@@ -3,9 +3,15 @@
 #+title: Algorithms Review for Job Interview
 #+author: Jenny Huang
 
-* dfkdjf
-* ÎÒÊÇÖÐ¹úÈË
-#+BEGIN_SRC c++
+* 12/20/2014, Saturday
+- Pity that Chinese is not shown in github with org-mode
+- Begin to review for job Interview
+- test Chinese
+- test code
+
+* æˆ‘æ˜¯ä¸­å›½äºº
+#+begin_latex
+\begin{lstlisting}
 #include <pthread.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -13,48 +19,6 @@
 #define SIZE 8   // Size by SIZE matrices
 
 using namespace std;
-
-int num_thrd;   // number of threads
- 
-int A[SIZE][SIZE], B[SIZE][SIZE], C[SIZE][SIZE];
-int idx[] = {0, 1, 2, 3};
-
-void print_matrix(int m[SIZE][SIZE]) {
-    int i, j;
-    for (i = 0; i < SIZE; i++) {
-        printf("\n\t| ");
-        for (j = 0; j < SIZE; j++)
-            printf("%2d ", m[i][j]);
-        printf("|");
-    }
-}
-
-void init_matrix(int m[SIZE][SIZE]) {
-    int i, j, val = 0;
-    for (i = 0; i < SIZE; i++)
-        for (j = 0; j < SIZE; j++)
-            m[i][j] = val++;
-}
- 
-// thread function: taking "slice" as its argument
-void* multiply(void* slice) {
-    int s = *((int*)slice);   // retrive the slice info
-    //printf("s value: %d\n", s);
-    int from = (s * SIZE)/num_thrd; // note that this 'slicing' works fine
-    int to = ((s+1) * SIZE)/num_thrd; // even if SIZE is not divisible by num_thrd
-    int i,j,k;
- 
-    printf("computing slice %d (from row %d to %d)\n", s, from, to-1);
-    for (i = from; i < to; i++) {    
-        for (j = 0; j < SIZE; j++) {
-            C[i][j] = 0;
-            for ( k = 0; k < SIZE; k++)
-                C[i][j] += A[i][k]*B[k][j];
-        }
-    }
-    printf("finished slice %d\n\n", s);
-    return 0;
-}
  
 int main(int argc, char* argv[]) {
     pthread_t* thread;  // pointer to a group of threads
@@ -102,4 +66,5 @@ int main(int argc, char* argv[]) {
  
     return 0;
 }
-#+END_SRC
+\end{lstlisting}
+#+end_latex
