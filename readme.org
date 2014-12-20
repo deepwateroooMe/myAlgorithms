@@ -4,9 +4,7 @@
 #+author: Jenny Huang
 
 * 12/20/2014, Saturday
-- Pity that Chinese is not shown in github with org-mode
 - Begin to review for job Interview
-- test Chinese
 - test code
 
 * 我是中国人
@@ -20,7 +18,7 @@
 
 using namespace std;
  
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[]) { // sampel mark for 中文是可以的
     pthread_t* thread;  // pointer to a group of threads
     int i;
     if (argc!=2) {    
