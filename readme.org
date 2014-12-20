@@ -4,10 +4,11 @@
 #+author: Jenny Huang
 
 * 12/20/2014, Saturday
-- Begin to review for job Interview
-- test code
+- Website (github), program highlight, and chinese input environment all good now;
+- Will configure Linux Mint Java environment later, prefer emacs;
+- 145/168 done before new season review, begin to work on these questions from today. 
 
-* 我是中国人
+* 我是一个学生
   #+begin_src c++
 #include <pthread.h>
 #include <stdlib.h>
