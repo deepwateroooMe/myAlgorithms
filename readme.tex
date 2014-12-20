@@ -1,4 +1,4 @@
-% Created 2014-12-20 Sat 13:58
+% Created 2014-12-20 Sat 13:59
 \documentclass[9pt,b5paper]{article}
 \usepackage{graphicx}
 \usepackage{xcolor}
@@ -43,7 +43,7 @@
 
 \section{我是中国人}
 \label{sec-2}
-\begin{lstlisting}
+\begin{verbatim}
 #include <pthread.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -51,7 +51,7 @@
 #define SIZE 8   // Size by SIZE matrices
 
 using namespace std;
- 
+
 int main(int argc, char* argv[]) { // sampel mark for 中文是可以的
     pthread_t* thread;  // pointer to a group of threads
     int i;
@@ -65,7 +65,7 @@ int main(int argc, char* argv[]) { // sampel mark for 中文是可以的
     printf("\n");
     init_matrix(B);
     thread = (pthread_t*) malloc(num_thrd*sizeof(pthread_t));
-    
+
     for (i = 1; i < num_thrd; i++) {    
         //printf("address i: %d\n", i);
         int rc = pthread_create(&thread[i], NULL, multiply, &idx[i]);
@@ -75,7 +75,7 @@ int main(int argc, char* argv[]) { // sampel mark for 中文是可以的
             exit(-1);
         }
     }
- 
+
     // main thread works on slice 0
     // so everybody is busy
     // main thread does everything if threadd number is specified as 1
@@ -85,7 +85,7 @@ int main(int argc, char* argv[]) { // sampel mark for 中文是可以的
     // main thead waiting for other thread to complete
     for (i = 2; i <= num_thrd; i++)
         pthread_join(thread[i-1], NULL);
- 
+
     printf("\n\n");
     print_matrix(A);
     printf("\n\n\t       * \n");
@@ -93,11 +93,11 @@ int main(int argc, char* argv[]) { // sampel mark for 中文是可以的
     printf("\n\n\t       = \n");
     print_matrix(C);
     printf("\n\n");
- 
+
     free(thread);
- 
+
     return 0;
 }
-\end{lstlisting}
+\end{verbatim}
 % Emacs 24.3.1 (Org mode 8.2.7c)
 \end{document}

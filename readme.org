@@ -8,8 +8,7 @@
 - test code
 
 * 我是中国人
-#+begin_latex
-\begin{lstlisting}
+  #+begin_src c++
 #include <pthread.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -64,5 +63,4 @@ int main(int argc, char* argv[]) { // sampel mark for 中文是可以的
  
     return 0;
 }
-\end{lstlisting}
-#+end_latex
+#+END_SRC 
