@@ -7,6 +7,7 @@
 - Website (github), program highlight, and chinese input environment all good now;
 - Will configure Linux Mint Java environment later, prefer emacs;
 - 145/168 done before new season review, begin to work on these questions from today. 
+- Just got 4 easiest done: min stack, excel sheet column title, compare version number, and intersection of two linked list, *149/168*
 
 * 我是一个学生
   #+begin_src c++
