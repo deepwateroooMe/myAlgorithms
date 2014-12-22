@@ -7,7 +7,17 @@
 - Website (github), program highlight, and chinese input environment all good now;
 - Will configure Linux Mint Java environment later, prefer emacs;
 - 145/168 done before new season review, begin to work on these questions from today. 
-- Just got 4 easiest done: min stack, excel sheet column title, compare version number, and intersection of two linked list, *149/168*
+- Just got 4 easiest done: *149/168*
+  - min stack, 
+  - excel sheet column title, 
+  - compare version number, and 
+  - intersection of two linked list,
+* 12/21/2014, Sunday
+- Only three got done today: *152/169*
+  - maximum gap
+  - fraction to recurring decimal
+  - majority element
+- Don't feel my mind is clear today at all, will look into job searing instead, hopefully tomorrow I can solve more problems, and slightly complicated ones;
 
 * 我是一个学生
   #+begin_src c++
