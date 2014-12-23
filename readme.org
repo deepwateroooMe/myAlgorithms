@@ -24,7 +24,7 @@
   - merge k sorted list
   - trapping rain water
   - recovery binary search tree
-- am going to work on the rest 6:
+- am going to work on the rest 6 tonight, so that hopefully tomorrow I would be able to work on the new 10 questions;
   - word ladder II
   - regular expression matching
   - divide two integers
