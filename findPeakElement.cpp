@@ -11,8 +11,11 @@ typedef vector<int> vi;
 
 void findMax(const vector<int> &num, int start, int end, int& max, int& idx) {    
     int mid;
-    mid = start + (end - start) / 2;
-    while (start < mid - 1 || mid < end-1) {
+    //cout << "start 0: " << start << endl;
+    //cout << "end 0: " << end << endl;
+    while (start < end -1) {            
+        mid = start + (end - start) / 2;
+        //cout << "mid 0: " << mid << endl;
         if (num[mid] >= num[start] || num[mid] >= num[end]) {            
             if (num[mid] > max) {
                 max = num[mid];
@@ -20,13 +23,11 @@ void findMax(const vector<int> &num, int start, int end, int& max, int& idx) {
             }
             if (num[mid] > num[start]) {                
                 start += 1;
-                if (start < mid -1)
-                    findMax(num, start, mid, max, idx);
+                findMax(num, start, mid, max, idx);
             }
             if (num[mid] > num[end]) {
                 end -= 1;
-                if (mid < end-1)
-                    findMax(num, mid, end, max, idx);
+                findMax(num, mid, end, max, idx);
             }
         } else {
             if (num[start] > num[mid]) {
@@ -34,8 +35,7 @@ void findMax(const vector<int> &num, int start, int end, int& max, int& idx) {
                     max = num[start];
                     idx = start;
                     mid = mid -1;
-                    if (start < mid -1)
-                        findMax(num, start, mid, max, idx);
+                    findMax(num, start, mid, max, idx);
                 }
             } else if (num[end] > num[mid]) {
                 if (num[end] > max) {
@@ -43,30 +43,28 @@ void findMax(const vector<int> &num, int start, int end, int& max, int& idx) {
                     idx = end;
                 }
                 mid = mid + 1;
-    cout << "start 0: " << start << endl;
-    cout << "mid 0: " << mid << endl;
-    cout << "end 0: " << end << endl;
-    cout << "max 0: " << max << endl;
-    cout << "idx 0: " << idx << endl;
-                
-                if (mid < end-1)
-                    findMax(num, mid, end, max, idx);
+                //cout << endl;
+                //cout << "start 1: " << start << endl;
+                //cout << "mid 1: " << mid << endl;
+                //cout << "end 1: " << end << endl;
+                //cout << "max 1: " << max << endl;
+                //cout << "idx 1: " << idx << endl;
+                findMax(num, mid, end, max, idx);
             }
         }
     }
-
-    cout << "start: " << start << endl;
-    cout << "mid: " << mid << endl;
-    cout << "end: " << end << endl;
-    cout << "max: " << max << endl;
-    cout << "idx: " << idx << endl;
-    if (start == mid || mid == end) {
+    //cout << "start: " << start << endl;
+    //cout << "mid: " << mid << endl;
+    //cout << "end: " << end << endl;
+    //cout << "max: " << max << endl;
+    //cout << "idx: " << idx << endl;
+    if (start == end) {            
         if (num[mid] > max) {
             max = num[mid];
             idx = mid;
         }
         return;
-    } else if (start == mid - 1 || mid == end -1) {
+    } else if (start == end - 1) {     
         if (num[start] <= num[mid]) {
             if (num[mid] > max) {                
                 max = num[mid];
@@ -86,14 +84,14 @@ int findPeakElement(const vector<int> &num) {
     
     int n = num.size();
     int max = (num[0] < num[n-1]) ? num[n-1] : num[0];
-    int idx = (num[0] < num[n-1]) ? 0 : n-1;
+    int idx = (num[0] < num[n-1]) ? n-1 : 0;
     findMax(num, 0, n-1, max, idx);
     return idx;
 }
 
 int main(){
-    int a[] = {1, 2, 3, 4};
-    int n = 4;
+    int a[] = {1, 2, 1};
+    int n = 3;
     
     vi tmp;
     for (int i = 0; i < n; ++i) {        

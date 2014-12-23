@@ -18,6 +18,19 @@
   - fraction to recurring decimal
   - majority element
 - Don't feel my mind is clear today at all, will look into job searing instead, hopefully tomorrow I can solve more problems, and slightly complicated ones;
+* 12/22/2014, Monday
+- So far got four done: *156/169*
+  - sort list
+  - merge k sorted list
+  - trapping rain water
+  - recovery binary search tree
+- am going to work on the rest 6:
+  - word ladder II
+  - regular expression matching
+  - divide two integers
+  - clone graph
+  - find peak element
+  - maximal rectangle
 
 * 我是一个学生
   #+begin_src c++
