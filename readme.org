@@ -25,12 +25,17 @@
   - trapping rain water
   - recovery binary search tree
 - am going to work on the rest 6 tonight, so that hopefully tomorrow I would be able to work on the new 10 questions;
-  - word ladder II: spent hours on this one, but got really sick with it!
+  - word ladder II: spent hours on this one, but got really sick with it! I should have solved my problems gradually, like solve the clone graph to understand graph first before touch this one, but I will get this one done later when I have clear mind. 
   - regular expression matching
   - divide two integers
   - clone graph
   - find peak element
   - maximal rectangle
+* 12/23/2014, Tuesday
+- Meet IPO staff this morning get coming semester plans clear at 8:30am in the morning;
+- Will most probably meet some friend and have dinner together;
+- Hopefully by this morning's dirruption meeting staff, I could change back my regular schedule instead of 5am-13:30 day time sleeping, target for tonight fall asleep before 12:00am.
+- Will not work on Algorithms for today, but work on it hard tomorrow. I have my confidence that I can figure them out, and do great job summarize the questions during my Java round, no worries!
 
 * 我是一个学生
   #+begin_src c++
