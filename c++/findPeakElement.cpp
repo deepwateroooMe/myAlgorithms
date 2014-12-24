@@ -9,13 +9,74 @@ using namespace std;
 
 typedef vector<int> vi;
 
+void findMax(const vector<int> &num, int start, int end, int& max, int& idx);
+int findPeakElement1(const vector<int> &num);
+
+
+// https://oj.leetcode.com/discuss/17793/find-the-maximum-by-binary-search-recursion-and-iteration
+
+// recursion
+int HelperOne(const vector<int> &num, int low, int high) {
+    if (low == high) return low;
+
+    int mid1 = low + (high - low) / 2;
+    int mid2 = mid1 + 1;
+    if (num[mid1] > num[mid2]) 
+        return HelperOne(num, low, mid1);
+    return HelperOne(num, mid2, high);
+}
+
+// iterative
+int Helper(const vector<int> &num, int low, int high) {
+    while (low <= high - 1) {        
+        int mid1 = low + (high - low) / 2;
+        int mid2 = mid1 + 1;
+        if (num[mid1] > num[mid2]) 
+            high = mid1;
+        else low = mid2;
+    }
+    //if (low == high) return low;
+    return low;
+}
+
+int findPeakElement(const vector<int> &num) {
+    //return HelperOne(num, 0, num.size() - 1);
+    return Helper(num, 0, num.size() - 1);
+}
+
+int main(){
+    int a[] = {2, 1};
+    int n = 2;
+    
+    vi tmp;
+    for (int i = 0; i < n; ++i) {        
+        tmp.push_back(a[i]);
+    }
+    
+    cout << findPeakElement(tmp) << endl;
+    
+    return 0;
+}
+
+int findPeakElement1(const vector<int> &num) {
+    if (num.size() == 0) return 0;
+    if (num.size() == 1) return 0;
+    else if (num.size() == 2) {
+        return (num[0] > num[1]) ? 0 : 1;
+    }
+    
+    int n = num.size();
+    int max = (num[0] < num[n-1]) ? num[n-1] : num[0];
+    int idx = (num[0] < num[n-1]) ? n-1 : 0;
+    findMax(num, 0, n-1, max, idx);
+    return idx;
+}
+
+// I don't know what am I doing here now
 void findMax(const vector<int> &num, int start, int end, int& max, int& idx) {    
     int mid;
-    //cout << "start 0: " << start << endl;
-    //cout << "end 0: " << end << endl;
     while (start < end -1) {            
         mid = start + (end - start) / 2;
-        //cout << "mid 0: " << mid << endl;
         if (num[mid] >= num[start] || num[mid] >= num[end]) {            
             if (num[mid] > max) {
                 max = num[mid];
@@ -43,21 +104,10 @@ void findMax(const vector<int> &num, int start, int end, int& max, int& idx) {
                     idx = end;
                 }
                 mid = mid + 1;
-                //cout << endl;
-                //cout << "start 1: " << start << endl;
-                //cout << "mid 1: " << mid << endl;
-                //cout << "end 1: " << end << endl;
-                //cout << "max 1: " << max << endl;
-                //cout << "idx 1: " << idx << endl;
                 findMax(num, mid, end, max, idx);
             }
         }
     }
-    //cout << "start: " << start << endl;
-    //cout << "mid: " << mid << endl;
-    //cout << "end: " << end << endl;
-    //cout << "max: " << max << endl;
-    //cout << "idx: " << idx << endl;
     if (start == end) {            
         if (num[mid] > max) {
             max = num[mid];
@@ -75,30 +125,3 @@ void findMax(const vector<int> &num, int start, int end, int& max, int& idx) {
     }
 }
 
-int findPeakElement(const vector<int> &num) {
-    if (num.size() == 0) return 0;
-    if (num.size() == 1) return 0;
-    else if (num.size() == 2) {
-        return (num[0] > num[1]) ? 0 : 1;
-    }
-    
-    int n = num.size();
-    int max = (num[0] < num[n-1]) ? num[n-1] : num[0];
-    int idx = (num[0] < num[n-1]) ? n-1 : 0;
-    findMax(num, 0, n-1, max, idx);
-    return idx;
-}
-
-int main(){
-    int a[] = {1, 2, 1};
-    int n = 3;
-    
-    vi tmp;
-    for (int i = 0; i < n; ++i) {        
-        tmp.push_back(a[i]);
-    }
-    
-    cout << findPeakElement(tmp) << endl;
-    
-    return 0;
-}
