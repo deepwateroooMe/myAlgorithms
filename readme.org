@@ -38,8 +38,15 @@
 - so far Got 2 done: *158/169*
   - find peak element
   - maximal rectangle
-- 
-- 
+* 12/24/2014, Wednesday
+- 2:00(3:00am?)-11:00am, expect 2:00-9:00am schedule tonight;
+- Don't know why old accound doesn't work any more, use new account; from *158/169* to *0/169* using *Java*
+- Worked on the following questions: *1/169*
+  - divide two integers, just got the Java environment ready
+  - regular expression matching: *working on it!*, require understanding and summarizing
+  - 
+  - 
+  - 
 
 * 我是一个学生
   #+begin_src c++
