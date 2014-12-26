@@ -45,8 +45,6 @@
   - divide two integers, just got the Java environment ready
   - regular expression matching: *working on it!*, require understanding and summarizing
   - 知道猪是怎么死的吗？ *笨死了~~~*
-* 12/25/2014, Thursday
-- List a detailed plan of working on the algorithms; *Question Tags* according to the Website:
 |----------------------+--------+----------------------|
 | Tags                 | Counts |                      |
 |----------------------+--------+----------------------|
@@ -408,3 +406,6 @@
 |                      |        |  15 | 3Sum                                                       |      16.7% | Medium     |       |
 |                      |        |  16 | 3Sum Closest                                               |      26.9% | Medium     |       |
 |----------------------+--------+-----+------------------------------------------------------------+------------+------------+-------|
+* 12/25/2014, Thursday
+- List a detailed plan of working on the algorithms; *Question Tags* according to the Website:
+- 
