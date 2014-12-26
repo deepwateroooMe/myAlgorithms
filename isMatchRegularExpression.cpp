@@ -6,7 +6,43 @@ char pre;   // p
 bool preStar = false;
 bool anySeq = false;
 
+// https://oj.leetcode.com/discuss/9405/the-shortest-ac-code
+// '.' if p has a '.', it can pass any single character in s except '\0'.
+// '*' if p has a '*' character, it can pass any length of first-match
+//                    characters in s including '\0'.
+bool matchFirst(const char *s, const char *p) {
+    return (*p == *s || (*p == '.' && *s != '\0'));
+}
+
 bool isMatch(const char *s, const char *p) {  // only p . *
+    if (*p == '\0') return *s == '\0';  // empty
+    if (*(p+1) != '*') {  // without '*'
+        if (!matchFirst(s, p)) return false;
+        return isMatch(s+1, p+1);
+    } else {
+        if (isMatch(s, p+2)) return true;
+        while (matchFirst(s, p)) {
+            if (isMatch(++s, p+2)) return true;
+        }
+    }
+}
+
+int main() 
+{  /*
+    cout << isMatch("aa","a")<< endl;
+    cout << isMatch("aa","aa")<< endl;
+    cout << isMatch("aaa","aa")<< endl;
+    cout << isMatch("aa", "a*")<< endl;
+    cout << isMatch("aa", ".*") << endl;
+    cout << isMatch("ab", ".*")<< endl;
+    cout << isMatch("aab","c*a*b") << endl; 
+    cout << isMatch("abaabababbcbcabbcbc", "b*ab.*.*.*.b..*") << endl;  */
+    cout << isMatch("abbabaaaaaaacaa", "a*.*b.a.*c*b*a*c*") << endl;
+    
+    return 0;
+}
+
+bool isMatch1(const char *s, const char *p) {  // only p . *
 
     if (!*s && !*p) return true;   // both empty
     else if (strlen(s) != strlen(p) && !strchr(p, '*')) return false; //不等长
@@ -120,17 +156,3 @@ bool isMatch(const char *s, const char *p) {  // only p . *
     } else return false;
 }
 
-int main() 
-{  /*
-    cout << isMatch("aa","a")<< endl;
-    cout << isMatch("aa","aa")<< endl;
-    cout << isMatch("aaa","aa")<< endl;
-    cout << isMatch("aa", "a*")<< endl;
-    cout << isMatch("aa", ".*") << endl;
-    cout << isMatch("ab", ".*")<< endl;
-    cout << isMatch("aab","c*a*b") << endl; 
-    cout << isMatch("abaabababbcbcabbcbc", "b*ab.*.*.*.b..*") << endl;  */
-    cout << isMatch("abbabaaaaaaacaa", "a*.*b.a.*c*b*a*c*") << endl;
-    
-    return 0;
-}

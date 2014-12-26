@@ -44,64 +44,75 @@
 - Worked on the following questions: *1/169*
   - divide two integers, just got the Java environment ready
   - regular expression matching: *working on it!*, require understanding and summarizing
-  - 
-  - 
-  - 
-
-* 我是一个学生
-  #+begin_src c++
-#include <pthread.h>
-#include <stdlib.h>
-#include <stdio.h>
-
-#define SIZE 8   // Size by SIZE matrices
-
-using namespace std;
- 
-int main(int argc, char* argv[]) { // sampel mark for 中文是可以的
-    pthread_t* thread;  // pointer to a group of threads
-    int i;
-    if (argc!=2) {    
-        printf("Usage: %s number_of_threads\n",argv[0]);
-        exit(-1);
-    }
-    num_thrd = atoi(argv[1]);
-    printf("num_thrd: %d\n", num_thrd);
-    init_matrix(A);
-    printf("\n");
-    init_matrix(B);
-    thread = (pthread_t*) malloc(num_thrd*sizeof(pthread_t));
-    
-    for (i = 1; i < num_thrd; i++) {    
-        //printf("address i: %d\n", i);
-        int rc = pthread_create(&thread[i], NULL, multiply, &idx[i]);
-        if (rc != 0) {
-            perror("Can't create thread");
-            free(thread);
-            exit(-1);
-        }
-    }
- 
-    // main thread works on slice 0
-    // so everybody is busy
-    // main thread does everything if threadd number is specified as 1
-    //int tmp = 0;
-    multiply((void*)(&(idx[0])));
-
-    // main thead waiting for other thread to complete
-    for (i = 2; i <= num_thrd; i++)
-        pthread_join(thread[i-1], NULL);
- 
-    printf("\n\n");
-    print_matrix(A);
-    printf("\n\n\t       * \n");
-    print_matrix(B);
-    printf("\n\n\t       = \n");
-    print_matrix(C);
-    printf("\n\n");
- 
-    free(thread);
- 
-    return 0;
-}
-#+END_SRC 
+  - 知道猪是怎么死的吗？ *笨死了~~~*
+* 12/25/2014, Thursday
+- List a detailed plan of working on the algorithms; *Question Tags* according to the Website:
+|----------------------+--------+----------------------|
+| Tags                 | Counts |                      |
+|----------------------+--------+----------------------|
+| Heap                 |      1 | Merge k Sorted Lists |
+| Graph                |      1 | Clone Graph          |
+| Data Structure       |      3 |                      |
+| Bit Manipulation     |      4 |                      |
+| Divide and Conquer   |      4 |                      |
+| Greedy               |      6 |                      |
+| Sort                 |      6 |                      |
+| Breadth-first Search | 7 (32) |                      |
+|----------------------+--------+----------------------|
+| Stack                |     11 |                      |
+| Binary Search        |     13 |                      |
+| Hash Table           |     16 |                      |
+| Math                 |     17 |                      |
+| Linked List          |     19 |                      |
+| Depth-first Search   |     19 |                      |
+| Backtracking         |     21 |                      |
+| Two Pointers         |     22 |                      |
+| Dynamic Programming  |     23 |                      |
+| Tree                 |     26 |                      |
+| String               |     38 |                      |
+| Array                |     56 |                      |
+|----------------------+--------+----------------------|
+- Detailed Questions:
+|----------------------+--------+-----+------------------------------------------+------------+------------+-------|
+| Tags                 | Counts |   # | Title                                    | Acceptance | Difficulty | Notes |
+|----------------------+--------+-----+------------------------------------------+------------+------------+-------|
+| Heap                 |      1 |  23 | Merge k Sorted Lists                     |      21.0% | Hard       |       |
+| Graph                |      1 | 133 | Clone Graph                              |      23.3% | Medium     |       |
+|----------------------+--------+-----+------------------------------------------+------------+------------+-------|
+| Data Structure       |      3 | 170 | Two Sum III - Data structure design      |      19.2% | Easy       |       |
+|                      |        | 155 | Min Stack                                |      14.6% | Easy       |       |
+|                      |        | 146 | LRU Cache                                |      14.3% | Hard       |       |
+|----------------------+--------+-----+------------------------------------------+------------+------------+-------|
+| Bit Manipulation     |      4 |  78 | Subsets                                  |      27.9% | Medium     |       |
+|                      |        | 136 | Single Number                            |      46.0% | Medium     |       |
+|                      |        | 137 | Single Number II                         |      34.0% | Medium     |       |
+|                      |        | 169 | Majority Element                         |      31.6% | Easy       |       |
+|----------------------+--------+-----+------------------------------------------+------------+------------+-------|
+| Divide and Conquer   |      4 |  23 | Merge k Sorted Lists                     |      21.0% | Hard       |       |
+|                      |        |   4 | Median of Two Sorted Arrays              |      17.6% | Hard       |       |
+|                      |        |  53 | Maximum Subarray                         |      34.2% | Medium     |       |
+|                      |        | 169 | Majority Element                         |      31.7% | Easy       |       |
+|----------------------+--------+-----+------------------------------------------+------------+------------+-------|
+| Greedy               |      6 |  44 | Wildcard Matching                        |      14.6% | Hard       |       |
+|                      |        |  55 | Jump Game                                |      27.2% | Medium     |       |
+|                      |        |  45 | Jump Game II                             |      24.6% | Hard       |       |
+|                      |        | 134 | Gas Station                              |      26.0% | Medium     |       |
+|                      |        | 135 | Candy                                    |      19.5% | Hard       |       |
+|                      |        | 122 | Best Time to Buy and Sell Stock II       |      37.0% | Medium     |       |
+|----------------------+--------+-----+------------------------------------------+------------+------------+-------|
+| Sort                 |      6 | 148 | Sort List                                |      20.9% | Medium     |       |
+|                      |        |  75 | Sort Colors                              |      32.3% | Medium     |       |
+|                      |        |  56 | Merge Intervals                          |      21.2% | Hard       |       |
+|                      |        | 164 | Maximum Gap                              |      23.1% | Hard       |       |
+|                      |        | 147 | Insertion Sort List                      |      25.5% | Medium     |       |
+|                      |        |  57 | Insert Interval                          |      20.7% | Hard       |       |
+|----------------------+--------+-----+------------------------------------------+------------+------------+-------|
+| Breadth-first Search | 7 (32) | 127 | Word Ladder                              |      18.4% | Medium     |       |
+|                      |        | 126 | Word Ladder II                           |      11.8% | Hard       |       |
+|                      |        | 130 | Surrounded Regions                       |      14.3% | Medium     |       |
+|                      |        | 133 | Clone Graph                              |      23.3% | Medium     |       |
+|                      |        | 103 | Binary Tree Zigzag Level Order Traversal |      26.5% | Medium     |       |
+|                      |        | 102 | Binary Tree Level Order Traversal        |      29.9% | Easy       |       |
+|                      |        | 107 | Binary Tree Level Order Traversal II     |      30.4% | Easy       |       |
+|----------------------+--------+-----+------------------------------------------+------------+------------+-------|
+|                      |        |     |                                          |            |            |       |
