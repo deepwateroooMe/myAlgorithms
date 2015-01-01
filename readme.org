@@ -44,7 +44,6 @@
 - Worked on the following questions: *1/169*
   - divide two integers, just got the Java environment ready
   - regular expression matching: *working on it!*, require understanding and summarizing
-  - 知道猪是怎么死的吗？ *笨死了~~~*
 |----------------------+--------+----------------------|
 | Tags                 | Counts |                      |
 |----------------------+--------+----------------------|
@@ -409,6 +408,34 @@
 * 12/25/2014, Thursday
 - List a detailed plan of working on the algorithms; *Question Tags* according to the Website:
 - Sent about 10 applications/interns;
-*  12/26/2014, Friday
+* 12/26/2014, Friday
+- two sum III
+* 12/29/2014, Monday
+- read N characters given read4
+* 12/30/2014, Tuesday
+- worked on *5* problems, *9/173*: 
+- binary tree upside down
+- missing ranges
+- two sum II
+- get Emacs JDEE environment ready, can compile and run inside emacs now, very convenient;
+- one edit distance
+- *DONT LIKE:*  read n characters given read4 II
+* 12/31/2014, Wednesday
+- java-mode autofill and snippets , tab-indent are all working now;
+- worked on *10* problems, *19/173*: 
+- Longest substring with at most 2 distinct characters, took my effort to rewrite it;
+- binary search tree iterator, understand theory, feels like just got Java environment ready;
+- excel sheet column number
+- factorial training zeroes
+- find peak element
+- maximum gap *dont like*
+- fraction to recurring decimal
+- excel sheet column title
+- majority element
+* 1/1/2015, Thursday
+- worked on *10* problems, *19/173*: 
 - 
 - 
+- 
+- 
+
