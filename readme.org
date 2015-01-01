@@ -413,25 +413,25 @@
 * 12/29/2014, Monday
 - read N characters given read4
 * 12/30/2014, Tuesday
+- get Emacs JDEE environment ready, can compile and run inside emacs now, convenient than using terminal jc j;
 - worked on *5* problems, *9/173*: 
-- binary tree upside down
-- missing ranges
-- two sum II
-- get Emacs JDEE environment ready, can compile and run inside emacs now, very convenient;
-- one edit distance
-- *DONT LIKE:*  read n characters given read4 II
+  - binary tree upside down
+  - missing ranges
+  - two sum II
+  - one edit distance
+  - *DONT LIKE:*  read n characters given read4 II
 * 12/31/2014, Wednesday
-- java-mode autofill and snippets , tab-indent are all working now;
-- worked on *10* problems, *19/173*: 
-- Longest substring with at most 2 distinct characters, took my effort to rewrite it;
-- binary search tree iterator, understand theory, feels like just got Java environment ready;
-- excel sheet column number
-- factorial training zeroes
-- find peak element
-- maximum gap *dont like*
-- fraction to recurring decimal
-- excel sheet column title
-- majority element
+- java-mode autofill functions and yasnippets snippets, while keeping tab-indent block are all working now, like the emacs environment;
+- worked on *9?10* problems, *19/173*: 
+  - Longest substring with at most 2 distinct characters, took my effort to rewrite it, sth can be done;
+  - binary search tree iterator, understand theory, feels like just got Java environment ready;
+  - excel sheet column number
+  - factorial training zeroes
+  - find peak element
+  - maximum gap *dont like*
+  - fraction to recurring decimal
+  - excel sheet column title
+  - majority element
 * 1/1/2015, Thursday
 - worked on *10* problems, *19/173*: 
 - 
