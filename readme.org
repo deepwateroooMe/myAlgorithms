@@ -34,8 +34,8 @@
 - linked list cycle II find start
 - Reorder list
 - binary tree Preorder Traversal - iterative method still thinking
-* 1/2, Friday
-** worked on ** problems, */173*: 
+* 1/2/2015, Friday
+** worked on  problems, /173: 
 - binary tree Preorder Traversal - iterative method still thinking
 - 
 - 
