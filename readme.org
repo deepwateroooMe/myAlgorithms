@@ -3,14 +3,35 @@
 #+title: Algorithms Review for Job Interview
 #+author: Jenny Huang
 
-* 12/30/2014, Tuesday
-- get Emacs JDEE environment ready, can compile and run inside emacs now, convenient than using terminal jc j;
-- worked on *5* problems, *9/173*: 
-  - binary tree upside down
-  - missing ranges
-  - two sum II
-  - one edit distance
-  - *DONT LIKE:*  read n characters given read4 II
+* 1/2/2015, Friday
+** Other things
+- When thought about sth, cannot fall asleep, fass asleep at 8:00am, and waked up at 12:00, so today would be filled with tidious things;
+- The haircurt store was closed during Christmas, and opened today, so spent $8 and half an hour in store got my hair cut, but still spent 1 hours at home to redo it to thin the hair layers; Cut hair has nothing to do with love life, but rather that I don't want to waste time on the hair at this semster;
+- try to organize previous courses contents, get the projects done better, and upload into github, and so far keep them secret until the time I need them in case in war;
+- need to work on the appointment with professor web scheduling projects, because it is important, and sure will be beaten if I fail in case in war;
+- target for fall asleep at 4:00am, but target for 8-10 easier algorithms problems be done before sleep; Time is so limited, I need change my schedule and use time more efficiently.
+** worked on  problems, /173: 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- binary tree Preorder Traversal - iterative method still thinking
+
+* 1/1/2015, Thursday
+** worked on *8* problems, *28/173*: 
+- intersection of wto linked list
+- reverse words in string
+- find Minimum in rotated sorted array
+- find Minimum in rotated sorted array with Duplicates
+- min stack
+- linked list cycle
+- linked list cycle II find start
+- Reorder list
+- binary tree Preorder Traversal - iterative method still thinking
 * 12/31/2014, Wednesday
 - java-mode autofill functions and yasnippets snippets, while keeping tab-indent block are all working now, like the emacs environment;
 - worked on *9?10* problems, *19/173*: 
@@ -23,28 +44,14 @@
   - fraction to recurring decimal
   - excel sheet column title
   - majority element
-* 1/1/2015, Thursday
-** worked on *8* problems, *28/173*: 
-- intersection of wto linked list
-- reverse words in string
-- find Minimum in rotated sorted array
-- find Minimum in rotated sorted array with Duplicates
-- min stack
-- linked list cycle
-- linked list cycle II find start
-- Reorder list
-- binary tree Preorder Traversal - iterative method still thinking
-* 1/2/2015, Friday
-** worked on  problems, /173: 
-- binary tree Preorder Traversal - iterative method still thinking
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-
+* 12/30/2014, Tuesday
+- get Emacs JDEE environment ready, can compile and run inside emacs now, convenient than using terminal jc j;
+- worked on *5* problems, *9/173*: 
+  - binary tree upside down
+  - missing ranges
+  - two sum II
+  - one edit distance
+  - *DONT LIKE:*  read n characters given read4 II
 * 12/20/2014, Saturday
 - Website (github), program highlight, and chinese input environment all good now;
 - Will configure Linux Mint Java environment later, prefer emacs;
