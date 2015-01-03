@@ -4,16 +4,16 @@
 #+author: Jenny Huang
 
 * 1/2/2015, Friday
-** worked on  problems, /173: 
+** worked on 7 problems, 35/173: 
 - LRU Cache, need to rework on it sometime, doubly-linked list to maintain frequency not proficient;
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- binary tree Preorder Traversal - iterative method still thinking
+- Insertion sort list, straight forward
+- sort list, merge sort, when break it down into pieces, it's not that hard;
+- evaluate reverse polish notation
+- gas station
+- single number
+- single number II, half done, most basic, but needs the perfect method, *tomorrow*
+- *Now:* I am not afraid of lists, or even trees, but still don't feel confortable with DP yet. Need some quality time on couple of questions of that type. For Graphics as well. I will not touch them when I am headache, but will work on them when I have a mind.  
+- *undone:* binary tree Preorder Traversal - iterative method still thinking
 ** Other things
 - When thought about sth, cannot fall asleep, fall asleep at 8:00am, and waked up at 12:00, so today would be filled with tidious things;
 - The haircurt store was closed during Christmas (I went to the store most probably on 12/26 on the afternoon after I met the two who were leaving for CA on 24th, but I don't really remember. The door was closed and the note on door said they would open today), and I called today and they did, so I spent $7+$1 tip and half an hour in store got my hair cut, but still spent 1 hours at home to redo it to thin the hair layers; Cut hair has nothing to do with love life, but rather that I don't want to waste time on the hair at this semster;

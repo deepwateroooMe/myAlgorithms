@@ -6,7 +6,7 @@ import java.util.List;
 // now I understand this wired
 public class hasCycle {
     public static class Solution {
-        public  class ListNode {
+        public class ListNode {
             int val;
             ListNode next;
             ListNode(int x) {
@@ -22,7 +22,7 @@ public class hasCycle {
             return res;
         }
 
-        ListNode one = new ListNode(-1);
+        //ListNode one = new ListNode(-1);
         public boolean hasCycle(ListNode head) {
             if (head == null || (head != null && head.next == null)) {  // special situation
                 return false;
