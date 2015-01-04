@@ -14,7 +14,6 @@ public class getIntersectionNode {
     }
 
     public static class Solution {
-        // consider no intersection
         public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
             if (headA == null || headB == null) { // special situations
                 return null;
@@ -34,7 +33,8 @@ public class getIntersectionNode {
                 }
             }
             return p1;
-
+        }
+        
             /* // way way too complicated~~~
             ListNode result;
             while (p1.next != null && p1.val != p2.val) {
@@ -95,15 +95,14 @@ public class getIntersectionNode {
                 p2.next = null;
                 return p1;
             }
-            */
         }
+            */
     }
 
     public static void main(String[] args){
         Solution result = new Solution();
         ListNode a, b;
         ListNode res = result.getIntersectionNode(a, b);
-        
         System.out.println(res);
     }
 }

@@ -1,3 +1,5 @@
+import com.RandomListNode;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
@@ -5,19 +7,6 @@ import java.util.List;
 
 public class copyRandomList {
     public static class Solution {
-        public class RandomListNode {
-            int label;
-            RandomListNode next, random;
-            RandomListNode(int x) { this.label = x; }
-        }
-
-        public RandomListNode RandomListNode(int x) {
-            RandomListNode res = new Solution.RandomListNode(-1);
-            res.label = x;
-            res.next = null;
-            res.random = null;
-            return res;
-        }
 
         // use old method:
         // 1. insert a node copy to make n -> 2n length, 1st round
@@ -25,7 +14,6 @@ public class copyRandomList {
         // 3. split into two lists, 3rd round, O(n)
         public RandomListNode copyRandomList(RandomListNode head) {
             if (head == null) return null;
-            
             RandomListNode result;
             RandomListNode tmp = head, one, next;
             while (tmp != null) {  // 1st
@@ -38,7 +26,6 @@ public class copyRandomList {
             
             tmp = head;  // 2nd
             while (tmp != null) {
-                System.out.println("tmp.label 2: " + tmp.label);
                 next = tmp.next;
                 if (next != null) {
                     if (tmp.random != null)
@@ -54,16 +41,14 @@ public class copyRandomList {
             tmp = tmp.next;
             one.next = null;
             while (tmp != null) {
-                System.out.println("tmp.label: " + tmp.label); // 1
-                System.out.println("tmp.next == null: " + (tmp.next == null));
-                if (tmp != null && tmp.next != null) { // sth wrong here, don't think my mind is working, work on it tomorrow ~
+                if (tmp != null && tmp.next != null) { 
                     next = tmp.next.next;
                     one.next = tmp.next;
                     one = one.next;
                     one.next = null;
                     tmp.next = next;
-                } else
-                    tmp.next = null;
+                    tmp = tmp.next;  // forgot this one
+                }
             }
             return result;
         }
@@ -83,11 +68,11 @@ public class copyRandomList {
 
     public static void main(String[] args){
         Solution result = new Solution();
-        Solution.RandomListNode one = result.RandomListNode(-1);
-        Solution.RandomListNode one2 = result.RandomListNode(1);
+        RandomListNode one = new RandomListNode(-1);
+        RandomListNode one2 = new RandomListNode(1);
         one.next = one2;
         
-        Solution.RandomListNode res = result.copyRandomList(one);
+        RandomListNode res = result.copyRandomList(one);
         result.printList(res);
     }
 }
