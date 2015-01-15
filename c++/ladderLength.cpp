@@ -47,7 +47,6 @@ bool bfs(unordered_set<string> &dict, string start, string end, int &cnt) {
     }
     cnt = 0;
     return false;
-
 }
     
 int ladderLength(string start, string end, unordered_set<string> &dict) {
