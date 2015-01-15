@@ -5,20 +5,37 @@
 
 * 1/14/2015, Wednesday
 ** worked on 8 problems, 98/173: 
-- tree series: 102 103 104 107 110 111 112 113
+- tree series: 102, 103, 104, 107, 110, 111, 112, 113
+- binary tree Level order Traversal
+- binary tree Level order Traversal II
+- binary tree Level Zigzag order Traversal
+- Maximum Depth of binary tree
+- Minimum Depth of binary tree
+- Balanced binary tree
+- path sum
+- path sum II
 ** Other things
-- a matter: get rid of it as soon as possible, 7-12,
-- got very headache and 3:30-6:00pm food court training
+- a matter get it done as soon as possible, 7-12,
 * 1/13/2015, Tuesday
 ** worked on 4 problems, 90/173: 
 - 98, 99, 100, 101
+- Validate binary search tree
+- Recover binary search tree
+- same tree
+- Symmetric tree
 ** Other things
 - got very headache and 3:30-6:00pm food court training
 * 1/12/2015, Monday
 ** worked on 6 problems, 86/173: 
 - 73, 74, 79, 83, 86, 92
+- Set Matrix Zeroes
+- Search a 2D matrix
+- Word Search
+- Remove Duplicates from Sorted Lists
+- Partition list
+- Reverse Linked List II
 ** Other things
-- wrote quite a few yasnippets for java quite great~!
+- wrote quite a few nippets for java-mode, works quite great~!
 * 1/11/2015, Sunday
 ** worked on 7 problems, 80/173: 
 - Spiral matrix II
@@ -36,7 +53,7 @@
 - udgrade jdk from 1.6 to be 1.8, Emacs 1.6 to be 1.8 as well, don't have wired errors like Arrays.asList(), Collections.sort() any more, nice!
 * 1/9/2015, Friday
 ** worked on 2 problems, 70/173: 
-- Permutation: Arrays.asList() not working in 1.6, spent hours here, figured should be too old openjde-1.6
+- Permutation: Arrays.asList() not working in 1.6, spent hours here, figured it should be the openjde-1 too outdated for being openjde-1.6
 - retate Image
 * 1/8/2015, Thursday
 ** worked on 9 problems, 68/173: 
