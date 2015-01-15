@@ -73,7 +73,7 @@
 * 1/5/2015, Monday
 - worked on 0 succeed problems
 ** Other things
-- Go to court on 1/14/2015, Wednesday 8:30am
+- Go to a on 1/14/2015, Wednesday
 * 1/4/2015, Sunday
 ** worked on 2 problems, 42/173: 
 - binary tree Maximum path sum
