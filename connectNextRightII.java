@@ -4,9 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
+import java.util.LinkedList;
+
 
 public class connectNextRightII {
     public static class Solution {
+        /*
         // II, 3 more cases
         public void connect(TreeLinkNode root) {
             if (root == null || (root.left == null && root.right == null) ) return;
@@ -50,6 +54,38 @@ public class connectNextRightII {
                 if (root.right.left != null) connect(root.right.left);
                 if (root.right.right != null) connect(root.right.right);
             }
+            } */
+
+        // try most basic queue first
+        public class Oj {
+            TreeLinkNode tln;
+            int i;
+            public Oj(TreeLinkNode tmp, int x) {            
+                tln = tmp;
+                i = x;
+            }
+        }
+        // need a tricky constant space one
+        public void connect(TreeLinkNode root) {
+            if (root == null || (root.left == null && root.right == null)) return;
+            Queue<Oj> q = new LinkedList<Oj>();
+            Oj tmp;
+            TreeLinkNode curr = null;
+            int cnt = 1, old = cnt;
+            q.add(new Oj(root, 1));
+            while (!q.isEmpty()) {
+                tmp = q.poll();
+                curr = tmp.tln;
+                cnt = tmp.i;
+                if (!q.isEmpty() && q.peek().i == cnt){
+                    curr.next = q.peek().tln;
+                }
+                if (curr.left != null)
+                    q.add(new Oj(curr.left, cnt + 1));
+                if (curr.right != null)
+                    q.add(new Oj(curr.right, cnt + 1));
+            }
+            return;
         }
     }
 
