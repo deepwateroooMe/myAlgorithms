@@ -4,13 +4,18 @@
 #+author: deepwaterooo
 
 * 1/15/2015, Thursday
-** worked on 4 problems, 102/173: 
+** worked on 10 problems, 108/173: 
 - Simplify Path
 - Search in Rotated Sorted Array
 - Restore IP Addresses
 - Populating Next Right Pointers in Each Node
-- Populating Next Right Pointers in Each Node II: You may only use constant extra space
-- working on 105
+- *Populating Next Right Pointers in Each Node II*: You may only use constant extra space
+- Minimum Window Substring, repeats, 
+- Sum Root to Leaf Numbers
+- Binary Tree Inorder Traversal
+- Binary Tree Preorder Traversal
+- Binary Tree Postorder Traversal
+- Merge K sorted List
 * 1/14/2015, Wednesday
 ** worked on 8 problems, 98/173: 
 - tree series: 102, 103, 104, 107, 110, 111, 112, 113
@@ -24,6 +29,7 @@
 - path sum II
 ** Other things
 - a matter get it done as soon as possible, 7-12,
+- didn't do anything in the evening, better not behave this way any more~!
 * 1/13/2015, Tuesday
 ** worked on 4 problems, 90/173: 
 - 98, 99, 100, 101
