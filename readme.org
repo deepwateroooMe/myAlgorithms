@@ -7,7 +7,7 @@
 ** worked on 5 problems, 113/173:
 - 49, 81, 51, 52, 22, (39)
 - Anagrams
-- search in rotated sorted array with dup II: wrote mid = start - 1 in the morning ~; 
+- search in rotated sorted array with dup II: wrote mid = end - 1 in the morning ~; 
 - N-Queens
 - N-Queens II
 - Generate Parentheses
