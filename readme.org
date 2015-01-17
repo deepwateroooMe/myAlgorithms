@@ -4,15 +4,22 @@
 #+author: deepwaterooo
 
 * 1/16/2015, Friday
-** worked on 5 problems, 113/173:
-- 49, 81, 51, 52, 22, (39)
+** worked on 9 problems, 117/173:
+- 49, 81, 51, 52, 22, (39), 82, 108, 109, 149
 - Anagrams
 - search in rotated sorted array with dup II: wrote mid = end - 1 in the morning ~; 
 - N-Queens
 - N-Queens II
 - Generate Parentheses
 - *Combination Sum*: don't know how to make it run faster
-
+- Remove Duplicates from Sorted List II
+- Convert Sorted Array to Binary Search Tree
+- Convert Sorted List to Binary Search Tree
+- Max Points on a Line, *Double* map key, (double)/(doule) == (double)(int/int) ???
+** Other things
+- Wanted to *swipe* bottom up from 17?, but apparantly I am *NOT proficient enough* to solve the Difficult ones yet, so take my time to solve them gradually~~
+- do NOT work in it any more tonight, 
+- got especially headache this week, go grocery to get my water, have rest earlier & expecting tomorrow to work in DP ~!
 * 1/15/2015, Thursday
 ** worked on 10 problems, 108/173: 
 - Simplify Path
