@@ -3,6 +3,16 @@
 #+title: Algorithms Review for Job Interview
 #+author: deepwaterooo
 
+* 1/16/2015, Friday
+** worked on 5 problems, 113/173:
+- 49, 81, 51, 52, 22, (39)
+- Anagrams
+- search in rotated sorted array with dup II: wrote mid = start - 1 in the morning ~; 
+- N-Queens
+- N-Queens II
+- Generate Parentheses
+- *Combination Sum*: don't know how to make it run faster
+
 * 1/15/2015, Thursday
 ** worked on 10 problems, 108/173: 
 - Simplify Path

@@ -22,56 +22,52 @@ public class findSubstring {
                     hash.put(i, 1);
 
             int slow = 0;
-            int fast = m;
-            int one = slow;
-            while (fast < s.length()) {
-                while (fast < s.length() && !hash.containsKey(s.substring(slow, fast))) {
-                    slow++;
-                    fast++;
-                }
-                one = slow;
-                //System.out.println("slow 0: " + slow);
-                while (fast < s.length() && hash.containsKey(s.substring(slow, fast))) {
-                    if (!fnd.containsKey(s.substring(slow, fast)) ||
-                        (fnd.containsKey(s.substring(slow, fast)) && hash.get(s.substring(slow, fast)) > 1) ) {
-                        if (!fnd.containsKey(s.substring(slow, fast)))
-                            fnd.put(s.substring(slow, fast), 1);
-                        else
-                            fnd.put(s.substring(slow, fast), fnd.get(s.substring(slow, fast)) + 1);
-                        int cnt = 0;
-                        for(String i : fnd.keySet()) 
-                            cnt += fnd.get(i);
-                        if (cnt == n) {
-                            //System.out.println("one: " + one);
-                            //System.out.println("");
-                            res.add(one);
-                            fnd.remove(s.substring(one, one+m));
+            for ( slow = 0; slow < m; slow++) {
+                int fast = m;
+                int one = slow;
+                while (fast < s.length()) {
+                    while (fast < s.length() && !hash.containsKey(s.substring(slow, fast))) {
+                        slow++;
+                        //fast++;
+                    }
+                    one = slow;
+                    fast = slow + 1;
+                    while (fast < s.length() && hash.containsKey(s.substring(slow, fast))) {
+                        if (!fnd.containsKey(s.substring(slow, fast)) ||
+                            (fnd.containsKey(s.substring(slow, fast)) && hash.get(s.substring(slow, fast)) > 1) ) {
+                            if (!fnd.containsKey(s.substring(slow, fast)))
+                                fnd.put(s.substring(slow, fast), 1);
+                            else
+                                fnd.put(s.substring(slow, fast), fnd.get(s.substring(slow, fast)) + 1);
+                            int cnt = 0;
+                            for(String i : fnd.keySet()) 
+                                cnt += fnd.get(i);
+                            if (cnt == n) {
+                                res.add(one);
+                                fnd.remove(s.substring(one, one+m));
+                                slow = one + 1;
+                                fast = slow + m;
+                                //slow += m;   // need a start pointer to move to the right, not on this one when headache~!
+                                //fast = slow + 1;
+                            } else {
+                                slow += m;
+                                fast += m;
+                            }
+                        } else {
+                            fnd.clear();
                             slow = one + 1;
                             fast = slow + m;
-                        } else {
-                            slow += m;
-                            fast += m;
                         }
-                    } else {
-                        fnd.clear();
-                        //slow = fast;
-                        //one = slow;
-                        //fast += m;
-                        slow = one + 1;
-                        fast = slow + m;
                     }
-                    //System.out.println("slow 1: " + slow);
-                    //System.out.println("fast 0: " + fast);
+                
+                    if (fnd.size() < n) 
+                        fnd.clear(); // clear fnd map
+                    slow = one + 1;
+                    fast = slow + m;
                 }
                 
-                if (fnd.size() < n) 
-                    fnd.clear(); // clear fnd map
-                //slow = fast;
-                //fast += m;
-                slow = one + 1;
-                fast = slow + m;
-                //System.out.println("fast 1: " + fast);
             }
+
             return res;
         }
     }
