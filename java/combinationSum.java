@@ -58,34 +58,34 @@ public class combinationSum {
           var save: to save the combination of candidates
           var vvi: the final return vector
         */
-        public void dfs(int [] candidates, int size, int bgn, int val, int target,
+        public void dfs(int [] candidates, int size, int bgn, int target,
                         List<Integer> one, List<List<Integer>> res) {
-            List<Integer> two = new ArrayList<Integer>(one);
-            boolean haveit = false;
-            if (val == target) {
-                for (int i = 0; i < res.size(); i++) { // check if exist already
-                    if (res.get(i).size() != two.size()) continue;
-                    if (res.get(i).equals(one)) return;
-                }
-                res.add(two);
-                two = new ArrayList<Integer>();
+            //List<Integer> two = new ArrayList<Integer>(one);
+            // don't need always make another copy, as far as backtraced by remove last element
+            if (target < 0) return;
+            if (target == 0) {
+                res.add(new ArrayList<Integer> (one));
                 return;
             }
+
             for (int i = bgn; i < size; i++) {
-                if (val + candidates[i] > target) return;
-                two.add(candidates[i]);
-                dfs(candidates, size, bgn, val + candidates[i], target, two, res); // use lots of times
-                int n = two.size() - 1;
-                two.remove(n);
+                if (candidates[i] > target) return;
+                //two.add(candidates[i]);
+                one.add(candidates[i]);
+                dfs(candidates, size, i, target - candidates[i], one, res); // use lots of times
+                //int n = two.size() - 1;
+                //two.remove(n);
+                one.remove(one.size() - 1);
             }
             return;
         }
         
         public List<List<Integer>> combinationSum(int[] candidates, int target) {
             List<List<Integer>> res = new ArrayList<List<Integer>>();
+            if (candidates == null || candidates.length == 0) return res;
             List<Integer> one = new ArrayList<Integer>();
             Arrays.sort(candidates); // to prevent potential duplicates
-            dfs(candidates, candidates.length, 0, 0, target, one, res);
+            dfs(candidates, candidates.length, 0, target, one, res);
             return res;
         }
     }
