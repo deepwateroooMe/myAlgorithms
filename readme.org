@@ -3,6 +3,20 @@
 #+title: Algorithms Review for Job Interview
 #+author: deepwaterooo
 
+* 1/17/2015, Saturday
+** worked on 7 problems, 124/173:
+- 120, 128, 96, 95, 70, 53, 91
+- Triangle
+- Longest Consecutive Sequence
+- Unique Binary Search Trees
+- Unique Binary Search Trees II
+- Climbing Stairs
+- Maximum Subarray
+- Decode Ways
+** Other things
+- 4:00 - 8:58, woke up for 2 min, fall back asleep in 2 mins after surfing internet for 2 mins;
+- wake up 11:48, better mind today, tried couple of dp, but how could I efficiently fall asleep before 4 tonight? 1 cup coffee at ard 4pm alrdy after 20 mins nap
+- Need try greedy method some other time when mind is clear, all painful & bad memories about TLE...
 * 1/16/2015, Friday
 ** worked on 9 problems, 117/173:
 - 49, 81, 51, 52, 22, (39), 82, 108, 109, 149
