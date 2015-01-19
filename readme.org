@@ -4,14 +4,19 @@
 #+author: deepwaterooo
 
 * 1/18/2015, Sunday
-** worked on 4 problems, 133/173:
-- 78, 90, 77, 46, 47
+** worked on 10 problems, 139/173:
+- 78, 90, 77, 46, 47,, 133, 152, 89, 72, 55, 45
 - Subsets
 - Subsets II
 - Combinations
 - Permutations
 - Permutations II
-- 
+- Clone Graph
+- Maximum Product Subarray
+- Gray Code
+- Edit Distance
+- Jump Game
+- Jump Game II
 ** Other things
 - 5:00 - 10:44, mind is NOT in the brain today, do only easy ones, no touching greedy nor array...
 - eat earlier, eat more to make it easier to fall asleep after dinner, evening depends...
