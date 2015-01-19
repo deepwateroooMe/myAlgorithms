@@ -3,6 +3,19 @@
 #+title: Algorithms Review for Job Interview
 #+author: deepwaterooo
 
+* 1/18/2015, Sunday
+** worked on 4 problems, 133/173:
+- 78, 90, 77, 46, 47
+- Subsets
+- Subsets II
+- Combinations
+- Permutations
+- Permutations II
+- 
+** Other things
+- 5:00 - 10:44, mind is NOT in the brain today, do only easy ones, no touching greedy nor array...
+- eat earlier, eat more to make it easier to fall asleep after dinner, evening depends...
+- should be able to fall asleep before 5am tonight then;
 * 1/17/2015, Saturday
 ** worked on 12 problems, 129/173:
 - 120, 128, 96, 95, 70, 53, 91,, 66, 8, 60, 39, 40
