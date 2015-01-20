@@ -86,7 +86,7 @@ public class ladderLength {
             else if (dict.contains(end) && end.length() == 1) return 2;
             
             List<Integer> tmp = new ArrayList<Integer>(1);
-            tmp.add(Integer.MAX_VALUE);
+            tmp.add(Integer.MAX_VALUE);   
             boolean done = bfs(start, end, dict, tmp);
             if (done)
                 return tmp.get(0);

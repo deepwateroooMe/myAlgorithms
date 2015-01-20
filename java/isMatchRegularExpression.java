@@ -93,7 +93,8 @@ public class isMatchRegularExpression {
                             System.out.println("s: " + s);
                             if (isMatch(s, tmp)) {
                                 return true;
-                            } 
+                            } else {
+                            }
                         } 
                     }
                 }

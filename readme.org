@@ -4,9 +4,19 @@
 #+author: deepwaterooo
 
 * 1/19/2015, Monday
-** worked on 7 problems, 146/173:
-
-- 84, 42, 85, 11, 131, 179, 127
+** worked on 1 problems, 148/173:
+- 28, 140
+- strStr
+- word break II
+- should try to work on word ladder II
+** Other things
+- (2:30~2:45) ~ 11:55
+- still, somebody else's mind in my body today, so not me~
+- 3:00-5:00, go campus, try to meet advisor
+- will work coming week when docs processed ready, so try finish this round as soon as possible
+* 1/19/2015, Monday
+** worked on 8 problems, 147/173:
+- 84, 42, 85, 11, 131, 179, 127,, 28
 - Largest Rectangle in Histogram
 - Trapping Rain Water
 - Maximal Rectangle
@@ -16,7 +26,6 @@
 - Word Ladder
 ** Other things
 - (3:30~4:00) ~ 11:05
-
 * 1/18/2015, Sunday
 ** worked on 10 problems, 139/173:
 - 78, 90, 77, 46, 47,, 133, 152, 89, 72, 55, 45

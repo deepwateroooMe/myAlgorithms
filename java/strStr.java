@@ -5,6 +5,7 @@ import java.util.List;
 
 public class strStr {
     public static class Solution {
+        // idea is straight forward, but need to organize the idea better
         public int strStr(String haystack, String needle) {
             if (haystack == null || needle == null) return -1;
             if (needle.length() == 0) return 0;
@@ -16,10 +17,12 @@ public class strStr {
                 }
                 return 0;
             }
-            int i = 0;
+
+            int start = 0, i = 0;
             int j = 0;
             int result = 0;
-            while (i < haystack.length()) {
+            while (start < haystack.length()) {
+                i = start;
                 while (i < haystack.length() && haystack.charAt(i) != needle.charAt(j)) i++;
                 if (i == haystack.length() && j <= needle.length()) return -1;
                 result = i;
@@ -27,17 +30,14 @@ public class strStr {
                     i++;
                     j++;
                 }
-                //System.out.println("i: " + i);
-                //System.out.println("j: " + j);
-                
                 if (i == haystack.length() && j < needle.length())
                     return -1;
                 if (j == needle.length())
                     return result;
-                if (strStr(haystack.substring(result+1), needle) == -1)
-                    return -1;
-                else 
-                    return result + 1 + strStr(haystack.substring(result+1), needle);
+                else {
+                    start++;
+                    j = 0;
+                }
             }
             return -1;
         }
@@ -45,8 +45,8 @@ public class strStr {
 
     public static void main(String[] args){
         Solution result = new Solution();
-        String a = "mississippi";
-        String b = "issip";
+        String a = "baabbaaaaaaabbaaaaabbabbababaabbabbbbbabbabbbbbbabababaabbbbbaaabbbbabaababababbbaabbbbaaabbaababbbaabaabbabbaaaabababaaabbabbababbabbaaabbbbabbbbabbabbaabbbaa";
+        String b = "bbaaaababa";
         int res = result.strStr(a, b);
         
         System.out.println(res);
@@ -54,5 +54,7 @@ public class strStr {
 }
 
 /*
-Last executed input:	"baabbaaaaaaabbaaaaabbabbababaabbabbbbbabbabbbbbbabababaabbbbbaaabbbbabaababababbbaabbbbaaabbaababbbaabaabbabbaaaabababaaabbabbababbabbaaabbbbabbbbabbabbaabbbaa", "bbaaaababa"
- */
+  Time Limit Exceeded
+  Last executed input:	"baabbaaaaaaabbaaaaabbabbababaabbabbbbbabbabbbbbbabababaabbbbbaaabbbbabaababababbbaabbbbaaabbaababbbaabaabbabbaaaabababaaabbabbababbabbaaabbbbabbbbabbabbaabbbaa",
+  "bbaaaababa"
+*/
