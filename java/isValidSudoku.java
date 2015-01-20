@@ -10,7 +10,7 @@ public class isValidSudoku {
             Map<Character, Integer> map = new HashMap<Character, Integer>();
 
             // check row
-            for (int i = 0; i < board.length; i++) {
+            for (int i = 0; i < board.length; i++) 
                 for (int j = 0; j < board[0].length; j++) {
                     if (board[i][j] == '.') continue;
                     if (!map.containsKey(board[i][j]))
@@ -18,11 +18,10 @@ public class isValidSudoku {
                     else if (map.containsKey(board[i][j]))
                         return false;
                 }
-                map.clear();
-            }
+            map.clear();
 
             // check column
-            for (int j = 0; j < board[0].length; j++) {
+            for (int j = 0; j < board[0].length; j++) 
                 for (int i = 0; i < board.length; i++) {
                     if (board[i][j] == '.') continue;
                     if (!map.containsKey(board[i][j]))
@@ -30,13 +29,12 @@ public class isValidSudoku {
                     else if (map.containsKey(board[i][j]))
                         return false;
                 }
-                map.clear();
-            }
+            map.clear();
 
             // check square
-            for (int i = 0; i < 3; i++) {
-                for (int j = 0; j < 3; j++) {
-                    for (int cnti = 0; cnti < 3; cnti++) {
+            for (int i = 0; i < 3; i++)
+                for (int j = 0; j < 3; j++) 
+                    for (int cnti = 0; cnti < 3; cnti++) 
                         for (int cntj = 0; cntj < 3; cntj++) {
                             if (board[i*3+cnti][j*3+cntj] == '.') continue;
                             if (!map.containsKey(board[i*3+cnti][j*3+cntj]))
@@ -44,10 +42,7 @@ public class isValidSudoku {
                             else if (map.containsKey(board[i*3+cnti][j*3+cntj]))
                                 return false;
                         }
-                    }
-                    map.clear();
-                }
-            }
+            map.clear();
             return true;
         }
     }
