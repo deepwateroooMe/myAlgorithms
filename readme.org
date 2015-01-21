@@ -4,15 +4,19 @@
 #+author: deepwaterooo
 
 * 1/19/2015, Monday
-** worked on 1 problems, 148/173:
-- 28, 140
+** worked on 6 problems, 153/173:
+- 28, 140,, 126, 132, 5, 105, 106
 - strStr
 - word break II
-- should try to work on word ladder II
+- word ladder II
+- Palindrom Partitioning II
+- longest Palindrom
+- Preorder Inorder build tree
+- Inorder Postorder build tree
 ** Other things
 - (2:30~2:45) ~ 11:55
 - still, somebody else's mind in my body today, so not me~
-- 3:00-5:00, go campus, try to meet advisor
+- 3:00-5:00, go campus, try to meet advisor, stubbern evening...
 - will work coming week when docs processed ready, so try finish this round as soon as possible
 * 1/19/2015, Monday
 ** worked on 8 problems, 147/173:
