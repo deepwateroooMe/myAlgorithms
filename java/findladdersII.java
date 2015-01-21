@@ -75,8 +75,14 @@ public class findladdersII {
             queue.offer(start); // search & build from start
             int currLev = 1;
             int nextLev = 0;
-            for(String word : unv)    // all strings in dict + start
+            for(String word : unv) {   // all strings in dict + start
                 adjMap.put(word, new LinkedList<String>());  // just like clone graph
+                // each dict word is a key, including end, except start,
+                // because building directed graph from end --> start
+                // any ele in val for the key recorded induced from "end", would be functional swh in the path
+                // cause terminated once found shortest;
+                // but these not traced/triggered from end will ignore because not shortest
+            }
             unv.remove(start);
             while( !queue.isEmpty() ){
                 String currLadder = queue.poll();  // current word, --> mutate, check dicts, add or not
@@ -85,7 +91,7 @@ public class findladdersII {
                         nextLev++;
                         queue.offer(nextLadder);
                     }
-                    adjMap.get(nextLadder).offer(currLadder);
+                    adjMap.get(nextLadder).offer(currLadder); 
                     if(nextLadder.equals(end) && !found) { // control if start --> end directly, No here
                         found = true;
                         currLen += 2;
