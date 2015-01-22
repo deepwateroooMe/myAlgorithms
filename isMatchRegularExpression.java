@@ -1,17 +1,31 @@
 public class isMatchRegularExpression {
     public static class Solution {
-
         // https://oj.leetcode.com/discuss/9405/the-shortest-ac-code
         // '.' if p has a '.', it can pass any single character in s except '\0'.
         // '*' if p has a '*' character, it can pass any length of first-match
         //                    characters in s including '\0'.
         public boolean matchFirst(String s, String p) {
-            char[] schar = s.toCharArray();
-            char[] pchar = p.toCharArray();
-            return (schar[0] == pchar[0] || (pchar[0] == '.' && schar[0] != '\0'));
+            return (s.charAt(0) == p.charAt(0)) || (s.charAt(0) == '.' && p.length() >= 1);
         }
 
         public boolean isMatch(String s, String p) {
+            if (s == null) return p == null;
+            if (s.length() == 0) return (p.length() == 0 || 
+            return false;
+        }
+    }
+        
+    public static void main(String[] args) {
+        String s = "abbabaaaaaaacaa";
+        String t = "a*.*b.a.*c*b*a*c*"; // I don't want to do this one any more!!! 435/445
+        Solution result = new Solution();
+        boolean results = result.isMatch(s, t);
+                
+        System.out.println(results);
+    }
+}
+    /*
+      public boolean isMatch(String s, String p) {
             if (s == null || s.length() == 0) {
                 if ( (p == null && s == null) || (s.length() == 0 && p.length() == 0) ) {
                     return true;
@@ -100,14 +114,4 @@ public class isMatchRegularExpression {
             }
             return false;
         }
-    };
-        
-    public static void main(String[] args) {
-        String s = "abbabaaaaaaacaa";
-        String t = "a*.*b.a.*c*b*a*c*"; // I don't want to do this one any more!!! 435/445
-        Solution result = new Solution();
-        boolean results = result.isMatch(s, t);
-                
-        System.out.println(results);
-    }
-}
+     */

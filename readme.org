@@ -4,13 +4,21 @@
 #+author: deepwaterooo
 
 * 1/21/2015, Wednesday
-** worked on 1 problems, 154/173:
-- 114
+** worked on 8 problems, 161/175:
+- 114,, 31, 41, 32, 9, 7, 26, 80
 - Flatten binary tree to Preorder all Right nodes
+- Next Permutation
+- First Missing Positive
+- Longest Valid Parentheses
+- Palindrome Number
+- Reverse Integer
+- Remove Duplicates from Sorted Array
+- Remove Duplicates from Sorted Array II
 ** Other things
 - 8:00 - 2:38pm
 - C-cC-vC-c C-cC-vC-r C-xC-c terminate without prompt, but still seeking a way to kill subprocesses without kill emacs;
 - It maybe Difficult, but so far tolerate it, only one tree/list problem left anyway~
+- 10 hard ones left untouched ~!!
 * 1/20/2015, Tuesday
 ** worked on 6 problems, 153/173:
 - 28, 140,, 126, 132, 5, 105, 106
