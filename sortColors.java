@@ -46,19 +46,7 @@ public class sortColors {
                 }
             }
             if (m == a.length) return;
-            /*
-            if (a[j] != 2 && a[n] != 2) { // a[j] = 2
-                while (n >= 0 && a[n] != 2) n--;
-                if (n >= 0) {
-                    myswap(a, j, n);
-                    n = j - 1;
-                }
-            }
-            */
-            while ( m < n) {
-                if (a[m] != a[i])
-            }
-
+            return;
         }
     }
 

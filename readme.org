@@ -3,7 +3,15 @@
 #+title: Algorithms Review for Job Interview
 #+author: deepwaterooo
 
-* 1/19/2015, Monday
+* 1/21/2015, Wednesday
+** worked on 1 problems, 154/173:
+- 114
+- Flatten binary tree to Preorder all Right nodes
+** Other things
+- 8:00 - 2:38pm
+- C-cC-vC-c C-cC-vC-r C-xC-c terminate without prompt, but still seeking a way to kill subprocesses without kill emacs;
+- It maybe Difficult, but so far tolerate it, only one tree/list problem left anyway~
+* 1/20/2015, Tuesday
 ** worked on 6 problems, 153/173:
 - 28, 140,, 126, 132, 5, 105, 106
 - strStr
