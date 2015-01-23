@@ -24,8 +24,16 @@ public class sortColors {
             int i = 0;
             int k = n - 1;
             int j = i + 1;
+            while (k >= 0 && a[k] == 2) --k;
+            while (i < n && a[i] == 0) {
+                ++i;
+                j = i + 1;
+            }
+            while (j < k && a[j] == 2) {
+                swap(a, j, k);
+                --k;
+            }
             while (j < k) {
-                while (k >= 0 && a[k] == 2) --k;
                 if (k < 0) return;
                 if (k > 0 && a[i] == 2) {
                     swap(a, i, k);
