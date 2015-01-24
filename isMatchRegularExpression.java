@@ -5,31 +5,21 @@ public class isMatchRegularExpression {
         // '*' if p has a '*' character, it can pass any length of first-match
         //                    characters in s including '\0'.
         public boolean matchFirst(String s, String p) {
-            return (s.charAt(0) == p.charAt(0)) || (s.charAt(0) == '.' && p.length() >= 1);
+            System.out.println("s: " + s);
+            System.out.println("p: " + p);
+
+            if (s.length() == 0 && !p.equals("*")) return false;
+            else if (s.length() > 0 && p.length() == 0) return false;
+            else if (s.length() == 0 && p.charAt(0) != '.' && p.charAt(0) != '*') return false;
+            return ((s.charAt(0) == p.charAt(0)) || (s.length() >= 1 && p.charAt(0) == '.'));
         }
 
         public boolean isMatch(String s, String p) {
             if (s == null) return p == null;
-            if (s.length() == 0) return (p.length() == 0 || 
-            return false;
-        }
-    }
-        
-    public static void main(String[] args) {
-        String s = "abbabaaaaaaacaa";
-        String t = "a*.*b.a.*c*b*a*c*"; // I don't want to do this one any more!!! 435/445
-        Solution result = new Solution();
-        boolean results = result.isMatch(s, t);
-                
-        System.out.println(results);
-    }
-}
-    /*
-      public boolean isMatch(String s, String p) {
             if (s == null || s.length() == 0) {
-                if ( (p == null && s == null) || (s.length() == 0 && p.length() == 0) ) {
+                if ( (p == null && s == null) || (s.length() == 0 && p.length() == 0) )
                     return true;
-                } else if (p != null && p.length() != 0) {
+                else if (p != null && p.length() != 0) {
                     if ((p.length() == 1 && p.charAt(0) == '*')
                         || (p.length() == 2 && p.charAt(1) == '*')) {
                         return true;
@@ -38,9 +28,7 @@ public class isMatchRegularExpression {
                                || (p.length() > 2 &&
                                    (p.charAt(1) != '*' || p.charAt(p.length()-1) != '*'))) {
                         return false;
-                    } else {
-                        return isMatch(s, p.substring(3));
-                    }
+                    } else return isMatch(s, p.substring(3));
                 } else {
                     char[] pchar = p.toCharArray();
                     if (p.length() == 2 && pchar[0] == '.' && pchar[1] == '*') {
@@ -49,8 +37,7 @@ public class isMatchRegularExpression {
                         for(int i = 2; i < p.length(); ++i) {
                             if (pchar[i] != '*') {
                                 return false;
-                            } else {
-                            }
+                            } 
                         }
                         return true;
                     }
@@ -60,9 +47,7 @@ public class isMatchRegularExpression {
             } else if (p.length() == 1) {
                 if (s.length() == 1) {
                     return matchFirst(s, p);
-                } else {
-                    return false;
-                }
+                } else return false;
             }
             
             char[] schar = s.toCharArray();
@@ -82,36 +67,38 @@ public class isMatchRegularExpression {
                     } else if (p.length() >= 3 && p.charAt(2) == '*') {
                         return isMatch(s.substring(1), p.substring(3));
                     }
-                } else {
-                    return isMatch(s.substring(1), p.substring(1));
-                }
+                } else return isMatch(s.substring(1), p.substring(1));                    
             } else { // with followed '*'
-                //if (p.length() == 2 && matchFirst(s, p) && s.charAt(1) == s.charAt(0)) {
-                if (p.length() == 2 && matchFirst(s, p)) {
-                    if (s.length() == 1) {
-                        return true;
-                    } else {
-                        return isMatch(s.substring(1), p);
-                    }
-                } else if (p.length() > 2 && isMatch(s, p.substring(2))) {
-                    return true;
-                } else {
-                    m = 1;
-                    String tmp = p.substring(2);
-                    System.out.println("tmp out: " + tmp);
-                    while (matchFirst(s, p)) {  //try all possible lengths by the following
-                        if (s.length() <= m) {
-                            return false;
-                        } else { 
-                            s = s.substring(m);
-                            System.out.println("s: " + s);
-                            if (isMatch(s, tmp)) {
-                                return true;
-                            } 
-                        } 
-                    }
+                System.out.println("");
+                System.out.println("GotHere");
+
+                if (isMatch(s, p.substring(2))) return true;
+                String tmp = p.substring(2, p.length());
+                System.out.println("tmp 0: " + tmp);
+                String stmp = s;
+                while (stmp.length() > 0 && tmp.length() > 0 && matchFirst(stmp, tmp)) {
+                    tmp = p.substring(2, p.length());
+                    System.out.println("tmp 1: " + tmp);
+                    if (s.length() >= 1) {
+                        stmp = s.substring(1, s.length());
+                        System.out.println("stmp: " + stmp);
+                        if (isMatch(stmp, tmp)) return true;
+                    } else if (s.length() == 0 && tmp.length() > 0 && !tmp.equals(".*") && !tmp.equals("*"))
+                        return false;
+                    else if (s.length() > 0 && p.length() == 0) return false;
                 }
+                if (stmp.length() > 0 && tmp.length() > 0 && !matchFirst(stmp, tmp)) return false;
             }
             return false;
         }
-     */
+    }
+        
+    public static void main(String[] args) {
+        String s = "abbabaaaaaaacaa";
+        String t = "a*.*b.a.*c*b*a*c*"; // I don't want to do this one any more!!! 435/445
+        Solution result = new Solution();
+        boolean results = result.isMatch(s, t);
+                
+        System.out.println(results);
+    }
+}
