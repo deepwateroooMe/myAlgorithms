@@ -11,6 +11,7 @@
 - connect next Right
 - (4:30~5:00) ~ 2:30, woke up from 10:00 from time to time,
 - http://bbs.tianya.cn/post-culture-849459-117.shtml#ty_vip_look[V%E5%93%A5%E6%8E%B0%E8%B0%8E] 5:00-7:30 read 85-117; 117/166, want to finish this, a way to think...
+- go grocery buy food, have dinner, then conitnue the several questions
 * 1/23/2015, Friday
 ** worked on 6 problems, 173/175: 4 left
 - find substring idxes
