@@ -8,48 +8,43 @@ import java.util.Set;
 
 public class solveSudoku {
     public static class Solution {
-        // can NOT think tonight any more
         public boolean helper(char[][] bd, List<Integer> list, int fst, List<Character> avb) {
-
-            System.out.println("");
-            System.out.println("fst: " + fst);
-            int x = fst / 9;
-            int y = fst % 9;
-            System.out.println("x: " + x);
-            System.out.println("y: " + y);
+            avb = new ArrayList<Character>();
+            fst = getFirst(bd, list, avb);
+            int val = list.get(fst);
+            int x = list.get(fst) / 9;
+            int y = list.get(fst) % 9;
+            //System.out.println("avb.size(): " + avb.size());
+                
+            if (avb.size() == 0) return false;
+            list.remove(fst);
             
-            list.remove(new Integer(fst));
             for (int k = 0; k < avb.size(); k++) {
                 char c = avb.get(k);
-                System.out.println("c: " + c);
                 bd[x][y] = c;
+                /*  
                 // print board
                 for (int i = 0; i < bd.length; i++) {
-                    for (int j = 0; j < bd[0].length; j++) 
+                    for (int j = 0; j < bd[0].length; j++) {
                         System.out.print(bd[i][j] + " ");
+                        if (j % 3 == 2)
+                            System.out.print("| ");
+                    }
                     System.out.println("");
+                    if (i % 3 == 2)
+                        System.out.println("-----------------------");
                 }
 
-                if (!isValidSudoku(bd)) {
+                if (!isValidSudoku(bd, x, y)) {
                     bd[x][y] = '.';
                     continue;
                 }
-
+                */
                 if (list.size() == 0) return true;
-                
-                List<Character> nextAvb = new ArrayList<Character>();
-                int first = getFirst(bd, list, nextAvb);
-                //list.remove(new Integer(first));
-                if (helper(bd, list, first, nextAvb)) return true;
-                //list.add(new Integer(first));
+                if (helper(bd, new ArrayList<Integer>(list), fst, avb)) return true;
                 bd[x][y] = '.';
             }
-            list.add(new Integer(fst));
-
-            List<Character> nextAvb = new ArrayList<Character>();
-            int first = getFirst(bd, list, nextAvb);
-            //list.remove(new Integer(first));
-            if (helper(bd, list, first, nextAvb)) return true;
+            list.add(new Integer(val));
             return false;
         }
 
@@ -75,10 +70,10 @@ public class solveSudoku {
                 if (tmp.size() == 8) {
                     for (char a = '1'; a <= '9'; a++)
                         if (!tmp.contains(a)) res.add(a);
-                    return list.get(i);   
+                    return i;
                 }
                 if (tmp.size() > result) {
-                    result = list.get(i);
+                    result = i; 
                     bst = new HashSet<Character>(tmp);
                 }
             }
@@ -95,62 +90,57 @@ public class solveSudoku {
                 for (int j = 0; j < 9; j++) 
                     if (board[i][j] == '.') list.add(i * 9 + j);
             int first = getFirst(board, list, avb);
-            //list.remove(new Integer(first));
             helper(board, list, first, avb);
         }
-
-        public boolean isValidSudoku(char[][] board) {
-            if (board == null || board.length == 0 || board[0].length == 0) return false;
+        /*
+        public boolean isValidSudoku(char[][] bd, int x, int y) {
             Map<Character, Integer> map = new HashMap<Character, Integer>();
-            // check row
-            for (int i = 0; i < board.length; i++) {
-                for (int j = 0; j < board[0].length; j++) {
-                    if (board[i][j] == '.') continue;
-                    if (!map.containsKey(board[i][j]))
-                        map.put(board[i][j], 1);
-                    else if (map.containsKey(board[i][j])) {
-                        System.out.println("row wrong");
-                        return false;
-                    }
+            for (int j = 0; j < 9; j++) // row
+                if (bd[x][j] != '.') {
+                    if (!map.containsKey(bd[x][j])) map.put(bd[x][j], 1);   
+                    else return false;
                 }
-                map.clear();
-            }
-            // check column
-            for (int j = 0; j < board[0].length; j++) {
-                for (int i = 0; i < board.length; i++) {
-                    if (board[i][j] == '.') continue;
-                    if (!map.containsKey(board[i][j]))
-                        map.put(board[i][j], 1);
-                    else if (map.containsKey(board[i][j])) {
-                        System.out.println("col wrong");
-                        return false;
-                    }
+            map.clear();
+            for (int j = 0; j < 9; j++) 
+                if (bd[j][y] != '.') {
+                    if (!map.containsKey(bd[j][y])) map.put(bd[j][y], 1);   
+                    else return false;
                 }
-                map.clear();
-            }
-            // check square
-            for (int i = 0; i < 3; i++)
-                for (int j = 0; j < 3; j++) {
-                    for (int cnti = 0; cnti < 3; cnti++) {
-                        for (int cntj = 0; cntj < 3; cntj++) {
-                            if (board[i*3+cnti][j*3+cntj] == '.') continue;
-                            if (!map.containsKey(board[i*3+cnti][j*3+cntj]))
-                                map.put(board[i*3+cnti][j*3+cntj], 1);
-                            else if (map.containsKey(board[i*3+cnti][j*3+cntj])) {
-                                System.out.println("sqr wrong");
-                                return false;
-                            }
-                        }
+            map.clear();
+            for (int j = 0; j < 3; j++) 
+                for (int k = 0; k < 3; k++) 
+                    if (bd[j + (x / 3) * 3][k + (y / 3) * 3] != '.') {
+                        if (!map.containsKey(bd[j + (x / 3) * 3][k + (y / 3) * 3]))
+                            map.put(bd[j + (x / 3) * 3][k + (y / 3) * 3], 1);   
+                        else return false;
                     }
-                    map.clear();
-                }
             return true;
         }
+        */
     }
 
     public static void main(String[] args){
         Solution result = new Solution();
         char [][] board = {
+            {'1', '.', '.', '.', '7', '.', '.', '3', '.'},
+            {'8', '3', '.', '6', '.', '.', '.', '.', '.'},
+            {'.', '.', '2', '9', '.', '.', '6', '.', '8'},
+            {'6', '.', '.', '.', '.', '4', '9', '.', '7'},
+            {'.', '9', '.', '.', '.', '.', '.', '5', '.'},
+            {'3', '.', '7', '5', '.', '.', '.', '.', '4'},
+            {'2', '.', '3', '.', '.', '9', '1', '.', '.'},
+            {'.', '.', '.', '.', '.', '2', '.', '4', '3'},
+            {'.', '4', '.', '.', '8', '.', '.', '.', '9'}};
+            /*
+            {'.', '.', '.', '.', '.', '7', '.', '.', '9'},
+            {'.', '4', '.', '.', '8', '1', '2', '.', '.'},
+            {'.', '.', '.', '9', '.', '.', '.', '1', '.'},
+            {'.', '.', '5', '3', '.', '.', '.', '7', '2'},
+            {'2', '9', '3', '.', '.', '.', '.', '5', '.'},
+            {'.', '.', '.', '.', '.', '5', '3', '.', '.'},
+            {'8', '.', '.', '.', '2', '3', '.', '.', '.'},
+            {'7', '.', '.', '.', '5', '4', '.', '.', '.'},
+            {'5', '3', '1', '.', '7', '.', '.', '.', '.'}};
             {'.', '.', '9', '7', '4', '8', '.', '.', '.'}, 
             {'7', '.', '.', '.', '.', '.', '.', '.', '.'}, 
             {'.', '2', '.', '1', '.', '9', '.', '.', '.'}, 
@@ -160,7 +150,6 @@ public class solveSudoku {
             {'.', '.', '.', '8', '.', '3', '.', '2', '.'}, 
             {'.', '.', '.', '.', '.', '.', '.', '.', '6'}, 
             {'.', '.', '.', '2', '7', '5', '9', '.', '.'}};
-            /*
             {'5', '3', '.', '.', '7', '.', '.', '.', '.'},
             {'6', '.', '.', '1', '9', '5', '.', '.', '.'},
             {'.', '9', '8', '.', '.', '.', '.', '6', '.'},
@@ -170,9 +159,7 @@ public class solveSudoku {
             {'.', '6', '.', '.', '.', '.', '2', '8', '.'},
             {'.', '.', '.', '4', '1', '9', '.', '.', '5'},
             {'.', '.', '.', '.', '8', '.', '.', '7', '9'}};  */
-
         result.solveSudoku(board);
-
         System.out.println("");
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[0].length; j++) 
@@ -182,6 +169,30 @@ public class solveSudoku {
     }
 }
 /*
+  Time Limit ExceededMore Details 
+Last executed input:	[
+"1...7..3.",
+"83.6.....",
+"..29..6.8",
+"6....49.7",
+".9.....5.",
+"3.75....4",
+"2.3..91..",
+".....2.43",
+".4..8...9"]
+
+  Time Limit ExceededMore Details 
+Last executed input:[
+".....7..9",
+".4..812..",
+"...9...1.",
+"..53...72",
+"293....5.",
+".....53..",
+"8...23...",
+"7...5..4.",
+"531.7...."]
+
   Input:	["..9748...","7........",".2.1.9...","..7...24.",".64.1.59.",".98...3..","...8.3.2.","........6","...2759.."]
 Output:	["539748612","78.6.2459","426159873",".57986241","264317598","198524367","915863724","872491.36","64327598."]
 Expected:	["519748632","783652419","426139875","357986241","264317598","198524367","975863124","832491756","641275983"]
