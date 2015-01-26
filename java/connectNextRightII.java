@@ -73,10 +73,7 @@ public class connectNextRightII {
         TreeLinkNode root = new TreeLinkNode(a[0]);
         root.buildTree(root, a);
         root.levelPrintTree(root);
-        System.out.println("GotHere");
-
         result.connect(root);
-        System.out.println("GotHere");
 
         root.levelPrintTree(root);
     }

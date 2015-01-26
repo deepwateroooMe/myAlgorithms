@@ -16,15 +16,15 @@ public class cloneGraph {
 
             Map<UndirectedGraphNode, UndirectedGraphNode> map = new HashMap<UndirectedGraphNode, UndirectedGraphNode>();
             Queue<UndirectedGraphNode> q = new LinkedList<UndirectedGraphNode>();
-            q.add(node);         // added first node, need add its all Neighbors as well
+            q.add(node);                      // added first node, need add its all Neighbors as well
             map.put(node, res);
 
             List<UndirectedGraphNode> curNbr = new ArrayList<UndirectedGraphNode>();
             UndirectedGraphNode curr = null;
             while (!q.isEmpty()) {
                 curr = q.poll();
-                curNbr = curr.neighbors;   // ori
-                for (UndirectedGraphNode aNbr : curNbr) {    // for build connection among copies
+                curNbr = curr.neighbors;                   // ori
+                for (UndirectedGraphNode aNbr : curNbr) {  // for build connection among copies
                     if (!map.containsKey(aNbr)) {
                         UndirectedGraphNode acpNbr = new UndirectedGraphNode(aNbr.label);
                         map.put(aNbr, acpNbr);
@@ -32,7 +32,6 @@ public class cloneGraph {
                         q.add(aNbr);
                     } else
                         map.get(curr).neighbors.add(map.get(aNbr));                        
-                    //q.add(aNbr);
                 }
             }
             return res;

@@ -45,7 +45,6 @@ public class mergeKLists {
             if (lists.size() == 0) return null;
             if (lists.size() == 1) return lists.get(0);
             if (lists.size() == 2) return mergeTwoLists(lists.get(0), lists.get(1));
-            // Collections.copy(list1, list2); // copy list2 to list1
             return mergeTwoLists((mergeKLists(lists.subList(0, lists.size() / 2))),
                                  (mergeKLists(lists.subList(lists.size() / 2, lists.size()))));
         }

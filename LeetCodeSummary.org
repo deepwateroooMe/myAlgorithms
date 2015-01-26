@@ -1,0 +1,830 @@
+#+latex_class: book
+#+latex_header: \lstset{language=Java,numbers=left,numberstyle=\tiny,basicstyle=\ttfamily\small,tabsize=4,frame=none,escapeinside=``,extendedchars=false,keywordstyle=\color{blue!70},commentstyle=\color{red!55!green!55!blue!55!},rulesepcolor=\color{red!20!green!20!blue!20!}}
+#+title: LeetCode Summary
+#+author: deepwaterooo
+
+* 线性表
+** Array
+*** Two Sum
+*** Two Sum II - Input Array is Sorted
+*** Two Sum III - Data Structure Design
+    
+*** Valid Palindrome
+** 单链表： Single Linked List
+
+* 字符串： String
+
+*** Implement strStr()
+*** Reverse Words in a String
+*** Reverse Words in a String II
+*** String to Integer (atoi)
+*** Valid Number
+*** Longest Substring Without Repeating Characters
+*** Longest Substring with At Most Two Distinct Characters
+*** Longest Palindromic Substring
+*** Missing Ranges
+*** One Edit Distance 
+*** Read N Characters Given Read4
+*** Read N Characters Given Read4 II - Call multiple times 
+* Linked List
+
+** Easier Maybe?
+*** Merge Two Sorted List
+*** Add Two Numbers
+*** Swap Nodes in Pairs
+*** Copy List With Random Pointers
+* 树: Binary Tree, Binary Search Tree
+** 二叉树的遍历
+*** 
+** 二叉树的构建
+*** 
+** 二叉树查找
+** 二叉树递归
+
+* 栈和队列
+** 栈
+*** Evaluate Reverse Polish Notation
+*** Valid Parentheses
+*** 
+** 队列
+*** 
+** Heap: Merge k sorted List
+Merge k sorted linked lists and return it as one sorted list. Analyze and describe its complexity.
+*Tags*: Divide and Conquer, Linked List, Heap
+#+BEGIN_SRC java
+public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+    if (l1 == null) return l2;
+    if (l2 == null) return l1;
+    ListNode result;
+    if (l1.val < l2.val) {
+        result = l1;
+        l1 = l1.next;
+        result.next = null;
+    } else {
+        result = l2;
+        l2 = l2.next;
+        result.next = null;
+    }
+    ListNode curr = result;
+    while (l1 != null && l2 != null) {
+        if (l1.val < l2.val) {
+            curr.next = l1;
+            curr = curr.next;
+            l1 = l1.next;
+            curr.next = null;
+        } else {
+            curr.next = l2;
+            curr = curr.next;
+            l2 = l2.next;
+            curr.next = null;
+        }
+    }
+    if (l1 == null && l2 == null)
+        return result;
+    l1 = (l1 == null) ? l2 : l1;
+    curr.next = l1;
+    return result;
+}
+        
+public ListNode mergeKLists(List<ListNode> lists) {
+    if (lists.size() == 0) return null;
+    if (lists.size() == 1) return lists.get(0);
+    if (lists.size() == 2) return mergeTwoLists(lists.get(0), lists.get(1));
+    return mergeTwoLists((mergeKLists(lists.subList(0, lists.size() / 2))),
+                         (mergeKLists(lists.subList(lists.size() / 2, lists.size()))));
+}
+#+END_SRC
+
+* Backtracing and Recursion
+** 排列: Permutation
+*** Permutation
+Given a collection of numbers, return all possible permutations.
+
+For example,
+#+BEGIN_SRC java
+[1,2,3] have the following permutations:
+[1,2,3], [1,3,2], [2,1,3], [2,3,1], [3,1,2], and [3,2,1].
+#+END_SRC
+*** Permutation II
+Given a collection of numbers that might contain duplicates, return all possible unique permutations.
+
+For example,
+#+BEGIN_SRC java
+[1,1,2] have the following unique permutations:
+[1,1,2], [1,2,1], and [2,1,1].
+#+END_SRC
+*** Permutation Sequence
+The set [1,2,3,…,n] contains a total of n! unique permutations.
+
+By listing and labeling all of the permutations in order, We get the following sequence (ie, for n = 3):
+#+BEGIN_SRC java
+"123"
+"132"
+"213"
+"231"
+"312"
+"321"
+#+END_SRC
+Given n and k, return the kth permutation sequence.
+
+Note: Given n will be between 1 and 9 inclusive.
+** 组合：Combination
+*** Combinationas
+Given two integers n and k, return all possible combinations of k numbers out of 1 ... n.
+
+For example,
+
+If n = 4 and k = 2, a solution is:
+#+BEGIN_SRC java
+[
+  [2,4],
+  [3,4],
+  [2,3],
+  [1,2],
+  [1,3],
+  [1,4],
+]
+#+END_SRC
+*** Combination Sum
+Given a set of candidate numbers (C) and a target number (T), find all unique combinations in C where the candidate numbers sums to T.
+
+The same repeated number may be chosen from C unlimited number of times.
+
+Note:
+- All numbers (including target) will be positive integers.
+- Elements in a combination (a1, a2, … , ak) must be in non-descending order. (ie, a1 ≤ a2 ≤ … ≤ ak).
+- The solution set must not contain duplicate combinations.
+
+For example, given candidate set 2,3,6,7 and target 7, 
+
+A solution set is: 
+#+BEGIN_SRC java
+[7] 
+[2, 2, 3] 
+#+END_SRC
+*** Combination Sum II
+Given a collection of candidate numbers (C) and a target number (T), find all unique combinations in C where the candidate numbers sums to T.
+
+Each number in C may only be used once in the combination.
+
+Note:
+- All numbers (including target) will be positive integers.
+- Elements in a combination (a1, a2, … , ak) must be in non-descending order. (ie, a1 ≤ a2 ≤ … ≤ ak).
+- The solution set must not contain duplicate combinations.
+For example, given candidate set 10,1,2,7,6,1,5 and target 8, 
+
+A solution set is: 
+#+BEGIN_SRC java
+[1, 7] 
+[1, 2, 5] 
+[2, 6] 
+[1, 1, 6] 
+#+END_SRC
+** Subsets
+*** Subsets: Bit Manipulation
+Given a set of distinct integers, S, return all possible subsets.
+
+Note:
+- Elements in a subset must be in non-descending order.
+- The solution set must not contain duplicate subsets.
+For example,
+If S = [1,2,3], a solution is:
+#+BEGIN_SRC java
+[
+  [3],
+  [1],
+  [2],
+  [1,2,3],
+  [1,3],
+  [2,3],
+  [1,2],
+  []
+]
+#+END_SRC
+*Tags:* Array Backtracking, Bit Manipulation
+*** Subsets II
+Given a collection of integers that might contain duplicates, S, return all possible subsets.
+
+Note:
+- Elements in a subset must be in non-descending order.
+- The solution set must not contain duplicate subsets.
+For example,
+If S = [1,2,2], a solution is:
+#+BEGIN_SRC java
+[
+  [2],
+  [1],
+  [1,2,2],
+  [2,2],
+  [1,2],
+  []
+]
+#+END_SRC
+** with Recursion
+*** Letter Combinationas of Phone Number
+Given a digit string, return all possible letter combinations that the number could represent.
+
+A mapping of digit to letters (just like on the telephone buttons) is given below.
+
+#+CAPTION: Letter Combinationas of Phone Number
+[[./pic/phoneNumber.png]]
+#+BEGIN_SRC java
+Input:Digit string "23"
+Output: ["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"].
+#+END_SRC
+Note:
+
+Although the above answer is in lexicographical order, your answer could be in any order you want.
+*** Restore IP Addresses
+Given a string containing only digits, restore it by returning all possible valid IP address combinations.
+
+For example:
+#+BEGIN_SRC java
+Given "25525511135",
+return ["255.255.11.135", "255.255.111.35"]. (Order does not matter)
+#+END_SRC
+*** Generate Parentheses
+Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.
+
+For example, given n = 3, a solution set is:
+#+BEGIN_SRC java
+"((()))", "(()())", "(())()", "()(())", "()()()"
+#+END_SRC
+*** Gray Code
+The gray code is a binary numeral system where two successive values differ in only one bit.
+
+Given a non-negative integer n representing the total number of bits in the code, print the sequence of gray code. A gray code sequence must begin with 0.
+
+For example, given n = 2, return [0,1,3,2]. Its gray code sequence is:
+#+BEGIN_SRC java
+00 - 0
+01 - 1
+11 - 3
+10 - 2
+#+END_SRC
+Note:
+- For a given n, a gray code sequence is not uniquely defined.
+- For example, [0,2,3,1] is also a valid gray code sequence according to the above definition.
+- For now, the judge is able to judge based on one instance of gray code sequence. Sorry about that.
+*** Word Search
+Given a 2D board and a word, find if the word exists in the grid.
+
+The word can be constructed from letters of sequentially adjacent cell, where "adjacent" cells are those horizontally or vertically neighboring. The same letter cell may not be used more than once.
+
+For example,
+#+BEGIN_SRC java
+Given board =
+[
+  ["ABCE"],
+  ["SFCS"],
+  ["ADEE"]
+]
+word = "ABCCED", -> returns true,
+word = "SEE", -> returns true,
+word = "ABCB", -> returns false.
+#+END_SRC
+*** Palindrome Partitioning 
+Given a string s, partition s such that every substring of the partition is a palindrome.
+
+Return all possible palindrome partitioning of s.
+
+For example, 
+#+BEGIN_SRC java
+given s = "aab",
+Return
+  [
+    ["aa","b"],
+    ["a","a","b"]
+  ]
+#+END_SRC
+*** N-Queens 
+The n-queens puzzle is the problem of placing n queens on an n×n chessboard such that no two queens attack each other.
+ #+caption: N-Queens 
+[[./pic/8-queens.png]]
+
+Given an integer n, return all distinct solutions to the n-queens puzzle.
+
+Each solution contains a distinct board configuration of the n-queens' placement, where 'Q' and '.' both indicate a queen and an empty space respectively.
+
+For example,
+
+There exist two distinct solutions to the 4-queens puzzle:
+#+BEGIN_SRC java
+[
+ [".Q..",  // Solution 1
+  "...Q",
+  "Q...",
+  "..Q."],
+
+ ["..Q.",  // Solution 2
+  "Q...",
+  "...Q",
+  ".Q.."]
+]
+#+END_SRC
+*** N-Queens II
+Follow up for N-Queens problem.
+
+Now, instead outputting board configurations, return the total number of distinct solutions.
+*** Sudoku Solver
+Write a program to solve a Sudoku puzzle by filling the empty cells.
+
+Empty cells are indicated by the character '.'.
+
+You may assume that there will be only one unique solution.
+
+#+caption: Sudoku Solver 1
+[[./pic/solveSudoku1.png]]
+A sudoku puzzle...
+
+#+caption: Sudoku Solver 2
+[[./pic/solveSudoku2.png]]
+...and its solution numbers marked in red.
+
+*Tags:* Backtracking, Hash Table
+
+*** Regular Expression Matching
+Implement regular expression matching with support for '.' and '*'.
+- '.' Matches any single character.
+- '*' Matches zero or more of the preceding element.
+
+The matching should cover the entire input string (not partial).
+
+The function prototype should be:
+
+bool isMatch(const char *s, const char *p)
+
+Some examples:
+#+BEGIN_SRC java
+isMatch("aa","a") → false
+isMatch("aa","aa") → true
+isMatch("aaa","aa") → false
+isMatch("aa", "a*") → true
+isMatch("aa", ".*") → true
+isMatch("ab", ".*") → true
+isMatch("aab", "c*a*b") → true
+#+END_SRC
+*Tags:* Dynamic Programming, Backtracking, String
+*** Wild Card Matching
+Implement wildcard pattern matching with support for '?' and '*'.
+- '?' Matches any single character.
+- '*' Matches any sequence of characters (including the empty sequence).
+
+The matching should cover the entire input string (not partial).
+
+The function prototype should be:
+
+bool isMatch(const char *s, const char *p)
+
+Some examples:
+#+BEGIN_SRC java
+isMatch("aa","a") → false
+isMatch("aa","aa") → true
+isMatch("aaa","aa") → false
+isMatch("aa", "*") → true
+isMatch("aa", "a*") → true
+isMatch("ab", "?*") → true
+isMatch("aab", "c*a*b") → false
+#+END_SRC
+*Tags:* Dynamic Programming, Backtracking, Greedy, String
+*** Word Break II
+Given a string s and a dictionary of words dict, add spaces in s to construct a sentence where each word is a valid dictionary word.
+
+Return all such possible sentences.
+
+For example, given
+#+BEGIN_SRC java
+s = "catsanddog",
+dict = ["cat", "cats", "and", "sand", "dog"].
+
+A solution is ["cats and dog", "cat sand dog"].
+#+END_SRC
+*Tags:* Dynamic Programming Backtracking
+
+*** Word Ladder II
+Given two words (start and end), and a dictionary, find all shortest transformation sequence(s) from start to end, such that:
+- Only one letter can be changed at a time
+- Each intermediate word must exist in the dictionary
+For example,
+#+BEGIN_SRC java
+Given:
+start = "hit"
+end = "cog"
+dict = ["hot","dot","dog","lot","log"]
+Return
+  [
+    ["hit","hot","dot","dog","cog"],
+    ["hit","hot","lot","log","cog"]
+  ]
+#+END_SRC
+Note:
+- All words have the same length.
+- All words contain only lowercase alphabetic characters.
+*Tags:* Array, Backtracking, Breadth-first Search, String
+
+* Bit Manipulation
+*** Subsets: Bit Manipulation
+Given a set of distinct integers, S, return all possible subsets.
+
+Note:
+- Elements in a subset must be in non-descending order.
+- The solution set must not contain duplicate subsets.
+For example,
+If S = [1,2,3], a solution is:
+#+BEGIN_SRC java
+[
+  [3],
+  [1],
+  [2],
+  [1,2,3],
+  [1,3],
+  [2,3],
+  [1,2],
+  []
+]
+#+END_SRC
+*Tags:* Array Backtracking, Bit Manipulation
+*** Single Number
+*** Single Number II
+*** Majority Element
+* 排序
+
+* 查找: Binary Search
+** Easier Maybe?
+*** Search Insert Position
+*** Find Minimum in Rotated Sorted Array
+*** Find Minimum in Rotated Sorted Array II - with Duplicates
+*** 
+* 暴力枚举法
+
+*** 
+* 广度优先搜索: Breadth First Search
+*** Word Ladder
+Given two words (start and end), and a dictionary, find the length of shortest transformation sequence from start to end, such that:
+- Only one letter can be changed at a time
+- Each intermediate word must exist in the dictionary
+For example,
+
+Given:
+#+BEGIN_SRC java
+start = "hit"
+end = "cog"
+dict = ["hot","dot","dog","lot","log"]
+As one shortest transformation is "hit" -> "hot" -> "dot" -> "dog" -> "cog",
+return its length 5.
+#+END_SRC
+Note:
+- Return 0 if there is no such transformation sequence.
+- All words have the same length.
+- All words contain only lowercase alphabetic characters.
+*** 
+* 深度优先搜索: Depth First Search
+
+* 分治法: Divide and Conqure
+*** Maximum Subarray
+*** Merge K sorted List
+*** Median of Two Sorted Array
+*** Majority Element
+*** 
+*** 
+*** 
+* 贫心法: Greedy Search
+*** Gas Station
+*** Best Time to Buy and Sell Stock II
+*** Jump Game
+*** Jump Game II
+*** Candy
+*** Wildcard Matching
+*** 
+
+* 动态归划：Dynamic Programming
+*** Climbing Stairs
+*** Unique Path
+*** Unique Path II
+*** Maximum Sum Subarray
+*** Maximum Product Subarray
+*** Coins in a Line
+*** Word Break
+Given a string s and a dictionary of words dict, determine if s can be segmented into a space-separated sequence of one or more dictionary words.
+
+For example, given
+#+BEGIN_SRC java
+s = "leetcode",
+dict = ["leet", "code"].
+Return true because "leetcode" can be segmented as "leet code".
+#+END_SRC
+*** Palindrome Partitioning II 
+Given a string s, partition s such that every substring of the partition is a palindrome.
+
+Return the minimum cuts needed for a palindrome partitioning of s.
+
+For example, 
+#+BEGIN_SRC java
+given s = "aab",
+Return 1 since the palindrome partitioning ["aa","b"] could be produced using 1 cut.
+#+END_SRC
+
+* Two Pointers and Sliding Window
+*** 
+
+* 图: Graphics
+** Clone Graph
+   Clone an undirected graph. Each node in the graph contains a label and a list of its neighbors.
+   
+   OJ's undirected graph serialization:
+
+   Nodes are labeled uniquely.
+   
+   We use # as a separator for each node, and , as a separator for node label and each neighbor of the node.
+
+   As an example, consider the serialized graph {0,1,2#1,2#2,2}.
+   
+   The graph has a total of three nodes, and therefore contains three parts as separated by #.
+   
+   1. First node is labeled as 0. Connect node 0 to both nodes 1 and 2.
+   2. Second node is labeled as 1. Connect node 1 to node 2.
+   3. Third node is labeled as 2. Connect node 2 to node 2 (itself), thus forming a self-cycle.
+
+Visually, the graph looks like the following:
+[[./pic/clonegraph.jpg]]
+
+*** 分析： 广度优先遍历或深度优先遍历都可以
+*** DFS： 时间复杂度O(n), 空间复杂度O(n)
+#+BEGIN_SRC java 
+/**
+ * Definition for undirected graph.
+ * class UndirectedGraphNode {
+ *     int label;
+ *     List<UndirectedGraphNode> neighbors;
+ *     UndirectedGraphNode(int x) { label = x; neighbors = new ArrayList<UndirectedGraphNode>(); }
+ * };
+ */
+public UndirectedGraphNode cloneGraph(UndirectedGraphNode node) {
+    if (node == null) return null;
+    UndirectedGraphNode res = new UndirectedGraphNode(node.label);  // result head
+    if (node.neighbors == null || node.neighbors.size() == 0) return res;
+
+    Map<UndirectedGraphNode, UndirectedGraphNode> map = new HashMap<UndirectedGraphNode, UndirectedGraphNode>();
+    Queue<UndirectedGraphNode> q = new LinkedList<UndirectedGraphNode>();
+    q.add(node);                      // added first node, need add its all Neighbors as well
+    map.put(node, res);
+
+    List<UndirectedGraphNode> curNbr = new ArrayList<UndirectedGraphNode>();
+    UndirectedGraphNode curr = null;
+    while (!q.isEmpty()) {
+        curr = q.poll();
+        curNbr = curr.neighbors;                   // ori
+        for (UndirectedGraphNode aNbr : curNbr) {  // for build connection among copies
+            if (!map.containsKey(aNbr)) {
+                UndirectedGraphNode acpNbr = new UndirectedGraphNode(aNbr.label);
+                map.put(aNbr, acpNbr);
+                map.get(curr).neighbors.add(acpNbr);
+                q.add(aNbr);
+            } else
+                map.get(curr).neighbors.add(map.get(aNbr));                        
+        }
+    }
+    return res;
+}
+#+END_SRC 
+*** BFS：
+** Word Ladder, Word Ladder II: Backtracing
+*** Word Ladder
+Given two words (start and end), and a dictionary, find the length of shortest transformation sequence from start to end, such that:
+1. Only one letter can be changed at a time
+2. Each intermediate word must exist in the dictionary
+
+For example,
+
+Given:
+start = "hit", end = "cog"
+
+dict = ["hot","dot","dog","lot","log"]
+
+As one shortest transformation is "hit" -> "hot" -> "dot" -> "dog" -> "cog",
+
+return its length 5.
+
+Note:
+- Return 0 if there is no such transformation sequence.
+- All words have the same length.
+- All words contain only lowercase alphabetic characters.
+
+*** Word Ladder II
+Given two words (start and end), and a dictionary, find all shortest transformation sequence(s) from start to end, such that:
+1. Only one letter can be changed at a time
+2. Each intermediate word must exist in the dictionary
+For example,
+
+Given:
+
+start = "hit", end = "cog"
+
+dict = ["hot","dot","dog","lot","log"]
+
+Return
+#+BEGIN_SRC java
+  [
+    ["hit","hot","dot","dog","cog"],
+    ["hit","hot","lot","log","cog"]
+  ]
+#+END_SRC
+
+Note:
+- All words have the same length.
+- All words contain only lowercase alphabetic characters.
+
+** Check whether the graph is bigraph
+** Topological Sort
+Topological sorting for Directed Acyclic Graph (DAG) is a linear
+ordering of vertices such that for every directed edge uv, vertex u
+comes before v in the ordering. Topological Sorting for a graph is not
+possible if the graph is not a DAG.
+
+For example, a topological sorting of the following graph is “5 4 2 3
+1 0″. There can be more than one topological sorting for a graph. For
+example, another topological sorting of the following graph is “4 5 2
+3 1 0″. The first vertex in topological sorting is always a vertex
+with in-degree as 0 (a vertex with no in-coming edges).
+#+CAPTION: Topological Sorting
+[[./pic/topologicalSorting.png]]
+*** Topological Sorting vs Depth First Traversal (DFS):
+In DFS, we print a vertex and then recursively call DFS for its adjacent vertices. In topological sorting, we need to print a vertex before its adjacent vertices. For example, in the given graph, the vertex ‘5’ should be printed before vertex ‘0’, but unlike DFS, the vertex ‘4’ should also be printed before vertex ‘0’. So Topological sorting is different from DFS. For example, a DFS of the above graph is “5 2 3 1 0 4″, but it is not a topological sorting.
+*** Algorithm to find Topological Sorting:
+We recommend to first see implementation of DFS here. We can modify DFS to find Topological Sorting of a graph. In DFS, we start from a vertex, we first print it and then recursively call DFS for its adjacent vertices. In topological sorting, we use a temporary stack. We don’t print the vertex immediately, we first recursively call topological sorting for all its adjacent vertices, then push it to a stack. Finally, print contents of stack. Note that a vertex is pushed to stack only when all of its adjacent vertices (and their adjacent vertices and so on) are already in stack.
+
+
+* Data Structure
+** Min Stack
+Design a stack that supports push, pop, top, and retrieving the minimum element in constant time.
+- push(x) -- Push element x onto stack.
+- pop() -- Removes the element on top of the stack.
+- top() -- Get the top element.
+- getMin() -- Retrieve the minimum element in the stack.
+ *Tags:* Stack Data Structure
+#+BEGIN_SRC java
+public static class MinStack {
+    Stack<Integer> stack = new Stack<Integer>();
+    Stack<Integer> minStack = new Stack<Integer>();
+    public void push(int x) {
+        stack.push(x);
+        if (minStack.isEmpty() || x <= minStack.peek()) {
+            minStack.push(x);
+        }
+    }
+
+    public void pop() { // java boxing & unboxing, container, object specific methods
+        if (stack.peek().intValue() == minStack.peek().intValue()) 
+            minStack.pop();
+        stack.pop();
+    }
+
+    public int top() {
+        return stack.peek();
+    }
+
+    public int getMin() {
+        if (!minStack.isEmpty()) return minStack.peek();
+        else return -1;
+    }
+}
+#+END_SRC
+** LRU Cache
+Design and implement a data structure for Least Recently Used (LRU) cache. It should support the following operations: get and set.
+- get(key) - Get the value (will always be positive) of the key if the key exists in the cache, otherwise return -1.
+- set(key, value) - Set or insert the value if the key is not already
+  present. When the cache reached its capacity, it should invalidate
+  the least recently used item before inserting a new item.
+#+BEGIN_SRC java
+public static class LRUCache {
+    public class Node {
+        int key;
+        int value;
+        Node prev;
+        Node next;
+        public Node(int x, int y){
+            key = x;
+            value = y;
+        }
+    }
+
+    private HashMap<Integer, Node> hash;
+    private int cap;
+    private int number;
+    Node head;
+    Node tail;
+    public LRUCache(int capacity) {
+        cap = capacity;
+        number = 0;
+        head = new Node(-1, -1);
+        head.prev = null;
+        head.next = null;
+        tail = head;
+        hash = new HashMap<Integer, Node>(capacity); // so I can restrict a size !!
+    }
+    
+    public int get(int key) {
+        Node res = hash.get(new Integer(key)); // don't understand here
+        if (res != null) {
+            refresh(res);   // update usage frequence
+            return res.value;
+        } else return -1;
+        /*
+          if (hash.containsKey(key)) {
+          //Node res = hash.get(new Integer(key)); // don't understand here
+          Node res = hash.get(key);
+          refresh(res);   // update usage frequence
+          return res.value;
+          } else {
+          return -1;
+          }
+        */
+    }
+
+    // so still, must maintain a doubly-linked list to order usage frequency
+    public  void refresh(Node tmp) {
+        if (tmp == head.next) return; // it's head already
+            
+        Node temp = head.next;  // head node in the hash
+        Node prevNode = tmp.prev;
+        Node nextNode = tmp.next;
+        // set to be most recently used~~ move the tmp node to be head.next, connections
+        head.next = tmp;  
+        tmp.prev = head;
+        tmp.next = temp;
+        temp.prev = tmp;
+        prevNode.next = nextNode;
+        if (nextNode != null) 
+            nextNode.prev = prevNode;
+        else tail = prevNode;   // remember tail as well 
+    }
+
+    public void set(int key, int value) {
+        Node res = hash.get(new Integer(key));
+        if (res != null) {
+            refresh(res);
+            res.value = value;
+        } else {
+            //if (!hash.containsKey(key)) { // another way of detecting existing
+            Node prevNode = new Node(key, value); 
+            Node temp;
+            if (number == cap) { // remove tail;
+                temp = tail.prev;
+                hash.remove(tail.key);      // remember to remove from hash too !!!
+                if (temp != null) {
+                    temp.next = null;
+                }
+                tail.prev = null;
+                tail = temp;
+                number--;
+            }
+            // add to tail first
+            tail.next = prevNode;
+            prevNode.prev = tail;
+            tail = prevNode;
+            refresh(prevNode);
+            hash.put(key, prevNode); 
+            number++;  // count node numbers
+        }
+    }
+}
+#+END_SRC
+** Two Sum III - data Structure Design
+Design and implement a TwoSum class. It should support the following operations: add and find.
+- add - Add the number to an internal data structure.
+- find - Find if there exists any pair of numbers which sum is equal to the value.
+For example,
+#+BEGIN_SRC java
+add(1); add(3); add(5);
+find(4) -> true
+find(7) -> false
+#+END_SRC
+*Tags:* Hash Table, Data Structure
+#+BEGIN_SRC java
+
+#+END_SRC
+
+* 细节实现题
+
+* Math
+** Easy
+*** Reverse Integer
+*** Plus One
+*** Palindrome Number
+*** Next Permutation: Math
+Implement next permutation, which rearranges numbers into the lexicographically next greater permutation of numbers.
+
+If such arrangement is not possible, it must rearrange it as the lowest possible order (ie, sorted in ascending order).
+
+The replacement must be in-place, do not allocate extra memory.
+
+Here are some examples. Inputs are in the left-hand column and its
+corresponding outputs are in the right-hand column.
+#+BEGIN_SRC java
+1,2,3 → 1,3,2
+3,2,1 → 1,2,3
+1,1,5 → 1,5,1
+#+END_SRC
+
+*** 
+** 

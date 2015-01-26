@@ -15,7 +15,7 @@ public class minStack {
             }
         }
 
-        public void pop() {  // java boxing & unboxing, container, object specific methods
+        public void pop() { // java boxing & unboxing, container, object specific methods
             if (stack.peek().intValue() == minStack.peek().intValue()) 
                 minStack.pop();
             stack.pop();
@@ -26,11 +26,8 @@ public class minStack {
         }
 
         public int getMin() {
-            if (!minStack.isEmpty()) {
-                return minStack.peek();
-            } else {
-                return -1;
-            }
+            if (!minStack.isEmpty()) return minStack.peek();
+            else return -1;
         }
     }
 
