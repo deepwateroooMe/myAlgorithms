@@ -3,6 +3,14 @@
 #+title: Algorithms Review for Job Interview
 #+author: deepwaterooo
 
+* 1/25/2015, Sunday
+** worked on 3 problems, 175/175: finally Java once ~~!!
+- connect next Right
+- Wildcard Matching
+- regular expression matching
+** Other things
+- (4:30~5:00) ~ 12:30, much better than yesterday~~
+- think about what I should do next
 * 1/24/2015, Saturday
 ** worked on 1 problems, 174/175: 3 left
 - Sudoku Solver
