@@ -13,6 +13,7 @@
 - think about what I should do next
 - *Target:* make a book of LeetCode just like them made it, which is pretty good~~
 - Schedule appointment with layer
+- Try to summarize LeetCode questions, want to make a book of my own, just like the one I made for ctci...
 * 1/24/2015, Saturday
 ** worked on 1 problems, 174/175: 3 left
 - Sudoku Solver
