@@ -3,53 +3,192 @@
 #+title: LeetCode Summary
 #+author: deepwaterooo
 
-* 线性表
-** Array
+* 数组 Array
+** Easy
+*** Remove Element	
+*** Remove Duplicates from Sorted Array
+*** Plus One
+*** Pascal's Triangle
+*** Pascal's Triangle II
+*** Merge Sorted Array	
+*** Majority Element	
+** Medium
 *** Two Sum
-*** Two Sum II - Input Array is Sorted
-*** Two Sum III - Data Structure Design
-    
-*** Valid Palindrome
-** 单链表： Single Linked List
-
-* 字符串： String
-
-*** Implement strStr()
-*** Reverse Words in a String
-*** Reverse Words in a String II
-*** String to Integer (atoi)
-*** Valid Number
-*** Longest Substring Without Repeating Characters
-*** Longest Substring with At Most Two Distinct Characters
-*** Longest Palindromic Substring
-*** Missing Ranges
-*** One Edit Distance 
+*** 3Sum Closest
+*** Container With Most Water
+*** Set Matrix Zeroes	
+*** Minimum Path Sum	
+*** Search Insert Position
+*** Unique Paths
+*** Search in Rotated Sorted Array II
+*** Search for a Range
+*** Search a 2D Matrix
+*** Rotate Image
+*** 3Sum
+*** 4Sum
+*** Remove Duplicates from Sorted Array II
+*** Best Time to Buy and Sell Stock II	
+*** Unique Paths II
+*** Best Time to Buy and Sell Stock
+*** Next Permutation
+*** Missing Ranges 	
+*** Find Minimum in Rotated Sorted Array
+*** Combination Sum II
+*** Two Sum II - Input array is sorted
+*** Triangle
+*** Maximum Subarray
+*** Maximum Product Subarray
+*** Word Search
+*** Combination Sum	
+*** Subsets
+*** Subsets II
+*** Jump Game
+*** Spiral Matrix
+*** Spiral Matrix II
+*** Sort Colors
+*** Find Peak Element
+** Hard
+*** Trapping Rain Water
+*** Find Minimum in Rotated Sorted Array II
+*** Insert Interval
+*** Jump Game II
+*** Largest Rectangle in Histogram
+*** Longest Consecutive Sequence
+*** First Missing Positive	
+*** Median of Two Sorted Arrays
+*** Merge Intervals
+*** Word Ladder II
+*** Best Time to Buy and Sell Stock III
+*** Search in Rotated Sorted Array
+*** Maximal Rectangle
+** Others
+*** Construct Binary Tree from Inorder and Postorder Traversal
+*** Construct Binary Tree from Preorder and Inorder Traversal
+* 字符串 String
+** Easy
+*** Valid Parentheses
+*** Add Binary	
+*** Compare Version Numbers
+*** Count and Say	
+*** Longest Common Prefix
+*** Roman to Integer	
+*** Valid Palindrome	
 *** Read N Characters Given Read4
-*** Read N Characters Given Read4 II - Call multiple times 
+*** Implement strStr()	
+*** ZigZag Conversion	
+*** String to Integer (atoi)	
+*** Length of Last Word
+** Medium
+*** Restore IP Addresses
+*** Anagrams
+*** Integer to Roman
+*** Multiply Strings
+*** One Edit Distance
+*** Longest Palindromic Substring
+*** Letter Combinations of a Phone Number
+*** Decode Ways
+*** Longest Substring Without Repeating Characters
+*** Generate Parentheses
+*** Reverse Words in a String
+*** Simplify Path
+** Hard
+*** Edit Distance
+*** Minimum Window Substring
+*** Longest Valid Parentheses
+*** Longest Substring with At Most Two Distinct Characters 	
+*** Read N Characters Given Read4 II - Call multiple times
+*** Regular Expression Matching
+*** Interleaving String
+*** Wildcard Matching
+*** Scramble String	
+*** Distinct Subsequences
+*** Substring with Concatenation of All Words
+*** Text Justification
+*** Valid Number
+*** Word Ladder II
+
 * Linked List
-
-** Easier Maybe?
-*** Merge Two Sorted List
-*** Add Two Numbers
+** Easy
+*** Remove Nth Node From End of List
+*** Remove Duplicates from Sorted List
+*** Merge Two Sorted Lists
+*** Intersection of Two Linked Lists
+** Medium
+*** Reverse Linked List II
+*** Reorder List
+*** Convert Sorted List to Binary Search Tree
+*** Rotate List
+*** Remove Duplicates from Sorted List II
+*** Sort List
+*** Insertion Sort List
 *** Swap Nodes in Pairs
-*** Copy List With Random Pointers
-* 树: Binary Tree, Binary Search Tree
-** 二叉树的遍历
-*** 
-** 二叉树的构建
-*** 
-** 二叉树查找
-** 二叉树递归
+*** Linked List Cycle
+*** Linked List Cycle II
+*** Add Two Numbers	
+*** Partition List
+** Hard	
+*** Copy List with Random Pointer
+*** Merge k Sorted Lists
+*** Reverse Nodes in k-Group
 
+* 树 Binary Tree, Binary Search Tree
+** 二叉树的遍历
+*** Binary Tree Preorder Traversal
+*** Binary Tree Inorder Traversal
+*** Binary Tree Postorder Traversal	
+*** Binary Tree Level Order Traversal
+*** Binary Tree Level Order Traversal II
+*** Binary Tree Zigzag Level Order Traversal	
+*** Recover Binary Search Tree
+
+*** Same Tree
+*** Symmetric Tree
+*** Balanced Binary Tree
+*** Flatten Binary Tree to Linked List
+*** Populating Next Right Pointers in Each Node II
+** 二叉树的构建
+*** Construct Binary Tree from Preorder and Inorder Traversal
+*** Construct Binary Tree from Inorder and Postorder Traversal
+** 二叉树查找
+*** Unique Binary Search Trees
+*** Unique Binary Search Trees II	
+*** Validate Binary Search Tree	
+*** Convert Sorted Array to Binary Search Tree
+*** Convert Sorted List to Binary Search Tree
+** 二叉树递归
+*** Minimum Depth of Binary Tree	
+*** Maximum Depth of Binary Tree	
+*** Path Sum
+*** Path Sum II
+*** Binary Tree Maximum Path Sum	
+*** Populating Next Right Pointers in Each Node
+
+*** Sum Root to Leaf Numbers
+*** Binary Tree Upside Down: this 2 ?
+*** Binary Search Tree Iterator	
 * 栈和队列
 ** 栈
-*** Evaluate Reverse Polish Notation
+** Easy
 *** Valid Parentheses
-*** 
+*** Min Stack
+** Medium
+*** Binary Tree Inorder Traversal
+*** Binary Search Tree Iterator	
+*** Evaluate Reverse Polish Notation
+*** Simplify Path
+*** Binary Tree Preorder Traversal
+*** Binary Tree Zigzag Level Order Traversal
+** Hard
+*** Binary Tree Postorder Traversal
+*** Largest Rectangle in Histogram
+*** Trapping Rain Water
+*** Maximal Rectangle
 ** 队列
 *** 
-** Heap: Merge k sorted List
+** Heap: 
+*** Merge k sorted List
 Merge k sorted linked lists and return it as one sorted list. Analyze and describe its complexity.
+
 *Tags*: Divide and Conquer, Linked List, Heap
 #+BEGIN_SRC java
 public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
@@ -95,8 +234,265 @@ public ListNode mergeKLists(List<ListNode> lists) {
 }
 #+END_SRC
 
+* Hash Table
+** Easy
+*** Valid Sudoku
+*** Two Sum III
+** Medium
+*** Two Sum
+*** 4Sum
+*** Binary Tree Inorder Traversal
+*** Fraction to Recurring Decimal
+*** Single Number
+*** Anagrams
+*** Longest Substring Without Repeating Characters	
+** Hard	
+*** Minimum Window Substring
+*** Maximal Rectangle
+*** Copy List with Random Pointer
+*** Sudoku Solver
+*** Max Points on a Line
+*** Substring with Concatenation of All Words
+*** Longest Substring with At Most Two Distinct Characters
+* 广度优先搜索 Breadth First Search
+** Easy
+*** Binary Tree Level Order Traversal
+*** Binary Tree Level Order Traversal II
+** Medium
+*** Word Ladder
+Given two words (start and end), and a dictionary, find the length of shortest transformation sequence from start to end, such that:
+- Only one letter can be changed at a time
+- Each intermediate word must exist in the dictionary
+For example,
+
+Given:
+#+BEGIN_SRC java
+start = "hit"
+end = "cog"
+dict = ["hot","dot","dog","lot","log"]
+As one shortest transformation is "hit" -> "hot" -> "dot" -> "dog" -> "cog",
+return its length 5.
+#+END_SRC
+Note:
+- Return 0 if there is no such transformation sequence.
+- All words have the same length.
+- All words contain only lowercase alphabetic characters.
+*** Surrounded Regions
+*** Clone Graph	
+*** Binary Tree Zigzag Level Order Traversal
+*** Minimum Depth of Binary Tree
+    
+** Hard
+*** Word Ladder II
+
+* 深度优先搜索 Depth First Search
+** Easy
+*** Path Sum
+*** Balanced Binary Tree
+*** Same Tree
+*** Symmetric Tree
+*** Maximum Depth of Binary Tree
+** Medium
+*** Sum Root to Leaf Numbers	
+*** Convert Sorted List to Binary Search Tree
+*** Convert Sorted Array to Binary Search Tree
+*** Construct Binary Tree from Preorder and Inorder Traversal
+*** Construct Binary Tree from Inorder and Postorder Traversal
+*** Clone Graph
+*** Flatten Binary Tree to Linked List
+*** Populating Next Right Pointers in Each Node
+*** Validate Binary Search Tree
+*** Path Sum II
+** Hard
+*** Recover Binary Search Tree
+*** Populating Next Right Pointers in Each Node II
+*** Binary Tree Maximum Path Sum
+* 排序
+** Medium
+*** Sort Colors
+*** Sort List
+*** Largest Number
+** Hard
+*** Insertion Sort List
+*** Maximum Gap
+*** Merge Intervals	
+*** Insert Interval
+
+* 查找 Binary Search
+** Medium
+*** Sqrt(x)
+*** Divide Two Integers
+*** Search in Rotated Sorted Array II
+*** Two Sum II - Input array is sorted
+*** Pow(x, n)
+*** Search for a Range
+*** Search a 2D Matrix
+*** Find Minimum in Rotated Sorted Array
+*** Search Insert Position	
+*** Find Peak Element
+** Hard
+*** Median of Two Sorted Arrays
+*** Dungeon Game
+*** Find Minimum in Rotated Sorted Array II
+*** Search in Rotated Sorted Array
+* 暴力枚举法
+** 
+*** 
+* 分治法 Divide and Conqure
+** Easy
+*** Majority Element
+** Medium
+*** Maximum Subarray
+** Hard
+*** Merge K sorted List
+*** Median of Two Sorted Array
+* 贫心法 Greedy Search
+** Medium
+*** Gas Station
+*** Best Time to Buy and Sell Stock II
+*** Jump Game
+** Hard
+*** Jump Game II
+*** Candy
+*** Wildcard Matching
+*** 
+
+* 动态归划 Dynamic Programming
+** Easy
+*** Climbing Stairs
+You are climbing a stair case. It takes n steps to reach to the top.
+
+Each time you can either climb 1 or 2 steps. In how many distinct ways
+can you climb to the top?
+**** O(n)
+#+BEGIN_SRC java
+public int climbStairs(int n) {
+    int [] res = new int[n + 1];
+    res[0] = 1; // 1 stair
+    res[1] = 2; // 2 stair
+    for (int i = 2; i < n; i++) 
+        res[i] = res[i - 2] + res[i - 1];
+    return res[n - 1];
+}
+#+END_SRC
+Considering odd and even, 实现滚动数组
+#+BEGIN_SRC java
+public int climbStairs(int n){
+    if(n <= 0) return 0;
+    int [] stairs = {1, 2};
+    for(int i = 2;i < n; i++)
+        stairs[i % 2] = stairs[0] + stairs[1];
+    return n % 2 == 0 ? stairs[1] : stairs[0];
+}
+#+END_SRC
+**** O( log(n) )
+
+     https://oj.leetcode.com/discuss/11211/o-log-n-solution-with-matrix-multiplication
+
+     I saw most solutions posted in discussion are DP with runtime O(n) and O(1) space which is accepted by OJ.
+     
+     The only O(log(n)) solution so far is lucastan's using Binet's formula.
+     
+     There actually is a matrix multiplication solution which also runs in O(log(n)). It basically calculates fibonacci numbers by power of matrix ((0, 1), (1, 1)) ^ (n-1).
+
+#+BEGIN_SRC java
+private int[][] pow(int[][] a, int n) {
+    int[][] ret = {{1, 0}, {0, 1}};
+    while (n > 0) {
+        if ((n & 1) == 1) 
+            ret = multiply(ret, a);
+        n >>= 1;
+        a = multiply(a, a);
+    }
+    return ret;
+}
+
+private int[][] multiply(int[][] a, int[][] b) {
+    int[][] c = new int[2][2];
+    for (int i = 0; i < 2; i++) 
+        for (int j = 0; j < 2; j++) 
+            c[i][j] = a[i][0] * b[0][j] + a[i][1] * b[1][j];
+    return c;
+}
+
+public int climbStairs(int n) {
+    int[][] a = {{0, 1}, {1, 1}};
+    int[][] m = pow(a, n - 1);
+    return m[0][1] + m[1][1];
+}
+#+END_SRC
+** Medium
+*** Unique Path
+*** Unique Path II
+*** Unique Binary Search Tree
+*** Unique Binary Search Tree II
+*** Minimum Path Sum
+*** Maximum Sum Subarray
+*** Maximum Product Subarray
+*** Decode Ways
+*** Triangle
+*** Word Break
+Given a string s and a dictionary of words dict, determine if s can be segmented into a space-separated sequence of one or more dictionary words.
+
+For example, given
+#+BEGIN_SRC java
+s = "leetcode",
+dict = ["leet", "code"].
+Return true because "leetcode" can be segmented as "leet code".
+#+END_SRC
+*** Best Time to Buy and Sell Stock
+** Hard
+*** Best Time to Buy and Sell Stock III
+*** Longest Valid Parentheses
+
+*** Coins in a Line
+*** Word Break II
+*** Maximum Rectangle
+*** Edit Distance
+*** Distinct Subsequence
+*** Palindrome Partitioning II 
+Given a string s, partition s such that every substring of the partition is a palindrome.
+
+Return the minimum cuts needed for a palindrome partitioning of s.
+
+For example, 
+#+BEGIN_SRC java
+given s = "aab",
+Return 1 since the palindrome partitioning ["aa","b"] could be produced using 1 cut.
+#+END_SRC
+
+*** Interleaving String
+*** Scramble String
+*** Regular Expression Matching
+*** Wildcard Matching
+* Two Pointers and Sliding Window
+** Easy
+*** Valid Palindrome
+*** Remove Nth Node From End of List
+*** Remove Element
+*** Remove Duplicates from Sorted Array
+*** Merge Sorted Array
+*** Implement strStr()
+** Medium
+*** 3Sum
+*** 4Sum
+*** Container With Most Water
+*** Remove Duplicates from Sorted Array II
+*** Partition List	
+*** Two Sum II - Input array is sorted
+*** Linked List Cycle II
+*** Longest Substring Without Repeating Characters
+*** 3Sum Closest
+*** Linked List Cycle
+*** Sort Colors
+*** Rotate List
+** Hard
+*** Trapping Rain Water
+*** Longest Substring with At Most Two Distinct Characters
+*** Substring with Concatenation of All Words	
+*** Minimum Window Substring
 * Backtracing and Recursion
-** 排列: Permutation
+** 排列
 *** Permutation
 Given a collection of numbers, return all possible permutations.
 
@@ -128,7 +524,7 @@ By listing and labeling all of the permutations in order, We get the following s
 Given n and k, return the kth permutation sequence.
 
 Note: Given n will be between 1 and 9 inclusive.
-** 组合：Combination
+** 组合
 *** Combinationas
 Given two integers n and k, return all possible combinations of k numbers out of 1 ... n.
 
@@ -188,6 +584,7 @@ Note:
 - Elements in a subset must be in non-descending order.
 - The solution set must not contain duplicate subsets.
 For example,
+
 If S = [1,2,3], a solution is:
 #+BEGIN_SRC java
 [
@@ -209,6 +606,7 @@ Note:
 - Elements in a subset must be in non-descending order.
 - The solution set must not contain duplicate subsets.
 For example,
+
 If S = [1,2,2], a solution is:
 #+BEGIN_SRC java
 [
@@ -220,7 +618,7 @@ If S = [1,2,2], a solution is:
   []
 ]
 #+END_SRC
-** with Recursion
+** others with Recursion
 *** Letter Combinationas of Phone Number
 Given a digit string, return all possible letter combinations that the number could represent.
 
@@ -400,7 +798,6 @@ dict = ["cat", "cats", "and", "sand", "dog"].
 A solution is ["cats and dog", "cat sand dog"].
 #+END_SRC
 *Tags:* Dynamic Programming Backtracking
-
 *** Word Ladder II
 Given two words (start and end), and a dictionary, find all shortest transformation sequence(s) from start to end, such that:
 - Only one letter can be changed at a time
@@ -423,6 +820,9 @@ Note:
 *Tags:* Array, Backtracking, Breadth-first Search, String
 
 * Bit Manipulation
+** Easy
+*** Majority Element
+** Medium
 *** Subsets: Bit Manipulation
 Given a set of distinct integers, S, return all possible subsets.
 
@@ -446,89 +846,9 @@ If S = [1,2,3], a solution is:
 *Tags:* Array Backtracking, Bit Manipulation
 *** Single Number
 *** Single Number II
-*** Majority Element
-* 排序
-
-* 查找: Binary Search
-** Easier Maybe?
-*** Search Insert Position
-*** Find Minimum in Rotated Sorted Array
-*** Find Minimum in Rotated Sorted Array II - with Duplicates
-*** 
-* 暴力枚举法
-
-*** 
-* 广度优先搜索: Breadth First Search
-*** Word Ladder
-Given two words (start and end), and a dictionary, find the length of shortest transformation sequence from start to end, such that:
-- Only one letter can be changed at a time
-- Each intermediate word must exist in the dictionary
-For example,
-
-Given:
-#+BEGIN_SRC java
-start = "hit"
-end = "cog"
-dict = ["hot","dot","dog","lot","log"]
-As one shortest transformation is "hit" -> "hot" -> "dot" -> "dog" -> "cog",
-return its length 5.
-#+END_SRC
-Note:
-- Return 0 if there is no such transformation sequence.
-- All words have the same length.
-- All words contain only lowercase alphabetic characters.
-*** 
-* 深度优先搜索: Depth First Search
-
-* 分治法: Divide and Conqure
-*** Maximum Subarray
-*** Merge K sorted List
-*** Median of Two Sorted Array
-*** Majority Element
-*** 
-*** 
-*** 
-* 贫心法: Greedy Search
-*** Gas Station
-*** Best Time to Buy and Sell Stock II
-*** Jump Game
-*** Jump Game II
-*** Candy
-*** Wildcard Matching
-*** 
-
-* 动态归划：Dynamic Programming
-*** Climbing Stairs
-*** Unique Path
-*** Unique Path II
-*** Maximum Sum Subarray
-*** Maximum Product Subarray
-*** Coins in a Line
-*** Word Break
-Given a string s and a dictionary of words dict, determine if s can be segmented into a space-separated sequence of one or more dictionary words.
-
-For example, given
-#+BEGIN_SRC java
-s = "leetcode",
-dict = ["leet", "code"].
-Return true because "leetcode" can be segmented as "leet code".
-#+END_SRC
-*** Palindrome Partitioning II 
-Given a string s, partition s such that every substring of the partition is a palindrome.
-
-Return the minimum cuts needed for a palindrome partitioning of s.
-
-For example, 
-#+BEGIN_SRC java
-given s = "aab",
-Return 1 since the palindrome partitioning ["aa","b"] could be produced using 1 cut.
-#+END_SRC
-
-* Two Pointers and Sliding Window
-*** 
-
-* 图: Graphics
-** Clone Graph
+* 图 Graphics
+** Medium
+*** Clone Graph
    Clone an undirected graph. Each node in the graph contains a label and a list of its neighbors.
    
    OJ's undirected graph serialization:
@@ -548,8 +868,8 @@ Return 1 since the palindrome partitioning ["aa","b"] could be produced using 1 
 Visually, the graph looks like the following:
 [[./pic/clonegraph.jpg]]
 
-*** 分析： 广度优先遍历或深度优先遍历都可以
-*** DFS： 时间复杂度O(n), 空间复杂度O(n)
+**** 分析： 广度优先遍历或深度优先遍历都可以
+**** DFS： 时间复杂度O(n), 空间复杂度O(n)
 #+BEGIN_SRC java 
 /**
  * Definition for undirected graph.
@@ -587,7 +907,7 @@ public UndirectedGraphNode cloneGraph(UndirectedGraphNode node) {
     return res;
 }
 #+END_SRC 
-*** BFS：
+**** BFS：
 ** Word Ladder, Word Ladder II: Backtracing
 *** Word Ladder
 Given two words (start and end), and a dictionary, find the length of shortest transformation sequence from start to end, such that:
@@ -634,8 +954,8 @@ Note:
 - All words have the same length.
 - All words contain only lowercase alphabetic characters.
 
-** Check whether the graph is bigraph
-** Topological Sort
+*** Check whether the graph is bigraph
+**** Topological Sort
 Topological sorting for Directed Acyclic Graph (DAG) is a linear
 ordering of vertices such that for every directed edge uv, vertex u
 comes before v in the ordering. Topological Sorting for a graph is not
@@ -648,14 +968,29 @@ example, another topological sorting of the following graph is “4 5 2
 with in-degree as 0 (a vertex with no in-coming edges).
 #+CAPTION: Topological Sorting
 [[./pic/topologicalSorting.png]]
-*** Topological Sorting vs Depth First Traversal (DFS):
+**** Topological Sorting vs Depth First Traversal (DFS):
 In DFS, we print a vertex and then recursively call DFS for its adjacent vertices. In topological sorting, we need to print a vertex before its adjacent vertices. For example, in the given graph, the vertex ‘5’ should be printed before vertex ‘0’, but unlike DFS, the vertex ‘4’ should also be printed before vertex ‘0’. So Topological sorting is different from DFS. For example, a DFS of the above graph is “5 2 3 1 0 4″, but it is not a topological sorting.
-*** Algorithm to find Topological Sorting:
+**** Algorithm to find Topological Sorting:
 We recommend to first see implementation of DFS here. We can modify DFS to find Topological Sorting of a graph. In DFS, we start from a vertex, we first print it and then recursively call DFS for its adjacent vertices. In topological sorting, we use a temporary stack. We don’t print the vertex immediately, we first recursively call topological sorting for all its adjacent vertices, then push it to a stack. Finally, print contents of stack. Note that a vertex is pushed to stack only when all of its adjacent vertices (and their adjacent vertices and so on) are already in stack.
 
-
 * Data Structure
-** Min Stack
+** Easy
+*** Two Sum III
+Design and implement a TwoSum class. It should support the following operations: add and find.
+- add - Add the number to an internal data structure.
+- find - Find if there exists any pair of numbers which sum is equal to the value.
+For example,
+#+BEGIN_SRC java
+add(1); add(3); add(5);
+find(4) -> true
+find(7) -> false
+#+END_SRC
+*Tags:* Hash Table, Data Structure
+#+BEGIN_SRC java
+
+#+END_SRC
+
+*** Min Stack
 Design a stack that supports push, pop, top, and retrieving the minimum element in constant time.
 - push(x) -- Push element x onto stack.
 - pop() -- Removes the element on top of the stack.
@@ -689,7 +1024,8 @@ public static class MinStack {
     }
 }
 #+END_SRC
-** LRU Cache
+** Hard
+*** LRU Cache
 Design and implement a data structure for Least Recently Used (LRU) cache. It should support the following operations: get and set.
 - get(key) - Get the value (will always be positive) of the key if the key exists in the cache, otherwise return -1.
 - set(key, value) - Set or insert the value if the key is not already
@@ -789,28 +1125,28 @@ public static class LRUCache {
     }
 }
 #+END_SRC
-** Two Sum III - data Structure Design
-Design and implement a TwoSum class. It should support the following operations: add and find.
-- add - Add the number to an internal data structure.
-- find - Find if there exists any pair of numbers which sum is equal to the value.
-For example,
-#+BEGIN_SRC java
-add(1); add(3); add(5);
-find(4) -> true
-find(7) -> false
-#+END_SRC
-*Tags:* Hash Table, Data Structure
-#+BEGIN_SRC java
-
-#+END_SRC
-
 * 细节实现题
 
 * Math
 ** Easy
-*** Reverse Integer
-*** Plus One
+*** Add Binary
+*** Roman to Integers
+*** String to Integer (atoi)
 *** Palindrome Number
+*** Plus One
+    
+*** Factorial Trailing Zeroes
+*** Excel Sheet Column Title
+*** Excel Sheet Column Number
+*** Reverse Integer
+** Medium
+*** Multiply Strings
+*** Sqrt(x)
+*** Divide Two Integers
+*** Pow(x, n)	
+*** Fraction to Recurring Decimal
+*** Permutation Sequence	
+*** Integer to Roman
 *** Next Permutation: Math
 Implement next permutation, which rearranges numbers into the lexicographically next greater permutation of numbers.
 
@@ -826,5 +1162,6 @@ corresponding outputs are in the right-hand column.
 1,1,5 → 1,5,1
 #+END_SRC
 
-*** 
-** 
+** Hard
+*** Valid Number
+*** Max Points on a Line
