@@ -133,59 +133,699 @@
 
 * 树 Binary Tree, Binary Search Tree
 ** 二叉树的遍历
+
+   树的遍历有两类:深度优先遍历和宽度优先遍历。深度优先遍历又可分为两种:先根(次序)遍历和后根(次序)遍历。
+
+   树的先根遍历是:先访问树的根结点,然后依次先根遍历根的各棵子树。树的先跟遍历的结果与对应二叉树(孩子兄弟表示法)的先序遍历的结果相同。
+
+   树的后根遍历是:先依次后根遍历树根的各棵子树,然后访问根结点。树的后跟遍历的结果与对应二叉树的中序遍历的结果相同。
+
+   二叉树的先根遍历有: 先序遍历 (root -> left -> right), root -> right -> left; 后根遍历有: 后序遍历(left -> right -> root), right -> left -> root; 二叉树还有个一般的树没有的遍历次序, 中序遍历 (left -> root -> right)。
+
 *** Binary Tree Preorder Traversal
+    Given a binary tree, return the preorder traversal of its nodes' values.
+    
+    For example:
+
+    Given binary tree {1,#,2,3},
+    #+BEGIN_SRC java
+    1
+     \
+      2
+     /
+    3
+    #+END_SRC
+    
+    return [1,2,3].
+    
+    Note: Recursive solution is trivial, could you do it iteratively?
+
+    用栈或Morris遍历
+**** 栈： 使用栈,时间复杂度 O(n), 空间复杂度 O(n)
+**** Morris先序遍历： Morris 先序遍历,时间复杂度 O(n),空间复杂度 O(1)
+
 *** Binary Tree Inorder Traversal
+    Given a binary tree, return the inorder traversal of its nodes' values.
+    
+    For example:
+
+    Given binary tree {1,#,2,3},
+    #+BEGIN_SRC java
+   1
+    \
+     2
+    /
+   3
+#+END_SRC
+    
+    return [1,3,2].
+    
+    Note: Recursive solution is trivial, could you do it iteratively?
+**** 栈： 使用栈,时间复杂度 O(n), 空间复杂度 O(n)
+**** Morris先序遍历： Morris 先序遍历,时间复杂度 O(n),空间复杂度 O(1)
+
+
 *** Binary Tree Postorder Traversal	
+    Given a binary tree, return the postorder traversal of its nodes' values.
+    
+    For example:
+
+    Given binary tree {1,#,2,3},
+    #+BEGIN_SRC java
+   1
+    \
+     2
+    /
+   3
+    #+END_SRC
+    
+    return [3,2,1].
+    
+    Note: Recursive solution is trivial, could you do it iteratively?
+**** 栈： 使用栈,时间复杂度 O(n), 空间复杂度 O(n)
+**** Morris先序遍历： Morris 先序遍历,时间复杂度 O(n),空间复杂度 O(1)
+
+
 *** Binary Tree Level Order Traversal
+    Given a binary tree, return the level order traversal of its nodes' values. (ie, from left to right, level by level).
+    
+    For example:
+
+    Given binary tree {3,9,20,#,#,15,7},
+    #+BEGIN_SRC java
+    3
+   / \
+  9  20
+    /  \
+   15   7
+    #+END_SRC
+    return its level order traversal as:
+    #+BEGIN_SRC java
+[
+  [3],
+  [9,20],
+  [15,7]
+]
+    #+END_SRC
+**** 递归版
+**** 迭代版
+
 *** Binary Tree Level Order Traversal II
+    Given a binary tree, return the bottom-up level order traversal of its nodes' values. (ie, from left to right, level by level from leaf to root).
+    
+    For example:
+    Given binary tree {3,9,20,#,#,15,7},
+    #+BEGIN_SRC java
+    3
+   / \
+  9  20
+    /  \
+   15   7
+    #+END_SRC
+    return its bottom-up level order traversal as:
+    #+BEGIN_SRC java
+[
+  [15,7],
+  [9,20],
+  [3]
+]
+    #+END_SRC
+**** 递归版
+**** 迭代版
+
+
 *** Binary Tree Zigzag Level Order Traversal	
+    Given a binary tree, return the zigzag level order traversal of its nodes' values. (ie, from left to right, then right to left for the next level and alternate between).
+    
+    For example:
+
+    Given binary tree {3,9,20,#,#,15,7},
+    #+BEGIN_SRC java
+    3
+   / \
+  9  20
+    /  \
+   15   7
+    #+END_SRC
+    return its zigzag level order traversal as:
+    #+BEGIN_SRC java
+[
+  [3],
+  [20,9],
+  [15,7]
+]
+    #+END_SRC
+**** 递归版
+**** 迭代版
+
 *** Recover Binary Search Tree
+    Two elements of a binary search tree (BST) are swapped by mistake.
+    
+    Recover the tree without changing its structure.
+    
+    Note:
+
+    A solution using O(n) space is pretty straight forward. Could you devise a constant space solution?
+    
+    O(n) 空间的解法是,开一个指针数组,中序遍历,将节点指针依次存放到数组里,然后寻找两处逆向的位置,先从前往后找第一个逆序的位置,然后从后往前找第二个逆序的位置,交换这两个指针的值。
+    
+    中序遍历一般需要用到栈,空间也是 O(n) 的,如何才能不使用栈?Morris 中序遍历。
 
 *** Same Tree
+    Given two binary trees, write a function to check if they are equal or not.
+    
+    Two binary trees are considered equal if they are structurally identical and the nodes have the same value.
+**** 递归版: 时间复杂度 O(n), 空间复杂度 O(logn)
+**** 迭代版: 时间复杂度 O(n), 空间复杂度 O(logn)
+
 *** Symmetric Tree
+    Given a binary tree, check whether it is a mirror of itself (ie, symmetric around its center).
+
+    For example, this binary tree is symmetric:
+    #+BEGIN_SRC java
+    1
+   / \
+  2   2
+ / \ / \
+3  4 4  3
+    #+END_SRC
+    But the following is not:
+    #+BEGIN_SRC java
+    1
+   / \
+  2   2
+   \   \
+   3    3
+    #+END_SRC
+    Note:
+
+    Bonus points if you could solve it both recursively and iteratively.
+**** 递归版: 时间复杂度 O(n), 空间复杂度 O(logn)
+**** 迭代版: 时间复杂度 O(n), 空间复杂度 O(logn)
+
+
 *** Balanced Binary Tree
+    Given a binary tree, determine if it is height-balanced.
+
+    For this problem, a height-balanced binary tree is defined as a binary tree in which the depth of the two subtrees of every node never differ by more than 1.
+
+    时间复杂度 O(n), 空间复杂度 O(logn)
+
 *** Flatten Binary Tree to Linked List
+    Given a binary tree, flatten it to a linked list in-place.
+
+    For example, Given
+    #+BEGIN_SRC java
+         1
+        / \
+       2   5
+      / \   \
+     3   4   6
+    #+END_SRC
+    
+    The flattened tree should look like:
+    #+BEGIN_SRC java
+   1
+    \
+     2
+      \
+       3
+        \
+         4
+          \
+           5
+            \
+             6
+    #+END_SRC
+    click to show hints.
+    
+    Hints:
+
+    If you notice carefully in the flattened tree, each node's right child points to the next node of a pre-order traversal.
+**** 递归版1: 时间复杂度 O(n), 空间复杂度 O(logn)
+**** 递归版2: 时间复杂度 O(n), 空间复杂度 O(logn)
+**** 迭代版: 时间复杂度 O(n), 空间复杂度 O(logn)
+
+
 *** Populating Next Right Pointers in Each Node II
+    Follow up for problem "Populating Next Right Pointers in Each Node".
+    
+    What if the given tree could be any binary tree? Would your previous solution still work?
+    
+    Note:
+    
+    You may only use constant extra space.
+
+    For example,
+
+    Given the following binary tree,
+    #+BEGIN_SRC java
+         1
+       /  \
+      2    3
+     / \    \
+    4   5    7
+    #+END_SRC
+    
+    After calling your function, the tree should look like:
+    #+BEGIN_SRC java
+         1 -> NULL
+       /  \
+      2 -> 3 -> NULL
+     / \    \
+    4-> 5 -> 7 -> NULL
+    #+END_SRC
+
+    要处理一个节点,可能需要最右边的兄弟节点,首先想到用广搜。但广搜不是常数空间的,本题要求常数空间。
+
+    注意,这题的代码原封不动,也可以解决 Populating Next Right Pointers in Each Node I.
+**** 递归版: 时间复杂度 O(n), 空间复杂度 O(1)
+**** 迭代版: 时间复杂度 O(n), 空间复杂度 O(1)
+
+    
+    
 ** 二叉树的构建
 *** Construct Binary Tree from Preorder and Inorder Traversal
+    Given preorder and inorder traversal of a tree, construct the binary tree.
+
+    Note:
+    
+    You may assume that duplicates do not exist in the tree.
+    
 *** Construct Binary Tree from Inorder and Postorder Traversal
+    Given inorder and postorder traversal of a tree, construct the binary tree.
+    
+    Note:
+
+    You may assume that duplicates do not exist in the tree.
+
 ** 二叉树查找
-*** Unique Binary Search Trees
-*** Unique Binary Search Trees II	
+
+*** Unique Binary Search Tree
+    Given n, how many structurally unique BST's (binary search trees) that store values 1...n?
+    
+    For example, Given n = 3, there are a total of 5 unique BST's.
+    #+BEGIN_SRC java
+   1         3     3      2      1
+    \       /     /      / \      \
+     3     2     1      1   3      2
+    /     /       \                 \
+   2     1         2                 3
+    #+END_SRC
+    如果把上例的顺序改一下,就可以看出规律了。《水中的鱼》
+    #+BEGIN_SRC java
+    1           1                   2                    3            3
+     \           \                 /  \                 /            / 
+      3           2               1    3               2            1
+     /             \                                  /              \
+    2                3                               1                2
+    #+END_SRC
+    比如，以1为根的树有几个，完全取决于有二个元素的子树有几种。同理，2为根的子树取决于一个元素的子树有几个。以3为根的情况，则与1相同。
+    
+    定义Count[i] 为以[0,i]能产生的Unique Binary Tree的数目，
+    
+    如果数组为空，毫无疑问，只有一种BST，即空树， Count[ 0 ] =1
+    
+    如果数组仅有一个元素{1}，只有一种BST，单个节点, Count[ 1 ] = 1
+    
+    如果数组有两个元素{1,2}， 那么有如下两种可能
+    #+BEGIN_SRC java
+    1                     2
+     \                   /
+      2                1
+    Count[2] = Count[0] * Count[1]   [ 1 为根的情况 ]
+             + Count[1] * Count[0]   [ 2 为根的情况 ]
+    #+END_SRC
+   再看一遍三个元素的数组，可以发现BST的取值方式如下：
+   #+BEGIN_SRC java
+   Count[3] = Count[0]*Count[2]  [ 1 为根的情况 ]
+            + Count[1]*Count[1]  [ 2 为根的情况 ]
+            + Count[2]*Count[0]  [ 3 为根的情况 ]
+   #+END_SRC
+   所以，由此观察，当数组为 1, 2, 3, ..., n 时,基于以下原则的构建的 BST 树具有唯一性:以 i 为根节点的树,其左子树由 [1, i-1] 构成,其右子树由 [i+1, n] 构成。
+   
+   可以得出Count的递推公式为
+
+	       Count[i] = ∑ Count[0...k] * [ k+1....i] ( 0 <= k < i-1 )
+
+   问题至此划归为一维动态规划。
+
+*** Unique Binary Search Tree II
+    Given n, generate all structurally unique BST's (binary search trees) that store values 1...n.
+    
+    For example,
+    
+    Given n = 3, your program should return all 5 unique BST's shown below.
+    #+BEGIN_SRC java
+   1         3     3      2      1
+    \       /     /      / \      \
+     3     2     1      1   3      2
+    /     /       \                 \
+   2     1         2                 3
+    #+END_SRC
+#+BEGIN_SRC java
+public List<TreeNode> helper(int bgn, int end) {
+    List<TreeNode> res = new ArrayList<TreeNode>();
+    if (bgn > end) {
+        res.add(null);  // important
+        return res;
+    }
+
+    List<TreeNode> left = null;
+    List<TreeNode> right = null;
+    TreeNode root = null;
+    for (int i = bgn; i <= end ; i++) {
+        left = helper(bgn, i - 1);
+        right = helper(i + 1, end);
+        for (int j = 0; j < left.size(); j++) {
+            for (int k = 0; k < right.size(); k++) {
+                root = new TreeNode(i);
+                root.left = left.get(j);
+                root.right = right.get(k);
+                res.add(root);
+                root = null;
+            }
+        }
+        left = null;
+        right = null;
+    }
+    return res;
+}
+        
+public List<TreeNode> generateTrees(int n) {
+    return helper(1, n);
+}
+#+END_SRC
 *** Validate Binary Search Tree	
+    Given a binary tree, determine if it is a valid binary search tree (BST).
+    
+    Assume a BST is defined as follows:
+- The left subtree of a node contains only nodes with keys less than the node's key.
+- The right subtree of a node contains only nodes with keys greater than the node's key.
+- Both the left and right subtrees must also be binary search trees.
+ 
+    时间复杂度 O(n),空间复杂度 O( log(n) )
+
 *** Convert Sorted Array to Binary Search Tree
+    Given an array where elements are sorted in ascending order, convert it to a height balanced BST.
+
+    二分法。
 *** Convert Sorted List to Binary Search Tree
+    Given a singly linked list where elements are sorted in ascending order, convert it to a height balanced BST.
+
+    这题与上一题类似,但是单链表不能随机访问,而自顶向下的二分法必须需要 RandomAccessIt-erator,因此前面的方法不适用本题。
+
+    存在一种自底向上(boom-up)的方法, 见 
+
+    http://leetcode.com/2010/11/convert-sorted-list-to-balanced-binary.html
+**** 分治法： 自项向下
+**** 分治法： 自底向上
 ** 二叉树递归
+   二叉树是一个递归的数据结构,因此是一个用来考察递归思维能力的绝佳数据结构。递归一定是深搜(见“深搜与递归的区别”),由于在二叉树上,递归的味道更浓些,因此本节用“二叉树的递归”作为标题,而不是“二叉树的深搜”,尽管本节所有的算法都属于深搜。
+
+二叉树的先序、中序、后序遍历都可以看做是 DFS,此外还有其他顺序的深度优先遍历,共有3! = 6 种。其他 3 种顺序是 root -> right -> left,right -> root -> left, right -> left -> root。
 *** Minimum Depth of Binary Tree	
+    Given a binary tree, find its minimum depth.
+
+    The minimum depth is the number of nodes along the shortest path from the root node down to the nearest leaf node.
+**** 递归版: 时间复杂度 O(n), 空间复杂度 O( log(n) )
+**** 迭代版: 时间复杂度 O(n), 空间复杂度 O( log(n) )
+
 *** Maximum Depth of Binary Tree	
+    Given a binary tree, find its maximum depth.
+    
+    The maximum depth is the number of nodes along the longest path from the root node down to the farthest leaf node.
+
 *** Path Sum
+    Given a binary tree and a sum, determine if the tree has a root-to-leaf path such that adding up all the values along the path equals the given sum.
+    
+    For example:
+    
+    Given the below binary tree and sum = 22,
+    #+BEGIN_SRC java
+              5
+             / \
+            4   8
+           /   / \
+          11  13  4
+         /  \      \
+        7    2      1
+    #+END_SRC
+    return true, as there exist a root-to-leaf path 5->4->11->2 which sum is 22.
+
+    题目只要求返回 true 或者 false,因此不需要记录路径。
+
+    由于只需要求出一个结果,因此,当左、右任意一棵子树求到了满意结果,都可以及时 return。
+
+    由于题目没有说节点的数据一定是正整数,必须要走到叶子节点才能判断,因此中途没法剪枝,只能进行朴素深搜。
+
+    时间复杂度 O(n), 空间复杂度 O( log(n) )
+
 *** Path Sum II
+    Given a binary tree and a sum, find all root-to-leaf paths where each path's sum equals the given sum.
+    
+    For example:
+    
+    Given the below binary tree and sum = 22,
+    #+BEGIN_SRC java
+              5
+             / \
+            4   8
+           /   / \
+          11  13  4
+         /  \    / \
+        7    2  5   1
+    #+END_SRC
+    return
+    #+BEGIN_SRC java
+[
+   [5,4,11,2],
+   [5,8,4,5]
+]
+    #+END_SRC
+
+    跟上一题相比,本题是求路径本身。且要求出所有结果,左子树求到了满意结果,不能 return, 要接着求右子树。
+
+    时间复杂度 O(n), 空间复杂度 O( log(n) )
+
 *** Binary Tree Maximum Path Sum	
+    Given a binary tree, find the maximum path sum.
+    
+    The path may start and end at any node in the tree.
+    
+    For example:
+    Given the below binary tree,
+    #+BEGIN_SRC java
+       1
+      / \
+     2   3
+    #+END_SRC
+    Return 6.
+
+    这题很难,路径可以从任意节点开始,到任意节点结束。
+
+    可以利用“最大连续子序列和”问题的思路,见第 §13.2节。如果说 Array只有一个方向的话, 那么 Binary Tree 其实只是左、右两个方向而已,我们需要比较两个方向上的值。
+
+    不过,Array 可以从头到尾遍历,那么 Binary Tree 怎么办呢,我们可以采用 Binary Tree 最常用的 dfs 来进行遍历。先算出左右子树的结果 L 和 R,如果 L 大于 0,那么对后续结果是有利的,我们加上 L,如果 R 大于 0,对后续结果也是有利的,继续加上 R。
+
+    时间复杂度 O(n), 空间复杂度 O( log(n) )
+
 *** Populating Next Right Pointers in Each Node
+    Given a binary tree
+    #+BEGIN_SRC java
+struct TreeLinkNode {
+    TreeLinkNode *left;
+    TreeLinkNode *right;
+    TreeLinkNode *next;
+}
+    #+END_SRC
+    Populate each next pointer to point to its next right node. If there is no next right node, the next pointer should be set to NULL.
+
+    Initially, all next pointers are set to NULL.
+    
+    Note:
+    
+    You may only use constant extra space.
+
+    You may assume that it is a perfect binary tree (ie, all leaves are at the same level, and every parent has two children).
+
+    For example,
+
+    Given the following perfect binary tree,
+    #+BEGIN_SRC java
+         1
+       /  \
+      2    3
+     / \  / \
+    4  5  6  7
+    #+END_SRC
+
+    After calling your function, the tree should look like:
+    #+BEGIN_SRC java
+         1 -> NULL
+       /  \
+      2 -> 3 -> NULL
+     / \  / \
+    4->5->6->7 -> NULL
+    #+END_SRC
+
+    时间复杂度 O(n), 空间复杂度 O( log(n) )
+
 
 *** Sum Root to Leaf Numbers
-*** Binary Tree Upside Down: this 2 ?
+    Given a binary tree containing digits from 0-9 only, each root-to-leaf path could represent a number.
+    
+    An example is the root-to-leaf path 1->2->3 which represents the number 123.
+    
+    Find the total sum of all root-to-leaf numbers.
+    
+    For example,
+    #+BEGIN_SRC java
+    1
+   / \
+  2   3
+    #+END_SRC
+    The root-to-leaf path 1->2 represents the number 12.
+    
+    The root-to-leaf path 1->3 represents the number 13.
+    
+    Return the sum = 12 + 13 = 25.
+
+    时间复杂度 O(n), 空间复杂度 O( log(n) )
+
+
+*** Binary Tree Upside Down
+    Given a binary tree where all the right nodes are either leaf nodes with a sibling (a left node that shares the same parent node) or empty, flip it upside down and turn it into a tree where the original right nodes turned into left leaf nodes. Return the new root.
+
+    For example:
+
+    Given a binary tree {1,2,3,4,5},
+    #+BEGIN_SRC java
+    1
+   / \
+  2   3
+ / \
+4   5
+    #+END_SRC
+    
+    return the root of the binary tree [4,5,2,#,#,3,1].
+    #+BEGIN_SRC java
+   4
+  / \
+ 5   2
+    / \
+   3   1  
+    #+END_SRC
+
 *** Binary Search Tree Iterator	
-* 栈和队列
-** 栈
+    Implement an iterator over a binary search tree (BST). Your iterator will be initialized with the root node of a BST.
+    
+    Calling next() will return the next smallest number in the BST.
+    
+    Note: next() and hasNext() should run in average O(1) time and uses O(h) memory, where h is the height of the tree.
+
+* 栈 Stack
 ** Easy
 *** Valid Parentheses
-*** Min Stack
+    Given a string containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.
+
+    The brackets must close in the correct order, "()" and "()[]{}" are all valid but "(]" and "([)]" are not.
+
+    时间复杂度 O(n), 空间复杂度 O(n)。
+
 ** Medium
-*** Binary Tree Inorder Traversal
-*** Binary Search Tree Iterator	
 *** Evaluate Reverse Polish Notation
+    Evaluate the value of an arithmetic expression in Reverse Polish Notation.
+    
+    Valid operators are +, -, *, /. Each operand may be an integer or another expression.
+    
+    Some examples:
+    #+BEGIN_SRC java
+  ["2", "1", "+", "3", "*"] -> ((2 + 1) * 3) -> 9
+  ["4", "13", "5", "/", "+"] -> (4 + (13 / 5)) -> 6
+    #+END_SRC
+
 *** Simplify Path
-*** Binary Tree Preorder Traversal
-*** Binary Tree Zigzag Level Order Traversal
+    Given an absolute path for a file (Unix-style), simplify it.
+    
+    For example,
+    #+BEGIN_SRC java
+    path = "/home/", => "/home"
+    path = "/a/./b/../../c/", => "/c"
+    #+END_SRC
+    
+    click to show corner cases.
+    
+    Corner Cases:
+    #+BEGIN_SRC java
+    Did you consider the case where path = "/../"?
+    In this case, you should return "/".
+    Another corner case is the path might contain multiple slashes '/' together, such as "/home//foo/".
+    In this case, you should ignore redundant slashes and return "/home/foo".
+    #+END_SRC
+
 ** Hard
-*** Binary Tree Postorder Traversal
-*** Largest Rectangle in Histogram
 *** Trapping Rain Water
+    Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it is able to trap after raining.
+
+    For example, 
+
+    Given [0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1], return 6.
+
+    #+CAPTION: Trapping Rain Water
+    [[./pic/rainwatertrap.png]]
+    
+    The above elevation map is represented by array [0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]. In this case, 6 units of rain water (blue section) are being trapped. Thanks Marcos for contributing this image!
+    
+    *Tags:* Array, Stack, Two Pointers
+
+    对于每个柱 子,找到其左右两边最 高的柱子, 该柱子能容纳的面积就是 min(max_left, max_right) - height。所以,
+    
+1. 从左往右扫描一遍,对于每个柱子,求取左边最大值;
+2. 从右往左扫描一遍,对于每个柱子,求最大右值;
+3. 再扫描一遍,把每个柱子的面积并累加。
+也可以,
+1. 扫描一遍,找到最高的柱子,这个柱子将数组分为两半;
+2. 处理左边一半;
+3. 处理右边一半。
+**** 思路 1, 时间复杂度 O(n), 空间复杂度 O(n)
+**** 思路 2, 时间复杂度 O(n), 空间复杂度 O(1)
+**** 思路 3, 时间复杂度 O(n), 空间复杂度 O(n)
+**** 
+*** Largest Rectangle in Histogram
+    Given n non-negative integers representing the histogram's bar height where the width of each bar is 1, find the area of largest rectangle in the histogram.
+    
+    #+CAPTION: Largest Rectangle in Histogram 1
+    [[./pic/rectangle1.png]]
+
+    Above is a histogram where width of each bar is 1, given height = [2, 1, 5, 6, 2, 3].
+
+    #+CAPTION: Largest Rectangle in Histogram 2
+    [[./pic/rectangle2.png]]
+    
+    The largest rectangle is shown in the shaded area, which has area = 10 unit.
+    
+    For example,
+
+    Given height = [2, 1, 5, 6, 2, 3],
+
+    return 10.
+
+    简单的,类似于 Container With Most Water(§12.6),对每个柱子,左右扩展,直到碰到比自己矮的,计算这个矩形的面积,用一个变量记录最大的面积,复杂度 O(n 2 ),会超时。
+
+    如图所示,从左到右处理直方,当 i = 4 时,小于当前栈顶(即直方 3), 对于直方 3,无论后面还是前面的直方,都不可能得到比目前栈顶元素更高的高度了,处理掉直方 3(计算从直方 3到直方 4 之间的矩形的面积,然后从栈里弹出);对于直方 2 也是如此;直到碰到比直方 4 更矮的直方 1。
+
+    这就意味着,可以维护一个递增的栈,每次比较栈顶与当前元素。如果当前元素小于栈顶元素,则入栈,否则合并现有栈,直至栈顶元素小于当前元素。结尾时入栈元素 0,重复合并一次。
+
+    时间复杂度 O(n),空间复杂度 O(n)。
+
+    
 *** Maximal Rectangle
-** 队列
-*** 
-** Heap: 
+    Given a 2D binary matrix filled with 0's and 1's, find the largest rectangle containing all ones and return its area.
+
+    *Tags:* Array Hash Table Stack Dynamic Programming
+    
+** Heap
 *** Merge k sorted List
 Merge k sorted linked lists and return it as one sorted list. Analyze and describe its complexity.
 
@@ -233,6 +873,15 @@ public ListNode mergeKLists(List<ListNode> lists) {
                          (mergeKLists(lists.subList(lists.size() / 2, lists.size()))));
 }
 #+END_SRC
+
+** other Covered
+*** Binary Tree Preorder Traversal
+*** Binary Tree Inorder Traversal
+*** Binary Tree Postorder Traversal
+*** Binary Search Tree Iterator	
+*** Binary Tree Zigzag Level Order Traversal
+*** Min Stack
+    See 19.1.2
 
 * Hash Table
 ** Easy
@@ -341,21 +990,119 @@ Note:
 * 分治法 Divide and Conqure
 ** Easy
 *** Majority Element
+    Given an array of size n, find the majority element. The majority element is the element that appears more than ⌊ n/2 ⌋ times.
+    
+    You may assume that the array is non-empty and the majority element always exist in the array.
+    
+    Credits:
+    
+    Special thanks to @ts for adding this problem and creating all test cases.
+    
+    *Tags:* Divide and Conquer, Array, Bit Manipulation
+
 ** Medium
 *** Maximum Subarray
+    Find the contiguous subarray within an array (containing at least one number) which has the largest sum.
+    
+    For example, given the array [-2, 1, -3, 4, -1, 2, 1, -5, 4], 
+    
+    the contiguous subarray [4, -1, 2, 1] has the largest sum = 6.
+    
+    click to show more practice.
+    
+    *More practice:*
+
+    If you have figured out the O(n) solution, try coding another solution using the divide and conquer approach, which is more subtle.
+    
+    *Tags:* Divide and Conquer, Array, Dynamic Programming
+
 ** Hard
 *** Merge K sorted List
+    Merge k sorted linked lists and return it as one sorted list. Analyze and describe its complexity.
+
+    *Tags:* Divide and Conquer Linked, List, Heap
+
 *** Median of Two Sorted Array
+    There are two sorted arrays A and B of size m and n respectively. Find the median of the two sorted arrays. The overall run time complexity should be O(log (m+n)).
+
+    *Tags:* Divide and Conquer, Array, Binary Search
+
 * 贫心法 Greedy Search
 ** Medium
 *** Gas Station
+    There are N gas stations along a circular route, where the amount of gas at station i is gas[i].
+
+    You have a car with an unlimited gas tank and it costs cost[i] of gas to travel from station i to its next station (i+1). You begin the journey with an empty tank at one of the gas stations.
+
+    Return the starting gas station's index if you can travel around the circuit once, otherwise return -1.
+    
+    Note:
+    
+    The solution is guaranteed to be unique.
+
 *** Best Time to Buy and Sell Stock II
+    Say you have an array for which the ith element is the price of a given stock on day i.
+
+    Design an algorithm to find the maximum profit. You may complete as many transactions as you like (ie, buy one and sell one share of the stock multiple times). However, you may not engage in multiple transactions at the same time (ie, you must sell the stock before you buy again).
 *** Jump Game
+    Given an array of non-negative integers, you are initially positioned at the first index of the array.
+
+    Each element in the array represents your maximum jump length at that position.
+
+    Determine if you are able to reach the last index.
+    
+    For example:
+    
+    A = [2,3,1,1,4], return true.
+    
+    A = [3,2,1,0,4], return false.
 ** Hard
 *** Jump Game II
+    Given an array of non-negative integers, you are initially positioned at the first index of the array.
+    
+    Each element in the array represents your maximum jump length at that position.
+    
+    Your goal is to reach the last index in the minimum number of jumps.
+    
+    For example:
+    
+    Given array A = [2,3,1,1,4]
+    
+    The minimum number of jumps to reach the last index is 2. (Jump 1 step from index 0 to 1, then 3 steps to the last index.)
 *** Candy
+    There are N children standing in a line. Each child is assigned a rating value.
+    
+    You are giving candies to these children subjected to the following requirements:
+    
+    Each child must have at least one candy.
+    
+    Children with a higher rating get more candies than their neighbors.
+
+    What is the minimum candies you must give?
 *** Wildcard Matching
-*** 
+    Implement wildcard pattern matching with support for '?' and '*'.
+    #+BEGIN_SRC java
+    '?' Matches any single character.
+    '*' Matches any sequence of characters (including the empty sequence).
+    #+END_SRC    
+    
+    The matching should cover the entire input string (not partial).
+    
+    The function prototype should be:
+    
+    bool isMatch(const char *s, const char *p)
+    
+    Some examples:
+    #+BEGIN_SRC java
+    isMatch("aa","a") → false
+    isMatch("aa","aa") → true
+    isMatch("aaa","aa") → false
+    isMatch("aa", "*") → true
+    isMatch("aa", "a*") → true
+    isMatch("ab", "?*") → true
+    isMatch("aab", "c*a*b") → false
+    #+END_SRC
+    *Tags:* Dynamic Programming, Backtracking, Greedy, String
 
 * 动态归划 Dynamic Programming
 ** Easy
@@ -377,7 +1124,7 @@ public int climbStairs(int n) {
 #+END_SRC
 Considering odd and even, 实现滚动数组
 #+BEGIN_SRC java
-public int climbStairs(int n){
+public int climbStairs(int n) {
     if(n <= 0) return 0;
     int [] stairs = {1, 2};
     for(int i = 2;i < n; i++)
@@ -389,9 +1136,7 @@ public int climbStairs(int n){
 
      https://oj.leetcode.com/discuss/11211/o-log-n-solution-with-matrix-multiplication
 
-     I saw most solutions posted in discussion are DP with runtime O(n) and O(1) space which is accepted by OJ.
-     
-     The only O(log(n)) solution so far is lucastan's using Binet's formula.
+     Most solutions are DP with runtime O(n) and O(1) space, the only O(log(n)) solution so far is lucastan's using Binet's formula.
      
      There actually is a matrix multiplication solution which also runs in O(log(n)). It basically calculates fibonacci numbers by power of matrix ((0, 1), (1, 1)) ^ (n-1).
 
@@ -423,14 +1168,326 @@ public int climbStairs(int n) {
 #+END_SRC
 ** Medium
 *** Unique Path
-*** Unique Path II
+A robot is located at the top-left corner of a m x n grid (marked 'Start' in the diagram below).
+
+The robot can only move either down or right at any point in time. The robot is trying to reach the bottom-right corner of the grid (marked 'Finish' in the diagram below).
+
+How many possible unique paths are there?
+#+caption: Unique Path
+[[./pic/uniquePaths.png]]
+
+Above is a 3 x 7 grid. How many possible unique paths are there?
+
+Note: m and n will be at most 100.
+
+这里Note的含义是: 如果数值过大会溢出的。--《靖空间》
+
+方法论总结：遇上新颖没见过的题目：
+- 查看其特征；
+- 搜索大脑有什么熟悉的题目，可以套的，或者相似的可以退到出来的； 
+- 罗列出来这些题目：全排列， 水槽，TwoSum，等等；
+- 搜索大脑里面有什么熟悉的算法；
+- 罗列出来：动态规划法，递归，回溯，二叉树遍历，贪心法，递归树，分治法，观察特征计算法，等等，肯定有可以套的算法的！ 
+- 最后选定算法解题； 
+- 没有优化的算法，可以使用暴力法，先解决再说！
+
+最后实在没招了，想办法让人提示，主要是提示用什么算法，能给个思路更好了，O(∩_∩)O~
+
+**** 深搜， 递归法
+
+     深搜,小集合可以过,大集合会超时；时间复杂度 O(n^4),空间复杂度 O(n)；
+#+BEGIN_SRC java
+public int uniquePaths(int m, int n) {
+    if (m < 1 || n < 1) return 0;   // 终止条件
+    if (m == 1 && n == 1) return 1; // 收敛条件
+    return uniquePaths(m - 1, n) + uniquePaths(m, n - 1);
+}  
+#+END_SRC
+**** 备忘录法: 有bug,明天修~~！！
+
+     给前面的深搜,加个缓存,就可以过大集合了。即备忘录法。
+#+BEGIN_SRC java
+// 深搜 + 缓存,即备忘录法
+// 时间复杂度 O(n^2), 空间复杂度 O(n^2)
+class Solution {
+    private List<List<Integer>> f = new ArrayList<List<Integer>>(); // 缓存
+    
+    public int dfs(int x, int y) {
+        if (x < 1 || y < 1) return 0;   // 数据非法,终止条件
+        if (x == 1 && y == 1) return 1; // 回到起点,收敛条件
+        return getOrUpdate(x - 1, y) + getOrUpdate(x, y - 1);
+    }
+    
+    public int getOrUpdate(int x, int y) {
+        if (f.get(x).get(y) > 0) return f.get(x).get(y);
+        else return f.get(x).get(y) = dfs(x, y);
+    }
+    
+    public int uniquePaths(int m, int n) {        
+        // 0 行和 0 列未使用
+        f = new ArrayList<List<Integer>>(m + 1, List<Integer>(n + 1)); // 缓存
+        return dfs(m, n);
+    }
+}
+#+END_SRC
+**** 动态规划
+
+     算法1的递归解法中，其实我们计算了很多重复的子问题，比如计算uniquePaths(4, 5) 和 uniquePaths(5, 3)时都要计算子问题uniquePaths(3,2)，再者由于uniquePaths(m, n) = uniquePaths(n, m)，这也使得许多子问题被重复计算了。
+
+     要保存子问题的状态，这样很自然的就想到了动态规划方法，设dp[i][j] = uniquePaths(i, j)， 那么动态规划方程为：
+
+     动态方程: dp[i][j] = dp[i-1][j] + dp[i][j-1]
+
+     边界条件：dp[i][ 1 ] = 1, dp[ 1 ][j] = 1
+#+BEGIN_SRC java
+public int uniquePaths(int m, int n) {
+    if (m == 0 || n == 0) return 1;
+    else if (m == 1 && n == 1) return 1;
+            
+    int [][] dp = new int[m][n];
+    for (int i = 0; i < n; i++) 
+        dp[0][i] = 1;
+    for (int i = 0; i < m; i++)
+        dp[i][0] = 1;
+    dp[0][0] = 0;
+    for (int i = 1; i < m; i++) 
+        for (int j = 1; j < n; j++) 
+            dp[i][j] = dp[i][j - 1] + dp[i - 1][j];
+    return dp[m-1][n-1];
+}
+#+END_SRC
+滚动数组
+#+BEGIN_SRC java
+// 动规,滚动数组
+// 时间复杂度 O(n^2), 空间复杂度 O(n)
+int uniquePaths(int m, int n) {
+    vector<int> f(n, 0);
+    f[0] = 1;
+    for (int i = 0; i < m; i++) {
+        for (int j = 1; j < n; j++) {
+            // 左边的 f[j], 表示更新后的 f[j], 与公式中的 f[i[[j] 对应
+            // 右边的 f[j], 表示老的 f[j], 与公式中的 f[i-1][j] 对应
+            f[j] = f[j - 1] + f[j];
+        }
+    }
+    return f[n - 1];
+}
+#+END_SRC
+
+**** 组合数 （ C_{m+n-2}^{m-1} ）
+
+     一个 m 行,n 列的矩阵,机器人从左上走到右下总共需要的步数是 m + n − 2,其中向下走的步数是 m − 1,因此问题变成了在 m + n − 2 个操作中,选择 m–1 个时间点向下走,选择方式有多少种。即C_{m+n-2}^{m-1}。这里需要注意的是求组合数时防止乘法溢出。
+#+BEGIN_SRC java
+public int combination(int a, int b) {
+    if (b > (a >>> 1)) b = a - b;
+    long res = 1;
+    for (int i = 1; i <= b ; i++) 
+        res = res * (a - i + 1) / i;
+    return (int)res;
+}
+        
+public int uniquePaths(int m, int n) {
+    return combination(m + n - 2, m - 1);
+}
+#+END_SRC
+
+*** Unique Path with Obstacles
+Follow up for "Unique Paths":
+
+Now consider if some obstacles are added to the grids. How many unique paths would there be?
+
+An obstacle and empty space is marked as 1 and 0 respectively in the grid.
+
+For example, There is one obstacle in the middle of a 3x3 grid as illustrated below.
+#+BEGIN_SRC java
+[
+  [0,0,0],
+  [0,1,0],
+  [0,0,0]
+]
+#+END_SRC
+The total number of unique paths is 2.
+
+Note: m and n will be at most 100.
+**** 备忘录法
+**** 动态规划
+
 *** Unique Binary Search Tree
+    Given n, how many structurally unique BST's (binary search trees) that store values 1...n?
+    
+    For example, Given n = 3, there are a total of 5 unique BST's.
+    #+BEGIN_SRC java
+   1         3     3      2      1
+    \       /     /      / \      \
+     3     2     1      1   3      2
+    /     /       \                 \
+   2     1         2                 3
+    #+END_SRC
+    如果把上例的顺序改一下,就可以看出规律了。《水中的鱼》
+    #+BEGIN_SRC java
+    1           1                   2                    3            3
+     \           \                 /  \                 /            / 
+      3           2               1    3               2            1
+     /             \                                  /              \
+    2                3                               1                2
+    #+END_SRC
+    比如，以1为根的树有几个，完全取决于有二个元素的子树有几种。同理，2为根的子树取决于一个元素的子树有几个。以3为根的情况，则与1相同。
+    
+    定义Count[i] 为以[0,i]能产生的Unique Binary Tree的数目，
+    
+    如果数组为空，毫无疑问，只有一种BST，即空树， Count[ 0 ] =1
+    
+    如果数组仅有一个元素{1}，只有一种BST，单个节点, Count[ 1 ] = 1
+    
+    如果数组有两个元素{1,2}， 那么有如下两种可能
+    #+BEGIN_SRC java
+    1                     2
+     \                   /
+      2                1
+    Count[2] = Count[0] * Count[1]   [ 1 为根的情况 ]
+             + Count[1] * Count[0]   [ 2 为根的情况 ]
+    #+END_SRC
+   再看一遍三个元素的数组，可以发现BST的取值方式如下：
+   #+BEGIN_SRC java
+   Count[3] = Count[0]*Count[2]  [ 1 为根的情况 ]
+            + Count[1]*Count[1]  [ 2 为根的情况 ]
+            + Count[2]*Count[0]  [ 3 为根的情况 ]
+   #+END_SRC
+   所以，由此观察，当数组为 1, 2, 3, ..., n 时,基于以下原则的构建的 BST 树具有唯一性:以 i 为根节点的树,其左子树由 [1, i-1] 构成,其右子树由 [i+1, n] 构成。
+   
+   可以得出Count的递推公式为
+
+	       Count[i] = ∑ Count[0...k] * [ k+1....i] ( 0 <= k < i-1 )
+
+   问题至此划归为一维动态规划。
+
 *** Unique Binary Search Tree II
+    Given n, generate all structurally unique BST's (binary search trees) that store values 1...n.
+    
+    For example,
+    
+    Given n = 3, your program should return all 5 unique BST's shown below.
+    #+BEGIN_SRC java
+   1         3     3      2      1
+    \       /     /      / \      \
+     3     2     1      1   3      2
+    /     /       \                 \
+   2     1         2                 3
+    #+END_SRC
+#+BEGIN_SRC java
+public List<TreeNode> helper(int bgn, int end) {
+    List<TreeNode> res = new ArrayList<TreeNode>();
+    if (bgn > end) {
+        res.add(null);  // important
+        return res;
+    }
+
+    List<TreeNode> left = null;
+    List<TreeNode> right = null;
+    TreeNode root = null;
+    for (int i = bgn; i <= end ; i++) {
+        left = helper(bgn, i - 1);
+        right = helper(i + 1, end);
+        for (int j = 0; j < left.size(); j++) {
+            for (int k = 0; k < right.size(); k++) {
+                root = new TreeNode(i);
+                root.left = left.get(j);
+                root.right = right.get(k);
+                res.add(root);
+                root = null;
+            }
+        }
+        left = null;
+        right = null;
+    }
+    return res;
+}
+        
+public List<TreeNode> generateTrees(int n) {
+    return helper(1, n);
+}
+#+END_SRC
 *** Minimum Path Sum
+Given a m x n grid filled with non-negative numbers, find a path from top left to bottom right which minimizes the sum of all numbers along its path.
+
+Note: You can only move either down or right at any point in time.
+**** 备忘录法
+**** 动态规划 + 滚动数组
+#+BEGIN_SRC java
+public int minPathSum(int[][] grid) {
+    int m = grid.length;
+    int n = grid[0].length;
+    if (m == 0 || n == 0) return 0;
+            
+    int [][] arr = new int[m][n];
+    arr[0][0] = grid[0][0];
+    for (int i = 1; i < n; i++)
+        arr[0][i] = arr[0][i - 1] + grid[0][i];
+    for (int i = 1; i < m; i++)
+        arr[i][0] = arr[i - 1][0] + grid[i][0];
+            
+    for (int i = 1; i < m; i++) {
+        for (int j = 1; j < n; j++) {
+            arr[i][j] = Math.min(arr[i][j - 1], arr[i - 1][j]) + grid[i][j];
+        }
+    }
+    return arr[m-1][n-1];
+}
+#+END_SRC
 *** Maximum Sum Subarray
+Find the contiguous subarray within an array (containing at least one number) which has the largest sum.
+
+For example, given the array [-2, 1, -3, 4, -1, 2, 1, -5, 4], 
+
+the contiguous subarray [4, -1, 2, 1] has the largest sum = 6.
+
+click to show more practice.
+
+*More practice:*
+
+If you have figured out the O(n) solution, try coding another solution using the divide and conquer approach, which is more subtle.
+
+*Tags:* Divide and Conquer, Array, Dynamic Programming
+
 *** Maximum Product Subarray
+Find the contiguous subarray within an array (containing at least one number) which has the largest product.
+
+For example, given the array [2, 3, -2, 4], 
+
+the contiguous subarray [2, 3] has the largest product = 6.
+
 *** Decode Ways
+A message containing letters from A-Z is being encoded to numbers using the following mapping:
+#+BEGIN_SRC java
+'A' -> 1
+'B' -> 2
+...
+'Z' -> 26
+#+END_SRC
+Given an encoded message containing digits, determine the total number of ways to decode it.
+
+For example,
+
+Given encoded message "12", it could be decoded as "AB" (1 2) or "L" (12).
+
+The number of ways decoding "12" is 2.
+
 *** Triangle
+Given a triangle, find the minimum path sum from top to bottom. Each step you may move to adjacent numbers on the row below.
+
+For example, given the following triangle
+#+BEGIN_SRC java
+[
+     [2],
+    [3,4],
+   [6,5,7],
+  [4,1,8,3]
+]
+#+END_SRC
+The minimum path sum from top to bottom is 11 (i.e., 2 + 3 + 5 + 1 = 11).
+
+Note: Bonus point if you are able to do this using only O(n) extra space, where n is the total number of rows in the triangle.
+
 *** Word Break
 Given a string s and a dictionary of words dict, determine if s can be segmented into a space-separated sequence of one or more dictionary words.
 
@@ -441,15 +1498,59 @@ dict = ["leet", "code"].
 Return true because "leetcode" can be segmented as "leet code".
 #+END_SRC
 *** Best Time to Buy and Sell Stock
+Say you have an array for which the ith element is the price of a given stock on day i.
+
+If you were only permitted to complete at most one transaction (ie, buy one and sell one share of the stock), design an algorithm to find the maximum profit.
 ** Hard
 *** Best Time to Buy and Sell Stock III
+Say you have an array for which the ith element is the price of a given stock on day i.
+
+Design an algorithm to find the maximum profit. You may complete at most two transactions.
+
+Note: You may not engage in multiple transactions at the same time (ie, you must sell the stock before you buy again).
+
 *** Longest Valid Parentheses
+Given a string containing just the characters '(' and ')', find the length of the longest valid (well-formed) parentheses substring.
+
+For "(()", the longest valid parentheses substring is "()", which has length = 2.
+
+Another example is ")()())", where the longest valid parentheses substring is "()()", which has length = 4.
+**** 使用栈: 时间复杂度 O(n), 空间复杂度 O(n)
+
+#+BEGIN_SRC java
+
+#+END_SRC
 
 *** Coins in a Line
+
 *** Word Break II
+    See 16.4.12
 *** Maximum Rectangle
+Given a 2D binary matrix filled with 0's and 1's, find the largest rectangle containing all ones and return its area.
+
+*Tags:* Array Hash Table Stack Dynamic Programming
+
 *** Edit Distance
+Given two words word1 and word2, find the minimum number of steps required to convert word1 to word2. (each operation is counted as 1 step.)
+
+You have the following 3 operations permitted on a word:
+
+a) Insert a character
+
+b) Delete a character
+
+c) Replace a character
+
 *** Distinct Subsequence
+Given a string S and a string T, count the number of distinct subsequences of T in S.
+
+A subsequence of a string is a new string which is formed from the original string by deleting some (can be none) of the characters without disturbing the relative positions of the remaining characters. (ie, "ACE" is a subsequence of "ABCDE" while "AEC" is not).
+
+Here is an example:
+
+S = "rabbbit", T = "rabbit"
+
+Return 3.
 *** Palindrome Partitioning II 
 Given a string s, partition s such that every substring of the partition is a palindrome.
 
@@ -462,9 +1563,114 @@ Return 1 since the palindrome partitioning ["aa","b"] could be produced using 1 
 #+END_SRC
 
 *** Interleaving String
+Given s1, s2, s3, find whether s3 is formed by the interleaving of s1 and s2.
+
+For example, Given:
+#+BEGIN_SRC java
+s1 = "aabcc",
+s2 = "dbbca",
+When s3 = "aadbbcbcac", return true.
+When s3 = "aadbbbaccc", return false.
+#+END_SRC
+
 *** Scramble String
+    Given a string s1, we may represent it as a binary tree by partitioning it to two non-empty substrings recursively.
+
+    Below is one possible representation of s1 = "great":
+
+    #+BEGIN_SRC java
+    great
+   /    \
+  gr    eat
+ / \    /  \
+g   r  e   at
+           / \
+          a   t
+    #+END_SRC
+
+    To scramble the string, we may choose any non-leaf node and swap its two children.
+    
+    For example, if we choose the node "gr" and swap its two children, it produces a scrambled string "rgeat".
+
+    #+BEGIN_SRC java
+    rgeat
+   /    \
+  rg    eat
+ / \    /  \
+r   g  e   at
+           / \
+          a   t
+    #+END_SRC
+
+    We say that "rgeat" is a scrambled string of "great".
+    
+    Similarly, if we continue to swap the children of nodes "eat" and "at", it produces a scrambled string "rgtae".
+
+    #+BEGIN_SRC java
+    rgtae
+   /    \
+  rg    tae
+ / \    /  \
+r   g  ta  e
+       / \
+      t   a
+    #+END_SRC    
+
+    We say that "rgtae" is a scrambled string of "great".
+    
+    Given two strings s1 and s2 of the same length, determine if s2 is a scrambled string of s1.
+
 *** Regular Expression Matching
+Implement regular expression matching with support for '.' and '*'.
+#+BEGIN_SRC java
+'.' Matches any single character.
+'*' Matches zero or more of the preceding element.
+#+END_SRC
+
+The matching should cover the entire input string (not partial).
+
+The function prototype should be:
+
+bool isMatch(const char *s, const char *p)
+
+Some examples:
+#+BEGIN_SRC java
+isMatch("aa","a") → false
+isMatch("aa","aa") → true
+isMatch("aaa","aa") → false
+isMatch("aa", "a*") → true
+isMatch("aa", ".*") → true
+isMatch("ab", ".*") → true
+isMatch("aab", "c*a*b") → true
+#+END_SRC
+
+*Tags:* Dynamic Programming Backtracking String
+
 *** Wildcard Matching
+Implement wildcard pattern matching with support for '?' and '*'.
+#+BEGIN_SRC java
+'?' Matches any single character.
+'*' Matches any sequence of characters (including the empty sequence).
+#+END_SRC
+
+The matching should cover the entire input string (not partial).
+
+The function prototype should be:
+
+bool isMatch(const char *s, const char *p)
+
+Some examples:
+#+BEGIN_SRC java
+isMatch("aa","a") → false
+isMatch("aa","aa") → true
+isMatch("aaa","aa") → false
+isMatch("aa", "*") → true
+isMatch("aa", "a*") → true
+isMatch("ab", "?*") → true
+isMatch("aab", "c*a*b") → false
+#+END_SRC
+*Tags:* Dynamic Programming, Backtracking, Greedy, String
+
 * Two Pointers and Sliding Window
 ** Easy
 *** Valid Palindrome
@@ -725,21 +1931,22 @@ Follow up for N-Queens problem.
 
 Now, instead outputting board configurations, return the total number of distinct solutions.
 *** Sudoku Solver
-Write a program to solve a Sudoku puzzle by filling the empty cells.
+    Write a program to solve a Sudoku puzzle by filling the empty cells.
+    
+    Empty cells are indicated by the character '.'.
+    
+    You may assume that there will be only one unique solution.
+    
+    #+caption: Sudoku Solver 1
+    [[./pic/solveSudoku1.png]]
 
-Empty cells are indicated by the character '.'.
-
-You may assume that there will be only one unique solution.
-
-#+caption: Sudoku Solver 1
-[[./pic/solveSudoku1.png]]
-A sudoku puzzle...
-
-#+caption: Sudoku Solver 2
-[[./pic/solveSudoku2.png]]
-...and its solution numbers marked in red.
-
-*Tags:* Backtracking, Hash Table
+    A sudoku puzzle...
+    
+    #+caption: Sudoku Solver 2
+    [[./pic/solveSudoku2.png]]
+    ...and its solution numbers marked in red.
+    
+    *Tags:* Backtracking, Hash Table
 
 *** Regular Expression Matching
 Implement regular expression matching with support for '.' and '*'.
@@ -822,6 +2029,16 @@ Note:
 * Bit Manipulation
 ** Easy
 *** Majority Element
+    Given an array of size n, find the majority element. The majority element is the element that appears more than ⌊ n/2 ⌋ times.
+    
+    You may assume that the array is non-empty and the majority element always exist in the array.
+    
+    Credits:
+    
+    Special thanks to @ts for adding this problem and creating all test cases.
+    
+    *Tags:* Divide and Conquer, Array, Bit Manipulation
+
 ** Medium
 *** Subsets: Bit Manipulation
 Given a set of distinct integers, S, return all possible subsets.
@@ -845,7 +2062,21 @@ If S = [1,2,3], a solution is:
 #+END_SRC
 *Tags:* Array Backtracking, Bit Manipulation
 *** Single Number
+    Given an array of integers, every element appears twice except for one. Find that single one.
+    
+    Note:
+    
+    Your algorithm should have a linear runtime complexity. Could you implement it without using extra memory?
+    
+    *Tags:* Hash Table, Bit Manipulation
+
 *** Single Number II
+    Given an array of integers, every element appears three times except for one. Find that single one.
+
+    Note:
+    
+    Your algorithm should have a linear runtime complexity. Could you implement it without using extra memory?
+
 * 图 Graphics
 ** Medium
 *** Clone Graph
