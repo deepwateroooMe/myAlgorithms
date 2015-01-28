@@ -5,7 +5,7 @@ import java.util.List;
 
 public class numDecodings {
     public static class Solution {
-        public int numDecodings(String s) {
+        public int numDecodings0(String s) {
             if (s == null || s.length() == 0) return 0;
             else if (s.charAt(0) == '0') return 0;
             else if (s.length() == 1) return 1;
@@ -49,11 +49,29 @@ public class numDecodings {
             }
             return res[s.length() - 1];
         }
+
+        // code has bug here, fix it later ~~~
+        public int numDecodings(String s) {
+            if (s == null || s.length() == 0 || s.charAt(0) == '0') return 0;
+            int prev = 0;
+            int curr = 1;
+            int tmp = 0;
+            for (int i = 1; i <= s.length() ; i++) {
+                if (s.charAt(i - 1) == '0') curr = 0;
+                if (i < 2 || s.charAt(i - 2) != '1' ||
+                    (s.charAt(i - 2) == '2' && s.charAt(i - 1) <= '6'))
+                    prev = 0;
+                tmp = curr;
+                curr = prev + curr;
+                prev = tmp;
+            }
+            return curr;
+        }
     }
 
     public static void main(String[] args){
         Solution result = new Solution();
-        String s = "301";
+        String s = "26";
         int res = result.numDecodings(s);
         
         System.out.println(res);

@@ -29,9 +29,29 @@ public class uniquePaths {
             return (int)res;
         }
         
-        public int uniquePaths(int m, int n) {
+        public int uniquePaths1(int m, int n) {
             return combination(m + n - 2, m - 1);
         }
+
+        // another one
+        private int [][] f;
+        
+        public int dfs(int x, int y) {
+            if (x < 1 || y < 1) return 0;   
+            if (x == 1 && y == 1) return 1; 
+            return getOrUpdate(x - 1, y) + getOrUpdate(x, y - 1);
+        }
+    
+        public int getOrUpdate(int x, int y) {
+            if (f[x][y] > 0) return f[x][y];
+            else return f[x][y] = dfs(x, y);
+        }
+    
+        public int uniquePaths(int m, int n) {        
+            f = new int[m + 1][n + 1];
+            return dfs(m, n);
+        }
+
     }
 
     public static void main(String[] args){

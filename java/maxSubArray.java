@@ -5,7 +5,7 @@ import java.util.List;
 
 public class maxSubArray {
     public static class Solution {
-        public int maxSubArray(int[] a) {
+        public int maxSubArray0(int[] a) {
             if (a == null || a.length == 0) return 0;
             else if (a.length == 1) return a[0];
 
@@ -27,6 +27,30 @@ public class maxSubArray {
                 }
             }
           return res[a.length - 1];
+        }
+
+        public int maxSubArray1(int[] a) {
+            int result = Integer.MIN_VALUE, f = 0;
+            for (int i = 0; i < a.length; i++) {
+                f = Math.max(f + a[i], a[i]);
+                result = Math.max(result, f);
+            }
+            return result;
+        }
+
+        public int maxSubArray(int[] a) {
+            int result, curMin;
+            int [] sum = new int[a.length + 1];
+            sum[0] = 0;
+            result = Integer.MIN_VALUE;
+            curMin = sum[0];
+            for (int i = 1; i <= a.length ; i++) 
+                sum[i] = sum[i - 1] + a[i - 1];
+            for (int i = 1; i <= a.length ; i++) {
+                result = Math.max(result, sum[i] - curMin);
+                curMin = Math.min(curMin, sum[i]);
+            }
+            return result;
         }
     }
 

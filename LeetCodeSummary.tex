@@ -1,5 +1,5 @@
-% Created 2015-01-27 Tue 00:38
-\documentclass[11pt]{book}
+% Created 2015-01-27 Tue 17:53
+\documentclass[12pt]{book}
 \usepackage{graphicx}
 \usepackage{xcolor}
 \usepackage{xeCJK}
@@ -8,7 +8,7 @@
 \usepackage{float}
 \usepackage{textcomp}
 \usepackage{geometry}
-\geometry{left=0cm,right=0cm,top=0cm,bottom=0cm}
+\geometry{left=1.5cm,right=1.5cm,top=2cm,bottom=1.5cm}
 \usepackage{multirow}
 \usepackage{multicol}
 \usepackage{listings}
@@ -652,111 +652,8 @@ You may assume that duplicates do not exist in the tree.
 \section{二叉树查找}
 \label{sec-4-3}
 
-\subsection{Unique Binary Search Tree}
-\label{sec-4-3-1}
-Given n, how many structurally unique BST's (binary search trees) that store values 1\ldots{}n?
-
-For example, Given n = 3, there are a total of 5 unique BST's.
-\lstset{language=java,label= ,caption= ,numbers=none}
-\begin{lstlisting}
-1         3     3      2      1
- \       /     /      / \      \
-  3     2     1      1   3      2
- /     /       \                 \
-2     1         2                 3
-\end{lstlisting}
-如果把上例的顺序改一下,就可以看出规律了。《水中的鱼》
-\lstset{language=java,label= ,caption= ,numbers=none}
-\begin{lstlisting}
-1           1                   2                    3            3
- \           \                 /  \                 /            / 
-  3           2               1    3               2            1
- /             \                                  /              \
-2                3                               1                2
-\end{lstlisting}
-比如，以1为根的树有几个，完全取决于有二个元素的子树有几种。同理，2为根的子树取决于一个元素的子树有几个。以3为根的情况，则与1相同。
-
-定义Count[i] 为以[0,i]能产生的Unique Binary Tree的数目，
-
-如果数组为空，毫无疑问，只有一种BST，即空树， Count[ 0 ] =1
-
-如果数组仅有一个元素\{1\}，只有一种BST，单个节点, Count[ 1 ] = 1
-
-如果数组有两个元素\{1,2\}， 那么有如下两种可能
-\lstset{language=java,label= ,caption= ,numbers=none}
-\begin{lstlisting}
-1                     2
- \                   /
-  2                1
-Count[2] = Count[0] * Count[1]   [ 1 为根的情况 ]
-         + Count[1] * Count[0]   [ 2 为根的情况 ]
-\end{lstlisting}
-再看一遍三个元素的数组，可以发现BST的取值方式如下：
-\lstset{language=java,label= ,caption= ,numbers=none}
-\begin{lstlisting}
-Count[3] = Count[0]*Count[2]  [ 1 为根的情况 ]
-         + Count[1]*Count[1]  [ 2 为根的情况 ]
-         + Count[2]*Count[0]  [ 3 为根的情况 ]
-\end{lstlisting}
-所以，由此观察，当数组为 1, 2, 3, \ldots{}, n 时,基于以下原则的构建的 BST 树具有唯一性:以 i 为根节点的树,其左子树由 [1, i-1] 构成,其右子树由 [i+1, n] 构成。
-
-可以得出Count的递推公式为
-
-Count[i] = ∑ Count[0\ldots{}k] * [ k+1\ldots{}.i] ( 0 <= k < i-1 )
-
-问题至此划归为一维动态规划。
-
-\subsection{Unique Binary Search Tree II}
-\label{sec-4-3-2}
-Given n, generate all structurally unique BST's (binary search trees) that store values 1\ldots{}n.
-
-For example,
-
-Given n = 3, your program should return all 5 unique BST's shown below.
-\lstset{language=java,label= ,caption= ,numbers=none}
-\begin{lstlisting}
-1         3     3      2      1
- \       /     /      / \      \
-  3     2     1      1   3      2
- /     /       \                 \
-2     1         2                 3
-\end{lstlisting}
-\lstset{language=java,label= ,caption= ,numbers=none}
-\begin{lstlisting}
-public List<TreeNode> helper(int bgn, int end) {
-    List<TreeNode> res = new ArrayList<TreeNode>();
-    if (bgn > end) {
-        res.add(null);  // important
-        return res;
-    }
-
-    List<TreeNode> left = null;
-    List<TreeNode> right = null;
-    TreeNode root = null;
-    for (int i = bgn; i <= end ; i++) {
-        left = helper(bgn, i - 1);
-        right = helper(i + 1, end);
-        for (int j = 0; j < left.size(); j++) {
-            for (int k = 0; k < right.size(); k++) {
-                root = new TreeNode(i);
-                root.left = left.get(j);
-                root.right = right.get(k);
-                res.add(root);
-                root = null;
-            }
-        }
-        left = null;
-        right = null;
-    }
-    return res;
-}
-
-public List<TreeNode> generateTrees(int n) {
-    return helper(1, n);
-}
-\end{lstlisting}
 \subsection{Validate Binary Search Tree}
-\label{sec-4-3-3}
+\label{sec-4-3-1}
 Given a binary tree, determine if it is a valid binary search tree (BST).
 
 Assume a BST is defined as follows:
@@ -769,24 +666,24 @@ Assume a BST is defined as follows:
 \end{itemize}
 
 \subsection{Convert Sorted Array to Binary Search Tree}
-\label{sec-4-3-4}
+\label{sec-4-3-2}
 Given an array where elements are sorted in ascending order, convert it to a height balanced BST.
 
 二分法。
 \subsection{Convert Sorted List to Binary Search Tree}
-\label{sec-4-3-5}
+\label{sec-4-3-3}
 Given a singly linked list where elements are sorted in ascending order, convert it to a height balanced BST.
 
 这题与上一题类似,但是单链表不能随机访问,而自顶向下的二分法必须需要 RandomAccessIt-erator,因此前面的方法不适用本题。
 
-存在一种自底向上(boom-up)的方法, 见 
+存在一种自底向上(bottom-up)的方法, 见 
 
 \url{http://leetcode.com/2010/11/convert-sorted-list-to-balanced-binary.html}
 \begin{enumerate}
 \item 分治法： 自项向下
-\label{sec-4-3-5-1}
-\item 分治法： 自底向上
-\label{sec-4-3-5-2}
+\label{sec-4-3-3-1}
+\item 自底向上
+\label{sec-4-3-3-2}
 \end{enumerate}
 \section{二叉树递归}
 \label{sec-4-4}
@@ -828,6 +725,7 @@ Given the below binary tree and sum = 22,
  /  \      \
 7    2      1
 \end{lstlisting}
+
 return true, as there exist a root-to-leaf path 5->4->11->2 which sum is 22.
 
 题目只要求返回 true 或者 false,因此不需要记录路径。
@@ -855,6 +753,7 @@ Given the below binary tree and sum = 22,
  /  \    / \
 7    2  5   1
 \end{lstlisting}
+
 return
 \lstset{language=java,label= ,caption= ,numbers=none}
 \begin{lstlisting}
@@ -882,11 +781,12 @@ Given the below binary tree,
  / \
 2   3
 \end{lstlisting}
+
 Return 6.
 
 这题很难,路径可以从任意节点开始,到任意节点结束。
 
-可以利用“最大连续子序列和”问题的思路,见第 §13.2节。如果说 Array只有一个方向的话, 那么 Binary Tree 其实只是左、右两个方向而已,我们需要比较两个方向上的值。
+可以利用“最大连续子序列和”问题的思路,见第 ?????? 节。如果说 Array只有一个方向的话, 那么 Binary Tree 其实只是左、右两个方向而已,我们需要比较两个方向上的值。
 
 不过,Array 可以从头到尾遍历,那么 Binary Tree 怎么办呢,我们可以采用 Binary Tree 最常用的 dfs 来进行遍历。先算出左右子树的结果 L 和 R,如果 L 大于 0,那么对后续结果是有利的,我们加上 L,如果 R 大于 0,对后续结果也是有利的,继续加上 R。
 
@@ -903,6 +803,7 @@ struct TreeLinkNode {
     TreeLinkNode *next;
 }
 \end{lstlisting}
+
 Populate each next pointer to point to its next right node. If there is no next right node, the next pointer should be set to NULL.
 
 Initially, all next pointers are set to NULL.
@@ -953,6 +854,7 @@ For example,
  / \
 2   3
 \end{lstlisting}
+
 The root-to-leaf path 1->2 represents the number 12.
 
 The root-to-leaf path 1->3 represents the number 13.
@@ -968,7 +870,7 @@ Given a binary tree where all the right nodes are either leaf nodes with a sibli
 
 For example:
 
-Given a binary tree \{1,2,3,4,5\},
+Given a binary tree \{1, 2, 3, 4, 5\},
 \lstset{language=java,label= ,caption= ,numbers=none}
 \begin{lstlisting}
     1
@@ -978,7 +880,7 @@ Given a binary tree \{1,2,3,4,5\},
 4   5
 \end{lstlisting}
 
-return the root of the binary tree [4,5,2,\#,\#,3,1].
+return the root of the binary tree [4, 5, 2, \#, \#, 3, 1].
 \lstset{language=java,label= ,caption= ,numbers=none}
 \begin{lstlisting}
   4
@@ -995,6 +897,15 @@ Implement an iterator over a binary search tree (BST). Your iterator will be ini
 Calling next() will return the next smallest number in the BST.
 
 Note: next() and hasNext() should run in average O(1) time and uses O(h) memory, where h is the height of the tree.
+
+\section{others Covered}
+\label{sec-4-5}
+\begin{itemize}
+\item Unique Binary Search Tree
+\ref{sec-14-2-4}
+\item Unique Binary Search Tree II
+\ref{sec-14-2-5}
+\end{itemize}
 
 \chapter{栈 Stack}
 \label{sec-5}
@@ -1181,21 +1092,22 @@ public ListNode mergeKLists(List<ListNode> lists) {
 }
 \end{lstlisting}
 
-\section{other Covered}
+\section{others Covered}
 \label{sec-5-5}
-\subsection{Binary Tree Preorder Traversal}
-\label{sec-5-5-1}
-\subsection{Binary Tree Inorder Traversal}
-\label{sec-5-5-2}
-\subsection{Binary Tree Postorder Traversal}
-\label{sec-5-5-3}
-\subsection{Binary Search Tree Iterator}
-\label{sec-5-5-4}
-\subsection{Binary Tree Zigzag Level Order Traversal}
-\label{sec-5-5-5}
-\subsection{Min Stack}
-\label{sec-5-5-6}
-See 19.1.2
+\begin{itemize}
+\item Binary Tree Preorder Traversal
+\ref{sec-4-1-1}
+\item Binary Tree Inorder Traversal
+\ref{sec-4-1-2}
+\item Binary Tree Postorder Traversal
+\ref{sec-4-1-3}
+\item Binary Search Tree Iterator        
+\ref{sec-4-4-9}
+\item Binary Tree Zigzag Level Order Traversal
+\ref{sec-4-1-6}
+\item Min Stack
+\ref{sec-19-1-2}
+\end{itemize}
 
 \chapter{Hash Table}
 \label{sec-6}
@@ -1550,6 +1462,7 @@ public int climbStairs(int n) {
     return res[n - 1];
 }
 \end{lstlisting}
+
 Considering odd and even, 实现滚动数组
 \lstset{language=java,label= ,caption= ,numbers=none}
 \begin{lstlisting}
@@ -1645,7 +1558,7 @@ public int uniquePaths(int m, int n) {
     return uniquePaths(m - 1, n) + uniquePaths(m, n - 1);
 }
 \end{lstlisting}
-\item 备忘录法: 有bug,明天修\textasciitilde{}~！！
+\item 备忘录法: 时间复杂度 O(n$^{\text{2}}$), 空间复杂度 O(n$^{\text{2}}$)
 \label{sec-14-2-1-2}
 
 给前面的深搜,加个缓存,就可以过大集合了。即备忘录法。
@@ -1654,7 +1567,7 @@ public int uniquePaths(int m, int n) {
 // 深搜 + 缓存,即备忘录法
 // 时间复杂度 O(n^2), 空间复杂度 O(n^2)
 class Solution {
-    private List<List<Integer>> f = new ArrayList<List<Integer>>(); // 缓存
+    private int [][] f;    // 缓存
 
     public int dfs(int x, int y) {
         if (x < 1 || y < 1) return 0;   // 数据非法,终止条件
@@ -1663,13 +1576,13 @@ class Solution {
     }
 
     public int getOrUpdate(int x, int y) {
-        if (f.get(x).get(y) > 0) return f.get(x).get(y);
-        else return f.get(x).get(y) = dfs(x, y);
+        if (f[x][y] > 0) return f[x][y];
+        else return f[x][y] = dfs(x, y);
     }
 
     public int uniquePaths(int m, int n) {        
         // 0 行和 0 列未使用
-        f = new ArrayList<List<Integer>>(m + 1, List<Integer>(n + 1)); // 缓存
+        f = new int[m + 1][n + 1]; // 缓存
         return dfs(m, n);
     }
 }
@@ -1702,6 +1615,7 @@ public int uniquePaths(int m, int n) {
     return dp[m-1][n-1];
 }
 \end{lstlisting}
+
 滚动数组
 \lstset{language=java,label= ,caption= ,numbers=none}
 \begin{lstlisting}
@@ -1724,7 +1638,7 @@ int uniquePaths(int m, int n) {
 \item 组合数 （ C$_{\text{m+n-2}}^{\text{m-1}}$ ）
 \label{sec-14-2-1-4}
 
-一个 m 行,n 列的矩阵,机器人从左上走到右下总共需要的步数是 m + n − 2,其中向下走的步数是 m − 1,因此问题变成了在 m + n − 2 个操作中,选择 m–1 个时间点向下走,选择方式有多少种。即C$_{\text{m+n-2}}^{\text{m-1}}$。这里需要注意的是求组合数时防止乘法溢出。
+一个 m 行, n 列的矩阵, 机器人从左上走到右下总共需要的步数是 m + n - 2, 其中向下走的步数是 m - 1, 因此问题变成了在 m + n - 2 个操作中, 选择 m–1 个时间点向下走, 选择方式有多少种。即C$_{\text{m+n-2}}^{\text{m-1}}$。这里需要注意的是求组合数时防止乘法溢出。
 \lstset{language=java,label= ,caption= ,numbers=none}
 \begin{lstlisting}
 public int combination(int a, int b) {
@@ -1758,18 +1672,159 @@ For example, There is one obstacle in the middle of a 3x3 grid as illustrated be
   [0,0,0]
 ]
 \end{lstlisting}
+
 The total number of unique paths is 2.
 
 Note: m and n will be at most 100.
 \begin{enumerate}
 \item 备忘录法
 \label{sec-14-2-2-1}
+\lstset{language=java,label= ,caption= ,numbers=none}
+\begin{lstlisting}
+// LeetCode, Unique Paths II
+// 深搜 + 缓存, 即备忘录法
+class Solution {
+public:
+    int uniquePathsWithObstacles(vector<vector<int> > &obstacleGrid) {
+        const int m = obstacleGrid.size();
+        const int n = obstacleGrid[0].size();
+        // 0 行和 0 列未使用
+        this->f = vector<vector<int> >(m + 1, vector<int>(n + 1, 0));
+        return dfs(obstacleGrid, m, n);
+    }
+
+private:
+    vector<vector<int> > f;                    // 缓存
+    int dfs(const vector<vector<int> > &obstacleGrid,
+            int x, int y) {
+        if (x < 1 || y < 1) return 0;         // 数据非法,终止条件
+
+        if (obstacleGrid[x-1][y-1]) return 0; // (x,y) 是障碍
+        if (x == 1 and y == 1) return 1;      // 回到起点,收敛条件
+        return getOrUpdate(obstacleGrid, x - 1, y) +
+                getOrUpdate(obstacleGrid, x, y - 1);
+    }
+    int getOrUpdate(const vector<vector<int> > &obstacleGrid,
+                    int x, int y) {
+        if (f[x][y] > 0) return f[x][y];
+        else return f[x][y] = dfs(obstacleGrid, x, y);
+    }
+};
+\end{lstlisting}
 \item 动态规划
 \label{sec-14-2-2-2}
-\end{enumerate}
 
-\subsection{Unique Binary Search Tree}
+与上一题类似, 但要特别注意第一列的障碍。在上一题中,第一列全部是1, 但是在这一题中不同,第一列如果某一行有障碍物,那么后面的行应该为 0。
+\lstset{language=java,label= ,caption= ,numbers=none}
+\begin{lstlisting}
+public int uniquePathsWithObstacles(int[][] obstacleGrid) {
+    int m = obstacleGrid.length;
+    int n = obstacleGrid[0].length;
+    if (m == 0 || n == 0) return 0;
+    else if (obstacleGrid[0][0] == 1 || obstacleGrid[m - 1][n - 1] == 1) return 0;
+    else if (m == 1 || n == 1) return obstacleGrid[m-1][n-1] == 1 ? 0 : 1;
+
+    int [][] arr = new int[m][n];
+    for (int i = 0; i < n; i++)
+        if (obstacleGrid[0][i] == 1) {
+            for (int j = i; j < n; j++) 
+                arr[0][j] = 0;
+            i = n;
+        } else arr[0][i] = 1;
+
+    for (int i = 0; i < m; i++)
+        if (obstacleGrid[i][0] != 1)
+            arr[i][0] = 1;
+        else 
+            for (int j = i; j < m; j++) {
+                arr[j][0] = 0;
+                i = m;
+            }
+
+    arr[0][0] = 0;
+    for (int i = 1; i < m; i++) {
+        for (int j = 1; j < n; j++) {
+            if (obstacleGrid[i][j] == 1)
+                arr[i][j] = 0;
+            else 
+                arr[i][j] = arr[i][j - 1] + arr[i - 1][j];
+        }
+    }
+    return arr[m-1][n-1];
+}
+\end{lstlisting}
+\end{enumerate}
+\subsection{Minimum Path Sum}
 \label{sec-14-2-3}
+Given a m x n grid filled with non-negative numbers, find a path from top left to bottom right which minimizes the sum of all numbers along its path.
+
+Note: You can only move either down or right at any point in time.
+
+跟 Unique Paths (见 §10.2) 很类似。设状态为 f[i][j], 表示从起点 (0, 0) 到达 (i, j) 的最小路径和, 则状态转移方程为: 
+
+转移方程: f[i][j] = min(f[i-1][j], f[i][j-1]) + grid[i][j]
+\begin{enumerate}
+\item 备忘录法
+\label{sec-14-2-3-1}
+
+代码应该可以再优化一下。
+\lstset{language=java,label= ,caption= ,numbers=none}
+\begin{lstlisting}
+private int [][] f;
+
+private int getOrUpdate(int [][] grid, int x, int y) {
+    if (x < 0 || y < 0) return Integer.MAX_VALUE;
+    if (f[x][y] >= 0) return f[x][y];
+    else {
+        f[x][y] = dfs(grid, x, y);
+        return f[x][y];
+    }
+}
+
+private int dfs(int [][] grid, int x, int y) {
+    if (x < 0 || y < 0) return Integer.MAX_VALUE;
+    if (x == 0 && y == 0) return grid[0][0];
+    return Math.min(getOrUpdate(grid, x - 1, y),
+                    getOrUpdate(grid, x, y - 1)) + grid[x][y];
+}
+
+public int minPathSum(int[][] grid) {
+    int m = grid.length;
+    int n = grid[0].length;
+    f = new int[m][n];
+    for (int i = 0; i < m; i++) 
+        for (int j = 0; j < n; j++) 
+            f[i][j] = -1;
+    return dfs(grid, m - 1, n - 1);
+}
+\end{lstlisting}
+\item 动态规划
+\label{sec-14-2-3-2}
+\lstset{language=java,label= ,caption= ,numbers=none}
+\begin{lstlisting}
+public int minPathSum(int[][] grid) {
+    int m = grid.length;
+    int n = grid[0].length;
+    if (m == 0 || n == 0) return 0;
+
+    int [][] f = new int[m][n];
+    f[0][0] = grid[0][0];
+    for (int i = 1; i < n; i++)
+        f[0][i] = f[0][i - 1] + grid[0][i];
+    for (int i = 1; i < m; i++)
+        f[i][0] = f[i - 1][0] + grid[i][0];
+
+    for (int i = 1; i < m; i++) 
+        for (int j = 1; j < n; j++) 
+            f[i][j] = Math.min(f[i][j - 1], f[i - 1][j]) + grid[i][j];
+    return f[m-1][n-1];
+}
+\end{lstlisting}
+\item 动态规划 + 滚动数组
+\label{sec-14-2-3-3}
+\end{enumerate}
+\subsection{Unique Binary Search Tree}
+\label{sec-14-2-4}
 Given n, how many structurally unique BST's (binary search trees) that store values 1\ldots{}n?
 
 For example, Given n = 3, there are a total of 5 unique BST's.
@@ -1781,15 +1836,17 @@ For example, Given n = 3, there are a total of 5 unique BST's.
  /     /       \                 \
 2     1         2                 3
 \end{lstlisting}
+
 如果把上例的顺序改一下,就可以看出规律了。《水中的鱼》
 \lstset{language=java,label= ,caption= ,numbers=none}
 \begin{lstlisting}
-1           1                   2                    3            3
- \           \                 /  \                 /            / 
-  3           2               1    3               2            1
- /             \                                  /              \
-2                3                               1                2
+1           1                   2                    3           3
+ \           \                 / \                 /            / 
+  3           2               1   3               2            1
+ /             \                                 /              \
+2               3                               1                2
 \end{lstlisting}
+
 比如，以1为根的树有几个，完全取决于有二个元素的子树有几种。同理，2为根的子树取决于一个元素的子树有几个。以3为根的情况，则与1相同。
 
 定义Count[i] 为以[0,i]能产生的Unique Binary Tree的数目，
@@ -1801,29 +1858,42 @@ For example, Given n = 3, there are a total of 5 unique BST's.
 如果数组有两个元素\{1,2\}， 那么有如下两种可能
 \lstset{language=java,label= ,caption= ,numbers=none}
 \begin{lstlisting}
-1                     2
- \                   /
-  2                1
-Count[2] = Count[0] * Count[1]   [ 1 为根的情况 ]
-         + Count[1] * Count[0]   [ 2 为根的情况 ]
+1                2
+ \              /
+  2            1
+Count[2] = Count[0] * Count[1]   ( 1 为根的情况 )
+         + Count[1] * Count[0]   ( 2 为根的情况 )
 \end{lstlisting}
+
 再看一遍三个元素的数组，可以发现BST的取值方式如下：
 \lstset{language=java,label= ,caption= ,numbers=none}
 \begin{lstlisting}
-Count[3] = Count[0]*Count[2]  [ 1 为根的情况 ]
-         + Count[1]*Count[1]  [ 2 为根的情况 ]
-         + Count[2]*Count[0]  [ 3 为根的情况 ]
+Count[3] = Count[0]*Count[2]  ( 1 为根的情况 )
+         + Count[1]*Count[1]  ( 2 为根的情况 )
+         + Count[2]*Count[0]  ( 3 为根的情况 )
 \end{lstlisting}
+
 所以，由此观察，当数组为 1, 2, 3, \ldots{}, n 时,基于以下原则的构建的 BST 树具有唯一性:以 i 为根节点的树,其左子树由 [1, i-1] 构成,其右子树由 [i+1, n] 构成。
 
 可以得出Count的递推公式为
 
-Count[i] = ∑ Count[0\ldots{}k] * [ k+1\ldots{}.i] ( 0 <= k < i-1 )
+Count(i) = $\sum$$_{\text{k = 1}}^{\text{i}}$ Count(k - 1) * Count(i - k) 
 
 问题至此划归为一维动态规划。
-
+\lstset{language=java,label= ,caption= ,numbers=none}
+\begin{lstlisting}
+public int numTrees(int n) {
+    int [] cnt = new int[n + 1];
+    cnt[0] = 1; // empty element
+    cnt[1] = 1; // one element
+    for (int i = 2; i <= n ; i++) 
+        for (int j = 0; j < i; j++) 
+            cnt[i] += cnt[j]*cnt[i - 1 - j];
+    return cnt[n];
+}
+\end{lstlisting}
 \subsection{Unique Binary Search Tree II}
-\label{sec-14-2-4}
+\label{sec-14-2-5}
 Given n, generate all structurally unique BST's (binary search trees) that store values 1\ldots{}n.
 
 For example,
@@ -1871,39 +1941,6 @@ public List<TreeNode> generateTrees(int n) {
     return helper(1, n);
 }
 \end{lstlisting}
-\subsection{Minimum Path Sum}
-\label{sec-14-2-5}
-Given a m x n grid filled with non-negative numbers, find a path from top left to bottom right which minimizes the sum of all numbers along its path.
-
-Note: You can only move either down or right at any point in time.
-\begin{enumerate}
-\item 备忘录法
-\label{sec-14-2-5-1}
-\item 动态规划 + 滚动数组
-\label{sec-14-2-5-2}
-\lstset{language=java,label= ,caption= ,numbers=none}
-\begin{lstlisting}
-public int minPathSum(int[][] grid) {
-    int m = grid.length;
-    int n = grid[0].length;
-    if (m == 0 || n == 0) return 0;
-
-    int [][] arr = new int[m][n];
-    arr[0][0] = grid[0][0];
-    for (int i = 1; i < n; i++)
-        arr[0][i] = arr[0][i - 1] + grid[0][i];
-    for (int i = 1; i < m; i++)
-        arr[i][0] = arr[i - 1][0] + grid[i][0];
-
-    for (int i = 1; i < m; i++) {
-        for (int j = 1; j < n; j++) {
-            arr[i][j] = Math.min(arr[i][j - 1], arr[i - 1][j]) + grid[i][j];
-        }
-    }
-    return arr[m-1][n-1];
-}
-\end{lstlisting}
-\end{enumerate}
 \subsection{Maximum Sum Subarray}
 \label{sec-14-2-6}
 Find the contiguous subarray within an array (containing at least one number) which has the largest sum.
@@ -1920,6 +1957,73 @@ If you have figured out the O(n) solution, try coding another solution using the
 
 \textbf{Tags:} Divide and Conquer, Array, Dynamic Programming
 
+分析:
+
+最大连续子序列和,非常经典的题。
+
+当我们从头到尾遍历这个数组的时候, 对于数组里的一个整数, 它有几种选择呢? 它只有两种选择: 1、加入之前的 SubArray;  2. 自己另起一个 SubArray。那什么时候会出现这两种情况呢?
+
+\begin{itemize}
+\item 如果之前 SubArray 的总体和大于 0 的话, 我们认为其对后续结果是有贡献的。这种情况下我们选择加入之前的 SubArray
+
+\item 如果之前 SubArray 的总体和为 0 或者小于 0 的话, 我们认为其对后续结果是没有贡献, 甚至是有害的(小于 0 时)。这种情况下我们选择以这个数字开始, 另起一个 SubArray。
+\end{itemize}
+
+设状态为 f[j], 表示以 S[j] 结尾的最大连续子序列和, 则状态转移方程如下:
+\lstset{language=java,label= ,caption= ,numbers=none}
+\begin{lstlisting}
+f[j] = max (f[j-1] + S[j], S[j]) , 其中 1 ≤ j ≤ n
+target = max (f[j]) , 其中 1 ≤ j ≤ n
+\end{lstlisting}
+
+解释如下:
+
+情况一, S[j]不独立, 与前面的某些数组成一个连续子序列, 则最大连续子序列和为 f[j-1] + S[j]。
+
+情况二, S[j] 独立划分成为一段, 即连续子序列仅包含一个数 S[j], 则最大连续子序列和为S[j]。
+
+其他思路:
+\begin{itemize}
+\item 思路 2: 直接在 i 到 j 之间暴力枚举, 复杂度是 O(n$^{\text{3}}$)
+\item 思路 3: 处理后枚举, 连续子序列的和等于两个前缀和之差, 复杂度 O(n$^{\text{2}}$)。
+\item 思路 4: 分治法, 把序列分为两段, 分别求最大连续子序列和, 然后归并, 复杂度 O( n*(log(n)) )
+\item 思路 5: 把思路 2 O(n$^{\text{2}}$) 的代码稍作处理, 得到 O(n) 的算法
+\item 思路 6: 当成 M = 1 的最大 M 子段和
+\end{itemize}
+\begin{enumerate}
+\item 动态规划： 时间复杂度 O(n), 空间复杂度 O(1)
+\label{sec-14-2-6-1}
+\lstset{language=java,label= ,caption= ,numbers=none}
+\begin{lstlisting}
+public int maxSubArray(int[] a) {
+    int result = Integer.MIN_VALUE, f = 0;
+    for (int i = 0; i < a.length; i++) {
+        f = Math.max(f + a[i], a[i]);
+        result = Math.max(result, f);
+    }
+    return result;
+}
+\end{lstlisting}
+\item 思路 5: 时间复杂度 O(n),空间复杂度 O(n)
+\label{sec-14-2-6-2}
+\lstset{language=java,label= ,caption= ,numbers=none}
+\begin{lstlisting}
+public int maxSubArray(int[] a) {
+    int result, curMin;
+    int [] sum = new int[a.length + 1];
+    sum[0] = 0;
+    result = Integer.MIN_VALUE;
+    curMin = sum[0];
+    for (int i = 1; i <= a.length; i++) 
+        sum[i] = sum[i - 1] + a[i - 1];
+    for (int i = 1; i <= a.length; i++) {
+        result = Math.max(result, sum[i] - curMin);
+        curMin = Math.min(curMin, sum[i]);
+    }
+    return result;
+}
+\end{lstlisting}
+\end{enumerate}
 \subsection{Maximum Product Subarray}
 \label{sec-14-2-7}
 Find the contiguous subarray within an array (containing at least one number) which has the largest product.
@@ -1928,7 +2032,33 @@ For example, given the array [2, 3, -2, 4],
 
 the contiguous subarray [2, 3] has the largest product = 6.
 
-\subsection{Decode Ways}
+这道题跟\ref{sec-14-2-6}模型上和思路上都比较类似，还是用一维动态规划中的“局部最优和全局最优法”。
+
+这里的区别是维护一个局部最优不足以求得后面的全局最优，这是由于乘法的性质不像加法那样，累加结果只要是正的一定是递增，乘法中有可能现在看起来小的一个负数，后面跟另一个负数相乘就会得到最大的乘积。
+
+不过事实上也没有麻烦很多，我们只需要在维护一个局部最大的同时，在维护一个局部最小，这样如果下一个元素遇到负数时，就有可能与这个最小相乘得到当前最大的乘积和，这也是利用乘法的性质得到的。
+
+来自《Code Ganker征服代码》
+
+\lstset{language=java,label= ,caption= ,numbers=none}
+\begin{lstlisting}
+public int maxProduct(int[] a) {
+    int n = a.length;
+    int maxLocal = a[0];
+    int minLocal = a[0];
+    int res = a[0];
+    for (int i = 1; i < n; i++) {
+        int tmp = maxLocal;
+        maxLocal = Math.max(Math.max(maxLocal * a[i], a[i]),
+                            Math.max(minLocal * a[i], a[i]));
+        minLocal = Math.min(Math.min(a[i], a[i] * tmp),
+                            Math.min(a[i], a[i] * minLocal));
+        res = Math.max(res, maxLocal);
+    }
+    return res; 
+}
+\end{lstlisting}
+\subsection{Decode Ways, bug\textasciitilde{}~!!}
 \label{sec-14-2-8}
 A message containing letters from A-Z is being encoded to numbers using the following mapping:
 \lstset{language=java,label= ,caption= ,numbers=none}
@@ -1938,6 +2068,7 @@ A message containing letters from A-Z is being encoded to numbers using the foll
 ...
 'Z' -> 26
 \end{lstlisting}
+
 Given an encoded message containing digits, determine the total number of ways to decode it.
 
 For example,
@@ -1945,6 +2076,83 @@ For example,
 Given encoded message "12", it could be decoded as "AB" (1 2) or "L" (12).
 
 The number of ways decoding "12" is 2.
+
+参考Climb stairs, \ref{sec-14-1-1}
+
+最原始型的follow、控制logic：
+\lstset{language=java,label= ,caption= ,numbers=none}
+\begin{lstlisting}
+public int numDecodings(String s) {
+    if (s == null || s.length() == 0) return 0;
+    else if (s.charAt(0) == '0') return 0;
+    else if (s.length() == 1) return 1;
+    else if (s.length() >= 2 && s.charAt(0) - '0' > 2 && s.charAt(1) == '0') return 0;
+
+    int j = 0; // idx for s
+    char c;    // char at pos j
+    int [] res = new int[s.length()];
+    res[0] = 1;
+    res[1] = 1;
+    if (s.charAt(1) != '0'
+        && ( (s.charAt(0) == '1'
+              || (s.charAt(0) == '2') && s.charAt(1) - '0' < 7)))
+        res[1] = 2;
+
+    for (int i = 2; i < s.length(); i++) {
+        c = s.charAt(i);
+        if (c != '0')
+            res[i] += res[i - 1]; // separate dijit // except '0', NO, 10, 20 ok
+
+        switch (c) {
+        case '0':
+            if (s.charAt(i - 1) == '1' || s.charAt(i - 1) == '2')
+                if (s.charAt(i - 2) == '1' || s.charAt(i - 2) == '2')
+                    res[i] = res[i - 2];     // 110 = 1 10, ... 11 0, NO~!
+                else
+                    res[i] = res[i - 1]; 
+            else return 0;
+            break;
+        case '7':     // 17, 18, 19
+        case '8':
+        case '9':
+            if (s.charAt(i - 1) == '1')
+                res[i] += res[i - 2];
+            break;
+        default:     // 1, 2, 3, 4, 5, 6: Individual, 1-pre, 2-pre, 11, 21, 12, 22 ...
+            if (s.charAt(i - 1) == '1' || s.charAt(i - 1) == '2')
+                res[i] += res[i - 2];
+            break;
+        }
+    }
+    return res[s.length() - 1];
+}
+\end{lstlisting}
+\begin{enumerate}
+\item 动态规划, 时间复杂度 O(n), 空间复杂度 O(1), java v m bug \verb,~~,!!!!
+\label{sec-14-2-8-1}
+
+模拟pdf c++版大牛精华版代码： 
+\lstset{language=java,label= ,caption= ,numbers=none}
+\begin{lstlisting}
+// my Java version code has bug here, fix it later ~~~
+public int numDecodings(String s) {
+    if (s == null || s.length() == 0 || s.charAt(0) == '0') return 0;
+    int prev = 0;
+    int curr = 1;
+    int tmp = 0;
+    for (int i = 1; i <= s.length() ; i++) {
+        if (s.charAt(i - 1) == '0') curr = 0;
+        if (i < 2 || s.charAt(i - 2) != '1' ||
+            (s.charAt(i - 2) == '2' && s.charAt(i - 1) <= '6'))
+            prev = 0;
+        tmp = curr;
+        curr = prev + curr;
+        prev = tmp;
+    }
+    return curr;
+}
+\end{lstlisting}
+\end{enumerate}
 
 \subsection{Triangle}
 \label{sec-14-2-9}
@@ -1960,10 +2168,62 @@ For example, given the following triangle
   [4,1,8,3]
 ]
 \end{lstlisting}
+
 The minimum path sum from top to bottom is 11 (i.e., 2 + 3 + 5 + 1 = 11).
 
 Note: Bonus point if you are able to do this using only O(n) extra space, where n is the total number of rows in the triangle.
+\begin{enumerate}
+\item 自顶向下： 时间复杂度是O(n$^{\text{2}}$)， 空间复杂度是O(n)
+\label{sec-14-2-9-1}
 
+这是一道动态规划的题目，求一个三角形二维数组从顶到低端的最小路径和。思路是维护到某一个元素的最小路径和，那么在某一个元素i，j的最小路径和就是它上层对应的相邻两个元素的最小路径和加上自己的值，递推式是
+
+sum[i][j] = min(sum[i-1][j-1],sum[i-1][j]) + triangle[i][j]。
+
+最后扫描一遍最后一层的路径和，取出最小的即可。每个元素需要维护一次，总共有 1+2+\ldots{}+n = n*(n+1)/2 个元素，所以时间复杂度是O(n$^{\text{2}}$)。而空间上每次只需维护一层即可（因为当前层只用到上一层的元素），所以空间复杂度是O(n)。
+
+来自《Code Ganker征服代码》
+\lstset{language=java,label= ,caption= ,numbers=none}
+\begin{lstlisting}
+public int minimumTotal(ArrayList<ArrayList<Integer>> triangle) {  
+    if(triangle == null || triangle.size() == 0)  
+        return 0;  
+    if(triangle.size()==1)  
+        return triangle.get(0).get(0);
+
+    int[] sums = new int[triangle.size()];  
+    sums[0] = triangle.get(0).get(0);  
+    for(int i=1;i<triangle.size();i++) {  
+        sums[i] = sums[i-1]+triangle.get(i).get(i);  
+        for(int j=i-1;j>=1;j--)  
+            sums[j] = (sums[j]<sums[j-1]?sums[j]:sums[j-1]) + triangle.get(i).get(j);  
+        sums[0] = sums[0]+triangle.get(i).get(0);  
+    }
+
+    int minimum = sums[0];  
+    for(int i=1;i<sums.length;i++) 
+        if(sums[i]<minimum)
+            minimum = sums[i];  
+    return minimum;  
+}
+\end{lstlisting}
+
+上述代码实现时要注意每层第一个和最后一个元素特殊处理一下。
+\item 自底向上：
+\label{sec-14-2-9-2}
+
+换个角度考虑一下，如果这道题不自顶向下进行动态规划，而是放过来自底向上来规划，递归式只是变成下一层对应的相邻两个元素的最小路径和加上自己的值，原理和上面的方法是相同的，这样考虑到优势在于不需要最后对于所有路径找最小的，而且第一个元素和最后元素也不需要单独处理了，所以代码简洁了很多。
+\lstset{language=java,label= ,caption= ,numbers=none}
+\begin{lstlisting}
+public int minimumTotal(List<List<Integer>> triangle) {
+    List<Integer> res = new ArrayList<Integer>(triangle.get(triangle.size() - 1));
+    for (int i = triangle.size() - 2; i >= 0 ; i--) 
+        for (int j = 0; j <= i ; j++) 
+            res.set(j, Math.min(res.get(j), res.get(j + 1)) + triangle.get(i).get(j));
+    return res.get(0);
+}
+\end{lstlisting}
+\end{enumerate}
 \subsection{Word Break}
 \label{sec-14-2-10}
 Given a string s and a dictionary of words dict, determine if s can be segmented into a space-separated sequence of one or more dictionary words.
@@ -1975,11 +2235,72 @@ s = "leetcode",
 dict = ["leet", "code"].
 Return true because "leetcode" can be segmented as "leet code".
 \end{lstlisting}
+
+设状态为 f(i),表示 s[0,i] 是否可以分词,则状态转移方程为
+
+转移方程: f (i) = any$_{\text{of}}$ ( f(j) \&\& s[j+1, i] ∈ dict ), 0 ≤ j < i
+\begin{enumerate}
+\item 深搜: 时间复杂度 O(2$^{\text{n}}$),空间复杂度 O(n)
+\label{sec-14-2-10-1}
+
+OJ 超时。
+\lstset{language=java,label= ,caption= ,numbers=none}
+\begin{lstlisting}
+public boolean helper(String s, int i, Set<String> dict) {
+    int n = s.length();
+    if (i >= n) return false;
+    int j = i;
+    while (j < n) {
+        while (j < n && !dict.contains(s.substring(i, j + 1))) j++;
+        if (j == n) return false;
+        if (helper(s, j + 1, dict) == true) return true;
+        j++;
+    }
+    return false;
+}
+
+public boolean wordBreak(String s, Set<String> dict) {
+    if (dict.contains(s)) return true;
+    if (s == null || s.length() == 0) return false;
+    return helper(s, 0, dict);
+}
+\end{lstlisting}
+\item 动态规划：
+\label{sec-14-2-10-2}
+\lstset{language=java,label= ,caption= ,numbers=none}
+\begin{lstlisting}
+public boolean wordBreak(String s, Set<String> dict) {
+    if (dict.contains(s)) return true;
+    boolean [] dp = new boolean[s.length()];
+    for (int i = 0; i < s.length(); i++) 
+        dp[i] = false;
+
+    for (int i = 0; i < s.length(); i++)
+        for (int j = i; j >= 0; j--) {
+            String tmp = new String(s.substring(j, i+1));
+            if (dict.contains(tmp))
+                if ((j == 0) || (j >= 1 && dp[j-1])) {
+                    dp[i] = true;
+                    break;
+                }
+        }
+    return dp[s.length()-1];
+}
+\end{lstlisting}
+\end{enumerate}
+
 \subsection{Best Time to Buy and Sell Stock}
 \label{sec-14-2-11}
 Say you have an array for which the ith element is the price of a given stock on day i.
 
 If you were only permitted to complete at most one transaction (ie, buy one and sell one share of the stock), design an algorithm to find the maximum profit.
+\begin{enumerate}
+\item O(n$^{\text{2}}$)
+\label{sec-14-2-11-1}
+\item O(n)
+\label{sec-14-2-11-2}
+\end{enumerate}
+
 \section{Hard}
 \label{sec-14-3}
 \subsection{Best Time to Buy and Sell Stock III}
@@ -2007,7 +2328,7 @@ Another example is ")()())", where the longest valid parentheses substring is "(
 
 \subsection{Word Break II}
 \label{sec-14-3-4}
-See 16.4.12
+\ref{sec-1-3-10}
 \subsection{Maximum Rectangle}
 \label{sec-14-3-5}
 Given a 2D binary matrix filled with 0's and 1's, find the largest rectangle containing all ones and return its area.
@@ -2169,6 +2490,7 @@ isMatch("aa", "a*") → true
 isMatch("ab", "?*") → true
 isMatch("aab", "c*a*b") → false
 \end{lstlisting}
+
 \textbf{Tags:} Dynamic Programming, Backtracking, Greedy, String
 
 \chapter{Two Pointers and Sliding Window}

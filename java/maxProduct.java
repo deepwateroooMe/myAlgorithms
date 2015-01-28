@@ -5,9 +5,9 @@ import java.util.List;
 
 public class maxProduct {
     public static class Solution {
-        public int maxProduct(int[] a) {
+        public int maxProduct0(int[] a) {
             int n = a.length;
-            int [] max = new int[n];
+            int [] max = new int[n]; //  I don't need array, use 1 space only
             int [] min = new int[n];
             max[0] = a[0];
             min[0] = a[0];
@@ -18,6 +18,22 @@ public class maxProduct {
                 min[i] = Math.min(Math.min(min[i - 1] * a[i], a[i]),
                                   Math.min(max[i - 1] * a[i], a[i]));
                 res = Math.max(res, max[i]);
+            }
+            return res; 
+        }
+
+        public int maxProduct(int[] a) {
+            int n = a.length;
+            int maxLocal = a[0];
+            int minLocal = a[0];
+            int res = a[0];
+            for (int i = 1; i < n; i++) {
+                int tmp = maxLocal;
+                maxLocal = Math.max(Math.max(maxLocal * a[i], a[i]),
+                                    Math.max(minLocal * a[i], a[i]));
+                minLocal = Math.min(Math.min(a[i], a[i] * tmp),
+                                    Math.min(a[i], a[i] * minLocal));
+                res = Math.max(res, maxLocal);
             }
             return res; 
         }
