@@ -12,7 +12,7 @@
 - have rest after dinner, evening depends, either:
   - Summarize dp, greedy and Backtracking first;
   - Or try to finish the question contents copy-paste for today then, 175 questions;
-- call food court tomorrow, check first day of work...who knows what will happen next, but only stick to the study....
+- call food court tomorrow, check first day of work...
 * 1/25/2015, Sunday
 ** worked on 3 problems, 175/175: finally Java once ~~!!
 - connect next Right
