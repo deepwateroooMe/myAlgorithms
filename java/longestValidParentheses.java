@@ -6,48 +6,82 @@ import java.util.Stack;
 
 public class longestValidParentheses {
     public static class Solution {
-        public int longestValidParentheses(String s) {
-            if (s == null || s.length() < 2) return 0;
-            else if (s.length() == 2) return s.equals("()") ? 2 : 0;
+        public int longestValidParentheses0(String s) {
             Stack<Integer> k = new Stack<Integer>();
             int [] res = new int[s.length()];
-            int i = 0;
             char j;
-            int tmp;
-            while (i < s.length()) {
+            int tmp = 0;
+            for (int i = 0; i < s.length(); i++) {
                 j = s.charAt(i);
-                if (j == '(') {
+                if (j == '(') 
                     k.push(i);
-                } else if (j == ')'){
+                else if (j == ')'){
                     if (!k.isEmpty()) {
                         res[i] = 1;
                         tmp = k.pop();
                         res[tmp] = 1;
                     }
                 }
-                ++i;
             }
-            
-            // count continue ones
             int max = 0;
-            tmp = res[0] == 1 ? 1 : 0;
-            for ( i = 1; i < s.length(); i++) {
-                if (res[i] == res[i - 1] && res[i] == 1) {
-                    ++tmp;
-                    if (tmp > max) max = tmp;
-                } else if (res[i] == 0) {
-                    if (res[i - 1] == 1)
-                        if (tmp > max) max = tmp;                            
-                    tmp = 0;
-                } else tmp = 1;
+            int i = 0;
+            while (i < s.length()) {
+                tmp = 0;  // reset value
+                while (i < s.length() && res[i] == 0) i++;
+                while (i < s.length() && res[i] == 1) {
+                    tmp++;
+                    i++;
+                }
+                max = Math.max(max, tmp);
             }
             return max;
+        }
+
+        public int longestValidParentheses1(String s) {
+            Stack<Integer> k = new Stack<Integer>();
+            int res = 0;
+            k.push(-1); // 
+            for (int i = 0; i < s.length(); i++) {
+                if (s.charAt(i) == '(')
+                    k.push(i);
+                else { // ')'
+                    if (k.isEmpty())
+                        k.push(i);
+                    else {
+                        int tmp = k.peek();
+                        if (tmp >= 0 && s.charAt(tmp) == '(') {
+                            k.pop();
+                            res = Math.max(res, i - k.peek());
+                        } else k.push(i);
+                    }
+                }
+            }
+            return res;
+        }
+
+        public int longestValidParentheses(String s) {
+            int n = s.length();
+            int res = 0;
+            int [] dp = new int[n];
+            int j = 0;
+            for (int i = n - 2; i >= 0; i--) {
+                if (s.charAt(i) == '(') {
+                    j = dp[i + 1] + i + 1;
+                    if (j < n && s.charAt(j) == ')') {
+                        dp[i] = dp[i + 1] + 2;
+                        if (j + 1 < n)
+                            dp[i] += dp[j + 1];
+                        res = Math.max(res, dp[i]);
+                    }
+                }
+            }
+            return res;
         }
     }
 
     public static void main(String[] args){
         Solution result = new Solution();
-        String s = "(()(((()";
+        String s = "(()";
         
         int res = result.longestValidParentheses(s);
         

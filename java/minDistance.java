@@ -6,16 +6,12 @@ import java.util.List;
 public class minDistance {
     public static class Solution {
         public int minDistance(String s, String t) {
-            if (s == null && t == null) return 0;
-            else if (s == null || s.length() == 0) return t.length();
-            else if (t == null || t.length() == 0) return s.length();
-
             int m = s.length();
             int n = t.length();
             int [][] res = new int[m + 1][n + 1];
-            for (int i = 0; i <= s.length(); i++)
+            for (int i = 0; i <= m; i++)
                 res[i][0] = i;
-            for (int i = 0; i <= t.length(); i++)
+            for (int i = 0; i <= n; i++)
                 res[0][i] = i;
 
             for (int i = 1; i <= m; i++) 

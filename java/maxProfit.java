@@ -5,7 +5,7 @@ import java.util.List;
 
 public class maxProfit {
     public static class Solution {
-        public int maxProfit(int[] prices) {
+        public int maxProfit0(int[] prices) {
             if (prices == null || prices.length < 2) return 0;  // prices.length == 1: bug == 0
 
             int [] min = new int[prices.length];
@@ -21,6 +21,16 @@ public class maxProfit {
                 result = Math.max(result, max[i]-min[i]);
             }
             return result;
+        }
+        
+        public int maxProfit(int[] prices) {
+            int lowest = Integer.MAX_VALUE;
+            int maxProfit = 0;
+            for (int i = 0; i < prices.length; i++) {
+                if (prices[i] < lowest) lowest = prices[i];
+                else maxProfit = Math.max(maxProfit, prices[i] - lowest);
+            }
+            return maxProfit;
         }
     }
 

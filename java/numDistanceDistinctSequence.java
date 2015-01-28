@@ -9,20 +9,12 @@ public class numDistanceDistinctSequence {
             if (s == null || s.length() == 0) return 0;
             int m = s.length();
             int n = t.length();
-            if (n == 0) return 1;
-            
-            int [][] res = new int[m + 1][n + 1];
-            for (int i = 0; i <= m; i++) // when t = ""
-                res[i][0] = 1;
-            for (int i = 1; i <= m; i++) {
-                for (int j = 1; j <= n; j++) {
-                    if (s.charAt(i - 1) == t.charAt(j - 1))
-                        res[i][j] = res[i - 1][j] + res[i - 1][j - 1];
-                    else
-                        res[i][j] = res[i - 1][j];
-                }
-            }
-            return res[m][n];
+            int [] res = new int[n + 1];
+            res[0] = 1;
+            for (int i = 0; i < m; i++) 
+                for (int j = n - 1; j >= 0; j--) 
+                    res[j + 1] += s.charAt(i) == t.charAt(j) ? res[j] : 0;
+            return res[n];
         }
     }
 
