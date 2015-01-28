@@ -40,6 +40,7 @@ public class longestValidParentheses {
         public int longestValidParentheses1(String s) {
             Stack<Integer> k = new Stack<Integer>();
             int res = 0;
+            int tmp = 0;
             k.push(-1); // 
             for (int i = 0; i < s.length(); i++) {
                 if (s.charAt(i) == '(')
@@ -48,7 +49,7 @@ public class longestValidParentheses {
                     if (k.isEmpty())
                         k.push(i);
                     else {
-                        int tmp = k.peek();
+                        tmp = k.peek();
                         if (tmp >= 0 && s.charAt(tmp) == '(') {
                             k.pop();
                             res = Math.max(res, i - k.peek());
