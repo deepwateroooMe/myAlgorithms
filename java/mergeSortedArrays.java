@@ -24,6 +24,17 @@ public class mergeSortedArrays {
                 for (int x = 0; x <= k ; x++) 
                     a[x] = b[x];
         }
+        public void merge(int a[], int m, int b[], int n) {
+            int ia = m - 1;
+            int ib = n - 1;
+            int icur = m + n - 1;
+            while (ia >= 0 && ib >= 0) {
+                a[icur--] = a[ia] > b[ib] ? a[ia--] : b[ib--];
+            }
+            while (ib >= 0) {
+                a[icur--] = b[ib--];
+            }
+        }
     }
 
     public static void main(String[] args){

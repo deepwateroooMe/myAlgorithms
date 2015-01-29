@@ -35,6 +35,21 @@ public class searchInsertPosition {
             if (target > A[A.length - 1]) return A.length;
             return helper(A, target, 0, A.length - 1);
         }
+
+        public int searchInsert(int[] a, int target) {
+            int bgn = 0, end = a.length - 1;
+            while (bgn <= end) {
+                int mid = bgn + (end - bgn) / 2;
+                if (a[mid] ==  target) return mid;
+                if (mid > bgn && a[mid] > target && a[mid - 1] < target) return mid;
+                if (a[mid] > target)
+                    end = mid - 1;
+                else
+                    bgn = mid + 1;
+            }
+            return bgn;
+        }
+
     }
 
     public static void main(String[] args){

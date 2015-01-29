@@ -1015,50 +1015,211 @@ http://www.cnblogs.com/felixfang/p/3676193.html
 * 排序
 ** Easy
 *** Merge Sorted Array	
+Given two sorted integer arrays A and B, merge B into A as one sorted array.
+
+Note:
+
+You may assume that A has enough space (size that is greater or equal to m + n) to hold additional elements from B. The number of elements initialized in A and B are m and n respectively.
+
+时间复杂度 O(m+n), 空间复杂度 O(1). 
+
+#+BEGIN_SRC java
+public void merge(int a[], int m, int b[], int n) {
+    int ia = m - 1;
+    int ib = n - 1;
+    int icur = m + n - 1;
+    while (ia >= 0 && ib >= 0) 
+        a[icur--] = a[ia] > b[ib] ? a[ia--] : b[ib--];
+    while (ib >= 0) 
+        a[icur--] = b[ib--];
+}
+#+END_SRC
+
 *** Merge Two Sorted List
+Merge two sorted linked lists and return it as a new list. The new
+list should be made by splicing together the nodes of the first two
+lists.
+
+时间复杂度 O(m+n), 空间复杂度 O(1).
+
+#+BEGIN_SRC java
+public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+    ListNode head = new ListNode(-1);     // dummy List ~!
+    for (ListNode p = head; l1 != null || l2 != null; p = p.next) {
+        int val1 = l1 == null ? Integer.MAX_VALUE : l1.val;
+        int val2 = l2 == null ? Integer.MAX_VALUE : l2.val;
+        if (val1 < val2) {
+            p.next = l1;
+            l1 = l1.next;
+        } else {
+            p.next = l2;
+            l2 = l2.next;
+        }
+    }
+    return head.next;
+}
+#+END_SRC
+
 ** Medium
 *** Sort Colors
+Given an array with n objects colored red, white or blue, sort them so that objects of the same color are adjacent, with the colors in the order red, white and blue.
+
+Here, we will use the integers 0, 1, and 2 to represent the color red, white, and blue respectively.
+
+Note:
+
+You are not suppose to use the library's sort function for this problem.
+
+click to show follow up.
+
+Follow up:
+
+A rather straight forward solution is a two-pass algorithm using counting sort.
+
+First, iterate the array counting number of 0's, 1's, and 2's, then overwrite array with total number of 0's, then 1's and followed by 2's.
+
+Could you come up with an one-pass algorithm using only constant space?
+
+*Tags:* Array, Two Pointers, Sort
+
+由于 0, 1, 2 非常紧凑,首先想到计数排序 (counting sort),但需要扫描两遍,不符合题目要求。
+
+由于只有三种颜色,可以设置两个 index,一个是 red 的 index,一个是 blue 的 index,两边往中
+间走。时间复杂度 O(n),空间复杂度 O(1)。
+
+第 3 种思路,利用快速排序里 partition 的思想,第一次将数组按 0 分割,第二次按 1 分割,排
+序完毕,可以推广到 n 种颜色,每种颜色有重复元素的情况。
+
+时间复杂度 O(n), 空间复杂度 O(1). 
+
+**** Counting Sort: 时间复杂度 O(n), 空间复杂度 O(1)
+
+#+BEGIN_SRC java
+public void sortColors(int[] a) {
+    int [] cnt = new int[3];  // 记录每个颜色出现的次数
+    for (int i = 0; i < a.length; i++) 
+        cnt[a[i]]++;
+    for (int i = 0, index = 0; i < 3; i++) {
+        for (int j = 0; j < cnt[i]; j++) {
+            a[index++] = i;
+        }
+    }
+}
+#+END_SRC
+
+**** 双指针: 时间复杂度 O(n), 空间复杂度 O(1)
+#+BEGIN_SRC java
+public void swap(int [] a, int i, int j) {
+    int tmp = a[i];
+    a[i] = a[j];
+    a[j] = tmp;
+}
+
+public void sortColors(int[] a) {
+    if (a == null || a.length < 2) return;
+    int n = a.length;
+    int i = 0;
+    // 一个是 red 的 index,一个是 blue 的 index,两边往中间走
+    int zEnd = -1;  // 0 end
+    int tEnd = n;   // 2 end
+    while (i < tEnd) {
+        if (a[i] == 0 && i != ++zEnd) // first 0
+            swap(a, zEnd, i);
+        else if (a[i] == 2 && i != --tEnd)
+            swap(a, i, tEnd);
+        else i++;
+    }
+    return;
+}
+#+END_SRC
+
+**** use partition(): 
+**** use partition(): 
+
 *** Sort List
+Sort a linked list in O(n log n) time using constant space complexity.
+
+#+BEGIN_SRC java
+public ListNode divideList(ListNode head) {
+    ListNode fast = head;
+    ListNode slow = head;
+    ListNode prev = head;
+    while (fast != null && fast.next != null) {
+        prev = slow;
+        slow = slow.next;
+        fast = fast.next.next;
+    }
+    prev.next = null;
+    return slow;
+}
+        
+public ListNode mergeList(ListNode one, ListNode two) {
+    if (one == null) return two;
+    if (two == null) return one;
+    ListNode dummy = new ListNode(Integer.MIN_VALUE);
+    ListNode curr = dummy;
+    while (one != null && two != null) {
+        if (one.val < two.val) {
+            curr.next = one;
+            one = one.next;
+        } else {
+            curr.next = two;
+            two = two.next;
+        }
+        curr.next.next = null;
+        curr = curr.next;
+    }
+    if (one != null) curr.next = one;
+    else curr.next = two;
+    return dummy.next;
+}
+        
+public ListNode sortList(ListNode head) {
+    if (head == null || head.next == null) 
+        return head;
+    ListNode second = divideList(head);
+    ListNode firstSorted = sortList(head);
+    ListNode secondSorted = sortList(second);
+    return mergeList(firstSorted, secondSorted);
+}
+#+END_SRC
+
 ** Hard
 *** Merge k sorted Lists
 Merge k sorted linked lists and return it as one sorted list. Analyze and describe its complexity.
 
 *Tags*: Divide and Conquer, Linked List, Heap
+
+可以复用 Merge Two Sorted Lists(见 Merge Two Sorted List [[Merge Two Sorted List]])的函数
+
+时间复杂度 O(n1 + n2 + ...),空间复杂度 O(1). 
+
 #+BEGIN_SRC java
 public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
-    if (l1 == null) return l2;
-    if (l2 == null) return l1;
-    ListNode result;
-    if (l1.val < l2.val) {
-        result = l1;
-        l1 = l1.next;
-        result.next = null;
-    } else {
-        result = l2;
-        l2 = l2.next;
-        result.next = null;
-    }
-    ListNode curr = result;
-    while (l1 != null && l2 != null) {
-        if (l1.val < l2.val) {
-            curr.next = l1;
-            curr = curr.next;
+    ListNode head = new ListNode(-1);     // dummy List ~!
+    for (ListNode p = head; l1 != null || l2 != null; p = p.next) {
+        int val1 = l1 == null ? Integer.MAX_VALUE : l1.val;
+        int val2 = l2 == null ? Integer.MAX_VALUE : l2.val;
+        if (val1 < val2) {
+            p.next = l1;
             l1 = l1.next;
-            curr.next = null;
         } else {
-            curr.next = l2;
-            curr = curr.next;
+            p.next = l2;
             l2 = l2.next;
-            curr.next = null;
         }
     }
-    if (l1 == null && l2 == null)
-        return result;
-    l1 = (l1 == null) ? l2 : l1;
-    curr.next = l1;
-    return result;
+    return head.next;
 }
-        
+
+public ListNode mergeKLists(List<ListNode> lists) {
+    if (lists.size() == 0) return null;
+    ListNode p = lists.get(0);  // Time Limit Exceeded
+    for (int i = 1; i < lists.size(); i++) {
+        p = mergeTwoLists(p, lists.get(i));
+    }
+    return p;
+}
+
 public ListNode mergeKLists(List<ListNode> lists) {
     if (lists.size() == 0) return null;
     if (lists.size() == 1) return lists.get(0);
@@ -1069,17 +1230,313 @@ public ListNode mergeKLists(List<ListNode> lists) {
 #+END_SRC
 
 *** Insertion Sort List
-*** First Missing Positive	
+Sort a linked list using insertion sort.
+
+这个，代码过于混乱，需要优化。。。
+
+#+BEGIN_SRC java
+public ListNode insertionSortList(ListNode head) {
+    if (head == null) return null;
+    ListNode prev = head;
+    ListNode curr = head.next;
+    ListNode next = head;
+    ListNode tnext = head;
+    ListNode tmp = head;
+    while (curr != null) {
+        next = curr.next;
+        if (curr.val < prev.val) {
+            prev.next = next;
+            curr.next = null;
+            if (curr.val < head.val) {
+                curr.next = head;
+                head = curr;
+            } else {
+                tmp = head;
+                while (tmp.next != prev && curr.val > tmp.next.val) {
+                    tmp = tmp.next;
+                }
+                tnext = tmp.next;
+                tmp.next = curr;
+                curr.next = tnext;
+            }
+            curr = next;
+        } else {
+            prev = curr;
+            curr = curr.next;
+        }
+    }
+    return head;
+}
+#+END_SRC
+*** First Missing Positive
+Given an unsorted integer array, find the first missing positive integer.
+
+For example,
+
+Given [1, 2, 0] return 3, 
+
+and [3, 4, -1, 1] return 2.
+
+Your algorithm should run in O(n) time and uses constant space.
+	
+本质上是桶排序 (bucket sort),每当 A[i]!= i+1 的时候,将 A[i] 与 A[A[i]-1] 交换,直到无法
+交换为止,终止条件是 A[i]== A[A[i]-1]。
+
+#+BEGIN_SRC java
+public void swap(int [] a, int i, int j) {        
+    int tmp = a[i];
+    a[i] = a[j];
+    a[j] = tmp;
+}
+        
+public void bucket_sort(int [] a) {
+    for (int i = 0; i < a.length; i++) {
+        while (a[i] != i + 1) {
+            if (a[i] <= 0 || a[i] > a.length || a[i] == a[i] - 1)
+                break;
+            swap(a, i, a[i] - 1);
+        }
+    }
+}
+
+// need to clean code
+// 时间复杂度 O(n), 空间复杂度 O(1)
+public int firstMissingPositive(int[] a) {
+    // Time Limit Exceeded
+    bucket_sort(a);
+    for (int i = 0; i < a.length; i++) 
+        if (a[i] != (i + 1))
+            return i + 1;
+    return a.length + 1;
+}
+
+public int firstMissingPositive0(int[] a) {
+    if (a == null || a.length == 0) return 1;
+    if (a.length == 1) return a[0] == 1 ? 2 : 1;
+            
+    int n = a.length;
+    boolean equl = false;
+    int i;
+    for ( i = 0; i < n; i++) {
+        if (a[i] < 0) continue;
+        if (a[i] == n) {
+            equl = true;
+            continue;
+        }
+        while ( (i == 0 || (i != 0 && a[i] != i))
+                && a[i] < n && a[i] > 0 ) {
+            swap(a, i, a[i]);
+            if (a[i] == n) {
+                equl = true;
+                break;
+            }
+            if ((a[i] > n || a[i] < 0) || (a[i] >= 0 && a[i] == a[a[i]]))
+                break; // to avoid infite loop
+        }
+    }
+    for ( i = 1; i < n; i++) 
+        if (a[i] != i) return i;
+    if (equl || a[0] == n) return n + 1;
+    else return n;
+}
+#+END_SRC
+
 ** other Covered
 *** Largest Number
 *** Maximum Gap
-*** Merge Intervals	
-*** Insert Interval
+- Merge Intervals	
+- Insert Interval
 * 查找
 ** Medium
 *** Search for a Range
+Given a sorted array of integers, find the starting and ending position of a given target value.
+
+Your algorithm's runtime complexity must be in the order of O(log n).
+
+If the target is not found in the array, return [-1, -1].
+
+For example,
+
+Given [5, 7, 7, 8, 8, 10] and target value 8,
+
+return [3, 4].
+
+*Tags:* Array, Binary Search
+
+已经排好了序,用二分查找。
+
+时间复杂度 O(logn), 空间复杂度 O(1). 
+
+分两步来做，找一次第一个，找一次最后一个，返回。
+#+BEGIN_SRC java
+public int searchFirsst(int [] a, int target, int start, int end) {
+    if (start == end) return (a[end] == target) ? start : -1;
+    if (start == end - 1) {
+        if (a[start] == target) return start;
+        else if (a[end] == target) return end;
+        else return -1;
+    }
+
+    while (start < end - 1) {
+        int mid = start + (end - start) / 2;
+        if (a[mid] >= target) 
+            end = mid;
+        else 
+            start = mid + 1;
+    }
+    if (start == end) return (a[end] == target) ? start : -1;
+    if (start == end - 1) {
+        if (a[start] == target) return start;
+        else if (a[end] == target) return end;
+        else return -1;
+    }
+    return -1;
+}
+        
+public int searchLast(int [] a, int target, int start, int end) {
+    if (start == end) return (a[end] == target) ? end : -1;
+    if (start == end - 1) {
+        if (a[end] == target) return end;        
+        else if (a[start] == target) return start;
+        else return -1;
+    }
+
+    while (start < end - 1) {
+        int mid = start + (end - start) / 2;
+        if (a[mid] > target) 
+            end = mid - 1;
+        else 
+            start = mid;
+    }
+    if (start == end) return (a[end] == target) ? end : -1;
+    if (start == end - 1) {
+        if (a[end] == target) return end;        
+        else if (a[start] == target) return start;
+        else return -1;
+    }
+    return -1;
+}
+
+public int[] searchRange(int[] A, int target) {
+    int [] res = new int[2];
+    if (A == null || A.length == 0 ||
+        (A.length == 1 && A[0] != target)) {
+        res[0] = -1;
+        res[1] = -1;
+        return res;   
+    } else if (A.length == 1) {
+        res[0] = 0;
+        res[1] = 0;
+        return res;   
+    }
+    res[0] = searchFirsst(A, target, 0, A.length-1);
+    res[1] = searchLast(A, target, 0, A.length-1);
+    return res;
+}
+#+END_SRC
+
 *** Search Insert Position
+Given a sorted array and a target value, return the index if the target is found. If not, return the index where it would be if it were inserted in order.
+
+You may assume no duplicates in the array.
+
+Here are few examples.
+#+BEGIN_SRC java
+[1, 3, 5, 6],  5 → 2
+[1, 3, 5, 6],  2 → 1
+[1, 3, 5, 6],  7 → 4
+[1, 3, 5, 6],  0 → 0
+#+END_SRC
+
+直接的二分查找，查找第一个大于或等于target的位置。对于中间位置mid：
+
+\nbsp{} 如果 A[mid] >= target，那么答案至少应该为mid，或者为mid的左边
+位置，则 end = mid
+
+\nbsp{} 否则 A[mid] < target，那么答案肯定在mid的右边，而且不可能为mid，则
+bgn = mid +１
+
+时间复杂度 O(logn), 空间复杂度 O(1). 
+#+BEGIN_SRC java
+public int searchInsert(int[] a, int target) {
+    int bgn = 0, end = a.length - 1;
+    while (bgn <= end) {
+        int mid = bgn + (end - bgn) / 2;
+        if (a[mid] ==  target) return mid;
+        if (mid > bgn && a[mid] > target && a[mid - 1] < target) return mid;
+        if (a[mid] > target)
+            end = mid - 1;
+        else
+            bgn = mid + 1;
+    }
+    return bgn;
+}
+#+END_SRC
+
 *** Search a 2D Matrix
+Write an efficient algorithm that searches for a value in an m x n matrix. This matrix has the following properties:
+
+Integers in each row are sorted from left to right.
+
+The first integer of each row is greater than the last integer of the previous row.
+
+For example,
+
+Consider the following matrix:
+#+BEGIN_SRC java
+[
+  [1,   3,  5,  7],
+  [10, 11, 16, 20],
+  [23, 30, 34, 50]
+]
+#+END_SRC
+
+Given target = 3, return true.
+
+二分查找。
+
+时间复杂度 O(logn), 空间复杂度 O(1). 
+
+#+BEGIN_SRC java
+public boolean binarySearch(int [] a, int target, int bgn, int end) {
+    while (bgn <= end) {
+        int mid = bgn + (end - bgn) / 2;
+        if (a[mid] == target) return true;
+        if (a[mid] > target) end = mid - 1;
+        else bgn = mid + 1;
+    }
+    return false;
+}
+        
+public boolean searchMatrix(int[][] matrix, int target) {
+    int m = matrix.length;
+    int n = matrix[0].length;
+    int [] a = new int[m * n];
+    int cnt = 0;
+    for (int i = 0; i < m; i++) 
+        for (int j = 0; j < n; j++) 
+            a[cnt++] = matrix[i][j];
+    return binarySearch(a, target, 0, m * n - 1);
+}
+#+END_SRC
+
+也可以把两个函数合并成一个，，省去中间合成桥梁数组的步骤，代码如下： 
+#+BEGIN_SRC java
+public boolean searchMatrix(int[][] matrix, int target) {
+    int m = matrix.length;
+    int n = matrix[0].length;
+    int bgn = 0;
+    int end = m * n- 1;
+    while (bgn <= end) {
+        int mid = bgn + (end - bgn) / 2;
+        int val = matrix[mid / n][mid % n];
+        if (val == target) return true;
+        if (val > target) end = mid - 1;
+        else bgn = mid + 1;
+    }
+    return false;
+}
+#+END_SRC
 
 * 暴力枚举法
 ** Medium
@@ -1106,6 +1563,113 @@ If S = [1,2,3], a solution is:
 #+END_SRC
 
 *Tags:* Array Backtracking, Bit Manipulation
+
+**** 递归， 增量构造法: 增量构造法,深搜,时间复杂度 O(2^n), 空间复杂度 O(n)
+
+每个元素, 都有两种选择, 选或者不选。
+ 
+#+BEGIN_SRC java
+public void helper(int [] s, List<Integer> path, int step, List<List<Integer>> res) {
+    if (step == s.length) {
+        res.add(new ArrayList<Integer>(path));
+        return;   
+    }
+    helper(s, path, step + 1, res);  // 不选 S[step]
+    path.add(s[step]);               // 选 S[step]
+    helper(s, path, step + 1, res);
+    path.remove(path.size() - 1);
+}
+        
+public List<List<Integer>> subsets(int[] s) {
+    Arrays.sort(s);           // 输出要求有序
+    List<List<Integer>> res = new ArrayList<List<Integer>>();
+    List<Integer> path = new ArrayList<Integer>();
+    helper(s, path, 0, res);
+    return res;
+}
+#+END_SRC
+**** 递归， 位向量法： 时间复杂度 O(2^n), 空间复杂度 O(n). 
+
+开一个位向量 bool selected[n],每个元素可以选或者不选。
+
+位向量法, 深搜, 时间复杂度 O(2^n), 空间复杂度 O(n). 
+
+#+BEGIN_SRC java
+public void helper(int [] s, boolean [] selected, int step, List<List<Integer>> res) {
+    if (step == s.length) {
+        List<Integer> path = new ArrayList<Integer>();
+        for (int i = 0; i < s.length; i++) {
+            if (selected[i]) path.add(s[i]);
+        }
+        res.add(path);
+        return;   
+    }
+    selected[step] = false;
+    helper(s, selected, step + 1, res);
+    selected[step] = true;
+    helper(s, selected, step + 1, res);
+}
+        
+public List<List<Integer>> subsets(int[] s) {
+    Arrays.sort(s); 
+    List<List<Integer>> res = new ArrayList<List<Integer>>();
+    boolean [] selected = new boolean[s.length];
+    helper(s, selected, 0, res);
+    return res;
+}
+#+END_SRC
+
+**** 迭代， 增量构造法， 时间复杂度 O(2^n),空间复杂度 O(1)
+
+#+BEGIN_SRC java
+vector<vector<int> > subsets(vector<int> &S) {
+    sort(S.begin(), S.end()); // 输出要求有序
+    vector<vector<int> > result(1);
+    for (auto elem : S) {
+        result.reserve(result.size() * 2);
+        auto half = result.begin() + result.size();
+        copy(result.begin(), half, back_inserter(result));
+        for_each(half, result.end(), [&elem](decltype(result[0]) &e){
+                e.push_back(elem);
+            });
+    }
+    return result;
+}
+#+END_SRC
+
+需要改写成 Java 版。
+
+**** 二进制法
+
+本方法的前提是:集合的元素不超过 int 位数。用一个 int 整数表示位向量, 第 i 位为 1, 则表示选择 S[i], 为 0 则不选择。例如 S={A, B, C, D}, 则 0110=6 表示子集 {B, C}。
+
+这种方法最巧妙。因为它不仅能生成子集, 还能方便的表示集合的并、交、差等集合运算。设两个集合的位向量分别为 B1 和 B2 , 则 B1 | B2 ,  B1 & B2 ,  B1 B2 分别对应集合的并、交、对称差。
+
+二进制法, 也可以看做是位向量法, 只不过更加优化。
+
+二进制法, 时间复杂度 O(2^n), 空间复杂度 O(1)
+
+#+BEGIN_SRC java
+public List<List<Integer>> subsets(int[] s) {
+    Arrays.sort(s);   
+    List<List<Integer>> res = new ArrayList<List<Integer>>();
+    List<Integer> path = new ArrayList<Integer>();
+    int n = s.length;
+    for (int i = 0; i < (1 << n); i++) {
+        for (int j = 0; j < n; j++) {
+            // if ((i & (1 << j)) != 0) path.add(s[j]);
+            if(((i >> j) & 1 ) != 0) path.add(s[j]);   
+        }
+        res.add(path);
+        path = new ArrayList<Integer>();
+    }
+    return res;
+}
+#+END_SRC
+
+总体看来，不管是用向量数组来保存选与不选，还是位操作，都是选与不选的控
+制。通过有序控制来得到想要的结果。
+
 *** Subsets II
 Given a collection of integers that might contain duplicates, S, return all possible subsets.
 
@@ -1125,6 +1689,65 @@ If S = [1,2,2], a solution is:
   []
 ]
 #+END_SRC
+
+这题有重复元素,但本质上,跟上一题很类似,上一题中元素没有重复,相当于每个元素只能选 0 或 1 次,这里扩充到了每个元素可以选 0 到若干次而已。
+
+**** 递归， 增量构造法: 增量构造法,深搜,时间复杂度 O(2^n), 空间复杂度 O(n)
+
+
+#+BEGIN_SRC java
+public void helper(int [] s, List<Integer> path, List<List<Integer>> res) {
+    res.add(new ArrayList<Integer>(path));
+    for (int i = 0; i < s.length; i++) {
+        if (i != 0 && s[i] == s[i - 1]) continue;
+        path.add(s[i]);
+        helper(s, path, res);
+        path.remove(path.size() - 1);
+    }
+}
+
+// Memory Limit Exceeded
+public List<List<Integer>> subsetsWithDup(int[] s) {
+    Arrays.sort(s); 
+    List<List<Integer>> res = new ArrayList<List<Integer>>();
+    List<Integer> path = new ArrayList<Integer>();
+    helper(s, path, res);
+    return res;
+}
+#+END_SRC
+
+**** 增量构造法,版本 2,时间复杂度 O(2^n),空间复杂度 O(n)
+**** 位向量法, 时间复杂度 O(2^n), 空间复杂度 O(n)
+
+这个相对复杂，改天再写
+**** 迭代， 增量构造法， 时间复杂度 O(2^n),空间复杂度 O(1)
+
+
+**** 二进制法
+
+#+BEGIN_SRC java
+public List<List<Integer>> subsetsWithDup(int[] s) {
+    Arrays.sort(s);   
+    HashSet<List<Integer>> res = new HashSet<List<Integer>>();
+    List<Integer> path = new ArrayList<Integer>();
+    int n = s.length;
+    for (int i = 0; i < (1 << n); i++) {
+        for (int j = 0; j < n; j++) {
+            if ((i & (1 << j)) != 0) path.add(s[j]);
+            //if(((i >> j) & 1 ) != 0) path.add(s[j]);   
+        }
+        res.add(path);
+        path = new ArrayList<Integer>();
+    }
+    List<List<Integer>> result = new ArrayList<List<Integer>>();
+    result.addAll(res);
+    return result;
+}
+#+END_SRC
+
+与上一题类似，只是多一步控制对重复的处理，或不再执行重复的，或执行后去
+重处理。
+
 *** Permutation
 Given a collection of numbers, return all possible permutations.
 
@@ -1133,6 +1756,49 @@ For example,
 [1,2,3] have the following permutations:
 [1,2,3], [1,3,2], [2,1,3], [2,3,1], [3,1,2], and [3,2,1].
 #+END_SRC
+
+偷懒的做法,可以直接使用 c++ std::next_permutation()。如果是在 OJ 网站上,可以用这个API 偷个懒;如果是在面试中,面试官肯定会让你重新实现。
+
+时间复杂度 O(n!),空间复杂度 O(1)
+
+**** 重新实现 next_permutation(): 时间复杂度 O(n!), 空间复杂度 O(1)
+**** 递归： 时间复杂度 O(n!), 空间复杂度 O(n)
+
+本题是求路径本身,求所有解,函数参数需要标记当前走到了哪步,还需要中间结果的引用,最终结果的引用。
+
+扩展节点,每次从左到右,选一个没有出现过的元素。
+
+本题不需要判重,因为状态装换图是一颗有层次的树。收敛条件是当前走到了最
+后一个元素。
+
+#+BEGIN_SRC java
+public void helper(int [] num, boolean [] used, List<Integer> one,
+                   List<List<Integer>> res) {
+    if (one.size() == num.length) {
+        res.add(new ArrayList<Integer>(one));
+        return;
+    }
+    for (int i = 0; i < num.length; i++) {
+        if (!used[i]) {
+            used[i] = true;
+            one.add(num[i]);
+            helper(num, used, one, res);
+            one.remove(one.size() - 1);
+            used[i] = false;
+        }
+    }
+    return;
+}
+        
+public List<List<Integer>> permute(int[] num) {
+    List<List<Integer>> res = new ArrayList<List<Integer>>();
+    if (num == null || num.length == 0) return res;
+    boolean [] used = new boolean[num.length];
+    helper(num, used, new ArrayList<Integer>(), res);
+    return res;
+}
+#+END_SRC
+
 *** Combinationas
 Given two integers n and k, return all possible combinations of k numbers out of 1 ... n.
 
@@ -1149,6 +1815,34 @@ If n = 4 and k = 2, a solution is:
   [1,4],
 ]
 #+END_SRC
+**** 递归: 深搜, 时间复杂度 O(n!), 空间复杂度 O(n)
+
+时间复杂度 O(n!), 空间复杂度 O(n). 
+#+BEGIN_SRC java
+// bgn, 开始的数, cur, 已经选择的数目
+public void dfs(List<List<Integer>> res, List<Integer> path, int n, int k, int bgn, int cur) {
+    if (cur == k) {
+        res.add(new ArrayList<Integer>(path));
+    }
+    for (int i = bgn; i <= n; i ++) {
+        path.add(i);
+        dfs(res, new ArrayList<Integer>(path), n, k, i + 1, cur + 1);
+        path.remove(path.size() - 1);
+    }
+}
+
+public List<List<Integer>> combine(int n, int k) {
+    List<List<Integer>> res = new ArrayList<List<Integer>>();
+    List<Integer> path = new ArrayList<Integer>();
+    dfs(res, path, n, k, 1, 0); 
+    return res;
+}
+#+END_SRC
+**** 迭代： 时间复杂度 O((n-k)!), 空间复杂度 O(n)
+
+时间复杂度 O((n-k)!), 空间复杂度 O(n). 
+
+some other day~~!!@
 
 *** Letter Combinationas of Phone Number
 Given a digit string, return all possible letter combinations that the number could represent.
@@ -1163,7 +1857,65 @@ Output: ["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"].
 #+END_SRC
 Note:
 
-Although the above answer is in lexicographical order, your answer could be in any order you want.
+Although the above answer is in lexicographical order, your answer
+could be in any order you want.
+
+**** 递归: 深搜, 时间复杂度 O(3^n), 空间复杂度 O(n)
+
+#+BEGIN_SRC java
+public char [] getArr(char x) {
+    char [] two = {'a', 'b', 'c'};
+    char [] thr = {'d', 'e', 'f'};
+    char [] fou = {'g', 'h', 'i'};
+    char [] fiv = {'j', 'k', 'l'};
+    char [] six = {'m', 'n', 'o'};
+    char [] sev = {'p', 'q', 'r', 's'};
+    char [] eig = {'t', 'u', 'v'};
+    char [] nin = {'w', 'x', 'y', 'z'};
+    switch (x) {
+    case '2': return two;
+    case '3': return thr;
+    case '4': return fou;
+    case '5': return fiv;
+    case '6': return six;
+    case '7': return sev;
+    case '8': return eig;
+    case '9': return nin;
+    }
+    return null;
+}
+
+public void recursion(String digits, List<String> result) {
+    char [] base = getArr(digits.charAt(digits.length()-1));
+    int n = result.size();
+    //for(String x : result) // ConcurrentModificationException, result is changing
+    for (int j = 0; j < n; j++) {
+        for (int i = 0; i < base.length; i++)
+            result.add(new StringBuffer(base[i]+ result.get(j)).toString());
+    }
+    for (int i = n-1; i >= 0; i--)
+        result.remove(i);
+    if (digits.length() > 1)
+        recursion(digits.substring(0, digits.length()-1), result);
+}
+        
+public List<String> letterCombinations(String digits) {
+    List<String> result = new ArrayList<String>();
+    if (digits.equals("")) {
+        result.add("");
+        return result;
+    }
+    char [] base = getArr(digits.charAt(digits.length()-1));
+    for (int i = 0; i < base.length; i++) 
+        result.add("" + base[i]);
+    if (digits.length() > 1)
+        recursion(digits.substring(0, digits.length()-1), result);
+    return result;
+}
+#+END_SRC
+
+**** 迭代： 时间复杂度 O(3^n), 空间复杂度 O(1)
+
 ** Hard
 *** Permutation II
 Given a collection of numbers that might contain duplicates, return all possible unique permutations.
@@ -1173,6 +1925,54 @@ For example,
 [1,1,2] have the following unique permutations:
 [1,1,2], [1,2,1], and [2,1,1].
 #+END_SRC
+
+**** next_permutation()
+
+直接使用 std::next_permutation(),代码与上一题相同。
+**** 重新实现 next_permutation()
+
+重新实现 std::next_permutation(),代码与上一题相同。
+**** 递归: 
+
+递归函数 permute() 的参数 p,是中间结果,它的长度又能标记当前走到了哪一步,用于判断收敛条件。
+
+扩展节点,每次从小到大,选一个没有被用光的元素,直到所有元素被用光。
+
+本题不需要判重,因为状态装换图是一颗有层次的树。
+
+#+BEGIN_SRC java
+public void helper(int [] num, boolean [] used, List<Integer> one,
+                   List<List<Integer>> res, int cnt) {
+    if (one.size() == num.length) {
+        res.add(new ArrayList<Integer>(one));
+        return;
+    }
+    for (int i = 0; i < num.length; i++) {
+        // !used[i - 1] marks the completion of first 0 done, so ignore second 0
+        if (i > 0 && !used[i - 1] && num[i] == num[i - 1]) continue;
+        if (!used[i]) {
+            used[i] = true;
+            one.add(num[i]);
+            helper(num, used, one, res, ++cnt);
+            one.remove(one.size() - 1);
+            used[i] = false;
+        }
+    }
+    return;
+}
+        
+public List<List<Integer>> permuteUnique(int[] num) {
+    List<List<Integer>> res = new ArrayList<List<Integer>>();
+    if (num == null || num.length == 0) return res;
+    boolean [] used = new boolean[num.length];
+    Arrays.sort(num);
+    helper(num, used, new ArrayList<Integer>(), res, 1);
+    return res;
+}
+#+END_SRC
+
+应该还有其它更好的控制原理，只是今天不在状态，不用多想。。。
+
 * 广度优先搜索 Breadth First Search
 当题目看不出任何规律, 既不能用分治, 贪心, 也不能用动规时, 这时候万能方法——搜索, 就派上用场了。搜索分为广搜和深搜, 广搜里面又有普通广搜, 双向广搜, A* 搜索等。深搜里面又有普通深搜, 回溯法等。
 
@@ -1508,6 +2308,53 @@ Return
     ["a","a","b"]
   ]
 #+END_SRC
+
+在每一步都可以判断中间结果是否为合法结果,用回溯法。
+
+一个长度为 n 的字符串,有 n+1 个地方可以砍断,每个地方可断可不断,前后两
+个隔板默认已经使用,因此复杂度为 O(2^{n−1}).
+
+**** 深搜: 时间复杂度 O(2^n), 空间复杂度 O(n)
+#+BEGIN_SRC java
+public void dfs(String s, List<String> path, List<List<String>> res) {
+    if (s.length() == 0) {
+        res.add(new ArrayList<String>(path));
+        return;
+    }
+    for (int i = 0; i < s.length(); i++) {
+        int bgn = 0;
+        int end = i;
+        while (bgn < end) {
+            if (s.charAt(bgn) == s.charAt(end)) {
+                bgn ++;
+                end --;
+            } else break;
+        }
+        if (bgn >= end) {
+            path.add(s.substring(0, i + 1));
+            dfs(s.substring(i + 1), path, res);
+            path.remove(path.size() - 1);
+        } 
+    }
+    return;
+}
+        
+public List<List<String>> partition(String s) {
+    List<List<String>> res = new ArrayList<List<String>>();
+    List<String> path = new ArrayList<String>();
+    dfs(s, path, res);
+    return res;
+}
+#+END_SRC
+
+**** 深搜 2: 时间复杂度 O(2^n), 空间复杂度 O(n)
+
+另一种写法,更加简洁。这种写法也在 Combination Sum, Combination Sum II 中出现过。
+
+**** 动态规划：时间复杂度 O(n^2),空间复杂度 O(1)
+
+需要先消化一下别人的解法。。。。
+
 *** Restore IP Addresses
 Given a string containing only digits, restore it by returning all possible valid IP address combinations.
 
@@ -1516,12 +2363,77 @@ For example:
 Given "25525511135",
 return ["255.255.11.135", "255.255.111.35"]. (Order does not matter)
 #+END_SRC
+
+必须要走到底部才能判断解是否合法, 深搜。
+
+#+BEGIN_SRC java
+#+END_SRC
+
+需要优化自己的代码 ，写得太丑。。。
+
 *** Generate Parentheses
 Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.
 
 For example, given n = 3, a solution set is:
 #+BEGIN_SRC java
 "((()))", "(()())", "(())()", "()(())", "()()()"
+#+END_SRC
+
+小括号串是一个递归结构,跟单链表、二叉树等递归结构一样,首先想到用递归。
+
+一步步构造字符串。当左括号出现次数 < n 时,就可以放置新的左括号。当右括号出现次数小
+于左括号出现次数时,就可以放置新的右括号。
+
+**** 时间复杂度 O(TODO),空间复杂度 O(n)
+#+BEGIN_SRC java
+public void generate(List<String> res, int n, StringBuffer one, int left, int right) {
+    StringBuffer tmp = new StringBuffer(one);
+    if (left == n) {
+        for (int i = 0; i < n - right; i++)
+            tmp.append(")");
+        res.add(tmp.toString());
+        return;
+    }
+    generate(res, n, new StringBuffer(one).append("("), left + 1, right);
+    if (left > right)
+        generate(res, n, new StringBuffer(one).append(")"), left, right + 1);
+}
+        
+public List<String> generateParenthesis(int n) {
+    List<String> res = new ArrayList<String>();
+    if (n > 0)
+        generate(res, n, new StringBuffer(), 0, 0);
+    return res;
+}
+#+END_SRC
+
+反过来写。
+#+BEGIN_SRC java
+public void generate(List<String> res, int n, StringBuffer tmp, int left, int right) {
+    if (left < 0 || right < left) return;
+    if (left == 0 && right == 0) { 
+        res.add(tmp.toString());
+        return;
+    } else {
+        if (left > 0) 
+            generate(res, n, new StringBuffer(tmp).append("("), left - 1, right);
+        if (right > left) 
+            generate(res, n, new StringBuffer(tmp).append(")"), left, right - 1);
+    }
+}
+        
+public List<String> generateParenthesis(int n) {
+    List<String> res = new ArrayList<String>();
+    if (n > 0) 
+        generate(res, n, new StringBuffer(), n, n);
+    return res;
+}
+#+END_SRC
+     不太确定这是真正正确的操作StringBuffer的途径还。
+
+**** 另一种写法： 
+
+#+BEGIN_SRC java
 #+END_SRC
 *** Combination Sum
 Given a set of candidate numbers (C) and a target number (T), find all unique combinations in C where the candidate numbers added to T.

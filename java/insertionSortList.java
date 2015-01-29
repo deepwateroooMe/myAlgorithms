@@ -22,10 +22,7 @@ public class insertionSortList {
         }
 
         public ListNode insertionSortList(ListNode head) {
-            if (head == null) {
-                return null;
-            }
-            
+            if (head == null) return null;
             ListNode prev = head;
             ListNode curr = head.next;
             ListNode next = head;

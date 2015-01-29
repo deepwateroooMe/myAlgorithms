@@ -32,11 +32,8 @@ public class permuteUnique {
             List<List<Integer>> res = new ArrayList<List<Integer>>();
             if (num == null || num.length == 0) return res;
             boolean [] used = new boolean[num.length];
-            //HashSet<List<Integer>> set = new HashSet<List<Integer>>(res);
-            //helper(num, used, new ArrayList<Integer>(), set);
             Arrays.sort(num);
             helper(num, used, new ArrayList<Integer>(), res, 1);
-            //res.addAll(set);
             return res;
         }
     }

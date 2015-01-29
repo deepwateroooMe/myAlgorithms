@@ -56,9 +56,8 @@ public class sortList {
         }
         
         public ListNode sortList(ListNode head) {
-            if (head == null || head.next == null) {
+            if (head == null || head.next == null) 
                 return head;
-            }
             ListNode second = divideList(head);
             ListNode firstSorted = sortList(head);
             ListNode secondSorted = sortList(second);

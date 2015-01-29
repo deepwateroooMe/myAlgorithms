@@ -6,36 +6,41 @@ import java.util.List;
 public class searchMatrix {
     public static class Solution {
         public boolean binarySearch(int [] a, int target, int bgn, int end) {
-            if (bgn == end) return a[bgn] == target;
-            else if (a[bgn] > target) return false;
-            else if (a[end] < target) return false;
-            
-            while (bgn < end) {
+            while (bgn <= end) {
                 int mid = bgn + (end - bgn) / 2;
-                if (a[mid] == target)
-                    return true;
-                if (a[mid] > target)
-                    end = mid - 1;
-                else
-                    bgn = mid + 1;
+                if (a[mid] == target) return true;
+                if (a[mid] > target) end = mid - 1;
+                else bgn = mid + 1;
             }
-            if (bgn == end) return a[bgn] == target;
             return false;
         }
         
-        public boolean searchMatrix(int[][] matrix, int target) {
-            if (matrix == null || matrix.length == 0) return false;
-            else if (matrix.length == 1 && matrix[0].length == 1) return matrix[0][0] == target;
+        public boolean searchMatrix0(int[][] matrix, int target) {
             int m = matrix.length;
             int n = matrix[0].length;
             int [] a = new int[m * n];
-
             int cnt = 0;
             for (int i = 0; i < m; i++) 
                 for (int j = 0; j < n; j++) 
                     a[cnt++] = matrix[i][j];
             return binarySearch(a, target, 0, m * n - 1);
         }
+
+        public boolean searchMatrix(int[][] matrix, int target) {
+            int m = matrix.length;
+            int n = matrix[0].length;
+            int bgn = 0;
+            int end = m * n- 1;
+            while (bgn <= end) {
+                int mid = bgn + (end - bgn) / 2;
+                int val = matrix[mid / n][mid % n];
+                if (val == target) return true;
+                if (val > target) end = mid - 1;
+                else bgn = mid + 1;
+            }
+            return false;
+        }
+
     }
 
     public static void main(String[] args){
