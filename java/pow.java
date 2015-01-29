@@ -43,8 +43,21 @@ public class pow {
                 return midd[-n - 1];
             } else return 0;
         }
+
+        public double myPower(double x, int n) {
+            if (n == 0) return 1;
+            double val = myPower(x, n / 2);
+            if (n % 2 == 0) return val * val;
+            else return val * val * x;
+        }
+        
+        public double pow(double x, int n) {
+            if (n < 0) return 1.0 / myPower(x, -n);
+            else return myPower(x, n);
+        }
     }
 
+    
     public static void main(String[] args){
         Solution result = new Solution();
         double x = -13.62608;

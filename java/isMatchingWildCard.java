@@ -43,15 +43,10 @@ public class isMatchingWildCard {
         }
 
         public boolean isMatch(String s, String p) {
-            if (p.length() == 0 && s.length() != 0) return false;
-            else if (s.length()== 0 && p.length() == 0)  return true;
-            else if (s.length() == 0 && p.charAt(0) != '*') return false;
-
             int minLen = 0;
             for (int i = 0; i < p.length(); i++) 
                 if (p.charAt(i) != '*') ++minLen;
             if (s.length() < minLen) return false;
-            
             int m = s.length();
             int n = p.length();
             boolean [][] dp = new boolean[m + 1][n + 1];
@@ -62,11 +57,10 @@ public class isMatchingWildCard {
                 dp[0][i] = (p.charAt(i - 1) == '*' && dp[0][i - 1]) ? true : false;
             for (int i = 1; i <= m; i++) 
                 for (int j = 1; j <= n ; j++) {
-                    if (p.charAt(j - 1) == '*') // user * or not
+                    if (p.charAt(j - 1) == '*')  // user * or not
                         dp[i][j] = (dp[i - 1][j] || dp[i][j - 1]);
                     else if (s.charAt(i - 1) == p.charAt(j - 1) || p.charAt(j - 1) == '?')
                         dp[i][j] = dp[i - 1][j - 1];
-                    //else dp[i][j] = false; // default value
                 }
             return dp[m][n];
         }

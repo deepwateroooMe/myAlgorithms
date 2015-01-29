@@ -116,7 +116,6 @@ public class isMatchRegularExpression {
             int n = p.length();
             boolean [][] dp = new boolean[m + 1][n + 1];
             dp[0][0] = true;
-            //dp[0][1] = false;
             for (int i = 1; i <= m ; i++)
                 dp[i][0] = false;
             for (int i = 1; i <= n ; i++)

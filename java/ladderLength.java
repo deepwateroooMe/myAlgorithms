@@ -81,7 +81,7 @@ public class ladderLength {
             return false;
         }
         
-        public int ladderLength(String start, String end, Set<String> dict) {
+        public int ladderLength0(String start, String end, Set<String> dict) {
             if (start.equals(end)) return 2;
             else if (dict.contains(end) && end.length() == 1) return 2;
             
@@ -90,6 +90,35 @@ public class ladderLength {
             boolean done = bfs(start, end, dict, tmp);
             if (done)
                 return tmp.get(0);
+            return 0;
+        }
+
+        public int ladderLength(String start, String end, Set<String> dict) {
+            if (start.length() != end.length()) return 0;
+            if (start.compareTo("") == 0) return 1;
+            List<String> newStart = new ArrayList<String>();
+            List<String> nextStart = new ArrayList<String>();
+            newStart.add(start);
+            int distance = 1;
+            for (int index = 0; index < newStart.size(); index++) {
+                String curr = newStart.get(index);
+                for (int i = 0; i < curr.length(); i++) {
+                    for (char j = 'a'; j <= 'z'; j++) {
+                        if (curr.charAt(i) == j) continue;
+                        String tmp = curr.substring(0, i) + j + curr.substring(i + 1);
+                        if (tmp.equals(end)) return distance + 1;
+                        if (dict.contains(tmp)) {
+                            nextStart.add(tmp);
+                            dict.remove(tmp);
+                        }
+                    }
+                }
+                if (index == newStart.size() - 1) {
+                    newStart.addAll(new ArrayList<String>(nextStart));
+                    nextStart = new ArrayList<String>();
+                    distance++;
+                }
+            }
             return 0;
         }
     }

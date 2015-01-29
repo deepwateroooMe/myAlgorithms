@@ -52,15 +52,14 @@ public class solveSurroundedRegions {
 
         // https://oj.leetcode.com/discuss/10425/use-stack-to-get-rid-of-stackoverflow-in-dfs
         public void solve(char[][] board) {
-            if (board == null || board.length == 0 || board[0].length == 0) return;
+              if (board.length == 0) return;
             int row = board.length;
             int col = board[0].length;
-
             for (int i = 0; i < row; i++) {
                 for (int j = 0; j < col; j++) {
                     if ((i == 0 || j == 0 || i == row-1 || j == col-1) && board[i][j] == 'O') {
                         Stack<Integer> stk = new Stack<Integer>();
-                        stk.push(i * col + j);  // cannot *row, produce error
+                        stk.push(i * col + j);         // cannot *row, produce error, the larger 
                         while (!stk.isEmpty()) {
                             int tmp = stk.pop();
                             int x = tmp / col;

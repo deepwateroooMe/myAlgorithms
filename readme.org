@@ -3,6 +3,11 @@
 #+title: Algorithms Review for Job Interview
 #+author: deepwaterooo
 
+* 1/28/2015, Wednesday
+- decode ways java version, bug .....
+- ~4:30~09:45, have no reason won't be headache today, but to get my schedule back, worth a headache day~~
+- accompany the landlord for cleaning the house for half an hour 2:30 - 3:00
+
 * 1/27/2015, Tuesday
 - decode ways java version, bug .....
 - ~7:00-13:30, went to food court, need to push the process, doesn't seem to really helping...

@@ -5,61 +5,33 @@
 
 * 数组 Array
 ** Easy
-*** Remove Element	
 *** Remove Duplicates from Sorted Array
+*** Remove Element	
 *** Plus One
-*** Pascal's Triangle
-*** Pascal's Triangle II
-*** Merge Sorted Array	
-*** Majority Element	
 ** Medium
-*** Two Sum
-*** 3Sum Closest
-*** Container With Most Water
-*** Set Matrix Zeroes	
-*** Minimum Path Sum	
-*** Search Insert Position
-*** Unique Paths
-*** Search in Rotated Sorted Array II
-*** Search for a Range
-*** Search a 2D Matrix
 *** Rotate Image
-*** 3Sum
-*** 4Sum
+*** Set Matrix Zeroes	
 *** Remove Duplicates from Sorted Array II
-*** Unique Paths II
+*** Search in Rotated Sorted Array II
+*** 3Sum
+*** 3Sum Closest
+*** 4Sum
+*** Remove Element
 *** Next Permutation
-*** Missing Ranges 	
-*** Find Minimum in Rotated Sorted Array
-*** Combination Sum II
-*** Two Sum II - Input array is sorted
-*** Triangle
-*** Maximum Subarray
-*** Maximum Product Subarray
-*** Word Search
-*** Combination Sum	
-*** Subsets
-*** Subsets II
-*** Jump Game
-*** Spiral Matrix
-*** Spiral Matrix II
-*** Sort Colors
-*** Find Peak Element
-** Hard
+*** Permutation Sequence
+*** Valid Sudoku
 *** Trapping Rain Water
-*** Find Minimum in Rotated Sorted Array II
-*** Insert Interval
-*** Jump Game II
-*** Longest Consecutive Sequence
-*** First Missing Positive	
-*** Median of Two Sorted Arrays
-*** Merge Intervals
-*** Word Ladder II
-*** Best Time to Buy and Sell Stock III
+*** Gray Code
+** Hard
 *** Search in Rotated Sorted Array
-** Others
+*** Median of Two Sorted Arrays
+*** Longest Consecutive Sequence
+*** Trapping Rain Water
+** others Covered
 - Construct Binary Tree from Inorder and Postorder Traversal
+  [[Construct Binary Tree from Inorder and Postorder Traversal]]
 - Construct Binary Tree from Preorder and Inorder Traversal
+  [[Construct Binary Tree from Preorder and Inorder Traversal]]
 - Best Time to Buy and Sell Stock
   [[Best Time to Buy and Sell Stock]]
 - Best Time to Buy and Sell Stock II	
@@ -68,76 +40,145 @@
   [[Largest Rectangle in Histogram]]
 - Maximal Rectangle
   [[Maximum Rectangle]]
+- Pascal's Triangle
+- Pascal's Triangle II
+- Merge Sorted Array	
+  [[Merge Sorted Array]]
+- Two Sum
+  [[Two Sum]]
+- Two Sum II - Input array is sorted
+  [[Two Sum II - Input array is sorted]]
+- Spiral Matrix
+  [[Spiral Matrix]]
+- Spiral Matrix II
+  [[Spiral Matrix II]]
+- Sort Colors
+  [[Sort Colors]]
+- Insert Interval
+  [[Insert Interval]]
+- Merge Intervals
+  [[Merge Intervals]]
+*** Majority Element	
+*** Container With Most Water
+*** Minimum Path Sum	
+- Search Insert Position
+  [[Search Insert Position]]
+- Unique Paths
+- Search for a Range
+  [[Search for a Range]]
+- Search a 2D Matrix
+  [[Search a 2D Matrix]]
+- Unique Paths II
+*** Missing Ranges 	
+*** Find Minimum in Rotated Sorted Array
+*** Triangle
+- Maximum Subarray
+  [[Maximum Subarray]]
+- Maximum Product Subarray
+  [[Maximum Product Subarray]]
+- Word Search
+  [[Word Search]]
+- Combination Sum	
+  [[Combination Sum]]
+- Combination Sum II
+  [[Combination Sum II]]
+- Subsets
+  [[Subsets]]
+- Subsets II
+  [[Subsets II]]
+- Jump Game
+  [[Jump Game]]
+*** Find Peak Element
+*** Find Minimum in Rotated Sorted Array II
+*** Jump Game II
+- First Missing Positive	
+  [[First Missing Positive]]
+- Word Ladder II
+[[Word Ladder II]]
+- Best Time to Buy and Sell Stock III
+  [[Best Time to Buy and Sell Stock III]]
+- Roman to Integers
+  [[Roman to Integers]]
+- Integer to Roman
+  [[Integer to Roman]]
+- Pow(x, n)
+  [[Pow(x, n)]]
+- Sqrt(x)
+  [[Sqrt(x)]]
 
 * 字符串 String
 ** Easy
-*** Valid Parentheses
+*** Valid Palindrome	
+*** Implement strStr()	
+*** String to Integer (atoi)	
 *** Add Binary	
-*** Compare Version Numbers
-*** Count and Say	
 *** Longest Common Prefix
 *** Roman to Integer	
-*** Valid Palindrome	
-*** Read N Characters Given Read4
-*** Implement strStr()	
-*** ZigZag Conversion	
-*** String to Integer (atoi)	
+*** Count and Say	
 *** Length of Last Word
 ** Medium
-*** Restore IP Addresses
-*** Anagrams
-*** Integer to Roman
-*** Multiply Strings
-*** One Edit Distance
 *** Longest Palindromic Substring
-*** Letter Combinations of a Phone Number
-*** Decode Ways
-*** Longest Substring Without Repeating Characters
-*** Generate Parentheses
-*** Reverse Words in a String
+*** Integer to Roman
+*** Anagrams
 *** Simplify Path
 ** Hard
+*** Valid Number
 *** Edit Distance
 *** Minimum Window Substring
 *** Longest Substring with At Most Two Distinct Characters 	
 *** Read N Characters Given Read4 II - Call multiple times
-*** Regular Expression Matching
-*** Interleaving String
-*** Wildcard Matching
-*** Scramble String	
-*** Distinct Subsequences
-*** Substring with Concatenation of All Words
-*** Text Justification
-*** Valid Number
-*** Word Ladder II
 ** other Covered
 - Longest Valid Parentheses
   [[Longest Valid Parentheses]]
+*** Valid Parentheses
+*** Compare Version Numbers
+*** Read N Characters Given Read4
+*** One Edit Distance
+*** Decode Ways
+*** Longest Substring Without Repeating Characters
+*** Reverse Words in a String
+*** Interleaving String
 
+- Multiply Strings
+- Substring with Concatenation of All Words
+- ZigZag Conversion	
+- Text Justification
+- Restore IP Addresses
+
+- Letter Combinations of a Phone Number
+- Generate Parentheses
+- Regular Expression Matching
+- Wildcard Matching
+- Scramble String	
+- Distinct Subsequences
+- Word Ladder II [[Word Ladder II]]
 * Linked List
 ** Easy
-*** Remove Nth Node From End of List
 *** Remove Duplicates from Sorted List
+*** Remove Nth Node From End of List
 *** Merge Two Sorted Lists
 *** Intersection of Two Linked Lists
 ** Medium
+*** Add Two Numbers	
 *** Reverse Linked List II
+*** Partition List
+*** Remove Duplicates from Sorted List II
+*** Rotate List
+*** Swap Nodes in Pairs
 *** Reorder List
 *** Convert Sorted List to Binary Search Tree
-*** Rotate List
-*** Remove Duplicates from Sorted List II
-*** Sort List
-*** Insertion Sort List
-*** Swap Nodes in Pairs
 *** Linked List Cycle
 *** Linked List Cycle II
-*** Add Two Numbers	
-*** Partition List
 ** Hard	
-*** Copy List with Random Pointer
-*** Merge k Sorted Lists
 *** Reverse Nodes in k-Group
-
+*** Copy List with Random Pointer
+** other Covered
+- Sort List
+  [[Sort List]]
+- Insertion Sort List
+  [[Insertion Sort List]]
+- Merge k Sorted Lists
+  [[Merge k Sorted Lists]]
 * 树 Binary Tree, Binary Search Tree
 ** 二叉树的遍历
 
@@ -641,6 +682,7 @@ struct TreeLinkNode {
     
     Note: next() and hasNext() should run in average O(1) time and uses O(h) memory, where h is the height of the tree.
 
+*** Binary Tree Maximum Path Sum
 ** others Covered
 - Unique Binary Search Tree
   [[Unique Binary Search Tree]]
@@ -933,116 +975,52 @@ public int largestRectangleArea(int[] height) {
 
 http://www.cnblogs.com/felixfang/p/3676193.html
 
-*** Maximal Rectangle
-    Given a 2D binary matrix filled with 0's and 1's, find the largest rectangle containing all ones and return its area.
-
-    *Tags:* Array Hash Table Stack Dynamic Programming
-**** 栈： O(n)    
-这是一道非常综合的题目，要求在0-1矩阵中找出面积最大的全1矩阵。刚看到这道题会比较无从下手，brute force就是对于每个矩阵都看一下，总共有m(m+1)/2*n(n+1)/2个子矩阵（原理跟字符串子串类似，字符串的子串数有n(n+1)/2，只是这里是二维情形，所以是两个相乘），复杂度相当高，肯定不是面试官想要的答案，就不继续想下去了。
-
-这道题的解法灵感来自于Largest Rectangle in Histogram这道题，假设我们把矩阵沿着某一行切下来，然后把切的行作为底面，将自底面往上的矩阵看成一个直方图（histogram）。直方图的中每个项的高度就是从底面行开始往上1的数量。根据Largest Rectangle in Histogram我们就可以求出当前行作为矩阵下边缘的一个最大矩阵。接下来如果对每一行都做一次Largest Rectangle in Histogram，从其中选出最大的矩阵，那么它就是整个矩阵中面积最大的子矩阵。
-算法的基本思路已经出来了，剩下的就是一些节省时间空间的问题了。
-
-我们如何计算某一行为底面时直方图的高度呢？ 如果重新计算，那么每次需要的计算数量就是当前行数乘以列数。然而在这里我们会发现一些动态规划的踪迹，如果我们知道上一行直方图的高度，我们只需要看新加进来的行（底面）上对应的列元素是不是0，如果是，则高度是0，否则则是上一行直方图的高度加1。利用历史信息，我们就可以在线行时间内完成对高度的更新。我们知道，Largest Rectangle in Histogram的算法复杂度是O(n)。所以完成对一行为底边的矩阵求解复杂度是O(n+n)=O(n)。接下来对每一行都做一次，那么算法总时间复杂度是O(m*n)。
-
-空间上，我们只需要保存上一行直方图的高度 O(n)，加上Largest Rectangle in Histogram中所使用的空间O(n)，所以总空间复杂度还是O(n)。
-
-#+BEGIN_SRC java
-private int largestRectangleArea(int[] height) {
-    Stack<Integer> s = new Stack<Integer>();
-    int [] hnew = new int[height.length + 1];
-    hnew = Arrays.copyOf(height, height.length + 1);
-    int res = 0; 
-    int tmp;     
-    int left;
-    for (int i = 0; i <= height.length; i++) {
-        if (s.isEmpty() || hnew[i] > hnew[s.peek()]) s.push(i);
-        else {
-            tmp = s.pop();
-            res = Math.max(res, hnew[tmp] * 
-                           (s.isEmpty() ? i : i - s.peek() - 1));
-            i--;
-        }
-    }
-    return res;
-}
-
-public int maximalRectangle(char[][] matrix) {
-    if (matrix == null || matrix.length == 0 || matrix[0].length == 0) return 0;
-    int [] h = new int[matrix[0].length];
-    int res = 0;     // record max area
-    for (int i = 0; i < matrix.length; i++) {
-        for (int j = 0; j < matrix[0].length; j++) 
-            h[j] = matrix[i][j] == '0' ? 0 : h[j] + 1;
-        res = Math.max(res, largestRectangleArea(h));
-    }
-    return res;
-}
-#+END_SRC
-**** 动态规划：
-
-一般一个题目我首先会想想怎么暴力解决，比如这一题，可以枚举出所有的矩形，求出其中的面积最大者，那么怎么枚举呢，如果分别枚举矩形的宽度和高度，这样还得枚举矩形的位置，复杂度至少为O(n^4) (计算复杂度是我们把matrix的行、列长度都泛化为n，下同)，我们可以枚举矩形左上角的位置，那么知道了矩形左上角的位置，怎么计算以某一点为左上角的矩形的最大面积呢？举例如下，下面的矩阵我们以(0,0)为矩形的左上角：
-#+BEGIN_SRC java
-1 1 1 1 0 0
-1 1 1 0 1 1
-1 0 1 0 1 1
-0 1 1 1 1 1
-1 1 1 1 1 1
-#+END_SRC
-
-矩形高度是1时,宽度为第一行中从第一个位置起连续的1的个数,为4,面积为4 * 1=4
-
-矩形高度是2时,第二行从第一个位置起连续1的个数是3,宽度为min(3,4)=3,面积为3*2=6
-
-矩形高度为3时,第三行从第一个位置起连续1的个数是1,宽度为min(1,3)=1,面积为1*3=3
-
-矩形高度为4时,第四行从第一个位置起连续1的个数是0,宽度为min(0,1)=0,面积为0*4=0
-
-后面的行就不用计算了,因为上一行计算的宽度是0,下面所有宽度都是0
-
-因此以(0,0)为左上角的矩形的最大面积是6，计算以某一点为左上角的矩形的最大面积复杂度是O(n)。
-
-注意到上面我们用到了信息“从某一行某个位置开始连续的1的个数”，这个我们可以通过动态规划求得：设dp[i][j]是从点(i,j)开始，这一行连续1的个数，动态规划方程如下：
-
-初始条件：
-- dp[i][n-1] = (matrix[i][n-1] == '1') （n是matrix的列数）
-- dp[i][j] = (matrix[i][j] == '1') ?  1 + dp[i][j + 1] : 0 (从方程看出我们应该从每一行的后往前计算)
-计算dp复杂度O(n^2)，枚举左上角位置以及计算以该位置为左上角的矩形最大面积复杂度是O(n^2*n)=O(n^3)，总的复杂度是O(n^3)
-
-这个算法还可以优化，枚举到某个点时我们可以假设该点右下方全是1，得到一个假设最大面积，如果这个面积比当前计算好的面积还要小，该点就可以直接跳过；在上面计算以某点为左上角的矩形面积时，也可以剪枝，剪枝方法同上。《JustDoIT》
-#+BEGIN_SRC java
-public int maximalRectangle(char[][] matrix) {
-    if (matrix == null || matrix.length == 0 || matrix[0].length == 0) return 0;
-    int m = matrix.length;
-    int n = matrix[0].length;
-    int [][] dp = new int[m][n];
-    int res = 0;
-    int width = 0;
-    for (int i = 0; i < m; i++) 
-        dp[i][n - 1] = matrix[i][n - 1] == '1' ? 1 : 0;
-    for (int i = 0; i < m; i++) 
-        for (int j = n - 2; j >= 0; j--) 
-            if (matrix[i][j] == '1')
-                dp[i][j] = dp[i][j + 1] + 1;
-    for (int i = 0; i < m; i++) // 以每个点作为矩形的左上角计算所得的最大矩形面积
-        for (int j = 0; j < n; j++) {
-            if ((n - j) * (m - i) <= res)
-                break;          // 剪枝，column-j 是最大宽度，row-i 是最大高度
-            width = dp[i][j];
-            for (int k = i; k < m && width > 0; k++) {
-                if (width * (m - i) <= res)
-                    break;    // 剪枝,row-i 是以点 (i,j) 为左上角的矩形的最大高度
-                if (width > dp[k][j])
-                    width = dp[k][j]; //矩形宽度要取从第 i 行到第 k 行宽度的最小值
-                res = Math.max(res, width * (k - i + 1));
-            }
-        }
-    return res;
-}
-#+END_SRC
-
-** Heap
-*** Merge k sorted List
+** others Covered
+- Binary Tree Preorder Traversal
+  [[Binary Tree Preorder Traversal]]
+- Binary Tree Inorder Traversal
+  [[Binary Tree Inorder Traversal]]
+- Binary Tree Postorder Traversal
+  [[Binary Tree Postorder Traversal]]
+- Binary Search Tree Iterator	
+  [[Binary Search Tree Iterator	]]
+- Binary Tree Zigzag Level Order Traversal
+  [[Binary Tree Zigzag Level Order Traversal]]
+- Maximal Rectangle
+  [[Maximal Rectangle]]
+- Min Stack
+  [[Min Stack]]
+* Hash Table
+** Easy
+*** Valid Sudoku
+*** Two Sum III
+** Medium
+*** Two Sum
+*** 4Sum
+*** Binary Tree Inorder Traversal
+*** Fraction to Recurring Decimal
+*** Single Number
+*** Anagrams
+*** Longest Substring Without Repeating Characters	
+** Hard	
+*** Minimum Window Substring
+*** Copy List with Random Pointer
+*** Sudoku Solver
+*** Max Points on a Line
+*** Substring with Concatenation of All Words
+*** Longest Substring with At Most Two Distinct Characters
+** other Covered
+- Maximal Rectangle
+  [[Maximal Rectangle]]
+* 排序
+** Easy
+*** Merge Sorted Array	
+*** Merge Two Sorted List
+** Medium
+*** Sort Colors
+*** Sort List
+** Hard
+*** Merge k sorted Lists
 Merge k sorted linked lists and return it as one sorted list. Analyze and describe its complexity.
 
 *Tags*: Divide and Conquer, Linked List, Heap
@@ -1090,48 +1068,187 @@ public ListNode mergeKLists(List<ListNode> lists) {
 }
 #+END_SRC
 
-** others Covered
-- Binary Tree Preorder Traversal
-  [[Binary Tree Preorder Traversal]]
-- Binary Tree Inorder Traversal
-  [[Binary Tree Inorder Traversal]]
-- Binary Tree Postorder Traversal
-  [[Binary Tree Postorder Traversal]]
-- Binary Search Tree Iterator	
-  [[Binary Search Tree Iterator	]]
-- Binary Tree Zigzag Level Order Traversal
-  [[Binary Tree Zigzag Level Order Traversal]]
-- Min Stack
-  [[Min Stack]]
-
-* Hash Table
-** Easy
-*** Valid Sudoku
-*** Two Sum III
-** Medium
-*** Two Sum
-*** 4Sum
-*** Binary Tree Inorder Traversal
-*** Fraction to Recurring Decimal
-*** Single Number
-*** Anagrams
-*** Longest Substring Without Repeating Characters	
-** Hard	
-*** Minimum Window Substring
-*** Copy List with Random Pointer
-*** Sudoku Solver
-*** Max Points on a Line
-*** Substring with Concatenation of All Words
-*** Longest Substring with At Most Two Distinct Characters
+*** Insertion Sort List
+*** First Missing Positive	
 ** other Covered
-- Maximal Rectangle
-  [[Maximal Rectangle]]
-
-* 广度优先搜索 Breadth First Search
-** Easy
-*** Binary Tree Level Order Traversal
-*** Binary Tree Level Order Traversal II
+*** Largest Number
+*** Maximum Gap
+*** Merge Intervals	
+*** Insert Interval
+* 查找
 ** Medium
+*** Search for a Range
+*** Search Insert Position
+*** Search a 2D Matrix
+
+* 暴力枚举法
+** Medium
+*** Subsets
+Given a set of distinct integers, S, return all possible subsets.
+
+Note:
+- Elements in a subset must be in non-descending order.
+- The solution set must not contain duplicate subsets.
+For example,
+
+If S = [1,2,3], a solution is:
+#+BEGIN_SRC java
+[
+  [3],
+  [1],
+  [2],
+  [1,2,3],
+  [1,3],
+  [2,3],
+  [1,2],
+  []
+]
+#+END_SRC
+
+*Tags:* Array Backtracking, Bit Manipulation
+*** Subsets II
+Given a collection of integers that might contain duplicates, S, return all possible subsets.
+
+Note:
+- Elements in a subset must be in non-descending order.
+- The solution set must not contain duplicate subsets.
+For example,
+
+If S = [1,2,2], a solution is:
+#+BEGIN_SRC java
+[
+  [2],
+  [1],
+  [1,2,2],
+  [2,2],
+  [1,2],
+  []
+]
+#+END_SRC
+*** Permutation
+Given a collection of numbers, return all possible permutations.
+
+For example,
+#+BEGIN_SRC java
+[1,2,3] have the following permutations:
+[1,2,3], [1,3,2], [2,1,3], [2,3,1], [3,1,2], and [3,2,1].
+#+END_SRC
+*** Combinationas
+Given two integers n and k, return all possible combinations of k numbers out of 1 ... n.
+
+For example,
+
+If n = 4 and k = 2, a solution is:
+#+BEGIN_SRC java
+[
+  [2,4],
+  [3,4],
+  [2,3],
+  [1,2],
+  [1,3],
+  [1,4],
+]
+#+END_SRC
+
+*** Letter Combinationas of Phone Number
+Given a digit string, return all possible letter combinations that the number could represent.
+
+A mapping of digit to letters (just like on the telephone buttons) is given below.
+
+#+CAPTION: Letter Combinationas of Phone Number
+[[./pic/phoneNumber.png]]
+#+BEGIN_SRC java
+Input:Digit string "23"
+Output: ["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"].
+#+END_SRC
+Note:
+
+Although the above answer is in lexicographical order, your answer could be in any order you want.
+** Hard
+*** Permutation II
+Given a collection of numbers that might contain duplicates, return all possible unique permutations.
+
+For example,
+#+BEGIN_SRC java
+[1,1,2] have the following unique permutations:
+[1,1,2], [1,2,1], and [2,1,1].
+#+END_SRC
+* 广度优先搜索 Breadth First Search
+当题目看不出任何规律, 既不能用分治, 贪心, 也不能用动规时, 这时候万能方法——搜索, 就派上用场了。搜索分为广搜和深搜, 广搜里面又有普通广搜, 双向广搜, A* 搜索等。深搜里面又有普通深搜, 回溯法等。
+
+广搜和深搜非常类似(除了在扩展节点这部分不一样), 二者有相同的框架, 如何表示状态?如何扩展状态?如何判重?尤其是判重, 解决了这个问题, 基本上整个问题就解决了。
+** Medium
+*** Surrounded Regions
+Given a 2D board containing 'X' and 'O', capture all regions surrounded by 'X'.
+
+A region is captured by flipping all 'O's into 'X's in that surrounded region.
+
+For example,
+#+BEGIN_SRC java
+X X X X
+X O O X
+X X O X
+X O X X
+#+END_SRC
+
+After running your function, the board should be:
+#+BEGIN_SRC java
+X X X X
+X X X X
+X X X X
+X O X X
+#+END_SRC
+
+*Tags:* Breadth-first Search
+
+广搜。从上下左右四个边界往里走,凡是能碰到的'O',都是跟边界接壤的,应该删
+除。
+
+这叫广搜啊？ 我还以为延着0深搜呢。。。
+
+四面的最外层搜索，有O通路的就为不被包围的区域，其他都可以置为X；没把握
+这个特点，难度为五星级的。思路还是很新颖的。
+
+注意栈溢出总题。
+
+#+BEGIN_SRC java
+public void solve(char[][] board) {
+    if (board.length == 0) return;
+    int row = board.length;
+    int col = board[0].length;
+    for (int i = 0; i < row; i++) {
+        for (int j = 0; j < col; j++) {
+            if ((i == 0 || j == 0 || i == row-1 || j == col-1) && board[i][j] == 'O') {
+                Stack<Integer> stk = new Stack<Integer>();
+                stk.push(i * col + j);         // cannot *row, produce error, the larger 
+                while (!stk.isEmpty()) {
+                    int tmp = stk.pop();
+                    int x = tmp / col;
+                    int y = tmp % col;
+                    if (x < 0 || y < 0 || x >= row || y >= col ||
+                        !(board[x][y] == 'O'))
+                        continue;
+                    board[x][y] = '#';
+                    stk.push((x-1) * col + y);
+                    stk.push((x+1) * col + y);
+                    stk.push(x * col + (y - 1));
+                    stk.push(x * col + (y + 1));
+                }
+            }
+        }
+    }
+            
+    for (int i = 0; i < row; i++) {
+        for (int j = 0; j < col; j++) {
+            if (board[i][j] == 'O')
+                board[i][j] = 'X';
+            if (board[i][j] == '#')
+                board[i][j] = 'O';
+        }
+    }
+}
+#+END_SRC
+
 *** Word Ladder
 Given two words (start and end), and a dictionary, find the length of shortest transformation sequence from start to end, such that:
 - Only one letter can be changed at a time
@@ -1150,107 +1267,463 @@ Note:
 - Return 0 if there is no such transformation sequence.
 - All words have the same length.
 - All words contain only lowercase alphabetic characters.
-*** Surrounded Regions
-*** Clone Graph	
-*** Binary Tree Zigzag Level Order Traversal
-*** Minimum Depth of Binary Tree
-    
+
+时间复杂度 O(n), 空间复杂度 O(n).
+
+#+CAPTION: Word Ladder
+[[./pic/wordladder.png]]
+
+分析：这种题，肯定是每次改变单词的一个字母，然后逐渐搜索，很多人一开始就想到用dfs，其实像这种求最短路径、树最小深度问题bfs最适合，可以参考我的这篇博客bfs（层序遍历）求二叉树的最小深度。本题bfs要注意的问题：
+
+和当前单词相邻的单词是：对当前单词改变一个字母且在字典中存在的单词, 找到一个单词的相邻单词，加入bfs队列后，要从字典中删除，因为不删除的话会造成类似于hog->hot->hog的死循环。而删除对求最短路径没有影响，因为我们第一次找到该单词肯定是最短路径，即使后面其他单词也可能转化得到它，路径肯定不会比当前的路径短（如果要输出所有最短路径，则不能立即从字典中删除，具体见下一题）
+
+bfs队列中用NULL来标识层与层的间隔，每次碰到层的结尾，遍历深度+1
+
+我们利用和求二叉树最小深度层序遍历的方法来进行bfs，代码如下： 
+
+#+BEGIN_SRC java
+public int ladderLength(String start, String end, Set<String> dict) {
+    if (start.length() != end.length()) return 0;
+    if (start.compareTo("") == 0) return 1;
+    List<String> newStart = new ArrayList<String>();
+    List<String> nextStart = new ArrayList<String>();
+    newStart.add(start);
+    int distance = 1;
+    for (int index = 0; index < newStart.size(); index++) {
+        String curr = newStart.get(index);
+        for (int i = 0; i < curr.length(); i++) {
+            for (char j = 'a'; j <= 'z'; j++) {
+                if (curr.charAt(i) == j) continue;
+                String tmp = curr.substring(0, i) + j + curr.substring(i + 1);
+                if (tmp.equals(end)) return distance + 1;
+                if (dict.contains(tmp)) {
+                    nextStart.add(tmp);
+                    dict.remove(tmp);
+                }
+            }
+        }
+        if (index == newStart.size() - 1) {
+            newStart.addAll(new ArrayList<String>(nextStart));
+            nextStart = new ArrayList<String>();
+            distance++;
+        }
+    }
+    return 0;
+}
+#+END_SRC
+
+应该还有更多更好的方法，改天再深入去写。
+
 ** Hard
 *** Word Ladder II
+Given two words (start and end), and a dictionary, find all shortest transformation sequence(s) from start to end, such that:
+1. Only one letter can be changed at a time
+2. Each intermediate word must exist in the dictionary
+For example,
+
+Given:
+
+start = "hit", end = "cog"
+
+dict = ["hot","dot","dog","lot","log"]
+
+Return
+#+BEGIN_SRC java
+  [
+    ["hit","hot","dot","dog","cog"],
+    ["hit","hot","lot","log","cog"]
+  ]
+#+END_SRC
+
+Note:
+- All words have the same length.
+- All words contain only lowercase alphabetic characters.
+
+跟 Word Ladder 比,这题是求路径本身,不是路径长度,也是 BFS,略微麻烦点。
+
+这题跟普通的广搜有很大的不同,就是要输出所有路径,因此在记录前驱和判重地方与普通广搜不同。
+
+时间复杂度 O(n), 空间复杂度 O(n)。
+
+这道题是LeetCode中AC率最低的题目，确实是比较难。一方面是因为对时间有比较严格的要求（容易超时），另一方面是它有很多细节需要实现。思路上和Word Ladder是比较类似的，但是因为是要求出所有路径，仅仅保存路径长度是不够的，而且这里还有更多的问题，那就是为了得到所有路径，不是每个结点访问一次就可以标记为visited了，因为有些访问过的结点也会是别的路径上的结点，所以访问的集合要进行回溯（也就是标记回未访问）。所以时间上不再是一次广度优先搜索的复杂度了，取决于结果路径的数量。同样空间上也是相当高的复杂度，因为我们要保存过程中满足的中间路径到某个数据结构中，以便最后可以获取路径，这里我们维护一个HashMap，把一个结点前驱结点都进行保存。
+
+在LeetCode中用Java实现上述算法非常容易超时。为了提高算法效率，需要注意一下两点：
+
+1）在替换String的某一位的字符时，先转换成char数组再操作；
+
+2）如果按照正常的方法从start找end，然后根据这个来构造路径，代价会比较
+高，因为保存前驱结点容易，而保存后驱结点则比较困难。所以我们在广度优先
+搜索时反过来先从end找start，最后再根据生成的前驱结点映射从start往end构
+造路径，这样算法效率会有明显提高。
+
+#+BEGIN_SRC java
+        /* Graph of example:
+         *                |--- dot --- dog ---|
+         * hit --- hot -- |     |       |     |--- cog
+         *                |--- lot --- log ---|
+         */
+        // set: visited   // current level used already
+        // set: unvisited // leftover for choosing for next level to avoid repeat, dict + end
+        // List<List<String>> res; // result paths
+        // List<String, Queue<String>> adjMap; // adjacent directed graph, 
+        // List<string, List<String>> works 2 ~! clone graph
+#+END_SRC
+
+#+BEGIN_SRC java
+private List<String> getNextLadder(String currLadder, Set<String> unVisited) {
+    ArrayList<String> nextLadders = new ArrayList<String>();
+    StringBuffer replace = new StringBuffer(currLadder); // mutate from here
+    for(int i = 0; i < currLadder.length(); i++){
+        char old = replace.charAt(i);
+        for(char ch = 'a'; ch <= 'z'; ch++){
+            if (currLadder.charAt(i) != ch) 
+                replace.setCharAt(i, ch);
+            else continue;
+            String replaced = replace.toString();
+            if (unVisited.contains(replaced)) 
+                nextLadders.add(replaced);
+        }
+        replace.setCharAt(i, old); 
+    }
+    return nextLadders;
+}
+
+private void getLadders(String start, String end, LinkedList<String> path,
+                        List<List<String>> res,
+                        HashMap<String, Queue<String>> adjMap) {
+    if (end.equals(start))      // end condition, len ?
+        res.add(new ArrayList<String> (path));   
+    else {                      // else if (len > 0) {            
+        Queue<String> adjs = adjMap.get(end);
+        for (String lad : adjs) {
+            path.addFirst(lad); // path.add(0, lad); // equivallent
+            getLadders(start, lad, path, res, adjMap);
+            path.removeFirst(); // path.remove(0);   // remove ele at idx 0
+        }
+    }
+}
+
+public List<List<String>> findLadders(String start, String end, HashSet<String> dict) {
+    HashMap<String, Queue<String>> adjMap = new HashMap<String, Queue<String>>(); 
+    int currLen = 0;
+    boolean found = false;
+    List<List<String>> res = new ArrayList<List<String>>(); // results
+    Queue<String> queue = new LinkedList<String>();         // queue for BFS
+    Set<String> unv = new HashSet<String>(dict);            // unvstd words, delete f here
+    Set<String> vst = new HashSet<String>();                // check vstd during same level
+    unv.add(end);       // dict may not contain end, so we add it~!@
+    queue.offer(start); // search & build from start
+    int currLev = 1;
+    int nextLev = 0;
+    for(String word : unv)    // all strings in dict + start
+        adjMap.put(word, new LinkedList<String>());  // just like clone graph
+    unv.remove(start);
+    while (!queue.isEmpty()) {
+        String currLadder = queue.poll();  // curr word, mutate, check dicts, add or not
+        for(String nextLadder : getNextLadder(currLadder, unv)){ 
+            if (vst.add(nextLadder)) {  // add to vst set, return true, succeed, 
+                nextLev++;              // vst set didn't contain it before
+                queue.offer(nextLadder);
+            }
+            adjMap.get(nextLadder).offer(currLadder); 
+            if(nextLadder.equals(end) && !found) { // control if start-->end, No here
+                found = true;
+                currLen += 2;
+            }
+        } 
+        if(--currLev == 0){
+            if(found) break;
+            unv.removeAll(vst);  // remove all used string from cur level 
+            currLev = nextLev;   // to avoid next level repeat & infinite loop
+            nextLev = 0;
+            currLen++;
+        }
+    }
+    if (found) {
+        LinkedList<String> path = new LinkedList<String>();
+        path.addFirst(end);     // add at beginning of list
+        getLadders(start, end, path, res, adjMap);
+    }
+    return res;
+}
+#+END_SRC
+
+此题改天再回来优化。。。。
+
+** other Covered
+- Binary Tree Level Order Traversal
+  [[Binary Tree Level Order Traversal]]
+- Binary Tree Level Order Traversal II
+  [[Binary Tree Level Order Traversal II]]
+- Clone Graph	
+  [[Clone Graph]]
+- Binary Tree Zigzag Level Order Traversal
+  [[Binary Tree Zigzag Level Order Traversal]]
+- Minimum Depth of Binary Tree
+  [[Minimum Depth of Binary Tree]]
+** 小结
+*** 适用场景
+*输入数据:* 没什么特征,不像深搜,需要有“递归”的性质。如果是树或者图,概率更大。
+
+*状态转换图:* 树或者图。
+
+*求解目标:* 求最短。
+*** 思考的步骤
+**** 求路径长度,还是路径本身(或动作序列)?
+
+(a) 如果是求路径长度,则状态里面要存路径长度
+
+(b) 如果是求路径本身或动作序列
+
+\nbsp{} i. 要用一棵树存储宽搜过程中的路径
+
+\nbsp{} ii. 是否可以预估状态个数的上限?能够预估状态总数,则开一个大数组,用树的双亲
+表示法;如果不能预估状态总数,则要使用一棵通用的树。这一步也是第 4 步的必
+要不充分条件。
+**** 如何表示状态?即一个状态需要存储哪些些必要的数据,才能够完整提供如何扩展到下一步状态的所有信息。一般记录当前位置或整体局面。
+**** 如何扩展状态?这一步跟第 2 步相关。状态里记录的数据不同,扩展方法就不同。对于固定不变的数据结构(一般题目直接给出,作为输入数据),如二叉树,图等,扩展方法很简单,直接往下一层走,对于隐式图,要先在第 1 步里想清楚状态所带的数据,想清楚了这点,那如何扩展就很简单了。
+**** 关于判重,状态是否存在完美哈希方案?即将状态一一映射到整数,互相之间不会冲突。
+
+(a) 如果不存在,则需要使用通用的哈希表(自己实现或用标准库,例如unordered\textunderscore{}set)
+来判重;自己实现哈希表的话,如果能够预估状态个数的上限,则可以开两个数组,
+head 和 next,表示哈希表,参考第 §??节方案 2。
+
+(b) 如果存在,则可以开一个大布尔数组,作为哈希表来判重,且此时可以精确计算出状态
+总数,而不仅仅是预估上限。
+**** 目标状态是否已知?如果题目已经给出了目标状态,可以带来很大便利,这时候可以从起始状态出发,正向广搜;也可以从目标状态出发,逆向广搜;也可以同时出发,双向广搜。
 
 * 深度优先搜索 Depth First Search
-** Easy
-*** Path Sum
-*** Balanced Binary Tree
-*** Same Tree
-*** Symmetric Tree
-*** Maximum Depth of Binary Tree
 ** Medium
-*** Sum Root to Leaf Numbers	
-*** Convert Sorted List to Binary Search Tree
-*** Convert Sorted Array to Binary Search Tree
-*** Construct Binary Tree from Preorder and Inorder Traversal
-*** Construct Binary Tree from Inorder and Postorder Traversal
-*** Clone Graph
-*** Flatten Binary Tree to Linked List
-*** Populating Next Right Pointers in Each Node
-*** Validate Binary Search Tree
-*** Path Sum II
-** Hard
-*** Recover Binary Search Tree
-*** Populating Next Right Pointers in Each Node II
-*** Binary Tree Maximum Path Sum
-* 排序
-** Medium
-*** Sort Colors
-*** Sort List
-*** Largest Number
-** Hard
-*** Insertion Sort List
-*** Maximum Gap
-*** Merge Intervals	
-*** Insert Interval
+*** Palindrome Partitioning 
+Given a string s, partition s such that every substring of the partition is a palindrome.
 
-* 查找 Binary Search
-** Medium
-*** Sqrt(x)
-*** Divide Two Integers
-*** Search in Rotated Sorted Array II
-*** Two Sum II - Input array is sorted
-*** Pow(x, n)
-*** Search for a Range
-*** Search a 2D Matrix
-*** Find Minimum in Rotated Sorted Array
-*** Search Insert Position	
-*** Find Peak Element
+Return all possible palindrome partitioning of s.
+
+For example, 
+#+BEGIN_SRC java
+given s = "aab",
+Return
+  [
+    ["aa","b"],
+    ["a","a","b"]
+  ]
+#+END_SRC
+*** Restore IP Addresses
+Given a string containing only digits, restore it by returning all possible valid IP address combinations.
+
+For example:
+#+BEGIN_SRC java
+Given "25525511135",
+return ["255.255.11.135", "255.255.111.35"]. (Order does not matter)
+#+END_SRC
+*** Generate Parentheses
+Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.
+
+For example, given n = 3, a solution set is:
+#+BEGIN_SRC java
+"((()))", "(()())", "(())()", "()(())", "()()()"
+#+END_SRC
+*** Combination Sum
+Given a set of candidate numbers (C) and a target number (T), find all unique combinations in C where the candidate numbers added to T.
+
+The same repeated number may be chosen from C unlimited number of times.
+
+Note:
+- All numbers (including target) will be positive integers.
+- Elements in a combination (a1, a2, … , ak) must be in non-descending order. (ie, a1 ≤ a2 ≤ … ≤ ak).
+- The solution set must not contain duplicate combinations.
+
+For example, given candidate set 2,3,6,7 and target 7, 
+
+A solution set is: 
+#+BEGIN_SRC java
+[7] 
+[2, 2, 3] 
+#+END_SRC
+*** Combination Sum II
+Given a collection of candidate numbers (C) and a target number (T), find all unique combinations in C where the candidate numbers added to T.
+
+Each number in C may only be used once in the combination.
+
+Note:
+- All numbers (including target) will be positive integers.
+- Elements in a combination (a1, a2, … , ak) must be in non-descending order. (ie, a1 ≤ a2 ≤ … ≤ ak).
+- The solution set must not contain duplicate combinations.
+For example, given candidate set 10,1,2,7,6,1,5 and target 8, 
+
+A solution set is: 
+#+BEGIN_SRC java
+[1, 7] 
+[1, 2, 5] 
+[2, 6] 
+[1, 1, 6] 
+#+END_SRC
 ** Hard
-*** Median of Two Sorted Arrays
-*** Dungeon Game
-*** Find Minimum in Rotated Sorted Array II
-*** Search in Rotated Sorted Array
-* 暴力枚举法
-** 
-*** 
+*** N-Queens 
+The n-queens puzzle is the problem of placing n queens on an n×n chessboard such that no two queens attack each other.
+ #+caption: N-Queens 
+[[./pic/8-queens.png]]
+
+Given an integer n, return all distinct solutions to the n-queens puzzle.
+
+Each solution contains a distinct board configuration of the n-queens' placement, where 'Q' and '.' both indicate a queen and an empty space respectively.
+
+For example,
+
+There exist two distinct solutions to the 4-queens puzzle:
+#+BEGIN_SRC java
+[
+ [".Q..",  // Solution 1
+  "...Q",
+  "Q...",
+  "..Q."],
+
+ ["..Q.",  // Solution 2
+  "Q...",
+  "...Q",
+  ".Q.."]
+]
+#+END_SRC
+*** N-Queens II
+Follow up for N-Queens problem.
+
+Now, instead outputting board configurations, return the total number of distinct solutions.
+*** Sudoku Solver
+    Write a program to solve a Sudoku puzzle by filling the empty cells.
+    
+    Empty cells are indicated by the character '.'.
+    
+    You may assume that there will be only one unique solution.
+    
+    #+caption: Sudoku Solver 1
+    [[./pic/solveSudoku1.png]]
+
+    A sudoku puzzle...
+    
+    #+caption: Sudoku Solver 2
+    [[./pic/solveSudoku2.png]]
+    ...and its solution numbers marked in red.
+    
+    *Tags:* Backtracking, Hash Table
+
+*** Word Search
+Given a 2D board and a word, find if the word exists in the grid.
+
+The word can be constructed from letters of sequentially adjacent cell, where "adjacent" cells are those horizontally or vertically neighboring. The same letter cell may not be used more than once.
+
+For example,
+#+BEGIN_SRC java
+Given board =
+[
+  ["ABCE"],
+  ["SFCS"],
+  ["ADEE"]
+]
+word = "ABCCED", -> returns true,
+word = "SEE", -> returns true,
+word = "ABCB", -> returns false.
+#+END_SRC
+** other Covered
+- Same Tree
+  [[Same Tree]]
+- Symmetric Tree
+  [[Symmetric Tree]]
+- Balanced Binary Tree
+  [[Balanced Binary Tree]]
+- Validate Binary Search Tree
+  [[Validate Binary Search Tree]]
+- Convert Sorted List to Binary Search Tree
+  [[Convert Sorted List to Binary Search Tree]]
+- Convert Sorted Array to Binary Search Tree
+  [[Convert Sorted Array to Binary Search Tree]]
+- Construct Binary Tree from Preorder and Inorder Traversal
+  [[Construct Binary Tree from Preorder and Inorder Traversal]]
+- Construct Binary Tree from Inorder and Postorder Traversal
+  [[Construct Binary Tree from Inorder and Postorder Traversal]]
+- Flatten Binary Tree to Linked List
+  [[Flatten Binary Tree to Linked List]]
+- Populating Next Right Pointers in Each Node
+  [[Populating Next Right Pointers in Each Node]]
+- Populating Next Right Pointers in Each Node II
+  [[Populating Next Right Pointers in Each Node II]]
+- Sum Root to Leaf Numbers	
+  [[Sum Root to Leaf Numbers]]
+- Path Sum
+  [[Path Sum]]
+- Path Sum II
+  [[Path Sum II]]
+- Maximum Depth of Binary Tree
+  [[Maximum Depth of Binary Tree]]
+- Recover Binary Search Tree
+  [[Recover Binary Search Tree]]
+- Clone Graph
+  [[Clone Graph]]
+- Binary Tree Maximum Path Sum
+  [[Binary Tree Maximum Path Sum]]
 * 分治法 Divide and Conqure
-** Easy
-*** Majority Element
-    Given an array of size n, find the majority element. The majority element is the element that appears more than ⌊ n/2 ⌋ times.
-    
-    You may assume that the array is non-empty and the majority element always exist in the array.
-    
-    Credits:
-    
-    Special thanks to @ts for adding this problem and creating all test cases.
-    
-    *Tags:* Divide and Conquer, Array, Bit Manipulation
-
 ** Medium
-*** Maximum Subarray
-    Find the contiguous subarray within an array (containing at least one number) which has the largest sum.
-    
-    For example, given the array [-2, 1, -3, 4, -1, 2, 1, -5, 4], 
-    
-    the contiguous subarray [4, -1, 2, 1] has the largest sum = 6.
-    
-    click to show more practice.
-    
-    *More practice:*
+*** Pow(x, n)
+Implement pow(x, n).
 
-    If you have figured out the O(n) solution, try coding another solution using the divide and conquer approach, which is more subtle.
-    
-    *Tags:* Divide and Conquer, Array, Dynamic Programming
+*Tags:* Math, Binary Search
 
-** Hard
-*** Merge K sorted List
-    Merge k sorted linked lists and return it as one sorted list. Analyze and describe its complexity.
+二分法, x^n = x^{n/2} × x^{n/2} × x^{n%2}
 
-    *Tags:* Divide and Conquer Linked, List, Heap
+时间复杂度 O(logn), 空间复杂度 O(1).
+#+BEGIN_SRC java
+public double myPower(double x, int n) {
+    if (n == 0) return 1;
+    double val = myPower(x, n / 2);
+    if (n % 2 == 0) return val * val;
+    else return val * val * x;
+}
+        
+public double pow(double x, int n) {
+    if (n < 0) return 1.0 / myPower(x, -n);
+    else return myPower(x, n);
+}
+#+END_SRC
 
-*** Median of Two Sorted Array
-    There are two sorted arrays A and B of size m and n respectively. Find the median of the two sorted arrays. The overall run time complexity should be O(log (m+n)).
+*** Sqrt(x)
+Implement int sqrt(int x).
 
-    *Tags:* Divide and Conquer, Array, Binary Search
+Compute and return the square root of x.
 
+*Tags:* Math, Binary Search
+
+二分查找
+
+时间复杂度 O(logn), 空间复杂度 O(1).
+#+BEGIN_SRC java
+public int sqrt(int x) {
+    int bgn = 0, end = 0;
+    int mid = 0;
+    int lastMid = 0;
+    if (x < 2) return x;
+    // end = x / 2;          // which one is better ?
+    end = x / 2 < (int)Math.sqrt(Integer.MAX_VALUE) ?
+        x / 2 + 1 : (int)Math.sqrt(Integer.MAX_VALUE);
+    while (bgn <= end) {
+        mid = bgn + (end - bgn) / 2;
+        if (x / mid == mid)  // 不要用 x > mid * mid, 会溢出
+            return mid;
+        else if (x / mid > mid) {
+            bgn = mid + 1;
+            lastMid = mid;
+        } else  // x / mid < mid
+            end = mid - 1;
+    }
+    return lastMid;
+}
+#+END_SRC
+
+** other Covered
+- Majority Element
+  [[Majority Element]]
+- Maximum Subarray
+  [[Maximum Subarray]]
+- Merge K sorted List
+  [[Merge K sorted List]]
 * 贫心法 Greedy Search
 ** Medium
 *** Gas Station
@@ -1296,7 +1769,7 @@ public int maxProfit(int[] prices) {
 public int maxProfit(int[] prices) {
     int result = 0;
     for (int i = 0; i < prices.length-1; i++) 
-        result += (prices[i] < prices[i+1]) ? prices[i+1]-prices[i] : 0;
+        result += (prices[i] < prices[i+1]) ? prices[i + 1] - prices[i] : 0;
     return result;
 }
 #+END_SRC
@@ -2159,6 +2632,114 @@ public int maxProfit(int[] prices) {
 
 *** Coins in a Line
 
+*** Maximal Rectangle
+    Given a 2D binary matrix filled with 0's and 1's, find the largest rectangle containing all ones and return its area.
+
+    *Tags:* Array Hash Table Stack Dynamic Programming
+**** 栈： O(n)    
+这是一道非常综合的题目，要求在0-1矩阵中找出面积最大的全1矩阵。刚看到这道题会比较无从下手，brute force就是对于每个矩阵都看一下，总共有m(m+1)/2*n(n+1)/2个子矩阵（原理跟字符串子串类似，字符串的子串数有n(n+1)/2，只是这里是二维情形，所以是两个相乘），复杂度相当高，肯定不是面试官想要的答案，就不继续想下去了。
+
+这道题的解法灵感来自于Largest Rectangle in Histogram这道题，假设我们把矩阵沿着某一行切下来，然后把切的行作为底面，将自底面往上的矩阵看成一个直方图（histogram）。直方图的中每个项的高度就是从底面行开始往上1的数量。根据Largest Rectangle in Histogram我们就可以求出当前行作为矩阵下边缘的一个最大矩阵。接下来如果对每一行都做一次Largest Rectangle in Histogram，从其中选出最大的矩阵，那么它就是整个矩阵中面积最大的子矩阵。
+算法的基本思路已经出来了，剩下的就是一些节省时间空间的问题了。
+
+我们如何计算某一行为底面时直方图的高度呢？ 如果重新计算，那么每次需要的计算数量就是当前行数乘以列数。然而在这里我们会发现一些动态规划的踪迹，如果我们知道上一行直方图的高度，我们只需要看新加进来的行（底面）上对应的列元素是不是0，如果是，则高度是0，否则则是上一行直方图的高度加1。利用历史信息，我们就可以在线行时间内完成对高度的更新。我们知道，Largest Rectangle in Histogram的算法复杂度是O(n)。所以完成对一行为底边的矩阵求解复杂度是O(n+n)=O(n)。接下来对每一行都做一次，那么算法总时间复杂度是O(m*n)。
+
+空间上，我们只需要保存上一行直方图的高度 O(n)，加上Largest Rectangle in Histogram中所使用的空间O(n)，所以总空间复杂度还是O(n)。
+
+#+BEGIN_SRC java
+private int largestRectangleArea(int[] height) {
+    Stack<Integer> s = new Stack<Integer>();
+    int [] hnew = new int[height.length + 1];
+    hnew = Arrays.copyOf(height, height.length + 1);
+    int res = 0; 
+    int tmp;     
+    int left;
+    for (int i = 0; i <= height.length; i++) {
+        if (s.isEmpty() || hnew[i] > hnew[s.peek()]) s.push(i);
+        else {
+            tmp = s.pop();
+            res = Math.max(res, hnew[tmp] * 
+                           (s.isEmpty() ? i : i - s.peek() - 1));
+            i--;
+        }
+    }
+    return res;
+}
+
+public int maximalRectangle(char[][] matrix) {
+    if (matrix == null || matrix.length == 0 || matrix[0].length == 0) return 0;
+    int [] h = new int[matrix[0].length];
+    int res = 0;     // record max area
+    for (int i = 0; i < matrix.length; i++) {
+        for (int j = 0; j < matrix[0].length; j++) 
+            h[j] = matrix[i][j] == '0' ? 0 : h[j] + 1;
+        res = Math.max(res, largestRectangleArea(h));
+    }
+    return res;
+}
+#+END_SRC
+**** 动态规划：
+
+一般一个题目我首先会想想怎么暴力解决，比如这一题，可以枚举出所有的矩形，求出其中的面积最大者，那么怎么枚举呢，如果分别枚举矩形的宽度和高度，这样还得枚举矩形的位置，复杂度至少为O(n^4) (计算复杂度是我们把matrix的行、列长度都泛化为n，下同)，我们可以枚举矩形左上角的位置，那么知道了矩形左上角的位置，怎么计算以某一点为左上角的矩形的最大面积呢？举例如下，下面的矩阵我们以(0,0)为矩形的左上角：
+#+BEGIN_SRC java
+1 1 1 1 0 0
+1 1 1 0 1 1
+1 0 1 0 1 1
+0 1 1 1 1 1
+1 1 1 1 1 1
+#+END_SRC
+
+矩形高度是1时,宽度为第一行中从第一个位置起连续的1的个数,为4,面积为4 * 1=4
+
+矩形高度是2时,第二行从第一个位置起连续1的个数是3,宽度为min(3,4)=3,面积为3*2=6
+
+矩形高度为3时,第三行从第一个位置起连续1的个数是1,宽度为min(1,3)=1,面积为1*3=3
+
+矩形高度为4时,第四行从第一个位置起连续1的个数是0,宽度为min(0,1)=0,面积为0*4=0
+
+后面的行就不用计算了,因为上一行计算的宽度是0,下面所有宽度都是0
+
+因此以(0,0)为左上角的矩形的最大面积是6，计算以某一点为左上角的矩形的最大面积复杂度是O(n)。
+
+注意到上面我们用到了信息“从某一行某个位置开始连续的1的个数”，这个我们可以通过动态规划求得：设dp[i][j]是从点(i,j)开始，这一行连续1的个数，动态规划方程如下：
+
+初始条件：
+- dp[i][n-1] = (matrix[i][n-1] == '1') （n是matrix的列数）
+- dp[i][j] = (matrix[i][j] == '1') ?  1 + dp[i][j + 1] : 0 (从方程看出我们应该从每一行的后往前计算)
+计算dp复杂度O(n^2)，枚举左上角位置以及计算以该位置为左上角的矩形最大面积复杂度是O(n^2*n)=O(n^3)，总的复杂度是O(n^3)
+
+这个算法还可以优化，枚举到某个点时我们可以假设该点右下方全是1，得到一个假设最大面积，如果这个面积比当前计算好的面积还要小，该点就可以直接跳过；在上面计算以某点为左上角的矩形面积时，也可以剪枝，剪枝方法同上。《JustDoIT》
+#+BEGIN_SRC java
+public int maximalRectangle(char[][] matrix) {
+    if (matrix == null || matrix.length == 0 || matrix[0].length == 0) return 0;
+    int m = matrix.length;
+    int n = matrix[0].length;
+    int [][] dp = new int[m][n];
+    int res = 0;
+    int width = 0;
+    for (int i = 0; i < m; i++) 
+        dp[i][n - 1] = matrix[i][n - 1] == '1' ? 1 : 0;
+    for (int i = 0; i < m; i++) 
+        for (int j = n - 2; j >= 0; j--) 
+            if (matrix[i][j] == '1')
+                dp[i][j] = dp[i][j + 1] + 1;
+    for (int i = 0; i < m; i++) // 以每个点作为矩形的左上角计算所得的最大矩形面积
+        for (int j = 0; j < n; j++) {
+            if ((n - j) * (m - i) <= res)
+                break;          // 剪枝，column-j 是最大宽度，row-i 是最大高度
+            width = dp[i][j];
+            for (int k = i; k < m && width > 0; k++) {
+                if (width * (m - i) <= res)
+                    break;    // 剪枝,row-i 是以点 (i,j) 为左上角的矩形的最大高度
+                if (width > dp[k][j])
+                    width = dp[k][j]; //矩形宽度要取从第 i 行到第 k 行宽度的最小值
+                res = Math.max(res, width * (k - i + 1));
+            }
+        }
+    return res;
+}
+#+END_SRC
+
 *** Edit Distance
 Given two words word1 and word2, find the minimum number of steps required to convert word1 to word2. (each operation is counted as 1 step.)
 
@@ -2268,6 +2849,64 @@ given s = "aab",
 Return 1 since the palindrome partitioning ["aa","b"] could be produced using 1 cut.
 #+END_SRC
 
+**** 思路1：leetcode online
+
+忘记从线上哪个贴子看的了，根据回文可能有的两种特性，奇数长度回文和偶数长度回文，进行一维dp的判断。
+#+BEGIN_SRC java
+public int minCut(String s) {
+    int n = s.length();
+    int [] dp = new int[n + 1];
+    for (int i = 0; i <= n ; i++) // initiate
+        dp[i] = i - 1;
+    for (int i = 0; i < n; i++) {
+        // s[i - j] == s[i + j], aba
+        for (int j = 0; i - j >= 0 && i + j <= n - 1 && s.charAt(i - j) == s.charAt(i + j); j++)
+            dp[i + j + 1] = Math.min(dp[i - j] + 1, dp[i + j + 1]);
+        // s[i - j] == s[i + 1 + j], abba
+        for (int j = 0; i - j >= 0 && i + 1 + j <= n - 1 && s.charAt(i - j) == s.charAt(i + 1 + j); j++)
+            dp[i + j + 2] = Math.min(dp[i - j] + 1, dp[i + j + 2]);
+    }
+    return dp[n];
+}
+#+END_SRC
+
+**** 动态规划： 时间复杂度 O(n^2), 空间复杂度 O(n^2)
+
+定义状态 f(i,j) 表示区间 [i,j] 之间最小的 cut 数,则状态转移方程为
+
+ f(i, j) = min {f(i, k) + f(k + 1, j)} , i ≤ k ≤ j, 0 ≤ i ≤ j < n
+
+这是一个二维函数,实际写代码比较麻烦。
+
+所以要转换成一维 DP。如果每次, 从 i 往右扫描, 每找到一个回文就算一次DP 的话, 就可以转换为 f(i)= 区间 [i,  n-1] 之间最小的 cut 数, n 为字符串长度, 则状态转移方程为
+
+f(i) = min {f(j + 1) + 1} ,  i ≤ j < n
+
+一个问题出现了, 就是如何判断 [i, j] 是否是回文?每次都从 i 到 j 比较一遍?太浪费了, 这里也是一个 DP 问题。
+
+定义状态 P[i][j] = true if [i, j] 为回文, 那么
+
+P[i][j] = str[i] == str[j] && P[i+1][j-1]
+
+#+BEGIN_SRC java
+public int minCut(String s) {
+    int n = s.length();
+    int [] f = new int[n + 1];
+    boolean [][] p = new boolean[n][n];
+    for (int i = 0; i <= n; i++) 
+        f[i] = n - 1 - i;  // 最后一个 f[n] = -1
+    for (int i = n - 1; i >= 0; i--) {
+        for (int j = i; j < n; j++) {
+            if (s.charAt(i) == s.charAt(j) &&
+                (j - i < 2 || p[i + 1][j - 1] == true)) {
+                p[i][j] = true;
+                f[i] = Math.min(f[i], f[j + 1] + 1);
+            }
+        }
+    }
+    return f[0];
+}
+#+END_SRC
 *** Interleaving String
 Given s1, s2, s3, find whether s3 is formed by the interleaving of s1 and s2.
 
@@ -2277,6 +2916,64 @@ s1 = "aabcc",
 s2 = "dbbca",
 When s3 = "aadbbcbcac", return true.
 When s3 = "aadbbbaccc", return false.
+#+END_SRC
+
+**** 递归: 会超时, 仅用来帮助理解
+
+今天写不出来代码，明天再写~~
+
+**** 动态规划：二维动规, 时间复杂度 O(n^2), 空间复杂度 O(n^2)
+
+设状态 f[i][j], 表示 s1[0, i] 和 s2[0, j], 匹配 s3[0,  i+j]。如果 s1
+的最后一个字符等于 s3 的最后一个字符, 则 f[i][j]=f[i-1][j];如果 s2 的
+最后一个字符等于 s3 的最后一个字符, 则 f[i][j]=f[i][j-1]。
+
+因此状态转移方程如下:
+#+BEGIN_SRC java
+f[i][j] = (s1[i - 1] == s3 [i + j - 1] && f[i - 1][j])
+       || (s2[j - 1] == s3 [i + j - 1] && f[i][j - 1]);
+#+END_SRC
+
+#+BEGIN_SRC java
+public boolean isInterleave(String s1, String s2, String s3) {
+    int m = s1.length();
+    int n = s2.length();
+    if (s3.length() != m + n) return false;
+    boolean [][] f = new boolean[m + 1][n + 1];
+    f[0][0] = true;
+    for (int j = 1; j <= m ; j++) 
+        f[j][0] = f[j - 1][0] && s1.charAt(j - 1) == s3.charAt(j - 1);
+    for (int j = 1; j <= n ; j++) 
+        f[0][j] = f[0][j - 1] && s2.charAt(j - 1) == s3.charAt(j - 1);
+    for (int i = 1; i <= m; i++) {
+        for (int j = 1; j <= n ; j++) {
+            f[i][j] = ((f[i - 1][j] && s1.charAt(i - 1) == s3.charAt(i + j - 1)) ||
+                       (f[i][j - 1] && (s2.charAt(j - 1) == s3.charAt(i + j - 1))));
+        }
+    }
+    return f[m][n];
+}
+#+END_SRC
+**** 二维动规 + 滚动数组： 时间复杂度 O(n^2), 空间复杂度 O(n)
+#+BEGIN_SRC java
+public boolean isInterleave(String s1, String s2, String s3) {
+    int m = s1.length();
+    int n = s2.length();
+    if (s3.length() != m + n) return false;
+    if (m < n) return isInterleave(s2, s1, s3);
+    boolean [] f = new boolean[n + 1];
+    for (int i = 0; i < n + 1; i++) 
+        f[i] = true;
+    for (int i = 1; i < n + 1 ; i++) 
+        f[i] = s2.charAt(i - 1) == s3.charAt(i - 1) && f[i - 1];
+    for (int i = 1; i < m + 1; i++) {
+        f[0] = s1.charAt(i - 1) == s3.charAt(i - 1) && f[0];
+        for (int j = 1; j < n + 1; j++) 
+            f[j] = (s1.charAt(i - 1) == s3.charAt(i + j - 1) && f[j])
+                || (s2.charAt(j - 1) == s3.charAt(i + j - 1) && f[j - 1]);
+    }
+    return f[n];
+}
 #+END_SRC
 
 *** Scramble String
@@ -2326,6 +3023,67 @@ r   g  ta  e
     
     Given two strings s1 and s2 of the same length, determine if s2 is a scrambled string of s1.
 
+首先想到的是递归(即深搜), 对两个 string 进行分割, 然后比较四对字符串。代码虽然简单, 
+但是复杂度比较高。有两种加速策略, 一种是剪枝, 提前返回;一种是加缓存, 缓存中间结果, 即
+memorization(翻译为记忆化搜索)。
+
+这两种思路应该都非常容易理解，有大量工作要做，遇到已经干过的 quit 不干了，剪枝；或者保存了前面工作的结果，遇见干过的，直接调结果，缓存？
+
+剪枝可以五花八门, 要充分观察, 充分利用信息, 找到能让节点提前返回的条件。例如, 判断
+两个字符串是否互为 scamble, 至少要求每个字符在两个字符串中出现的次数要相等, 如果不相等
+则返回 false。
+
+加缓存, 可以用数组或 HashMap。本题维数较高, 用 HashMap, map 和 unordered_map 均可。
+既然可以用记忆化搜索, 这题也一定可以用动规。设状态为 f[n][i][j], 表示长度为 n, 起
+点为 s1[i] 和起点为 s2[j] 两个字符串是否互为 scramble, 则状态转移方程为
+#+BEGIN_SRC java
+f[n][i][j] = (f[k][i][j] && f[n-k][i+k][j+k])
+           || (f[k][i][j+n-k] && f[n-k][i+k][j])
+#+END_SRC
+
+**** 递归： 时间复杂度 O(n^6), 空间复杂度 O(1)
+**** 动态规划： 时间复杂度 O(n^3), 空间复杂度 O(n^3)
+
+代码的变量名称循环方式还是看起来很奇怪，改天再优化一下~~
+
+#+BEGIN_SRC java
+public boolean isScramble(String s1, String s2) {
+    int n = s1.length();
+    // f[k][i][j], 表示长度各为 k, 起点为 s1[i] 和
+    // 起点为 s2[j] 两个字符串是否互为 scramble
+    boolean [][][] f = new boolean[n + 1][n][n];
+    for (int i = 0; i < n; i++) 
+        for (int j = 0; j < n; j++) 
+            f[1][i][j] = s1.charAt(i) == s2.charAt(j);
+    for (int k = 2; k <= n; k++) {
+        for (int i = 0; i <= n - k; i++) {
+            for (int j = 0; j <= n - k; j++) {
+                f[k][i][j] = false;
+                for (int x = 1; x < k && !f[k][i][j]; x++) {
+                    f[k][i][j] = ( (f[x][i][j] && f[k - x][x + i][x + j])
+                                   || (f[k - x] [x + i][j] && f[x][i][k - x + j]));
+                }
+            }
+        }
+    }
+    return f[n][0][0];
+}
+#+END_SRC
+
+**** 递归 + 剪枝： 时间复杂度 O(n^6), 空间复杂度 O(1)
+**** 备忘录法: 递归 +map 做 cache, 时间复杂度 O(n^3), 空间复杂度 O(n^3)
+**** 备忘录法: 
+
+定制一个哈希函数, 递归 + (c++) unordered_map 做 cache,比 map 快, 时间
+复杂度 O(n^3),空间复杂度 O(n^3).
+
+Java是一样的吗，改天试一下。。。这三个题need every effort to work on them....
+
+http://www.cnblogs.com/TenosDoIt/p/3452004.html
+ 
+http://blog.unieagle.net/2012/10/23/leetcode%E9%A2%98%E7%9B%AE%EF%BC%9Ascramble-string%EF%BC%8C%E4%B8%89%E7%BB%B4%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/
+
+
 *** Regular Expression Matching
 Implement regular expression matching with support for '.' and '*'.
 #+BEGIN_SRC java
@@ -2352,6 +3110,126 @@ isMatch("aab", "c*a*b") → true
 
 *Tags:* Dynamic Programming Backtracking String
 
+这是一道很有挑战的题（三个最难的之一， 本楼层居中，还有其上其下neighbor楼。）。这是 LeetCode 里仅有的两个我觉得面试时应该用c++写的题目，尤其是递归法，
+假如面试时实在想不出 DP 思路的话。所以这里代码直接贴 c++ 版的。。。
+
+**** 递归： 时间复杂度 O(n), 空间复杂度 O(1)
+
+#+CAPTION: Regular Expression Matching
+[[./pic/regularExpressionMatching.png]]
+
+来自 http://leetcode.com/2011/09/regular-expression-matching.html
+
+#+BEGIN_SRC java
+bool isMatch(const char *s, const char *p) {  
+    if (*p == '\0') return *s == '\0'; 
+    if (*(p + 1) != '*') {  
+        if (*p == *s || (*p == '.' && *s != '\0'))
+            return isMatch(s + 1, p + 1);
+        else return false;
+    } else { // next char is '*'
+        while (*p == *s || (*p == '.' && *s != '\0')) {
+            if (isMatch(s, p + 2)) // can optimize
+                return true;
+            s++;                 // but easier to understand
+        }
+    }
+    return isMatch(s, p + 2);
+}
+#+END_SRC
+
+搜到两种 Java 的解法，改天自己得再好好研究下。。。来自《压栈底的弱渣》
+
+暂时只想出来了递归解法。其实就是自动机的实现原理。
+
+对于两个字符串：string，pattern 有两种情况：
+
+当 pattern[ 1 ] 不为 “*” 的时候（或 pattern 长度为1），直接比较
+patter[ 0 ] 和 string[ 0 ] 是否相等。若不等，则直接返回false；若相等，则接着比较他们后面的字符，即跳到自动机的下一个state。
+
+当 pattern[ 1 ] 为 “*” 的时候，情况就稍微复杂一点了。
+
+\nbsp{} \nbsp{} 若 pattern[ 0 ] != string[ 0 ] ，或 string 长度为0时，应跳过 pattern[ 0 ] 和 pattern[ 1 ] 继续比较后面的字符，因为 “*” 为optional symbol。
+
+\nbsp{} \nbsp{} 若 pattern[ 0 ] == string[ 0 ] ，我们既可以跳过 string[ 0 ] ，也可以跳过 pattern[ 0 ] 和 pattern[ 1 ]  。
+
+#+BEGIN_SRC java
+public boolean isMatch(String s, String p) {
+    if (p.length() == 0) return s.length() == 0;
+    if (p.length() == 1 || p.charAt(1)!='*') {
+        if (s.length() > 0 &&
+            (p.charAt(0) == '.' || s.charAt(0) == p.charAt(0)))
+            return isMatch(s.substring(1), p.substring(1));
+        else return false;
+    } else {
+        if (s.length() == 0) return isMatch(s, p.substring(2));
+        if (p.charAt(0) == '.' || s.charAt(0) == p.charAt(0)) 
+            return isMatch(s.substring(1), p) || isMatch(s, p.substring(2));
+        else return isMatch(s, p.substring(2));
+    }
+}
+#+END_SRC
+
+在Java 1.7以后，String.substring() 这个方法会重新拷贝一个新的字符串，这样在递归过程中内存效率很低, 而且会消耗大量时间用来对象初始化。因而可以考虑在递归的时候传index进去。
+
+改进代码如下：
+#+BEGIN_SRC java
+public boolean isMatchHelper(String s, String p, int is, int ip){
+    if (ip == p.length()) return is  ==  s.length();
+    if (ip == p.length()-1 || p.charAt(ip + 1)!='*'){ // no *
+        if ( is < s.length() &&
+             (p.charAt(ip) == '.' || s.charAt(is) == p.charAt(ip)) ) 
+            return isMatchHelper(s, p, is + 1, ip + 1); 
+        else return false;
+    } else {                                          // with *
+        if (is == s.length())
+            return isMatchHelper(s,p,is,ip + 2);      // empty
+        if (p.charAt(ip) == '.' || s.charAt(is) == p.charAt(ip)) //match
+            return isMatchHelper(s, p, is + 1, ip)
+                || isMatchHelper(s, p, is, ip + 2);  // two choices for continue
+        else return isMatchHelper(s, p, is, ip + 2); // not match
+    }
+}
+
+public boolean isMatch(String s, String p) {
+    return isMatchHelper(s, p, 0, 0);
+}
+#+END_SRC
+
+**** 动态规划：
+
+仅次于 Scramble String 的最复杂的动规。。。
+
+思路改天再写，... 
+#+BEGIN_SRC java
+public boolean isMatch(String s, String p) {
+    if (p.length() == 0 && s.length() == 0) return true;
+    if (p.length() == 0 && s.length() > 0) return false;
+    int m = s.length();
+    int n = p.length();
+    boolean [][] dp = new boolean[m + 1][n + 1];
+    dp[0][0] = true;
+    for (int i = 1; i <= m ; i++)
+        dp[i][0] = false;
+    for (int i = 1; i <= n ; i++)
+        if (i >= 2)
+            dp[0][i] = (p.charAt(i - 1) == '*') ? dp[0][i - 2] : false;
+    for (int i = 1; i <= m ; i++) {
+        for (int j = 1; j <= n ; j++) {
+            if (p.charAt(j - 1) == '.')
+                dp[i][j] = dp[i - 1][j - 1];
+            else if (p.charAt(j - 1) == '*')
+                dp[i][j] = ( dp[i][j - 1] || dp[i][j - 2] ||
+                             (dp[i - 1][j] &&
+                              ((s.charAt(i - 1) == p.charAt(j - 2)  || p.charAt(j - 2) == '.'))) );
+            else if (s.charAt(i - 1) == p.charAt(j - 1)) 
+                dp[i][j] = dp[i - 1][j - 1];
+        }
+    }
+    return dp[m][n];
+}
+#+END_SRC
+
 *** Wildcard Matching
 Implement wildcard pattern matching with support for '?' and '*'.
 #+BEGIN_SRC java
@@ -2377,6 +3255,83 @@ isMatch("aab", "c*a*b") → false
 #+END_SRC
 
 *Tags:* Dynamic Programming, Backtracking, Greedy, String
+
+跟上一题很类似。
+
+主要是'*' 的匹配问题。p 每遇到一个'*', 就保留住当前'*' 的坐标和 s 的坐标, 然后 s 从前
+往后扫描, 如果不成功, 则 s++, 重新扫描。
+
+除 Scramble String 外最复杂的 DP, 因为 '*' 可以什么也不用配。
+
+**** 递归版: 时间复杂度 O(n!*m!), 空间复杂度 O(n)
+
+递归版, 会超时, 用于帮助理解题意.
+
+#+BEGIN_SRC java
+bool isMatch(const char *s, const char *p) {
+    if (*p == '*') {
+        while (*p == '*') ++p;
+        if (*p == '\0') return true;
+        while (*s != '\0' && !isMatch(s, p)) ++s;
+        return *s != '\0';
+    } else if (*p == '\0' || *s == '\0') return *p == *s;
+    else if (*p == *s || *p == '?') return isMatch(++s, ++p);
+    else return false;
+}
+#+END_SRC
+
+**** 迭代版： 时间复杂度 O(n*m), 空间复杂度 O(1)
+
+**** 动态规划：
+
+直接使用递归会超出内存或者超时，因为递归会重复计算很多相同的内容，可以使用动态规划利用中间结果来避免重复计算。
+
+用 dp[i][j] 表示 s 串的前 i 个字符和 p 串的前 j 个字符是否匹配，则计算
+
+p[i][j] 时，可以根据p的第j个字符分别讨论
+
+p[j-1]为 '*'，s可以选择使用这个*，转化为 dp[i-1][j]；或者不使用这个'*'，变为 dp[i][j-1]。
+
+p[j-1]为 '?'，此时p[j-1]必定要匹配s[i-1]。
+
+p[j-1]为普通字符，如果p[j-1]==s[i-1]，匹配成功，问题转化为dp[i-1][j-1]，否则匹配失败，dp[i][j] = false。
+#+BEGIN_SRC java
+if (p[j-1] == '*') then dp[i][j] = dp[i-1][j] || dp[i][j-1]
+if (p[j-1] == '?') then dp[i][j] = dp[i-1][j-1]
+if (p[j-1] == s[i-1])   dp[i][j] = dp[i-1][j-1] else dp[i][j]=false//普通字符
+#+END_SRC
+当 i 或 j 为 0 时作为初始化部分，根据定义，应有：
+
+dp[ 0 ][ 0 ] = true。
+
+dp[i][ 0 ] = false，因为有长度的s肯定无法和空串p匹配。
+
+dp[ 0 ][i]，只有p[i-1]为*且dp[ 0 ][i-1]为真是才为真。
+
+#+BEGIN_SRC java
+public boolean isMatch(String s, String p) {
+    int minLen = 0;
+    for (int i = 0; i < p.length(); i++) 
+        if (p.charAt(i) != '*') ++minLen;
+    if (s.length() < minLen) return false;
+    int m = s.length();
+    int n = p.length();
+    boolean [][] dp = new boolean[m + 1][n + 1];
+    dp[0][0] = true;
+    for (int i = 1; i <= m ; i++) 
+        dp[i][0] = false;
+    for (int i = 1; i <= n ; i++) 
+        dp[0][i] = (p.charAt(i - 1) == '*' && dp[0][i - 1]) ? true : false;
+    for (int i = 1; i <= m; i++) 
+        for (int j = 1; j <= n ; j++) {
+            if (p.charAt(j - 1) == '*')  // user * or not
+                dp[i][j] = (dp[i - 1][j] || dp[i][j - 1]);
+            else if (s.charAt(i - 1) == p.charAt(j - 1) || p.charAt(j - 1) == '?')
+                dp[i][j] = dp[i - 1][j - 1];
+        }
+    return dp[m][n];
+}
+#+END_SRC
 
 ** others Covered
 - Best Time to Buy and Sell Stock
@@ -2417,23 +3372,7 @@ isMatch("aab", "c*a*b") → false
 *** Substring with Concatenation of All Words	
 *** Minimum Window Substring
 * Backtracing and Recursion
-** 排列
-*** Permutation
-Given a collection of numbers, return all possible permutations.
-
-For example,
-#+BEGIN_SRC java
-[1,2,3] have the following permutations:
-[1,2,3], [1,3,2], [2,1,3], [2,3,1], [3,1,2], and [3,2,1].
-#+END_SRC
-*** Permutation II
-Given a collection of numbers that might contain duplicates, return all possible unique permutations.
-
-For example,
-#+BEGIN_SRC java
-[1,1,2] have the following unique permutations:
-[1,1,2], [1,2,1], and [2,1,1].
-#+END_SRC
+** Medium
 *** Permutation Sequence
 The set [1,2,3,…,n] contains a total of n! unique permutations.
 
@@ -2449,130 +3388,6 @@ By listing and labeling all of the permutations in order, We get the following s
 Given n and k, return the kth permutation sequence.
 
 Note: Given n will be between 1 and 9 inclusive.
-** 组合
-*** Combinationas
-Given two integers n and k, return all possible combinations of k numbers out of 1 ... n.
-
-For example,
-
-If n = 4 and k = 2, a solution is:
-#+BEGIN_SRC java
-[
-  [2,4],
-  [3,4],
-  [2,3],
-  [1,2],
-  [1,3],
-  [1,4],
-]
-#+END_SRC
-*** Combination Sum
-Given a set of candidate numbers (C) and a target number (T), find all unique combinations in C where the candidate numbers added to T.
-
-The same repeated number may be chosen from C unlimited number of times.
-
-Note:
-- All numbers (including target) will be positive integers.
-- Elements in a combination (a1, a2, … , ak) must be in non-descending order. (ie, a1 ≤ a2 ≤ … ≤ ak).
-- The solution set must not contain duplicate combinations.
-
-For example, given candidate set 2,3,6,7 and target 7, 
-
-A solution set is: 
-#+BEGIN_SRC java
-[7] 
-[2, 2, 3] 
-#+END_SRC
-*** Combination Sum II
-Given a collection of candidate numbers (C) and a target number (T), find all unique combinations in C where the candidate numbers added to T.
-
-Each number in C may only be used once in the combination.
-
-Note:
-- All numbers (including target) will be positive integers.
-- Elements in a combination (a1, a2, … , ak) must be in non-descending order. (ie, a1 ≤ a2 ≤ … ≤ ak).
-- The solution set must not contain duplicate combinations.
-For example, given candidate set 10,1,2,7,6,1,5 and target 8, 
-
-A solution set is: 
-#+BEGIN_SRC java
-[1, 7] 
-[1, 2, 5] 
-[2, 6] 
-[1, 1, 6] 
-#+END_SRC
-** Subsets
-*** Subsets: Bit Manipulation
-Given a set of distinct integers, S, return all possible subsets.
-
-Note:
-- Elements in a subset must be in non-descending order.
-- The solution set must not contain duplicate subsets.
-For example,
-
-If S = [1,2,3], a solution is:
-#+BEGIN_SRC java
-[
-  [3],
-  [1],
-  [2],
-  [1,2,3],
-  [1,3],
-  [2,3],
-  [1,2],
-  []
-]
-#+END_SRC
-*Tags:* Array Backtracking, Bit Manipulation
-*** Subsets II
-Given a collection of integers that might contain duplicates, S, return all possible subsets.
-
-Note:
-- Elements in a subset must be in non-descending order.
-- The solution set must not contain duplicate subsets.
-For example,
-
-If S = [1,2,2], a solution is:
-#+BEGIN_SRC java
-[
-  [2],
-  [1],
-  [1,2,2],
-  [2,2],
-  [1,2],
-  []
-]
-#+END_SRC
-** others with Recursion
-*** Letter Combinationas of Phone Number
-Given a digit string, return all possible letter combinations that the number could represent.
-
-A mapping of digit to letters (just like on the telephone buttons) is given below.
-
-#+CAPTION: Letter Combinationas of Phone Number
-[[./pic/phoneNumber.png]]
-#+BEGIN_SRC java
-Input:Digit string "23"
-Output: ["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"].
-#+END_SRC
-Note:
-
-Although the above answer is in lexicographical order, your answer could be in any order you want.
-*** Restore IP Addresses
-Given a string containing only digits, restore it by returning all possible valid IP address combinations.
-
-For example:
-#+BEGIN_SRC java
-Given "25525511135",
-return ["255.255.11.135", "255.255.111.35"]. (Order does not matter)
-#+END_SRC
-*** Generate Parentheses
-Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.
-
-For example, given n = 3, a solution set is:
-#+BEGIN_SRC java
-"((()))", "(()())", "(())()", "()(())", "()()()"
-#+END_SRC
 *** Gray Code
 The gray code is a binary numeral system where two successive values differ in only one bit.
 
@@ -2589,84 +3404,32 @@ Note:
 - For a given n, a gray code sequence is not uniquely defined.
 - For example, [0,2,3,1] is also a valid gray code sequence according to the above definition.
 - For now, the judge is able to judge based on one instance of gray code sequence. Sorry about that.
-*** Word Search
-Given a 2D board and a word, find if the word exists in the grid.
 
-The word can be constructed from letters of sequentially adjacent cell, where "adjacent" cells are those horizontally or vertically neighboring. The same letter cell may not be used more than once.
+格雷码 (Gray Code) 的定义请参考 wikipedia http://en.wikipedia.org/wiki/Gray_code。
 
-For example,
-#+BEGIN_SRC java
-Given board =
-[
-  ["ABCE"],
-  ["SFCS"],
-  ["ADEE"]
-]
-word = "ABCCED", -> returns true,
-word = "SEE", -> returns true,
-word = "ABCB", -> returns false.
-#+END_SRC
-*** Palindrome Partitioning 
-Given a string s, partition s such that every substring of the partition is a palindrome.
+自然二进制码转换为格雷码:g 0 = b 0 , g i = b i ⊕ b i−1
 
-Return all possible palindrome partitioning of s.
+保留自然二进制码的最高位作为格雷码的最高位,格雷码次高位为二进制码的高位与次高位异或,其余各位与次高位的求法类似。例如,将自然二进制码 1001,转换为格雷码的过程是:保留最高位;然后将第 1 位的 1 和第 2 位的 0 异或,得到 1,作为格雷码的第 2 位;将第 2 位的 0 和第 3 位的 0 异或,得到 0,作为格雷码的第 3 位;将第 3 位的 0 和第 4 位的 1 异或,得到 1,作为格雷码的第 4 位,最终,格雷码为 1101。
 
-For example, 
-#+BEGIN_SRC java
-given s = "aab",
-Return
-  [
-    ["aa","b"],
-    ["a","a","b"]
-  ]
-#+END_SRC
-*** N-Queens 
-The n-queens puzzle is the problem of placing n queens on an n×n chessboard such that no two queens attack each other.
- #+caption: N-Queens 
-[[./pic/8-queens.png]]
+格雷码转换为自然二进制码:b 0 = g 0 , b i = g i ⊕ b i−1
 
-Given an integer n, return all distinct solutions to the n-queens puzzle.
+保留格雷码的最高位作为自然二进制码的最高位,次高位为自然二进制高位与格雷码次高位异或,其余各位与次高位的求法类似。例如,将格雷码 1000 转换为自然二进制码的过程是:保留最高位 1,作为自然二进制码的最高位;然后将自然二进制码的第 1 位 1 和格雷码的第 2 位 0 异或,得到1,作为自然二进制码的第 2 位;将自然二进制码的第 2 位 1 和格雷码的第 3 位 0 异或,得到 1,作为自然二进制码的第 3 位;将自然二进制码的第 3 位 1 和格雷码的第 4 位 0 异或,得到 1,作为自然二进制码的第 4 位,最终,自然二进制码为 1111。
 
-Each solution contains a distinct board configuration of the n-queens' placement, where 'Q' and '.' both indicate a queen and an empty space respectively.
+格雷码有数学公式,整数 n 的格雷码是 n ⊕ (n/2)。
 
-For example,
+这题要求生成 n 比特的所有格雷码。
 
-There exist two distinct solutions to the 4-queens puzzle:
-#+BEGIN_SRC java
-[
- [".Q..",  // Solution 1
-  "...Q",
-  "Q...",
-  "..Q."],
+最简单的方法,利用数学公式,对从 0 ∼ 2 n − 1 的所有整数,转化为格雷码。
 
- ["..Q.",  // Solution 2
-  "Q...",
-  "...Q",
-  ".Q.."]
-]
-#+END_SRC
-*** N-Queens II
-Follow up for N-Queens problem.
+n 比特的格雷码,可以递归地从 n − 1 比特的格雷码生成。如图 §2-5所示。
 
-Now, instead outputting board configurations, return the total number of distinct solutions.
-*** Sudoku Solver
-    Write a program to solve a Sudoku puzzle by filling the empty cells.
-    
-    Empty cells are indicated by the character '.'.
-    
-    You may assume that there will be only one unique solution.
-    
-    #+caption: Sudoku Solver 1
-    [[./pic/solveSudoku1.png]]
+#+CAPTION: Gray Code
+[[./pic/grayCode.png]]
 
-    A sudoku puzzle...
-    
-    #+caption: Sudoku Solver 2
-    [[./pic/solveSudoku2.png]]
-    ...and its solution numbers marked in red.
-    
-    *Tags:* Backtracking, Hash Table
+#+CAPTION: Gray Code 2
+[[./pic/grayCode2.png]]
 
+** Hard
 *** Regular Expression Matching
 Implement regular expression matching with support for '.' and '*'.
 - '.' Matches any single character.
@@ -2724,27 +3487,39 @@ dict = ["cat", "cats", "and", "sand", "dog"].
 A solution is ["cats and dog", "cat sand dog"].
 #+END_SRC
 *Tags:* Dynamic Programming Backtracking
-*** Word Ladder II
-Given two words (start and end), and a dictionary, find all shortest transformation sequence(s) from start to end, such that:
-- Only one letter can be changed at a time
-- Each intermediate word must exist in the dictionary
-For example,
-#+BEGIN_SRC java
-Given:
-start = "hit"
-end = "cog"
-dict = ["hot","dot","dog","lot","log"]
-Return
-  [
-    ["hit","hot","dot","dog","cog"],
-    ["hit","hot","lot","log","cog"]
-  ]
-#+END_SRC
-Note:
-- All words have the same length.
-- All words contain only lowercase alphabetic characters.
-*Tags:* Array, Backtracking, Breadth-first Search, String
-
+** other Covered
+- Subsets
+  [[Subsets]]
+- Subsets II
+  [[Subsets II]]
+- Combinationas
+  [[Combinationas]]
+- Letter Combinationas of Phone Number
+  [[Letter Combinationas of Phone Number]]
+- Permutation
+  [[Permutation]]
+- Permutation II
+  [[Permutation II]]
+- Palindrome Partitioning 
+  [[Palindrome Partitioning ]]
+- Restore IP Addresses
+  [[Restore IP Addresses]]
+- N-Queens 
+  [[N-Queens]]
+- N-Queens II
+  [[N-Queens II]]
+- Combination Sum
+  [[Combination Sum]]
+- Combination Sum II
+  [[Combination Sum II]]
+- Generate Parentheses
+  [[Generate Parentheses]]
+- Sudoku Solver
+  [[Sudoku Solver]]
+- Word Search
+  [[Word Search]]
+- Word Ladder II
+  [[Word Ladder II]]
 * Bit Manipulation
 ** Easy
 *** Majority Element
@@ -2858,52 +3633,6 @@ public UndirectedGraphNode cloneGraph(UndirectedGraphNode node) {
 }
 #+END_SRC 
 **** BFS：
-** Word Ladder, Word Ladder II: Backtracing
-*** Word Ladder
-Given two words (start and end), and a dictionary, find the length of shortest transformation sequence from start to end, such that:
-1. Only one letter can be changed at a time
-2. Each intermediate word must exist in the dictionary
-
-For example,
-
-Given:
-start = "hit", end = "cog"
-
-dict = ["hot","dot","dog","lot","log"]
-
-As one shortest transformation is "hit" -> "hot" -> "dot" -> "dog" -> "cog",
-
-return its length 5.
-
-Note:
-- Return 0 if there is no such transformation sequence.
-- All words have the same length.
-- All words contain only lowercase alphabetic characters.
-
-*** Word Ladder II
-Given two words (start and end), and a dictionary, find all shortest transformation sequence(s) from start to end, such that:
-1. Only one letter can be changed at a time
-2. Each intermediate word must exist in the dictionary
-For example,
-
-Given:
-
-start = "hit", end = "cog"
-
-dict = ["hot","dot","dog","lot","log"]
-
-Return
-#+BEGIN_SRC java
-  [
-    ["hit","hot","dot","dog","cog"],
-    ["hit","hot","lot","log","cog"]
-  ]
-#+END_SRC
-
-Note:
-- All words have the same length.
-- All words contain only lowercase alphabetic characters.
-
 *** Check whether the graph is bigraph
 **** Topological Sort
 Topological sorting for Directed Acyclic Graph (DAG) is a linear
@@ -2922,6 +3651,10 @@ with in-degree as 0 (a vertex with no in-coming edges).
 In DFS, we print a vertex and then recursively call DFS for its adjacent vertices. In topological sorting, we need to print a vertex before its adjacent vertices. For example, in the given graph, the vertex ‘5’ should be printed before vertex ‘0’, but unlike DFS, the vertex ‘4’ should also be printed before vertex ‘0’. So Topological sorting is different from DFS. For example, a DFS of the above graph is “5 2 3 1 0 4″, but it is not a topological sorting.
 **** Algorithm to find Topological Sorting:
 We recommend to first see implementation of DFS here. We can modify DFS to find Topological Sorting of a graph. In DFS, we start from a vertex, we first print it and then recursively call DFS for its adjacent vertices. In topological sorting, we use a temporary stack. We don’t print the vertex immediately, we first recursively call topological sorting for all its adjacent vertices, then push it to a stack. Finally, print contents of stack. Note that a vertex is pushed to stack only when all of its adjacent vertices (and their adjacent vertices and so on) are already in stack.
+** other Covered
+- Word Ladder [[Word Ladder]]
+- Word Ladder II
+[[Word Ladder II]]
 
 * Data Structure
 ** Easy
@@ -3076,28 +3809,46 @@ public static class LRUCache {
 }
 #+END_SRC
 * 细节实现题
+** Medium
+*** Pascal's Triangle
+*** Pascal's Triangle II
+*** Two Sum
+*** Two Sum II - Input array is sorted
+*** Insert Interval
+*** Merge Intervals
+*** Spiral Matrix
+*** Spiral Matrix II
+*** Multiply Strings
+*** Substring with Concatenation of All Words
+*** ZigZag Conversion	
+*** Text Justification
+** other Covered
+- Majority Element	
+- Container With Most Water
+- Minimum Path Sum	
+- Missing Ranges 	
+- Find Minimum in Rotated Sorted Array
+- Triangle
+- Find Peak Element
+- Find Minimum in Rotated Sorted Array II
+- Jump Game II
+- Word Ladder II
 
 * Math
 ** Easy
 *** Add Binary
-*** Roman to Integers
 *** String to Integer (atoi)
 *** Palindrome Number
-*** Plus One
-    
 *** Factorial Trailing Zeroes
 *** Excel Sheet Column Title
 *** Excel Sheet Column Number
 *** Reverse Integer
 ** Medium
 *** Multiply Strings
-*** Sqrt(x)
 *** Divide Two Integers
-*** Pow(x, n)	
 *** Fraction to Recurring Decimal
 *** Permutation Sequence	
-*** Integer to Roman
-*** Next Permutation: Math
+*** Next Permutation
 Implement next permutation, which rearranges numbers into the lexicographically next greater permutation of numbers.
 
 If such arrangement is not possible, it must rearrange it as the lowest possible order (ie, sorted in ascending order).
@@ -3111,7 +3862,17 @@ corresponding outputs are in the right-hand column.
 3,2,1 → 1,2,3
 1,1,5 → 1,5,1
 #+END_SRC
-
 ** Hard
 *** Valid Number
 *** Max Points on a Line
+** other Covered
+- Plus One
+  [[Plus One]]
+- Roman to Integers
+  [[Roman to Integers]]
+- Integer to Roman
+  [[Integer to Roman]]
+- Pow(x, n)
+  [[Pow(x, n)]]
+- Sqrt(x)
+  [[Sqrt(x)]]

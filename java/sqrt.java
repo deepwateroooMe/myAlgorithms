@@ -5,7 +5,7 @@ import java.util.List;
 
 public class sqrt {
     public static class Solution {
-        public int sqrt(int x) {
+        public int sqrt0(int x) {
             int bgn = 0;
             int end;
             int mid;
@@ -14,7 +14,6 @@ public class sqrt {
             end = x / 2 < (int)Math.sqrt(Integer.MAX_VALUE) ? x / 2 + 1 : (int)Math.sqrt(Integer.MAX_VALUE);
             while (bgn < end) {
                 mid = bgn + (end - bgn) / 2;
-                mid = (bgn + end) / 2;
                 pdt = mid * mid;
                 pdtt = (mid + 1) * (mid + 1);
                 if (pdt == x) return mid;
@@ -26,6 +25,26 @@ public class sqrt {
             }
             return bgn + (end - bgn) / 2;
         }
+
+        public int sqrt(int x) {
+            int bgn = 0, end = 0;
+            int mid = 0;
+            int lastMid = 0;
+            if (x < 2) return x;
+            end = x / 2 < (int)Math.sqrt(Integer.MAX_VALUE) ? x / 2 + 1 : (int)Math.sqrt(Integer.MAX_VALUE);
+            while (bgn <= end) {
+                mid = bgn + (end - bgn) / 2;
+                if (x / mid == mid)
+                    return mid;
+                else if (x / mid > mid) {
+                    bgn = mid + 1;
+                    lastMid = mid;
+                } else  // x / mid < mid
+                    end = mid - 1;
+            }
+            return lastMid;
+        }
+
     }
 
     public static void main(String[] args){
