@@ -10,6 +10,11 @@
 - finish leetcode java code review as soon as possible;
 - Try to work on web scheduling system as soon as possible;
 - need to work hard on algorithms and projects...
+- start to work on java thread a little bit, terminal is ok, Emacs
+  unreasonably throws java.lang.IllegalThreadStateException, and I
+  don't understand why emacs behaves Difficulty yet...
+- work tomorrow day time, but will work on algorithms in the evening. 
+
 * 1/28/2015, Wednesday
 - decode ways java version, bug .....
 - ~4:30~09:45, have no reason won't be headache today, but to get my schedule back, worth a headache day~~
