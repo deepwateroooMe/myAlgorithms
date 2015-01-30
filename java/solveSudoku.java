@@ -14,32 +14,11 @@ public class solveSudoku {
             int val = list.get(fst);
             int x = list.get(fst) / 9;
             int y = list.get(fst) % 9;
-            //System.out.println("avb.size(): " + avb.size());
-                
             if (avb.size() == 0) return false;
             list.remove(fst);
-            
             for (int k = 0; k < avb.size(); k++) {
                 char c = avb.get(k);
                 bd[x][y] = c;
-                /*  
-                // print board
-                for (int i = 0; i < bd.length; i++) {
-                    for (int j = 0; j < bd[0].length; j++) {
-                        System.out.print(bd[i][j] + " ");
-                        if (j % 3 == 2)
-                            System.out.print("| ");
-                    }
-                    System.out.println("");
-                    if (i % 3 == 2)
-                        System.out.println("-----------------------");
-                }
-
-                if (!isValidSudoku(bd, x, y)) {
-                    bd[x][y] = '.';
-                    continue;
-                }
-                */
                 if (list.size() == 0) return true;
                 if (helper(bd, new ArrayList<Integer>(list), fst, avb)) return true;
                 bd[x][y] = '.';
@@ -92,7 +71,35 @@ public class solveSudoku {
             int first = getFirst(board, list, avb);
             helper(board, list, first, avb);
         }
-        /*
+
+        public boolean isValidSudoku(char[][] bd, int x, int y) {
+            for (int i = 0; i < 9; i++) 
+                if (i != x && bd[x][y] == bd[i][y]) return false;
+            for (int j = 0; j < 9; j++) 
+                if (j != y && bd[x][y] == bd[x][j]) return false;
+            for (int i = (x / 3) * 3; i < (x / 3 + 1) * 3; i++) 
+                for (int j = (y / 3) * 3; j < (y / 3 + 1) * 3; j++) 
+                    if (i != x && j != y && bd[x][y] == bd[i][j])
+                        return false;
+            return true;
+        }
+
+        public boolean solveSudoku(char[][] board) {
+            for (int i = 0; i < 9; i++)
+                for (int j = 0; j < 9; j++) 
+                    if (board[i][j] == '.') {
+                        for (int k = 0; k < 9; k++) {
+                            board[i][j] = (char)('1' + k);
+                            if (isValidSudoku(board, i, j) && solveSudoku(board))
+                                return true;
+                            board[i][j] = '.';
+                        }
+                        return false;
+                    }
+            return true;
+        }
+        
+        // still too slow
         public boolean isValidSudoku(char[][] bd, int x, int y) {
             Map<Character, Integer> map = new HashMap<Character, Integer>();
             for (int j = 0; j < 9; j++) // row
@@ -116,7 +123,6 @@ public class solveSudoku {
                     }
             return true;
         }
-        */
     }
 
     public static void main(String[] args){

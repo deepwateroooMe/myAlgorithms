@@ -2004,7 +2004,8 @@ X O X X
 广搜。从上下左右四个边界往里走,凡是能碰到的'O',都是跟边界接壤的,应该删
 除。
 
-这叫广搜啊？ 我还以为延着0深搜呢。。。
+这叫广搜啊？ 我还以为延着0深搜呢。。。仔细想了下，以树的 level order
+Traversal 作为类比，这个确实应该是广搜，而不是深搜。
 
 四面的最外层搜索，有O通路的就为不被包围的区域，其他都可以置为X；没把握
 这个特点，难度为五星级的。思路还是很新颖的。
@@ -2438,7 +2439,7 @@ public List<String> generateParenthesis(int n) {
 *** Combination Sum
 Given a set of candidate numbers (C) and a target number (T), find all unique combinations in C where the candidate numbers added to T.
 
-The same repeated number may be chosen from C unlimited number of times.
+The same repeated number may be chosen from C _unlimited_ number of times.
 
 Note:
 - All numbers (including target) will be positive integers.
@@ -2452,10 +2453,38 @@ A solution set is:
 [7] 
 [2, 2, 3] 
 #+END_SRC
+
+时间复杂度 O(n!), 空间复杂度 O(n). 
+
+#+BEGIN_SRC java
+public void dfs(int [] candidates, int bgn, int target,
+                List<Integer> path, List<List<Integer>> res) {
+    if (target == 0) {                           // 找到一个合法解
+        res.add(new ArrayList<Integer> (path));
+        return;
+    }
+    for (int i = bgn; i < candidates.length; i++) {   // 扩展状态
+        if (candidates[i] > target) return;
+        path.add(candidates[i]);      // 执行扩展动作
+        dfs(candidates, i, target - candidates[i], path, res); // unlimited
+        path.remove(path.size() - 1); // 撤销动作
+    }
+    return;
+}
+        
+public List<List<Integer>> combinationSum(int[] candidates, int target) {
+    Arrays.sort(candidates); 
+    List<List<Integer>> res = new ArrayList<List<Integer>>();
+    List<Integer> path = new ArrayList<Integer>();
+    dfs(candidates, 0, target, path, res);
+    return res;
+}
+#+END_SRC
+
 *** Combination Sum II
 Given a collection of candidate numbers (C) and a target number (T), find all unique combinations in C where the candidate numbers added to T.
 
-Each number in C may only be used once in the combination.
+Each number in C may only be used _once_ in the combination.
 
 Note:
 - All numbers (including target) will be positive integers.
@@ -2470,6 +2499,44 @@ A solution set is:
 [2, 6] 
 [1, 1, 6] 
 #+END_SRC
+
+时间复杂度 O(n!), 空间复杂度 O(n). 
+
+#+BEGIN_SRC java
+public void dfs(int [] candidates, int bgn, int target,
+                List<Integer> path, List<List<Integer>> res) {
+    if (target == 0) {
+        res.add(new ArrayList<Integer> (path));
+        return;
+    }
+    int previous = -1;
+    for (int i = bgn; i < candidates.length; i++) {
+        //if (i > 0 && candidates[i] == candidates[i - 1]) cnt++;
+        //else cnt = 1;
+        //if (cnt == 1 || (path.size() >= cnt - 1
+        //               && path.get(path.size() - cnt + 1) == candidates[i])) {
+        // 如果上一轮循环没有选 candidates[i],则本次循环就不能再选 candidates[i],
+        // 确保 candidates[i] 最多只用一次
+        if (previous == candidates[i]) continue;
+        if (candidates[i] > target) return;
+        previous = candidates[i];
+        path.add(candidates[i]);                             // , cnt
+        dfs(candidates, i + 1, target - candidates[i], path, res); // use once
+        path.remove(path.size() - 1);
+        // }
+    }
+    return;
+}
+        
+public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+    Arrays.sort(candidates); 
+    List<List<Integer>> res = new ArrayList<List<Integer>>();
+    List<Integer> path = new ArrayList<Integer>();
+    dfs(candidates, 0, target, path, res);
+    return res;
+}
+#+END_SRC
+
 ** Hard
 *** N-Queens 
 The n-queens puzzle is the problem of placing n queens on an n×n chessboard such that no two queens attack each other.
@@ -2518,6 +2585,111 @@ Now, instead outputting board configurations, return the total number of distinc
     
     *Tags:* Backtracking, Hash Table
 
+时间复杂度 O(9^4), 空间复杂度 O(1). 
+
+#+BEGIN_SRC java
+public boolean isValidSudoku(char[][] bd, int x, int y) {
+    for (int i = 0; i < 9; i++) 
+        if (i != x && bd[x][y] == bd[i][y]) return false;
+    for (int j = 0; j < 9; j++) 
+        if (j != y && bd[x][y] == bd[x][j]) return false;
+    for (int i = (x / 3) * 3; i < (x / 3 + 1) * 3; i++) 
+        for (int j = (y / 3) * 3; j < (y / 3 + 1) * 3; j++) 
+            if (i != x && j != y && bd[x][y] == bd[i][j])
+                return false;
+    return true;
+}
+
+public boolean solveSudoku(char[][] board) {
+    for (int i = 0; i < 9; i++)
+        for (int j = 0; j < 9; j++) 
+            if (board[i][j] == '.') {
+                for (int k = 0; k < 9; k++) {
+                    board[i][j] = (char)('1' + k);
+                    if (isValidSudoku(board, i, j) && solveSudoku(board))
+                        return true;
+                    board[i][j] = '.';
+                }
+                return false;
+            }
+    return true;
+}
+#+END_SRC
+
+相当于是暴力法，基本上测试了所有的可能性，然后就每种可能性作有效性判断。（277 ms）
+
+我希望执行的速度能够稍微快一点儿，所以每一步都执行了最优的一步，这样每
+一步都不用有效性判断，因为选的就是最好的，可速度还是更慢了。。。（589
+ms）
+
+#+BEGIN_SRC java
+public boolean helper(char[][] bd, List<Integer> list, int fst, List<Character> avb) {
+    avb = new ArrayList<Character>();
+    fst = getFirst(bd, list, avb);
+    int val = list.get(fst);
+    int x = list.get(fst) / 9;
+    int y = list.get(fst) % 9;
+    if (avb.size() == 0) return false;
+    list.remove(fst);
+    for (int k = 0; k < avb.size(); k++) {
+        char c = avb.get(k);
+        bd[x][y] = c;
+        if (list.size() == 0) return true;
+        if (helper(bd, new ArrayList<Integer>(list), fst, avb)) return true;
+        bd[x][y] = '.';
+    }
+    list.add(new Integer(val));
+    return false;
+}
+
+public int getFirst(char[][] bd, List<Integer> list, List<Character> res) {
+    Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+    Set<Character> tmp = new HashSet<Character>();  // for each pos
+    Set<Character> bst = new HashSet<Character>();  // for each pos
+    Set<Character> avb = new HashSet<Character>();
+    int x, y; // row, col
+    int result = 0;
+    for (int i = 0; i < list.size(); i++) {
+        tmp.clear();
+        x = list.get(i) / 9;
+        y = list.get(i) % 9;
+        for (int j = 0; j < 9; j++) {
+            if (bd[x][j] != '.') tmp.add(bd[x][j]);
+            if (bd[j][y] != '.') tmp.add(bd[j][y]);
+        }
+        for (int j = 0; j < 3; j++) 
+            for (int k = 0; k < 3; k++) 
+                if (bd[j + (x / 3) * 3][k + (y / 3) * 3] != '.')
+                    tmp.add(bd[j + (x / 3) * 3][k + (y / 3) * 3]);
+        if (tmp.size() == 8) {
+            for (char a = '1'; a <= '9'; a++)
+                if (!tmp.contains(a)) res.add(a);
+            return i;
+        }
+        if (tmp.size() > result) {
+            result = i; 
+            bst = new HashSet<Character>(tmp);
+        }
+    }
+    for (char i = '1'; i <= '9'; i++) {
+        if (!bst.contains(i)) res.add(i);
+    }
+    return result;
+}
+        
+public void solveSudoku(char[][] board) {
+    List<Integer> list = new ArrayList<Integer>();
+    List<Character> avb = new ArrayList<Character>();
+    for (int i = 0; i < 9; i++) 
+        for (int j = 0; j < 9; j++) 
+            if (board[i][j] == '.') list.add(i * 9 + j);
+    int first = getFirst(board, list, avb);
+    helper(board, list, first, avb);
+}
+#+END_SRC
+
+看来解题还是简明地满足最基本的要求会比较好。
+
 *** Word Search
 Given a 2D board and a word, find if the word exists in the grid.
 
@@ -2535,6 +2707,43 @@ word = "ABCCED", -> returns true,
 word = "SEE", -> returns true,
 word = "ABCB", -> returns false.
 #+END_SRC
+
+深搜,递归: 时间复杂度 O(n^2*m^2), 空间复杂度 O(n^2). 
+
+#+BEGIN_SRC java
+public boolean dfs(char[][] board, String word,
+                   int i, int j, int idx, boolean [][] visited) {
+    int m = board.length;
+    int n = board[0].length;
+    if (idx == word.length()) return true;   // 收敛条件
+            
+    if (i < 0 || i >= m || j < 0 || j >= n)
+        return false;                    // 越界,终止条件
+    if (visited[i][j]) return false;   // 已经访问过,剪枝
+    if (word.charAt(idx) != board[i][j])
+        return false;                     // 不相等,剪枝
+
+    visited[i][j] = true;
+    if (dfs(board, word, i - 1, j, idx + 1, visited)    // 上
+        || dfs(board, word, i + 1, j, idx + 1, visited) // 下
+        || dfs(board, word, i, j + 1, idx + 1, visited) // 左
+        || dfs(board, word, i, j - 1, idx + 1, visited))// 右
+        return true;
+    visited[i][j] = false;
+    return false;
+}
+        
+public boolean exist(char[][] board, String word) {
+    int m = board.length;
+    int n = board[0].length;
+    boolean [][] visited = new boolean[m][n];
+    for (int i = 0; i < m; i++) 
+        for (int j = 0; j < n; j++) 
+            if (dfs(board, word, i, j, 0, visited) == true) return true;
+    return false;
+}
+#+END_SRC
+
 ** other Covered
 - Same Tree
   [[Same Tree]]
@@ -2572,6 +2781,69 @@ word = "ABCB", -> returns false.
   [[Clone Graph]]
 - Binary Tree Maximum Path Sum
   [[Binary Tree Maximum Path Sum]]
+** 小结
+*** 适用场景
+*输入数据:* 如果是递归数据结构, 如单链表, 二叉树, 集合, 则百分之百可以用深搜;如果是
+非递归数据结构, 如一维数组, 二维数组, 字符串, 图, 则概率小一些。
+
+ *状态转换图:* 树或者图。
+
+ *求解目标:* 必须要走到最深(例如对于树, 必须要走到叶子节点)才能得到一个解, 这种情况
+适合用深搜。
+
+*** 思考的步骤
+**** 是求路径条数, 还是路径本身(或动作序列)?深搜最常见的三个问题, 求可行解的总数, 求一个可行解, 求所有可行解。
+
+\nbsp{} (a) 如果是求路径本身, 则要用一个数组 path[] 存储路径。跟宽搜不同, 宽搜虽然最终求
+的也是一条路径, 但是需要存储扩展过程中的所有路径, 在没找到答案之前所有路径都
+不能放弃;而深搜, 在搜索过程中始终只有一条路径, 因此用一个数组就足够了。
+
+\nbsp{} (b) 如果是路径条数, 则不需要存储路径。
+**** 只要求一个解, 还是要求所有解?如果只要求一个解, 那找到一个就可以返回;如果要求所有解, 找到了一个后, 还要继续扩展, 直到遍历完。广搜一般只要求一个解, 因而不需要考虑这个问题(广搜当然也可以求所有解, 这时需要扩展到所有叶子节点, 相当于在内存中存储整个状态转换图, 非常占内存, 因此广搜不适合解这类问题)。
+
+**** 如何表示状态?即一个状态需要存储哪些些必要的数据, 才能够完整提供如何扩展到下一步状态的所有信息。跟广搜不同, 深搜的惯用写法, 不是把数据记录在状态 struct 里, 而是添加函数参数(有时为了节省递归堆栈, 用全局变量), struct 里的字段与函数参数一一对应。
+
+**** 如何扩展状态?这一步跟上一步相关。状态里记录的数据不同, 扩展方法就不同。对于固定不变的数据结构(一般题目直接给出, 作为输入数据), 如二叉树, 图等, 扩展方法很简单, 直接往下一层走, 对于隐式图, 要先在第 1 步里想清楚状态所带的数据, 想清楚了这点, 那如何扩展就很简单了。
+
+**** 关于判重
+(a) 如果状态转换图是一棵树, 则不需要判重, 因为在遍历过程中不可能重复。
+(b) 如果状态转换图是一个图, 则需要判重, 方法跟广搜相同, 见第 §9.4 节。这里跟第 8 步中的加缓存是相同的, 如果有重叠子问题, 则需要判重, 此时加缓存自然也是有效果的。
+
+**** 终止条件是什么?终止条件是指到了不能扩展的末端节点。对于树, 是叶子节点, 对于图或隐式图, 是出度为 0 的节点。
+
+**** 收敛条件是什么?收敛条件是指找到了一个合法解的时刻。如果是正向深搜(父状态处理完了才进行递归, 即父状态不依赖子状态, 递归语句一定是在最后, 尾递归), 则是指是否达到目标状态;如果是逆向深搜(处理父状态时需要先知道子状态的结果, 此时递归语句不在最后), 则是指是否到达初始状态。
+
+由于很多时候终止条件和收敛条件是是合二为一的, 因此很多人不区分这两种条件。仔细区
+分这两种条件, 还是很有必要的。
+
+为了判断是否到了收敛条件, 要在函数接口里用一个参数记录当前的位置(或距离目标还有
+多远)。如果是求一个解, 直接返回这个解;如果是求所有解, 要在这里收集解, 即把第一步
+中表示路径的数组 path[] 复制到解集合里。
+
+****  如何加速?
+
+\nbsp{} (a) 剪枝。深搜一定要好好考虑怎么剪枝, 成本小收益大, 加几行代码, 就能大大加速。这
+里没有通用方法, 只能具体问题具体分析, 要充分观察, 充分利用各种信息来剪枝, 在
+中间节点提前返回。
+
+\nbsp{} (b) 缓存。如果子问题的解会被重复利用, 可以考虑使用缓存。
+
+\nbsp{} \nbsp{} i. 前提条件:子问题的解会被重复利用, 即子问题之间的依赖关系是有向无环图
+(DAG)。如果依赖关系是树状的(例如树, 单链表)
+, 没必要加缓存, 因为子问题只
+会一层层往下, 用一次就再也不会用到, 加了缓存也没什么加速效果。
+
+\nbsp{} \nbsp{} ii. 具 体 实 现: 可 以 用 数 组 或 HashMap。 维 度 简 单 的,  用 数 组; 维 度 复 杂 的,  用
+HashMap, C++ 有 map, C++ 11 以后有 unordered_map, 比 map 快。
+
+拿到一个题目, 当感觉它适合用深搜解决时, 在心里面把上面 8 个问题默默回答一遍, 代码基
+本上就能写出来了。对于树, 不需要回答第 5 和第 8 个问题。如果读者对上面的经验总结看不懂或
+感觉“不实用”, 很正常, 因为这些经验总结是笔者做了很多深搜题后总结出来的, 从思维的发展过
+程看, “经验总结”要晚于感性认识, 所以这时候建议读者先做做后面的题目, 积累一定的感性认识
+后, 在回过头来看这一节的总结, 相信会和笔者有共鸣。
+
+*** 代码模板
+
 * 分治法 Divide and Conqure
 ** Medium
 *** Pow(x, n)
@@ -2699,6 +2971,53 @@ public int maxProfit(int[] prices) {
     
     A = [3, 2, 1, 0, 4], return false.
 
+由于每层最多可以跳 A[i] 步,也可以跳 0 或 1 步,因此如果能到达最高层,则说明每一层都
+可以到达。有了这个条件,说明可以用贪心法。
+
+思路一:正向,从 0 出发,一层一层网上跳,看最后能不能超过最高层,能超过,说明能到达,
+否则不能到达。
+
+思路二:逆向,从最高层下楼梯,一层一层下降,看最后能不能下降到第 0 层。
+
+思路三:如果不敢用贪心,可以用动规,设状态为 f[i],表示从第 0 层出发,走到 A[i] 时剩
+余的最大步数,则状态转移方程为:
+#+BEGIN_SRC java
+f[i] = max(f[i - 1], A[i - 1]) - 1, i > 0
+#+END_SRC
+**** 思路 1, 时间复杂度 O(n), 空间复杂度 O(1)
+#+BEGIN_SRC java
+public boolean canJump(int[] a) {
+    int reach = 1;      // 最右能跳到哪里
+    for (int i = 0; i < reach && reach < a.length; i++) 
+        reach = Math.max(reach, i + 1 + a[i]);
+    return reach >= a.length;
+}
+#+END_SRC
+**** 思路 2, 时间复杂度 O(n), 空间复杂度 O(1)
+
+#+BEGIN_SRC java
+public boolean canJump(int[] a) {
+    if (a.length == 0) return true;
+    // 逆向下楼梯, 最左能下降到第几层
+    int leftMost = a.length - 1;
+    for (int i = a.length - 2; i >= 0; i--) 
+        if (i + a[i] >= leftMost)
+            leftMost = i;
+    return leftMost == 0;
+}
+#+END_SRC
+**** 思路三, 动规, 时间复杂度 O(n), 空间复杂度 O(n)
+#+BEGIN_SRC java
+public boolean canJump(int[] a) {
+    int f[] = new int[a.length];
+    for (int i = 1; i < a.length; i++) {
+        f[i] = Math.max(f[i - 1], a[i - 1]) - 1;
+        if (f[i] < 0) return false;
+    }
+    return f[a.length - 1] >= 0;
+}
+#+END_SRC
+
 ** Hard
 *** Jump Game II
     Given an array of non-negative integers, you are initially positioned at the first index of the array.
@@ -2709,9 +3028,15 @@ public int maxProfit(int[] prices) {
     
     For example:
     
-    Given array A = [2,3,1,1,4]
+    Given array A = [2, 3, 1, 1, 4]
     
-    The minimum number of jumps to reach the last index is 2. (Jump 1 step from index 0 to 1, then 3 steps to the last index.)
+    The minimum number of jumps to reach the last index is 2. (Jump 1
+    step from index 0 to 1, then 3 steps to the last index.)
+**** 思路1： 时间复杂度 O(n), 空间复杂度 O(1)
+
+**** 思路2： 时间复杂度 O(n), 空间复杂度 O(1)
+
+
 *** Candy
     There are N children standing in a line. Each child is assigned a rating value.
     
@@ -2722,30 +3047,10 @@ public int maxProfit(int[] prices) {
     Children with a higher rating get more candies than their neighbors.
 
     What is the minimum candies you must give?
-*** Wildcard Matching
-    Implement wildcard pattern matching with support for '?' and '*'.
-    #+BEGIN_SRC java
-    '?' Matches any single character.
-    '*' Matches any sequence of characters (including the empty sequence).
-    #+END_SRC    
-    
-    The matching should cover the entire input string (not partial).
-    
-    The function prototype should be:
-    
-    bool isMatch(const char *s, const char *p)
-    
-    Some examples:
-    #+BEGIN_SRC java
-    isMatch("aa","a") → false
-    isMatch("aa","aa") → true
-    isMatch("aaa","aa") → false
-    isMatch("aa", "*") → true
-    isMatch("aa", "a*") → true
-    isMatch("ab", "?*") → true
-    isMatch("aab", "c*a*b") → false
-    #+END_SRC
-    *Tags:* Dynamic Programming, Backtracking, Greedy, String
+
+** other Covered
+- Wildcard Matching
+ [[Wildcard Matching]]
 
 * 动态归划 Dynamic Programming
 ** Easy
@@ -4342,50 +4647,6 @@ n 比特的格雷码,可以递归地从 n − 1 比特的格雷码生成。如�
 [[./pic/grayCode2.png]]
 
 ** Hard
-*** Regular Expression Matching
-Implement regular expression matching with support for '.' and '*'.
-- '.' Matches any single character.
-- '*' Matches zero or more of the preceding element.
-
-The matching should cover the entire input string (not partial).
-
-The function prototype should be:
-
-bool isMatch(const char *s, const char *p)
-
-Some examples:
-#+BEGIN_SRC java
-isMatch("aa","a") → false
-isMatch("aa","aa") → true
-isMatch("aaa","aa") → false
-isMatch("aa", "a*") → true
-isMatch("aa", ".*") → true
-isMatch("ab", ".*") → true
-isMatch("aab", "c*a*b") → true
-#+END_SRC
-*Tags:* Dynamic Programming, Backtracking, String
-*** Wild Card Matching
-Implement wildcard pattern matching with support for '?' and '*'.
-- '?' Matches any single character.
-- '*' Matches any sequence of characters (including the empty sequence).
-
-The matching should cover the entire input string (not partial).
-
-The function prototype should be:
-
-bool isMatch(const char *s, const char *p)
-
-Some examples:
-#+BEGIN_SRC java
-isMatch("aa","a") → false
-isMatch("aa","aa") → true
-isMatch("aaa","aa") → false
-isMatch("aa", "*") → true
-isMatch("aa", "a*") → true
-isMatch("ab", "?*") → true
-isMatch("aab", "c*a*b") → false
-#+END_SRC
-*Tags:* Dynamic Programming, Backtracking, Greedy, String
 *** Word Break II
 Given a string s and a dictionary of words dict, add spaces in s to construct a sentence where each word is a valid dictionary word.
 
@@ -4432,6 +4693,10 @@ A solution is ["cats and dog", "cat sand dog"].
   [[Word Search]]
 - Word Ladder II
   [[Word Ladder II]]
+- Regular Expression Matching
+  [[Regular Expression Matching]]
+- Wild Card Matching
+  [[Wild Card Matching]]
 * Bit Manipulation
 ** Easy
 *** Majority Element

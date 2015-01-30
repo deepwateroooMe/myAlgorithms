@@ -33,6 +33,32 @@ public class canJump {
             return res[a.length - 1] >= 0;
             */
         }
+
+        public boolean canJump(int[] a) {
+            int reach = 1;
+            for (int i = 0; i < reach && reach < a.length; i++) 
+                reach = Math.max(reach, i + 1 + a[i]);
+            return reach >= a.length;
+        }
+
+        public boolean canJump(int[] a) {
+            if (a.length == 0) return true;
+            int leftMost = a.length - 1;
+            for (int i = a.length - 2; i >= 0; i--) 
+                if (i + a[i] >= leftMost)
+                    leftMost = i;
+            return leftMost == 0;
+        }
+
+        public boolean canJump(int[] a) {
+            int f[] = new int[a.length];
+            for (int i = 1; i < a.length; i++) {
+                f[i] = Math.max(f[i - 1], a[i - 1]) - 1;
+                if (f[i] < 0) return false;
+            }
+            return f[a.length - 1] >= 0;
+        }
+
     }
 
     public static void main(String[] args){

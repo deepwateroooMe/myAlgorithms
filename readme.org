@@ -3,6 +3,13 @@
 #+title: Algorithms Review for Job Interview
 #+author: deepwaterooo
 
+* 1/29/2015, Thursday
+- 6:00-8:00am; 12:00-1:40 fall asleep; work in food court 2:00-9:30, 0.5 hr dinner;
+- Scheduled appointment with lawyer to be 2/5/2014 2:00pm; 
+- Next court day will be 2/13/2015, Friday 9:00am;
+- finish leetcode java code review as soon as possible;
+- Try to work on web scheduling system as soon as possible;
+- need to work hard on algorithms and projects...
 * 1/28/2015, Wednesday
 - decode ways java version, bug .....
 - ~4:30~09:45, have no reason won't be headache today, but to get my schedule back, worth a headache day~~
