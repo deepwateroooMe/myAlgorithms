@@ -7,7 +7,7 @@ import java.util.List;
 
 public class addTwoNumbers {
     public static class Solution {
-        public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        public ListNode addTwoNumbers0(ListNode l1, ListNode l2) {
             if (l1 == null) return l2;
             if (l2 == null) return l1;
             int leftover;
@@ -44,6 +44,26 @@ public class addTwoNumbers {
                 curr.next = tmp;
             }
             return head;
+        }
+
+        public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+            ListNode head = new ListNode(-1);   // dummy
+            int carry = 0;
+            ListNode prev = head;
+            for (ListNode pa = l1, pb = l2;
+                 pa != null || pb != null;
+                 pa = pa == null ? null : pa.next,
+                     pb = pb == null ? null : pb.next,
+                     prev = prev.next) {
+                int aval = pa == null ? 0 : pa.val;
+                int bval = pb == null ? 0 : pb.val;
+                int value = (aval + bval + carry) % 10;
+                carry = (aval + bval + carry) / 10;
+                prev.next = new ListNode(value);
+            }
+            if (carry > 0)
+                prev.next = new ListNode(carry);
+            return head.next;
         }
     }
 

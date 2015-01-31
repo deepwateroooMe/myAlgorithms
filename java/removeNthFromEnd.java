@@ -7,7 +7,7 @@ import java.util.List;
 
 public class removeNthFromEnd {
     public static class Solution {
-        public ListNode removeNthFromEnd(ListNode head, int n) {
+        public ListNode removeNthFromEnd0(ListNode head, int n) {
             if (head == null) return head;
             if (head != null && head.next == null) return null;
             int cnt = 1;
@@ -45,16 +45,36 @@ public class removeNthFromEnd {
             }
             return head;
         }
+
+        public ListNode removeNthFromEnd(ListNode head, int n) {
+            ListNode dummy = new ListNode(-1);
+            ListNode p = dummy;
+            ListNode q = dummy;
+            p.next = head;
+            q.next = head;
+            for (int i = 0; i < n; i++) {
+                q = q.next;
+            }
+            while (q.next != null) {
+                p = p.next;
+                q = q.next;
+            }
+            ListNode tmp = p.next;
+            p.next = tmp.next;
+            return dummy.next;
+        }
+        
     }
 
     public static void main(String[] args){
         Solution result = new Solution();
         int [] a = {1, 2};
+        int b = 2;
         ListNode head = new ListNode(a[0]);
         head.buildList(head, a);
         head.printList(head);
         
-        ListNode res = result.removeNthFromEnd(head, 2);
+        ListNode res = result.removeNthFromEnd(head, b);
         res.printList(res);
         
         //System.out.println(res);

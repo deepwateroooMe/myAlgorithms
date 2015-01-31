@@ -156,22 +156,629 @@
 ** Easy
 *** Remove Duplicates from Sorted List
 *** Remove Nth Node From End of List
+
+Given a linked list, remove the nth node from the end of list and return its head.
+
+For example,
+
+   Given linked list: 1->2->3->4->5, and n = 2.
+
+   After removing the second node from the end, the linked list becomes 1->2->3->5.
+Note:
+
+Given n will always be valid.
+
+Try to do this in one pass.
+
+*Tags:* Linked List, Two Pointers
+
+设两个指针 p,  q, 让 q 先走 n 步, 然后 p 和 q 一起走, 直到 q 走到尾节点, 删
+除 p->next 即可。
+
+时间复杂度 O(n), 空间复杂度 O(1). 
+
+#+BEGIN_SRC java
+public ListNode removeNthFromEnd(ListNode head, int n) {
+    ListNode dummy = new ListNode(-1);
+    ListNode p = dummy;
+    ListNode q = dummy;
+    p.next = head;
+    q.next = head;
+    for (int i = 0; i < n; i++) {    // q 先走 n 步
+        q = q.next;
+    }
+    while (q.next != null) {              // 一起走
+        p = p.next;
+        q = q.next;
+    }
+    ListNode tmp = p.next;
+    p.next = tmp.next;
+    return dummy.next;
+}
+#+END_SRC
+
 *** Merge Two Sorted Lists
 *** Intersection of Two Linked Lists
 ** Medium
 *** Add Two Numbers	
+You are given two linked lists representing two non-negative numbers. The digits are stored in reverse order and each of their nodes contain a single digit. Add the two numbers and return it as a linked list.
+
+Input: (2 -> 4 -> 3) + (5 -> 6 -> 4)
+
+Output: 7 -> 0 -> 8
+
+跟 Add Binary(见 §3.4)很类似. 
+
+#+BEGIN_SRC java
+public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+    ListNode head = new ListNode(-1);   // dummy 头节点
+    int carry = 0;
+    ListNode prev = head;
+    for (ListNode pa = l1, pb = l2;
+         pa != null || pb != null;
+         pa = pa == null ? null : pa.next,
+             pb = pb == null ? null : pb.next,
+             prev = prev.next) {
+        int aval = pa == null ? 0 : pa.val;
+        int bval = pb == null ? 0 : pb.val;
+        int value = (aval + bval + carry) % 10;
+        carry = (aval + bval + carry) / 10;
+        prev.next = new ListNode(value); // 尾插法
+    }
+    if (carry > 0)
+        prev.next = new ListNode(carry);
+    return head.next;
+}
+#+END_SRC
+
 *** Reverse Linked List II
+
+Reverse a linked list from position m to n. Do it in-place and in one-pass.
+
+For example:
+
+Given 1->2->3->4->5->NULL, m = 2 and n = 4,
+
+return 1->4->3->2->5->NULL.
+
+Note:
+
+Given m, n satisfy the following condition:
+
+1 ≤ m ≤ n ≤ length of list.
+
+这题非常繁琐,有很多边界检查,15 分钟内做到 bug free 很有难度!
+
+**** 迭代版, 时间复杂度 O(n), 空间复杂度 O(1)
+
+#+BEGIN_SRC java
+public ListNode reverseBetween(ListNode head, int m, int n) {
+    ListNode dummy = new ListNode(-1);
+    dummy.next = head;
+    ListNode prevM = null;
+    ListNode curr = dummy;
+    for (int i = 1; i <= n ; i++) {
+        if (i == m) prevM = curr;
+        if (i > m && i <= n) { // prev_m 和 curr 静止不动
+            curr.next = head.next;
+            head.next = prevM.next;
+            prevM.next = head;
+            head = curr;
+        }
+        curr = head;
+        head = head.next;
+    }
+    return dummy.next;
+}
+#+END_SRC
+
+再仔细好好想一下这个代码 ~~~
+
 *** Partition List
+
+Given a linked list and a value x, partition it such that all nodes less than x come before nodes greater than or equal to x.
+
+You should preserve the original relative order of the nodes in each of the two partitions.
+
+For example,
+
+Given 1->4->3->2->5->2 and x = 3,
+
+return 1->2->2->4->3->5.
+
+*Tags:* Linked List, Two Pointers
+
+**** 时间复杂度 O(n), 空间复杂度 O(1)
+
+#+BEGIN_SRC java
+public ListNode partition(ListNode head, int x) {
+    if (head == null) return head;
+    ListNode lftDummy = new ListNode(0);
+    ListNode ritDummy = new ListNode(0);
+    ListNode lftCurr = lftDummy; // 左头结点
+    ListNode ritCurr = ritDummy; // 右头结点
+        
+    for (; head != null; head = head.next) {
+        if (head.val < x) {
+            lftCurr.next = head;
+            lftCurr = head;
+        } else {
+            ritCurr.next = head;
+            ritCurr = head;
+        }
+    }
+    lftCurr.next = ritDummy.next;
+    ritCurr.next = null; // 无限寻还
+    return lftDummy.next;
+}
+#+END_SRC
+
+*** Remove Duplicates from Sorted List
+Given a sorted linked list, delete all duplicates such that each element appear only once.
+
+For example,
+
+Given 1->1->2, return 1->2.
+
+Given 1->1->2->3->3, return 1->2->3.
+
+**** 递归版, 时间复杂度 O(n), 空间复杂度 O(1)
+
+c++版： 
+#+BEGIN_SRC java
+class Solution {
+public:
+    ListNode *deleteDuplicates(ListNode *head) {
+        if (!head) return head;
+        ListNode dummy{head->val + 1, head}; // 值只要跟 head 不同即可
+        recur(&dummy, head);
+        return dummy.next;
+    }
+private:
+    static void recur(ListNode *prev, ListNode *cur) {
+        if (cur == nullptr) return;
+        if (prev->val == cur->val) { // 删除 head
+            prev->next = cur->next;
+            delete cur;
+            recur(prev, prev->next);
+        } else {
+            recur(prev->next, cur->next);
+        }
+    }
+};
+#+END_SRC
+
+Java版：
+#+BEGIN_SRC java
+public void recursion(ListNode prev, ListNode curr) {
+    if (curr == null) return;
+    if (prev.val == curr.val) {     // 删除 head
+        prev.next = curr.next;
+        recursion(prev, curr.next);
+    } else {
+        prev.next = curr;   // important for Java
+        recursion(prev.next, curr.next);
+    }
+}
+        
+public ListNode deleteDuplicates(ListNode head) {
+    if (head == null) return head;
+    ListNode dummy = new ListNode(head.val + 1);
+    // 值只要跟 head 不同即可
+    recursion(dummy, head);
+    return dummy.next;
+}
+#+END_SRC
+
+**** 迭代版, 时间复杂度 O(n), 空间复杂度 O(1)
+
+#+BEGIN_SRC java
+public ListNode deleteDuplicates(ListNode head) {
+    if (head == null) return head;
+    for (ListNode prev = head, curr = head.next; curr != null; curr = curr.next) {
+        if (prev.val == curr.val) {
+            prev.next = curr.next;
+        } else {
+            prev = curr;
+        }
+    }
+    return head;
+}
+#+END_SRC
+
+虽然觉得自己链表和树的原理掌握得还不错，可这两个版块都因为代码没有受过
+正规训练，所以代码奇差无比，看看别人写的。。。照葫芦画饼地写一遍，也算是一个提高的过程
+吧。。。
+
 *** Remove Duplicates from Sorted List II
+Given a sorted linked list, delete all nodes that have duplicate numbers, leaving only distinct numbers from the original list.
+
+For example,
+
+Given 1->2->3->3->4->4->5, return 1->2->5.
+
+Given 1->1->1->2->3, return 2->3.
+
+**** 递归版, 时间复杂度 O(n), 空间复杂度 O(1)
+#+BEGIN_SRC java
+public ListNode deleteDuplicates(ListNode head) {
+    if (head == null || head.next == null) return head;  
+    ListNode curr = head.next;
+    if (head.val == curr.val) {
+        while (curr != null && head.val == curr.val) 
+            curr = curr.next;
+        return deleteDuplicates(curr);
+    } else {
+        head.next = deleteDuplicates(head.next);
+        return head;
+    }
+}
+#+END_SRC
+
+**** 迭代版, 时间复杂度 O(n), 空间复杂度 O(1)
+
+#+BEGIN_SRC java
+public ListNode deleteDuplicates(ListNode head) {
+    if (head == null) return head;  
+    ListNode dummy = new ListNode(Integer.MIN_VALUE);
+    dummy.next = head;
+    ListNode prev = dummy;
+    ListNode curr = head;
+    while (curr != null) {
+        boolean dup = false;
+        while (curr.next != null && curr.val == curr.next.val) {
+            dup = true;
+            curr = curr.next;
+        }
+        if (dup) {    // 删除重复的最后一个元素
+            curr = curr.next;
+            continue;
+        }
+        prev.next = curr;
+        prev = prev.next;
+        curr = curr.next;
+    }
+    prev.next = curr;
+    return dummy.next;
+}
+#+END_SRC
+
 *** Rotate List
+
+Given a list, rotate the list to the right by k places, where k is non-negative.
+
+For example:
+
+Given 1->2->3->4->5->NULL and k = 2,
+
+return 4->5->1->2->3->NULL.
+
+*Tags:* Linked List, Two Pointers
+
+先遍历一遍, 得出链表长度 len, 注意 k 可能大于 len, 因此令 k% = len。将尾节点 next 指针
+指向首节点, 形成一个环, 接着往后跑 len − k 步, 从这里断开, 就是要求的结果
+了。(这个思路真是好。。。)
+
+#+BEGIN_SRC java
+public ListNode rotateRight(ListNode head, int n) {
+    if (head == null || n == 0) return head;
+    int len = 1;
+    ListNode curr = head;
+    while (curr.next != null) {    // 求长度
+        len++;
+        curr = curr.next;
+    }
+    n = len - n % len;
+    curr.next = head;            // 首尾相连
+    for (int step = 0; step < n; step++) {
+        curr = curr.next;      // 接着往后跑
+    }
+    head = curr.next;          // 新的首节点
+    curr.next = null;             // 断开环
+    return head;
+}
+#+END_SRC
+
 *** Swap Nodes in Pairs
+
+Given a linked list, swap every two adjacent nodes and return its head.
+
+For example,
+
+Given 1->2->3->4, you should return the list as 2->1->4->3.
+
+Your algorithm should use only constant space. You may not modify the values in the list, only nodes itself can be changed.
+
+**** 时间复杂度 O(n), 空间复杂度 O(1)
+
+#+BEGIN_SRC java
+public ListNode swapPairs(ListNode head) {
+    if (head == null || head.next == null) return head;
+    ListNode dummy = new ListNode(-1);
+    dummy.next = head;
+    for (ListNode prev = dummy, curr = prev.next, next = curr.next;
+         next != null;
+         prev = curr, curr = curr.next, next = curr != null ? curr.next : null) {
+        prev.next = next;
+        curr.next = next.next;
+        next.next = curr;
+    }
+    return dummy.next;
+}
+#+END_SRC
+
+**** 简洁版： 时间复杂度 O(n), 空间复杂度 O(1)
+
+
+下面这种写法更简洁, 但题目规定了不准这样做。
+
+#+BEGIN_SRC java
+public ListNode swapPairs(ListNode head) {
+    ListNode p = head;
+    int tmp = 0;
+    while (p != null && p.next != null) {
+        tmp = p.val;
+        p.val = p.next.val;
+        p.next.val = tmp;
+        p = p.next.next;
+    }
+    return head;
+}
+#+END_SRC
+
 *** Reorder List
+
+Given a singly linked list L: L_0→L_1→…→L_{n-1}→L_n,
+
+reorder it to: L_0→L_n→L_1→L_{n-1}→L_2→L_{n-2}→…
+
+You must do this in-place without altering the nodes' values.
+
+For example,
+
+Given {1, 2, 3, 4},  reorder it to {1, 4, 2, 3}.
+
+题目规定要 in-place,也就是说只能使用 O(1) 的空间。
+
+可以找到中间节点,断开,把后半截单链表 reverse 一下,再合并两个单链表。
+
+时间复杂度 O(n),空间复杂度 O(1)
+
+#+BEGIN_SRC java
+public ListNode reverse(ListNode head) {
+    if (head == null || head.next == null) return head;
+    ListNode prev = head;
+    for (ListNode curr = head.next, next = curr.next;
+         curr != null;
+         prev = curr, curr = next, next = next != null ? next.next : null) {
+        curr.next = prev;
+    }
+    head.next = null;
+    return prev;
+}
+
+public void reorderList(ListNode head) {
+    if (head == null || head.next == null) return;
+    ListNode slow = head;
+    ListNode fast = head;
+    ListNode prev = null;
+    while (fast != null && fast.next != null) {
+        prev = slow;
+        slow = slow.next;
+        fast = fast.next.next;
+    }
+    prev.next = null;     // cut at middle
+    slow = reverse(slow);
+    ListNode curr = head;
+    while (curr.next != null) {
+        ListNode tmp = curr.next;
+        curr.next = slow;
+        slow = slow.next;
+        curr.next.next = tmp;
+        curr = tmp;
+    }
+    curr.next = slow;
+}
+#+END_SRC
+
 *** Convert Sorted List to Binary Search Tree
 *** Linked List Cycle
+Given a linked list, determine if it has a cycle in it.
+
+Follow up:
+
+Can you solve it without using extra space?
+
+*Tags：* Linked List， Two Pointers
+
+最容易想到的方法是, 用一个哈希表 unordered_map<int,  bool> visited, 记录每个元素是
+否被访问过, 一旦出现某个元素被重复访问, 说明存在环。空间复杂度 O(n), 时间复杂度 O(N )。
+
+最好的方法是时间复杂度 O(n), 空间复杂度 O(1) 的。设置两个指针, 一个快一个慢, 快
+的 指 针 每 次 走 两 步,  慢 的 指 针 每 次 走 一 步,  如 果 快 指 针 和 慢 指 针 相 遇,  则 说 明 有 环。 参 考
+http://leetcode.com/2010/09/detecting-loop-in-singly-linked-list.html
+
+**** 时间复杂度 O(n), 空间复杂度 O(1)
+
+#+BEGIN_SRC java
+public boolean hasCycle(ListNode head) {
+    // 设置两个指针,一个快一个
+    ListNode fast = head;
+    ListNode slow = head;
+    while (fast != null && fast.next != null) {
+        slow = slow.next;
+        fast = fast.next.next;
+        if (slow == fast) return true;
+    }
+    return false;
+}
+#+END_SRC
+
 *** Linked List Cycle II
+
+Given a linked list, return the node where the cycle begins. If there is no cycle, return null.
+
+Follow up:
+
+Can you solve it without using extra space?
+
+*Tags:* Linked List, Two Pointers
+
+当 fast 与 slow 相遇时, slow 肯定没有遍历完链表, 而 fast 已经在环内循环了 n 圈 (1 ≤ n)。假
+设 slow 走了 s 步, 则 fast 走了 2s 步(fast 步数还等于 s 加上在环上多转的 n 圈), 设环长为 r, 则:
+
+2s = s + nr
+
+s = nr
+
+设整个链表长 L, 环入口点与相遇点距离为 a, 起点到环入口点的距离为 x, 则
+
+x + a = nr = (n-1)r + r = (n - 1)r + L - x
+
+x = (n - 1)r + (L - x - a)
+
+L-x-a 为相遇点到环入口点的距离, 由此可知, 从链表头到环入口点等于 n - 1 圈内环 + 相遇
+点到环入口点, 于是我们可以从 head 开始另设一个指针 slow2, 两个慢指针每次前进一步, 它俩
+一定会在环入口点相遇。
+
+#+CAPTION: Linked List Cycle II
+[[./pic/listcycle.jpg]]
+
+**** 方法一（网上都是这个答案）：
+
+第一次相遇后，让slow,fast继续走，记录到下次相遇时循环了几次。因为当fast第二次到达Z点时，fast走了一圈，slow走了半圈，而当fast第三次到达Z点时，fast走了两圈，slow走了一圈，正好还在Z点相遇。
+
+方法二：
+
+第一次相遇后，让fast停着不走了，slow继续走，记录到下次相遇时循环了几次。
+
+方法三（最简单）：
+
+第一次相遇时slow走过的距离：a+b，fast走过的距离：a+b+c+b。
+
+因为fast的速度是slow的两倍，所以fast走的距离是slow的两倍，有 2(a+b) = a+b+c+b，可以得到a=c（这个结论很重要！）。
+
+我们发现L=b+c=a+b，也就是说，从一开始到二者第一次相遇，循环的次数就等于环的长度。
+
+**** 我们已经得到了结论a=c，那么让两个指针分别从X和Z开始走，每次走一步，那么正好会在Y相遇！也就是环的第一个节点。
+
+**** 在上一个问题的最后，将c段中Y点之前的那个节点与Y的链接切断即可。
+
+**** 如何判断两个单链表是否有交点？先判断两个链表是否有环，如果一个有环一个没环，肯定不相交；如果两个都没有环，判断两个列表的尾部是否相等；如果两个都有环，判断一个链表上的Z点是否在另一个链表上。
+
+如何找到第一个相交的节点？求出两个链表的长度L1,L2（如果有环，则将Y点当
+做尾节点来算），假设L1<L2，用两个指针分别从两个链表的头部开始走，长度
+为L2的链表先走(L2-L1)步，然后两个一起走，直到二者相遇。
+
+时间复杂度 O(n), 空间复杂度 O(1). 
+
+#+BEGIN_SRC java
+public ListNode detectCycle(ListNode head) {
+    ListNode fast = head;
+    ListNode slow = head;
+    while (fast != null && fast.next != null) {
+        slow = slow.next;
+        fast = fast.next.next; // 2X speed
+        if (fast == slow) {
+            ListNode curr = head;
+            while (curr != slow) {
+                curr = curr.next;
+                slow = slow.next;
+            }
+            return curr;
+        }
+    }
+    return null;
+} 
+#+END_SRC
+
 ** Hard	
 *** Reverse Nodes in k-Group
+
+Given a linked list, reverse the nodes of a linked list k at a time and return its modified list.
+
+If the number of nodes is not a multiple of k then left-out nodes in the end should remain as it is.
+
+You may not alter the values in the nodes, only nodes itself may be changed.
+
+Only constant memory is allowed.
+
+For example,
+
+Given this linked list: 1->2->3->4->5
+
+For k = 2, you should return: 2->1->4->3->5
+
+For k = 3, you should return: 3->2->1->4->5
+
+**** 递归版, 时间复杂度 O(n), 空间复杂度 O(1)
+
+#+BEGIN_SRC java
+public ListNode reverseKGroup(ListNode head, int k) {
+    if (head == null || head.next == null || k < 2) return head;
+    ListNode gNext = head;
+    for (int i = 0; i < k; i++) {
+        if (gNext != null) {
+            gNext = gNext.next;
+        } else return head;
+    }
+    // gNext is the head of next group
+    // newGNext is the new head of next group after reversion
+    ListNode newGNext = reverseKGroup(gNext, k);
+    ListNode prev = null;
+    ListNode curr = head;
+    while (curr != gNext) {
+        ListNode next = curr.next;
+        curr.next = prev != null ? prev : newGNext;
+        prev = curr;
+        curr = next;
+    }
+    return prev;
+}
+#+END_SRC
+
+**** 迭代版, 时间复杂度 O(n), 空间复杂度 O(1)
+
+#+BEGIN_SRC java
+bug~~
+#+END_SRC
+
 *** Copy List with Random Pointer
+
+A linked list is given such that each node contains an additional random pointer which could point to any node in the list or null.
+
+Return a deep copy of the list.
+
+*Tags:* Hash Table, Linked List
+
+#+BEGIN_SRC java
+public RandomListNode copyRandomList(RandomListNode head) {
+    if (head == null) return null;
+    for (RandomListNode curr = head; curr != null; ) {
+        RandomListNode node = new RandomListNode(curr.label);
+        node.next = curr.next;
+        curr.next = node;
+        curr = node.next;
+    }
+    for (RandomListNode curr = head; curr != null; ) {
+        if (curr.random != null)
+            curr.next.random = curr.random.next;
+        curr = curr.next.next;
+    }
+    // 分拆两个单链表
+    RandomListNode dummy = new RandomListNode(-1);
+    for (RandomListNode curr = head, newC = dummy; curr != null; ) {
+        newC.next = curr.next;
+        newC = newC.next;
+        curr.next = curr.next.next;
+        curr = curr.next;
+    }
+    return dummy.next;
+}
+#+END_SRC
+
+改天去找一下 HashMap 的解法， 或者自己写一个。
+
 ** other Covered
 - Sort List
   [[Sort List]]

@@ -7,7 +7,7 @@ import java.util.List;
 
 public class reotateRight {
     public static class Solution {
-        public ListNode rotateRight(ListNode head, int n) {
+        public ListNode rotateRight0(ListNode head, int n) {
             if (n == 0 || head == null || head.next == null) return head;
             
             ListNode curr = head;
@@ -43,6 +43,25 @@ public class reotateRight {
             fast.next = head;
             return res;
         }
+
+        public ListNode rotateRight(ListNode head, int n) {
+            if (head == null || n == 0) return head;
+            int len = 1;
+            ListNode curr = head;
+            while (curr.next != null) {
+                len++;
+                curr = curr.next;
+            }
+            n = len - n % len;
+            curr.next = head;
+            for (int step = 0; step < n; step++) {
+                curr = curr.next;
+            }
+            head = curr.next;
+            curr.next = null;
+            return head;
+        }
+        
     }
     
     public static void main(String[] args){

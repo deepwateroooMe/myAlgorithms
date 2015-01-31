@@ -25,7 +25,7 @@ public class hasCycleIIfindStart {
         ListNode one = new ListNode(-1);
 
         // http://www.cnblogs.com/hiddenfox/p/3408931.html
-        public ListNode detectCycle(ListNode head) {
+        public ListNode detectCycle0(ListNode head) {
             ListNode fast = head;
             ListNode slow = head;
             while (true) {
@@ -46,6 +46,25 @@ public class hasCycleIIfindStart {
             }
             return slow;
         } 
+
+        public ListNode detectCycle(ListNode head) {
+            ListNode fast = head;
+            ListNode slow = head;
+            while (fast != null && fast.next != null) {
+                slow = slow.next;
+                fast = fast.next.next; // 2X speed
+                if (fast == slow) {
+                    ListNode curr = head;
+                    while (curr != slow) {
+                        curr = curr.next;
+                        slow = slow.next;
+                    }
+                    return curr;
+                }
+            }
+            return null;
+        } 
+
     }
 
     public static void main(String[] args){

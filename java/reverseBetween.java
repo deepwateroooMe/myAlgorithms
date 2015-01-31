@@ -7,7 +7,7 @@ import java.util.List;
 
 public class reverseBetween {
     public static class Solution {
-        public ListNode reverseBetween(ListNode head, int m, int n) {
+        public ListNode reverseBetween0(ListNode head, int m, int n) {
             if (head == null || head.next == null || m == n) return head;
             ListNode curr = head;
             ListNode prev = null;
@@ -47,6 +47,26 @@ public class reverseBetween {
             } else
                 return curr;
         }
+
+        public ListNode reverseBetween(ListNode head, int m, int n) {
+            ListNode dummy = new ListNode(-1);
+            dummy.next = head;
+            ListNode prevM = null;
+            ListNode curr = dummy;
+            for (int i = 1; i <= n ; i++) {
+                if (i == m) prevM = curr;
+                if (i > m && i <= n) {
+                    curr.next = head.next;
+                    head.next = prevM.next;
+                    prevM.next = head;
+                    head = curr;
+                }
+                curr = head;
+                head = head.next;
+            }
+            return dummy.next;
+        }
+        
     }
 
     public static void main(String[] args){

@@ -12,7 +12,7 @@ public class copyRandomList {
         // 1. insert a node copy to make n -> 2n length, 1st round
         // 2. set randome pointers, 2nd round
         // 3. split into two lists, 3rd round, O(n)
-        public RandomListNode copyRandomList(RandomListNode head) {
+        public RandomListNode copyRandomList0(RandomListNode head) {
             if (head == null) return null;
             RandomListNode result;
             RandomListNode tmp = head, one, next;
@@ -64,6 +64,30 @@ public class copyRandomList {
                 tmp = tmp.next;
             }
         }
+
+        public RandomListNode copyRandomList(RandomListNode head) {
+            if (head == null) return null;
+            for (RandomListNode curr = head; curr != null; ) {
+                RandomListNode node = new RandomListNode(curr.label);
+                node.next = curr.next;
+                curr.next = node;
+                curr = node.next;
+            }
+            for (RandomListNode curr = head; curr != null; ) {
+                if (curr.random != null)
+                    curr.next.random = curr.random.next;
+                curr = curr.next.next;
+            }
+            RandomListNode dummy = new RandomListNode(-1);
+            for (RandomListNode curr = head, newC = dummy; curr != null; ) {
+                newC.next = curr.next;
+                newC = newC.next;
+                curr.next = curr.next.next;
+                curr = curr.next;
+            }
+            return dummy.next;
+        }
+        
     }
 
     public static void main(String[] args){

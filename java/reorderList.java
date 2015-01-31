@@ -22,7 +22,7 @@ public class reorderList {
         }
         ListNode one = new ListNode(-1);
 
-        public void reorderList(ListNode head) {
+        public void reorderList0(ListNode head) {
             if (head == null || (head != null && head.next == null)) {
                 return;
             } // consider one node situation
@@ -63,6 +63,41 @@ public class reorderList {
             }
         }
 
+        public ListNode reverse(ListNode head) {
+            if (head == null || head.next == null) return head;
+            ListNode prev = head;
+            for (ListNode curr = head.next, next = curr.next;
+                 curr != null;
+                 prev = curr, curr = next, next = next != null ? next.next : null) {
+                curr.next = prev;
+            }
+            head.next = null;
+            return prev;
+        }
+
+        public void reorderList(ListNode head) {
+            if (head == null || head.next == null) return;
+            ListNode slow = head;
+            ListNode fast = head;
+            ListNode prev = null;
+            while (fast != null && fast.next != null) {
+                prev = slow;
+                slow = slow.next;
+                fast = fast.next.next;
+            }
+            prev.next = null;
+            slow = reverse(slow);
+            ListNode curr = head;
+            while (curr.next != null) {
+                ListNode tmp = curr.next;
+                curr.next = slow;
+                slow = slow.next;
+                curr.next.next = tmp;
+                curr = tmp;
+            }
+            curr.next = slow;
+        }
+        
         public  void printList(ListNode head) {
             ListNode tmp = head;
             while (tmp != null) {
