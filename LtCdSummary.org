@@ -861,20 +861,20 @@ vector inorderTraversal(TreeNode *root) {
 vector preorderTraversal(TreeNode *root) {
 	vector order;
 	for (TreeNode *now = root, *tmp; now;) {
-		if (now->left =  = NULL) {
-            order.push_back(now->val);
-            now = now->right;   
-        } else {
-	    for (tmp = now->left; tmp->right! = NULL && tmp->right! = now;) {
-                tmp = tmp->right;
-	    if (tmp->right) {
+	    if (now->left == NULL) {
+                order.push_back(now->val);
+                now = now->right;   
+            } else {
+	        for (tmp = now->left; tmp->right != NULL && tmp->right != now;) {
+                    tmp = tmp->right;
+	        if (tmp->right) {
 				tmp->right = NULL;
 				now = now->right;
-	    } else {
+	        } else {
 				order.push_back(now->val);
 				tmp->right = now;
 				now = now->left;
-	                }
+	        }
 	    }
 	}
 	return order;
@@ -1104,12 +1104,169 @@ public List<Integer> inorderTraversal(TreeNode root) {
 }
 #+END_SRC
 
-**** Morris先序遍历： Morris 先序遍历,时间复杂度 O(n),空间复杂度 O(1)
-
-这个参考的方法看起来有点儿复杂，就今天下午的状态，应该是做不出来了，晚
-上再看吧。。。
+**** Morris先序遍历： Morris 先序遍历,时间复杂度 O(n), 空间复杂度 O(1)
 
 #+BEGIN_SRC java
+// 逆转路径
+public void reverse(TreeNode bgn, TreeNode end) {
+    TreeNode x = bgn;
+    TreeNode y = bgn.right;
+    TreeNode z = null;
+    if (bgn == end) return;
+    while (x != end) {
+        z = y.right;
+        y.right = x;
+        x = y;
+        y = z;
+    }
+}
+
+// 访问逆转后的路径上的所有结点
+public void visit_reverse(TreeNode bgn, TreeNode end, List<Integer> res) {
+    TreeNode p = end;
+    reverse(bgn, end);
+    while (true) {
+        res.add(p.val);
+        if (p == bgn) break;
+        p = p.right;
+    }
+    reverse(end, bgn);
+}
+        
+public List<Integer> postorderTraversal(TreeNode root) {
+    List<Integer> res = new ArrayList<Integer>();
+    TreeNode dummy = new TreeNode(-1);
+    TreeNode curr = null;
+    TreeNode prev = null;
+    dummy.left = root;
+    curr = dummy;
+    while (curr != null) {
+        if (curr.left == null) {
+            prev = curr;                         /* 必须要有 */
+            curr = curr.right;
+        } else {
+            TreeNode node = curr.left;
+            while (node.right != null && node.right != curr)
+                node = node.right;
+            if (node.right == null) { /* 还没线索化,则建立线索 */
+                node.right = curr;
+                prev = curr;                    /* 必须要有 */
+                curr = curr.left;
+            } else {        /* 已经线索化,则访问节点,并删除线索 */
+                visit_reverse(curr.left, prev, res);
+                prev.right = null;
+                prev = curr;                    /* 必须要有 */
+                curr = curr.right;
+            }
+        }
+    }
+    return res;
+}
+#+END_SRC
+
+c++版：
+
+#+BEGIN_SRC java
+// LeetCode, Binary Tree Postorder Traversal
+// Morris 后序遍历, 时间复杂度 O(n), 空间复杂度 O(1)
+class Solution {
+public:
+    vector<int> postorderTraversal(TreeNode *root) {
+        vector<int> result;
+        TreeNode dummy(-1);
+        TreeNode *cur, *prev = nullptr;
+        std::function < void(const TreeNode*)>
+            visit = [&result](const TreeNode *node) {
+            result.push_back(node->val);
+        };
+
+        dummy.left = root;
+        cur = &dummy;
+        while (cur != nullptr) {
+            if (cur->left == nullptr) {
+                prev = cur;                  /* 必须要有 */
+                cur = cur->right;
+            } else {
+                TreeNode *node = cur->left;
+                while (node->right != nullptr && node->right != cur)
+                    node = node->right;
+                if (node->right == nullptr) { /* 还没线索化,则建立线索 */
+                    node->right = cur;
+                    prev = cur;              /* 必须要有 */
+                    cur = cur->left;
+                } else { /* 已经线索化,则访问节点,并删除线索 */
+                    visit_reverse(cur->left, prev, visit);
+                    prev->right = nullptr;
+                    prev = cur;              /* 必须要有 */
+                    cur = cur->right;
+                }
+            }
+        }
+        return result;
+    }
+private:
+    // 逆转路径
+    static void reverse(TreeNode *from, TreeNode *to) {
+        TreeNode *x = from, *y = from->right, *z;
+        if (from == to) return;
+        while (x != to) {
+            z = y->right;
+            y->right = x;
+            x = y;
+            y = z;
+        }
+    }
+    // 访问逆转后的路径上的所有结点
+    static void visit_reverse(TreeNode* from, TreeNode *to,
+                              std::function< void(const TreeNode*) > &visit) {
+        TreeNode *p = to;
+        reverse(from, to);
+        while (true) {
+            visit(p);
+            if (p == from)
+                break;
+            p = p->right;
+        }
+        reverse(to, from);
+    }
+};
+#+END_SRC
+
+一段代码写成这样，实在是太恐怖了。。。面试的时候怎么出得来？还是把原理
+弄懂尽量不要写这种方法好了。。。
+
+**** root, right, left --> Reverse
+
+另一个比较 tricky 的方法就是先模拟 postorder （实际上是按 root, right,
+left 的顺序遍历的）, 再 reverse 得到的结果。
+
+#+BEGIN_SRC java
+public List<Integer> postorderTraversal0(TreeNode root) {
+    // get preorder results first, no no no no, root, right, left
+    List<Integer> res = new ArrayList<Integer>();
+    if (root == null) {
+        return res;
+    }
+    Stack<TreeNode> s = new Stack<TreeNode>();
+    TreeNode curr = root;
+    while (!s.isEmpty() || curr != null) {
+        while (curr != null) {
+            res.add(curr.val);
+            s.push(curr);
+            curr = curr.right;
+        }
+        if (!s.isEmpty()) {
+            curr = s.pop();
+            curr = curr.left;
+        } 
+    }
+    // then reverse the values
+    List<Integer> result = new ArrayList<Integer>();
+    for (int i = res.size() - 1; i >= 0; i--) {
+        result.add(res.get(i));
+    }
+    return result;
+}
 #+END_SRC
 
 *** Binary Tree Level Order Traversal
@@ -1133,8 +1290,53 @@ public List<Integer> inorderTraversal(TreeNode root) {
   [15,7]
 ]
     #+END_SRC
-**** 递归版
-**** 迭代版
+
+**** 递归版: 时间复杂度 O(n), 空间复杂度 O(n)
+
+#+BEGIN_SRC java
+public void traverse(TreeNode root, int level, List<List<Integer>> res) {
+    if (root == null) return;
+    if (level > res.size())
+        res.add(new ArrayList<Integer>());
+    res.get(level - 1).add(root.val);
+    traverse(root.left, level + 1, res);
+    traverse(root.right, level + 1, res);
+}
+        
+public List<List<Integer>> levelOrder(TreeNode root) {
+    List<List<Integer>> res = new ArrayList<List<Integer>>();
+    traverse(root, 1, res);
+    return res;
+}
+#+END_SRC
+
+**** 迭代版: 时间复杂度 O(n), 空间复杂度 O(1)
+
+#+BEGIN_SRC java
+public List<List<Integer>> levelOrder(TreeNode root) {
+    List<List<Integer>> res = new ArrayList<List<Integer>>();
+    if (root == null) return res;
+    Queue<TreeNode> curr = new LinkedList<TreeNode>();
+    Queue<TreeNode> next = new LinkedList<TreeNode>();
+    List<Integer> level = new ArrayList<Integer>();
+
+    curr.add(root);
+    while (!curr.isEmpty()) {
+        while (!curr.isEmpty()) {
+            TreeNode node = curr.poll();
+            level.add(node.val);
+            if (node.left != null) next.add(node.left);
+            if (node.right != null) next.add(node.right);
+        }
+        res.add(level);
+        //level.clear();    // not working
+        level = new ArrayList<Integer>();
+        curr.addAll(next);
+        next.clear();
+    }
+    return res;
+}
+#+END_SRC
 
 *** Binary Tree Level Order Traversal II
     Given a binary tree, return the bottom-up level order traversal of its nodes' values. (ie, from left to right, level by level from leaf to root).
@@ -1156,9 +1358,58 @@ public List<Integer> inorderTraversal(TreeNode root) {
   [3]
 ]
     #+END_SRC
-**** 递归版
-**** 迭代版
 
+在上一题(Binary Tree Level Order Traversal见 [[Binary Tree Level Order Traversal]] )的基础上,reverse() 一下即可。
+
+**** 递归版: 时间复杂度 O(n), 空间复杂度 O(n)
+
+
+#+BEGIN_SRC java
+public void traverse(TreeNode root, int level, List<List<Integer>> res) {
+    if (root == null) return;
+    if (level > res.size())
+        res.add(new ArrayList<Integer>());
+    res.get(level - 1).add(root.val);
+    traverse(root.left, level + 1, res);
+    traverse(root.right, level + 1, res);
+}
+        
+public List<List<Integer>> levelOrderBottom(TreeNode root) {
+    List<List<Integer>> res = new ArrayList<List<Integer>>();
+    traverse(root, 1, res);
+    Collections.reverse(res);    // 比上一题多此一行
+    return res;
+}
+#+END_SRC
+
+**** 迭代版: 时间复杂度 O(n), 空间复杂度 O(1)
+
+
+#+BEGIN_SRC java
+public List<List<Integer>> levelOrderBottom(TreeNode root) {
+    List<List<Integer>> res = new ArrayList<List<Integer>>();
+    if (root == null) return res;
+    Queue<TreeNode> curr = new LinkedList<TreeNode>();
+    Queue<TreeNode> next = new LinkedList<TreeNode>();
+    List<Integer> level = new ArrayList<Integer>();
+
+    curr.add(root);
+    while (!curr.isEmpty()) {
+        while (!curr.isEmpty()) {
+            TreeNode node = curr.poll();
+            level.add(node.val);
+            if (node.left != null) next.add(node.left);
+            if (node.right != null) next.add(node.right);
+        }
+        res.add(level);
+        level = new ArrayList<Integer>();
+        curr.addAll(next);
+        next.clear();
+    }
+    Collections.reverse(res);    // 比上一题多此一行
+    return res;
+}
+#+END_SRC
 
 *** Binary Tree Zigzag Level Order Traversal	
     Given a binary tree, return the zigzag level order traversal of its nodes' values. (ie, from left to right, then right to left for the next level and alternate between).
@@ -1181,8 +1432,68 @@ public List<Integer> inorderTraversal(TreeNode root) {
   [15,7]
 ]
     #+END_SRC
-**** 递归版
-**** 迭代版
+
+广度优先遍历, 用一个 bool 记录是从左到右还是从右到左, 每一层结束就翻转一
+下。
+
+**** 递归版,时间复杂度 O(n),空间复杂度 O(n)
+
+#+BEGIN_SRC java
+public void traverse(TreeNode root, int level,
+                     List<List<Integer>> res, boolean lefttoright) {
+    if (root == null) return;
+    if (level > res.size())
+        res.add(new ArrayList<Integer>());
+    if (lefttoright)
+        res.get(level - 1).add(root.val);
+    else
+        res.get(level - 1).add(0, root.val);
+    traverse(root.left, level + 1, res, !lefttoright);
+    traverse(root.right, level + 1, res, !lefttoright);
+}
+        
+public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+    List<List<Integer>> res = new ArrayList<List<Integer>>();
+    traverse(root, 1, res, true);
+    return res;
+}
+#+END_SRC
+
+**** 迭代版,时间复杂度 O(n),空间复杂度 O(n)
+
+广度优先遍历, 用一个 bool 记录是从左到右还是从右到左, 每一层结束就翻转一
+下。
+
+#+BEGIN_SRC java
+public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+    List<List<Integer>> res = new ArrayList<List<Integer>>();
+    if (root == null) return res;
+    Queue<TreeNode> q = new LinkedList<TreeNode>();
+    boolean lefttoright = true;
+    List<Integer> level = new ArrayList<Integer>();
+    q.add(root);
+    q.add(null);      // level separator
+    while (!q.isEmpty()) {
+        TreeNode curr = q.poll();
+        if (curr != null) {
+            level.add(curr.val);
+            if (curr.left != null) q.add(curr.left);
+            if (curr.right != null) q.add(curr.right);
+        } else {
+            if (lefttoright) {
+                res.add(level);
+            } else {
+                Collections.reverse(level);
+                res.add(level);
+            }
+            level = new ArrayList<Integer>();
+            lefttoright = !lefttoright;
+            if (q.size() > 0) q.add(null);
+        }
+    }
+    return res;
+}
+#+END_SRC
 
 *** Recover Binary Search Tree
     Two elements of a binary search tree (BST) are swapped by mistake.
@@ -1193,16 +1504,134 @@ public List<Integer> inorderTraversal(TreeNode root) {
 
     A solution using O(n) space is pretty straight forward. Could you devise a constant space solution?
     
-    O(n) 空间的解法是,开一个指针数组,中序遍历,将节点指针依次存放到数组里,然后寻找两处逆向的位置,先从前往后找第一个逆序的位置,然后从后往前找第二个逆序的位置,交换这两个指针的值。
+    O(n) 空间的解法是, 开一个指针数组, 中序遍历, 将节点指针依次存放到数组里, 然后寻找两处逆向的位置, 先从前往后找第一个逆序的位置, 然后从后往前找第二个逆序的位置, 交换这两个指针的值。
     
-    中序遍历一般需要用到栈,空间也是 O(n) 的,如何才能不使用栈?Morris 中序遍历。
+    中序遍历一般需要用到栈, 空间也是 O(n) 的, 如何才能不使用栈? Morris 中序遍历。
+
+**** 一个 inorder 的解法： 
+
+#+BEGIN_SRC java
+public void inOrderTraverse(TreeNode root) {
+    if (root == null) return;
+    if (root.left != null)
+        inOrderTraverse(root.left);
+
+    if (prev.val < root.val) {
+        prev = root;
+    } else if (prev.val > root.val) {
+        if (first == null) {
+            first = prev;
+            second = root;
+        } else second = root;
+        prev = root;
+    }
+    if (root.right != null)
+        inOrderTraverse(root.right);
+}
+
+public void recoverTree(TreeNode root) {
+    if (root == null || (root.left == null && root.right == null)) return;
+    if (first == null || second == null) {
+        TreeNode curr = root;
+        if (curr.left != null)
+            while (curr.left != null) 
+                curr = curr.left;
+        prev = curr;
+        inOrderTraverse(root);
+    }
+    int tmp = first.val;
+    first.val = second.val;
+    second.val = tmp;
+}
+#+END_SRC
+
+**** Morris 中序遍历 , 时间复杂度 O(n) , 空间复杂度 O(1)
+
+#+BEGIN_SRC java
+public void detect(List<TreeNode> res, TreeNode prev, TreeNode curr) {
+    if (prev != null && prev.val > curr.val) {
+        if (res.get(0) == null)
+            res.add(0, prev); 
+        // 不能用 else,例如 {0,1},会导致最后 swap 时 second 为 nullptr,
+        // 会 Runtime Error
+        res.add(1, curr);
+    }
+}
+        
+public void recoverTree(TreeNode root) {
+    TreeNode prev = null;
+    TreeNode curr = root;
+    List<TreeNode> res = new ArrayList<TreeNode>();
+    res.add(null);
+
+    while (curr != null) {
+        if (curr.left == null) {
+            detect(res, prev, curr);
+            prev = curr;
+            curr = curr.right;
+        } else {
+            TreeNode node = curr.left;
+            while (node.right != null && node.right != curr) {
+                node = node.right;
+            }
+            if (node.right == null) {
+                node.right = curr;
+                //prev = cur; 不能有这句!因为 cur 还没有被访问
+                curr = curr.left;
+            } else {
+                detect(res, prev, curr);
+                node.right = null;
+                prev = curr;
+                curr = curr.right;
+            }
+        }
+    }
+    int tmp = res.get(0).val;
+    res.get(0).val = res.get(1).val;
+    res.get(1).val = tmp;
+}
+#+END_SRC
+
+这个可以套成模板，可能写得不熟悉吧，现在写起来还是怎么写怎么别扭，不如
+原本朴素的 inorder traverse 来得自然。。。。
 
 *** Same Tree
     Given two binary trees, write a function to check if they are equal or not.
     
     Two binary trees are considered equal if they are structurally identical and the nodes have the same value.
 **** 递归版: 时间复杂度 O(n), 空间复杂度 O(logn)
+
+#+BEGIN_SRC java
+public boolean isSameTree(TreeNode p, TreeNode q) {
+    if (p == null && q == null) return true;  // 终止条件
+    if (p == null || q == null) return false; // 剪枝
+    return p.val == q.val                     // 三方合并
+        && isSameTree(p.left, q.left)                
+        && isSameTree(p.right, q.right);
+}
+#+END_SRC
+
 **** 迭代版: 时间复杂度 O(n), 空间复杂度 O(logn)
+
+#+BEGIN_SRC java
+public boolean isSameTree(TreeNode p, TreeNode q) {
+    Stack<TreeNode> s = new Stack<TreeNode>();
+    s.push(p);
+    s.push(q);
+    while (!s.isEmpty()) {
+        p = s.pop();
+        q = s.pop();
+        if (p == null && q == null) continue;
+        if (p == null || q == null) return false;
+        if (p.val != q.val) return false;
+        s.push(p.left);
+        s.push(q.left);
+        s.push(p.right);
+        s.push(q.right);
+    }
+    return true;
+}
+#+END_SRC
 
 *** Symmetric Tree
     Given a binary tree, check whether it is a mirror of itself (ie, symmetric around its center).
@@ -1227,8 +1656,44 @@ public List<Integer> inorderTraversal(TreeNode root) {
 
     Bonus points if you could solve it both recursively and iteratively.
 **** 递归版: 时间复杂度 O(n), 空间复杂度 O(logn)
+
+#+BEGIN_SRC java
+public boolean isSymTree(TreeNode left, TreeNode right) {
+    if (left == null && right == null) return true;
+    if (left == null || right == null) return false;
+    return left.val == right.val
+        && isSymTree(left.left, right.right)
+        && isSymTree(left.right, right.left);
+}
+
+public boolean isSymmetric(TreeNode root) {
+    if (root == null ) return true;
+    return isSymTree(root.left, root.right);
+}
+#+END_SRC
+
 **** 迭代版: 时间复杂度 O(n), 空间复杂度 O(logn)
 
+#+BEGIN_SRC java
+public boolean isSymmetric(TreeNode root) {
+    if (root == null) return true;
+    Stack<TreeNode> s = new Stack<TreeNode>();
+    s.push(root.left);
+    s.push(root.right);
+    while (!s.isEmpty()) {
+        TreeNode p = s.pop();
+        TreeNode q = s.pop();
+        if (p == null && q == null) continue;
+        if (p == null || q == null) return false;
+        if (p.val != q.val) return false;
+        s.push(p.left);
+        s.push(q.right);
+        s.push(p.right);
+        s.push(q.left);
+    }
+    return true;
+}
+#+END_SRC
 
 *** Balanced Binary Tree
     Given a binary tree, determine if it is height-balanced.
@@ -1236,6 +1701,21 @@ public List<Integer> inorderTraversal(TreeNode root) {
     For this problem, a height-balanced binary tree is defined as a binary tree in which the depth of the two subtrees of every node never differ by more than 1.
 
     时间复杂度 O(n), 空间复杂度 O(logn)
+
+#+BEGIN_SRC java
+public int balanceHeight(TreeNode root) {
+    if (root == null) return 0;    // 终止条件
+    int left = balanceHeight(root.left);
+    int right = balanceHeight(root.right);
+    if (left < 0 || right < 0 || Math.abs(left - right) > 1)
+        return -1;                  // 剪枝
+    return Math.max(left, right) + 1;   // 三方合并
+}
+        
+public boolean isBalanced(TreeNode root) {
+    return balanceHeight(root) >= 0;
+}
+#+END_SRC
 
 *** Flatten Binary Tree to Linked List
     Given a binary tree, flatten it to a linked list in-place.
@@ -1269,9 +1749,58 @@ public List<Integer> inorderTraversal(TreeNode root) {
 
     If you notice carefully in the flattened tree, each node's right child points to the next node of a pre-order traversal.
 **** 递归版1: 时间复杂度 O(n), 空间复杂度 O(logn)
+
+#+BEGIN_SRC java
+public void flatten(TreeNode root) {
+    if (root == null) return;    // 终止条件
+    flatten(root.left);
+    flatten(root.right);
+    if (root.left == null) return;
+    // 三方合并, 将左子树所形成的链表插入到 root 和 root->right 之间
+    TreeNode p = root.left;
+    while (p.right != null) 
+        p = p.right;     //寻找左链表最后一个节点
+    p.right = root.right;
+    root.right = root.left;
+    root.left = null;
+}
+#+END_SRC
+
 **** 递归版2: 时间复杂度 O(n), 空间复杂度 O(logn)
+
+#+BEGIN_SRC java
+// 把 root 所代表树变成链表后, tail 跟在该链表后面
+public TreeNode flatten(TreeNode root, TreeNode tail) {
+    if (root == null) return tail;
+    root.right = flatten(root.left, flatten(root.right, tail));
+    root.left = null;
+    return root;
+}
+        
+public void flatten(TreeNode root) {
+    flatten(root, null);
+}
+#+END_SRC
+
 **** 迭代版: 时间复杂度 O(n), 空间复杂度 O(logn)
 
+#+BEGIN_SRC java
+public void flatten(TreeNode root) {
+    if (root == null) return;
+    Stack<TreeNode> s = new Stack<TreeNode>();
+    s.push(root);
+    while (!s.isEmpty()) {
+        TreeNode p = s.pop();
+        if (p.right != null)
+            s.push(p.right);
+        if (p.left != null)
+            s.push(p.left);
+        p.left = null;
+        if (!s.isEmpty())
+            p.right = s.peek();
+    }
+}
+#+END_SRC
 
 *** Populating Next Right Pointers in Each Node II
     Follow up for problem "Populating Next Right Pointers in Each Node".
@@ -1306,9 +1835,53 @@ public List<Integer> inorderTraversal(TreeNode root) {
 
     注意,这题的代码原封不动,也可以解决 Populating Next Right Pointers in Each Node I.
 **** 递归版: 时间复杂度 O(n), 空间复杂度 O(1)
+
+#+BEGIN_SRC java
+public void connect(TreeLinkNode root) {
+    if (root == null) return;
+    TreeLinkNode dummy = new TreeLinkNode(-1);
+    for (TreeLinkNode curr = root, prev = dummy;
+         curr != null;
+         curr = curr.next) {
+        if (curr.left != null) {
+            prev.next = curr.left;
+            prev = prev.next;
+        }
+        if (curr.right != null) {
+            prev.next = curr.right;
+            prev = prev.next;
+        }
+    }
+    connect(dummy.next);
+}
+#+END_SRC
+
 **** 迭代版: 时间复杂度 O(n), 空间复杂度 O(1)
 
-    
+#+BEGIN_SRC java
+public void connect(TreeLinkNode root) {
+    while (root != null) {
+        TreeLinkNode next = null;
+        TreeLinkNode prev = null;
+        for (; root != null;
+             root = root.next) {
+            if (next == null) 
+                next = root.left != null ? root.left : root.right;
+            if (root.left != null) {
+                if (prev != null)
+                    prev.next = root.left;
+                prev = root.left;
+            }
+            if (root.right != null) {
+                if (prev != null)
+                    prev.next = root.right;
+                prev = root.right;
+            }
+        }
+        root = next;
+    }
+}
+#+END_SRC
     
 ** 二叉树的构建
 *** Construct Binary Tree from Preorder and Inorder Traversal

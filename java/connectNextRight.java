@@ -8,7 +8,51 @@ import java.util.List;
 public class connectNextRight {
     public static class Solution {
         public void connect(TreeLinkNode root) {
-            if (root == null || (root.left == null && root.right == null) ) return;
+            while (root != null) {
+                TreeLinkNode next = null;
+                TreeLinkNode prev = null;
+                for (; root != null;
+                     root = root.next) {
+                    if (next == null) 
+                        next = root.left != null ? root.left : root.right;
+                    if (root.left != null) {
+                        if (prev != null)
+                            prev.next = root.left;
+                        prev = root.left;
+                    }
+                    if (root.right != null) {
+                        if (prev != null)
+                            prev.next = root.right;
+                        prev = root.right;
+                    }
+                }
+                root = next;
+            }
+        }
+
+        public void connect1(TreeLinkNode root) {
+            if (root == null) return;
+            TreeLinkNode dummy = new TreeLinkNode(-1);
+            for (TreeLinkNode curr = root, prev = dummy;
+                 curr != null;
+                 curr = curr.next) {
+                if (curr.left != null) {
+                    prev.next = curr.left;
+                    prev = prev.next;
+                }
+                if (curr.right != null) {
+                    prev.next = curr.right;
+                    prev = prev.next;
+                }
+            }
+            connect(dummy.next);
+        }
+        
+        public void connect0(TreeLinkNode root) {
+            if (root == null) return;
+            TreeLinkNode dummy = new TreeLinkNode(-1);
+            
+
             TreeLinkNode left = null;
             TreeLinkNode right = null;
             if (root.left != null && root.right != null) {
@@ -37,7 +81,7 @@ public class connectNextRight {
     }
 }
 /*
-Input:	{-1,0,1,2,3,4,5,6,7,8,9,10,11,12,13}
-Output:	{-1,#,0,1,#,2,3,4,5,#,6,7,8,9,#}
-Expected:	{-1,#,0,1,#,2,3,4,5,#,6,7,8,9,10,11,12,13,#}
- */
+  Input:	{-1,0,1,2,3,4,5,6,7,8,9,10,11,12,13}
+  Output:	{-1,#,0,1,#,2,3,4,5,#,6,7,8,9,#}
+  Expected:	{-1,#,0,1,#,2,3,4,5,#,6,7,8,9,10,11,12,13,#}
+*/

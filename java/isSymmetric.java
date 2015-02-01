@@ -4,17 +4,38 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 public class isSymmetric {
     public static class Solution {
-        public boolean isSymTree(TreeNode p, TreeNode q) {
-            if (p == null && q == null) return true;
-            else if (p == null || q == null) return false;
-            else if (p.val != q.val) return false;
-            return isSymTree(p.left, q.right) && isSymTree(p.right, q.left);
+        public boolean isSymTree(TreeNode left, TreeNode right) {
+            if (left == null && right == null) return true;
+            if (left == null || right == null) return false;
+            return left.val == right.val
+                && isSymTree(left.left, right.right)
+                && isSymTree(left.right, right.left);
         }
 
         public boolean isSymmetric(TreeNode root) {
+            if (root == null) return true;
+            Stack<TreeNode> s = new Stack<TreeNode>();
+            s.push(root.left);
+            s.push(root.right);
+            while (!s.isEmpty()) {
+                TreeNode p = s.pop();
+                TreeNode q = s.pop();
+                if (p == null && q == null) continue;
+                if (p == null || q == null) return false;
+                if (p.val != q.val) return false;
+                s.push(p.left);
+                s.push(q.right);
+                s.push(p.right);
+                s.push(q.left);
+            }
+            return true;
+        }
+        
+        public boolean isSymmetric0(TreeNode root) {
             if (root == null ) return true;
             return isSymTree(root.left, root.right);
         }

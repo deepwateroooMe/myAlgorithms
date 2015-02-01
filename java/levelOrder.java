@@ -18,7 +18,7 @@ public class levelOrder {
             }
         }
 
-        public List<List<Integer>> levelOrder(TreeNode root) {
+        public List<List<Integer>> levelOrder0(TreeNode root) {
             List<List<Integer>> res = new ArrayList<List<Integer>>();
             List<Integer> tmp = new ArrayList<Integer>();
             if (root == null) return res;
@@ -55,6 +55,46 @@ public class levelOrder {
                 res.add(tmp);                
             return res;
         }
+
+        public void traverse(TreeNode root, int level, List<List<Integer>> res) {
+            if (root == null) return;
+            if (level > res.size())
+                res.add(new ArrayList<Integer>());
+            res.get(level - 1).add(root.val);
+            traverse(root.left, level + 1, res);
+            traverse(root.right, level + 1, res);
+        }
+        
+        public List<List<Integer>> levelOrder1(TreeNode root) {
+            List<List<Integer>> res = new ArrayList<List<Integer>>();
+            traverse(root, 1, res);
+            return res;
+        }
+
+        public List<List<Integer>> levelOrder(TreeNode root) {
+            List<List<Integer>> res = new ArrayList<List<Integer>>();
+            if (root == null) return res;
+            Queue<TreeNode> curr = new LinkedList<TreeNode>();
+            Queue<TreeNode> next = new LinkedList<TreeNode>();
+            List<Integer> level = new ArrayList<Integer>();
+
+            curr.add(root);
+            while (!curr.isEmpty()) {
+                while (!curr.isEmpty()) {
+                    TreeNode node = curr.poll();
+                    level.add(node.val);
+                    if (node.left != null) next.add(node.left);
+                    if (node.right != null) next.add(node.right);
+                }
+                res.add(level);
+                //level.clear();    // not working
+                level = new ArrayList<Integer>();
+                curr.addAll(next);
+                next.clear();
+            }
+            return res;
+        }
+        
     }
 
     public static void main(String[] args){

@@ -25,22 +25,52 @@ public class recoverTree {
                 } else second = root;
                 prev = root;
             }
-
             if (root.right != null)
                 inOrderTraverse(root.right);
         }
 
-        public void recoverTree(TreeNode root) {
-            if (root == null || (root.left == null && root.right == null)) return;
-            if (root.left != null && root.right == null &&
-                root.left.left == null && root.left.right == null) {
-                first = root;
-                second = root.left;
-            } else if (root.right != null && root.left == null &&
-                root.right.left == null && root.right.right == null) {
-                first = root;
-                second = root.right;
+        public void detect(List<TreeNode> res, TreeNode prev, TreeNode curr) {
+            if (prev != null && prev.val > curr.val) {
+                if (res.get(0) == null)
+                    res.add(0, prev);
+                res.add(1, curr);
             }
+        }
+        
+        public void recoverTree(TreeNode root) {
+            TreeNode prev = null;
+            TreeNode curr = root;
+            List<TreeNode> res = new ArrayList<TreeNode>();
+            res.add(null);
+
+            while (curr != null) {
+                if (curr.left == null) {
+                    detect(res, prev, curr);
+                    prev = curr;
+                    curr = curr.right;
+                } else {
+                    TreeNode node = curr.left;
+                    while (node.right != null && node.right != curr) {
+                        node = node.right;
+                    }
+                    if (node.right == null) {
+                        node.right = curr;
+                        curr = curr.left;
+                    } else {
+                        detect(res, prev, curr);
+                        node.right = null;
+                        prev = curr;
+                        curr = curr.right;
+                    }
+                }
+            }
+            int tmp = res.get(0).val;
+            res.get(0).val = res.get(1).val;
+            res.get(1).val = tmp;
+        }
+        
+        public void recoverTree0(TreeNode root) {
+            if (root == null || (root.left == null && root.right == null)) return;
             if (first == null || second == null) {
                 TreeNode curr = root;
                 if (curr.left != null)

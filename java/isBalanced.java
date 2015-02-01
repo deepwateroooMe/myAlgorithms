@@ -31,7 +31,20 @@ public class isBalanced {
             return res.get(0);
         }
 
+        public int balanceHeight(TreeNode root) {
+            if (root == null) return 0;
+            int left = balanceHeight(root.left);
+            int right = balanceHeight(root.right);
+            if (left < 0 || right < 0 || Math.abs(left - right) > 1)
+                return -1;
+            return Math.max(left, right) + 1;
+        }
+        
         public boolean isBalanced(TreeNode root) {
+            return balanceHeight(root) >= 0;
+        }
+        
+        public boolean isBalanced0(TreeNode root) {
             if (root == null) return true;
             else if (root.left == null && root.right == null) return true;
             else if (root.left == null)

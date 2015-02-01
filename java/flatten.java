@@ -9,7 +9,49 @@ import java.util.Arrays;
 
 public class flatten {
     public static class Solution {
+        public TreeNode flatten(TreeNode root, TreeNode tail) {
+            if (root == null) return tail;
+            root.right = flatten(root.left, flatten(root.right, tail));
+            root.left = null;
+            return root;
+        }
+        
+        public void flatten2(TreeNode root) {
+            flatten(root, null);
+        }
+
         public void flatten(TreeNode root) {
+            if (root == null) return;
+            Stack<TreeNode> s = new Stack<TreeNode>();
+            s.push(root);
+            while (!s.isEmpty()) {
+                TreeNode p = s.pop();
+                if (p.right != null)
+                    s.push(p.right);
+                if (p.left != null)
+                    s.push(p.left);
+                p.left = null;
+                if (!s.isEmpty())
+                    p.right = s.peek();
+            }
+        }
+        
+        public void flatten1(TreeNode root) {
+            if (root == null) return;
+            flatten(root.left);
+            flatten(root.right);
+            if (root.left == null) return;
+
+            TreeNode p = root.left;
+            while (p.right != null) {
+                p = p.right;
+            }
+            p.right = root.right;
+            root.right = root.left;
+            root.left = null;
+        }
+        
+        public void flatten0(TreeNode root) {
             if (root == null) return;
             if (root == null || (root.left == null && root.right == null)) return;
             if (root.left == null && root.right.left == null && root.right.right == null) return;

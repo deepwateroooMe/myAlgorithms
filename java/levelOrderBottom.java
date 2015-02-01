@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 import java.util.LinkedList;
+import java.util.Collections;
 
 public class levelOrderBottom {
     public static class Solution {
@@ -18,7 +19,7 @@ public class levelOrderBottom {
             }
         }
 
-        public List<List<Integer>> levelOrderBottom(TreeNode root) {
+        public List<List<Integer>> levelOrderBottom0(TreeNode root) {
             List<List<Integer>> res = new ArrayList<List<Integer>>();
             List<Integer> tmp = new ArrayList<Integer>();
             if (root == null) return res;
@@ -55,6 +56,23 @@ public class levelOrderBottom {
                 res.add(0, tmp);                
             return res;
         }
+
+public void traverse(TreeNode root, int level, List<List<Integer>> res) {
+    if (root == null) return;
+    if (level > res.size())
+        res.add(new ArrayList<Integer>());
+    res.get(level - 1).add(root.val);
+    traverse(root.left, level + 1, res);
+    traverse(root.right, level + 1, res);
+}
+        
+public List<List<Integer>> levelOrderBottom(TreeNode root) {
+    List<List<Integer>> res = new ArrayList<List<Integer>>();
+    traverse(root, 1, res);
+    Collections.reverse(res);
+    return res;
+}
+        
     }
 
     public static void main(String[] args){
