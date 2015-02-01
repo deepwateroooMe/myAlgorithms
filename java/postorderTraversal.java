@@ -8,7 +8,7 @@ import java.util.Stack;
 
 public class postorderTraversal {
     public static class Solution {
-        public List<Integer> postorderTraversal(TreeNode root) {
+        public List<Integer> postorderTraversal0(TreeNode root) {
             // get preorder results first, no no no no, root, right, left
             List<Integer> res = new ArrayList<Integer>();
             if (root == null) {
@@ -40,6 +40,39 @@ public class postorderTraversal {
             }
             return result;
         }
+
+        public List<Integer> postorderTraversal1(TreeNode root) {
+            List<Integer> res = new ArrayList<Integer>();
+            TreeNode prev= null; 
+            TreeNode curr= root; 
+            Stack<TreeNode> s = new Stack<TreeNode>();
+            do {
+                while (curr != null) {
+                    s.push(curr);
+                    curr = curr.left;
+                }
+                prev = null;
+                while (!s.isEmpty()) {
+                    curr = s.pop();
+                    if (curr.right == prev) {
+                        res.add(curr.val);
+                        prev = curr;
+                    } else {
+                        s.push(curr);
+                        curr = curr.right;
+                        break;
+                    }
+                }
+            } while (!s.isEmpty());
+            return res;
+        }
+
+        public List<Integer> postorderTraversal(TreeNode root) {
+            List<Integer> res = new ArrayList<Integer>();
+            
+
+        }
+        
     }
     
     public static void main(String[] args){

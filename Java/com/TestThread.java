@@ -1,9 +1,8 @@
 package com;
 
-//public class TestThread extends Thread {
-public class TestThread implements Runnable {
+public class TestThread extends Thread {
 
-    private int tickets = 20;
+    private int tickets = 200;
     
     public void run() {
         //for (int i = 0; i < 10; i++) {
@@ -17,11 +16,13 @@ public class TestThread implements Runnable {
           */
         while (true) {
             if (tickets > 0) {
+                /*
                 try {
                     Thread.sleep(10);                 //1000 milliseconds is one second.
                 } catch(InterruptedException ex) {
                     Thread.currentThread().interrupt();
                 }
+                */
                 System.out.println(Thread.currentThread().getName() + "selling ticket " + tickets--);
             }
         }

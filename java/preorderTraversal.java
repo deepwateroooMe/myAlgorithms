@@ -22,31 +22,54 @@ public class preorderTraversal {
             }
         }
         
-        public List<Integer> preorderTraversal(TreeNode root) {
+        public List<Integer> preorderTraversal0(TreeNode root) {
             List<Integer> res = new ArrayList<Integer>();
-            if (root == null) {
-                return res;
-            }
+            if (root == null) return res;
             Stack<TreeNode> s = new Stack<TreeNode>();
             TreeNode curr = root;
-            while (!s.isEmpty() || curr != null) {
-                while (curr != null) {
-                    res.add(curr.val);
-                    s.push(curr);
-                    curr = curr.left;
-                }
-                if (!s.isEmpty()) {
-                    curr = s.pop();
-                    curr = curr.right;
-                } 
+            if (curr != null) s.push(curr);
+            while (!s.isEmpty()) {
+                curr = s.pop();
+                res.add(curr.val);
+                if (curr.right != null) s.push(curr.right);
+                if (curr.left != null) s.push(curr.left);
             }
             return res;
         }
+
+        public List<Integer> preorderTraversal(TreeNode root) {
+            List<Integer> res = new ArrayList<Integer>();
+            TreeNode curr = root;
+            TreeNode prev = null;
+            while (curr != null) {
+                if (curr.left == null) {
+                    res.add(curr.val);
+                    prev = curr;
+                    curr = curr.right;
+                } else {
+                    TreeNode node = curr.left;
+                    while (node.right != null && node.right != curr) {
+                        node = node.right;
+                    }
+                    if (node.right == null) {
+                        res.add(curr.val);
+                        node.right = curr;
+                        prev = curr;
+                        curr = curr.left;
+                    } else {
+                        node.right = null;
+                        curr = curr.right;
+                    }
+                }
+            }
+            return res;
+        }
+
     }
 
     public static void main(String[] args){
         Solution result = new Solution();
-        int [] a = {3, 1, -1, -1, 2};
+        int [] a = {1, 2};
         TreeNode root = new TreeNode(a[0]);
         root.buildTree(root, a);
         root.levelPrintTree(root);
@@ -64,72 +87,72 @@ public class preorderTraversal {
 
 /*
   Input:	{3,1,#,#,2}
-Output:	[3,1]
-Expected:	[3,1,2]
+  Output:	[3,1]
+  Expected:	[3,1,2]
 
   Input:	{4,2,#,1,3}
-Output:	[4,2,3]
-Expected:	[4,2,1,3]
+  Output:	[4,2,3]
+  Expected:	[4,2,1,3]
 
-Input:	{4,1,#,2,#,3}
-Output:	[4,1,2]
-Expected:	[4,1,2,3]
- */
-        /* // thought and got it too complicated
-        // iterative method: use a stack<TreeNode> right, left, root order
-        public void preorderTraversalIter(TreeNode root, List<Integer> res) {       
-            Stack<TreeNode> s = new Stack<TreeNode>();
-            Stack<TreeNode> f = new Stack<TreeNode>();
-            TreeNode curr = null;
-            if (root.right != null) {
-                curr = root.right;
-                s.push(curr);
-                while (!s.isEmpty()) {
-                    while (curr.right != null) {
-                        curr = curr.right;
-                        s.push(curr);
-                    }
-                    while (!s.isEmpty()) {
-                        curr = s.pop();
-                        if (curr.left != null)
-                            f.push(curr.left);
-                        f.push(curr);
-                    }  
-                } 
-            }
+  Input:	{4,1,#,2,#,3}
+  Output:	[4,1,2]
+  Expected:	[4,1,2,3]
+*/
+/* // thought and got it too complicated
+// iterative method: use a stack<TreeNode> right, left, root order
+public void preorderTraversalIter(TreeNode root, List<Integer> res) {       
+Stack<TreeNode> s = new Stack<TreeNode>();
+Stack<TreeNode> f = new Stack<TreeNode>();
+TreeNode curr = null;
+if (root.right != null) {
+curr = root.right;
+s.push(curr);
+while (!s.isEmpty()) {
+while (curr.right != null) {
+curr = curr.right;
+s.push(curr);
+}
+while (!s.isEmpty()) {
+curr = s.pop();
+if (curr.left != null)
+f.push(curr.left);
+f.push(curr);
+}  
+} 
+}
 
-            // root.left
-            if (root.left != null) {
-                curr = root.left;
-                s.push(curr);
-                while (!s.isEmpty()) {
-                    while (curr.right != null) {
-                        curr = curr.right;
-                        s.push(curr);
-                    }
-                    while (curr.left != null) {
-                        curr = curr.left;
-                        s.push(curr);
-                    }
-                    //System.out.println("s.size(): " + s.size());
+// root.left
+if (root.left != null) {
+curr = root.left;
+s.push(curr);
+while (!s.isEmpty()) {
+while (curr.right != null) {
+curr = curr.right;
+s.push(curr);
+}
+while (curr.left != null) {
+curr = curr.left;
+s.push(curr);
+}
+//System.out.println("s.size(): " + s.size());
 
-                    while (!s.isEmpty()) {
-                        curr = s.pop();
-                        f.push(curr);
-                        /*
-                        if (curr.left == null && curr.right == null) {
-                            f.push(curr);   
-                        } else if (curr.right == null) f.push(curr);
+while (!s.isEmpty()) {
+curr = s.pop();
+f.push(curr);
+/*
+if (curr.left == null && curr.right == null) {
+f.push(curr);   
+} else if (curr.right == null) f.push(curr);
 
-                    }
-                }
-            }
+}
+}
+}
 
-            f.push(root);
-            while (!f.isEmpty()) {
-                curr = f.pop();
-                res.add(curr.val);
-            }
-        }
-        */
+f.push(root);
+while (!f.isEmpty()) {
+curr = f.pop();
+res.add(curr.val);
+}
+}
+*/
 

@@ -3,6 +3,12 @@
 #+title: Algorithms Review for Job Interview
 #+author: deepwaterooo
 
+* 1/31/2015, Saturday
+- Reverse Nodes in k-Group recursion bug !~~~~~~~~
+- 3:00-10:30am; drmi dizi most painful body ever, drinking glasses &
+  glasses water all day...
+- wanted to work on threads, but got speedbar work instead;
+- worked on trees, , will try to finish trees tonight...
 * 1/30/2015, Friday
 - Reverse Nodes in k-Group recursion bug !~~~~~~~~
 - 1:30-7:30am; started to do labor work recently, had been sitting in chairs
