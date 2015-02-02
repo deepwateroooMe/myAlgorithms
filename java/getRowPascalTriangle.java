@@ -10,8 +10,19 @@ public class getRowPascalTriangle {
         // O(n) EXTRA space, not O(n) space
         // it should be handled using list only, but got tired of it today~
         // don't need array and list at the same time, one works already~
-        
+        // set() function
         public List<Integer> getRow(int rowIndex) {
+            List<Integer> arr = new ArrayList<Integer>();
+            for (int i = 0; i <= rowIndex ; i++) {
+                for (int j = i - 1; j > 0; j--) {
+                    arr.set(j, arr.get(j - 1) + arr.get(j));
+                }
+                arr.add(1);
+            }
+            return arr;
+        }
+        
+        public List<Integer> getRow0(int rowIndex) {
             if (rowIndex < 0) return null;
             if (rowIndex == 0) return Arrays.asList(1);
             if (rowIndex == 1) return Arrays.asList(1, 1);

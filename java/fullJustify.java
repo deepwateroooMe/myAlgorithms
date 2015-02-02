@@ -97,7 +97,7 @@ public class fullJustify {
             return res;
         }
         
-        public List<String> fullJustify(String[] words, int L) {
+        public List<String> fullJustify0(String[] words, int L) {
             List<String> res = new ArrayList<String>();
             if (words == null) return null;
             else if (words.length == 1 && words[0] == "" && L == 0) {
@@ -111,8 +111,49 @@ public class fullJustify {
                 list.add(i);
             return recursion(list, L);
         }
+
+        public StringBuffer addSpaces(StringBuffer s, int i, int n, int L, boolean last) {
+            if (n < 1 || i > n - 1) return s;
+            int spaces = last ? 1 : (L / n + (i < (L % n) ? 1 : 0));
+            for (int j = 0; j < spaces; j++)
+                s.append(" ");
+            return s;
+        }
+        
+        public StringBuffer connect(String [] words, int bgn, int end, int len, int L, boolean last) {
+            StringBuffer s = new StringBuffer();
+            int n = end - bgn + 1;
+            for (int i = 0; i < n; i++) {
+                s.append(words[bgn + i]);
+                s = addSpaces(s, i, n - 1, L - len, last);
+            }
+            if (s.length() < L)
+                for (int j = 0; j < L - s.length(); j++) 
+                    s.append(' ');
+            return s;
+        }
+        
+        public List<String> fullJustify(String[] words, int L) {
+            List<String> res = new ArrayList<String>();
+            int n = words.length;
+            int bgn = 0, len = 0;
+            for (int i = 0; i < n; i++) {
+                if (len + words[i].length() + (i - bgn) > L) {
+                    res.add(connect(words, bgn, i - 1, len, L, false).toString());
+                    bgn = i;
+                    len = 0;
+                }
+                len += words[i].length();
+            }
+            res.add(connect(words, bgn, n - 1, len, L, true).toString());
+            return res;
+        }
     }
     /*
+      Input:	[""], 2
+Output:	[" "]
+Expected:	["  "]
+
       Runtime Error Message:	Line 29: java.lang.ArithmeticException: / by zero
       Last executed input:	["Listen","to","many,","speak","to","a","few."], 6
 
@@ -125,8 +166,8 @@ Expected:	["Here    is    an","example  of text","justification.  "]
     */
     public static void main(String[] args){
         Solution result = new Solution();
-        String [] words = {"Here","is","an","example","of","text","justification."};
-        int L = 16;
+        String [] words = {""};
+        int L = 2;
         List<String> res = result.fullJustify(words, L);
 
         for (int i = 0; i < res.size(); i++) 

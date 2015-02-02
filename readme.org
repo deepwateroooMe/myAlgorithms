@@ -3,6 +3,11 @@
 #+title: Algorithms Review for Job Interview
 #+author: deepwaterooo
 
+* 2/2/2015, Monday
+- Reverse Nodes in k-Group recursion bug !~~~~~~~~
+- 5:00-11:30am; will work in the afternoon like yesterday, schedule not fixed yet,
+  guess the arrangement right now just for tmp only....
+- work as mush as I can before work...
 * 2/1/2015, Sunday
 - Reverse Nodes in k-Group recursion bug !~~~~~~~~
 - 5:00-12:30am; worked day time; coming days breaks into parts too...

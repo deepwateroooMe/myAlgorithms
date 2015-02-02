@@ -33,8 +33,6 @@ public class multiply {
             }
             if (leftover > 0)
                 res.insert(0, leftover);
-
-            //System.out.println("res mul: " + res);
             return res.toString();
         }
 
@@ -44,11 +42,9 @@ public class multiply {
             a = a.length() < b.length() ? b : a; // long
             b = res;   // short
             int gap = a.length() - b.length();
-            
             int leftover = 0;
             int curr = 0;
             res = new StringBuffer("");
-            
             for (int i = b.length() - 1; i >= 0; i--) {
                 curr = (getVal(a.charAt(i+gap)) + getVal(b.charAt(i)) + leftover) % 10;
                 leftover = (getVal(a.charAt(i+gap)) + getVal(b.charAt(i)) + leftover) / 10;
@@ -61,14 +57,12 @@ public class multiply {
             }
             if (leftover > 0)
                 res.insert(0, leftover);
-            //System.out.println("res add: " + res);
             return res.toString();
         }
         
         public String multiply(String num1, String num2) {
             if (num1 == null || num2 == null || num1.length() == 0 || num2.length() == 0) return "";
             if (num1.equals("0") || num2.equals("0")) return "0";  // forgot "0" case
-            
             StringBuffer res, tmp = new StringBuffer();
             String temp;
             res = new StringBuffer(num1.length() < num2.length() ? num1 : num2);
@@ -80,12 +74,8 @@ public class multiply {
                     res = new StringBuffer(temp);
                 else {
                     tmp = new StringBuffer(temp);
-                    //System.out.println("tmp: " + tmp);
                     for (int j = 0; j < num2.length() - 1 - i; j++)
                         tmp.append('0');
-                    
-                    //System.out.println("tmp: " + tmp);
-                    //System.out.println("res: " + res);
                     res = new StringBuffer(myAdd(res, tmp));
                 }
             }

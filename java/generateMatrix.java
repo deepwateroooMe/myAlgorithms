@@ -6,6 +6,43 @@ import java.util.List;
 public class generateMatrix {
     public static class Solution {
         public int[][] generateMatrix(int n) {
+            int [][] mat = new int[n][n];
+            int ibgn = 0, iend = n - 1;
+            int jbgn = 0, jend = n - 1;
+            int cnt = 1;
+            while (true) {
+                for (int j = jbgn; j <= jend; j++) mat[ibgn][j] = cnt++;
+                if (++ibgn > iend) break;
+                
+                for (int j = ibgn; j <= iend; j++) mat[j][jend] = cnt++;
+                if (jbgn > --jend) break;
+
+                for (int j = jend; j >= jbgn ; j --) mat[iend][j] = cnt++;
+                if (ibgn > --iend) break;
+                
+                for (int i = iend; i >= ibgn ; i --) mat[i][jbgn] = cnt++;
+                if (++jbgn > jend) break;
+            }
+            return mat;
+        }
+
+        public int[][] generateMatrix1(int n) {
+            int [][] mat = new int[n][n];
+            int bgn = 0, end = n - 1;
+            int num = 1;
+            while (bgn < end) {
+                for (int j = bgn; j < end; j++) mat[bgn][j] = num++;
+                for (int i = bgn; i < end; i++) mat[i][end] = num++;
+                for (int j = end; j > bgn; j--) mat[end][j] = num++;
+                for (int i = end; i > bgn; i--) mat[i][bgn] = num++;
+                ++bgn;
+                --end;
+            }
+            if (bgn == end) mat[bgn][bgn] = num;
+            return mat;
+        }
+        
+        public int[][] generateMatrix0(int n) {
             int [][] matrix = new int[n][n];  // return 
             if (matrix == null || matrix.length == 0) return matrix;
             

@@ -11,7 +11,6 @@ public class minWindow {
                 if (!hash.containsKey(t.charAt(i)))
                     hash.put(t.charAt(i), 1);
                 else hash.put(t.charAt(i), hash.get(t.charAt(i)) + 1);
-
             Map<Character, Integer> fnd = new HashMap<Character, Integer>();
             int fndCnt = 0;
             int slow = 0, fast = slow, size, minl = Integer.MAX_VALUE;
@@ -26,12 +25,10 @@ public class minWindow {
                     } else {
                         if (fnd.get(j) < hash.get(j)) 
                             fndCnt++;
-                        fnd.put(j, fnd.get(j) + 1);  // 
+                        fnd.put(j, fnd.get(j) + 1);  
                     }
                 }
-
                 if (fndCnt == t.length()) {
-                    // if fnd all characters
                     char sc = s.charAt(slow);
                     while (!fnd.containsKey(sc) || fnd.get(sc) > hash.get(sc)) {
                         if (fnd.containsKey(sc) && fnd.get(sc) > hash.get(sc))
@@ -46,7 +43,6 @@ public class minWindow {
                 }
                 fast++;
             }
-            //System.out.println("res.toString(): " + res.toString());
             return res.toString();
         }
     }

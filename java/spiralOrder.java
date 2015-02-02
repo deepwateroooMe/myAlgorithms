@@ -8,12 +8,10 @@ public class spiralOrder {
         public List<Integer> spiralOrder(int[][] matrix) {
             List<Integer> res = new ArrayList<Integer>();
             if (matrix == null || matrix.length == 0) return res;
-            
             int size = matrix.length * matrix[0].length;
             int ibgn = 0, iend = matrix.length - 1;
             int jbgn = 0, jend = matrix[0].length - 1;
-            boolean toup = false, toleft = false;
-
+            boolean toup = false, toleft = false; // 
             while (res.size() < size && ibgn < matrix.length && jbgn < matrix[0].length) {
                 for (int j = jbgn; j <= jend; j++) {
                     if (res.size() == size) break;
