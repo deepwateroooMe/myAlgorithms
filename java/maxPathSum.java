@@ -9,7 +9,7 @@ import java.util.LinkedList;
 
 public class maxPathSum {
     public static class Solution {
-        // need to fix this one, how to pass &max in c++ in java
+        // need to fix this one, how to pass &max in c++ in java, boxing ?
         public int maxSum(TreeNode root, int [] max) {
             if (root == null) {
                 max[0] = 0;
@@ -37,10 +37,28 @@ public class maxPathSum {
             return result;
         }
         
-        public int maxPathSum(TreeNode root) {
+        public int maxPathSum0(TreeNode root) {
             if (root == null) return 0;
             int [] max = {0, 0};
             return maxSum(root, max);
+        }
+
+        private int res;
+        public int dfs(TreeNode root) {
+            if (root == null) return 0;
+            int left = dfs(root.left);
+            int right = dfs(root.right);
+            int sum = root.val;
+            if (left > 0) sum += left;
+            if (right > 0) sum += right;
+            res = Math.max(res, sum);
+            return Math.max(right, left) > 0 ? Math.max(right, left) + root.val : root.val;
+        }
+        
+        public int maxPathSum(TreeNode root) {
+            res = Integer.MIN_VALUE;
+            dfs(root);
+            return res;
         }
     }
 

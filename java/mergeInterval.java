@@ -10,18 +10,17 @@ import java.lang.Integer;
 
 public class mergeInterval {
     public static class Solution {
-        public List<Interval> merge(List<Interval> intervals) {
             // sort List<interval>
             // https://oj.leetcode.com/discuss/13953/a-simple-java-solution
+        public List<Interval> merge(List<Interval> intervals) {
             Collections.sort(intervals, new Comparator<Interval>(){
                     @Override
                         public int compare(Interval a, Interval b) {
                         return Integer.compare(a.start, b.start);
                     }
                 });
-
-            int i;
-            for ( i = 0; i < intervals.size() - 1; i++) {
+            //int i;
+            for (int i = 0; i < intervals.size() - 1; i++) {
                 int j = i + 1;
                 if (intervals.get(i).end < intervals.get(j).start)
                     continue;

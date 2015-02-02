@@ -7,13 +7,12 @@ import java.util.List;
 
 public class sortArrayToBST {
     public static class Solution {
-        public  TreeNode createMyTree(int [] num, int bgn, int end) {
+        public TreeNode createMyTree(int [] num, int bgn, int end) {
             TreeNode root = null;
             if (bgn == end) {
                 root = new TreeNode(num[end]);
                 return root;
             }
-            
             if (bgn < end) {
                 int mid = bgn + (end - bgn) / 2;
                 root = new TreeNode(num[mid]);

@@ -32,19 +32,21 @@ public class pathSum {
                 judSum(root.right, sum, res, two2, curr);
             }
         }
+        public void pathSum(TreeNode root, int gap, List<Integer> curr,
+                            List<List<Integer>> res) {
+            if (root == null) return;
+            curr.add(root.val);
+            if (root.left == null && root.right == null) 
+                if (root.val == gap) 
+                    res.add(curr);
+            pathSum(root.left, gap - root.val, new ArrayList<Integer>(curr), res);
+            pathSum(root.right, gap - root.val, new ArrayList<Integer>(curr), res);
+        }
         
         public List<List<Integer>> pathSum(TreeNode root, int sum) {
             List<List<Integer>> res = new ArrayList<List<Integer>>();
-            List<Integer> one = new ArrayList<Integer>();
-            if (root == null) return res;
-            else if (root.left == null && root.right == null) {
-                if (root.val == sum) {
-                    one.add(root.val);
-                    res.add(one);
-                } 
-                return res;
-            }
-            judSum(root, sum, res, one, 0);
+            List<Integer> curr = new ArrayList<Integer>();
+            pathSum(root, sum, curr, res);
             return res;
         }
     }

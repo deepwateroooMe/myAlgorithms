@@ -7,7 +7,21 @@ import java.util.List;
 
 public class connectNextRight {
     public static class Solution {
+        public void connect(TreeLinkNode root, TreeLinkNode sibling) {
+            if (root == null) return;
+            else root.next = sibling;
+            connect(root.left, root.right);
+            if (sibling != null)
+                connect(root.right, sibling.left);
+            else
+                connect(root.right, null);
+        }
+
         public void connect(TreeLinkNode root) {
+            connect(root, null);
+        }
+        
+        public void connect2(TreeLinkNode root) {
             while (root != null) {
                 TreeLinkNode next = null;
                 TreeLinkNode prev = null;

@@ -9,14 +9,9 @@ using namespace std;
 
 // try recursive method
 // https://oj.leetcode.com/discuss/17745/recursive-solution-not-the-best-but-it-works
+
 TreeNode* newRoot = NULL;
 bool found = false;
-TreeNode *upsideDownBinaryTree(TreeNode *root) {
-    if (root == NULL) return NULL;
-    if (root->left == NULL) return root;
-    recursive(root);
-    return newRoot;
-}
 
 void recursive(TreeNode* root) {
     if (root->left == NULL) return;
@@ -33,7 +28,14 @@ void recursive(TreeNode* root) {
     }
 }
 
-// iterative easier to understand
+TreeNode *upsideDownBinaryTree(TreeNode *root) {
+    if (root == NULL) return NULL;
+    if (root->left == NULL) return root;
+    recursive(root);
+    return newRoot;
+}
+
+
 TreeNode *upsideDownBinaryTree1(TreeNode *root) {
     if (root == NULL || root->left == NULL) return root;
     TreeNode *curr;
@@ -41,11 +43,10 @@ TreeNode *upsideDownBinaryTree1(TreeNode *root) {
     curr = root;
     s.push(curr);
     curr = curr->left;
-    while (curr != NULL) {  // different from !curr
+    while (curr != NULL) {  
         s.push(curr);
         curr = curr->left;
     }
-    
     TreeNode *head;
     head = s.top();
     s.pop();  

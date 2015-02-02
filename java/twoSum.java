@@ -7,6 +7,17 @@ public class twoSum {
     public static class Solution {
         // need consider equal case
         public int[] twoSum(int[] numbers, int target) {
+            Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+            int [] res = new int[2];
+            for (int i = 0; i < numbers.length; i++) {
+                map.put(number[i], i);
+                
+            }
+
+
+        }
+        
+        public int[] twoSum0(int[] numbers, int target) {
             int [] result = new int[2];
             if (numbers == null || numbers.length == 0) return null;
             Map<Integer, Integer> hash = new HashMap<Integer, Integer>();

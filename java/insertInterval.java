@@ -12,8 +12,6 @@ public class insertInterval {
     public static class Solution {
         public List<Interval> insert(List<Interval> intervals, Interval newInterval) {
             intervals.add(newInterval);
-            // sort List<interval>
-            // https://oj.leetcode.com/discuss/13953/a-simple-java-solution
             Collections.sort(intervals, new Comparator<Interval>(){
                     @Override
                         public int compare(Interval a, Interval b) {
@@ -21,8 +19,7 @@ public class insertInterval {
                     }
                 });
 
-            int i;
-            for ( i = 0; i < intervals.size() - 1; i++) {
+            for (int i = 0; i < intervals.size() - 1; i++) {
                 int j = i + 1;
                 if (intervals.get(i).end < intervals.get(j).start)
                     continue;

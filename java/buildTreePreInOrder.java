@@ -33,10 +33,9 @@ public class buildTreePreInOrder {
             root.right = helper(pre, in, idx + (inEnd - bgn) + 1, inEnd + 1, end);
             return root;
         }
-        
+
         public TreeNode buildTree(int[] preorder, int[] inorder) {
-            TreeNode root = helper(preorder, inorder, 0, 0, inorder.length - 1);
-            return root;
+            return helper(preorder, inorder, 0, 0, inorder.length - 1);
         }
     }
 

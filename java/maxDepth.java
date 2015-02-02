@@ -19,7 +19,7 @@ public class maxDepth {
             helper(root.right, res, idx + 1);
         }
         
-        public int maxDepth(TreeNode root) {
+        public int maxDepth0(TreeNode root) {
             if (root == null) return 0;
             else if (root.left == null && root.right == null) return 1;
             
@@ -29,6 +29,12 @@ public class maxDepth {
             helper(root, res, 1);
             return res.get(0);
         }
+
+        public int maxDepth(TreeNode root) {
+            if (root == null) return 0;
+            return Math.max(maxDepth(root.left), maxDepth(root.right)) + 1;
+        }
+        
     }
 
     public static void main(String[] args){

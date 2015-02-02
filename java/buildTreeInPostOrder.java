@@ -1,3 +1,4 @@
+
 import com.TreeNode;
 
 import java.util.HashMap;
@@ -23,7 +24,6 @@ public class buildTreeInPostOrder {
             if (bgn > end) return null;
             TreeNode root = new TreeNode(post[idx]);
             if (bgn == end) return root;
-
             int inEnd = getIdx(in, post[idx]);
             root.left = helper(in, post, idx - (end - inEnd) - 1, bgn, inEnd - 1);
             root.right = helper(in, post, idx - 1, inEnd + 1, end);
@@ -31,8 +31,7 @@ public class buildTreeInPostOrder {
         }
         
         public TreeNode buildTree(int[] inorder, int[] postorder) {
-            TreeNode root = helper(inorder, postorder, postorder.length - 1, 0, inorder.length - 1);
-            return root;
+            return helper(inorder, postorder, postorder.length - 1, 0, inorder.length - 1);
         }
     }
 
