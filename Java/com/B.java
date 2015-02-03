@@ -1,5 +1,6 @@
 package com;
-//import com.A;
+
+import com.A;
 
 public class B {
     public synchronized void funB(A a) {
@@ -7,7 +8,7 @@ public class B {
         System.out.println(name + " enter B.funB(A a)");
         try {
             Thread.sleep(1000);
-        } catch (Exception ex) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
         System.out.println(name + "calling A's last() method");

@@ -2,12 +2,17 @@ package com;
 
 public class TestThread implements Runnable {
     private int tickets = 200;
-    
+    private boolean bFlag = true;
+    public void stopMe() {
+        bFlag = false;
+    }
     public void run() {
-        while (true) {
+        while (bFlag) {
+            //System.out.println(Thread.currentThread().getName() + " is running .....");
             sale();
         }
     }
+    
     public synchronized void sale() {
         if (tickets > 0) {
             try {

@@ -7,6 +7,19 @@ public class isPalindrome {
     public static class Solution {
         // valid: 0-9 A-Z a-z
         public boolean isPalindrome(String s) {
+            int i = 0, j = s.length()-1;
+            while (i < j) {
+                while (i < j && !Character.isLetterOrDigit(s.charAt(i))) i++;
+                while (i < j && !Character.isLetterOrDigit(s.charAt(j))) j--;
+                if (Character.toLowerCase(s.charAt(i)) != Character.toLowerCase(s.charAt(j)))
+                    return false;
+                i++;
+                j--;
+            }
+            return true;
+        }
+        
+        public boolean isPalindrome(String s) {
             if (s == null || s.length() == 0) return true;
             int i = 0, j = s.length()-1;
             char one, two;

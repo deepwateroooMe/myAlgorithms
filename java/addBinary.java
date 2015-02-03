@@ -9,8 +9,26 @@ public class addBinary {
             if ((a == '1' && b == '1') || (a == '0' && b == '0')) return '0';
             else return '1';
         }
-    
+
         public String addBinary(String a, String b) {
+            StringBuffer res = new StringBuffer("");
+            int n = a.length() > b.length() ? a.length() : b.length();
+            a = new StringBuilder(a).reverse().toString();
+            b = new StringBuilder(b).reverse().toString();
+            int carry = 0;
+            for (int i = 0; i < n; i++) {
+                int aval = i < a.length() ? a.charAt(i) - '0' : 0;
+                int bval = i < b.length() ? b.charAt(i) - '0' : 0;
+                int value = (aval + bval + carry) % 2;
+                carry = (aval + bval + carry) / 2;
+                res.insert(0, (char)(value + '0'));
+            }
+            if (carry == 1)
+                res.insert(0, '1');
+            return res.toString();
+        }
+        
+        public String addBinary0(String a, String b) {
             if (a == null || a.length() == 0) return b;
             if (b == null || b.length() == 0) return a;
             StringBuffer res = new StringBuffer();

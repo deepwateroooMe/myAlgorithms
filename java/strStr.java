@@ -7,6 +7,16 @@ public class strStr {
     public static class Solution {
         // idea is straight forward, but need to organize the idea better
         public int strStr(String haystack, String needle) {
+            for (int i = 0; ; i++) {
+                for (int j = 0; ; j++) {
+                    if (j == needle.length()) return i;
+                    if (i + j == haystack.length()) return -1;
+                    if (needle.charAt(j) != haystack.charAt(i + j)) break;
+                }
+            }
+        }
+        
+        public int strStr(String haystack, String needle) {
             if (haystack == null || needle == null) return -1;
             if (needle.length() == 0) return 0;
             if (haystack.length() < needle.length()) return -1;
