@@ -8,7 +8,6 @@ public class lengthOfLastWord {
         public int lengthOfLastWord(String s) {
             if (s == null || s.length() == 0) return 0;
             String [] tmp = s.split("\\s+");
-            //System.out.println(tmp.length);
             if (tmp.length == 0) return 0;
             return tmp[tmp.length-1].length();
         }

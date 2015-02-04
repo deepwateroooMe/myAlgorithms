@@ -5,7 +5,22 @@ import java.util.List;
 
 public class countAndSay {
     public static class Solution {
+        public StringBuffer getNext(StringBuffer s) {
+            
+
+
+
+        }
+        
         public String countAndSay(int n) {
+            StringBuffer s = new StringBuffer("1");
+            while (--n > 0) {
+                s = getNext(s);
+                return s.toString();
+            }
+        }
+        
+        public String countAndSay0(int n) {
             StringBuffer [] res = new StringBuffer[n];
             if (n < 1) return null;
             if (n == 1) return "1";

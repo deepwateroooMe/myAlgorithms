@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 public class anagrams {
     public static class Solution {
-        public String getAna(String a) {
+        public String sort(String a) {
             if (a == "") return "";
             char [] s = a.toCharArray();
             Arrays.sort(s);
@@ -15,19 +15,14 @@ public class anagrams {
         }
         
         public List<String> anagrams(String[] strs) {
-            List<String> list = new ArrayList<String>();
-            if (strs == null || strs.length < 2) return list;
+            List<String> list = new ArrayList<String>();  // result
+            //if (strs == null || strs.length < 2) return list;
             Map<String, List<Integer>> res = new HashMap<String, List<Integer>>();
             String [] sorted = new String[strs.length];
             List<Integer> one = new ArrayList<Integer>();
             for (int i = 0; i < strs.length; i++) {
-                sorted[i] = getAna(strs[i]);
+                sorted[i] = sort(strs[i]);
                 if (res.containsKey(sorted[i])) {
-                    /*
-                    one = new ArrayList<Integer>(res.get(sorted[i]));
-                    one.add(i);
-                    res.put(sorted[i], one);
-                    */
                     res.get(sorted[i]).add(i);
                 } else {
                     one.add(i);
@@ -35,7 +30,6 @@ public class anagrams {
                     one = new ArrayList<Integer>();
                 }
             }
-
             for (String key : res.keySet()) 
                     if (res.get(key).size() > 1) 
                         for (int i = 0; i < res.get(key).size(); i++) 

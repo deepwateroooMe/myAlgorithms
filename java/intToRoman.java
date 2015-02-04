@@ -6,6 +6,19 @@ import java.util.List;
 public class intToRoman {
     public static class Solution {
         public String intToRoman(int num) {
+            int radix [] = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
+            String symbol [] = {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
+            StringBuffer res = new StringBuffer();
+            for (int i = 0; num > 0; i++) {
+                int cnt = num / radix[i];
+                num %= radix[i];
+                for (; cnt > 0 ; --cnt)
+                    res.append(symbol[i]);
+            }
+            return res.toString();
+        }
+        
+        public String intToRoman0(int num) {
             // index        0    1    2    3    4    5    6
             char [] sym = {'I', 'V', 'X', 'L', 'C', 'D', 'M'};
             // value:       1    5    10   50   100  500  1000
