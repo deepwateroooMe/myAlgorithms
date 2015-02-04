@@ -1,7 +1,13 @@
 #include <iostream>
+#include <algorithm>
+
 using namespace std;
 
 int removeDuplicates(int a[], int n) {
+    return distance(a, unique(a, a + n));
+}
+
+int removeDuplicates0(int a[], int n) {
     if (n == 0) return n;
     int cnt = 0; 
     bool flag = false;

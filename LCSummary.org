@@ -6,26 +6,364 @@
 * 数组 Array
 ** Easy
 *** Remove Duplicates from Sorted Array
+Given a sorted array, remove the duplicates in place such that each element appear only once and return the new length.
+
+Do not allocate extra space for another array, you must do this in place with constant memory.
+
+For example,
+
+Given input array A = [1,1,2],
+
+Your function should return length = 2, and A is now [1,2].
+
+**** 时间复杂度 O(n), 空间复杂度 O(1)
+#+BEGIN_SRC java
+public int removeDuplicates(int[] a) {
+    if (a.length == 0) return 0;
+    int idx = 0;
+    for (int i = 1; i < a.length; i++) {
+        if (a[idx] != a[i])
+            a[++idx] = a[i];
+    }
+    return idx + 1;
+}
+#+END_SRC
+**** 使用 STL, 时间复杂度 O(n), 空间复杂度 O(1)
+#+BEGIN_SRC java
+int removeDuplicates(int a[], int n) {
+    return distance(a, unique(a, a + n));
+}
+#+END_SRC
+**** 使用 STL, 时间复杂度 O(n), 空间复杂度 O(1)
+#+BEGIN_SRC java
+int removeDuplicates(int A[], int n) {
+    return removeDuplicates(A, A + n, A) - A;
+}
+template<typename InIt, typename OutIt>
+OutIt removeDuplicates(InIt first, InIt last, OutIt output) {
+    while (first != last) {
+        *output++ = *first;
+        first = find_if(first, last,
+                        bind1st(not_equal_to<int>(), *first));
+    }
+    return output;
+}
+#+END_SRC
+
 *** Remove Element	
+Given an array and a value, remove all instances of that value in place and return the new length.
+
+The order of elements can be changed. It doesn't matter what you leave
+beyond the new length.
+
+**** 时间复杂度 O(n),空间复杂度 O(1)
+#+BEGIN_SRC java
+public int removeElement(int[] a, int elem) {
+    int idx = 0;
+    for (int i = 0; i < a.length; i++) {
+        if (a[i] != elem)
+            a[idx++] = a[i];
+    }
+    return idx;
+}
+#+END_SRC
+**** 使用 remove(),时间复杂度 O(n),空间复杂度 O(1)
+#+BEGIN_SRC java
+int removeElement(int A[], int n, int elem) {
+    return distance(A, remove(A, A+n, elem));
+}
+#+END_SRC
+
 *** Plus One
+
 ** Medium
-*** Rotate Image
-*** Set Matrix Zeroes	
 *** Remove Duplicates from Sorted Array II
+Follow up for "Remove Duplicates":
+What if duplicates are allowed at most twice?
+
+For example,
+
+Given sorted array A = [1,1,1,2,2,3],
+
+Your function should return length = 5, and A is now [1,1,2,2,3].*** Rotate Image
+
+加一个变量记录一下元素出现的次数即可。这题因为是已经排序的数组,所以一个变量即可解
+决。如果是没有排序的数组,则需要引入一个 hashmap 来记录出现次数。
+
+**** 时间复杂度 O(n),空间复杂度 O(1)
+#+BEGIN_SRC java
+public int removeDuplicates(int[] a) {
+    if (a.length == 0) return 0;
+    int ocnt = 1;  // occurance count
+    int idx = 0;
+    for (int i = 1; i < a.length; i++) {
+        if (a[idx] == a[i]) {
+            if (ocnt < 2) {
+                a[++idx] = a[i];
+                ocnt++;
+            }
+        } else {
+            a[++idx] = a[i];
+            ocnt = 1;
+        }
+    }
+    return idx + 1;
+}
+#+END_SRC
+**** 时间复杂度 O(n),空间复杂度 O(1)
+
+下面是一个更简洁的版本。上面的代码略长,不过扩展性好一些,例如将 occur < 2 改为
+occur < 3,就变成了允许重复最多 3 次。
+
+#+BEGIN_SRC java
+public int removeDuplicates(int[] a) {
+    //if (a.length == 0) return 0;
+    int idx = 0;
+    for (int i = 0; i < a.length; i++) {
+        if (i > 0 && i < a.length - 1 && a[i] == a[i - 1] && a[i] == a[i + 1])
+            continue;
+        a[idx++] = a[i];
+    }
+    return idx;
+}
+#+END_SRC
+*** Set Matrix Zeroes	
+
 *** Search in Rotated Sorted Array II
-*** 3Sum
-*** 3Sum Closest
-*** 4Sum
+Follow up for "Search in Rotated Sorted Array":
+
+What if duplicates are allowed?
+
+Would this affect the run-time complexity? How and why?
+
+Write a function to determine if a given target is in the array.
+
+允许重复元素,则上一题中如果 A[m]>=A[l], 那么 [l,m] 为递增序列的假设就不能成立了,比
+如 [1,3,1,1,1]。
+
+如果 A[m]>=A[l] 不能确定递增,那就把它拆分成两个条件:
+
+• 若 A[m]>A[l],则区间 [l,m] 一定递增
+
+• 若 A[m]==A[l] 确定不了,那就 l++,往下看一步即可。
+
+#+BEGIN_SRC java
+public boolean search(int[] a, int target) {
+    int bgn = 0, end = a.length;
+    while (bgn != end) {
+        int mid = bgn + (end - bgn) / 2;
+        if (a[mid] == target) return true;
+        if (a[bgn] < a[mid]) {
+            if (a[bgn] <= target && target < a[mid])
+                end = mid;
+            else
+                bgn = mid + 1;
+        } else if (a[bgn] > a[mid]) {
+            if (a[mid] < target && target <= a[end - 1])
+                bgn = mid + 1;
+            else
+                end = mid;
+        } else 
+            // skip duplicated one, a[bgn] == a[mid]
+            bgn++;
+    }
+    return false;
+}
+#+END_SRC
+
+- 3Sum
+- 3Sum Closest
+- 4Sum
 *** Remove Element
-*** Next Permutation
+- Next Permutation
 *** Permutation Sequence
 *** Valid Sudoku
 *** Trapping Rain Water
 *** Gray Code
 ** Hard
 *** Search in Rotated Sorted Array
+Suppose a sorted array is rotated at some pivot unknown to you beforehand.
+
+(i.e., 0 1 2 4 5 6 7 might become 4 5 6 7 0 1 2).
+
+You are given a target value to search. If found in the array return its index, otherwise return -1.
+
+You may assume no duplicate exists in the array.
+
+二分查找,难度主要在于左右边界的确定。
+
+时间复杂度 O(log n),空间复杂度 O(1). 
+
+#+BEGIN_SRC java
+public int search(int[] a, int target) {
+    int bgn = 0, end = a.length;
+    while (bgn < end) {
+        int mid = bgn + (end - bgn) / 2;
+        if (a[mid] == target) return mid;
+        if (a[bgn] <= a[mid]) {
+            if (a[bgn] <= target && target < a[mid])
+                end = mid;
+            else
+                bgn = mid + 1;
+        } else {
+            if (a[mid] < target && target <= a[end - 1])    //
+                bgn = mid + 1;
+            else
+                end = mid;
+        }
+    }
+    return -1;
+}
+#+END_SRC
+
 *** Median of Two Sorted Arrays
+There are two sorted arrays A and B of size m and n respectively. Find the median of the two sorted arrays. The overall run time complexity should be O(log (m+n)).
+
+*Tags:* Divide and Conquer, Array, Binary Search
+
+这是一道非常经典的题。这题更通用的形式是,给定两个已经排序好的数组,找到两者所有元
+素中第 k 大的元素。
+
+O(m + n) 的解法比较直观,直接 merge 两个数组,然后求第 k 大的元素。
+
+不过我们仅仅需要第 k 大的元素,是不需要“排序”这么复杂的操作的。可以用一个计数器,
+记录当前已经找到第 m 大的元素了。同时我们使用两个指针 pA 和 pB,分别指向 A 和 B 数组的第
+一个元素,使用类似于 merge sort 的原理,如果数组 A 当前元素小,那么 pA++,同时 m++;如果
+数组 B 当前元素小,那么 pB++,同时 m++。最终当 m 等于 k 的时候,就得到了我们的答案,O(k)
+时间,O(1) 空间。但是,当 k 很接近 m + n 的时候,这个方法还是 O(m + n) 的。
+
+有没有更好的方案呢?我们可以考虑从 k 入手。如果我们每次都能够删除一个一定在第 k 大元
+素之前的元素,那么我们需要进行 k 次。但是如果每次我们都删除一半呢?由于 A 和 B 都是有序
+的,我们应该充分利用这里面的信息,类似于二分查找,也是充分利用了“有序”
+。
+
+假设 A 和 B 的元素个数都大于 k/2,我们将 A 的第 k/2 个元素(即 A[k/2-1])和 B 的第 k/2
+个元素(即 B[k/2-1])进行比较,有以下三种情况(为了简化这里先假设 k 为偶数,所得到的结
+论对于 k 是奇数也是成立的):
+
+• A[k/2-1] == B[k/2-1]
+
+• A[k/2-1] > B[k/2-1]
+
+• A[k/2-1] < B[k/2-1]
+
+如果 A[k/2-1] < B[k/2-1],意味着 A[ 0 ] 到 A[k/2-1] 的肯定在 A ∪ B 的 top k 元素的范围
+内,换句话说,A[k/2-1 不可能大于 A ∪ B 的第 k 大元素。留给读者证明。
+
+因此,我们可以放心的删除 A 数组的这 k/2 个元素。同理,当 A[k/2-1] > B[k/2-1] 时,可
+以删除 B 数组的 k/2 个元素。
+
+当 A[k/2-1] == B[k/2-1] 时,说明找到了第 k 大的元素,直接返回 A[k/2-1] 或 B[k/2-1]
+即可。
+
+因此,我们可以写一个递归函数。那么函数什么时候应该终止呢?
+
+• 当 A 或 B 是空时,直接返回 B[k-1] 或 A[k-1];
+
+
+• 当 k=1 是,返回 min(A[ 0 ], B[ 0 ]);
+
+• 当 A[k/2-1] == B[k/2-1] 时,返回 A[k/2-1] 或 B[k/2-1]
+
+#+BEGIN_SRC java
+public int helper(int [] a, int [] b, int k, int i, int j, int x, int y) {
+    int m = a.length;
+    int n = b.length;
+    if (j == i) return b[x + k];
+    if (y == x) return a[i + k];
+    int mida = (i + j) / 2;
+    int midb = (x + y) / 2;
+    int lena = mida - i;
+    int lenb = midb - x;
+    if (b[midb] >= a[mida]) {
+        if (k <= lena + lenb) 
+            return helper(a, b, k, i, j, x, midb);
+        else
+            return helper(a, b, k - lena - 1, mida + 1, j, x, y);
+    } else {
+        if (k <= lena + lenb) {
+            return helper(a, b, k, i, mida, x, y);
+        } else {
+            return helper(a, b, k - lenb - 1, i, j, midb + 1, y);
+        }
+    }
+}
+        
+public double findMedianSortedArrays(int a[], int b[]) {
+    int m = a.length;
+    int n = b.length;
+    if ((m + n) % 2 == 0)
+        return (helper(a, b, (m + n) / 2, 0, m, 0, n) +
+                helper(a, b, (m + n) / 2 - 1, 0, m, 0, n)) / 2.0;
+    else
+        return helper(a, b, (m + n) / 2, 0, m, 0, n);
+}
+#+END_SRC
+
 *** Longest Consecutive Sequence
+Given an unsorted array of integers, find the length of the longest consecutive elements sequence.
+
+For example,
+
+Given [100, 4, 200, 1, 3, 2],
+
+The longest consecutive elements sequence is [1, 2, 3, 4]. Return its length: 4.
+
+Your algorithm should run in O(n) complexity.
+
+如果允许 O(n log n) 的复杂度,那么可以先排序,可是本题要求 O(n)。
+由于序列里的元素是无序的,又要求 O(n),首先要想到用哈希表。
+
+用一个哈希表 unordered_map<int, bool> used 记录每个元素是否使用,对每个元素,以该
+元素为中心,往左右扩张,直到不连续为止,记录下最长的长度。
+
+#+BEGIN_SRC java
+public int longestConsecutive(int[] num) {
+    Map<Integer, Boolean> used = new HashMap<Integer, Boolean>();
+    int longest = 0;
+    for(int i : num) {
+        if (used.containsKey(i)) continue;
+        int length = 1;
+        used.put(i, true);
+        for (int j = i + 1; used.containsKey(j); j++) {
+            used.put(j, true);
+            ++length;
+        }
+        for (int j = i - 1; used.containsKey(j); j--) {
+            used.put(j, true);
+            ++length;
+        }
+        longest = Math.max(longest, length);
+    }
+    return longest;
+}
+#+END_SRC
+
+OJ超时。
+
+#+BEGIN_SRC java
+public int longestConsecutive(int[] num) {
+    Map<Integer, Integer> used = new HashMap<Integer, Integer>();
+    int res = 0, tmp;
+    int left, right;
+    for(int i : num) {
+        if (!used.containsKey(i)) {
+            left = (used.containsKey(i - 1)) ? used.get(i - 1) : 0;
+            right = (used.containsKey(i + 1)) ? used.get(i + 1) : 0;
+            tmp = left + right + 1;
+            used.put(i, tmp);
+            res = Math.max(res, tmp);
+            used.put(i - left, tmp);
+            used.put(i + right, tmp);
+        } else continue;
+    }
+    return res;
+}
+#+END_SRC
+
+简单地想一下，就知道前面一个遍历了所有数组中的无素，重复了已经cnt在最
+长片段里的元素，而这部分是可以跳过的。
+
 *** Trapping Rain Water
 ** others Covered
 - Construct Binary Tree from Inorder and Postorder Traversal
@@ -7247,14 +7585,210 @@ public boolean isMatch(String s, String p) {
 *** Implement strStr()
 ** Medium
 *** 3Sum
+Given an array S of n integers, are there elements a, b, c in S such that a + b + c = 0? Find all unique triplets in the array which gives the sum of zero.
+
+Note:
+
+Elements in a triplet (a,b,c) must be in non-descending order. (ie, a ≤ b ≤ c)
+
+The solution set must not contain duplicate triplets.
+
+    For example, given array S = {-1 0 1 2 -1 -4},
+
+    A solution set is:
+#+BEGIN_SRC java
+    (-1, 0, 1)
+    (-1, -1, 2)
+#+END_SRC
+
+先排序,然后二分查找,复杂度 O(n 2 log n)。
+
+#+BEGIN_SRC java
+public List<List<Integer>> threeSum0(int[] num) {
+    ArrayList<List<Integer>> result = new ArrayList<List<Integer>>();
+    Arrays.sort(num);  
+    List<Integer> one = new ArrayList<Integer>();
+    Map<List<Integer>, Integer> hash = new HashMap<List<Integer>, Integer>();
+    int sum, j, k;
+    for (int i = 0; i < num.length-2; i++) {
+        if (i > 0 && num[i] == num[i-1]) continue;
+        j = i + 1;
+        k = num.length - 1;
+        while (j < k) {
+            while (k > num.length - 1 && num[k] == num[k+1]) k--;
+            sum = num[i] + num[j] + num[k];
+            if (sum > 0) k--;
+            else if (sum < 0) j++;
+            else {
+                one.add(num[i]);
+                one.add(num[j]);
+                one.add(num[k]);
+                if (!hash.containsKey(one))
+                    hash.put(one, 1);
+                one = new ArrayList<Integer>();
+                j++;
+                k--;
+            }
+        }
+    }
+    for(List<Integer> key : hash.keySet()) 
+        result.add(key);
+    return result;
+}
+#+END_SRC
+
+*** 3Sum Closest
+Given an array S of n integers, find three integers in S such that the sum is closest to a given number, target. Return the sum of the three integers. You may assume that each input would have exactly one solution.
+
+    For example, given array S = {-1 2 1 -4}, and target = 1.
+
+    The sum that is closest to the target is 2. (-1 + 2 + 1 = 2).
+
+先排序,然后左右夹逼,复杂度 O(n 2 )。
+
+**** 代码 1: 
+
+#+BEGIN_SRC java
+// LeetCode, 3Sum Closest
+// 先排序,然后左右夹逼,时间复杂度 O(n^2),空间复杂度 O(1)
+class Solution {
+public:
+    int threeSumClosest(vector<int>& num, int target) {
+        int result = 0;
+        int min_gap = INT_MAX;
+        sort(num.begin(), num.end());
+        for (auto a = num.begin(); a != prev(num.end(), 2);
+             a = upper_bound(a, prev(num.end(), 2), *a)) {
+            auto b = next(a);
+            auto c = prev(num.end());
+            while (b < c) {
+                const int sum = *a + *b + *c;
+                const int gap = abs(sum - target);
+                if (gap < min_gap) {
+                    result = sum;
+                    min_gap = gap;
+                }
+                if (sum < target) ++b;
+                else
+                    --c;
+            }
+        }
+        return result;
+    }
+};
+#+END_SRC
+
+**** 代码 2: 
+#+BEGIN_SRC java
+// LeetCode, 3Sum Closest
+// 先排序,然后左右夹逼
+// 时间复杂度 O(n^2),空间复杂度 O(1),与代码 1 比,有常数级的优化
+class Solution {
+public:
+    int threeSumClosest(vector<int>& num, int target) {
+        int result = 0;
+        int min_gap = INT_MAX;
+        sort(num.begin(), num.end());
+        for (auto a = num.begin(); a != prev(num.end(), 2);
+             a = upper_bound(a, prev(num.end(), 2), *a)) {
+            auto b = next(a);
+            auto c = prev(num.end());
+            while (b < c) {
+                const int sum = *a + *b + *c;
+                const int gap = abs(sum - target);
+                if (gap < min_gap) {
+                    result = sum;
+                    min_gap = gap;
+                }
+                if (sum < target)
+                    b = upper_bound(b, c, *b);
+                else
+                    c = prev(lower_bound(b, c, *c));
+            }
+        }
+        return result;
+    }
+};
+#+END_SRC
+from original......
+
 *** 4Sum
+Given an array S of n integers, are there elements a, b, c, and d in S such that a + b + c + d = target? Find all unique quadruplets in the array which gives the sum of target.
+
+Note:
+Elements in a quadruplet (a,b,c,d) must be in non-descending order. (ie, a ≤ b ≤ c ≤ d)
+The solution set must not contain duplicate quadruplets.
+    For example, given array S = {1 0 -1 0 -2 2}, and target = 0.
+
+    A solution set is:
+#+BEGIN_SRC java
+    (-1,  0, 0, 1)
+    (-2, -1, 1, 2)
+    (-2,  0, 0, 2)
+#+END_SRC
+
+*Tags:* Array, Hash Table, Two Pointers
+
+跟 3Sum 很类似,先排序,然后二分查找,复杂度 O(n 3 log n),会超时。
+
+然后想到,可以先缓存两个数的和,最终复杂度 O(n 3 )。这个策略也适用于 3Sum 。
+
+**** 二分查找: 先排序,然后二分查找,复杂度 O(n^3*logn),会超时
+#+BEGIN_SRC java
+vector<vector<int>> fourSum(vector<int>& num, int target) {
+    vector<vector<int>> result;
+    if (num.size() < 4) return result;
+    sort(num.begin(), num.end());
+    auto last = num.end();
+    for (auto a = num.begin(); a < prev(last, 3);
+         a = upper_bound(a, prev(last, 3), *a)) {
+        for (auto b = next(a); b < prev(last, 2);
+             b = upper_bound(b, prev(last, 2), *b)) {
+            for (auto c = next(b); c < prev(last);
+                 c = upper_bound(c, prev(last), *c)) {
+                const int d = target - *a - *b - *c;
+                if (binary_search(next(c), last, d))
+                    result.push_back(vector<int> { *a, *b, *c, d });
+            }
+        }
+    }
+    return result;
+}
+#+END_SRC
+**** map 做缓存: 先缓存两个数的和,时间复杂度 O(n^3),空间复杂度 O(n^2)
+#+BEGIN_SRC java
+vector<vector<int> > fourSum(vector<int> &num, int target) {
+    if (num.size() < 4) return vector<vector<int> >();
+    sort(num.begin(), num.end());
+    map<int, vector<pair<int, int> > > cache;
+    for (size_t a = 0; a < num.size(); ++a) {
+        for (size_t b = a + 1; b < num.size(); ++b) {
+            cache[num[a] + num[b]].push_back(pair<int, int>(a, b));
+        }
+    }
+    set<vector<int>> result; // 去重,因为 num 里有重复元素
+    for (size_t c = 2; c < num.size(); ++c) {
+        for (size_t d = c + 1; d < num.size(); ++d) {
+            const int key = target - num[c] - num[d];
+            if (cache.find(key) != cache.end()) {
+                for (size_t k = 0; k < cache[key].size(); ++k) {
+                    if (c <= cache[key][k].second) continue; // 有重叠
+                    result.insert(vector<int> { num[cache[key][k].first],
+                                num[cache[key][k].second], num[c], num[d] });
+                }
+            }
+        }
+    }
+    return vector<vector<int> >(result.begin(), result.end());
+}
+#+END_SRC
+
 *** Container With Most Water
 *** Remove Duplicates from Sorted Array II
 *** Partition List	
 *** Two Sum II - Input array is sorted
 *** Linked List Cycle II
 *** Longest Substring Without Repeating Characters
-*** 3Sum Closest
 *** Linked List Cycle
 *** Sort Colors
 *** Rotate List
@@ -8634,6 +9168,9 @@ corresponding outputs are in the right-hand column.
 3,2,1 → 1,2,3
 1,1,5 → 1,5,1
 #+END_SRC
+
+算法过程如图所示
+
 ** Hard
 *** Valid Number
 *** Max Points on a Line

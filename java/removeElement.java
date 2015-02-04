@@ -5,7 +5,16 @@ import java.util.List;
 
 public class removeElement {
     public static class Solution {
-        public int removeElement(int[] A, int elem) {
+        public int removeElement(int[] a, int elem) {
+            int idx = 0;
+            for (int i = 0; i < a.length; i++) {
+                if (a[i] != elem)
+                    a[idx++] = a[i];
+            }
+            return idx;
+        }
+
+        public int removeElement0(int[] A, int elem) {
             if (A == null || A.length == 0) return 0;
             int i = 0;
             int j = 0;

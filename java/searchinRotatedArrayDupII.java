@@ -1,3 +1,4 @@
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
@@ -55,8 +56,29 @@ public class searchinRotatedArrayDupII {
                 else return false;
             } 
         }
-
-        public boolean search(int[] A, int target) {
+        public boolean search(int[] a, int target) {
+            int bgn = 0, end = a.length;
+            while (bgn != end) {
+                int mid = bgn + (end - bgn) / 2;
+                if (a[mid] == target) return true;
+                if (a[bgn] < a[mid]) {
+                    if (a[bgn] <= target && target < a[mid])
+                        end = mid;
+                    else
+                        bgn = mid + 1;
+                } else if (a[bgn] > a[mid]) {
+                    if (a[mid] < target && target <= a[end - 1])
+                        bgn = mid + 1;
+                    else
+                        end = mid;
+                } else 
+                    // skip duplicated one, a[bgn] == a[mid]
+                    bgn++;
+            }
+            return false;
+        }
+        
+        public boolean search0(int[] A, int target) {
             if (A == null || A.length == 0) return false;
             else if (A.length == 1) return A[0] == target ? true : false;
             int start = 0;
@@ -79,47 +101,47 @@ public class searchinRotatedArrayDupII {
 /* // when headache should NOT work on this one !!!
    /*
    Input:	[3,3,3,3,4,4,4,4,5,5,5,6,6,6,6,6,6,7,7,8,8,8,8,8,8,8,8,9,9,10,10,10,10,10,-10,-10,-9,-9,-9,-9,-9,-9,-9,-9,-9,-8,-8,-8,-8,-8,-8,-7,-7,-7,-6,-6,-6,-6,-6,-6,-6,-6,-6,-6,-5,-5,-5,-5,-5,-5,-4,-4,-4,-4,-4,-3,-3,-2,-2,-2,-2,-1,-1,-1,-1,-1,-1,0,0,0,1,1,1,1,1,1,2,2,2,2], 10
-Output:	false
-Expected:	true
-
-  Time Limit ExceededMore Details 
-Last executed input:	[1,2,2,2,0,1,1], 0
-
-  Input:	[0,0,1,1,2,0], 2
-Output:	false
-Expected:	true
-
-  Input:	[4,5,6,7,0,1,2], 6
-Output:	false
-Expected:	true
-
- Time Limit ExceededMore Details 
-Last executed input:	[0,2,2], -1
+   Output:	false
+   Expected:	true
 
    Time Limit ExceededMore Details 
-Last executed input:	[1,2,2,2,0,1,1], 0
+   Last executed input:	[1,2,2,2,0,1,1], 0
+
+   Input:	[0,0,1,1,2,0], 2
+   Output:	false
+   Expected:	true
+
+   Input:	[4,5,6,7,0,1,2], 6
+   Output:	false
+   Expected:	true
 
    Time Limit ExceededMore Details 
-Last executed input:	[0,2,2], 0
+   Last executed input:	[0,2,2], -1
 
-  Time Limit ExceededMore Details 
-Last executed input:	[0,2,2], 3
+   Time Limit ExceededMore Details 
+   Last executed input:	[1,2,2,2,0,1,1], 0
 
-  Time Limit ExceededMore Details 
-Last executed input:	[3,1,1], 0
+   Time Limit ExceededMore Details 
+   Last executed input:	[0,2,2], 0
 
-  Input:	[5,1,3], 5
-  Output:	-1
-  Expected:	0
+   Time Limit ExceededMore Details 
+   Last executed input:	[0,2,2], 3
 
-  Input:	[1,3,5], 1
-  Output:	-1
-  Expected:	0
+   Time Limit ExceededMore Details 
+   Last executed input:	[3,1,1], 0
 
-  Input:	[4,5,6,7,8,1,2,3], 8
-  Output:	-1
-  Expected:	4
+   Input:	[5,1,3], 5
+   Output:	-1
+   Expected:	0
 
-  Runtime Error Message:	Line 24: java.lang.ArrayIndexOutOfBoundsException: -1
-  Last executed input:	[1,3], 4
+   Input:	[1,3,5], 1
+   Output:	-1
+   Expected:	0
+
+   Input:	[4,5,6,7,8,1,2,3], 8
+   Output:	-1
+   Expected:	4
+
+   Runtime Error Message:	Line 24: java.lang.ArrayIndexOutOfBoundsException: -1
+   Last executed input:	[1,3], 4
 */

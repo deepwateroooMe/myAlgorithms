@@ -1,3 +1,4 @@
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
@@ -5,7 +6,36 @@ import java.util.List;
 
 public class removeDuplicatesArrayII {
     public static class Solution {
+    public int removeDuplicates(int[] a) {
+            //if (a.length == 0) return 0;
+            int idx = 0;
+            for (int i = 0; i < a.length; i++) {
+                if (i > 0 && i < a.length - 1 && a[i] == a[i - 1] && a[i] == a[i + 1])
+                    continue;
+                a[idx++] = a[i];
+            }
+            return idx;
+        }
+        
         public int removeDuplicates(int[] a) {
+            if (a.length == 0) return 0;
+            int ocnt = 1;  // occurance count
+            int idx = 0;
+            for (int i = 1; i < a.length; i++) {
+                if (a[idx] == a[i]) {
+                    if (ocnt < 2) {
+                        a[++idx] = a[i];
+                        ocnt++;
+                    }
+                } else {
+                    a[++idx] = a[i];
+                    ocnt = 1;
+                }
+            }
+            return idx + 1;
+        }
+        
+        public int removeDuplicates0(int[] a) {
             if (a == null || a.length == 0) return 0;
             else if (a.length == 1) return 1;
             else if (a.length == 2) return 2;

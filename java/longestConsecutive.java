@@ -6,23 +6,41 @@ import java.util.HashMap;
 
 public class longestConsecutive {
     public static class Solution {
-        
-        // or use two sets to ensure O(n)
         public int longestConsecutive(int[] num) {
-            if (num == null || num.length == 0) return 0;
-            Map<Integer, Integer> hash = new HashMap<Integer, Integer>();
+            Map<Integer, Boolean> used = new HashMap<Integer, Boolean>();
+            int longest = 0;
+            for(int i : num) {
+                if (used.containsKey(i)) continue;
+                int length = 1;
+                used.put(i, true);
+                for (int j = i + 1; used.containsKey(j); j++) {
+                    used.put(j, true);
+                    ++length;
+                }
+                for (int j = i - 1; used.containsKey(j); j--) {
+                    used.put(j, true);
+                    ++length;
+                }
+                longest = Math.max(longest, length);
+            }
+            return longest;
+        }
+        
+        public int longestConsecutive0(int[] num) {
+            //if (num == null || num.length == 0) return 0;
+            Map<Integer, Integer> used = new HashMap<Integer, Integer>();
             int res = 0, tmp;
             int left, right;
 
             for(int i : num) {
-                if (!hash.containsKey(i)) {
-                    left = (hash.containsKey(i - 1)) ? hash.get(i - 1) : 0;
-                    right = (hash.containsKey(i + 1)) ? hash.get(i + 1) : 0;
+                if (!used.containsKey(i)) {
+                    left = (used.containsKey(i - 1)) ? used.get(i - 1) : 0;
+                    right = (used.containsKey(i + 1)) ? used.get(i + 1) : 0;
                     tmp = left + right + 1;
-                    hash.put(i, tmp);
+                    used.put(i, tmp);
                     res = Math.max(res, tmp);
-                    hash.put(i - left, tmp);
-                    hash.put(i + right, tmp);
+                    used.put(i - left, tmp);
+                    used.put(i + right, tmp);
                 } else continue;
             }
             return res;

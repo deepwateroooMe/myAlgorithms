@@ -10,8 +10,17 @@ public class removeDuplicates {
             a[i] = a[j];
             a[j] = tmp;
         }
-        
         public int removeDuplicates(int[] a) {
+            if (a.length == 0) return 0;
+            int idx = 0;
+            for (int i = 1; i < a.length; i++) {
+                if (a[idx] != a[i])
+                    a[++idx] = a[i];
+            }
+            return idx + 1;
+        }
+        
+        public int removeDuplicates0(int[] a) {
             if (a == null || a.length == 0) return 0;
             else if (a.length == 1) return 1;
             else if (a.length == 2) return a[0] == a[1] ? 1 : 2;

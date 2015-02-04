@@ -3,6 +3,10 @@
 #+title: Algorithms Review for Job Interview
 #+author: deepwaterooo
 
+* 2/4/2015, Wednesday
+- Reverse Nodes in k-Group recursion bug !~~~~~~~~
+- 1:30-10:30, it happens, don't know why...
+- read initial chapters of EPI....
 * 2/3/2015, Tuesday
 - Reverse Nodes in k-Group recursion bug !~~~~~~~~
 - Last night schedule was assigned extra heavy one, got really tired...
