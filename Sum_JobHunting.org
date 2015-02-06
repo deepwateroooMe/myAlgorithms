@@ -1,6 +1,6 @@
 #+latex_class: book
 #+latex_header: \lstset{language=Java,numbers=left,numberstyle=\tiny,basicstyle=\ttfamily\small,tabsize=4,frame=none,escapeinside=``,extendedchars=false,keywordstyle=\color{blue!70},commentstyle=\color{red!55!green!55!blue!55!},rulesepcolor=\color{red!20!green!20!blue!20!}}
-#+title: JobHunting One Year Interviewer Problems Summary
+#+title: JobHunting Interview Questions
 #+author: deepwaterooo
 
 * 数组
@@ -9,15 +9,14 @@
 3. 一个party N个人，如果一个人不认识任何其他人，又被任何其他人认识，此人为celebrity。用O(n)时间找到此celebrity。 
 
 * 字符串
-1. 写atoi函数，测nodepad
+** 写atoi函数，测nodepad
 
-1.reverse words in a sentence，使用如下函数。
+** reverse words in a sentence，使用如下函数。
 char* reverseWord(const char* str)
 
-3.covert interger number to date string, for example, 20090130 -> "01/30/
-2009"
+** covert interger number to date string, for example, 20090130 -> "01/30/2009"
 
-第三道自己的做法是先取得30,然后01，然后2009然后组合成一个string。问题
+** 第三道自己的做法是先取得30,然后01，然后2009然后组合成一个string。问题
 是这样的话，月和日的01前的0可能会丢失，使得最后结果可能不对。后来想正
 确的做法应该是先把整形转成string,然后使用substr并组合。另外，面试者问
 有stl有什么可以替换itoa，自己答不出来。后来查了下，应该是可以使用
@@ -29,15 +28,11 @@ ss.str()就是我们要的结果。
 #+END_SRC
 
 * Linked List
-2. 复制linked list。 已知每个节点有两个pointer，一个指向后一个节点，另一个指向其他任意一节点。 O(n)时间内，无附加内存，复制该linked list。（存储不连续）
-
-* Stack
+** 复制linked list。 已知每个节点有两个pointer，一个指向后一个节点，另一个指向其他任意一节点。 O(n)时间内，无附加内存，复制该linked list。（存储不连续）
 
 * Tree
 4. 给中序后续，构建树。 
 
-* Hash Table
-  
 * Sort
 2.an interger array containing millions of elements with min 0 and max 1000,
 how to sort it?
@@ -47,21 +42,11 @@ how to sort it?
 * Search
 . 一来就是比较高难度的，给你一个字节数组（注意取值范围），数组长度可能非常长，如何找到第一个只出现了一次的数字。开始没什么思路，和他讨论了一会，边问还边问复杂度和数据结构的问题，后来发现应该进行数出现次数，这样复杂度就是２ｎ，结果出来了要求手写出代码。
   
-* BFS
-  
-* DFS
-  
-* DC
-  
-* Greedy
-  
 * Backtracing
 . 设计一个函数，返回一组数字的组合，combination，不同的是，你每调用它一次，它就返回下一个组合，而不是一次全返回。注：你不能一次算完，把他们存起来，而必须临时算！
 
 * DP
 3. 手写fab(n)函数，不是算，而是输出，递归或者循环都可，不过递归不高效大家应该知道
-
-* Two Pointers
 
 * brain teaser
 1. 50个黑球50个百球，2个罐，要求你放这100个球在这2个罐，使得别人随机从2个罐中任意拿一个球是黑球的几率达到最大。
@@ -202,10 +187,7 @@ all of them. For example, abcx, abdx, abea, then ab is shared by all of them.
 
 2. the gmail page loads very slow. any suggestion for improvement?
 
-3. we want to check the number of querys obtained from the world in the last
-minute and the last hour, what data structure should you use for that? If 
-there are billions of records, i.e, too many records for the main memory, 
-what suggestions do you have?
+3. we want to check the number of querys obtained from the world in the last minute and the last hour, what data structure should you use for that? If there are billions of records, i.e, too many records for the main memory, what suggestions do you have?
 
 马上就要第二轮店面了，求大家的题目和建议，我们也可以私下交流。谢谢！
 
@@ -250,19 +232,34 @@ http://www.mitbbs.com/article/JobHunting/31494489_3.html
 
 * Google / MS
 
-删除一个singly linked list节点, 但不知道head.不知道head, 怎么找之前的那个节点阿? 又没说有loop.谁知道trick在哪?
+** continental divider
+给一个矩阵，其中0代表海洋，其他数字代表高度，秉着水往低处流的原则，求出能够
+流向任意海洋的点。 比如说
+#+BEGIN_SRC java
+0 0 0 1 2 3 0
+0 1 2 2 4 3 2
+2 1 1 3 3 2 0
+0 3 3 3 2 3 3
+#+END_SRC
+
+那么就要给出 第二行的4 （这有这点出发，能够找到连通道四个0的区域的一条非递增
+路线），当然也有可能找不到这样的点，或者找到多个点。
+
+http://www.mitbbs.com/article_t/JobHunting/32882153.html
+
+** 删除一个singly linked list节点, 但不知道head.不知道head, 怎么找之前的那个节点阿? 又没说有loop.谁知道trick在哪?
 
 record the next node of it delete its next node do the assignment to copy saved next node to it 
 
 http://www.mitbbs.com/article/JobHunting/31454761_3.html
 
-Write code for finding number of zeros in n! OR Find the first
+** Write code for finding number of zeros in n! OR Find the first
 non-zero digit from the right in 100! (Factorial of hundred). Can an
 int store hundred factorial. What size of array should be sufficient to solve the above problem. Write a code for the same.
 
 http://www.mitbbs.com/article/JobHunting/31454839_3.html
 
-you have a billion google searches a day, design a data structure
+** you have a billion google searches a day, design a data structure
 which lets you pull out the top 100 unique ones at the end of the
 day.我的想法是create hashtable. scan billion data 一次，在hashtable纪
 录每个query的次数, 然后再scan billion data一次,通过heap和hashtable找到
@@ -273,9 +270,13 @@ http://www.mitbbs.com/article/JobHunting/31455781_3.html
 
 #+BEGIN_SRC java
 list<int> L;
-...
-list<int>::iterator in_range =   find_if(L.begin(), L.end(),          compose2(logical_and<bool>(),                   bind2nd(greater_equal<int>(), 1),                   bind2nd(less_equal<int>(), 10)));
+list<int>::iterator in_range = find_if(L.begin(), L.end(),
+                                       compose2(logical_and<bool>(),
+                                                bind2nd(greater_equal<int>(), 1),
+                                                bind2nd(less_equal<int>(), 10)));
+#+END_SRC
 What is the best assertion that should be used as a post-condition?
+#+BEGIN_SRC java
 assert(in_range == L.begin() || (*in_range >= 1 && *in_range <= 10));
 assert(in_range == L.end() || (*in_range >= 1 || *in_range <= 10));
 assert(*in_range >= 1 && *in_range <= 10);
@@ -285,7 +286,7 @@ assert(in_range == L.end() && (*in_range >= 1 && *in_range <= 10));
 
 http://www.mitbbs.com/article/JobHunting/31456679_3.html
 
-he difference of following two expressions: Test A or Test B()
+** The difference of following two expressions: Test A or Test B()
 #+BEGIN_SRC java
 Class Test;
 Test A;
@@ -294,8 +295,8 @@ Test B();
 #+END_SRC
 
 http://www.mitbbs.com/article/JobHunting/31456597_3.html
-p
-When a derived class is destructed, at what stage will the base class's 
+
+** When a derived class is destructed, at what stage will the base class's 
 destructor be called?
 the answer varies on a case-by-case basis
 It will automatically be called after the destructors for the derived class 

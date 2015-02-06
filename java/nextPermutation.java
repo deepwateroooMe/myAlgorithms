@@ -12,6 +12,11 @@ public class nextPermutation {
             a[i] = a[j];
             a[j] = tmp;
         }
+
+        public void nextPermutation(int[] a) {
+            
+
+        }
         
         public void nextPermutation(int[] a) {
             if (a == null || a.length < 2) return;

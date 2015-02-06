@@ -3,6 +3,23 @@
 #+title: Algorithms Review for Job Interview
 #+author: deepwaterooo
 
+* 2/5/2015, Thursday
+- Reverse Nodes in k-Group recursion bug !~~~~~~~~
+- spent 1.5 hours rearrange the room so that avoid shower & washer
+  dryer for bed and study desk, now desk facing Window... should be so much better now...
+- went outside and came back in the afternoon
+- appreciate a lot for LeetCode having been helpping me getting
+  farmilar with these algorithms, I can recite the
+  answers, but maybe one more round of algorithms so that I do
+  UNDERSTAND instead of memorizing them by mistake...target for
+  finishing in one week...
+- work during day time, but will combe back for algorithms in the
+  evening, 
+- LeetCode Summary .org file is too large killing my computer, maybe
+  go back to it after one week...
+- began to prepare for the projects, algorithms deeper understand and
+  summarizing, after this week, no more problems, project-oriented
+  alter on....
 * 2/4/2015, Wednesday
 - Reverse Nodes in k-Group recursion bug !~~~~~~~~
 - 1:30-10:30, it happens, don't know why...

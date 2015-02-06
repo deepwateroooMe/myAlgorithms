@@ -1,4 +1,4 @@
-% Created 2015-02-01 Sun 13:18
+% Created 2015-02-05 Thu 18:41
 \documentclass[12pt]{book}
 \usepackage{graphicx}
 \usepackage{xcolor}
@@ -44,17 +44,18 @@
 
 \chapter{字符串}
 \label{sec-2}
-\begin{enumerate}
-\item 写atoi函数，测nodepad
-\end{enumerate}
+\section{写atoi函数，测nodepad}
+\label{sec-2-1}
 
-1.reverse words in a sentence，使用如下函数。
+\section{reverse words in a sentence，使用如下函数。}
+\label{sec-2-2}
 char* reverseWord(const char* str)
 
-3.covert interger number to date string, for example, 20090130 -> "01/30/
-2009"
+\section{covert interger number to date string, for example, 20090130 -> "01/30/2009"}
+\label{sec-2-3}
 
-第三道自己的做法是先取得30,然后01，然后2009然后组合成一个string。问题
+\section{第三道自己的做法是先取得30,然后01，然后2009然后组合成一个string。问题}
+\label{sec-2-4}
 是这样的话，月和日的01前的0可能会丢失，使得最后结果可能不对。后来想正
 确的做法应该是先把整形转成string,然后使用substr并组合。另外，面试者问
 有stl有什么可以替换itoa，自己答不出来。后来查了下，应该是可以使用
@@ -68,60 +69,38 @@ ss.str()就是我们要的结果。
 
 \chapter{Linked List}
 \label{sec-3}
-\begin{enumerate}
-\item 复制linked list。 已知每个节点有两个pointer，一个指向后一个节点，另一个指向其他任意一节点。 O(n)时间内，无附加内存，复制该linked list。（存储不连续）
-\end{enumerate}
-
-\chapter{Stack}
-\label{sec-4}
+\section{复制linked list。 已知每个节点有两个pointer，一个指向后一个节点，另一个指向其他任意一节点。 O(n)时间内，无附加内存，复制该linked list。（存储不连续）}
+\label{sec-3-1}
 
 \chapter{Tree}
-\label{sec-5}
+\label{sec-4}
 \begin{enumerate}
 \item 给中序后续，构建树。
 \end{enumerate}
 
-\chapter{Hash Table}
-\label{sec-6}
-
 \chapter{Sort}
-\label{sec-7}
+\label{sec-5}
 2.an interger array containing millions of elements with min 0 and max 1000,
 how to sort it?
 
 第二道使用couting sort应该就可以。面试者要求描述算法，不需写代码。
 
 \chapter{Search}
-\label{sec-8}
+\label{sec-6}
 . 一来就是比较高难度的，给你一个字节数组（注意取值范围），数组长度可能非常长，如何找到第一个只出现了一次的数字。开始没什么思路，和他讨论了一会，边问还边问复杂度和数据结构的问题，后来发现应该进行数出现次数，这样复杂度就是２ｎ，结果出来了要求手写出代码。
 
-\chapter{BFS}
-\label{sec-9}
-
-\chapter{DFS}
-\label{sec-10}
-
-\chapter{DC}
-\label{sec-11}
-
-\chapter{Greedy}
-\label{sec-12}
-
 \chapter{Backtracing}
-\label{sec-13}
+\label{sec-7}
 . 设计一个函数，返回一组数字的组合，combination，不同的是，你每调用它一次，它就返回下一个组合，而不是一次全返回。注：你不能一次算完，把他们存起来，而必须临时算！
 
 \chapter{DP}
-\label{sec-14}
+\label{sec-8}
 \begin{enumerate}
 \item 手写fab(n)函数，不是算，而是输出，递归或者循环都可，不过递归不高效大家应该知道
 \end{enumerate}
 
-\chapter{Two Pointers}
-\label{sec-15}
-
 \chapter{brain teaser}
-\label{sec-16}
+\label{sec-9}
 \begin{enumerate}
 \item 50个黑球50个百球，2个罐，要求你放这100个球在这2个罐，使得别人随机从2个罐中任意拿一个球是黑球的几率达到最大。
 
@@ -131,7 +110,7 @@ how to sort it?
 \end{enumerate}
 
 \chapter{系统}
-\label{sec-17}
+\label{sec-10}
 \begin{enumerate}
 \item 古老的三角形问题：输入3边，看是什么三角形。一个mobile device可以从服务器上传和下载图像，怎么测试这个系统？
 
@@ -154,7 +133,7 @@ coding的题目是Path Walk，给一条路径，写一个函数来走通它。�
 \url{http://www.mitbbs.com/article/JobHunting/31393101_3.html}
 
 \chapter{c++}
-\label{sec-18}
+\label{sec-11}
 1.template中用typename和用class有什么区别？
 
 2.unix下执行shell脚本和执行可执行文件有什么区别？哪个更快，为什么？脚本语言程序（如javascript)和可执行文件程序有什么区别？shell和这两者却别呢？
@@ -254,17 +233,17 @@ C++：effective c++上的东西若干；exception相关；继承和子父类指�
 \end{enumerate}
 
 \chapter{c++ and data structure}
-\label{sec-19}
+\label{sec-12}
 \section{single linked list, find nth from the end}
-\label{sec-19-1}
+\label{sec-12-1}
 \section{Overwriting and Overloading}
-\label{sec-19-2}
+\label{sec-12-2}
 \section{Stack vs. Queue}
-\label{sec-19-3}
+\label{sec-12-3}
 \section{Array of integers, all integers appear even times except one, find the one appears odd times. (some following up questions for this one)OOD}
-\label{sec-19-4}
+\label{sec-12-4}
 \section{Do you approve the following design?}
-\label{sec-19-5}
+\label{sec-12-5}
 \lstset{language=java,label= ,caption= ,numbers=none}
 \begin{lstlisting}
 Class Furniture{    
@@ -281,7 +260,7 @@ Class steel_table
 \end{lstlisting}
 What if you need to design a lot of other furnitures like desks\ldots{}. with other materials like plastics 
 \section{An open question.Takes more time than any other questions. It is related to the project they are working on, you should not be asked.}
-\label{sec-19-6}
+\label{sec-12-6}
 
 \url{http://www.mitbbs.com/article/JobHunting/31487819_3.html}
 
@@ -337,7 +316,7 @@ The nextRight points to the right node to the current node in the same level. As
 \url{http://www.mitbbs.com/article/JobHunting/31494489_3.html}
 
 \chapter{OOD OOP}
-\label{sec-20}
+\label{sec-13}
 \begin{enumerate}
 \item 一堆关于OO概念的问题，多态，继承，封装，接口和抽象类的区别，复写和重载（包括C++具体怎么实现的）
 \end{enumerate}
@@ -345,21 +324,24 @@ The nextRight points to the right node to the current node in the same level. As
 然后就是一个智力问题，三个囚犯黑帽白帽，之前没见过，所以用了不少时间才想出来，大家可以搜搜，有现成的。 最后反问问题后结束。
 
 \chapter{Google / MS}
-\label{sec-21}
+\label{sec-14}
 
-删除一个singly linked list节点, 但不知道head.不知道head, 怎么找之前的那个节点阿? 又没说有loop.谁知道trick在哪?
+\section{删除一个singly linked list节点, 但不知道head.不知道head, 怎么找之前的那个节点阿? 又没说有loop.谁知道trick在哪?}
+\label{sec-14-1}
 
 record the next node of it delete its next node do the assignment to copy saved next node to it 
 
 \url{http://www.mitbbs.com/article/JobHunting/31454761_3.html}
 
-Write code for finding number of zeros in n! OR Find the first
+\section{Write code for finding number of zeros in n! OR Find the first}
+\label{sec-14-2}
 non-zero digit from the right in 100! (Factorial of hundred). Can an
 int store hundred factorial. What size of array should be sufficient to solve the above problem. Write a code for the same.
 
 \url{http://www.mitbbs.com/article/JobHunting/31454839_3.html}
 
-you have a billion google searches a day, design a data structure
+\section{you have a billion google searches a day, design a data structure}
+\label{sec-14-3}
 which lets you pull out the top 100 unique ones at the end of the
 day.我的想法是create hashtable. scan billion data 一次，在hashtable纪
 录每个query的次数, 然后再scan billion data一次,通过heap和hashtable找到
@@ -371,9 +353,14 @@ top 100, 不过这样的话,billion data会被scan 2次，disk i/o会很大
 \lstset{language=java,label= ,caption= ,numbers=none}
 \begin{lstlisting}
 list<int> L;
-...
-list<int>::iterator in_range =   find_if(L.begin(), L.end(),          compose2(logical_and<bool>(),                   bind2nd(greater_equal<int>(), 1),                   bind2nd(less_equal<int>(), 10)));
+list<int>::iterator in_range = find_if(L.begin(), L.end(),
+                                       compose2(logical_and<bool>(),
+                                                bind2nd(greater_equal<int>(), 1),
+                                                bind2nd(less_equal<int>(), 10)));
+\end{lstlisting}
 What is the best assertion that should be used as a post-condition?
+\lstset{language=java,label= ,caption= ,numbers=none}
+\begin{lstlisting}
 assert(in_range == L.begin() || (*in_range >= 1 && *in_range <= 10));
 assert(in_range == L.end() || (*in_range >= 1 || *in_range <= 10));
 assert(*in_range >= 1 && *in_range <= 10);
@@ -383,7 +370,8 @@ assert(in_range == L.end() && (*in_range >= 1 && *in_range <= 10));
 
 \url{http://www.mitbbs.com/article/JobHunting/31456679_3.html}
 
-he difference of following two expressions: Test A or Test B()
+\section{The difference of following two expressions: Test A or Test B()}
+\label{sec-14-4}
 \lstset{language=java,label= ,caption= ,numbers=none}
 \begin{lstlisting}
 Class Test;
@@ -393,8 +381,9 @@ Test B();
 \end{lstlisting}
 
 \url{http://www.mitbbs.com/article/JobHunting/31456597_3.html}
-p
-When a derived class is destructed, at what stage will the base class's 
+
+\section{When a derived class is destructed, at what stage will the base class's}
+\label{sec-14-5}
 destructor be called?
 the answer varies on a case-by-case basis
 It will automatically be called after the destructors for the derived class 
@@ -618,7 +607,7 @@ query into a few parts, for example, *o*ve*ou => o, ve, ou, 然后分别用o, ve
 \url{http://www.mitbbs.com/article/JobHunting/31472965_3.html}
 
 \chapter{Google interview question}
-\label{sec-22}
+\label{sec-15}
 Design a system to store heap on multiple machines ? What is avg number of 
 machines accessed per operation and  number of elements stored in a machine ?
 First greater number in an array. Given a large array of positive integers, 
@@ -674,7 +663,7 @@ clearly, C D E in the most frequent website?
 
 \url{http://www.mitbbs.com/article/JobHunting/31493961_3.html}
 \chapter{google interview question from glassdoor}
-\label{sec-23}
+\label{sec-16}
 Design and describe a system/application that will most efficiently produce 
 a report of the top 1 million Google search requests. You are given:
 
@@ -903,7 +892,7 @@ zhang  checkout
 \url{http://www.mitbbs.com/article/JobHunting/31487345_3.html}
 
 \chapter{LinkedIn}
-\label{sec-24}
+\label{sec-17}
 \begin{enumerate}
 \item 2D matrix, sorted on each row, first element of next row is larger(or
 \end{enumerate}
@@ -1005,40 +994,40 @@ and 0
 \url{http://www.mitbbs.com/article_t/JobHunting/32802467.html}
 
 \chapter{Amazon}
-\label{sec-25}
+\label{sec-18}
 \section{为什么对Amazon感兴趣。}
-\label{sec-25-1}
+\label{sec-18-1}
 \section{自己最近的Project。}
-\label{sec-25-2}
+\label{sec-18-2}
 \section{说出自己会的编程语言并打分（1－5）。}
-\label{sec-25-3}
+\label{sec-18-3}
 \section{有没有开发Mobile application的经验。}
-\label{sec-25-4}
+\label{sec-18-4}
 \section{几个常见Data structure的Lookup操作的时间复杂度。}
-\label{sec-25-5}
+\label{sec-18-5}
 \section{HTTP post和get的区别。}
-\label{sec-25-6}
+\label{sec-18-6}
 \section{Design Pattern: Singleton, Factory, Lazy initialization。}
-\label{sec-25-7}
+\label{sec-18-7}
 \section{Multi-threaded programming, deadlock之类。}
-\label{sec-25-8}
+\label{sec-18-8}
 \section{对Unix环境是否熟悉，几个常见命令，ls, ps之类。}
-\label{sec-25-9}
+\label{sec-18-9}
 \section{Reflection的概念，Java reflection，C++里面是不是有reflection。}
-\label{sec-25-10}
+\label{sec-18-10}
 \section{如何实现Garbage Collection。Reference counting的缺点(cycle)，如何解决，JVM有没有解决。}
-\label{sec-25-11}
+\label{sec-18-11}
 \section{C++里面virtual destructor的用途，于一般virtual function的区别。}
-\label{sec-25-12}
+\label{sec-18-12}
 \section{写一个函数实现两个整数相除，不用"/"和"\%"，返回商和余数。写完读给他听。}
-\label{sec-25-13}
+\label{sec-18-13}
 \section{算法设计：一个Galaxy，每个星星用一个三围座标表示，找出离地球最近的1000个。}
-\label{sec-25-14}
+\label{sec-18-14}
 
 \chapter{amazon}
-\label{sec-26}
+\label{sec-19}
 \section{那道wood steel table chair furniture的题目}
-\label{sec-26-1}
+\label{sec-19-1}
 \lstset{language=java,label= ,caption= ,numbers=none}
 \begin{lstlisting}
 #include <iostream>
@@ -1310,7 +1299,7 @@ c. insert a letter (also at any position)
 \url{http://www.mitbbs.com/article/JobHunting/31501445_3.html}
 
 \section{题目}
-\label{sec-26-2}
+\label{sec-19-2}
 
 题目1. LIS. 一个任意的数组，找出一个严格单调递增的最长子序列。例如: \{3,0,1,7,2,4,5,9\} –> output： \{0, 1, 2, 4, 5, 9\}很简洁巧妙的算法，能在O(N log N)时间和O(N)空间做出来！方法就是始终保持一个单增的序列，然后新来的数如果比当前最大还大就append在后面，否则在单增序列里面做binary search，替换相应位置的数。
 
@@ -1399,7 +1388,7 @@ int bitSetCount(unsigned int i){
 \url{http://www.mitbbs.com/article/JobHunting/31502237_3.html}
 
 \section{学习了backtrack(回溯法)}
-\label{sec-26-3}
+\label{sec-19-3}
 
 之前做了一些回溯的题，比如打印permutation，打印任意n对括号等等，都是瞎蒙的。还真凑巧，上午做了打印n括号的题，下午就看见有人说到回溯法，想想自己还没系统学过这个，找了本基础的中文算法书来看了看，虽然书上讲的很浅显，发现自己貌似瞎蒙还蒙对了思路，呵呵。正好凑巧的是，刚刚看了一点点，网上就有个人问怎么做Vertex Cover的问题，正好让我来做做练习。
 
@@ -1474,7 +1463,7 @@ void VC2(int k, int start_v){
 \url{http://www.mitbbs.com/article/JobHunting/31502231_3.html}
 
 \section{题：}
-\label{sec-26-4}
+\label{sec-19-4}
 
 \begin{enumerate}
 \item 我们知道，从一个数组里找一段(连续的)子数组求最大和，是一道经典的面试题，方法很简单，只要O(n)的时间。把这个问题变一下，假设是一个循环数组呢？找一个size<=n的子数组with最大和。
@@ -1638,9 +1627,9 @@ dictionary is given. You have a word which may be misspelled. How will you check
 \url{http://www.mitbbs.com/article/JobHunting/31485125_3.html}
 
 \chapter{bloomberg's phone interview question}
-\label{sec-27}
+\label{sec-20}
 \section{}
-\label{sec-27-1}
+\label{sec-20-1}
 \begin{enumerate}
 \item How to implement garbage collector ( what data structure)
 \item How to implement c++ smart pointer
@@ -1649,7 +1638,7 @@ dictionary is given. You have a word which may be misspelled. How will you check
 \end{enumerate}
 10 stacks? 1 heap?
 \section{}
-\label{sec-27-2}
+\label{sec-20-2}
 1.为什么加入bloomberg？
 2.introduce your experience。
 3.比较c++和java的区别。内存管理，garbage class\ldots{}.compiler，编译的作用？（
@@ -1687,7 +1676,7 @@ only-putchar/
 \url{http://www.mitbbs.com/article_t/JobHunting/31500097.html}
 
 \chapter{hedge fund}
-\label{sec-28}
+\label{sec-21}
 职位是 junior financial engineer, 公司是一hedge fund,其实面完就感觉不太好，
 一共见了6个人，有两个人问得技术问题答得不太好，也怪自己事先准备面试下的功夫
 不太到家，准备得重点没有把握好。以下是一些能想起来的问题：
@@ -2009,7 +1998,7 @@ O(1) solution forth is e.g if N=9 ( 1001) ,A=0 ,B=2,K=5(101 then the result shou
 \url{http://www.mitbbs.com/article/JobHunting/31446979_3.html}
 
 \chapter{Adobe}
-\label{sec-29}
+\label{sec-22}
 Went to Adobe to interview a Senior SW Engineer position, 总的interview的不错， 但被下面问题问倒了，让回去想想，  
 
 Q1: "We need to compare thousands text files with each other, they are not big, 
@@ -2127,7 +2116,7 @@ originating or terminating from that vertex. The time should be less Q(n$^{\text
 \url{http://www.mitbbs.com/article/JobHunting/31454759_3.html}
 
 \chapter{cloud service}
-\label{sec-30}
+\label{sec-23}
 面的是ELASTIC COMPUTING CLOUD组的SE,我是做网络的,对他们的这个cloud service有些兴趣,以为会问算法和系统的问题,结果问了一个OOD的问题,说一个大楼,10层,4个电梯,怎么设计类来实现这样一个系统? 题目career cup上有,不过没想到他会问这个,ECC又不是做应用的.刚好是我的弱项,一直做research,对算法和语言还算了解,对应用系统和设计那是一片空白.面的是一塌糊涂. 有要面amazon的参考一下.
 Windows Live Experience 组：1.美国人。上来随便聊聊，然后出了个coding 题目 一个数组，找出第一个重复的数  我给了三种方法，最后用hash写的，然后问test case之类的
 
@@ -2142,7 +2131,7 @@ Windows Live Experience 组：1.美国人。上来随便聊聊，然后出了个
 给你一本dictionary，任意给你七个letters，让你找出包含这七个字母的、最长的单词。条件：可以pre-processing，这样每次给你不同的letters时，可以very effcient我当时想了好久也没给出完整答案。。。naive 的解法当然就是每次scan dictionary，每次 O（n）。。。pre-peocessing那就是建index，但index怎么建？怎么操作？
 
 \chapter{FULL TIME SDE。}
-\label{sec-31}
+\label{sec-24}
 1.REVERSE LINKLIST.
 2.给了N个数，值域[1,N-1]，如何找出第一个重复的数
 3.算POLYNOMIAL，比如5x$^{\text{4}}$+6x$^{\text{3}}$-7x$^{\text{2}}$-8=?
@@ -2151,7 +2140,7 @@ Windows Live Experience 组：1.美国人。上来随便聊聊，然后出了个
 \url{http://www.mitbbs.com/article/JobHunting/31387663_3.html}
 
 \chapter{ftware Development Engineer}
-\label{sec-32}
+\label{sec-25}
 问候之后，首先问了一下我的research, 让我具体的阐述我提到过的算法然后OOD的一道题，其实不难，但我感觉自己答得不好have a furniture class, some child classes like table, chair, etc.
 they want to extend the class hierarchy, as there are wood table, steel table, wood chair, steel chair, and so on.
 我首先给出class + interface的design:
@@ -2262,7 +2251,7 @@ to use BST, and using no recursive. Also how to handle unicode.
 \url{http://www.mitbbs.com/article/JobHunting/31482527_3.html}
 
 \chapter{Website Links}
-\label{sec-33}
+\label{sec-26}
 \url{http://www.mitbbs.com/article_t/JobHunting/31342084.html}
 
 \url{http://www.mitbbs.com/article_t/JobHunting/31347263.html}
