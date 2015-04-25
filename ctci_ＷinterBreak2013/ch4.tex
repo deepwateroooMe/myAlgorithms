@@ -1,0 +1,353 @@
+\chapter{Trees and Graphs}
+\small{}
+
+\begin{description}
+\item[4.1] Implement a function to check if a tree is balanced. For the purposes of this question, a balanced tree is defined to be a tree such that no two leaf nodes differ in distance from the root by more than one.
+
+实现一个函数检查一棵树是否平衡。对于这个问题而言， 平衡指的是这棵树任意两个叶子结点到根结点的距离之差不大于1。
+
+Solution: 
+
+对于这道题，要审清题意。它并不是让你判断一棵树是否为平衡二叉树。 平衡二叉树的定义为：它是一棵空树或它的左右两个子树的高度差的绝对值不超过1， 并且左右两个子树都是一棵平衡二叉树。 而本题的平衡指的是这棵树任意两个叶子结点到根结点的距离之差不大于1。 这两个概念是不一样的。例如下图，它是一棵平衡二叉树，但不满足本题的平衡条件。 (叶子结点f和l到根结点的距离之差等于2，不满足题目条件)
+
+对于本题，只需要求出离根结点最近和最远的叶子结点， 然后看它们到根结点的距离之差是否大于1即可。
+
+假设只考虑二叉树，我们可以通过遍历一遍二叉树求出每个叶子结点到根结点的距离。 使用中序遍历，依次求出从左到右的叶子结点到根结点的距离，递归实现。
+
+\begin{lstlisting}[language=C++]
+int d = 0, num = 0, dep[maxn];
+void getDepth(Node *head){
+    if(head == NULL) return;
+    ++d;
+    getDepth(head->lchild);
+    if(head->lchild == NULL && head->rchild == NULL)
+        dep[num++] = d;
+    getDepth(head->rchild);
+    --d;
+}
+\end{lstlisting}
+
+求出所有叶子结点到根结点的距离后，再求出其中的最大值和最小值， 然后作差与1比较即可。此外，空树认为是平衡的。代码如下：
+
+\begin{lstlisting}[language=C++]
+bool isBalance(Node *head){
+    if(head == NULL) return true;
+    getDepth(head);
+    int max = dep[0], min = dep[0];
+    for(int i=0; i<num; ++i){
+        if(dep[i]>max) max = dep[i];
+        if(dep[i]<min) min = dep[i];
+    }
+    if(max-min > 1) return false;
+    else return true;
+}
+\end{lstlisting}
+
+完整代码如下：
+
+\lstinputlisting[language=C++]{ch4one.cpp}
+
+
+\item[4.2] Given a directed graph, design an algorithm to find out whether there is a route between two nodes.
+
+给定一个有向图，设计算法判断两结点间是否存在路径。
+
+Solution: 
+
+根据题意，给定一个有向图和起点终点，判断从起点开始，是否存在一条路径可以到达终点。 考查的就是图的遍历，从起点开始遍历该图，如果能访问到终点， 则说明起点与终点间存在路径。稍微修改一下遍历算法即可。
+
+代码如下(在BFS基础上稍微修改)：
+
+\begin{lstlisting}[language=C++]
+bool route(int src, int dst){
+    q.push(src);
+    visited[src] = true;
+    while(!q.empty()){
+        int t = q.front();
+        q.pop();
+        if(t == dst) return true;
+        for(int i=0; i<n; ++i)
+            if(g[t][i] && !visited[i]){
+                q.push(i);
+                visited[i] = true;
+            }
+    }
+    return false;
+}
+\end{lstlisting}
+
+完整代码如下：
+
+\lstinputlisting[language=C++]{ch4two.cpp}
+
+
+\item[4.3] Given a sorted (increasing order) array, write an algorithm to create a binary tree with minimal height.
+
+给定一个有序数组(递增)，写程序构建一棵具有最小高度的二叉树。
+
+Solution: 
+
+想要使构建出来的二叉树高度最小，那么对于任意结点， 它的左子树和右子树的结点数量应该相当。比如，当我们将一个数放在根结点， 那么理想情况是，我们把数组中剩下的数对半分，一半放在根结点的左子树， 另一半放在根结点的右子树。我们可以定义不同的规则来决定这些数怎样对半分， 不过最简单的方法就是取得有序数组中中间那个数，然后把小于它的放在它的左子树， 大于它的放在它的右子树。不断地递归操作即可构造这样一棵最小高度二叉树。
+
+\begin{lstlisting}[language=C++]
+void create_minimal_tree(Node* &head, Node *parent, int a[], int start, int end){
+    if(start <= end){
+        int mid = (start + end)>>1;
+        node[cnt].key = a[mid];
+        node[cnt].parent = parent;
+        head = &node[cnt++];
+        create_minimal_tree(head->lchild, head, a, start, mid-1);
+        create_minimal_tree(head->rchild, head, a, mid+1, end);
+    }
+}
+\end{lstlisting}
+
+完整代码如下：
+
+\lstinputlisting[language=C++]{ch4thr.cpp}
+
+
+\item[4.4] Given a binary search tree, design an algorithm which creates a linked list of all the nodes at each depth (i.e., if you have a tree with depth D, you’ll have D linked lists).
+
+给定一棵二叉查找树，设计算法，将每一层的所有结点构建为一个链表(也就是说， 如果树有D层，那么你将构建出D个链表)
+
+Solution: 
+
+这道题目本质上是个BFS，也就是说，如果已经构建了第i层结点的链表， 那么将此链表中每个结点的左右孩子结点取出，即可构建第i+1层结点的链表。 设结点类型为Node，那么指向每一层链表头结点的类型为list<Node*>， 将每一层头结点指针放到vector中。如果当前层的链表不为空， 那么将该链表的结点依次取出，然后将这些结点的不为空的孩子放入新的链表中。
+
+代码如下：
+\begin{lstlisting}[language=C++]
+vector<list<Node*> > find_level_linklists(Node *head){
+    vector<list<Node*> > res;
+    int level = 0;
+    list<Node*> li;
+    li.push_back(head);
+    res.push_back(li);
+    while(!res[level].empty()){
+        list<Node*> l;
+        list<Node*>::iterator it;
+        for(it=res[level].begin(); it!=res[level].end(); ++it){
+            Node *n = *it;
+            if(n->lchild) l.push_back(n->lchild);
+            if(n->rchild) l.push_back(n->rchild);
+        }
+        ++level;
+        res.push_back(l);
+    }
+    return res;
+}
+\end{lstlisting}
+
+完整代码如下：
+
+\lstinputlisting[language=C++]{ch4for.cpp}
+
+
+\item[4.5] Write an algorithm to find the ‘next’ node (i.e., in-order successor) of a given node in a binary search tree where each node has a link to its parent.
+
+给定二叉查找树的一个结点， 写一个算法查找它的“下一个”结点(即中序遍历后它的后继结点)， 其中每个结点都有指向其父亲的链接。
+
+Solution: 
+
+我们知道，在二叉查找树中， 每个结点的值都大于等于它左子树所有结点的值且小于右子树所有结点的值( 或是大于它左子树所有结点的值且小于等于右子树所有结点的值，等号放哪边示情况而定。) 二叉查找树中序遍历后，元素将按递增排序， 某一结点的后继结点即为比该结点大的结点中最小的一个。如果该结点有右儿子， 则后继结点为右儿子的最左子孙。否则需要不断地向上查找该结点的祖先， 直到找到第一个比它大的结点为止。
+
+代码如下：
+\begin{lstlisting}[language=C++]
+Node* minimal(Node* no){
+    if(no == NULL) return NULL;
+    while(no->lchild)
+        no = no->lchild;
+    return no;
+}
+Node* successor(Node* no){
+    if(no == NULL) return NULL;
+    if(no->rchild) return minimal(no->rchild);
+    Node *y = no->parent;
+    while(y && y->rchild==no){
+        no = y;
+        y = y->parent;
+    }
+    return y;
+}
+\end{lstlisting}
+
+完整代码如下：
+
+\lstinputlisting[language=C++]{ch4fiv.cpp}
+
+
+\item[4.6] Design an algorithm and write code to find the first common ancestor of two nodes in a binary tree. Avoid storing additional nodes in a data structure. NOTE: This is not necessarily a binary search tree.
+
+写程序在一棵二叉树中找到两个结点的第一个共同祖先。不允许存储额外的结点。注意： 这里不特指二叉查找树。
+
+Solution: 
+
+本题的关键应当是在Avoid storing additional nodes in a data structure 这句话上。我的理解是，不允许开额外的空间(比如说一个数组)来存储作为中间变量的结点。 虽然我也怀疑它是不是说不允许在结点数据结构Node中加入额外的东西， 比如说父结点的指针。Anyway，我们先从最简单的入手，再一步步加入限制条件。
+
+如果没有任何限制条件，那我觉得最直观的思路就是把其中一个点的所有祖先(包含它自身) 都放入一个哈希表，然后再一步步查找另一个点的祖先结点， 第一个在哈希表中出现的祖先结点即为题目所求。
+
+代码如下，用map模拟(当然，效率比不上哈希表)：
+\begin{lstlisting}[language=C++]
+Node* first_ancestor(Node* n1, Node* n2){
+    if(n1 == NULL || n2 == NULL) return NULL;
+    map<Node*, bool> m;
+    while(n1){
+        m[n1] = true;
+        n1 = n1->parent;
+    }
+    while(n2 && !m[n2]){
+        n2 = n2->parent;
+    }
+    return n2;
+}
+\end{lstlisting}
+
+这里用了一个map来存储中间变量，如果题目不允许开额外的辅助空间，那该如何做呢？ 那就老老实实地一个个地试。不断地取出其中一个结点的父结点， 然后判断这个结点是否也为另一个结点的父结点。代码如下：
+
+\begin{lstlisting}[language=C++]
+bool father(Node* n1, Node* n2){
+    if(n1 == NULL) return false;
+    else if(n1 == n2) return true;
+    else return father(n1->lchild, n2) || father(n1->rchild, n2);
+}
+Node* first_ancestor1(Node* n1, Node* n2){
+    if(n1 == NULL || n2 == NULL) return NULL;
+    while(n1){
+        if(father(n1, n2)) return n1;
+        n1 = n1->parent;
+    }
+    return NULL;
+}
+\end{lstlisting}
+
+让我们把条件再限制地严苛一些，如果数据结构Node中不允许有指向父亲结点的指针， 那么我们又该如何处理？其实也很简单，首先根结点一定为任意两个结点的共同祖先， 从根结点不断往下找，直到找到最后一个这两结点的共同祖先，即为题目所求。代码如下：
+
+\begin{lstlisting}[language=C++]
+void first_ancestor2(Node* head, Node* n1, Node* n2, Node* &ans){
+    if(head==NULL || n1==NULL || n2==NULL) return;
+    if(head && father(head, n1) && father(head, n2)){
+        ans = head;
+        first_ancestor2(head->lchild, n1, n2, ans);
+        first_ancestor2(head->rchild, n1, n2, ans);
+    }
+}
+\end{lstlisting}
+
+这里用到了递归，ans最终保存的是这两个结点从根结点算起最后找到的那个祖先。 因为从根结点开始，每次找到满足要求的结点，ans都会被更新。
+
+完整代码如下：
+
+\lstinputlisting[language=C++]{ch4six.cpp}
+
+
+\item[4.7] You have two very large binary trees: T1, with millions of nodes, and T2, with hundreds of nodes. Create an algorithm to decide if T2 is a subtree of T1
+
+有两棵很大的二叉树：T1有上百万个结点，T2有上百个结点。写程序判断T2是否为T1的子树。
+
+Solution: 
+
+我觉得这道题目意欲考察如何在二叉树中结点数量非常巨大的情况下进行快速的查找与匹配， 不过除了常规的暴力法，我暂时想不到什么高效的方法。暴力法就很简单了， 先在T1中找到T2的根结点，然后依次去匹配它们的左右子树即可。
+
+这里要注意的一点是，T1中的结点可能包含多个与T2根结点的值相同的结点。因此， 在T1中查找T2的根结点时，如果找到与T2匹配的子树，则返回真值；否则，还要继续查找， 直到在T1中找到一棵匹配的子树或是T1中的结点都查找完毕。
+
+代码如下：
+\begin{lstlisting}[language=C++]
+bool match(Node* r1, Node* r2){
+    if(r1 == NULL && r2 == NULL) return true;
+    else if(r1 == NULL || r2 == NULL) return false;
+    else if(r1->key != r2->key) return false;
+    else return match(r1->lchild, r2->lchild) && match(r1->rchild, r2->rchild);
+}
+bool subtree(Node* r1, Node* r2){
+    if(r1 == NULL) return false;
+    else if(r1->key == r2->key){
+        if(match(r1, r2)) return true;
+    }
+    else return subtree(r1->lchild, r2) || subtree(r1->rchild, r2);
+}
+bool contain_tree(Node* r1, Node* r2){
+    if(r2 == NULL) return true;
+    else return subtree(r1, r2);
+}
+\end{lstlisting}
+
+完整代码如下：
+\lstinputlisting[language=C++]{ch4sev.cpp}
+
+
+\item[4.8] You are given a binary tree in which each node contains a value. Design an algorithm to print all paths which sum up to that value. Note that it can be any path in the tree - it does not have to start at the root.
+
+给定一棵二叉树，每个结点包含一个值。打印出所有满足以下条件的路径： 路径上结点的值加起来等于给定的一个值。注意：这些路径不必从根结点开始。
+
+Solution: 
+
+方案1：如果结点中包含指向父亲结点的指针，那么，只需要去遍历这棵二叉树， 然后从每个结点开始，不断地去累加上它父亲结点的值直到父亲结点为空(这个具有唯一性， 因为每个结点都只有一个父亲结点。也正因为这个唯一性， 可以不另外开额外的空间来保存路径)，如果等于给定的值sum，则打印输出。
+
+代码如下：
+\begin{lstlisting}[language=C++]
+void find_sum(Node* head, int sum){
+    if(head == NULL) return;
+    Node *no = head;
+    int tmp = 0;
+    for(int i=1; no!=NULL; ++i){
+        tmp += no->key;
+        if(tmp == sum)
+            print(head, i);
+        no = no->parent;
+    }
+    find_sum(head->lchild, sum);
+    find_sum(head->rchild, sum);
+}
+\end{lstlisting}
+
+打印输出时，只需要提供当前结点的指针，及累加的层数即可。然后从当前结点开始， 不断保存其父亲结点的值(包含当前结点)直到达到累加层数，然后逆序输出即可。
+
+代码如下：
+\begin{lstlisting}[language=C++]
+void print(Node* head, int level){
+    vector<int> v;
+    for(int i=0; i<level; ++i){
+        v.push_back(head->key);
+        head = head->parent;
+    }
+    while(!v.empty()){
+        cout<<v.back()<<" ";
+        v.pop_back();
+    }
+    cout<<endl;
+}
+\end{lstlisting}
+
+方案2：如果结点中不包含指向父亲结点的指针，则在二叉树从上向下查找路径的过程中， 需要为每一次的路径保存中间结果，累加求和仍然是从下至上的，对应到保存路径的数组， 即是从数组的后面开始累加的，这样能保证遍历到每一条路径。
+
+代码如下：
+\begin{lstlisting}[language=C++]
+void print2(vector<int> v, int level){
+    for(int i=level; i<v.size(); ++i)
+        cout<<v.at(i)<<" ";
+    cout<<endl;
+}
+void find_sum2(Node* head, int sum, vector<int> v, int level){
+    if(head == NULL) return;
+    v.push_back(head->key);
+    int tmp = 0;
+    for(int i=level; i>-1; --i){
+        tmp += v.at(i);
+        if(tmp == sum)
+            print2(v, i);
+    }
+    vector<int> v1(v), v2(v);
+    find_sum2(head->lchild, sum, v1, level+1);
+    find_sum2(head->rchild, sum, v2, level+1);
+}
+\end{lstlisting}
+
+方案1和方案2的本质思想其实是一样的，不同的只是有无指向父亲结点的指针这个信息。 如果没有这个信息，则需要增加许多额外的空间来存储中间信息。
+
+注意：方案1和方案2代码中的level并非指同一概念，方案1中level表示层数，最小值为1； 方案2中level表示第几层，最小值为0。
+
+完整代码如下：
+
+\lstinputlisting[language=C++]{ch4eit.cpp}
+
+\end{description}

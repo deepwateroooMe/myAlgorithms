@@ -1,0 +1,644 @@
+\chapter{Stacks and Queues}
+\small{}
+
+\begin{description}
+\item[3.1] Describe how you could use a single array to implement three stacks.
+
+你如何只用一个数组实现三个栈？
+
+Solution: 
+
+我们可以很容易地用一个数组来实现一个栈，压栈就往数组里插入值，栈顶指针加1； 出栈就直接将栈顶指针减1；取栈顶值就把栈顶指针指向的单元的值返回； 判断是否为空就直接看栈顶指针是否为-1。
+
+如果要在一个数组里实现3个栈，可以将该数组分为3个部分。如果我们并不知道哪个栈将装 入更多的数据，就直接将这个数组平均分为3个部分，每个部分维护一个栈顶指针， 根据具体是对哪个栈进行操作，用栈顶指针去加上相应的偏移量即可。
+
+代码如下：
+
+\begin{lstlisting}[language=C++]
+class stack3{
+private:
+    int *buf;
+    int ptop[3];
+    int size;
+public:
+    stack3(int size = 300){
+        buf = new int[size*3];
+        ptop[0]=ptop[1]=ptop[2]=-1;
+        this->size = size;
+    }
+    ~stack3(){
+        delete[] buf;
+    }
+
+    void push(int stackNum, int val){
+        int idx = stackNum*size + ptop[stackNum] + 1;
+        buf[idx] = val;
+        ++ptop[stackNum];
+    }
+    void pop(int stackNum){
+        --ptop[stackNum];
+    }
+    int top(int stackNum){
+        int idx = stackNum*size + ptop[stackNum];
+        return buf[idx];
+    }
+    bool empty(int stackNum){
+        return ptop[stackNum]==-1;
+    }
+};
+\end{lstlisting}
+
+当然，我们也可以有第二种方案。数组不分段，无论是哪个栈入栈，都依次地往这个数组里 存放。这样一来，我们除了维护每个栈的栈顶指针外，我们还需要维护每个栈中， 每个元素指向前一个元素的指针。这样一来，某个栈栈顶元素出栈后，它就能正确地找到下 一个栈顶元素。
+
+所以，数组里存放的不再是基本数据类型的数据，我们需要先定义一个结点结构：
+
+\begin{lstlisting}[language=C++]
+typedef struct node{
+    int val;
+    int preIdx;
+} node;
+\end{lstlisting}
+
+数组中的每个元素将是这样一个结点，它保存当前位置的值，和指向上一个结点的索引。
+
+具体代码如下：
+
+\begin{lstlisting}[language=C++]
+class stack3_1{
+private:
+    node *buf;
+    int ptop[3];
+    int totalSize;
+    int cur;
+public:
+    stack3_1(int totalSize = 900){
+        buf = new node[totalSize];
+        ptop[0]=ptop[1]=ptop[2]=-1;
+        this->totalSize = totalSize;
+        cur = 0;
+    }
+    ~stack3_1(){
+        delete[] buf;
+    }
+
+    void push(int stackNum, int val){
+        buf[cur].val = val;
+        buf[cur].preIdx = ptop[stackNum];
+        ptop[stackNum] = cur;
+        ++cur;
+    }
+    void pop(int stackNum){
+        ptop[stackNum] = buf[ptop[stackNum]].preIdx;
+    }
+    int top(int stackNum){
+        return buf[ptop[stackNum]].val;
+    }
+    bool empty(int stackNum){
+        return ptop[stackNum]==-1;
+    }
+};
+\end{lstlisting}
+
+这种实现有一个缺点，在频繁地入栈出栈后，会造成数组空间的大量浪费。 因为当前指针cur是一直递增的，而堆栈在出栈后相应位置的空间将不会再被利用到。 代码中pop函数，只是修改了栈顶指针。如果我们对一个栈先执行出栈，再入栈， 那么再次入栈的位置是在cur，而不是原来栈顶的位置。
+
+有没有避免这种空间浪费的方法呢？当然是有的。不过这样一来，对cur的操作就变得复杂 了。第一，每次执行pop操作，检查该元素对应索引是否小于cur，如果是， 将cur更新到该元素索引；否则cur不变。第二，每次执行完push操作， cur要沿着数组依次向后查找，直到找到第一个空的空间，用它的索引更新cur。 这部分代码实现起来也是没什么难度的，这里不再贴出。
+
+以下是完整代码：
+
+\lstinputlisting[language=C++]{ch3one.cpp}
+
+
+\item[3.2] How would you design a stack which, in addition to push and pop, also has a function min which returns the minimum element? Push, pop and min should all operate in O(1) time.
+
+实现一个栈，除了push和pop操作，还要实现min函数以返回栈中的最小值。 push，pop和min函数的时间复杂度都为O(1)。
+
+Solution: 
+
+看到这个题目最直接的反应是用一个变量来保存当前栈的最小值，让我们来看看这样可行否？ 如果栈一直push那是没有问题，入栈元素如果比当前最小值还小，那就更新当前最小值。 可是如果pop掉的栈顶元素就是最小值，那么我们如何更新最小值呢？显然不太好办。 既然只用一个变量没法解决这个问题，那我们就增加变量。如果说每个结点除了保存当前的 值，另外再保存一个从该结点到栈底的结点中的最小值。那么，不论哪个结点成为了栈顶结 点，我们都有办法取得剩下的这些元素的最小值。代价是付出的空间多了一倍。
+
+代码如下：
+
+\begin{lstlisting}[language=C++]
+const int MAX_INT = ~(1<<31);//2147483647
+
+typedef struct node{
+    int val, min;
+}node;
+
+class StackWithMin{
+public:
+    StackWithMin(int size=1000){
+        buf = new node[size];
+        buf[0].min = MAX_INT;
+        cur = 0;
+    }
+    ~StackWithMin(){
+        delete[] buf;
+    }
+    void push(int val){
+        buf[++cur].val = val;
+        if(val<buf[cur-1].min) buf[cur].min = val;
+        else buf[cur].min = buf[cur-1].min;
+    }
+    void pop(){
+        --cur;
+    }
+    int top(){
+        return buf[cur].val;
+    }
+    bool empty(){
+        return cur==0;
+    }
+    int min(){
+        return buf[cur].min;
+    }
+
+private:
+    node *buf;
+    int cur;
+};
+\end{lstlisting}
+
+这种实现方式有一个明显的问题：数据冗余。比如说，栈里的数据从栈底到栈顶是1到10000， 那么，每个结点保存的最小值都是1，也就是保存了1的10000份拷贝，有这个必要吗？ 直觉告诉我们应该是没必要的，我们应该可以想办法只保留一份1的拷贝， 然后如果结点是这些1到10000，就正确地返回这个最小值。这个要怎么做呢？ 我们假设除了用一个栈s1来保存数据，还用另一个栈s2来保存这些非冗余最小值。那么， 当我们将数据压到要s1时，同时将它和s2的栈顶元素比较，如果不大于s2的栈顶元素， 那么将当前值也压入s2中。这样一来，s2中保存的就是一个阶段性最小值。 即s2中的每个值都是s1中栈底到达某个位置的最小值。那么，如果执行pop操作呢？ 执行pop操作除了将s1中的栈顶元素出栈，还要将它和s2中的栈顶元素比较，如果相等， 说明这个值是栈底到栈顶的最小值，而它出栈后，最小值就不再是它了。所以， s2也要将栈顶元素出栈，新的栈顶元素将对应s1剩下元素中新的最小值。
+
+代码如下：
+
+\begin{lstlisting}[language=C++]
+class stack{
+public:
+    stack(int size=1000){
+        buf = new int[size];
+        cur = -1;
+    }
+    ~stack(){
+        delete[] buf;
+    }
+    void push(int val){
+        buf[++cur] = val;
+    }
+    void pop(){
+        --cur;
+    }
+    int top(){
+        return buf[cur];
+    }
+    bool empty(){
+        return cur==-1;
+    }
+
+private:
+    int *buf;
+    int cur;
+};
+
+class StackWithMin1{
+public:
+    StackWithMin1(){
+
+    }
+    ~StackWithMin1(){
+
+    }
+    void push(int val){
+        s1.push(val);
+        if(val<=min())
+            s2.push(val);
+    }
+    void pop(){
+        if(s1.top()==min())
+            s2.pop();
+        s1.pop();
+    }
+    int top(){
+        return s1.top();
+    }
+    bool empty(){
+        return s1.empty();
+    }
+    int min(){
+        if(s2.empty()) return MAX_INT;
+        else return s2.top();
+    }
+
+private:
+    stack s1, s2;
+};
+\end{lstlisting}
+
+完整代码如下：
+
+\lstinputlisting[language=C++]{ch3two.cpp}
+
+
+\item[3.3] Imagine a (literal) stack of plates. If the stack gets too high, it might topple. Therefore, in real life, we would likely start a new stack when the previous stack exceeds some threshold. Implement a data structure SetOfStacks that mimics this. SetOfStacks should be composed of several stacks, and should create a new stack once the previous one exceeds capacity. SetOfStacks.push() and SetOfStacks.pop() should behave identically to a single stack (that is, pop() should return the same values as it would if there were just a single stack).
+
+FOLLOW UP
+
+Implement a function popAt(int index) which performs a pop operation on a specific sub-stack.
+
+栈就像叠盘子，当盘子叠得太高时，就会倾斜倒下。因此，在真实的世界中，当一叠盘子 (栈)超过了一定的高度时，我们就会另起一堆，再从头叠起。实现数据结构SetOfStacks 来模拟这种情况。SetOfStacks由几个栈组成，当前一栈超出容量时，需要创建一个新的栈 来存放数据。SetOfStacks.push()和SetOfStacks.pop()的行为应当和只有一个栈时 表现的一样。
+
+进一步地，
+
+实现函数popAt(int index)在指定的子栈上进行pop操作。
+
+Solution: 
+
+首先，我们如果不考虑popAt这个麻烦的函数，那么SetOfStacks的实现就简单很多。 SetOfStacks由栈的数组构成，我们需要一个指向当前栈的变量cur， 每当执行push操作时，我们需要检查一下当前栈是否已经达到其容量了， 如果是的话，就要将cur加1，指向下一个栈。而执行pop操作时， 需要先检查当前栈是否为空，如果是，则cur减1，移向上一个栈。top操作同理。 这时候，SetOfStacks可以想象成把一个本来可以叠得很高的栈，分成了好几个子栈。 push和pop操作其实都只是在“最后”一个子栈上操作。
+
+代码如下：
+
+\begin{lstlisting}[language=C++]
+class SetOfStacks{//without popAt()
+private:
+    stack *st;
+    int cur;
+    int capacity;
+
+public:
+    SetOfStacks(int capa=STACK_NUM){
+        st = new stack[capa];
+        cur = 0;
+        capacity = capa;
+    }
+    ~SetOfStacks(){
+        delete[] st;
+    }
+    void push(int val){
+        if(st[cur].full()) ++cur;
+        st[cur].push(val);
+    }
+    void pop(){
+        if(st[cur].empty()) --cur;
+        st[cur].pop();
+    }
+    int top(){
+        if(st[cur].empty()) --cur;
+        return st[cur].top();
+    }
+    bool empty(){
+        if(cur==0) return st[0].empty();
+        else return false;
+    }
+    bool full(){
+        if(cur==capacity-1) return st[cur].full();
+        else return false;
+    }    
+};
+\end{lstlisting}
+
+当加入popAt函数，情况就变得复杂了。因为这时候的数据分布可能出现中间的某些子栈使 用popAt把它们清空了，而后面的子栈却有数据。为了实现方便，我们不考虑因为popAt 带来的空间浪费。即如果我用popAt把中间某些子栈清空了，并不把后面子栈的数据往前移 动。这样一来，cur指向操作的“最后”一个栈，它后面的子栈一定都是空的， 而它本身及前面的子栈由于popAt函数的缘故都有可能是空的。如果没有popAt函数， cur前面的子栈一定都是满的(见上面的例子)。这样一来，push仍然只需要判断一次当前子 栈是否为满。但是，pop函数则要从cur向前一直寻找，直到找到一个非空的子栈， 才能进行pop操作。同理，popAt，top，empty也是一样的。
+
+代码如下：
+
+\begin{lstlisting}[language=C++]
+class SetOfStacks1{
+private:
+    stack *st;
+    int cur;
+    int capacity;
+
+public:
+    SetOfStacks1(int capa=STACK_NUM){
+        st = new stack[capa];
+        cur = 0;
+        capacity = capa;
+    }
+    ~SetOfStacks1(){
+        delete[] st;
+    }
+    void push(int val){
+        if(st[cur].full()) ++cur;
+        st[cur].push(val);
+    }
+    void pop(){
+        while(st[cur].empty()) --cur;
+        st[cur].pop();
+    }
+    void popAt(int idx){
+        while(st[idx].empty()) --idx;
+        st[idx].pop();
+    }
+    int top(){
+        while(st[cur].empty()) --cur;
+        return st[cur].top();
+    }
+    bool empty(){
+        while(cur!=-1 && st[cur].empty()) --cur;
+        if(cur==-1) return true;
+        else return false;
+    }
+    bool full(){
+        if(cur==capacity-1) return st[cur].full();
+        else return false;        
+    }
+};
+\end{lstlisting}
+
+\lstinputlisting[language=C++]{ch3thr.cpp}
+
+
+\item[3.4] In the classic problem of the Towers of Hanoi, you have 3 rods and N disks of different sizes which can slide onto any tower. The puzzle starts with disks sorted in ascending order of size from top to bottom (e.g., each disk sits on top of an even larger one). You have the following constraints:	
+
+(A) Only one disk can be moved at a time.
+
+(B) A disk is slid off the top of one rod onto the next rod.
+
+(C) A disk can only be placed on top of a larger disk.
+
+Write a program to move the disks from the first rod to the last using Stacks.
+
+编程解决汉诺塔问题，使用数据结构栈(偷个懒，如果不知道汉诺塔是什么，请自行Google)
+
+Solution: 
+
+汉诺塔是个非常经典的问题，讲递归时应该都会讲到它。如果我们没有递归的先验知识， 直接去解答这道题，常常会觉得不知道如何下手。用递归却可以非常优美地解决这个问题。
+
+使用递归的一个关键就是，我们先定义一个函数，不用急着去实现它， 但要明确它的功能。
+
+对于汉诺塔问题，我们定义如下函数原型：
+
+void hanoi(int n, char src, char bri, char dst);
+
+我们先不去关心它是怎么实现的，而是明确它的功能是：
+\begin{itemize}
+\item 将n个圆盘从柱子src移动到柱子dst，其中可以借助柱子bri(bridge)。
+\item 注：n个圆盘从上到下依次的标号依次为1到n，表示圆盘从小到大。
+\item 移动的过程中，不允许大圆盘放在小圆盘的上面。
+\end{itemize}
+
+OK，既然要用到递归，当然是在这个函数中还是用到这个函数本身， 也就是说，我们完成这个任务中的步骤还会用到hanoi这个操作，只是参数可能不一样了。 我们定义一组元组来表示三根柱子的状态：(src上的圆盘，bri上的圆盘，dst上的圆盘) 初始状态是：(1~n, 0, 0)表示src上有1到n共n个圆盘，另外两个柱子上没有圆盘。 目标状态是：(0, 0, 1~n)表示dst上有1到n共n个圆盘，另外两个柱子上没有圆盘。 由于最大的圆盘n最后是放在dst的最下面，且大圆盘是不能放在小圆盘上面的， 所以，一定存在这样一个中间状态：(n, 1~n-1, 0)，这样才能把最大的圆盘n 移动到dst的最下面。这时候，有人就会问，你怎么就想到这个中间状态而不是其它呢？ 好问题。因为，我现在手头上的工具(可用的函数)只有hanoi， 那我自然要想办法创造可以使用这个函数的情景，而不是其它情景。
+
+\begin{itemize}
+\item 初始状态是：(1~n, 0, 0)
+\item 中间状态是：(n, 1~n-1, 0)
+\end{itemize}
+
+从初始状态到中间状态使用操作hanoi(n-1, src, dst, bri)就可以到达了。即把n-1 个圆盘从src移动到bri，中间可以借助柱子dst。
+
+接下来就是将圆盘n从src移动到dst了，这个可以直接输出：
+
+cout<<"Move disk "<<n<<" from "<<src<<" to "<<dst<<endl;
+
+这个操作后得到的状态是：
+
+(0, 1~n-1, n)
+
+然后再利用hanoi函数，将n-1个圆盘从bri移动到dst，中间可借助柱子src， hanoi(n-1, bri, src, dst)，操作后得到最终状态：
+
+(0, 0, 1~n)
+
+这些操作合起来就三行代码：
+\begin{itemize}
+\item hanoi(n-1, src, dst, bri);
+\item cout<<"Move disk "<<n<<" from "<<src<<" to "<<dst<<endl;
+\item hanoi(n-1, bri, src, dst);
+\end{itemize}
+
+最后，我们还需要递归停止条件。什么时候递归结束呢？当n等于1时，既只有一个圆盘时， 直接把它从src移动到dst即可：
+
+if(n==1){
+
+    cout<<"Move disk "<<n<<" from "<<src<<" to "<<dst<<endl;
+
+}
+
+所以，完整的汉诺塔问题的递归解法如下：
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+using namespace std;
+
+void hanoi(int n, char src, char bri, char dst){
+    if(n==1){
+        cout<<"Move disk "<<n<<" from "<<src<<" to "<<dst<<endl;
+    }
+    else{
+        hanoi(n-1, src, dst, bri);
+        cout<<"Move disk "<<n<<" from "<<src<<" to "<<dst<<endl;
+        hanoi(n-1, bri, src, dst);
+    }
+}
+
+int main(){
+    int n = 3;
+    hanoi(n, 'A', 'B', 'C');
+    return 0;
+}
+\end{lstlisting}
+
+汉诺塔的递归解法讲完了，可是这并不是题目要求的。题目要求用栈来解决这个问题。 递归解法其实也是用到了栈的，在每次递归调用自己的时候， 将中间的状态参数压入栈中。不过这些操作都是系统隐式进行的， 所以你不用去关心它具体是怎么压栈出栈的。如果我们要用栈自己来实现这个过程， 就不得不考虑这其中的细节了。
+
+接下来，我们就显式地用栈来实现递归过程中，这些状态参数的压栈出栈过程。首先， 我们需要定义一个数据结构来保存操作过程中的参数。
+
+\begin{lstlisting}[language=C++]
+struct op{
+    int begin, end;
+    char src, bri, dst;
+    op(){
+    }
+    op(int pbegin, int pend, int psrc, int pbri, int pdst):begin(pbegin), end(pend), src(psrc), bri(pbri), dst(pdst){
+    }
+};
+\end{lstlisting}
+
+其中的5个参数表示，在柱子src上有一叠圆盘，标号从begin到end， 要将它们从src移动到dst，中间可借助柱子bri。end其实相当于递归解法中的n， src，bri，dst与递归解法中的对应。那为什么还要定义begin这个变量呢？ 为了判断柱子上是否只剩下一个盘子。如果begin等于end， 说明柱子上只剩下“最后”一个圆盘，可以进行移动。当然了， 用另外一个布尔变量来表示是否只剩下一个圆盘也是可以的，效果一样。 讲递归方法的时候，说到从初始状态到最终状态一共要经过以下几个状态：
+\begin{itemize}
+\item (1~n, 0, 0)
+\item (n, 1~n-1, 0)
+\item (0, 1~n-1, n)
+\item (0, 0, 1~n)
+\end{itemize}
+
+这些过程我们现在需要自己压栈出栈处理。压栈的时候不做处理，出栈时进行处理。因此， 压栈的时候需要与实际要操作的步骤相反。一开始，我们将最终想要完成的任务压栈。 听起来怪怪的，其实就是往栈中压入一组参数：
+
+stack<op> st;
+
+st.push(op(1, n, src, bri, dst));
+
+这组参数表示，柱子src上有1~n个圆盘，要把它移动到dst上，可以借助柱子bri。 当栈st不为空时，不断地出栈，当begin和end不相等时，进行三个push操作 (对应上面四个状态，相邻状态对应一个push操作，使状态变化)， push与实际操作顺序相反(因为出栈时才进行处理，出栈时顺序就正确了)， 如果，begin与end相等，则剩下当前问题规模下的“最后”一个圆盘，直接打印移动方案， hanoi代码如下：
+
+\begin{lstlisting}[language=C++]
+void hanoi(int n, char src, char bri, char dst){
+    stack<op> st;
+    op tmp;
+    st.push(op(1, n, src, bri, dst));
+    while(!st.empty()){
+        tmp = st.top();
+        st.pop();
+        if(tmp.begin != tmp.end){
+            st.push(op(tmp.begin, tmp.end-1, tmp.bri, tmp.src, tmp.dst));
+            st.push(op(tmp.end, tmp.end, tmp.src, tmp.bri, tmp.dst));
+            st.push(op(tmp.begin, tmp.end-1, tmp.src, tmp.dst, tmp.bri));
+        }
+        else{
+            cout<<"Move disk "<<tmp.begin<<" from "<<tmp.src<<" to "<<tmp.dst<<endl;
+        }
+
+    }
+}
+\end{lstlisting}
+
+完整代码如下：
+
+\lstinputlisting[language=C++]{ch3for1.cpp}
+\lstinputlisting[language=C++]{ch3for2.cpp}
+
+
+\item[3.5] Implement a MyQueue class which implements a queue using two stacks.
+
+使用两个栈实现一个队列MyQueue。
+
+Solution: 
+
+队列是先进先出的数据结构(FIFO)，栈是先进后出的数据结构(FILO)， 用两个栈来实现队列的最简单方式是：进入队列则往第一个栈压栈， 出队列则将第一个栈的数据依次压入第二个栈，然后出栈。每次有数据进入队列， 都先将第二个栈的数据压回第一个栈，然后再压入新增的那个数据； 每次有数据出队列，都将第一个栈的数据压入第二个栈，然后第二个栈出栈。 代码很简单：
+
+\begin{lstlisting}[language=C++]
+template <typename T>
+class MyQueue{
+public:
+    MyQueue(){
+
+    }
+    ~MyQueue(){
+
+    }
+    void push(T val){
+        move(sout, sin);
+        sin.push(val);
+    }
+    void pop(){
+        move(sin, sout);
+        sout.pop();
+    }
+    T front(){
+        move(sin, sout);
+        return sout.top();
+    }
+    T back(){
+        move(sout, sin);
+        return sin.top();
+    }
+    int size(){
+        return sin.size()+sout.size();
+    }
+    bool empty(){
+        return sin.empty()&&sout.empty();
+    }
+    void move(stack<T> &src, stack<T> &dst){
+        while(!src.empty()){
+            dst.push(src.top());
+            src.pop();
+        }
+    }
+
+private:
+    stack<T> sin, sout;
+};
+\end{lstlisting}
+
+对于上面的实现，我们可以稍作改进来提高效率。上面的实现方法， 数据在两个栈之间移动得太频繁了，必然会导致效率下降。事实上有些移动是没有必要的。 有数据进入队列时，我们不去管第二个栈是否有数据，只管往第一个栈压栈即可。 当数据出队列时，如果第二个栈有数据，那就出栈。 因为此时第二个栈的栈顶元素即为队列的队首元素；如果第二个栈没有数据， 这才将第一个栈的数据出栈移动到第二个栈，然后第二个栈再出栈。这样一来， 逻辑上相当于将一个队列从中间切开，第一个栈从栈顶到栈底对应队列的队尾到切开处， 第二个栈从栈顶到栈底对应队列的队首到切开处。这样简单的修改， 可以减少许多不必要的数据移动，提高效率。
+
+代码如下：
+
+\begin{lstlisting}[language=C++]
+template <typename T>
+class MyQueue1{
+public:
+    MyQueue1(){
+
+    }
+    ~MyQueue1(){
+
+    }
+    void push(T val){
+        sin.push(val);
+    }
+    void pop(){
+        move(sin, sout);
+        sout.pop();
+    }
+    T front(){
+        move(sin, sout);
+        return sout.top();
+    }
+    T back(){
+        move(sout, sin);
+        return sin.top();
+    }
+    int size(){
+        return sin.size()+sout.size();
+    }
+    bool empty(){
+        return sin.empty()&&sout.empty();
+    }
+    void move(stack<T> &src, stack<T> &dst){
+        if(dst.empty()){
+            while(!src.empty()){
+                dst.push(src.top());
+                src.pop();
+            }
+        }
+    }
+
+private:
+    stack<T> sin, sout;    
+};
+\end{lstlisting}
+
+完整代码如下：
+\lstinputlisting[language=C++]{ch3fiv.cpp}
+
+
+\item[3.6] Write a program to sort a stack in ascending order. You should not make any assumptions about how the stack is implemented. The following are the only functions that should be used to write this program: push | pop | peek | isEmpty.
+
+写程序将一个栈按升序排序。对这个栈是如何实现的，你不应该做任何特殊的假设。 程序中能用到的栈操作有：push | pop | peek | isEmpty。
+
+Solution: 
+
+方案1：
+
+使用一个附加的栈来模拟插入排序。将原栈中的数据依次出栈与附加栈中的栈顶元素比较， 如果附加栈为空，则直接将数据压栈。否则， 如果附加栈的栈顶元素大于从原栈中弹出的元素，则将附加栈的栈顶元素压入原栈。 一直这样查找直到附加栈为空或栈顶元素已经不大于该元素， 则将该元素压入附加栈。
+
+代码如下：
+
+\begin{lstlisting}[language=C++]
+stack<int> Ssort(stack<int> s){
+    stack<int> t;
+    while(!s.empty()){
+        int data = s.top();
+        s.pop();
+        while(!t.empty() && t.top()>data){
+            s.push(t.top());
+            t.pop();
+        }
+        t.push(data);
+    }
+    return t;
+}
+\end{lstlisting}
+
+方案2：
+
+使用一个优先队列来为出栈的元素排序，原栈中的元素不断出栈然后插入优先队列， 直到原栈为空。然后再将优先队列中的元素不断压回原栈，这样操作后， 栈中的元素便有序化了。
+
+代码如下：
+
+\begin{lstlisting}[language=C++]
+void Qsort(stack<int> &s){
+    priority_queue< int,vector<int>,greater<int> > q;
+    while(!s.empty()){
+        q.push(s.top());
+        s.pop();
+    }
+    while(!q.empty()){
+        s.push(q.top());
+        q.pop();
+    }
+}
+\end{lstlisting}
+
+完整代码如下：
+\lstinputlisting[language=C++]{ch3six.cpp}
+
+\end{description}

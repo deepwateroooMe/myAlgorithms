@@ -3,6 +3,39 @@
 #+title: Algorithms Review for Job Interview
 #+author: deepwaterooo
 
+* 4/25/2015, Saturday, May-Summer Section 2015 Study Plan
+- *Algorithms & Software Engineering Education*:
+  - I took *cs502 Algorithms* and *cs502 Software Engineering* directed background study 2 credits each course from a famous professor from the department in Spring 2013. The courses are P/F, and we study by meeting the intructor once each week for 40 minutes for raising questions if we have any (2 students only, the other one was a Ph.D Candidate from Math Department without any programming experience). At the same time, I audit cs395 python-based *Analysis of Algorithms* course in this Spring 2013 semester with superficial/super-easy mid-term final 2 exams and without homeworks. 
+  - It has been barely any learning experience for these two courses, and that was one main reason I registered *CS480 Senior Design* course in Fall 2014.  
+  - Good or bad, reasonable or not, those are the education I got from the university.... 
+  - So, I have always been paying careful attention to my Algorithms and Software Engineering practises. 
+- The Algorithms parts I have finished: 
+  - *ctci:* Cracking the Coding Interview, practised a basic c++ version during winter break 2013;
+    - Don't know *Emacs org-mode* yet at that time, purely latex-based src files. 
+    - I included all the src files in case somebody else would want to make his own personal modifications. 
+  - *LeetCode:* https://leetcode.com/problemset/algorithms/ (lc)
+    - between 3/25/2014 and 4/30/2014, finished slightly easier about 100 problems using *c++*, finished about the rest 50 during followed summer using c++;
+    - During winter break 2014, finished about 150 problems using *Java* for the second round for lc; *Up to this point, feels comfortable using Java programming language;*
+  - *LintCode:* http://www.lintcode.com/en/problem/
+    - During winter break 2014, finished about 50 problems using *Java*, about 130 problems left undone yet; *Up to this point, feels comfortable using Java programming language;*
+  - < *Nine Chapter Algorithms* >: It's an online learning Camp my friends and I have attented during late Summer 2014. The course instructor is a genius and explains the theories especially easy to understand. 
+  - Others include *Mitbbs* Chinese forum *JobHunting, Java, Programming* boards, and *MeetQun* forum http://meetqun.com/ and online judges as well, and the famous "¶Î·Ö×Ó"ÅàÑµ°à in Chinese community.
+- The Algorithms parts I plan to work on during May-Summer section 2015: 
+  - *Finish the rest about 130 algorithms problems in LintCode using Java*; LeetCode is a great coding set as well, but after c++ & Java two rounds of coding, feels like I could recite the answers by bad studing habits (I should at least understand each problems and algorithms instead); So a round using Java for LintCode could help refresh my mind, and LintCode coding set does inspire further potential critical thinking for me; Expect to understand the algorithms pretty well when finish;
+  - *Coding LeetCode a third round using Python programming language* for Python programming propose only. I have coding experience using Python for only one month during 2013 Internship season for three small projects [a log module insertion within SSD MSTK test Suite by parsing original software/driver generated log files (8 to 11 python module files), an independent VDBench test suite development for STEL Automation Python Framework), and a complete full-functional GUI project for Medusa excel data statistical plots]. Expect this round Python coding ends my "EASY" algorithms journey, and understand Python language to a slightly deeper layer;
+  - *EPI: Elements of Programming Interviews*, start "MEDIUM" or "HARD" algorithms study process from this book. Practise like ctci, LeetCode, LintCode....
+  - *Study Java Spring framework, build a Java-based dynamic personal blog for fun* and to practise project handling abilities. 
+  - *Study and review OOP, Operating System questions, design patterns for interview.*
+  - Solve all the *bug* I have in algorithms before. It was the solving process that helps. 
+  - Temporatorily won't work on *Sum\textunderscore JobHunting.org* for the first months or so, but will focus on updating it when finish Python LeetCode round. 
+  - Form a habit to *solve 3-5 algorithms problems each day* for programming and algorithms practise propose only. 
+
+* 2/22/2015, Sunday
+- Whether I like it or not, I am into the midiUI project now, and will have to try my best to make it work. It is challenging, but I have to work on it. 
+- Many things to do recently, but try my best to make everything work out as expected. 
+- fall asleep late last night, too tired today, waked up at 8:47, went to work without washing cleaning...
+- work on midiUI tomorrow, spend couple of hours to write for gs update, hope will make some progress on midiUI tomorrow; ever since Saturday night, I began to realize how much work/efford I need to make to make this midiUI GUI responsive, so far my main UI still got blocked, and I could only play and stop for one key, afterwards will get blocked, well dive into it...
+- work on JH problems after midiUI if midiUI done if recently possible 
 * 2/11/2015, Wednesday
 - Reverse Nodes in k-Group recursion bug !~~~~~~~~
 - live dead recently, woke up by another rommoate's drying cloth at

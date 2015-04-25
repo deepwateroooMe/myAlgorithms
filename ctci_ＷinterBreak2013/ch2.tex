@@ -1,0 +1,275 @@
+\chapter{Linked Lists}
+\small{}
+
+\begin{description}
+\item[2.1] Write code to remove duplicates from an unsorted linked list.
+
+FOLLOW UP
+
+How would you solve this problem if a temporary buffer is not allowed?
+
+从一个未排序的链表中移除重复的项. 进一步地，如果不允许使用临时的缓存，你如何解决这个问题？
+
+Solution: 
+
+如果可以使用额外的存储空间，我们就开一个数组来保存一个元素的出现情况。 对于这种情况，最好的解决方法当然是使用哈希表，但令人非常不爽的是C++标准里是没有 哈希表的(java里有)。网上有人用ext下的hash\_map，但毕竟不是C++标准里的， 用起来怪怪的，搞不好换个环境就跑不起来了(像Linux和Windows下使用就不一样)。 所以，一般用一个数组模拟一下就好了。但，这里要注意一个问题， 就是元素的边界，比如链表里存储的是int型变量。那么，如果有负值，这个方法就不奏效 了。而如果元素里的最大值非常大，那么这个数组也要开得很大，而数组中大部分空间是用 不上的，会造成空间的大量浪费。
+
+简言之，如果可以用哈希表，还是用哈希表靠谱。
+
+如下代码遍历一遍链表即可，如果某个元素在数组里记录的是已经出现过， 那么将该元素删除。时间复杂度O(n):
+\begin{lstlisting}[language=C++]
+void removedulicate(node *head){
+    if(head==NULL) return;
+    node *p=head, *q=head->next;
+    hash[head->data] = true;
+    while(q){
+        if(hash[q->data]){
+            node *t = q;
+            p->next = q->next;
+            q = p->next;
+            delete t;
+        }
+        else{
+            hash[q->data] = true;
+            p = q; q = q->next;
+        }
+    }
+}
+\end{lstlisting}
+
+如果不允许使用临时的缓存(即不能使用额外的存储空间)，那需要两个指针， 当第一个指针指向某个元素时，第二个指针把该元素后面与它相同的元素删除， 时间复杂度O(n2 )，代码如下：
+\begin{lstlisting}[language=C++]
+void removedulicate1(node *head){
+    if(head==NULL) return;
+    node *p, *q, *c=head;
+    while(c){
+        p=c; q=c->next;
+        int d = c->data;
+        while(q){
+            if(q->data==d){
+                node *t = q;
+                p->next = q->next;
+                q = p->next;
+                delete t;
+            }
+            else{
+                p = q; q = q->next;
+            }
+        }
+        c = c->next;
+    }
+}
+\end{lstlisting}
+
+完整代码如下：
+\lstinputlisting[language=C++]{ch2one.cpp}
+
+
+\item[2.2] Implement an algorithm to find the nth to last element of a singly linked list.
+
+实现一个算法从一个单链表中返回倒数第n个元素。
+
+
+Solution: 
+
+这道题的考点在于我们怎么在一个单链表中找到倒数第n个元素？ 由于是单链表，所以我们没办法从最后一个元素数起，然后数n个得到答案。 但这种最直观的思路显然是没错的，那我们有没有办法通过别的方式，从最后的元素数起数 n个来得到我们想要的答案呢。
+
+这个次序颠倒的思路可以让我们联想到一种数据结构：栈。
+
+我们如果遍历一遍单链表，将其中的元素压栈，然后再将元素一一出栈。那么， 第n个出栈的元素就是我们想要的。
+
+那我们是不是需要显式地用栈这么一个结构来做这个问题呢？答案是否。看到栈，我们应当 要想到递归，它是一种天然使用栈的方式。所以，第一种解决方案用递归，让栈自己帮我 们从链表的最后一个元素数起。
+
+思路很简单，如果指向链表的指针还未空，就不断递归。当指针为空时开始退递归，这个过 程n不断减1，直接等于1，即可把栈中当前的元素取出。代码如下：
+
+\begin{lstlisting}[language=C++]
+node *pp;
+int nn;
+void findNthToLast1(node *head){
+    if(head==NULL) return;
+    findNthToLast1(head->next);
+    if(nn==1) pp = head;
+    --nn;
+}
+\end{lstlisting}
+
+递归的特点就是理解直接，代码短小。所以，很多递归代码看起来都很漂亮(不包括我这个 哈，还用了两个全局变量，比较不美观)。除了递归，这道题目还有别的方法还做吗？ 答案还是有。虽然我们没办法从单链表的最后一个元素往前数，但如果我们维护两个指针， 它们之间的距离为n。然后，我将这两个指针同步地在这个单链表上移动，保持它们的距离 为n不变。那么，当第二个指针指到空时，第一个指针即为所求。很tricky的方法， 将这个问题很漂亮地解决了。代码如下：
+
+\begin{lstlisting}[language=C++]
+node* findNthToLast(node *head, int n){
+    if(head==NULL || n < 1) return NULL;
+    node *p=head, *q=head;
+    while(n>0 && q){
+        q = q->next;
+        --n;
+    }
+    if(n > 0) return NULL;
+    while(q){
+        p = p->next;
+        q = q->next;
+    }
+    return p;
+}
+\end{lstlisting}
+没有额外的全局变量，代码看起来就要漂亮一些。:P
+
+完整代码如下：
+
+\lstinputlisting[language=C++]{ch2two.cpp}
+
+
+\item[2.3] Implement an algorithm to delete a node in the middle of a single linked list, given only access to that node.
+
+EXAMPLE
+
+Input: the node ‘c’ from the linked list a->b->c->d->e
+
+Result: nothing is returned, but the new linked list looks like a->b->d->e
+
+实现一个算法来删除单链表中间的一个结点，只给出指向那个结点的指针。
+
+例子：
+
+输入：指向链表a->b->c->d->e中结点c的指针
+
+结果：不需要返回什么，得到一个新链表：a->b->d->e
+
+Solution: 
+
+这个问题的关键是你只有一个指向要删除结点的指针，如果直接删除它，这条链表就断了。 但你又没办法得到该结点之前结点的指针，是的，它连头结点也不提供。在这种情况下， 你只能另觅他径。重新审视一下这个问题，我们只能获得从c结点开始后的指针， 如果让你删除c结点后的某个结点，那肯定是没问题的。比如删除结点d，那只需要把c 的next指针指向e，然后delete d就ok了。好的，如果我们就删除结点d，我们将得到 a->b->c->e，和目标链表只差了一个结点。怎么办呢？把d的数据给c！ 结点结构都是一样的，删除谁都一样，最关键的是结点中的数据，只要我们留下的是数据 a->b->d->e就OK了。
+
+思路已经有了，直接写代码？等等，写代码之前，让我们再简单分析一 下可能出现的各种情况(当然包括边界情况)。如果c指向链表的：1.头结点；2.中间结点。 3.尾结点。4.为空。情况1，2属于正常情况，直接将d的数据给c，c的next指针指向d 的next指向所指结点，删除d就OK。情况4为空，直接返回。情况3比较特殊，如果c 指向尾结点，一般会认为直接删除c就ok了，反正c后面也没有结点了，不用担心链表断开。 可是真的是这样吗？代码告诉我们，直接删除c，指向c的那个结点(比如说b)的next指针 并不会为空。也就是说，如果你打印这个链表，它还是会打印出和原来链表长度一样的链表， 而且最后一个元素为0！
+
+关于这一点，原书CTCI中是这么讲的，这正是面试官希望你指出来的。然后， 你可以做一些特殊处理，比如当c是尾结点时，将它的数据设置为一些特殊字符， 这样在打印时就可以不打印它。当然也可以直接不处理这种情况，原书里的代码就是这么做 的。这里，也直接不处理这种情况。代码如下：
+
+\begin{lstlisting}[language=C++]
+bool remove(node *c){
+    if(c==NULL || c->next==NULL) return false;
+    node *q = c->next;
+    c->data = q->data;
+    c->next = q->next;
+    delete q;
+    return true;
+}
+\end{lstlisting}
+
+\lstinputlisting[language=C++]{ch2thr.cpp}
+
+
+\item[2.4] You have two numbers represented by a linked list, where each node contains a single digit. The digits are stored in reverse order, such that the 1’s digit is at the head of the list. Write a function that adds the two numbers and returns the sum as a linked list.
+
+EXAMPLE
+
+Input: (3 -> 1 -> 5) + (5 -> 9 -> 2)
+
+Output: 8 -> 0 -> 8
+
+你有两个由单链表表示的数。每个结点代表其中的一位数字。数字的存储是逆序的， 也就是说个位位于链表的表头。写一函数使这两个数相加并返回结果，结果也由链表表示。
+
+例子：(3 -> 1 -> 5), (5 -> 9 -> 2)
+
+输入：8 -> 0 -> 8
+
+Solution:
+这道题目并不难，需要注意的有：1.链表为空。2.有进位。3.链表长度不一样。 代码如下：
+
+\lstinputlisting[language=C++]{ch2for.cpp}
+
+
+\item[2.5] Given a circular linked list, implement an algorithm which returns node at the beginning of the loop.
+
+DEFINITION
+
+Circular linked list: A (corrupt) linked list in which a node’s next pointer points to an earlier node, so as to make a loop in the linked list.
+
+EXAMPLE
+
+input: A -> B -> C -> D -> E -> C [the same C as earlier]
+
+output: C
+
+给定一个循环链表，实现一个算法返回这个环的开始结点。
+
+定义：
+
+循环链表：链表中一个结点的指针指向先前已经出现的结点，导致链表中出现环。
+
+例子：
+
+输入：A -> B -> C -> D -> E -> C [结点C在之前已经出现过]
+
+输出：结点C
+
+Solution: 
+
+http://hawstein.com/posts/2.5.html
+
+关于带环链表的题目，《编程之美》中也有讲过。方法很tricky，设置快慢指针， (快指针速度为2，慢指针速度为1)使它们沿着链表移动，如果这个链表中存在环， 那么快指针最终会追上慢指针而指向同一个结点。接下来的问题是，快指针追上慢指针后， 怎么找到这个环的开始结点？ 现在我们还没有答案，那让我们先来分析一下，快指针会在哪里追上慢指针。
+
+设环的开始结点(图中的D)前有k个结点，环有n个结点(上图中n从D到K共8个结点)。 快指针fast和慢指针slow一开始都指向头结点head，它们移动k步可到环的开始结点。 假设慢指针走过m个结点后，快指针追上了它，这时快指针走过了2m个结点。 快指针比慢指针多走过的结点都在环里转圈了，是环中结点数n的整数倍，即：
+
+2m - m = pn --> m = pn, p为正整数
+
+如果头结点是第一个结点的话，那么相遇结点就是第m+1=pn+1个结点(慢指针走了m步)。 当环开始结点为起点1时，相遇结点为第pn+1-k个结点(减去前k个结点)。这pn+1-k 有可能是绕环转了很多圈后的一个数，假设继续走过一些结点，它就绕环刚好q圈， 则从相遇结点需要再经过 qn-(pn+1-k)+1=(q-p)n+k个结点，才能回到环的开始结点(图中结点D)。 由于从相遇结点走回到环的开始结点(图中D)所需要步数一定是小于等于一圈的，因此有
+
+(q-p)n+k <= n 
+
+由于q，p，n，k都是正整数，因此有q-p <= 0，否则上式左边大于右边。 因为q-p <= 0，可以得出上式左边是小于等于k的。即：
+
+(q-p)n+k <= k
+
+如果让快指针在相遇结点继续走，不过这次把速度变成了慢指针一样， 那么它要走(q-p)n+k步到达环开始结点，让慢指针从头结点head开始走， 它要走k步到达环开始结点。最后，它们将在环开始结点处相遇。
+
+这个是怎么得出来的呢？假设快指针走了(q-p)n+k个结点到达环的开始结点，这时， 慢指针也走了(q-p)n+k步，它离环的开始结点还有
+
+k - [ (q-p)n + k ] = (p-q)n (步)
+
+从上面我们知道q-p <= 0，因此p-q >= 0。 这说明慢指针离环开始结点的步数正好是环中结点数的整数倍， 所以当慢指针到达环的开始结点时， 快指针(此时它的速度也是1)刚好在环中转了(p-q)圈，然后和慢指针在环的开始结点处相遇。
+
+代码如下：
+
+\begin{lstlisting}[language=C++]
+node* loopstart(node *head){
+    if(head==NULL) return NULL;
+    node *fast = head, *slow = head;
+    while(fast && fast->next){
+        fast = fast->next->next;
+        slow = slow->next;
+        if(fast==slow) break;
+    }
+    if(!fast || !fast->next) return NULL;
+    slow = head;
+    while(fast!=slow){
+        fast = fast->next;
+        slow = slow->next;
+    }
+    return fast;
+}
+\end{lstlisting}
+
+这个思路确实很巧很tricky。但，还有没有别的方法呢？更直观更简单的方法。 既然这么问了，当然是有了。:p一个无环的链表，它每个结点的地址都是不一样的。 但如果有环，指针沿着链表移动，那这个指针最终会指向一个已经出现过的地址。 答案是不是已经呼之欲出了。嗯，没错，哈希表！
+
+以地址为哈希表的键值，每出现一个地址，就将该键值对应的实值置为true。 那么当某个键值对应的实值已经为true时，说明这个地址之前已经出现过了， 直接返回它就OK了。
+
+由于C++标准中没有哈希表的操作，我用map进行模拟。不过哈希表的插入和取值操作是O(1) 的时间。而map是由一个RB tree组织，为了维护这个RB tree，插入和取值都会花更多的时 间。
+
+代码如下：
+
+\begin{lstlisting}[language=C++]
+map<node*, bool> hash;
+node* loopstart1(node *head){
+    while(head){
+        if(hash[head]) return head;
+        else{
+            hash[head] = true;
+            head = head->next;
+        }
+    }
+    return head;
+}
+\end{lstlisting}
+
+完整代码如下页：
+%\lstinputlisting[language=C++]{ch2fiv.cpp}
+
+\end{description}
