@@ -56,6 +56,7 @@ public ArrayList<ArrayList<Integer>> fourSum(int[] numbers, int target) {
     return res;
 }
 #+END_SRC
+
 * 2 Sum: O(1) Space, O(nlogn) Time undone
 
 25% Accepted
@@ -348,7 +349,7 @@ n = 3.72, return ERROR
 n = 3.5, return 11.1
 #+BEGIN_SRC java
 #+END_SRC
-* Binary Search My Submissions: arr.length > Integer.MAX_VALUE ? don't understand...
+* Binary Search My Submissions: arr.length > Integer.MAX\textunderscore VALUE ? don't understand...
 
 27% Accepted
 

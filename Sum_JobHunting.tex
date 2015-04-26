@@ -1,4 +1,4 @@
-% Created 2015-04-25 Sat 12:49
+% Created 2015-04-26 Sun 00:36
 \documentclass[12pt]{book}
 \usepackage{graphicx}
 \usepackage{xcolor}
@@ -358,9 +358,9 @@ int store hundred factorial. What size of array should be sufficient to solve th
 \begin{lstlisting}
 list<int> L;
 list<int>::iterator in_range = find_if(L.begin(), L.end(),
-				       compose2(logical_and<bool>(),
-						bind2nd(greater_equal<int>(), 1),
-						bind2nd(less_equal<int>(), 10)));
+                                       compose2(logical_and<bool>(),
+                                                bind2nd(greater_equal<int>(), 1),
+                                                bind2nd(less_equal<int>(), 10)));
 \end{lstlisting}
 \section{What is the best assertion that should be used as a post-condition?}
 \label{sec-13-5}
@@ -896,25 +896,25 @@ upside down and turn it into a tree with left leaf nodes.
 for example, turn these:
 \lstset{language=java,label= ,caption= ,numbers=none}
 \begin{lstlisting}
-      1                1
-     /               / 
-    2   3            2   3
+        1                1
+       /               / 
+      2   3            2   3
+     / 
+    4   5
    / 
-  4   5
- / 
-6   7
+  6   7
 \end{lstlisting}
 
 into these:
 \lstset{language=java,label= ,caption= ,numbers=none}
 \begin{lstlisting}
-      1               1
-     /               /
-    2---3           2---3
+        1               1
+       /               /
+      2---3           2---3
+     /
+    4---5
    /
-  4---5
- /
-6---7
+  6---7
 \end{lstlisting}
 
 where 6 is the new root node for the left tree, and 2 for the right tree.
@@ -922,13 +922,13 @@ where 6 is the new root node for the left tree, and 2 for the right tree.
 oriented correctly:
 \lstset{language=java,label= ,caption= ,numbers=none}
 \begin{lstlisting}
-  6                  2
- /                 / 
-7   4              3   1
-   / 
-  5   2
-     / 
-    3   1
+     6                  2
+    /                 / 
+   7   4              3   1
+      / 
+     5   2
+        / 
+       3   1
 \end{lstlisting}
 
 \begin{enumerate}
@@ -1034,7 +1034,7 @@ public:
     table() {}
     ~table() {}
     void info() {
-	cout << "Table " << endl;
+        cout << "Table " << endl;
     }
 };
 
@@ -1043,7 +1043,7 @@ public:
     chair(){}
     ~chair(){}
     void info() {
-	cout << "Chair" << endl;
+        cout << "Chair" << endl;
     }
 };
 
@@ -1051,8 +1051,8 @@ class wood: public  stuff {
 public:
     wood(stuff * s): stf(s) { }
     void info() {
-	cout << "Wood ";
-	stf->info();
+        cout << "Wood ";
+        stf->info();
     }
 private:
     stuff* stf;
@@ -1062,8 +1062,8 @@ class steel : public stuff {
 public:
     steel(stuff *s) : stf(s) {}
     void info() {
-	cout << "Steel ";
-	stf->info();
+        cout << "Steel ";
+        stf->info();
     }
 private:
     stuff* stf;
@@ -1115,14 +1115,14 @@ public:
 class wood : public material{
 public:
     void info() {
-	cout << "Wood ";
+        cout << "Wood ";
     }
 };
 
 class steel: public material {
 public:
     void info() {
-	cout << "Steel ";
+        cout << "Steel ";
     }
 };
 
@@ -1130,7 +1130,7 @@ class furniture {
 public:
     furniture() {};
     void setMaterial(material *m) {
-	this->m = m;
+        this->m = m;
     }
     virtual ~furniture() {};
     virtual void info() = 0 ;
@@ -1142,8 +1142,8 @@ class table : public furniture {
 public:
     table() {};
     void info() {
-	m->info();
-	cout << " Table" << endl;
+        m->info();
+        cout << " Table" << endl;
     }
 };
 
@@ -1151,8 +1151,8 @@ class chair : public furniture {
 public:
     chair() {};
     void info() {
-	m->info();
-	cout << " Chair" << endl;
+        m->info();
+        cout << " Chair" << endl;
     }
 };
 
@@ -1363,8 +1363,8 @@ static int BitSetCount256[256] = {
 int bitSetCount(unsigned int i){
     int c=0;
     while (i) {
-	c++;
-	i &= (i-1);  //这一步很赞，每次保证清除最低一位1；
+        c++;
+        i &= (i-1);  //这一步很赞，每次保证清除最低一位1；
     }
     return c;
 }
@@ -1384,18 +1384,18 @@ int bitSetCount(unsigned int i){
 \begin{lstlisting}
 void printParenthes(int N, int left, int right, stack<char> &stk) {
     if (left == N && right == N) {
-	printStack(stk);
-	return;
+        printStack(stk);
+        return;
     }
     if (left > right){
-	stk.push(')');
-	printParenthes(N, left,right+1, stk);
-	stk.pop();
+        stk.push(')');
+        printParenthes(N, left,right+1, stk);
+        stk.pop();
     }
     if (left < N){
-	stk.push('(');
-	printParenthes(N, left+1, right, stk);
-	stk.pop();
+        stk.push('(');
+        printParenthes(N, left+1, right, stk);
+        stk.pop();
     }   
 }
 \end{lstlisting}
@@ -1408,18 +1408,18 @@ void printParenthes(int N, int left, int right, stack<char> &stk) {
 int current_k = N;  //global
 void VC(int k, int start_v){
     if (all_edge_covered(G) && k < current_k) {
-	current_k = k;
-	return;
+        current_k = k;
+        return;
     }
     if (k == current_k - 1) return;       //剪枝
     for(; start_v <= N; start_v++) {
-	if (!edge_list[start_v].empty()){ //剪枝
-	    list<int> temp_edge_list = edge_list[start_v];
-	    clear_edge(start_v,G);
-	    VC(k+1, start_v+1);
-	    if(curent_k == k+1) return;   //剪枝
-	    reset_edge(start_v,temp_edge_list,G);
-	}
+        if (!edge_list[start_v].empty()){ //剪枝
+            list<int> temp_edge_list = edge_list[start_v];
+            clear_edge(start_v,G);
+            VC(k+1, start_v+1);
+            if(curent_k == k+1) return;   //剪枝
+            reset_edge(start_v,temp_edge_list,G);
+        }
     }
 }
 \end{lstlisting}
@@ -1429,17 +1429,17 @@ void VC(int k, int start_v){
 \begin{lstlisting}
 void VC2(int k, int start_v){
     if (k<current_k && all_edge_covered(G)) {
-	current_k = k;
-	return;
+        current_k = k;
+        return;
     }
     if(k >= current_k - 1) return;  // 剪枝
     if(start_v == N) return; //没有下一个顶点了
     if(!edge_list[start_v].empty()){ //如果
-	list<int> temp_edge_list = edge_list[start_v];
-	clear_edge(start_v,G);
-	VC2(k+1, start_v+1);
-	if(curent_k == k+1) return; // 剪枝
-	reset_edge(start_v,temp_edge_list,G);
+        list<int> temp_edge_list = edge_list[start_v];
+        clear_edge(start_v,G);
+        VC2(k+1, start_v+1);
+        if(curent_k == k+1) return; // 剪枝
+        reset_edge(start_v,temp_edge_list,G);
     }
     VC2(k, start_v+1); //不选start_v这个顶点
 }
@@ -1796,14 +1796,14 @@ class FOO {
     char * buf;
 public:
     Foo (const char *b = "default") {
-	if (b) {
-	    buf = new char[std::strlen(b) + 1];
-	    std::strcpy(buf, b);
-	} else         
-	    buf=0;
+        if (b) {
+            buf = new char[std::strlen(b) + 1];
+            std::strcpy(buf, b);
+        } else         
+            buf=0;
     }
     ~Foo() {
-	delete[] buf;
+        delete[] buf;
     }
 };
 
