@@ -1,0 +1,3584 @@
+#+latex_class: book
+#+title: LeetCode Summary
+#+author: deepwaterooo
+
+* LeetCode Summary - Part II
+** 排序
+*** Merge Sorted Array	
+Given two sorted integer arrays A and B, merge B into A as one sorted array.
+
+Note:
+
+You may assume that A has enough space (size that is greater or equal to m + n) to hold additional elements from B. The number of elements initialized in A and B are m and n respectively.
+
+时间复杂度 O(m+n), 空间复杂度 O(1). 
+
+#+BEGIN_SRC java
+public void merge(int a[], int m, int b[], int n) {
+    int ia = m - 1;
+    int ib = n - 1;
+    int icur = m + n - 1;
+    while (ia >= 0 && ib >= 0) 
+        a[icur--] = a[ia] > b[ib] ? a[ia--] : b[ib--];
+    while (ib >= 0) 
+        a[icur--] = b[ib--];
+}
+#+END_SRC
+
+*** Merge Two Sorted List
+Merge two sorted linked lists and return it as a new list. The new
+list should be made by splicing together the nodes of the first two
+lists.
+
+时间复杂度 O(m+n), 空间复杂度 O(1).
+
+#+BEGIN_SRC java
+public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+    ListNode head = new ListNode(-1);     // dummy List ~!
+    for (ListNode p = head; l1 != null || l2 != null; p = p.next) {
+        int val1 = l1 == null ? Integer.MAX_VALUE : l1.val;
+        int val2 = l2 == null ? Integer.MAX_VALUE : l2.val;
+        if (val1 < val2) {
+            p.next = l1;
+            l1 = l1.next;
+        } else {
+            p.next = l2;
+            l2 = l2.next;
+        }
+    }
+    return head.next;
+}
+#+END_SRC
+
+*** Sort Colors
+Given an array with n objects colored red, white or blue, sort them so that objects of the same color are adjacent, with the colors in the order red, white and blue.
+
+Here, we will use the integers 0, 1, and 2 to represent the color red, white, and blue respectively.
+
+Note:
+
+You are not suppose to use the library's sort function for this problem.
+
+click to show follow up.
+
+Follow up:
+
+A rather straight forward solution is a two-pass algorithm using counting sort.
+
+First, iterate the array counting number of 0's, 1's, and 2's, then overwrite array with total number of 0's, then 1's and followed by 2's.
+
+Could you come up with an one-pass algorithm using only constant space?
+
+*Tags:* Array, Two Pointers, Sort
+
+由于 0, 1, 2 非常紧凑,首先想到计数排序 (counting sort),但需要扫描两遍,不符合题目要求。
+
+由于只有三种颜色,可以设置两个 index,一个是 red 的 index,一个是 blue 的 index,两边往中
+间走。时间复杂度 O(n),空间复杂度 O(1)。
+
+第 3 种思路,利用快速排序里 partition 的思想,第一次将数组按 0 分割,第二次按 1 分割,排
+序完毕,可以推广到 n 种颜色,每种颜色有重复元素的情况。
+
+时间复杂度 O(n), 空间复杂度 O(1). 
+
+**** Counting Sort: 时间复杂度 O(n), 空间复杂度 O(1)
+
+#+BEGIN_SRC java
+public void sortColors(int[] a) {
+    int [] cnt = new int[3];  // 记录每个颜色出现的次数
+    for (int i = 0; i < a.length; i++) 
+        cnt[a[i]]++;
+    for (int i = 0, index = 0; i < 3; i++) {
+        for (int j = 0; j < cnt[i]; j++) {
+            a[index++] = i;
+        }
+    }
+}
+#+END_SRC
+
+**** 双指针: 时间复杂度 O(n), 空间复杂度 O(1)
+#+BEGIN_SRC java
+public void swap(int [] a, int i, int j) {
+    int tmp = a[i];
+    a[i] = a[j];
+    a[j] = tmp;
+}
+
+public void sortColors(int[] a) {
+    if (a == null || a.length < 2) return;
+    int n = a.length;
+    int i = 0;
+    // 一个是 red 的 index,一个是 blue 的 index,两边往中间走
+    int zEnd = -1;  // 0 end
+    int tEnd = n;   // 2 end
+    while (i < tEnd) {
+        if (a[i] == 0 && i != ++zEnd) // first 0
+            swap(a, zEnd, i);
+        else if (a[i] == 2 && i != --tEnd)
+            swap(a, i, tEnd);
+        else i++;
+    }
+    return;
+}
+#+END_SRC
+
+**** use partition(): 
+**** use partition(): 
+
+*** Sort List
+Sort a linked list in O(n log n) time using constant space complexity.
+
+#+BEGIN_SRC java
+public ListNode divideList(ListNode head) {
+    ListNode fast = head;
+    ListNode slow = head;
+    ListNode prev = head;
+    while (fast != null && fast.next != null) {
+        prev = slow;
+        slow = slow.next;
+        fast = fast.next.next;
+    }
+    prev.next = null;
+    return slow;
+}
+        
+public ListNode mergeList(ListNode one, ListNode two) {
+    if (one == null) return two;
+    if (two == null) return one;
+    ListNode dummy = new ListNode(Integer.MIN_VALUE);
+    ListNode curr = dummy;
+    while (one != null && two != null) {
+        if (one.val < two.val) {
+            curr.next = one;
+            one = one.next;
+        } else {
+            curr.next = two;
+            two = two.next;
+        }
+        curr.next.next = null;
+        curr = curr.next;
+    }
+    if (one != null) curr.next = one;
+    else curr.next = two;
+    return dummy.next;
+}
+        
+public ListNode sortList(ListNode head) {
+    if (head == null || head.next == null) 
+        return head;
+    ListNode second = divideList(head);
+    ListNode firstSorted = sortList(head);
+    ListNode secondSorted = sortList(second);
+    return mergeList(firstSorted, secondSorted);
+}
+#+END_SRC
+
+*** Merge k sorted Lists
+Merge k sorted linked lists and return it as one sorted list. Analyze and describe its complexity.
+
+*Tags*: Divide and Conquer, Linked List, Heap
+
+可以复用 Merge Two Sorted Lists(见 Merge Two Sorted List [[Merge Two Sorted List]])的函数
+
+时间复杂度 O(n1 + n2 + ...),空间复杂度 O(1). 
+
+#+BEGIN_SRC java
+public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+    ListNode head = new ListNode(-1);     // dummy List ~!
+    for (ListNode p = head; l1 != null || l2 != null; p = p.next) {
+        int val1 = l1 == null ? Integer.MAX_VALUE : l1.val;
+        int val2 = l2 == null ? Integer.MAX_VALUE : l2.val;
+        if (val1 < val2) {
+            p.next = l1;
+            l1 = l1.next;
+        } else {
+            p.next = l2;
+            l2 = l2.next;
+        }
+    }
+    return head.next;
+}
+
+public ListNode mergeKLists(List<ListNode> lists) {
+    if (lists.size() == 0) return null;
+    ListNode p = lists.get(0);  // Time Limit Exceeded
+    for (int i = 1; i < lists.size(); i++) {
+        p = mergeTwoLists(p, lists.get(i));
+    }
+    return p;
+}
+
+public ListNode mergeKLists(List<ListNode> lists) {
+    if (lists.size() == 0) return null;
+    if (lists.size() == 1) return lists.get(0);
+    if (lists.size() == 2) return mergeTwoLists(lists.get(0), lists.get(1));
+    return mergeTwoLists((mergeKLists(lists.subList(0, lists.size() / 2))),
+                         (mergeKLists(lists.subList(lists.size() / 2, lists.size()))));
+}
+#+END_SRC
+
+*** Insertion Sort List
+Sort a linked list using insertion sort.
+
+这个，代码过于混乱，需要优化。。。
+
+#+BEGIN_SRC java
+public ListNode insertionSortList(ListNode head) {
+    if (head == null) return null;
+    ListNode prev = head;
+    ListNode curr = head.next;
+    ListNode next = head;
+    ListNode tnext = head;
+    ListNode tmp = head;
+    while (curr != null) {
+        next = curr.next;
+        if (curr.val < prev.val) {
+            prev.next = next;
+            curr.next = null;
+            if (curr.val < head.val) {
+                curr.next = head;
+                head = curr;
+            } else {
+                tmp = head;
+                while (tmp.next != prev && curr.val > tmp.next.val) {
+                    tmp = tmp.next;
+                }
+                tnext = tmp.next;
+                tmp.next = curr;
+                curr.next = tnext;
+            }
+            curr = next;
+        } else {
+            prev = curr;
+            curr = curr.next;
+        }
+    }
+    return head;
+}
+#+END_SRC
+*** First Missing Positive
+Given an unsorted integer array, find the first missing positive integer.
+
+For example,
+
+Given [1, 2, 0] return 3, 
+
+and [3, 4, -1, 1] return 2.
+
+Your algorithm should run in O(n) time and uses constant space.
+	
+本质上是桶排序 (bucket sort),每当 A[i]!= i+1 的时候,将 A[i] 与 A[A[i]-1] 交换,直到无法
+交换为止,终止条件是 A[i]== A[A[i]-1]。
+
+#+BEGIN_SRC java
+public void swap(int [] a, int i, int j) {        
+    int tmp = a[i];
+    a[i] = a[j];
+    a[j] = tmp;
+}
+        
+public void bucket_sort(int [] a) {
+    for (int i = 0; i < a.length; i++) {
+        while (a[i] != i + 1) {
+            if (a[i] <= 0 || a[i] > a.length || a[i] == a[i] - 1)
+                break;
+            swap(a, i, a[i] - 1);
+        }
+    }
+}
+
+// need to clean code
+// 时间复杂度 O(n), 空间复杂度 O(1)
+public int firstMissingPositive(int[] a) {
+    // Time Limit Exceeded
+    bucket_sort(a);
+    for (int i = 0; i < a.length; i++) 
+        if (a[i] != (i + 1))
+            return i + 1;
+    return a.length + 1;
+}
+
+public int firstMissingPositive0(int[] a) {
+    if (a == null || a.length == 0) return 1;
+    if (a.length == 1) return a[0] == 1 ? 2 : 1;
+            
+    int n = a.length;
+    boolean equl = false;
+    int i;
+    for ( i = 0; i < n; i++) {
+        if (a[i] < 0) continue;
+        if (a[i] == n) {
+            equl = true;
+            continue;
+        }
+        while ( (i == 0 || (i != 0 && a[i] != i))
+                && a[i] < n && a[i] > 0 ) {
+            swap(a, i, a[i]);
+            if (a[i] == n) {
+                equl = true;
+                break;
+            }
+            if ((a[i] > n || a[i] < 0) || (a[i] >= 0 && a[i] == a[a[i]]))
+                break; // to avoid infite loop
+        }
+    }
+    for ( i = 1; i < n; i++) 
+        if (a[i] != i) return i;
+    if (equl || a[0] == n) return n + 1;
+    else return n;
+}
+#+END_SRC
+
+*** Largest Number
+*** Maximum Gap
+- Merge Intervals	
+- Insert Interval
+
+
+** 查找
+*** 二分查找一个数字 C\#
+  #+BEGIN_SRC csharp
+public static bool Find(int[] sortedArray, int number) {
+    if (sortedArray.Length == 0)
+        return false;
+    int bgn = 0;
+    int end = sortedArray.Length - 1;
+    while (end >= bgn) {
+        int mid = (bgn + end) / 2;
+        if (sortedArray[mid] < number)
+            bgn = mid + 1;
+        else if (sortedArray[mid] > number)
+            end = mid - 1;
+        else
+            return true;
+    }
+    return false;
+}    
+  #+END_SRC
+*** 三分查找一个数字 C\#
+  #+BEGIN_SRC csharp
+public static bool Find(int[] sortedArray, int number) {
+    if (sortedArray.Length == 0)
+        return false;
+    int bgn = 0;
+    int end = sortedArray.Length - 1;
+    while (end >= bgn) {
+        int firstMiddle = (end - bgn) / 3 + bgn;
+        int secondMiddle = end - (end - bgn) / 3;
+        if (sortedArray[firstMiddle] > number)
+            end = firstMiddle - 1;
+        else if (sortedArray[secondMiddle] < number)
+            bgn = secondMiddle + 1;
+        else if (sortedArray[firstMiddle] != number && sortedArray[secondMiddle] != number) {
+            end = secondMiddle - 1;
+            bgn = firstMiddle + 1;
+        } else
+            return true;
+    }
+    return false;
+}
+  #+END_SRC
+*** Search Insert Position
+- Given a sorted array and a target value, return the index if the target is found. If not, return the index where it would be if it were inserted in order.
+- You may assume no duplicates in the array.
+- Here are few examples.
+#+BEGIN_SRC java
+[1, 3, 5, 6],  5 → 2
+[1, 3, 5, 6],  2 → 1
+[1, 3, 5, 6],  7 → 4
+[1, 3, 5, 6],  0 → 0
+#+END_SRC
+
+直接的二分查找，查找第一个大于或等于target的位置。对于中间位置mid：
+
+\nbsp{} 如果 A[mid] >= target，那么答案至少应该为mid，或者为mid的左边
+位置，则 end = mid
+
+\nbsp{} 否则 A[mid] < target，那么答案肯定在mid的右边，而且不可能为mid，则
+bgn = mid +１
+
+时间复杂度 O(logn), 空间复杂度 O(1). 
+#+BEGIN_SRC java
+public int searchInsert(int[] a, int target) {
+    int bgn = 0, end = a.length - 1;
+    while (bgn <= end) {
+        int mid = bgn + (end - bgn) / 2;
+        if (a[mid] ==  target) return mid;
+        if (mid > bgn && a[mid] > target && a[mid - 1] < target) return mid;
+        if (a[mid] > target)
+            end = mid - 1;
+        else
+            bgn = mid + 1;
+    }
+    return bgn;
+}
+#+END_SRC
+
+*** Search for a Range
+Given a sorted array of integers, find the starting and ending position of a given target value.
+
+Your algorithm's runtime complexity must be in the order of O(log n).
+
+If the target is not found in the array, return [-1, -1].
+
+For example,
+
+Given [5, 7, 7, 8, 8, 10] and target value 8,
+
+return [3, 4].
+
+*Tags:* Array, Binary Search
+
+已经排好了序,用二分查找。
+
+时间复杂度 O(logn), 空间复杂度 O(1). 
+
+分两步来做，找一次第一个，找一次最后一个，返回。
+#+BEGIN_SRC java
+public int searchFirsst(int [] a, int target, int start, int end) {
+    if (start == end) return (a[end] == target) ? start : -1;
+    if (start == end - 1) {
+        if (a[start] == target) return start;
+        else if (a[end] == target) return end;
+        else return -1;
+    }
+
+    while (start < end - 1) {
+        int mid = start + (end - start) / 2;
+        if (a[mid] >= target) 
+            end = mid;
+        else 
+            start = mid + 1;
+    }
+    if (start == end) return (a[end] == target) ? start : -1;
+    if (start == end - 1) {
+        if (a[start] == target) return start;
+        else if (a[end] == target) return end;
+        else return -1;
+    }
+    return -1;
+}
+        
+public int searchLast(int [] a, int target, int start, int end) {
+    if (start == end) return (a[end] == target) ? end : -1;
+    if (start == end - 1) {
+        if (a[end] == target) return end;        
+        else if (a[start] == target) return start;
+        else return -1;
+    }
+
+    while (start < end - 1) {
+        int mid = start + (end - start) / 2;
+        if (a[mid] > target) 
+            end = mid - 1;
+        else 
+            start = mid;
+    }
+    if (start == end) return (a[end] == target) ? end : -1;
+    if (start == end - 1) {
+        if (a[end] == target) return end;        
+        else if (a[start] == target) return start;
+        else return -1;
+    }
+    return -1;
+}
+
+public int[] searchRange(int[] A, int target) {
+    int [] res = new int[2];
+    if (A == null || A.length == 0 ||
+        (A.length == 1 && A[0] != target)) {
+        res[0] = -1;
+        res[1] = -1;
+        return res;   
+    } else if (A.length == 1) {
+        res[0] = 0;
+        res[1] = 0;
+        return res;   
+    }
+    res[0] = searchFirsst(A, target, 0, A.length-1);
+    res[1] = searchLast(A, target, 0, A.length-1);
+    return res;
+}
+#+END_SRC
+
+*** Search a 2D Matrix
+Write an efficient algorithm that searches for a value in an m x n matrix. This matrix has the following properties:
+
+Integers in each row are sorted from left to right.
+
+The first integer of each row is greater than the last integer of the previous row.
+
+For example,
+
+Consider the following matrix:
+#+BEGIN_SRC java
+[
+  [1,   3,  5,  7],
+  [10, 11, 16, 20],
+  [23, 30, 34, 50]
+]
+#+END_SRC
+
+Given target = 3, return true.
+
+二分查找。
+
+时间复杂度 O(logn), 空间复杂度 O(1). 
+
+#+BEGIN_SRC java
+public boolean binarySearch(int [] a, int target, int bgn, int end) {
+    while (bgn <= end) {
+        int mid = bgn + (end - bgn) / 2;
+        if (a[mid] == target) return true;
+        if (a[mid] > target) end = mid - 1;
+        else bgn = mid + 1;
+    }
+    return false;
+}
+        
+public boolean searchMatrix(int[][] matrix, int target) {
+    int m = matrix.length;
+    int n = matrix[0].length;
+    int [] a = new int[m * n];
+    int cnt = 0;
+    for (int i = 0; i < m; i++) 
+        for (int j = 0; j < n; j++) 
+            a[cnt++] = matrix[i][j];
+    return binarySearch(a, target, 0, m * n - 1);
+}
+#+END_SRC
+
+也可以把两个函数合并成一个，，省去中间合成桥梁数组的步骤，代码如下： 
+#+BEGIN_SRC java
+public boolean searchMatrix(int[][] matrix, int target) {
+    int m = matrix.length;
+    int n = matrix[0].length;
+    int bgn = 0;
+    int end = m * n- 1;
+    while (bgn <= end) {
+        int mid = bgn + (end - bgn) / 2;
+        int val = matrix[mid / n][mid % n];
+        if (val == target) return true;
+        if (val > target) end = mid - 1;
+        else bgn = mid + 1;
+    }
+    return false;
+}
+#+END_SRC
+
+
+** 暴力枚举法
+*** Subsets
+Given a set of distinct integers, S, return all possible subsets.
+
+Note:
+- Elements in a subset must be in non-descending order.
+- The solution set must not contain duplicate subsets.
+For example,
+
+If S = [1,2,3], a solution is:
+#+BEGIN_SRC java
+[
+  [3],
+  [1],
+  [2],
+  [1,2,3],
+  [1,3],
+  [2,3],
+  [1,2],
+  []
+]
+#+END_SRC
+
+*Tags:* Array Backtracking, Bit Manipulation
+
+**** 递归， 增量构造法: 增量构造法,深搜,时间复杂度 O(2^n), 空间复杂度 O(n)
+
+每个元素, 都有两种选择, 选或者不选。
+ 
+#+BEGIN_SRC java
+public void helper(int [] s, List<Integer> path, int step, List<List<Integer>> res) {
+    if (step == s.length) {
+        res.add(new ArrayList<Integer>(path));
+        return;   
+    }
+    helper(s, path, step + 1, res);  // 不选 S[step]
+    path.add(s[step]);               // 选 S[step]
+    helper(s, path, step + 1, res);
+    path.remove(path.size() - 1);
+}
+        
+public List<List<Integer>> subsets(int[] s) {
+    Arrays.sort(s);           // 输出要求有序
+    List<List<Integer>> res = new ArrayList<List<Integer>>();
+    List<Integer> path = new ArrayList<Integer>();
+    helper(s, path, 0, res);
+    return res;
+}
+#+END_SRC
+**** 递归， 位向量法： 时间复杂度 O(2^n), 空间复杂度 O(n). 
+
+开一个位向量 bool selected[n],每个元素可以选或者不选。
+
+位向量法, 深搜, 时间复杂度 O(2^n), 空间复杂度 O(n). 
+
+#+BEGIN_SRC java
+public void helper(int [] s, boolean [] selected, int step, List<List<Integer>> res) {
+    if (step == s.length) {
+        List<Integer> path = new ArrayList<Integer>();
+        for (int i = 0; i < s.length; i++) {
+            if (selected[i]) path.add(s[i]);
+        }
+        res.add(path);
+        return;   
+    }
+    selected[step] = false;
+    helper(s, selected, step + 1, res);
+    selected[step] = true;
+    helper(s, selected, step + 1, res);
+}
+        
+public List<List<Integer>> subsets(int[] s) {
+    Arrays.sort(s); 
+    List<List<Integer>> res = new ArrayList<List<Integer>>();
+    boolean [] selected = new boolean[s.length];
+    helper(s, selected, 0, res);
+    return res;
+}
+#+END_SRC
+
+**** 迭代， 增量构造法， 时间复杂度 O(2^n),空间复杂度 O(1)
+
+#+BEGIN_SRC java
+vector<vector<int> > subsets(vector<int> &S) {
+    sort(S.begin(), S.end()); // 输出要求有序
+    vector<vector<int> > result(1);
+    for (auto elem : S) {
+        result.reserve(result.size() * 2);
+        auto half = result.begin() + result.size();
+        copy(result.begin(), half, back_inserter(result));
+        for_each(half, result.end(), [&elem](decltype(result[0]) &e){
+                e.push_back(elem);
+            });
+    }
+    return result;
+}
+#+END_SRC
+
+需要改写成 Java 版。
+
+**** 二进制法
+
+本方法的前提是:集合的元素不超过 int 位数。用一个 int 整数表示位向量, 第 i 位为 1, 则表示选择 S[i], 为 0 则不选择。例如 S={A, B, C, D}, 则 0110=6 表示子集 {B, C}。
+
+这种方法最巧妙。因为它不仅能生成子集, 还能方便的表示集合的并、交、差等集合运算。设两个集合的位向量分别为 B1 和 B2 , 则 B1 | B2 ,  B1 & B2 ,  B1 B2 分别对应集合的并、交、对称差。
+
+二进制法, 也可以看做是位向量法, 只不过更加优化。
+
+二进制法, 时间复杂度 O(2^n), 空间复杂度 O(1)
+
+#+BEGIN_SRC java
+public List<List<Integer>> subsets(int[] s) {
+    Arrays.sort(s);   
+    List<List<Integer>> res = new ArrayList<List<Integer>>();
+    List<Integer> path = new ArrayList<Integer>();
+    int n = s.length;
+    for (int i = 0; i < (1 << n); i++) {
+        for (int j = 0; j < n; j++) {
+            // if ((i & (1 << j)) != 0) path.add(s[j]);
+            if(((i >> j) & 1 ) != 0) path.add(s[j]);   
+        }
+        res.add(path);
+        path = new ArrayList<Integer>();
+    }
+    return res;
+}
+#+END_SRC
+
+总体看来，不管是用向量数组来保存选与不选，还是位操作，都是选与不选的控
+制。通过有序控制来得到想要的结果。
+
+*** Subsets II
+Given a collection of integers that might contain duplicates, S, return all possible subsets.
+
+Note:
+- Elements in a subset must be in non-descending order.
+- The solution set must not contain duplicate subsets.
+For example,
+
+If S = [1,2,2], a solution is:
+#+BEGIN_SRC java
+[
+  [2],
+  [1],
+  [1,2,2],
+  [2,2],
+  [1,2],
+  []
+]
+#+END_SRC
+
+这题有重复元素,但本质上,跟上一题很类似,上一题中元素没有重复,相当于每个元素只能选 0 或 1 次,这里扩充到了每个元素可以选 0 到若干次而已。
+
+**** 递归， 增量构造法: 增量构造法,深搜,时间复杂度 O(2^n), 空间复杂度 O(n)
+
+
+#+BEGIN_SRC java
+public void helper(int [] s, List<Integer> path, List<List<Integer>> res) {
+    res.add(new ArrayList<Integer>(path));
+    for (int i = 0; i < s.length; i++) {
+        if (i != 0 && s[i] == s[i - 1]) continue;
+        path.add(s[i]);
+        helper(s, path, res);
+        path.remove(path.size() - 1);
+    }
+}
+
+// Memory Limit Exceeded
+public List<List<Integer>> subsetsWithDup(int[] s) {
+    Arrays.sort(s); 
+    List<List<Integer>> res = new ArrayList<List<Integer>>();
+    List<Integer> path = new ArrayList<Integer>();
+    helper(s, path, res);
+    return res;
+}
+#+END_SRC
+
+**** 增量构造法,版本 2,时间复杂度 O(2^n),空间复杂度 O(n)
+**** 位向量法, 时间复杂度 O(2^n), 空间复杂度 O(n)
+
+这个相对复杂，改天再写
+**** 迭代， 增量构造法， 时间复杂度 O(2^n),空间复杂度 O(1)
+
+**** 二进制法
+
+#+BEGIN_SRC java
+public List<List<Integer>> subsetsWithDup(int[] s) {
+    Arrays.sort(s);   
+    HashSet<List<Integer>> res = new HashSet<List<Integer>>();
+    List<Integer> path = new ArrayList<Integer>();
+    int n = s.length;
+    for (int i = 0; i < (1 << n); i++) {
+        for (int j = 0; j < n; j++) {
+            if ((i & (1 << j)) != 0) path.add(s[j]);
+            //if(((i >> j) & 1 ) != 0) path.add(s[j]);   
+        }
+        res.add(path);
+        path = new ArrayList<Integer>();
+    }
+    List<List<Integer>> result = new ArrayList<List<Integer>>();
+    result.addAll(res);
+    return result;
+}
+#+END_SRC
+
+与上一题类似，只是多一步控制对重复的处理，或不再执行重复的，或执行后去
+重处理。
+
+*** Permutation
+Given a collection of numbers, return all possible permutations.
+
+For example,
+#+BEGIN_SRC java
+[1,2,3] have the following permutations:
+[1,2,3], [1,3,2], [2,1,3], [2,3,1], [3,1,2], and [3,2,1].
+#+END_SRC
+
+偷懒的做法,可以直接使用 c++ std::next\textunderscore permutation()。如果是在 OJ 网站上,可以用这个API 偷个懒;如果是在面试中,面试官肯定会让你重新实现。
+
+时间复杂度 O(n!),空间复杂度 O(1)
+
+**** 重新实现 next_permutation(): 时间复杂度 O(n!), 空间复杂度 O(1)
+**** 递归： 时间复杂度 O(n!), 空间复杂度 O(n)
+
+本题是求路径本身,求所有解,函数参数需要标记当前走到了哪步,还需要中间结果的引用,最终结果的引用。
+
+扩展节点,每次从左到右,选一个没有出现过的元素。
+
+本题不需要判重,因为状态装换图是一颗有层次的树。收敛条件是当前走到了最
+后一个元素。
+
+#+BEGIN_SRC java
+public void helper(int [] num, boolean [] used, List<Integer> one,
+                   List<List<Integer>> res) {
+    if (one.size() == num.length) {
+        res.add(new ArrayList<Integer>(one));
+        return;
+    }
+    for (int i = 0; i < num.length; i++) {
+        if (!used[i]) {
+            used[i] = true;
+            one.add(num[i]);
+            helper(num, used, one, res);
+            one.remove(one.size() - 1);
+            used[i] = false;
+        }
+    }
+    return;
+}
+        
+public List<List<Integer>> permute(int[] num) {
+    List<List<Integer>> res = new ArrayList<List<Integer>>();
+    if (num == null || num.length == 0) return res;
+    boolean [] used = new boolean[num.length];
+    helper(num, used, new ArrayList<Integer>(), res);
+    return res;
+}
+#+END_SRC
+
+*** Combinationas
+Given two integers n and k, return all possible combinations of k numbers out of 1 ... n.
+
+For example,
+
+If n = 4 and k = 2, a solution is:
+#+BEGIN_SRC java
+[
+  [2,4],
+  [3,4],
+  [2,3],
+  [1,2],
+  [1,3],
+  [1,4],
+]
+#+END_SRC
+**** 递归: 深搜, 时间复杂度 O(n!), 空间复杂度 O(n)
+
+时间复杂度 O(n!), 空间复杂度 O(n). 
+#+BEGIN_SRC java
+// bgn, 开始的数, cur, 已经选择的数目
+public void dfs(List<List<Integer>> res, List<Integer> path, int n, int k, int bgn, int cur) {
+    if (cur == k) {
+        res.add(new ArrayList<Integer>(path));
+    }
+    for (int i = bgn; i <= n; i ++) {
+        path.add(i);
+        dfs(res, new ArrayList<Integer>(path), n, k, i + 1, cur + 1);
+        path.remove(path.size() - 1);
+    }
+}
+
+public List<List<Integer>> combine(int n, int k) {
+    List<List<Integer>> res = new ArrayList<List<Integer>>();
+    List<Integer> path = new ArrayList<Integer>();
+    dfs(res, path, n, k, 1, 0); 
+    return res;
+}
+#+END_SRC
+**** 迭代： 时间复杂度 O((n-k)!), 空间复杂度 O(n)
+
+时间复杂度 O((n-k)!), 空间复杂度 O(n). 
+
+some other day~~!!@
+
+*** Letter Combinationas of Phone Number
+Given a digit string, return all possible letter combinations that the number could represent.
+
+A mapping of digit to letters (just like on the telephone buttons) is given below.
+
+#+CAPTION: Letter Combinationas of Phone Number
+[[./pic/phoneNumber.png]]
+#+BEGIN_SRC java
+Input:Digit string "23"
+Output: ["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"].
+#+END_SRC
+Note:
+
+Although the above answer is in lexicographical order, your answer
+could be in any order you want.
+
+**** 递归: 深搜, 时间复杂度 O(3^n), 空间复杂度 O(n)
+
+#+BEGIN_SRC java
+public char [] getArr(char x) {
+    char [] two = {'a', 'b', 'c'};
+    char [] thr = {'d', 'e', 'f'};
+    char [] fou = {'g', 'h', 'i'};
+    char [] fiv = {'j', 'k', 'l'};
+    char [] six = {'m', 'n', 'o'};
+    char [] sev = {'p', 'q', 'r', 's'};
+    char [] eig = {'t', 'u', 'v'};
+    char [] nin = {'w', 'x', 'y', 'z'};
+    switch (x) {
+    case '2': return two;
+    case '3': return thr;
+    case '4': return fou;
+    case '5': return fiv;
+    case '6': return six;
+    case '7': return sev;
+    case '8': return eig;
+    case '9': return nin;
+    }
+    return null;
+}
+
+public void recursion(String digits, List<String> result) {
+    char [] base = getArr(digits.charAt(digits.length()-1));
+    int n = result.size();
+    //for(String x : result) // ConcurrentModificationException, result is changing
+    for (int j = 0; j < n; j++) {
+        for (int i = 0; i < base.length; i++)
+            result.add(new StringBuffer(base[i]+ result.get(j)).toString());
+    }
+    for (int i = n-1; i >= 0; i--)
+        result.remove(i);
+    if (digits.length() > 1)
+        recursion(digits.substring(0, digits.length()-1), result);
+}
+        
+public List<String> letterCombinations(String digits) {
+    List<String> result = new ArrayList<String>();
+    if (digits.equals("")) {
+        result.add("");
+        return result;
+    }
+    char [] base = getArr(digits.charAt(digits.length()-1));
+    for (int i = 0; i < base.length; i++) 
+        result.add("" + base[i]);
+    if (digits.length() > 1)
+        recursion(digits.substring(0, digits.length()-1), result);
+    return result;
+}
+#+END_SRC
+
+**** 迭代： 时间复杂度 O(3^n), 空间复杂度 O(1)
+
+*** Permutation II
+Given a collection of numbers that might contain duplicates, return all possible unique permutations.
+
+For example,
+#+BEGIN_SRC java
+[1,1,2] have the following unique permutations:
+[1,1,2], [1,2,1], and [2,1,1].
+#+END_SRC
+
+**** next_permutation()
+
+直接使用 std::next\textunderscore permutation(),代码与上一题相同。
+**** 重新实现 next\textunderscore permutation()
+
+重新实现 std::next\textunderscore permutation(),代码与上一题相同。
+**** 递归: 
+
+递归函数 permute() 的参数 p,是中间结果,它的长度又能标记当前走到了哪一步,用于判断收敛条件。
+
+扩展节点,每次从小到大,选一个没有被用光的元素,直到所有元素被用光。
+
+本题不需要判重,因为状态装换图是一颗有层次的树。
+
+#+BEGIN_SRC java
+public void helper(int [] num, boolean [] used, List<Integer> one,
+                   List<List<Integer>> res, int cnt) {
+    if (one.size() == num.length) {
+        res.add(new ArrayList<Integer>(one));
+        return;
+    }
+    for (int i = 0; i < num.length; i++) {
+        // !used[i - 1] marks the completion of first 0 done, so ignore second 0
+        if (i > 0 && !used[i - 1] && num[i] == num[i - 1]) continue;
+        if (!used[i]) {
+            used[i] = true;
+            one.add(num[i]);
+            helper(num, used, one, res, ++cnt);
+            one.remove(one.size() - 1);
+            used[i] = false;
+        }
+    }
+    return;
+}
+        
+public List<List<Integer>> permuteUnique(int[] num) {
+    List<List<Integer>> res = new ArrayList<List<Integer>>();
+    if (num == null || num.length == 0) return res;
+    boolean [] used = new boolean[num.length];
+    Arrays.sort(num);
+    helper(num, used, new ArrayList<Integer>(), res, 1);
+    return res;
+}
+#+END_SRC
+
+应该还有其它更好的控制原理，只是今天不在状态，不用多想。。。
+
+
+** 广度优先搜索 Breadth First Search
+当题目看不出任何规律, 既不能用分治, 贪心, 也不能用动规时, 这时候万能方法——搜索, 就派上用场了。搜索分为广搜和深搜, 广搜里面又有普通广搜, 双向广搜, A* 搜索等。深搜里面又有普通深搜, 回溯法等。
+
+广搜和深搜非常类似(除了在扩展节点这部分不一样), 二者有相同的框架, 如何表示状态?如何扩展状态?如何判重?尤其是判重, 解决了这个问题, 基本上整个问题就解决了。
+*** Surrounded Regions
+Given a 2D board containing 'X' and 'O', capture all regions surrounded by 'X'.
+
+A region is captured by flipping all 'O's into 'X's in that surrounded region.
+
+For example,
+#+BEGIN_SRC java
+X X X X
+X O O X
+X X O X
+X O X X
+#+END_SRC
+
+After running your function, the board should be:
+#+BEGIN_SRC java
+X X X X
+X X X X
+X X X X
+X O X X
+#+END_SRC
+
+*Tags:* Breadth-first Search
+
+广搜。从上下左右四个边界往里走,凡是能碰到的'O',都是跟边界接壤的,应该删
+除。
+
+这叫广搜啊？ 我还以为延着0深搜呢。。。仔细想了下，以树的 level order
+Traversal 作为类比，这个确实应该是广搜，而不是深搜。
+
+四面的最外层搜索，有O通路的就为不被包围的区域，其他都可以置为X；没把握
+这个特点，难度为五星级的。思路还是很新颖的。
+
+注意栈溢出总题。
+
+#+BEGIN_SRC java
+public void solve(char[][] board) {
+    if (board.length == 0) return;
+    int row = board.length;
+    int col = board[0].length;
+    for (int i = 0; i < row; i++) {
+        for (int j = 0; j < col; j++) {
+            if ((i == 0 || j == 0 || i == row-1 || j == col-1) && board[i][j] == 'O') {
+                Stack<Integer> stk = new Stack<Integer>();
+                stk.push(i * col + j);         // cannot *row, produce error, the larger 
+                while (!stk.isEmpty()) {
+                    int tmp = stk.pop();
+                    int x = tmp / col;
+                    int y = tmp % col;
+                    if (x < 0 || y < 0 || x >= row || y >= col ||
+                        !(board[x][y] == 'O'))
+                        continue;
+                    board[x][y] = '#';
+                    stk.push((x-1) * col + y);
+                    stk.push((x+1) * col + y);
+                    stk.push(x * col + (y - 1));
+                    stk.push(x * col + (y + 1));
+                }
+            }
+        }
+    }
+            
+    for (int i = 0; i < row; i++) {
+        for (int j = 0; j < col; j++) {
+            if (board[i][j] == 'O')
+                board[i][j] = 'X';
+            if (board[i][j] == '#')
+                board[i][j] = 'O';
+        }
+    }
+}
+#+END_SRC
+
+*** Word Ladder
+Given two words (start and end), and a dictionary, find the length of shortest transformation sequence from start to end, such that:
+- Only one letter can be changed at a time
+- Each intermediate word must exist in the dictionary
+For example,
+
+Given:
+#+BEGIN_SRC java
+start = "hit"
+end = "cog"
+dict = ["hot","dot","dog","lot","log"]
+As one shortest transformation is "hit" -> "hot" -> "dot" -> "dog" -> "cog",
+return its length 5.
+#+END_SRC
+Note:
+- Return 0 if there is no such transformation sequence.
+- All words have the same length.
+- All words contain only lowercase alphabetic characters.
+
+时间复杂度 O(n), 空间复杂度 O(n).
+
+#+CAPTION: Word Ladder
+[[./pic/wordladder.png]]
+
+分析：这种题，肯定是每次改变单词的一个字母，然后逐渐搜索，很多人一开始就想到用dfs，其实像这种求最短路径、树最小深度问题bfs最适合，可以参考我的这篇博客bfs（层序遍历）求二叉树的最小深度。本题bfs要注意的问题：
+
+和当前单词相邻的单词是：对当前单词改变一个字母且在字典中存在的单词, 找到一个单词的相邻单词，加入bfs队列后，要从字典中删除，因为不删除的话会造成类似于hog->hot->hog的死循环。而删除对求最短路径没有影响，因为我们第一次找到该单词肯定是最短路径，即使后面其他单词也可能转化得到它，路径肯定不会比当前的路径短（如果要输出所有最短路径，则不能立即从字典中删除，具体见下一题）
+
+bfs队列中用NULL来标识层与层的间隔，每次碰到层的结尾，遍历深度+1
+
+我们利用和求二叉树最小深度层序遍历的方法来进行bfs，代码如下： 
+
+#+BEGIN_SRC java
+public int ladderLength(String start, String end, Set<String> dict) {
+    if (start.length() != end.length()) return 0;
+    if (start.compareTo("") == 0) return 1;
+    List<String> newStart = new ArrayList<String>();
+    List<String> nextStart = new ArrayList<String>();
+    newStart.add(start);
+    int distance = 1;
+    for (int index = 0; index < newStart.size(); index++) {
+        String curr = newStart.get(index);
+        for (int i = 0; i < curr.length(); i++) {
+            for (char j = 'a'; j <= 'z'; j++) {
+                if (curr.charAt(i) == j) continue;
+                String tmp = curr.substring(0, i) + j + curr.substring(i + 1);
+                if (tmp.equals(end)) return distance + 1;
+                if (dict.contains(tmp)) {
+                    nextStart.add(tmp);
+                    dict.remove(tmp);
+                }
+            }
+        }
+        if (index == newStart.size() - 1) {
+            newStart.addAll(new ArrayList<String>(nextStart));
+            nextStart = new ArrayList<String>();
+            distance++;
+        }
+    }
+    return 0;
+}
+#+END_SRC
+
+应该还有更多更好的方法，改天再深入去写。
+
+*** Word Ladder II
+Given two words (start and end), and a dictionary, find all shortest transformation sequence(s) from start to end, such that:
+1. Only one letter can be changed at a time
+2. Each intermediate word must exist in the dictionary
+For example,
+
+Given:
+
+start = "hit", end = "cog"
+
+dict = ["hot","dot","dog","lot","log"]
+
+Return
+#+BEGIN_SRC java
+  [
+    ["hit","hot","dot","dog","cog"],
+    ["hit","hot","lot","log","cog"]
+  ]
+#+END_SRC
+
+Note:
+- All words have the same length.
+- All words contain only lowercase alphabetic characters.
+
+跟 Word Ladder 比,这题是求路径本身,不是路径长度,也是 BFS,略微麻烦点。
+
+这题跟普通的广搜有很大的不同,就是要输出所有路径,因此在记录前驱和判重地方与普通广搜不同。
+
+时间复杂度 O(n), 空间复杂度 O(n)。
+
+这道题是LeetCode中AC率最低的题目，确实是比较难。一方面是因为对时间有比较严格的要求（容易超时），另一方面是它有很多细节需要实现。思路上和Word Ladder是比较类似的，但是因为是要求出所有路径，仅仅保存路径长度是不够的，而且这里还有更多的问题，那就是为了得到所有路径，不是每个结点访问一次就可以标记为visited了，因为有些访问过的结点也会是别的路径上的结点，所以访问的集合要进行回溯（也就是标记回未访问）。所以时间上不再是一次广度优先搜索的复杂度了，取决于结果路径的数量。同样空间上也是相当高的复杂度，因为我们要保存过程中满足的中间路径到某个数据结构中，以便最后可以获取路径，这里我们维护一个HashMap，把一个结点前驱结点都进行保存。
+
+在LeetCode中用Java实现上述算法非常容易超时。为了提高算法效率，需要注意一下两点：
+
+1）在替换String的某一位的字符时，先转换成char数组再操作；
+
+2）如果按照正常的方法从start找end，然后根据这个来构造路径，代价会比较
+高，因为保存前驱结点容易，而保存后驱结点则比较困难。所以我们在广度优先
+搜索时反过来先从end找start，最后再根据生成的前驱结点映射从start往end构
+造路径，这样算法效率会有明显提高。
+
+#+BEGIN_SRC java
+        /* Graph of example:
+         *                |--- dot --- dog ---|
+         * hit --- hot -- |     |       |     |--- cog
+         *                |--- lot --- log ---|
+         */
+        // set: visited   // current level used already
+        // set: unvisited // leftover for choosing for next level to avoid repeat, dict + end
+        // List<List<String>> res; // result paths
+        // List<String, Queue<String>> adjMap; // adjacent directed graph, 
+        // List<string, List<String>> works 2 ~! clone graph
+#+END_SRC
+
+#+BEGIN_SRC java
+private List<String> getNextLadder(String currLadder, Set<String> unVisited) {
+    ArrayList<String> nextLadders = new ArrayList<String>();
+    StringBuffer replace = new StringBuffer(currLadder); // mutate from here
+    for(int i = 0; i < currLadder.length(); i++){
+        char old = replace.charAt(i);
+        for(char ch = 'a'; ch <= 'z'; ch++){
+            if (currLadder.charAt(i) != ch) 
+                replace.setCharAt(i, ch);
+            else continue;
+            String replaced = replace.toString();
+            if (unVisited.contains(replaced)) 
+                nextLadders.add(replaced);
+        }
+        replace.setCharAt(i, old); 
+    }
+    return nextLadders;
+}
+
+private void getLadders(String start, String end, LinkedList<String> path,
+                        List<List<String>> res,
+                        HashMap<String, Queue<String>> adjMap) {
+    if (end.equals(start))      // end condition, len ?
+        res.add(new ArrayList<String> (path));   
+    else {                      // else if (len > 0) {            
+        Queue<String> adjs = adjMap.get(end);
+        for (String lad : adjs) {
+            path.addFirst(lad); // path.add(0, lad); // equivallent
+            getLadders(start, lad, path, res, adjMap);
+            path.removeFirst(); // path.remove(0);   // remove ele at idx 0
+        }
+    }
+}
+
+public List<List<String>> findLadders(String start, String end, HashSet<String> dict) {
+    HashMap<String, Queue<String>> adjMap = new HashMap<String, Queue<String>>(); 
+    int currLen = 0;
+    boolean found = false;
+    List<List<String>> res = new ArrayList<List<String>>(); // results
+    Queue<String> queue = new LinkedList<String>();         // queue for BFS
+    Set<String> unv = new HashSet<String>(dict);            // unvstd words, delete f here
+    Set<String> vst = new HashSet<String>();                // check vstd during same level
+    unv.add(end);       // dict may not contain end, so we add it~!@
+    queue.offer(start); // search & build from start
+    int currLev = 1;
+    int nextLev = 0;
+    for(String word : unv)    // all strings in dict + start
+        adjMap.put(word, new LinkedList<String>());  // just like clone graph
+    unv.remove(start);
+    while (!queue.isEmpty()) {
+        String currLadder = queue.poll();  // curr word, mutate, check dicts, add or not
+        for(String nextLadder : getNextLadder(currLadder, unv)){ 
+            if (vst.add(nextLadder)) {  // add to vst set, return true, succeed, 
+                nextLev++;              // vst set didn't contain it before
+                queue.offer(nextLadder);
+            }
+            adjMap.get(nextLadder).offer(currLadder); 
+            if(nextLadder.equals(end) && !found) { // control if start-->end, No here
+                found = true;
+                currLen += 2;
+            }
+        } 
+        if(--currLev == 0){
+            if(found) break;
+            unv.removeAll(vst);  // remove all used string from cur level 
+            currLev = nextLev;   // to avoid next level repeat & infinite loop
+            nextLev = 0;
+            currLen++;
+        }
+    }
+    if (found) {
+        LinkedList<String> path = new LinkedList<String>();
+        path.addFirst(end);     // add at beginning of list
+        getLadders(start, end, path, res, adjMap);
+    }
+    return res;
+}
+#+END_SRC
+
+此题改天再回来优化。。。。
+
+*** other Covered
+- Binary Tree Level Order Traversal
+  [[Binary Tree Level Order Traversal]]
+- Binary Tree Level Order Traversal II
+  [[Binary Tree Level Order Traversal II]]
+- Clone Graph	
+  [[Clone Graph]]
+- Binary Tree Zigzag Level Order Traversal
+  [[Binary Tree Zigzag Level Order Traversal]]
+- Minimum Depth of Binary Tree
+  [[Minimum Depth of Binary Tree]]
+*** 小结
+*** 适用场景
+*输入数据:* 没什么特征,不像深搜,需要有“递归”的性质。如果是树或者图,概率更大。
+
+*状态转换图:* 树或者图。
+
+*求解目标:* 求最短。
+*** 思考的步骤
+**** 求路径长度,还是路径本身(或动作序列)?
+
+(a) 如果是求路径长度,则状态里面要存路径长度
+
+(b) 如果是求路径本身或动作序列
+
+\nbsp{} i. 要用一棵树存储宽搜过程中的路径
+
+\nbsp{} ii. 是否可以预估状态个数的上限?能够预估状态总数,则开一个大数组,用树的双亲
+表示法;如果不能预估状态总数,则要使用一棵通用的树。这一步也是第 4 步的必
+要不充分条件。
+**** 如何表示状态?即一个状态需要存储哪些些必要的数据,才能够完整提供如何扩展到下一步状态的所有信息。一般记录当前位置或整体局面。
+**** 如何扩展状态?这一步跟第 2 步相关。状态里记录的数据不同,扩展方法就不同。对于固定不变的数据结构(一般题目直接给出,作为输入数据),如二叉树,图等,扩展方法很简单,直接往下一层走,对于隐式图,要先在第 1 步里想清楚状态所带的数据,想清楚了这点,那如何扩展就很简单了。
+**** 关于判重,状态是否存在完美哈希方案?即将状态一一映射到整数,互相之间不会冲突。
+
+(a) 如果不存在,则需要使用通用的哈希表(自己实现或用标准库,例如unordered\textunderscore{}set)
+来判重;自己实现哈希表的话,如果能够预估状态个数的上限,则可以开两个数组,
+head 和 next,表示哈希表,参考第 §??节方案 2。
+
+(b) 如果存在,则可以开一个大布尔数组,作为哈希表来判重,且此时可以精确计算出状态
+总数,而不仅仅是预估上限。
+**** 目标状态是否已知?如果题目已经给出了目标状态,可以带来很大便利,这时候可以从起始状态出发,正向广搜;也可以从目标状态出发,逆向广搜;也可以同时出发,双向广搜。
+
+
+** 深度优先搜索 Depth First Search
+*** Palindrome Partitioning 
+Given a string s, partition s such that every substring of the partition is a palindrome.
+
+Return all possible palindrome partitioning of s.
+
+For example, 
+#+BEGIN_SRC java
+given s = "aab",
+Return
+  [
+    ["aa","b"],
+    ["a","a","b"]
+  ]
+#+END_SRC
+
+在每一步都可以判断中间结果是否为合法结果,用回溯法。
+
+一个长度为 n 的字符串,有 n+1 个地方可以砍断,每个地方可断可不断,前后两
+个隔板默认已经使用,因此复杂度为 O(2^{n−1}).
+
+**** 深搜: 时间复杂度 O(2^n), 空间复杂度 O(n)
+#+BEGIN_SRC java
+public void dfs(String s, List<String> path, List<List<String>> res) {
+    if (s.length() == 0) {
+        res.add(new ArrayList<String>(path));
+        return;
+    }
+    for (int i = 0; i < s.length(); i++) {
+        int bgn = 0;
+        int end = i;
+        while (bgn < end) {
+            if (s.charAt(bgn) == s.charAt(end)) {
+                bgn ++;
+                end --;
+            } else break;
+        }
+        if (bgn >= end) {
+            path.add(s.substring(0, i + 1));
+            dfs(s.substring(i + 1), path, res);
+            path.remove(path.size() - 1);
+        } 
+    }
+    return;
+}
+        
+public List<List<String>> partition(String s) {
+    List<List<String>> res = new ArrayList<List<String>>();
+    List<String> path = new ArrayList<String>();
+    dfs(s, path, res);
+    return res;
+}
+#+END_SRC
+
+**** 深搜 2: 时间复杂度 O(2^n), 空间复杂度 O(n)
+
+另一种写法,更加简洁。这种写法也在 Combination Sum, Combination Sum II 中出现过。
+
+**** 动态规划：时间复杂度 O(n^2),空间复杂度 O(1)
+
+需要先消化一下别人的解法。。。。
+
+*** Restore IP Addresses
+Given a string containing only digits, restore it by returning all possible valid IP address combinations.
+
+For example:
+#+BEGIN_SRC java
+Given "25525511135",
+return ["255.255.11.135", "255.255.111.35"]. (Order does not matter)
+#+END_SRC
+
+必须要走到底部才能判断解是否合法, 深搜。
+
+#+BEGIN_SRC java
+#+END_SRC
+
+需要优化自己的代码 ，写得太丑。。。
+
+*** Generate Parentheses
+Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.
+
+For example, given n = 3, a solution set is:
+#+BEGIN_SRC java
+"((()))", "(()())", "(())()", "()(())", "()()()"
+#+END_SRC
+
+小括号串是一个递归结构,跟单链表、二叉树等递归结构一样,首先想到用递归。
+
+一步步构造字符串。当左括号出现次数 < n 时,就可以放置新的左括号。当右括号出现次数小
+于左括号出现次数时,就可以放置新的右括号。
+
+**** 时间复杂度 O(TODO),空间复杂度 O(n)
+#+BEGIN_SRC java
+public void generate(List<String> res, int n, StringBuffer one, int left, int right) {
+    StringBuffer tmp = new StringBuffer(one);
+    if (left == n) {
+        for (int i = 0; i < n - right; i++)
+            tmp.append(")");
+        res.add(tmp.toString());
+        return;
+    }
+    generate(res, n, new StringBuffer(one).append("("), left + 1, right);
+    if (left > right)
+        generate(res, n, new StringBuffer(one).append(")"), left, right + 1);
+}
+        
+public List<String> generateParenthesis(int n) {
+    List<String> res = new ArrayList<String>();
+    if (n > 0)
+        generate(res, n, new StringBuffer(), 0, 0);
+    return res;
+}
+#+END_SRC
+
+反过来写。
+#+BEGIN_SRC java
+public void generate(List<String> res, int n, StringBuffer tmp, int left, int right) {
+    if (left < 0 || right < left) return;
+    if (left == 0 && right == 0) { 
+        res.add(tmp.toString());
+        return;
+    } else {
+        if (left > 0) 
+            generate(res, n, new StringBuffer(tmp).append("("), left - 1, right);
+        if (right > left) 
+            generate(res, n, new StringBuffer(tmp).append(")"), left, right - 1);
+    }
+}
+        
+public List<String> generateParenthesis(int n) {
+    List<String> res = new ArrayList<String>();
+    if (n > 0) 
+        generate(res, n, new StringBuffer(), n, n);
+    return res;
+}
+#+END_SRC
+     不太确定这是真正正确的操作StringBuffer的途径还。
+
+**** 另一种写法： 
+
+#+BEGIN_SRC java
+#+END_SRC
+*** Combination Sum
+Given a set of candidate numbers (C) and a target number (T), find all unique combinations in C where the candidate numbers added to T.
+
+The same repeated number may be chosen from C _unlimited_ number of times.
+
+Note:
+- All numbers (including target) will be positive integers.
+- Elements in a combination (a1, a2, … , ak) must be in non-descending order. (ie, a1 ≤ a2 ≤ … ≤ ak).
+- The solution set must not contain duplicate combinations.
+
+For example, given candidate set 2,3,6,7 and target 7, 
+
+A solution set is: 
+#+BEGIN_SRC java
+[7] 
+[2, 2, 3] 
+#+END_SRC
+
+时间复杂度 O(n!), 空间复杂度 O(n). 
+
+#+BEGIN_SRC java
+public void dfs(int [] candidates, int bgn, int target,
+                List<Integer> path, List<List<Integer>> res) {
+    if (target == 0) {                           // 找到一个合法解
+        res.add(new ArrayList<Integer> (path));
+        return;
+    }
+    for (int i = bgn; i < candidates.length; i++) {   // 扩展状态
+        if (candidates[i] > target) return;
+        path.add(candidates[i]);      // 执行扩展动作
+        dfs(candidates, i, target - candidates[i], path, res); // unlimited
+        path.remove(path.size() - 1); // 撤销动作
+    }
+    return;
+}
+        
+public List<List<Integer>> combinationSum(int[] candidates, int target) {
+    Arrays.sort(candidates); 
+    List<List<Integer>> res = new ArrayList<List<Integer>>();
+    List<Integer> path = new ArrayList<Integer>();
+    dfs(candidates, 0, target, path, res);
+    return res;
+}
+#+END_SRC
+
+*** Combination Sum II
+Given a collection of candidate numbers (C) and a target number (T), find all unique combinations in C where the candidate numbers added to T.
+
+Each number in C may only be used _once_ in the combination.
+
+Note:
+- All numbers (including target) will be positive integers.
+- Elements in a combination (a1, a2, … , ak) must be in non-descending order. (ie, a1 ≤ a2 ≤ … ≤ ak).
+- The solution set must not contain duplicate combinations.
+For example, given candidate set 10,1,2,7,6,1,5 and target 8, 
+
+A solution set is: 
+#+BEGIN_SRC java
+[1, 7] 
+[1, 2, 5] 
+[2, 6] 
+[1, 1, 6] 
+#+END_SRC
+
+时间复杂度 O(n!), 空间复杂度 O(n). 
+
+#+BEGIN_SRC java
+public void dfs(int [] candidates, int bgn, int target,
+                List<Integer> path, List<List<Integer>> res) {
+    if (target == 0) {
+        res.add(new ArrayList<Integer> (path));
+        return;
+    }
+    int previous = -1;
+    for (int i = bgn; i < candidates.length; i++) {
+        //if (i > 0 && candidates[i] == candidates[i - 1]) cnt++;
+        //else cnt = 1;
+        //if (cnt == 1 || (path.size() >= cnt - 1
+        //               && path.get(path.size() - cnt + 1) == candidates[i])) {
+        // 如果上一轮循环没有选 candidates[i],则本次循环就不能再选 candidates[i],
+        // 确保 candidates[i] 最多只用一次
+        if (previous == candidates[i]) continue;
+        if (candidates[i] > target) return;
+        previous = candidates[i];
+        path.add(candidates[i]);                             // , cnt
+        dfs(candidates, i + 1, target - candidates[i], path, res); // use once
+        path.remove(path.size() - 1);
+        // }
+    }
+    return;
+}
+        
+public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+    Arrays.sort(candidates); 
+    List<List<Integer>> res = new ArrayList<List<Integer>>();
+    List<Integer> path = new ArrayList<Integer>();
+    dfs(candidates, 0, target, path, res);
+    return res;
+}
+#+END_SRC
+
+*** N-Queens 
+The n-queens puzzle is the problem of placing n queens on an n×n chessboard such that no two queens attack each other.
+ #+caption: N-Queens 
+[[./pic/8-queens.png]]
+
+Given an integer n, return all distinct solutions to the n-queens puzzle.
+
+Each solution contains a distinct board configuration of the n-queens' placement, where 'Q' and '.' both indicate a queen and an empty space respectively.
+
+For example,
+
+There exist two distinct solutions to the 4-queens puzzle:
+#+BEGIN_SRC java
+[
+ [".Q..",  // Solution 1
+  "...Q",
+  "Q...",
+  "..Q."],
+
+ ["..Q.",  // Solution 2
+  "Q...",
+  "...Q",
+  ".Q.."]
+]
+#+END_SRC
+*** N-Queens II
+Follow up for N-Queens problem.
+
+Now, instead outputting board configurations, return the total number of distinct solutions.
+*** Sudoku Solver
+    Write a program to solve a Sudoku puzzle by filling the empty cells.
+    
+    Empty cells are indicated by the character '.'.
+    
+    You may assume that there will be only one unique solution.
+    
+    #+caption: Sudoku Solver 1
+    [[./pic/solveSudoku1.png]]
+
+    A sudoku puzzle...
+    
+    #+caption: Sudoku Solver 2
+    [[./pic/solveSudoku2.png]]
+    ...and its solution numbers marked in red.
+    
+    *Tags:* Backtracking, Hash Table
+
+时间复杂度 O(9^4), 空间复杂度 O(1). 
+
+#+BEGIN_SRC java
+public boolean isValidSudoku(char[][] bd, int x, int y) {
+    for (int i = 0; i < 9; i++) 
+        if (i != x && bd[x][y] == bd[i][y]) return false;
+    for (int j = 0; j < 9; j++) 
+        if (j != y && bd[x][y] == bd[x][j]) return false;
+    for (int i = (x / 3) * 3; i < (x / 3 + 1) * 3; i++) 
+        for (int j = (y / 3) * 3; j < (y / 3 + 1) * 3; j++) 
+            if (i != x && j != y && bd[x][y] == bd[i][j])
+                return false;
+    return true;
+}
+
+public boolean solveSudoku(char[][] board) {
+    for (int i = 0; i < 9; i++)
+        for (int j = 0; j < 9; j++) 
+            if (board[i][j] == '.') {
+                for (int k = 0; k < 9; k++) {
+                    board[i][j] = (char)('1' + k);
+                    if (isValidSudoku(board, i, j) && solveSudoku(board))
+                        return true;
+                    board[i][j] = '.';
+                }
+                return false;
+            }
+    return true;
+}
+#+END_SRC
+
+相当于是暴力法，基本上测试了所有的可能性，然后就每种可能性作有效性判断。（277 ms）
+
+我希望执行的速度能够稍微快一点儿，所以每一步都执行了最优的一步，这样每
+一步都不用有效性判断，因为选的就是最好的，可速度还是更慢了。。。（589
+ms）
+
+#+BEGIN_SRC java
+public boolean helper(char[][] bd, List<Integer> list, int fst, List<Character> avb) {
+    avb = new ArrayList<Character>();
+    fst = getFirst(bd, list, avb);
+    int val = list.get(fst);
+    int x = list.get(fst) / 9;
+    int y = list.get(fst) % 9;
+    if (avb.size() == 0) return false;
+    list.remove(fst);
+    for (int k = 0; k < avb.size(); k++) {
+        char c = avb.get(k);
+        bd[x][y] = c;
+        if (list.size() == 0) return true;
+        if (helper(bd, new ArrayList<Integer>(list), fst, avb)) return true;
+        bd[x][y] = '.';
+    }
+    list.add(new Integer(val));
+    return false;
+}
+
+public int getFirst(char[][] bd, List<Integer> list, List<Character> res) {
+    Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+    Set<Character> tmp = new HashSet<Character>();  // for each pos
+    Set<Character> bst = new HashSet<Character>();  // for each pos
+    Set<Character> avb = new HashSet<Character>();
+    int x, y; // row, col
+    int result = 0;
+    for (int i = 0; i < list.size(); i++) {
+        tmp.clear();
+        x = list.get(i) / 9;
+        y = list.get(i) % 9;
+        for (int j = 0; j < 9; j++) {
+            if (bd[x][j] != '.') tmp.add(bd[x][j]);
+            if (bd[j][y] != '.') tmp.add(bd[j][y]);
+        }
+        for (int j = 0; j < 3; j++) 
+            for (int k = 0; k < 3; k++) 
+                if (bd[j + (x / 3) * 3][k + (y / 3) * 3] != '.')
+                    tmp.add(bd[j + (x / 3) * 3][k + (y / 3) * 3]);
+        if (tmp.size() == 8) {
+            for (char a = '1'; a <= '9'; a++)
+                if (!tmp.contains(a)) res.add(a);
+            return i;
+        }
+        if (tmp.size() > result) {
+            result = i; 
+            bst = new HashSet<Character>(tmp);
+        }
+    }
+    for (char i = '1'; i <= '9'; i++) {
+        if (!bst.contains(i)) res.add(i);
+    }
+    return result;
+}
+        
+public void solveSudoku(char[][] board) {
+    List<Integer> list = new ArrayList<Integer>();
+    List<Character> avb = new ArrayList<Character>();
+    for (int i = 0; i < 9; i++) 
+        for (int j = 0; j < 9; j++) 
+            if (board[i][j] == '.') list.add(i * 9 + j);
+    int first = getFirst(board, list, avb);
+    helper(board, list, first, avb);
+}
+#+END_SRC
+
+看来解题还是简明地满足最基本的要求会比较好。
+
+*** Word Search
+Given a 2D board and a word, find if the word exists in the grid.
+
+The word can be constructed from letters of sequentially adjacent cell, where "adjacent" cells are those horizontally or vertically neighboring. The same letter cell may not be used more than once.
+
+For example,
+#+BEGIN_SRC java
+Given board =
+[
+  ["ABCE"],
+  ["SFCS"],
+  ["ADEE"]
+]
+word = "ABCCED", -> returns true,
+word = "SEE", -> returns true,
+word = "ABCB", -> returns false.
+#+END_SRC
+
+深搜,递归: 时间复杂度 O(n^2*m^2), 空间复杂度 O(n^2). 
+
+#+BEGIN_SRC java
+public boolean dfs(char[][] board, String word,
+                   int i, int j, int idx, boolean [][] visited) {
+    int m = board.length;
+    int n = board[0].length;
+    if (idx == word.length()) return true;   // 收敛条件
+            
+    if (i < 0 || i >= m || j < 0 || j >= n)
+        return false;                    // 越界,终止条件
+    if (visited[i][j]) return false;   // 已经访问过,剪枝
+    if (word.charAt(idx) != board[i][j])
+        return false;                     // 不相等,剪枝
+
+    visited[i][j] = true;
+    if (dfs(board, word, i - 1, j, idx + 1, visited)    // 上
+        || dfs(board, word, i + 1, j, idx + 1, visited) // 下
+        || dfs(board, word, i, j + 1, idx + 1, visited) // 左
+        || dfs(board, word, i, j - 1, idx + 1, visited))// 右
+        return true;
+    visited[i][j] = false;
+    return false;
+}
+        
+public boolean exist(char[][] board, String word) {
+    int m = board.length;
+    int n = board[0].length;
+    boolean [][] visited = new boolean[m][n];
+    for (int i = 0; i < m; i++) 
+        for (int j = 0; j < n; j++) 
+            if (dfs(board, word, i, j, 0, visited) == true) return true;
+    return false;
+}
+#+END_SRC
+
+*** other Covered
+- Same Tree
+  [[Same Tree]]
+- Symmetric Tree
+  [[Symmetric Tree]]
+- Balanced Binary Tree
+  [[Balanced Binary Tree]]
+- Validate Binary Search Tree
+  [[Validate Binary Search Tree]]
+- Convert Sorted List to Binary Search Tree
+  [[Convert Sorted List to Binary Search Tree]]
+- Convert Sorted Array to Binary Search Tree
+  [[Convert Sorted Array to Binary Search Tree]]
+- Construct Binary Tree from Preorder and Inorder Traversal
+  [[Construct Binary Tree from Preorder and Inorder Traversal]]
+- Construct Binary Tree from Inorder and Postorder Traversal
+  [[Construct Binary Tree from Inorder and Postorder Traversal]]
+- Flatten Binary Tree to Linked List
+  [[Flatten Binary Tree to Linked List]]
+- Populating Next Right Pointers in Each Node
+  [[Populating Next Right Pointers in Each Node]]
+- Populating Next Right Pointers in Each Node II
+  [[Populating Next Right Pointers in Each Node II]]
+- Sum Root to Leaf Numbers	
+  [[Sum Root to Leaf Numbers]]
+- Path Sum
+  [[Path Sum]]
+- Path Sum II
+  [[Path Sum II]]
+- Maximum Depth of Binary Tree
+  [[Maximum Depth of Binary Tree]]
+- Recover Binary Search Tree
+  [[Recover Binary Search Tree]]
+- Clone Graph
+  [[Clone Graph]]
+- Binary Tree Maximum Path Sum
+  [[Binary Tree Maximum Path Sum]]
+*** 小结
+*** 适用场景
+*输入数据:* 如果是递归数据结构, 如单链表, 二叉树, 集合, 则百分之百可以用深搜;如果是
+非递归数据结构, 如一维数组, 二维数组, 字符串, 图, 则概率小一些。
+
+ *状态转换图:* 树或者图。
+
+ *求解目标:* 必须要走到最深(例如对于树, 必须要走到叶子节点)才能得到一个解, 这种情况
+适合用深搜。
+
+*** 思考的步骤
+**** 是求路径条数, 还是路径本身(或动作序列)?深搜最常见的三个问题, 求可行解的总数, 求一个可行解, 求所有可行解。
+
+\nbsp{} (a) 如果是求路径本身, 则要用一个数组 path[] 存储路径。跟宽搜不同, 宽搜虽然最终求
+的也是一条路径, 但是需要存储扩展过程中的所有路径, 在没找到答案之前所有路径都
+不能放弃;而深搜, 在搜索过程中始终只有一条路径, 因此用一个数组就足够了。
+
+\nbsp{} (b) 如果是路径条数, 则不需要存储路径。
+**** 只要求一个解, 还是要求所有解?如果只要求一个解, 那找到一个就可以返回;如果要求所有解, 找到了一个后, 还要继续扩展, 直到遍历完。广搜一般只要求一个解, 因而不需要考虑这个问题(广搜当然也可以求所有解, 这时需要扩展到所有叶子节点, 相当于在内存中存储整个状态转换图, 非常占内存, 因此广搜不适合解这类问题)。
+
+**** 如何表示状态?即一个状态需要存储哪些些必要的数据, 才能够完整提供如何扩展到下一步状态的所有信息。跟广搜不同, 深搜的惯用写法, 不是把数据记录在状态 struct 里, 而是添加函数参数(有时为了节省递归堆栈, 用全局变量), struct 里的字段与函数参数一一对应。
+
+**** 如何扩展状态?这一步跟上一步相关。状态里记录的数据不同, 扩展方法就不同。对于固定不变的数据结构(一般题目直接给出, 作为输入数据), 如二叉树, 图等, 扩展方法很简单, 直接往下一层走, 对于隐式图, 要先在第 1 步里想清楚状态所带的数据, 想清楚了这点, 那如何扩展就很简单了。
+
+**** 关于判重
+(a) 如果状态转换图是一棵树, 则不需要判重, 因为在遍历过程中不可能重复。
+(b) 如果状态转换图是一个图, 则需要判重, 方法跟广搜相同, 见第 §9.4 节。这里跟第 8 步中的加缓存是相同的, 如果有重叠子问题, 则需要判重, 此时加缓存自然也是有效果的。
+
+**** 终止条件是什么?终止条件是指到了不能扩展的末端节点。对于树, 是叶子节点, 对于图或隐式图, 是出度为 0 的节点。
+
+**** 收敛条件是什么?收敛条件是指找到了一个合法解的时刻。如果是正向深搜(父状态处理完了才进行递归, 即父状态不依赖子状态, 递归语句一定是在最后, 尾递归), 则是指是否达到目标状态;如果是逆向深搜(处理父状态时需要先知道子状态的结果, 此时递归语句不在最后), 则是指是否到达初始状态。
+
+由于很多时候终止条件和收敛条件是是合二为一的, 因此很多人不区分这两种条件。仔细区
+分这两种条件, 还是很有必要的。
+
+为了判断是否到了收敛条件, 要在函数接口里用一个参数记录当前的位置(或距离目标还有
+多远)。如果是求一个解, 直接返回这个解;如果是求所有解, 要在这里收集解, 即把第一步
+中表示路径的数组 path[] 复制到解集合里。
+
+****  如何加速?
+
+\nbsp{} (a) 剪枝。深搜一定要好好考虑怎么剪枝, 成本小收益大, 加几行代码, 就能大大加速。这
+里没有通用方法, 只能具体问题具体分析, 要充分观察, 充分利用各种信息来剪枝, 在
+中间节点提前返回。
+
+\nbsp{} (b) 缓存。如果子问题的解会被重复利用, 可以考虑使用缓存。
+
+\nbsp{} \nbsp{} i. 前提条件:子问题的解会被重复利用, 即子问题之间的依赖关系是有向无环图
+(DAG)。如果依赖关系是树状的(例如树, 单链表)
+, 没必要加缓存, 因为子问题只
+会一层层往下, 用一次就再也不会用到, 加了缓存也没什么加速效果。
+
+\nbsp{} \nbsp{} ii. 具 体 实 现: 可 以 用 数 组 或 HashMap。 维 度 简 单 的,  用 数 组; 维 度 复 杂 的,  用
+HashMap, C++ 有 map, C++ 11 以后有 unordered_map, 比 map 快。
+
+拿到一个题目, 当感觉它适合用深搜解决时, 在心里面把上面 8 个问题默默回答一遍, 代码基
+本上就能写出来了。对于树, 不需要回答第 5 和第 8 个问题。如果读者对上面的经验总结看不懂或
+感觉“不实用”, 很正常, 因为这些经验总结是笔者做了很多深搜题后总结出来的, 从思维的发展过
+程看, “经验总结”要晚于感性认识, 所以这时候建议读者先做做后面的题目, 积累一定的感性认识
+后, 在回过头来看这一节的总结, 相信会和笔者有共鸣。
+
+*** 代码模板
+
+
+** 分治法 Divide and Conqure
+*** Pow(x, n)
+Implement pow(x, n).
+
+*Tags:* Math, Binary Search
+
+二分法, x^n = x^{n/2} × x^{n/2} × x^{n%2}
+
+时间复杂度 O(logn), 空间复杂度 O(1).
+#+BEGIN_SRC java
+public double myPower(double x, int n) {
+    if (n == 0) return 1;
+    double val = myPower(x, n / 2);
+    if (n % 2 == 0) return val * val;
+    else return val * val * x;
+}
+        
+public double pow(double x, int n) {
+    if (n < 0) return 1.0 / myPower(x, -n);
+    else return myPower(x, n);
+}
+#+END_SRC
+
+*** Sqrt(x)
+Implement int sqrt(int x).
+
+Compute and return the square root of x.
+
+*Tags:* Math, Binary Search
+
+二分查找
+
+时间复杂度 O(logn), 空间复杂度 O(1).
+#+BEGIN_SRC java
+public int sqrt(int x) {
+    int bgn = 0, end = 0;
+    int mid = 0;
+    int lastMid = 0;
+    if (x < 2) return x;
+    // end = x / 2;          // which one is better ?
+    end = x / 2 < (int)Math.sqrt(Integer.MAX_VALUE) ?
+        x / 2 + 1 : (int)Math.sqrt(Integer.MAX_VALUE);
+    while (bgn <= end) {
+        mid = bgn + (end - bgn) / 2;
+        if (x / mid == mid)  // 不要用 x > mid * mid, 会溢出
+            return mid;
+        else if (x / mid > mid) {
+            bgn = mid + 1;
+            lastMid = mid;
+        } else  // x / mid < mid
+            end = mid - 1;
+    }
+    return lastMid;
+}
+#+END_SRC
+
+*** other Covered
+- Majority Element
+  [[Majority Element]]
+- Maximum Subarray
+  [[Maximum Subarray]]
+- Merge K sorted List
+  [[Merge K sorted List]]
+
+
+** 贫心法 Greedy Search
+*** Gas Station
+    There are N gas stations along a circular route, where the amount of gas at station i is gas[i].
+
+    You have a car with an unlimited gas tank and it costs cost[i] of gas to travel from station i to its next station (i+1). You begin the journey with an empty tank at one of the gas stations.
+
+    Return the starting gas station's index if you can travel around the circuit once, otherwise return -1.
+    
+    Note:
+    
+    The solution is guaranteed to be unique.
+
+*** Best Time to Buy and Sell Stock
+Say you have an array for which the ith element is the price of a given stock on day i.
+
+If you were only permitted to complete at most one transaction (ie, buy one and sell one share of the stock), design an algorithm to find the maximum profit.
+
+贪心法, 分别找到价格最低和最高的一天, 低进高出, 注意最低的一天要在最高的一天之前。把原始价格序列变成差分序列, 本题也可以做是最大 m 子段和, m = 1。
+
+时间复杂度 O(n), 空间复杂度 O(1).
+
+#+BEGIN_SRC java
+public int maxProfit(int[] prices) {
+    int lowest = Integer.MAX_VALUE;
+    int maxProfit = 0;
+    for (int i = 0; i < prices.length; i++) {
+        if (prices[i] < lowest) lowest = prices[i];
+        else maxProfit = Math.max(maxProfit, prices[i] - lowest);
+    }
+    return maxProfit;
+}
+#+END_SRC
+
+*** Best Time to Buy and Sell Stock II
+    Say you have an array for which the ith element is the price of a given stock on day i.
+
+    Design an algorithm to find the maximum profit. You may complete as many transactions as you like (ie, buy one and sell one share of the stock multiple times). However, you may not engage in multiple transactions at the same time (ie, you must sell the stock before you buy again).
+
+贪心法, 低进高出, 把所有正的价格差价相加起来。把原始价格序列变成差分序列, 本题也可以做是最大 m 子段和, m = 数组长度。
+
+#+BEGIN_SRC java
+public int maxProfit(int[] prices) {
+    int result = 0;
+    for (int i = 0; i < prices.length-1; i++) 
+        result += (prices[i] < prices[i+1]) ? prices[i + 1] - prices[i] : 0;
+    return result;
+}
+#+END_SRC
+
+*** Jump Game
+    Given an array of non-negative integers, you are initially positioned at the first index of the array.
+
+    Each element in the array represents your maximum jump length at that position.
+
+    Determine if you are able to reach the last index.
+    
+    For example:
+    
+    A = [2, 3, 1, 1, 4], return true.
+    
+    A = [3, 2, 1, 0, 4], return false.
+
+由于每层最多可以跳 A[i] 步,也可以跳 0 或 1 步,因此如果能到达最高层,则说明每一层都
+可以到达。有了这个条件,说明可以用贪心法。
+
+思路一:正向,从 0 出发,一层一层网上跳,看最后能不能超过最高层,能超过,说明能到达,
+否则不能到达。
+
+思路二:逆向,从最高层下楼梯,一层一层下降,看最后能不能下降到第 0 层。
+
+思路三:如果不敢用贪心,可以用动规,设状态为 f[i],表示从第 0 层出发,走到 A[i] 时剩
+余的最大步数,则状态转移方程为:
+#+BEGIN_SRC java
+f[i] = max(f[i - 1], A[i - 1]) - 1, i > 0
+#+END_SRC
+**** 思路 1, 时间复杂度 O(n), 空间复杂度 O(1)
+#+BEGIN_SRC java
+public boolean canJump(int[] a) {
+    int reach = 1;      // 最右能跳到哪里
+    for (int i = 0; i < reach && reach < a.length; i++) 
+        reach = Math.max(reach, i + 1 + a[i]);
+    return reach >= a.length;
+}
+#+END_SRC
+**** 思路 2, 时间复杂度 O(n), 空间复杂度 O(1)
+
+#+BEGIN_SRC java
+public boolean canJump(int[] a) {
+    if (a.length == 0) return true;
+    // 逆向下楼梯, 最左能下降到第几层
+    int leftMost = a.length - 1;
+    for (int i = a.length - 2; i >= 0; i--) 
+        if (i + a[i] >= leftMost)
+            leftMost = i;
+    return leftMost == 0;
+}
+#+END_SRC
+**** 思路三, 动规, 时间复杂度 O(n), 空间复杂度 O(n)
+#+BEGIN_SRC java
+public boolean canJump(int[] a) {
+    int f[] = new int[a.length];
+    for (int i = 1; i < a.length; i++) {
+        f[i] = Math.max(f[i - 1], a[i - 1]) - 1;
+        if (f[i] < 0) return false;
+    }
+    return f[a.length - 1] >= 0;
+}
+#+END_SRC
+
+*** Jump Game II
+    Given an array of non-negative integers, you are initially positioned at the first index of the array.
+    
+    Each element in the array represents your maximum jump length at that position.
+    
+    Your goal is to reach the last index in the minimum number of jumps.
+    
+    For example:
+    
+    Given array A = [2, 3, 1, 1, 4]
+    
+    The minimum number of jumps to reach the last index is 2. (Jump 1
+    step from index 0 to 1, then 3 steps to the last index.)
+**** 思路1： 时间复杂度 O(n), 空间复杂度 O(1)
+
+**** 思路2： 时间复杂度 O(n), 空间复杂度 O(1)
+
+*** Candy
+    There are N children standing in a line. Each child is assigned a rating value.
+    
+    You are giving candies to these children subjected to the following requirements:
+    
+    Each child must have at least one candy.
+    
+    Children with a higher rating get more candies than their neighbors.
+
+    What is the minimum candies you must give?
+
+*** other Covered
+- Wildcard Matching
+ [[Wildcard Matching]]
+
+
+** 动态归划 Dynamic Programming
+*** Climbing Stairs
+You are climbing a stair case. It takes n steps to reach to the top.
+
+Each time you can either climb 1 or 2 steps. In how many distinct ways
+can you climb to the top?
+**** O(n)
+#+BEGIN_SRC java
+public int climbStairs(int n) {
+    int [] res = new int[n + 1];
+    res[0] = 1; // 1 stair
+    res[1] = 2; // 2 stair
+    for (int i = 2; i < n; i++) 
+        res[i] = res[i - 2] + res[i - 1];
+    return res[n - 1];
+}
+#+END_SRC
+
+Considering odd and even, 实现滚动数组
+#+BEGIN_SRC java
+public int climbStairs(int n) {
+    if(n <= 0) return 0;
+    int [] stairs = {1, 2};
+    for(int i = 2;i < n; i++)
+        stairs[i % 2] = stairs[0] + stairs[1];
+    return n % 2 == 0 ? stairs[1] : stairs[0];
+}
+#+END_SRC
+**** O( log(n) )
+
+     https://oj.leetcode.com/discuss/11211/o-log-n-solution-with-matrix-multiplication
+
+     Most solutions are DP with runtime O(n) and O(1) space, the only O(log(n)) solution so far is lucastan's using Binet's formula.
+     
+     There actually is a matrix multiplication solution which also runs in O(log(n)). It basically calculates fibonacci numbers by power of matrix ((0, 1), (1, 1)) ^ (n-1).
+
+#+BEGIN_SRC java
+private int[][] pow(int[][] a, int n) {
+    int[][] ret = {{1, 0}, {0, 1}};
+    while (n > 0) {
+        if ((n & 1) == 1) 
+            ret = multiply(ret, a);
+        n >>= 1;
+        a = multiply(a, a);
+    }
+    return ret;
+}
+
+private int[][] multiply(int[][] a, int[][] b) {
+    int[][] c = new int[2][2];
+    for (int i = 0; i < 2; i++) 
+        for (int j = 0; j < 2; j++) 
+            c[i][j] = a[i][0] * b[0][j] + a[i][1] * b[1][j];
+    return c;
+}
+
+public int climbStairs(int n) {
+    int[][] a = {{0, 1}, {1, 1}};
+    int[][] m = pow(a, n - 1);
+    return m[0][1] + m[1][1];
+}
+#+END_SRC
+*** Unique Path
+A robot is located at the top-left corner of a m x n grid (marked 'Start' in the diagram below).
+
+The robot can only move either down or right at any point in time. The robot is trying to reach the bottom-right corner of the grid (marked 'Finish' in the diagram below).
+
+How many possible unique paths are there?
+#+caption: Unique Path
+[[./pic/uniquePaths.png]]
+
+Above is a 3 x 7 grid. How many possible unique paths are there?
+
+Note: m and n will be at most 100.
+
+这里Note的含义是: 如果数值过大会溢出的。--《靖空间》
+
+方法论总结：遇上新颖没见过的题目：
+- 查看其特征；
+- 搜索大脑有什么熟悉的题目，可以套的，或者相似的可以退到出来的； 
+- 罗列出来这些题目：全排列， 水槽，TwoSum，等等；
+- 搜索大脑里面有什么熟悉的算法；
+- 罗列出来：动态规划法，递归，回溯，二叉树遍历，贪心法，递归树，分治法，观察特征计算法，等等，肯定有可以套的算法的！ 
+- 最后选定算法解题； 
+- 没有优化的算法，可以使用暴力法，先解决再说！
+
+最后实在没招了，想办法让人提示，主要是提示用什么算法，能给个思路更好了，O(∩_∩)O~
+
+**** 深搜， 递归法
+
+     深搜,小集合可以过,大集合会超时；时间复杂度 O(n^4),空间复杂度 O(n)；
+#+BEGIN_SRC java
+public int uniquePaths(int m, int n) {
+    if (m < 1 || n < 1) return 0;   // 终止条件
+    if (m == 1 && n == 1) return 1; // 收敛条件
+    return uniquePaths(m - 1, n) + uniquePaths(m, n - 1);
+}  
+#+END_SRC
+**** 备忘录法: 时间复杂度 O(n^2), 空间复杂度 O(n^2)
+
+     给前面的深搜,加个缓存,就可以过大集合了。即备忘录法。
+#+BEGIN_SRC java
+// 深搜 + 缓存,即备忘录法
+// 时间复杂度 O(n^2), 空间复杂度 O(n^2)
+class Solution {
+    private int [][] f;    // 缓存
+        
+    public int dfs(int x, int y) {
+        if (x < 1 || y < 1) return 0;   // 数据非法,终止条件
+        if (x == 1 && y == 1) return 1; // 回到起点,收敛条件
+        return getOrUpdate(x - 1, y) + getOrUpdate(x, y - 1);
+    }
+    
+    public int getOrUpdate(int x, int y) {
+        if (f[x][y] > 0) return f[x][y];
+        else return f[x][y] = dfs(x, y);
+    }
+    
+    public int uniquePaths(int m, int n) {        
+        // 0 行和 0 列未使用
+        f = new int[m + 1][n + 1]; // 缓存
+        return dfs(m, n);
+    }
+}
+#+END_SRC
+**** 动态规划
+
+     算法1的递归解法中，其实我们计算了很多重复的子问题，比如计算uniquePaths(4, 5) 和 uniquePaths(5, 3)时都要计算子问题uniquePaths(3,2)，再者由于uniquePaths(m, n) = uniquePaths(n, m)，这也使得许多子问题被重复计算了。
+
+     要保存子问题的状态，这样很自然的就想到了动态规划方法，设dp[i][j] = uniquePaths(i, j)， 那么动态规划方程为：
+
+     动态方程: dp[i][j] = dp[i-1][j] + dp[i][j-1]
+
+     边界条件：dp[i][ 1 ] = 1, dp[ 1 ][j] = 1
+#+BEGIN_SRC java
+public int uniquePaths(int m, int n) {
+    if (m == 0 || n == 0) return 1;
+    else if (m == 1 && n == 1) return 1;
+            
+    int [][] dp = new int[m][n];
+    for (int i = 0; i < n; i++) 
+        dp[0][i] = 1;
+    for (int i = 0; i < m; i++)
+        dp[i][0] = 1;
+    dp[0][0] = 0;
+    for (int i = 1; i < m; i++) 
+        for (int j = 1; j < n; j++) 
+            dp[i][j] = dp[i][j - 1] + dp[i - 1][j];
+    return dp[m-1][n-1];
+}
+#+END_SRC
+
+滚动数组
+#+BEGIN_SRC java
+// 动规,滚动数组
+// 时间复杂度 O(n^2), 空间复杂度 O(n)
+int uniquePaths(int m, int n) {
+    vector<int> f(n, 0);
+    f[0] = 1;
+    for (int i = 0; i < m; i++) {
+        for (int j = 1; j < n; j++) {
+            // 左边的 f[j], 表示更新后的 f[j], 与公式中的 f[i[[j] 对应
+            // 右边的 f[j], 表示老的 f[j], 与公式中的 f[i-1][j] 对应
+            f[j] = f[j - 1] + f[j];
+        }
+    }
+    return f[n - 1];
+}
+#+END_SRC
+
+**** 组合数 （ C_{m+n-2}^{m-1} ）
+
+     一个 m 行, n 列的矩阵, 机器人从左上走到右下总共需要的步数是 m + n - 2, 其中向下走的步数是 m - 1, 因此问题变成了在 m + n - 2 个操作中, 选择 m–1 个时间点向下走, 选择方式有多少种。即C_{m+n-2}^{m-1}。这里需要注意的是求组合数时防止乘法溢出。
+#+BEGIN_SRC java
+public int combination(int a, int b) {
+    if (b > (a >>> 1)) b = a - b;
+    long res = 1;
+    for (int i = 1; i <= b ; i++) 
+        res = res * (a - i + 1) / i;
+    return (int)res;
+}
+        
+public int uniquePaths(int m, int n) {
+    return combination(m + n - 2, m - 1);
+}
+#+END_SRC
+
+*** Unique Path with Obstacles
+Follow up for "Unique Paths":
+
+Now consider if some obstacles are added to the grids. How many unique paths would there be?
+
+An obstacle and empty space is marked as 1 and 0 respectively in the grid.
+
+For example, There is one obstacle in the middle of a 3x3 grid as illustrated below.
+#+BEGIN_SRC java
+[
+  [0,0,0],
+  [0,1,0],
+  [0,0,0]
+]
+#+END_SRC
+
+The total number of unique paths is 2.
+
+Note: m and n will be at most 100.
+**** 备忘录法
+#+BEGIN_SRC java
+// LeetCode, Unique Paths II
+// 深搜 + 缓存, 即备忘录法
+class Solution {
+public:
+    int uniquePathsWithObstacles(vector<vector<int> > &obstacleGrid) {
+        const int m = obstacleGrid.size();
+        const int n = obstacleGrid[0].size();
+        // 0 行和 0 列未使用
+        this->f = vector<vector<int> >(m + 1, vector<int>(n + 1, 0));
+        return dfs(obstacleGrid, m, n);
+    }
+
+private:
+    vector<vector<int> > f;                    // 缓存
+    int dfs(const vector<vector<int> > &obstacleGrid,
+            int x, int y) {
+        if (x < 1 || y < 1) return 0;         // 数据非法,终止条件
+        
+        if (obstacleGrid[x-1][y-1]) return 0; // (x,y) 是障碍
+        if (x == 1 and y == 1) return 1;      // 回到起点,收敛条件
+        return getOrUpdate(obstacleGrid, x - 1, y) +
+                getOrUpdate(obstacleGrid, x, y - 1);
+    }
+    int getOrUpdate(const vector<vector<int> > &obstacleGrid,
+                    int x, int y) {
+        if (f[x][y] > 0) return f[x][y];
+        else return f[x][y] = dfs(obstacleGrid, x, y);
+    }
+};
+#+END_SRC
+**** 动态规划
+
+     与上一题类似, 但要特别注意第一列的障碍。在上一题中,第一列全部是1, 但是在这一题中不同,第一列如果某一行有障碍物,那么后面的行应该为 0。
+#+BEGIN_SRC java
+public int uniquePathsWithObstacles(int[][] obstacleGrid) {
+    int m = obstacleGrid.length;
+    int n = obstacleGrid[0].length;
+    if (m == 0 || n == 0) return 0;
+    else if (obstacleGrid[0][0] == 1 || obstacleGrid[m - 1][n - 1] == 1) return 0;
+    else if (m == 1 || n == 1) return obstacleGrid[m-1][n-1] == 1 ? 0 : 1;
+            
+    int [][] arr = new int[m][n];
+    for (int i = 0; i < n; i++)
+        if (obstacleGrid[0][i] == 1) {
+            for (int j = i; j < n; j++) 
+                arr[0][j] = 0;
+            i = n;
+        } else arr[0][i] = 1;
+
+    for (int i = 0; i < m; i++)
+        if (obstacleGrid[i][0] != 1)
+            arr[i][0] = 1;
+        else 
+            for (int j = i; j < m; j++) {
+                arr[j][0] = 0;
+                i = m;
+            }
+            
+    arr[0][0] = 0;
+    for (int i = 1; i < m; i++) {
+        for (int j = 1; j < n; j++) {
+            if (obstacleGrid[i][j] == 1)
+                arr[i][j] = 0;
+            else 
+                arr[i][j] = arr[i][j - 1] + arr[i - 1][j];
+        }
+    }
+    return arr[m-1][n-1];
+}
+#+END_SRC
+*** Minimum Path Sum
+Given a m x n grid filled with non-negative numbers, find a path from top left to bottom right which minimizes the sum of all numbers along its path.
+
+Note: You can only move either down or right at any point in time.
+
+跟 Unique Paths (见 §10.2) 很类似。设状态为 f[i][j], 表示从起点 (0, 0) 到达 (i, j) 的最小路径和, 则状态转移方程为: 
+
+转移方程: f[i][j] = min(f[i-1][j], f[i][j-1]) + grid[i][j]
+**** 备忘录法
+
+     代码应该可以再优化一下。
+#+BEGIN_SRC java
+private int [][] f;
+
+private int getOrUpdate(int [][] grid, int x, int y) {
+    if (x < 0 || y < 0) return Integer.MAX_VALUE;
+    if (f[x][y] >= 0) return f[x][y];
+    else {
+        f[x][y] = dfs(grid, x, y);
+        return f[x][y];
+    }
+}
+        
+private int dfs(int [][] grid, int x, int y) {
+    if (x < 0 || y < 0) return Integer.MAX_VALUE;
+    if (x == 0 && y == 0) return grid[0][0];
+    return Math.min(getOrUpdate(grid, x - 1, y),
+                    getOrUpdate(grid, x, y - 1)) + grid[x][y];
+}
+
+public int minPathSum(int[][] grid) {
+    int m = grid.length;
+    int n = grid[0].length;
+    f = new int[m][n];
+    for (int i = 0; i < m; i++) 
+        for (int j = 0; j < n; j++) 
+            f[i][j] = -1;
+    return dfs(grid, m - 1, n - 1);
+}
+#+END_SRC
+**** 动态规划
+#+BEGIN_SRC java
+public int minPathSum(int[][] grid) {
+    int m = grid.length;
+    int n = grid[0].length;
+    if (m == 0 || n == 0) return 0;
+            
+    int [][] f = new int[m][n];
+    f[0][0] = grid[0][0];
+    for (int i = 1; i < n; i++)
+        f[0][i] = f[0][i - 1] + grid[0][i];
+    for (int i = 1; i < m; i++)
+        f[i][0] = f[i - 1][0] + grid[i][0];
+            
+    for (int i = 1; i < m; i++) 
+        for (int j = 1; j < n; j++) 
+            f[i][j] = Math.min(f[i][j - 1], f[i - 1][j]) + grid[i][j];
+    return f[m-1][n-1];
+}
+#+END_SRC
+**** 动态规划 + 滚动数组
+*** Unique Binary Search Tree
+    Given n, how many structurally unique BST's (binary search trees) that store values 1...n?
+    
+    For example, Given n = 3, there are a total of 5 unique BST's.
+    #+BEGIN_SRC java
+   1         3     3      2      1
+    \       /     /      / \      \
+     3     2     1      1   3      2
+    /     /       \                 \
+   2     1         2                 3
+    #+END_SRC
+
+    如果把上例的顺序改一下,就可以看出规律了。《水中的鱼》
+    #+BEGIN_SRC java
+    1           1                   2                   3           3
+     \           \                 / \                 /           / 
+      3           2               1   3               2           1
+     /             \                                 /             \
+    2               3                               1               2
+    #+END_SRC
+
+    比如，以1为根的树有几个，完全取决于有二个元素的子树有几种。同理，2为根的子树取决于一个元素的子树有几个。以3为根的情况，则与1相同。
+    
+    定义Count[i] 为以[0,i]能产生的Unique Binary Tree的数目，
+    
+    如果数组为空，毫无疑问，只有一种BST，即空树， Count[ 0 ] =1
+    
+    如果数组仅有一个元素{1}，只有一种BST，单个节点, Count[ 1 ] = 1
+    
+    如果数组有两个元素{1,2}， 那么有如下两种可能
+    #+BEGIN_SRC java
+    1                2
+     \              /
+      2            1
+    Count[2] = Count[0] * Count[1]   ( 1 为根的情况 )
+             + Count[1] * Count[0]   ( 2 为根的情况 )
+    #+END_SRC
+
+   再看一遍三个元素的数组，可以发现BST的取值方式如下：
+   #+BEGIN_SRC java
+   Count[3] = Count[0]*Count[2]  ( 1 为根的情况 )
+            + Count[1]*Count[1]  ( 2 为根的情况 )
+            + Count[2]*Count[0]  ( 3 为根的情况 )
+   #+END_SRC
+
+   所以，由此观察，当数组为 1, 2, 3, ..., n 时,基于以下原则的构建的 BST 树具有唯一性:以 i 为根节点的树,其左子树由 [1, i-1] 构成,其右子树由 [i+1, n] 构成。
+   
+   可以得出Count的递推公式为
+
+   Count(i) = \sum_{k = 1}^{i} Count(k - 1) * Count(i - k) 
+
+   问题至此划归为一维动态规划。
+#+BEGIN_SRC java
+public int numTrees(int n) {
+    int [] cnt = new int[n + 1];
+    cnt[0] = 1; // empty element
+    cnt[1] = 1; // one element
+    for (int i = 2; i <= n ; i++) 
+        for (int j = 0; j < i; j++) 
+            cnt[i] += cnt[j]*cnt[i - 1 - j];
+    return cnt[n];
+}
+#+END_SRC
+*** Unique Binary Search Tree II
+    Given n, generate all structurally unique BST's (binary search trees) that store values 1...n.
+    
+    For example,
+    
+    Given n = 3, your program should return all 5 unique BST's shown below.
+    #+BEGIN_SRC java
+   1         3     3      2      1
+    \       /     /      / \      \
+     3     2     1      1   3      2
+    /     /       \                 \
+   2     1         2                 3
+    #+END_SRC
+#+BEGIN_SRC java
+public List<TreeNode> helper(int bgn, int end) {
+    List<TreeNode> res = new ArrayList<TreeNode>();
+    if (bgn > end) {
+        res.add(null);  // important
+        return res;
+    }
+
+    List<TreeNode> left = null;
+    List<TreeNode> right = null;
+    TreeNode root = null;
+    for (int i = bgn; i <= end ; i++) {
+        left = helper(bgn, i - 1);
+        right = helper(i + 1, end);
+        for (int j = 0; j < left.size(); j++) {
+            for (int k = 0; k < right.size(); k++) {
+                root = new TreeNode(i);
+                root.left = left.get(j);
+                root.right = right.get(k);
+                res.add(root);
+                root = null;
+            }
+        }
+        left = null;
+        right = null;
+    }
+    return res;
+}
+        
+public List<TreeNode> generateTrees(int n) {
+    return helper(1, n);
+}
+#+END_SRC
+*** Maximum Sum Subarray
+Find the contiguous subarray within an array (containing at least one number) which has the largest sum.
+
+For example, given the array [-2, 1, -3, 4, -1, 2, 1, -5, 4], 
+
+the contiguous subarray [4, -1, 2, 1] has the largest sum = 6.
+
+click to show more practice.
+
+*More practice:*
+
+If you have figured out the O(n) solution, try coding another solution using the divide and conquer approach, which is more subtle.
+
+*Tags:* Divide and Conquer, Array, Dynamic Programming
+
+分析:
+
+最大连续子序列和,非常经典的题。
+
+当我们从头到尾遍历这个数组的时候, 对于数组里的一个整数, 它有几种选择呢? 它只有两种选择: 1、加入之前的 SubArray;  2. 自己另起一个 SubArray。那什么时候会出现这两种情况呢?
+
+- 如果之前 SubArray 的总体和大于 0 的话, 我们认为其对后续结果是有贡献的。这种情况下我们选择加入之前的 SubArray
+
+- 如果之前 SubArray 的总体和为 0 或者小于 0 的话, 我们认为其对后续结果是没有贡献, 甚至是有害的(小于 0 时)。这种情况下我们选择以这个数字开始, 另起一个 SubArray。
+
+设状态为 f[j], 表示以 S[j] 结尾的最大连续子序列和, 则状态转移方程如下:
+#+BEGIN_SRC java
+f[j] = max (f[j-1] + S[j], S[j]) , 其中 1 ≤ j ≤ n
+target = max (f[j]) , 其中 1 ≤ j ≤ n
+#+END_SRC
+
+解释如下:
+
+情况一, S[j]不独立, 与前面的某些数组成一个连续子序列, 则最大连续子序列和为 f[j-1] + S[j]。
+
+情况二, S[j] 独立划分成为一段, 即连续子序列仅包含一个数 S[j], 则最大连续子序列和为S[j]。
+
+其他思路:
+- 思路 2: 直接在 i 到 j 之间暴力枚举, 复杂度是 O(n^3)
+- 思路 3: 处理后枚举, 连续子序列的和等于两个前缀和之差, 复杂度 O(n^2)。
+- 思路 4: 分治法, 把序列分为两段, 分别求最大连续子序列和, 然后归并, 复杂度 O( n*(log(n)) )
+- 思路 5: 把思路 2 O(n^2) 的代码稍作处理, 得到 O(n) 的算法
+- 思路 6: 当成 M = 1 的最大 M 子段和
+**** 动态规划： 时间复杂度 O(n), 空间复杂度 O(1)
+#+BEGIN_SRC java
+public int maxSubArray(int[] a) {
+    int result = Integer.MIN_VALUE, f = 0;
+    for (int i = 0; i < a.length; i++) {
+        f = Math.max(f + a[i], a[i]);
+        result = Math.max(result, f);
+    }
+    return result;
+}
+#+END_SRC
+**** 思路 5: 时间复杂度 O(n),空间复杂度 O(n)
+#+BEGIN_SRC java
+public int maxSubArray(int[] a) {
+    int result, curMin;
+    int [] sum = new int[a.length + 1];
+    sum[0] = 0;
+    result = Integer.MIN_VALUE;
+    curMin = sum[0];
+    for (int i = 1; i <= a.length; i++) 
+        sum[i] = sum[i - 1] + a[i - 1];
+    for (int i = 1; i <= a.length; i++) {
+        result = Math.max(result, sum[i] - curMin);
+        curMin = Math.min(curMin, sum[i]);
+    }
+    return result;
+}
+#+END_SRC
+*** Maximum Product Subarray
+Find the contiguous subarray within an array (containing at least one number) which has the largest product.
+
+For example, given the array [2, 3, -2, 4], 
+
+the contiguous subarray [2, 3] has the largest product = 6.
+
+这道题跟[[Maximum Sum Subarray]]模型上和思路上都比较类似，还是用一维动态规划中的“局部最优和全局最优法”。
+
+这里的区别是维护一个局部最优不足以求得后面的全局最优，这是由于乘法的性质不像加法那样，累加结果只要是正的一定是递增，乘法中有可能现在看起来小的一个负数，后面跟另一个负数相乘就会得到最大的乘积。
+
+不过事实上也没有麻烦很多，我们只需要在维护一个局部最大的同时，在维护一个局部最小，这样如果下一个元素遇到负数时，就有可能与这个最小相乘得到当前最大的乘积和，这也是利用乘法的性质得到的。
+
+来自《Code Ganker征服代码》
+
+#+BEGIN_SRC java
+public int maxProduct(int[] a) {
+    int n = a.length;
+    int maxLocal = a[0];
+    int minLocal = a[0];
+    int res = a[0];
+    for (int i = 1; i < n; i++) {
+        int tmp = maxLocal;
+        maxLocal = Math.max(Math.max(maxLocal * a[i], a[i]),
+                            Math.max(minLocal * a[i], a[i]));
+        minLocal = Math.min(Math.min(a[i], a[i] * tmp),
+                            Math.min(a[i], a[i] * minLocal));
+        res = Math.max(res, maxLocal);
+    }
+    return res; 
+}
+#+END_SRC
+*** Decode Ways, bug~~!!
+A message containing letters from A-Z is being encoded to numbers using the following mapping:
+#+BEGIN_SRC java
+'A' -> 1
+'B' -> 2
+...
+'Z' -> 26
+#+END_SRC
+
+Given an encoded message containing digits, determine the total number of ways to decode it.
+
+For example,
+
+Given encoded message "12", it could be decoded as "AB" (1 2) or "L" (12).
+
+The number of ways decoding "12" is 2.
+
+参考Climb stairs, [[Climbing Stairs]]
+
+最原始型的follow、控制logic：
+#+BEGIN_SRC java
+public int numDecodings(String s) {
+    if (s == null || s.length() == 0) return 0;
+    else if (s.charAt(0) == '0') return 0;
+    else if (s.length() == 1) return 1;
+    else if (s.length() >= 2 && s.charAt(0) - '0' > 2 && s.charAt(1) == '0') return 0;
+            
+    int j = 0; // idx for s
+    char c;    // char at pos j
+    int [] res = new int[s.length()];
+    res[0] = 1;
+    res[1] = 1;
+    if (s.charAt(1) != '0'
+        && ( (s.charAt(0) == '1'
+              || (s.charAt(0) == '2') && s.charAt(1) - '0' < 7)))
+        res[1] = 2;
+            
+    for (int i = 2; i < s.length(); i++) {
+        c = s.charAt(i);
+        if (c != '0')
+            res[i] += res[i - 1]; // separate dijit // except '0', NO, 10, 20 ok
+
+        switch (c) {
+        case '0':
+            if (s.charAt(i - 1) == '1' || s.charAt(i - 1) == '2')
+                if (s.charAt(i - 2) == '1' || s.charAt(i - 2) == '2')
+                    res[i] = res[i - 2];     // 110 = 1 10, ... 11 0, NO~!
+                else
+                    res[i] = res[i - 1]; 
+            else return 0;
+            break;
+        case '7':     // 17, 18, 19
+        case '8':
+        case '9':
+            if (s.charAt(i - 1) == '1')
+                res[i] += res[i - 2];
+            break;
+        default:     // 1, 2, 3, 4, 5, 6: Individual, 1-pre, 2-pre, 11, 21, 12, 22 ...
+            if (s.charAt(i - 1) == '1' || s.charAt(i - 1) == '2')
+                res[i] += res[i - 2];
+            break;
+        }
+    }
+    return res[s.length() - 1];
+}
+#+END_SRC
+**** 动态规划, 时间复杂度 O(n), 空间复杂度 O(1), java v m bug ~~~~!!!!
+
+模拟pdf c++版大牛精华版代码： 
+#+BEGIN_SRC java
+// my Java version code has bug here, fix it later ~~~
+public int numDecodings(String s) {
+    if (s == null || s.length() == 0 || s.charAt(0) == '0') return 0;
+    int prev = 0;
+    int curr = 1;
+    int tmp = 0;
+    for (int i = 1; i <= s.length() ; i++) {
+        if (s.charAt(i - 1) == '0') curr = 0;
+        if (i < 2 || s.charAt(i - 2) != '1' ||
+            (s.charAt(i - 2) == '2' && s.charAt(i - 1) <= '6'))
+            prev = 0;
+        tmp = curr;
+        curr = prev + curr;
+        prev = tmp;
+    }
+    return curr;
+}
+#+END_SRC
+
+*** Triangle
+Given a triangle, find the minimum path sum from top to bottom. Each step you may move to adjacent numbers on the row below.
+
+For example, given the following triangle
+#+BEGIN_SRC java
+[
+     [2],
+    [3,4],
+   [6,5,7],
+  [4,1,8,3]
+]
+#+END_SRC
+
+The minimum path sum from top to bottom is 11 (i.e., 2 + 3 + 5 + 1 = 11).
+
+Note: Bonus point if you are able to do this using only O(n) extra space, where n is the total number of rows in the triangle.
+**** 自顶向下： 时间复杂度是O(n^2)， 空间复杂度是O(n)
+
+这是一道动态规划的题目，求一个三角形二维数组从顶到低端的最小路径和。思路是维护到某一个元素的最小路径和，那么在某一个元素i，j的最小路径和就是它上层对应的相邻两个元素的最小路径和加上自己的值，递推式是
+
+sum[i][j] = min(sum[i-1][j-1],sum[i-1][j]) + triangle[i][j]。
+
+最后扫描一遍最后一层的路径和，取出最小的即可。每个元素需要维护一次，总共有 1+2+...+n = n*(n+1)/2 个元素，所以时间复杂度是O(n^2)。而空间上每次只需维护一层即可（因为当前层只用到上一层的元素），所以空间复杂度是O(n)。
+
+来自《Code Ganker征服代码》
+#+BEGIN_SRC java
+public int minimumTotal(ArrayList<ArrayList<Integer>> triangle) {  
+    if(triangle == null || triangle.size() == 0)  
+        return 0;  
+    if(triangle.size() == 1)  
+        return triangle.get(0).get(0);
+    
+    int[] dp = new int[triangle.size()];  
+    dp[0] = triangle.get(0).get(0);  
+    for(int i = 1; i < triangle.size(); i++) {  
+        dp[i] = dp[i - 1] + triangle.get(i).get(i);  
+        for(int j = i - 1 ; j >= 1; j--)  
+            dp[j] = (dp[j] < dp[j-1] ? dp[j] : dp[j - 1]) + triangle.get(i).get(j);  
+        dp[0] = dp[0] + triangle.get(i).get(0);  
+    }
+    
+    int minimum = dp[0];  
+    for(int i = 1; i < dp.length; i++) 
+        if (dp[i] < minimum)
+            minimum = dp[i];  
+    return minimum;  
+}
+#+END_SRC
+
+上述代码实现时要注意每层第一个和最后一个元素特殊处理一下。
+**** 自底向上： 
+
+换个角度考虑一下，如果这道题不自顶向下进行动态规划，而是放过来自底向上来规划，递归式只是变成下一层对应的相邻两个元素的最小路径和加上自己的值，原理和上面的方法是相同的，这样考虑到优势在于不需要最后对于所有路径找最小的，而且第一个元素和最后元素也不需要单独处理了，所以代码简洁了很多。
+#+BEGIN_SRC java
+public int minimumTotal(List<List<Integer>> triangle) {
+    List<Integer> res = new ArrayList<Integer>(triangle.get(triangle.size() - 1));
+    for (int i = triangle.size() - 2; i >= 0 ; i--) 
+        for (int j = 0; j <= i ; j++) 
+            res.set(j, Math.min(res.get(j), res.get(j + 1))
+                    + triangle.get(i).get(j));
+    return res.get(0);
+}
+#+END_SRC
+*** Word Break
+Given a string s and a dictionary of words dict, determine if s can be segmented into a space-separated sequence of one or more dictionary words.
+
+For example, given
+#+BEGIN_SRC java
+s = "leetcode",
+dict = ["leet", "code"].
+Return true because "leetcode" can be segmented as "leet code".
+#+END_SRC
+
+设状态为 f(i),表示 s[0,i] 是否可以分词,则状态转移方程为
+
+转移方程: f (i) = any_of ( f(j) && s[j+1, i] ∈ dict ), 0 ≤ j < i
+**** 深搜: 时间复杂度 O(2^n),空间复杂度 O(n)
+
+OJ 超时。
+#+BEGIN_SRC java
+public boolean helper(String s, int i, Set<String> dict) {
+    int n = s.length();
+    if (i >= n) return false;
+    int j = i;
+    while (j < n) {
+        while (j < n && !dict.contains(s.substring(i, j + 1))) j++;
+        if (j == n) return false;
+        if (helper(s, j + 1, dict) == true) return true;
+        j++;
+    }
+    return false;
+}
+        
+public boolean wordBreak(String s, Set<String> dict) {
+    if (dict.contains(s)) return true;
+    if (s == null || s.length() == 0) return false;
+    return helper(s, 0, dict);
+}
+#+END_SRC
+**** 动态规划：
+#+BEGIN_SRC java
+public boolean wordBreak(String s, Set<String> dict) {
+    if (dict.contains(s)) return true;
+    boolean [] dp = new boolean[s.length()];
+    for (int i = 0; i < s.length(); i++) 
+        dp[i] = false;
+
+    for (int i = 0; i < s.length(); i++)
+        for (int j = i; j >= 0; j--) {
+            String tmp = new String(s.substring(j, i+1));
+            if (dict.contains(tmp))
+                if ((j == 0) || (j >= 1 && dp[j-1])) {
+                    dp[i] = true;
+                    break;
+                }
+        }
+    return dp[s.length()-1];
+}
+#+END_SRC
+
+*** Best Time to Buy and Sell Stock III
+Say you have an array for which the ith element is the price of a given stock on day i.
+
+Design an algorithm to find the maximum profit. You may complete at most two transactions.
+
+Note: You may not engage in multiple transactions at the same time (ie, you must sell the stock before you buy again).
+
+设状态 f(i), 表示区间[0, i](0 ≤ i ≤ n−1) 的最大利润, 状态 g(i), 表示区间[i, n−1](0 ≤ i ≤ n−1)的最大利润, 则最终答案为 max{ f(i) + g(i) }, 0 ≤ i ≤ n−1。
+
+允许在一天内买进又卖出,相当于不交易,因为题目的规定是最多两次,而不是一定要两次。
+
+将原数组变成差分数组, 本题也可以看做是最大 m 子段和, m = 2.
+
+#+BEGIN_SRC java
+public int maxProfit(int[] prices) {
+    if (prices.length < 2) return 0; 
+    int [] past = new int[prices.length];
+    int [] futu = new int[prices.length];
+    int result = 0;
+    for (int i = 1, valley = prices[0]; i < prices.length; i++) {
+        valley = Math.min(valley, prices[i]);
+        past[i] = Math.max(past[i - 1], prices[i]-valley);
+    }
+    for (int i = prices.length-2, peak = prices[prices.length-1]; i >= 0 ; i--) {
+        peak = Math.max(peak, prices[i]);
+        futu[i] = Math.max(futu[i+1], peak-prices[i]);
+        result = Math.max(result, past[i] + futu[i]);
+    }
+    return result;
+}
+#+END_SRC
+
+*** Coins in a Line
+
+*** Maximal Rectangle
+    Given a 2D binary matrix filled with 0's and 1's, find the largest rectangle containing all ones and return its area.
+
+    *Tags:* Array Hash Table Stack Dynamic Programming
+**** 栈： O(n)    
+这是一道非常综合的题目，要求在0-1矩阵中找出面积最大的全1矩阵。刚看到这道题会比较无从下手，brute force就是对于每个矩阵都看一下，总共有m(m+1)/2*n(n+1)/2个子矩阵（原理跟字符串子串类似，字符串的子串数有n(n+1)/2，只是这里是二维情形，所以是两个相乘），复杂度相当高，肯定不是面试官想要的答案，就不继续想下去了。
+
+这道题的解法灵感来自于Largest Rectangle in Histogram这道题，假设我们把矩阵沿着某一行切下来，然后把切的行作为底面，将自底面往上的矩阵看成一个直方图（histogram）。直方图的中每个项的高度就是从底面行开始往上1的数量。根据Largest Rectangle in Histogram我们就可以求出当前行作为矩阵下边缘的一个最大矩阵。接下来如果对每一行都做一次Largest Rectangle in Histogram，从其中选出最大的矩阵，那么它就是整个矩阵中面积最大的子矩阵。
+算法的基本思路已经出来了，剩下的就是一些节省时间空间的问题了。
+
+我们如何计算某一行为底面时直方图的高度呢？ 如果重新计算，那么每次需要的计算数量就是当前行数乘以列数。然而在这里我们会发现一些动态规划的踪迹，如果我们知道上一行直方图的高度，我们只需要看新加进来的行（底面）上对应的列元素是不是0，如果是，则高度是0，否则则是上一行直方图的高度加1。利用历史信息，我们就可以在线行时间内完成对高度的更新。我们知道，Largest Rectangle in Histogram的算法复杂度是O(n)。所以完成对一行为底边的矩阵求解复杂度是O(n+n)=O(n)。接下来对每一行都做一次，那么算法总时间复杂度是O(m*n)。
+
+空间上，我们只需要保存上一行直方图的高度 O(n)，加上Largest Rectangle in Histogram中所使用的空间O(n)，所以总空间复杂度还是O(n)。
+
+#+BEGIN_SRC java
+private int largestRectangleArea(int[] height) {
+    Stack<Integer> s = new Stack<Integer>();
+    int [] hnew = new int[height.length + 1];
+    hnew = Arrays.copyOf(height, height.length + 1);
+    int res = 0; 
+    int tmp;     
+    int left;
+    for (int i = 0; i <= height.length; i++) {
+        if (s.isEmpty() || hnew[i] > hnew[s.peek()]) s.push(i);
+        else {
+            tmp = s.pop();
+            res = Math.max(res, hnew[tmp] * 
+                           (s.isEmpty() ? i : i - s.peek() - 1));
+            i--;
+        }
+    }
+    return res;
+}
+
+public int maximalRectangle(char[][] matrix) {
+    if (matrix == null || matrix.length == 0 || matrix[0].length == 0) return 0;
+    int [] h = new int[matrix[0].length];
+    int res = 0;     // record max area
+    for (int i = 0; i < matrix.length; i++) {
+        for (int j = 0; j < matrix[0].length; j++) 
+            h[j] = matrix[i][j] == '0' ? 0 : h[j] + 1;
+        res = Math.max(res, largestRectangleArea(h));
+    }
+    return res;
+}
+#+END_SRC
+**** 动态规划：
+
+一般一个题目我首先会想想怎么暴力解决，比如这一题，可以枚举出所有的矩形，求出其中的面积最大者，那么怎么枚举呢，如果分别枚举矩形的宽度和高度，这样还得枚举矩形的位置，复杂度至少为O(n^4) (计算复杂度是我们把matrix的行、列长度都泛化为n，下同)，我们可以枚举矩形左上角的位置，那么知道了矩形左上角的位置，怎么计算以某一点为左上角的矩形的最大面积呢？举例如下，下面的矩阵我们以(0,0)为矩形的左上角：
+#+BEGIN_SRC java
+1 1 1 1 0 0
+1 1 1 0 1 1
+1 0 1 0 1 1
+0 1 1 1 1 1
+1 1 1 1 1 1
+#+END_SRC
+
+矩形高度是1时,宽度为第一行中从第一个位置起连续的1的个数,为4,面积为4 * 1=4
+
+矩形高度是2时,第二行从第一个位置起连续1的个数是3,宽度为min(3,4)=3,面积为3*2=6
+
+矩形高度为3时,第三行从第一个位置起连续1的个数是1,宽度为min(1,3)=1,面积为1*3=3
+
+矩形高度为4时,第四行从第一个位置起连续1的个数是0,宽度为min(0,1)=0,面积为0*4=0
+
+后面的行就不用计算了,因为上一行计算的宽度是0,下面所有宽度都是0
+
+因此以(0,0)为左上角的矩形的最大面积是6，计算以某一点为左上角的矩形的最大面积复杂度是O(n)。
+
+注意到上面我们用到了信息“从某一行某个位置开始连续的1的个数”，这个我们可以通过动态规划求得：设dp[i][j]是从点(i,j)开始，这一行连续1的个数，动态规划方程如下：
+
+初始条件：
+- dp[i][n-1] = (matrix[i][n-1] == '1') （n是matrix的列数）
+- dp[i][j] = (matrix[i][j] == '1') ?  1 + dp[i][j + 1] : 0 (从方程看出我们应该从每一行的后往前计算)
+计算dp复杂度O(n^2)，枚举左上角位置以及计算以该位置为左上角的矩形最大面积复杂度是O(n^2*n)=O(n^3)，总的复杂度是O(n^3)
+
+这个算法还可以优化，枚举到某个点时我们可以假设该点右下方全是1，得到一个假设最大面积，如果这个面积比当前计算好的面积还要小，该点就可以直接跳过；在上面计算以某点为左上角的矩形面积时，也可以剪枝，剪枝方法同上。《JustDoIT》
+#+BEGIN_SRC java
+public int maximalRectangle(char[][] matrix) {
+    if (matrix == null || matrix.length == 0 || matrix[0].length == 0) return 0;
+    int m = matrix.length;
+    int n = matrix[0].length;
+    int [][] dp = new int[m][n];
+    int res = 0;
+    int width = 0;
+    for (int i = 0; i < m; i++) 
+        dp[i][n - 1] = matrix[i][n - 1] == '1' ? 1 : 0;
+    for (int i = 0; i < m; i++) 
+        for (int j = n - 2; j >= 0; j--) 
+            if (matrix[i][j] == '1')
+                dp[i][j] = dp[i][j + 1] + 1;
+    for (int i = 0; i < m; i++) // 以每个点作为矩形的左上角计算所得的最大矩形面积
+        for (int j = 0; j < n; j++) {
+            if ((n - j) * (m - i) <= res)
+                break;          // 剪枝，column-j 是最大宽度，row-i 是最大高度
+            width = dp[i][j];
+            for (int k = i; k < m && width > 0; k++) {
+                if (width * (m - i) <= res)
+                    break;    // 剪枝,row-i 是以点 (i,j) 为左上角的矩形的最大高度
+                if (width > dp[k][j])
+                    width = dp[k][j]; //矩形宽度要取从第 i 行到第 k 行宽度的最小值
+                res = Math.max(res, width * (k - i + 1));
+            }
+        }
+    return res;
+}
+#+END_SRC
+
+*** Edit Distance
+Given two words word1 and word2, find the minimum number of steps required to convert word1 to word2. (each operation is counted as 1 step.)
+
+You have the following 3 operations permitted on a word:
+
+a) Insert a character
+
+b) Delete a character
+
+c) Replace a character
+
+设状态为 f[i][j], 表示 A[0, i] 和 B[0, j] 之间的最小编辑距离。设 A[0, i] 的形式是 str1c, B[0, j] 的形式是 str2d, 
+
+一. 如果 c == d, 则 f[i][j] = f[i-1][j-1];
+
+二. 如果 c != d,
+ 
+  (a) 如果将 c 替换成 d, 则\nbsp{} \nbsp{} \nbsp{} \nbsp{} \nbsp{} \nbsp{} f[i][j] = f[i-1][j-1] + 1;
+
+  (b) 如果在 c 后面添加一个 d, 则\nbsp{} f[i][j] = f[i][j-1] + 1;
+
+  (c) 如果将 c 删除, 则\nbsp{} \nbsp{} \nbsp{} \nbsp{} \nbsp{} \nbsp{} \nbsp{} \nbsp{} \nbsp{} f[i][j] = f[i-1][j] + 1;
+
+**** 动态规划：时间复杂度 O(n*m), 空间复杂度 O(n*m)。
+#+BEGIN_SRC java
+public int minDistance(String s, String t) {
+    int m = s.length();
+    int n = t.length();
+    int [][] res = new int[m + 1][n + 1];
+    for (int i = 0; i <= m; i++)
+        res[i][0] = i;
+    for (int i = 0; i <= n; i++)
+        res[0][i] = i;
+    for (int i = 1; i <= m; i++) 
+        for (int j = 1; j <= n; j++) 
+            if (s.charAt(i - 1) == t.charAt(j - 1))
+                res[i][j] = res[i - 1][j - 1];
+            else 
+                res[i][j] = Math.min(Math.min(res[i - 1][j], res[i][j - 1]),
+                                     Math.min(res[i - 1][j],
+                                              res[i - 1][j - 1])) + 1;
+    return res[m][n];
+}
+#+END_SRC
+**** 动态规划 + 滚动数组：
+
+*** Distinct Subsequence
+Given a string S and a string T, count the number of distinct subsequences of T in S.
+
+A subsequence of a string is a new string which is formed from the original string by deleting some (can be none) of the characters without disturbing the relative positions of the remaining characters. (ie, "ACE" is a subsequence of "ABCDE" while "AEC" is not).
+
+Here is an example:
+
+S = "rabbbit", T = "rabbit"
+
+Return 3.
+
+设状态为 f(i, j), 表示 T[0, j] 在 S[0, i] 里出现的次数。首先, 无论 S[i] 和 T[j] 是否相等, 
+
+若不使用 S[i], 则\nbsp \nbsp \nbsp \nbsp \nbsp \nbsp \nbsp \nbsp \nbsp \nbsp \nbsp \nbsp \nbsp f(i, j) = f(i-1, j); 
+
+若 S[i] == T[j], 则可以使用 S[i], 则 f(i, j) = f(i-1, j) + f(i-1, j-1)。
+
+#+BEGIN_SRC java
+public int numDistinct(String s, String t) {
+    if (s == null || s.length() == 0) return 0;
+    int m = s.length();
+    int n = t.length();
+    int [][] res = new int[m + 1][n + 1];
+    for (int i = 0; i <= m; i++) 
+        res[i][0] = 1;
+    for (int i = 1; i <= m; i++) {
+        for (int j = 1; j <= n; j++) {
+            if (s.charAt(i - 1) == t.charAt(j - 1))
+                res[i][j] = res[i - 1][j] + res[i - 1][j - 1];
+            else
+                res[i][j] = res[i - 1][j];
+        }
+    }
+    return res[m][n];
+}
+#+END_SRC
+
+滚动数组： 时间复杂度 O(m*n), 空间复杂度 O(n)
+#+BEGIN_SRC java
+public int numDistinct(String s, String t) {
+    if (s == null || s.length() == 0) return 0;
+    int m = s.length();
+    int n = t.length();
+    int [] res = new int[n + 1];
+    res[0] = 1;
+    for (int i = 0; i < m; i++) 
+        for (int j = n - 1; j >= 0; j--) 
+            res[j + 1] += s.charAt(i) == t.charAt(j) ? res[j] : 0;
+    return res[n];
+}
+#+END_SRC
+
+*** Palindrome Partitioning II 
+Given a string s, partition s such that every substring of the partition is a palindrome.
+
+Return the minimum cuts needed for a palindrome partitioning of s.
+
+For example, 
+#+BEGIN_SRC java
+given s = "aab",
+Return 1 since the palindrome partitioning ["aa","b"] could be produced using 1 cut.
+#+END_SRC
+
+**** 思路1：leetcode online
+
+忘记从线上哪个贴子看的了，根据回文可能有的两种特性，奇数长度回文和偶数长度回文，进行一维dp的判断。
+#+BEGIN_SRC java
+public int minCut(String s) {
+    int n = s.length();
+    int [] dp = new int[n + 1];
+    for (int i = 0; i <= n ; i++) // initiate
+        dp[i] = i - 1;
+    for (int i = 0; i < n; i++) {
+        // s[i - j] == s[i + j], aba
+        for (int j = 0; i - j >= 0 && i + j <= n - 1 && s.charAt(i - j) == s.charAt(i + j); j++)
+            dp[i + j + 1] = Math.min(dp[i - j] + 1, dp[i + j + 1]);
+        // s[i - j] == s[i + 1 + j], abba
+        for (int j = 0; i - j >= 0 && i + 1 + j <= n - 1 && s.charAt(i - j) == s.charAt(i + 1 + j); j++)
+            dp[i + j + 2] = Math.min(dp[i - j] + 1, dp[i + j + 2]);
+    }
+    return dp[n];
+}
+#+END_SRC
+
+**** 动态规划： 时间复杂度 O(n^2), 空间复杂度 O(n^2)
+
+定义状态 f(i,j) 表示区间 [i,j] 之间最小的 cut 数,则状态转移方程为
+
+ f(i, j) = min {f(i, k) + f(k + 1, j)} , i ≤ k ≤ j, 0 ≤ i ≤ j < n
+
+这是一个二维函数,实际写代码比较麻烦。
+
+所以要转换成一维 DP。如果每次, 从 i 往右扫描, 每找到一个回文就算一次DP 的话, 就可以转换为 f(i)= 区间 [i,  n-1] 之间最小的 cut 数, n 为字符串长度, 则状态转移方程为
+
+f(i) = min {f(j + 1) + 1} ,  i ≤ j < n
+
+一个问题出现了, 就是如何判断 [i, j] 是否是回文?每次都从 i 到 j 比较一遍?太浪费了, 这里也是一个 DP 问题。
+
+定义状态 P[i][j] = true if [i, j] 为回文, 那么
+
+P[i][j] = str[i] == str[j] && P[i+1][j-1]
+
+#+BEGIN_SRC java
+public int minCut(String s) {
+    int n = s.length();
+    int [] f = new int[n + 1];
+    boolean [][] p = new boolean[n][n];
+    for (int i = 0; i <= n; i++) 
+        f[i] = n - 1 - i;  // 最后一个 f[n] = -1
+    for (int i = n - 1; i >= 0; i--) {
+        for (int j = i; j < n; j++) {
+            if (s.charAt(i) == s.charAt(j) &&
+                (j - i < 2 || p[i + 1][j - 1] == true)) {
+                p[i][j] = true;
+                f[i] = Math.min(f[i], f[j + 1] + 1);
+            }
+        }
+    }
+    return f[0];
+}
+#+END_SRC
+*** Interleaving String
+Given s1, s2, s3, find whether s3 is formed by the interleaving of s1 and s2.
+
+For example, Given:
+#+BEGIN_SRC java
+s1 = "aabcc",
+s2 = "dbbca",
+When s3 = "aadbbcbcac", return true.
+When s3 = "aadbbbaccc", return false.
+#+END_SRC
+
+**** 递归: 会超时, 仅用来帮助理解
+
+今天写不出来代码，明天再写~~
+
+**** 动态规划：二维动规, 时间复杂度 O(n^2), 空间复杂度 O(n^2)
+
+设状态 f[i][j], 表示 s1[0, i] 和 s2[0, j], 匹配 s3[0,  i+j]。如果 s1
+的最后一个字符等于 s3 的最后一个字符, 则 f[i][j]=f[i-1][j];如果 s2 的
+最后一个字符等于 s3 的最后一个字符, 则 f[i][j]=f[i][j-1]。
+
+因此状态转移方程如下:
+#+BEGIN_SRC java
+f[i][j] = (s1[i - 1] == s3 [i + j - 1] && f[i - 1][j])
+       || (s2[j - 1] == s3 [i + j - 1] && f[i][j - 1]);
+#+END_SRC
+
+#+BEGIN_SRC java
+public boolean isInterleave(String s1, String s2, String s3) {
+    int m = s1.length();
+    int n = s2.length();
+    if (s3.length() != m + n) return false;
+    boolean [][] f = new boolean[m + 1][n + 1];
+    f[0][0] = true;
+    for (int j = 1; j <= m ; j++) 
+        f[j][0] = f[j - 1][0] && s1.charAt(j - 1) == s3.charAt(j - 1);
+    for (int j = 1; j <= n ; j++) 
+        f[0][j] = f[0][j - 1] && s2.charAt(j - 1) == s3.charAt(j - 1);
+    for (int i = 1; i <= m; i++) {
+        for (int j = 1; j <= n ; j++) {
+            f[i][j] = ((f[i - 1][j] && s1.charAt(i - 1) == s3.charAt(i + j - 1)) ||
+                       (f[i][j - 1] && (s2.charAt(j - 1) == s3.charAt(i + j - 1))));
+        }
+    }
+    return f[m][n];
+}
+#+END_SRC
+**** 二维动规 + 滚动数组： 时间复杂度 O(n^2), 空间复杂度 O(n)
+#+BEGIN_SRC java
+public boolean isInterleave(String s1, String s2, String s3) {
+    int m = s1.length();
+    int n = s2.length();
+    if (s3.length() != m + n) return false;
+    if (m < n) return isInterleave(s2, s1, s3);
+    boolean [] f = new boolean[n + 1];
+    for (int i = 0; i < n + 1; i++) 
+        f[i] = true;
+    for (int i = 1; i < n + 1 ; i++) 
+        f[i] = s2.charAt(i - 1) == s3.charAt(i - 1) && f[i - 1];
+    for (int i = 1; i < m + 1; i++) {
+        f[0] = s1.charAt(i - 1) == s3.charAt(i - 1) && f[0];
+        for (int j = 1; j < n + 1; j++) 
+            f[j] = (s1.charAt(i - 1) == s3.charAt(i + j - 1) && f[j])
+                || (s2.charAt(j - 1) == s3.charAt(i + j - 1) && f[j - 1]);
+    }
+    return f[n];
+}
+#+END_SRC
+
+*** Scramble String
+    Given a string s1, we may represent it as a binary tree by partitioning it to two non-empty substrings recursively.
+
+    Below is one possible representation of s1 = "great":
+
+    #+BEGIN_SRC java
+    great
+   /    \
+  gr    eat
+ / \    /  \
+g   r  e   at
+           / \
+          a   t
+    #+END_SRC
+
+    To scramble the string, we may choose any non-leaf node and swap its two children.
+    
+    For example, if we choose the node "gr" and swap its two children, it produces a scrambled string "rgeat".
+
+    #+BEGIN_SRC java
+    rgeat
+   /    \
+  rg    eat
+ / \    /  \
+r   g  e   at
+           / \
+          a   t
+    #+END_SRC
+
+    We say that "rgeat" is a scrambled string of "great".
+    
+    Similarly, if we continue to swap the children of nodes "eat" and "at", it produces a scrambled string "rgtae".
+
+    #+BEGIN_SRC java
+    rgtae
+   /    \
+  rg    tae
+ / \    /  \
+r   g  ta  e
+       / \
+      t   a
+    #+END_SRC    
+
+    We say that "rgtae" is a scrambled string of "great".
+    
+    Given two strings s1 and s2 of the same length, determine if s2 is a scrambled string of s1.
+
+首先想到的是递归(即深搜), 对两个 string 进行分割, 然后比较四对字符串。代码虽然简单, 
+但是复杂度比较高。有两种加速策略, 一种是剪枝, 提前返回;一种是加缓存, 缓存中间结果, 即
+memorization(翻译为记忆化搜索)。
+
+这两种思路应该都非常容易理解，有大量工作要做，遇到已经干过的 quit 不干了，剪枝；或者保存了前面工作的结果，遇见干过的，直接调结果，缓存？
+
+剪枝可以五花八门, 要充分观察, 充分利用信息, 找到能让节点提前返回的条件。例如, 判断
+两个字符串是否互为 scamble, 至少要求每个字符在两个字符串中出现的次数要相等, 如果不相等
+则返回 false。
+
+加缓存, 可以用数组或 HashMap。本题维数较高, 用 HashMap, map 和 unordered_map 均可。
+既然可以用记忆化搜索, 这题也一定可以用动规。设状态为 f[n][i][j], 表示长度为 n, 起
+点为 s1[i] 和起点为 s2[j] 两个字符串是否互为 scramble, 则状态转移方程为
+#+BEGIN_SRC java
+f[n][i][j] = (f[k][i][j] && f[n-k][i+k][j+k])
+           || (f[k][i][j+n-k] && f[n-k][i+k][j])
+#+END_SRC
+
+**** 递归： 时间复杂度 O(n^6), 空间复杂度 O(1)
+**** 动态规划： 时间复杂度 O(n^3), 空间复杂度 O(n^3)
+
+代码的变量名称循环方式还是看起来很奇怪，改天再优化一下~~
+
+#+BEGIN_SRC java
+public boolean isScramble(String s1, String s2) {
+    int n = s1.length();
+    // f[k][i][j], 表示长度各为 k, 起点为 s1[i] 和
+    // 起点为 s2[j] 两个字符串是否互为 scramble
+    boolean [][][] f = new boolean[n + 1][n][n];
+    for (int i = 0; i < n; i++) 
+        for (int j = 0; j < n; j++) 
+            f[1][i][j] = s1.charAt(i) == s2.charAt(j);
+    for (int k = 2; k <= n; k++) {
+        for (int i = 0; i <= n - k; i++) {
+            for (int j = 0; j <= n - k; j++) {
+                f[k][i][j] = false;
+                for (int x = 1; x < k && !f[k][i][j]; x++) {
+                    f[k][i][j] = ( (f[x][i][j] && f[k - x][x + i][x + j])
+                                   || (f[k - x] [x + i][j] && f[x][i][k - x + j]));
+                }
+            }
+        }
+    }
+    return f[n][0][0];
+}
+#+END_SRC
+
+**** 递归 + 剪枝： 时间复杂度 O(n^6), 空间复杂度 O(1)
+**** 备忘录法: 递归 +map 做 cache, 时间复杂度 O(n^3), 空间复杂度 O(n^3)
+**** 备忘录法: 
+
+定制一个哈希函数, 递归 + (c++) unordered_map 做 cache,比 map 快, 时间
+复杂度 O(n^3),空间复杂度 O(n^3).
+
+Java是一样的吗，改天试一下。。。这三个题need every effort to work on them....
+
+http://www.cnblogs.com/TenosDoIt/p/3452004.html
+ 
+http://blog.unieagle.net/2012/10/23/leetcode%E9%A2%98%E7%9B%AE%EF%BC%9Ascramble-string%EF%BC%8C%E4%B8%89%E7%BB%B4%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/
+
+*** Regular Expression Matching
+Implement regular expression matching with support for '.' and '*'.
+#+BEGIN_SRC java
+'.' Matches any single character.
+'*' Matches zero or more of the preceding element.
+#+END_SRC
+
+The matching should cover the entire input string (not partial).
+
+The function prototype should be:
+
+bool isMatch(const char *s, const char *p)
+
+Some examples:
+#+BEGIN_SRC java
+isMatch("aa","a") → false
+isMatch("aa","aa") → true
+isMatch("aaa","aa") → false
+isMatch("aa", "a*") → true
+isMatch("aa", ".*") → true
+isMatch("ab", ".*") → true
+isMatch("aab", "c*a*b") → true
+#+END_SRC
+
+*Tags:* Dynamic Programming Backtracking String
+
+这是一道很有挑战的题（三个最难的之一， 本楼层居中，还有其上其下neighbor楼。）。这是 LeetCode 里仅有的两个我觉得面试时应该用c++写的题目，尤其是递归法，
+假如面试时实在想不出 DP 思路的话。所以这里代码直接贴 c++ 版的。。。
+
+**** 递归： 时间复杂度 O(n), 空间复杂度 O(1)
+
+#+CAPTION: Regular Expression Matching
+[[./pic/regularExpressionMatching.png]]
+
+来自 http://leetcode.com/2011/09/regular-expression-matching.html
+
+#+BEGIN_SRC java
+bool isMatch(const char *s, const char *p) {  
+    if (*p == '\0') return *s == '\0'; 
+    if (*(p + 1) != '*') {  
+        if (*p == *s || (*p == '.' && *s != '\0'))
+            return isMatch(s + 1, p + 1);
+        else return false;
+    } else { // next char is '*'
+        while (*p == *s || (*p == '.' && *s != '\0')) {
+            if (isMatch(s, p + 2)) // can optimize
+                return true;
+            s++;                 // but easier to understand
+        }
+    }
+    return isMatch(s, p + 2);
+}
+#+END_SRC
+
+搜到两种 Java 的解法，改天自己得再好好研究下。。。来自《压栈底的弱渣》
+
+暂时只想出来了递归解法。其实就是自动机的实现原理。
+
+对于两个字符串：string，pattern 有两种情况：
+
+当 pattern[ 1 ] 不为 “*” 的时候（或 pattern 长度为1），直接比较
+patter[ 0 ] 和 string[ 0 ] 是否相等。若不等，则直接返回false；若相等，则接着比较他们后面的字符，即跳到自动机的下一个state。
+
+当 pattern[ 1 ] 为 “*” 的时候，情况就稍微复杂一点了。
+
+\nbsp{} \nbsp{} 若 pattern[ 0 ] != string[ 0 ] ，或 string 长度为0时，应跳过 pattern[ 0 ] 和 pattern[ 1 ] 继续比较后面的字符，因为 “*” 为optional symbol。
+
+\nbsp{} \nbsp{} 若 pattern[ 0 ] == string[ 0 ] ，我们既可以跳过 string[ 0 ] ，也可以跳过 pattern[ 0 ] 和 pattern[ 1 ]  。
+
+#+BEGIN_SRC java
+public boolean isMatch(String s, String p) {
+    if (p.length() == 0) return s.length() == 0;
+    if (p.length() == 1 || p.charAt(1)!='*') {
+        if (s.length() > 0 &&
+            (p.charAt(0) == '.' || s.charAt(0) == p.charAt(0)))
+            return isMatch(s.substring(1), p.substring(1));
+        else return false;
+    } else {
+        if (s.length() == 0) return isMatch(s, p.substring(2));
+        if (p.charAt(0) == '.' || s.charAt(0) == p.charAt(0)) 
+            return isMatch(s.substring(1), p) || isMatch(s, p.substring(2));
+        else return isMatch(s, p.substring(2));
+    }
+}
+#+END_SRC
+
+在Java 1.7以后，String.substring() 这个方法会重新拷贝一个新的字符串，这样在递归过程中内存效率很低, 而且会消耗大量时间用来对象初始化。因而可以考虑在递归的时候传index进去。
+
+改进代码如下：
+#+BEGIN_SRC java
+public boolean isMatchHelper(String s, String p, int is, int ip){
+    if (ip == p.length()) return is  ==  s.length();
+    if (ip == p.length()-1 || p.charAt(ip + 1)!='*'){ // no *
+        if ( is < s.length() &&
+             (p.charAt(ip) == '.' || s.charAt(is) == p.charAt(ip)) ) 
+            return isMatchHelper(s, p, is + 1, ip + 1); 
+        else return false;
+    } else {                                          // with *
+        if (is == s.length())
+            return isMatchHelper(s,p,is,ip + 2);      // empty
+        if (p.charAt(ip) == '.' || s.charAt(is) == p.charAt(ip)) //match
+            return isMatchHelper(s, p, is + 1, ip)
+                || isMatchHelper(s, p, is, ip + 2);  // two choices for continue
+        else return isMatchHelper(s, p, is, ip + 2); // not match
+    }
+}
+
+public boolean isMatch(String s, String p) {
+    return isMatchHelper(s, p, 0, 0);
+}
+#+END_SRC
+
+**** 动态规划：
+
+仅次于 Scramble String 的最复杂的动规。。。
+
+思路改天再写，... 
+#+BEGIN_SRC java
+public boolean isMatch(String s, String p) {
+    if (p.length() == 0 && s.length() == 0) return true;
+    if (p.length() == 0 && s.length() > 0) return false;
+    int m = s.length();
+    int n = p.length();
+    boolean [][] dp = new boolean[m + 1][n + 1];
+    dp[0][0] = true;
+    for (int i = 1; i <= m ; i++)
+        dp[i][0] = false;
+    for (int i = 1; i <= n ; i++)
+        if (i >= 2)
+            dp[0][i] = (p.charAt(i - 1) == '*') ? dp[0][i - 2] : false;
+    for (int i = 1; i <= m ; i++) {
+        for (int j = 1; j <= n ; j++) {
+            if (p.charAt(j - 1) == '.')
+                dp[i][j] = dp[i - 1][j - 1];
+            else if (p.charAt(j - 1) == '*')
+                dp[i][j] = ( dp[i][j - 1] || dp[i][j - 2] ||
+                             (dp[i - 1][j] &&
+                              ((s.charAt(i - 1) == p.charAt(j - 2)  || p.charAt(j - 2) == '.'))) );
+            else if (s.charAt(i - 1) == p.charAt(j - 1)) 
+                dp[i][j] = dp[i - 1][j - 1];
+        }
+    }
+    return dp[m][n];
+}
+#+END_SRC
+
+*** Wildcard Matching
+Implement wildcard pattern matching with support for '?' and '*'.
+#+BEGIN_SRC java
+'?' Matches any single character.
+'*' Matches any sequence of characters (including the empty sequence).
+#+END_SRC
+
+The matching should cover the entire input string (not partial).
+
+The function prototype should be:
+
+bool isMatch(const char *s, const char *p)
+
+Some examples:
+#+BEGIN_SRC java
+isMatch("aa","a") → false
+isMatch("aa","aa") → true
+isMatch("aaa","aa") → false
+isMatch("aa", "*") → true
+isMatch("aa", "a*") → true
+isMatch("ab", "?*") → true
+isMatch("aab", "c*a*b") → false
+#+END_SRC
+
+*Tags:* Dynamic Programming, Backtracking, Greedy, String
+
+跟上一题很类似。
+
+主要是'*' 的匹配问题。p 每遇到一个'*', 就保留住当前'*' 的坐标和 s 的坐标, 然后 s 从前
+往后扫描, 如果不成功, 则 s++, 重新扫描。
+
+除 Scramble String 外最复杂的 DP, 因为 '*' 可以什么也不用配。
+
+**** 递归版: 时间复杂度 O(n!*m!), 空间复杂度 O(n)
+
+递归版, 会超时, 用于帮助理解题意.
+
+#+BEGIN_SRC java
+bool isMatch(const char *s, const char *p) {
+    if (*p == '*') {
+        while (*p == '*') ++p;
+        if (*p == '\0') return true;
+        while (*s != '\0' && !isMatch(s, p)) ++s;
+        return *s != '\0';
+    } else if (*p == '\0' || *s == '\0') return *p == *s;
+    else if (*p == *s || *p == '?') return isMatch(++s, ++p);
+    else return false;
+}
+#+END_SRC
+
+**** 迭代版： 时间复杂度 O(n*m), 空间复杂度 O(1)
+
+**** 动态规划：
+
+直接使用递归会超出内存或者超时，因为递归会重复计算很多相同的内容，可以使用动态规划利用中间结果来避免重复计算。
+
+用 dp[i][j] 表示 s 串的前 i 个字符和 p 串的前 j 个字符是否匹配，则计算
+
+p[i][j] 时，可以根据p的第j个字符分别讨论
+
+p[j-1]为 '*'，s可以选择使用这个*，转化为 dp[i-1][j]；或者不使用这个'*'，变为 dp[i][j-1]。
+
+p[j-1]为 '?'，此时p[j-1]必定要匹配s[i-1]。
+
+p[j-1]为普通字符，如果p[j-1]==s[i-1]，匹配成功，问题转化为dp[i-1][j-1]，否则匹配失败，dp[i][j] = false。
+#+BEGIN_SRC java
+if (p[j-1] == '*') then dp[i][j] = dp[i-1][j] || dp[i][j-1]
+if (p[j-1] == '?') then dp[i][j] = dp[i-1][j-1]
+if (p[j-1] == s[i-1])   dp[i][j] = dp[i-1][j-1] else dp[i][j]=false//普通字符
+#+END_SRC
+当 i 或 j 为 0 时作为初始化部分，根据定义，应有：
+
+dp[ 0 ][ 0 ] = true。
+
+dp[i][ 0 ] = false，因为有长度的s肯定无法和空串p匹配。
+
+dp[ 0 ][i]，只有p[i-1]为*且dp[ 0 ][i-1]为真是才为真。
+
+#+BEGIN_SRC java
+public boolean isMatch(String s, String p) {
+    int minLen = 0;
+    for (int i = 0; i < p.length(); i++) 
+        if (p.charAt(i) != '*') ++minLen;
+    if (s.length() < minLen) return false;
+    int m = s.length();
+    int n = p.length();
+    boolean [][] dp = new boolean[m + 1][n + 1];
+    dp[0][0] = true;
+    for (int i = 1; i <= m ; i++) 
+        dp[i][0] = false;
+    for (int i = 1; i <= n ; i++) 
+        dp[0][i] = (p.charAt(i - 1) == '*' && dp[0][i - 1]) ? true : false;
+    for (int i = 1; i <= m; i++) 
+        for (int j = 1; j <= n ; j++) {
+            if (p.charAt(j - 1) == '*')  // user * or not
+                dp[i][j] = (dp[i - 1][j] || dp[i][j - 1]);
+            else if (s.charAt(i - 1) == p.charAt(j - 1) || p.charAt(j - 1) == '?')
+                dp[i][j] = dp[i - 1][j - 1];
+        }
+    return dp[m][n];
+}
+#+END_SRC
+
+*** others Covered
+- Best Time to Buy and Sell Stock
+  [[Best Time to Buy and Sell Stock]]
+- Best Time to Buy and Sell Stock II
+  [[Best Time to Buy and Sell Stock II]]
+- Longest Valid Parentheses
+  [[Longest Valid Parentheses]]
+- Word Break II
+  [[Word Ladder II]]
+- Maximum Rectangle
+  [[Maximum Rectangle]]
+

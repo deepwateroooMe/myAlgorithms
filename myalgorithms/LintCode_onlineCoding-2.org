@@ -1,0 +1,44 @@
+#+latex_class: book
+#+title: LintCode Online Coding Interview Questions - Problem-wise
+#+author: deepwaterooo
+
+* test
+** Remove Nth Node From End of List: don't know if there is bug, run 15/15 forever...
+40% Accepted
+
+Given a linked list, remove the nth node from the end of list and return its head.
+
+Note
+
+The minimum number of nodes in list is n.
+
+Example
+
+Given linked list: 1->2->3->4->5->null, and n = 2.
+
+After removing the second node from the end, the linked list becomes 1->2->3->5->null.
+
+Challenge
+
+O(n) time
+#+BEGIN_SRC java
+ListNode removeNthFromEnd(ListNode head, int n) {
+    int cnt = 0;
+    ListNode curr = head;
+    while (cnt < n && curr != null) {
+        ++cnt;
+        curr = curr.next;
+    }
+    if (cnt == n && curr == null) return head.next;
+    if (cnt < n) return null;
+    ListNode prev = head;
+    ListNode slow = null;
+    while (curr != null) {
+        slow = prev;
+        prev = prev.next;
+        curr = curr.next;
+    }
+    slow.next = prev.next;
+    return head;
+}
+#+END_SRC
