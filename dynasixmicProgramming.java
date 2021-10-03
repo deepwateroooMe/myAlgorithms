@@ -185,19 +185,6 @@ public class dynasixmicProgramming {
 //         }
 
 
-        // private double dfs(int n, int k, int v, int maxPts) {
-        //     if (dp[v][k] != null) return dp[n][k];
-        //     if (v >= k) return v <= n ? 1 : 0;
-        //     for (int i = 1; i <= maxPts; i++) {
-        //     }
-        // }
-        // Double [][] dp;
-        // public double new21Game(int n, int k, int maxPts) {
-        //     dp = new Double [n+1][k+1];
-        //     return dfs(n, k, 0, maxPts);
-        // }
-
-
         // private int getMinCnt(String s) {
         //     int n = s.length();
         //     if (n == 1) return 0;

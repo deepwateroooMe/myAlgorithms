@@ -397,15 +397,76 @@ public class competition {
         // }
 
 
+        // public int[][] construct2DArray(int[] original, int m, int n) {
+        //     int o = original.length;
+        //     if (o != m * n) return new int [0][0];
+        //     int [][] ans = new int [m][n];
+        //     int idx = 0;
+        //     for (int i = 0; i < m; i++) 
+        //         for (int j = 0; j < n; j++) 
+        //            ans[idx/n][idx%n] = original[idx++];
+        //     return ans;
+        // }
+        // public int numOfPairs(String[] nums, String target) { // hashing
+        //     int n = target.length();
+        //     int res = 0;
+        //     for (int i = 0; i < nums.length; i++) 
+        //         for (int j = 0; j < nums.length; j++) {
+        //             if (i == j || !target.startsWith(nums[i])) continue;
+        //             if (target.substring(nums[i].length()).equals(nums[j])) ++res;
+        //         }
+        //     return res;
+        // }
+        // public int maxConsecutiveAnswers(String answerKey, int k) {
+        //     int n = answerKey.length();
+        //     if (n == 1) return 1;
+        //     if (k >= n) return n;
+        //     Map<Character, Integer> m = new HashMap<>();
+        //     int i = 0, j = -1, max = 0, locMax = 0;
+        //     while (j < n) {
+        //         if (j == -1) j = i;
+        //         while (j < n && (Math.min(m.getOrDefault('T', 0), m.getOrDefault('F', 0)) <= k)) {
+        //             m.put(answerKey.charAt(j), m.getOrDefault(answerKey.charAt(j), 0) + 1);
+        //             ++j;
+        //         }
+        //         locMax = m.getOrDefault('T', 0) + m.getOrDefault('F', 0) - (Math.min(m.getOrDefault('T', 0), m.getOrDefault('F', 0)) <= k ? 0 : 1);
+        //         max = Math.max(max, locMax);
+        //         m.put(answerKey.charAt(i), m.get(answerKey.charAt(i))-1);
+        //         if (m.get(answerKey.charAt(i)) == 0) m.remove(answerKey.charAt(i));
+        //         ++i;
+        //     }
+        //     return max;
+        // }
+
+        public int waysToPartition(int[] arr, int k) {
+            int n = arr.length;
+            int [][] sum = new int [2][n];
+            // Set<Integer> sdiff = new HashSet<>();
+            Map<Integer, List<Integer>> m = new HashMap<>();
+            for (int i = 0; i < n; i++) {
+                sum[0][i] = (i == 0 ? 0 : sum[0][i-1]) + arr[i];
+                // sdiff.add(k - arr[i]);
+                m.computeIfAbsent(k-arr[i], x -> new ArrayList<>());
+                m.get(k-arr[i]).add(i);
+            }
+            for (int i = n-1; i >= 0; i--) 
+                sum[1][i] = (i == n-1 ? 0 : sum[1][i+1]) + arr[i];
+            int res = 0, diff = 0;
+            for (int i = 1; i < n; i++) {
+                diff = sum[0][i-1] - sum[1][i];
+                if (diff == 0 || m.containsKey(diff) && m.get(diff).get(0) < i || m.containsKey(-diff) && m.get(-diff).get(m.get(-diff).size()-1) >= i)
+                    ++res;
+            }
+            return res;
+        }
+
     }
-    
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        // int [][] a = new int [][] {{1,3,1,15},{1,3,3,1}};
-        int [][] a = new int [][] {{20,3,20,17,2,12,15,17,4,15},{20,10,13,14,15,5,2,3,14,3}};
+        int []  a = new int []  {22, 4, -25, -20, -15, 15, -16, 7, 19, -10, 0, -13, -14};
 
-       long r = s.gridGame(a);
+        int r = s.waysToPartition(a, -33);
         System.out.println("r: " + r);
     }
 }

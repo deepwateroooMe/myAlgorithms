@@ -4,21 +4,22 @@
 #+HTML_HEAD: <style type="text/css">/*<![CDATA[*/ pre.src { height: 80px; overflow: auto; } /*]]>*/ </style>
 
 * 一周计划
-- 今天电脑坏了，因为没能更新好zsh有个后台程序无限执行，弄了大半天电脑运行环境，现在的配置很好用很喜欢，除了小问题，基本满意
+- 计划接下来几周，每天刷6-10个题，边刷边记错题进小本，到这个周末刷到900左右；
 
-- 计划接下来几周，每天刷6-10个题，边刷边记错题进小本本，到这个周末刷到850左右；
+- dyanmic programming剩下的部分、尤其字符串相关的，还相对陌生，需要先打定字符串的基础，再偱序渐近地试着把它们写完
 
-- union find 的几个题，现在应该可以试着扫完
-- 最讨厌扫描线，几个双数怎么也数不清楚。。。。。。这个周扫几个出去
-- bit manipulation bitmasks, dyanmic programming的mask相关的，偱序渐近地试着把它们写完
+- 字符串，hashing等自己不来都不喜欢、相对薄弱的部分还是要练习一些题，把基础打起来
 - Deque双端队列O（n）解法的概念在建立，需要练习和熟悉
-- 如果说以前是迷迷糊糊刷题求AC,现在基本的概念在建立，希望从以前代码和题目的解法效率中等偏下走向代码优化中等偏上，寻求高效、最优解法的提升
+- 最讨厌扫描线，几个双数怎么也数不清楚。。。。。。这个周扫几个出去
 
-- 其它的，等这个周60个题左右之后，再总结计划下一周
+- 其它的，等这个周50-60个题左右之后，再总结计划下一周
 
-- linked list, trees比较简单，基本写完；
+- 如果说以前是迷迷糊糊刷题求AC,现在基本的概念在建立，希望从以前代码和题目的算法效率向代码优化中等偏上，寻求高效、最优解法的提升
+- 希望通过一再的练习，巩固基本概念与练习，比如某些dfs需要记忆的时候，不熟悉、认不清的题型还是容易忘记记忆数组
+- bit manipulation, bitmasks基础知识基本掌握，还剩一些难题take my time慢慢解 
+- union find 的几个题，基本算是基本扫完吧，剩下的几下慢慢写。。。。。。
 - bfs, dfs在续写了dynamic programming之后，终于觉得它们俩个也比较简单，试着扫完；
-
+- linked list, trees比较简单，基本写完；
 
 * Bit Manipulations
 **  基本概念：原码、反码、与补码 （对负数尤其重要）
@@ -248,16 +249,7 @@ public int rangeBitwiseAnd(int left, int right) {
 }
 #+END_SRC
 
-** 1835. Find XOR Sum of All Pairs Bitwise AND
-Hard
-
-234
-
-26
-
-Add to List
-
-Share
+** 1835. Find XOR Sum of All Pairs Bitwise AND - Hard
 The XOR sum of a list is the bitwise XOR of all its elements. If the list only contains one element, then its XOR sum will be equal to this element.
 
 For example, the XOR sum of [1,2,3,4] is equal to 1 XOR 2 XOR 3 XOR 4 = 4, and the XOR sum of [3] is equal to 3.
@@ -399,6 +391,188 @@ public long wonderfulSubstrings(String word) {
 }
 #+END_SRC
 
+** 782. Transform to Chessboard- Hard
+You are given an n x n binary grid board. In each move, you can swap any two rows with each other, or any two columns with each other.
+
+Return the minimum number of moves to transform the board into a chessboard board. If the task is impossible, return -1.
+
+A chessboard board is a board where no 0's and no 1's are 4-directionally adjacent.
+
+我们发现对于长度为奇数的棋盘，各行的0和1个数不同，但是还是有规律的，每行的1的个数要么为 n/2，要么为 (n+1)/2，这个规律一定要保证，不然无法形成棋盘。
+
+还有一个很重要的规律，我们观察题目给的第一个例子，如果我们只看行，我们发现只有两种情况 0110 和 1001，如果只看列，只有 0011 和 1100，我们发现不管棋盘有多长，都只有两种情况，而这两种情况上各位上是相反的，只有这样的矩阵才有可能转换为棋盘。那么这个规律可以衍生出一个规律，就是任意一个矩形的四个顶点只有三种情况，要么四个0，要么四个1，要么两个0两个1，不会有其他的情况。那么四个顶点亦或在一起一定是0，所以我们判断只要亦或出了1，一定是不对的，直接返回-1。之后我们来统计首行和首列中的1个数，因为我们要让其满足之前提到的规律。统计完了首行首列1的个数，我们判断如果其小于 n/2 或者大于 (n+1) / 2，那么一定无法转为棋盘。我们还需要算下首行和首列跟棋盘位置的错位的个数，虽然 01010 和 10101 都可以是正确的棋盘，我们先默认跟 10101 比较好了，之后再做优化处理。
+
+最后的难点就是计算最小的交换步数了，这里要分n的奇偶来讨论。如果n是奇数，我们必须得到偶数个，为啥呢，因为我们之前统计的是跟棋盘位置的错位的个数，而每次交换行或者列，会修改两个错位，所以如果是奇数就无法还原为棋盘。举个例子，比如首行是 10001，如果我们跟棋盘 10101 比较，只有一个错位，但是我们是无法通过交换得到 10101的，所以我们必须要交换得到 01010，此时的错位是4个，而我们通过 n - rowDiff 正好也能得到4，这就是为啥我们需要偶数个错位。如果n是偶数，那么就不会出现这种问题，但是会出现另一个问题，比如我们是 0101，这本身就是正确的棋盘排列了，但是由于我们默认是跟 1010 比较，那么我们会得到4个错位，所以我们应该跟 n - rowDiff 比较取较小值。列的处理跟行的处理完全一样。最终我们把行错位个数跟列错位个数相加，再除以2，就可以得到最小的交换次数了，之前说过了每交换一次，可以修复两个错位，参见代码如下：
+
+#+BEGIN_SRC java
+public int movesToChessboard(int[][] bd) { // bd: board
+    int n = bd.length, rowSum = 0, colSum = 0, rowDif = 0, colDif = 0;
+    for (int i = 0; i < n; i++) 
+        for (int j = 0; j < n; j++)
+            if ((bd[0][0] ^ bd[i][0] ^ bd[0][j] ^ bd[i][j]) > 0) return -1;
+    for (int i = 0; i < n; i++) {
+        rowSum += bd[0][i];
+        colSum += bd[i][0];
+        rowDif += bd[i][0] == i % 2 ? 1 : 0; // 
+        colDif += bd[0][i] == i % 2 ? 1 : 0; // 
+    }
+    if (rowSum < n/2 || rowSum > (n+1)/2) return -1;
+    if (colSum < n/2 || colSum > (n+1)/2) return -1;
+    if (n % 2 == 1) {
+        if (rowDif % 2 == 1) rowDif = n - rowDif;
+        if (colDif % 2 == 1) colDif = n - colDif;
+    } else {
+        rowDif = Math.min(rowDif, n - rowDif);
+        colDif = Math.min(colDif, n - colDif);
+    }
+    return (rowDif + colDif) / 2;
+}
+#+END_SRC
+- 方法一：分维度计算【通过】
+思路
+
+首先需要思考的是一次交换之后，棋盘会发生什么变化。为了简单起见，这里用交换列来做例子。在对任意两列进行交换之后，可以看到列交换是不会改变任意两行之间的状态的，简单的来说如果这两行原本就相同，列交换之后这两行依旧相同，如果这两行本来就不同，列交换之后也还是不同。由于最终的棋盘只有两种不同的行，最初的棋盘也一定只有两种不同的行，否则不管怎么做列交换都不会得到最终的棋盘。
+
+之后再来看棋盘行的规律，棋盘有两种行，这两种行每一位都互相不同。同时对于每一行来说，一定有一半为 1，一半为 0（如果长度为奇数，会多一个 1 或多一个 0）。对于棋盘的列也是同样的规律。
+
+可以观察到，先换行再换列跟先换列再换行结果是一样的。在这里先将所有的行调到正确的位置，再将所有的列调到正确的位置。
+
+考虑到只有两种不同的行，可以分别用 0，1 对其表示。要达成最终的棋盘实际上等价于将棋盘的行表示成 0，1相隔的状态。假设在将棋盘的行用 0，1 表示之后得到数组为 [0, 1, 1, 1, 0, 0]，那么只需求这个数组变成 [0, 1, 0, 1, 0, 1] 和 [1, 0, 1, 0, 1, 0] 的代价，之后取其中最小的代价就好了。同理，对列也是如此，这就将二维问题变成了两个一维问题。
+
+算法
+
+首先需要确认是否有且只有两种行（列）存在，且这两种行（列）的 0，1 排布合法，如果不符合条件直接返回 -1。之后需要生成理想的行（列）的状态（即0，1相隔的数组排列），对于每种理想状态，计算其与初始状态之间变换的代价。举个例子，对于 [0, 1, 1, 1, 0, 0] 初始状态来说，有两种理想状态，分别是 [0, 1, 0, 1, 0, 1] 和 [1, 0, 1, 0, 1, 0]，对于 [0, 1, 1, 1, 0] 初始状态只有一种理想状态 [1, 0, 1, 0, 1]。
+
+在 Java 实现中，用整型来表示每行。之后将其与 0b010101010101.....01 进行异或来计算初始状态转换到理想状态的代价。为了代码简洁，这里统一使用 0xAAAAAAAA 和 0x55555555，为了不引入额外的转换代价，还需要根据行的长度 N 生成 0b00...0011...11 掩码与结果做与运算。
+#+BEGIN_SRC java
+public int movesToChessboard(int[][] board) {
+    int N = board.length;
+    // count[code] = v, where code is an integer
+    // that represents the row in binary, and v
+    // is the number of occurrences of that row
+    Map<Integer, Integer> count = new HashMap();
+    for (int[] row: board) {
+        int code = 0;
+        for (int x: row)
+            code = 2 * code + x;
+        count.put(code, count.getOrDefault(code, 0) + 1);
+    }
+    int k1 = analyzeCount(count, N);
+    if (k1 == -1) return -1;
+    // count[code], as before except with columns
+    count = new HashMap();
+    for (int c = 0; c < N; ++c) {
+        int code = 0;
+        for (int r = 0; r < N; ++r)
+            code = 2 * code + board[r][c];
+        count.put(code, count.getOrDefault(code, 0) + 1);
+    }
+    int k2 = analyzeCount(count, N);
+    return k2 >= 0 ? k1 + k2 : -1;
+}
+public int analyzeCount(Map<Integer, Integer> count, int N) {
+    // Return -1 if count is invalid
+    // Otherwise, return number of swaps required
+    if (count.size() != 2) return -1;
+    List<Integer> keys = new ArrayList(count.keySet());
+    int k1 = keys.get(0), k2 = keys.get(1);
+    // If lines aren't in the right quantity
+    if (!(count.get(k1) == N/2 && count.get(k2) == (N+1)/2) &&
+        !(count.get(k2) == N/2 && count.get(k1) == (N+1)/2))
+        return -1;
+    // If lines aren't opposite
+    if ((k1 ^ k2) != (1<<N) - 1)
+        return -1;
+    int Nones = (1 << N) - 1;
+    int ones = Integer.bitCount(k1 & Nones); // bitCount统计二进制中1的个数
+    int cand = Integer.MAX_VALUE;
+    if (N%2 == 0 || ones * 2 < N) // zero start
+        cand = Math.min(cand, Integer.bitCount(k1 ^ 0xAAAAAAAA & Nones) / 2);
+    if (N%2 == 0 || ones * 2 > N) // ones start
+        cand = Math.min(cand, Integer.bitCount(k1 ^ 0x55555555 & Nones) / 2);
+    return cand;
+}
+#+END_SRC
+
+** 1803. Count Pairs With XOR in a Range - Hard
+Given a (0-indexed) integer array nums and two integers low and high, return the number of nice pairs.
+
+A nice pair is a pair (i, j) where 0 <= i < j < nums.length and low <= (nums[i] XOR nums[j]) <= high.
+- 1. 暴力算法
+
+直接暴力计算，利用 num^num2=i 等效于 num^i=num2 的特点，先统计当前各个数字出现的次数，再将当前数字和 [low, high] 范围内的数字进行异或运算，将其结果对应的出现次数相加。
+
+#+BEGIN_SRC java
+public int countPairs(int[] arr, int low, int high) { 
+    int [] freq = new int [20002]; // nums[i]<=20000
+    for (int v : arr)
+        freq[v]++;
+    int val = 0, res = 0;
+    for (int v : arr) {
+        for (int i = low; i <= high; i++) {
+            val = v ^ i;     // num ^ i = num2 <==> num ^ num2 = i
+            if (val <= 20000)
+                res += freq[val]; // v^val=i中当前v对应val出现的次数
+        }
+        freq[v]--;           // 当前v所有组合已统计，减去出现次数，避免重复
+    }
+    return res;
+}
+#+END_SRC
+- 2. 字典树(Trie树)
+（1）思路
+在上述算法的基础上，结合字典树方法快速统计。在依次将 nums 中数字加入字典树的同时，搜索和该数字异或值在 [0, high] 和 [0, low - 1] 范围内数字 num2 的个数并相减，就是符合异或值为 [low, high] 区间内的数字个数。
+#+BEGIN_SRC java
+public class Trie {
+    static final int H = 14; // 2^15=32768，15位二进制足够计算
+    int cnt;
+    Trie [] next;
+    public Trie() {
+        this.cnt = 0;
+        this.next = new Trie[2];
+    }
+    public void insert(int va) { // 插入数值
+        Trie r = this;
+        for (int i = H; i >= 0; i--) {
+            int bit = (va >> i) & 1;
+            if (r.next[bit] == null)
+                r.next[bit] = new Trie();
+            r = r.next[bit];
+            r.cnt++;
+        }
+    } 
+    public int search(Trie r, int digit, int v, int range) { // 搜索和 v 异或值在[0,range]范围内的数字num2的个数
+        if (r == null) return 0;
+        if (digit < 0) return r.cnt;
+        int vb = (v >> digit) & 1;    // v 和 range 在该位的值
+        int vr = (range >> digit) & 1;
+        if (vr == 1) {   // range在该位为1
+            if (vb == 0) // num 在该位为0，num2该位为0的部分全部满足，为1的部分继续判断
+                return (r.next[0] == null ? search(r.next[1], digit-1, v, range) : r.next[0].cnt + search(r.next[1], digit-1, v, range));
+            else         // v 在该位为1，num2该位为1的部分全部满足，为0的部分继续判断
+                return (r.next[1] == null ? search(r.next[0], digit-1, v, range) : r.next[1].cnt + search(r.next[0], digit-1, v, range));
+        }
+        return search(r.next[vb], digit-1, v, range); // range在该位 vr 为0，num2该位必须和num一致
+    }
+}
+private Trie root;
+public int countPairs(int[] arr, int low, int high) {
+    int n = arr.length, maxHeight = 14; // 2^15=32768，15位二进制足够计算
+    int res = 0;
+    root = new Trie();
+    for (int v : arr) {
+        res += root.search(root, maxHeight, v, high) - root.search(root, maxHeight, v, low-1); // 这里的脑袋好难转呀。。。
+        root.insert(v);
+    }
+    return res;
+    // for (int v : arr) 
+    //     root.insert(v);
+    // for (int v : arr) 
+    //     res += root.search(root, maxHeight, v, high) - root.search(root, maxHeight, v, low-1);
+    // return res / 2; // 如果按这种写法，就得 / 2，智商呢？！！！
+}
+#+END_SRC
+
 ** 1734. Decode XORed Permutation - Medium
 There is an integer array perm that is a permutation of the first n positive integers, where n is always odd.
 
@@ -509,7 +683,7 @@ vector<int> prisonAfterNDays(vector<int>& cells, int N) {
 public int[] prisonAfterNDays(int[] arr, int n) {
     int m = 8, cnt = 0;
     int [] tmp = arr.clone();
-    while (cnt < (n % 14 == 0 ? 14 : n % 14)) { // 应该是找到某个重复的规律，今天不想再看这题了
+    while (cnt < (n % 14 == 0 ? 14 : n % 14)) { 
         Arrays.fill(tmp, 0);
         for (int i = 1; i < m-1; i++) 
             tmp[i] = 1- (arr[i-1] ^ arr[i+1]);
@@ -2799,6 +2973,27 @@ You have a convex n-sided polygon where each vertex has an integer value. You ar
 You will triangulate the polygon into n - 2 triangles. For each triangle, the value of that triangle is the product of the values of its vertices, and the total score of the triangulation is the sum of these values over all n - 2 triangles in the triangulation.
 Return the smallest possible total score that you can achieve with some triangulation of the polygon.
 #+BEGIN_SRC java
+// 动态规划，递归可以使逻辑简单（本质还是动态规划）将多边形起
+// 始位置设为start，end, 用一个数组dp来记录任意起始位置的score
+// 为了计算dp[start][end], 我们用一个index k在start到end之间遍
+// 历dp[start][end] = min(dp[start][k] + dp[k][end] + A[start]
+// * A[k] * A[end])结果为dp[0][n - 1]注意：相邻的dp[i][i + 1]
+// = 0, 因为两条边无法组成三角形
+private int dfs(int [] arr, int x, int y) {
+    if (y - x < 2) return dp[x][y] = 0;
+    if (dp[x][y] > 0) return dp[x][y];
+    int min = Integer.MAX_VALUE;
+    for (int i = x+1; i < y; i++) 
+        min = Math.min(min, dfs(arr, x,  i) + dfs(arr, i, y) + arr[x]*arr[i]*arr[y]);
+    return dp[x][y] = min;
+}
+int [][] dp;
+int n;
+public int minScoreTriangulation(int[] arr) {
+    n = arr.length;
+    dp = new int [n][n];
+    return dfs(arr, 0, n-1);
+}
 #+END_SRC
 
 ** 673. Number of Longest Increasing Subsequence
@@ -2939,7 +3134,7 @@ You want to build an expression out of nums by adding one of the symbols '+' and
 For example, if nums = [2, 1], you can add a '+' before 2 and a '-' before 1 and concatenate them to build the expression "+2-1".
 Return the number of different expressions that you can build, which evaluates to target.
 - 该题是一道非常经典的题目，在面试中很可能会考到。该题有多种解法。
-*** 第一种解法：DFS，brute force。我们对nums数组中的每个数字，都尝试在其前面添加正号和负号，最后暴力求解，统计数组中各数字组合值为target的情况。(该理解是错误的，我们可以使用带备忘录机制的自顶向下的DP方法，代码见下)
+- 第一种解法：DFS，brute force。我们对nums数组中的每个数字，都尝试在其前面添加正号和负号，最后暴力求解，统计数组中各数字组合值为target的情况。(该理解是错误的，我们可以使用带备忘录机制的自顶向下的DP方法，代码见下)
 #+BEGIN_SRC java
 //带备忘录机制的自顶向下DP解法 //map存储重复的值，there are obvious a lot of overlap subproblems
 private int helper(int[] nums, int index, int sum, int S, Map<String, Integer> map){ 
@@ -2959,8 +3154,7 @@ public int findTargetSumWays(int[] nums, int S) {
     return helper(nums, 0, 0, S, new HashMap<>());
 }
 #+END_SRC
-
-*** 第二种解法：DP。我们使用Vi来表示数组中的前i个数所能求得的和的集合。初始化时
+- 第二种解法：DP。我们使用Vi来表示数组中的前i个数所能求得的和的集合。初始化时
 #+BEGIN_SRC java
 V0 = {0}     //表示前0个数的和为0
 Vi = {V(i-1) + ai} U {V(i-1) - ai}
@@ -3235,31 +3429,20 @@ public boolean splitArraySameAverage(int[] nums) {
     int m = n / 2;
     int sum = Arrays.stream(nums).sum();
     boolean poss = false;
-    for (int i = 1; i <= m; i++) {
+    for (int i = 1; i <= m; i++) 
         if (sum * i % n == 0) {
             poss = true;
             break;
         }
-    }
     if (!poss) return false;
     List<Set<Integer>> ls = new ArrayList<>();
     for (int i = 0; i <= m; i++) 
         ls.add(new HashSet<Integer>());
     ls.get(0).add(0);    // 这种构建子序列和的方法，要学习一下
-    for (int v : nums) { // for each element in A, we try to add it to sums[i] by joining sums[i - 1]
-        for (int i = m; i >= 1; i--) {
-            for (int t : ls.get(i-1)) {
+    for (int v : nums)  // for each element in A, we try to add it to sums[i] by joining sums[i - 1]
+        for (int i = m; i >= 1; i--) 
+            for (int t : ls.get(i-1)) 
                 ls.get(i).add(t + v);
-            }
-        }
-    }
-    // System.out.println("ls.size(): " + ls.size());
-    // for (int z = 0; z < ls.size(); ++z) {
-    //     for (Integer x : ls.get(z))
-    //         System.out.print(x + ", ");
-    //     System.out.print("\n");
-    //     System.out.print("\n ");
-    // }
     for (int i = 1; i <= m; i++) {
         if (sum * i % n == 0 && ls.get(i).contains(sum * i / n))
             return true;
@@ -3421,6 +3604,127 @@ bool splitArraySameAverage(vector<int>& A) {  // https://www.cnblogs.com/grandya
 }
 #+END_SRC
 
+** 801. Minimum Swaps To Make Sequences Increasing - Hard
+You are given two integer arrays of the same length nums1 and nums2. In one operation, you are allowed to swap nums1[i] with nums2[i].
+
+For example, if nums1 = [1,2,3,8], and nums2 = [5,6,7,4], you can swap the element at i = 3 to obtain nums1 = [1,2,3,4] and nums2 = [5,6,7,8].
+Return the minimum number of needed operations to make nums1 and nums2 strictly increasing. The test cases are generated so that the given input always makes it possible.
+
+An array arr is strictly increasing if and only if arr[0] < arr[1] < arr[2] < ... < arr[arr.length - 1].
+#+BEGIN_SRC java
+// 设 dp[0][i] 表示不交换 A[i] 和 B[i] 在下标 i 的交换次数
+// 设 dp[1][i] 表示交换 A[i] 和 B[i] 在下标 i 的交换次数
+// 可以看到交换与否只取决与前一个状态, 可以将空间复杂度压缩到 O(1)
+//     时间复杂度为 O(n), 空间复杂度为 O(1)
+public int minSwap(int[] a, int[] b) {
+    int n = a.length;
+    int [][] dp = new int [2][n];
+    for (int [] row : dp) 
+        Arrays.fill(row, Integer.MAX_VALUE);
+    dp[0][0] = 0;
+    dp[1][0] = 1;
+    for (int i = 1; i < n; i++) {
+        if (a[i] > a[i-1] && b[i] > b[i-1]) {
+            dp[0][i] = Math.min(dp[0][i], dp[0][i-1]);    // 不需要交换不用增加交换次数
+            dp[1][i] = Math.min(dp[1][i], dp[1][i-1] + 1);// 如果要交换前一个也必须交换才能满足递增的条件
+        }
+        if (a[i] > b[i-1] && b[i] > a[i-1]) {
+            dp[0][i] = Math.min(dp[0][i], dp[1][i-1]);    // 表示 i - 1 位置发生交换  
+            dp[1][i] = Math.min(dp[1][i], dp[0][i-1] + 1);// 表示在 i - 1 不换的基础上, i 发生了交换 
+        }
+    }
+    return Math.min(dp[0][n-1], dp[1][n-1]);
+}
+#+END_SRC
+** 837. New 21 Game - Medium
+Alice plays the following game, loosely based on the card game "21".
+
+Alice starts with 0 points and draws numbers while she has less than k points. During each draw, she gains an integer number of points randomly from the range [1, maxPts], where maxPts is an integer. Each draw is independent and the outcomes have equal probabilities.
+
+Alice stops drawing numbers when she gets k or more points.
+
+Return the probability that Alice has n or fewer points.
+
+Answers within 10-5 of the actual answer are considered accepted.
+#+BEGIN_SRC java
+// When the draws sum up to K, it stops, calculate the possibility K<=sum<=N.
+//     Think about one step earlier, sum = K-1, game is not ended and draw largest card W.
+//     K-1+W is the maximum sum could get when game is ended. If it is <= N, then for sure the possiblity when games end ans sum <= N is 1.
+//     Because the maximum is still <= 1.
+//     Otherwise calculate the possibility sum between K and N.
+//     Let dp[i] denotes the possibility of that when game ends sum up to i.
+//     i is a number could be got equally from i - m and draws value m card.
+//     Then dp[i] should be sum of dp[i-W] + dp[i-W+1] + ... + dp[i-1], devided by W.
+//     We only need to care about previous W value sum, accumlate winSum, reduce the possibility out of range.
+//     Time Complexity: O(N).
+//     Space: O(N).
+public double new21Game(int n, int k, int w) { // k : threshold
+    if (k == 0 || n >= (k + w)) return 1.0;
+    if (k > n) return 0;
+    double [] dp = new double [n+1];
+    dp[0] = 1.0;
+    double winSum = 1;
+    double res = 0;
+    for (int i = 1; i <= n; i++) {
+        dp[i] = winSum / w;
+        if (i < k) winSum += dp[i];
+        else res += dp[i];
+        if (i >= w) winSum -= dp[i-w];
+    }
+    return res;
+}
+#+END_SRC
+** 1105. Filling Bookcase Shelves - Medium
+You are given an array books where books[i] = [thicknessi, heighti] indicates the thickness and height of the ith book. You are also given an integer shelfWidth.
+
+We want to place these books in order onto bookcase shelves that have a total width shelfWidth.
+
+We choose some of the books to place on this shelf such that the sum of their thickness is less than or equal to shelfWidth, then build another level of the shelf of the bookcase so that the total height of the bookcase has increased by the maximum height of the books we just put down. We repeat this process until there are no more books to place.
+
+Note that at each step of the above process, the order of the books we place is the same order as the given sequence of books.
+
+For example, if we have an ordered list of 5 books, we might place the first and second book onto the first shelf, the third book on the second shelf, and the fourth and fifth book on the last shelf.
+Return the minimum possible height that the total bookshelf can be after placing shelves in this manner.
+#+BEGIN_SRC java
+// 求摆放前i本书需要的最小高度，首先需要求摆放前i-1书需要的最小高度，以此类推，最初需要计算的是摆放第0本书需要的最小高度，也就是0。
+// 根据前i-1本书求前i书需要的最小高度的思路是：
+// 尝试①将第i本书放在前i-1本书的下面
+// 以及②将前i-1本书的最后几本和第i本书放在同一层两种方案，看哪种方案高度更小就用哪种方案，依次求出摆放前1,…,n本书需要的最小高度。
+public int minHeightShelves(int[][] books, int shelfWidth) {
+    int [] dp = new int [books.length + 1];
+    for (int i = 1; i < dp.length; i++) { // 依次求摆放前i本书的最小高度
+        int width = books[i-1][0];
+        int height = books[i-1][1];
+        dp[i] = dp[i-1] + height;
+        // 将前i - 1本书从第i - 1本开始放在与i同一层，直到这一层摆满或者所有的书都摆好
+        for (int j = i-1; j > 0 && width + books[j-1][0] <= shelfWidth; j--) {
+            height = Math.max(height, books[j-1][1]); // 每层的高度由最高的那本书决定
+            width += books[j-1][0];
+            dp[i] = Math.min(dp[i], dp[j-1] + height);// 选择高度最小的方法
+        }
+    }            
+    return dp[books.length];
+}
+#+END_SRC
+** 1997. First Day Where You Have Been in All the Rooms - Medium
+There are n rooms you need to visit, labeled from 0 to n - 1. Each day is labeled, starting from 0. You will go in and visit one room a day.
+
+Initially on day 0, you visit room 0. The order you visit the rooms for the coming days is determined by the following rules and a given 0-indexed array nextVisit of length n:
+
+Assuming that on a day, you visit room i,
+if you have been in room i an odd number of times (including the current visit), on the next day you will visit a room with a lower or equal room number specified by nextVisit[i] where 0 <= nextVisit[i] <= i;
+if you have been in room i an even number of times (including the current visit), on the next day you will visit room (i + 1) mod n.
+Return the label of the first day where you have been in all the rooms. It can be shown that such a day exists. Since the answer may be very large, return it modulo 109 + 7.
+#+BEGIN_SRC java
+public int firstDayBeenInAllRooms(int [] nextVisit) {
+    int n = nextVisit.length, mod = (int)1e9 + 7;
+    long [] dp = new long [n];
+    dp[0] = 0;
+    for (int i = 1; i < n; i++) 
+        dp[i] = (2 * dp[i-1] % mod + mod - dp[nextVisit[i-1]] + 2) % mod;
+    return (int)dp[n-1];
+}
+#+END_SRC
 
 * sliding window 
 ** 862. Shortest Subarray with Sum at Least K - Hard
@@ -5125,6 +5429,221 @@ public int findMaximumXOR(int[] nums) { // 这种解法没有用到上面的这�
 // 此解法时间复杂度为O(32n)=O(n)，空间复杂度上，我们使用了一个HashSet用于存储所有数字，因此空间复杂度是O(n)
 #+END_SRC
 
+** 1617. Count Subtrees With Max Distance Between Cities - Hard
+There are n cities numbered from 1 to n. You are given an array edges of size n-1, where edges[i] = [ui, vi] represents a bidirectional edge between cities ui and vi. There exists a unique path between each pair of cities. In other words, the cities form a tree.
+
+A subtree is a subset of cities where every city is reachable from every other city in the subset, where the path between each pair passes through only the cities from the subset. Two subtrees are different if there is a city in one subtree that is not present in the other.
+
+For each d from 1 to n-1, find the number of subtrees in which the maximum distance between any two cities in the subtree is equal to d.
+
+Return an array of size n-1 where the dth element (1-indexed) is the number of subtrees in which the maximum distance between any two cities is equal to d.
+
+Notice that the distance between the two cities is the number of edges in the path between them.
+- So apparently the brute-force approach passed this question. I guess for future contests, I should really pay attention to the input size...
+#+BEGIN_SRC java
+public int [] countSubgraphsForEachDiameter(int n, int[][] edges) {
+    int [] res = new int [n-1];
+    List<List<int []>> subsets = new ArrayList<>();
+    generateSubsets(edges, new ArrayList<int []>(), subsets, 0);
+    for (List<int []> subset : subsets) 
+        solve(subset, res);
+    return res;
+}
+private void solve(List<int []> subset, int [] res) {
+    if (!isValidGraph(subset)) return;
+    Map<Integer, List<Integer>> graph = new HashMap<>();
+    for (int [] eg : subset) {
+        graph.computeIfAbsent(eg[0], k -> new ArrayList<>()).add(eg[1]);
+        graph.computeIfAbsent(eg[1], k -> new ArrayList<>()).add(eg[0]);
+    }
+    int max = 1;
+    for (Integer key : graph.keySet()) {
+        if (graph.get(key).size() == 1) {
+            int [] longest = new int [] {1}; // 减少global变量的数量
+            Set<Integer> vis = new HashSet<>();
+            vis.add(key);
+            dfs(graph, vis, key, longest, 0);
+            max = Math.max(max, longest[0]);
+        }
+    }
+    res[max - 1]++;
+}
+private void dfs(Map<Integer, List<Integer>> graph, Set<Integer> vis, int idx, int [] longest, int level) {
+    longest[0] = Math.max(longest[0], level);
+    for (Integer node : graph.get(idx)) 
+        if (vis.add(node)) // Set.add(element) return false if it contains element already
+            dfs(graph, vis, node, longest, level + 1);
+}
+private boolean isValidGraph(List<int []> subset) {
+    Set<Integer> nodes = new HashSet<>();
+    for (int [] cur : subset) {
+        nodes.add(cur[0]);
+        nodes.add(cur[1]);
+    }
+    return nodes.size() - 1 <= subset.size();
+}
+private void generateSubsets(int [][] arr, List<int []> cur, List<List<int []>> res, int idx) {
+    if (idx == arr.length) return; // arr.length <= 15, 用回塑法直接生成subsets,但是这是相对耗时的操作
+    for (int i = idx; i < arr.length; i++) {
+        cur.add(arr[i]);
+        res.add(new ArrayList<>(cur));
+        generateSubsets(arr, cur, res, i+1);
+        cur.remove(cur.size()-1);
+    }
+}
+#+END_SRC
+- 另一种位操作法
+#+BEGIN_SRC java
+// One way in which we can find the diameter of a tree is using DFS, just like if our tree is represented using tree nodes instead of as grpah
+//     1. Make a call to DFS from any node as root, lets say 1 as root
+//     2. Maintain a global max parameter
+//     3. For each call to dfs, of all current node's children (excluding parent)
+//        find top two distances from current node to any leaf reachable from current node
+//     4. Sum of these top two distances froms the longes path passing through current node to all its children. Update if this path is maximum
+//     5. return 1 + top distance for this dfs call. Need to add 1 since,
+//        max length of path that can be reached from current ndoe is current ndoe + max distance reachable from current ndoes's children
+int ans = 0, vis = 0;
+int [] res;
+public int [] countSubgraphsForEachDiameter(int n, int[][] edges) {
+    res = new int [n-1];
+    ans = 0; vis = 0;
+    Map<Integer, List<Integer>> graph = new HashMap<>();
+    for (int [] i : edges) { // if our node is 5, we store it as 1 << 4 which is 2^4
+        graph.computeIfAbsent(1 << (i[0]-1), ArrayList::new).add(1 << (i[1]-1));
+        graph.computeIfAbsent(1 << (i[1]-1), ArrayList::new).add(1 << (i[0]-1));
+    }
+    int range = (1 << n) - 1;  // (int)Math.pow(2, n) - 1;
+    for (int subset = 3; subset <= range; subset++) {
+        boolean isPowerOf2 = subset != 0 && (subset & (subset - 1)) == 0; // is power of 2
+        if (isPowerOf2) continue;      // Single node subtrees can be excluded.
+        ans = 0; vis = 0;
+        dfs(graph, subset, Integer.highestOneBit(subset), -1); // Integer.highestOneBit(subset): subset: 0b1100, highest: 0b1000
+        if (vis == subset)   // If visited is not equal to our current subset, all nodes are not reachable.
+            res[ans - 1] ++; // In otherwords is not a proper subtree, hence dont include in the answer
+    }
+    return res;
+}
+// we can pass any node in this subset as root for dfs, we are passing node represented with highest set bit as root
+// pass -1 as parent of root, since it has no root
+private int dfs(Map<Integer, List<Integer>> graph, int subset, int cur, int pre) {
+    if ((subset & cur) == 0) return 0;
+    vis = vis | cur; 
+    int fstMax = 0, sndMax = 0;
+    for (Integer next : graph.get(cur)) {
+        if (next == pre) continue;
+        int dist = dfs(graph, subset, next, cur);
+        if (dist > fstMax) {
+            sndMax = fstMax;
+            fstMax = dist;
+        } else sndMax = Math.max(sndMax, dist);
+    }
+    ans = Math.max(ans, fstMax + sndMax); // top two distances from this node c
+// top distance this cur node to any leaf is topdistance from c's children + 1. Adding 1 since we need to include cur node
+    return 1 + fstMax; // 这里要再想一下 ？？？
+}
+#+END_SRC
+
+** 1938. Maximum Genetic Difference Query - Hard 离线算法、离线思维、批量处理、顺序无关
+There is a rooted tree consisting of n nodes numbered 0 to n - 1. Each node's number denotes its unique genetic value (i.e. the genetic value of node x is x). The genetic difference between two genetic values is defined as the bitwise-XOR of their values. You are given the integer array parents, where parents[i] is the parent for node i. If node x is the root of the tree, then parents[x] == -1.
+
+You are also given the array queries where queries[i] = [nodei, vali]. For each query i, find the maximum genetic difference between vali and pi, where pi is the genetic value of any node that is on the path between nodei and the root (including nodei and the root). More formally, you want to maximize vali XOR pi.
+
+Return an array ans where ans[i] is the answer to the ith query.
+#+BEGIN_SRC java
+// 可以从根节点开始，对整棵树进行一次深度优先遍历，即：
+// 当我们第一次遍历到某一节点 ii 时，我们将 ii 放入「数据结构」中；
+// 当我们遍历完所有节点 ii 的子节点，即将回溯到 ii 的父节点前，我们将 ii 从「数据结构」中移除。
+// 这样一来，我们就可以通过「离线」的思想将每一个询问在遍历到节点 \textit{val}_ival 时进行求解。这是因为，如果当前正在遍历节点 \textit{val}_ival
+// 那么数据结构中就存放着所有从根节点到节点 \textit{val}_ival 的路径上的所有节点。
+// 此时，我们只需要找出数据结构中使得 p_i \oplus \textit{val}_ip 达到最大值的节点 p_ip 即可。
+// 而深度优先搜索过程中，当前入队的部分正是该节点及其所有层级的父节点，因此可结合 DFS 方法进行离线搜索。
+// 对最大异或值的计算，可结合字典树方法进行。
+// 本题需涉及对字典树中数值的删除操作，为简化代码，可在字典树的节点中设计一个计数器，记录当前该节点对应的数字个数，从而避免删除实际节点。
+public class Trie {
+    static final int H = 18; // 树高度，本题val<=2*10^5<2^18
+    Trie [] next;
+    int cnt;                 // 当前节点对应的数值个数，简化删除操作
+    public Trie() {
+        this.next = new Trie[2];
+        this.cnt = 0;
+    }
+    public void insert(int va) { // 插入数值
+        Trie r = this;
+        for (int i = H-1; i >= 0; i--) {
+            int bit = (va >> i) & 1;
+            if (r.next[bit] == null) 
+                r.next[bit] = new Trie();
+            r = r.next[bit];
+            r.cnt++;
+        }
+    }
+    private void removeVal(int v) { // 删除数值
+        Trie r = this;
+        for (int i = H-1; i >= 0; i--) {
+            int bit = (v >> i) & 1;
+            r = r.next[bit];
+            r.cnt--;
+        }
+    }
+    public int search(int va) { // 针对数值查询当前字典树对应的最大异或值
+        Trie r = this;
+        int max = 0;
+        for (int i = H-1; i >= 0; i--) {
+            int bit = (va >> i) & 1 ^ 1;
+            if (r == null) return -1;
+            if (r.next[bit] != null && r.next[bit].cnt > 0) {
+                max += (1 << i);
+                r = r.next[bit];
+            } else
+                r = r.next[bit ^ 1];
+        }
+        return max;
+    }
+}
+private void dfs(int idx) { // 深度优先搜索
+    trie.insert(idx);       // 当前节点加入字典树
+    if (queVal.containsKey(idx)) // 处理针对当前节点的查询
+        for (int i = 0; i < queVal.get(idx).size(); i++) 
+            ans[queId.get(idx).get(i)] = trie.search(queVal.get(idx).get(i));
+    if (tree.containsKey(idx))   // 当前节点存在子节点
+        for (int n : tree.get(idx)) 
+            dfs(n);
+    trie.removeVal(idx);         // 从字典树中删除当前节点
+}
+Map<Integer, List<Integer>> tree;  // 树中各个节点对应的子节点
+Map<Integer, List<Integer>> queVal;// 树中各个节点对应的查询值
+Map<Integer, List<Integer>> queId; // 树中各个节点对应的queries下标
+Trie trie;                         // 字典树根节点
+int [] ans;
+public int[] maxGeneticDifference(int[] parents, int[][] queries) {
+    int n = parents.length, m = queries.length, root = -1;
+    this.tree = new HashMap<>();
+    for (int i = 0; i < n; i++) { // 记录树中各个节点对应的子节点
+        if (parents[i] != -1) {   // Note: 当作有向树图来处理 !!!
+            tree.computeIfAbsent(parents[i], k -> new ArrayList<>());
+            tree.get(parents[i]).add(i);
+        } else root = i;  
+    }
+    this.queVal = new HashMap<>();
+    this.queId = new HashMap<>();
+    for (int i = 0; i < m; i++) {
+        int nid = queries[i][0], val = queries[i][1];
+        queVal.computeIfAbsent(nid, k -> new ArrayList<>()).add(val);
+        queId.computeIfAbsent(nid, k -> new ArrayList<>()).add(i);
+    }
+    this.ans = new int [m];
+    this.trie = new Trie();
+    dfs(root);
+    return ans;
+}
+#+END_SRC
+
+复杂度分析
+
+时间复杂度：O((n+q) \log C)O((n+q)logC)，其中 qq 是数组 \textit{queries}queries 的长度，\log C = 18logC=18 是本题中最大的数的二进制表示的位数。在深度优先遍历的过程中，访问的节点个数为 nn，每个节点需要 O(\log C)O(logC) 的时间在一开将其加入字典树以及回溯前将其从字典树中移除。对于数组 \textit{queries}queries 中的每一个询问，我们需要 O(\log C)O(logC) 的时间得到答案。因此总时间复杂度为 O((n+q) \log C)O((n+q)logC)。
+
+空间复杂度：O(n\log C + q)O(nlogC+q)。我们需要 O(n)O(n) 的空间存储树本身，O(n \log C)O(nlogC) 的空间存储字典树，O(q)O(q) 的空间存储将询问进行离线，分配到每个节点上。
+
 ** 472. Concatenated Words - Hard
 Given an array of strings words (without duplicates), return all the concatenated words in the given list of words.
 
@@ -5378,7 +5897,140 @@ public int numMatchingSubseq(String s, String[] words) {
 }
 #+END_SRC
 
+* HashMap
+** 336. Palindrome Pairs - Hard
+Given a list of unique words, return all the pairs of the distinct indices (i, j) in the given list, so that the concatenation of the two words words[i] + words[j] is a palindrome.
+解题思路分析
 
+利用字典wmap保存单词 -> 下标的键值对
+
+遍历单词列表words，记当前单词为word，下标为idx：
+#+BEGIN_SRC java
+1). 若当前单词word本身为回文，且words中存在空串，则将空串下标bidx与idx加入答案
+2). 若当前单词的逆序串在words中，则将逆序串下标ridx与idx加入答案
+3). 将当前单词word拆分为左右两半left，right。
+     3.1) 若left为回文，并且right的逆序串在words中，则将right的逆序串下标rridx与idx加入答案
+     3.2) 若right为回文，并且left的逆序串在words中，则将left的逆序串下标idx与rlidx加入答案
+#+END_SRC
+
+情况分析清楚以后，针对每个情况逐个判断， 然后提前建好hashmap以后判断就好。
+
+细节部分是不要忘记空字符串的情况， 然后针对整个字符串反过来的情况，不要有重复。
+#+BEGIN_SRC java
+private boolean isPalindrome(String s, int i, int j) {
+    while (i < j) 
+        if (s.charAt(i++) != s.charAt(j--)) return false;
+    return true;
+}
+public List<List<Integer>> palindromePairs(String[] words) {
+    Map<String, Integer> map = new HashMap<>();
+    List<List<Integer>> ans = new ArrayList<>();
+    for (int i = 0; i < words.length; i++) 
+        map.put(words[i], i);
+    for (int i = 0; i < words.length; i++) {
+        if (words[i].equals("")) {
+            for (int j = 0; j < words.length; j++) {
+                String w = words[j];
+                if (isPalindrome(w, 0, w.length()-1) && j != i) {
+                    ans.add(List.of(i, j));
+                    ans.add(List.of(j, i));
+                }
+            }
+            continue;
+        }
+        StringBuilder sb = new StringBuilder(words[i]);
+        sb.reverse();
+        String bw = sb.toString();
+        if (map.containsKey(bw)) {
+            int res = map.get(bw);
+            if (res != i) ans.add(List.of(i, res));
+        }
+        for (int j = 1; j < bw.length(); j++) {
+            if (isPalindrome(bw, 0, j-1)) {
+                String s = bw.substring(j);
+                if (map.containsKey(s))
+                    ans.add(List.of(i, map.get(s)));
+            }
+            if (isPalindrome(bw, j, bw.length()-1)) {
+                String s = bw.substring(0, j);
+                if (map.containsKey(s))
+                    ans.add(List.of(map.get(s), i));
+            }
+        }
+    }
+    return ans;
+}
+#+END_SRC
+
+** 1392. Longest Happy Prefix - Hard
+A string is called a happy prefix if is a non-empty prefix which is also a suffix (excluding itself).
+
+Given a string s, return the longest happy prefix of s. Return an empty string "" if no such prefix exists.
+#+BEGIN_SRC java
+// 频繁的字符串操作（substring和equals操作）会大幅消耗执行时间，也会导致TLE时间超时。
+// 因此我们可以使用字符串的hash值方式来比较前后缀是否相同。这里我们需要普及一个知识点，任意一个字符串的Hash值的计算公式为：
+// int hash=s[0]∗31^(n−1)+s[1]∗31^(n−2) +...+s[n−2]∗31^1+s[n−1]∗31^0
+//     对于前缀hash，每次长度加一后hash的变化应该是：
+//     hash = hash*31 + 新添头字符ch
+//     对于后缀hash，每次长度加一后hash的变化应该是：
+//     hash = hash + 新添尾字符*31^t   (t为后缀长度减1)
+//     这样我们每次只需要比较前缀hash与后缀hash是否相同即可。
+public String longestPrefix(String s) {
+    int n = s.length(), hashPre = 0, hashSuf = 0;
+    int left = 0, right = n-1, pow = 1, maxLen = 0;
+    String res = "";
+    while (left < n-1) {
+        hashPre = hashPre * 31 + s.charAt(left);
+        hashSuf = hashSuf + s.charAt(right)*pow;
+        if (hashPre == hashSuf) maxLen = left + 1;
+        left ++;
+        right --;
+        pow *= 31;
+    }
+    return maxLen == 0 ? "" : s.substring(0, maxLen);
+}
+#+END_SRC
+*** KMP 算法
+[[./pic/kmp.png]]
+
+[[./pic/kmp2.png]]
+
+[[./pic/kmp3.png]]
+
+[[./pic/kmp4.png]]
+
+#+BEGIN_SRC java
+// straight forward KMP algorithm - 8ms - beats 94% time - O(N) time and O(N) space
+public String longestPrefix(String s) {
+    int i, x, N = s.length();
+    int [] LPS = new int[N];
+    LPS[0] = 0;
+    for (i = 1; i < N; i++){
+        x = LPS[i - 1];
+        while (s.charAt(i) != s.charAt(x)){
+            if (x == 0){
+                x = -1;
+                break;
+            }
+            x = LPS[x - 1];
+        }
+        LPS[i] = x + 1;
+    }
+    return s.substring(0, LPS[N - 1]);
+}        
+#+END_SRC
+#+BEGIN_SRC cpp
+string longestPrefix(string s) {
+    vector<int> lps(s.size(), 0);
+    size_t i = 0, j = 1;
+    while (j < s.size()) {
+        if (s[i] == s[j]) lps[j++] = (i++) + 1;  // situ.1
+        else if (i != 0) i = lps[i - 1];         // situ.2
+        else lps[j++] = 0;                       // situ.3
+    }
+    return s.substr(0, lps.back());
+}
+#+END_SRC
 * binary Search
 ** LeetCode Binary Search Summary 二分搜索法小结
 - https://www.cnblogs.com/grandyang/p/6854825.html
@@ -5587,7 +6239,7 @@ public int preimageSizeFZF(int k) {
 }
 #+END_SRC
 
-* Tree: 只是用自己相对愚钝的脑袋把题目AC了，还需要一再总结套路，真正掌握关于树的绝大部分题型
+* Tree: 只是用自己相对愚钝的脑袋把题目AC了，还需要一再总结套路，用更优化的代码真正掌握关于树的题型
 ** 979. Distribute Coins in Binary Tree
 You are given the root of a binary tree with n nodes where each node in the tree has node.val coins. There are n coins in total throughout the whole tree.
 

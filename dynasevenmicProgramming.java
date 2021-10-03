@@ -871,46 +871,6 @@ public class dynasevenmicProgramming {
         // }
 
 
-        // public int minTaps(int n, int[] ranges) {
-        //     int [][] arr = new int[n+1][2];
-        //     for (int i = 0; i < ranges.length; i++) 
-        //         arr[i] = new int[]{i-ranges[i], i+ranges[i]};
-        //     Arrays.sort(arr, (a, b)-> (a[0] != b[0] ? a[0]-b[0] : a[1]-b[1]));
-        //     System.out.println("arr.length: " + arr.length);
-        //     for (int z = 0; z < arr.length; ++z) {
-        //         for (int w = 0; w < arr[z].length; w++) 
-        //             System.out.print(arr[z][w] + ", ");
-        //         System.out.print("\n");
-        //     }
-        //     if (arr[0][0] > 0) return -1;
-        //     int cnt = 0, right = arr[0][1];
-        //     int i = 1;
-        //     int [] cur = arr[0];
-        //     while (i < n+1 && right < n) {
-        //         System.out.println("\ni: " + i);
-        //         System.out.println(" (i < n+1 && arr[i][0] == cur[0]): " +  (i < n+1 && arr[i][0] == cur[0]));
-        //         System.out.println("cnt: " + cnt);   
-        //         if  (i < n+1 && arr[i][0] == cur[0]) {
-        //             while (i < n+1 && arr[i][0] == cur[0]) ++i;
-        //             if (i == n+1 && arr[i-1][1] >= n) return cnt;
-        //             ++cnt;
-        //             System.out.println("cnt I: " + cnt);   
-        //         }
-        //         right = arr[i-1][1];
-        //         cur = arr[i];
-        //         if (cur[0] > right) return -1;
-        //         if (arr[i][1] <= right) {
-        //             while (i < n+1 && arr[i][1] <= right) ++ i;
-        //             if (i == n+1 && arr[i-1][1] >= n) return cnt;
-        //             ++ cnt;
-        //             right = arr[i-1][1];
-        //             cur = arr[i];
-        //         }
-        //     }
-        //     return cnt;
-        // }
-
-
         // // 参考 n 的范围 [1, 14]，可状态压缩后结合动态规划方法求解。
         // // 设计一个动态规划数组 dp[1 << n]，
         // // 对每个 dp[i]，若 i 的二进制表示中 1 的个数为 num, 1 的位置为 k1, k2, …, knum,

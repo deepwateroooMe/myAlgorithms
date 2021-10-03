@@ -726,144 +726,271 @@ public class trieC {
 //         }
 
 
-        public class Trie { 
-            boolean isWord;
-            int forward; // 0: forward, 1 backward, 2 both
-            int [] idx;
-            Trie [] children;
-            public Trie() {
-                isWord = false;
-                forward = -1;
-                children = new Trie[26];
-                idx = new int [2];
-            }
-        }
-        public void insert(String word, int idx, int fd) { 
-            System.out.println("\n word: " + word);
-            Trie cur = root;
-            for (int i = 0; i < word.length(); i++) {
-                char c = word.charAt(i);
-                if (cur.children[c-'a'] == null)
-                    cur.children[c-'a'] = new Trie();
-                cur = cur.children[c-'a'];
-            }
-            if (!cur.isWord) {
-                cur.isWord = true;
-                cur.forward = fd;
-                cur.idx[0] = idx;
-            } else if (cur.isWord && cur.forward > 0 && fd == 0) {
-                cur.forward = 2;
-                cur.idx[fd] = idx;
-            } else if (cur.isWord && cur.forward == 0 && fd > 0) {
-                cur.forward = 2;
-                cur.idx[fd] = idx;
-            }
-            System.out.println("cur.isWord: " + cur.isWord);
+        // public class Trie { 
+        //     boolean isWord;
+        //     int forward; // 0: forward, 1 backward, 2 both
+        //     int [] idx;
+        //     Trie [] children;
+        //     public Trie() {
+        //         isWord = false;
+        //         forward = -1;
+        //         children = new Trie[26];
+        //         idx = new int [2];
+        //     }
+        // }
+        // public void insert(String word, int idx, int fd) { 
+        //     System.out.println("\n word: " + word);
+        //     Trie cur = root;
+        //     for (int i = 0; i < word.length(); i++) {
+        //         char c = word.charAt(i);
+        //         if (cur.children[c-'a'] == null)
+        //             cur.children[c-'a'] = new Trie();
+        //         cur = cur.children[c-'a'];
+        //     }
+        //     if (!cur.isWord) {
+        //         cur.isWord = true;
+        //         cur.forward = fd;
+        //         cur.idx[0] = idx;
+        //     } else if (cur.isWord && cur.forward > 0 && fd == 0) {
+        //         cur.forward = 2;
+        //         cur.idx[fd] = idx;
+        //     } else if (cur.isWord && cur.forward == 0 && fd > 0) {
+        //         cur.forward = 2;
+        //         cur.idx[fd] = idx;
+        //     }
+        //     System.out.println("cur.isWord: " + cur.isWord);
             
-        }
-        private void dfs(Trie r, int idx, StringBuilder s) {
-            if (r == null) return;
-            System.out.println("\n s.toString(): " + s.toString());
-            
-            boolean isLeaf = true;
-            for (int i = 0; i < 26; i++) 
-                if (r.children[i] != null) {
-                    isLeaf = false;
-                    break;
-                }
-            System.out.println("isLeaf: " + isLeaf);
-            
-            if (isLeaf || r.isWord) {
-                if (r.isWord && r.forward > 0 && s.toString().equals(s.reverse().toString()) && (r.idx[0] != idx || r.idx[1] != idx)) {
-                    List<Integer> l = new ArrayList<>();
-                    l.add(idx);
-                    l.add(idx == r.idx[0] ? r.idx[1] : r.idx[0]);
-                    if (!res.contains(l)) res.add(l);
-                }
-                if (isLeaf) return;
-            }
-            for (int i = 0; i < 26; i++) {
-                if (r.children[i] == null) continue;
-                s.append((char)('a' + i));
-                // System.out.println("s: " + s);
-                
-                dfs(r.children[i], idx, s);
-                s.deleteCharAt(s.length()-1);
-            }
-        }
-        List<List<Integer>> res;
-        public List<List<Integer>> search(String s, int idx) { // s is the reversed already
-            res = new ArrayList<>();
-            Trie cur = root;
-            System.out.println("cur.isWord: " + cur.isWord);
-            if (cur.isWord && s.equals((new StringBuilder(s).reverse()).toString())) {
-                if (cur.idx[0] != idx || cur.idx[1] != idx) {
-                    List<Integer> l = new ArrayList<>();
-                    l.add(idx);
-                    l.add(idx == cur.idx[0] ? cur.idx[1] : cur.idx[0]);
-                    if (!res.contains(l)) res.add(l);
-                }
-            }
-            for (int i = 0; i < s.length(); i++) {
-                char c = s.charAt(i);
-                cur = cur.children[c-'a'];
-            }
-            List<Integer> l = new ArrayList<>();
-            if (cur.isWord && (cur.forward > 0 && (cur.idx[0] != idx || cur.idx[1] != idx))) {
-                l.add(idx);
-                l.add(idx == cur.idx[0] ? cur.idx[1] : cur.idx[0]);
-                if (!res.contains(l)) res.add(new ArrayList<>(l));
-            }
-            dfs(cur, idx, new StringBuilder());
-            for (List<Integer> li : res) 
-                if (!res.contains(li)) res.add(new ArrayList<>(li));
-            return res;
-        }
-        Trie root = new Trie();
-        public List<List<Integer>> palindromePairs(String[] words) {
-            for (int i = 0; i < words.length; i++) {
-                insert(words[i], i, 0);
-                String tmp = (new StringBuilder(words[i]).reverse()).toString();
-                insert(tmp, i, 1);
-            }
-            res = new ArrayList<>();
-            List<List<Integer>> ll = new ArrayList<>();
-            for (int i = 0; i < words.length; i++) {
-                res.clear();
-                
-                System.out.println("\n words[i]: " + words[i]);
-                if (words[i].length() == 0) dfs(root, i, new StringBuilder());
-                else search(words[i], i);                
+        // }
+        // private void dfs(Trie r, int idx, StringBuilder s) {
+        //     if (r == null) return;
+        //     boolean isLeaf = true;
+        //     for (int i = 0; i < 26; i++) 
+        //         if (r.children[i] != null) {
+        //             isLeaf = false;
+        //             break;
+        //         }
+        //     if (isLeaf || r.isWord) {
+        //         if (r.isWord && r.forward > 0 && s.toString().equals(s.reverse().toString()) && (r.idx[0] != idx || r.idx[1] != idx)) {
+        //             List<Integer> l = new ArrayList<>();
+        //             l.add(idx);
+        //             l.add(idx == r.idx[0] ? r.idx[1] : r.idx[0]);
+        //             if (!res.contains(l)) res.add(l);
+        //         }
+        //         if (isLeaf) return;
+        //     }
+        //     for (int i = 0; i < 26; i++) {
+        //         if (r.children[i] == null) continue;
+        //         s.append((char)('a' + i));
+        //         dfs(r.children[i], idx, s);
+        //         s.deleteCharAt(s.length()-1);
+        //     }
+        // }
+        // List<List<Integer>> res;
+        // public List<List<Integer>> search(String s, int idx) { // s is the reversed already
+        //     res = new ArrayList<>();
+        //     Trie cur = root;
+        //     if (cur.isWord && s.equals((new StringBuilder(s).reverse()).toString())) {
+        //         if (cur.idx[0] != idx || cur.idx[1] != idx) {
+        //             List<Integer> l = new ArrayList<>();
+        //             l.add(idx);
+        //             l.add(idx == cur.idx[0] ? cur.idx[1] : cur.idx[0]);
+        //             if (!res.contains(l)) res.add(l);
+        //         }
+        //     }
+        //     for (int i = 0; i < s.length(); i++) {
+        //         char c = s.charAt(i);
+        //         cur = cur.children[c-'a'];
+        //     }
+        //     List<Integer> l = new ArrayList<>();
+        //     if (cur.isWord && (cur.forward > 0 && (cur.idx[0] != idx || cur.idx[1] != idx))) {
+        //         l.add(idx);
+        //         l.add(idx == cur.idx[0] ? cur.idx[1] : cur.idx[0]);
+        //         if (!res.contains(l)) res.add(new ArrayList<>(l));
+        //     }
+        //     dfs(cur, idx, new StringBuilder());
+        //     for (List<Integer> li : res) 
+        //         if (!res.contains(li)) res.add(new ArrayList<>(li));
+        //     return res;
+        // }
+        // Trie root = new Trie();
+        // public List<List<Integer>> palindromePairs(String[] words) {
+        //     for (int i = 0; i < words.length; i++) {
+        //         insert(words[i], i, 0);
+        //         String tmp = (new StringBuilder(words[i]).reverse()).toString();
+        //         insert(tmp, i, 1);
+        //     }
+        //     res = new ArrayList<>();
+        //     List<List<Integer>> ll = new ArrayList<>();
+        //     for (int i = 0; i < words.length; i++) {
+        //         res.clear();
+        //         if (words[i].length() == 0) dfs(root, i, new StringBuilder());
+        //         else search(words[i], i);                
+        //         for (List<Integer> l : res) 
+        //             if (!ll.contains(res)) ll.add(new ArrayList<>(l));
+        //     }
+        //     return ll;
+        // }
+        // private boolean isPalindrome(String s, int i, int j) {
+        //     while (i < j) 
+        //         if (s.charAt(i++) != s.charAt(j--)) return false;
+        //     return true;
+        // }
+        // public List<List<Integer>> palindromePairs(String[] words) {
+        //     Map<String, Integer> map = new HashMap<>();
+        //     List<List<Integer>> ans = new ArrayList<>();
+        //     for (int i = 0; i < words.length; i++) 
+        //         map.put(words[i], i);
+        //     for (int i = 0; i < words.length; i++) {
+        //         if (words[i].equals("")) {
+        //             for (int j = 0; j < words.length; j++) {
+        //                 String w = words[j];
+        //                 if (isPalindrome(w, 0, w.length()-1) && j != i) {
+        //                     ans.add(List.of(i, j));
+        //                     ans.add(List.of(j, i));
+        //                 }
+        //             }
+        //             continue;
+        //         }
+        //         StringBuilder sb = new StringBuilder(words[i]);
+        //         sb.reverse();
+        //         String bw = sb.toString();
+        //         if (map.containsKey(bw)) {
+        //             int res = map.get(bw);
+        //             if (res != i) ans.add(List.of(i, res));
+        //         }
+        //         for (int j = 1; j < bw.length(); j++) {
+        //             if (isPalindrome(bw, 0, j-1)) {
+        //                 String s = bw.substring(j);
+        //                 if (map.containsKey(s))
+        //                     ans.add(List.of(i, map.get(s)));
+        //             }
+        //             if (isPalindrome(bw, j, bw.length()-1)) {
+        //                 String s = bw.substring(0, j);
+        //                 if (map.containsKey(s))
+        //                     ans.add(List.of(map.get(s), i));
+        //             }
+        //         }
+        //     }
+        //     return ans;
+        // }
 
-        System.out.println("res.size(): " + res.size());
-        for (int z = 0; z < res.size(); ++z) {
-            for (int y = 0; y < res.get(z).size(); y++) 
-                System.out.print(res.get(z).get(y) + ", ");
-            System.out.print("\n ");
-        }
-        
-                for (List<Integer> l : res) 
-                    if (!ll.contains(res)) ll.add(new ArrayList<>(l));
+
+        // public String longestPrefix(String s) { // TLE TLE TLE
+        //     int n = s.length();
+        //     Map<String, Integer> m = new HashMap<>();
+        //     for (int i = 1; i <= n-1; i++) 
+        //         m.put(s.substring(0, i), m.getOrDefault(s.substring(0, i), 0) + 1);
+        //     for (int i = n-1; i >= 1; i--) 
+        //         m.put(s.substring(i), m.getOrDefault(s.substring(i), 0) + 1);
+        //     String res = "";
+        //     int max = 0;
+        //     for (Map.Entry<String, Integer> en : m.entrySet()) 
+        //         if (en.getValue() >= 2 && en.getKey().length() > max) {
+        //             max = en.getKey().length();
+        //             res = en.getKey();
+        //         }
+        //     return res;
+        // }
+        // private int [][] kmpBuildTable(String s) {
+        //     int n = s.length();
+        //     int [][] dp = new int [n][26];
+        //     for (int i = 0; i < n; i++) {
+        //         // dp[i][s.charAt(i+1)-'a'] = i + 1;
+        //         for (int j = 0; j < 26; j++) {
+        //             if (s.charAt(i+1) == (char)('a'+j))
+        //                 dp[i][j] = i+1;
+        //             else {
+        //                 for (int k = i-1; k >= 0; k--) {
+        //                     if (s.charAt(k) == (char)('a'+j)) {
+        //                         dp[i][j] = k;
+        //                         break;
+        //                     } else dp[i][j] = 0;
+        //                 }
+        //             }
+        //         }
+        //     }
+        //     return dp;
+        // }
+        // private int [] kmpBuildTable(String s) {
+        //     int n = s.length();
+        //     int [] dp = new int [n];
+        //     int len = 0, i = 1;
+        //     while (i < n) { // the loop calculates lps[i] for i = 1 to M-1
+        //         if (s.charAt(i) == s.charAt(len)) {
+        //             len++;
+        //             dp[i] = len;
+        //             i++;
+        //         } else { // s.charAt(i) != s.charAt(len)
+        //             // This is tricky. Consider the example.
+        //             // AAACAAAA and i = 7. The idea is similar to search step.
+        //             if (len != 0) len = dp[len-1]; // Also, note that we do not increment i here
+        //             else {
+        //                 dp[i] = len;
+        //                 i++;
+        //             }
+        //         }
+        //     }
+        // }
+        // public String longestPrefix(String s) {
+        //     int n = s.length();
+        //     String res = "";
+        //     int max = 0;
+        //     for (int i = n-1; i > 0; i--) {
+        //         String pat = s.substring(0, i);
+        //         if (pat.equals(s.substring(n-i)))
+        //             return pat;
+        //     }
+        //     return res;
+        // }
+        // // 频繁的字符串操作（substring和equals操作）会大幅消耗执行时间，也会导致TLE时间超时。
+        // // 因此我们可以使用字符串的hash值方式来比较前后缀是否相同。这里我们需要普及一个知识点，任意一个字符串的Hash值的计算公式为：
+        // // int hash=s[0]∗31^(n−1)+s[1]∗31^(n−2) +...+s[n−2]∗31^1+s[n−1]∗31^0
+        // //     对于前缀hash，每次长度加一后hash的变化应该是：
+        // //     hash = hash*31 + 新添头字符ch
+        // //     对于后缀hash，每次长度加一后hash的变化应该是：
+        // //     hash = hash + 新添尾字符*31^t   (t为后缀长度减1)
+        // //     这样我们每次只需要比较前缀hash与后缀hash是否相同即可。
+        // public String longestPrefix(String s) {
+        //     int n = s.length(), hashPre = 0, hashSuf = 0;
+        //     int left = 0, right = n-1, pow = 1, maxLen = 0;
+        //     String res = "";
+        //     while (left < n-1) {
+        //         hashPre = hashPre * 31 + s.charAt(left);
+        //         hashSuf = hashSuf + s.charAt(right)*pow;
+        //         if (hashPre == hashSuf) maxLen = left + 1;
+        //         left ++;
+        //         right --;
+        //         pow *= 31;
+        //     }
+        //     return maxLen == 0 ? "" : s.substring(0, maxLen);
+        // }
+        // straight forward KMP algorithm - 8ms - beats 94% time - O(N) time and O(N) space
+        public String longestPrefix(String s) {
+            int i, x, N = s.length();
+            int [] LPS = new int[N];
+            LPS[0] = 0;
+            for (i = 1; i < N; i++){
+                x = LPS[i - 1];
+                while (s.charAt(i) != s.charAt(x)){
+                    if (x == 0){
+                        x = -1;
+                        break;
+                    }
+                    x = LPS[x - 1];
+                }
+                LPS[i] = x + 1;
             }
-            return ll;
-        }
+            return s.substring(0, LPS[N - 1]);
+        }        
     }
 
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        // String []  a = new String []  {"abcd", "dcba", "lls", "s", "sssll"};
-        // String []  a = new String []  {"bat", "tab", "cat"};
-        // String []  a = new String []  {"a", ""};
-        // String []  a = new String []  {"a", "abc", "aba", ""};
-        String []  a = new String []  {"a", "b", "c", "ab", "ac", "aa"};
+        String a = "aaaaa";
 
-        List<List<Integer>> res = s.palindromePairs(a);
-        System.out.println("res.size(): " + res.size());
-        for (int z = 0; z < res.size(); ++z) {
-            for (int y = 0; y < res.get(z).size(); y++) 
-                System.out.print(res.get(z).get(y) + ", ");
-            System.out.print("\n ");
-        }
+        String res = s.longestPrefix(a);
+        System.out.println("res: " + res);
+        
     }
 }

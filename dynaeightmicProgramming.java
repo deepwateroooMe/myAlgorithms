@@ -839,82 +839,6 @@ public class dynaeightmicProgramming {
         // }
 
 
-        // private void resetTree(int n) {
-        //     for (int i = 0; i < n; i++)
-        //         ll.get(i).clear();
-        // }
-        // private int dfs(int idx) { // dia[ ] bugss...这里的最大直径计算应该是有问题的，改天再回来写这个题
-        //     System.out.println("\n idx: " + idx);
-        //     if (dia[idx] != -1) return dia[idx];
-        //     sv.add(idx);
-        //     List<Integer> l = ll.get(idx);
-        //     if (l.size() == 1 && sv.contains(l.get(0))) return 0; // leaves
-        //     int lar = 0, sec = 0, cur = 0;
-        //     for (int i = 0; i < l.size(); i++) {
-        //         if (sv.contains(l.get(i))) continue;
-        //         cur = dfs(l.get(i));
-        //         if (cur > sec && cur > lar) {
-        //             sec = lar;
-        //             lar = cur;
-        //         } else if (cur > sec) sec = cur;
-        //     }
-        //     return dia[idx] = lar + sec + 1;
-        // }
-        // List<List<Integer>> ll = new ArrayList<>();
-        // Set<Integer> sv = new HashSet<>();
-        // int [] dia;
-        // int max = 0;
-        // public int[] countSubgraphsForEachDiameter(int n, int[][] edges) {
-        //     int range = 1 << n, cur = 0, oneVer = 0; // 遍历的是由顶点所组成的所有的可能性
-        //     int [] ans = new int [n-1];
-        //     Set<Integer> ver = new HashSet<>(); // 每种子树的顶点集合
-        //     List<Integer> l = new ArrayList<>();
-        //     for (int i = 0; i <= n; i++) {
-        //         l = new ArrayList<>();
-        //         ll.add(l);
-        //     }
-        //     dia = new int [n+1];
-        //     for (int i = 2; i < range; i++) {
-        //         System.out.println("\n i: " + i);
-        //         ver.clear();
-        //         cur = i;
-        //         oneVer = 0;
-        //         for (int j = 0; j < n; j++) 
-        //             if (((cur >> j) & 1) == 1) {
-        //                 ver.add(j+1); // 顶点的取值范围：[1, n]
-        //                 if (oneVer == 0) oneVer = j+1;
-        //             }
-        //         for (int j = 0; j < edges.length; j++) {
-        //             if (!ver.contains(edges[j][0]) || !ver.contains(edges[j][1])) continue;
-        //             ll.get(edges[j][0]).add(edges[j][1]);
-        //             ll.get(edges[j][1]).add(edges[j][0]);
-        //         }
-        //         sv.clear();
-        //         Arrays.fill(dia, -1); // -1 ? 
-        //         System.out.println("oneVer: " + oneVer);
-        //         System.out.println("ll.size(): " + ll.size());
-        //         for (int z = 0; z < ll.size(); ++z) {
-        //             for (int y = 0; y < ll.get(z).size(); y++) 
-        //                 System.out.print(ll.get(z).get(y) + ", ");
-        //             System.out.print("\n ");
-        //         }
-        //         dfs(oneVer); 
-        //         System.out.println("dia.length: " + dia.length);
-        //         for (int z = 0; z < dia.length; ++z) 
-        //             System.out.print(dia[z] + ", ");
-        //         System.out.println("");
-        //         if (sv.size() == Integer.bitCount(i)) { // set ans
-        //             for (int j = 1; j <= n; j++) 
-        //                 max = Math.max(max, dia[j]);
-        //             System.out.println("max: " + max);
-        //             if (max > 1)
-        //                 ans[max-1]++;
-        //         }
-        //         resetTree(n);
-        //     }
-        //     return ans;
-        // }
-
         // // 自顶向下 （记忆化搜索）
         // // 每个dfs搜索当前状态为城市i，油量f到达终点的方案数。这样决策的时候就很直观：当前这个状态的方案数，由可去的城市的，且油量为剩余油量的到达终点方案数加起来。
         // // 初始化：每个状态都初始化为-1。
@@ -980,65 +904,307 @@ public class dynaeightmicProgramming {
         // }
 
 
-        private int dfs(int [] arr, int i) {
-            System.out.println("\n i: " + i);
-            System.out.println("(dp[i] != -1): " + (dp[i] != -1));
-            
-
-            if (dp[i] != -1) return dp[i];
-            if (i <= 0) return 0;
-            long res = 0, tmp = 0;
-            int j = 0;
-            for (j = 0; j < n; j++) {
-                System.out.println("j: " + j);
-                System.out.println("(arr[j] == i && j < i): " + (arr[j] == i && j < i));
-
-                if (arr[j] == i && j < i) { // j <= i
-                    System.out.println("j: " + j);
-                    // if (j < i)
-                    tmp = dfs(arr, j);
-                    break;
-                }
-                
-            }
-            res = (tmp + tmp - dfs(arr, arr[j-1]) + 1) % mod;
-            return dp[i] = (int)res;
-        }
-        int mod = (int)1e9 + 7;
-        int [] dp; // 1st have been visiing room idx odd times
-        int n;
-        public int firstDayBeenInAllRooms(int [] nextVisit) {
-            n = nextVisit.length;
-            System.out.println("n: " + n);
-            
-            dp = new int [n];
-            Arrays.fill(dp, -1);
-            dp[0] = 0;
-            dfs(nextVisit, n-1);
-
-            System.out.println("dp.length: " + dp.length);
-            for (int z = 0; z < dp.length; ++z) 
-                System.out.print(dp[z] + ", ");
-            System.out.println("");
-            return dp[n-1];
-        }
+        // // 动态规划，递归可以使逻辑简单（本质还是动态规划）将多边形起
+        // // 始位置设为start，end, 用一个数组dp来记录任意起始位置的score
+        // // 为了计算dp[start][end], 我们用一个index k在start到end之间遍
+        // // 历dp[start][end] = min(dp[start][k] + dp[k][end] + A[start]
+        // // * A[k] * A[end])结果为dp[0][n - 1]注意：相邻的dp[i][i + 1]
+        // // = 0, 因为两条边无法组成三角形
+        // private int dfs(int [] arr, int x, int y) {
+        //     if (y - x < 2) return dp[x][y] = 0;
+        //     if (dp[x][y] > 0) return dp[x][y];
+        //     int min = Integer.MAX_VALUE;
+        //     for (int i = x+1; i < y; i++) 
+        //         min = Math.min(min, dfs(arr, x,  i) + dfs(arr, i, y) + arr[x]*arr[i]*arr[y]);
+        //     return dp[x][y] = min;
+        // }
+        // int [][] dp;
+        // int n;
+        // public int minScoreTriangulation(int[] arr) {
+        //     n = arr.length;
+        //     dp = new int [n][n];
+        //     return dfs(arr, 0, n-1);
+        // }
 
 
+        // When the draws sum up to K, it stops, calculate the possibility K<=sum<=N.
+        //     Think about one step earlier, sum = K-1, game is not ended and draw largest card W.
+        //     K-1+W is the maximum sum could get when game is ended. If it is <= N, then for sure the possiblity when games end ans sum <= N is 1.
+        //     Because the maximum is still <= 1.
+        //     Otherwise calculate the possibility sum between K and N.
+        //     Let dp[i] denotes the possibility of that when game ends sum up to i.
+        //     i is a number could be got equally from i - m and draws value m card.
+        //     Then dp[i] should be sum of dp[i-W] + dp[i-W+1] + ... + dp[i-1], devided by W.
+        //     We only need to care about previous W value sum, accumlate winSum, reduce the possibility out of range.
+        //     Time Complexity: O(N).
+        //     Space: O(N).
+        // public double new21Game(int n, int k, int w) { // k : threshold
+        //     if (k == 0 || n >= (k + w)) return 1.0;
+        //     if (k > n) return 0;
+        //     double [] dp = new double [n+1];
+        //     dp[0] = 1.0;
+        //     double winSum = 1;
+        //     double res = 0;
+        //     for (int i = 1; i <= n; i++) {
+        //         dp[i] = winSum / w;
+        //         if (i < k) winSum += dp[i];
+        //         else res += dp[i];
+        //         if (i >= w) winSum -= dp[i-w];
+        //     }
+        //     return res;
+        // }
+
+        
+        // public int firstDayBeenInAllRooms(int [] nextVisit) {
+        //     int n = nextVisit.length, mod = (int)1e9 + 7;
+        //     long [] dp = new long [n];
+        //     dp[0] = 0;
+        //     for (int i = 1; i < n; i++) 
+        //         dp[i] = (2 * dp[i-1] % mod + mod - dp[nextVisit[i-1]] + 2) % mod;
+        //     return (int)dp[n-1];
+        // }
+
+
+        // public int minTaps(int n, int[] ranges) {
+        //     int [][] arr = new int[n+1][2];
+        //     for (int i = 0; i < ranges.length; i++) 
+        //         arr[i] = new int [] {i-ranges[i], i+ranges[i]};
+        //     Arrays.sort(arr, (a, b)-> (a[0] != b[0] ? a[0]-b[0] : a[1]-b[1]));
+        //     System.out.println("arr.length: " + arr.length);
+        //     for (int z = 0; z < arr.length; ++z) {
+        //         for (int w = 0; w < arr[z].length; w++) 
+        //             System.out.print(arr[z][w] + ", ");
+        //         System.out.print("\n");
+        //     }
+        //     if (arr[0][0] > 0) return -1;
+        //     int cnt = 0, pre = -1, i = 0, j = 0;
+        //     int [] cur = null;
+        //     // for (int i = 0; i < n+1; i++) {
+        //     //     cur = arr[i];
+        //     //     if (pre == -1) {
+        //     //         pre = cur[1];
+        //     //         ++cnt;
+        //     //     }
+        //     //     j = i;
+        //     //     while (arr[j][0] < pre) {
+        //     //         pre = Math.max(pre, arr[j][1]);
+        //     //         ++j;
+        //     //     }
+        //     //     if (j > i) i = j-1;
+        //     // }
+        //     while (i < n+1 && pre < n) {
+        //         if  (i < n+1 && arr[i][0] == cur[0]) {
+        //             while (i < n+1 && arr[i][0] == cur[0]) ++i;
+        //             if (i == n+1 && arr[i-1][1] >= n) return cnt;
+        //             ++cnt;
+        //         }
+        //         pre = arr[i-1][1];
+        //         cur = arr[i];
+        //         if (cur[0] > pre) return -1;
+        //         if (arr[i][1] <= pre) {
+        //             while (i < n+1 && arr[i][1] <= pre) ++ i;
+        //             if (i == n+1 && arr[i-1][1] >= n) return cnt;
+        //             ++ cnt;
+        //             pre = arr[i-1][1];
+        //             cur = arr[i];
+        //         }
+        //     }
+        //     return cnt;
+        // }
+
+
+        // Map<String, String> dp = new HashMap<>();
+        // int m, n;
+        // public String kthSmallestPath(int[] destination, int k) {
+        //     m = destination[0];
+        //     n = destination[1];
+        //     return dfs(m, n, k);
+        // }
+
+
+        // public int profitableSchemes(int n, int minProfit, int[] group, int[] profit) {
+        //     int m = group.length;
+        //     int [][] dp = new int [minProfit + 1][m];
+        // }
+
+
+        // 设 dp[0][i] 表示不交换 A[i] 和 B[i] 在下标 i 的交换次数
+        // 设 dp[1][i] 表示交换 A[i] 和 B[i] 在下标 i 的交换次数
+        // 可以看到交换与否只取决与前一个状态, 可以将空间复杂度压缩到 O(1)
+        //     时间复杂度为 O(n), 空间复杂度为 O(1)
+        // public int minSwap(int[] a, int[] b) {
+        //     int n = a.length;
+        //     int [][] dp = new int [2][n];
+        //     for (int [] row : dp) 
+        //         Arrays.fill(row, Integer.MAX_VALUE);
+        //     dp[0][0] = 0;
+        //     dp[1][0] = 1;
+        //     for (int i = 1; i < n; i++) {
+        //         if (a[i] > a[i-1] && b[i] > b[i-1]) {
+        //             dp[0][i] = Math.min(dp[0][i], dp[0][i-1]);    // 不需要交换不用增加交换次数
+        //             dp[1][i] = Math.min(dp[1][i], dp[1][i-1] + 1);// 如果要交换前一个也必须交换才能满足递增的条件
+        //         }
+        //         if (a[i] > b[i-1] && b[i] > a[i-1]) {
+        //             dp[0][i] = Math.min(dp[0][i], dp[1][i-1]);    // 表示 i - 1 位置发生交换  
+        //             dp[1][i] = Math.min(dp[1][i], dp[0][i-1] + 1);// 表示在 i - 1 不换的基础上, i 发生了交换 
+        //         }
+        //     }
+        //     return Math.min(dp[0][n-1], dp[1][n-1]);
+        // }
+
+
+        // public int maxSatisfaction(int[] arr) {
+        //    int n = arr.length;
+        //     Arrays.sort(arr);
+        //     int sum = 0, max = 0;
+        //     for (int i = n-1; i >= 0; i--) {
+        //         sum = 0;
+        //         for (int j = i; j < n; j++) 
+        //             sum += (j-i+1)*arr[j];
+        //         max = Math.max(max, sum);
+        //     }
+        //     return max;
+        // }
+
+        // 求摆放前i本书需要的最小高度，首先需要求摆放前i-1书需要的最小高度，以此类推，最初需要计算的是摆放第0本书需要的最小高度，也就是0。
+        // 根据前i-1本书求前i书需要的最小高度的思路是：
+        // 尝试①将第i本书放在前i-1本书的下面
+        // 以及②将前i-1本书的最后几本和第i本书放在同一层两种方案，看哪种方案高度更小就用哪种方案，依次求出摆放前1,…,n本书需要的最小高度。
+        // public int minHeightShelves(int[][] books, int shelfWidth) {
+        //     int [] dp = new int [books.length + 1];
+        //     for (int i = 1; i < dp.length; i++) { // 依次求摆放前i本书的最小高度
+        //         int width = books[i-1][0];
+        //         int height = books[i-1][1];
+        //         dp[i] = dp[i-1] + height;
+        //         // 将前i - 1本书从第i - 1本开始放在与i同一层，直到这一层摆满或者所有的书都摆好
+        //         for (int j = i-1; j > 0 && width + books[j-1][0] <= shelfWidth; j--) {
+        //             height = Math.max(height, books[j-1][1]); // 每层的高度由最高的那本书决定
+        //             width += books[j-1][0];
+        //             dp[i] = Math.min(dp[i], dp[j-1] + height);// 选择高度最小的方法
+        //         }
+        //     }            
+        //     return dp[books.length];
+        // }
+
+
+        // 基本思路：
+        // 在本题中，应该假设节点是从小到大存储的。
+        // 本题有两个难点，第一个怎么把所有的可能性都列出来？由于节点数小于15，可以考虑用枚举法，一共N位，每一位对应0或者1，组成的数值表示一个状态，
+        // 对于1<state<=2^15,对于每一个状态state，当其有两个以上的节点，且对应的节点构成一棵子树才算合理的。
+        // 但是怎么判断那？首先采用邻接表存储节点信息，只有下一个节点在邻接表中和当前的状态state中才可以。
+        //     第二个难点，怎么找到当前state的最大距离，以当前树为根节点，可以分为两种状态，
+        //     a)以当前节点为根节点的树的最大距离:l_depth+r_depth+1==》sub_d1+sub_2-2*d;
+        //     b)以当前树的某一节点为根节点的树;
+        // public int [] countSubgraphsForEachDiameter(int n, int[][] edges) {
+        //     int [] res = new int [n-1];
+        //     List<List<int []>> subsets = new ArrayList<>();
+        //     generateSubsets(edges, new ArrayList<int []>(), subsets, 0);
+        //     for (List<int []> subset : subsets) 
+        //         solve(subset, res);
+        //     return res;
+        // }
+        // private void solve(List<int []> subset, int [] res) {
+        //     if (!isValidGraph(subset)) return;
+        //     Map<Integer, List<Integer>> graph = new HashMap<>();
+        //     for (int [] eg : subset) {
+        //         graph.computeIfAbsent(eg[0], k -> new ArrayList<>()).add(eg[1]);
+        //         graph.computeIfAbsent(eg[1], k -> new ArrayList<>()).add(eg[0]);
+        //     }
+        //     int max = 1;
+        //     for (Integer key : graph.keySet()) {
+        //         if (graph.get(key).size() == 1) {
+        //             int [] longest = new int [] {1}; // 减少global变量的数量
+        //             Set<Integer> vis = new HashSet<>();
+        //             vis.add(key);
+        //             dfs(graph, vis, key, longest, 0);
+        //             max = Math.max(max, longest[0]);
+        //         }
+        //     }
+        //     res[max - 1]++;
+        // }
+        // private void dfs(Map<Integer, List<Integer>> graph, Set<Integer> vis, int idx, int [] longest, int level) {
+        //     longest[0] = Math.max(longest[0], level);
+        //     for (Integer node : graph.get(idx)) 
+        //         if (vis.add(node)) // Set.add(element) return false if it contains element already
+        //             dfs(graph, vis, node, longest, level + 1);
+        // }
+        // private boolean isValidGraph(List<int []> subset) {
+        //     Set<Integer> nodes = new HashSet<>();
+        //     for (int [] cur : subset) {
+        //         nodes.add(cur[0]);
+        //         nodes.add(cur[1]);
+        //     }
+        //     return nodes.size() - 1 <= subset.size();
+        // }
+        // private void generateSubsets(int [][] arr, List<int []> cur, List<List<int []>> res, int idx) {
+        //     if (idx == arr.length) return; // arr.length <= 15, 用回塑法直接生成subsets,但是这是相对耗时的操作
+        //     for (int i = idx; i < arr.length; i++) {
+        //         cur.add(arr[i]);
+        //         res.add(new ArrayList<>(cur));
+        //         generateSubsets(arr, cur, res, i+1);
+        //         cur.remove(cur.size()-1);
+        //     }
+        // }
+        // One way in which we can find the diameter of a tree is using DFS, just like if our tree is represented using tree nodes instead of as grpah
+        //     1. Make a call to DFS from any node as root, lets say 1 as root
+        //     2. Maintain a global max parameter
+        //     3. For each call to dfs, of all current node's children (excluding parent)
+        //        find top two distances from current node to any leaf reachable from current node
+        //     4. Sum of these top two distances froms the longes path passing through current node to all its children. Update if this path is maximum
+        //     5. return 1 + top distance for this dfs call. Need to add 1 since,
+        //        max length of path that can be reached from current ndoe is current ndoe + max distance reachable from current ndoes's children
+//         int ans = 0, vis = 0;
+//         int [] res;
+//         public int [] countSubgraphsForEachDiameter(int n, int[][] edges) {
+//             res = new int [n-1];
+//             ans = 0; vis = 0;
+//             Map<Integer, List<Integer>> graph = new HashMap<>();
+//             for (int [] i : edges) { // if our node is 5, we store it as 1 << 4 which is 2^4
+//                 graph.computeIfAbsent(1 << (i[0]-1), ArrayList::new).add(1 << (i[1]-1));
+//                 graph.computeIfAbsent(1 << (i[1]-1), ArrayList::new).add(1 << (i[0]-1));
+//             }
+//             int range = (1 << n) - 1;  // (int)Math.pow(2, n) - 1;
+//             for (int subset = 3; subset <= range; subset++) {
+//                 boolean isPowerOf2 = subset != 0 && (subset & (subset - 1)) == 0; // is power of 2
+//                 if (isPowerOf2) continue;      // Single node subtrees can be excluded.
+//                 ans = 0; vis = 0;
+//                 dfs(graph, subset, Integer.highestOneBit(subset), -1); // Integer.highestOneBit(subset): subset: 0b1100, highest: 0b1000
+//                 if (vis == subset)   // If visited is not equal to our current subset, all nodes are not reachable.
+//                     res[ans - 1] ++; // In otherwords is not a proper subtree, hence dont include in the answer
+//             }
+//             return res;
+//         }
+//         // we can pass any node in this subset as root for dfs, we are passing node represented with highest set bit as root
+//         // pass -1 as parent of root, since it has no root
+//         private int dfs(Map<Integer, List<Integer>> graph, int subset, int cur, int pre) {
+//             if ((subset & cur) == 0) return 0;
+//             vis = vis | cur; 
+//             int fstMax = 0, sndMax = 0;
+//             for (Integer next : graph.get(cur)) {
+//                 if (next == pre) continue;
+//                 int dist = dfs(graph, subset, next, cur);
+//                 if (dist > fstMax) {
+//                     sndMax = fstMax;
+//                     fstMax = dist;
+//                 } else sndMax = Math.max(sndMax, dist);
+//             }
+//             ans = Math.max(ans, fstMax + sndMax); // top two distances from this node c
+// // top distance this cur node to any leaf is topdistance from c's children + 1. Adding 1 since we need to include cur node
+//             return 1 + fstMax; // 这里要再想一下 ？？？
+//         }
+
+        
     }
 
     public static void main(String[] args) {
         Solution s  =  new Solution();
 
-        // int []  a = new int []  {0, 0};
-        int []  a = new int []  {0, 1, 2, 0};
+        int [][] a = new int [][] {{1,2},{2,3},{2,4}};
 
-        System.out.println("a.length: " + a.length);
-        for (int z = 0; z < a.length; ++z) 
-            System.out.print(a[z] + ", ");
+        int [] r = s.countSubgraphsForEachDiameter(4, a);
+        System.out.println("r.length: " + r.length);
+        for (int z = 0; z < r.length; ++z) 
+            System.out.print(r[z] + ", ");
         System.out.println("");
-
-        int r  = s.firstDayBeenInAllRooms(a);
-            System.out.println("r: " + r);
-            
     }
 }
