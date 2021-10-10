@@ -445,30 +445,6 @@ public class dynamicProgramming {
         //     return res;
         // }
 
-        // public int longestCommonSubsequence(String text1, String text2) {
-        //     if (text1.length() == 1 && text2.length() == 1) return text1.charAt(0) == text2.charAt(0) ? 1 : 0;
-        //     int m = text1.length();
-        //     int n = text2.length();
-        //     int [] [] arr = new int [m][n];
-        //     for (int i = 0; i < n; i++) {
-        //         arr[0][i] = text1.charAt(0) == text2.charAt(i) ? 1 : 0;
-        //         if (i > 0 && arr[0][i-1] == 1) arr[0][i] = 1;
-        //     }
-        //     for (int i = 0; i < m; i++) {
-        //         arr[i][0] = text1.charAt(i) == text2.charAt(0) ? 1 : 0;
-        //         if (i > 0 && arr[i-1][0] == 1) arr[i][0] = 1;
-        //     }
-        //     for (int i = 1; i < m; i++) {
-        //         for (int j = 1; j < n; j++) {
-        //             if (text1.charAt(i) == text2.charAt(j)) arr[i][j] = arr[i-1][j-1] + 1;
-        //             else {
-        //                 arr[i][j] = Math.max(arr[i-1][j], arr[i][j-1]);
-        //             }
-        //         }
-        //     }
-        //     return arr[m-1][n-1];
-        // }
-
         // public int longestSubarray(int[] nums) {
         //     if (nums.length == 1) return 0;
         //     int n = nums.length;
@@ -904,49 +880,61 @@ public class dynamicProgramming {
         //     }
         //     return max;
         // }
-        public int maxProfit(int[] prices) {
-            int start = prices[0];
-            int res = 0;
-            for (int i = 1; i < prices.length; i++) {
-                if (prices[i] >= prices[i-1]) continue;
-                res += prices[i-1] - start;
-                start = prices[i];
-            }
-            res += prices[prices.length-1] - start;
-            return res;
-        }
+        // public int maxProfit(int[] prices) {
+        //     int start = prices[0];
+        //     int res = 0;
+        //     for (int i = 1; i < prices.length; i++) {
+        //         if (prices[i] >= prices[i-1]) continue;
+        //         res += prices[i-1] - start;
+        //         start = prices[i];
+        //     }
+        //     res += prices[prices.length-1] - start;
+        //     return res;
+        // }
 
-        public int maxProfit(int[] prices) {
-            if (prices.length < 2) return 0; 
-            int [] past = new int[prices.length];
-            int [] futu = new int[prices.length];
-            int result = 0;
-            for (int i = 1, valley = prices[0]; i < prices.length; i++) {
-                valley = Math.min(valley, prices[i]);
-                past[i] = Math.max(past[i - 1], prices[i]-valley);
-            }
-            for (int i = prices.length-2, peak = prices[prices.length-1]; i >= 0 ; i--) {
-                peak = Math.max(peak, prices[i]);
-                futu[i] = Math.max(futu[i+1], peak-prices[i]);
-                result = Math.max(result, past[i] + futu[i]);
-            }
-            return result;
-        }
+        // public int maxProfit(int[] prices) {
+        //     if (prices.length < 2) return 0; 
+        //     int [] past = new int[prices.length];
+        //     int [] futu = new int[prices.length];
+        //     int result = 0;
+        //     for (int i = 1, valley = prices[0]; i < prices.length; i++) {
+        //         valley = Math.min(valley, prices[i]);
+        //         past[i] = Math.max(past[i - 1], prices[i]-valley);
+        //     }
+        //     for (int i = prices.length-2, peak = prices[prices.length-1]; i >= 0 ; i--) {
+        //         peak = Math.max(peak, prices[i]);
+        //         futu[i] = Math.max(futu[i+1], peak-prices[i]);
+        //         result = Math.max(result, past[i] + futu[i]);
+        //     }
+        //     return result;
+        // }
 
-        public int maxProfit(int[] prices, int fee) {
-            int start = prices[0];
-            int min = Integer.MAX_VALUE;
-            int res = 0;
-            for (int i = 1; i < prices.length; i++) {
-                if (prices[i] < min) min = prices[i];
-                if (prices[i] >= prices[i-1]) continue;
-                res = Math.max(res, prices[i-1] - min - fee);
-                start = prices[i];
-            }
-            res += prices[prices.length-1] - start > fee ? prices[prices.length-1] - start - fee : 0;
-            return res;
+        // public int maxProfit(int[] prices, int fee) {
+        //     int start = prices[0];
+        //     int min = Integer.MAX_VALUE;
+        //     int res = 0;
+        //     for (int i = 1; i < prices.length; i++) {
+        //         if (prices[i] < min) min = prices[i];
+        //         if (prices[i] >= prices[i-1]) continue;
+        //         res = Math.max(res, prices[i-1] - min - fee);
+        //         start = prices[i];
+        //     }
+        //     res += prices[prices.length-1] - start > fee ? prices[prices.length-1] - start - fee : 0;
+        //     return res;
+        // }
+
+
+        public int longestCommonSubsequence(String S, String T) {
+            int m = S.length();
+            int n = T.length();
+            int [][] dp = new int [m+1][n+1];
+            for (int i = 1; i <= m; i++) 
+                for (int j = 1; j <= n; j++) 
+                    if (S.charAt(i-1) == T.charAt(j-1)) dp[i][j] = dp[i-1][j-1] + 1;
+                    else dp[i][j] = Math.max(dp[i-1][j], dp[i][j-1]);
+            return dp[m][n];
         }
-    }
+   }
     
     public static void main(String[] args) {
         Solution s = new Solution();

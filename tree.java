@@ -251,27 +251,73 @@ public class tree {
         // }
 
 
+        // private void traversal(TreeNode r, int d, int left, int l) { // l: 0 root, 1 left, 2 right 这个思路仍然是不对的
+        //     if (r == null) return;
+        //     System.out.println("\nr.val: " + r.val);
+        //     if (d != 0) {
+        //         int li = 0, ri = 0;
+        //         if (l == 1) {
+        //             li = Math.min(left, m.getOrDefault(d, new int[]{Integer.MAX_VALUE, Integer.MIN_VALUE})[0]);
+        //             m.put(d, new int [] {li, m.getOrDefault(d, new int[]{Integer.MAX_VALUE, Integer.MIN_VALUE})[1]});
+        //         } else if (l == 2) {
+        //             ri = Math.max(left, m.getOrDefault(d, new int[]{Integer.MAX_VALUE, Integer.MIN_VALUE})[1]);
+        //             m.put(d, new int [] {m.getOrDefault(d, new int[]{Integer.MAX_VALUE, Integer.MIN_VALUE})[0], ri});
+        //         }
+        //     }
+        //     traversal(r.left, d+1, left-1, 1);
+        //     traversal(r.right, d+1, left+1, 2);
+        // }
+        // Map<Integer, int []> m = new HashMap<>();
+        // public int widthOfBinaryTree(TreeNode root) {
+        //     if (root.left == null && root.right == null) return 1;
+        //     traversal(root, 0, 0, 0);
+        //     int max = 0;
+        //     for (Map.Entry<Integer, int []> entry : m.entrySet()) 
+        //         max = Math.max(max, entry.getValue()[1]-entry.getValue()[0]);
+        //     return max;
+        // }
+        class Pt {
+            TreeNode r;
+            int v;
+            public Pt(TreeNode r, int v) {
+                this.r = r;
+                this.v = v;
+            }
+        }
+        public int widthOfBinaryTree(TreeNode root) { // 二的时候，再参考java代码优化一下
+            int res = 0;
+            Queue<Pt> q = new LinkedList<>();
+            q.offer(new Pt(root, 1));
+            while (!q.isEmpty()) {
+                if (q.size() == 1) q.peek().v = 1;
+                int left = q.peek().v, right = left, n = q.size();
+                for (int i = 0; i < n; i++) {
+                    TreeNode cur = q.peek().r;
+                    right = q.peek().v;
+                    q.poll();
+                    if (cur.left != null) q.offer(new Pt(cur.left, right*2));
+                    if (cur.right != null) q.offer(new Pt(cur.right, right*2+1));
+                }
+                res = Math.max(res, right - left + 1);
+            }
+            return res;
+        }
+
         
     }
         
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        // int [] a = new int [] {1, 2, -1, 3};
-        // int [] b = new int [] {1, 3, 2};
+        // int []  a = new int []  { 1, 3, 2, 5, 3, -1, 9};
+        int []  a = new int []  {1, 3, 2, 5, -1, -1, 9, 6, -1, -1, 7};
 
-        int []  a = new int []  {7, 1, 5, -1, -1, 3, 2, -1, -1, 6, 4, -1, -1, -1, -1};
-        int []  b = new int []  {7, 5, 2, 4, 3, 6, 1};
-        
         TreeNode root = new TreeNode(a[0]);
         root.buildTree(root, a);
         root.levelPrintTree(root);
 
-        List<Integer> r2 = s.flipMatchVoyage(root, b);
-        System.out.println("r2.size(): " + r2.size());
-        for (int z = 0; z < r2.size(); ++z) 
-            System.out.print(r2.get(z) + ", ");
-        System.out.print("\n");
+        int r = s.widthOfBinaryTree(root);
+        System.out.println("r: " + r);
         
     }
 }

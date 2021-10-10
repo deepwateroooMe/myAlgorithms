@@ -1305,38 +1305,6 @@ public class greedy {
         // }
 
 
-        // class Pt {
-        //     char c;
-        //     int v;
-        //     public Pt (char a, int v) {
-        //         this.c = a;
-        //         this.v = v;
-        //     }
-        // }
-        // public String longestDiverseString(int a, int b, int c) {
-        //     Queue<Pt> q = new PriorityQueue<>((x, y) -> y.v - x.v);
-        //     if (a > 0) q.offer(new Pt('a', a));
-        //     if (b > 0) q.offer(new Pt('b', b));
-        //     if (c > 0) q.offer(new Pt('c', c));
-        //     Pt cur = null, next = null;
-        //     String res = "";
-        //     while (!q.isEmpty()) {
-        //         cur = q.poll();
-        //         next = null;
-        //         res += Character.toString(cur.c);
-        //         if (cur.v >= 2)
-        //             res += Character.toString(cur.c);
-        //         if (q.size() > 0) {
-        //             next = q.poll();
-        //             res += Character.toString(next.c);
-        //             if (next.v >= 2)
-        //                 res += Character.toString(next.c);
-        //         } else return res;
-        //         if (cur.v > 2) q.offer(new Pt(cur.c, cur.v-2));
-        //         if (next != null && next.v > 2) q.offer(new Pt(next.c, next.v-2));
-        //     }
-        //     return res;
-        // }
 
         
     }

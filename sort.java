@@ -1113,65 +1113,6 @@ public class sort {
         // }
 
 
-        // private class Pt {
-        //     int i;
-        //     int v;
-        //     public Pt(int a, int b) {
-        //         i = a;
-        //         v = b;
-        //     }
-        // }
-        // public int[] rearrangeBarcodes(int[] barcodes) {
-        //     int n = barcodes.length;
-        //     if (n == 1) return barcodes;
-        //     HashMap<Integer, Integer> map = new HashMap<>();
-        //     for (int i = 0; i < n; i++) 
-        //         map.put(barcodes[i], map.getOrDefault(barcodes[i], 0) + 1);
-        //     Map<Integer, Integer> m = map.entrySet().stream()
-        //         .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-        //         .collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> a, LinkedHashMap::new));
-
-        //     // System.out.println("");
-        //     // System.out.println("m.size(): " + m.size());
-        //     // for (Map.Entry<Integer, Integer> entry : m.entrySet()) 
-        //     //     System.out.print(entry.getKey() + ", " + entry.getValue() + "\n");
-        //     // System.out.println("");
-            
-        //     Queue<Pt> q = new PriorityQueue<>((x, y) -> y.v - x.v);
-        //     for (Map.Entry<Integer, Integer> entry : m.entrySet()) 
-        //         q.add(new Pt(entry.getKey(), entry.getValue()));
-        //     int [] arr = new int[n];
-        //     int idx = 0;
-        //     Pt cur = null, top = null;
-        //     while (!q.isEmpty()) {
-        //         cur = q.poll();
-        //         if (q.size() > 0)
-        //             top = q.peek();
-        //         else {
-        //             arr[idx] = cur.i;
-        //             return arr;
-        //         }
-        //         if (cur.v > 0 && top.v > 0) {
-        //             arr[idx] = cur.i;
-        //             --cur.v;
-        //             if (cur.v > 0) q.add(new Pt(cur.i, cur.v));
-        //             ++idx;
-        //             // arr[idx++] = top.i;
-        //             // --top.v;
-        //             if (q.size() == 0) break;
-        //         }
-        //         if (top.v == 0) {
-        //             q.poll();
-        //             System.out.println("cur.v: " + cur.v);
-        //             if (cur.v > 0)
-        //             q.add(cur);
-        //         }
-        //     }
-        //     System.out.println("q.size(): " + q.size());
-        //     return arr;
-        // }
-
-
         // public boolean reorderedPowerOf2(int n) {
         //     String s = String.valueOf(n);
         //     System.out.println("s: " + s);

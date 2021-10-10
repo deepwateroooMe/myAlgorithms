@@ -350,61 +350,6 @@ public class binarySearch {
         // }
 
         
-        // public static int base = 256;
-        // public static int module = 101;
-        // public static boolean match(String str1,String str2) {
-        //     assert str1.length() == str2.length();
-        //     for (int i = 0; i < str1.length(); i++) {
-        //         if (str1.charAt(i) != str2.charAt(i))
-        //             return false; 
-        //     }
-        //     return true; 
-        // }
-        // public static int hash(String str) {
-        //     int hash = 0; 
-        //     for (int i = 0; i < str.length(); i++)
-        //         hash = (hash*base+str.charAt(i))/module; 
-        //     return hash; 
-        // }
-        // private boolean poss(String s, int v) {
-        //     int n = s.length();
-        //     int hashT = 0;
-        //     String t = "";
-        //     for (int i = 0; i <= n-v; i++) {
-        //         String str = s.substring(i, i+v);
-        //         int targetHash = hash(str);
-        //         hashT = targetHash;  // 这里好像有点儿问题
-        //         for (int j = i+1; j < n-v+1; j++) 
-        //             // t = s.substring(j, j+v);
-        //             // if (j == i+1) 
-        //             //     hashT = hash(t);
-        //             // else
-        //             hashT = (int)((hashT - Math.pow(v-1, base)*s.charAt(j-1))*base + s.charAt(j+v-1)) % module;
-        //         if (hash(t) == targetHash) {
-        //             if (match(t, str)){
-        //                 res = t;
-        //                 return true;
-        //             }
-        //         }
-        //     }
-        //     return false;
-        // }
-        // String res = "";
-        // private int binarySearch(String s, int l, int r) {
-        //     if (l == r) return poss(s, l) ? l : -1;
-        //     if (l == r-1) return poss(s, r) ? r : (poss(s, l) ? l : -1);
-        //     int m = l + (r-l)/2;
-        //     if (poss(s, m)) return binarySearch(s, m, r);
-        //     return binarySearch(s, l, m-1);
-        // }
-        // public String longestDupSubstring(String s) {
-        //     int n = s.length();
-        //     if (n == 2) return s.charAt(0) == s.charAt(1) ? s.substring(0, 1) : "";
-        //     int k = binarySearch(s, 1, s.length()-1);
-        //     return res;
-        // }
-
-
         // private double getTraHours(int [] arr, int v) {
         //     int res = 0;
         //     for (int i = 0; i < arr.length; i++) {

@@ -367,34 +367,6 @@ public class dynafourmicProgramming {
         // }
 
 
-        // private int minDistanceRecursion(int [] arr, int k, int l, int r) {
-        //     int mid = 0;
-        //     if (r == l) return 0;
-        //     if ((r - l) % 2 == 0) mid = arr[(r-l)/2];
-        //     else mid = (arr[(r-l)/2] + arr[(r-l+1)/2])/2;
-        //     if (k == 1) {
-        //         int res = 0;
-        //         for (int i = l; i <= (r-l)/2; i++) 
-        //             res += mid - arr[i];
-        //         for (int i = r; i >= (r-l+1)/2; i--) 
-        //             res += arr[i] - mid;
-        //         return res;
-        //     }
-        //     if (k == 2) // 这里的想法不对，需要先把数组分成组内距离最小的k 段子数组
-        //         return minDistanceRecursion(arr, 1, l, (r-l) % 2 == 0 ? (r-l)/2-1 : (r-l)/2)
-        //             + minDistanceRecursion(arr, 1, (r-l) % 2 == 0 ? (r-l)/2 + 1 : (r-l+1)/2, r);
-        //     // k % 2 == 0
-        //     // k % 2 == 1
-        //     return 0;
-        // }
-        // int n;
-        // public int minDistance(int[] houses, int k) {
-        //     n = houses.length;
-        //     if (n == k) return 0;
-        //     return minDistanceRecursion(houses, k, 0, n-1);
-        // }
-
-
         // public int minCost(int n, int[] cuts) {
         //     int m = cuts.length;
         //     int [][] dp = new int [n][n];

@@ -1027,60 +1027,6 @@ public class dynafivemicProgramming {
         // }
 
 
-        // private String getLongestCommonSubsequence(String s, String t) {
-        //     int [][] dp = new int [m][n];
-        //     dp[0][0] = s.charAt(0) == t.charAt(0) ? 1 : 0;
-        //     for (int i = 0; i < m; i++) {
-        //         if (s.charAt(i) == t.charAt(0))
-        //             dp[i][0] = 1;
-        //     }
-        //     for (int j = 0; j < n; j++) {
-        //         if (s.charAt(0) == t.charAt(j))
-        //             dp[0][j] = 1;
-        //     }
-        //     for (int i = 1; i < m; i++) {
-        //         for (int j = 1; j < n; j++) {
-        //             if (s.charAt(i) == t.charAt(j))
-        //                 dp[i][j] = Math.max(dp[i-1][j], dp[i][j-1]) + 1;
-        //             else dp[i][j] = Math.max(dp[i-1][j], dp[i][j-1]);
-        //         }
-        //     }
-        //     char [] sq = new char [dp[m-1][n-1]];
-        //     int i = m-1, j = n-1, idx = dp[m-1][n-1]-1;
-        //     while (i > 0 && j > 0) {
-        //         if (s.charAt(i) == t.charAt(j)) {
-        //             sq[idx] = s.charAt(i);
-        //             --idx;
-        //             i--;
-        //             j--;
-        //         } else if (dp[i-1][j] >= dp[i][j-1]) i--;
-        //         else j--;
-        //     }
-        //     if (s.charAt(i) == t.charAt(j)) sq[idx] = s.charAt(i);
-        //     return new String(sq);
-        // }
-        // int m, n;
-        // public String shortestCommonSupersequence(String s, String t) {
-        //     m = s.length();
-        //     n = t.length();
-        //     String com = getLongestCommonSubsequence(s, t);
-        //     // System.out.println("com: " + com);
-        //     int i = 0, j = 0; // 把三个字符串合并成一个
-        //     StringBuilder res = new StringBuilder(com);
-        //     while (i < m && j < n) {
-        //         if (s.charAt(i) != t.charAt(j)) {
-        //         }
-        //         if (s.charAt(i) == t.charAt(j)) {
-        //             res += Character.toString(s.charAt(i));
-        //             ++i;
-        //             ++j;
-        //             continue;
-        //         } else 
-        //     }
-        //     return res;
-        // }
-
-
         // // state是前走的人走完之后的局面，sum是当前数字总和，返回的是当前走的人是否能赢
         // private boolean dfs(int max, int target, int state, int val) {
         //     if (dp[state] != -1) return dp[state] > 0;

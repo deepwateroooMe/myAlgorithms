@@ -201,42 +201,6 @@ public class depthtwoFirstSearch {
 
 
 
-        // private void traversal(TreeNode r, int d, int left, int l) { // l: 0 root, 1 left, 2 right
-        //     if (r == null) return;
-        //     System.out.println("\nr.val: " + r.val);
-        //     if (d != 0) {
-        //         int li = 0, ri = 0;
-        //         if (l == 1) {
-        //             li = Math.min(left, m.getOrDefault(d, new int[]{Integer.MAX_VALUE, Integer.MIN_VALUE})[0]);
-        //             System.out.println("li: " + li);
-        //             m.put(d, new int [] {li, m.getOrDefault(d, new int[]{Integer.MAX_VALUE, Integer.MIN_VALUE})[1]});
-        //         } else if (l == 2) {
-        //             ri = Math.max(left, m.getOrDefault(d, new int[]{Integer.MAX_VALUE, Integer.MIN_VALUE})[1]);
-        //             System.out.println("ri: " + ri);
-        //             m.put(d, new int [] {m.getOrDefault(d, new int[]{Integer.MAX_VALUE, Integer.MIN_VALUE})[0], ri});
-        //         }
-        //     }
-        //     traversal(r.left, d+1, left-1, 1);
-        //     traversal(r.right, d+1, left+1, 2);
-        // }
-        // Map<Integer, int []> m = new HashMap<>();
-        // public int widthOfBinaryTree(TreeNode root) {
-        //     if (root.left == null && root.right == null) return 1;
-        //     traversal(root, 0, 0, 0);
-        //     // System.out.println("m.size(): " + m.size());
-        //     // for (Map.Entry<Integer, int []> entry : m.entrySet()) {
-        //     //     System.out.print(entry.getKey() + ": "); 
-        //     //     for (int z = 0; z < entry.getValue().length; z++) 
-        //     //         System.out.print(entry.getValue()[z] + ", ");
-        //     //     System.out.print("\n");
-        //     // }
-        //     int max = 0;
-        //     for (Map.Entry<Integer, int []> entry : m.entrySet()) 
-        //         max = Math.max(max, entry.getValue()[1]-entry.getValue()[0]);
-        //     return max;
-        // }
-
-
         // public class UnionFind {
         //     int [] pare;
         //     int [] rank;
@@ -732,16 +696,81 @@ public class depthtwoFirstSearch {
         // }
 
 
+        // private int dfs(int [][] arr, int x, int y) { // 1011101, how to make sure remove the right one? a[i] ^ a[i+1] ?
+        //     int cur = 0, max = 0;
+        //     boolean pre = false;
+        //     for (int i = 1; i < n; i++) {
+        //         if ((arr[x][i] ^ arr[x][i-1]) == 1) {
+        //             cur++;
+        //             if (arr[x][i] == 'X')
+        //         }
+        //     }
+        // }
+        // int m, n;
+        // public int countBattleships(char[][] board) {
+        //     m = board.length;
+        //     n = board[0].length, max = 0;
+        //     for (int i = 0; i < m; i++) 
+        //         for (int j = 0; j < n; j++) 
+        //             if (board[i][j] == 'X')
+        //                 max = Math.max(max, dfs(board, i, j));
+        //     return max;
+        // }
+
         
+        // private void dfs(int [][] arr, int ox, int oy, int x, int y, int [] max) {
+        //     if (x < 0 || x >= m || y < 0 || y >= n
+        //         || arr[x][y] == 0 || vis[x][y]) return;
+        //     vis[x][y] = true;
+        //     if (x >= max[0] && y >= max[1]) {
+        //         max[0] = x;
+        //         max[1] = y;
+        //     }
+        //     for (int [] d : dirs)
+        //         dfs(arr, ox, oy, x+d[0], y+d[1], max);
+        // }
+        // int [][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+        // boolean [][] vis;
+        // int m, n;
+        // public int[][] findFarmland(int[][] land) {
+        //     m = land.length;
+        //     n = land[0].length;
+        //     vis = new boolean [m][n];
+        //     List<int []> res = new ArrayList<>();
+        //     for (int i = 0; i < m; i++) 
+        //         for (int j = 0; j < n; j++) 
+        //             if (land[i][j] == 1 && !vis[i][j]) {
+        //                 int [] loc = new int [2];
+        //                 dfs(land, i, j, i, j, loc);
+        //                 res.add(new int [] {i, j, loc[0], loc[1]});
+        //             }
+        //     int [][] ans = new int [res.size()][4];
+        //     for (int i = 0; i < res.size(); i++) 
+        //         ans[i] = res.get(i);
+        //     return ans;
+        // }
+
+
+        // public List<String> findItinerary(List<List<String>> tickets) {
+        //     int n = tickets.length;
+        //     for (int i = 0; i < n; i++) 
+        //         Collections.sort(tickets.get(i));
+        // }
+
+
         
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        // int [][] a = new int [][] {{0,1},{1,2},{2,0}};
-        int [][] a = new int [][] {{0,1},{0,2},{3,5},{5,4},{4,3}};
+        int [][] a = new int [][] {{1,0,0},{0,1,1},{0,1,1}};
 
-        boolean res = s.validPath(6, a, 0, 5);
-        System.out.println("res: " + res);
+        int [][] res = s.findFarmland(a);
+        System.out.println("res.length: " + res.length);
+        for (int z = 0; z < res.length; ++z) {
+            for (int w = 0; w < res[z].length; w++) 
+                System.out.print(res[z][w] + ", ");
+            System.out.print("\n");
+        }
     }
 }

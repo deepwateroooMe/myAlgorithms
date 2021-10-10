@@ -179,58 +179,7 @@ public class binarySearchinSortedArray {
         // }
         // boolean res = s.isPerfectSquare(808201);
 
-        // private int countZeroes(int [] arr) {
-        //     int res = 0;
-        //     for (int i = 0; i < arr.length; i++) {
-        //         if (arr[i] == 0) ++res;
-        //     }
-        //     return res;
-        // }
-        // public int longestOnes(int[] nums, int k) {
-        //     if (nums.length == k || k >= countZeroes(nums)) return nums.length;
-        //     int n = nums.length;
-        //     int i = 0, j = 0, cnt = 0, res = 0;
-        //     int leadingZero = 0;
-        //     while (i < n && nums[i] == 0) ++i;
-        //     j = i;
-        //     while (j < n) {
-        //           System.out.println("\ni: " + i);
-        //           System.out.println("j: " + j);
-        //         while (j < n && (nums[j] == 1 || (nums[j] == 0 && cnt < k))) {
-        //               System.out.println("\nj: " + j);
-        //               System.out.println("nums[j]: " + nums[j]);
-        //             if (nums[j] == 0) ++cnt;
-        //             ++j;
-        //               System.out.println("cnt: " + cnt);
-        //         }
-        //           System.out.println("i: " + i);
-        //           System.out.println("j: " + j);
-        //         if (j - i > res) res = j - i;
-        //           System.out.println("res: " + res);
-        //         if (j == n) return res;
-        //         while (i < n && (nums[i] == 1 || (nums[i] == 0 && leadingZero < 1 && k >= 1))) {
-        //                 if (nums[i] == 0) ++leadingZero;
-        //                 ++i;   
-        //         }
-        //         --cnt;
-        //         leadingZero = 0;
-        //         if (k == 0) {
-        //             while (i < n && nums[i] == 0) ++i;
-        //         }
-        //         if (i == n) return res;
-        //         if (k == 0 && i < n) j = i;
-        //           System.out.println("i: " + i);
-        //           System.out.println("j: " + j);
-        //     }
-        //     if (j - i > res) res = j - i;
-        //     return res;
-        // }
-        // int [] a = new int [] {1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0}; 
-        // int [] a = new int [] {0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1}; 
-        // int [] a = new int [] {1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1}; 
-        // int [] a = new int [] {1, 1, 1, 0, 0, 0, 1, 1, 1, 1};
-        // int [] a = new int [] {1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1}; 
-
+        
         // public int rangeSum(int[] nums, int n, int left, int right) {
         //     long [] arr = new long [n * (n+1)/2];
         //     int idx = 0;

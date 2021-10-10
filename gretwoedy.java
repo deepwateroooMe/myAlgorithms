@@ -520,22 +520,6 @@ public class gretwoedy {
         // }
 
         
-        // private boolean isPossibleIndex(int [] arr, int l, int r) {
-        //     if (r - l < 2) return false;
-        //     if (r - l == 2) return arr[r]-arr[r-1] == 1 && arr[r-1]-arr[l] == 1;
-        //     int i = l+1;
-        //     while (true) {
-        //         while (i <= r && arr[i] -arr[i-1] == 1) ++i;
-        //         if (i <= r && arr[i] -arr[i-1] != 1 && i-l < 3) return false;
-        //         return isPossibleIndex(arr, i, r);
-        //     }
-        // }
-        // public boolean isPossible(int[] nums) {
-        //     int n = nums.length;
-        //     return isPossibleIndex(nums, 0, n-1);
-        // }
-
-
         // public int minFlips(String s) {
         //     int n = s.length();
         //     int i = 0, cnt = 0;

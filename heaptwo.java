@@ -475,29 +475,180 @@ public class heaptwo {
     //     }
 
 
-        
+        // public String longestDiverseString(int a, int b, int c) {
+        //     StringBuilder sb = new StringBuilder();
+        //     int size = a + b + c;
+        //     int ca = 0, cb = 0, cc = 0;
+        //     for (int i = 0; i < size; i++) {
+        //         if ((a >= b && a >= c && ca != 2) || a > 0 && cb == 2 || a > 0 && cc == 2) {
+        //             sb.append('a');
+        //             a--;
+        //             ca++;
+        //             cb = 0;
+        //             cc = 0;
+        //         } else if (b >= a && b >= c && cb != 2 || b > 0 && ca == 2 || b > 0 && cc == 2) {
+        //             sb.append('b');
+        //             b--;
+        //             cb++;
+        //             ca = 0;
+        //             cc = 0;
+        //         } else if (c >= a && c >= b && cc != 2 || c > 0 && ca == 2 || c > 0 && cb == 2) {
+        //             sb.append('c');
+        //             c--;
+        //             cc++;
+        //             ca = 0;
+        //             cb = 0;
+        //         }
+        //     }
+        //     return sb.toString();
+        // }
+
+
+        // public String reorganizeString(String s) {
+        //     int n = s.length();
+        //     if (n == 1 || (n == 2 && s.charAt(0) != s.charAt(1)) || s.chars().distinct().count() == n) return s;
+        //     int [] cnt = new int [26];
+        //     for (int i = 0; i < n; i++)
+        //         cnt[s.charAt(i)-'a']++;
+        //     Queue<int []> q = new PriorityQueue<>((a, b) -> b[1]-a[1]);
+        //     for (int i = 0; i < 26; i++)
+        //         if (cnt[i] > 0)
+        //             q.offer(new int [] {i, cnt[i]});
+        //     StringBuilder t = new StringBuilder();
+        //     int [] cur = null, next = null;
+        //     while (!q.isEmpty()) {
+        //         cur = q.poll();
+        //         if (t.length() == 0 || t.charAt(t.length()-1) != (char)(cur[0] + 'a')) {
+        //             t.append((char)(cur[0] + 'a'));
+        //             if (cur[1] > 1)
+        //                 q.offer(new int [] {cur[0], cur[1]-1});
+        //         } else {
+        //             if (!q.isEmpty()) {
+        //                 next = q.poll();
+        //                 t.append((char)(next[0] + 'a'));
+        //                 q.offer(cur);
+        //                 if (next[1] > 1)
+        //                     q.offer(new int [] {next[0], next[1]-1});
+        //             } else return "";
+        //         }
+        //     }
+        //     return t.toString();
+        // }
+
+
+        // public double maxAverageRatio(int[][] classes, int extraStudents) {
+        //     Queue<int []> q = new PriorityQueue<int []>((x, y) -> ((double)(y[0]+1) / (y[1]+1)) - (double)y[0] / y[1]
+        //                                                 - ((double)(x[0]+1) / (x[1]+1) - (double)x[0] / x[1]) > 0 ? 1 : -1);
+        //     for (int [] v : classes) q.offer(v);
+        //     int [] cur = null;
+        //     for (; extraStudents > 0; extraStudents--) {
+        //         cur = q.poll();
+        //         cur[0]++;
+        //         cur[1]++;
+        //         q.offer(cur);
+        //     }
+        //     double res = 0d;
+        //     for (int [] v : classes) 
+        //         res += (double)v[0] / (double)v[1];
+        //     return (double)(res / (double)classes.length);
+        // }
+
+
+        // private class Pt {
+        //     int i;
+        //     int v;
+        //     public Pt(int a, int b) {
+        //         i = a;
+        //         v = b;
+        //     }
+        // }
+        // public int[] rearrangeBarcodes(int[] barcodes) {
+        //     int n = barcodes.length;
+        //     if (n == 1) return barcodes;
+        //     HashMap<Integer, Integer> map = new HashMap<>();
+        //     for (int i = 0; i < n; i++) 
+        //         map.put(barcodes[i], map.getOrDefault(barcodes[i], 0) + 1);
+        //     Queue<Pt> q = new PriorityQueue<>((x, y) -> y.v - x.v); // Queue<int []> q = new PriorityQueue<>(); is convenient too
+        //     for (Map.Entry<Integer, Integer> entry : map.entrySet()) 
+        //         q.add(new Pt(entry.getKey(), entry.getValue()));
+        //     int [] arr = new int[n];
+        //     int idx = 0;
+        //     Pt cur = null, next = null;
+        //     while (!q.isEmpty()) {
+        //         cur = q.poll();
+        //         if (idx == 0 || arr[idx-1] != cur.i) {
+        //             arr[idx++] = cur.i;
+        //             if (cur.v > 1)
+        //                 q.offer(new Pt(cur.i, cur.v-1));
+        //             continue;
+        //         }
+        //         next = q.poll();
+        //         arr[idx++] = next.i;
+        //         if (next.v > 1)
+        //             q.offer(new Pt(next.i, next.v-1));
+        //         q.offer(cur);
+        //     }
+        //     return arr;
+        // }
+
+
+        // public boolean isPossible(int[] arr) {
+        //     if (arr == null || arr.length == 0) return false;
+        //     int n = arr.length;
+        //     Map<Integer, Integer> m = new HashMap<>(); // frequency map
+        //     for (int i = 0; i < n; i++) 
+        //         m.put(arr[i], m.getOrDefault(arr[i], 0) + 1);
+        //     Map<Integer, Integer> need = new HashMap<>(); // frequency map
+        //     for (int v : arr) {
+        //         if (m.get(v) <= 0) continue;
+        //         if (need.getOrDefault(v, 0) > 0) {
+        //             m.put(v, m.get(v)-1);
+        //             need.put(v, need.get(v)-1);
+        //             need.put(v+1, need.getOrDefault(v+1, 0) + 1);
+        //         } else {
+        //             if (m.getOrDefault(v+1, 0) > 0 && m.getOrDefault(v+2, 0) > 0) {
+        //                 m.put(v, m.get(v)-1);
+        //                 m.put(v+1, m.get(v+1)-1);
+        //                 m.put(v+2, m.get(v+2)-1);
+        //                 need.put(v+3, need.getOrDefault(v+3, 0) + 1);
+        //             } else return false;
+        //         } 
+        //     }
+        //     return true;
+        // }
+        // private PriorityQueue<Integer> getOrPut(int v) {
+        //     PriorityQueue<Integer> q = dmap.get(v);
+        //     if (q == null) {
+        //         q = new PriorityQueue<Integer>();
+        //         dmap.put(v, q);
+        //     }
+        //     return q;
+        // }
+        // private Map<Integer, PriorityQueue<Integer>> dmap;
+        // public boolean isPossible(int[] arr) {
+        //     dmap = new HashMap<>();
+        //     for (int v : arr) {
+        //         PriorityQueue<Integer> q = getOrPut(v-1);
+        //         int len = q.isEmpty() ? 0 : q.poll();
+        //         PriorityQueue<Integer> p = getOrPut(v);
+        //         p.offer(len+1);
+        //     }
+        //     for (int key : dmap.keySet()) 
+        //         for (int len : dmap.get(key)) 
+        //             if (len < 3) return false;
+        //     return true;
+        // }
+
+
     }
     
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        char [][] a = new char [][] {{'#','#','#','#','#','#'},{'#','T','#','#','#','#'},{'#','.','.','B','.','#'},{'#','.','#','#','.','#'},{'#','.','.','.','S','#'},{'#','#','#','#','#','#'}}; 
-        // char [][] a = new char [][] {{'#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#'},{'#','.','.','.','.','.','.','.','.','.','.','.','#','#','#','#'},{'#','.','#','#','#','#','.','#','#','#','#','.','#','#','#','.'},{'#','.','.','.','.','.','.','#','T','#','.','.','#','#','#','.'},{'#','.','.','.','#','.','.','.','.','.','.','.','#','#','#','.'},{'#','.','.','.','.','.','B','.','.','.','.','.','#','#','#','.'},{'#','.','#','#','#','#','#','#','#','#','#','.','#','#','#','.'},{'#','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.'},{'#','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.'},{'#','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.'},{'#','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.'},{'#','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.'},{'#','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.'},{'#','.','.','.','.','.','.','.','S','.','.','.','.','.','.','.'},{'#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#'}}; 
-        // // char [][] a = new char [][] {{'#','.','.','#','T','#','#','#','#'},{'#','.','.','#','.','#','.','.','#'},{'#','.','.','#','.','#','B','.','#'},{'#','.','.','.','.','.','.','.','#'},{'#','.','.','.','.','#','.','S','#'},{'#','.','.','#','.','#','#','#','#'}}; 
-        
-        System.out.println("a.length: " + a.length);
-        for (int z = 0; z < a.length; ++z) {
-            for (int w = 0; w < a[z].length; w++) {
-                System.out.print(a[z][w] + " ");
-                if (w % 5 == 4)
-                    System.out.print(" | ");
-            }
-            System.out.print("\n");
-            if (z % 5 == 4)
-                System.out.println("________________________________________");
-        }
+        int [][] a = new int [][] {{0,1},{1,2},{0,2}};
+        double[] b = new double[] {0.5, 0.5, 0.2};
 
-        int res = s.minPushBox(a);
+        double res = s.maxProbability(2, a, b, 0, 2);
         System.out.println("res: " + res);
     }
 }

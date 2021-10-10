@@ -255,64 +255,6 @@ public class heap {
         // }
 
         
-        // public String reorganizeString(String s) {
-        //     int n = s.length();
-        //     if (n == 1 || (n == 2 && s.charAt(0) != s.charAt(1))) return s;
-        //     int x = 1;
-        //     while (x < n && s.charAt(x) != s.charAt(x-1)) ++x;
-        //     if (x == n) return s;
-            
-        //     HashMap<Character, Integer> m = new HashMap<>();
-        //     for (int i = 0; i < n; i++) 
-        //         m.put(s.charAt(i), m.getOrDefault(s.charAt(i), 0) + 1);
-        //     Map<Character, Integer> map = m.entrySet().stream()
-        //         .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-        //         .collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
-        //       System.out.println("");
-        //       System.out.println("map.size(): " + map.size());
-        //       for (Map.Entry<Character, Integer> entry : map.entrySet()) 
-        //           System.out.print(entry.getKey() + ", " + entry.getValue() + "\n");
-        //       System.out.println("");
-        //     StringBuilder res = new StringBuilder();
-        //     Iterator<Map.Entry<Character, Integer>> itr = map.entrySet().iterator();
-        //     Map.Entry<Character, Integer> pre = itr.next(), cur = pre, tmp = pre;
-        //     int cnt = 0, tar = pre.getValue();
-        //     while (itr.hasNext()) {
-        //         cur = itr.next();
-        //         if (tar == 0 && itr.hasNext()) {
-        //             pre = cur;
-        //             cur = itr.next();
-        //         } else if (tar == 0) {
-        //             if (cur.getValue() > 1) return "";
-        //             res.append(cur.getKey());
-        //             return res.toString();
-        //         }
-        //         if (cur.getValue() > tar) { 
-        //             tmp = cur;
-        //             cur = pre;
-        //             pre = tmp;
-        //         }
-        //         cnt = 0;
-        //         while (cnt < Math.min(cur.getValue(), tar)) {
-        //             res.append(pre.getKey());
-        //             res.append(cur.getKey());
-        //             ++cnt;
-        //         }
-        //          System.out.println("cnt: " + cnt);
-        //           System.out.println("res.toString(): " + res.toString());
-        //         if (tar >= cnt) tar -= cnt;
-        //           System.out.println("tar: " + tar);
-        //     }
-        //       System.out.println("pre.getValue(): " + pre.getValue());
-        //       System.out.println("cnt: " + cnt);
-        //       System.out.println("tar: " + tar);
-        //       System.out.println("cur.getValue(): " + cur.getValue());
-        //     if (Math.max(tar, cur.getValue()) - cnt >= 1) return "";
-        //     res.append(pre.getKey());
-        //     return res.toString();
-        // }
-
-
         // public int minimumEffortPath(int[][] heights) {
         //     m = heights.length;
         //     n = heights[0].length;
@@ -394,37 +336,7 @@ public class heap {
         //     return -1;
         // }
 
-        // public double maxAverageRatio(int[][] classes, int extraStudents) {
-        //     int n = classes.length;
-        //     Queue<int []> q = new PriorityQueue<int []>((x, y) -> Double.compare(((((int[])y)[0]+1.0)/(((int[])y)[1]+1.0) - ((int[])y)[0]/(((int[])y)[1])),
-        //                                                                          ((((int[])x)[0]+1.0)/(((int[])x)[1]+1.0) - ((int[])x)[0]/(((int[])x)[1]))));
-        //     for (int i = 0; i < n; i++)
-        //         q.add(classes[i]);
-        //     int [] val = new int [2];
-        //     while (extraStudents > 0) {
-        //         val = q.poll();
-        //         // System.out.println("val.length: " + val.length);
-        //         // for (int z = 0; z < val.length; ++z) 
-        //         //     System.out.print(val[z] + ", ");
-        //         // System.out.println("");
-        //         val[0] += 1;
-        //         val[1] += 1;
-        //         q.add(val);
-        //         --extraStudents;
-        //     }
-        //     double res = 0d;
-        //     while (!q.isEmpty()) {
-        //         val = q.poll();
-        //         // System.out.println("val.length: " + val.length);
-        //         // for (int z = 0; z < val.length; ++z) 
-        //         //     System.out.print(val[z] + ", ");
-        //         // System.out.println("");
-        //         res += (double)val[0] / (double)val[1];
-        //     }
-        //     // System.out.println("res: " + res);
-        //     return (double)(res / n);
-        // }
-
+        
         // private class Node {
         //     int i;
         //     int r;

@@ -346,58 +346,53 @@ public class dynaeightmicProgramming {
         // }
 
         
-        // private void initializeGraph(int n, int [][] arr) {
-        //     for (int [] v : arr) {
-        //         m.putIfAbsent(v[0], new HashMap<>());
-        //         m.get(v[0]).put(v[1], v[2]);
-        //         m.putIfAbsent(v[1], new HashMap<>());
-        //         m.get(v[1]).put(v[0], v[2]);
-        //     }
-        // }
-        // public void dijkstra(int n) {
-        //     Queue<int []> q = new PriorityQueue<>((a, b) -> (a[1] - b[1]));
-        //     q.add(new int [] {n, 0});
-        //     Arrays.fill(dist, Integer.MAX_VALUE);
-        //     dist[n] = 0;
-        //     int [] cur = null;
-        //     int u = 0, d = 0;
-        //     while (!q.isEmpty()) {
-        //         cur = q.poll();
-        //         u = cur[0];
-        //         d = cur[1];
-        //         if (dist[u] < d) continue;
-        //         if (m.get(u) != null) 
-        //             for (int v : m.get(u).keySet()) 
-        //                 if (dist[v] > dist[u] + m.get(u).get(v)) {
-        //                     dist[v] = dist[u] + m.get(u).get(v);
-        //                     q.offer(new int [] {v, dist[v]});
-        //                 }
-        //     }
-        // }
-        // private int dfs(int n, int i) { 
-        //     if (i == n) return 1;
-        //     if (dp[i] != -1) return dp[i];
-        //     long res = 0;
-        //     if (m.get(i) != null) {
-        //         for (int v : m.get(i).keySet()) {
-        //             if (dist[i] > dist[v])
-        //                 res = (res + dfs(n, v)) % mod;
-        //         }
-        //     }
-        //     return dp[i] = (int)res;
-        // }
-        // HashMap<Integer, Map<Integer, Integer>> m = new HashMap<>();
-        // int mod = (int)(1e9+7);
-        // int [] dist;
-        // int [] dp;
-        // public int countRestrictedPaths(int n, int[][] edges) {
-        //     initializeGraph(n, edges);
-        //     dist = new int[n+1];
-        //     dijkstra(n);
-        //     dp = new int [n+1];
-        //     Arrays.fill(dp, -1);
-        //     return dfs(n, 1);
-        // }
+        public void dijkstra(int n) {
+            Queue<int []> q = new PriorityQueue<>((a, b) -> (a[1] - b[1]));
+            q.add(new int [] {n, 0});
+            Arrays.fill(dist, Integer.MAX_VALUE);
+            dist[n] = 0;
+            int [] cur = null;
+            int u = 0, d = 0;
+            while (!q.isEmpty()) {
+                cur = q.poll();
+                u = cur[0];
+                d = cur[1];
+                if (dist[u] < d) continue;
+                if (m.get(u) != null) 
+                    for (int v : m.get(u).keySet()) 
+                        if (dist[v] > dist[u] + m.get(u).get(v)) {
+                            dist[v] = dist[u] + m.get(u).get(v);
+                            q.offer(new int [] {v, dist[v]});
+                        }
+            }
+        }
+        private int dfs(int n, int i) { 
+            if (i == n) return 1;
+            if (dp[i] != -1) return dp[i];
+            long res = 0;
+            if (m.get(i) != null) {
+                for (int v : m.get(i).keySet()) {
+                    if (dist[i] > dist[v])
+                        res = (res + dfs(n, v)) % mod;
+                }
+            }
+            return dp[i] = (int)res;
+        }
+        HashMap<Integer, Map<Integer, Integer>> m = new HashMap<>();
+        int mod = (int)(1e9+7);
+        int [] dist;
+        int [] dp;
+        public int countRestrictedPaths(int n, int[][] edges) {
+            for (int [] v : edges) {
+                m.computeIfAbsent(v[0], k->new HashMap<>()).put(v[1], v[2]);
+                m.computeIfAbsent(v[1], k->new HashMap<>()).put(v[0], v[2]);
+            }
+            dist = new int[n+1];
+            dijkstra(n);
+            dp = new int [n+1];
+            Arrays.fill(dp, -1);
+            return dfs(n, 1);
+        }
 
 
         // public int maxProfit(int[] prices) {
@@ -635,40 +630,6 @@ public class dynaeightmicProgramming {
         // }
 
 
-        // private int dfs(int [] arr, int [] sort, int i, int j) {
-        //     if (i < 0) return 0;
-        //     if (dp[i][j] != -1) return dp[i][j];
-        //     int res = Integer.MAX_VALUE, tmp = 0, tv = 0;
-        //     if (i == 0) {
-        //         if (arr[i] < arr[i+1]) return 0;
-        //         if (arr[i] >= sort[0]) return -1;
-        //         return 1;
-        //     }
-        //     if (arr[i] > arr[i-1]) res = Math.min(res, dfs(arr, sort, i-1, j));
-        //     else {
-        //         for (int k = j+1; k < n; k++) 
-        //             if (sort[k] > arr[i-1]) break;
-        //         res = Math.min(res, dfs(arr, sort, i-1, j) + 1);
-        //         // 这里的逻辑还是稀里糊涂
-        //     }
-        //     // if (arr[i] <= sort[j]) return dp[i][j] = dfs(arr, sort, i+1, j);
-        //     // int res = 0, tmp = 0;
-        //     // return dp[i][j] = Math.min( dfs(arr, sort, i+1, j), 1 + dfs(tmp, sort, i+1, j+1));
-        // }
-        // int [][] dp;
-        // int m, n;
-        // public int makeArrayIncreasing(int[] a, int[] arr2) {
-        //     int [] b = Arrays.stream(arr2).distinct().toArray();
-        //     Arrays.sort(b);
-        //     m = a.length;
-        //     n = b.length;
-        //     dp = new int [m][n];
-        //     for (int i = 0; i < m; i++) 
-        //         Arrays.fill(dp[i], -1);
-        //     return dfs(a, b, m-1, -1);
-        // }
-
-
         // public int minLen(int len, int i, int j) {
         //     int min = Math.min(i, j);
         //     int max = Math.max(i, j);
@@ -765,42 +726,6 @@ public class dynaeightmicProgramming {
         // }
 
 
-        // private int dfs(int [][] arr, int target, int fu, int i) {
-        //     if (i == n-1) {
-        //         if (fu >= target || fu + arr[i][1] >= target) {
-        //             dp[i][0] = fu >= target ? 0 : 1;
-        //             dp[i][1] = 1;
-        //             return dp[i][0];
-        //         } else {
-        //             dp[i][0] = -1;
-        //             return dp[i][0];
-        //         }
-        //     }
-        //     if (dp[i][1] != -1) return dp[i][0]; // 每个下标状态也与当时的油量相关，这个状态可能不对，要再想一下
-        //     int res = Integer.MAX_VALUE, tmp = 0;
-        //     if (fu >= arr[i+1][0]) {
-        //         tmp = dfs(arr, target, fu, i+1);
-        //         if (dp[i+1][1] != -1) res = Math.min(res, tmp);
-        //     }
-        //     tmp = dfs(arr, target, fu + arr[i][1], i+1);
-        //     if (dp[i+1][1] != -1) res = Math.min(res, 1 + tmp); // 感觉这像是在做贪心法，局部最优可能并不是全局最优，下标之间没有独立性
-        //     if (res == Integer.MAX_VALUE) dp[i][0] = -1;
-        //     else {
-        //         dp[i][0] = res;
-        //         dp[i][1] = 1;
-        //     }
-        //     return dp[i][0];
-        // }
-        // int [][][] dp;
-        // int n;
-        // public int minRefuelStops(int target, int startFuel, int[][] stations) {
-        //     int  n = stations.length;
-        //     if (startFuel >= target) return 0;
-        //     if (startFuel < target && n == 0 || startFuel < stations[0][0]) return -1;
-        //     Queue<Integer> q = new PriorityQueue<>();
-        // }
-
-
         // public int findSubstringInWraproundString(String p) {
         //     int n = p.length();
         //     int [] arr = new int [n];
@@ -817,25 +742,6 @@ public class dynaeightmicProgramming {
         //     for (int i = 0; i < 26; i++) 
         //         res += cnt[i];
         //     return res;
-        // }
-
-
-        // private int dfs(int i, int k, int m) { // m: 0, not middle, 1: middle
-        //     if (i == n-1) return m == 1 ? 1 : 0; // 怎么区分 m == 0 or m == 1
-        //     if (dp[i][k][m] > 0) return dp[i][k][m];
-        //     int res = 0;
-        //     for (int j = i; j < (n-1-k); j++) {
-        //         res = (res + dfs(j, k-1, 0)) % mod;
-        //     }
-        // }
-        // int mod = (int)1e9 + 7;
-        // int [][][] dp;
-        // int n;
-        // public int numberOfSets(int nn, int k) {
-        //     if (k == nn-1) return 1;
-        //     n = nn;
-        //     dp = new int [n][k+1][1];
-        //     return dfs(0, k, 0);
         // }
 
 
@@ -962,54 +868,6 @@ public class dynaeightmicProgramming {
         //     for (int i = 1; i < n; i++) 
         //         dp[i] = (2 * dp[i-1] % mod + mod - dp[nextVisit[i-1]] + 2) % mod;
         //     return (int)dp[n-1];
-        // }
-
-
-        // public int minTaps(int n, int[] ranges) {
-        //     int [][] arr = new int[n+1][2];
-        //     for (int i = 0; i < ranges.length; i++) 
-        //         arr[i] = new int [] {i-ranges[i], i+ranges[i]};
-        //     Arrays.sort(arr, (a, b)-> (a[0] != b[0] ? a[0]-b[0] : a[1]-b[1]));
-        //     System.out.println("arr.length: " + arr.length);
-        //     for (int z = 0; z < arr.length; ++z) {
-        //         for (int w = 0; w < arr[z].length; w++) 
-        //             System.out.print(arr[z][w] + ", ");
-        //         System.out.print("\n");
-        //     }
-        //     if (arr[0][0] > 0) return -1;
-        //     int cnt = 0, pre = -1, i = 0, j = 0;
-        //     int [] cur = null;
-        //     // for (int i = 0; i < n+1; i++) {
-        //     //     cur = arr[i];
-        //     //     if (pre == -1) {
-        //     //         pre = cur[1];
-        //     //         ++cnt;
-        //     //     }
-        //     //     j = i;
-        //     //     while (arr[j][0] < pre) {
-        //     //         pre = Math.max(pre, arr[j][1]);
-        //     //         ++j;
-        //     //     }
-        //     //     if (j > i) i = j-1;
-        //     // }
-        //     while (i < n+1 && pre < n) {
-        //         if  (i < n+1 && arr[i][0] == cur[0]) {
-        //             while (i < n+1 && arr[i][0] == cur[0]) ++i;
-        //             if (i == n+1 && arr[i-1][1] >= n) return cnt;
-        //             ++cnt;
-        //         }
-        //         pre = arr[i-1][1];
-        //         cur = arr[i];
-        //         if (cur[0] > pre) return -1;
-        //         if (arr[i][1] <= pre) {
-        //             while (i < n+1 && arr[i][1] <= pre) ++ i;
-        //             if (i == n+1 && arr[i-1][1] >= n) return cnt;
-        //             ++ cnt;
-        //             pre = arr[i-1][1];
-        //             cur = arr[i];
-        //         }
-        //     }
-        //     return cnt;
         // }
 
 
@@ -1193,18 +1051,172 @@ public class dynaeightmicProgramming {
 //             return 1 + fstMax; // 这里要再想一下 ？？？
 //         }
 
+
+        // public double getProbability(int[] balls) {
+        //     int sum = Arrays.stream(balls).sum();
+        //     double all = allCases(balls, 0, 0, 0, 0, 0, sum);
+        //     double valid = casesWithEqualDistinctBalls(balls, 0, 0, 0, 0, 0, sum);
+        //     return (1.0 * valid / all);
+        // }
+        // // disF = distinct balls in first bin
+        // // disS = distinct balls in second bin
+        // // f = number of balls in first bin
+        // // s = number of balls in second bin
+        // public double allCases(int [] arr, int pos, int f, int s, int disF, int disS, int sum) {
+        //     if (pos == arr.length) {
+        //         // for all cases, we just need to check if both bins have same number of balls or not
+        //         if (f == s) return fact(sum / 2) * fact(sum / 2); // numerator of our permutations
+        //         return 0;
+        //     }
+        //     // we put all balls in second bin
+        //     double ans = 1.0 * allCases(arr, pos+1, f, s+arr[pos], disF, disS+1, sum) / fact(arr[pos]);
+        //     // we put all balls in first bin
+        //     ans += 1.0 * allCases(arr, pos+1, f+arr[pos], s, disF+1, disS, sum) / fact(arr[pos]);
+        //     for (int i = 1; i < arr[pos]; i++) // 把每一种颜色的球放到两个里面盒子里都有
+        //         ans += 1.0 * allCases(arr, pos+1, f+i, s+arr[pos]-i, disF+1, disS+1, sum) / (fact(i) * fact(arr[pos]-i));
+        //     return ans;
+        // }
+        // public double casesWithEqualDistinctBalls(int [] arr, int pos, int f, int s, int disF, int disS, int sum) {
+        //     if (pos == arr.length) {
+        //         if (f == s && disF == disS) return fact(sum / 2) * fact(sum / 2);
+        //         return 0;
+        //     }
+        //     double ans = 1.0 * casesWithEqualDistinctBalls(arr, pos+1, f, s+arr[pos], disF, disS+1, sum) / fact(arr[pos]);
+        //     ans += 1.0 * casesWithEqualDistinctBalls(arr, pos+1, f+arr[pos], s, disF+1, disS, sum) / fact(arr[pos]);
+        //     for (int i = 1; i < arr[pos]; i++) 
+        //         ans += 1.0 * casesWithEqualDistinctBalls(arr, pos+1, f+i, s+arr[pos]-i, disF+1, disS+1, sum) / (fact(i) * fact(arr[pos]-i));
+        //     return ans;
+        // }
+        // private double fact(double n) {
+        //     double res = 1;
+        //     for (int i = 2; i <= n; i++) 
+        //         res = res * i;
+        //     return res;
+        // }
+
+        // private long dfs(String s, Set<Integer> si, int idx, )
+        // long [] dp;
+        // int n, mod = (int)1e9 + 7;
+        // public int numPermsDISequence(String s) {
+        //     n = s.length();
+        //     dp = new long [n+1];
+        //     Set<Integer> si = new HashSet<>();
+        //     for (int i = 0; i <= n; i++) 
+        //         si.add(i);
+        //     return dfs(s, si, 0, -1);
+        // }
+
+        
+        // public int numPermsDISequence(String s) {
+        //     int n = s.length(), mod = (int)1e9 + 7, res = 0;
+        //     int [][] dp = new int [n+1][n+1];
+        //     dp[0][0] = 1;
+        //     for (int i = 1; i <= n; i++) 
+        //         for (int j = 0; j <= i; j++) // 考虑当前最后一个元素为j
+        //             if (s.charAt(i-1) == 'D')
+        //                 // 可以把序列中所有大于等于j的元素都加上1得到新序列（这个时候是不会改变当前序列的大小关系的），再把j添加到序列末尾得到
+        //                 for (int k = j; k <= i; k++) 
+        //                     dp[i][j] = (dp[i][j] + dp[i-1][k]) % mod;
+        //             else // 考虑当前最后一个元素为j
+        //                 // 把该序列中所有大于等于j(k < j <= i)的数字都加上1，并在末尾添加一个j得到dp[i][j]中的一种方案
+        //                 for (int k = 0; k < j; k++) // 把序列中所有大等于j的元素都加上1,再把j放在序列末尾得到
+        //                     dp[i][j] = (dp[i][j] + dp[i-1][k]) % mod;
+        //     for (int i = 0; i <= n; i++) 
+        //         res = (res + dp[n][i]) % mod;
+        //     return (int)res;
+        // }
+
+
+        // public String getLongestCommonSubsequence(String S, String T) { // 标准模板，记住
+        //     int m = S.length();
+        //     int n = T.length();
+        //     int [][] dp = new int [m+1][n+1];
+        //     for (int i = 1; i <= m; i++) 
+        //         for (int j = 1; j <= n; j++) 
+        //             if (S.charAt(i-1) == T.charAt(j-1)) dp[i][j] = dp[i-1][j-1] + 1;
+        //             else dp[i][j] = Math.max(dp[i-1][j], dp[i][j-1]);
+        //     int i = m, j = n;
+        //     StringBuilder sb = new StringBuilder();
+        //     while (i-1 >= 0 && j-1 >= 0 && dp[i][j] > 0) {
+        //         if (S.charAt(i-1) == T.charAt(j-1)) {
+        //             sb.insert(0, S.charAt(i-1));
+        //             --i;
+        //             --j;
+        //         } else {
+        //             if (dp[i-1][j] >= dp[i][j-1]) --i;
+        //             else --j;
+        //         }
+        //     }
+        //     return sb.toString();
+        // }
+        // public String shortestCommonSupersequence(String s, String t) {
+        //     int m = s.length();
+        //     int n = t.length();
+        //     int i = 0, j = 0;
+        //     String sub = getLongestCommonSubsequence(s, t);
+        //     String res = "";
+        //     for (char c : sub.toCharArray()) {
+        //         while (s.charAt(i) != c) {
+        //             res += s.charAt(i);
+        //             i++;
+        //         }
+        //         while (t.charAt(j) != c) {
+        //             res += t.charAt(j);
+        //             j++;
+        //         }
+        //         res += c;
+        //         i++;
+        //         j++;
+        //     }
+        //     return res + s.substring(i) + t.substring(j);
+        // }
+        // public void longestCommonSubsequence(String S, String T) { // 标准模板，记住
+        //     int m = S.length();
+        //     int n = T.length();
+        //     for (int i = 1; i <= m; i++) 
+        //         for (int j = 1; j <= n; j++) 
+        //             if (S.charAt(i-1) == T.charAt(j-1)) dp[i][j] = dp[i-1][j-1] + 1;
+        //             else dp[i][j] = Math.max(dp[i-1][j], dp[i][j-1]);
+        // }
+        // int [][] dp;
+        // public String shortestCommonSupersequence(String s, String t) {
+        //     int m = s.length();
+        //     int n = t.length();
+        //     dp = new int [m+1][n+1];
+        //     longestCommonSubsequence(s, t); // fill dp table
+        //     int i = m, j = n;
+        //     StringBuilder sb = new StringBuilder();
+        //     while (i-1 >= 0 && j-1 >= 0) {
+        //         if (s.charAt(i-1) == t.charAt(j-1)) {
+        //             sb.append(s.charAt(i-1));
+        //             --i;
+        //             --j;
+        //         } else {
+        //             if (dp[i][j] == dp[i-1][j]) {
+        //                 sb.append(s.charAt(i-1));
+        //                 --i;
+        //             } else {
+        //                 sb.append(t.charAt(j-1));
+        //                 --j;
+        //             }
+        //         }
+        //     }
+        //     if (i > 0) sb.append((new StringBuilder(s.substring(0, i))).reverse());
+        //     if (j > 0) sb.append((new StringBuilder(t.substring(0, j))).reverse());
+        //     return sb.reverse().toString();
+        // }
+
+
         
     }
 
     public static void main(String[] args) {
         Solution s  =  new Solution();
 
-        int [][] a = new int [][] {{1,2},{2,3},{2,4}};
+        String a = "abac";
+        String b = "cab";
 
-        int [] r = s.countSubgraphsForEachDiameter(4, a);
-        System.out.println("r.length: " + r.length);
-        for (int z = 0; z < r.length; ++z) 
-            System.out.print(r[z] + ", ");
-        System.out.println("");
+        String r = s.shortestCommonSupersequence(a, b);
+        System.out.println("r: " + r);
     }
 }

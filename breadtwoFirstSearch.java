@@ -1019,57 +1019,6 @@ public class breadtwoFirstSearch {
         // }
 
 
-        // public int shortestPathAllKeys(String[] grid) {
-        //     int m = grid.length;
-        //     int n = grid[0].length();
-        //     if (m == 1 && n == 1) return 0;
-        //     int si = 0, sj = 0, keyCnt = 0; // starting point, and total key conts
-        //     Map<Character, Integer> lock = new HashMap<>(); // memo locks and their positions
-        //     for (int i = 0; i < m; i++) 
-        //         for (int j = 0; j < n; j++) 
-        //             if (grid[i].charAt(j) == '@') {
-        //                 si = i;
-        //                 sj = j;
-        //             } else if (Character.isLowerCase(grid[i].charAt(j)))
-        //                 ++keyCnt;
-        //             else if (Character.isUpperCase(grid[i].charAt(j)))
-        //                 lock.put(grid[i].charAt(j), i*n+j);
-        //     System.out.println("keyCnt: " + keyCnt);
-        //     int [][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
-        //     Queue<Integer> q = new LinkedList<>();
-        //     Set<Character> keySet = new HashSet<>(); // key to upperred case
-        //     // Set<Character> lockSet = new HashSet<>(); // key to upperred case
-        //     boolean [][] vis = new boolean [m][n];
-        //     q.offer(si*n+sj);
-        //     int i = 0, j = 0, cur = 0, size = 0, cnt = 0;
-        //     while (keyCnt > 0) {
-        //         while (size-- > 0) {
-        //             cur = q.poll();
-        //             for (int [] d : dirs) {
-        //                 i = cur / n + d[0];
-        //                 j = cur % n + d[1];
-        //                 if (i >= 0 && i < m && j >= 0 && j < n && !vis[i][j] && grid[i].charAt[j] != '#') {
-        //                     if (grid[i].charAt(j) == '.') q.offer(i*n+j);
-        //                     else if (Character.isLowerCase(grid[i].charAt(j))) {
-        //                         keySet.add(Character.toUpperCase(grid[i].charAt(j)));
-        //                         if (keySet.size() == keyCnt) return cnt;
-        //                         --keyCnt;
-        //                         q.offer(i*n+j);
-        //                     } else if (Character.isUpperCase(grid[i].charAt(j)) && keySet.contains(grid[i].charAt(j)))
-        //                         q.offer(i*n+j);
-        //                 }
-        //             }
-        //         } // 想一下什么时候需要重复走：撞了南墙、无路可走的时候回退可能会有多余的步数（如果不是最后一步取到一把钥匙的话）；
-        //         // 拿到最后一把钥匙后回退需要记忆拿到钥匙时的步数
-        //         if (q.size() == 0) { // 这里需要仔细想一下：需要记忆哪些数据，以及如何回退取其它可能取的钥匙
-        //         }
-        //         size = q.size();
-        //         ++cnt;
-        //     }
-        //     return -1;
-        // }
-
-
         // public int numBusesToDestination(int[][] routes, int source, int target) {
         //     if (source == target) return 0;
         //     int n = routes.length, cnt = 0, max = 0;
@@ -1141,29 +1090,29 @@ public class breadtwoFirstSearch {
         // }
 
 
-        public int[] findRedundantDirectedConnection(int[][] edges) {
-            int n = edges.length;
-            boolean [] vis = new boolean [n+1];
-            int [] ins = new int [n+1];
-            Queue<Integer> q = new LinkedList<>();
-            int [] cur = null;
-            int root = 0;
-            boolean once = false;
-            for (int i = 0; i < n; i++) {
-                cur = edges[i];
-                ++ins[cur[1]];
-                if (ins[cur[1]] > 1 || vis[cur[1]]) return cur;
-                if (!vis[cur[0]]) vis[cur[0]] = true;
-                else {
-                    if (!once) {
-                        once = true;
-                        root = cur[0];
-                    } else return cur;
-                    // ins[cur[1]] == 1 && once && root == cur[1]
-                }
-            }
-            return new int [0];
-        }
+        // public int[] findRedundantDirectedConnection(int[][] edges) {
+        //     int n = edges.length;
+        //     boolean [] vis = new boolean [n+1];
+        //     int [] ins = new int [n+1];
+        //     Queue<Integer> q = new LinkedList<>();
+        //     int [] cur = null;
+        //     int root = 0;
+        //     boolean once = false;
+        //     for (int i = 0; i < n; i++) {
+        //         cur = edges[i];
+        //         ++ins[cur[1]];
+        //         if (ins[cur[1]] > 1 || vis[cur[1]]) return cur;
+        //         if (!vis[cur[0]]) vis[cur[0]] = true;
+        //         else {
+        //             if (!once) {
+        //                 once = true;
+        //                 root = cur[0];
+        //             } else return cur;
+        //             // ins[cur[1]] == 1 && once && root == cur[1]
+        //         }
+        //     }
+        //     return new int [0];
+        // }
     }
 
     public static void main(String[] args) {

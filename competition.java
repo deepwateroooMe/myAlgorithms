@@ -334,28 +334,6 @@ public class competition {
         //     return res;
         // }
 
-//         privaet int getAns(String t) { // parse the string to get value, two stacks ,one for vals, and one for symbol
-//             char [] s = t.toCharArray();
-//             int n = s.length;
-// // if no * ops, short cut to add
-//             int i = 0, res = 0, j = 0;
-//             if (t.indexOf('*') == -1) {
-//                 while (i < n) {
-//                     j = i;
-//                     while (j < n && s[j] != '+') ++j;
-//                     res += Integer.parseInt(t.substring(i, j));
-//                     i = j+1;
-//                 }
-//                 return res;
-//             }
-//             Stack<Integer> si = new Stack<>();
-//             Stack<Character> ss = new Stack<>();
-//         }
-//         public int scoreOfStudents(String s, int[] arr) {
-//             int n = arr.length;
-//             // 这个题目的举例给得不好，会不会还有其它不正确认算顺序的呢？先算加再算乘只有一种错法吗？
-//         }
-
 
         // private Boolean dfs(char [][] arr, String s, int i, int j, int idx, int d) { // 还需要剪枝
         //     // System.out.println("\ni: " + i);
@@ -438,36 +416,185 @@ public class competition {
         //     return max;
         // }
 
-        public int waysToPartition(int[] arr, int k) {
-            int n = arr.length;
-            int [][] sum = new int [2][n];
-            // Set<Integer> sdiff = new HashSet<>();
-            Map<Integer, List<Integer>> m = new HashMap<>();
-            for (int i = 0; i < n; i++) {
-                sum[0][i] = (i == 0 ? 0 : sum[0][i-1]) + arr[i];
-                // sdiff.add(k - arr[i]);
-                m.computeIfAbsent(k-arr[i], x -> new ArrayList<>());
-                m.get(k-arr[i]).add(i);
-            }
-            for (int i = n-1; i >= 0; i--) 
-                sum[1][i] = (i == n-1 ? 0 : sum[1][i+1]) + arr[i];
-            int res = 0, diff = 0;
-            for (int i = 1; i < n; i++) {
-                diff = sum[0][i-1] - sum[1][i];
-                if (diff == 0 || m.containsKey(diff) && m.get(diff).get(0) < i || m.containsKey(-diff) && m.get(-diff).get(m.get(-diff).size()-1) >= i)
-                    ++res;
-            }
-            return res;
-        }
+        // public int waysToPartition(int[] arr, int k) {
+        //     int n = arr.length;
+        //     int [][] sum = new int [2][n];
+        //     // Set<Integer> sdiff = new HashSet<>();
+        //     Map<Integer, List<Integer>> m = new HashMap<>();
+        //     for (int i = 0; i < n; i++) {
+        //         sum[0][i] = (i == 0 ? 0 : sum[0][i-1]) + arr[i];
+        //         // sdiff.add(k - arr[i]);
+        //         m.computeIfAbsent(k-arr[i], x -> new ArrayList<>());
+        //         m.get(k-arr[i]).add(i);
+        //     }
+        //     for (int i = n-1; i >= 0; i--) 
+        //         sum[1][i] = (i == n-1 ? 0 : sum[1][i+1]) + arr[i];
+        //     int res = 0, diff = 0;
+        //     for (int i = 1; i < n; i++) {
+        //         diff = sum[0][i-1] - sum[1][i];
+        //         if (diff == 0 || m.containsKey(diff) && m.get(diff).get(0) < i || m.containsKey(-diff) && m.get(-diff).get(m.get(-diff).size()-1) >= i)
+        //             ++res;
+        //     }
+        //     return res;
+        // }
 
+
+        // public int[] missingRolls(int[] rolls, int mean, int n) {
+        //     int m = rolls.length;
+        //     int v = mean * (m + n) - Arrays.stream(rolls).sum();
+        //     if (v > n * 6 || v < n) return new int [0];
+        //     int sum = mean * (m + n) - Arrays.stream(rolls).sum();
+        //     int [] ans = new int [n];
+        //     Arrays.fill(ans, 1);
+        //     sum -= n;
+        //     int i = 0;
+        //     while (sum > 0 && i < n) {
+        //         ans[i++]++;
+        //         --sum;
+        //         if (i == n) i = 0;
+        //     }
+        //     return ans;
+        // }
+        // public int minimumMoves(String s) {
+        //     int n = s.length();
+        //     int i = 0, cnt = 0;
+        //     while (i < n) {
+        //         while (i < n && s.charAt(i) == 'O') ++i;
+        //         if (i == n) return cnt;
+        //         ++cnt;
+        //         i += 3;
+        //     }
+        //     return cnt;
+        // }
+
+        
+        // public String smallestSubsequence(String s, int k, char letter, int repetition) {
+        //     int n = s.length();
+        //     if (n == k) return s;
+        //     int i = 0, cnt = 0, j = 0;
+        //     String res = "";
+        //     while (j < n) {
+        //         while (cnt < repetition && j < n) {
+        //             if (s.charAt(j) == letter) ++cnt;
+        //             ++j;
+        //         }
+        //         if (j - i == k && (res.equals("") || res.compareTo(s.substring(i, j)) > 0))
+        //             res = s.substring(i, j);
+        //         else if (i + k > j) {
+        //             while (i + k > j && j < n) {
+        //                 if (s.charAt(j) == letter) ++cnt;
+        //                 ++j;   
+        //             }
+        //         } // 我觉得这里需要借助什么数据结构或dp来理一下思路，有点儿混乱
+        //         if (res.compareTo(s.substring(i, j)) > 0) res = s.substring(i, j);
+        //         while (i < j && cnt > repetition){
+        //             ++i;  
+        //         } 
+        //     }
+        // }
+
+
+        // private boolean dfs(int val, int one, int two, int zro) {
+        //     if (val == 0) return true;
+        //     String key = one + "-" + two + "-" + zro + "-" + val;
+        //     if (dp.containsKey(key)) return dp.get(key);
+        //     if (one == 0 && two == 0 && zro == 0) return n % 2 != 0; // 题目这个要求我可能没有理解清楚
+        //     boolean res = false;
+        //     if (!res && one > 0 && val != 2) 
+        //         if (!dfs((val+1) % 3, one-1, two, zro)) 
+        //             res = true;
+        //     if (!res && two > 0 && val != 1)
+        //         if (!dfs((val + 2) % 3, one, two-1, zro))
+        //             res = true;
+        //     if (!res && zro > 0 && val != 0)
+        //         if (!dfs((val+0) % 3, one, two, zro-1))
+        //             res = true;
+        //     dp.put(key, res);
+        //     return res;
+        // }
+        // Map<String, Boolean> dp = new HashMap<>();
+        // int n;
+        // public boolean stoneGameIX(int[] stones) {
+        //     n = stones.length;
+        //     dp = new HashMap<String, Boolean>();
+        //     int one = 0, two = 0, zro = 0;
+        //     for (int v : stones)
+        //         if (v % 3 == 0) zro++;
+        //         else if (v % 3 == 1) one++;
+        //         else two++;
+        //     return dfs(3, one, two, zro % 2);
+        // }
+        // public boolean stoneGameIX(int[] stones) {
+        //     int[] cnt = new int[3];
+        //     for (int a: stones)
+        //         cnt[a % 3]++;
+        //     if (Math.min(cnt[1], cnt[2]) == 0)
+        //         return Math.max(cnt[1], cnt[2]) > 2 && cnt[0] % 2 > 0;
+        //     return Math.abs(cnt[1] - cnt[2]) > 2 || cnt[0] % 2 == 0;
+        // }
+
+
+      private int getAns(String s) { 
+          int n = s.length();
+          int j = 0, i = 0;
+          Stack<Integer> va = new Stack<>();
+          Stack<Character> sn = new Stack<>();
+          for (i = 0; i < n; i++) {
+              char c = s.charAt(i);
+              if (c == '+' || c == '*') {
+                  sign[si++] = c;
+                  sn.push(c);
+                  continue;
+              } else {
+                  j = i+1;
+                  
+                  while (j < n && Character.isDigit(s.charAt(j))) ++j;
+                  num[vi] = Integer.parseInt(s.substring(i, j)); // bug
+                  va.push(num[vi++]);
+                  if (j - i > 1)
+                      i = j-1;
+              }
+              while (sn.size() > 0 && sn.peek() == '*' && va.size() >= 2) {
+                  int ans = va.pop() * va.pop();
+                  sn.pop();
+                  va.push(ans);
+              }
+          }
+          while (!sn.isEmpty()) {
+              int ans = va.pop() + va.pop();
+              sn.pop();
+              va.push(ans);
+          }
+          return va.peek();
+      }
+        Map<String, Set<Integer>> m = new HashMap<>(); // memo all possile ans of the string
+        int [] num;
+        char [] sign;
+        int si, vi;
+        public int scoreOfStudents(String s, int [] arr) { 
+            int n = arr.length;
+            num = new int [n];
+            sign = new char[n];
+            si = 0;
+            vi = 0;
+            int ans = getAns(s);
+            System.out.println("vi: " + vi);
+            System.out.println("si: " + si);
+            System.out.println("ans: " + ans);
+            System.out.println(Arrays.toString(num));            
+            System.out.println(Arrays.toString(sign));
+            
+            
+            return 0;
+        }
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        int []  a = new int []  {22, 4, -25, -20, -15, 15, -16, 7, 19, -10, 0, -13, -14};
+        String a = "1+2*3+4";
+        int [] b = new int []  {13, 21, 11, 15};
 
-        int r = s.waysToPartition(a, -33);
+        int r = s.scoreOfStudents(a, b);
         System.out.println("r: " + r);
     }
 }
-

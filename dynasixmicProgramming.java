@@ -562,33 +562,6 @@ public class dynasixmicProgramming {
         //     dp = new int [m][n];
         // }
 
-        // private int dfs(String [] arr, int n, int v) {
-        //     if (v == 1) {
-        //         if (n >= 10) return dp[v] = arr.length;
-        //         int tmp = 0, cnt = 0;
-        //         for (String  str : arr) {
-        //             tmp = Integer.parseInt(str);
-        //             if (tmp < n) ++cnt;
-        //         }
-        //         return dp[v] = cnt;
-        //     }
-        //     if (dp[v] > 0) return dp[v];
-        // }
-        // int [] dp;
-        // int cnt;
-        // public int atMostNGivenDigitSet(String[] digits, int n) {
-        //     cnt = 0;
-        //     int tmp = n;
-        //     while (tmp > 10) {
-        //         ++cnt;
-        //         tmp /= 10;
-        //     }
-        //     ++cnt;
-        //     System.out.println("cnt: " + cnt);
-        //     dp = new int [cnt+1];
-        //     return dfs(digits, n, cnt);
-        // }
-
 
         // public String largestMultipleOfThree(int[] digits) {
         //     int n = digits.length;

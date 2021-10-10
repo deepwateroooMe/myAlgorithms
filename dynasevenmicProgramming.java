@@ -445,31 +445,6 @@ public class dynasevenmicProgramming {
         // }
 
 
-        // private int dfs(String s, int k, int i) {
-        //     System.out.println("\ni: " + i);
-        //     if (i == n-1) return s.charAt(i) > 0 ? 1 : 0;
-        //     if (dp[i] > 0) return dp[i];
-        //     long res = 0; // 这里的折分思路再想一下 
-        //     if (s.charAt(i) == '0' || s.charAt(i+1) == '0' || Integer.parseInt(s.substring(i)) >= k) res = dfs(s, k, i+1) % mod;
-        //     // else if (Integer.parseInt(s.substring(i)) == k) res = dfs(s, k, i+1) % mod;
-        //     else res = (dfs(s, k, i+1) * 2) % mod;
-        //     return dp[i] = (int)res;
-        // }
-        // int mod = 1_000_000_007;
-        // int [] dp;
-        // int n;
-        // public int numberOfArrays(String s, int k) {
-        //     n = s.length();
-        //     dp = new int [n];
-        //     dfs(s, k, 0);
-        //     System.out.println("dp.length: " + dp.length);
-        //     for (int z = 0; z < dp.length; ++z) 
-        //         System.out.print(dp[z] + ", ");
-        //     System.out.println("");
-        //     return dp[0];
-        // }
-
-
         // public int twoEggDrop(int n) { // 1 + 2 + 3 + ... + x >= n ==> get x
         //     if (n <= 2) return n;
         //     return (int)(Math.ceil((-1 + Math.sqrt((long)n * 8 + 1)) / 2.0));
@@ -576,38 +551,38 @@ public class dynasevenmicProgramming {
 //             }
 //             return res;
 //         }
-        // public int findTheCity(int n, int[][] edges, int distanceThreshold) {
-        //     // 1.创建邻接矩阵
-        //     int [][] graph = new int [n][n]; // 相比于我只会用HashMap来建邻接关系，邻接链表与数组都可能，看哪个用起来方便
-        //     for (int i = 0; i < n; i++)
-        //         Arrays.fill(graph[i], Integer.MAX_VALUE); // pre filled n equaivlent to Integer.MAX_VALUE
-        //     for (int [] eg : edges) {
-        //         graph[eg[0]][eg[1]] = eg[2];
-        //         graph[eg[1]][eg[0]] = eg[2];
-        //     }
-        //     // 2.floyd算法
-        //     for (int k = 0; k < n; k++)          // 中间结点
-        //         for (int i = 0; i < n; i++)      // 开始结点
-        //             for (int j = 0; j < n; j++) {// 结尾结点
-        //                 if (i == j || graph[i][k] == Integer.MAX_VALUE || graph[k][j] == Integer.MAX_VALUE) continue;
-        //                 graph[i][j] = Math.min(graph[i][j], graph[i][k] + graph[k][j]);
-        //             }                
-        //     // 3.每个城市距离不大于distanceThreshold的邻居城市的数目
-        //     int [] mark = new int [n]; //记录小于distanceThreshold的邻居城市个数
-        //     for (int i = 0; i < n; i++) 
-        //         for (int j = 0; j < n; j++) 
-        //             if (graph[i][j] <= distanceThreshold)
-        //                 mark[i]++;
-        //     // 4.找数目少，编号最大的
-        //     int min = n;
-        //     int ans = 0;
-        //     for (int i = 0; i < n; i++) 
-        //         if (min >= mark[i]) {
-        //             min = mark[i];
-        //             ans = i;
-        //         }
-        //     return ans;
-        // }
+//         public int findTheCity(int n, int[][] edges, int distanceThreshold) {
+//             // 1.创建邻接矩阵
+//             int [][] graph = new int [n][n]; // 相比于我只会用HashMap来建邻接关系，邻接链表与数组都可能，看哪个用起来方便
+//             for (int i = 0; i < n; i++)
+//                 Arrays.fill(graph[i], Integer.MAX_VALUE); // pre filled n equaivlent to Integer.MAX_VALUE
+//             for (int [] eg : edges) {
+//                 graph[eg[0]][eg[1]] = eg[2];
+//                 graph[eg[1]][eg[0]] = eg[2];
+//             }
+//             // 2.floyd算法
+//             for (int k = 0; k < n; k++)          // 中间结点
+//                 for (int i = 0; i < n; i++)      // 开始结点
+//                     for (int j = 0; j < n; j++) {// 结尾结点
+//                         if (i == j || graph[i][k] == Integer.MAX_VALUE || graph[k][j] == Integer.MAX_VALUE) continue;
+//                         graph[i][j] = Math.min(graph[i][j], graph[i][k] + graph[k][j]);
+//                     }                
+//             // 3.每个城市距离不大于distanceThreshold的邻居城市的数目
+//             int [] mark = new int [n]; //记录小于distanceThreshold的邻居城市个数
+//             for (int i = 0; i < n; i++) 
+//                 for (int j = 0; j < n; j++) 
+//                     if (graph[i][j] <= distanceThreshold)
+//                         mark[i]++;
+//             // 4.找数目少，编号最大的
+//             int min = n;
+//             int ans = 0;
+//             for (int i = 0; i < n; i++) 
+//                 if (min >= mark[i]) {
+//                     min = mark[i];
+//                     ans = i;
+//                 }
+//             return ans;
+//         }
 
 
         // private int dfs(int i, int k) {

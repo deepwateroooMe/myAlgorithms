@@ -516,30 +516,6 @@ public class bitManipulation {
         // }
 
 
-       //  public int longestAwesome(String s) {
-       //      int n = s.length(), mask = 0, max = 0, cur = 0;
-       //      int [] masks = new int [n];
-       //      for (int i = 0; i < n; i++) {
-       //          // System.out.println("\n i: " + i);
-       //          mask ^= (1 << (s.charAt(i) - '0'));
-       //          masks[i] = mask;
-       //          // System.out.println("masks[i]: " + Integer.toBinaryString(masks[i]));
-       //          for (int j = 0; j < i; j++) {
-       //              if (j == 0) cur = masks[i]; // 这里的细节上有点儿问题，需要回头再改一下
-       //              else cur = masks[i] & masks[j-1];
-       // //              System.out.println("j: " + j);
-       // // System.out.println("cur: " + Integer.toBinaryString(cur));
-       // //              System.out.println("Integer.toBinaryString(cur): " + Integer.toBinaryString(cur));
-       // //              System.out.println("(cur == 0 || Integer.bitCount(cur) == 1): " + (cur == 0 || Integer.bitCount(cur) == 1));
-       //              if (cur == 0 || Integer.bitCount(cur) == 1)
-       //                  max = Math.max(max, i-j);
-       //              // System.out.println("max: " + max);
-       //          }
-       //      }
-       //      return max;
-       //  }
-
-
         // public int findTheLongestSubstring(String s) { 
         //     int n = s.length(), idx, mask = 0, max = 0;
         //     Map<Integer, Integer> m = new HashMap<>();
@@ -702,17 +678,6 @@ public class bitManipulation {
         //         else si.add(key);
         //     }
         //     return res;
-        // }
-
-
-        // public int minFlips(int a, int b, int c) {
-        //     int res = 0;
-        //     for (int i = 0; i < 31; i++) {
-        //         if (((c >> i) & 1) == 1) {
-        //             if (((a >> i) & 1) == 1) {
-        //         } else {
-        //         }
-        //     }
         // }
 
 
@@ -1012,96 +977,6 @@ public class bitManipulation {
         // }
 
 
-        // public boolean canDistribute(int[] nums, int[] quantity) {
-        //     int n = nums.length;
-        //     int m = quantity.length;
-        //     Map<Integer, Integer> mm = new HashMap<>();
-        //     int max = 0;
-        //     for (int i = 0; i < n; i++) {
-        //         mm.put(nums[i], mm.getOrDefault(nums[i], 0) + 1);
-        //         max = Math.max(max, mm.get(nums[i]));
-        //     }
-        //     Map<Integer, Integer> map = mm.entrySet().stream()
-        //         .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-        //         .collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
-        //     Arrays.sort(quantity);
-        //     int [] query = IntStream.rangeClosed(0, m-1).map(z->quantity[m-1-z]).toArray();
-        //     List<Integer> l = Arrays.stream(query).boxed().collect(Collectors.toList());
-        //     List<Integer> lidx = new ArrayList<>();
-        //     Set<Integer> mks = new HashSet<>(); // need to be handled
-        //     for (int i = 0; i < m; i++) {
-        //         for (Map.Entry<Integer, Integer> en : map.entrySet()) {
-        //             if (en.getValue() == l.get(i) && !mks.contains(en.getKey())) {
-        //                 mks.add(en.getKey());
-        //                 lidx.add(i);
-        //                 break;
-        //             }
-        //         }
-        //     }
-        //     Collections.sort(lidx, Collections.reverseOrder());
-        //     for (int i = 0; i < lidx.size(); i++) 
-        //         l.remove((int)lidx.get(i));
-        //     if (l.size() == 0) return true;
-        //     if (l.get(l.size()-1) > max) return false;
-        //     for (Integer k : mks) 
-        //         map.remove(k);
-        //     int idx = 0, k = 0, v = 0;
-        //     boolean vm = false;
-        //     while (idx < l.size() && map.size() > 0) {
-        //         mm.clear();
-        //         for (Map.Entry<Integer, Integer> en : map.entrySet()) {
-        //             k = en.getKey();
-        //             v = en.getValue();
-        //             if (v < l.get(idx)) return false;
-        //             vm = false;
-        //             while (v >= l.get(idx)) {
-        //                 v -= l.get(idx);
-        //                 ++idx;
-        //                 if (idx == l.size()) return true;
-        //                 vm = true;
-        //             }
-        //             if (vm) {
-        //                 mm.put(k, v);
-        //                 continue;
-        //             }
-        //         }
-        //         Map<Integer, Integer> tmp = mm.entrySet().stream()
-        //             .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))  // 
-        //             .collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> a, LinkedHashMap::new));
-        //         map = new HashMap<Integer, Integer>(tmp);
-        //     }
-        //     return true;
-        // }
-        // private boolean backTracking(List<List<Integer>> ll, int [] qua, int idx) {
-        //     if (idx == ll.size()) return dp.equals(qua);
-        //     for (int i = 0; i < m; i++) { // m <= 10, bitmask is possible too
-        //         if (i > 0 && dp[i] == dp[i-1]) continue;
-        //         if (ll.get(idx).get(1) < qua[i] || dp[i] > 0) continue;
-        //         dp[i] += qua[i];
-        //         ll.get(idx).set(1, ll.get(idx).get(1) - qua[i]);
-        //         backTracking(ll, qua, idx);
-        //         // 这里的逻辑还有点儿不楚
-        //     }
-        // }
-        // int [] dp;
-        // int m, n;
-        // public boolean canDistribute(int[] nums, int[] quantity) {
-        //     n = nums.length;
-        //     m = quantity.length;
-        //     Map<Integer, Integer> map = new HashMap<>();
-        //     for (Integer v : arr) 
-        //         map.put(v, map.getOrDefault(v, 0) + 1);
-        //     List<List<Integer>> ll = new ArrayList<>();
-        //     for (Map.Entry<Integer, Integer> en : m.entrySet()) 
-        //         ll.add(List.of(en.getKey(), en.getValue()));
-        //     Collections.sort(ll, (a, b) -> b.get(1) - a.get(1)); // decreasing frequency
-        //     Arrays.sort(quantity);
-        //     int [] sorted = IntStream.rangeClosed(0, m-1).map(z->quantity[m-1-z]).toArray();
-        //     dp = new int [m];
-        //     return backTracking(ll, sorted, 0);
-        // }
-
-
         // 可以从根节点开始，对整棵树进行一次深度优先遍历，即：
         // 当我们第一次遍历到某一节点 ii 时，我们将 ii 放入「数据结构」中；
         // 当我们遍历完所有节点 ii 的子节点，即将回溯到 ii 的父节点前，我们将 ii 从「数据结构」中移除。
@@ -1287,95 +1162,18 @@ public class bitManipulation {
         // }
 
 
-        // private boolean helper(int [] arr, int i, int xor) { // xor: the current leftover array xor result
-        //     System.out.println("\n i: " + i);
-        // // Map<String, Integer> tmp = new HashMap<>(); // 这里的dp状态可能定义得不对
-        //     System.out.println("(i == n): " + (i == n));
-        //     System.out.println("Integer.toBinaryString(xor): " + Integer.toBinaryString(xor));
-        //     if (i == n) {
-        //         // tmp = 
-        //         System.out.println("(i % 2 == 0): " + (i % 2 == 0));
-        //         return (i % 2 == 0);
-        //     }
-        //     // if (dp[i] != null) return dp[i];
-        //     String cur = Arrays.toString(arr);
-        //     if (dp.containsKey(cur)) return dp.get(cur);
-        //     int tmp = 0;
-        //     if (i % 2 == 0) { // alice's turn
-        //         for (int j = 0; j < n; j++) {
-        //             System.out.println("j: " + j);
-        //             if (arr[j] == -1) continue;
-        //             System.out.println("((arr[j] ^ xor) == 0): " + ((arr[j] ^ xor) == 0));
-        //             if ((arr[j] ^ xor) == 0) continue;
-        //             tmp = arr[j];
-        //             arr[j] = -1;
-        //             System.out.println("arr.length: " + arr.length);
-        //             for (int z = 0; z < arr.length; ++z) 
-        //                 System.out.print(arr[z] + ", ");
-        //             System.out.println("");
-        //             System.out.println("Integer.toBinaryString((xor^tmp): " + Integer.toBinaryString((xor^tmp)));
-        //             System.out.println("i: " + i);
-        //             System.out.println("(!helper(arr, i+1, xor^tmp)): " + (!helper(arr, i+1, xor^tmp)));
-        //             if (!helper(arr, i+1, xor^tmp)) {
-        //                 dp.put(cur, true);
-        //                 // return dp[i] = true;
-        //                 return true;
-        //             }
-        //             arr[j] = tmp;
-        //         }
-        //         // dp[i] = false;
-        //         // System.out.println("dp[i]: " + dp[i]);
-        //         dp.put(cur, false);
-        //         return false;
-        //     } else { // bob's turn
-        //         for (int j = 0; j < n; j++) {
-        //             if (arr[j] == -1) continue;
-        //             System.out.println("((arr[j] ^ xor) == 0): " + ((arr[j] ^ xor) == 0));
-        //             if ((arr[j] ^ xor) == 0) continue;
-        //             tmp = arr[j];
-        //             arr[j] = -1;
-        //             // if (i % 2 == 0 && !helper(arr, i+1, xor^tmp)) return dp[i] = true;
-        //             System.out.println("arr.length: " + arr.length);
-        //             for (int z = 0; z < arr.length; ++z) 
-        //                 System.out.print(arr[z] + ", ");
-        //             System.out.println("");
-        //             System.out.println("Integer.toBinaryString((xor^tmp): " + Integer.toBinaryString((xor^tmp)));
-        //             System.out.println("i: " + i);
-        //             System.out.println("(!helper(arr, i+1, xor^tmp)): " + (!helper(arr, i+1, xor^tmp)));
-        //             if (!helper(arr, i+1, xor^tmp)){
-        //                 // return dp[i] = false;
-        //                 dp.put(cur, false);
-        //                 // return dp[i] = false;
-        //                 return false;
-        //             }
-        //         }
-        //         dp.put(cur, true);
-        //         return true;
-        //     }
-        // }
-        // // Map<Map<String, Integer>, Boolean> dp = new HashMap<>();
-        // Map<String, Boolean> dp = new HashMap<>();
-        // // Boolean [] dp;
-        // int n;
-        // public boolean xorGame(int[] arr) {
-        //     n = arr.length;
-        //     int v = 0;
-        //     // dp = new Boolean [n];
-        //     dp = new HashMap<>();
-        //     int [] xor = new int [n];
+        // public int countPairs(int[] arr, int low, int high) { // TLE TLE TLE
+        //     int n = arr.length, v = 0, res = 0;
         //     for (int i = 0; i < n; i++) 
-        //         xor[i] = ((i == 0 ? 0 : xor[i-1]) ^ arr[i]);
-        //     System.out.println("xor.length: " + xor.length);
-        //     for (int z = 0; z < xor.length; ++z) 
-        //         System.out.println("Integer.toBinaryString(xor[z]): " + Integer.toBinaryString(xor[z]));
-        //         // System.out.print(xor[z] + ", ");
-        //     System.out.println("");
-        //     System.out.println("xor[n-1]: " + xor[n-1]);
-        //     System.out.println("Integer.toBinaryString(xor[n-1]): " + Integer.toBinaryString(xor[n-1]));
-        // return helper(arr, 0, xor[n-1]); // i: turn
+        //         for (int j = i+1; j < n; j++) {
+        //             v = arr[i] ^ arr[j];
+        //             if (v >= low && v <= high) {
+        //                 ++res;
+        //             }
+        //         }
+        //     System.out.println("res: " + res);
+        //     return res;
         // }
-
-
         // public int countPairs(int[] arr, int low, int high) { 
         //     int [] freq = new int [20002];
         //     for (int v : arr)
@@ -1391,77 +1189,209 @@ public class bitManipulation {
         //     }
         //     return res;
         // }
-        public class Trie {
-            static final int H = 14; // 2^15=32768，15位二进制足够计算
-            int cnt;
-            Trie [] next;
-            public Trie() {
-                this.cnt = 0;
-                this.next = new Trie[2];
-            }
-            public void insert(int va) { // 插入数值
-                Trie r = this;
-                for (int i = H; i >= 0; i--) {
-                    int bit = (va >> i) & 1;
-                    if (r.next[bit] == null)
-                        r.next[bit] = new Trie();
-                    r = r.next[bit];
-                    r.cnt++;
-                }
-            } 
-            public int search(Trie r, int digit, int v, int range) { // 搜索和 v 异或值在[0,range]范围内的数字num2的个数
-                if (r == null) return 0;
-                if (digit < 0) return r.cnt;
-                int vb = (v >> digit) & 1;    // v 和 range 在该位的值
-                int vr = (range >> digit) & 1;
-                if (vr == 1) {   // range在该位为1
-                    if (vb == 0) // num 在该位为0，num2该位为0的部分全部满足，为1的部分继续判断
-                        return (r.next[0] == null ? search(r.next[1], digit-1, v, range) : r.next[0].cnt + search(r.next[1], digit-1, v, range));
-                    else         // v 在该位为1，num2该位为1的部分全部满足，为0的部分继续判断
-                        return (r.next[1] == null ? search(r.next[0], digit-1, v, range) : r.next[1].cnt + search(r.next[0], digit-1, v, range));
-                }
-                return search(r.next[vb], digit-1, v, range); // range在该位 vr 为0，num2该位必须和num一致
-            }
-        }
-        private Trie root;
-        public int countPairs(int[] arr, int low, int high) {
-            int n = arr.length, maxHeight = 14; // 2^15=32768，15位二进制足够计算
-            int res = 0;
-            root = new Trie();
-            for (int v : arr) {
-                res += root.search(root, maxHeight, v, high) - root.search(root, maxHeight, v, low-1); // 这里的脑袋好难转呀。。。
-                root.insert(v);
-            }
-            return res;
-            // for (int v : arr) 
-            //     root.insert(v);
-            // for (int v : arr) 
-            //     res += root.search(root, maxHeight, v, high) - root.search(root, maxHeight, v, low-1);
-            // return res / 2; // 如果按这种写法，就得 / 2，智商呢？！！！
-        }
-        // public int countPairs(int[] arr, int low, int high) { // TLE TLE TLE
-        //     int n = arr.length, v = 0, res = 0;
+        // public class Trie {
+        //     static final int H = 14; // 2^15=32768，15位二进制足够计算
+        //     int cnt;
+        //     Trie [] next;
+        //     public Trie() {
+        //         this.cnt = 0;
+        //         this.next = new Trie[2];
+        //     }
+        //     public void insert(int va) { // 插入数值
+        //         Trie r = this;
+        //         for (int i = H; i >= 0; i--) {
+        //             int bit = (va >> i) & 1;
+        //             if (r.next[bit] == null)
+        //                 r.next[bit] = new Trie();
+        //             r = r.next[bit];
+        //             r.cnt++;
+        //         }
+        //     } 
+        //     public int search(Trie r, int digit, int v, int range) { // 搜索和 v 异或值在[0,range]范围内的数字num2的个数
+        //         if (r == null) return 0;
+        //         if (digit < 0) return r.cnt;
+        //         int vb = (v >> digit) & 1;    // v 和 range 在该位的值
+        //         int vr = (range >> digit) & 1;
+        //         if (vr == 1) {   // range在该位为1
+        //             if (vb == 0) // num 在该位为0，num2该位为0的部分全部满足，为1的部分继续判断
+        //                 return (r.next[0] == null ? search(r.next[1], digit-1, v, range) : r.next[0].cnt + search(r.next[1], digit-1, v, range));
+        //             else         // v 在该位为1，num2该位为1的部分全部满足，为0的部分继续判断
+        //                 return (r.next[1] == null ? search(r.next[0], digit-1, v, range) : r.next[1].cnt + search(r.next[0], digit-1, v, range));
+        //         }
+        //         return search(r.next[vb], digit-1, v, range); // range在该位 vr 为0，num2该位必须和num一致
+        //     }
+        // }
+        // private Trie root;
+        // public int countPairs(int[] arr, int low, int high) {
+        //     int n = arr.length, maxHeight = 14; // 2^15=32768，15位二进制足够计算
+        //     int res = 0;
+        //     root = new Trie();
+        //     for (int v : arr) {
+        //         res += root.search(root, maxHeight, v, high) - root.search(root, maxHeight, v, low-1); // 这里的脑袋好难转呀。。。
+        //         root.insert(v);
+        //     }
+        //     return res;
+        //     // for (int v : arr) 
+        //     //     root.insert(v);
+        //     // for (int v : arr) 
+        //     //     res += root.search(root, maxHeight, v, high) - root.search(root, maxHeight, v, low-1);
+        //     // return res / 2; // 如果按这种写法，就得 / 2，智商呢？！！！
+        // }
+
+        
+        // private boolean backTracking(int [] arr, int [] quantity, int idx) {
+        //     if (idx < 0) return true;
+        //     Set<Integer> vis = new HashSet<>();
+        //     for (int i = 0; i < arr.length; i++) {
+        //         if (arr[i] < quantity[idx] || vis.contains(arr[i])) continue; // 去杂去重
+        //         vis.add(arr[i]);
+        //         arr[i] -= quantity[idx];
+        //         if (backTracking(arr, quantity, idx-1)) return true;
+        //         arr[i] += quantity[idx];
+        //     }
+        //     return false;
+        // }
+        // public boolean canDistribute(int[] nums, int[] quantity) {
+        //     Map<Integer, Integer> map = new HashMap<>();
+        //     for (Integer v : nums) 
+        //         map.put(v, map.getOrDefault(v, 0) + 1);
+        //     int [] arr = new int [map.size()];
+        //     int i = 0;
+        //     for (Integer val : map.values()) arr[i++] = val;
+        //     Arrays.sort(quantity); // decreasing frequency: 是一种裁枝优化
+        //     return backTracking(arr, quantity, quantity.length-1);
+        // }
+        // public boolean canDistribute(int[] nums, int[] quantity) {
+        //     int [] counts = new int[1001]; // compress the states first
+        //     int n = 0;
+        //     for(int i: nums) {
+        //         counts[i] ++;
+        //         if (counts[i] == 1) n++;
+        //     }
+        //     nums = new int[n];
+        //     int j = 0;
+        //     for (int i: counts) 
+        //         if (i > 0) nums[j++] = i;
+        //     return distribute(nums, quantity, 0);
+        // }
+        // private boolean distribute(int[] nums, int[] quantity, int idx) {
+        //     if (i == quantity.length) return true;
+        //     int q = quantity[idx];
+        //     Set<Integer> used = new HashSet<>();
+        //     for(int j = 0; j < nums.length; j++) {
+        //         int k = nums[j];
+        //         if (k < q || used.contains(k)) continue;
+        //         nums[j] -= q;
+        //         used.add(k); // Avoid duplicates. TLE without it.
+        //         if (distribute(nums, quantity, i+1)) return true;
+        //         nums[j] += q;
+        //     }
+        //     return false;
+        // }
+
+
+        // private boolean helper(int [] arr, int i, int xor) { // xor: the current leftover array xor result
+        //     if (i == n) return (i % 2 == 0);
+        //     if (dp[i] != null) return dp[i];
+        //     if (xor == 0) return (i % 2 == 0); // to be noted
+        //     int tmp = 0;
+        //     if (i % 2 == 0) { // alice's turn
+        //         for (int j = 0; j < n; j++) {
+        //             if (arr[j] == -1) continue;
+        //             if ((arr[j] ^ xor) == 0) continue;
+        //             tmp = arr[j];
+        //             arr[j] = -1;
+        //             if (helper(arr, i+1, xor^tmp)) return dp[i] = true;
+        //             arr[j] = tmp;
+        //         }
+        //         return dp[i] = false;
+        //     } else { // bob's turn
+        //         for (int j = 0; j < n; j++) {
+        //             if (arr[j] == -1) continue;
+        //             if ((arr[j] ^ xor) == 0) continue;
+        //             tmp = arr[j];
+        //             arr[j] = -1;
+        //             if (!helper(arr, i+1, xor^tmp)) return dp[i] = false;
+        //             arr[j]= tmp;
+        //         }
+        //         return dp[i] = true;
+        //     }
+        // }
+        // Boolean [] dp; // alice win states
+        // int n;
+        // public boolean xorGame(int[] arr) {
+        //     n = arr.length;
+        //     dp = new Boolean [n];
+        //     int [] xor = new int [n];
         //     for (int i = 0; i < n; i++) 
-        //         for (int j = i+1; j < n; j++) {
-        //             v = arr[i] ^ arr[j];
-        //             if (v >= low && v <= high) {
-        //                 ++res;
+        //         xor[i] = (i == 0 ? 0 : xor[i-1]) ^ arr[i];
+        //     return helper(arr, 0, xor[n-1]); // i: turn
+        // }
+
+        // public boolean xorGame(int[] nums) {
+        //     int xor = 0 ;
+        //     for (int i : nums) 
+        //         xor = xor ^ i ;
+        //     if (xor == 0 || ( nums.length & 1 ) == 0 )
+        //         return true ;
+        //     return false ;
+        // }
+
+
+        // public int shortestPathAllKeys(String[] grid) {
+        //     int m = grid.length;
+        //     int n = grid[0].length();
+        //     int [][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+        //     Queue<int []> q = new LinkedList<>(); // pos + mask
+        //     Set<String> vis = new HashSet<>();
+        //     int keyCnt = 0;     
+        //     for (int i = 0; i < m; i++) 
+        //         for (int j = 0; j < n; j++) 
+        //             if (grid[i].charAt(j) == '@') {
+        //                 q.offer(new int [] {i*n+j, 0});
+        //                 vis.add(String.valueOf(i*n+j) + "_0");
+        //             } else if (Character.isLowerCase(grid[i].charAt(j))) 
+        //                 ++keyCnt;
+        //     int i = 0, j = 0, k = 0, cnt = 0, mask = 0;
+        //     int [] cur = null;
+        //     while (!q.isEmpty()) {
+        //         for (int w = q.size(); w > 0; w--) {
+        //             cur = q.poll();
+        //             if (cur[1] == (1 << keyCnt) - 1) return cnt;
+        //             for (int [] d : dirs) {
+        //                 i = cur[0] / n + d[0];
+        //                 j = cur[0] % n + d[1];
+        //                 k = i * n + j;
+        //                 mask = cur[1]; // 。。。。。。一不小心就。。。。。
+        //                 if (i < 0 || i >= m || j < 0 || j >= n) continue;
+        //                 char c = grid[i].charAt(j);
+        //                 if (c == '#') continue;
+        //                 if (c >= 'A' && c <= 'F' && ((cur[1] >> (c - 'A')) & 1) == 0) continue;
+        //                 if (c >= 'a' && c <= 'f') mask |= (1 << (c - 'a'));
+        //                 String tmp = k + "_" + mask;
+        //                 if (!vis.contains(tmp)) {
+        //                     vis.add(tmp);
+        //                     q.offer(new int [] {k, mask});
+        //                 }
         //             }
         //         }
-        //     System.out.println("res: " + res);
-        //     return res;
+        //         ++cnt;
+        //     }
+        //     return -1;
         // }
-    }
 
+
+    }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        // int []  a = new int []  {1, 4, 2, 7};
-        int []  a = new int []  {9, 8, 4, 2, 1};
+        // String []  a = new String []  {"@.a.#", "###.#", "b.A.B"};
+        // String []  a = new String []  {"@..aA", "..B#.", "....b"};
+        // String []  a = new String []  {"@fedcbBCDEFaA"};
+        String []  a = new String []  {"@...a", ".###A", "b.BCc"};
+        // String []  a = new String []  {"@fedcbBCDEFaA"};
 
-        // int res = s.countPairs(a, 2, 6);
-        int res = s.countPairs(a, 5, 14);
+        int res = s.shortestPathAllKeys(a);
         System.out.println("res: " + res);
-        
     }
 }
