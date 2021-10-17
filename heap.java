@@ -424,95 +424,7 @@ public class heap {
         //     }
         // }
 
-        // private class Node {
-        //     int i;
-        //     int [] arr;
-        //     public Node(int a, int [] b) {
-        //         i = a;
-        //         arr = b;
-        //     }
-        // }
-        // public int[] getOrder(int[][] tasks) {
-        //     int n = tasks.length;
-        //     int [] res = new int [n];
-        //     int i = 0, idx = 0;
-
-        //     HashMap<Integer, int []> map = new HashMap<>();
-        //     for ( i = 0; i < n; i++) 
-        //         map.put(i, tasks[i]);
-
-        //     Comparator<Map.Entry<Integer, int[]>> ptimeThenIdx = new Comparator<Map.Entry<Integer, int []>> () {
-        //         @Override 
-        //         public int compare(Map.Entry<Integer, int []> a, Map.Entry<Integer, int []> b) {
-        //             int cmp0 = (a.getValue())[0] - (b.getValue())[0];
-        //             if (cmp0 != 0) {
-        //                 return cmp0;
-        //             } else {
-        //                 return (a.getValue())[1] - (b.getValue())[1];
-        //             }
-        //         }
-        //     };
-        //     Map<Integer, int []> m = map.entrySet().stream().sorted(ptimeThenIdx)
-        //         .collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (x, y) -> x, LinkedHashMap::new));
-        //     // System.out.println("");
-        //     // System.out.println("m.size(): " + m.size());
-        //     // for (Map.Entry<Integer, int []> entry : m.entrySet()) 
-        //     //     System.out.print(entry.getKey() + ": " + (entry.getValue())[0] + ", " +  (entry.getValue())[1] + "\n");
-        //     // System.out.println("");
-        //     Arrays.sort(tasks, new Comparator<int []>() {
-        //             public int compare( int [] r1, int [] r2 ) {
-        //                 if ( r1[0] != r2[0]) return r1[0]-r2[0];
-        //                 else return r1[1]-r2[1];
-        //             }
-        //         });
-        //     // System.out.println("tasks.length: " + tasks.length);
-        //     // for (int z = 0; z < tasks.length; ++z) {
-        //     //     for (int w = 0; w < tasks[z].length; w++) 
-        //     //         System.out.print(tasks[z][w] + ", ");
-        //     //     System.out.print("\n");
-        //     // }
-        //     int cur = tasks[0][0];
-        //     Queue<Node> q = new PriorityQueue<>(new Comparator<Node> () {
-        //             @Override public int compare(Node a, Node b) {
-        //                 int res = a.arr[1] - b.arr[1];
-        //                 if (res == 0) return a.i - b.i;
-        //                 else return res;
-        //             }
-        //         });
-
-        //     Node tmp = null;
-        //     i = 0;
-        //     Iterator<Map.Entry<Integer, int []>> itr = m.entrySet().iterator();
-        //     Map.Entry<Integer, int []> ent = itr.next(); 
-
-        //     while (i < n && tasks[i][0] <= cur && itr.hasNext()) {
-        //         q.add(new Node(ent.getKey(), tasks[i]));
-        //         ++i;
-        //         ent = itr.next();
-        //     }
-        //     while (!q.isEmpty()) {
-        //         tmp = q.poll();
-        //         res[idx++] = tmp.i;
-        //         System.out.println("tmp.i: " + tmp.i);
-                
-        //         cur += tmp.arr[1];
-        //         if (q.size() >= 1 && cur < (q.peek()).arr[0]) cur = (q.peek()).arr[0];
-        //         if (i == n) {
-        //             while (!q.isEmpty()) {
-        //                 tmp = q.poll();
-        //                 res[idx++] = tmp.i;
-        //             }
-        //             return res;
-        //         }
-        //         while (i < n && tasks[i][0] <= cur && itr.hasNext()) {
-        //             ent = itr.next();
-        //             q.add(new Node(ent.getKey(), tasks[i]));
-        //             ++i;
-        //         }
-        //     }
-        //     return res;
-        // }
-
+        
         // int res = 0;
         // private int findTheK(int [] arr, int val, int i, int j) {
         //     // if (i == j)
@@ -540,20 +452,6 @@ public class heap {
         //     int k = findTheK(inventory, orders, 0, n-1);
         // }
 
-        // public int maxEvents(int[][] events) {
-        //     int n = events.length;
-        //     if (n == 1) return 1;
-        //     Arrays.sort(events, new Comparator<int []>() {
-        //             public int compare( int [] x, int [] y ) {
-        //                 if ( x[0] != y[0]) return x[0] - y[0];
-        //                 return x[1] - y[1];
-        //             }
-        //         });
-        //     int res = 1;
-        //     for (int i = 1; i < n; i++) {
-        //         if (events[i][0] > events[i-1][1])
-        //     }
-        // }
 
         // public int kthSmallest(int[][] matrix, int k) {
         //     int m = matrix.length;
@@ -614,36 +512,6 @@ public class heap {
         // }
 
 
-        // public int furthestBuilding(int[] heights, int bricks, int ladders) {
-        //     int n = heights.length;
-        //     if (n == 1) return 0;
-        //     int i = 1;
-        //     Queue<Integer> q = new PriorityQueue<>(ladders, (x, y)-> x - y);
-        //     int cnt = heights[1] <= heights[0] ? 0 : 1;
-        //     System.out.println("cnt: " + cnt);
-        //     while (i < n && cnt <= ladders && bricks > 0) {
-        //         System.out.println("i: " + i);
-        //         while (i < n && heights[i] <= heights[i-1]) ++i;
-        //         System.out.println("i 0: " + i);
-        //         // while (i < n && heights[i] > heights[i-1] && (cnt < ladders || (cnt == ladders && q.size() > 0 && bricks >= q.peek()))) {
-        //         while (i < n && heights[i] > heights[i-1] && cnt <= ladders) {
-        //             q.add(heights[i] - heights[i-1]);
-        //             ++cnt;
-        //             ++i;
-        //         }
-        //         if (cnt == ladders + 1 && bricks >= q.peek()) {
-        //             --cnt;
-        //             bricks -= q.poll();
-        //             continue;
-        //         }
-        //         if (cnt > ladders || (q.size() > 0 && bricks < q.peek())) {
-        //             break;
-        //         }
-        //     }
-        //     return i;
-        // }
-
-        
         // List<List<Integer>> res = new ArrayList<>();
         // int m, n;
         // public List<List<Integer>> kSmallestPairs(int[] nums1, int[] nums2, int k) {
@@ -768,22 +636,98 @@ public class heap {
         // }
 
         
-        public int strongPasswordChecker(String password) {
-            int n = password.length();
-            if (n < 6 || n > 20) return Math.min(Math.abs(n-6), Math.abs(n-20)); // 这里应该还需要进一步检测
-        }
+        // public int strongPasswordChecker(String password) {
+        //     int n = password.length();
+        //     if (n < 6 || n > 20) return Math.min(Math.abs(n-6), Math.abs(n-20)); // 这里应该还需要进一步检测
+        // }
+
+
+        // public int furthestBuilding(int[] heights, int bricks, int ladders) {
+        //     int n = heights.length; // 先用砖头，没有砖头了，用梯子换砖头
+        //     if (n == 1) return 0;
+        //     int i = 0;
+        //     if (bricks == 0 && ladders == 0) {
+        //         while  (i < n-1 && heights[i] >= heights[i+1]) i++;
+        //         return i;
+        //     }
+        //     Queue<Integer> q = new PriorityQueue<>((x, y) -> y-x);
+        //     while (i < n-1 && (bricks > 0 || ladders > 0)) {
+        //         while (i < n-1 && heights[i] >= heights[i+1]) i++;
+        //         while (i < n-1 && heights[i] < heights[i+1]) {
+        //             int dif = heights[i+1] - heights[i];
+        //             if (bricks >= dif) {
+        //                 q.offer(dif);
+        //                 bricks -= dif;
+        //                 i++;
+        //             } else { //  (bricks < dif) {
+        //                 if (ladders <= 0) return i;
+        //                 ladders--;
+        //                 i++;
+        //                 if (!q.isEmpty() && dif < q.peek()) {
+        //                     bricks += q.poll() - dif;
+        //                     q.offer(dif);
+        //                 }
+        //             }
+        //         }
+        //     }
+        //     return n-1;
+        // }
+
+
+        // public List<List<Integer>> kSmallestPairs(int[] a, int[] b, int k) { // still bug here
+        //     int m = a.length;
+        //     int n = b.length;
+        //     int [] next = new int [m]; // match to m rows
+        //     Queue<Integer> q = new PriorityQueue<>(new Comparator<Integer>() {
+        //             public int compare(Integer x, Integer y) {
+        //                 return a[x] + b[next[x]] - (a[y]+b[next[y]]);
+        //             }
+        //         });
+        //     for (int i = 0; i < m; i++) q.offer(i);
+        //     List<List<Integer>> ans = new ArrayList<>();
+        //     while (k > 0 && !q.isEmpty()) {
+        //         int idx = q.poll();
+        //         ans.add(List.of(a[idx], b[next[idx]]));
+        //         next[idx] += 1;
+        //         if (next[idx] < n) q.offer(idx);
+        //         --k;
+        //     }
+        //     return ans;
+        // }
+
+
+        // public int[] getOrder(int[][] tasks) {
+        //     int n = tasks.length;
+        //     List<int []> tass = new ArrayList<>();
+        //     for (int i = 0; i < n; i++) 
+        //         tass.add(new int [] {i, tasks[i][0], tasks[i][1]}); // [idx, enQTime, processTime]
+        //     Queue<int []> q = new PriorityQueue<>((a, b) -> (a[2] != b[2] ? a[2]-b[2] : a[0]-b[0]));   // idx sorting ???
+        //     Collections.sort(tass, (a, b)->(a[1]-b[1])); // enq time
+        //     int [] res = new int [n];
+        //     int idx = 0, i = 0, now = 0;
+        //     while (idx < n) {
+        //         if (q.isEmpty()) 
+        //             now = Math.max(now, tass.get(i)[1]);
+        //         while (i < n && tass.get(i)[1] <= now) q.offer(tass.get(i++));
+        //         int [] cur = q.poll();
+        //         res[idx++] = cur[0];
+        //         now += cur[2];
+        //     }
+        //     return res;
+        // }
+
         
-        
+    
     }
     
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        // String []  a = new String []  {"3", "6", "7", "10"};
-        String []  a = new String []  {"2", "21", "12", "1"};
+        // int [][] a = new int [][] {{1,2},{2,4},{3,2},{4,1}};
+        // int [][] a = new int [][] {{7,10},{7,12},{7,5},{7,4},{7,2}};
+        int [][] a = new int [][] {{19,13},{16,9},{21,10},{32,25},{37,4},{49,24},{2,15},{38,41},{37,34},{33,6},{45,4},{18,18},{46,39},{12,24}};
 
-        String res = s.kthLargestNumber(a, 3);
-        System.out.println("res: " + res);
-        
+        int [] res = s.getOrder(a);
+        System.out.println(Arrays.toString(res));
     }
 }

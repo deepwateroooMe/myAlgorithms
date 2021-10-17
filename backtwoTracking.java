@@ -772,53 +772,6 @@ public class backtwoTracking {
         // }
 
 
-        // int min = Integer.MAX_VALUE;
-        // private void helper(int m, int n, int cnt, int v, List<Integer> li, int idx) {
-        //     if (cnt > Math.max(m, n) || v > m*n) return;
-        //     // System.out.println("idx: " + idx);
-        //     // System.out.println("v: " + v);
-        //     if (v == m*n) {
-        //         if (cnt < min) min = cnt;
-        //         // System.out.println("li.size(): " + li.size());
-        //         // for (int z = 0; z < li.size(); ++z) 
-        //         //     System.out.print(li.get(z) + ", ");
-        //         // System.out.print("\n");
-        //         return;
-        //     }
-        //     if (idx < 0) return;
-        //     for (int i = idx; i >= 0; i--) {
-        //         if (!vis[i]) {
-        //             vis[i] = true;
-        //             if (li.size() == 0 || l.get(i) <= li.get(li.size()-1)) { // 还需要一个更严格的标准把控
-        //                 li.add(l.get(i));
-        //                 helper(m, n, cnt+1, v+l.get(i)*l.get(i), li, i-1);
-        //                 li.remove(li.size()-1);
-        //             }
-        //             vis[i] = false;
-        //         }
-        //     }
-        // }
-        // boolean [] vis;
-        // List<Integer> l;
-        // public int tilingRectangle(int n, int m) {
-        //     if (m > n) return tilingRectangle(m, n); // m <= n
-        //     min = Integer.MAX_VALUE;
-        //     l = new ArrayList<>();
-        //     for (int i = 1; i <= Math.min(m, n); i++) {
-        //         l.add(i);
-        //         l.add(i);
-        //     }
-        //     // System.out.println("l.size(): " + l.size());
-        //     // for (int z = 0; z < l.size(); ++z) 
-        //     //     System.out.print(l.get(z) + ", ");
-        //     // System.out.print("\n");
-        //     vis = new boolean[l.size()];
-        //     helper(m, n, 0, 0, new ArrayList<Integer>(), l.size()-1);
-        //     return min;
-        // }
-        // int res = s.tilingRectangle(5, 8);
-
-
         // private boolean checkPerfectSquare(double number) {   
         //     double sqrt=Math.sqrt(number);   
         //     return ((sqrt - Math.floor(sqrt)) == 0);   

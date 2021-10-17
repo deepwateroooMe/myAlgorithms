@@ -591,7 +591,6 @@ public class segmentTree {
         //     //         return new Node(i, j, cnt, left, right);
         //     //     }
         //     // }
-
         //     //  rec1 [x1 y1 x2 y2]
         //     //  rec2 [x1 y1 x2 y2]
         //     // public boolean isRectangleOverlap(int[] rec1, int[] rec2) { 
@@ -607,17 +606,110 @@ public class segmentTree {
         // }
 
         
+        // public List<List<Integer>> getSkyline(int[][] buildings) { // 从左向右扫一遍过去
+        //     List<List<Integer>> ans = new ArrayList<>();
+        //     Map<Integer, List<Integer>> map = new TreeMap<>();
+        //     for (int [] v : buildings) {
+        //         map.computeIfAbsent(v[0], z -> new ArrayList<>()).add(-v[2]); // 插入左节点: 高度为负
+        //         map.computeIfAbsent(v[1], z -> new ArrayList<>()).add(v[2]);  // 插入右节点：高度为正
+        //     }
+        //     Map<Integer, Integer> heights = new TreeMap<>((a, b) -> b-a); // 保留当前位置的所有高度 重定义排序：从大到小
+        //     int [] last = {0, 0}; // 保留上一个位置的横坐标及高度           
+        //     for (Integer key : map.keySet()) {
+        //         List<Integer> ys = map.get(key);
+        //         Collections.sort(ys);
+        //         for (int y : ys) {
+        //             if (y < 0) // 左端点,高度入队
+        //                 heights.put(-y, heights.getOrDefault(-y, 0) + 1);
+        //             else {     // 右端点移除高度
+        //                 heights.put(y, heights.getOrDefault(y, 1) - 1);
+        //                 if (heights.get(y) == 0) heights.remove(y);
+        //             }
+        //         }
+        //         Integer maxHeight = 0;      // 获取heights的最大值:就是第一个值
+        //         if (!heights.isEmpty())
+        //             maxHeight = heights.keySet().iterator().next();
+        //         if (last[1] != maxHeight) { // 如果当前最大高度不同于上一个高度，说明其为转折点
+        //             last[0] = key;          // 更新last，并加入结果集
+        //             last[1] = maxHeight;
+        //             ans.add(Arrays.asList(key, maxHeight));
+        //         }
+        //     }
+        //     return ans;
+        // }
+
+        
+        // public class MinSeg {
+        //     List<Integer> tree = new ArrayList<>();
+        //     int n, idx;
+        //     public MinSeg (int [] arr) {
+        //         n = arr.length;
+        //         tree = new ArrayList<>(2*n);
+        //         for (int i = 0; i < n; i++) 
+        //             tree.add(0);
+        //         for (int i = 0; i < n; i++) 
+        //             tree.add(arr[i]); 
+        //         for (int i = n-1; i >= 0; i--)  // i >= 0
+        //             tree.set(i,  Math.min(tree.get(2*i),  tree.get(2*i+1)));
+        //     }
+        //     public void update(int idx,  int v) {
+        //         idx += n;
+        //         tree.set(idx,  v);
+        //         while (idx > 1) {
+        //             idx /= 2;
+        //             tree.set(idx,  Math.min(tree.get(2*idx),  tree.get(2*idx+1)));
+        //         }
+        //     }
+        //     public int getMin(int l,  int r) { // [l, r) include left, not included right
+        //         l += n;
+        //         r += n;
+        //         int min = Integer.MAX_VALUE;
+        //         while (l < r) {
+        //             if ((l & 1) == 1) {
+        //                 if (tree.get(l) < min) {
+        //                     min = tree.get(l);
+        //                     idx = l;
+        //                 }
+        //                 // min = Math.min(min,  tree.get(l));
+        //                 l++;
+        //             }
+        //             if ((r & 1) == 1) {
+        //                 r--; // order matters !!!
+        //                 if (tree.get(r) < min) {
+        //                     min = tree.lget(r);
+        //                     idx = r;
+        //                 }
+        //                 // min = Math.min(min,  tree.get(r));
+        //             }
+        //             l >>= 1;
+        //             r >>= 1;
+        //         }
+        //         return min;
+        //     }
+        // }
+        // public String minInteger(String s, int k) { // minSeg: 难点在于怎么得到最小值相对应的下标值？
+        //     int n = s.length();
+        //     int [] arr = new int [n];
+        //     for (int i = 0; i < n; i++) 
+        //         arr[i] = s.charAt(i) - '0';
+        //     MinSeg minSeg = new MinSeg(arr);
+        // }
+
         
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        int []  a = new int []  {1, 3, -1, -3, 5, 3, 6, 7};
+        int [][] a = new int [][] {{2,9,10},{3,7,15},{5,12,12},{15,20,10},{19,24,8}};
 
-        int [] res = s.maxSlidingWindow(a, 3);
-        System.out.println("res.length: " + res.length);
-        for (int z = 0; z < res.length; ++z) 
-            System.out.print(res[z] + ", ");
-        System.out.println("");
+        System.out.println("a.length: " + a.length);
+        for (int z = 0; z < a.length; ++z) 
+            System.out.println(Arrays.toString(a[z]));
+        
+
+        List<List<Integer>> res = s.getSkyline(a);
+        System.out.println("res.size(): " + res.size());
+        for (int z = 0; z < res.size(); ++z) 
+            System.out.println(Arrays.toString(res.get(z).toArray()));
     }
 }

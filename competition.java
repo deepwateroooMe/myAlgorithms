@@ -416,28 +416,6 @@ public class competition {
         //     return max;
         // }
 
-        // public int waysToPartition(int[] arr, int k) {
-        //     int n = arr.length;
-        //     int [][] sum = new int [2][n];
-        //     // Set<Integer> sdiff = new HashSet<>();
-        //     Map<Integer, List<Integer>> m = new HashMap<>();
-        //     for (int i = 0; i < n; i++) {
-        //         sum[0][i] = (i == 0 ? 0 : sum[0][i-1]) + arr[i];
-        //         // sdiff.add(k - arr[i]);
-        //         m.computeIfAbsent(k-arr[i], x -> new ArrayList<>());
-        //         m.get(k-arr[i]).add(i);
-        //     }
-        //     for (int i = n-1; i >= 0; i--) 
-        //         sum[1][i] = (i == n-1 ? 0 : sum[1][i+1]) + arr[i];
-        //     int res = 0, diff = 0;
-        //     for (int i = 1; i < n; i++) {
-        //         diff = sum[0][i-1] - sum[1][i];
-        //         if (diff == 0 || m.containsKey(diff) && m.get(diff).get(0) < i || m.containsKey(-diff) && m.get(-diff).get(m.get(-diff).size()-1) >= i)
-        //             ++res;
-        //     }
-        //     return res;
-        // }
-
 
         // public int[] missingRolls(int[] rolls, int mean, int n) {
         //     int m = rolls.length;
@@ -534,67 +512,396 @@ public class competition {
         // }
 
 
-      private int getAns(String s) { 
-          int n = s.length();
-          int j = 0, i = 0;
-          Stack<Integer> va = new Stack<>();
-          Stack<Character> sn = new Stack<>();
-          for (i = 0; i < n; i++) {
-              char c = s.charAt(i);
-              if (c == '+' || c == '*') {
-                  sign[si++] = c;
-                  sn.push(c);
-                  continue;
-              } else {
-                  j = i+1;
+      // private int getAns(String s) { 
+      //     int n = s.length();
+      //     int j = 0, i = 0;
+      //     Stack<Integer> va = new Stack<>();
+      //     Stack<Character> sn = new Stack<>();
+      //     for (i = 0; i < n; i++) {
+      //         char c = s.charAt(i);
+      //         if (c == '+' || c == '*') {
+      //             sign[si++] = c;
+      //             sn.push(c);
+      //             continue;
+      //         } else {
+      //             j = i+1;
                   
-                  while (j < n && Character.isDigit(s.charAt(j))) ++j;
-                  num[vi] = Integer.parseInt(s.substring(i, j)); // bug
-                  va.push(num[vi++]);
-                  if (j - i > 1)
-                      i = j-1;
-              }
-              while (sn.size() > 0 && sn.peek() == '*' && va.size() >= 2) {
-                  int ans = va.pop() * va.pop();
-                  sn.pop();
-                  va.push(ans);
-              }
-          }
-          while (!sn.isEmpty()) {
-              int ans = va.pop() + va.pop();
-              sn.pop();
-              va.push(ans);
-          }
-          return va.peek();
-      }
-        Map<String, Set<Integer>> m = new HashMap<>(); // memo all possile ans of the string
-        int [] num;
-        char [] sign;
-        int si, vi;
-        public int scoreOfStudents(String s, int [] arr) { 
-            int n = arr.length;
-            num = new int [n];
-            sign = new char[n];
-            si = 0;
-            vi = 0;
-            int ans = getAns(s);
-            System.out.println("vi: " + vi);
-            System.out.println("si: " + si);
-            System.out.println("ans: " + ans);
-            System.out.println(Arrays.toString(num));            
-            System.out.println(Arrays.toString(sign));
+      //             while (j < n && Character.isDigit(s.charAt(j))) ++j;
+      //             num[vi] = Integer.parseInt(s.substring(i, j)); // bug
+      //             va.push(num[vi++]);
+      //             if (j - i > 1)
+      //                 i = j-1;
+      //         }
+      //         while (sn.size() > 0 && sn.peek() == '*' && va.size() >= 2) {
+      //             int ans = va.pop() * va.pop();
+      //             sn.pop();
+      //             va.push(ans);
+      //         }
+      //     }
+      //     while (!sn.isEmpty()) {
+      //         int ans = va.pop() + va.pop();
+      //         sn.pop();
+      //         va.push(ans);
+      //     }
+      //     return va.peek();
+      // }
+      //   Map<String, Set<Integer>> m = new HashMap<>(); // memo all possile ans of the string
+      //   int [] num;
+      //   char [] sign;
+      //   int si, vi;
+      //   public int scoreOfStudents(String s, int [] arr) { 
+      //       int n = arr.length;
+      //       num = new int [n];
+      //       sign = new char[n];
+      //       si = 0;
+      //       vi = 0;
+      //       int ans = getAns(s);
+      //       return 0;
+      //   }
+
+
+        // public List<Integer> twoOutOfThree(int[] nums1, int[] nums2, int[] nums3) {
+        //     Set<Integer> res = new HashSet<>();
+        //     Set<Integer> a = new HashSet<>();
+        //     Set<Integer> b = new HashSet<>();
+        //     Set<Integer> c = new HashSet<>();
+        //     a.addAll(Arrays.stream(nums1).boxed().collect(Collectors.toList()));
+        //     b.addAll(Arrays.stream(nums2).boxed().collect(Collectors.toList()));
+        //     c.addAll(Arrays.stream(nums3).boxed().collect(Collectors.toList()));
+        //     Set<Integer> tmp = new HashSet<>();
+        //     tmp.addAll(a);   
+        //     tmp.retainAll(c); // a c 
+        //     a.retainAll(b);   // a & b a modified
+        //     res.addAll(c); 
+        //     res.retainAll(b); // c & b
+        //     res.addAll(a);
+        //     res.addAll(tmp);
+        //     return new ArrayList<>(res);
+        // }
+
+        // public int minimumDifference(int[] arr) {
+        //     int n = arr.length, range = 1 << n, cur = 0;
+        //     int sum = Arrays.stream(arr).sum();
+        //     Set<Integer> s = new HashSet<>();
+        //     int min = Integer.MAX_VALUE;
+        //     for (int i = 1; i < range; i++) {
+        //         if (Integer.bitCount(i) != n/2) continue;
+        //         cur = 0;
+        //         for (int j = 0; j < n; j++) {
+        //             if (((i >> j) & 1) == 1) {
+        //                 cur += arr[j];
+        //             }
+        //         }
+        //         if (s.contains(sum - cur)) 
+        //             min = Math.min(min, Math.abs(sum-cur-cur));
+        //         else s.add(cur);
+        //     }
+        //     return min;
+        // }
+
+
+        // public int minOperations(int [][] grid, int x) {
+        //     int m = grid.length;
+        //     int n = grid[0].length;
+        //     List<Integer> al = new ArrayList<>();
+        //     for (int i = 0; i < m; i++) 
+        //         for (int j = 0; j < n; j++) 
+        //             al.add(grid[i][j]);
+        //     Collections.sort(al);
+        //     int median = al.get((al.size()-1)/2);
+        //     int cnt = 0;
+        //     for (int  i : al) {
+        //         if (i != median) {
+        //             int diff = Math.abs(i - median);
+        //             if (diff % x != 0) return -1;
+        //             cnt += diff / x;
+        //         }
+        //     }
+        //     return cnt;
+        // }
+
+
+        // public int waysToPartition(int[] arr, int k) { // todo: this problem needs deeper understanding
+        //     int n = arr.length;
+        //     long [] sum = new long [n];
+        //     long totalSum = (long)Arrays.stream(arr).sum();
+        //     for (int i = 0; i < n; i++) 
+        //         sum[i] = (i == 0 ? 0 : sum[i-1]) + arr[i];
+        //     int res = 0;
+        //     Map<Long, Integer> leftSum = new HashMap<>(), rightSum = new HashMap<>();
+        //     for (int i = 1; i < n; i++) 
+        //         if (sum[i-1] == sum[n-1] - sum[i-1]) ++res;
+        //     long cur = 0;
+        //     for (int i = n-1; i > 0; i--) {
+        //         cur += arr[i];
+        //         rightSum.put(cur, rightSum.getOrDefault(cur, 0) + 1);
+        //     }
+        //     long newSum = totalSum + (long)k - arr[0];
+        //     if (newSum % 2 == 0 && rightSum.containsKey(newSum / 2))
+        //         res = Math.max(res, rightSum.get(newSum / 2));
+        //     cur = 0;
+        //     for (int i = 1; i < n; i++) {
+        //         cur += arr[i-1];
+        //         leftSum.put(cur, leftSum.getOrDefault(cur, 0) + 1);
+        //         if (rightSum.containsKey(totalSum - cur)) {
+        //             int freq = rightSum.get(totalSum - cur);
+        //             if (freq == 1) rightSum.remove(totalSum - cur);
+        //             else rightSum.put(totalSum - cur, freq - 1);
+        //         }
+        //         newSum = totalSum + (long)k - arr[i];
+        //         if (newSum % 2 != 0) continue;
+        //         int cntLeft = leftSum.getOrDefault(newSum/2, 0), cntRight = rightSum.getOrDefault(newSum/2, 0);
+        //         res = Math.max(res, cntLeft + cntRight);
+        //     }
+        //     return res;
+        // }
+
+
+        // public int minMovesToSeat(int[] seats, int[] students) {
+        //     Arrays.sort(seats);
+        //     Arrays.sort(students);
+        //     int ans = 0;
+        //     for (int i = 0; i < seats.length; i++) 
+        //         ans += Math.abs(seats[i] - students[i]);
+        //     return ans;
+        // }
+
+
+        // public boolean winnerOfGame(String s) {
+        //     int n = s.length();
+        //     if (n <= 2) return false;
+        //     int cnta = (s.charAt(0) == 'A' ? 1 : 0), cntb = (s.charAt(0) == 'B' ? 1 : 0), i = 0, j = 0;
+        //     int tta = 0, ttb = 0;
+        //     while (i < n) {
+        //         while (i < n-1 && s.charAt(i) == s.charAt(i+1)) {
+        //             if (s.charAt(i) == 'A') cnta++;
+        //             else cntb++;
+        //             i++;
+        //         }
+        //         if (i == 0) {
+        //             i = 1;
+        //             j = 1;
+        //             continue;
+        //         }
+        //         if (cnta >= 3 && s.charAt(i) == 'A') {
+        //             cnta -= 2;
+        //             tta += cnta;
+        //         } else if (cntb >= 3 && s.charAt(i) == 'B'){
+        //             cntb -= 2;
+        //             ttb += cntb;
+        //         } 
+        //         j = i+1;
+        //         i++;
+        //         if (i == n) break;
+        //         cnta = (s.charAt(i) == 'A' ? 1 : 0);
+        //         cntb = (s.charAt(i) == 'B' ? 1 : 0);
+        //     }
+        //     return tta > ttb;
+        // }
+
+        
+        // private void dijkstra(int idx) { // 不知道哪个细节错了
+        //     Queue<int []> q = new LinkedList<>();
+        //     q.offer(new int [] {idx, 0});
+        //     while (!q.isEmpty()) {
+        //         int [] cur = q.poll();
+        //         int u = cur[0];
+        //         int d = cur[1];
+        //         if (t[u] < d || m.get(u) == null) continue;
+        //         for (Integer v : m.get(u)) 
+        //             if (t[v] > t[u] + 1) {
+        //                 t[v] = t[u] + 1;
+        //                 q.offer(new int [] {v, t[v]});
+        //             }
+        //     }
+        // }
+        // Map<Integer, List<Integer>> m = new HashMap<>();
+        // int [] t;
+        // public int networkBecomesIdle(int[][] edges, int[] patience) { // 不知道哪个细节错了
+        //     for (int [] e : edges) {
+        //         m.computeIfAbsent(e[0], z -> new ArrayList<>()).add(e[1]);
+        //         m.computeIfAbsent(e[1], z -> new ArrayList<>()).add(e[0]);
+        //     }
+        //     t = new int [m.size()];
+        //     Arrays.fill(t, Integer.MAX_VALUE);
+        //     t[0] = 0;
+        //     dijkstra(0); // 你想先把耗时算出来，然后统一管理，但实际上可以一次遍历达到所有的目的，不用分两次
+        //     for (int i = 0; i < t.length; i++) 
+        //         t[i] *= 2;
+        //     System.out.println(Arrays.toString(t));
+        //     Queue<int []> q = new PriorityQueue<>((a, b)->(a[1]+t[a[0]]/2)-(b[1]+t[b[0]]/2));
+        //     Set<String> vis = new HashSet<>();
+        //     for (Integer key : m.keySet()) 
+        //         if (key != 0) {
+        //             q.offer(new int [] {key, 0});
+        //             vis.add(""+key+"_0");
+        //         }
+        //     int now = 1, ans = 0;
+        //     int [] tt = new int [m.size()];
+        //     while (!q.isEmpty()) {
+        //         int [] cur = q.poll();
+        //         int i = cur[0], time = cur[1] + t[i] / 2;
+        //         if (tt[i] == 0) // 只设置一次，到了这个时间点，就不再重发了
+        //             tt[i] = cur[1] + t[i];
+        //         now = Math.max(now, time); // ???
+        //         ans = cur[1] + t[i] + 1;
+        //         if (patience[i] >= t[i] && q.size() > 0) continue;
+        //         if (patience[i] >= t[i] && q.isEmpty()) return cur[1] + t[i] + 1;
+        //         if (now >= tt[i]) continue;
+        //         for (int j = cur[1]+1; j <= Math.min(now, tt[i]-1); j++) {
+        //             String tmp = "" + i + "_" + j;
+        //             if (vis.contains(tmp)) continue;
+        //             q.offer(new int [] {i, j});
+        //             vis.add(tmp);
+        //         }
+        //     }
+        //     return ans;
+        // }
+        // public int networkBecomesIdle(int[][] edges, int[] patience) {
+        //     int n = patience.length;
+        //     List<List<Integer>> adj = new ArrayList<>();
+        //     for (int i = 0; i < n; i++) 
+        //         adj.add(new ArrayList<>());
+        //     for (int [] e : edges) {
+        //         adj.get(e[0]).add(e[1]);
+        //         adj.get(e[1]).add(e[0]);
+        //     }
+        //     Queue<Integer> q = new LinkedList<>();
+        //     q.offer(0);
+        //     int [] vis = new int [n];
+        //     Arrays.fill(vis, -1); // you can remove Arrays.fill(visited, -1); and instead just check visited[next] == 0 since it's a connected graph.
+        //     vis[0] = 0;
+        //     // vis[0] = 1; // 按照以上建议，也可以把它mark出来以避开重复遍历
+        //     int time = 0;
+        //     while (!q.isEmpty()) {
+        //         time++;
+        //         for (int size = q.size(); size > 0; size--) {
+        //             int cur = q.poll();
+        //             System.out.println("cur: " + cur);
+        //             for (Integer next : adj.get(cur)) 
+        //                 // if (vis[next] == 0) { // 会把0 node重复遍历好多次，但不影响结果正确性，只是重复遍历了它好多次
+        //                 if (vis[next] == -1) {
+        //                     q.offer(next);
+        //                     vis[next] = 2 * time;
+        //                 }
+        //         }
+        //     }
+        //     int res = 0;
+        //     for (int i = 1; i < vis.length; i++) {
+        //         int travelTime = vis[i];
+        //         int k = travelTime / patience[i]; // how many messages send after first message
+        //         if (travelTime % patience[i] == 0) k--;
+        //         int totalTime = k * patience[i] + travelTime;
+        //         res = Math.max(res, totalTime);
+        //     }
+        //     return res + 1;
+        // }
+
+
+        // public long kthSmallestProduct(int[] a, int[] b, long k) { 
+        //     int m = a.length; // ma mb, na, nb 0 four five cnts, 
+        //     int n = b.length; // 以m or n为单位向前推进，找到第 a, a+(m/n) >= k个数，
+        //     int l = 0, r = m*n-1;
+        //     while (l <= r) {
+        //         int m = l + (r-l)/2;
+        //     }
+        // }
+
+
+        // public boolean areNumbersAscending(String so) {
+        //     String [] arr = so.split("\\s+");
+        //     System.out.println(Arrays.toString(arr));
+        //     List<Integer> l = new ArrayList<>();
+        //     for (String s : arr) {
+        //         if (Character.isDigit(s.charAt(0)))
+        //             l.add(Integer.parseInt(s));
+        //     }
+        //     if (l.size() <= 1) return true;
+        //     for (int i = 1; i < l.size(); i++) 
+        //         if (l.get(i) <= l.get(i-1)) return false;
+        //     return true;
+        // }
+
+
+        // public int countMaxOrSubsets(int[] arr) {
+        //     int n = arr.length, range = (1 << n);
+        //     Map<Integer, Set<Integer>> m = new HashMap<>();
+        //     int cur = 0;
+        //     for (int i = 1; i < range; i++) {
+        //         cur = 0;
+        //         for (int j = 0; j < n; j++) 
+        //             if (((i >> j) & 1) == 1) cur |= arr[j];
+        //         m.computeIfAbsent(cur, z -> new HashSet<>()).add(i);
+        //     }
+        //     Map<Integer, Set<Integer>> tmp = m.entrySet().stream()
+        //         .sorted(Map.Entry.comparingByKey(Comparator.reverseOrder())) 
+        //         .collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> a, LinkedHashMap::new));
+        //     return tmp.entrySet().iterator().next().getValue().size();
+        // }
+
+
+        public int secondMinimum(int n, int[][] edges, int time, int change) {
+            List<List<Integer>> ll = new ArrayList<>();
+            for (int i = 0; i <= n; i++) 
+                ll.add(new ArrayList<>());
+            for (int [] e : edges) {
+                ll.get(e[0]).add(e[1]);
+                ll.get(e[1]).add(e[0]);
+            }
+            int min = Integer.MAX_VALUE, t = 0;
+            Queue<int []> q = new LinkedList<>();
+            q.offer(new int [] {1, 0}); // [idx, time]
+            while (!q.isEmpty()) {
+                int [] cur = q.poll();
+                System.out.println(Arrays.toString(cur));
+                t = cur[1] + time; // now
+                boolean bk = false;
+                for (Integer next : ll.get(cur[0])) {
+                    if (next == n) 
+                        if (min == Integer.MAX_VALUE) {
+                            min = t;
+                            bk = true;
+                            break;
+                        }
+                        // else {
+                        //     if (t == min) continue;
+                        //     return t;
+                        // }
+                    if ((t / change) % 2 == 0) {
+                        q.offer(new int [] {next, t});
+                    } else {
+                        q.offer(new int [] {next, t + change - t % change});
+                    }
+                }
+                if (bk) break;
+            }
+            System.out.println("t: " + t);
             
-            
-            return 0;
+            int cnt = 0;
+            while (cnt < 2) {
+                t += time;
+                if (cnt == 1) break;
+                System.out.println("t: " + t);
+                // if ((t / change) % 2 == 0) {
+                //     t += time;
+                // } else {
+                if ((t / change) % 2 == 1) {
+                    t += change - t % change;
+                }
+                ++cnt;
+            }
+            return t;
         }
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        String a = "1+2*3+4";
-        int [] b = new int []  {13, 21, 11, 15};
+        int [][] a = new int [][] {{1,2},{1,3},{1,4},{3,4},{4,5}};
+        int r = s.secondMinimum(5, a, 3, 5);
 
-        int r = s.scoreOfStudents(a, b);
+        // int[] [] a = new int [][] {{1, 2}};
+        // int r = s.secondMinimum(2, a, 3, 2);
+
         System.out.println("r: " + r);
     }
 }

@@ -350,35 +350,6 @@ public class binarySearch {
         // }
 
         
-        // private double getTraHours(int [] arr, int v) {
-        //     int res = 0;
-        //     for (int i = 0; i < arr.length; i++) {
-        //         // System.out.println("\ni: " + i);
-        //         // System.out.println("v: " + v);
-        //         if (i < arr.length-1)
-        //             res += (int)Math.ceil((double)(arr[i]/(double)v));
-        //         else res += (double)(arr[i]/(double)v);
-        //         // System.out.println("res: " + res);
-        //     }
-        //     return res;
-        // }
-        // private int binarySearch(int [] arr, double v, int l, int r) {
-        //     // System.out.println("\n l: " + l);
-        //     // System.out.println("r: " + r);
-        //     if (l == r) return getTraHours(arr, l) <= v ? l : -1;
-        //     if (l == r-1) return getTraHours(arr, l) <= v ? l : (getTraHours(arr, r) <= v ? r : -1);
-        //     int m = l + (r-l)/2;
-        //     // System.out.println("m: " + m);
-        //     // System.out.println(" (getTraHours(arr, m): " +  (getTraHours(arr, m)));
-        //     if (getTraHours(arr, m) <= v) return binarySearch(arr, v, l, m);
-        //     return binarySearch(arr, v, m, r);
-        // }
-        // public int minSpeedOnTime(int[] dist, double hour) {
-        //     int n = dist.length;
-        //     return binarySearch(dist, hour, 1, (int)Math.ceil((double)(Arrays.stream(dist).sum() * 3.0 / hour)));
-        // }
-
-        
         // 怎么才能在这个里面用binarySearch呢？
         // 找子数绒组和为特定值的最大子数组长度 range [0, n] ??? 思路错到了千里之外：我这是在背题么？！！！
         // public int minOperations(int[] arr, int x) {
@@ -577,69 +548,6 @@ public class binarySearch {
         // }
 
 
-   //      private boolean couldGetTarget(int [] arr, int t, int v) {
-   //          // System.out.println("\nt: " + t);
-   //          // System.out.println("v: " + v);
-   //          int cnt = 0, sum = 0;
-   //          for (int i = 0; i < n; i++) {
-   //              if (arr[i] > v) {
-   //                  sum += arr[i]-v;
-   //                  ++cnt;
-   //              } else if (arr[i] == v) ++cnt;
-   //          }
-   //          // System.out.println("sum: " + sum);
-   //          // System.out.println("cnt: " + cnt);
-   //          return sum >= t || sum < t && sum + cnt >= t;
-   //      }
-   //      private int binarySearch(int [] arr, int t, int l, int h) {
-   //          // System.out.println("\n l: " + l);
-   //          // System.out.println("h: " + h);
-   //          if (l == h) return couldGetTarget(arr, t, l) ? l : -1;
-   //          if (l == h-1) return couldGetTarget(arr, t, h) ? h : (couldGetTarget(arr, t, l) ? l : -1);
-   //          int m = l + (h-l)/2;
-   //          // System.out.println("m: " + m);
-   //          // System.out.println("couldGetTarget(arr, t, m): " + couldGetTarget(arr, t, m));
-   //          if (couldGetTarget(arr, t, m)) return binarySearch(arr, t, m, h);
-   //          return binarySearch(arr, t, l, m-1);
-   //      }
-   //      int mod = (int)1e9 + 7, n;
-   //      public int maxProfit(int[] inventory, int orders) {
-   //          n = inventory.length;
-   //          long res = 0;
-   //          if (n == 1) {
-   //              if (orders >= inventory[0]) {
-   //                  res = (int)(((inventory[0]+1l)*inventory[0]) % mod /2l );
-   //                  return (int)res;
-   //              }
-   //              return (int)((inventory[0]*(inventory[0]+1l)/2l - (inventory[0]-orders)*(inventory[0]-orders+1l)/2l) % mod);
-   //          }
-   //          Arrays.sort(inventory);
-   //          int min = Arrays.stream(inventory).min().getAsInt();
-   //          int max = Arrays.stream(inventory).max().getAsInt();
-   //          long sum = 0;
-   //          for (int v : inventory) sum += v;
-   //          int cnt = 0;
-   //          if (orders == (int)sum) 
-   //              for (int i = 0; i < n; i++) 
-   //                  sum += ((long)(inventory[i]*(inventory[i]+1l))) % mod /2l;
-   //          if (orders < sum && orders > sum-min) min -= sum-orders;
-   //          int k = binarySearch(inventory, orders, 0, max);
-   //          System.out.println("k: " + k);
-   //          for (int i = 0; i < n; i++) {
-   //              if (inventory[i] > k) {
-   //                  res += (inventory[i]+k+1l)*(inventory[i]-k)/2l % mod;
-   //                  cnt += inventory[i]-k;
-   //              }
-   //          }
-   //          System.out.println("res: " + res);
-   //          System.out.println("cnt: " + cnt);
-   // res += (cnt < orders ? (orders - cnt)*k % mod : 0);
-   //          return (int)(res % mod);
-   //      }
-        // int []  a = new int []  {701695700, 915736894, 35093938, 364836059, 452183894, 951826038, 861556610, 441929847, 842650446, 858413011, 457896886, 35119509, 776620034, 396643588, 83585103, 681609037};
-        // int res = s.maxProfit(a, 598226067); 
-
-
         // public boolean find132pattern(int[] arr) {
         //     int n = arr.length;
         //     int [] min = new int [n];
@@ -679,71 +587,6 @@ public class binarySearch {
         // }
 
 
-        // private int binarySearchLow(int [] arr, int v, int r, int l, int h) {
-        //     int mid = 0;
-        //     if (l == h) {
-        //         mid = arr[r] - arr[l];
-        //         if (arr[l] <= mid && mid <= v) return l;
-        //         return -1;
-        //     } else if (l == h-1) {
-        //         mid = arr[r] - arr[l];
-        //         if (arr[l] <= mid && mid <= v) return l;
-        //         mid = arr[r] - arr[h];
-        //         if (arr[h] <= mid && mid <= v) return h;
-        //         return -1;
-        //     }
-        //     int m = l + (h-l)/2;
-        //     mid = arr[r] - arr[m];
-        //     if (mid == v) return m;
-        //     if (mid > v) return binarySearchLow(arr, v, r, m+1, h);
-        //     if (arr[m] > mid) return binarySearchLow(arr, v, r, l, m-1);
-        //     return binarySearchLow(arr, v, r, l, m);
-        // }
-        // private int binarySearchHigh(int [] arr, int v, int r, int l, int h) { // (l, h] ? 左边墙的最大放置范围：最左和最右，这里有问题
-        //     int mid = 0;
-        //     if (l == h) {
-        //         mid = arr[r] - arr[l];
-        //         if (arr[l] <= mid && mid <= v) return l;
-        //         return -1;
-        //     } else if (l == h-1) {
-        //         mid = arr[r] - arr[h];
-        //         if (arr[h] <= mid && mid <= v) return h;
-        //         mid = arr[r] - arr[l];
-        //         if (arr[l] <= mid && mid <= v) return l;
-        //         return -1;
-        //     }
-        //     int m = l + (h-l)/2;
-        //     mid = arr[r] - arr[m];
-        //     if (mid == v && arr[m] == mid) return m;
-        //     if (mid == v) return binarySearchHigh(arr, v, r, l, m);
-        //     if (mid > v || arr[m] > mid) return binarySearchLow(arr, v, r, l, m-1);
-        //     return binarySearchLow(arr, v, r, l, m);
-        // }
-        // public int waysToSplit(int[] arr) {
-        //     int n = arr.length;
-        //     if (n == 3) return (arr[0] <= arr[1] && arr[1] <= arr[2]) ? 1 : 0;
-        //     int [] sum = new int[n];
-        //     sum[0] = arr[0];
-        //     for (int i = 1; i < n; i++) 
-        //         sum[i] = sum[i-1] + arr[i];
-        //     int left = 0, mid = 0, right = 0;
-        //     int jlo = 0, jhi;
-        //     int res = 0;
-        //     for (int i = n-1; i >= 2; i--) {
-        //         right = sum[n-1] - sum[i-1];
-        //         if (right < sum[n-1] / 3) continue;
-        //         System.out.println("\n i: " + i);
-        //         jlo = binarySearchLow(sum, right, i-1, 0, i-1);
-        //         jhi = binarySearchHigh(sum, right, i-1, 0, i-1);
-        //         System.out.println("jlo: " + jlo);
-        //         System.out.println("jhi: " + jhi);
-        //         res += jhi - jlo + 1;
-        //     }
-        //     return res;
-        // }
-        // int []  a = new int []  {2, 3, 5, 10};
-
-
         // private boolean poss(int n, int idx, int sum, int target) {
         // }
         // private int binarySearch(int n, int idx, int sum, int l, int r) {
@@ -754,18 +597,168 @@ public class binarySearch {
         //     return binarySearch(n, index, maxSum, 0, n-1);
         // }
 
+
+// public int findLatestStep(int[] arr, int m) { // 上下两个方法都是有bug的
+        //     int n = arr.length;
+        //     if (m == n) return n;
+        //     Map<Integer, Set<String>> map = new HashMap<>();
+        //     map.computeIfAbsent(n, k->new HashSet<>()).add("1".repeat(n));
+        //     for (int i = n; i > 0; i--) { // index has problems
+        //         System.out.println("\n i: " + i);
+        //         System.out.println("map.get(i).size(): " + map.get(i).size());
+        //         System.out.println(Arrays.toString(new ArrayList<>(map.get(i)).toArray()));
+        //         if (map.get(i) == null) return -1;
+        //         for (String s : map.get(i)) 
+        //             if (s.length() == m) return i;
+        //         for (String s : map.get(i)) {
+        //             if (s.length() < arr[arr[i-1]-1]) continue; // a[i-1]-1+1
+        //             String one = s.substring(0, arr[arr[i-1]-1]-1);
+        //             if (one.length() > 0)
+        //                 map.computeIfAbsent(i-1, k->new HashSet<>()).add(one);
+        //             if (arr[arr[i-1]-1]-1 < s.length()-1) {
+        //                 String two = s.substring(arr[arr[i-1]-1]);
+        //                 map.computeIfAbsent(i-1, k->new HashSet<>()).add(two);
+        //             }
+        //         }
+        //     }
+        //     return -1;
+        // }
+        // public int findLatestStep(int[] arr, int m) {
+        //     int n = arr.length;
+        //     if (m == n) return n;
+        //     Map<Integer, Set<String>> map = new HashMap<>();
+        //     map.computeIfAbsent(n, k->new HashSet<>()).add("1".repeat(n));
+        //     for (int i = n; i > 0; i--) { // index has problems
+        //         System.out.println("\n i: " + i);
+        //         System.out.println("map.get(i).size(): " + map.get(i).size());
+        //         System.out.println(Arrays.toString(new ArrayList<>(map.get(i)).toArray()));
+        //         if (map.get(i) == null) return -1;
+        //         for (String s : map.get(i)) 
+        //             if (s.length() == m) return i;
+        //         for (String s : map.get(i)) {
+        //             if (s.length() < arr[i-1]) continue; // a[i-1]-1+1
+        //             String one = s.substring(0, arr[i-1]-1);
+        //             if (one.length() > 0)
+        //                 map.computeIfAbsent(i-1, k->new HashSet<>()).add(one);
+        //             if (arr[i-1]-1 < s.length()-1) {
+        //                 String two = s.substring(arr[i-1]);
+        //                 map.computeIfAbsent(i-1, k->new HashSet<>()).add(two);
+        //             }
+        //         }
+        //     }
+        //     return -1;
+        // }
+
+
+        // public int reachNumber(int target) { // 结果：是个数学问题！！！
+        //     target = Math.abs(target);
+        //     int cnt = 0, sum = 0;
+        //     while (sum < target) sum += (++cnt);
+        //     int d = sum - target;
+        //     if (d % 2 == 0) return cnt;
+        //     return cnt + 1 + (cnt % 2);
+        // }
+
+
+        // private boolean canReach(int [] arr, int v, double target) {
+        //     double res = 0;
+        //     for (int i = 0; i < arr.length-1; i++) 
+        //         res += Math.ceil((double)arr[i] / (double)v);
+        //     res += (double)arr[arr.length-1] / (double)v;
+        //     return res <= target;
+        // }
+        // public int minSpeedOnTime(int[] dist, double hour) {
+        //     int l = 1, r = 10000000, m;
+        //     int res = -1;
+        //     while (l <= r) {
+        //         m = l + (r-l)/ 2;
+        //         if (canReach(dist, m, hour)) {
+        //             res = m; // 把当下最优结果先记下来
+        //             r = m-1; // 同时继续缩短一个，以避免死循环
+        //         } else l = m+1;
+        //     }
+        //     return res;
+        // }
+
+        // public int findNthDigit(int n) {
+        //     int digit = 1;     // 该范围内所有实际数字都占用了digit个单数字
+        //     long totDigit = 0; // 该范围之前的所有实际数字已经占用了totalDigit个单数字
+        //     while (true) {     // 先查出区间范围
+        //         long top = totDigit + digit * 9 * (long)Math.pow(10, digit-1);
+        //         if (n >= totDigit && n <= top) break;
+        //         totDigit = top;
+        //         digit++;
+        //     }
+        //     // 根据范围算出具体的值
+        //     int bgn = (int)Math.pow(10, digit-1);
+        //     int res = 0;
+        //     totDigit += 1;
+        //     // 第n个digit在哪个具体的实际数字上
+        //     int val = bgn + (n - (int)totDigit) / digit;
+        //     res = Integer.toString((int)val).charAt((int)((n- totDigit) % digit)) - '0';
+        //     return res;
+        // }
+
+
+        // public int binarySearchHigh(int [] arr, int sum, int n, int l, int r) { // sum: right sum; n: right most available idx
+        //     int ridx = n;
+        //     while (l <= r) {
+        //         int m = l + (r-l)/2;
+        //         int mid = arr[n] - arr[m];
+        //         if (arr[m] <= mid && mid <= sum) {
+        //             ridx = m;
+        //             l = m+1;
+        //         } else if (arr[m] <= mid)
+        //             l = m+1;
+        //         else // arr[m] > mid
+        //             r = m-1;
+        //     }
+        //     return ridx;
+        // }
+        // public int binarySearchLow(int [] arr, int sum, int n, int l, int r) { // sum: right sum; n: right most available idx
+        //     int lidx = n;
+        //     while (l <= r) {
+        //         int m = l + (r-l)/2;
+        //         int mid = arr[n] - arr[m];
+        //         if (arr[m] <= mid && mid <= sum) {
+        //             lidx = m;
+        //             r = m-1;
+        //         } else if (arr[m] <= mid)
+        //             l = m+1;
+        //         else r = m-1;
+        //     }
+        //     return lidx;
+        // }
+        // public int waysToSplit(int[] arr) { // bug bug bug: 不知道哪里错了
+        //     int mod = (int)1e9 + 7;
+        //     int n = arr.length;
+        //     if (n == 3) return (arr[0] <= arr[1] && arr[1] <= arr[2]) ? 1 : 0;
+        //     int [] sum = new int[n];
+        //     sum[0] = arr[0];
+        //     for (int i = 1; i < n; i++) 
+        //         sum[i] = sum[i-1] + arr[i];
+        //     int left = 0, mid = 0, right = 0;
+        //     int jlo = 0, jhi;
+        //     long res = 0;
+        //     for (int i = n-1; i >= 2; i--) { // 在第i位的前面树最右边的墙
+        //         right = sum[n-1] - sum[i-1];
+        //         if (right < sum[n-1] / 3) continue;
+        //         jlo = binarySearchLow(sum, right, i-1, 0, i-1);
+        //         jhi = binarySearchHigh(sum, right, i-1, 0, i-1);
+        //         if (jlo >= 0 && jlo < i-1 || jhi >= 0 && jhi < i-1)
+        //             res = (res + jhi - jlo + 1) % mod;
+        //     }
+        //     return (int)res;
+        // }
+
         
     }
     
     public static void main(String[] args) {
         Solution s = new Solution(); 
 
-        int []  a = new int []  {2, 3, 5, 10};
-
-        System.out.println("a.length: " + a.length);
-        for (int z = 0; z < a.length; ++z) 
-            System.out.print(a[z] + ", ");
-        System.out.println("");
+        // int []  a = new int []  {2, 3, 5, 10};
+        int [] a = new int [] {1,2,2,2,5,0};
 
         int res = s.waysToSplit(a);
         System.out.println("res: " + res);

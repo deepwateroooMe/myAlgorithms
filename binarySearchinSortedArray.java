@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.*;
 import java.util.stream.*;
 import java.util.stream.Collectors;
-import javafx.util.Pair;
+// import javafx.util.Pair;
 
 import static java.util.stream.Collectors.toMap;
 
@@ -947,26 +947,6 @@ public class binarySearchinSortedArray {
         // }
 
 
-        // public int reachNumber(int target) { // n : target 
-        //     int [] dp = new int[2 * target +1];
-        //     int [] left = new int[target +1];
-        //     Arrays.fill(dp, -1);
-        //     dp[target+1] = 0;
-        //     int j = 0;
-        //     for (int i = 1; i <= target; i++) { // update j each time to be current pos, and continue updating dp
-        //         if (dp[i+target+1+j] == -1 && dp[target+1] != -1)
-        //             dp[i+target+1+j] = dp[target+1] + 1;
-        //         if (dp[target-i-1] == -1 && dp[target+1] != -1)
-        //             dp[target-1-i] = dp[target+1] + 1;
-        //         j = i;
-        //     }
-        //     for (int i = 1; i <= target; i++) {
-        //         if (dp[i] == -1 && dp[0] != -1) dp[i] = dp[0] + 1;
-        //         if (left[i] == -1 && left[0] != -1) left[i] = left[0] + 1;
-        //     }
-        // }
-
-        
         // public int numSubseq(int[] nums, int target) {
         //     int n = nums.length;
         //     Arrays.sort(nums);
@@ -1093,31 +1073,19 @@ public class binarySearchinSortedArray {
         // public boolean judgeSquareSum(int c) {
         //     if (c == 0 || c == 3) return false;
         //     if (c <= 5)  return true;
-        //     int v = c/2;
-        //     while (v * v > c) {
-        //         v /= 2;
-        //         // System.out.println("v: " + v);
+        //     for (int i = (int)Math.sqrt(c); i > 0; i--) {
+        //         int v = c - i*i;
+        //         int j = (int)Math.sqrt(v);
+        //         if (j*j == v) return true;
         //     }
-        //     // System.out.println("v: " + v);
-            
-        //     if (c - v*v == v*v) return true;
-        //     int k = (c - v*v)/2;
-        //     // System.out.println("k: " + k);
-        //     while (k*k > c-v*v) k /= 2;
-            
-
-        //     if (k*k != c - v*v) return false;
-        //     return true;
+        //     return false;
         // }
-
-
-        
     }
 
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        boolean res = s.judgeSquareSum(6);
+        boolean res = s.judgeSquareSum(5);
         System.out.println("res: " + res);
     }
 }

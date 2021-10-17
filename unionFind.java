@@ -1181,104 +1181,79 @@ public class unionFind {
         
         
         // private class UnionFind {
-        //     HashMap<Integer, Integer> pare;
-        //     HashMap<Integer, Integer> rank;
-        //     public UnionFind() {
-        //         pare = new HashMap<>();
-        //         rank = new HashMap<>();
-        //     }
-        //     public int find(int val) {
-        //         if (!pare.containsKey(val)) {
-        //             pare.put(val, val);
-        //             rank.put(val, 0);
-        //             return val;
+        //     int [] id; // parent
+        //     int [] cnt;// size
+        //     public UnionFind (int n) {
+        //         id = new int [n];
+        //         cnt = new int [n];
+        //         for (int i = 0; i < n; i++) {
+        //             id[i] = i;
+        //             cnt[i] = 1;
         //         }
-        //         if (pare.get(val) != val) pare.put(val, find(pare.get(val)));
-        //         return pare.get(val);
         //     }
-        //     public void merge(int p, int q) {
-        //         int rp = find(p);
-        //         int rq = find(q);
-        //         if (rp == rq) return;
-        //         pare.put(rq, rp);
-        //         if (rank.get(rq) == 0) rank.put(rq, 1);
-        //         rank.put(rp, rank.get(rp) + rank.get(rq));
-        //     }
-        //     public boolean sameGroup(int x, int y) {
-        //         return find(x) == find(y);
-        //     }
-        //     public void addToParent(int val) {
-        //         int x = this.find(val);
-        //         rank.put(x, rank.get(x) + 1);
-        //     }
-        //     public int getRemovedCnts(int i, int j, int m, int n) {
-        //         int ans = 0;
-        //         int p = find(i*n+j);
-        //         for (int x = 0; x < m; x++) {
-        //             for (int y = 0; y < n; y++) {
-        //                 if (find(x*n+y) == p) {
-        //                     rank.put(x*n+y, rank.get(x*n+y)-1 >= 0 ? rank.get(x*n+y)-1 : 0);
-        //                     pare.put(x*n+y, x*n+y);
-        //                     rank.put(pare.get(x*n+y), rank.get(pare.get(x*n+y))-1);
-        //                     ++ans;   
-        //                 }
-        //             }
+        //     public int find(int i) {
+        //         while (id[i] != i) {
+        //             id[i] = id[id[i]];
+        //             i = id[i];
         //         }
-        //         return ans - 1;
+        //         return i;
+        //     }
+        //     public void union(int i, int j) {
+        //         int rootI = find(i);
+        //         int rootJ = find(j);
+        //         if (rootI != rootJ) {
+        //             id[rootI] = rootJ;
+        //             cnt[rootJ] += cnt[rootI];
+        //         }
         //     }
         // }
+        // private void unionAround(int x, int y, int [][] arr, UnionFind uf) {
+        //     for (int [] d : dirs) {
+        //         int i = x + d[0];
+        //         int j = y + d[1];
+        //         if (i < 0 || i >= m || j < 0 || j >= n) continue;
+        //         if (arr[i][j] == 1) uf.union(x*n+y+1, i*n+j+1); // +1
+        //     }
+        //     if (x == 0) uf.union(x*n+y+1, 0); // 第一排的直接与顶相连 // trick: to help calculate cnts connecting top easier/faster
+        // }
+        // int [][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+        // int m, n;
         // public int[] hitBricks(int[][] grid, int[][] hits) {
-        //     int m = grid.length;
-        //     int n = grid[0].length;
-        //     int [] arr = new int [hits.length];
-        //     if (m == 1) return arr;
-        //     UnionFind uf = new UnionFind();
-        //     for (int i = 0; i < m; i++) {   // 每一次这个东西都是需要从新建立的
-        //         for (int j = 0; j < n; j++) {
-        //             if (i == 0 && grid[i][j] == 1) {
-        //                 uf.addToParent(i*n+j);
-        //                 continue;
-        //             }
-        //             if (i > 0 && grid[i][j] == 1 && grid[i-1][j] == 1 && !uf.sameGroup((i-1)*n+j, i*n+j)) 
-        //                 uf.merge((i-1)*n+j, i*n+j);
-        //             if (j > 0 && grid[i][j] == 1 && grid[i][j-1] == 1 && !uf.sameGroup(i*n+j, i*n+j-1))
-        //                 uf.merge(i*n+j-1, i*n+j);
+        //     m = grid.length;
+        //     n = grid[0].length;
+        //     for (int [] hit : hits)              // 首先把所有要打的砖块标记为2.
+        //         if (grid[hit[0]][hit[1]] == 1)   // 如果有砖头
+        //             grid[hit[0]][hit[1]] = 2;
+        //     UnionFind uf = new UnionFind(m*n+1); // 这里的 + 1主要是多一个0来表示顶，所有的第一排的砖在unionfind的时候都会直接与这个0相连。
+        //     for (int i = 0; i < m; i++)          // 然后对打掉后的数组中的砖块进行四个方向的union
+        //         for (int j = 0; j < n; j++) 
+        //             if (grid[i][j] == 1)
+        //                 unionAround(i, j, grid, uf);
+        //     int cnt = uf.cnt[uf.find(0)];        // 这个count就是打完后一定会剩下的砖块数量.
+        //     int [] ans = new int [hits.length];
+        //     for (int i = hits.length-1; i >= 0; i--) {
+        //         int [] hit = hits[i];
+        //         if (grid[hit[0]][hit[1]] == 2) { // 对于需要复原的这个砖块做四个方向union，主要是为了得到有多少砖必须通过这块砖才能连接到顶部。
+        //             unionAround(hit[0], hit[1], grid, uf);
+        //             grid[hit[0]][hit[1]] = 1;    // 由于是从后向前，做完要把这块砖重新标记回来: 这些砖是有可能被hits前序砖敲掉后掉落下来的,不复原影响前序结果
         //         }
-        //         for (int j = n-2; j >= 0; j--) {
-        //             if (grid[i][j] == 1 && grid[i][j+1] == 1 && uf.pare.containsKey(i*n+j+1) && !uf.sameGroup(i*n+j, i*n+j+1))
-        //                 uf.merge(i*n+j+1, i*n+j);
-        //         }
-        //         if (i > 0) {
-        //             for (int j = i-1; j >= 0 ; --j) {
-        //                 for (int k = 0; k < n; k++) {
-        //                     if (grid[j][k] == 1 && grid[j+1][k] == 1 && uf.pare.containsKey((j+1)*n+k) && !uf.sameGroup(j*n+k, (j+1)*n+k))
-        //                         uf.merge((j+1)*n+k, j*n+k);
-        //                 }
-        //             }
-        //         }
+        //         int newCnt = uf.cnt[uf.find(0)];
+        //         ans[i] = (newCnt - cnt > 0 ? newCnt - cnt - 1 : 0);
+        //         cnt = newCnt;
         //     }
-        //     for (int i = 0; i < hits.length; i++) {
-        //         if (grid[hits[i][0]][hits[i][1]] == 0 || uf.find(hits[i][0]*n+hits[i][1]) == hits[i][0]*n+hits[i][1]) {
-        //             arr[i] = 0;
-        //             continue;
-        //         }
-        //         arr[i] = uf.getRemovedCnts(hits[i][0], hits[i][1], m, n);
-        //     }
-        //     return arr;
+        //     return ans;
         // }
 
 
         
     }
-    
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        // int [] a = new int [] {7, 21, 3};
-        int []  a = new int []  {5, 2, 6, 2};
+        int [][] a = new int [][] {{1,0,0,0},{1,1,1,0}};
+        int [][] b = new int [][] {{1, 0}};
 
-        boolean res  = s.gcdSort(a);
-        System.out.println("res: " + res);
-        
+        int [] res  = s.hitBricks(a, b);
+        System.out.println(Arrays.toString(res));
     }
 }

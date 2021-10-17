@@ -4,6 +4,9 @@ import java.util.Map;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.*;
+import java.util.stream.*;
+import java.util.stream.Collectors;
+import static java.util.stream.Collectors.toMap;
 
 public class grathreeph {
     public static class Solution {
@@ -530,14 +533,154 @@ public class grathreeph {
         //     return res;
         // }
 
+
+        // void dfs(String cur, List<String> list) {
+        //     Queue<String> next = m.get(cur);
+        //     while (next != null && next.size() > 0) {
+        //         dfs(next.poll(), list);
+        //     }
+        //     list.add(cur);
+        // }
+        // Map<String, PriorityQueue<String>> m = new HashMap<>(); // TreeSet does not handle repeats, use queue
+        // public List<String> findItinerary(List<List<String>> tickets) {
+        //     for (int i = 0; i < tickets.size(); i++) 
+        //         m.computeIfAbsent(tickets.get(i).get(0), k -> new PriorityQueue<>()).offer(tickets.get(i).get(1));
+        //     List<String> res = new ArrayList<>();
+        //     dfs("JFK", res);
+        //     Collections.reverse(res);
+        //     return res;
+        // }
+
+
+        // private boolean dfs(String cur, String tar, Set<String> vis) {
+        //     if (cur.equals(tar)) return true;
+        //     vis.add(cur);
+        //     if (m.get(cur) == null) return false;
+        //     for (String next : m.get(cur)) {
+        //         if (vis.contains(next)) continue;
+        //         if (dfs(next, tar, vis)) return true;
+        //     }
+        //     return false;
+        // }
+        // Map<String, Set<String>> m = new HashMap<>();
+        // public boolean equationsPossible(String[] equations) {
+        //     int n = equations.length;
+        //     Set<String> notEq = new HashSet<>();
+        //     for (String s : equations) {
+        //         String key = s.substring(0, 1);
+        //         String val = s.substring(3);
+        //         if (key.equals(val)) {
+        //             if (s.substring(1, 3).equals("!=")) return false;
+        //             continue;
+        //         }
+        //         if (s.substring(1, 3).equals("==")) {
+        //             m.computeIfAbsent(key, k->new HashSet<>()).add(val);
+        //             m.computeIfAbsent(val, k->new HashSet<>()).add(key);
+        //         } else notEq.add(s);
+        //     }
+        //     for (String s : notEq) {
+        //         String key = s.substring(0, 1);
+        //         String val = s.substring(3);
+        //         if (dfs(key, val, new HashSet<>())) return false;
+        //     }
+        //     return true;
+        // }
+
+
+        // 本体主要利用了 边的数目少于点的数目的平方个
+        // 先模糊计算有多少对点
+        // 然后去掉单个点的度*2大于目标值的情况
+        // 再去掉某对点度的和大于目标值但是减去出现频率之后小于等于目标值的情况（一次减2）
+        // 最终将结果除以2即得最终结果（因为会重复算一遍，(a,b), (b,a)）
+        // 小结：困难的题目重要的在于优化的技巧，可能本身用到的大框架思路是可以凭自己想出来的，
+        // 但是从题目给出的条件中，找到复杂度较低的解题方法，
+        // 并且合理处理其中遇到的边界条件是有一定的难度的。
+        // public int[] countPairs(int n, int[][] edges, int[] queries) { // bug bug bug
+        //     Map<Integer, Integer> [] m = new HashMap[n+1];
+        //     for (int i = 1; i <= n; i++) 
+        //         m[i] = new HashMap<>();
+        //     for (int [] cur : edges) {
+        //         m[cur[0]].put(cur[1], m[cur[0]].getOrDefault(cur[1], 0) + 1);
+        //         m[cur[1]].put(cur[0], m[cur[1]].getOrDefault(cur[0], 0) + 1);
+        //     }
+        //     // // System.out.println("m[2].size(): " + m[2].size());
+        //     // for (Map.Entry<Integer, Integer> en : m[2].entrySet()) 
+        //     //     System.out.print(en.getKey() + ", " + en.getValue() + "\n");
+        //     int [] cnt = new int [n+1];
+        //     for (int i = 1; i <= n; i++) 
+        //         cnt[i] = m[i].size() == 0 ? 0 : m[i].values().stream().reduce(0, Integer::sum);
+        //     // System.out.println(Arrays.toString(cnt));
+        //     int [] pre = new int [Arrays.stream(cnt).max().getAsInt()+1];
+        //     for (int v : cnt) pre[v]++; //
+        //     for (int i = pre.length-2; i >= 0; i--) 
+        //         pre[i] += pre[i+1]; // 计算出大于等于某个值出入边总数值的点数
+        //     // System.out.println(Arrays.toString(pre));
+        //     int [] ans = new int [queries.length];
+        //     int res = 0, cur = 0;
+        //     for (int i = 0; i < queries.length; i++) {
+        //         res = 0;
+        //         for (int j = 1; j <= n; j++) {
+        //             cur = 0;
+        //             int target = queries[i] - cnt[j];
+        //             for (Map.Entry<Integer, Integer> en : m[j].entrySet()) {
+        //                 int k = en.getKey();
+        //                 if (j >= k) break;
+        //                 int v = en.getValue();
+        //                 if (cnt[k] > target) cur--;
+        //                 int count = cnt[i] + cnt[k] - v;
+        //                 if (count > queries[i]) cur++;
+        //             }
+        //             if (cnt[i] > target) cur--;
+        //             cur += pre[target < 0 ? 0 : target+1]; // + 1
+        //             res += cur;
+        //         }
+        //         ans[i] = res / 2;
+        //     } 
+        //     return ans;
+        // }
+    // https://leetcode.com/problems/count-pairs-of-nodes/discuss/1096740/C%2B%2BJavaPython3-Two-Problems-O(q-*-(n-%2B-e))
+        // public int[] countPairs(int n, int[][] edges, int[] queries) { // 感觉被别人这么写了，思路好清晰
+        //     int [] cnt = new int [n+1], sortedCnt = new int [n+1], ans = new int [queries.length];
+        //     Map<Integer, Integer> [] m = new HashMap[n+1];
+        //     for (var e : edges) {
+        //         sortedCnt[e[0]] = cnt[e[0]] = cnt[e[0]] + 1;
+        //         sortedCnt[e[1]] = cnt[e[1]] = cnt[e[1]] + 1;
+        //         int min = Math.min(e[0], e[1]), max = Math.max(e[0], e[1]);
+        //         m[min] = m[min] == null ? new HashMap<>() : m[min];
+        //         m[min].put(max, m[min].getOrDefault(max, 0) + 1); // 仍然是当作有向图、单向图来做
+        //     }
+        //     Arrays.sort(sortedCnt);
+        //     int res = 0, cur = 0;
+        //     for (int k = 0; k < queries.length; k++) {
+        //         for (int i = 1, j = n; i < j;) 
+        //             if (queries[k] < sortedCnt[i] + sortedCnt[j])
+        //                 ans[k] += (j--) - i;
+        //             else ++i;
+        //         for (int i = 1; i <= n; i++) 
+        //             if (m[i] != null) 
+        //                 for (var en : m[i].entrySet()) {
+        //                     int j = en.getKey(), sharedCnt = en.getValue();
+        //                     if (queries[k] < cnt[i] + cnt[j] && cnt[i] + cnt[j] - sharedCnt <= queries[k])
+        //                         ans[k]--;
+        //                 }
+        //     } 
+        //     return ans;
+        // }
+    // https://leetcode.com/problems/count-pairs-of-nodes/discuss/1096432/Java-or-Two-Steps-or-O(NlgN-%2B-Q(N%2BE))
+// 这个也可以再参考一下
+
+        
         
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        int [][] a = new int [][] {{0,1,4},{1,2,6},{0,2,8},{1,3,1}};
-
-        int r = s.reachableNodes(a, 10, 4);
-        System.out.println("r: " + r);
+        // int [][] a = new int [][] {{1,2},{2,4},{1,3},{2,3},{2,1}};
+        // int [] b = new int [] {2, 3};
+        int [][] a = new int [][] {{1,5},{1,5},{3,4},{2,5},{1,3},{5,1},{2,3},{2,5}};
+        int [] b = new int [] {1, 2, 3, 4, 5};
+        
+        int [] r = s.countPairs(5, a, b);
+        System.out.println(Arrays.toString(r));
     }
 }

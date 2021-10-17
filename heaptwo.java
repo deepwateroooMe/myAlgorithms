@@ -76,132 +76,6 @@ public class heaptwo {
         // }
 
         
-        // private class Pt {
-        //     int i; // server index
-        //     int j; // tasks idx
-        //     int v; // time weight
-        //     int t;
-        //     public Pt(int a, int b) {
-        //         i = a; 
-        //         v = b;
-        //     }
-        //     public Pt(int a, int b, int c, int d) {
-        //         i = a;
-        //         j = b;
-        //         v = c;
-        //         t = d;
-        //     }
-        // }
-        // public int[] assignTasks(int[] servers, int[] tasks) {
-        //     int n = servers.length;
-        //     int m = tasks.length;
-        //     Queue<Pt> q = new PriorityQueue<>(new Comparator<Pt>() {
-        //             @Override public int compare(Pt a, Pt b) {
-        //                 int cmp = a.v - b.v;
-        //                 if (cmp != 0) return cmp;
-        //                 return a.t - b.t;
-        //             }
-        //         });
-        //     Queue<Pt> p = new PriorityQueue<Pt>(new Comparator<Pt>() {
-        //             @Override public int compare(Pt a, Pt b) {
-        //                 int cmp = a.v - b.v;
-        //                 if (cmp != 0) return cmp;
-        //                 return a.i - b.i;
-        //             }
-        //         });
-        //     for (int i = 0; i < n; i++) 
-        //         p.add(new Pt(i, servers[i]));
-        //     Pt top = null;
-        //     int [] arr = new int [m];
-        //     int waitResidual = 0;
-        //     for (int i = 0; i < m; i++) { // ith task insertion time needs some works too
-        //         waitResidual = 0;
-        //         if (q.isEmpty()) {
-        //             arr[i] = p.peek().i;
-        //             q.add(new Pt(p.poll().i, i, i + tasks[i], i));
-        //         } else {
-        //             top = q.peek();
-        //             if (i >= top.v) {
-        //                 while (i >= top.v) {
-        //                     p.add(new Pt(top.i, servers[top.i]));
-        //                     q.poll();
-        //                     if (!q.isEmpty()) top = q.peek();
-        //                     else break;
-        //                 }
-        //             }
-        //             // System.out.println("p.size(): " + p.size());
-        //             if (p.size() == 0) {
-        //                 top = q.poll();
-        //                 waitResidual = top.v - i;
-        //                 p.add(new Pt(top.i, servers[top.i]));
-        //                 // while (q.size() > 0 && q.peek().v == top.v) {
-        //                 //     top = q.poll();
-        //                 //     p.add(new Pt(top.i, servers[top.i]));
-        //                 // }
-        //             }
-        //             arr[i] = p.peek().i;
-        //             q.add(new Pt(p.poll().i, i, waitResidual + i + tasks[i], i + waitResidual));
-        //         }
-        //         waitResidual = 0;
-        //     }
-        //     return arr;
-        // }
-        // int []  a = new int []  {338, 890, 301, 532, 284, 930, 426, 616, 919, 267, 571, 140, 716, 859, 980, 469, 628, 490, 195, 664, 925, 652, 503, 301, 917, 563, 82, 947, 910, 451, 366, 190, 253, 516, 503, 721, 889, 964, 506, 914, 986, 718, 520, 328, 341, 765, 922, 139, 911, 578, 86, 435, 824, 321, 942, 215, 147, 985, 619, 865};
-        // int []  b = new int []  {773, 537, 46, 317, 233, 34, 712, 625, 336, 221, 145, 227, 194, 693, 981, 861, 317, 308, 400, 2, 391, 12, 626, 265, 710, 792, 620, 416, 267, 611, 875, 361, 494, 128, 133, 157, 638, 632, 2, 158, 428, 284, 847, 431, 94, 782, 888, 44, 117, 489, 222, 932, 494, 948, 405, 44, 185, 587, 738, 164, 356, 783, 276, 547, 605, 609, 930, 847, 39, 579, 768, 59, 976, 790, 612, 196, 865, 149, 975, 28, 653, 417, 539, 131, 220, 325, 252, 160, 761, 226, 629, 317, 185, 42, 713, 142, 130, 695, 944, 40, 700, 122, 992, 33, 30, 136, 773, 124, 203, 384, 910, 214, 536, 767, 859, 478, 96, 172, 398, 146, 713, 80, 235, 176, 876, 983, 363, 646, 166, 928, 232, 699, 504, 612, 918, 406, 42, 931, 647, 795, 139, 933, 746, 51, 63, 359, 303, 752, 799, 836, 50, 854, 161, 87, 346, 507, 468, 651, 32, 717, 279, 139, 851, 178, 934, 233, 876, 797, 701, 505, 878, 731, 468, 884, 87, 921, 782, 788, 803, 994, 67, 905, 309, 2, 85, 200, 368, 672, 995, 128, 734, 157, 157, 814, 327, 31, 556, 394, 47, 53, 755, 721, 159, 843};
-
-        // private int binarySearch(int [] arr, int k, int i, int j) {
-        // }
-        // public int maxProfit(int[] inventory, int orders) {
-        //     int n = inventory.length;
-        //     if (n == 1) {
-        //         long sum = orders * (inventory[0] - orders + 1 + inventory[0]) / 2 % 1000000007;
-        //         return (int)sum;
-        //     }
-        //     Arrays.sort(inventory); // val;
-        //     int k = binarySearch(inventory, orders, 0, n-1);
-        // }
-
-        // private class Pt {
-        //     int i;
-        //     int j;
-        //     public Pt(int a, int b) {
-        //         i = a;
-        //         j = b;
-        //     }
-        // }
-        // public int maxEvents(int[][] events) {
-        //     int n = events.length;
-        //     if (n == 1) return 1;
-        //     Queue<Pt> q = new PriorityQueue<>(new Comparator<Pt>() {
-        //             @Override public int compare(Pt x, Pt y) {
-        //                 int cp = x.j - y.j;
-        //                 if (cp != 0) return cp;
-        //                 return x.i - y.i;
-        //             }
-        //         });
-        //     for (int i = 0; i < events.length; i++) 
-        //         q.add(new Pt(events[i][0], events[i][1]));
-        //     int cnt = 0;
-        //     Pt cur = null;
-        //     Pt next = null;
-        //     int day = 0;
-        //     while (!q.isEmpty()) {
-        //         cur = q.poll();
-        //         // System.out.println("\ncur.i: " + cur.i);
-        //         // System.out.println("cur.j: " + cur.j);
-        //         // System.out.println("(cur.j < day): " + (cur.j < day));
-        //         if (cur.j < day) continue;
-        //         ++cnt;
-        //         if (day == cur.j) day = cur.j+1;
-        //         else if (day < cur.i) day = cur.i + 1;
-        //         else if (day >= cur.i) day += 1;
-        //         // System.out.println("cnt: " + cnt);
-        //         // System.out.println("day: " + day);
-        //     }
-        //     return cnt;
-        // }
-
-
         // public int minimumDeviation(int[] nums) {
         //     int n = nums.length;
         //     Set<Integer> s = Arrays.stream(nums).boxed().collect(Collectors.toSet());
@@ -231,50 +105,8 @@ public class heaptwo {
         //     return min;
         // }
 
-        // class Range {
-        //     int left, right, size;
-        //     public Range(int left, int right) {
-        //         this.left = left;
-        //         this.right = right;
-        //         this.size = right - left + 1;
-        //     }
-        //     public String toString() {
-        //         return "Range(" + left + "," + right + "," + size + ")";
-        //     }
-        // }
-        // public int[] minInterval(int[][] intervals, int[] queries) {
-        //     // Arrays.sort(intervals, new Comparator<int []>(){
-        //     //         @Override public int compare(int [] x, int [] y) {
-        //     //             int cmp = x[0] - y[0];
-        //     //             if (cmp != 0) return cmp;
-        //     //             return x[1]-x[0] - (y[1]-y[0]);
-        //     //         }
-        //     //     });
-        //     TreeSet<Range> ts = new TreeSet<Range>(new Comparator<Range>() {
-        //             @Override public int compare(Range one, Range two) {
-        //                 int cmp = one.left - two.left;
-        //                 if (cmp != 0) return cmp;
-        //                 return one.size - two.size;
-        //             }
-        //         });
-        //     for (int i = 0; i < intervals.length; i++) 
-        //         ts.add(new Range(intervals[i][0], intervals[i][1]));
-        //     Map<Integer, Integer> q = new HashMap<>();
-        //     for (int i = 0; i < queries.length; i++) 
-        //         q.put(i, queries[i]);
-        //     Map<Integer, Integer> m = q.entrySet().stream()
-        //         .sorted(Map.Entry.comparingByValue()) // Comparator.reverseOrder()
-        //         .collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> a, LinkedHashMap::new));
-        //     int [] res = new int[queries.length];
-        //     int v = 0;
-        //     for (int i = 0; i < queries.length; i++) {
-        //         v = m.get(i);
-        //         // 想想这里如何从treeset中查询想要找的答案
-        //     }
-        // }
-
-
-    // https://www.acwing.com/solution/LeetCode/content/6358/
+        
+        // https://www.acwing.com/solution/LeetCode/content/6358/
         // private void dfs(char [][] arr, int x, int y, int i, int j, boolean mk) { // target pos , cur position
         //     if (i < 0 || i >= m || j < 0 || j >= n || vis[i][j] || arr[i][j] == '#') return;
         //     if (mk && arr[i][j] == 'B') return;
@@ -405,74 +237,74 @@ public class heaptwo {
         //     vb = new boolean[m][n][4];
         //     return bfs(grid, s);
         // }
-    // // https://leetcode.jp/leetcode-1263-minimum-moves-to-move-a-box-to-their-target-location-%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF%E5%88%86%E6%9E%90/
-    //     private boolean canPlayerMove(int pi, int pj, int ti, int tj, int bi, int bj, boolean [][] vis, char [][] arr) {
-    //         vis[pi][pj] = true;
-    //         if (pi == ti && pj == tj) return true;
-    //         int i = 0, j = 0;
-    //         for (int [] d : dirs) {
-    //             i = pi + d[0];
-    //             j = pj + d[1];
-    //             if (i >= 0 && i < m && j >= 0 && j < n
-    //                 && arr[i][j] != '#' && !vis[i][j]
-    //                 && (i != bi && j != bj)) { // 也不可以是箱子所在的位置: 这里没有更改面板，直接记住位置就可以了
-    //                 if (canPlayerMove(i, j, ti, tj, bi, bj, vis, arr))
-    //                     return true;
-    //             }
-    //         }
-    //         return false;
-    //     }
-    //     private int dfs(char [][] arr, int bi, int bj, int pi, int pj) {
-    //         if (arr[bi][bj] == 'T') return 0;
-    //         if (memo[bi][bj][pi][pj] != 0) return memo[bi][bj][pi][pj];
-    //         vis[bi][bj][pi][pj] = true;
-    //         int res = Integer.MAX_VALUE;
-    //         if (bi+1 < m && arr[bi+1][bj] != '#' && bi-1 >= 0 && arr[bi-1][bj] != '#') { // 箱子上下两格为空地时
-    //             // 如果箱子没有从当前位置向上推动过，并且人能够移动到箱子下方
-    //             if (!vis[bi-1][bj][bi][bj] && canPlayerMove(pi, pj, bi+1, bj, bi, bj, new boolean[m][n], arr)) 
-    //                 res = Math.min(res, 1+dfs(arr, bi-1, bj, bi, bj));
-    //             // 如果箱子没有从当前位置向下推动过，并且人能够移动到箱子上方
-    //             if (!vis[bi+1][bj][bi][bj] && canPlayerMove(pi, pj, bi-1, bj, bi, bj, new boolean[m][n], arr))
-    //                 res = Math.min(res, 1+dfs(arr, bi+1, bj, bi, bj));
-    //         }
-    //         if (bj+1 < n && arr[bi][bj+1] != '#' && bj-1 >= 0 && arr[bi][bj-1] != '#') {  // 箱子左右两格为空地时
-    //             // 如果箱子没有从当前位置向左推动过，并且人能够移动到箱子右方
-    //             if (!vis[bi][bj-1][bi][bj] && canPlayerMove(pi, pj, bi, bj+1, bi, bj, new boolean[m][n], arr))
-    //                 // dfs向左移动箱子一格，人移动到原先箱子位置
-    //                 res = Math.min(res, 1+dfs(arr, bi, bj-1, bi, bj));
-    //             // 如果箱子没有从当前位置向右推动过，并且人能够移动到箱子左方
-    //             if (!vis[bi][bj+1][bi][bj] && canPlayerMove(pi, pj, bi, bj-1, bi, bj, new boolean[m][n], arr))
-    //                 res = Math.min(res, 1+dfs(arr, bi, bj+1, bi, bj));
-    //         }
-    //         vis[bi][bj][pi][pj] = false;
-    //         memo[bi][bj][pi][pj] = res;
-    //         return res;
-    //     }
-    //     int [][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
-    //     boolean [][][][] vis;
-    //     int [][][][] memo;
-    //     int m, n;
-    //     public int minPushBox(char[][] grid) {
-    //         m = grid.length;
-    //         n = grid[0].length;
-    //         boolean fb = false;
-    //         vis = new boolean [m][n][m][n];
-    //         memo = new int [m][n][m][n];
-    //         int bi = 0, bj = 0, pi = 0, pj = 0;
-    //         for (int i = 0; i < m; i++) {
-    //             for (int j = 0; j < n; j++) {
-    //                 if (grid[i][j] == 'B') {
-    //                     bi = i;
-    //                     bj = j;
-    //                 } else if (grid[i][j] == 'S') {
-    //                     pi = i;
-    //                     pj = j;
-    //                 }
-    //             }
-    //         }
-    //         int res = dfs(grid, bi, bj, pi, pj);
-    //         return res == Integer.MAX_VALUE ? -1 : res;
-    //     }
+        // // https://leetcode.jp/leetcode-1263-minimum-moves-to-move-a-box-to-their-target-location-%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF%E5%88%86%E6%9E%90/
+        //     private boolean canPlayerMove(int pi, int pj, int ti, int tj, int bi, int bj, boolean [][] vis, char [][] arr) {
+        //         vis[pi][pj] = true;
+        //         if (pi == ti && pj == tj) return true;
+        //         int i = 0, j = 0;
+        //         for (int [] d : dirs) {
+        //             i = pi + d[0];
+        //             j = pj + d[1];
+        //             if (i >= 0 && i < m && j >= 0 && j < n
+        //                 && arr[i][j] != '#' && !vis[i][j]
+        //                 && (i != bi && j != bj)) { // 也不可以是箱子所在的位置: 这里没有更改面板，直接记住位置就可以了
+        //                 if (canPlayerMove(i, j, ti, tj, bi, bj, vis, arr))
+        //                     return true;
+        //             }
+        //         }
+        //         return false;
+        //     }
+        //     private int dfs(char [][] arr, int bi, int bj, int pi, int pj) {
+        //         if (arr[bi][bj] == 'T') return 0;
+        //         if (memo[bi][bj][pi][pj] != 0) return memo[bi][bj][pi][pj];
+        //         vis[bi][bj][pi][pj] = true;
+        //         int res = Integer.MAX_VALUE;
+        //         if (bi+1 < m && arr[bi+1][bj] != '#' && bi-1 >= 0 && arr[bi-1][bj] != '#') { // 箱子上下两格为空地时
+        //             // 如果箱子没有从当前位置向上推动过，并且人能够移动到箱子下方
+        //             if (!vis[bi-1][bj][bi][bj] && canPlayerMove(pi, pj, bi+1, bj, bi, bj, new boolean[m][n], arr)) 
+        //                 res = Math.min(res, 1+dfs(arr, bi-1, bj, bi, bj));
+        //             // 如果箱子没有从当前位置向下推动过，并且人能够移动到箱子上方
+        //             if (!vis[bi+1][bj][bi][bj] && canPlayerMove(pi, pj, bi-1, bj, bi, bj, new boolean[m][n], arr))
+        //                 res = Math.min(res, 1+dfs(arr, bi+1, bj, bi, bj));
+        //         }
+        //         if (bj+1 < n && arr[bi][bj+1] != '#' && bj-1 >= 0 && arr[bi][bj-1] != '#') {  // 箱子左右两格为空地时
+        //             // 如果箱子没有从当前位置向左推动过，并且人能够移动到箱子右方
+        //             if (!vis[bi][bj-1][bi][bj] && canPlayerMove(pi, pj, bi, bj+1, bi, bj, new boolean[m][n], arr))
+        //                 // dfs向左移动箱子一格，人移动到原先箱子位置
+        //                 res = Math.min(res, 1+dfs(arr, bi, bj-1, bi, bj));
+        //             // 如果箱子没有从当前位置向右推动过，并且人能够移动到箱子左方
+        //             if (!vis[bi][bj+1][bi][bj] && canPlayerMove(pi, pj, bi, bj-1, bi, bj, new boolean[m][n], arr))
+        //                 res = Math.min(res, 1+dfs(arr, bi, bj+1, bi, bj));
+        //         }
+        //         vis[bi][bj][pi][pj] = false;
+        //         memo[bi][bj][pi][pj] = res;
+        //         return res;
+        //     }
+        //     int [][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+        //     boolean [][][][] vis;
+        //     int [][][][] memo;
+        //     int m, n;
+        //     public int minPushBox(char[][] grid) {
+        //         m = grid.length;
+        //         n = grid[0].length;
+        //         boolean fb = false;
+        //         vis = new boolean [m][n][m][n];
+        //         memo = new int [m][n][m][n];
+        //         int bi = 0, bj = 0, pi = 0, pj = 0;
+        //         for (int i = 0; i < m; i++) {
+        //             for (int j = 0; j < n; j++) {
+        //                 if (grid[i][j] == 'B') {
+        //                     bi = i;
+        //                     bj = j;
+        //                 } else if (grid[i][j] == 'S') {
+        //                     pi = i;
+        //                     pj = j;
+        //                 }
+        //             }
+        //         }
+        //         int res = dfs(grid, bi, bj, pi, pj);
+        //         return res == Integer.MAX_VALUE ? -1 : res;
+        //     }
 
 
         // public String longestDiverseString(int a, int b, int c) {
@@ -640,15 +472,444 @@ public class heaptwo {
         // }
 
 
+        // private class Pt {
+        //     int i;
+        //     int j;
+        //     public Pt(int a, int b) {
+        //         i = a;
+        //         j = b;
+        //     }
+        // }
+        // public int maxEvents(int[][] events) {
+        //     int n = events.length;
+        //     if (n == 1) return 1;
+        //     Queue<Pt> q = new PriorityQueue<>(new Comparator<Pt>() {
+        //             @Override public int compare(Pt x, Pt y) {
+        //                 int cp = x.j - y.j;
+        //                 if (cp != 0) return cp;
+        //                 return x.i - y.i;
+        //             }
+        //         });
+        //     for (int i = 0; i < events.length; i++) 
+        //         q.add(new Pt(events[i][0], events[i][1]));
+        //     // for (Pt zz : q) 
+        //     //     System.out.println(zz.i + ", " + zz.j);
+        //    int cnt = 0;
+        //     Pt cur = null;
+        //     Pt next = null;
+        //     int day = 0; // 0 
+        //     while (!q.isEmpty()) {
+        //         cur = q.poll();
+        //         if (cur.j < day) continue;
+        //         ++cnt;
+        //         if (day < cur.i) day = cur.i + 1;
+        //         else {
+        //             if (day == cur.j) day = cur.j+1;
+        //             else day += 1;
+        //         }
+        //     }
+        //     return cnt;
+        // }
+
+
+        // public int[] assignTasks(int[] servers, int[] tasks) {// bugy bugy bugy把它找出来。。。。。。
+        //     int n = servers.length;
+        //     int m = tasks.length;
+        //     Queue<int []> s = new PriorityQueue<>((a, b)->(a[1] != b[1] ? a[1] - b[1] : a[0]-b[0])); // [serverIdx, serverWeight]
+        //     for (int i = 0; i < n; i++) 
+        //         s.offer(new int [] {i, servers[i]});
+        //     Queue<int []> q = new PriorityQueue<>((a, b)->(a[4]+a[3]- (b[4] + b[3])));
+        //     int [] ans = new int [m], cur = null, sv = null;
+        //     int now = 0;
+        //     for (int i = 0; i < m; i++) { // ith task insertion time needs some works too
+        //         if (!s.isEmpty() && (q.isEmpty() || q.size() > 0 && now < q.peek()[3] + q.peek()[4])) {
+        //             sv = s.poll();
+        //             q.offer(new int [] {sv[0], sv[1], i, tasks[i], now}); // [serverIdx, serverWeight, taskIdx, taskTime, enQtime]
+        //         } else { // update now
+        //             if (!q.isEmpty() && q.peek()[4] + q.peek()[3] > now) {
+        //                 cur = q.poll();
+        //                 ans[cur[2]] = cur[0];
+        //                 s.offer(new int [] {cur[0], cur[1]});
+        //                 now = cur[3] + cur[4];
+        //             } else {
+        //                 while (!q.isEmpty() && q.peek()[4] + q.peek()[3] <= now) {
+        //                     cur = q.poll();
+        //                     ans[cur[2]] = cur[0];
+        //                     s.offer(new int [] {cur[0], cur[1]});
+        //                 }
+        //             }
+        //             sv = s.poll();
+        //             q.offer(new int [] {sv[0], sv[1], i, tasks[i], now});
+        //         }
+        //         now++;
+        //     }
+        //     while (!q.isEmpty()) {
+        //         cur = q.poll();
+        //         ans[cur[2]] = cur[0];
+        //     }
+        //     return ans;
+        // }
+//         public int[] assignTasks(int[] servers, int[] tasks) {
+//             int n = servers.length, m = tasks.length;
+//             int[][] s = new int[n][3];// 扩展服务器数组，添加编号和结束工作的时间点信息
+//             for (int i = 0; i < n; i++) {
+//                 s[i][0] = servers[i];
+//                 s[i][1] = i;
+//                 s[i][2] = 0;// 初始所有服务器处于空闲状态
+//             }
+// // 当前空闲的服务器队列，按权重、下标排序
+//             PriorityQueue<int[]> free = new PriorityQueue<int[]>((ser1, ser2) -> (ser1[0] != ser2[0] ? ser1[0] - ser2[0] : ser1[1] - ser2[1]));
+// // 当前工作的服务器队列，按结束工作的时间点排列
+//             PriorityQueue<int[]> work = new PriorityQueue<int[]>((ser1, ser2) -> (ser1[2] - ser2[2]));
+//             for (int i = 0; i < n; i++) free.offer(s[i]);
+//             int[] ans = new int[m];      // 答案数组
+//             int t = 0;              // 当前时刻
+//             for (int i = 0; i < m; i++) {// 依次处理各任务
+//                 if (free.isEmpty())      // 当前无服务器空闲，时间点直接跳到最早完成工作的服务器开始空闲的时刻
+//                     t = work.peek()[2];
+//                 t = Math.max(t, i);      // 时间点小于i则直接跳到i, 开启第i个任务
+//                 while (!work.isEmpty() && work.peek()[2] <= t) {// 将当前已完成工作的服务器加入空闲队列
+//                     free.offer(work.poll());
+//                 }
+//                 int[] ser = free.poll();// 从空闲队列选择优先级最高的服务器
+//                 ser[2] = t + tasks[i];  // 记录该服务器结束工作的时间
+//                 ans[i] = ser[1];
+//                 work.offer(ser);        // 加入工作队列
+//             }
+//             return ans;
+//         }
+
+
+        // public int[] minInterval(int[][] intervals, int[] queries) {
+        //     Arrays.sort(intervals, (a, b)-> (a[0] != b[0] ? a[0]-b[0] : a[1]-b[1])); // left, right increasing
+        //     Queue<int []> q = new PriorityQueue<>((a, b)->(a[1]-a[0]-(b[1]-b[0]))); // size increasing
+        //     Map<Integer, List<Integer>> map = new HashMap<>();
+        //     for (int i = 0; i < queries.length; i++) 
+        //         map.computeIfAbsent(queries[i], k->new ArrayList<>()).add(i);
+        //     Map<Integer, List<Integer>> m = map.entrySet().stream()
+        //         .sorted(Map.Entry.comparingByKey()) // Comparator.reverseOrder()
+        //         .collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> a, LinkedHashMap::new));
+        //     int n = intervals.length;
+        //     int [] ans = new int[queries.length];
+        //     int k = 0, i = 0, j = 0;
+        //     List<Integer> v = new ArrayList<>();
+        //     for (Map.Entry<Integer, List<Integer>> en : m.entrySet()) {
+        //         k = en.getKey();
+        //         v = en.getValue(); // idx
+        //         while (i < n && intervals[i][0] <= k) {
+        //             q.offer(intervals[i]);
+        //             i++;
+        //         }
+        //         while (!q.isEmpty() && (q.peek()[0] > k || q.peek()[1] < k)) q.poll();
+        //         if (!q.isEmpty()) {
+        //             int [] cur = q.peek();
+        //             for (Integer idx : v) 
+        //                 ans[idx] = cur[1] - cur[0] + 1;
+        //         } else
+        //             for (Integer idx : v) ans[idx] = -1;
+        //     }
+        //     return ans;
+        // }
+        // public int[] minInterval(int[][] intervals, int[] queries) {
+        //     Arrays.sort(intervals, (a, b)-> (a[0] != b[0] ? a[0]-b[0] : a[1]-b[1])); // left, right increasing
+        //     int [][] qy = new int [queries.length][];
+        //     for (int i = 0; i < queries.length; i++) 
+        //         qy[i] = new int [] {queries[i], i};
+        //     Arrays.sort(qy, (a, b)->a[0]-b[0]); // increasing
+        //     int [] ans = new int[queries.length];
+        //     Arrays.fill(ans, -1);
+        //     Queue<int []> q = new PriorityQueue<>((a, b)->(a[1]-a[0]-(b[1]-b[0]))); // size increasing
+        //     int idx = 0;
+        //     for (int i = 0; i < queries.length; i++) {
+        //         while (idx < intervals.length && intervals[idx][0] <= qy[i][0]) {
+        //             q.offer(intervals[idx]);
+        //             idx++;
+        //         }
+        //         while (!q.isEmpty() && q.peek()[1] < qy[i][0]) q.poll();
+        //         if (!q.isEmpty()) {
+        //             int [] cur = q.peek();
+        //             ans[qy[i][1]] = cur[1] - cur[0] + 1;
+        //         }
+        //     }
+        //     return ans;
+        // }
+
+
+        // public int[] kthSmallestPrimeFraction(int [] arr, int k) {
+        //     int n = arr.length;
+        //     Queue<int []> q = new PriorityQueue<>((a, b)->Double.compare(((double)a[0]/(double)a[1]), (double)b[0]/((double)b[1])));
+        //     for (int i = 0; i < n; i++) 
+        //         for (int j = i+1; j < n; j++) 
+        //             q.offer(new int [] {arr[i], arr[j]});
+        //     int [] cur = null;
+        //     while (k > 1) {
+        //         cur = q.poll();
+        //         System.out.println(Arrays.toString(cur));
+        //         k--;
+        //     }
+        //     cur = q.poll();
+        //     // System.out.println(Arrays.toString(cur));
+        //     return cur;
+        // }
+
+
+        // public int trapRainWater(int[][] heightMap) {
+        //     int m = heightMap.length;
+        //     int n = heightMap[0].length;
+        //     boolean [][] vis = new boolean [m][n];
+        //     Queue<int []> q = new PriorityQueue<>((a, b)->a[2] - b[2]);
+        //     for (int i = 0; i < n; i++) {
+        //         q.offer(new int [] {0, i, heightMap[0][i]});
+        //         q.offer(new int [] {m-1, i, heightMap[m-1][i]});
+        //         vis[0][i] = true;
+        //         vis[m-1][i] = true;
+        //     }
+        //     for (int i = 1; i < m-1; i++) {
+        //         q.offer(new int [] {i, 0, heightMap[i][0]});
+        //         q.offer(new int [] {i, n-1, heightMap[i][n-1]});
+        //         vis[i][0] = true;
+        //         vis[i][n-1] = true;
+        //     }
+        //     int [][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+        //     int [] cur = null;
+        //     int i, j, max = 0, ans = 0;
+        //     while (!q.isEmpty()) {
+        //         cur = q.poll();
+        //         max = Math.max(max, cur[2]);
+        //         for (int [] d : dirs) {
+        //             i = cur[0] + d[0];
+        //             j = cur[1] + d[1];
+        //             if (i < 0 || i >= m || j < 0 || j >= n || vis[i][j]) continue; 
+        //             vis[i][j] = true;
+        //             if (heightMap[i][j] < max) 
+        //                 ans += max - heightMap[i][j];
+        //             q.offer(new int [] {i, j, heightMap[i][j]});
+        //         }
+        //     }
+        //     return ans;
+        // }
+
+
+        // public int findMaximizedCapital(int k, int w, int[] profits, int[] capital) {
+        //     Queue<int []> q = new PriorityQueue<>((a, b)->(a[0] != b[0] ? a[0]-b[0] : b[1]-a[1]));
+        //     int n = s.length, ans = 0, max = 0;
+        //     for (int i = 0; i < n; i++) 
+        //         q.offer(new int [] {capital[i], profits[i]});
+        //     while (!q.isEmpty() && w >= q.peek()[0]) { // 遍历
+        //         max = q.poll()[1];
+        //     }
+        // }
+
+
+        // public int maxPerformance(int n, int[] speed, int[] efficiency, int k) {
+        //     int mod = (int)1e9 + 7;
+        //     int [][] eng = new int [n][2];
+        //     for (int i = 0; i < n; i++) {
+        //         eng[i][0] = speed[i];
+        //         eng[i][1] = efficiency[i];
+        //     }
+        //     Arrays.sort(eng, (a, b)->(b[1] - a[1]));
+        //     long res = 0, sum = 0, max = 0;
+        //     int idx = 0;
+        //     Queue<int []> q = new PriorityQueue<>((a,b)->(a[0]-b[0]));
+        //     while (q.size() < k) {
+        //         q.offer(eng[idx]);
+        //         sum += (long)eng[idx][0];
+        //         max = Math.max(max, sum * eng[idx++][1]);
+        //     }
+        //     while (idx < n) {
+        //         sum -= (long)q.poll()[0];
+        //         q.offer(eng[idx]);
+        //         sum += (long)eng[idx][0];
+        //         max = Math.max(max, sum * eng[idx++][1]);
+        //     }
+        //     return (int)(max % mod);
+        // }
+
+
+        // public List<Integer> busiestServers(int k, int [] arrival, int[] load) {
+        //     int n = arrival.length;
+        //     TreeSet<Integer> ts = new TreeSet<>();
+        //     for (int i = 0; i < k; i++) 
+        //         ts.add(i);
+        //     int [] cnt = new int [k];
+        //     Queue<int []> q = new PriorityQueue<>((a, b)->(a[1]+a[2]-(b[1]+b[2])));
+        //     int [] sv = null, cur = null;
+        //     int  t = 0;
+        //     for (int i = 0; i < n; i++) {
+        //         t = Math.max(t, arrival[i]);
+        //         if (i < k) {
+        //             ts.remove(i);
+        //             cnt[i]++;
+        //             q.offer(new int [] {i, t, load[i]}); // serverIdx, arrival, processTime
+        //             continue;
+        //         }
+        //         while (q.size() > 0 && q.peek()[1] + q.peek()[2] <= t) {
+        //             cur = q.poll();
+        //             ts.add(cur[0]);
+        //         }
+        //         if (ts.size() == 0 && q.peek()[1] + q.peek()[2] > t) continue;
+        //         Integer higher = ts.ceiling(i % k);
+        //         if (higher != null) {
+        //             ts.remove(higher);
+        //             cnt[higher]++;
+        //             q.offer(new int [] {higher,  arrival[i], load[i]}); // arrival, processTime
+        //         } else {
+        //             higher = ts.ceiling(0);
+        //             if (higher != null) {
+        //                 ts.remove(higher);
+        //                 cnt[higher]++;
+        //                 q.offer(new int [] {higher,  arrival[i], load[i]}); // arrival, processTime
+        //             }
+        //         }
+        //     }
+        //     int max = Arrays.stream(cnt).max().getAsInt();
+        //     List<Integer> res = new ArrayList<>();
+        //     for (int i = 0; i < k; i++) 
+        //         if (cnt[i] == max) res.add(i);
+        //     return res;
+        // }
+
+
+        // public boolean isPossible(int[] arr) {
+        //     if (arr.length == 1) return arr[0] == 1;
+        //     long sum = 0;
+        //     Queue<Integer> q = new PriorityQueue<>((a, b)-> b-a);
+        //     for (int v : arr) {
+        //         q.offer(v);
+        //         sum += v;
+        //     }
+        //     int max = 0;
+        //     while (q.peek() != 1) {
+        //         max = q.poll();
+        //         if (max <= sum - max) return false;
+        //         int pre = (int)(max % (int)(sum - max));
+        //         // int pre = max - (int)(sum - max); // max的前身可能经历了万水千山的重复
+        //         // 如果前身是0时(max与rest余数为0)。
+        //         // 说明max的前身与剩余数字和相同。
+        //         // 如果剩余数字和是为1，说明前身也是1，返回true
+        //         if (pre == 0) return sum - max == 1;
+        //         // sum -= (sum - max);
+        //         sum -= (max - pre);
+        //         q.offer(pre);
+        //     }
+        //     return true;
+        // }
+
+
+        // private boolean couldGetTarget(int [] arr, int t, int v) {
+        //     int cnt = 0;
+        //     long sum = 0;
+        //     for (int i = 0; i < n; i++) {
+        //         if (arr[i] > v) {
+        //             sum += arr[i]-v;
+        //             ++cnt;
+        //         } else if (arr[i] == v) ++cnt;
+        //     }
+        //     return sum >= t || sum < t && sum + cnt >= t;
+        // }
+        // private int binarySearch(int [] arr, int t, int l, int h) {
+        //     if (l == h) return couldGetTarget(arr, t, l) ? l : -1;
+        //     if (l == h-1) return couldGetTarget(arr, t, h) ? h : (couldGetTarget(arr, t, l) ? l : -1);
+        //     int m = l + (h-l)/2;
+        //     if (couldGetTarget(arr, t, m)) return binarySearch(arr, t, m, h);
+        //     return binarySearch(arr, t, l, m-1);
+        // }
+        // int mod = (int)1e9 + 7, n;
+        // public int maxProfit(int[] inventory, int orders) {  // bug bug bug
+        //     n = inventory.length;
+        //     long res = 0;
+        //     if (n == 1) {
+        //         if (orders >= inventory[0]) {
+        //             res = (int)(((inventory[0]+1)*inventory[0]) % mod /2 );
+        //             return (int)res;
+        //         }
+        //         return (int)((inventory[0]*(inventory[0]+1) % mod /2 - (inventory[0]-orders)*(inventory[0]-orders+1) % mod /2) % mod);
+        //     }
+        //     Arrays.sort(inventory);
+        //     int min = Arrays.stream(inventory).min().getAsInt();
+        //     int max = Arrays.stream(inventory).max().getAsInt();
+        //     long sum = 0;
+        //     for (int v : inventory) sum += v;
+        //     int cnt = 0;
+        //     if (orders == (int)sum) {
+        //         sum = 0;
+        //         for (int i = 0; i < n; i++) 
+        //             sum += ((long)(inventory[i]*(inventory[i]+1))) % mod /2;
+        //     } else if (orders < sum && orders > sum-min) min -= sum-orders;
+        //     int k = binarySearch(inventory, orders, 0, max);
+        //     for (int i = 0; i < n; i++) {
+        //         if (inventory[i] > k) {
+        //             res += ((long)((inventory[i]+k+1)*(inventory[i]-k)) % mod + mod) % mod / 2l;
+        //             cnt += inventory[i]-k;
+        //         }
+        //     }
+        //     res = (res + (cnt < orders ? (orders - cnt) * k : 0)) % mod;
+        //     return (int)res;
+        // }
+        // public int maxProfit(int[] inventory, int orders) { // bug bug bug
+        //     Arrays.sort(inventory);
+        //     int mod = (int)1e9 + 7, n = inventory.length, i = 0;
+        //     long res = 0;
+        //     while (orders > 0) {
+        //         while (i < n && inventory[i] >= inventory[0]) i++; // [0, j) 范围内的颜色的球数 == MAX
+        //         int next = 0;
+        //         if (i < n) next = inventory[i]; // 可从MAX一直卖到next + 1
+        //         long bucks = i, delta = inventory[0] - next;
+        //         long rem = bucks * delta;  // 可卖的次数
+        //         if (rem > orders) {
+        //             int del = (int)(orders / bucks); // 每种球可卖的次数
+        //             long a = inventory[0], b = a - del + 1;
+        //             res += ((a + b) * del / 2) * bucks;
+        //             res += (inventory[0] - del) * (orders % bucks);
+        //         } else {
+        //             long a = inventory[0], b = next + 1;
+        //             res += ((a + b) * delta / 2) * bucks;
+        //             inventory [0] = next;
+        //         }
+        //         orders -= rem;
+        //         res %= mod;
+        //     }
+        //     return (int)res;
+        // }
+        // private boolean valid(int [] arr, int v, int orders) {
+        //     for (int cur : arr) {
+        //         if (cur > v) orders -= (cur - v);
+        //         if (orders < 0) return false;
+        //     }
+        //     return orders >= 0;
+        // }
+        // public int maxProfit(int[] inventory, int orders) {
+        //     int mod = (int)1e9 + 7;
+        //     int l = 0, r = Arrays.stream(inventory).max().getAsInt();
+        //     while (l <= r) {
+        //         int m = l + (r-l)/2;
+        //         if (valid(inventory, m, orders)) r = m-1;
+        //         else l = m+1;
+        //     } // 返回边界l
+        //     long ans = 0;
+        //     for (int v : inventory) {
+        //         if (v > l) {
+        //             long one = v, two = l +1, n = v - l;
+        //             ans += ((one + two) * n / 2) % mod;
+        //             orders -= n;
+        //         }
+        //     }
+        //     if (orders > 0) ans += l * orders;
+        //     ans %= mod;
+        //     return (int)ans;
+        // }
+
+        
     }
-    
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        int [][] a = new int [][] {{0,1},{1,2},{0,2}};
-        double[] b = new double[] {0.5, 0.5, 0.2};
+        // int []  a = new int []  {2, 8, 4, 10, 6};
+        int []  a = new int []  {565259708, 715164401, 716563713, 958255469, 844600740, 823949511, 180479359, 287829385, 164248818, 73361150, 230686692, 322986846, 598720034, 338241127, 748922260, 181241085, 833659853, 509571179, 250093451, 690995620, 703292727, 595636202};
 
-        double res = s.maxProbability(2, a, b, 0, 2);
-        System.out.println("res: " + res);
+        int r = s.maxProfit(a, 650114768); 
+        System.out.println("r: " + r);
+
     }
 }

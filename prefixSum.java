@@ -140,19 +140,31 @@ public class prefixSum {
         //     }
         // }
 
+
+        // public int[] getSumAbsoluteDifferences(int[] arr) {
+        //     int n = arr.length;
+        //     int [] pre = new int [n];
+        //     int [] suf = new int [n];
+        //     for (int i = 0; i < n; i++) 
+        //         pre[i] = (i == 0 ? 0 : pre[i-1]) + arr[i];
+        //     for (int i = n-1; i >= 0; i--) 
+        //         suf[i] = (i == n-1 ? 0 : suf[i+1]) + arr[i];
+        //     int [] ans = new int [n];
+        //     for (int i = 0; i < n; i++) 
+        //         ans[i] = arr[i]*i - (i == 0 ? 0 : pre[i-1]) + (i == n-1 ? 0 : suf[i+1] - arr[i]*(n-1-i));
+        //     return ans;
+        // }
+
+
+        
     }
 
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        int [][] a = new int [][] {{1,2,10},{2,3,20},{2,5,25}};
-        // int [][] a = new int [][] {{1,2,10},{2,2,15}};
+        int []  a = new int []  {1, 4, 6, 8, 10};
 
-        int[] res = s.corpFlightBookings(a, 5);
-        System.out.println("res.length: " + res.length);
-        for (int z = 0; z < res.length; ++z) 
-            System.out.print(res[z] + ", ");
-        System.out.println("");
-        
+        int[] res = s.getSumAbsoluteDifferences(a);
+        System.out.println(Arrays.toString(res));
     }
 }

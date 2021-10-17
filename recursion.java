@@ -60,36 +60,6 @@ public class recursion {
         // }
 
         
-        // private String invert(String s) {
-        //     int n = s.length();
-        //     String res = "";
-        //     for (int i = 0; i < n; i++) {
-        //         if (s.charAt(i) == '1') res += '0';
-        //         else res += '1';
-        //     }
-        //     return res;
-        // }
-        // private String reverse(String s) {
-        //     int n = s.length();
-        //     if (n == 1) return s;
-        //     String res = "";
-        //     for (int i = n-1; i >= 0; i--) 
-        //         res += s.charAt(i);
-        //     return res;
-        // }
-        // public char findKthBit(int n, int k) {
-        //     if (n == 1) return '0';
-        //     String [] arr = new String [n]; 
-        //     arr[0] = "0";
-        //     for (int i = 1; i < n; i++) 
-        //         arr[i] = arr[i-1] + '1' + reverse(invert(arr[i-1]));
-        //     // System.out.println("arr.length: " + arr.length);
-        //     // for (int z = 0; z < arr.length; ++z) 
-        //     //     System.out.print(arr[z] + ", ");
-        //     // System.out.println("");
-        //     return arr[n-1].charAt(k-1);
-        // }
-
         // boolean res;
         // private void helper(int [] arr, int i, int j, long va, long vb, boolean aa, List<Integer> l) {
         //     if (i == j) {

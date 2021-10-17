@@ -812,100 +812,6 @@ public class sort {
         // }
 
 
-      //   // 时间复杂度：O(nk \log k)O(nklogk)，其中 nn 是所有列表的平均长度，kk 是列表数量。所有的指针移动的总次数最多是 nknk 次，每次从堆中取出元素和添加元素都需要更新堆，时间复杂度是 O(\log k)O(logk)，因此总时间复杂度是 O(nk \log k)O(nklogk)。
-      //   // 空间复杂度：O(k)O(k)，其中 kk 是列表数量。空间复杂度取决于堆的大小，堆中维护 kk 个元素。
-      //   public int[] smallestRange(List<List<Integer>> nums) {
-      //       int n = nums.size();
-      //       int resMin = 0, resMax = Integer.MAX_VALUE;
-      //       int minRg = resMax - resMin;
-      //       int max = Integer.MIN_VALUE;
-      //       int [] next = new int [n]; // 各子链表中比当前idx位数值大的下一个数的下标，即idx+1,初始化全为0
-      //       Queue<Integer> q = new PriorityQueue<>(new Comparator<Integer>() {
-      //               public int compare(Integer idx1, Integer idx2) {
-      //                   return nums.get(idx1).get(next[idx1]) - nums.get(idx2).get(next[idx2]);
-      //               }
-      //           });
-      //       for (int i = 0; i < n; i++) {
-      //           q.offer(i); // 0, 1, 2, .... n-1 真神奇呀
-      //           max = Math.max(max, nums.get(i).get(0));
-      //       }
-      //       int minIdx = 0, curRg = 0;
-      //       while (true) {
-      //           minIdx = q.poll(); // 取出的是最小值的子链表的序号，而子链表里的当前最小值所在子链表中的位置存于next[minIdx]中
-      //           curRg = max - nums.get(minIdx).get(next[minIdx]);
-      //           if (curRg < minRg)  {
-      //               minRg = curRg;
-      //               resMin = nums.get(minIdx).get(next[minIdx]);
-      //               resMax = max;
-      //           }
-      //           next[minIdx]++;
-      //           if (next[minIdx] == nums.get(minIdx).size()) break;
-      //           q.offer(minIdx); // 加回去，但是queue里真正比较的值已经变了，变强大了。。。 // 更新最小值的替换值 
-      //           max = Math.max(max, nums.get(minIdx).get(next[minIdx]));  // 更新最大值
-      //       }
-      //       return new int [] {resMin, resMax};
-      //   }
-      //   // 这里的 BB 序列是什么？我们可以用一个哈希映射来表示 BB 序列—— B[i]
-      //   // B[i] 表示 ii 在哪些列表当中出现过，
-      //   // 这里哈希映射的键是一个整数，表示列表中的某个数值，
-      //   // 哈希映射的值是一个数组，这个数组里的元素代表当前的键出现在哪些列表里。
-      //   // 如果列表集合为：
-      //   // 0: [-1, 2, 3]
-      //   // 1: [1]
-      //   // 2: [1, 2]
-      //   // 3: [1, 1, 3]
-      //   // 那么可以得到这样一个哈希映射
-      //   // -1: [0]
-      //   // 1: [1, 2, 3, 3]
-      //   // 2: [0, 2]
-      //   // 3: [0, 3]
-      //   // 时间复杂度：O(nk + |V|)O(nk+∣V∣)，其中 nn 是所有列表的平均长度，kk 是列表数量，|V|∣V∣ 是列表中元素的值域，在本题中 |V| \leq 2*10^5∣V∣≤2∗10 
-      //   // 5
-      //   // 。构造哈希映射的时间复杂度为 O(nk)O(nk)，双指针的移动范围为 |V|∣V∣，在此过程中会对哈希映射再进行一次遍历，时间复杂度为 O(nk)O(nk)，因此总时间复杂度为 O(nk + |V|)O(nk+∣V∣)。
-      //   // 空间复杂度：O(nk)O(nk)，即为哈希映射使用的空间。哈希映射的「键」的数量由列表中的元素个数 nknk 以及值域 |V|∣V∣ 中的较小值决定，「值」为长度不固定的数组，但是它们的长度之和为 nknk，因此哈希映射使用的空间为 O(nk)O(nk)。在使用双指针时，还需要一个长度为 nn 的数组，其对应的空间在渐进意义下小于 O(nk)O(nk)，因此可以忽略。
-      // public int[] smallestRange(List<List<Integer>> nums) {
-      //       int n = nums.size();
-      //       Map<Integer, List<Integer>> indices = new HashMap<>();
-      //       int xmin = Integer.MAX_VALUE, xmax = Integer.MIN_VALUE;
-      //       for (int i = 0; i < n; i++) {
-      //           for (int v : nums.get(i)) { // 把大链表中出出过的每一个值作键，值为它所存在于的子链表序号链表
-      //               List<Integer> list = indices.getOrDefault(v, new ArrayList<>());
-      //               list.add(i);
-      //               indices.put(v, list);
-      //               xmin = Math.min(xmin, v);
-      //               xmax = Math.max(xmax, v); // 这里得到全局的最小最大值
-      //           }
-      //       }
-      //       int [] freq = new int [n];
-      //       int inside = 0; // cnt # of lists included in miniRanges
-      //       int left = xmin, right = xmin -1;
-      //       int resLeft = xmin, resRight = xmax;
-      //       while (right < xmax) {
-      //           right ++;
-      //           if (indices.containsKey(right)) {
-      //               for (int x : indices.get(right)) {
-      //                   freq[x]++;
-      //                   if (freq[x] == 1) inside++;
-      //               }
-      //               while (inside == n) { // find ONE satified solution, try to minimize the range
-      //                   if (right - left < resRight - resLeft) {
-      //                       resLeft = left;
-      //                       resRight = right;
-      //                   }
-      //                   if (indices.containsKey(left)) { // sliding the left size towards right
-      //                       for (int v : indices.get(left)) {
-      //                           freq[v]--;
-      //                           if (freq[v] == 0) --inside;
-      //                       }
-      //                   }
-      //                   left++;
-      //               }
-      //           }
-      //       }
-      //       return new int [] {resLeft, resRight};
-      //   }  
-
-
         // private boolean equals(List<Integer> l, List<Integer> ll) {
         //     if (l.size() != ll.size()) return false;
         //     Collections.sort(l);
@@ -1049,48 +955,6 @@ public class sort {
         // }
 
 
-        // public boolean carPooling(int[][] trips, int capacity) {
-        //     int n = trips.length;
-        //     Arrays.sort(trips, (a, b) -> (a[0] != b[0] ? a[0]-b[0] : a[1]-b[1]));
-        //     // if (n == 1) return true;
-        //     // else if (n == 2 && (trips[0][2] <= trips[1][1] || trips[0][0] + trips[1][0] <= capacity)) return true;
-        //     // else if (n == 2) return false;
-        //     int cnt = trips[0][0];
-        //     int [] pre = trips[0], cur = null;
-        //     for (int i = 1; i < n; i++) {
-        //         cur = trips[i];
-        //         if (pre[2] <= cur[1]) cnt -= pre[0]; // 当前一站有人还不能在当前站下车的时候，需要将前一旅程重新推入双端队列时间点早的一端
-        //         // 改天早上或晚上再回来写这个题，遍历一个序列，作必要的调整整理
-        //     }
-        //     // Queue<int []> q = new PriorityQueue<>(n, (a, b) -> a[1]-b[1]); // 双端队列 应该比这个好用
-        //     // q.addAll(Arrays.asList(trips));
-        //     // int [] prev, curr, next;
-        //     // Queue<int []> h = new PriorityQueue<>();
-        //     // prev = q.poll();
-        //     // int cnt = 0;
-        //     // while (q.size() >= 1) {
-        //     //     curr = q.poll();
-        //     //     if (curr[1] < prev[2] && prev[0] + curr[0] > capacity) return false;
-        //     //     if (!q.isEmpty()) {
-        //     //         next = q.peek();
-        //     //         if (next[1] < prev[2] && prev[0] + curr[0] + next[0] > capacity) return false;
-        //     //         if (next[1] < prev[2]) {
-        //     //             h = new PriorityQueue<>(q);
-        //     //             cnt = prev[0] + curr[0];
-        //     //             while (!h.isEmpty() && (h.peek())[1] < curr[2]) {
-        //     //                 next = h.poll();
-        //     //                 cnt += next[0];
-        //     //                 if (cnt > capacity && next[1] < curr[2]) return false;
-        //     //                 curr = next;
-        //     //             }
-        //     //         }
-        //     //     }
-        //     //     prev = curr;
-        //     // }
-        //     return true;
-        // }
-
-
         // int getDiff(int [] arr, int v) {
         //     int res = 0;
         //     for (int i = 0; i < arr.length; i++) 
@@ -1201,16 +1065,154 @@ public class sort {
         // }
 
 
+        // public boolean carPooling(int[][] trips, int capacity) { // O(NlogN)
+        //     int n = trips.length;
+        //     Arrays.sort(trips, (a, b) -> (a[1] != b[1] ? a[1]-b[1] : a[2]-b[2]));
+        //     System.out.println("trips.length: " + trips.length);
+        //     for (int z = 0; z < trips.length; ++z) 
+        //         System.out.println(Arrays.toString(trips[z]));
+        //     int seat = capacity - trips[0][0];
+        //     if (seat < 0) return false;
+        //     // Queue<int []> q = new PriorityQueue<>(n, (a, b) -> a[2]-b[2]); // 已经坐在车上的人，按照下车时间排序
+        //     Queue<int []> q = new PriorityQueue<>(Comparator.comparingInt(a -> a[2])); // 已经坐在车上的人，按照下车时间排序
+        //     q.offer(trips[0]);
+        //     int [] pre = trips[0], cur = null;
+        //     for (int i = 1; i < n; i++) {
+        //         cur = trips[i];
+        //         while (!q.isEmpty() && q.peek()[2] <= cur[1]) seat += q.poll()[0];
+        //         if (seat < cur[0]) return false;
+        //         seat -= cur[0];
+        //         q.offer(cur);
+        //     }
+        //     return true;
+        // }
+        // public boolean carPooling(int[][] trips, int capacity) { // O(N^2)
+        //     int[] sum = new int[1001]; // 构建数组，为了判断每站的乘客数
+        //     for (int[] trip: trips){   // 循环trips
+        //         for (int i=trip[1];i<trip[2];i++){ // 循环每个trip的起点到终点
+        //             sum[i]+=trip[0];   // 在每一站加入当前trip的人数
+        //             if (sum[i] > capacity){ // 如果超载返回false
+        //                 return false;
+        //             }
+        //         }
+        //     }
+        //     return true;
+        // }
+        // public boolean carPooling(int[][] trips, int capacity) { // O(N)
+        //     int[] sum = new int[1001]; // 记录每一站乘客的相对变化
+        //     for (int[] trip: trips){ // 循环trips
+        //         sum[trip[1]]+=trip[0]; // 起点增加此trip的人数
+        //         sum[trip[2]]-=trip[0]; // 终点减少此trip的人数
+        //     }
+        //     for (int i=0;i<sum.length;i++){ // 利用前缀和判断当前站的乘客数
+        //         sum[i] = i==0 ? sum[i] : sum[i]+sum[i-1];
+        //         if (sum[i] > capacity){
+        //             return false;
+        //         }
+        //     }
+        //     return true;
+        // }
+
         
-    }
+        //   // 时间复杂度：O(nk \log k)O(nklogk)，其中 nn 是所有列表的平均长度，kk 是列表数量。所有的指针移动的总次数最多是 nknk 次，每次从堆中取出元素和添加元素都需要更新堆，时间复杂度是 O(\log k)O(logk)，因此总时间复杂度是 O(nk \log k)O(nklogk)。
+        //   // 空间复杂度：O(k)O(k)，其中 kk 是列表数量。空间复杂度取决于堆的大小，堆中维护 kk 个元素。
+          public int[] smallestRange(List<List<Integer>> nums) {
+              int n = nums.size();
+              int resMin = 0, resMax = Integer.MAX_VALUE;
+              int minRg = resMax - resMin;
+              int max = Integer.MIN_VALUE;
+              int [] next = new int [n]; // 各子链表中比当前idx位数值大的下一个数的下标，即idx+1,初始化全为0
+              Queue<Integer> q = new PriorityQueue<>(new Comparator<Integer>() {
+                      public int compare(Integer idx1, Integer idx2) {
+                          return nums.get(idx1).get(next[idx1]) - nums.get(idx2).get(next[idx2]);
+                      }
+                  });
+              for (int i = 0; i < n; i++) {
+                  q.offer(i); // 0, 1, 2, .... n-1 真神奇呀
+                  max = Math.max(max, nums.get(i).get(0));
+              }
+              int minIdx = 0, curRg = 0;
+              while (true) {
+                  minIdx = q.poll(); // 取出的是最小值的子链表的序号，而子链表里的当前最小值所在子链表中的位置存于next[minIdx]中
+                  curRg = max - nums.get(minIdx).get(next[minIdx]);
+                  if (curRg < minRg)  {
+                      minRg = curRg;
+                      resMin = nums.get(minIdx).get(next[minIdx]);
+                      resMax = max;
+                  }
+                  next[minIdx]++;
+                  if (next[minIdx] == nums.get(minIdx).size()) break;
+                  q.offer(minIdx); // 加回去，但是queue里真正比较的值已经变了，变强大了。。。 // 更新最小值的替换值 
+                  max = Math.max(max, nums.get(minIdx).get(next[minIdx]));  // 更新最大值
+              }
+              return new int [] {resMin, resMax};
+          }
+        //   // 这里的 BB 序列是什么？我们可以用一个哈希映射来表示 BB 序列—— B[i]
+        //   // B[i] 表示 ii 在哪些列表当中出现过，
+        //   // 这里哈希映射的键是一个整数，表示列表中的某个数值，
+        //   // 哈希映射的值是一个数组，这个数组里的元素代表当前的键出现在哪些列表里。
+        //   // 如果列表集合为：
+        //   // 0: [-1, 2, 3]
+        //   // 1: [1]
+        //   // 2: [1, 2]
+        //   // 3: [1, 1, 3]
+        //   // 那么可以得到这样一个哈希映射
+        //   // -1: [0]
+        //   // 1: [1, 2, 3, 3]
+        //   // 2: [0, 2]
+        //   // 3: [0, 3]
+        //   // 时间复杂度：O(nk + |V|)O(nk+∣V∣)，其中 nn 是所有列表的平均长度，kk 是列表数量，|V|∣V∣ 是列表中元素的值域，在本题中 |V| \leq 2*10^5∣V∣≤2∗10 
+        //   // 5
+        //   // 。构造哈希映射的时间复杂度为 O(nk)O(nk)，双指针的移动范围为 |V|∣V∣，在此过程中会对哈希映射再进行一次遍历，时间复杂度为 O(nk)O(nk)，因此总时间复杂度为 O(nk + |V|)O(nk+∣V∣)。
+        //   // 空间复杂度：O(nk)O(nk)，即为哈希映射使用的空间。哈希映射的「键」的数量由列表中的元素个数 nknk 以及值域 |V|∣V∣ 中的较小值决定，「值」为长度不固定的数组，但是它们的长度之和为 nknk，因此哈希映射使用的空间为 O(nk)O(nk)。在使用双指针时，还需要一个长度为 nn 的数组，其对应的空间在渐进意义下小于 O(nk)O(nk)，因此可以忽略。
+        // public int[] smallestRange(List<List<Integer>> nums) {
+        //       int n = nums.size();
+        //       Map<Integer, List<Integer>> indices = new HashMap<>();
+        //       int xmin = Integer.MAX_VALUE, xmax = Integer.MIN_VALUE;
+        //       for (int i = 0; i < n; i++) {
+        //           for (int v : nums.get(i)) { // 把大链表中出出过的每一个值作键，值为它所存在于的子链表序号链表
+        //               List<Integer> list = indices.getOrDefault(v, new ArrayList<>());
+        //               list.add(i);
+        //               indices.put(v, list);
+        //               xmin = Math.min(xmin, v);
+        //               xmax = Math.max(xmax, v); // 这里得到全局的最小最大值
+        //           }
+        //       }
+        //       int [] freq = new int [n];
+        //       int inside = 0; // cnt # of lists included in miniRanges
+        //       int left = xmin, right = xmin -1;
+        //       int resLeft = xmin, resRight = xmax;
+        //       while (right < xmax) {
+        //           right ++;
+        //           if (indices.containsKey(right)) {
+        //               for (int x : indices.get(right)) {
+        //                   freq[x]++;
+        //                   if (freq[x] == 1) inside++;
+        //               }
+        //               while (inside == n) { // find ONE satified solution, try to minimize the range
+        //                   if (right - left < resRight - resLeft) {
+        //                       resLeft = left;
+        //                       resRight = right;
+        //                   }
+        //                   if (indices.containsKey(left)) { // sliding the left size towards right
+        //                       for (int v : indices.get(left)) {
+        //                           freq[v]--;
+        //                           if (freq[v] == 0) --inside;
+        //                       }
+        //                   }
+        //                   left++;
+        //               }
+        //           }
+        //       }
+        //       return new int [] {resLeft, resRight};
+        //   }  
+   }
     public static void main(String[] args) {
         Solution s  =  new Solution();
 
-        //  int [][] a  =  new int [][] {{5,5},{6,3},{3,6}};
-        //  int [][] a  =  new int [][] {{2,2},{3,3}};
-        int [][] a  =  new int [][] {{1,5},{10,4},{4,3}};
-
-        int res  =  s.numberOfWeakCharacters(a);
+        int [][] a = new int [][] {{4,10,15,24,26},{0,9,12,20},{5,18,22,30}};
+        
+        boolean res  =  s.smallestRange(a);
         System.out.println("res: " + res);
         
     }

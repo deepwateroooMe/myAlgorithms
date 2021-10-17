@@ -1050,15 +1050,310 @@ public class dynaninemicProgramming {
         //     System.out.println("");
         //     return 0;
         // }
-    }
+
+
+        // // 要把这种工具方法像写binarySearch一样随手拈来随手就敲才行: 仍然超时，最后两个不过
+        // public void getSum(List<Integer> li, int [] arr, int sum , int l, int r) {
+        //     if (l >= r) { //
+        //         li.add(sum);
+        //         return;
+        //     }
+        //     getSum(li, arr, sum + arr[l], l+1, r); // choose and add idx l to sum
+        //     getSum(li, arr, sum, l+1, r);          // skip idx l, move directly to next element
+        // }
+        // public int minAbsDifference(int[] arr, int goal) {
+        //     int n = arr.length, m = arr.length / 2;
+        //     List<Integer> l = new ArrayList<>();
+        //     List<Integer> r = new ArrayList<>();
+        //     getSum(l, arr, 0, 0, m); // m 
+        //     getSum(r, arr, 0, m, n); // m ? 这里反而想不明白了？
+        //     Collections.sort(l);
+        //     Collections.sort(r);
+        //     int i = 0, j = r.size()-1, cur = 0;
+        //     int minDiff = Integer.MAX_VALUE;
+        //     while (i < l.size() && j >= 0) {
+        //         cur = l.get(i) + r.get(j) - goal;
+        //         if (cur > 0) {
+        //             minDiff = Math.min(minDiff, cur);
+        //             j--;
+        //         } else if (cur < 0) {
+        //             minDiff = Math.min(minDiff, -cur);
+        //             i++;
+        //         }
+        //         else return 0;
+        //     }
+        //     return minDiff;
+        // }
+        public int minAbsDifference(int[] arr, int goal) {
+            int n = arr.length;
+            List<Integer> lsum = new ArrayList<>();
+            List<Integer> rsum = new ArrayList<>();
+            lsum.add(0);
+            rsum.add(0);
+            for (int i = 0; i <= n/2; i++) { // 这种生成和的方式
+                int size = lsum.size();
+                for (int j = 0; j < size; j++) 
+                    lsum.add(lsum.get(j) + arr[i]);
+            }
+            for (int i = n/2+1; i < n; i++) {
+                int size = rsum.size();
+                for (int j = 0; j < size; j++) 
+                    rsum.add(rsum.get(j) + arr[i]);
+            }
+            TreeSet<Integer> rightSumSet = new TreeSet<>(rsum);
+            Set<Integer> leftSumSet = new HashSet<>(lsum);
+            int ans = Math.abs(goal);
+            for (int v : leftSumSet) {
+                int b = goal - v;
+                Integer lower = rightSumSet.floor(b);
+                Integer higher = rightSumSet.ceiling(b);
+                if (lower != null)
+                    ans = Math.min(ans, Math.abs(goal-v-lower));
+                if (higher != null)
+                    ans = Math.min(ans, Math.abs(goal-v-higher));
+            }
+            return ans;
+        }
+        // public int minimumDifference(int[] arr) { // 暴力解，数据规模太大，需要更高效的解法
+        //     int n = arr.length, range = 1 << n, cur = 0;
+        //     int sum = Arrays.stream(arr).sum();
+        //     Set<Integer> s = new HashSet<>();
+        //     int min = Integer.MAX_VALUE;
+        //     for (int i = 1; i < range; i++) {
+        //         if (Integer.bitCount(i) != n/2) continue;
+        //         cur = 0;
+        //         for (int j = 0; j < n; j++) 
+        //             if (((i >> j) & 1) == 1) 
+        //                 cur += arr[j];
+        //         if (s.contains(sum - cur)) 
+        //             min = Math.min(min, Math.abs(sum-cur-cur));
+        //         else s.add(cur);
+        //     }
+        //     return min;
+        // }
+        // private void calcHalvesSubsetSums(int [] arr, Map<Integer, Set<Integer>> map, int l) {
+        //     map.computeIfAbsent(0, k -> new HashSet<>()).add(0);
+        //     int cur = 0;
+        //     for (int k = 1; k <= n; k++) // 过个生成的过程是O(n*(2^n)), could be O(2^n)
+        //         for (int i = 1; i < (1 << n); i++) {
+        //             if (cnt[i] != k) continue;
+        //             cur = 0;
+        //             for (int j = 0; j < n; j++) 
+        //                 if (((i >> j) & 1) == 1) cur += arr[l+j];
+        //             map.computeIfAbsent(k, w -> new HashSet<>()).add(cur);
+        //         }
+        // }
+        // Map<Integer, Set<Integer>> left = new HashMap<>(); 
+        // Map<Integer, Set<Integer>> right = new HashMap<>(); 
+        // int [] cnt;
+        // int n;
+        // public int minimumDifference(int[] arr) {
+        //     n = arr.length / 2;
+        //     if (n == 1) return Math.abs(arr[0] - arr[1]);
+        //     cnt = new int [1 << n];
+        //     int sum = Arrays.stream(arr).sum(), half = sum / 2;
+        //     for (int i = 0; i < (1 << n); i++) 
+        //         cnt[i] = Integer.bitCount(i);
+        //     calcHalvesSubsetSums(arr, left, 0);
+        //     calcHalvesSubsetSums(arr, right, n);
+        //     int min = Integer.MAX_VALUE;
+        //     TreeSet<Integer> rightKSums; // 用TreeSet就可以不用自己手动写binarySearch while loop了，并且保证答案正确
+        //     for (int i = 1; i <= n; i++) {
+        //         rightKSums = new TreeSet(right.get(n-i));
+        //         for (Integer leftKSum : left.get(i)) {
+        //             Integer lower = rightKSums.floor(half - leftKSum);
+        //             Integer higher = rightKSums.ceiling(half - leftKSum);
+        //             if (lower != null) 
+        //                 min = Math.min(min, Math.abs(sum - 2 * (leftKSum + lower)));
+        //             if (higher != null) 
+        //                 min = Math.min(min, Math.abs(sum - 2 * (leftKSum + higher)));
+        //         }
+        //     }
+        //     return min;
+        // }
+        // public int minimumDifference(int[] nums) {
+        //     int n = nums.length;
+        //     int sum = Arrays.stream(nums).sum();
+        //     TreeSet<Integer>[] sets = new TreeSet[n/2+1]; // 数组，而不是hashMap，这个应该关系不是很大
+        //     for (int i = 0; i < (1 << (n / 2)); ++i) {    // 一次遍历，而不是n次遍历
+        //         int curSum = 0;
+        //         int m = 0; // element Cnts                         
+        //         for (int j = 0; j < n / 2; ++j) 
+        //             if ((i & (1<<j)) != 0) {
+        //                 curSum += nums[j]; // 左半部分
+        //                 m ++;
+        //             }
+        //         if (sets[m] == null) sets[m] = new TreeSet<Integer>();
+        //         sets[m].add(curSum);
+        //     }
+        //     int res = Integer.MAX_VALUE;
+        //     for (int i = 0; i < (1 << (n / 2)); ++i) {
+        //         int curSum = 0;
+        //         int m = 0;
+        //         for (int j = 0; j < n / 2; ++j) 
+        //             if ((i & (1<<j)) != 0) {
+        //                 curSum += nums[n/2 + j]; // 遍历计算右半部分的和：边遍历，边解决问题
+        //                 m ++;
+        //             }
+        //         int target = (sum - 2 * curSum) / 2;
+        //         Integer left = sets[n/2-m].floor(target), right = sets[n/2-m].ceiling(target);
+        //         if (left != null) 
+        //             res = Math.min(res, Math.abs(sum - 2 * (curSum + left.intValue())));
+        //         if (right != null) 
+        //             res = Math.min(res, Math.abs(sum - 2 * (curSum + right.intValue())));
+        //         if (res == 0) return 0;
+        //     }
+        //     return res;
+        // }
+
+
+        // // dp[i][j] 表示前面i根木棍可以看到j根
+        // // 设 dp[i][j] 表示从高度为 1, 2, ..., i 的木棍中，高度逐渐递减地插入新的木棍，从左侧看恰好看到 k 根木棍的方案数。
+        // // 后面说看到ith根，不是指从小到大的第ith根棍子，而是指ith这个位置上的棍子
+        // // 如果可以看到ith根的话，那么数量为dp[i-1][j-1]
+        // // 如果看不到ith的话，那么取前面(i-1)里面任意一个出来放在ith的最后，接下来就是从前面i-1个棍子里面看到j根，所以结果是 (i-1)* dp[i-1][j]
+        // public int rearrangeSticks(int n, int k) {
+        //     int mod = (int)1e9 + 7;
+        //     long [][] dp = new long [n+1][k+1];
+        //     dp[0][0] = 1;
+        //     for (int i = 1; i <= n; i++) 
+        //         for (int j = 1; j <= Math.min(n, k); j++) 
+        //             dp[i][j] = (dp[i-1][j-1] + (dp[i-1][j] * (i-1)) % mod) % mod;
+        //     return (int)dp[n][k];
+        // }
+
+        // long mod = 1000_000_000 + 7;
+        // Long[][] dp;
+        // public int rearrangeSticks(int n, int k) {
+        //     dp = new Long[n + 1][k + 1];
+        //     long ans = dfs(n, k);
+        //     return (int) (ans % mod);
+        // }
+        // long dfs(int n, int k) {
+        //     if (n < k || k == 0) return 0;
+        //     if (n == k) return 1;
+        //     if (dp[n][k] != null) return dp[n][k];
+        //     long ans = 0;
+        //     // trying each stick from 1 to n
+        //     // placing them at last position
+        //     for (int N = 1; N <= n; N++) {
+        //         if (N == n) { // if the current stick is largest
+        //             ans += dfs(n - 1, k - 1);
+        //         } else { // if the current stick is not largest
+        //             ans += dfs(n - 1, k);
+        //         }
+        //         ans %= mod;
+        //     }
+        //     dp[n][k] = ans;
+        //     return ans;
+        // }
+        // long mod = 1000_000_000 + 7;
+        // long[][] dp;
+        // public int rearrangeSticks(int n, int k) {
+        //     dp = new long[n + 1][k + 1];
+        //     long ans = dfs(n, k);
+        //     return (int) (ans % mod);
+        // }
+        // long dfs(int n, int k) {
+        //     if(n < k || k == 0) return 0;
+        //     if(n == k) return 1;
+        //     if(dp[n][k] != 0) return dp[n][k];
+        //     long ans = 0;
+        //     // instead of iterating for every stick
+        //     // we are just multiplying number of ways with (n - 1)
+        //     ans += (((n - 1) * dfs(n - 1, k)) % mod);
+        //     ans %= mod;
+        //     ans += dfs(n - 1, k - 1);
+        //     ans %= mod;
+        //     return dp[n][k] = ans;
+        // }
+
+
+        // public int numberOfUniqueGoodSubsequences(String binary) {
+        //     int mod = (int)1e9 + 7;
+        //     int n = binary.length(), preZoo = 0, preOne = 0, m = 1;
+        //     long [] dp = new long [n+1];
+        //     String s = "#" + binary;
+        //     while (m <= n && s.charAt(m) == '0') m++;
+        //     if (m == n+1) return 1;
+        //     dp[m] = 1;
+        //     preOne = m;
+        //     preZoo = m-1;
+        //     for (int i = m+1; i <= n; i++) {
+        //         char c = s.charAt(i);
+        //         int j = (c == '0' ? preZoo : preOne);
+        //         dp[i] = (2 * dp[i-1] % mod - (j >= 1 ? dp[j-1] : 0) + mod) % mod;
+        //         if (c == '0') preZoo = i;
+        //         else preOne = i;
+        //     }
+        //     return (int)dp[n] + (s.indexOf("0") != -1 ?  1 : 0);
+        // }
+        // public int numberOfUniqueGoodSubsequences(String binary) {
+        //     int mod = (int)1e9 + 7;
+        //     int endZoo = 0, endOne = 0, hasZoo = 0;
+        //     for (int i = 0; i < binary.length(); i++) 
+        //         if (binary.charAt(i) == '1')
+        //             endOne = (endOne + endZoo + 1) % mod;
+        //         else {
+        //             endZoo = (endZoo + endOne) % mod;
+        //             hasZoo = 1;
+        //         }
+        //     return (endOne + endZoo + hasZoo) % mod;
+        // }
+
         
+        // // 快速计算x^y的乘方
+        // public int quickMul(int x , int y) {
+        //     long res = 1, cur = x;
+        //     while (y > 0) {
+        //         if ((y & 1) == 1)
+        //             res = res * cur % mod;
+        //         cur = cur * cur % mod;
+        //         y >>= 1;
+        //     }
+        //     return (int)res;
+        // }
+        // // 深度优先搜索，返回以当前节点为根的子树节点个数 及 内部排列数
+        // public int [] dfs (int idx) {
+        //     if (!map.containsKey(idx)) return new int [] {1, 1}; // 子节点，节点个数及内部排列数均为1
+        //     int cnt = 1, res = 1;       //  子树的节点个数、内部排列数
+        //     for (Integer node : map.get(idx)) {
+        //       int [] cur = dfs(node); // 递归得到子节点对应树的节点个数和排列数
+        //         cnt += cur[0];
+        //         res = (int)((long)res * cur[1] % mod * inv[cur[0]] % mod);
+        //     }
+        //     res = (int)((long)res * fac[cnt-1] % mod);
+        //     return new int [] {cnt, res};
+        // }
+        // int mod = (int)1e9 + 7;
+        // Map<Integer, List<Integer>> map = new HashMap<>();
+        // int [] fac, inv;
+        // public int waysToBuildRooms(int[] prevRoom) {
+        //     int n = prevRoom.length;
+        //     // 求阶乘数列及对应逆元
+        //     this.fac = new int [n]; // fac[i]=i!
+        //     this.inv = new int [n]; // inv[i]=i!^(-1)
+        //     fac[0] = inv[0] = 1;
+        //     for (int i = 1; i < n; i++) {
+        //         fac[i] = (int)((long)fac[i-1] * i % mod);
+        //         inv[i] = quickMul(fac[i], mod - 2); // 费马小定理: (fac[i]^(-1))%mod = (fac[i]^(mod-2))%mod
+        //     }
+        //     // 记录各个节点与子节点之间的边
+        //     for (int i = 1; i < n; i++) 
+        //         map.computeIfAbsent(prevRoom[i], k->new ArrayList<>()).add(i);
+        //     // 动态规划得到总体顺序数量x
+        //     return dfs(0)[1];      
+        // }
+
+
+        
+    }
     public static void main(String[] args) {
         Solution s  =  new Solution();
 
-        int []  a = new int []  {2, 3, 5};
-        int [] b = new int [] {6, 7, 8};
+        int []  a = new int []  { -1, 0, 0, 1, 2};
 
-        int res = s.profitableSchemes(10, 5, a, b);
+        int res = s.waysToBuildRooms(a);
         System.out.println("res: " + res);
     }
 }

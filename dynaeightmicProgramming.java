@@ -143,40 +143,6 @@ public class dynaeightmicProgramming {
         // String a = "**"; // 96
 
 
-        // // 要把这种工具方法像写binarySearch一样随手拈来随手就敲才行: 仍然超时，最后两个不过
-        // public void getSum(List<Integer> li, int [] arr, int sum , int l, int r) {
-        //     if (l >= r) {
-        //         li.add(sum);
-        //         return;
-        //     }
-        //     getSum(li, arr, sum + arr[l], l+1, r);
-        //     getSum(li, arr, sum, l+1, r);
-        // }
-        // public int minAbsDifference(int[] arr, int goal) {
-        //     int n = arr.length, m = arr.length / 2;
-        //     List<Integer> l = new ArrayList<>();
-        //     List<Integer> r = new ArrayList<>();
-        //     getSum(l, arr, 0, 0, m);
-        //     getSum(r, arr, 0, m, n);
-        //     Collections.sort(l);
-        //     Collections.sort(r);
-        //     int i = 0, j = r.size()-1, cur = 0;
-        //     int minDiff = Integer.MAX_VALUE;
-        //     while (i < l.size() && j >= 0) {
-        //         cur = l.get(i) + r.get(j) - goal;
-        //         if (cur > 0) {
-        //             minDiff = Math.min(minDiff, cur);
-        //             j--;
-        //         } else if (cur < 0) {
-        //             minDiff = Math.min(minDiff, -cur);
-        //             i++;
-        //         }
-        //         else return 0;
-        //     }
-        //     return minDiff;
-        // }
-
-
         // private int [] getMin(int [] a, int [] b) { // 这个题最近需要再写一遍
         //     if (a[0] > b[0]) return b;
         //     if (a[0] < b[0]) return a;

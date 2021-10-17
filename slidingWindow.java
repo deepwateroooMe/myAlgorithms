@@ -694,33 +694,6 @@ public class slidingWindow {
         // }
 
 
-        // public int minMoves(int[] arr, int k) {
-        //     int n = arr.length;
-        //     int min = n, cnt = 0, j = 0;
-        //     for (int i = 0; i < n; i++) {
-        //         System.out.println("\n i: " + i);
-        //         if (arr[i] == 1) ++cnt;
-        //         System.out.println("cnt: " + cnt);
-        //         System.out.println("(cnt == k): " + (cnt == k));
-        //         System.out.println("i-j+1: " + (i-j+1));
-        //         if (cnt == k) min = Math.min(min, i-j+1-k);
-        //         System.out.println("min: " + min);
-        //         if (cnt > k) {
-        //             while (j <= i && cnt >= k) {
-        //                 if (arr[j] == 1) --cnt;
-        //                 ++j;
-        //             }
-        //             System.out.println("j: " + j);
-        //             System.out.println("cnt: " + cnt);
-        //             if (cnt == k-1) min = Math.min(min, i-j+2-k);
-        //             System.out.println("min: " + min);
-        //         }
-        //         System.out.println("j: " + j);
-        //     }
-        //     return min;
-        // }
-
-
         // public int longestSubstring(String s, int k) {
         //     int n = s.length(), j = 0, max = 1;
         //     Map<Integer, Integer> m = new HashMap<>();
@@ -982,51 +955,51 @@ public class slidingWindow {
         // }
 
 
-        public static int base = 26; // 256
-        public static int mod = (1 << 31) - 1;
-        public static boolean match(String str1,String str2) {
-            assert str1.length() == str2.length();
-            for (int i = 0; i < str1.length(); i++) 
-                if (str1.charAt(i) != str2.charAt(i))
-                    return false; 
-            return true; 
-        }
-        private String search(String s, int v) { // v: substring length
-            int n = s.length();
-            long hash = 0L, mp = 1l;             // to avoid overflow, long long long
-            Map<Long, List<Integer>> map = new HashMap<>();
-            for (int j = 0; j < v; j++) {
-                hash = ((hash*base) + s.charAt(j)) % mod;
-                if (j >= 1)
-                    mp = mp * base % mod;        // 先乘好准备好，准备着备用 
-            }
-            map.computeIfAbsent(hash, k->new ArrayList<>()).add(0);
-            for (int i = 1; i+v <= n; i++) {
-                hash = ((hash - s.charAt(i-1) * mp % mod + mod) % mod * base % mod + s.charAt(i+v-1)) % mod; // mod 
-                if (map.containsKey(hash)) 
-                    for (int idx : map.get(hash)) 
-                        if (match(s.substring(i, i+v), s.substring(idx, idx+v)))
-                            return s.substring(i, i+v);
-                map.computeIfAbsent(hash, k->new ArrayList<>()).add(i);
-            }
-            return null;
-        }
-        public String longestDupSubstring(String s) {
-            int n = s.length();
-            int l = 0, r = n;
-            String res = "";
-            while (l <= r) {
-                int m = l + (r-l) / 2;
-                String tmp = search(s, m);
-                if (tmp == null) r = m-1;
-                else {
-                    if (tmp.length() > res.length())
-                        res = tmp;
-                    l = m+1;
-                }
-            }
-            return res;
-        }
+        // public static int base = 26; // 256
+        // public static int mod = (1 << 31) - 1;
+        // public static boolean match(String str1,String str2) {
+        //     assert str1.length() == str2.length();
+        //     for (int i = 0; i < str1.length(); i++) 
+        //         if (str1.charAt(i) != str2.charAt(i))
+        //             return false; 
+        //     return true; 
+        // }
+        // private String search(String s, int v) { // v: substring length
+        //     int n = s.length();
+        //     long hash = 0L, mp = 1l;             // to avoid overflow, long long long
+        //     Map<Long, List<Integer>> map = new HashMap<>();
+        //     for (int j = 0; j < v; j++) {
+        //         hash = ((hash*base) + s.charAt(j)) % mod;
+        //         if (j >= 1)
+        //             mp = mp * base % mod;        // 先乘好准备好，准备着备用 
+        //     }
+        //     map.computeIfAbsent(hash, k->new ArrayList<>()).add(0);
+        //     for (int i = 1; i+v <= n; i++) {
+        //         hash = ((hash - s.charAt(i-1) * mp % mod + mod) % mod * base % mod + s.charAt(i+v-1)) % mod; // mod 
+        //         if (map.containsKey(hash)) 
+        //             for (int idx : map.get(hash)) 
+        //                 if (match(s.substring(i, i+v), s.substring(idx, idx+v)))
+        //                     return s.substring(i, i+v);
+        //         map.computeIfAbsent(hash, k->new ArrayList<>()).add(i);
+        //     }
+        //     return null;
+        // }
+        // public String longestDupSubstring(String s) {
+        //     int n = s.length();
+        //     int l = 0, r = n;
+        //     String res = "";
+        //     while (l <= r) {
+        //         int m = l + (r-l) / 2;
+        //         String tmp = search(s, m);
+        //         if (tmp == null) r = m-1;
+        //         else {
+        //             if (tmp.length() > res.length())
+        //                 res = tmp;
+        //             l = m+1;
+        //         }
+        //     }
+        //     return res;
+        // }
         // public String longestDupSubstring(String s) {
         //     var low = 0;
         //     var high = s.length();
@@ -1079,19 +1052,100 @@ public class slidingWindow {
         // }
 
 
+        // public boolean containsNearbyAlmostDuplicate(int [] arr, int k, int t) {
+        //     if (k == 0) return t >= 0;
+        //     // ArrayDeque<Integer> q = new ArrayDeque<>(); // increasing
+        //     Queue<Integer> minq = new PriorityQueue<>((a, b) -> arr[a]-arr[b]); // increasing
+        //     Queue<Integer> maxq = new PriorityQueue<>((a, b) -> arr[b]-arr[a]); // decreasing
+        //     int j = 0; // j: left
+        //     for (int i = 0; i < arr.length; i++) {
+        //         minq.offer(i);
+        //         maxq.offer(i);
+        //         if (i-j < k-1) continue;
+        //         if ()
+        //     }
+        // }
+
+
+        // public int totalFruit(int[] arr) {
+        //     int n = arr.length;
+        //     int ans = 0, cnt = 0, j = 0;
+        //     Map<Integer, Integer> m = new HashMap<>();
+        //     for (int i = 0; i < n; i++) {
+        //         m.put(arr[i], m.getOrDefault(arr[i], 0) + 1);
+        //         cnt++;
+        //         if (m.size() <= 2) {
+        //             ans = Math.max(ans, cnt);
+        //             continue;
+        //         }
+        //         while (m.size() > 2) {
+        //             m.put(arr[j], m.get(arr[j]) - 1);
+        //             if (m.get(arr[j]) == 0) m.remove(arr[j]);
+        //             cnt--;
+        //             j++;
+        //         }
+        //         ans = Math.max(ans, cnt);
+        //     }
+        //     return ans;
+        // }
+
         
+        // public boolean containsNearbyAlmostDuplicate(int [] arr, int k, int t) {
+        //     TreeSet<Long> ts = new TreeSet<>();
+        //     for (int i = 0; i < arr.length; i++) {
+        //         if (i >= k+1) ts.remove((long)arr[i-k-1]);
+        //         Long lower = ts.ceiling((long)arr[i]-t); // E ceiling(E e) ，返回 treeSet 中大于等于 e 的元素中最小的元素，如果没有大于等于 e 的元素就返回 null
+        //         if (lower != null && lower <= (long)arr[i] + t)
+        //             return true;
+        //         ts.add((long)arr[i]);
+        //     }
+        //     return false;
+        // }
+        // 维持一个长度为k的window, 每次检查新的值是否与原来窗口中的所有值的差值有小于等于t的. 如果用两个for循环会超时O(nk).
+        //     使用treeset( backed by binary search tree) 的subSet函数,可以快速搜索. 复杂度为 O(n logk)
+        // public boolean containsNearbyAlmostDuplicate(int[] nums, int k, int t) {
+        //     if (k < 1 || t < 0 || nums == null || nums.length < 2) return false;
+        //     SortedSet<Long> set = new TreeSet<Long>();
+        //     for(int j = 0; j < nums.length; j++) {
+        //         SortedSet<Long> subSet = set.subSet((long)nums[j] - t, (long)nums[j] + t + 1);
+        //         if (!subSet.isEmpty()) return true;
+        //         if (j >= k)  set.remove((long)nums[j - k]);
+        //         set.add((long)nums[j]);
+        //     }
+        //     return false;
+        // }
+
+
+        public int minMoves(int[] arr, int k) {
+            if (k == 1) return 0;
+            int n = arr.length;
+            List<Integer> g = new ArrayList<>();
+            List<Integer> sum = new ArrayList<>();
+            sum.add(0);
+            int cnt = -1, last = 0;
+            for (int i = 0; i < n; i++) {
+                if (arr[i] == 0) continue;
+                ++cnt;
+                g.add(i-cnt);
+                sum.add(last + i - cnt);
+                last += i - cnt; 
+            }
+            int m = g.size();
+            int ans = Integer.MAX_VALUE;
+            for (int i = 0; i+k <= m; i++) {
+                int mid = (i + i + k - 1) / 2; // 中位数下标
+                int q = g.get(mid);            // 中位数
+                ans = Math.min(ans, (2*(mid-i)-k+1) * q + sum.get(i+k) - sum.get(mid+1) - sum.get(mid) + sum.get(i));
+            }
+            return ans;
+        }
     }    
     public static void main(String[] args) {
-        Solution s = new Solution();
+        Solution s  =  new Solution();
 
-        // String a = "banana";
-        // String a = "zxcvdqkfawuytt";
-        String a = "nnpxouomcofdjuujloanjimymadkuepightrfodmauhrsy";
-
-        // String a = "ppyprwwynqfidzoroopgecnvdgupnlwxwjjpynpxvptmgmirzerrwlslshudljlkbanxbuidrhocsaadxcqgzleadrbsnspcxgfaimugpwyfhwfhhwhvxvpuyhixibaqpvsdigpofyeqyljekswxrckwdwyeatlulnglkuzuwmglcctjqgwwzvflayzqpqucdqzfpegmhcxuxqhxkamsxeczspgixgatcxjkfgtupiwdeicozvbackiwoxgyfrysgrlevolbmawccazzbiubipialpxmjyzrwtqtjznnunjkuujthcrmjuofaofyyviwfnxujdbmigzdbmdjwmqjddjjidzohgetthcrmsnzbxzgwicvhcsgeqvovwyikgiiaksgrrgktwhtowezzmxhbfbgktaamzeizwbcexckuejpgmgtckrgiwiopgaaaihvorfpjebsnxixmiqcfjqwqtlovqdywsibqwjuwehwguwdqnavpxltxtfowcobihawjpgtgwwmcwiftudksvhyykoskyuifgyipemyswgmusywztkobnuqrvvnxffrtwoijwpdaelhtlpweyupbvumalqaumiryikyijqpisgpgqpjwrvesforvcygzrjuwxiyewfezggvprbcfdyavzdwovgntyakcdhbunyumvzmljsktiyudvxygofyjhlvbqballbchamarhewmqwoaepq";
-        System.out.println("a: " + a);
-
-        String r = s.longestDupSubstring(a);
-        System.out.println("r: " + r);
+        int []  a = new int []  {1, 0, 0, 0, 0, 0, 1, 1};
+        
+        int r  =  s.minMoves(a, 3);
+        System.out.println("r: "  +  r);
     }
 }

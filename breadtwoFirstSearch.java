@@ -1067,29 +1067,6 @@ public class breadtwoFirstSearch {
         // }
 
 
-        // public int trapRainWater(int[][] heightMap) {
-        //     int m = heightMap.length;
-        //     int n = heightMap[0].length;
-        //     boolean [][] vis = new boolean [m][n];
-        //     int [][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
-        //     int cnt = 0, x = 0, y = 0;
-        //     for (int i = 1; i < m-1; i++) {
-        //         for (int j = 1; j < n-1; j++) {
-        //             if (vis[i][j]) continue;
-        //             cnt = 0;
-        //             for (int [] d : dirs) {
-        //                 x = i + d[0];
-        //                 y = j + d[1];
-        //                 if (!vis[i+d[0]][j+d[1]] && heightMap[i+d[0]][j+d[1]] > heightMap[i][j])
-        //                     // ++cnt;
-        //                     // 这里直接bfs: 可是它的终止条件是什么呢，到边了，或者周围没有更大的了
-        //                     // 可是怎么把这个池塘标记出来算面积
-        //             }
-        //         }
-        //     }
-        // }
-
-
         // public int[] findRedundantDirectedConnection(int[][] edges) {
         //     int n = edges.length;
         //     boolean [] vis = new boolean [n+1];
