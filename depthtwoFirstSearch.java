@@ -201,195 +201,6 @@ public class depthtwoFirstSearch {
 
 
 
-        // public class UnionFind {
-        //     int [] pare;
-        //     int [] rank;
-        //     int n;
-        //     int cnt;
-        //     public UnionFind(int x) {
-        //         this.n = x;
-        //         cnt = this.n;
-        //         pare = new int[this.n];
-        //         rank = new int[this.n];
-        //         for (int i = 0; i < n; i++) {
-        //             pare[i] = i;
-        //         }
-        //         Arrays.fill(rank, 0);
-        //     }
-        //     public int find(int val) {
-        //         while (val != pare[val]) {
-        //             pare[val] = pare[pare[val]];
-        //             val = pare[val];
-        //         }
-        //         return val;
-        //     }
-        //     public void merge(int p, int q) {
-        //         int rp = find(p);
-        //         int rq = find(q);
-        //         if (rank[rp] < rank[rq]) {
-        //             swap(rp, rq);
-        //         }
-        //         pare[rq] = rp;
-        //         rank[rp] += rank[rq];
-        //         --cnt;
-        //     }
-        //     public boolean sameGroup(int x, int y) {
-        //         return find(x) == find(y);
-        //     }
-        //     public int getCnt() {
-        //         return cnt;
-        //     }
-        //     private void isolatedInfectedMax(int [][] arr) {
-        //         int i = 0, j = 0;
-        //         for (int k = 0; k < this.n; k++) {
-        //             if (pare[k] == maxCorresKey) {
-        //                 i = k / arr[0].length;
-        //                 j = k % arr[0].length;
-        //                 arr[i][j] = 2;
-        //             }
-        //         }
-        //     }
-        //     private void infectingNeighbours(int [][] arr, int v) {
-        //         int m = arr.length;
-        //         int n = arr[0].length;
-        //         for (int i = 0; i < arr.length; i++) {
-        //             for (int j = 0; j < arr[0].length; j++) {
-        //                 if (arr[i][j] == 1 && pare[i*n+j] != v) {
-        //                     if (i > 0 && pare[(i-1)*n+j] != pare[i] && arr[i-1][j] == 0) {
-        //                         arr[i-1][j] = 3;
-        //                         merge(i*n+j, (i-1)*n+j);
-        //                     }
-        //                     if (i < m-1 && pare[(i+1)*n+j] != pare[i] && arr[i+1][j] == 0) {
-        //                         arr[i+1][j] = 3;
-        //                         merge(i*n+j, (i+1)*n+j);
-        //                     }
-        //                     if (j > 0 && pare[i*n+j-1] != pare[i] && arr[i][j-1] == 0) {
-        //                         arr[i][j-1] = 3;
-        //                         merge(i*n+j, i*n+j-1);
-        //                     }
-        //                     if (j < n-1 && pare[i*n+j+1] != pare[i] && arr[i][j+1] == 0) {
-        //                         arr[i][j+1] = 3;
-        //                         merge(i*n+j, i*n+j+1);
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //         for (int i = 0; i < arr.length; i++) 
-        //             for (int j = 0; j < arr[0].length; j++) 
-        //                 if (arr[i][j] == 3) arr[i][j] = 1;
-        //     }
-        //     private void processInfectingNeighbour(int [][] arr) {
-        //         isolatedInfectedMax(arr);
-        //         infectingNeighbours(arr, maxCorresKey);                
-        //     }
-        //     int maxCorresKey = 0;
-        //     public int getMaxGroupedPerimeter(int [][] arr) {
-        //         // System.out.println("arr.length: " + arr.length);
-        //         // for (int z = 0; z < arr.length; ++z) {
-        //         //     for (int w = 0; w < arr[z].length; w++) {
-        //         //         System.out.print(arr[z][w] + ", ");
-        //         //         if (w % 4 == 3)
-        //         //             System.out.print("| ");
-        //         //     }
-        //         //     System.out.print("\n");
-        //         // }
-        //         int m = arr.length;
-        //         int n = arr[0].length;
-        //         Map<Integer, Integer> ma = new HashMap<>();
-        //         for (int i = 0; i < this.n; i++) {
-        //             find(i);
-        //             if (arr[i/n][i%n] != 2)
-        //                 ma.put(pare[i], ma.getOrDefault(pare[i], 0) + 1);
-        //         }
-        //         Map<Integer, Integer> map = ma.entrySet().stream()
-        //             .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-        //             .collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> a, LinkedHashMap::new));
-        //         // System.out.println("map.size(): " + map.size());
-        //         // for (Map.Entry<Integer, Integer> entry : map.entrySet()) 
-        //         //     System.out.print(entry.getKey() + ", " + entry.getValue() + "\n");
-        //         HashSet<Integer> s = new HashSet<>();
-        //         int x = 0, y = 0;
-        //         int max = Integer.MIN_VALUE;
-        //         int res = 0, cnt = 0, wood = 0;
-        //         for (Integer key : map.keySet()) {
-        //             for (int i = 0; i < this.n; i++) {
-        //                 if (pare[i] == key) {
-        //                     x = i/n;
-        //                     y = i % n;
-        //                     cnt = 0;
-        //                     if (x > 0 && pare[(x-1)*n+y] != pare[i]) { s.add((x-1)*n+y); ++cnt; }
-        //                     if (x < m-1 && pare[(x+1)*n+y] != pare[i]) { s.add((x+1)*n+y); ++cnt; }
-        //                     if (y > 0 && pare[x*n+y-1] != pare[i]) { s.add(x*n+y-1); ++cnt; }
-        //                     if (y < n-1 && pare[x*n+y+1] != pare[i]) { s.add(x*n+y+1); ++cnt; }
-        //                     if (x == 0) ++cnt;
-        //                     if (y == 0) ++cnt;
-        //                     if (x == m-1) ++cnt;
-        //                     if (y == n-1) ++cnt;
-        //                     res += 4-cnt; // 这里数得不对，改天再写
-        //                 }
-        //             }
-        //             if (s.size() > max) {
-        //                 max = s.size();
-        //                 maxCorresKey = key;
-        //                 wood = res;
-        //             }
-        //             s.clear();
-        //             res = 0;
-        //         }
-        //         return wood;
-        //     }
-            
-        //     private void swap(int x, int y) {
-        //         int tmp = x;
-        //         x = y;
-        //         y = tmp;
-        //     }
-        // }
-        // private boolean allTwo(int [][] arr) {
-        //     int m = arr.length;
-        //     int n = arr[0].length;
-        //     for (int i = 0; i < m; i++) {
-        //         for (int j = 0; j < n; j++) {
-        //             if (arr[i][j] == 1) return false;
-        //         }
-        //     }
-        //     return true;
-        // }
-        // public int containVirus(int[][] arr) { 
-        //     int m = arr.length;
-        //     int n = arr[0].length;
-        //     UnionFind uf = new UnionFind(m*n);
-        //     for (int i = 0; i < m*n; i++) {
-        //         for (int j = 0; j < m*n; j++) {
-        //             if (i == j) continue;
-        //             if (arr[i/n][i%n] == 1 && arr[i/n][i%n] == arr[j/n][j%n] && !uf.sameGroup(i, j)
-        //                 && ((Math.abs(i/n-j/n) == 1 && i%n == j%n) || (Math.abs(i%n-j%n) == 1 && i/n==j/n)))
-        //                 uf.merge(i, j);
-        //         }
-        //     }
-        //     // System.out.println("\nuf.getCnt(): " + uf.getCnt());
-        //     int res = 0;
-        //     int tmp = 0;
-        //     while (!allTwo(arr)) {
-        //         tmp =  uf.getMaxGroupedPerimeter(arr); // 这个邻居个数是对的，对应的边或需要的板是不对的，要更新
-        //         System.out.println("tmp: " + tmp);
-        //         res += tmp;
-        //         uf.isolatedInfectedMax(arr); // 1--> 2
-        //         // System.out.println("arr.length: " + arr.length);
-        //         // for (int z = 0; z < arr.length; ++z) {
-        //         //     for (int w = 0; w < arr[z].length; w++) {
-        //         //         System.out.print(arr[z][w] + ", ");
-        //         //         if (w % 4 == 3)
-        //         //             System.out.print("| ");
-        //         //     }
-        //         //     System.out.print("\n");
-        //         // }
-        //         uf.processInfectingNeighbour(arr);
-        //     }
-        //     return res/2;
-        // }
-
-
         // private void dfs(int [][] arr, int i, int j, int v) {
         //     if (i < 0 || i >= n || j < 0 || j >= n || arr[i][j] != 1) return;
         //     arr[i][j] = v;
@@ -696,28 +507,6 @@ public class depthtwoFirstSearch {
         // }
 
 
-        // private int dfs(int [][] arr, int x, int y) { // 1011101, how to make sure remove the right one? a[i] ^ a[i+1] ?
-        //     int cur = 0, max = 0;
-        //     boolean pre = false;
-        //     for (int i = 1; i < n; i++) {
-        //         if ((arr[x][i] ^ arr[x][i-1]) == 1) {
-        //             cur++;
-        //             if (arr[x][i] == 'X')
-        //         }
-        //     }
-        // }
-        // int m, n;
-        // public int countBattleships(char[][] board) {
-        //     m = board.length;
-        //     n = board[0].length, max = 0;
-        //     for (int i = 0; i < m; i++) 
-        //         for (int j = 0; j < n; j++) 
-        //             if (board[i][j] == 'X')
-        //                 max = Math.max(max, dfs(board, i, j));
-        //     return max;
-        // }
-
-        
         // private void dfs(int [][] arr, int ox, int oy, int x, int y, int [] max) {
         //     if (x < 0 || x >= m || y < 0 || y >= n
         //         || arr[x][y] == 0 || vis[x][y]) return;
@@ -751,26 +540,320 @@ public class depthtwoFirstSearch {
         // }
 
 
-        // public List<String> findItinerary(List<List<String>> tickets) {
-        //     int n = tickets.length;
-        //     for (int i = 0; i < n; i++) 
-        //         Collections.sort(tickets.get(i));
+        // public int countBattleships(char[][] board) {
+        //     int m = board.length, n = board[0].length;
+        //     boolean [][] vis = new boolean [m][n];
+        //     int cnt = 0;
+        //     boolean hori = false, vert = false;
+        //     for (int i = 0; i < m; i++) 
+        //         for (int j = 0; j < n; j++) 
+        //             if (board[i][j] == 'X' && !vis[i][j]) {
+        //                 ++cnt;
+        //                 hori = false;
+        //                 vert = false;
+        //                 for (int k = j+1; k < n; k++) {
+        //                     if (!vis[i][k] && board[i][k] == 'X') {
+        //                         if (!hori) hori = true;
+        //                         vis[i][k] = true;
+        //                     } else break;
+        //                 }
+        //                 if (hori) continue;
+        //                 for (int k = i+1; k < m; k++) {
+        //                     if (!vis[k][j] && board[k][j] == 'X') {
+        //                         if (!vert) vert = true;
+        //                         vis[k][j] = true;
+        //                     } else break;
+        //                 }
+        //             }
+        //     return cnt;
         // }
 
 
-        
+        // public class UnionFind {
+        //     int [] pare;
+        //     int [] rank;
+        //     int n;
+        //     int cnt;
+        //     public UnionFind(int x) {
+        //         this.n = x;
+        //         cnt = this.n;
+        //         pare = new int[this.n];
+        //         rank = new int[this.n];
+        //         for (int i = 0; i < n; i++) pare[i] = i;
+        //         Arrays.fill(rank, 0);
+        //     }
+        //     public int find(int val) {
+        //         while (val != pare[val]) {
+        //             pare[val] = pare[pare[val]];
+        //             val = pare[val];
+        //         }
+        //         return val;
+        //     }
+        //     public void merge(int p, int q) {
+        //         int rp = find(p);
+        //         int rq = find(q);
+        //         if (rank[rp] < rank[rq]) 
+        //             swap(rp, rq);
+        //         pare[rq] = rp;
+        //         rank[rp] += rank[rq];
+        //         --cnt;
+        //     }
+        //     public boolean sameGroup(int x, int y) {
+        //         return find(x) == find(y);
+        //     }
+        //     public int getCnt() {
+        //         return cnt;
+        //     }
+        //     private void isolatedInfectedMax(int [][] arr) {
+        //         int i = 0, j = 0;
+        //         for (int k = 0; k < this.n; k++) {
+        //             if (pare[k] == maxCorresKey) {
+        //                 i = k / arr[0].length;
+        //                 j = k % arr[0].length;
+        //                 arr[i][j] = 2;
+        //             }
+        //         }
+        //     }
+        //     private void infectingNeighbours(int [][] arr, int v) {
+        //         int m = arr.length;
+        //         int n = arr[0].length;
+        //         for (int i = 0; i < arr.length; i++) {
+        //             for (int j = 0; j < arr[0].length; j++) {
+        //                 if (arr[i][j] == 1 && pare[i*n+j] != v) {
+        //                     if (i > 0 && pare[(i-1)*n+j] != pare[i] && arr[i-1][j] == 0) {
+        //                         arr[i-1][j] = 3;
+        //                         merge(i*n+j, (i-1)*n+j);
+        //                     }
+        //                     if (i < m-1 && pare[(i+1)*n+j] != pare[i] && arr[i+1][j] == 0) {
+        //                         arr[i+1][j] = 3;
+        //                         merge(i*n+j, (i+1)*n+j);
+        //                     }
+        //                     if (j > 0 && pare[i*n+j-1] != pare[i] && arr[i][j-1] == 0) {
+        //                         arr[i][j-1] = 3;
+        //                         merge(i*n+j, i*n+j-1);
+        //                     }
+        //                     if (j < n-1 && pare[i*n+j+1] != pare[i] && arr[i][j+1] == 0) {
+        //                         arr[i][j+1] = 3;
+        //                         merge(i*n+j, i*n+j+1);
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //         for (int i = 0; i < arr.length; i++) 
+        //             for (int j = 0; j < arr[0].length; j++) 
+        //                 if (arr[i][j] == 3) arr[i][j] = 1;
+        //     }
+        //     private void processInfectingNeighbour(int [][] arr) {
+        //         isolatedInfectedMax(arr);
+        //         infectingNeighbours(arr, maxCorresKey);                
+        //     }
+        //     int maxCorresKey = 0;
+        //     public int getMaxGroupedPerimeter(int [][] arr) {
+        //         int m = arr.length;
+        //         int n = arr[0].length;
+        //         Map<Integer, Integer> ma = new HashMap<>();
+        //         for (int i = 0; i < this.n; i++) {
+        //             find(i);
+        //             if (arr[i/n][i%n] != 2)
+        //                 ma.put(pare[i], ma.getOrDefault(pare[i], 0) + 1);
+        //         }
+        //         Map<Integer, Integer> map = ma.entrySet().stream()
+        //             .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+        //             .collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> a, LinkedHashMap::new));
+        //         HashSet<Integer> s = new HashSet<>();
+        //         int x = 0, y = 0;
+        //         int max = Integer.MIN_VALUE;
+        //         int res = 0, cnt = 0, wood = 0;
+        //         for (Integer key : map.keySet()) {
+        //             for (int i = 0; i < this.n; i++) {
+        //                 if (pare[i] == key) {
+        //                     x = i/n;
+        //                     y = i % n;
+        //                     cnt = 0;
+        //                     if (x > 0 && pare[(x-1)*n+y] != pare[i]) { s.add((x-1)*n+y); ++cnt; }
+        //                     if (x < m-1 && pare[(x+1)*n+y] != pare[i]) { s.add((x+1)*n+y); ++cnt; }
+        //                     if (y > 0 && pare[x*n+y-1] != pare[i]) { s.add(x*n+y-1); ++cnt; }
+        //                     if (y < n-1 && pare[x*n+y+1] != pare[i]) { s.add(x*n+y+1); ++cnt; }
+        //                     if (x == 0) ++cnt;
+        //                     if (y == 0) ++cnt;
+        //                     if (x == m-1) ++cnt;
+        //                     if (y == n-1) ++cnt;
+        //                     res += 4-cnt; // 这里数得不对，改天再写
+        //                 }
+        //             }
+        //             if (s.size() > max) {
+        //                 max = s.size();
+        //                 maxCorresKey = key;
+        //                 wood = res;
+        //             }
+        //             s.clear();
+        //             res = 0;
+        //         }
+        //         return wood;
+        //     }
+        //     private void swap(int x, int y) {
+        //         int tmp = x;
+        //         x = y;
+        //         y = tmp;
+        //     }
+        // }
+        // private boolean allTwo(int [][] arr) {
+        //     int m = arr.length;
+        //     int n = arr[0].length;
+        //     for (int i = 0; i < m; i++) {
+        //         for (int j = 0; j < n; j++) {
+        //             if (arr[i][j] == 1) return false;
+        //         }
+        //     }
+        //     return true;
+        // }
+        // public int containVirus(int[][] arr) { 
+        //     int m = arr.length;
+        //     int n = arr[0].length;
+        //     UnionFind uf = new UnionFind(m*n);
+        //     for (int i = 0; i < m*n; i++) {
+        //         for (int j = 0; j < m*n; j++) {
+        //             if (i == j) continue;
+        //             if (arr[i/n][i%n] == 1 && arr[i/n][i%n] == arr[j/n][j%n] && !uf.sameGroup(i, j)
+        //                 && ((Math.abs(i/n-j/n) == 1 && i%n == j%n) || (Math.abs(i%n-j%n) == 1 && i/n==j/n)))
+        //                 uf.merge(i, j);
+        //         }
+        //     }
+        //     int res = 0;
+        //     int tmp = 0;
+        //     while (!allTwo(arr)) {
+        //         tmp =  uf.getMaxGroupedPerimeter(arr); // 这个邻居个数是对的，对应的边或需要的板是不对的，要更新，不知道剩下的板要怎么数才好
+        //         System.out.println("tmp: " + tmp);
+        //         res += tmp;
+        //         uf.isolatedInfectedMax(arr); // 1--> 2
+        //         uf.processInfectingNeighbour(arr);
+        //     }
+        //     return res/2;
+        // }
+        // private class Region {
+        //     Set<Integer> infected = new HashSet<>();
+        //     Set<Integer> uninfected = new HashSet<>();
+        //     int wallsRequired = 0;
+        // }
+        // private void dfs(int [][] arr, int i, int j, boolean [][] vis, Region region) {
+        //     if (i < 0 || i >= m || j < 0 || j >= n || arr[i][j] == 2) return;
+        //     if (arr[i][j] == 1) {
+        //         region.infected.add(i*n+j); // 1 is already infected.
+        //         if (vis[i][j]) return;
+        //     }
+        //     vis[i][j] = true;
+        //     if (arr[i][j] == 0) {
+        //         // If 0 it is uninfected neighbor, we need a wall.
+        //         // Remeber we can reach this 0 multiple times from different infected neighbors i.e. 1s,
+        //         // and this will account for numbers of walls need to be built around this 0.
+        //         region.wallsRequired++; // 这是我数不清樯板的地方:四个方向上，哪几个方向上有还未感染的邻居，就会数几个边上需要板
+        //         region.uninfected.add(i*n+j);
+        //         return ;
+        //     }
+        //     for (int [] d : dirs) 
+        //         dfs(arr, i+d[0], j+d[1], vis, region);
+        // }
+        // // 1.Find all the regions.
+        // // 2.Get the region which has most number of uninfected neighbors. This region will cause maximum damage.
+        // // 3.For region in (2) contain the region. Mark all the infected nodes in this region as 2 to denote that these nodes are now contained and will not cause any more damage.
+        // // 4.For the remaining regions, expand by infecting the uninfected neighbors around these regions.
+        // // 5.Repeat steps (1) to (4) until there are no more regions with uninfected neighbors.
+        // int [][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}} ;
+        // int m, n;
+        // public int containVirus(int[][] arr) { 
+        //     m = arr.length;
+        //     n = arr[0].length;
+        //     int res = 0;
+        //     while (true) {
+        //         List<Region> regions = new ArrayList<>();
+        //         boolean [][] vis = new boolean [m][n];
+        //         for (int i = 0; i < m; i++) 
+        //             for (int j = 0; j < n; j++) 
+        //                 if (arr[i][j] == 1 && !vis[i][j]) {
+        //                     Region region =  new Region();
+        //                     dfs(arr, i, j, vis, region);
+        //                     if (region.uninfected.size() > 0)
+        //                         regions.add(region);
+        //                 }
+        //         if (regions.size() == 0) break;
+        //         Collections.sort(regions, (a, b)->b.uninfected.size() - a.uninfected.size());
+        //         Region mostDangerous = regions.remove(0);
+        //         res += mostDangerous.wallsRequired;
+        //         for (Integer nb : mostDangerous.infected) {
+        //             int x = nb / n;
+        //             int y = nb % n;
+        //             arr[x][y] = 2;
+        //         }
+        //         for (Region region : regions) 
+        //             for (Integer nb : region.uninfected) {
+        //                 int x = nb / n;
+        //                 int y = nb % n;
+        //                 arr[x][y] = 1;
+        //             }
+        //     }
+        //     return res;
+        // }
+
+        // // This is the interface that allows for creating nested lists.
+        // // You should not implement it, or speculate about its implementation
+        // public interface NestedInteger {
+        //     // Constructor initializes an empty nested list.
+        //     public NestedInteger();
+                
+        //     // Constructor initializes a single integer.
+        //     public NestedInteger(int value);
+                
+        //     // @return true if this NestedInteger holds a single integer, rather than a nested list.
+        //     public boolean isInteger();
+                
+        //     // @return the single integer that this NestedInteger holds, if it holds a single integer
+        //     // Return null if this NestedInteger holds a nested list
+        //     public Integer getInteger();
+                
+        //     // Set this NestedInteger to hold a single integer.
+        //     public void setInteger(int value);
+                
+        //     // Set this NestedInteger to hold a nested list and adds a nested integer to it.
+        //     public void add(NestedInteger ni);
+                
+        //     // @return the nested list that this NestedInteger holds, if it holds a nested list
+        //     // Return empty list if this NestedInteger holds a single integer
+        //     public List<NestedInteger> getList();
+        // }
+// 这个题目好悲催：是leetcode里到目前为止几乎唯一一个没法本地测试的题目，不知道本地要如何测试这种无头无尾的程序
+        // int i = 0;
+        // public NestedInteger deserialize(String s) {
+        //     if (i >= s.length()) return null;
+        //     if (s.charAt(i) == '-' || Character.isDigit(s.charAt(i))) {
+        //         int val = 0;
+        //         boolean isPos = true; // positive or Negative +/1 sign
+        //         if (s.charAt(i) == '-') {
+        //             isPos = false;
+        //             ++i;
+        //         }
+        //         while (i < s.length() && Character.isDigit(s.charAt(i))) {
+        //             val = val * 10 + s.charAt(i) - '0';
+        //             ++i;
+        //         }
+        //         return new NestedInteger(isPos ? val : -val);
+        //     }
+        //     NestedInteger ans = new NestedInteger();
+        //     ++i;
+        //     while (i < s.length() && s.charAt(i) != ']') {
+        //         NestedInteger kid = deserialize(s); // 这里看疯了。。。。。。？？？
+        //         ans.add(kid);
+        //         if (i < s.length() && s.charAt(i) == ',') ++i;
+        //     }
+        //     ++i;
+        //     return ans;
+        // }
+
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        int [][] a = new int [][] {{1,0,0},{0,1,1},{0,1,1}};
-
-        int [][] res = s.findFarmland(a);
-        System.out.println("res.length: " + res.length);
-        for (int z = 0; z < res.length; ++z) {
-            for (int w = 0; w < res[z].length; w++) 
-                System.out.print(res[z][w] + ", ");
-            System.out.print("\n");
-        }
+        // int [][] a = new int [][] {{1,1,1,0,0,0,0,0,0},{1,0,1,0,1,1,1,1,1},{1,1,1,0,0,0,0,0,0}};
+        String a = "dlkfjd";;
+        NestedInteger r = s.deserialize(a);
     }
 }

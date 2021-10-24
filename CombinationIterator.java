@@ -8,57 +8,32 @@ import java.util.stream.*;
 
 public class CombinationIterator {
 
-    int n;
-    char [] arr;
-    List<String> ll = new ArrayList<>();
-    int size;
-    boolean [] vis;
-    int idx = 0;
-    // private void helper(StringBuilder s) {
-    //     if (s.length() == size) {
-    //         String sorted = Stream.of(s.toString().split("")).sorted().collect(Collectors.joining());
-    //         if (!ll.contains(sorted))
-    //             ll.add(sorted);
-    //         return;
-    //     }
-    //     for (int i = 0; i < n; i++) {
-    //         if (!vis[i]) {
-    //             vis[i] = true;
-    //             s.append(arr[i]);
-    //             helper(s);
-    //             s.deleteCharAt(s.length()-1);
-    //             vis[i] = false;
-    //         }
-    //     }
-    // }
+    TreeSet<String> ts;
+    Iterator it;
     public CombinationIterator(String characters, int combinationLength) {
-        n = characters.length();
-        arr = characters.toCharArray();
-        Arrays.sort(arr);
-        // size = combinationLength;
-        size = combinationLength << 1; // 所有的排列、组合是这个数,当我们需要长度为N的时，从某个数字特定的数字开始取串
-        idx = 1;
-
-        // vis = new boolean[n];
-        // helper(new StringBuilder());
+        ts = new TreeSet<>();
+        char [] ori = new StringBuilder(characters).reverse().toString().toCharArray();
+        System.out.println(Arrays.toString(ori));
+        
+        int n = characters.length(), range = (1 << n), tmp = 0;
+        for (int i = 1; i < range; i++) {
+            if (Integer.bitCount(i) != combinationLength) continue;
+            StringBuilder cur = new StringBuilder();
+            for (int j = 0; j < n; j++) 
+                if (((i >> j) & 1) == 1) cur.append(ori[j]);
+            ts.add(cur.reverse().toString());
+        }
+        it = ts.iterator();
     }
     
     public String next() {
-        int tmp = idx;
-        int i = arr.length-1;
-        StringBuilder s = new StringBuilder( );
-        while (tmp > 0) {
-            s.append(arr[i]);
-            --i;
-            tmp >>= 1;
-        }
-        ++idx;
-        return s.toString();
+        if (it.hasNext())
+            return (String)it.next();
+        return null;
     }
     
     public boolean hasNext() {
-        return idx < size;
-        // return idx < ll.size();
+        return it.hasNext();
     }
     
     public static void main(String[] args) {

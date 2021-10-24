@@ -63,51 +63,53 @@ public class NestedInteger {
     // }
 
     public static class Solution {
-        private void printNI(NestedInteger v) {
+
+
+        // private void printNI(NestedInteger v) {
             
-        }
-        private int getMatedRIdx(String s, int idx) {
-            int n = s.length();
-            int i = 0, l = 0, r = 0;
-            while (i < n) {
-                if (s.charAt(i) == '[') ++l;
-                else if (s.charAt(i) == ']') {
-                    if (l > 0) --l;
-                    else ++r;
-                }
-                if (l == r) break;
-            }
-            return i;
-        }
-        public NestedInteger deserialize(String s) {
-            System.out.println("s: " + s);
+        // }
+        // private int getMatedRIdx(String s, int idx) {
+        //     int n = s.length();
+        //     int i = 0, l = 0, r = 0;
+        //     while (i < n) {
+        //         if (s.charAt(i) == '[') ++l;
+        //         else if (s.charAt(i) == ']') {
+        //             if (l > 0) --l;
+        //             else ++r;
+        //         }
+        //         if (l == r) break;
+        //     }
+        //     return i;
+        // }
+        // public NestedInteger deserialize(String s) {
+        //     System.out.println("s: " + s);
             
-            int n = s.length();
-            if (n == 1) return null;
-            int i = 0, j = 0;
-            if (Character.isDigit(s.charAt(i)) || s.charAt(i) == '-') {
-                return new NestedInteger(Integer.parseInt(s.substring(i, n)));
-            }
-            NestedInteger res = new NestedInteger(); // s.charAt(1) == '['
-            ++i;
-            while (i < n) {
-                while (Character.isDigit(s.charAt(i)) || s.charAt(i) == '-') {
-                    j = i;
-                    while (j < n && Character.isDigit(s.charAt(j))) ++j; // j: , or n
-                    res.add(new NestedInteger(Integer.parseInt(s.substring(i, j))));
-                    if (j == n) return res;
-                    i = j+1;
-                }
-                if (s.charAt(i) == '[') {
-                    j = getMatedRIdx(s, i);
-                    NestedInteger nt = deserialize(s.substring(i+1, j));
-                    res.add(nt);
-                    if (j == n-1) return res;
-                    i = j+2;
-                }
-            }
-            return null;
-        }
+        //     int n = s.length();
+        //     if (n == 1) return null;
+        //     int i = 0, j = 0;
+        //     if (Character.isDigit(s.charAt(i)) || s.charAt(i) == '-') {
+        //         return new NestedInteger(Integer.parseInt(s.substring(i, n)));
+        //     }
+        //     NestedInteger res = new NestedInteger(); // s.charAt(1) == '['
+        //     ++i;
+        //     while (i < n) {
+        //         while (Character.isDigit(s.charAt(i)) || s.charAt(i) == '-') {
+        //             j = i;
+        //             while (j < n && Character.isDigit(s.charAt(j))) ++j; // j: , or n
+        //             res.add(new NestedInteger(Integer.parseInt(s.substring(i, j))));
+        //             if (j == n) return res;
+        //             i = j+1;
+        //         }
+        //         if (s.charAt(i) == '[') {
+        //             j = getMatedRIdx(s, i);
+        //             NestedInteger nt = deserialize(s.substring(i+1, j));
+        //             res.add(nt);
+        //             if (j == n-1) return res;
+        //             i = j+2;
+        //         }
+        //     }
+        //     return null;
+        // }
     }
     
     public static void main(String[] args) {

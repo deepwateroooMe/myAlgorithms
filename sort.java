@@ -269,30 +269,6 @@ public class sort {
         // }
 
 
-        // private int getLargest(String s, int k) {
-        //     char [] cs = s.substring(0, k).toCharArray();
-        //     Arrays.sort(cs);
-        //     int i = 0;
-        //     while (s.charAt(i) != cs[k-1]) ++i;
-        //     // System.out.println("cs[k-1]: " + cs[k-1]);
-        //     return i;
-        // }
-        // public String orderlyQueue(String s, int k) {
-        //     int n = s.length();
-        //     if (k == n) return Stream.of(s.split("")).sorted().collect(Collectors.joining());
-        //     StringBuilder t = new StringBuilder (s);
-        //     int tmp = 0;
-        //     while (!t.toString().equals(Stream.of(t.toString().split("")).sorted().collect(Collectors.joining()))) {
-        //         tmp = getLargest(t.toString(), k);
-        //         // System.out.println("tmp: " + tmp);
-        //         t.append(t.charAt(tmp));
-        //         t.deleteCharAt(tmp);
-        //         System.out.println("t.toString(): " + t.toString());
-        //         // if (k == 1 && t.charAt(k-1) <= t.charAt(k)) break;
-        //     }
-        //     return t.toString();
-        // }
-
         // public List<Boolean> checkArithmeticSubarrays(int[] arr, int[] l, int[] r) {
         //     int n = arr.length;
         //     int m = l.length;

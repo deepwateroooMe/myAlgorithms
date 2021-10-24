@@ -246,54 +246,6 @@ public class greedy {
         //     if (n == 1) return new StringBuilder((char)(k-1+'a')).toString();
         // }
 
-        // int n;
-        // public String getNextLargerNum(String s) {
-        //     char [] arr = s.toCharArray();
-        //     int i = n-1;
-        //     StringBuilder res = new StringBuilder(s);
-        //     if (arr[i] > arr[i-1]) {
-        //         char c = arr[i];
-        //         res.setCharAt(i, arr[i-1]);
-        //         res.setCharAt(i-1, c);
-        //         return res.toString();
-        //     }
-        //     while (i >= 0 && arr[i-1] > arr[i]) --i;
-        //     char c = arr[i-1];
-        //     arr[i-1] = arr[i];
-        //     arr[i] = c;
-        //     Arrays.sort(arr, i, n);
-        //     for (int j = i; j < n; j++) 
-        //         res.setCharAt(j, arr[j]);
-        //     return res.toString();
-        // }
-        // private void swap(char [] arr, int i, int j) {
-        //     char tmp = arr[i];
-        //     arr[i] = arr[j];
-        //     arr[j] = tmp;
-        //     // return arr;
-        // }
-        // public int getMinSwaps(String num, int k) {
-        //     n = num.length();
-        //     String s = num;
-        //     int cnt = 0;
-        //     while (cnt < k) {
-        //         s = getNextLargerNum(s);
-        //         ++cnt;
-        //     }
-        //     char [] a = num.toCharArray();
-        //     char [] b = s.toCharArray();
-        //     for (int i = 0; i < n; i++) {
-        //         if (a[i] == b[i]) continue;
-        //         for (int j = i+1; j < n; j++) {
-        //             if (a[j] == b[i]) {
-        //                 swap(a, i, j);
-        //                 ++cnt;
-        //                 break;
-        //             }
-        //         }
-        //     }
-        //     return cnt;
-        // }
 
         // public boolean canConstruct(String s, int k) {
         //     int n = s.length();
@@ -611,38 +563,6 @@ public class greedy {
         //     min = Math.min(min, arr[n-2]-arr[2]);
         //     min = Math.min(min, arr[n-3]-arr[1]);
         //     return min;
-        // }
-
-        // int res = 0;
-        // private int getSmallestK(int [] arr, int idx) {
-        //     if (arr[idx] == idx) return idx;
-        //     int max = arr[idx];
-        //     int min = arr[idx];
-        //     Set<Integer> s = new HashSet<>();
-        //     s.add(arr[idx]);
-        //     for (int i = idx+1; i < arr.length; i++) {
-        //         max = Math.max(max, arr[i]);
-        //         min = Math.min(min, arr[i]);
-        //         s.add(arr[i]);
-        //         int cnt = 0;
-        //         for (int j = idx; j <= i; j++) 
-        //             if (s.contains(j)) ++cnt;
-        //         if (cnt == s.size()) return i;
-        //     }
-        //     return -1;
-        // }
-        // private void maxChunksToSortedRecursive(int [] arr, int idx) {
-        //     int k = getSmallestK(arr, idx);
-        //     res += 1;
-        //     if (k == arr.length-1) return;
-        //     maxChunksToSortedRecursive(arr, k+1);
-        // }
-        // public int maxChunksToSorted(int[] arr) {
-        //     int n = arr.length;
-        //     int i = 0, j = 0;
-        //     res = 0;
-        //     maxChunksToSortedRecursive(arr, 0);
-        //     return res;
         // }
 
 
@@ -1199,58 +1119,6 @@ public class greedy {
         // }
 
 
-        // private String swap(String t, int i, int j) { // j < i
-        //     StringBuilder s = new StringBuilder(t);
-        //     char tmp = s.charAt(i);
-        //     s.setCharAt(i, s.charAt(j));
-        //     s.setCharAt(j, tmp);
-        //     char [] tpp = t.substring(i+1).toCharArray();
-        //     Arrays.sort(tpp);
-        //     return s.substring(0, i+1) + new String(tpp);
-        // }
-        // private String getNext(String s) {
-        //     System.out.println("s: " + s);
-        //     int n = s.length();
-        //     int i = n-1;
-        //     if (s.charAt(i-1) < s.charAt(i)) return swap(s, i, i-1);
-        //     while (i > 0 && s.charAt(i-1) >= s.charAt(i)) --i;
-        //     if (i == 0) return s;
-        //     // System.out.println("i: " + i);
-        //     // System.out.println("s.charAt(i): " + s.charAt(i));
-        //     int j = i;
-        //     while (s.charAt(j) > s.charAt(i)+1) ++j;
-        //     // System.out.println("j: " + j);
-        //     // System.out.println("s.charAt(j): " + s.charAt(j));
-        //     return swap(s, i-1, j);
-        //     // return swap(s, i, (i == 0 ? s.length()-1 : i-1));
-        // }
-        // private int cnt(String ss, String t) {
-        //     int n = ss.length();
-        //     int i = 0, j = 0;
-        //     StringBuilder s = new StringBuilder(ss);
-        //     int cnt = 0;
-        //     while (i < n) {
-        //         while (i < n && s.charAt(i) == t.charAt(i)) ++i;
-        //         if (i == n) break;
-        //         s = new StringBuilder(swap(s.toString(), s.toString().indexOf(t.charAt(i)), i));
-        //         ++i;
-        //         ++cnt;
-        //     }
-        //     return cnt;
-        // }
-        // public int getMinSwaps(String num, int k) {
-        //     int n = num.length();
-        //     int cnt = 0;
-        //     String s = num;
-        //     while (cnt < k) {
-        //         s = getNext(s);
-        //         System.out.println("s 0: " + s);
-        //         ++cnt;
-        //     }
-        //     return cnt(num, s);
-        // }
-
-
         // public String smallestSubsequence(String s) {
         //     int n = s.length();
         //     Map<Character, Integer> m = new HashMap<>();
@@ -1305,8 +1173,6 @@ public class greedy {
         // }
 
 
-
-        
     }
     public static void main(String[] args) {
         Solution s = new Solution();

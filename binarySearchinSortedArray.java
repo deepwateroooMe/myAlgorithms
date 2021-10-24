@@ -652,103 +652,6 @@ public class binarySearchinSortedArray {
         //     return binarySearchinSortedArray(k, n, 1, n, 0);
         // }
 
-        // private Map<Integer, Set<List<Integer>>> getLenthM(int [][] arr, int v) { // of length v
-        //     Map<Integer, Set<List<Integer>>> map = new HashMap<>();
-        //     Set<List<Integer>> sli = new TreeSet<>();
-        //     for (int i = 0; i < m; i++) {
-        //         map.put(i, new HashSet<List<Integer>>());
-        //         sli = new HashSet<>();
-        //         if (arr[i].length == v) {
-        //             sli.add(Arrays.stream(arr[i]).boxed().collect(Collectors.toList()));
-        //             map.put(i, sli);
-        //             continue;
-        //         }
-        //         int [] tmp = arr[i];
-        //         for (int j = 0; j+v <= tmp.length; j++) {
-        //             sli.add(IntStream.range(j, j+v).mapToObj(k -> tmp[k]).collect(Collectors.toList()));
-        //         }
-        //         map.put(i, sli);
-        //     }
-        //     return map;
-        // }
-        // private boolean possible(int [][] arr, int v) {
-        //     System.out.println("v: " + v);
-        //     Map<Integer, Set<List<Integer>>> map = getLenthM(arr, v);
-        //     // System.out.println("map.size(): " + map.size());
-        //     // for (Map.Entry<Integer, Set<List<Integer>>> entry : map.entrySet()) {
-        //     //     System.out.print(entry.getKey() + ": ");
-        //     //     System.out.println("entry.getValue().size(): " + entry.getValue().size());
-        //     //     for (List<Integer> li : entry.getValue()) {
-        //     //         for (int z = 0; z < li.size(); ++z) 
-        //     //             System.out.print(li.get(z) + ", ");
-        //     //         System.out.print("\n");
-        //     //     }
-        //     // }
-        //     // System.out.print("\n");
-        //     int minSize = map.get(0).size();
-        //     int key = 0;
-        //     for (Map.Entry<Integer, Set<List<Integer>>> entry : map.entrySet()) {
-        //         if (entry.getValue().size() < minSize) {
-        //             minSize = entry.getValue().size();
-        //             key = entry.getKey();
-        //         }
-        //     }
-        //     System.out.println("key: " + key);
-        //     System.out.println("map.get(key).size()): " + map.get(key).size());
-
-        //     int cnt = 0;
-        //     Set<List<Integer>> sli = map.get(key);
-        //     // for (List<Integer> li : sli) {
-        //     //     for (int z = 0; z < li.size(); ++z) 
-        //     //         System.out.print(li.get(z) + ", ");
-        //     //     System.out.print("\n");
-        //     // }
-            
-        //     for (List<Integer> li : sli) {
-        //         // System.out.println("li.size(): " + li.size());
-        //         // for (int z = 0; z < li.size(); ++z) 
-        //         //     System.out.print(li.get(z) + ", ");
-        //         // System.out.print("\n");
-        //         cnt = 0;
-        //         for (Set<List<Integer>> val : map.values()) {
-        //             if (!val.contains(li)) break;
-        //             ++cnt;
-        //         }
-        //         if (cnt == m) return true;
-        //         cnt = 0;
-        //     }
-        //     return false;
-        // }
-        // int m;
-        // private int binarySearchinMatrix(int [][] arr, int l, int h) {
-        //     // System.out.println("\nl: " + l);
-        //     // System.out.println("h: " + h);
-        //     if (l == h) {
-        //         if (possible(arr, h)) return h;
-        //         return 0;
-        //     } else if (l == h -1) {
-        //         if (possible(arr, h)) return h;
-        //         if (possible(arr, l)) return l;
-        //         return 0;
-        //     }
-        //     int mid = l + (h-l)/2;
-        //     // System.out.println("mid: " + mid);
-        //     if (possible(arr, mid)) {
-        //         int res = binarySearchinMatrix(arr, mid+1, h);
-        //         if (res > 0) return res;
-        //         return mid;
-        //     }
-        //     return binarySearchinMatrix(arr, l, mid-1);
-        // }
-        // public int longestCommonSubpath(int n, int[][] arr) {
-        //     m = arr.length;
-        //     int min = arr[0].length;
-        //     for (int i = 1; i < m; i++) 
-        //         min = Math.min(min, arr[i].length);
-        //     // System.out.println("min: " + min);
-        //     return binarySearchinMatrix(arr, 0, min);
-        // }
-
 
         // public class UnionFind {
         //     int [] pare;
@@ -1080,12 +983,180 @@ public class binarySearchinSortedArray {
         //     }
         //     return false;
         // }
+
+
+        // private Map<Integer, Set<List<Integer>>> getLenthM(int [][] arr, int v) { // of length v
+        //     Map<Integer, Set<List<Integer>>> map = new HashMap<>();
+        //     Set<List<Integer>> sli = new TreeSet<>();
+        //     for (int i = 0; i < m; i++) {
+        //         map.put(i, new HashSet<List<Integer>>());
+        //         sli = new HashSet<>();
+        //         if (arr[i].length == v) {
+        //             sli.add(Arrays.stream(arr[i]).boxed().collect(Collectors.toList()));
+        //             map.put(i, sli);
+        //             continue;
+        //         }
+        //         int [] tmp = arr[i];
+        //         for (int j = 0; j+v <= tmp.length; j++) 
+        //             sli.add(IntStream.range(j, j+v).mapToObj(k -> tmp[k]).collect(Collectors.toList()));
+        //         map.put(i, sli);
+        //     }
+        //     return map;
+        // }
+        // // private Map<Integer, Set<Integer>> getLenthM(int [][] arr, int v) { // rolling hash: 存的应该是共同路线长度为v的路线的hash值，以便以后O(N) hash match
+        // // }
+        // private boolean possible(int [][] arr, int v) {
+        //     Map<Integer, Set<List<Integer>>> map = getLenthM(arr, v);
+        //     // Map<Integer, Set<Integer> map = getLenthM(arr, v); // Set<Integer> 容易overflow，string? hash function该怎么设计呢？
+        //     int minSize = map.get(0).size();
+        //     int key = 0;
+        //     for (Map.Entry<Integer, Set<List<Integer>>> entry : map.entrySet()) 
+        //         if (entry.getValue().size() < minSize) {
+        //             minSize = entry.getValue().size();
+        //             key = entry.getKey();
+        //         }
+        //     int cnt = 0;
+        //     Set<List<Integer>> sli = map.get(key);
+        //     for (List<Integer> li : sli) {
+        //         cnt = 0;
+        //         for (Set<List<Integer>> val : map.values()) {
+        //             if (!val.contains(li)) break;
+        //             ++cnt;
+        //         }
+        //         if (cnt == m) return true;
+        //         cnt = 0;
+        //     }
+        //     return false;
+        // }
+        // public long qPow(long x, long n) { // 使用快速幂计算 x^n % mod 的值
+        //     long res = 1;
+        //     while (n != 0) {
+        //         if ((n & 1) != 0) 
+        //             res = res * x % mod;
+        //         x = x * x % mod;
+        //         n >>= 1;
+        //     }
+        //     return res;
+        // }
+        // private boolean check(int [][] arr, int nen, int minIdx) { // nen: length 这种解法可能还存在hash冲突的问题
+        //     long hash = 0;
+        //     for (int i = 0; i < nen; i++) 
+        //         hash = (hash * base + arr[minIdx][i]) % mod;
+        //     Set<Long> bucket = new HashSet<>();
+        //     bucket.add(hash);
+        //     long mult = qPow(base, nen-1);
+        //     for (int i = nen; i < arr[minIdx].length; i++) {
+        //         hash = ((hash - arr[minIdx][i-nen] * mult % mod + mod) % mod * base + arr[minIdx][i]) % mod;
+        //         bucket.add(hash);
+        //     }
+        //     int j = 0;
+        //     for (int i = 0; i < arr.length; i++) {
+        //         if (i == minIdx) continue;
+        //         long hashB = 0;
+        //         for (j = 0; j < nen; j++) 
+        //             hashB = (hashB * base + arr[i][j]) % mod;
+        //         if (bucket.contains(hashB)) continue;
+        //         for (j = nen; j < arr[i].length; j++) {
+        //             hashB = ((hashB - arr[i][j-nen] * mult % mod + mod) % mod * base + arr[i][j]) % mod;
+        //             if (bucket.contains(hashB)) break;
+        //         }
+        //         if (j < arr[i].length) continue;
+        //         else return false;
+        //     }
+        //     return true;
+        // }
+        // int mod = (int)1e9 + 7;
+        // int m, base = 113;
+        // public int longestCommonSubpath(int n, int [][] arr) {
+        //     m = arr.length;
+        //     int l = 1, h = arr[0].length, minIdx = 0;
+        //     for (int i = 1; i < m; i++) 
+        //         if (arr[i].length < h) {
+        //             minIdx = i;
+        //             h = Math.min(h, arr[i].length);
+        //         }
+        //     while (l <= h) {
+        //         int mid = l + (h - l) / 2;
+        //         if (check(arr, mid, minIdx)) {
+        //             l = mid + 1;
+        //         } else h = mid - 1;
+        //     }
+        //     return l - 1;
+        // }
+        // long mul = 1_000_000_007;
+        // long mod = (1l<<61)-1;
+        // long[] pow;
+        // public int longestCommonSubpath(int n, int[][] paths) { // 这个题要好好再理解消化一下
+        //     int pl = paths.length;
+        //     int max = Integer.MAX_VALUE;
+        //     for(int i = 0; i < pl; i++)
+        //         max = Math.min(max, paths[i].length);
+        //     pow = new long[max+1];
+        //     pow[0] = 1;
+        //     for(int i = 1; i <= max; i++) 
+        //         pow[i] = multipy(pow[i-1], mul);
+        //     int le = 0, ri = max;
+        //     while(le < ri) {
+        //         int mid = le + (ri - le + 1) / 2;
+        //         if(valid(paths, mid)) le = mid;
+        //         else ri = mid - 1;
+        //     }
+        //     return le;
+        // }
+        // private boolean valid(int[][] paths, int len) {
+        //     int pl = paths.length;
+        //     Set<Long> prev = null;
+        //     for(int i = 0; i < pl; i++) {
+        //         Set<Long> hashs = rollingHashs(paths[i], len);
+        //         if(prev == null) 
+        //             prev = hashs;
+        //         else {
+        //             prev.retainAll(hashs);
+        //             if(prev.size() == 0) return false;
+        //         }
+        //     }
+        //     return true;
+        // }
+        // private Set<Long> rollingHashs(int[] arr, int len) {
+        //     int l = arr.length;
+        //     long[] hash = new long[l+1];
+        //     for(int i = 1; i <= l; i++) 
+        //         hash[i] = modulo(multipy(hash[i-1], mul) + (arr[i-1]+1));
+        //     Set<Long> ret = new HashSet<>();
+        //     for(int i = len-1; i < l; i++) {
+        //         long soFarHash = hash[i+1];
+        //         long prevHash = hash[i-len+1];
+        //         prevHash = multipy(prevHash, pow[len]);
+        //         long currHash = modulo(soFarHash - prevHash);
+        //         ret.add(currHash);
+        //     }
+        //     return ret;
+        // }
+        // private long multipy(long a, long b) {
+        //     long al = a&((1l<<31)-1), ah = (a>>>31);  // ???
+        //     long bl = b&((1l<<31)-1), bh = (b>>>31);
+        //     long ll = al * bl;
+        //     long mid = al * bh + bl * ah;
+        //     long hh = bh * ah + (mid >>> 31);
+        //     long ret = modulo(modulo(2*hh+ll) + ((mid & (1l<<31)-1)<<31));
+        //     return ret;
+        // }
+        // private long modulo(long hash) {
+        //     while(hash >= mod)
+        //         hash -= mod;
+        //     while(hash < 0)
+        //         hash += mod;
+        //     return hash;
+        // }
+        
     }
 
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        boolean res = s.judgeSquareSum(5);
-        System.out.println("res: " + res);
+        int [][] a = new int [][] {{0,1,2,3,4},{2,3,4},{4,0,1,2,3}};
+
+        int r = s.longestCommonSubpath(5, a);
+        System.out.println("r: " + r);
     }
 }

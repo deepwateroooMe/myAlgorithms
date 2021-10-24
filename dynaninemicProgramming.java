@@ -381,25 +381,6 @@ public class dynaninemicProgramming {
         // }
 
 
-        // private int dfs(int i, int k, int m) { // m: 0, not middle, 1: middle
-        //     if (i == n-1) return m == 1 ? 1 : 0; // 怎么区分 m == 0 or m == 1
-        //     if (dp[i][k][m] > 0) return dp[i][k][m];
-        //     int res = 0;
-        //     for (int j = i; j < (n-1-k); j++) {
-        //         res = (res + dfs(j, k-1, 0)) % mod;
-        //     }
-        // }
-        // int mod = (int)1e9 + 7;
-        // int [][][] dp;
-        // int n;
-        // public int numberOfSets(int nn, int k) {
-        //     if (k == nn-1) return 1;
-        //     n = nn;
-        //     dp = new int [n][k+1][2];
-        //     return dfs(0, k, 0);
-        // }
-
-
         // public int minTaps(int n, int[] ranges) {
         //     int cnt = 0, i = 0, j = 0;
         //     int maxRight = -1, maxj = -1, left = 0, right = 0;

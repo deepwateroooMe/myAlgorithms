@@ -534,14 +534,13 @@ public class grathreeph {
         // }
 
 
-        // void dfs(String cur, List<String> list) {
+        // private void dfs(String cur, List<String> list) {
         //     Queue<String> next = m.get(cur);
-        //     while (next != null && next.size() > 0) {
+        //     while (next != null && next.size() > 0) 
         //         dfs(next.poll(), list);
-        //     }
         //     list.add(cur);
         // }
-        // Map<String, PriorityQueue<String>> m = new HashMap<>(); // TreeSet does not handle repeats, use queue
+        // Map<String, PriorityQueue<String>> m = new HashMap<>();      // TreeSet does not handle repeats, use queue
         // public List<String> findItinerary(List<List<String>> tickets) {
         //     for (int i = 0; i < tickets.size(); i++) 
         //         m.computeIfAbsent(tickets.get(i).get(0), k -> new PriorityQueue<>()).offer(tickets.get(i).get(1));
@@ -638,8 +637,8 @@ public class grathreeph {
         //     } 
         //     return ans;
         // }
-    // https://leetcode.com/problems/count-pairs-of-nodes/discuss/1096740/C%2B%2BJavaPython3-Two-Problems-O(q-*-(n-%2B-e))
-        // public int[] countPairs(int n, int[][] edges, int[] queries) { // 感觉被别人这么写了，思路好清晰
+        // // https://leetcode.com/problems/count-pairs-of-nodes/discuss/1096740/C%2B%2BJavaPython3-Two-Problems-O(q-*-(n-%2B-e))
+        // public int[] countPairs(int n, int[][] edges, int[] queries) { // 别人家的思路好清晰
         //     int [] cnt = new int [n+1], sortedCnt = new int [n+1], ans = new int [queries.length];
         //     Map<Integer, Integer> [] m = new HashMap[n+1];
         //     for (var e : edges) {
@@ -669,18 +668,117 @@ public class grathreeph {
     // https://leetcode.com/problems/count-pairs-of-nodes/discuss/1096432/Java-or-Two-Steps-or-O(NlgN-%2B-Q(N%2BE))
 // 这个也可以再参考一下
 
-        
+
+        // public boolean isPrintable(int[][] targetGrid) { // 觉得这个题思路奇特
+        //     int m = targetGrid.length, n = targetGrid[0].length, max = Math.max(m, n);
+        //     for (int i = 0; i < m; i++) 
+        //         max = Math.max(max, Arrays.stream(targetGrid[i]).max().getAsInt());
+        //     int [] top = new int [max+1], bot = new int [max+1], left = new int [max+1], right = new int [max+1];
+        //     Arrays.fill(top, max+1);
+        //     Arrays.fill(left, max+1);
+        //     Arrays.fill(bot, -1);
+        //     Arrays.fill(right, -1);
+        //     for (int i = 0; i < m; i++) // 建立每个颜色的矩阵边界: 界定每种颜色的上下左右边界，每种颜色最早（上左）最晚（下右）出现的位置
+        //         for (int j = 0; j < n; j++) {
+        //             int color = targetGrid[i][j];
+        //             top[color] = Math.min(top[color], i);
+        //             bot[color] = Math.max(bot[color], i);
+        //             left[color] = Math.min(left[color], j);
+        //             right[color] = Math.max(right[color], j);
+        //         }
+        //     // 根据矩阵建立有向图，遍历targetGrid，
+        //     // 当前位置颜色X在某个矩阵A中但是不为矩阵A的颜色时，建立从A到X的边
+        //     // X可以存在于多个矩阵中
+        //     // 变量：是否存在边-防止重复建立边；入度，便于后期判断是否拓扑排序；邻接表，从i出发到达的点
+        //     boolean [][] eg = new boolean [max+1][max+1];
+        //     int [] ins = new int [max+1];
+        //     List<List<Integer>> adj = new ArrayList<>();
+        //     for (int i = 0; i <= max; i++) 
+        //         adj.add(new ArrayList<>());
+        //     int cur = 0; // 建立图
+        //     for (int i = 0; i < m; i++) 
+        //         for (int j = 0; j < n; j++) {
+        //             cur = targetGrid[i][j]; // 当前格子的最终打印顔色
+        //             for (int color = 1; color <= max; color++) // 遍历所有颜色：暴搜当前格子颜色是否可能后打印
+        //                 if (i >= top[color] && i <= bot[color] && j >= left[color] && j <= right[color])
+        //                     if (cur != color && !eg[color][cur]) {
+        //                         adj.get(color).add(cur); // color 先染后，cur后染色
+        //                         ins[cur]++;
+        //                         eg[color][cur] = true;
+        //                     }
+        //         }
+        //     // 寻找入度为0的颜色点，减小该点连结的点的入度，直到所有点的入度都为0
+        //     List<Integer> l = new ArrayList<>();
+        //     while (true) {
+        //         int i;
+        //         for (i = 1; i <= max; i++) 
+        //             if (ins[i] == 0) {
+        //                 l.add(i);
+        //                 for (int v : adj.get(i)) ins[v]--;
+        //                 ins[i] = -1;
+        //                 break;
+        //             }
+        //         if (i == max+1) break;
+        //     }
+        //     return l.size() == max;
+        // }
+        // private boolean topologicalSort(Set<Integer> visited, Set<Integer> visiting, int c, Map<Integer, Set<Integer>> graph) {
+        //     if (visited.contains(c)) return true;
+        //     if (visiting.contains(c)) return false;
+        //     visiting.add(c);
+        //     for (Integer nei : graph.getOrDefault(c, Collections.emptySet())) 
+        //         if (!topologicalSort(visited, visiting, nei, graph)) return  false;
+        //     visiting.remove(c);
+        //     visited.add(c);
+        //     return true;
+        // }
+        // // 1. For each color, find left top corner and right bottom corner
+        // // 2. All colors interfering with given color means they should go after given
+        // // 3. Create dependencies (1 -> [2,3])
+        // // 4. TopSort. Loops mean it is not possible
+        // public boolean isPrintable(int[][] targetGrid) {
+        //     Map<Integer, Set<Integer>> graph = new HashMap<>();
+        //     Set<Integer> colors = new HashSet<>();
+        //     int m = targetGrid.length, n = targetGrid[0].length;
+        //     for (int i = 0; i < m; i++) 
+        //         for (int j = 0; j < n; j++) 
+        //             colors.add(targetGrid[i][j]);
+        //     for (Integer c : colors) {
+        //         int fi = -1, fj = Integer.MAX_VALUE, li = -1, lj = -1; // f: first, f row, f col, l: last, l row, l col
+        //         for (int i = 0; i < m; i++) 
+        //             for (int j = 0; j < n; j++) 
+        //                 if (targetGrid[i][j] == c) {
+        //                     if (fi == -1) fi = i;
+        //                     fj = Math.min(fj, j);
+        //                     li = i;
+        //                     lj = Math.max(lj, j);
+        //                 }
+        //         for (int i = fi; i <= li; i++) 
+        //             for (int j = fj; j <= lj; j++) 
+        //                 if (targetGrid[i][j] != c) 
+        //                     graph.computeIfAbsent(c, z -> new HashSet<>()).add(targetGrid[i][j]);
+        //     }
+        //     Set<Integer> visited = new HashSet<>();
+        //     Set<Integer> visiting = new HashSet<>();
+        //     for (Integer c : colors) 
+        //         if (!topologicalSort(visited, visiting, c, graph)) return false;
+        //     return true;
+        // }
+
         
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        // int [][] a = new int [][] {{1,2},{2,4},{1,3},{2,3},{2,1}};
-        // int [] b = new int [] {2, 3};
-        int [][] a = new int [][] {{1,5},{1,5},{3,4},{2,5},{1,3},{5,1},{2,3},{2,5}};
-        int [] b = new int [] {1, 2, 3, 4, 5};
-        
-        int [] r = s.countPairs(5, a, b);
-        System.out.println(Arrays.toString(r));
+        int [][] a = new int [][] {{1,1,1,1},{1,1,3,3},{1,1,3,4},{5,5,1,4}};
+        // int [][] a = new int [][] {{1,1,1,1},{1,2,2,1},{1,2,2,1},{1,1,1,1}};
+        // int [][] a = new int [][] {{1,1,4,4,1,1,1},{1,1,4,4,1,1,1},{1,1,4,4,1,1,1},{5,1,1,1,1,1,1},{5,3,3,3,3,3,1},{5,3,3,3,3,3,1},{1,3,3,3,3,3,1},{1,3,3,3,3,3,1},{6,3,3,3,3,3,1},{1,1,2,1,1,1,1}};
+
+        System.out.println("a.length: " + a.length);
+        for (int z = 0; z < a.length; ++z) 
+            System.out.println(Arrays.toString(a[z]));
+
+        boolean r = s.isPrintable(a);
+        System.out.println("r: " + r);
     }
 }

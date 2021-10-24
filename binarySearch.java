@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.*;
+import java.util.Map.Entry;
 import java.util.stream.*;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toMap;
@@ -54,27 +55,8 @@ public class binarySearch {
         //     return binarySearch(s, t, removable, 1, removable.length);
         // }
 
-        // public int minAbsoluteSumDiff(int[] aa, int[] bb) {
-        //     int n = aa.length;
-        //     int sumDiff = 0, maxDiff = 0;
-        //     int maxVal = 0;
-        //     for (int i = 0; i < n; i++) {
-        //         if (Math.abs(aa[i] - bb[i]) > maxDiff) {
-        //             maxDiff = Math.abs(aa[i] - bb[i]);
-        //             maxVal = bb[i];
-        //         }
-        //         sumDiff += Math.abs(aa[i]-bb[i]);
-        //     }
-        //     if (sumDiff == 0) return 0;
-        //     int minDiff = Integer.MAX_VALUE;
-        //     for (int v : aa) 
-        //         if (Math.abs(v-maxVal) < minDiff) 
-        //             minDiff = Math.abs(v-maxVal);
-        //         return sumDiff - (maxDiff - minDiff);
-        // }
 
-        
-        // public boolean find132pattern(int[] arr) {
+// public boolean find132pattern(int[] arr) {
         //     int n = arr.length;
         //     int l = 0, m = 0, r = 0;
         //     for (int i = 0; i < n-2; i++) {
@@ -281,33 +263,6 @@ public class binarySearch {
         // }
 
         
-        // private int finishHours(int [] arr, int v) {
-        //     int res = 0;
-        //     for (int val : arr)
-        //         if (val >= v)
-        //             res += val / v + (val % v == 0 ? 0 : 1);
-        //         else res += 1;
-        //     // System.out.println("res: " + res);
-        //     return res;
-        // }
-        // private int binarySearch(int [] arr, int k, int l, int r) {
-        //     if (l == r) return finishHours(arr, l) == k ? l : -1;
-        //     if (l == r-1) return finishHours(arr, l) == k ? l : (finishHours(arr, r) == k ? r : -1);
-        //     int m = l + (r-l) / 2;
-        //     // System.out.println("m: " + m);
-        //     // if (finishHours(arr, m) == k) return m;
-        //     if (finishHours(arr, m) <= k) return binarySearch(arr, k, l, m);
-        //     return binarySearch(arr, k, m+1, r);
-        // }
-        // int n;
-        // public int minEatingSpeed(int[] piles, int h) {
-        //     n = piles.length;
-        //     if (h == n) return Arrays.stream(piles).max().getAsInt();
-        //     if (n == 1) return piles[0] / h + (piles[0] % h == 0 ? 0 : 1);
-        //     return binarySearch(piles, h, Arrays.stream(piles).min().getAsInt(), Arrays.stream(piles).max().getAsInt());
-        // }
-
-
         // private boolean possible(int [] arr, int m, int v) {
         //     int i = 1, p = arr[0]; --m;
         //     while (i < n) {
@@ -548,45 +503,6 @@ public class binarySearch {
         // }
 
 
-        // public boolean find132pattern(int[] arr) {
-        //     int n = arr.length;
-        //     int [] min = new int [n];
-        //     int [] max = new int [n];
-        //     min[0] = arr[0];
-        //     max[0] = 0;;
-        //     int mav = arr[0];
-        //     for (int i = 1; i < n; i++) {
-        //         min[i] = Math.min(min[i-1], arr[i]);
-        //         if (arr[i] > mav) {
-        //             mav = i;
-        //             max[i] = i;
-        //         } else max[i] = max[i-1];
-        //     }
-        //     System.out.println("min.length: " + min.length);
-        //     for (int z = 0; z < min.length; ++z) 
-        //         System.out.print(min[z] + ", ");
-        //     System.out.println("");
-        //     System.out.println("max.length: " + max.length);
-        //     for (int z = 0; z < max.length; ++z) 
-        //         System.out.print(max[z] + ", ");
-        //     System.out.println("");
-        //     for (int i = 0; i < n; i++) {
-        //         // System.out.println("\n i: " + i);
-        //         // System.out.println("(min[i] < arr[max[i]] && max[i] < n-1) : " + (min[i] < arr[max[i]] && max[i] < n-1) );
-        //         if (min[i] < arr[max[i]] && max[i] < n-1) 
-        //             for (int j = max[i]+1; j < n; j++) {
-        //                 // System.out.println("j: " + j);
-        //                 // System.out.println("(arr[j] > min[i]): " + (arr[j] > min[i]));
-        //                 // System.out.println("(arr[j] < arr[max[i]]): " + (arr[j] < arr[max[i]]));
-        //                 // System.out.println(" (arr[j] > min[i] && arr[j] < arr[max[i]]): " +  (arr[j] > min[i] && arr[j] < arr[max[i]]));
-        //                 if (arr[j] > min[i] && arr[j] < arr[max[i]])
-        //                     return true;
-        //             }
-        //     }
-        //     return false;
-        // }
-
-
         // private boolean poss(int n, int idx, int sum, int target) {
         // }
         // private int binarySearch(int n, int idx, int sum, int l, int r) {
@@ -700,67 +616,483 @@ public class binarySearch {
         // }
 
 
-        // public int binarySearchHigh(int [] arr, int sum, int n, int l, int r) { // sum: right sum; n: right most available idx
-        //     int ridx = n;
-        //     while (l <= r) {
-        //         int m = l + (r-l)/2;
-        //         int mid = arr[n] - arr[m];
-        //         if (arr[m] <= mid && mid <= sum) {
-        //             ridx = m;
-        //             l = m+1;
-        //         } else if (arr[m] <= mid)
-        //             l = m+1;
-        //         else // arr[m] > mid
-        //             r = m-1;
-        //     }
-        //     return ridx;
-        // }
-        // public int binarySearchLow(int [] arr, int sum, int n, int l, int r) { // sum: right sum; n: right most available idx
-        //     int lidx = n;
-        //     while (l <= r) {
-        //         int m = l + (r-l)/2;
-        //         int mid = arr[n] - arr[m];
-        //         if (arr[m] <= mid && mid <= sum) {
-        //             lidx = m;
-        //             r = m-1;
-        //         } else if (arr[m] <= mid)
-        //             l = m+1;
-        //         else r = m-1;
-        //     }
-        //     return lidx;
-        // }
-        // public int waysToSplit(int[] arr) { // bug bug bug: 不知道哪里错了
+        // public int waysToSplit(int[] arr) { // O(N) solution
         //     int mod = (int)1e9 + 7;
         //     int n = arr.length;
-        //     if (n == 3) return (arr[0] <= arr[1] && arr[1] <= arr[2]) ? 1 : 0;
-        //     int [] sum = new int[n];
-        //     sum[0] = arr[0];
-        //     for (int i = 1; i < n; i++) 
-        //         sum[i] = sum[i-1] + arr[i];
-        //     int left = 0, mid = 0, right = 0;
-        //     int jlo = 0, jhi;
+        //     int [] sum = new int [n+1];
+        //     for (int i = 1; i <= n; i++)
+        //         sum[i] = sum[i-1] + arr[i-1];
         //     long res = 0;
-        //     for (int i = n-1; i >= 2; i--) { // 在第i位的前面树最右边的墙
-        //         right = sum[n-1] - sum[i-1];
-        //         if (right < sum[n-1] / 3) continue;
-        //         jlo = binarySearchLow(sum, right, i-1, 0, i-1);
-        //         jhi = binarySearchHigh(sum, right, i-1, 0, i-1);
-        //         if (jlo >= 0 && jlo < i-1 || jhi >= 0 && jhi < i-1)
-        //             res = (res + jhi - jlo + 1) % mod;
+        //     int j = 1, k = 2;
+        //     for (int i = 0; i < n-2; i++) { // 最后至少留两个数权当两段， 最左板的位置
+        //         int left = sum[i+1];
+        //         int target = (sum[n] - sum[i+1]) / 2;
+        //         if (target < left) break;  // sum of arr[i+1, j] inclusive
+        //         while (j <= i || j < n-1 && sum[j+1] - sum[i+1] < left) j++;              // 中间和要比左边的大, 合理的最左侧板
+        //         while (k < j || k < n-1 && sum[k+1] - sum[i+1] <= sum[n] - sum[k+1]) k++; // 右边的和要比中间的大， 合理的最右侧板
+        //         res = (res + k - j) % mod;
         //     }
         //     return (int)res;
         // }
+        // int binarySearchHigh(int [] arr, int i) { // 初步偿试写while简洁版代码,没有写recursion得心应手
+        //     int l = 1, h = i;
+        //     while (l < h) {
+        //         int m = l + (h - l + 1) / 2; // 边界向右靠拢
+        //         int sa = arr[m-1];
+        //         int sb = arr[i] - arr[m-1];
+        //         if (sa > sb) h = m - 1; // 确保的是左段比中间段小
+        //         else l = m;
+        //     }
+        //     return arr[l-1] <= arr[i] - arr[l-1] ? l : -1;
+        // }
+        int binarySearchLow(int [] arr, int i) {
+            int l = 1, h = i;
+            while (l < h) {
+                int m = l + (h - l) / 2;
+                int sa = arr[i] - arr[m-1];
+                int sb = arr[arr.length-1] - arr[i];
+                if (sa > sb) l = m + 1; // 确保的是中间段比右段小
+                else h = m;
+            } // 寻找左边界：返回的永远是左边界 
+            return arr[i] - arr[l-1] <= arr[arr.length-1] - arr[i] ? l : -1;
+        }
+        // public int waysToSplit(int[] arr) { 
+        //     int mod = (int)1e9 + 7, res = 0;
+        //     for (int i = 1; i < arr.length; i++)
+        //         arr[i] += arr[i-1];
+        //     for (int i = 1; i < arr.length-1; i++) { // i位置右侧树右墙
+        //         int l = binarySearchLow(arr, i);
+        //         int r = binarySearchHigh(arr, i);
+        //         if (l != -1 && r != -1 && l <= r)
+        //             res = (res + r - l + 1) % mod;
+        //     }
+        //     return res;
+        // }
+
+
+        // int getSum(int [] arr, int idx, int v) {
+        //     Arrays.fill(arr, 0);
+        //     arr[idx] = v;
+        //     for (int i = idx-1; i >= 0; i--) 
+        //         arr[i] = v + (idx-i);
+        //     for (int i = idx+1; i < arr.length; i++) 
+        //         arr[i] = v-(i-idx); // [1,2,2,1] 这种数组并不是按提示的方法生成的 ？？？
+        //     int sum = 0; // 算和的方法不是这么算的，换个方法，按它的提示写，改天再接着写
+        //     for (int cur : arr) 
+        //         sum += cur;
+        //     return sum;
+        // }
+        // public int maxValue(int n, int idx, int maxSum) {
+        //     int [] arr = new int [n];
+        //     int l = 0, r = n-1, res = 0;
+        //     while (l < r) { // when exit: l == r
+        //         System.out.println("\n l: " + l);
+        //         System.out.println("r: " + r);
+        //         int m = l + (r - l) / 2;
+        //         if (getSum(arr, idx, m) <= maxSum) {
+        //             // res = m;
+        //             l = m;
+        //         } else r = m-1;
+        //     }
+        //     System.out.println("l: " + l);
+        //     System.out.println("res: " + res);
+        //     return getSum(arr, idx, l) <= maxSum ? l : -1; // so shoult double check if l is valid here in theory......
+        // }
+
+
+        // int binarySearch(int [] arr, int v) { // 我记得这种题目以前都写疯了，现在再写居然还在犯迷糊。。。。。。
+        //     if (v < arr[0]) return arr[0];
+        //     if (v > arr[arr.length-1]) return arr[arr.length-1];
+        //     int l = 0, r = arr.length, m = 0;
+        //     while (l < r) { // when exit: l == r
+        //         m = l + (r - l) / 2;
+        //         if (arr[m] == v) return arr[m];
+        //         if (v < arr[m]) {
+        //             if (m > 0 && v > arr[m-1])
+        //                 return Math.abs(arr[m]-v) <= Math.abs(v-arr[m-1]) ? arr[m] : arr[m-1];
+        //             r = m-1;
+        //         } else { // arr[m] < v
+        //             if (m < arr.length-1 && v < arr[m+1])
+        //                 return Math.abs(arr[m+1]-v) <= Math.abs(arr[m]-v) ? arr[m+1] : arr[m];
+        //             l = m+1;
+        //         }
+        //     }
+        //     return l >= 0 && l < arr.length ? arr[l] : -1;  // needs double check here
+        // }
+        // public int minAbsoluteSumDiff(int[] aa, int[] bb) { // binarySearch cloest val to a target
+        //     int mod = (int)1e9 + 7;
+        //     int n = aa.length;
+        //     long sumDiff = 0;
+        //     for (int i = 0; i < n; i++) 
+        //         sumDiff += Math.abs(aa[i]-bb[i]);
+        //     int [] arr = Arrays.copyOf(aa, n);
+        //     Arrays.sort(arr);
+        //     int maxDiff = Integer.MIN_VALUE, locDif = Integer.MIN_VALUE;
+        //     for (int i = 0; i < n; i++) {
+        //         int v = binarySearch(arr, bb[i]);
+        //         locDif = Math.abs(aa[i] - bb[i]) - Math.abs(v - bb[i]);
+        //         maxDiff = Math.max(maxDiff, locDif);
+        //     }
+        //     return (int)((sumDiff - maxDiff) % mod);
+        // }
 
         
-    }
-    
+        // public int maximumScore(int[] arr, int k) {
+        //     int n = arr.length, maxScore = 0;
+        //     List<Integer> leftMinIdx = new ArrayList<>();
+        //     List<Integer> rightMinIdx = new ArrayList<>();
+        //     leftMinIdx.add(k);
+        //     rightMinIdx.add(k);
+        //     for (int i = k-1; i >= 0; i--) 
+        //         if (arr[i] < arr[leftMinIdx.get(leftMinIdx.size()-1)])
+        //             leftMinIdx.add(i);
+        //     for (int i = k+1; i < n; i++) 
+        //         if (arr[i] < arr[rightMinIdx.get(rightMinIdx.size()-1)])
+        //             rightMinIdx.add(i);
+        //     int i = 0, j = 0, nleft = leftMinIdx.size(), nright = rightMinIdx.size(); // 这里的下标-1有点儿绕
+        //     while (i < nleft || j < nright) {
+        //         int l = (i == nleft - 1) ? -1 : leftMinIdx.get(i+1); // 当前左侧最小值对应的左边界
+        //         int r = (j == nright -1) ? n  : rightMinIdx.get(j+1);// 当前右侧最小值对应的右边界
+        //         maxScore = Math.max(maxScore, Math.min(arr[leftMinIdx.get(i)], arr[rightMinIdx.get(j)]) * (r - l - 1));
+        //         if (i == nleft -1 && j == nright -1) break;
+        //         else if (i == nleft - 1) j++;   // 左单调栈已到达边界
+        //         else if (j == nright - 1) i++;  // 右单调栈已到达边界
+        //         else if (arr[l] <= arr[r]) j++; // 选取左、右区间中下一个较大的最小值，若相等则任意选取
+        //         else i++;
+        //     }
+        //     return maxScore;
+        // }
+        // 1.Start l, r at k and set min = nums[k].
+        // 2.Extend l and r as far as possible until nums[l - 1] < min and nums[r + 1] < min.
+        //   The reason for this is that any subarrays of nums[i, j] should be dominated by current min
+        //   and we are guaranteed the length is maximum which lead to best score so far.
+        // 3.We need to pick a new minimum value at this stage. Pick max(nums[l - 1], nums[r + 1]) as the new min to ensure not losing any candidates.
+        // 4.Repeat above steps until l,r hit bounds.
+        // public int maximumScore(int[] arr, int k) {  // O(N) Two Pointers
+        //     int n = arr.length, maxScore = arr[k];
+        //     int l = k, r = k, min = arr[k];
+        //     while (true) {
+        //         while (r+1 < n && arr[r+1] >= min) r++;
+        //         while (l-1 >= 0 && arr[l-1] >= min) l--;
+        //         maxScore = Math.max(maxScore, min*(r - l + 1));
+        //         if (l == 0 && r == n-1) break;
+        //         if (l == 0) min = arr[r+1];
+        //         else if (r == n-1) min = arr[l-1];
+        //         else min = Math.max(arr[r+1], arr[l-1]);
+        //     }
+        //     return maxScore;
+        // }
+        // public int maximumScore(int[] arr, int k) {  // Monotonic Increasing subsequence with stack O(N)
+        //     Stack<Integer> st = new Stack<>();
+        //     for (int i = 0; i <= k; i++) {
+        //         while (!st.isEmpty() && arr[st.peek()] > arr[i]) st.pop();
+        //         st.push(i);
+        //     }
+        //     int res = 0;
+        //     for (int i = k+1; i < arr.length; i++) 
+        //         if (arr[st.peek()] > arr[i]) {
+        //             while (!st.isEmpty() && arr[st.peek()] > arr[i]) {
+        //                 int pos = st.pop();
+        //                 int n = st.isEmpty() ? i : i - st.peek() - 1;
+        //                 res = Math.max(res, arr[pos]*n);
+        //             }
+        //             st.push(i);
+        //         }
+        //     while (!st.isEmpty()) {
+        //         int pos = st.pop();
+        //         int n = st.isEmpty() ? arr.length : arr.length - st.peek() - 1;
+        //         res = Math.max(res, arr[pos]*n);
+        //     }
+        //     return res;
+        // }
+        // monotonic stack based on LC84
+        // public int maximumScore(int[] nums, int k) {
+        //     Stack<Integer> stack = new Stack<>();
+        //     int res = 0;
+        //     for (int i = 0; i < nums.length; i++) {
+        //         while (!stack.isEmpty() && nums[stack.peek()] > nums[i]) {
+        //             int currIndex = stack.pop();
+        //             int leftBound = -1;
+        //             if (!stack.isEmpty()) leftBound = stack.peek();
+        //             int area = (i - leftBound - 1) * nums[currIndex];
+        //             if (leftBound + 1 <= k && i - 1 >= k) res = Math.max(res, area);
+        //         }
+        //         stack.push(i);
+        //     }
+        //     while (!stack.isEmpty()) {
+        //         int currIndex = stack.pop();
+        //         int leftBound = -1;
+        //         if (!stack.isEmpty()) leftBound = stack.peek();
+        //         int area = (nums.length - leftBound - 1) * nums[currIndex];
+        //         if (leftBound <= k) res = Math.max(res, area);
+        //     }
+        //     return res;
+        // }
+
+
+        // public int[] kthSmallestPrimeFraction(int [] arr, int k) { // 每行从左到右降序、每列从底向上降序
+        //     int n = arr.length;
+        //     double l = 0, r = 1.0;
+        //     while (l < r) {
+        //         double m = (l + r) / 2;
+        //         double maxF = 0;  // 小于m 的当前最大元素，因为我们要找第k小的元素
+        //         int total = 0, p = 0, q = 0;
+        //         for (int i = 0, j = 1; i < n-1; i++) {        // i 从上往下遍历n-1行
+        //             while (j < n && arr[i] > m * arr[j]) ++j; // 找到第一个arr[i] / arr[j]小于 m 的j的位置，i, j两层循环是O(N)
+        //             if (j == n) break;                        // j 继续第i-1行的搜索结果继续往右搜索
+        //             total += n - j;
+        //             double f = (double)arr[i] / arr[j]; // 这里double转化总是要单个的转化，加括号是错的！！！XXX_ (double)(a[i]/a[j]) _XXX
+        //             if (f > maxF) {
+        //                 p = i;
+        //                 q = j;
+        //                 maxF = f;
+        //             }
+        //         } // 当找到K个最小元素，那么就返回K小里面的最大元素
+        //         if (total == k) return new int [] {arr[p], arr[q]};
+        //         else if (total > k) r = m;
+        //         else l = m; 
+        //     }
+        //     return  new int [0];
+        // }
+
+ 
+        // public List<List<Integer>> findSolution(CustomFunction customfunction, int z) { // 这个比较快
+        //     List<List<Integer>> res = new ArrayList<>();
+        //     for (int i = 1; i <= 1000; i++) {
+        //         if (i > z) break; // 如果i大于z，说明之后所有i乘j均大于z
+        //         for (int j = 1; j <= 1000; j++) {
+        //             int tmp = customfunction.f(i, j);
+        //             if (tmp == z) 
+        //                 res.add(List.of(i, j));
+        //             if (tmp >= z) break;
+        //         }
+        //     }
+        //     return res;
+        // }
+        // public List<List<Integer>> findSolution(CustomFunction customfunction, int z) { // 这个反而慢
+        //     List<List<Integer>> res = new ArrayList<>();
+        //     int i = 1, j = 1000;
+        //     while (i <= 1000 && j >= 1) {
+        //         int v = customfunction.f(i, j);
+        //         if (v > z) j -= 1;
+        //         else if (v < z) i += 1;
+        //         else {
+        //             res.add(List.of(i, j));
+        //             i += 1;
+        //         }
+        //     }
+        //     return res;
+        // }
+
+
+        // private int finishHours(int [] arr, int v) { // bug bug bug
+        //     int res = 0; 
+        //     for (int val : arr)
+        //         if (val >= v)
+        //             res += val / v + (val % v == 0 ? 0 : 1);
+        //         else res += 1;
+        //     return res;
+        // }
+        // private int binarySearch(int [] arr, int k, int l, int r) {
+        //     if (l == r) return finishHours(arr, l) == k ? l : -1;
+        //     if (l == r-1) return finishHours(arr, l) == k ? l : (finishHours(arr, r) == k ? r : -1);
+        //     int m = l + (r-l) / 2;
+        //     if (finishHours(arr, m) <= k) return binarySearch(arr, k, l, m);
+        //     return binarySearch(arr, k, m+1, r);
+        // }
+        // int n;
+        // public int minEatingSpeed(int[] piles, int h) {
+        //     n = piles.length;
+        //     if (h == n) return Arrays.stream(piles).max().getAsInt();
+        //     if (n == 1) return piles[0] / h + (piles[0] % h == 0 ? 0 : 1);
+        //     return binarySearch(piles, h, Arrays.stream(piles).min().getAsInt(), Arrays.stream(piles).max().getAsInt());
+        // }
+        // public int minEatingSpeed(int[] piles, int h) {
+        //     int max = Arrays.stream(piles).max().getAsInt();
+        //     int bgn = 1, end = max;
+        //     while (bgn < end) {
+        //         int mid = bgn + (end - bgn) / 2;
+        //         int tt = 0;
+        //         for (int i = 0; i < piles.length; i++) {
+        //             int v = (int)Math.ceil(piles[i] * 1.0 / mid);
+        //             tt += v;
+        //         }
+        //         if (tt <= h) end = mid;
+        //         else if (tt >= h) bgn = mid + 1;
+        //     }
+        //     return bgn;
+        // }
+
+
+        // public boolean find132pattern(int[] arr) {
+        //     int n = arr.length;
+        //     TreeSet<Integer> left = new TreeSet<>();
+        //     TreeMap<Integer, Integer> right = new TreeMap<>();
+        //     for (int i = n-1; i >= 2; i--) 
+        //         right.put(arr[i], right.getOrDefault(arr[i], 0) + 1);
+        //     left.add(arr[0]);
+        //     for (int i = 1; i < n; i++) {
+        //         Integer lower = left.first();
+        //         Entry<Integer, Integer> lowerTwo = right.lowerEntry(arr[i]);
+        //         if (lower != null && lowerTwo != null && lowerTwo.getKey() > lower && lowerTwo.getKey() < arr[i]) return true;
+        //         left.add(arr[i]);
+        //         if (i + 1 < n) {
+        //             right.put(arr[i+1], right.get(arr[i+1])-1);
+        //             if (right.get(arr[i+1]) == 0) right.remove(arr[i+1]);
+        //         }
+        //     }
+        //     return false;
+        // }
+
+        
+        // private static long INF = (long)1e10;
+        // public long kthSmallestProduct(int[] a, int[] b, long k) { 
+        //     int m = a.length, n = b.length;
+        //     long lo = -INF-1, hi = INF + 1;
+        //     while (lo < hi) {
+        //         long mid = lo + (hi - lo) / 2, cnt = 0;
+        //         for (int  i : a) { // 对于数组a中的每一个数与b中元素的乘积，数<=mid的个数，二分搜索
+        //             if (i >= 0) {
+        //                 int l = 0, r = n-1, p = 0;
+        //                 while (l <= r) {
+        //                     int c = l + (r - l) / 2;
+        //                     long mul = i * (long)b[c];
+        //                     if (mul <= mid) {
+        //                         p = c + 1;
+        //                         l = c + 1;
+        //                     } else r = c - 1;
+        //                 }
+        //                 cnt += p;
+        //             } else { // i < 0
+        //                 int l = 0, r = n-1, p = 0;
+        //                 while (l <= r) {
+        //                     int c = l + (r - l) / 2;
+        //                     long mul = i * (long)b[c];
+        //                     if (mul <= mid) {
+        //                         p = n - c; // i < 0, 数右边<= mid的个数
+        //                         r = c - 1;
+        //                     } else l = c + 1;
+        //                 }
+        //                 cnt += p;
+        //             }
+        //         }
+        //         if (cnt >= k) hi = mid;
+        //         else lo = mid + 1l;
+        //     }
+        //     return lo;
+        // }
+        // private static long INF = (long)1e10;
+        // public long kthSmallestProduct(int[] a, int[] b, long k) { 
+        //     long lo = -INF, hi = INF;
+        //     while (lo < hi) {
+        //         long mid = lo + hi + 1 >> 1;
+        //         if (f(a, b, mid) < k) lo = mid;
+        //         else hi = mid - 1;
+        //     }
+        //     return lo;
+        // }
+        // private long f(int [] a, int [] b, long mid) {
+        //     long cnt = 0;
+        //     for (int v : a) {
+        //         int l = 0, r = b.length;
+        //         if (v < 0) {
+        //             while (l < r) {
+        //                 int m = l + r >> 1;
+        //                 if ((long)v * b[m] >= mid) l = m + 1;
+        //                 else r = m;
+        //             }
+        //             cnt += b.length - l;
+        //         } else { // v >= 0
+        //             while (l < r) {
+        //                 int m = l + r >> 1;
+        //                 if ((long)v * b[m] < mid) l = m + 1;
+        //                 else r = m;
+        //             }
+        //             cnt += l;
+        //         }
+        //     }
+        //     return cnt;
+        // }
+
+
+        // public int minimumBoxes(int n) {
+        //     long base = (long)Math.cbrt(6 * (long)n);
+        //     if (base * (base + 1) * (base + 2) / 6 > n) base--;
+        //     long blockBase = base * (base + 1) / 2;
+        //     n = n - (int)(base * (base + 1) * (base + 2) / 6);
+        //     long extra = (long)Math.sqrt(2 * (long)n);
+        //     if (extra * (extra + 1) / 2 >= n)
+        //         return (int)(blockBase + extra);
+        //     else return (int)(blockBase + extra + 1);
+        // }
+        
+       
+        // public int smallestDistancePair(int[] arr, int k) { // memory limit exceeded
+        //     int n = arr.length;                             
+        //     Arrays.sort(arr);
+        //     Queue<int []> q = new PriorityQueue<>((a, b)->Math.abs(a[0]-a[1])-Math.abs(b[0]-b[1]));
+        //     for (int i = 0; i < n; i++) 
+        //         for (int j = i+1; j < n; j++) 
+        //             q.offer(new int [] {arr[i], arr[j]});
+        //     int ans = 0;
+        //     while (k > 0 && !q.isEmpty()) {
+        //         int [] cur = q.poll();
+        //         ans = Math.abs(cur[0] - cur[1]);
+        //         k--;
+        //     }
+        //     return ans;
+        // }
+        // private int getLessThanCnt(int [] arr, int v) { // <= v
+        //     int j = 0, ans = 0;
+        //     for (int i = 0; i < arr.length; i++) {
+        //         if (arr[i] - arr[j] > v) 
+        //             while (j < i && arr[i] - arr[j] > v) j++;
+        //         ans += i - j;
+        //     }
+        //     return ans;
+        // }
+        // public int smallestDistancePair(int[] arr, int k) { 
+        //     int n = arr.length;                             
+        //     Arrays.sort(arr);
+        //     int l = 0, r = Math.abs(arr[n-1] - arr[0]), cnt = 0, m = 0;
+        //     while (l < r) { // when l == r infinite loop when l == r
+        //         m = l + (r - l) / 2;
+        //         cnt = 0; 
+        //         for (int i = 0, j = 0; i < n; i++) {
+        //             while (j < i && arr[i] - arr[j] > m) j++;
+        //             cnt += i - j;
+        //         }
+        //         // cnt = getLessThanCnt(arr, m);
+        //         if (cnt < k) l = m + 1;
+        //         else r = m; //
+        //     }
+        //     return l;
+        // }
+        // public int smallestDistancePair(int[] arr, int k) { // try to avoid infinite loop
+        //     int n = arr.length;                             
+        //     Arrays.sort(arr);
+        //     int l = 0, r = arr[n-1] - arr[0], cnt = 0, m = 0, j = 0;
+        //     while (l <= r) { // when l == r infinite loop when l == r
+        //         m = l + (r - l) / 2;
+        //         cnt = 0;
+        //         j = 0;
+        //         for (int i = 0; i < n; i++) {
+        //             while (j < n && arr[j] - arr[i] <= m) ++j;
+        //             cnt += j - i - 1;
+        //         }
+        //         if (cnt < k) l = m + 1;
+        //         else r = m - 1; //
+        //     }
+        //     return l;
+        // }
+   }
     public static void main(String[] args) {
         Solution s = new Solution(); 
 
-        // int []  a = new int []  {2, 3, 5, 10};
-        int [] a = new int [] {1,2,2,2,5,0};
+        // int [] a = new int [] {1, 3, 1};
+        int []  a = new int []  {1, 6, 1};
 
-        int res = s.waysToSplit(a);
+        int res = s.smallestDistancePair(a, 5);
         System.out.println("res: " + res);
     }
 }

@@ -798,16 +798,6 @@ public class competition {
         // }
 
 
-        // public long kthSmallestProduct(int[] a, int[] b, long k) { 
-        //     int m = a.length; // ma mb, na, nb 0 four five cnts, 
-        //     int n = b.length; // 以m or n为单位向前推进，找到第 a, a+(m/n) >= k个数，
-        //     int l = 0, r = m*n-1;
-        //     while (l <= r) {
-        //         int m = l + (r-l)/2;
-        //     }
-        // }
-
-
         // public boolean areNumbersAscending(String so) {
         //     String [] arr = so.split("\\s+");
         //     System.out.println(Arrays.toString(arr));
@@ -840,68 +830,265 @@ public class competition {
         // }
 
 
-        public int secondMinimum(int n, int[][] edges, int time, int change) {
-            List<List<Integer>> ll = new ArrayList<>();
-            for (int i = 0; i <= n; i++) 
-                ll.add(new ArrayList<>());
-            for (int [] e : edges) {
-                ll.get(e[0]).add(e[1]);
-                ll.get(e[1]).add(e[0]);
+        // public int secondMinimum(int n, int[][] edges, int time, int change) { // bug bug bug too naive ......
+        //     List<List<Integer>> ll = new ArrayList<>();
+        //     for (int i = 0; i <= n; i++) 
+        //         ll.add(new ArrayList<>());
+        //     for (int [] e : edges) {
+        //         ll.get(e[0]).add(e[1]);
+        //         ll.get(e[1]).add(e[0]);
+        //     }
+        //     int min = Integer.MAX_VALUE, t = 0;
+        //     Queue<int []> q = new LinkedList<>();
+        //     q.offer(new int [] {1, 0}); // [idx, time]
+        //     while (!q.isEmpty()) {
+        //         int [] cur = q.poll();
+        //         System.out.println(Arrays.toString(cur));
+        //         t = cur[1] + time; // now
+        //         boolean bk = false;
+        //         for (Integer next : ll.get(cur[0])) {
+        //             if (next == n) 
+        //                 if (min == Integer.MAX_VALUE) {
+        //                     min = t;
+        //                     bk = true;
+        //                     break;
+        //                 }
+        //             if ((t / change) % 2 == 0) 
+        //                 q.offer(new int [] {next, t});
+        //             else q.offer(new int [] {next, t + change - t % change});
+        //         }
+        //         if (bk) break;
+        //     }
+        //     int cnt = 0;
+        //     while (cnt < 2) {
+        //         t += time;
+        //         if (cnt == 1) break;
+        //         System.out.println("t: " + t);
+        //         if ((t / change) % 2 == 1) 
+        //             t += change - t % change;
+        //         ++cnt;
+        //     }
+        //     return t;
+        // }
+        // public int secondMinimum(int n, int[][] edges, int time, int change) {
+        //     Map<Integer, List<Integer>> adj = new HashMap<>();
+        //     for (int [] e : edges) {
+        //         adj.computeIfAbsent(e[0], z -> new ArrayList<>()).add(e[1]);
+        //         adj.computeIfAbsent(e[1], z -> new ArrayList<>()).add(e[0]);
+        //     }
+        //     Queue<int []> q = new PriorityQueue<>((a, b)->(a[1] -b[1]));
+        //     q.offer(new int []{1, 0});
+        //     Map<Integer, Integer> cache = new HashMap<>(); // use cache to record min time per city
+        //     // modification: we want to visit each city maximum two times with different times,
+        //     // this will help in early termination when we visit the city again (3rd time or more)
+        //     Set<Integer> exhausted = new HashSet<>();
+        //     while (!q.isEmpty()) {
+        //         int [] top = q.poll();
+        //         int cur = top[0], t = top[1];
+        //         // Base Termination : we have found our 2nd min time for city n
+        //         if (cur == n && t > cache.getOrDefault(cur, Integer.MAX_VALUE))
+        //             return t;
+        //         if (!cache.containsKey(cur)) // we vistied this city for first time, so elapsed time is min for this city
+        //             cache.put(cur, t);
+        //         // early termination, if we are trying to visit the city 3rd time or more ,
+        //         // or the elapsed time will not help in finding the solution
+        //         else if (cache.get(cur) == t || exhausted.contains(cur)) continue;
+        //         else // this means we are visiting the city with 2nd optimal time , we dont need to visit the city ever again
+        //             exhausted.add(cur);
+        //         // we visit the city on elapsedTime, we need to check if on basis of change time, whether this time falls in  cycle (green or red)
+        //         // if odd cycle (red), we must wait for this cycle to end
+        //         int factor = t / change;
+        //         if (factor % 2 == 1)
+        //             t = (factor + 1) * change;
+        //         for (int nb : adj.getOrDefault(cur, new ArrayList<>())) { // visit the neighbours
+        //             int visTime = t + time;
+        //             if (!exhausted.contains(nb))
+        //                 q.offer(new int [] {nb, visTime});
+        //         }
+        //     }
+        //     return -1;
+        // }
+        // public int secondMinimum(int n, int [][] edges, int time, int change) {
+        //     Map<Integer, Set<Integer>> map = new HashMap<>();
+        //     for (int [] e : edges) {
+        //         map.computeIfAbsent(e[0], z -> new HashSet<>()).add(e[1]);
+        //         map.computeIfAbsent(e[1], z -> new HashSet<>()).add(e[0]);
+        //     }
+        //     Queue<int []> q = new PriorityQueue<>((a, b)->(a[1]-b[1]));
+        //     Map<Integer, Set<Integer>> vis = new HashMap<>();
+        //     q.offer(new int [] {1, 0});
+        //     int min = -1;
+        //     while (!q.isEmpty()) {
+        //         int [] top = q.poll();
+        //         int cur = top[0], t = top[1];
+        //         if (cur == n) {
+        //             if (min == -1 || min == t) min = t;
+        //             else return t;
+        //         }
+        //         if (t % (2 * change) >= change)
+        //             t += 2 * change - t % (2 * change);
+        //         // 源码中传入key和value，根据key获取看是否存在value，如果value==null，然后调用put方法把传入的key和value  put进map，返回根据key获取的老value
+        //         // putIfAbsent: 如果传入key对应的value已经存在，就返回存在的value，不进行替换。如果不存在，就添加key和value，返回null
+        //         vis.putIfAbsent(cur, new HashSet<>());
+        //         if (!vis.get(cur).add(t) || vis.get(cur).size() >= 3) continue;
+        //         if (map.containsKey(cur))
+        //             for (int next : map.get(cur)) 
+        //                 q.offer(new int [] {next, t + time});
+        //     }
+        //     return -1;
+        // }
+
+
+    //     public int countValidWords(String sentence) {
+    //         int n = sentence.length();
+    //         String [] s = sentence.split("\\s+");
+    //         System.out.println(Arrays.toString(s));
+    //         int cnt = 0, ca = 0;
+    //         boolean valid = true;
+    //         for (String v : s) {
+    //             System.out.println("\n v: " + v);
+    //             System.out.println("cnt: " + cnt);
+    //             if (v.length() == 0) continue;
+
+    //             valid = true;
+    //             ca = 0;
+    //             for (int i = 0; i < v.length(); i++) {
+    //                 char c = v.charAt(i);
+    //                 if (Character.isDigit(c)
+    //                     || (c == '-' && (i == 0 || i == v.length()-1 || (!Character.isLowerCase(v.charAt(i-1)) || !Character.isLowerCase(v.charAt(i+1)))))
+    //                     || (c == '!' || c == '.' || c == ',') && i != v.length()-1
+    //                     || ca > 1) {
+    //                     valid = false;
+    //                     break;
+    //                 }
+    //                 System.out.println("v: " + v);
+    // if (c == '-') ++ ca;
+    //             }
+    //             System.out.println("v: " + v);
+    //             System.out.println("cnt: " + cnt);
+    //             System.out.println("valid: " + valid);
+                
+   
+    //             if (valid) cnt++;
+    //         }
+    //         return cnt;
+    //     }
+
+
+        // public int nextBeautifulNumber(int n) {
+        //     if (n == 1) return 22;
+        //     String t = "" + n;
+        //     System.out.println("t: " + t);
+        //     int n = t.length();
+        //     char [] s = t.toCharArray();
+        //     for (int i = 0; i < n; i++) {
+        //         if (s[i] == 1) continue;
+        //     }
+        // }
+
+
+        // private long dfs(int idx, int p) {
+        //     if (adj.get(idx).size() == 1 && adj.get(idx).get(0) == p) {
+        //         cnt[idx] = 1;
+        //         return 1;
+        //     }
+        //     int ans = 0;
+        //     for (Integer next : adj.get(idx)) {
+        //         if (next == p) continue;
+        //         ans += dfs(next, idx);
+        //     }
+        //     return cnt[idx] = ans + 1;
+        // }
+        // private void dfsMax(int i, int j) {
+        //     if (adj.get(i).size() == 1 && adj.get(i).get(0) == j) {
+        //         long v = cnt[i] * (tt - cnt[i]);
+        //         max = Math.max(max, v);
+        //         res.computeIfAbsent(v, z -> new ArrayList<>()).add(i);
+        //         return;
+        //     }
+        //     long v = 1;
+        //     for (Integer next : adj.get(i)) {
+        //         if (next == j) 
+        //             v *= tt - cnt[i];
+        //         else v *= cnt[next];
+        //     }
+        //     max = Math.max(max, v);
+        //     res.computeIfAbsent(v, z -> new ArrayList<>()).add(i);
+        //     for (Integer next : adj.get(i)) {
+        //         if (next == j) continue;
+        //         dfsMax(next, i);
+        //     }
+        // }
+        // Map<Integer, List<Integer>> adj;
+        // Map<Long, List<Integer>> res = new HashMap<>();
+        // long [] cnt;
+        // long n, max = 0, tt;
+        // public int countHighestScoreNodes(int[] parents) {
+        //     n = parents.length;
+        //     adj = new HashMap<>();
+        //     for (int i = 1; i < parents.length; i++) {
+        //         adj.computeIfAbsent(parents[i], z -> new ArrayList<>()).add(i);
+        //         adj.computeIfAbsent(i, z -> new ArrayList<>()).add(parents[i]);
+        //     }
+        //     cnt = new long [(int)n];
+        //     dfs(0, -1);
+        //     System.out.println(Arrays.toString(cnt));
+        //     tt = cnt[0];
+        //     dfsMax(0, -1);
+        //     return res.get(max).size();
+        // }
+
+        
+        private int getLargesetTimeNeeded(int [] arr, int mask) {
+            int max = 0;
+            for (int i = 0; i < arr.length; i++) 
+                if (((mask >> i) & 1 ) == 1)
+                    max = Math.max(max, arr[i]);
+            return max;
+        }
+        public int minimumTime(int n, int[][] relations, int[] time) {
+            int [] pre = new int [n]; // bitmask representing prerequirements
+            for (int i = 0; i < relations.length; i++) {
+                int u = relations[i][0] - 1;
+                int v = relations[i][1] - 1;
+                pre[v] |= (1 << u);
             }
-            int min = Integer.MAX_VALUE, t = 0;
-            Queue<int []> q = new LinkedList<>();
-            q.offer(new int [] {1, 0}); // [idx, time]
-            while (!q.isEmpty()) {
-                int [] cur = q.poll();
-                System.out.println(Arrays.toString(cur));
-                t = cur[1] + time; // now
-                boolean bk = false;
-                for (Integer next : ll.get(cur[0])) {
-                    if (next == n) 
-                        if (min == Integer.MAX_VALUE) {
-                            min = t;
-                            bk = true;
-                            break;
-                        }
-                        // else {
-                        //     if (t == min) continue;
-                        //     return t;
-                        // }
-                    if ((t / change) % 2 == 0) {
-                        q.offer(new int [] {next, t});
-                    } else {
-                        q.offer(new int [] {next, t + change - t % change});
-                    }
+            int range = (1 << n);
+            int [] dp = new int [range];          // dp[state] = minimum semesters to complete all the courses of 'state'.
+            Arrays.fill(dp, Integer.MAX_VALUE/3);
+            dp[0] = 0;
+            for (int i = 0; i < range; i++) {
+                int available = 0;
+                for (int j = 0; j < n; j++)
+                    if ((i & pre[j]) == pre[j]) // 可是包含了已经选过的课程: 这个bug可能是：有一门耗时很长的课，可以现在选，但我大概可以把它推后到同耗时长的课一起选以减少总消耗时间,可一时半会儿还是想不出来这个bug该如何改
+                        available |= (1 << j); // Can study course j next, since all required courses have been studied.
+                available &= ~i; // Don't want to study those already studied courses.
+                int nextCourses = available;
+                // dp[i | nextCourses] = Math.min(dp[i | nextCourses], dp[i] + getLargesetTimeNeeded(time, nextCourses));
+                while (nextCourses > 0) {
+                    // System.out.println("Integer.toBinaryString(nextCourses): " + Integer.toBinaryString(nextCourses));
+                    // System.out.println("getLargesetTimeNeeded(time, nextCourses): " + getLargesetTimeNeeded(time, nextCourses));
+                    dp[i | nextCourses] = Math.min(dp[i | nextCourses], dp[i] + getLargesetTimeNeeded(time, nextCourses));
+// 遍历现在可选课程的所有子集： Enumerate all subsets. E.g, available = 101, next: 100 -> 001 -> 000
+                    nextCourses = (nextCourses -1) & available;
                 }
-                if (bk) break;
             }
-            System.out.println("t: " + t);
-            
-            int cnt = 0;
-            while (cnt < 2) {
-                t += time;
-                if (cnt == 1) break;
-                System.out.println("t: " + t);
-                // if ((t / change) % 2 == 0) {
-                //     t += time;
-                // } else {
-                if ((t / change) % 2 == 1) {
-                    t += change - t % change;
-                }
-                ++cnt;
-            }
-            return t;
+            return dp[range-1];
         }
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        int [][] a = new int [][] {{1,2},{1,3},{1,4},{3,4},{4,5}};
-        int r = s.secondMinimum(5, a, 3, 5);
+        // int [][] a = new int [][] {{1,3},{2,3}};
+        // int [] b = new int [] {3, 2, 5};
 
-        // int[] [] a = new int [][] {{1, 2}};
-        // int r = s.secondMinimum(2, a, 3, 2);
+        int [][] a = new int [][] {{2,7},{2,6},{3,6},{4,6},{7,6},{2,1},{3,1},{4,1},{6,1},{7,1},{3,8},{5,8},{7,8},{1,9},{2,9},{6,9},{7,9}};
+        int []  b = new int []  {9, 5, 9, 5, 8, 7, 7, 8, 4};
 
+        System.out.println(Arrays.toString(b));
+        
+
+        int r = s.minimumTime(9, a, b);
         System.out.println("r: " + r);
     }
 }

@@ -1,77 +1,109 @@
-import com.Node;
+// import com.Node;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.*;
 
-public class ThroneInHeritance {
+public class ThroneInheritance {
 
-    private List<String> currOder;
-    private Node root;
-    
-    public ThroneInHeritance(String kingName) {
-        currOder = new ArrayList<>();
-        currOder.add(kingName);
-        root = new Node(kingName);
-        
+    private class Node {
+        String val;
+        List<Node> children;
+        public Node(String _val) {
+            val = _val;
+            children = new ArrayList<>();
+        }
     }
-    
+    Map<String, Node> map; // maps parent to Node of parent family
+    Set<String> death;
+    Node tree;
+    public ThroneInheritance(String kingName) {
+        tree = new Node(kingName);
+        map = new HashMap<>();
+        death = new HashSet<>();
+        map.put(kingName, tree);
+    }
     public void birth(String parentName, String childName) {
-        Node p = getNode(root, parentName);
-        Node tmp = new Node(childName);
-        if (p != null && p.children == null) {
-            p.children = new ArrayList<Node>();
-        }
-        if (p != null) p.children.add(tmp);
+        Node parent = map.get(parentName);
+        Node child = new Node(childName);
+        parent.children.add(child);
+        map.put(childName, child);
     }
-    
     public void death(String name) {
-        Node p = getNode(root, name);
-        if (p != null)
-            p.dead = 1;
+        death.add(name);
     }
-    
     public List<String> getInheritanceOrder() {
-        l = new ArrayList<>();
-        getInheritanceOrderRecursive(root);
-        return l;
+        List<String> res = new ArrayList<String>();
+        Node root = tree;
+        dfs(res, root);
+        return res;
     }
-
-    List<String> l = new ArrayList<>();
-    private void getInheritanceOrderRecursive(Node r) {
-        if (r == null) return;
-        if (r.dead != 1)
-        l.add(r.val);
-        if (r.children != null) {
-            for (int i = 0; i < r.children.size(); i++) {
-                getInheritanceOrderRecursive(r.children.get(i));
-            }
-        }
+    private void dfs(List<String> l, Node r) {
+        if (r == null) return ;
+        if (!death.contains(r.val))
+            l.add(r.val);
+        for (Node kid : r.children) 
+            dfs(l, kid);
     }
-    
-    private Node getNode(Node r, String p) {
-        if (r == null) return null;
-        if (p == r.val) return r;
-        if (r.children != null && r.children.size() >= 1) {
-            int i = 0;
-            for ( i = 0; i < r.children.size(); i++) {
-                if (r.children.get(i).val == p) return r.children.get(i);
-            }
-            i = 0;
-            Node tmp = getNode(r.children.get(i), p);
-            while (i < r.children.size()-1 && tmp == null) {
-                ++i;
-                tmp = getNode(r.children.get(i), p);
-            }
-            return tmp;
-        }
-        return null;
-    }
+    // private Node root; // locally 运行得挺好的，不知道leetcode那里是怎么回事
+    // private List<String> currOder;
+    // public ThroneInheritance(String kingName) {
+    //     currOder = new ArrayList<>();
+    //     currOder.add(kingName);
+    //     root = new Node(kingName);
+    // }
+    // public void birth(String parentName, String childName) {
+    //     Node p = getNode(root, parentName);
+    //     Node tmp = new Node(childName);
+    //     if (p != null && p.children == null) {
+    //         p.children = new ArrayList<Node>();
+    //     }
+    //     if (p != null) p.children.add(tmp);
+    // }
+    // public void death(String name) {
+    //     Node p = getNode(root, name);
+    //     if (p != null)
+    //         p.dead = 1;
+    // }
+    // public List<String> getInheritanceOrder() {
+    //     l = new ArrayList<>();
+    //     getInheritanceOrderRecursive(root);
+    //     return l;
+    // }
+    // List<String> l = new ArrayList<>();
+    // private void getInheritanceOrderRecursive(Node r) {
+    //     if (r == null) return;
+    //     if (r.dead != 1)
+    //     l.add(r.val);
+    //     if (r.children != null) {
+    //         for (int i = 0; i < r.children.size(); i++) {
+    //             getInheritanceOrderRecursive(r.children.get(i));
+    //         }
+    //     }
+    // }
+    // private Node getNode(Node r, String p) {
+    //     if (r == null) return null;
+    //     if (p == r.val) return r;
+    //     if (r.children != null && r.children.size() >= 1) {
+    //         int i = 0;
+    //         for ( i = 0; i < r.children.size(); i++) {
+    //             if (r.children.get(i).val == p) return r.children.get(i);
+    //         }
+    //         i = 0;
+    //         Node tmp = getNode(r.children.get(i), p);
+    //         while (i < r.children.size()-1 && tmp == null) {
+    //             ++i;
+    //             tmp = getNode(r.children.get(i), p);
+    //         }
+    //         return tmp;
+    //     }
+    //     return null;
+    // }
 
     public static void main(String[] args) {
 
-        ThroneInHeritance t = new ThroneInHeritance("king"); // order: king
+        ThroneInheritance t = new ThroneInheritance("king"); // order: king
         t.birth("king", "andy"); // order: king > andy
         System.out.println("t.getInheritanceOrder(): " + t.getInheritanceOrder());
         
@@ -92,15 +124,21 @@ public class ThroneInHeritance {
 
         List<String> l = t.getInheritanceOrder(); // return ["king", "andy", "matthew", "bob", "alex", "asha", "catherine"]
         System.out.println("l.size(): " + l.size());
-        for (int z = 0; z < l.size(); ++z) 
-            System.out.print(l.get(z) + ", ");
-        System.out.print("\n");
+        System.out.println(Arrays.toString(l.toArray()));
+        
 
         t.death("bob"); // order: king > andy > matthew > bob > alex > asha > catherine
         System.out.println("t.getInheritanceOrder(): " + t.getInheritanceOrder());
-        // t.getInheritanceOrder(); // return ["king", "andy", "matthew", "alex", "asha", "catherine"]
+        List<String> r = t.getInheritanceOrder(); // return ["king", "andy", "matthew", "alex", "asha", "catherine"]
+
+        System.out.println("r.size(): " + r.size());
+        System.out.println(Arrays.toString(r.toArray()));
     }
 }
+
+// ["ThroneInheritance","birth","birth","birth","birth","birth","birth","getInheritanceOrder","death","getInheritanceOrder"]
+// [["king"],["king","andy"],["king","bob"],["king","catherine"],["andy","matthew"],["bob","alex"],["bob","asha"],[null],["bob"],[null]]
+
 // ["ThroneInheritance","birth","birth","birth","birth","birth","birth","getInheritanceOrder","death","getInheritanceOrder"]
 // [["king"],["king","andy"],["king","bob"],["king","catherine"],["andy","matthew"],["bob","alex"],["bob","asha"],[null],["bob"],[null]]
 

@@ -472,46 +472,6 @@ public class heaptwo {
         // }
 
 
-        // private class Pt {
-        //     int i;
-        //     int j;
-        //     public Pt(int a, int b) {
-        //         i = a;
-        //         j = b;
-        //     }
-        // }
-        // public int maxEvents(int[][] events) {
-        //     int n = events.length;
-        //     if (n == 1) return 1;
-        //     Queue<Pt> q = new PriorityQueue<>(new Comparator<Pt>() {
-        //             @Override public int compare(Pt x, Pt y) {
-        //                 int cp = x.j - y.j;
-        //                 if (cp != 0) return cp;
-        //                 return x.i - y.i;
-        //             }
-        //         });
-        //     for (int i = 0; i < events.length; i++) 
-        //         q.add(new Pt(events[i][0], events[i][1]));
-        //     // for (Pt zz : q) 
-        //     //     System.out.println(zz.i + ", " + zz.j);
-        //    int cnt = 0;
-        //     Pt cur = null;
-        //     Pt next = null;
-        //     int day = 0; // 0 
-        //     while (!q.isEmpty()) {
-        //         cur = q.poll();
-        //         if (cur.j < day) continue;
-        //         ++cnt;
-        //         if (day < cur.i) day = cur.i + 1;
-        //         else {
-        //             if (day == cur.j) day = cur.j+1;
-        //             else day += 1;
-        //         }
-        //     }
-        //     return cnt;
-        // }
-
-
         // public int[] assignTasks(int[] servers, int[] tasks) {// bugy bugy bugy把它找出来。。。。。。
         //     int n = servers.length;
         //     int m = tasks.length;
@@ -635,24 +595,6 @@ public class heaptwo {
         // }
 
 
-        // public int[] kthSmallestPrimeFraction(int [] arr, int k) {
-        //     int n = arr.length;
-        //     Queue<int []> q = new PriorityQueue<>((a, b)->Double.compare(((double)a[0]/(double)a[1]), (double)b[0]/((double)b[1])));
-        //     for (int i = 0; i < n; i++) 
-        //         for (int j = i+1; j < n; j++) 
-        //             q.offer(new int [] {arr[i], arr[j]});
-        //     int [] cur = null;
-        //     while (k > 1) {
-        //         cur = q.poll();
-        //         System.out.println(Arrays.toString(cur));
-        //         k--;
-        //     }
-        //     cur = q.poll();
-        //     // System.out.println(Arrays.toString(cur));
-        //     return cur;
-        // }
-
-
         // public int trapRainWater(int[][] heightMap) {
         //     int m = heightMap.length;
         //     int n = heightMap[0].length;
@@ -687,17 +629,6 @@ public class heaptwo {
         //         }
         //     }
         //     return ans;
-        // }
-
-
-        // public int findMaximizedCapital(int k, int w, int[] profits, int[] capital) {
-        //     Queue<int []> q = new PriorityQueue<>((a, b)->(a[0] != b[0] ? a[0]-b[0] : b[1]-a[1]));
-        //     int n = s.length, ans = 0, max = 0;
-        //     for (int i = 0; i < n; i++) 
-        //         q.offer(new int [] {capital[i], profits[i]});
-        //     while (!q.isEmpty() && w >= q.peek()[0]) { // 遍历
-        //         max = q.poll()[1];
-        //     }
         // }
 
 
@@ -900,16 +831,218 @@ public class heaptwo {
         //     return (int)ans;
         // }
 
+
+        // public int eatenApples(int[] apples, int[] days) {
+        //     int n = apples.length, i = 0, ans = 0;
+        //     Queue<int []> q = new PriorityQueue<>((a, b)->(a[1]-b[1]));
+        //     boolean eat = false;
+        //     for (i = 0; i < n; i++) {
+        //         eat = false;
+        //         while (q.size() > 0 && q.peek()[1] < i) q.poll();
+        //         if (days[i] == 1 && apples[i] > 0) {
+        //             ans++;
+        //             continue;
+        //         }
+        //         if (q.size() > 0 && (q.peek()[1] == i || apples[i] == 0 || q.peek()[1] > i && apples[i] > 0 && i+days[i]-1 > q.peek()[1])) {
+        //             q.peek()[0] -= 1;
+        //             if (q.peek()[0] == 0) q.poll();
+        //             ++ans;
+        //             eat = true;
+        //         }
+        //         if (apples[i] == 0) continue;
+        //         if (!eat && apples[i] > 0) ans++;
+        //         if (eat || !eat && apples[i] > 1)
+        //             q.offer(new int [] {(eat ? apples[i] : apples[i]-1), i + days[i]-1});
+        //     }
+        //     while (!q.isEmpty()) {
+        //         while (!q.isEmpty() && q.peek()[1] < i) q.poll();
+        //         if (!q.isEmpty()) {
+        //             q.peek()[0] -= 1;
+        //             ans++;
+        //             if (q.peek()[0] == 0) q.poll();
+        //             i++;
+        //         }
+        //     }
+        //     return ans;
+        // }
+
+
+        // public int maxEvents(int[][] events) {
+        //     Arrays.sort(events, (x, y) -> (x[0] - y[0]));
+        //     Queue<Integer> q = new PriorityQueue<>();
+        //     int cnt = 0, idx = 0;
+        //     for (int day = 1; day <= 100000; day++) { // loop days
+        //         if (idx >= events.length && q.size() == 0) break;
+        //         for (; idx < events.length; idx++) { // 取出当天开始的会议加入到Queue中
+        //             int [] e = events[idx];
+        //             if (e[0] <= day) q.offer(e[1]);
+        //             else break;
+        //         }
+        //         // 从Queue中删除已经结束的会议
+        //         while (q.size() > 0 && q.peek() < day) q.poll();
+        //         if (q.size() > 0) {
+        //             q.poll(); // 从Queue中取出一个最早结束的会议
+        //             cnt++;     // 会议参加数加一
+        //         }
+        //     }
+        //     return cnt;
+        // }
+
+
+        // public int kthSmallest(int[][] mat, int k) {
+        //     int m = mat.length, n = mat[0].length;
+        //     if (m == 1) return mat[0][k-1];
+        //     Queue<Integer> q = new PriorityQueue<>((a, b)->a-b);
+        //     List<Integer> minK = new ArrayList<>();
+        //     for (int i = 0; i < n; i++)
+        //         minK.add(mat[0][i]);
+        //     for (int i = 1; i < m; i++) {
+        //         if (i > 1) {
+        //             minK.clear();
+        //             for (int cnt = k-1; cnt >= 0 && q.size() > 0; cnt--) minK.add(q.poll());
+        //             q.clear();
+        //         }
+        //         for (Integer v : minK) 
+        //             for (int j = 0; j < n; j++) 
+        //                 q.offer(v + mat[i][j]);
+        //     }
+        //     int ans = 0;
+        //     while (k >= 1) {
+        //         ans = q.poll();
+        //         --k;
+        //     }
+        //     return ans;
+        // }
+
+
+        // public int getNumberOfBacklogOrders(int[][] orders) {
+        //     int mod = (int)1e9 + 7;
+        //     Queue<int []> buy = new PriorityQueue<>((a, b)->b[0]-a[0]);
+        //     Queue<int []> sell = new PriorityQueue<>((a, b)->a[0]-b[0]);
+        //     int [] top = null;
+        //     for (int [] v : orders) {
+        //         if (v[2] == 0) { // buy order
+        //             top = sell.peek();
+        //             if (!sell.isEmpty() && top[0] <= v[0]) {
+        //                 if (v[1] <= top[1]) {
+        //                     if (v[1] == top[1]) sell.poll();
+        //                     else top[1] -= v[1];
+        //                 } else {
+        //                     sell.poll();
+        //                     v[1] -= top[1];
+        //                     top = sell.peek();
+        //                     while (!sell.isEmpty() && top[0] <= v[0]) {
+        //                         if (v[1] <= top[1]) {
+        //                             if (v[1] == top[1]) sell.poll();
+        //                             else top[1] -= v[1];
+        //                             break;
+        //                         } else {
+        //                             sell.poll();
+        //                             v[1] -= top[1];
+        //                             top = sell.peek();
+        //                         }
+        //                     }
+        //                     if (sell.isEmpty() || !sell.isEmpty() && sell.peek()[0] > v[0])
+        //                         buy.offer(v);
+        //                 }
+        //             } else buy.offer(v);
+        //         } else { // (v[2] == 1) { // sell order
+        //             top = buy.peek();
+        //             if (!buy.isEmpty() && top[0] >= v[0]) {
+        //                 if (v[1] <= top[1]) {
+        //                     if (v[1] == top[1]) buy.poll();
+        //                     else top[1] -= v[1];
+        //                 } else {
+        //                     buy.poll();
+        //                     v[1] -= top[1];
+        //                     top = buy.peek();
+        //                     while (!buy.isEmpty() && top[0] >= v[0]) {
+        //                         if (v[1] <= top[1]) {
+        //                             if (v[1] == top[1]) buy.poll();
+        //                             else top[1] -= v[1];
+        //                             break;
+        //                         } else {
+        //                             buy.poll();
+        //                             v[1] -= top[1];
+        //                             top = buy.peek();
+        //                         }                               
+        //                     }
+        //                     if (buy.isEmpty() || !buy.isEmpty() && buy.peek()[0] < v[0])
+        //                         sell.offer(v);
+        //                 }
+        //             } else sell.offer(v);
+        //         }
+        //     }
+        //     long ans = 0;
+        //     while (!buy.isEmpty()) ans = (ans + buy.poll()[1]) % mod;
+        //     while (!sell.isEmpty()) ans = (ans + sell.poll()[1]) % mod;
+        //     return (int)ans;
+        // }
+
+
+        // public int findMaximizedCapital(int k, int w, int[] profits, int[] capital) {
+        //     int n = profits.length;
+        //     List<List<Integer>> ll = new ArrayList<>();
+        //     for (int i = 0; i < n; i++) 
+        //         ll.add(List.of(capital[i], profits[i]));
+        //     Collections.sort(ll, (a, b)->a.get(0) - b.get(0));
+        //     Queue<int []> q = new PriorityQueue<>((a, b)->(a[0] != b[0] ? b[0]-a[0] : a[1]-b[1]));
+        //     int i = 0, ans = w;
+        //     while (i < n && k > 0) {
+        //         List<Integer> l = ll.get(i);
+        //         if (l.get(0) > ans && q.isEmpty()) break;
+        //         while (i < n && l.get(0) <= ans) {
+        //             q.offer(new int [] {l.get(1), l.get(0)}); // pure profit, initiate capital
+        //             i += 1;
+        //             if (i < n) l = ll.get(i);
+        //         }
+        //         if (k > 0 && !q.isEmpty() && ans >= q.peek()[1]) {
+        //             ans += q.poll()[0];
+        //             --k;
+        //         }
+        //     }
+        //     while (k > 0 && !q.isEmpty() && ans >= q.peek()[1]) {
+        //         ans += q.poll()[0];
+        //         --k;
+        //     }
+        //     return ans;
+        // }
+
         
-    }
+        // public int scheduleCourse(int[][] courses) { 
+        //     int n = courses.length;
+        //     Arrays.sort(courses, (a, b)->a[1] != b[1] ? a[1] - b[1] : a[0] - b[0]);
+        //     int ans = 0, tt = courses[n-1][1] + 1;
+        //     Queue<int []> q = new PriorityQueue<>((a, b)-> b[0] - a[0]);
+        //     int now = 0;
+        //     for (int i = 0; i < n; i++) {
+        //      int [] cur = courses[i];
+        //      if (cur[0] > cur[1]) continue;
+        //         if (now + cur[0] <= cur[1]) { // 假如选这门课时间合理
+        //             q.offer(cur);
+        //             now += cur[0];
+        //         } else { // 假如选这门课会超时，拿这门课跟前面用时最长的课换
+        //             if (!q.isEmpty() && q.peek()[0] > cur[0]) {
+        //                 int [] top = q.poll();
+        //                 now = now - top[0] + cur[0];
+        //                 q.offer(cur);
+        //             }
+        //         }
+        //     }
+        //     return q.size();
+        // }
+
+
+   }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        // int []  a = new int []  {2, 8, 4, 10, 6};
-        int []  a = new int []  {565259708, 715164401, 716563713, 958255469, 844600740, 823949511, 180479359, 287829385, 164248818, 73361150, 230686692, 322986846, 598720034, 338241127, 748922260, 181241085, 833659853, 509571179, 250093451, 690995620, 703292727, 595636202};
-
-        int r = s.maxProfit(a, 650114768); 
+        // int [][] a = new int [][] {{100,200},{200,1300},{1000,1250},{2000,3200}};
+        // int [][] a = new int [][] {{3,2},{4,3}};
+        // int [][] a = new int [][] {{7,16},{2,3},{3,12},{3,14},{10,19},{10,16},{6,8},{6,11},{3,13},{6,16}};
+        int [][] a = new int [][] {{5,15},{3,19},{6,7},{2,10},{5,16},{8,14},{10,11},{2,19}};
+        
+        int r = s.scheduleCourse(a); 
         System.out.println("r: " + r);
-
     }
 }

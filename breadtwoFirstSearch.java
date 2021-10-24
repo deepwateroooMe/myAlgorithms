@@ -1067,38 +1067,121 @@ public class breadtwoFirstSearch {
         // }
 
 
-        // public int[] findRedundantDirectedConnection(int[][] edges) {
+        // public int[] findRedundantDirectedConnection(int[][] edges) { // bug bug bug to be found
         //     int n = edges.length;
-        //     boolean [] vis = new boolean [n+1];
-        //     int [] ins = new int [n+1];
-        //     Queue<Integer> q = new LinkedList<>();
-        //     int [] cur = null;
-        //     int root = 0;
-        //     boolean once = false;
-        //     for (int i = 0; i < n; i++) {
-        //         cur = edges[i];
-        //         ++ins[cur[1]];
-        //         if (ins[cur[1]] > 1 || vis[cur[1]]) return cur;
-        //         if (!vis[cur[0]]) vis[cur[0]] = true;
-        //         else {
-        //             if (!once) {
-        //                 once = true;
-        //                 root = cur[0];
-        //             } else return cur;
-        //             // ins[cur[1]] == 1 && once && root == cur[1]
+        //     int[] one = {-1, -1}; // two ans candidates
+        //     int[] two = {-1, -1};
+        //     int [] par = new int [n + 1]; // parent array
+        //     for (int i = 0; i < n; i++) { // 筛选出答案的两个candidate
+        //         int [] e = edges[i];
+        //         if (par[e[1]] == 0) par[e[1]] = e[0];
+        //         else { // 当前节点e[1]有两个父节点: 有向图中，如果存在indegree(v) == 2的点，要删除的一定是这个点的某条有向边(u -> v)
+        //             two = e;                           // 当前父节点边
+        //             one = new int [] {par[e[1]], e[1]};// 另一条纪录过的构成父节点的边
+        //             e[1] = 0;
         //         }
         //     }
-        //     return new int [0];
+        //     for (int i = 0; i < n; i++) par[i] = i;
+        //     for (int i = 0; i < n; i++) {
+        //         if (edges[i][1] == 0) continue;
+        //         int kid = edges[i][1], far = edges[i][0];
+        //         if (getParent(par, far) == kid) { // 检测到环的存在
+        //             if (one[0] == -1) return edges[i]; // 不存在indegree(v) == 2 的点，那么直接删去最后一个造成环存在的有向边即可
+        //             return one; // 入度为2有环：为什么删除的一定是先出现的那条构成父节点的入度边？？？
+        //         }
+        //         par[kid] = far;
+        //     }
+        //     return two;
         // }
+        // int getParent(int [] par, int i) {
+        //     while (i != par[i]) {
+        //         par[i] = par[par[i]];
+        //         i = par[i];
+        //     }
+        //     return i;
+        // }
+        class UnionFind {
+            int[] parent;
+            int[] rank;
+            int size;
+            public UnionFind(int size) {
+                this.size = size;
+                parent = new int[size];
+                rank = new int[size];
+                for (int i = 0; i < size; i++) parent[i] = i;
+            }
+            public int find(int x) {
+                if (parent[x] != x) 
+                    parent[x] = find(parent[x]);
+                return parent[x];
+            }
+            public boolean union(int x, int y) { // return true if x, y has same parent
+                int xp = find(x);
+                int yp = find(y);
+                if (xp == yp) return false;
+                if (rank[xp] > rank[yp]) 
+                    parent[yp] = xp;
+                else if (rank[xp] < rank[yp]) 
+                    parent[xp] = yp;
+                else {
+                    parent[yp] = xp;
+                    rank[xp]++;
+                }
+                return true;
+            }
+        }
+        // 对于有向图中，如果存在indegree(v) == 2的点，那么要删除的一定是这个点的某条有向边(u -> v)
+        //    因为题目最后保证是一个rooted tree（every node has exactly one parent），具体看第一段定义；
+        // 如果不存在indegree(v) == 2的点，那么直接删去最后一个造成环存在的有向边即可。
+        // 现在存在三种情况：
+        // （1）有向图中只有环。这种情况就简单将两个节点具有共同根节点的边删去就好。
+        // （2）有向图中没有环，但有个节点有两个父节点。这种情况就将第二次出现不同父节点的边删去就好。
+        // （3）有向图中既有环，而且有个节点还有两个父节点。这时就检测当除去第二次出现父节点的边后，剩余边是不是合法的，如果不合法证明应该删掉的是另一个父节点的边。
+        public int[] findRedundantDirectedConnection(int[][] edges) {
+            Set<Integer> points = new HashSet<>();
+            Map<Integer, Integer> parent = new HashMap<>();
+            List<int[]> candidates = new ArrayList<>();
+            for (int[] edge: edges) { // u --> v 
+                int u = edge[0];
+                int v = edge[1];
+                points.add(u);
+                points.add(v);
+                if (!parent.containsKey(v)) { // parent.putIfAbsent(v, u);
+                    parent.put(v, u);
+                    continue;
+                }
+                candidates.add(new int[] {parent.get(v), v}); // if a node has two parents, add to candidates list
+                candidates.add(new int[] {u, v});
+                edge[1] = -1; // invalidate the second edge
+            }
+            UnionFind uf = new UnionFind(points.size());
+            for (int[] edge: edges) {
+                if (edge[1] == -1) continue; // skip invalidated edge
+                int u = edge[0] - 1;
+                int v = edge[1] - 1;
+                if (!uf.union(u, v)) {
+// if we have invalidated the second edge
+// yet still have a cycle
+// we either just formed a cycle with this edge
+// or there still exists a node with two parents
+// which is the first edge stored in candidates.get(0)
+                    if (candidates.isEmpty()) return edge; // 不存在indegree(v) == 2的点，直接删去最后一个造成环存在的有向边即可
+                    return candidates.get(0); // 这里就是有点儿想不通: 应该是构成环的边一定是后于入度为2中的那条先出现的该返回同时构成环和入度的入度边
+                }
+            }
+// no cycle found, meaning the redundant edge
+            // is the second edge in the candidates
+            return candidates.get(1);
+        }
     }
-
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        // int [][] a = new int [][] {{1,2},{1,3},{2,3}};
-        int [][] a = new int [][] {{1,2},{2,3},{3,4},{4,1},{1,5}};
-        
+        int [][] a = new int [][] {{1,2},{1,3},{2,3}};
+        // int [][] a = new int [][] {{1,2},{2,3},{3,4},{4,1},{1,5}};
+
         int [] r = s.findRedundantDirectedConnection(a);
+
         System.out.println("r.length: " + r.length);
         for (int z = 0; z < r.length; ++z) 
             System.out.print(r[z] + ", ");

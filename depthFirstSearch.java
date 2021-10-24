@@ -106,66 +106,6 @@ public class depthFirstSearch {
         // }
 
 
-        // // This is the interface that allows for creating nested lists.
-        // // You should not implement it, or speculate about its implementation
-        // public interface NestedInteger {
-        //     // Constructor initializes an empty nested list.
-        //     public NestedInteger();
-                
-        //     // Constructor initializes a single integer.
-        //     public NestedInteger(int value);
-                
-        //     // @return true if this NestedInteger holds a single integer, rather than a nested list.
-        //     public boolean isInteger();
-                
-        //     // @return the single integer that this NestedInteger holds, if it holds a single integer
-        //     // Return null if this NestedInteger holds a nested list
-        //     public Integer getInteger();
-                
-        //     // Set this NestedInteger to hold a single integer.
-        //     public void setInteger(int value);
-                
-        //     // Set this NestedInteger to hold a nested list and adds a nested integer to it.
-        //     public void add(NestedInteger ni);
-                
-        //     // @return the nested list that this NestedInteger holds, if it holds a nested list
-        //     // Return empty list if this NestedInteger holds a single integer
-        //     public List<NestedInteger> getList();
-        // }
-        // public NestedInteger deserialize(String s) {
-        //     if (s.length() == 1) return new NestedInteger(Integer.parseInt(s.substring(0, 1)));
-        //     int n = s.length();
-        //     int cnt = 0;
-        //     int i = 0, j = i;
-        //     if (s.charAt(0) != '[') {
-        //         while (j < n && Character.isDigit(s.charAt(j))) ++j;
-        //         if (j == n) return new NestedInteger(Integer.parseInt(s.substring(i, j)));
-                
-        //     }
-        // }
-        // private  List<Integer> deserializeToArray(String data) {
-        //     List<Integer> l = new ArrayList<>();
-        //     int n = data.length();
-        //     int j = data.charAt(0) == '-' ? 1 : 0, i = 0;
-        //     while (j < n) {
-        //         while (j < n && (Character.isDigit(data.charAt(j)) || data.charAt(j) == '-')) j++;
-        //         System.out.println("j: " + j);
-        //         if (j > i && j < n) {
-        //             l.add(Integer.parseInt(data.substring(i, j)));
-        //             if (j == n) return l;
-        //         }
-        //         if (data.charAt(j) == '#') {
-        //             l.add(-1111);
-        //             ++j;
-        //         }
-        //         while (j < n && data.charAt(j) != '-' && data.charAt(j) != '#' && !Character.isDigit(data.charAt(j))) j++;
-        //         if (j == n) return l;
-        //         i = j;
-        //         System.out.println("i: " + i);
-        //     }
-        //     return l;
-        // }
-
         // private boolean filesOnly;
         // private List<String> l;
         // private void parseStringHelper(String s) {

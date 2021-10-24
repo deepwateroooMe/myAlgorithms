@@ -7,6 +7,10 @@ import java.util.*;
 import java.util.stream.*;
 import java.util.stream.Collectors;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.abs;
+
 import static java.util.stream.Collectors.toMap;
 
 public class gretwoedy {
@@ -563,16 +567,228 @@ public class gretwoedy {
         // }
 
 
-        
+    //     int res = 0;
+    //     private boolean isSame(Map<Integer, Integer> m, Map<Integer, Integer> n) {
+    //         if (m.size() != n.size()) return false;
+    //         for (Integer key : m.keySet()) 
+    //             if (!n.containsKey(key) || n.containsKey(key) && (int)m.get(key) != (int)n.get(key)) return false;
+    //         return true;
+    //     }
+    //     private int getSmallestK(int [] arr, int idx) {
+    //         Map<Integer, Integer> m = new HashMap<>();
+    //         Map<Integer, Integer> n = new HashMap<>();
+    //         int i = 0;
+    //         for (i = idx; i < arr.length; i++) {
+    //             m.put(arr[i], m.getOrDefault(arr[i], 0) + 1);
+    //             n.put(sorted[i], n.getOrDefault(sorted[i], 0) + 1);
+    //             if (isSame(m, n)) return i;
+    //         }
+    //         return i;
+    //     }
+    //     private void maxChunksToSortedRecursive(int [] arr, int idx) {
+    //         int k = getSmallestK(arr, idx);
+    //         res += 1;
+    //         if (k >= arr.length-1) return;
+    //         maxChunksToSortedRecursive(arr, k+1);
+    //     }
+    //     int [] sorted;
+    //     public int maxChunksToSorted(int[] arr) {
+    //         int n = arr.length;
+    //         System.out.println("n: " + n);
+    //         sorted = Arrays.copyOf(arr, n);
+    //         Arrays.sort(sorted);
+    //         res = 0;
+    //         maxChunksToSortedRecursive(arr, 0);
+    //         return res;
+    //     }
+
+
+        // private String sort(String s) {
+        //     char [] arr = s.toCharArray();
+        //     Arrays.sort(arr);
+        //     return new String(arr);
+        // }
+        // private int getNextIdx(String s, char v, int idx) {
+        //     for (int i = idx+1; i < s.length(); i++) 
+        //         if (s.charAt(i) == v) return i;
+        //     return -1;
+        // }
+        // private int getPreIdx(String s, char v, int idx) {
+        //     for (int i = idx-1; i >= 0; i--) 
+        //         if (s.charAt(i) == v) return i;
+        //     return -1;
+        // }
+        // public boolean isTransformable(String s, String t) { // tle tle tle
+        //     int n = t.length();
+        //     int i = 0, j = 0;
+        //     String ori = new String(s);
+        //     while (i < n) {
+        //         while (i < n && j < n && t.charAt(i) == s.charAt(j)) {
+        //             i++;
+        //             j++;
+        //         }
+        //         if (i == n) return true;
+        //         int k = getNextIdx(s, t.charAt(i), j);
+        //         if (k == -1) return false;
+        //          s = s.substring(0, j) + sort(s.substring(j, k+1)) + s.substring(k+1);
+        //          if (t.charAt(i) != s.charAt(j)) break;
+        //         i++;
+        //         j++;
+        //     }
+        //     i = n-1;
+        //     j = n-1;
+        //     s = ori;
+        //     while (i >= 0) {
+        //         while (i >= 0 && j >= 0 && t.charAt(i) == s.charAt(j)) {
+        //             i--;
+        //             j--;
+        //         }
+        //         if (i == -1) return true;
+        //         int k = getPreIdx(s, t.charAt(i), j);
+        //         s = s.substring(0, k) + sort(s.substring(k, j+1)) + s.substring(j+1);
+        //         if (t.charAt(i) != s.charAt(j)) return false;
+        //         i--;
+        //         j--;
+        //     }
+        //     return true;
+        // }        
+        // public boolean isTransformable(String s, String t) { 
+        //     ArrayDeque<Integer> [] q = new ArrayDeque[10];
+        //     for (int i = 0; i < 10; i++) 
+        //         q[i] = new ArrayDeque<Integer>();
+        //     for (int i = 0; i < s.length(); i++) 
+        //         q[s.charAt(i)-'0'].offerLast(i);
+        //     for (char c : t.toCharArray()) {
+        //         int d = c - '0';
+        //         if (q[d].isEmpty()) return false;
+        //         for (int i = 0; i < d; i++) 
+        //             if (!q[i].isEmpty() && q[i].peekFirst() < q[d].peekFirst())
+        //                 return false;
+        //         q[d].pollFirst();
+        //     }
+        //     return true;
+        // }
+
+
+        // public int findMinMoves(int[] machines) {
+        //     int n = machines.length, sum = Arrays.stream(machines).sum(), avg = sum / n;
+        //     if (sum % n != 0) return -1;
+        //     return Arrays.stream(machines).max().getAsInt() - avg;
+        // }
+
+    // // https://leetcode.com/problems/reverse-subarray-to-maximize-array-value/discuss/489968/O(n)-Java-with-Mathematical-Proof
+    //     int Min = -1000000000;
+    //     public int maxValueAfterReverse(int[] a) { // 讨厌这个题
+    //         int n = a.length, base = 0;
+    //         for (int i = 0; i < n-1; i++) 
+    //             base += abs(a[i] - a[i+1]);
+    //         int best = 0;
+    //         int [][] dp = new int [n][4];
+    //         for (int i = 0; i < n; i++) 
+    //             Arrays.fill(dp[i], Min);
+    //         for (int i = 0; i < n-1; i++) {
+    //             int aad = abs(a[i] - a[i+1]); // |b-c|
+    //             if (i - 2 >= 0) { // |a-d |
+    //                 int v1 = a[i] - a[i + 1] - aad; // c<a, b<=a-2
+    //                 int c1 = dp[i - 2][0];  // (a-d)- |a-d|
+    //                 int v2 = -(a[i] + a[i + 1]) - aad;
+    //                 int c2 = dp[i - 2][1]; // -(a+d)-|a-d|
+    //                 int v3 = a[i] + a[i + 1] - aad;
+    //                 int c3 = dp[i - 2][2]; // (a+d)- |a-d |
+    //                 int v4 = -(a[i] - a[i + 1]) - aad;
+    //                 int c4 = dp[i - 2][3]; // -(a-d) - |a-d
+    //                 int m1 = v1 + c1;
+    //                 int m2 = v2 + c2;
+    //                 int m3 = v3 + c3;
+    //                 int m4 = v4 + c4;
+    //                 int cmax = max(m1, max(m2, max(m3, m4)));
+    //                 best = max(best, cmax);
+    //             }
+    //             dp[i][0] = max((i == 0 ? Min : dp[i - 1][0]), -(a[i] - a[i + 1]) - aad); // -(b-c)- |b-c|
+    //             dp[i][1] = max((i == 0 ? Min : dp[i - 1][1]), (a[i] + a[i + 1]) - aad);  // (b+c)- |b-c|
+    //             dp[i][2] = max((i == 0 ? Min : dp[i - 1][2]), -(a[i] + a[i + 1]) - aad); // (-(b+c) - |b-c|
+    //             dp[i][3] = max((i == 0 ? Min : dp[i - 1][3]), (a[i] - a[i + 1] - aad));  // (b-c)- |b-c|
+    //         }
+    //         // to cover reversing on the two ends
+    //         for (int i = 1; i + 1 < n; i++) {
+    //             int m1 = abs(a[0] - a[i + 1]) - abs(a[i] - a[i + 1]);
+    //             int m2 = abs(a[n - 1] - a[i - 1]) - abs(a[i] - a[i - 1]);
+    //             int cmax = max(m1, m2);
+    //             best = max(best, cmax);
+    //         }
+    //         return base + best;
+    //     }
+        // public int maxValueAfterReverse(int[] a) { 
+        //     int n = a.length, base = 0, ans = 0, sum = 0;
+        //     if (n == 1) return 0;
+        //     for (int i = 0; i < n-1; i++)
+        //         sum += abs(a[i] - a[i+1]);
+        //     // 交换的区间左端点是数组的左边界
+        //     for (int i = 0; i < n-1; i++) 
+        //         ans = max(ans, sum + abs(a[i+1]-a[0]) - abs(a[i+1] - a[i]));
+        //     // 交换的区间右端点是数组的右边界
+        //     for (int i = n-1; i > 0; i--)
+        //         ans = max(ans, sum + abs(a[n-1] - a[i-1]) - abs(a[i] - a[i-1]));
+        //     // 交换区间左右端点在数组内部
+        //     int l = 1; // 1. 找出左端点
+        //     for (int i = 2; i < n; i++) {
+        //         int ia = min(a[i], a[i-1]), ib = max(a[i], a[i-1]);
+        //         if (max(a[i], a[i-1]) < max(a[l], a[l-1])) l = i;
+        //     }
+        //     int r = 0; // 2. 找出右端点
+        //     for (int i = 1; i < n-1; i++) 
+        //         if (min(a[i], a[i+1]) > min(a[r], a[r+1])) r = i;
+        //     ans = max(ans, sum + 2 * (min(a[r], a[r+1]) - max(a[l], a[l-1])));
+        //     return ans;
+        // }
+
+        private String getSorted(String s) {
+            char [] arr = s.toCharArray();
+            Arrays.sort(arr);
+            return new String(arr);
+        }
+        public String minInteger(String s, int k) {
+            if (getSorted(s).equals(s)) return s;
+            int n = s.length(), i = 0;
+            Queue<Integer> [] q = new LinkedList[10];
+            for (i = 0; i < 10; i++) 
+                q[i] = new LinkedList<>();
+            for (i = 0; i < n; i++) 
+                q[s.charAt(i)-'0'].offer(i);
+            i = 0;
+            while (k > 0 && i < n) {
+                System.out.println("\ni: " + i);
+                
+                for (int j = 0; j < 10; j++) {
+                    System.out.println("j: " + j);
+                    System.out.println(" (!q[j].isEmpty() && q[j].peek() < i + k && s.charAt(i)-'0' > j): " +  (!q[j].isEmpty() && q[j].peek() < i + k && s.charAt(i)-'0' > j));
+
+                    if (!q[j].isEmpty() && q[j].peek() > i && q[j].peek() < i + k && s.charAt(i)-'0' > j) {
+                        int idx = q[j].poll();
+                        // s = s.substring(0, i) + (char)(j + '0') +  s.substring(i, idx) + s.substring(idx + 1);
+                        s = s.substring(0, i) + (char)(j + '0') + minInteger(s.substring(i, idx) + s.substring(idx + 1), k - idx + i);
+                        return s;
+                        // System.out.println("s: " + s);
+                        // k -= idx - i;
+                        // i++;
+                        // break;
+                    }
+                    // else i++;
+                }
+            }
+            return s;
+        }
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        // int []   a = new int []   { 1, 2, 3};
-        // int []   a = new int []   {9, 6, 1, 6, 2};
-        int []   a = new int []   {2, 7, 10, 9, 8, 9};
-
-        int res = s.movesToMakeZigzag(a);
+        String a = "4321";
+        // String a = "36789";
+        // String a = "9438957234785635408";
+        // String a = "294984148179";
+        // String a = "93381869906586732815534371687369696230051322687490016378041942933200460348432513852584914166787842993563474598524347457856281557167699143528339415965155122059521060208554001075443516880183360428040416140412215526095967089873348197856510612033979776821674655170627819804413472042861407769831876998165526163792402342702036138622047707692796695902441556977048771699631323468264287371021820962794432341872794217422883071195957990944615498558312605572040233912698536404832999788239398876994639785690913111795775346316717010747278939404435247080172656161970012190";
+        
+        String res = s.minInteger(a, 4);
         System.out.println("res: " + res);
     }
 }

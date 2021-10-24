@@ -226,14 +226,7 @@ public class RangeModule {
     }
     TreeSet<Range> ts;
     public RangeModule() {
-        ts = new TreeSet<>(new Comparator<Range>() {
-                @Override public int compare(Range one, Range two) {
-                    if (one.left == two.left) {
-                        return one.right - two.right;
-                    }
-                    return one.left - two.left;
-                }
-            });
+        ts = new TreeSet<>((a, b)->(a.left != b.left ? a.left - b.left : a.right - b.right));
     }
     public void addRange(int left, int right) {
         int nl = left, nr = right;

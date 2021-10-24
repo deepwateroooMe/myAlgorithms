@@ -140,18 +140,6 @@ public class tree {
         // }
 
 
-        // public int subarraysWithKDistinct(int[] arr, int k) {
-        //     int n = arr.length;
-        //     Map<Integer, Integer> m = new HashMap<>();
-        //     for (int i = 0; i < k; i++) 
-        //         m.put(arr[i], m.getOrDefault(arr[i], 0) + 1); // 1st window
-        //     int cnt = m.size() == k ? 1 : 0;
-        //     for (int i = k; i < n; i++) {
-        //         m.put(arr[i], m.getOrDefault(arr[i], 0) + 1);
-        //     }
-        // }
-
-
         // private int dfs(TreeNode r) { // 统计把自身，左右子树都平衡，需要移动的coins个数
         //     if (r == null) return 0;
         //     int left = dfs(r.left);      // 左、右子树缺多少

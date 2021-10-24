@@ -319,12 +319,340 @@ public class dynatenmicProgramming {
         // }
 
 
+        // private void turnOffRegion(int [][] arr, int n, int x, int y) {
+        //     for (int i = Math.max(0, x-1); i <= Math.min(n-1, x+1); i++) 
+        //         for (int j = Math.max(0, y-1); j <= Math.min(n-1, y+1); j++) 
+        //             if (arr[i][j] > 1) arr[i][j] = 0;
+        //             else if (arr[i][j] == 1) dfs(arr, n, i, j, false);
+        // }
+        // public int[] gridIllumination(int n, int[][] lit, int[][] q) {
+        //     int [][] arr = new int [n][n];
+        //     for (int [] on : lit) {
+        //         if (arr[on[0]][on[1]] != 1) arr[on[0]][on[1]] = 1;
+        //         dfs(arr, n, on[0], on[1], true);
+        //     }
+        //     int [] ans = new int [q.length];
+        //     for (int i = 0; i < q.length; i++) {
+        //         System.out.println("\n i: " + i);
+        //   ans[i] = arr[q[i][0]][q[i][1]] > 0 ? 1 : 0;
+        //         turnOffRegion(arr, n, q[i][0], q[i][1]);
+        //         for (int x = 0; x < n; x++) 
+        //             for (int y = 0; y < n; y++) 
+        //                 if (arr[x][y] == 1)
+        //                     dfs(arr, n, x, y, true);
+        //         System.out.println("arr.length: " + arr.length);
+        //         for (int z = 0; z < arr.length; ++z) 
+        //             System.out.println(Arrays.toString(arr[z]));
+        //     }
+        //     return ans;
+        // }
+        // private void dfs(int [][] arr, int n, int x, int y, boolean on) { // TLE TLE TLE
+        //     for (int i = 0; i < n; i++) // same col : on
+        //         if (arr[i][y] != 1) arr[i][y] = (on ? 2 : 0);
+        //     for (int j = 0; j < n; j++)
+        //         if (arr[x][j] != 1) arr[x][j] = (on ? 2 : 0);
+        //     int i = x, j = y;
+        //     while (i-1 >= 0 && j-1 >= 0) {
+        //         i -= 1 ;
+        //         j -= 1;
+        //         if (arr[i][j] != 1) arr[i][j] = (on ? 2 : 0);
+        //     }
+        //     i = x; j = y;
+        //     while (i+1 < n && j+1 < n) {
+        //         i += 1;
+        //         j += 1;
+        //         if (arr[i][j] != 1) arr[i][j] = (on ? 2 : 0);
+        //     }
+        //     i = x; j = y;
+        //     while (i+1 < n && j-1 >= 0) {
+        //         i += 1;
+        //         j -= 1;
+        //         if (arr[i][j] != 1) arr[i][j] = (on ? 2 : 0);
+        //     }
+        //     i = x; j = y;
+        //     while (i-1 >= 0 && j+1 < n) {
+        //         i -= 1;
+        //         j += 1;
+        //         if (arr[i][j] != 1) arr[i][j] = (on ? 2 : 0);
+        //     }
+        //     if (!on) arr[x][y] = 0;
+        // }
+        // private Set<Integer> litInRegion(int [][] arr, int n, int x, int y) {
+        //     Set<Integer> s = new HashSet<>();
+        //     for (int i = Math.max(0, x-1); i <= Math.min(n-1, x+1); i++) 
+        //         for (int j = Math.max(0, y-1); j <= Math.min(n-1, y+1); j++) 
+        //             if (arr[i][j] == 1) s.add(i * n + j);
+        //     return s;
+        // }
+        // public int[] gridIllumination(int n, int[][] lit, int[][] q) { // 倒着遍历的思路不对，受前面敲转块影响，独特的倒序在这里是行不通滴~
+        //     int [][] arr = new int [n][n];
+        //     for (int [] on : lit) 
+        //         arr[on[0]][on[1]] = 1;
+        //     System.out.println("arr.length: " + arr.length);
+        //     for (int z = 0; z < arr.length; ++z) 
+        //         System.out.println(Arrays.toString(arr[z]));
+        //     Map<Integer, Set<Integer>> map = new HashMap<>();
+        //     Set<Integer> cri = new HashSet<>();
+        //     for (int i = 0; i < q.length-1; i++) {
+        //         int [] v = q[i];
+        //         Set<Integer> lits = litInRegion(arr, n, v[0], v[1]);
+        //         map.put(i, lits);
+        //         cri.addAll(lits);
+        //     }
+        //     for (int i = 0; i < n; i++) 
+        //         for (int j = 0; j < n; j++) 
+        //             if (arr[i][j]== 1 && cri.contains(i*n+j)) arr[i][j] = 0;
+        //             // else if (arr[i][j] == 1)
+        //             //     dfs(arr, n, i, j, true);
+        //     // 这里bug造就不同的原因，真是让人百思不得其解。。。。。。
+        //     for (int i = 0; i < n; i++) 
+        //         for (int j = 0; j < n; j++) 
+        //             if (arr[i][j]== 1)
+        //                 dfs(arr, n, i, j, true);
+        //     int [] ans = new int [q.length];
+        //     for (int i = q.length-1; i >= 0; i--) { // 所以，这个倒序遍历，我并没能想得很彻底
+        //         ans[i] = arr[q[i][0]][q[i][1]] > 0 ? 1 : 0;
+        //         if (i == 0 || i > 0 && map.get(i-1).size() == 0) continue;
+        //         for (Integer idx : map.get(i-1)) {
+        //             int x = idx / n;
+        //             int y = idx % n;
+        //             arr[x][y] = 1; // // 这里的bug是：当倒序遍历，当我想要把这些灯打开，其实我并不能确定我可以在这个时候打开，还是它可以在原本更早的时候打开
+        //             dfs(arr, n, x, y, true);
+        //         }
+        //     }
+        //     return ans;
+        // }
+        // private Set<Integer> litInRegion(int [][] arr, int n, int x, int y) {
+        //     Set<Integer> s = new HashSet<>();
+        //     for (int i = Math.max(0, x-1); i <= Math.min(n-1, x+1); i++) 
+        //         for (int j = Math.max(0, y-1); j <= Math.min(n-1, y+1); j++) 
+        //             if (arr[i][j] == 1) s.add(i * n + j);
+        //     return s;
+        // }
+        // private static final int [][] dirs = {{-1, -1}, {-1, 0}, {-1, 1},
+        //                  {0, -1}, {0, 0}, {0, 1},
+        //                  {1, -1}, {1, 0}, {1, 1}};
+        // public int[] gridIllumination(int n, int[][] lit, int[][] q) {
+        //     Set<Long> l = new HashSet<>(); // Storing lamps to prevent dupes
+        //     Map<Integer, Integer> hor = new HashMap<>(); // Horizontal
+        //     Map<Integer, Integer> ver = new HashMap<>(); // Vertical
+        //     Map<Integer, Integer> dia = new HashMap<>(); // Diagonal
+        //     Map<Integer, Integer> ant = new HashMap<>(); // Anti-Diagonal
+        //     for (int [] v : lit)
+        //         if (l.add((long)v[0]*n+v[1])) {
+        //             hor.put(v[0], hor.getOrDefault(v[0], 0) + 1);
+        //             ver.put(v[1], ver.getOrDefault(v[1], 0) + 1);
+        //             dia.put(v[1]-v[0], dia.getOrDefault(v[1]-v[0], 0) + 1);
+        //             ant.put(v[0]+v[1], ant.getOrDefault(v[0]+v[1], 0) + 1);
+        //         }
+        //     int [] ans = new int [q.length];
+        //     for (int i = 0; i < q.length; i++) {
+        //         int [] v = q[i];
+        //         if (hor.getOrDefault(v[0], 0) > 0 || ver.getOrDefault(v[1], 0) > 0
+        //             || dia.getOrDefault(v[1]-v[0], 0) > 0 || ant.getOrDefault(v[0]+v[1], 0) > 0)
+        //             ans[i] = 1;
+        //         for (int [] d : dirs) {
+        //             int x = v[0] + d[0];
+        //             int y = v[1] + d[1];
+        //             if (x < 0 || x >= n || y < 0 || y >= n) continue;            
+        //             if (l.contains((long)x*n+y)) { // 这个位置是灯塔
+        //                 hor.put(x, hor.get(x)-1);
+        //                 ver.put(y, ver.get(y)-1);
+        //                 dia.put(y-x, dia.get(y-x)-1);
+        //                 ant.put(x+y, ant.get(x+y)-1);
+        //                 l.remove((long)x*n+y);
+        //             } 
+        //         }
+        //     }
+        //     return ans;
+        // }
+
+
+        // private long dfs(int cur, int n, int k) { // tle tle tle 有没有什么剪枝的优化呢？
+        //     if (dp[cur][k] > 0) return dp[cur][k];
+        //     if (k == 0) return 1;
+        //     long ans = 0;
+        //     for (int i = cur+1; i < n; i++) 
+        //         ans += (i-cur) * dfs(i, n, k-1);
+        //     return dp[cur][k] = ans % mod;
+        // }
+        // int mod = (int)1e9 + 7;
+        // long [][] dp;
+        // int n;
+        // public int numberOfSets(int nn, int k) {
+        //     if (k == nn-1) return 1;
+        //     n = nn;
+        //     dp = new long [n][k+1];
+        //     return (int)dfs(0, n, k);
+        // } 
+        // public int numberOfSets(int n, int k) {
+        //     int mod = (int)1e9 + 7;
+        //     long [][][] dp = new long [n][k+1][2]; // dp[i][j][0/1]: 0, 1, 2 ... i形成j段线段，并且第j段线段是1（否0）以点i结尾
+        //     dp[0][0][0] = 1;
+        //     for (int i = 1; i < n; i++) {
+        //         for (int j = 0; j <= k; j++) {
+        //             dp[i][j][0] = (dp[i-1][j][0] + dp[i-1][j][1]) % mod;
+        //             dp[i][j][1] = dp[i-1][j][1];
+        //             if (j > 0)
+        //                 dp[i][j][1] = (dp[i][j][1] + dp[i-1][j-1][0] + dp[i-1][j-1][1]) % mod; 
+        //         }
+        //     }
+        //     return (int)((dp[n-1][k][0] + dp[n-1][k][1]) % mod);
+        // }
+
+
+        // public int countOrders(int n) {
+        //     int mod = (int)1e9 + 7;
+        //     int spots = n * 2;
+        //     long ans = 1;
+        //     for (int i = n; i >= 2; i--) {
+        //         ans = (ans * spots * (spots - 1) / 2l) % mod;
+        //         spots -= 2;
+        //     }
+        //     return (int)ans;
+        // }
+
+
+        // private boolean isValid(int val) {
+        //     String s = String.valueOf(val);
+        //     int n = s.length();
+        //     for (char c : inval) 
+        //         if (s.indexOf(c) != -1) return false;
+        //     int cnt = 0;
+        //     for (char c : valid) 
+        //         if (s.indexOf(c) != -1) cnt++;
+        //     return cnt > 0;
+        // }
+        // char [] valid = {'2', '5', '6', '9'};
+        // char [] inval = {'3', '4', '7'};
+        // public int rotatedDigits(int n) {
+        //     int res = 0;
+        //     for (int i = 1; i <= n; i++) 
+        //         if (isValid(i)) 
+        //             ++res;   
+        //     return res;
+        // }
+
+
+        // private double dfs(int n, int i, int j, int k) {
+        //     if (i < 0 || j < 0 || i >= n || j >= n) return 0;
+        //     if (k == 0) return 1;
+        //     if (dp[i][j][k] > 0) return dp[i][j][k];
+        //     double ans = 0;
+        //     for (int [] d : dirs) {
+        //         int x = i + d[0];
+        //         int y = j + d[1];
+        //         ans += 0.125*dfs(n, x, y, k-1);
+        //     }
+        //     return dp[i][j][k] = ans;
+        // }
+        // double [][][] dp;
+        // int [][] dirs = {{-2, -1}, {-1, -2}, {1, -2}, {2, -1}, {2, 1}, {1, 2}, {-1, 2}, {-2, 1}};
+        // public double knightProbability(int n, int k, int row, int column) {
+        //     if (k == 0) return 1.0;
+        //     dp = new double[n][n][k+1];
+        //     return dfs(n, row, column, k);
+        // }
+
+
+        // public int countSpecialSubsequences(int[] arr) { // 去找个降维的参考一下
+        //     int mod = (int)1e9 + 7;
+        //     int n = arr.length;
+        //     long [][] dp = new long [n][3];
+        //     for (int i = 0; i < n; i++) 
+        //         for (int j = 0; j < 3; j++) {
+        //             if (arr[i] != j) dp[i][j] = (i == 0 ? 0 : dp[i-1][j]);
+        //             else 
+        //                 if (j == 0)
+        //                     dp[i][j] = (i == 0 ? 0 : dp[i-1][j]) * 2 % mod + 1;
+        //                 else
+        //                     dp[i][j] = ((i == 0 ? 0 : dp[i-1][j]) * 2 % mod + (i == 0 ? 0 : dp[i-1][j-1])) % mod;
+        //         }
+        //     return (int)dp[n-1][2];
+        // }
+
         
+        // private long dfs(int [] group, int [] profit, int minProfit, int idx, int cur, int n) {
+        //     // if (n == 0 || idx == m) return 0;
+        //     if (n == 0) return 0;
+        //     if (idx == m) return 1;
+        //     if (dp[idx][cur][n] > 0) return dp[idx][cur][n];
+        //     long ans = cur >= minProfit ? 1 : 0; //  这里还是有点儿没想清楚
+        // }
+        // long mod = (int)1e9 + 7;
+        // long [][][] dp;
+        // int m;
+        // public int profitableSchemes(int n, int minProfit, int[] group, int[] profit) {
+        //     m = group.length;
+        //     dp = new long [m][minProfit+1][n+1];
+        //     return (int)dfs(group, profit, minProfit, 0, 0, n);
+        // }
+
+
+        // public int findIntegers(int n) {
+        //     String s = new StringBuilder(Integer.toBinaryString(n)).reverse().toString();
+        //     int m = s.length();
+        //     int [] one = new int [m];  // 1, the number of binary strings of length i which do not contain any two consecutive 1’s and which end in 1
+        //     int [] zero = new int [m]; // 0, the number of binary strings of length i which do not contain any zero consecutive 1’s and which end in 0
+        //     one[0] = 1;
+        //     zero[0] = 1;
+        //     for (int i = 1; i < m; i++) {
+        //         zero[i] = zero[i-1] + one[i-1];
+        //         one[i] = zero[i-1];
+        //     }
+        //     int ans = one[m-1] + zero[m-1];
+        //     for (int i = m-2; i >= 0; i--) {
+        //         if (s.charAt(i) == '1' && s.charAt(i+1) == '1') break;
+        //         if (s.charAt(i) == '0' && s.charAt(i+1) == '0')
+        //             ans -= one[i];
+        //     }
+        //     return ans;
+        // }
+        // public int findIntegers(int n) {
+        //     int ans = 0, k = 31, pre = 0;
+        //     int [] f = new int [32];
+        //     f[0] = 1;
+        //     f[1] = 2;
+        //     for (int i = 2; i < 31; i++) 
+        //         f[i] = f[i-1] + f[i-2];
+        //     while (k >= 0) {
+        //         if ((n & (1 << k)) > 0) { // > 0 不是 == 1
+        //             ans += f[k];
+        //             if (pre == 1) return ans;
+        //             pre = 1;
+        //         } else pre = 0;
+        //         --k;
+        //     }
+        //     return ans + 1;
+        // }
+
+
+        // dp[i][j] 表示途径 i 条道路跳过 j 次休息情况下的最小用时，遍历过程中根据上一道路是否休息选取最小值，结合状态转移方程求解。
+        public int minSkips(int[] dist, int speed, int hoursBefore) {
+            int n = dist.length;
+            double eps = 1e-8, inf = 1e10; // eps用于避免浮点数计算误差导致向上取整后出现错误，inf作为最大值初始化动态规划数组
+            double[][] dp = new double[n+1][n+1];
+            for (int i = 0; i <= n; i++) 
+                Arrays.fill(dp[i], inf);
+            dp[0][0] = 0;
+            for (int i = 1; i <= n; i++) {
+                double t = (double)dist[i-1] / speed;       // 第i条道路耗时
+                dp[i][0] = Math.ceil(dp[i-1][0] - eps) + t; // 单独计算不跳过休息时的值
+                dp[i][i] = dp[i-1][i-1] + t;                // 单独计算跳过所有休息时的值
+                for (int j = i-1; j > 0; j--)               // 根据上一道路是否休息，确定最小值
+                    dp[i][j] = Math.min(Math.ceil(dp[i-1][j] - eps) + t, dp[i-1][j-1] + t);
+            }
+            for (int i = 0; i <= n; i++) 
+                if (dp[n][i] <= hoursBefore + eps) return i;
+            return -1;
+        }
     }
     public static void main(String[] args) {
         Solution s = new Solution();
-        
-        int res = s.tilingRectangle(5, 8);
-        System.out.println("res: " + res);
+
+        int []  a = new int []  { 7, 3, 5, 5};
+
+        int r = s.minSkips(a, 2, 10);
+        System.out.println("r: " + r);
     }
 }

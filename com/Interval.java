@@ -10,14 +10,6 @@ public class Interval {
         start = 0;
         end = 0;
     }
-    /*    
-    public Interval Interval(int s, int e) {
-        Interval res = new Interval();
-        res.start = s;
-        res.end = e;
-        return res;
-    }
-    */
     public Interval(int s, int e) {
         start = s;
         end = e;

@@ -4,28 +4,28 @@
 #+HTML_HEAD: <style type="text/css">/*<![CDATA[*/ pre.src { height: 80px; overflow: auto; } /*]]>*/ </style>
 
 * 一周计划
-- 这周刷得跟上一周差不多。计划接下来几周，每天刷8-10个题左右，一周60-70个题目，边刷边记错题进小本，到这个周末刷到1050左右；
-- 除了还在打基础知道的hashing, string等基础部分，dynamic programming, graph, segment tree等等剩下来的题目都是高难度的精华，需要好好练习和消化
+- 这周刷得跟上一周差不多。计划接下来几周，每天刷10个题左右，一周60-70个题目，边刷边记错题进小本，到接下来的周六刷到1150左右；
+- dynamic programming, graph, segment tree等等剩下来的题目都是高难度的精华，需要好好练习和消化
 
-- dyanmic programming剩下的部分、字符串的一些基础算法需要捡起来
+- 这个周主要复习了基础的部分，hashing, hashtable string two pointers, 以前很讨厌字符串，这个周写字符串看来，感觉基础的只要自己能够想得清楚的，都能很快实现出来，写得还比较得心应手。TreeMap, TreeSet也用得比较顺一点儿了
+- 写树的题目，dfs, bfs graph各种node,现在也是写得很顺心了，只是通过不断地测试加强巩固
+
+- 完成打基础的部分： hashing, hashmap, string, two pointer, sliding window,这些基础部分的题目，希望扫完
+- 如果某天头脑比较清醒、精力比较好的时候，会试图去慢速解决自己平时困难的地方：动态规划/ hashmap/hashing中数数组的个数，不常用的算法等
+
 - 数组相关的 segemnt tree, binary index tree等的基础，希望能够理解得再彻底一些，到能活学活用的程度
-
 - Deque双端队列O（n）解法的概念在建立，还需要很多的练习和熟悉
 - 最讨厌扫描线，几个双数怎么也数不清楚 heap等。。。。。。这个周扫几个出去
-- treemap, treeset的基础需要再扎实一点儿
-
-- 需要继续打基础的部分： hashing, hashmap, (，几个重点函数该记牢了)， string等等 
-
-- 其它的，等这个周60 - 80个题左右之后，再总结计划下一周
-
-- 当刷的题越来越多，错的题也越来越多，希望能把这个错题集稍微压缩一下，希望它保持现在大小轻量，但存的都是自己喜欢的精华。
 
 - 如果说以前是迷迷糊糊刷题求AC,现在基本的概念在建立，希望从以前代码和题目的算法效率向代码优化中等偏优，寻求高效、最优解法的提升
 - bit manipulation, bitmasks基础知识基本掌握，还剩几道难题take my time慢慢解（感觉现在对bit操作，相对自信得心应手得多了！） 
 - union find 的几个题，基本算是基本扫完吧，剩下的几下慢慢写。。。。。。
-- bfs, dfs在续写了dynamic programming之后，终于觉得它们俩个也比较简单，试着扫完；
-- linked list, trees比较简单，基本写完；
  
+- 很喜欢现在自己搭建出来的window刷题环境：WSL system, Zsh power shell, emacs configurations, locally everything, except Leetcode server is too slow, have to tolerant its latency......
+
+- 至昨天晚上我终于意识到确定右侧单耳耳鸣，搬到现居住处后发病的（感觉现居住处到处都是电磁波干扰、洗衣烘衣的车床，厨房的冰箱，曾整小时整小时开过的洗手间风扇等），已经有几个周了。对于自2013年秋天野鸡大学的住宿环境以来，备受各种居住环境的困扰，尤其是2019年9月10月以来，我自小的听力受损，现在单侧耳鸣，可能的原因有家族遗传性高血压、遗传性脑血管肿瘤（外公舅舅和妈妈都受此脑溢血困扰过，大我五岁的亲姐姐前几个月也刚发此重病一次）等等。今天在网上稍搜索了一下相关信息，回想这几年的居住环境噪音和人为打扰与睡眠干扰、心里戚戚很不是滋味，希望我不至于会失去听力。 
+- But my suffering is still only my/a personal suffering. Unless I could find an appropriate job, nobody cares if you are sick or not.因此，自信是本能，向往强大也是一种本能的向往。Anything happens, 我还是必须努力努力刷题，直到找到合适的工作.所以会近几周把剩下的一点儿题目刷完（hard and medium only, keep easy untouched dont care）不喜欢数字，也数字无缘，不打算写数组题目，如果一定要写，可能也只会把难题写一写吧
+
 * Bit Manipulations
 **  基本概念：原码、反码、与补码 （对负数尤其重要）
 *** 1、原码：
@@ -2566,6 +2566,84 @@ public int preimageSizeFZF(int k) {
 }
 #+END_SRC
 
+** 2040. Kth Smallest Product of Two Sorted Arrays - Hard
+Given two sorted 0-indexed integer arrays nums1 and nums2 as well as an integer k, return the kth (1-based) smallest product of nums1[i] * nums2[j] where 0 <= i < nums1.length and 0 <= j < nums2.length.
+
+[[./pic/binarySearch2.png]]
+
+#+BEGIN_SRC java
+private static long INF = (long)1e10;
+public long kthSmallestProduct(int[] a, int[] b, long k) { 
+    int m = a.length, n = b.length;
+    long lo = -INF-1, hi = INF + 1;
+    while (lo < hi) {
+        long mid = lo + (hi - lo) / 2, cnt = 0;
+        for (int  i : a) { // 对于数组a中的每一个数与b中元素的乘积，数<=mid的个数，二分搜索
+            if (i >= 0) {
+                int l = 0, r = n-1, p = 0;
+                while (l <= r) {
+                    int c = l + (r - l) / 2;
+                    long mul = i * (long)b[c];
+                    if (mul <= mid) {
+                        p = c + 1;
+                        l = c + 1;
+                    } else r = c - 1;
+                }
+                cnt += p;
+            } else { // i < 0
+                int l = 0, r = n-1, p = 0;
+                while (l <= r) {
+                    int c = l + (r - l) / 2;
+                    long mul = i * (long)b[c];
+                    if (mul <= mid) {
+                        p = n - c; // i < 0, 数右边<= mid的个数
+                        r = c - 1;
+                    } else l = c + 1;
+                }
+                cnt += p;
+            }
+        }
+        if (cnt >= k) hi = mid;
+        else lo = mid + 1l;
+    }
+    return lo;
+}
+#+END_SRC
+- 另一种相当于换汤不换药的写法
+#+BEGIN_SRC java
+private static long INF = (long)1e10;
+public long kthSmallestProduct(int[] a, int[] b, long k) { 
+    long lo = -INF, hi = INF;
+    while (lo < hi) {
+        long mid = lo + hi + 1 >> 1;
+        if (f(a, b, mid) < k) lo = mid;
+        else hi = mid - 1;
+    }
+    return lo;
+}
+private long f(int [] a, int [] b, long mid) {
+    long cnt = 0;
+    for (int v : a) {
+        int l = 0, r = b.length;
+        if (v < 0) {
+            while (l < r) {
+                int m = l + r >> 1;
+                if ((long)v * b[m] >= mid) l = m + 1;
+                else r = m;
+            }
+            cnt += b.length - l;
+        } else { // v >= 0
+            while (l < r) {
+                int m = l + r >> 1;
+                if ((long)v * b[m] < mid) l = m + 1;
+                else r = m;
+            }
+            cnt += l;
+        }
+    }
+    return cnt;
+}
+#+END_SRC
 
 * Dynamic Programming, 动态规划
 - 根据CLRS，动态规划分为两种：
@@ -5560,6 +5638,35 @@ int leastOpsExpressTarget(int x, int target) {
     return -1;
 }
 #+END_SRC
+** 1955. Count Number of Special Subsequences - Hard
+A sequence is special if it consists of a positive number of 0s, followed by a positive number of 1s, then a positive number of 2s.
+
+For example, [0,1,2] and [0,0,1,1,1,2] are special.
+In contrast, [2,1,0], [1], and [0,1,2,0] are not special.
+Given an array nums (consisting of only integers 0, 1, and 2), return the number of different subsequences that are special. Since the answer may be very large, return it modulo 109 + 7.
+
+A subsequence of an array is a sequence that can be derived from the array by deleting some or no elements without changing the order of the remaining elements. Two subsequences are different if the set of indices chosen are different.
+
+[[./pic/specialSeq.png]]
+
+#+BEGIN_SRC java
+public int countSpecialSubsequences(int[] arr) { // 去找个降维的参考一下
+    int mod = (int)1e9 + 7;
+    int n = arr.length;
+    long [][] dp = new long [n][3];
+    for (int i = 0; i < n; i++) 
+        for (int j = 0; j < 3; j++) {
+            if (arr[i] != j) dp[i][j] = (i == 0 ? 0 : dp[i-1][j]);
+            else 
+                if (j == 0)
+                    dp[i][j] = (i == 0 ? 0 : dp[i-1][j]) * 2 % mod + 1;
+                else
+                    dp[i][j] = ((i == 0 ? 0 : dp[i-1][j]) * 2 % mod + (i == 0 ? 0 : dp[i-1][j-1])) % mod;
+        }
+    return (int)dp[n-1][2];
+}
+#+END_SRC
+
 * Segment Tree与Binary Index Tree 线段树与树状数组 
 
 线段树（segment tree），顾名思义， 是用来存放给定区间（segment, or interval）内对应信息的一种数据结构。与树状数组（binary indexed tree）相似，线段树也用来处理数组相应的区间查询（range query）和元素更新（update）操作。与树状数组不同的是，线段树不止可以适用于区间求和的查询，也可以进行区间最大值，区间最小值（Range Minimum/Maximum Query problem）或者区间异或值的查询。
@@ -7087,6 +7194,34 @@ public int minMoves(int[] arr, int k) {
     return ans;
 }
 #+END_SRC
+** 220. Contains Duplicate III - Medium
+Given an integer array nums and two integers k and t, return true if there are two distinct indices i and j in the array such that abs(nums[i] - nums[j]) <= t and abs(i - j) <= k.
+#+BEGIN_SRC java
+public boolean containsNearbyAlmostDuplicate(int [] arr, int k, int t) {
+    TreeSet<Long> ts = new TreeSet<>();
+    for (int i = 0; i < arr.length; i++) {
+        if (i >= k+1) ts.remove((long)arr[i-k-1]);
+        Long lower = ts.ceiling((long)arr[i]-t); // E ceiling(E e) ，返回 treeSet 中大于等于 e 的元素中最小的元素，如果没有大于等于 e 的元素就返回 null
+        if (lower != null && lower <= (long)arr[i] + t)
+            return true;
+        ts.add((long)arr[i]);
+    }
+    return false;
+}
+// 维持一个长度为k的window, 每次检查新的值是否与原来窗口中的所有值的差值有小于等于t的. 如果用两个for循环会超时O(nk).
+//     使用treeset( backed by binary search tree) 的subSet函数,可以快速搜索. 复杂度为 O(n logk)
+public boolean containsNearbyAlmostDuplicate(int[] nums, int k, int t) {
+    if (k < 1 || t < 0 || nums == null || nums.length < 2) return false;
+    SortedSet<Long> set = new TreeSet<Long>();
+    for(int j = 0; j < nums.length; j++) {
+        SortedSet<Long> subSet = set.subSet((long)nums[j] - t, (long)nums[j] + t + 1);
+        if (!subSet.isEmpty()) return true;
+        if (j >= k)  set.remove((long)nums[j - k]);
+        set.add((long)nums[j]);
+    }
+    return false;
+}
+#+END_SRC
 * backTracking 回溯
 ** 491. Increasing Subsequences
 Given an integer array nums, return all the different possible increasing subsequences of the given array with at least two elements. You may return the answer in any order.
@@ -8476,6 +8611,7 @@ int popAtStack(int index) Returns the value at the top of the stack with the giv
     }
 #+END_SRC
 
+
 * Tree: 只是用自己相对愚钝的脑袋把题目AC了，还需要一再总结套路，用更优化的代码真正掌握关于树的题型
 ** 979. Distribute Coins in Binary Tree
 You are given the root of a binary tree with n nodes where each node in the tree has node.val coins. There are n coins in total throughout the whole tree.
@@ -8975,7 +9111,103 @@ public int longestSubstring(String s, int k) { // 人工手动折分
 }
 #+END_SRC
 
+
 * Graph
+** 2045. Second Minimum Time to Reach Destination - Hard
+A city is represented as a bi-directional connected graph with n vertices where each vertex is labeled from 1 to n (inclusive). The edges in the graph are represented as a 2D integer array edges, where each edges[i] = [ui, vi] denotes a bi-directional edge between vertex ui and vertex vi. Every vertex pair is connected by at most one edge, and no vertex has an edge to itself. The time taken to traverse any edge is time minutes.
+
+Each vertex has a traffic signal which changes its color from green to red and vice versa every change minutes. All signals change at the same time. You can enter a vertex at any time, but can leave a vertex only when the signal is green. You cannot wait at a vertex if the signal is green.
+
+The second minimum value is defined as the smallest value strictly larger than the minimum value.
+
+For example the second minimum value of [2, 3, 4] is 3, and the second minimum value of [2, 2, 4] is 4.
+Given n, edges, time, and change, return the second minimum time it will take to go from vertex 1 to vertex n.
+
+Notes:
+
+You can go through any vertex any number of times, including 1 and n.
+You can assume that when the journey starts, all signals have just turned green.
+
+[[./pic/redGreen.png]]
+
+#+BEGIN_SRC java
+public int secondMinimum(int n, int[][] edges, int time, int change) {
+    Map<Integer, List<Integer>> adj = new HashMap<>();
+    for (int [] e : edges) {
+        adj.computeIfAbsent(e[0], z -> new ArrayList<>()).add(e[1]);
+        adj.computeIfAbsent(e[1], z -> new ArrayList<>()).add(e[0]);
+    }
+    Queue<int []> q = new PriorityQueue<>((a, b)->(a[1] -b[1]));
+    q.offer(new int []{1, 0});
+    Map<Integer, Integer> cache = new HashMap<>(); // use cache to record min time per city
+    // modification: we want to visit each city maximum two times with different times,
+    // this will help in early termination when we visit the city again (3rd time or more)
+    Set<Integer> exhausted = new HashSet<>();
+    while (!q.isEmpty()) {
+        int [] top = q.poll();
+        int cur = top[0], t = top[1];
+        // Base Termination : we have found our 2nd min time for city n
+        if (cur == n && t > cache.getOrDefault(cur, Integer.MAX_VALUE))
+            return t;
+        if (!cache.containsKey(cur)) // we vistied this city for first time, so elapsed time is min for this city
+            cache.put(cur, t);
+        // early termination, if we are trying to visit the city 3rd time or more ,
+        // or the elapsed time will not help in finding the solution
+        else if (cache.get(cur) == t || exhausted.contains(cur)) continue;
+        else // this means we are visiting the city with 2nd optimal time , we dont need to visit the city ever again
+            exhausted.add(cur);
+        // we visit the city on elapsedTime, we need to check if on basis of change time, whether this time falls in  cycle (green or red)
+        // if odd cycle (red), we must wait for this cycle to end
+        int factor = t / change;
+        if (factor % 2 == 1)
+            t = (factor + 1) * change;
+        for (int nb : adj.getOrDefault(cur, new ArrayList<>())) { // visit the neighbours
+            int visTime = t + time;
+            if (!exhausted.contains(nb))
+                q.offer(new int [] {nb, visTime});
+        }
+    }
+    return -1;
+}
+#+END_SRC
+- 另一个也是写得直接了当的
+#+BEGIN_SRC java
+public int secondMinimum(int n, int [][] edges, int time, int change) {
+    Map<Integer, Set<Integer>> map = new HashMap<>();
+    for (int [] e : edges) {
+        map.computeIfAbsent(e[0], z -> new HashSet<>()).add(e[1]);
+        map.computeIfAbsent(e[1], z -> new HashSet<>()).add(e[0]);
+    }
+    Queue<int []> q = new PriorityQueue<>((a, b)->(a[1]-b[1]));
+    Map<Integer, Set<Integer>> vis = new HashMap<>();
+    q.offer(new int [] {1, 0});
+    int min = -1;
+    while (!q.isEmpty()) {
+        int [] top = q.poll();
+        int cur = top[0], t = top[1];
+        if (cur == n) {
+            if (min == -1 || min == t) min = t;
+            else return t;
+        }
+        if (t % (2 * change) >= change)
+            t += 2 * change - t % (2 * change);
+        // 源码中传入key和value，根据key获取看是否存在value，如果value==null，然后调用put方法把传入的key和value  put进map，返回根据key获取的老value
+        // 如果传入key对应的value已经存在，就返回存在的value，不进行替换。如果不存在，就添加key和value，返回null
+        vis.putIfAbsent(cur, new HashSet<>());
+        if (!vis.get(cur).add(t) || vis.get(cur).size() >= 3) continue;
+        if (map.containsKey(cur))
+            for (int next : map.get(cur)) 
+                q.offer(new int [] {next, t + time});
+    }
+    return -1;
+}
+#+END_SRC
+昨天晚上的比赛，状态相对早上要差了很多，感觉到晚上的头脑已经不是很清醒。比赛的时候没有感觉，白白折腾了一个小时。
+结束后去看别人题解的时候，弱弱的内心是奔溃的：
+应该说这些考点平时自己也都练习过，没有过偏的地方，可为什么自己做题的时候，一个个考点穿上马甲我就再也认不出它们来了呢？
+把可以重复遍历当作是多余的，不想去重复遍历；又被n迷惑住，全然忘记其它node也会被重复遍历到；明明知道pq里还有一堆杂物，比赛时却浑然想不到我是可以去裁枝优化的？！！！
+昨天晚上的比赛应该是最近几周参加比赛以来做得相对较好的一次，可相比于早上最后一道题完全没有时间做、几乎没有下笔思路，这个最后一题留有整整一个小时，考点也都练习到过，却探肩而过、失之交臂、被自己活活折腾死。。。感触很多。。。。。。或许这也是一个磨砺心志、相定信念的过程吧？！！！练习练习练习、总结总结总结，让它们深入骨髓，一看便知似曾相识？
+
 ** 1334. Floyd算法 - Find the City With the Smallest Number of Neighbors at a Threshold Distance - Medium
 There are n cities numbered from 0 to n-1. Given the array edges where edges[i] = [fromi, toi, weighti] represents a bidirectional and weighted edge between cities fromi and toi, and given the integer distanceThreshold.
 
@@ -9222,6 +9454,201 @@ public int reachableNodes(int[][] edges, int maxMoves, int n) {
 }
 #+END_SRC
 
+** 1782. Count Pairs Of Nodes - Hard
+You are given an undirected graph defined by an integer n, the number of nodes, and a 2D integer array edges, the edges in the graph, where edges[i] = [ui, vi] indicates that there is an undirected edge between ui and vi. You are also given an integer array queries.
+
+Let incident(a, b) be defined as the number of edges that are connected to either node a or b.
+
+The answer to the jth query is the number of pairs of nodes (a, b) that satisfy both of the following conditions:
+
+a < b
+incident(a, b) > queries[j]
+Return an array answers such that answers.length == queries.length and answers[j] is the answer of the jth query.
+
+Note that there can be multiple edges between the same two nodes.
+#+BEGIN_SRC java
+// https://leetcode.com/problems/count-pairs-of-nodes/discuss/1096740/C%2B%2BJavaPython3-Two-Problems-O(q-*-(n-%2B-e))
+public int[] countPairs(int n, int[][] edges, int[] queries) { // 别人家的思路好清晰
+    int [] cnt = new int [n+1], sortedCnt = new int [n+1], ans = new int [queries.length];
+    Map<Integer, Integer> [] m = new HashMap[n+1];
+    for (var e : edges) {
+        sortedCnt[e[0]] = cnt[e[0]] = cnt[e[0]] + 1;
+        sortedCnt[e[1]] = cnt[e[1]] = cnt[e[1]] + 1;
+        int min = Math.min(e[0], e[1]), max = Math.max(e[0], e[1]);
+        m[min] = m[min] == null ? new HashMap<>() : m[min];
+        m[min].put(max, m[min].getOrDefault(max, 0) + 1); // 仍然是当作有向图、单向图来做
+    }
+    Arrays.sort(sortedCnt);
+    int res = 0, cur = 0;
+    for (int k = 0; k < queries.length; k++) {
+        for (int i = 1, j = n; i < j;) 
+            if (queries[k] < sortedCnt[i] + sortedCnt[j])
+                ans[k] += (j--) - i;
+            else ++i;
+        for (int i = 1; i <= n; i++) 
+            if (m[i] != null) 
+                for (var en : m[i].entrySet()) {
+                    int j = en.getKey(), sharedCnt = en.getValue();
+                    if (queries[k] < cnt[i] + cnt[j] && cnt[i] + cnt[j] - sharedCnt <= queries[k])
+                        ans[k]--;
+                }
+    } 
+    return ans;
+}
+#+END_SRC
+# // https://leetcode.com/problems/count-pairs-of-nodes/discuss/1096432/Java-or-Two-Steps-or-O(NlgN-%2B-Q(N%2BE))
+# // 这个也可以再参考一下
+
+** 332. Reconstruct Itinerary - Medium
+You are given a list of airline tickets where tickets[i] = [fromi, toi] represent the departure and the arrival airports of one flight. Reconstruct the itinerary in order and return it.
+
+All of the tickets belong to a man who departs from "JFK", thus, the itinerary must begin with "JFK". If there are multiple valid itineraries, you should return the itinerary that has the smallest lexical order when read as a single string.
+
+For example, the itinerary ["JFK", "LGA"] has a smaller lexical order than ["JFK", "LGB"].
+You may assume all tickets form at least one valid itinerary. You must use all the tickets once and only once.
+#+BEGIN_SRC java
+private void dfs(String cur, List<String> list) {
+    Queue<String> next = m.get(cur);
+    while (next != null && next.size() > 0) 
+        dfs(next.poll(), list);
+    list.add(cur);
+}
+Map<String, PriorityQueue<String>> m = new HashMap<>();      // TreeSet does not handle repeats, use queue
+public List<String> findItinerary(List<List<String>> tickets) {
+    for (int i = 0; i < tickets.size(); i++) 
+        m.computeIfAbsent(tickets.get(i).get(0), k -> new PriorityQueue<>()).offer(tickets.get(i).get(1));
+    List<String> res = new ArrayList<>();
+    dfs("JFK", res);
+    Collections.reverse(res);
+    return res;
+}
+#+END_SRC
+
+** 1591. Strange Printer II - Hard
+There is a strange printer with the following two special requirements:
+
+On each turn, the printer will print a solid rectangular pattern of a single color on the grid. This will cover up the existing colors in the rectangle.
+Once the printer has used a color for the above operation, the same color cannot be used again.
+You are given a m x n matrix targetGrid, where targetGrid[row][col] is the color in the position (row, col) of the grid.
+
+Return true if it is possible to print the matrix targetGrid, otherwise, return false.
+
+这道题可以认为是在研究：是否有一种颜色序列，按照这个序列进行染色，最终矩阵就会呈现输入的状态。
+
+矩形上的某一个像素点，可能会先后经历多次染色。比如先染红，再染绿，再染黄，最后染蓝，最后呈现出的就是蓝色。
+
+我们知道这个像素现在是蓝色；
+
+而它在红色/绿色/黄色矩形范围内，说明这个像素曾经红过/绿过/黄过。
+
+此时我们可以提炼出信息：假定先染的优先于后染的，那么红色优于蓝色，绿色优于蓝色，黄色优于蓝色。
+
+（红绿黄之间的顺序未定）。
+
+题中指出，颜色最多有 6060 种，我们可以建立一个有向图，图中的结点就是这 6060 个颜色 1\sim 601∼60 。
+
+按照刚才的方法找出所有的有向边，进行拓扑排序即可判断出结果。
+
+#+BEGIN_SRC java
+public boolean isPrintable(int[][] targetGrid) { // 觉得这个题思路奇特
+    int m = targetGrid.length, n = targetGrid[0].length, max = Math.max(m, n);
+    for (int i = 0; i < m; i++) 
+        max = Math.max(max, Arrays.stream(targetGrid[i]).max().getAsInt());
+    int [] top = new int [max+1], bot = new int [max+1], left = new int [max+1], right = new int [max+1];
+    Arrays.fill(top, max+1);
+    Arrays.fill(left, max+1);
+    Arrays.fill(bot, -1);
+    Arrays.fill(right, -1);
+    for (int i = 0; i < m; i++) // 建立每个颜色的矩阵边界: 界定每种颜色的上下左右边界，每种颜色最早（上左）最晚（下右）出现的位置
+        for (int j = 0; j < n; j++) {
+            int color = targetGrid[i][j];
+            top[color] = Math.min(top[color], i);
+            bot[color] = Math.max(bot[color], i);
+            left[color] = Math.min(left[color], j);
+            right[color] = Math.max(right[color], j);
+        }
+    // 根据矩阵建立有向图，遍历targetGrid，
+    // 当前位置颜色X在某个矩阵A中但是不为矩阵A的颜色时，建立从A到X的边
+    // X可以存在于多个矩阵中
+    // 变量：是否存在边-防止重复建立边；入度，便于后期判断是否拓扑排序；邻接表，从i出发到达的点
+    boolean [][] eg = new boolean [max+1][max+1];
+    int [] ins = new int [max+1];
+    List<List<Integer>> adj = new ArrayList<>();
+    for (int i = 0; i <= max; i++) 
+        adj.add(new ArrayList<>());
+    int cur = 0; // 建立图
+    for (int i = 0; i < m; i++) 
+        for (int j = 0; j < n; j++) {
+            cur = targetGrid[i][j]; // 当前格子的最终打印顔色
+            for (int color = 1; color <= max; color++) // 遍历所有颜色：暴搜当前格子颜色是否可能后打印
+                if (i >= top[color] && i <= bot[color] && j >= left[color] && j <= right[color])
+                    if (cur != color && !eg[color][cur]) {
+                        adj.get(color).add(cur); // color 先染后，cur后染色
+                        ins[cur]++;
+                        eg[color][cur] = true;
+                    }
+        }
+    // 寻找入度为0的颜色点，减小该点连结的点的入度，直到所有点的入度都为0
+    List<Integer> l = new ArrayList<>();
+    while (true) {
+        int i;
+        for (i = 1; i <= max; i++) 
+            if (ins[i] == 0) {
+                l.add(i);
+                for (int v : adj.get(i)) ins[v]--;
+                ins[i] = -1;
+                break;
+            }
+        if (i == max+1) break;
+    }
+    return l.size() == max;
+}
+#+END_SRC
+- topological sort
+#+BEGIN_SRC java
+private boolean topologicalSort(Set<Integer> visited, Set<Integer> visiting, int c, Map<Integer, Set<Integer>> graph) {
+    if (visited.contains(c)) return true;
+    if (visiting.contains(c)) return false;
+    visiting.add(c);
+    for (Integer nei : graph.getOrDefault(c, Collections.emptySet())) 
+        if (!topologicalSort(visited, visiting, nei, graph)) return  false;
+    visiting.remove(c);
+    visited.add(c);
+    return true;
+}
+// 1. For each color, find left top corner and right bottom corner
+// 2. All colors interfering with given color means they should go after given
+// 3. Create dependencies (1 -> [2,3])
+// 4. TopSort. Loops mean it is not possible
+public boolean isPrintable(int[][] targetGrid) {
+    Map<Integer, Set<Integer>> graph = new HashMap<>();
+    Set<Integer> colors = new HashSet<>();
+    int m = targetGrid.length, n = targetGrid[0].length;
+    for (int i = 0; i < m; i++) 
+        for (int j = 0; j < n; j++) 
+            colors.add(targetGrid[i][j]);
+    for (Integer c : colors) {
+        int fi = -1, fj = Integer.MAX_VALUE, li = -1, lj = -1; // f: first, f row, f col, l: last, l row, l col
+        for (int i = 0; i < m; i++) 
+            for (int j = 0; j < n; j++) 
+                if (targetGrid[i][j] == c) {
+                    if (fi == -1) fi = i;
+                    fj = Math.min(fj, j);
+                    li = i;
+                    lj = Math.max(lj, j);
+                }
+        for (int i = fi; i <= li; i++) 
+            for (int j = fj; j <= lj; j++) 
+                if (targetGrid[i][j] != c) 
+                    graph.computeIfAbsent(c, z -> new HashSet<>()).add(targetGrid[i][j]);
+    }
+    Set<Integer> visited = new HashSet<>();
+    Set<Integer> visiting = new HashSet<>();
+    for (Integer c : colors) 
+        if (!topologicalSort(visited, visiting, c, graph)) return false;
+    return true;
+}
+#+END_SRC
 * 扫描线
 ** 218. The Skyline Problem - Hard
 A city's skyline is the outer contour of the silhouette formed by all the buildings in that city when viewed from a distance. Given the locations and heights of all the buildings, return the skyline formed by these buildings collectively.
@@ -9273,6 +9700,109 @@ public List<List<Integer>> getSkyline(int[][] buildings) { // 从左向右扫一
     }
     return ans;
 }
+#+END_SRC
+
+** 715. Range Module - Hard
+A Range Module is a module that tracks ranges of numbers. Design a data structure to track the ranges represented as half-open intervals and query about them.
+
+A half-open interval [left, right) denotes all the real numbers x where left <= x < right.
+
+Implement the RangeModule class:
+
+RangeModule() Initializes the object of the data structure.
+void addRange(int left, int right) Adds the half-open interval [left, right), tracking every real number in that interval. Adding an interval that partially overlaps with currently tracked numbers should add any numbers in the interval [left, right) that are not already tracked.
+boolean queryRange(int left, int right) Returns true if every real number in the interval [left, right) is currently being tracked, and false otherwise.
+void removeRange(int left, int right) Stops tracking every real number currently being tracked in the half-open interval [left, right).
+#+BEGIN_SRC java
+    class Range {
+        int left, right;
+        public Range(int left, int right) {
+            this.left = left;
+            this.right = right;
+        }
+    }
+    TreeSet<Range> ts;
+    public RangeModule() {
+        ts = new TreeSet<>((a, b)->(a.left != b.left ? a.left - b.left : a.right - b.right));
+    }
+    public void addRange(int left, int right) {
+        int nl = left, nr = right;
+        Range high = new Range(right, Integer.MAX_VALUE);
+        while (true) {
+            Range r = ts.lower(high);
+            if (r == null || r.right < left) break;
+            if (r.right > right) nr = r.right;
+            if (r.left < left) nl = r.left;
+            ts.remove(r);
+        }
+        ts.add(new Range(nl, nr));
+    }
+    public boolean queryRange(int left, int right) {
+        Range target = ts.floor(new Range(left, Integer.MAX_VALUE));
+        return target != null && target.left <= left && target.right >= right;
+    }
+    public void removeRange(int left, int right) {
+        Range high = new Range(right, right);
+        while (true) {
+            Range r = ts.lower(high);
+            if (r == null || r.right <= left) break;
+            if (r.right > right)
+                ts.add(new Range(right, r.right));
+            if (r.left < left)
+                ts.add(new Range(r.left, left));
+            ts.remove(r);
+        }
+    }
+#+END_SRC
+
+** 352. Data Stream as Disjoint Intervals - Hard
+Given a data stream input of non-negative integers a1, a2, ..., an, summarize the numbers seen so far as a list of disjoint intervals.
+
+Implement the SummaryRanges class:
+
+SummaryRanges() Initializes the object with an empty stream.
+void addNum(int val) Adds the integer val to the stream.
+int[][] getIntervals() Returns a summary of the integers in the stream currently as a list of disjoint intervals [starti, endi].
+#+BEGIN_SRC java
+    class Range implements Comparable<Range> {
+        int bgn, end;
+        public Range(int bgn, int end) {
+            this.bgn = bgn;
+            this.end = end;
+        }
+        @Override public int compareTo(Range other) {
+            return this.bgn - other.bgn;
+        }
+    }
+    TreeSet<Range> ts; 
+    public SummaryRanges() {
+        ts = new TreeSet<Range>();
+    }
+    public void addNum(int val) {
+        Range cur = new Range(val, val);
+        Range bef = ts.floor(cur);
+        Range aft = ts.ceiling(cur);
+        if (bef != null && bef.end + 1 >= val) {
+            cur.bgn = bef.bgn;
+            cur.end = Math.max(val, bef.end);
+            ts.remove(bef);
+        }
+        if (aft != null && aft.bgn == val + 1) {
+            cur.end = aft.end;
+            ts.remove(aft);
+        }
+        ts.add(cur);
+    }
+    public int[][] getIntervals() {
+        int [][] ans = new int [ts.size()][2];
+        int i = 0;
+        for (Range cur : ts) {
+            ans[i][0] = cur.bgn;
+            ans[i][1] = cur.end;
+            i++;
+        }
+        return ans;
+    }
 #+END_SRC
 
 ** 1419. Minimum Number of Frogs Croaking - Medium
@@ -9365,6 +9895,7 @@ public int minNumberOfFrogs(String croakOfFrogs) {
     return -1;
 }
 #+END_SRC
+
 * PreSum
 ** 1074. Number of Submatrices That Sum to Target - Hard 二维数组转化为一维数组:  数组中target Sum的2D版、presum思想的2d版
 Given a matrix and a target, return the number of non-empty submatrices that sum to target.
@@ -9519,6 +10050,69 @@ public int numSubmatrixSumTarget(int[][] matrix, int target) {
         }
     }
     return cnt;
+}
+#+END_SRC
+* Greedy
+** 1585. Check If String Is Transformable With Substring Sort Operations - Hard
+Given two strings s and t, you want to transform string s into string t using the following operation any number of times:
+
+Choose a non-empty substring in s and sort it in-place so the characters are in ascending order.
+For example, applying the operation on the underlined substring in "14234" results in "12344".
+
+Return true if it is possible to transform string s into string t. Otherwise, return false.
+
+A substring is a contiguous sequence of characters within a string.
+#+BEGIN_SRC java
+public boolean isTransformable(String s, String t) { 
+    ArrayDeque<Integer> [] q = new ArrayDeque[10];
+    for (int i = 0; i < 10; i++) 
+        q[i] = new ArrayDeque<Integer>();
+    for (int i = 0; i < s.length(); i++) 
+        q[s.charAt(i)-'0'].offerLast(i);
+    for (char c : t.toCharArray()) {
+        int d = c - '0';
+        if (q[d].isEmpty()) return false;
+        for (int i = 0; i < d; i++) 
+            if (!q[i].isEmpty() && q[i].peekFirst() < q[d].peekFirst())
+                return false;
+        q[d].pollFirst();
+    }
+    return true;
+}        
+#+END_SRC
+
+** 1330. Reverse Subarray To Maximize Array Value - Hard
+You are given an integer array nums. The value of this array is defined as the sum of |nums[i]-nums[i+1]| for all 0 <= i < nums.length-1.
+
+You are allowed to select any subarray of the given array and reverse it. You can perform this operation only once.
+
+Find maximum possible value of the final array.
+
+[[./pic/reverseSubarray.png]]
+
+#+BEGIN_SRC java
+public int maxValueAfterReverse(int[] a) { 
+    int n = a.length, base = 0, ans = 0, sum = 0;
+    if (n == 1) return 0;
+    for (int i = 0; i < n-1; i++)
+        sum += abs(a[i] - a[i+1]);
+    // 交换的区间左端点是数组的左边界
+    for (int i = 0; i < n-1; i++) 
+        ans = max(ans, sum + abs(a[i+1]-a[0]) - abs(a[i+1] - a[i]));
+    // 交换的区间右端点是数组的右边界
+    for (int i = n-1; i > 0; i--)
+        ans = max(ans, sum + abs(a[n-1] - a[i-1]) - abs(a[i] - a[i-1]));
+    // 交换区间左右端点在数组内部
+    int l = 1; // 1. 找出左端点
+    for (int i = 2; i < n; i++) {
+        int ia = min(a[i], a[i-1]), ib = max(a[i], a[i-1]);
+        if (max(a[i], a[i-1]) < max(a[l], a[l-1])) l = i;
+    }
+    int r = 0; // 2. 找出右端点
+    for (int i = 1; i < n-1; i++) 
+        if (min(a[i], a[i+1]) > min(a[r], a[r+1])) r = i;
+    ans = max(ans, sum + 2 * (min(a[r], a[r+1]) - max(a[l], a[l-1])));
+    return ans;
 }
 #+END_SRC
 * others

@@ -35,47 +35,80 @@ public class NestedIterator implements Iterator<Integer> {
     }
 
     public static class Solution {
-
-        private int getMatedRIdx(String s, int idx) {
-            int n = s.length();
-            int i = 0, l = 0, r = 0;
-            while (i < n) {
-                if (s.charAt(i) == '[') ++l;
-                else if (s.charAt(i) == ']') {
-                    if (l > 0) --l;
-                    else ++r;
-                }
-                if (l == r) break;
-            }
-            return i;
-        }
         public NestedInteger deserialize(String s) {
             int n = s.length();
-            if (n == 1) return null;
-            int i = 0, j = 0;
-            if (Character.isDigit(s.charAt(i)) || s.charAt(i) == '-') {
-                return new NestedInteger(Integer.parseInt(s.substring(i, n)));
-            }
-            NestedInteger res = new NestedInteger(); // s.charAt(1) == '['
-            ++i;
+            if (s.charAt(0) != '[') return new NestedInteger(Integer.parseInt(s.substring(0, n)));
+            NestedInteger ans = new NestedInteger();
+            int cnt = 0;
+            int i = 1, j = i;
             while (i < n) {
-                while (Character.isDigit(s.charAt(i)) || s.charAt(i) == '-') {
-                    j = i;
-                    while (j < n && Character.isDigit(s.charAt(j))) ++j; // j: , or n
-                    res.add(new NestedInteger(Integer.parseInt(s.substring(i, j))));
-                    if (j == n) return res;
-                    i = j+1;
+                j = i;
+                while (j < n && Character.isDigit(s.charAt(j))) j++; // [345, []]
+                if (j > i) {
+                    ans.add(new NestedInteger(Integer.parseInt(s.substring(i, j))));
+                    if (j == n) return ans;
+                    i = j + 1; // sca(i): [ or 0-9 digits
+                    continue;
                 }
                 if (s.charAt(i) == '[') {
-                    j = getMatedRIdx(s, i);
-                    NestedInteger nt = deserialize(s.substring(i+1, j));
-                    res.add(nt);
-                    if (j == n-1) return res;
-                    i = j+2;
+                    int l = 1, r = 0;
+                    j = i+1;
+                    while (j < n) {
+                        if (s.charAt(j) == '[') ++l;
+                        else if (s.charAt(j) == ']') {
+                            if (l > 0) --l;
+                            else ++r;
+                        }
+                        if (l == r) break;
+                        j++;
+                    }
+                    ans.add(deserialize(s.substring(i+1, j)));
+                    if (j == n-1) return ans; // j: ]
+                    i = j + 2; // i: ], [ or 0-9
                 }
             }
-            return null;
+            return new NestedInteger();
         }
+
+        // private int getMatedRIdx(String s, int idx) {
+        //     int n = s.length();
+        //     int i = 0, l = 0, r = 0;
+        //     while (i < n) {
+        //         if (s.charAt(i) == '[') ++l;
+        //         else if (s.charAt(i) == ']') {
+        //             if (l > 0) --l;
+        //             else ++r;
+        //         }
+        //         if (l == r) break;
+        //     }
+        //     return i;
+        // }
+        // public NestedInteger deserialize(String s) {
+        //     int n = s.length();
+        //     if (n == 1) return null;
+        //     int i = 0, j = 0;
+        //     if (Character.isDigit(s.charAt(i)) || s.charAt(i) == '-') 
+        //         return new NestedInteger(Integer.parseInt(s.substring(i, n)));
+        //     NestedInteger res = new NestedInteger(); // s.charAt(1) == '['
+        //     ++i;
+        //     while (i < n) {
+        //         while (Character.isDigit(s.charAt(i)) || s.charAt(i) == '-') {
+        //             j = i;
+        //             while (j < n && Character.isDigit(s.charAt(j))) ++j; // j: , or n
+        //             res.add(new NestedInteger(Integer.parseInt(s.substring(i, j))));
+        //             if (j == n) return res;
+        //             i = j+1;
+        //         }
+        //         if (s.charAt(i) == '[') {
+        //             j = getMatedRIdx(s, i);
+        //             NestedInteger nt = deserialize(s.substring(i+1, j));
+        //             res.add(nt);
+        //             if (j == n-1) return res;
+        //             i = j+2;
+        //         }
+        //     }
+        //     return null;
+        // }
     
         // List<Integer> l;
         // int idx;

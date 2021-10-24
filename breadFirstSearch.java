@@ -166,41 +166,6 @@ public class breadFirstSearch {
         // }
 
 
-        // private boolean diffByOneOne(String x, String y) {
-        //     int cnt = 0, dcnt = 0;
-        //     for (int i = 0; i < x.length(); i++) {
-        //         if (x.charAt(i) != y.charAt(i)) {
-        //             if (Math.abs(x.charAt(i) - y.charAt(i)) == 1
-        //                 || (x.charAt(i) == '0' && y.charAt(i) == '9')
-        //                 || (x.charAt(i) == '9' && y.charAt(i) == '0'))
-        //                 ++dcnt;
-        //             ++cnt;
-        //         }
-        //     }
-        //     return cnt == 1 && dcnt == 1 ? true : false;
-        // }
-        // HashMap<Integer, List<Integer>> m = new HashMap<>();
-        // List<Integer> l = new ArrayList<>();
-        // public int openLock(String[] deadends, String target) {
-        //     HashSet<Integer> s = new HashSet<>();
-        //     for (int i = 0; i < deadends.length; i++) 
-        //         s.add(Integer.parseInt(deadends[i]));
-        //     for (int i = 0; i < 10000; i++) {
-        //         l = new ArrayList<>();
-        //         m.put(i, l);
-        //     }            
-        //     for (int i = 0; i < 10000; i++) {
-        //         for (int j = 0; j < 10000; j++) {
-        //             if (j == i || s.contains(i) || s.contains(j)) continue;
-        //             if (diffByOneOne(String.format("%04d", i), String.format("%04d", j))) {
-        //                 m.get(i).add(j);
-        //                 m.get(j).add(i);
-        //             }
-        //         }
-        //     }
-        //     return 0;
-        // }
-
         // private class Pt {
         //     int i;
         //     int j;
@@ -697,73 +662,6 @@ public class breadFirstSearch {
         //         for (int k = ; k < n; k++) {
         //         }
         //     }
-        // }
-
-
-        // private boolean diffByOneDigitByOne(int x, int y) {
-        //     System.out.println("x: " + x);
-        //     System.out.println("y: " + y);
-        //     if (Math.abs((x+"").length() - (y+"").length()) > 1) return false;
-        //     if (Math.abs((x+"").length() - (y+"").length()) == 1) {
-        //         if (Math.abs(x-y) % (x > y ? (y+"").length()*10 : (x+"").length()*10) == 0) {
-        //             String i =  ((x+"").length() < (y+"").length() ? y : x) + "";
-        //             if (i.charAt(0) == '1' || i.charAt(0) == '9') return true;
-        //             else return false;
-        //         } else return false;
-        //     }
-        //     String s = x+"";
-        //     String t = y+"";
-        //     int i = 0, j = 0;
-        //     int cnt = 0;
-        //     while (i < 4 && j < 4) {
-        //         while (i < s.length() && j < t.length() && s.charAt(i) == t.charAt(j)) {
-        //             ++i;
-        //             ++j;
-        //         }
-        //         if (i == s.length() && j == t.length()) return cnt <= 1;
-        //         if (Math.abs(s.charAt(i) - t.charAt(j)) > 1) {
-        //             if ((s.charAt(i) == '0' && t.charAt(j) == '9')
-        //                 || (s.charAt(i) == '9' && t.charAt(j) == '0')) {
-        //                 ++cnt;
-        //                 ++i;
-        //                 ++j;
-        //                 if (i == 4 && j == 4) return cnt <= 1;
-        //             }
-        //             else return false;
-        //         } else if (Math.abs(s.charAt(i) - t.charAt(j)) == 1) {
-        //             ++cnt;
-        //             if (cnt > 1) return false;
-        //             ++i;
-        //             ++j;
-        //             if (i == 4 && j == 4) return cnt <= 1;
-        //         }
-        //     }
-        //     return false;
-        // }
-        // int N;
-        // public int openLock(String[] deadends, String target) {
-        //     if (Arrays.asList(deadends).contains("0000")) return -1;
-        //     Set<Integer> s = new HashSet<>();
-        //     for (String v : deadends) 
-        //         s.add(Integer.parseInt(v));
-        //     N = 10000;
-        //     Map<Integer, List<Integer>> m = new HashMap<>();
-        //     for (int i = 0; i < N; i++) 
-        //         m.put(i, new ArrayList<Integer>());
-        //     for (int i = 0; i < N; i++) {
-        //         for (int j = 0; j < N; j++) {
-        //             if (i == j || s.contains(i) || s.contains(j)) continue;
-        //             boolean tmp = diffByOneDigitByOne(i, j);
-        //             System.out.println("tmp: " + tmp);
-        //             if (tmp) {
-        //             // if (diffByOneDigitByOne(i, j)) {
-        //                 m.get(i).add(j);
-        //                 m.get(j).add(i);
-        //             }                        
-        //         }
-        //     }
-        //     // 从target往0000搜，同步判断deadend?
-        //     return 0;
         // }
 
 

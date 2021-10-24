@@ -218,32 +218,9 @@ public class dynatwomicProgramming {
         // int []  a = new int []  {1, 4, 6, 7, 8, 20}; 
         // int [] b = new int [] {2, 7, 15}; 
         // int res = s.mincostTickets(a, b);
-        // private boolean isValid(int val) {
-        //     String s = String.valueOf(val);
-        //     int n = s.length();
-        //     int i = 0;
-        //     while (i < n && s.charAt(i) != '3' && s.charAt(i) != '4' && s.charAt(i) != '7') ++i;
-        //     if (i == n && val <= 9 && val != 1 && val != 8) return true;
-        //     else if (i == n || (s.charAt(i) == '3' || s.charAt(i) == '4' || s.charAt(i) == '7')) return false;
-        //     boolean flag = false;
-        //     i = 0;
-        //     while (i < n && s.charAt(i) != '0' && s.charAt(i) != '1' && s.charAt(i) != '8') ++i;
-        //     if (i == n) return true; // 2569 256179
-        //     flag = true;
-        //     i = 0;
-        //     while (i < n && s.charAt(i) ==  '0' && s.charAt(i) ==  '1' && s.charAt(i) ==  '8') ++i;
-        //     if (i == n) return false;
-        //     return flag;
-        // }
-        // public int rotatedDigits(int n) {
-        //     int res = 0;
-        //     for (int i = 1; i <= n; i++) 
-        //         if (isValid(i)) {
-        //             ++res;   
-        //         }
-        //     return res;
-        // }
-        // public int maxSubArray(int[] nums) {
+
+
+// public int maxSubArray(int[] nums) {
         //     int res = nums[0], sum = 0;
         //     for (int i = 0; i < nums.length; i++) {
         //         sum = Math.max(sum + nums[i], nums[i]);

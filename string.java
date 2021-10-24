@@ -837,85 +837,6 @@ public class string {
         // }
 
 
-        // public String alphabetBoardPath(String target) {
-        //     String [] bd = {"abcde", "fghij", "klmno", "pqrst", "uvwxy", "z"};
-        //     int m = bd.length; n = bd[0].length();
-        //     Map<Integer, Character> map = new HashMap<>();
-        //     for (int i = 0; i < m; i++) 
-        //         for (int j = 0; j < bd[i].length(); j++) 
-        //             map.put(i*n+j, bd[i].charAt(j));
-        //     Queue<int []> q = new LinkedList<>();
-        //     Map<Character, int []> dirs = new HashMap<>();
-        //     dirs.put('U', new int [] {-1, 0}); 
-        //     dirs.put('D', new int [] {1, 0});
-        //     dirs.put('L', new int [] {0, -1});
-        //     dirs.put('R', new int [] {0, 1});
-        //     q.offer(new int []{0, 0});
-        //     StringBuilder sb = new StringBuilder();
-        //     int idx = 0;
-        //     while (!q.isEmpty()) {
-        //         int [] cur = q.poll();
-        //         if (map.get(cur[0]*n+cur[1]) == target.charAt(idx)) {
-        //             sb.append('!');
-        //             idx++;
-        //         }
-        //     }
-        // }
-
-        // private void remove(String t) {
-        //     int i = 0;
-        //     int n = s.length();
-        //     for (char c : t.toCharArray()) {
-        //         i = 0;
-        //         while (i < n && s.charAt(i) != c) i++;
-        //         s.deleteCharAt(i);
-        //     }
-        // }
-        // StringBuilder s;
-        // public String originalDigits(String so) {
-        //     s = new StringBuilder(so);
-        //     int n = s.length();
-        //     StringBuilder t = new StringBuilder();
-        //     int i = 0;
-        //     while (s.length() > 0) {
-        //         if (s.indexOf("u") != -1) {
-        //             remove("four");
-        //             t.append('4');
-        //         } else if (s.indexOf("x") != -1) {
-        //             remove("six");
-        //             t.append('6');
-        //         } else if (s.indexOf("g") != -1) {
-        //             t.append('8');
-        //             remove("eight");
-        //         } else if (s.indexOf("z") != -1) {
-        //             t.append('0');
-        //             remove("zero");
-        //         } else if (s.indexOf("w") != -1) {
-        //             t.append('2');
-        //             remove("two");
-        //         } else if (s.indexOf("h") != -1) {
-        //             t.append('3');
-        //             remove("three");
-        //         } else if (s.indexOf("o") != -1) {
-        //             t.append('1');
-        //             remove("one");
-        //         } else if (s.indexOf("f") != -1) {
-        //             t.append('5');
-        //             remove("five");
-        //         } else if (s.indexOf("s") != -1) {
-        //             t.append('7');
-        //             remove("seven");
-        //         } else {
-        //             t.append('9');
-        //             remove("nine");
-        //         }
-        //     }
-        //     char [] tmp = t.toString().toCharArray();
-        //     Arrays.sort(tmp);
-        //     return new String(tmp);
-        // }
-
-
         // public int compress(char[] chars) {
         //     if (chars.length == 1) return 1;
         //     StringBuilder s = new StringBuilder();
@@ -959,14 +880,243 @@ public class string {
         // }
 
 
-        
+        // public String alphabetBoardPath(String target) {
+        //     String ans = "";
+        //     int i = 0, j = 0;
+        //     for (char c : target.toCharArray()) {
+        //         int x = (c - 'a') / 5, y = (c - 'a') % 5;
+        //         ans += "U".repeat(Math.max(0, i-x)) + "R".repeat(Math.max(0, y - j)) + "L".repeat(Math.max(0, j - y)) + "D".repeat(Math.max(0, x - i)) + "!";
+        //         i = x;
+        //         j = y;
+        //     }
+        //     return ans;
+        // }
+
+
+        // public int findMinDifference(List<String> s) {
+        //     int n = s.size();
+        //     int [] arr = new int [n];
+        //     for (int i = 0; i < n; i++) 
+        //         arr[i] = Integer.parseInt(s.get(i).substring(0, 2))*60 + Integer.parseInt(s.get(i).substring(3));
+        //     int min = Integer.MAX_VALUE, cur = 0;
+        //     for (int i = 0; i < n; i++) 
+        //         for (int j = i+1; j < n; j++) {
+        //             cur = Math.min(Math.abs(arr[i]-arr[j]), Math.min(1440-arr[i]+arr[j], 1440-arr[j]+arr[i]));
+        //             min = Math.min(min, cur);
+        //         }
+        //     return min;
+        // }
+
+
+        // public boolean isRobotBounded(String instructions) {
+        //     int [][] dirs = {{-1, 0}, {0, -1}, {1, 0}, {0, 1}}; // N W S E
+        //     Map<String, int []> m = new HashMap<>();
+        //     m.put("L-1_0", new int [] {0, -1});
+        //     m.put("L0_-1", new int [] {1, 0});
+        //     m.put("L1_0", new int [] {0, 1});
+        //     m.put("L0_1", new int [] {-1, 0});
+        //     m.put("R-1_0", new int [] {0, 1});
+        //     m.put("R0_1", new int [] {1, 0});
+        //     m.put("R1_0", new int [] {0, -1});
+        //     m.put("R0_-1", new int [] {-1, 0});
+
+        //     int i = 0, j = 0, di = -1, dj = 0;
+        //     List<int []> pos = new ArrayList<>();
+        //     int [] cur = {i, j, di, dj}; // posX, posY, dirX, dirY
+        //     pos.add(cur);
+        //     for (char c : instructions.repeat(5).toCharArray()) {
+        //         if (c == 'G') {
+        //             i = i + di;
+        //             j = j + dj;
+        //         } else { // if (c == 'L' || 'R ) 
+        //             String key = "" + c + di + "_" + dj;
+        //             System.out.println("key: " + key);
+        //             int [] d = m.get(key);
+        //             di = d[0];
+        //             dj = d[1];
+        //         }
+        //         cur = new int [] {i, j, di, dj};
+        //         if (pos.contains(cur)) return true;
+        //         if (i == 0 && j == 0) 
+        //             for (int [] d : dirs) 
+        //                 if (pos.contains(new int [] {0, 0, d[0], d[1]})) return true;
+        //         pos.add(cur);
+        //     }
+        //     // for (int [] zz : pos) 
+        //     //     System.out.println(Arrays.toString(zz));
+        //     return i == cur[0] && j == cur[1];
+        // }
+
+
+        // private String swap(String t, int i, int j) { // j < i
+        //     StringBuilder s = new StringBuilder(t);
+        //     char tmp = s.charAt(i);
+        //     s.setCharAt(i, s.charAt(j));
+        //     s.setCharAt(j, tmp);
+        //     char [] tpp = t.substring(i+1).toCharArray();
+        //     Arrays.sort(tpp);
+        //     return s.substring(0, i+1) + new String(tpp);
+        // }
+        // private String getNext(String s) { // bug bug bug
+        //     int n = s.length();
+        //     int i = n-1;
+        //     if (s.charAt(i-1) < s.charAt(i)) return swap(s, i, i-1);
+        //     while (i > 0 && s.charAt(i-1) >= s.charAt(i)) --i;
+        //     if (i == 0) return s;
+        //     int j = i;
+        //     while (s.charAt(j) > s.charAt(i)+1) ++j;
+        //     return swap(s, i-1, j);
+        // }
+        // private int cnt(String ss, String t) {
+        //     int n = ss.length();
+        //     int i = 0, j = 0;
+        //     StringBuilder s = new StringBuilder(ss);
+        //     int cnt = 0;
+        //     while (i < n) {
+        //         while (i < n && s.charAt(i) == t.charAt(i)) ++i;
+        //         if (i == n) break;
+        //         s = new StringBuilder(swap(s.toString(), s.toString().indexOf(t.charAt(i)), i));
+        //         ++i;
+        //         ++cnt;
+        //     }
+        //     return cnt;
+        // }
+        // public int getMinSwaps(String num, int k) {
+        //     int n = num.length();
+        //     int cnt = 0;
+        //     String s = num;
+        //     while (cnt < k) {
+        //         s = getNext(s);
+        //         ++cnt;
+        //     }
+        //     return cnt(num, s);
+        // }
+        // public void swapTarget(int i, int j) {
+        //     char tmp = target[i];
+        //     target[i] = target[j];
+        //     target[j] = tmp;
+        // }
+        // char [] ori, target;
+        // public int getMinSwaps(String num, int k) {
+        //     int n = num.length();
+        //     ori = num.toCharArray();
+        //     target = Arrays.copyOf(ori, n);
+        //     // 求第k个最小妙数
+        //     for (int i = 0; i < k; i++) {
+        //         int x = n-2, y = n-1, z = n-1;
+        //         while (x > 0 && target[x] >= target[x+1]) x--; // 从后向前找到num[x] < num[x+1]的第一个位置
+        //         while (y > x && target[x] >= target[y]) y--;   // 从后向前找到num[x] < num[y]的第一个位置
+        //         swapTarget(x, y);                   // 交换num[x]和num[y]
+        //         while (x < z) swapTarget(++x, z--); // 翻转x以后位置的字符
+        //     }
+        //     // 贪心算法求交换次数，模拟将target交换得到num0
+        //     int ans = 0;
+        //     for (int i = 0; i < n; i++) {
+        //         int j = i;
+        //         while (j < n-1 && target[j] != ori[i]) j++;
+        //         while (i < j) {
+        //             swapTarget(j, --j);
+        //             ans++;
+        //         }
+        //     }
+        //     return ans;
+        // }
+
+
+        // public String complexNumberMultiply(String s, String t) {
+        //     int m = s.length(), n = t.length();
+        //     int i = 0, j = 0, a = 0, b = 0, c = 0, d = 0;
+        //     while (i < m && s.charAt(i) != '+') i++;
+        //     a = Integer.parseInt(s.substring(0, i));
+        //     b = Integer.parseInt(s.substring(i+1, m-1));
+        //     while (j < n && t.charAt(j) != '+') j++;
+        //     c = Integer.parseInt(t.substring(0, j));
+        //     d = Integer.parseInt(t.substring(j+1, n-1));
+        //     i = a * c - b * d;
+        //     j = b * c + a * d;
+        //     String ans = i + "+" + j + "i";
+        //     return ans;
+        // }
+
+
+        // public int countPalindromicSubsequence(String t) {
+        //     int n = t.length();
+        //     char [] s = t.toCharArray();
+        //     Set<Character> left = new HashSet<>();
+        //     Set<String> ss = new HashSet<>();
+        //     left.add(s[0]);
+        //     Map<Character, Integer> right = new HashMap<>();
+        //     for (int i = n-1; i > 1; i--) 
+        //         right.put(s[i], right.getOrDefault(s[i], 0) + 1);
+        //     for (int i = 1; i < n-1; i++) {
+        //         for (int j = 0; j < 26; j++) {
+        //             char c = (char)(j + 'a');
+        //             if (left.contains(c) && right.containsKey(c))
+        //                     ss.add("" + c + s[i] + c);
+        //         }
+        //         left.add(s[i]);
+        //         right.put(s[i+1], right.getOrDefault(s[i+1], 0)-1);
+        //         if (right.get(s[i+1]) == 0) right.remove(s[i+1]);
+        //     }
+        //     return ss.size();
+        // }
+
+
+        // public int magicalString(int n) {
+        //     if (n <= 0) return 0;
+        //     if (n <= 3) return 1;
+        //     int res = 1, head = 2, tail = 3, val = 1;
+        //     List<Integer> l = new ArrayList<>();
+        //     l.add(1);
+        //     l.add(2);
+        //     l.add(2);
+        //     while (tail < n) {
+        //         for (int i = 0; i < l.get(head); i++) {
+        //             l.add(val);
+        //             if (val == 1 && tail < n) ++res;
+        //             ++tail;
+        //         }
+        //         val ^= 3;
+        //         ++head;
+        //     }            
+        //     return res;
+        // }
+        // public int magicalString(int n) {
+        //     String s = "122";
+        //     int i = 2;
+        //     while (s.length() < n) 
+        //         s += String.valueOf(Integer.parseInt(s.substring(s.length()-1)) ^ 3).repeat(s.charAt(i++)-'0');
+        //     return (int)s.substring(0, n).chars().filter(ch -> ch == '1').count();
+        // }
+
+
+        public String orderlyQueue(String s, int k) { // tle tle tle
+            int n = s.length();
+            if (k == n) return Stream.of(s.split("")).sorted().collect(Collectors.joining());
+            TreeSet<String> ts = new TreeSet<>();
+            Queue<String> q = new LinkedList<>();
+            q.offer(s);
+            while (!q.isEmpty()) {
+                String cur = q.poll();
+                for (int i = 0; i < k; i++) {
+                    cur = cur.substring(0, i) + cur.substring(i+1) + cur.charAt(i);
+                    // System.out.println("cur: " + cur);
+                    if (!ts.contains(cur)) {
+                        q.offer(cur);
+                        ts.add(cur);
+                    }
+                }
+            }
+            return ts.first();
+        }
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        String a = "abbcccaa";
+        // String a = "scba";
+        String a = "baaca";
 
-        int r = s.countHomogenous(a);
+        String r = s.orderlyQueue(a, 3);
         System.out.println("r: " + r);
     }
 }

@@ -1101,8 +1101,8 @@ public class slidingWindow {
         //     }
         //     return false;
         // }
-        // 维持一个长度为k的window, 每次检查新的值是否与原来窗口中的所有值的差值有小于等于t的. 如果用两个for循环会超时O(nk).
-        //     使用treeset( backed by binary search tree) 的subSet函数,可以快速搜索. 复杂度为 O(n logk)
+        // // 维持一个长度为k的window, 每次检查新的值是否与原来窗口中的所有值的差值有小于等于t的. 如果用两个for循环会超时O(nk).
+        // //     使用treeset( backed by binary search tree) 的subSet函数,可以快速搜索. 复杂度为 O(n logk)
         // public boolean containsNearbyAlmostDuplicate(int[] nums, int k, int t) {
         //     if (k < 1 || t < 0 || nums == null || nums.length < 2) return false;
         //     SortedSet<Long> set = new TreeSet<Long>();
@@ -1116,29 +1116,32 @@ public class slidingWindow {
         // }
 
 
-        public int minMoves(int[] arr, int k) {
-            if (k == 1) return 0;
-            int n = arr.length;
-            List<Integer> g = new ArrayList<>();
-            List<Integer> sum = new ArrayList<>();
-            sum.add(0);
-            int cnt = -1, last = 0;
-            for (int i = 0; i < n; i++) {
-                if (arr[i] == 0) continue;
-                ++cnt;
-                g.add(i-cnt);
-                sum.add(last + i - cnt);
-                last += i - cnt; 
-            }
-            int m = g.size();
-            int ans = Integer.MAX_VALUE;
-            for (int i = 0; i+k <= m; i++) {
-                int mid = (i + i + k - 1) / 2; // 中位数下标
-                int q = g.get(mid);            // 中位数
-                ans = Math.min(ans, (2*(mid-i)-k+1) * q + sum.get(i+k) - sum.get(mid+1) - sum.get(mid) + sum.get(i));
-            }
-            return ans;
-        }
+        // public int minMoves(int[] arr, int k) {
+        //     if (k == 1) return 0;
+        //     int n = arr.length;
+        //     List<Integer> g = new ArrayList<>();
+        //     List<Integer> sum = new ArrayList<>();
+        //     sum.add(0);
+        //     int cnt = -1, last = 0;
+        //     for (int i = 0; i < n; i++) {
+        //         if (arr[i] == 0) continue;
+        //         ++cnt;
+        //         g.add(i-cnt);
+        //         sum.add(last + i - cnt);
+        //         last += i - cnt; 
+        //     }
+        //     int m = g.size();
+        //     int ans = Integer.MAX_VALUE;
+        //     for (int i = 0; i+k <= m; i++) {
+        //         int mid = (i + i + k - 1) / 2; // 中位数下标
+        //         int q = g.get(mid);            // 中位数
+        //         ans = Math.min(ans, (2*(mid-i)-k+1) * q + sum.get(i+k) - sum.get(mid+1) - sum.get(mid) + sum.get(i));
+        //     }
+        //     return ans;
+        // }
+
+
+        
     }    
     public static void main(String[] args) {
         Solution s  =  new Solution();
