@@ -1141,14 +1141,67 @@ public class slidingWindow {
         // }
 
 
+        // public int visiblePoints(List<List<Integer>> points, int angle, List<Integer> location) {
+        //     int cnt = 0;
+        //     double x = location.get(0), y = location.get(1);
+        //     List<Double> list = new ArrayList<>();
+        //     for (List<Integer> point : points) {
+        //         if (point.equals(location)) {
+        //             cnt++;
+        //             continue;
+        //         }
+        //         double x1 = point.get(0), y1 = point.get(1);
+        //         double acos = Math.acos((x1 - x) / Math.sqrt(pow2(x1 - x) + pow2(y1 - y)));
+        //         if (y1 < y) 
+        //             acos = 2 * Math.PI - acos;
+        //         list.add(acos);
+        //     }
+        //     double ang = angle / 180.0 * Math.PI;
+        //     list.sort(Double::compare);
+        //     int size = list.size();
+        //     for (int i = size; i < size * 2; i++) 
+        //         list.add(list.get(i - size) + 2 * Math.PI);
+        //     int res = cnt;
+        //     for (int i = 0, j = 0; i < list.size(); i++) {
+        //         while (j < list.size() && list.get(j) - list.get(i) <= ang) 
+        //             j++;
+        //         res = Math.max(res, cnt + j - i);
+        //     }
+        //     return res;
+        // }
+        // double pow2(double x) {
+        //     return x * x;
+        // }
+        // public int visiblePoints(List<List<Integer>> points, int angle, List<Integer> location) {
+        //     int cnt = 0;                         // 记录一下与站立点重合的总点数
+        //     List<Double> pt = new ArrayList<>(); // 只纪录了反余切的角度值，不需要再真正记点
+        //     double x = location.get(0), y = location.get(1);
+        //     for (List<Integer> p : points) 
+        //         if (p.get(0) == x && p.get(1) == y) 
+        //             cnt++;
+        //         else pt.add(Math.atan2(p.get(1)-y, p.get(0)-x));
+        //     Collections.sort(pt);
+        //     int n = pt.size();
+        //     for (int i = 0; i < n; i++) // duplicate the array +2PI
+        //         pt.add(pt.get(i) + 2.0 * Math.PI);
+        //     int l = 0, ans = 0;
+        //     double fov = angle * Math.PI / 180.0;
+        //     for (int r = 0; r < pt.size(); r++) {
+        //         while (pt.get(r) - pt.get(l) > fov) l++;
+        //         ans = Math.max(ans, r - l + 1);
+        //     }
+        //     return ans + cnt;
+        // }
+
         
     }    
     public static void main(String[] args) {
         Solution s  =  new Solution();
 
-        int []  a = new int []  {1, 0, 0, 0, 0, 0, 1, 1};
-        
-        int r  =  s.minMoves(a, 3);
+        int [][] a = new int [][] {{2,1},{2,2},{3,3}};
+        int [] b = new int [] {1, 1};
+
+        int r  =  s.visiblePoints(a, 90, b);
         System.out.println("r: "  +  r);
     }
 }

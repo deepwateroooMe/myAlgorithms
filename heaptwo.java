@@ -1033,16 +1033,128 @@ public class heaptwo {
         // }
 
 
-   }
+    // Map<Integer, List<Integer>> f;              // followerId -> followeeId sssss
+    // Queue<int []> q;
+    // int time = 0;
+    // public Twitter() {
+    //     q = new PriorityQueue<>((a, b)->b[0]-a[0]);
+    //     f = new HashMap<>();
+    // }
+    // public void postTweet(int userId, int tweetId) {
+    //     ++time;
+    //     q.offer(new int [] {time, tweetId, userId});
+    // }
+    // public List<Integer> getNewsFeed(int userId) {
+    //     List<Integer> res = new ArrayList<>();
+    //     List<int []> tmp = new ArrayList<>();
+    //     Set<Integer> fri = new HashSet<>();
+    //     fri.add(userId);
+    //     if (f.get(userId) != null)
+    //         for (Integer v : f.get(userId)) fri.add(v);
+    //     while (!q.isEmpty() && res.size() < 10) {
+    //         int [] cur = q.poll();
+    //         if (fri.contains(cur[2]))
+    //             res.add(cur[1]);
+    //         tmp.add(cur);
+    //     }
+    //     for (int [] v : tmp) 
+    //         q.offer(v);
+    //     return res;
+    // }
+    // public void follow(int followerId, int followeeId) {
+    //     f.computeIfAbsent(followerId, z -> new ArrayList<>()).add(followeeId);
+    // }
+    // public void unfollow(int followerId, int followeeId) {
+    //     List<Integer> l = f.get(followerId);
+    //     if (l == null || l.size() == 0) return ;
+    //         l.remove(new Integer(followeeId));
+    // }
+
+
+        // public int[] avoidFlood(int[] a) {
+        //     int n = a.length;
+        //     TreeSet<Integer> fu = new TreeSet<>();
+        //     // Queue<Integer> fu = new LinkedList<>();
+        //     Queue<Integer> fu = new PriorityQueue<>((a, b)->b-a);
+        //     List<Integer> dryIdx = new ArrayList<>();
+        //     int idx = 0;
+        //     int [] ans = new int [n];
+        //     for (int i = 1; i < n; i++)
+        //         if (a[i] > 0 && a[i] == a[i-1]) return new int [0];
+        //     for (int i = 0; i < n; i++) {
+        //         if (a[i] > 0 && !fu.contains(a[i])) {
+        //             ans[i] = -1;
+        //             fu.add(a[i]);
+        //         } else if (a[i] == 0) {
+        //             dryIdx.add(i);
+        //         } else if (a[i] > 0 && fu.contains(a[i])) {
+        //             if (idx == dryIdx.size())
+        //                 return new int [0];
+        //             else if (idx < dryIdx.size()) {
+        //                 ans[dryIdx.get(idx)] = a[i];
+        //                 idx++;
+        //                 ans[i] = -1;
+        //             } else return new int [0];
+        //         }
+        //     }
+        //     for (int i = idx; i < dryIdx.size(); i++) 
+        //         ans[dryIdx.get(i)] = 1;
+        //     return ans;
+        // } // 这里先抽干哪个湖，是有关系的，考虑把set fu heap fu
+        // int []  a = new int []  {1, 0, 2, 0, 2, 1};
+
+
+        public double[] getCollisionTimes(int[][] cars) {
+            int n = cars.length;
+            double [] ans = new double [n];
+            Arrays.fill(ans, -1.0);
+            ArrayDeque<Integer> s = new ArrayDeque<>(); // 单调栈，存储当前car右侧且从快到慢的车(的编号)，其他未进入栈的车已被栈中的车合并为车队
+            for (int i = n-1; i >= 0; i--) {
+                while (!s.isEmpty()) { //  顶车速度大于当前车，或被合并时间早于被当前车追上时间，不会被当前及更左的车追上
+                    if (cars[s.peek()][1] >= cars[i][1]
+                        || (ans[s.peek()] > 0 && (double)(cars[s.peek()][0] - cars[i][0]) / (cars[i][1] - cars[s.peek()][1]) > ans[s.peek()]))
+                        s.pop();
+                    else break; //  顶车速度小于当前车，可能相遇, 当前栈顶满足要求，跳出循环
+                }
+                if (!s.isEmpty()) // 当前车和栈顶车相遇
+                    ans[i] = (double)(cars[s.peek()][0] - cars[i][0]) / (cars[i][1] - cars[s.peek()][1]);
+                s.push(i);        // 当前车有可能和左边车相遇，加入栈
+            }
+            return ans;
+            // ArrayDeque<double []> s = new ArrayDeque<>();
+            // s.push(new double [] {cars[n-1][0], cars[n-1][1]});
+            // int t = 0;
+            // for (int i = n-2; i >= 0; i--) {
+            //     if (s.isEmpty() || s.peek()[1] >= cars[i][1]) {
+            //         while (!s.isEmpty() && s.peek()[1] >= cars[i][1]) s.pop();
+            //         s.push(new double [] {cars[i][0], cars[i][1]});
+            //         continue;
+            //     }
+            //     if (!s.isEmpty() && s.peek()[1] < cars[i][1]) {
+            //         double [] top = s.peek();
+            //         double tmp = (double)(s.peek()[0] - (cars[i][0] + t * cars[i][1])) / (double)(cars[i][1] - s.peek()[1]);
+            //         ans[i] = tmp;
+            //         t += tmp;
+            //         s.pop(); // 这里关于时间的计算不对
+            //         // s.push(new double [] {tmp * cars[i][1] + (double)cars[i][0], (double)top[1]});
+            //         s.push(new double [] {top[0], top[1]});
+            //         System.out.println(Arrays.toString(ans));
+            //     }
+            // }
+            // return ans;
+        }
+    }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        // int [][] a = new int [][] {{100,200},{200,1300},{1000,1250},{2000,3200}};
-        // int [][] a = new int [][] {{3,2},{4,3}};
-        // int [][] a = new int [][] {{7,16},{2,3},{3,12},{3,14},{10,19},{10,16},{6,8},{6,11},{3,13},{6,16}};
-        int [][] a = new int [][] {{5,15},{3,19},{6,7},{2,10},{5,16},{8,14},{10,11},{2,19}};
-        
-        int r = s.scheduleCourse(a); 
-        System.out.println("r: " + r);
+        // int [][] a = new int [][] {{1,2},{2,1},{4,3},{7,2}};
+        int [][] a = new int [][] {{3,4},{5,4},{6,3},{9,1}};
+
+        System.out.println("a.length: " + a.length);
+        for (int z = 0; z < a.length; ++z) 
+            System.out.println(Arrays.toString(a[z]));
+
+        double [] r = s.getCollisionTimes(a); 
+        System.out.println(Arrays.toString(r));
     }
 }

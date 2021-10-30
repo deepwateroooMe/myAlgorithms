@@ -156,7 +156,19 @@ public class prefixSum {
         // }
 
 
-        
+        public int findMaxLength(int[] arr) {
+            int n = arr.length;
+            int [] sum = Arrays.copyOf(arr, n);
+            for (int i = 1; i < n; i++) 
+                sum[i] += sum[i-1];
+            int max = 0, j = 0;
+            for (int i = 0; i < n; i++) { // 左右两端是怎么移动来着？
+                int v = sum[i] - (j == 0 ? 0 : sum[j-1]);
+                if (i-j+1 == v * 2) max = Math.max(max, i-j+1);
+            }
+        }
+
+
     }
 
     public static void main(String[] args) {

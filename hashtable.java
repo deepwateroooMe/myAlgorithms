@@ -354,32 +354,6 @@ public class hashtable {
         // }
 
 
-        // public int leastBricks(List<List<Integer>> wall) { // 要换个思路再接着写
-        //     int max = 0;
-        //     for (int i = 0; i < wall.size(); i++) {
-        //         List<Integer> l = wall.get(i);
-        //         for (int j = 1; j < l.size(); j++) 
-        //             l.set(j, l.get(j) + l.get(j-1));
-        //     }
-        //     for (int i = 0; i < wall.size(); i++) 
-        //         max = Collections.max(wall.get(i));
-        //     int [][] arr = new int [wall.size()][max];
-        //     for (int i = 0; i < wall.size(); i++) {
-        //         List<Integer> l = wall.get(i);
-        //         for (int j = 1; j < max; j++) 
-        //             if (!l.contains(j)) arr[i][j] = 1;
-        //     }
-        //     int min = wall.size(), tmp = 0;
-        //     for (int j = 1; j < max; j++) {
-        //         tmp = 0;
-        //         for (int i = 0; i < wall.size(); i++) 
-        //             tmp += arr[i][j];
-        //         min = Math.min(min, tmp);
-        //     }
-        //     return min;
-        // }
-
-
         // private boolean diffByOne(String s, String t)  {
         //     int cnt = 0;
         //     for (int i = 0; i < s.length(); i++) 
@@ -721,23 +695,6 @@ public class hashtable {
         // }
 
 
-        // public int longestWPI(int[] hours) {
-        //     int n = hours.length;
-        //     int [] arr = new int [n];
-        //     for (int i = 0; i < n; i++)
-        //         arr[i] = hours[i] > 8 ? 1 : -1;
-        //     int [] sum = new int [n+1];
-        //     for (int i = 1; i <= n; i++) 
-        //         sum[i] = sum[i-1] + arr[i-1];
-        //     int i = 0, max = 0, tmp = 0;
-        //     for (int j = 1; j <= n; j++) {
-        //         while (i < j && sum[i] + 1 > sum[j]) i++;
-        //         if (sum[i] + 1 == sum[j]) max = Math.max(max, j-i);
-        //     }
-        //     return max;
-        // }
-
-
         // public int countPairs(int [] deliciousness) { // bug bug bug
         //     int mod = (int)1e9 + 7;
         //     int n = deliciousness.length;
@@ -987,27 +944,31 @@ public class hashtable {
 
 
         public int maxEqualRowsAfterFlips(int[][] mat) {
-            int m = mat.length, n = mat[0].length, cnt = 0, max = 0;
-            int [] row = new int [m];
-            for (int i = 0; i < m; i++) {
-                cnt = 0;
-                for (int j = 0; j < n; j++) 
-                    cnt += mat[i][j];
-                row[i] = cnt;
+            int m = mat.length, n = mat[0].length;
+            Map<String, Integer> cnt = new HashMap<>();
+            for (int [] v : mat) {
+                if (v[0] == 1) {
+                    String cur = "";
+                    for (int i = 0; i < n; i++) 
+                        cur += "" + v[i];
+                    cnt.put(cur, cnt.getOrDefault(cur, 0) + 1);
+                } else {
+                    String cur = "";
+                    for (int i = 0; i < n; i++) 
+                        cur += String.valueOf(1 - v[i]);
+                    cnt.put(cur, cnt.getOrDefault(cur, 0) + 1);
+                }
             }
-            for (int k = 0; k <= n; k++) {
-                cnt = 0;
-                for (int i = 0; i < m; i++) 
-                    if (row[i] == k || row[i] == n-k) ++cnt;
-                max = Math.max(max, cnt);
-            }
-            return max;
+            Map<String, Integer> tmp = cnt.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())) 
+                .collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> a, LinkedHashMap::new));
+            return tmp.entrySet().iterator().next().getValue();
         }
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        int [][] a = new int [][] {{0,0},{1,0},{2,0}};
+        int [][] a = new int [][] {{0,0,0},{0,0,1},{1,1,0}};
 
         int r = s.maxEqualRowsAfterFlips(a);
         System.out.println("r: " + r);

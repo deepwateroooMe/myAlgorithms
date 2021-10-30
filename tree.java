@@ -264,34 +264,37 @@ public class tree {
         //         max = Math.max(max, entry.getValue()[1]-entry.getValue()[0]);
         //     return max;
         // }
-        class Pt {
-            TreeNode r;
-            int v;
-            public Pt(TreeNode r, int v) {
-                this.r = r;
-                this.v = v;
-            }
-        }
-        public int widthOfBinaryTree(TreeNode root) { // 二的时候，再参考java代码优化一下
-            int res = 0;
-            Queue<Pt> q = new LinkedList<>();
-            q.offer(new Pt(root, 1));
-            while (!q.isEmpty()) {
-                if (q.size() == 1) q.peek().v = 1;
-                int left = q.peek().v, right = left, n = q.size();
-                for (int i = 0; i < n; i++) {
-                    TreeNode cur = q.peek().r;
-                    right = q.peek().v;
-                    q.poll();
-                    if (cur.left != null) q.offer(new Pt(cur.left, right*2));
-                    if (cur.right != null) q.offer(new Pt(cur.right, right*2+1));
-                }
-                res = Math.max(res, right - left + 1);
-            }
-            return res;
-        }
+        // class Pt {
+        //     TreeNode r;
+        //     int v;
+        //     public Pt(TreeNode r, int v) {
+        //         this.r = r;
+        //         this.v = v;
+        //     }
+        // }
+        // public int widthOfBinaryTree(TreeNode root) { // 二的时候，再参考java代码优化一下
+        //     int res = 0;
+        //     Queue<Pt> q = new LinkedList<>();
+        //     q.offer(new Pt(root, 1));
+        //     while (!q.isEmpty()) {
+        //         if (q.size() == 1) q.peek().v = 1;
+        //         int left = q.peek().v, right = left, n = q.size();
+        //         for (int i = 0; i < n; i++) {
+        //             TreeNode cur = q.peek().r;
+        //             right = q.peek().v;
+        //             q.poll();
+        //             if (cur.left != null) q.offer(new Pt(cur.left, right*2));
+        //             if (cur.right != null) q.offer(new Pt(cur.right, right*2+1));
+        //         }
+        //         res = Math.max(res, right - left + 1);
+        //     }
+        //     return res;
+        // }
 
+
+        public int checkWays(int[][] pairs) {
         
+        }        
     }
         
     public static void main(String[] args) {

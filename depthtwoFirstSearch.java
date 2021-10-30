@@ -848,12 +848,73 @@ public class depthtwoFirstSearch {
         //     return ans;
         // }
 
+        // private int getCnt(char [][] arr, int i, int j) {
+        //     int cnt = 0, x = 0, y = 0;
+        //     for (int [] d : dirs) {
+        //         x = i + d[0];
+        //         y = j + d[1];
+        //         if (x < 0 || x >= m || y < 0 || y >= n) continue;
+        //         if (arr[x][y] == 'M') cnt++;
+        //     }
+        //     return cnt;
+        // }
+        // private void dfs(char [][] arr, char [][] ans, int i, int j) {
+        //     if (i < 0 || i >= m || j < 0 || j >= n || vis[i][j]) return;
+        //     vis[i][j] = true;
+        //     if (arr[i][j] == 'M') {
+        //         ans[i][j] = 'X';
+        //         return;
+        //     }
+        //     if (arr[i][j] == 'E') {
+        //         int cnt = getCnt(arr, i, j);
+        //         if (cnt > 0)
+        //             ans[i][j] = (char)('0'+cnt);
+        //         else {
+        //             ans[i][j] = 'B';
+        //             for (int [] d : dirs) 
+        //                 dfs(arr, ans, i+d[0], j+d[1]);
+        //         }
+        //     }
+        // }
+        // int [][] dirs = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}};
+        // boolean [][] vis;
+        // int m, n;
+        // public char[][] updateBoard(char[][] board, int[] click) {
+        //     m = board.length;
+        //     n = board[0].length;
+        //     char [][] ans = new char [m][n];
+        //     for (int i = 0; i < m; i++) 
+        //         ans[i] = Arrays.copyOf(board[i], n);
+        //     vis = new boolean[m][n];
+        //     dfs(board, ans, click[0], click[1]);
+        //     return ans;
+        // }
+
+
+        // public int lengthLongestPath(String input) {
+        //     int n = input.length();
+        //     if (input.indexOf("\\n") == -1) return input.indexOf('.') == -1 ? 0 : n;
+        //     char [] s = input.toCharArray();
+        //     ArrayDeque<String> s = new ArrayDeque<>();
+        //     int cur = 0, idx = 0, i = 0, max = 0;
+        //     while (i < n) {
+        //         while (i < n && s[i] != '\\') i++; // .ext
+        //     }
+        // }
+
+        
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        // int [][] a = new int [][] {{1,1,1,0,0,0,0,0,0},{1,0,1,0,1,1,1,1,1},{1,1,1,0,0,0,0,0,0}};
-        String a = "dlkfjd";;
-        NestedInteger r = s.deserialize(a);
+        char [][] a = new char [][] {{'E','E','E','E','E'},{'E','E','M','E','E'},{'E','E','E','E','E'},{'E','E','E','E','E'}}; 
+        int [] b = new int [] {3, 0};
+
+        char [][] r = s.updateBoard(a, b);
+
+        System.out.println("r.length: " + r.length);
+        for (int z = 0; z < r.length; ++z) 
+            System.out.println(Arrays.toString(r[z]));
+        
     }
 }

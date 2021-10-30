@@ -1181,8 +1181,24 @@ public class sort {
         //           }
         //       }
         //       return new int [] {resLeft, resRight};
-        //   }  
-   }
+        //   }
+
+
+        public boolean reorderedPowerOf2(int n) {
+            String t = "" + n;
+            char [] s = t.toCharArray();
+            Arrays.sort(s);
+            String ori = new String(s);
+            for (int i = 0; i < 31; i++) {
+                String cur = "" + (1 << i);
+                char [] curArr = cur.toCharArray();
+                Arrays.sort(curArr);
+                if (new String(curArr).equals(ori))
+                    return true;
+            }
+            return false;
+        }        
+    }
     public static void main(String[] args) {
         Solution s  =  new Solution();
 

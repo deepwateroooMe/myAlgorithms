@@ -589,14 +589,97 @@ public class binaryIndexedTree {
         // }
 
 
+        // public String minInteger(String s, int k) { // tle tle tle 当你总是使蛮力去挪动它们的时候，你就是在暴力求解，必将tle tle tle 
+        //     if (getSorted(s).equals(s)) return s;
+        //     int n = s.length(), i = 0;
+        //     Queue<Integer> [] q = new LinkedList[10];
+        //     for (i = 0; i < 10; i++) 
+        //         q[i] = new LinkedList<>();
+        //     for (i = 0; i < n; i++) 
+        //         q[s.charAt(i)-'0'].offer(i);
+        //     i = 0;
+        //     while (k > 0 && i < n) 
+        //         for (int j = 0; j < 10; j++) 
+        //             if (!q[j].isEmpty() && q[j].peek() > i && q[j].peek() < i + k && s.charAt(i)-'0' > j) {
+        //                 int idx = q[j].poll();
+        //                 s = s.substring(0, i) + (char)(j + '0') + minInteger(s.substring(i, idx) + s.substring(idx + 1), k - idx + i);
+        //                 return s;
+        //             }
+        //     return s;
+        // }
+        // private String getSorted(String s) {
+        //     char [] arr = s.toCharArray();
+        //     Arrays.sort(arr);
+        //     return new String(arr);
+        // }
+
+        
+        class BIT { // 开一个树状数组类，维护每个位置的字符的向右的偏移量 ? 向左偏移量
+            private int size;
+            private int [] arr;
+            public BIT(int size) {
+                this.size = size;
+                this.arr = new int [size+1]; // 初始值都是0
+            }
+            public void add(int idx, int v) { // 只有发生偏移，才移动某段区间的值
+                while (idx <= size) {
+                    arr[idx] += v;
+                    idx += lowbit(idx); //
+                }
+            }
+            public int sum(int idx) { // 得到以 i 为下标1-based的所有子、叶子节点的和， 也就是[1, idx]的和，1-based
+                int res = 0;
+                while (idx > 0) {
+                    res += arr[idx];
+                    idx -= lowbit(idx);
+                }
+                return res;
+            }
+            private int lowbit(int x) {
+                return x & -x; // 这个细节要再复习一下
+            }
+        }
+        public String minInteger(String t, int k) { // 感觉这个题目还没有想透，要再多想一下
+            int n = t.length();
+            t = " " + t; // 树状数组从1开始，所以字符串下标也要从1开始比较方便
+            char [] s = t.toCharArray();
+            ArrayDeque<Integer>[] q = new ArrayDeque[10]; // 开10个队列，将每个数各自出现在什么位置存进去,稍微优化只需开9个队列，因为我们不会主动挪9
+            for (int i = 1; i <= n; i++) {
+                int v = s[i] - '0';
+                if (q[v] == null) q[v] = new ArrayDeque<>();
+                q[v].offer(i);
+            }
+            BIT bit = new BIT(n);
+            StringBuilder sb = new StringBuilder();
+            for (int i = 1; i <= n; i++) {
+                for (int j = 0; j < 10; j++) {
+                    if (q[j] == null || q[j].isEmpty()) continue;
+                    int top = q[j].peek(), pos = top + bit.sum(top); // pos是最优解的位置，最优解的位置是原来的位置加上偏移量
+                    // int top = q[j].peek(), pos = bit.sum(top);    // pos是最优解的位置，最优解的位置是原来的位置加上偏移量
+                    // if ((char)(j+'0') == s[i]) break; // 这么写不对！！！
+                    // if (pos == i) break;              // 这么写不对！！！
+                    if (pos - i <= k) {
+                        k -= pos - i;
+                    // if (top - i <= k) { // 如果k还够让j挪到开头的话，按照贪心选择，就挪
+                    //     k -= top - i;
+                        sb.append(j);
+                        q[j].poll();
+                        bit.add(1, 1);  // 更新[1, t)这段的值每个加1，即向右偏移1位.为什么要 从1开始更新：假装每次都移动到最前端，方便计算
+                        bit.add(top, -1);
+                        break;
+                    }
+                }
+            }
+            return sb.toString();
+        }
     }
 
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        int []  a = new int []  {9, 12, 3, 7, 15}; 
+        String a =  "9438957234785635408";
 
-        int res = s.closestToTarget(a, 5);
+        String res = s.minInteger(a, 23);
         System.out.println("res: " + res);
     }
 }         

@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.*;
 import java.util.stream.*;
 import java.util.stream.Collectors;
+import java.util.HashSet;
+import java.util.Set;
 
 import static java.util.stream.Collectors.toMap;
 
@@ -446,32 +448,6 @@ public class competition {
         // }
 
         
-        // public String smallestSubsequence(String s, int k, char letter, int repetition) {
-        //     int n = s.length();
-        //     if (n == k) return s;
-        //     int i = 0, cnt = 0, j = 0;
-        //     String res = "";
-        //     while (j < n) {
-        //         while (cnt < repetition && j < n) {
-        //             if (s.charAt(j) == letter) ++cnt;
-        //             ++j;
-        //         }
-        //         if (j - i == k && (res.equals("") || res.compareTo(s.substring(i, j)) > 0))
-        //             res = s.substring(i, j);
-        //         else if (i + k > j) {
-        //             while (i + k > j && j < n) {
-        //                 if (s.charAt(j) == letter) ++cnt;
-        //                 ++j;   
-        //             }
-        //         } // 我觉得这里需要借助什么数据结构或dp来理一下思路，有点儿混乱
-        //         if (res.compareTo(s.substring(i, j)) > 0) res = s.substring(i, j);
-        //         while (i < j && cnt > repetition){
-        //             ++i;  
-        //         } 
-        //     }
-        // }
-
-
         // private boolean dfs(int val, int one, int two, int zro) {
         //     if (val == 0) return true;
         //     String key = one + "-" + two + "-" + zro + "-" + val;
@@ -510,54 +486,6 @@ public class competition {
         //         return Math.max(cnt[1], cnt[2]) > 2 && cnt[0] % 2 > 0;
         //     return Math.abs(cnt[1] - cnt[2]) > 2 || cnt[0] % 2 == 0;
         // }
-
-
-      // private int getAns(String s) { 
-      //     int n = s.length();
-      //     int j = 0, i = 0;
-      //     Stack<Integer> va = new Stack<>();
-      //     Stack<Character> sn = new Stack<>();
-      //     for (i = 0; i < n; i++) {
-      //         char c = s.charAt(i);
-      //         if (c == '+' || c == '*') {
-      //             sign[si++] = c;
-      //             sn.push(c);
-      //             continue;
-      //         } else {
-      //             j = i+1;
-                  
-      //             while (j < n && Character.isDigit(s.charAt(j))) ++j;
-      //             num[vi] = Integer.parseInt(s.substring(i, j)); // bug
-      //             va.push(num[vi++]);
-      //             if (j - i > 1)
-      //                 i = j-1;
-      //         }
-      //         while (sn.size() > 0 && sn.peek() == '*' && va.size() >= 2) {
-      //             int ans = va.pop() * va.pop();
-      //             sn.pop();
-      //             va.push(ans);
-      //         }
-      //     }
-      //     while (!sn.isEmpty()) {
-      //         int ans = va.pop() + va.pop();
-      //         sn.pop();
-      //         va.push(ans);
-      //     }
-      //     return va.peek();
-      // }
-      //   Map<String, Set<Integer>> m = new HashMap<>(); // memo all possile ans of the string
-      //   int [] num;
-      //   char [] sign;
-      //   int si, vi;
-      //   public int scoreOfStudents(String s, int [] arr) { 
-      //       int n = arr.length;
-      //       num = new int [n];
-      //       sign = new char[n];
-      //       si = 0;
-      //       vi = 0;
-      //       int ans = getAns(s);
-      //       return 0;
-      //   }
 
 
         // public List<Integer> twoOutOfThree(int[] nums1, int[] nums2, int[] nums3) {
@@ -939,54 +867,6 @@ public class competition {
         // }
 
 
-    //     public int countValidWords(String sentence) {
-    //         int n = sentence.length();
-    //         String [] s = sentence.split("\\s+");
-    //         System.out.println(Arrays.toString(s));
-    //         int cnt = 0, ca = 0;
-    //         boolean valid = true;
-    //         for (String v : s) {
-    //             System.out.println("\n v: " + v);
-    //             System.out.println("cnt: " + cnt);
-    //             if (v.length() == 0) continue;
-
-    //             valid = true;
-    //             ca = 0;
-    //             for (int i = 0; i < v.length(); i++) {
-    //                 char c = v.charAt(i);
-    //                 if (Character.isDigit(c)
-    //                     || (c == '-' && (i == 0 || i == v.length()-1 || (!Character.isLowerCase(v.charAt(i-1)) || !Character.isLowerCase(v.charAt(i+1)))))
-    //                     || (c == '!' || c == '.' || c == ',') && i != v.length()-1
-    //                     || ca > 1) {
-    //                     valid = false;
-    //                     break;
-    //                 }
-    //                 System.out.println("v: " + v);
-    // if (c == '-') ++ ca;
-    //             }
-    //             System.out.println("v: " + v);
-    //             System.out.println("cnt: " + cnt);
-    //             System.out.println("valid: " + valid);
-                
-   
-    //             if (valid) cnt++;
-    //         }
-    //         return cnt;
-    //     }
-
-
-        // public int nextBeautifulNumber(int n) {
-        //     if (n == 1) return 22;
-        //     String t = "" + n;
-        //     System.out.println("t: " + t);
-        //     int n = t.length();
-        //     char [] s = t.toCharArray();
-        //     for (int i = 0; i < n; i++) {
-        //         if (s[i] == 1) continue;
-        //     }
-        // }
-
-
         // private long dfs(int idx, int p) {
         //     if (adj.get(idx).size() == 1 && adj.get(idx).get(0) == p) {
         //         cnt[idx] = 1;
@@ -1038,57 +918,175 @@ public class competition {
         //     return res.get(max).size();
         // }
 
+
+        // public int countValidWords(String sentence) {
+        //     int n = sentence.length();
+        //     String [] s = sentence.split("\\s+");
+        //     int cnt = 0, ca = 0;
+        //     boolean valid = true;
+        //     for (String v : s) {
+        //         if (v.length() == 0) continue;
+        //         valid = true;
+        //         ca = 0;
+        //         for (int i = 0; i < v.length(); i++) {
+        //             char c = v.charAt(i);
+        //             if (Character.isDigit(c)
+        //                 || (c == '-' && (i == 0 || i == v.length()-1 || (!Character.isLowerCase(v.charAt(i-1)) || !Character.isLowerCase(v.charAt(i+1)))))
+        //                 || (c == '!' || c == '.' || c == ',') && i != v.length()-1
+        //                 || ca > 1) {
+        //                 valid = false;
+        //                 break;
+        //             }
+        //             if (c == '-') ++ ca;
+        //         }
+        //         if (valid) cnt++;
+        //     }
+        //     return cnt;
+        // }
+        // public int countValidWords(String sentence) {
+        //     String regex = "^([a-z]+(-?[a-z]+)?)?(!|\\.|,)?$";
+        //     String r2 = "[^0-9]+";
+        //     String [] arr = sentence.split("\\s+");
+        //     int ans = 0;
+        //     for (String s : arr) 
+        //         if (s.matches(regex) && s.matches(r2)) 
+        //             ans++;
+        //     return ans;
+        // }
+
+
+        // public int nextBeautifulNumber(int n) { // 这是在表演绝技吗？会把别人看哭滴。。。。。。。
+        //     int[] beauts = {0, 1, 22, 122, 212, 221, 333, 1333, 3133, 3313, 3331, 4444, 14444, 22333, 23233, 23323, 23332, 32233, 32323, 32332, 33223, 33232, 33322, 41444, 44144, 44414, 44441, 55555, 122333, 123233, 123323, 123332, 132233, 132323, 132332, 133223, 133232, 133322, 155555, 212333, 213233, 213323, 213332, 221333, 223133, 223313, 223331, 224444, 231233, 231323, 231332, 232133, 232313, 232331, 233123, 233132, 233213, 233231, 233312, 233321, 242444, 244244, 244424, 244442, 312233, 312323, 312332, 313223, 313232, 313322, 321233, 321323, 321332, 322133, 322313, 322331, 323123, 323132, 323213, 323231, 323312, 323321, 331223, 331232, 331322, 332123, 332132, 332213, 332231, 332312, 332321, 333122, 333212, 333221, 422444, 424244, 424424, 424442, 442244, 442424, 442442, 444224, 444242, 444422, 515555, 551555, 555155, 555515, 555551, 666666, 1224444};
+        //     int pos = Arrays.binarySearch(beauts, n);
+        //     if (pos >= 0) 
+        //         return beauts[pos+1];
+        //     return beauts[-pos-1];
+        // }
+        // private boolean same(int mid) {
+        //     int [] arr = new int [11];
+        //     while (mid != 0) {
+        //         arr[mid % 10]++;
+        //         mid /= 10;
+        //     }
+        //     for (int i = 0; i < arr.length; i++) 
+        //         if (arr[i] != 0 && arr[i] != i) return false;
+        //     return true;
+        // }
+        // public int nextBeautifulNumber(int n) {
+        //     while (true) if (same(++n)) return n;
+        // }
+
+
+        // private int getAns(String s) { 
+        //     int n = s.length();
+        //     int j = 0, i = 0;
+        //     ArrayDeque<Integer> va = new ArrayDeque<>();
+        //     ArrayDeque<Character> sn = new ArrayDeque<>();
+        //     for (i = 0; i < n; i++) {
+        //         char c = s.charAt(i);
+        //         if (c == '+' || c == '*') {
+        //             op.add(c);
+        //             sn.push(c);
+        //             continue;
+        //         } else {
+        //             j = i+1;
+        //             while (j < n && Character.isDigit(s.charAt(j))) ++j;
+        //             arr.add(Integer.parseInt(s.substring(i, j)));
+        //             va.push(arr.get(arr.size()-1));
+        //             if (j - i > 1)
+        //                 i = j-1;
+        //         }
+        //         while (sn.size() > 0 && sn.peek() == '*' && va.size() >= 2) {
+        //             int ans = va.pop() * va.pop();
+        //             sn.pop();
+        //             va.push(ans);
+        //         }
+        //     }
+        //     while (!sn.isEmpty()) {
+        //         int ans = va.pop() + va.pop();
+        //         sn.pop();
+        //         va.push(ans);
+        //     }
+        //     return va.peek();
+        // }
+        // Map<String, Set<Integer>> m = new HashMap<>(); // memo all possile ans of the string
+        // List<Integer> arr = new ArrayList<>();
+        // List<Character> op = new ArrayList<>();
+        // int si, vi;
+        // public int scoreOfStudents(String s, int [] num) { // 区间型DP
+        //     int n = num.length;
+        //     si = 0;
+        //     vi = 0;
+        //     int ans = getAns(s);
+        //     for (int i = op.size()-1; i >= 0; i--) 
+        //         op.add(i+1, '#');
+        //     op.add(0, '#');
+        //     return 0;
+        // }
+        // private int compute(String t) {
+        //     ArrayDeque<Integer> st = new ArrayDeque<>();
+        //     char [] s = t.toCharArray();
+        //     for (int i = 0; i < s.length; i++) {
+        //         char c = s[i];
+        //         if (Character.isDigit(c)) 
+        //             if (i > 0 && s[i-1] == '*') 
+        //                 st.push(st.pop() * (c-'0'));
+        //             else st.push(c-'0');
+        //     }
+        //     int ans = 0;
+        //     while (!st.isEmpty()) 
+        //         ans += st.pop();
+        //     return ans;
+        // }
+        // Set<Integer> dfs(String t, int l, int r, Set<Integer> [][] f) {
+        //     if (f[l][r] != null) return f[l][r]; // 有记忆则调取记忆
+        //     char [] s = t.toCharArray();
+        //     int n = t.length(), v = 0;
+        //     f[l][r] = new HashSet<>();
+        //     if (l == r) {
+        //         f[l][r].add(s[l] - '0');
+        //         return f[l][r];
+        //     }
+        //     for (int i = l+1; i < r; i++) {
+        //         if (!Character.isDigit(s[i])) { // 递归求解左右两边可能算出的答案
+        //             Set<Integer> left = dfs(t, l, i-1, f);
+        //             Set<Integer> right = dfs(t, i+1, r, f);
+        //             for (Integer va : left) 
+        //                 for (Integer vb : right) {
+        //                     if (s[i] == '*') v = va * vb;
+        //                     else v = va + vb;
+        //                     if (v >= 0 && v <= 1000) f[l][r].add(v);
+        //                 }
+        //         }
+        //     }
+        //     return f[l][r];
+        // }
+        // public int scoreOfStudents(String s, int [] num) { 
+        //     int m = num.length, res = compute(s), n = s.length(), ans = 0;
+        //     Set<Integer> [][] f = new Set[n][n]; // 第一次见，学习一下
+        //     dfs(s, 0, n-1, f);
+        //     Set<Integer> can = f[0][n-1]; // candidates: of wrong answers
+        //     for (Integer v : num) 
+        //         if (v == res) ans += 5;
+        //         else if (can.contains(v)) ans += 2;
+        //     return ans;
+        // }
+
         
-        private int getLargesetTimeNeeded(int [] arr, int mask) {
-            int max = 0;
-            for (int i = 0; i < arr.length; i++) 
-                if (((mask >> i) & 1 ) == 1)
-                    max = Math.max(max, arr[i]);
-            return max;
-        }
-        public int minimumTime(int n, int[][] relations, int[] time) {
-            int [] pre = new int [n]; // bitmask representing prerequirements
-            for (int i = 0; i < relations.length; i++) {
-                int u = relations[i][0] - 1;
-                int v = relations[i][1] - 1;
-                pre[v] |= (1 << u);
-            }
-            int range = (1 << n);
-            int [] dp = new int [range];          // dp[state] = minimum semesters to complete all the courses of 'state'.
-            Arrays.fill(dp, Integer.MAX_VALUE/3);
-            dp[0] = 0;
-            for (int i = 0; i < range; i++) {
-                int available = 0;
-                for (int j = 0; j < n; j++)
-                    if ((i & pre[j]) == pre[j]) // 可是包含了已经选过的课程: 这个bug可能是：有一门耗时很长的课，可以现在选，但我大概可以把它推后到同耗时长的课一起选以减少总消耗时间,可一时半会儿还是想不出来这个bug该如何改
-                        available |= (1 << j); // Can study course j next, since all required courses have been studied.
-                available &= ~i; // Don't want to study those already studied courses.
-                int nextCourses = available;
-                // dp[i | nextCourses] = Math.min(dp[i | nextCourses], dp[i] + getLargesetTimeNeeded(time, nextCourses));
-                while (nextCourses > 0) {
-                    // System.out.println("Integer.toBinaryString(nextCourses): " + Integer.toBinaryString(nextCourses));
-                    // System.out.println("getLargesetTimeNeeded(time, nextCourses): " + getLargesetTimeNeeded(time, nextCourses));
-                    dp[i | nextCourses] = Math.min(dp[i | nextCourses], dp[i] + getLargesetTimeNeeded(time, nextCourses));
-// 遍历现在可选课程的所有子集： Enumerate all subsets. E.g, available = 101, next: 100 -> 001 -> 000
-                    nextCourses = (nextCourses -1) & available;
-                }
-            }
-            return dp[range-1];
-        }
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        // int [][] a = new int [][] {{1,3},{2,3}};
-        // int [] b = new int [] {3, 2, 5};
+        // int [] a = new int [] {13,0,10,13,13,16,16};
+        // String b = "3+5*2";
 
-        int [][] a = new int [][] {{2,7},{2,6},{3,6},{4,6},{7,6},{2,1},{3,1},{4,1},{6,1},{7,1},{3,8},{5,8},{7,8},{1,9},{2,9},{6,9},{7,9}};
-        int []  b = new int []  {9, 5, 9, 5, 8, 7, 7, 8, 4};
+        String a = "7+3*1*2";
+        int [] b = new int [] {20,13,42};
 
-        System.out.println(Arrays.toString(b));
+        // System.out.println(Arrays.toString(a));
+        // System.out.println("b: " + b);
         
-
-        int r = s.minimumTime(9, a, b);
+        int r = s.scoreOfStudents(a, b);
         System.out.println("r: " + r);
     }
 }

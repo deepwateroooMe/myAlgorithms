@@ -175,31 +175,6 @@ public class gretwoedy {
         // }
 
         
-        //  private void helper(int t, long v, int cnt) {
-        //     if (v == t) {
-        //         if (cnt < min) min = cnt;
-        //         return;
-        //     }
-        //     if (cnt >= min || v == Integer.MAX_VALUE || v <= 0) return;
-        //     if (v > t)
-        //         helper(t, v-1, cnt+1);
-        //     else {
-        //         long tmp = 2 * v;
-        //         helper(t, tmp, cnt+1);
-        //         if (v > t)
-        //             helper(t, v-1, cnt+1);
-        //     }
-        // } 
-        // int min;
-        // public int brokenCalc(int startValue, int target) {
-        //     min = Integer.MAX_VALUE;
-        //     if (target < startValue) return startValue - target;
-        //     helper(target, (long)startValue, 0);
-        //     return min;
-        // }
-        // // int res = s.brokenCalc(1, 1000000000); // 爆栈，要用到快速幂处理吗，这里还要再想想
-
-
         // public int findMinArrowShots(int[][] points) {
         //     int n = points.length;
         //     // 负数的时候排序排反了: 所以要特别注意负数符号处理
@@ -262,88 +237,6 @@ public class gretwoedy {
         //         }
         //     }
         //     return (cnt+1) / 2;
-        // }
-
-
-        // public class MinSeg {
-        //     List<Integer> tree = new ArrayList<>();
-        //     List<Integer> tidx = new ArrayList<>();
-        //     public int minIdx = 0;
-        //     int n;
-        //     public MinSeg (int [] arr) {
-        //         n = arr.length;
-        //         tree = new ArrayList<>(2*n);
-        //         for (int i = 0; i < n; i++) {
-        //             tree.add(0);
-        //             tidx.add(0);
-        //         }
-        //         for (int i = 0; i < n; i++) {
-        //             tree.add(arr[i]); 
-        //             tidx.add(i);
-        //         }
-        //         for (int i = n-1; i >= 0; i--) { // i >= 0
-        //             tree.set(i,  Math.min(tree.get(2*i),  tree.get(2*i+1)));
-        //             tidx.set(i, tree.get(2*i) <= tree.get(2*i+1) ? i-1 : i);
-        //         }
-        //     }
-        //     public void update(int idx,  int v) {
-        //         idx += n;
-        //         tree.set(idx,  v);
-        //         while (idx > 1) {
-        //             idx /= 2;
-        //             tree.set(idx,  Math.min(tree.get(2*idx),  tree.get(2*idx+1)));
-        //             tidx.set(idx, tree.get(2*idx) <= tree.get(2*idx+1) ? idx-1 : idx);
-        //         }
-        //     }
-        //     public int getMin(int l,  int r) { // [l, r) include left, not included right
-        //         l += n;
-        //         r += n;
-        //         int min = Integer.MAX_VALUE;
-        //         while (l < r) {
-        //             if ((l & 1) == 1) {
-        //                 if (tree.get(l) < min) {
-        //                     min = tree.get(l);
-        //                     minIdx = tidx.get(l);
-        //                 }
-        //                 // min = Math.min(min,  tree.get(l));
-        //                 l++;
-        //             }
-        //             if ((r & 1) == 1) {
-        //                 r--; // order matters !!!
-        //                 // min = Math.min(min,  tree.get(r));
-        //                 if (tree.get(r) < min) {
-        //                     min = tree.get(r);
-        //                     minIdx = tidx.get(l);
-        //                     // minIdx = r;
-        //                 }
-        //             }
-        //             l >>= 1;
-        //             r >>= 1;
-        //         }
-        //         return min;
-        //     }
-        // }
-        // public int[] mostCompetitive(int[] nums,  int k) {
-        //     int n = nums.length;
-        //     if (k == n) return nums;
-        //     MinSeg minSeg = new MinSeg(nums);
-        //     List<Integer> l = new ArrayList<>();
-        //     int min = Integer.MAX_VALUE,  midx = -1;
-        //     while (l.size() < k) {
-        //         min = minSeg.getMin(midx+1, n-(k-l.size())+1);
-        //         System.out.println("min: " + min);
-        //         // for (int i = midx+1; i <= n-(k-l.size()); i++) {
-        //         //     if (nums[i] < min) {
-        //         //         min = nums[i];
-        //         //         midx = i;
-        //         //     }
-        //         // }
-        //         l.add(min);
-        //         min = Integer.MAX_VALUE;
-        //         midx = minSeg.minIdx; // 这里的idx的更新是有问题的，除非要把数组位标随身背着
-        //         System.out.println("midx:" + midx);
-        //     }
-        //     return l.stream().mapToInt(i->i).toArray();
         // }
 
 
@@ -433,27 +326,6 @@ public class gretwoedy {
         // }
 
 
-        // public int[] rearrangeArray(int[] nums) {
-        //     int n = nums.length;
-        //     int [] res = new int [n];
-        //     Arrays.sort(nums);
-        //     int ei = 0, oi = 1; // even idx odd idx
-        //     double mid = (n % 2 == 0 ? (nums[n/2] + nums[n/2+1])/2.0 : nums[n/2]);
-        //     System.out.println("mid: " + mid);
-        //     for (int i = 0; i < n; i++) {
-        //         if (nums[i] < mid) {
-        //             res[oi] = nums[i];
-        //             oi += 2;
-        //         } else {
-        //             res[ei] = nums[i];
-        //             ei += 2 ;
-        //         }
-        //     }
-        //     return res;
-        // }
-        // int []  a = new int []  {1, 2, 5, 9};
-
-
         // public String maximumBinaryString(String binary) {
         //     int n = binary.length();
         //     StringBuilder s = new StringBuilder(binary);
@@ -536,34 +408,6 @@ public class gretwoedy {
         //         ++cnt; // i : 0
         //     }
         //     return cnt;
-        // }
-
-        
-        // private int makeZigZag(int [] arr, int idx) {
-        //     int cnt = 0;
-        //     for (int i = idx; i < n; i += 2) {
-        //         // if (i == idx && i+1 < n && arr[i] < arr[i+1]) cnt += arr[i+1] - ((i == n-2 ? arr[i] : Math.min(arr[i], arr[i+2])) - 1);
-        //         if (i == idx && i+1 < n && arr[i] < arr[i+1]) {
-        //             cnt += arr[i+1] - (arr[i] - 1);
-        //             arr[i+1] = arr[i]-1;
-        //         }
-        //         if ((i > idx || idx%2 ==1) && arr[i] < arr[i-1]) {
-        //             cnt += arr[i-1] - (arr[i]-1);
-        //             arr[i-1]  = arr[i]-1;
-        //         }
-        //     }
-        //     System.out.println("cnt: " + cnt);
-        //     return cnt;
-        // }
-        // int n;
-        // public int movesToMakeZigzag(int[] nums) {
-        //     n = nums.length;
-        //     int [] s = new int [n];
-        //     System.arraycopy(nums, 0, s, 0, n);
-        //     int a = makeZigZag(s, 0);
-        //     int [] t = new int [n];
-        //     System.arraycopy(nums, 0, t, 0, n);
-        //     return Math.min(a, makeZigZag(t, 1));
         // }
 
 
@@ -742,53 +586,650 @@ public class gretwoedy {
         //     return ans;
         // }
 
-        private String getSorted(String s) {
-            char [] arr = s.toCharArray();
-            Arrays.sort(arr);
-            return new String(arr);
-        }
-        public String minInteger(String s, int k) {
-            if (getSorted(s).equals(s)) return s;
-            int n = s.length(), i = 0;
-            Queue<Integer> [] q = new LinkedList[10];
-            for (i = 0; i < 10; i++) 
-                q[i] = new LinkedList<>();
-            for (i = 0; i < n; i++) 
-                q[s.charAt(i)-'0'].offer(i);
-            i = 0;
-            while (k > 0 && i < n) {
-                System.out.println("\ni: " + i);
-                
-                for (int j = 0; j < 10; j++) {
-                    System.out.println("j: " + j);
-                    System.out.println(" (!q[j].isEmpty() && q[j].peek() < i + k && s.charAt(i)-'0' > j): " +  (!q[j].isEmpty() && q[j].peek() < i + k && s.charAt(i)-'0' > j));
+        
+        // public int brokenCalc(int startValue, int target) { // 思路基本到位了，bug还要慢慢修改
+        //     if (target < startValue) return startValue - target;
+        //     if (target == startValue) return 0;
+        //     int cnt = 0, cntb = 0, va = startValue, vb = target;
+        //     while (va < target) {
+        //         va *= 2;
+        //         ++cnt;
+        //     }
+        //     if (va == target) return cnt;
+        //     if (vb % 2 == 0 && vb > startValue) {
+        //         vb /= 2;
+        //         return brokenCalc(vb, target) + 1;
+        //         // ++cntb;
+        //     }
+        //     // System.out.println("cnt + va - target: " + (cnt + va - target));
+        //     if (vb < startValue)
+        //         return Math.min(cnt + va - target, startValue - vb + cntb);
+        //     return cnt + va - target;
+        // }
 
-                    if (!q[j].isEmpty() && q[j].peek() > i && q[j].peek() < i + k && s.charAt(i)-'0' > j) {
-                        int idx = q[j].poll();
-                        // s = s.substring(0, i) + (char)(j + '0') +  s.substring(i, idx) + s.substring(idx + 1);
-                        s = s.substring(0, i) + (char)(j + '0') + minInteger(s.substring(i, idx) + s.substring(idx + 1), k - idx + i);
-                        return s;
-                        // System.out.println("s: " + s);
-                        // k -= idx - i;
-                        // i++;
-                        // break;
+
+        // public int[] rearrangeArray(int[] arr) {
+        //     int n = arr.length;
+        //     int [] res = new int [n];
+        //     Arrays.sort(arr);
+        //     int ei = 0, oi = 1; // even idx odd idx
+        //     double mid = (n % 2 == 0 ? (arr[n/2] + arr[n/2-1])/2.0 : arr[n/2]);
+        //     for (Integer v : arr) {
+        //         if ((double)v < mid) {
+        //             res[oi] = v;
+        //             oi += 2;
+        //         } else {
+        //             res[ei] = v;
+        //             ei += 2 ;
+        //         }
+        //     }
+        //     return res;
+        // }
+
+
+        // public int[] mostCompetitive(int[] arr,  int k) {
+        //     int n = arr.length;
+        //     int [] ans = new int [k];
+        //     List<Integer> l = new ArrayList<>();
+        //     for (int i = 0; i < n; i++) {
+        //         if (i == 0) {
+        //             l.add(arr[i]);
+        //             continue;
+        //         }
+        //         if (arr[i] > l.get(l.size()-1) && l.size() < k) l.add(arr[i]);
+        //         else if (arr[i] < l.get(l.size()-1)) {
+        //             if (l.size() < k && l.size() + n-i == k) {
+        //                 int idx = 0;
+        //                 for (Integer v : l) 
+        //                     ans[idx++] = v;
+        //                 System.arraycopy(arr, i, ans, idx, n-i);
+        //                 return ans;
+        //             } else {
+        //                 l.remove(l.size()-1);
+        //                 while (l.size() > 0 &&  l.size() + n-i > k && l.get(l.size()-1) > arr[i]) l.remove(l.size()-1);
+        //                 l.add(arr[i]);
+        //             }
+        //         } else if (l.get(l.size()-1) == arr[i] && l.size() < k) l.add(arr[i]);
+        //     }
+        //     int idx = 0;
+        //     for (Integer v : l) 
+        //         ans[idx++] = v;
+        //     return ans;
+        // }
+
+
+        // public int monotoneIncreasingDigits(int n) {
+        //     String t = "" + n;
+        //     char [] s = t.toCharArray();
+        //     int m = t.length();
+        //     String tmp = (s[0] == '1' ? "" : ""+(s[0]-'0'-1)) + "9".repeat(m-1);
+        //     if (t.equals(""+s[0]+"0".repeat(m-1))) return Integer.parseInt(tmp); // [1-9]000000
+        //     int i = 0;
+        //     while (i < m-1 && s[i] <= s[i+1]) ++i;
+        //     if (i == m-1) return n;
+        //     i = 0;
+        //     while (i < m-1 && s[i] >= s[i+1]) ++i;
+        //     if (i == m-1) return Integer.parseInt(tmp);
+        //     return 0; // 其它的情况再遍历改写
+        // }
+
+
+ 
+        
+        // private int makeZigZag(int [] arr, int idx) { // 0, 1
+        //     int cnt = 0, min = Integer.MAX_VALUE;
+        //     for (int i = idx; i < n; i += 2) {
+        //         if (i == 0 || i == n-1) {
+        //             min = (i == 0 ? arr[1] : arr[i-1]) - 1;
+        //             if (arr[i] > min)
+        //                 cnt += arr[i] - min;
+        //             continue;
+        //         }
+        //         min = Math.min(arr[i-1], arr[i+1]) -1;
+        //         if (arr[i] > min)
+        //             cnt += arr[i] - min;
+        //     }
+        //     return cnt;
+        // }
+        // int n;
+        // public int movesToMakeZigzag(int[] arr) {
+        //     n = arr.length;
+        //     if (n == 1) return 0;
+        //     return Math.min(makeZigZag(arr, 0), makeZigZag(arr, 1));
+        // }
+
+
+        // public int maxDiff(int num) {
+        //     String t = "" + num;
+        //     char [] s = t.toCharArray();
+        //     int n = t.length(), min = Integer.MAX_VALUE, max = 0;
+        //     for (char c = '0'; c <= '9'; c++) {
+        //         if (t.indexOf(c) == -1) continue;
+        //         for (int i = 0; i <= 9; i++) {
+        //             char [] tmp = Arrays.copyOf(s, n);
+        //             System.out.println("i: " + i);
+        //             for (int j = 0; j < n; j++) 
+        //                 if (tmp[j] == c) tmp[j] = (char)('0' + i);
+        //             if (tmp[0] == '0' || new String(tmp).equals("0".repeat(n))) continue;
+        //             int v = Integer.parseInt(new String(tmp));
+        //             max = Math.max(v, max);
+        //             min = Math.min(v, min);
+        //         }            
+        //     }
+        //     return max - min;
+        // }
+
+
+        // public long maxMatrixSum(int[][] mat) { // 如果是同一行里面，找最大的两个乘积
+        //     int n = mat.length;
+        // }
+
+        
+        // public int addRungs(int[] rungs, int dist) {
+        //     int n = rungs.length, cur = 0, cnt = 0, i = 0;
+        //     while (i < n) {
+        //         while (cur + dist < rungs[i]) {
+        //             int v = (rungs[i] - cur) / dist - ((rungs[i] - cur) % dist == 0 ? 1 : 0); 
+        //             cnt += v;
+        //             cur = cur + v * dist;
+        //         }
+        //         if (cur + dist >= rungs[i]) {
+        //             cur = rungs[i];
+        //             i++;
+        //         }
+        //     }
+        //     return cnt;
+        // }
+
+
+        // public List<List<Integer>> reconstructMatrix(int upper, int lower, int[] colsum) {
+        //     int n = colsum.length, cnt = 0;
+        //     int [][] arr = new int [2][n];
+        //     for (int i = 0; i < n; i++) 
+        //         if (colsum[i] == 0) {
+        //             continue;
+        //         } else if (colsum[i] == 2) {
+        //             arr[0][i] = 1;
+        //             arr[1][i] = 1;
+        //             ++cnt;
+        //         }
+        //     if (cnt > upper) return new ArrayList<>();
+        //     for (int i = 0; i < n; i++)
+        //         if (colsum[i] == 1)
+        //             if (cnt < upper) {
+        //                 arr[0][i] = 1;
+        //                 ++cnt;
+        //             } else 
+        //                 arr[1][i] = 1;
+        //     int sum = Arrays.stream(arr[1]).sum();
+        //     if (sum != lower) return new ArrayList<>();
+        //     List<List<Integer>> res = new ArrayList<>();
+        //     for (int i = 0; i < 2; i++) 
+        //         res.add(Arrays.stream(arr[i]).boxed().collect(Collectors.toList()));
+        //     return res;
+        // }
+
+
+        // public boolean increasingTriplet(int[] arr) {
+        //     int n = arr.length;
+        //     TreeSet<Integer> l = new TreeSet<>();
+        //     TreeMap<Integer, Integer> r = new TreeMap<>();
+        //     for (int i = n-1; i >= 2; i--) 
+        //         r.put(arr[i], r.getOrDefault(arr[i], 0) + 1);
+        //     l.add(arr[0]);
+        //     for (int i = 1; i < n-1; i++) {
+        //         l.add(arr[i]);
+        //         Integer lower = l.lower(arr[i]);
+        //         if (lower == null) continue;
+        //         Integer higher = r.higherKey(arr[i]);
+        //         if (higher != null) return true;
+        //         if (i < n-2) {
+        //             r.put(arr[i+1], r.get(arr[i+1])-1);
+        //             if (r.get(arr[i+1]) == 0) r.remove(arr[i+1]);
+        //         }
+        //     }
+        //     return false;
+        // }
+
+
+        //   public int minElements(int [] arr, int limit, int goal) { // bug: overflow, 负数取模的问题
+        //      int n = arr.length;
+        //      // System.out.println("n: " + n);
+        //      long sum = 0;
+        //      for (Integer v : arr) sum += v;
+        //      System.out.println("sum: " + sum);
+        //      if (sum == (long)goal) return 0;
+        //      if ((long)goal > sum) return (int)((long)goal - sum) / limit + (int)(((long)goal - sum) % limit == 0 ? 0 : 1);
+        //      else if (goal < sum && goal > 0) return (int)((sum - (long)goal) / limit) + (int)((sum - goal) % limit == 0 ? 0 : 1);
+        //      else 
+        //          return -1*(int)((long)goal - sum) / limit + (int)((long)(sum - goal) % limit == 0 ? 0 : 1);
+        // }
+
+
+        // public String strWithout3a3b(int a, int b) {
+        //     int x = Math.min(a, b), y = Math.max(a, b);
+        //     String max = x == a ? "b" : "a", min = x == a ? "a" : "b";
+        //     String ans = "";
+        //     while (y > 0 && x > 0) {
+        //         while (y > x) {
+        //             ans += max.repeat(2);
+        //             y -= 2;
+        //             ans += min;
+        //             x --;
+        //         }
+        //         ans += max; // 昨晚邻居老黑半夜还在大声放音乐，晚上休息不好，现在的脑袋不是很好转，改天再接着写这个
+        //         y--;
+        //     }
+        //     return ans;
+        // }
+
+
+        // public int eliminateMaximum(int[] dist, int[] speed) {
+        //     int n = dist.length;
+        //     double [] time = new double[n];
+        //     for (int i = 0; i < n; i++) 
+        //         time[i] = (double)dist[i] / speed[i];
+        //     System.out.println(Arrays.toString(time));
+        //     List<Double> ins = new ArrayList<>();
+        //     for (int i = 0; i < n; i++) 
+        //         ins.add(time[i]);
+        //     Collections.sort(ins, (a, b)->Double.compare(a, b));
+        //     int cnt = 0, cur = 0;
+        //     for (int i = 0; i < ins.size(); i++) {
+        //         double v = ins.get(i);
+        //         if (Double.compare(cur, v) < 0) {
+        //             cnt++;
+        //             cur += 1; 
+        //         } else return cnt;
+        //     }
+        //     return cnt;
+        // }
+
+
+        // public int maxSumRangeQuery(int[] nums, int[][] requests) {
+        //     int mod = (int)1e9 + 7;
+        //     int [] cnt = new int [100001];
+        //     for (int [] v : requests) 
+        //         for (int i = v[0]; i <= v[1]; i++)
+        //             cnt[i]++;
+        //     List<Integer> l = new ArrayList<>();
+        //     for (int i = 0; i < 100001; i++)
+        //         if (cnt[i] > 0)
+        //             l.add(cnt[i]);
+        //     Collections.sort(l, (a, b)->b-a);
+        //     Arrays.sort(nums);
+        //     int idx = nums.length - 1;
+        //     long ans = 0;
+        //     for (int i = 0; i < l.size(); i++) 
+        //         ans = (ans + l.get(i) * nums[idx--]) % mod;
+        //     return (int)ans;
+        // }
+        // public int maxSumRangeQuery(int[] nums, int[][] requests) { // 差分数组 + 前缀和
+        //     int mod = (int)1e9 + 7, n = nums.length;
+        //     int [] cnt = new int [n];
+        //     for (int [] v : requests) {
+        //         cnt[v[0]]++;
+        //         if (v[1] + 1 < n) cnt[v[1]+1]--;
+        //     }
+        //     for (int i = 1; i < n; i++) 
+        //         cnt[i] += cnt[i-1];
+        //     Arrays.sort(cnt);
+        //     Arrays.sort(nums);
+        //     long ans = 0;
+        //     for (int i = n-1, j = n-1; i >= 0 && j >= 0; i--) 
+        //         ans = (ans + (long)nums[j--] * cnt[i]) % mod;
+        //     return (int)ans;
+        // }
+
+
+        // public long numberOfWeeks(int[] milestones) { // 差分数组 + 前缀和,可能还是跟前一题有些类似的地方，怎么把那些东西都减掉  
+        //     int n = milestones.length, ans = 0;
+        //     Queue<Integer> q = new PriorityQueue<>((a, b) -> b - a); // tle tle tle 
+        //     for (Integer v : milestones) q.offer(v);
+        //     int cur = 0, top = 0, pre = 0;
+        //     while (q.size() > 1) {
+        //         cur = q.poll();
+        //         if (cur == pre) {
+        //             top = q.poll();
+        //             ans++;
+        //             if (top > 1) q.offer(top-1)
+        //         }
+        //     }
+        // }
+
+        // private void getSums(int [] arr, int idx, int sum, Set<Integer> s) {
+        //     if (idx == arr.length) {
+        //         s.add(sum);
+        //         return ;
+        //     }
+        //     getSums(arr, idx+1, sum + arr[idx], s);
+        //     getSums(arr, idx+1, sum, s);
+        // }
+        // public int minPatches(int[] nums, int n) {  // tle tle tle tle
+        //     Set<Integer> vis = new HashSet<>();
+        //     getSums(nums, 0, 0, vis);
+        //     vis.remove(0);
+        //     int cnt = 0;
+        //     Set<Integer> s = new HashSet<>(vis);
+        //     for (int i = 1; i <= n; i++) {
+        //         if (!vis.contains(i)) {
+        //             vis.add(i);
+        //             cnt++;
+        //             for (Integer v : s)
+        //                 vis.add(v + i);
+        //         }
+        //         s.addAll(vis);
+        //     }
+        //     return cnt;
+        //  }
+        // public int minPatches(int[] nums, int n) {
+        //     long sum = 1;
+        //     int cnt = 0, idx = 0;
+        //     while (sum <= n) {
+        //         if (idx >= nums.length || sum < nums[idx]) {
+        //             sum *= 2;
+        //             cnt++;
+        //         } else sum += nums[idx++];
+        //     }
+        //     return cnt;
+        // }
+
+
+        
+        // public List<String> maxNumOfSubstrings(String t) {
+        //     int n = t.length();
+        //     char [] s = t.toCharArray();
+        //     int [] bgn = new int [26], end = new int [26];
+        //     Arrays.fill(bgn, -1);
+        //     Arrays.fill(end, -1);
+        //     for (int i = 0; i < n; i++) {
+        //         int v = s[i] - 'a';
+        //         if (bgn[v] == -1) {
+        //             bgn[v] = i;
+        //             end[v] = i;
+        //         } else end[v] = i;
+        //     }
+        //     TreeSet<String> ts = new TreeSet<>((a, b)->(a.length() != b.length() ? a.length() - b.length() : a.compareTo(b)));
+        //     for (int i = 0; i < 26; i++) {
+        //         if (bgn[i] == -1) continue;
+        //         String sub = t.substring(bgn[i], end[i]+1);
+        //          int l = n, r = 0, pl = n, pr = 0;
+        //         for (char c : sub.toCharArray()) {
+        //             l = Math.min(l, bgn[c-'a']);
+        //             r = Math.max(r, end[c-'a']);
+        //         }
+        //         if (l != r) 
+        //             while (pl != l || pr != r) {
+        //                 pl = l;
+        //                 pr = r;
+        //                 for (int j = l; j <= r; j++) 
+        //                     if (bgn[s[j] -'a'] != -1) {
+        //                         l = Math.min(l, bgn[s[j]-'a']);
+        //                         r = Math.max(r, end[s[j]-'a']);
+        //                     }
+        //             }
+        //         ts.add(t.substring(l, r+1));
+        //     }
+        //     List<String> ans = new ArrayList<>();
+        //     Iterator it = ts.iterator();
+        //     Set<Character> vis = new HashSet<>();
+        //     boolean valid = true;
+        //     while (it.hasNext()) {
+        //         String cur = (String)it.next();
+        //         Set<Character> chars = new HashSet<>();
+        //         for (char c : cur.toCharArray()) chars.add(c);
+        //         valid = true;
+        //         for (char c : chars) 
+        //             if (vis.contains(c)) {
+        //                 valid = false;
+        //                 break;
+        //             }
+        //         if (valid) {
+        //             ans.add(cur);
+        //             vis.addAll(chars);
+        //         }
+        //     }
+        //     return ans;
+        // }
+
+
+            // public String smallestSubsequence(String t, int k, char letter, int repetition) { // bug bug bug
+            //     int n = t.length(), cnt = 0; // 感觉思路是清楚的，可是细节实现是还是有很多bug
+            //     char [] s = t.toCharArray(); 
+            //     if (n == k) return t;
+            //     if (k == repetition) return (""+letter).repeat(repetition);
+            //     Stack<Character> st = new Stack<>();
+            //     for (char c : s)
+            //         if (c == letter) cnt++;
+            //     st.push(s[0]);
+            //     int ins = s[0] == letter ? 1 : 0;
+            //     for (int i = 1; i < n; i++) {
+            //         System.out.println("\n i: " + i);
+            //         System.out.println("s[i]: " + s[i]);
+            //         char c = s[i], top = st.peek();
+            //         if (c < top) {
+            //             int av = cnt - ins;
+            //             while (!st.isEmpty() && st.size()-1 + n-i >= k && (top != letter || top == letter && av + ins -1 >= repetition)) {
+            //                 st.pop();
+            //                 if (top == letter)
+            //                     ins -= 1;
+            //                 if (!st.isEmpty())
+            //                     top = st.peek();
+            //             }
+            //             if (top == letter && av + ins -1 < repetition) {
+            //                 st.push(c);
+            //                 if (c == letter) ins++;
+            //                 continue;
+            //             }
+            //         }
+            //         if (c == letter && ins < repetition) {
+            //             while (st.size() > k - (repetition-ins) && st.peek() != letter)
+            //                 st.pop();
+            //         if (st.size() < k) {
+            //             st.push(c);
+            //             if (c == letter) ins++;
+            //         }
+            //     }
+            //     StringBuilder ans = new StringBuilder();
+            //     while (!st.isEmpty()) ans.append(st.pop());
+            //     return ans.reverse().toString();
+            // }
+        // public String smallestSubsequence(String t, int k, char letter, int repetition) {
+        //     int n = t.length(), cnt = 0; 
+        //     char [] s = t.toCharArray();
+        //     for (char c : s)  cnt += c == letter ? 1 : 0;
+        //     StringBuilder sb = new StringBuilder();
+        //     for (int i = 0; i < n; cnt -= s[i++] == letter ? 1 : 0) { // 当前字符是更优选择，所以删除次优字符
+        //         while (sb.length() + n-i > k && sb.length() > 0 && s[i] < sb.charAt(sb.length()-1) // 后面的长度足以构成k长的序列
+        //                && (sb.charAt(sb.length()-1) != letter || cnt != repetition)) {
+        //             repetition += sb.charAt(sb.length()-1) == letter ? 1 : 0;
+        //             sb.deleteCharAt(sb.length()-1);
+        //         } // s[i] >= sb最后一个字符
+        //         if (k - sb.length() > Math.max(0, s[i] == letter ? 0 : repetition)) { // s[i] == letter,t只要有位置就放；其它字符，只有满足前提条件有空位才可
+        //             sb.append(s[i]);
+        //             repetition -= s[i] == letter ? 1 : 0;
+        //         }
+        //     }
+        //     return "" + sb;
+        // }
+//         public String smallestSubsequence(String s, int k, char letter, int repetition) {
+//             int n = s.length(), cnt = 0, dcnt = 0; // cnt: totalLetterNum, dcnt: deleted all letters cnt
+//             ArrayDeque<Character> q = new ArrayDeque<>();
+//             for (int i = 0; i < n; i++) cnt += s.charAt(i) == letter ? 1 : 0;
+//             for (int i = 0; i < n; i++) {
+//                 char c = s.charAt(i); // len-k>del 表示能否继续删除元素 如果len-k==del , 则剩余的元素都该入队列 否则最终队列元素的个数会小于k个
+//                 while (!q.isEmpty() && n-dcnt > k && q.size()+n-i > k && c < q.getLast()) { // 当前字符比栈顶元素小，更优解
+//                     if (q.getLast() == letter) {
+//                         if (cnt > repetition) {
+//                             q.removeLast();
+//                             cnt--;
+//                             dcnt++; // 如果剩余的letter的个数>repetition 则表明可以删除队列尾元素letter ，否则跳出循环
+//                         } else if (cnt == repetition) break;
+//                     } else if (q.getLast() != letter) {
+//                         q.removeLast();
+//                         dcnt++;
+//                     }
+//                 }
+// // 之前想到用各种条件来限制元素是否该入队列
+// // 但是后来转念一想 不管什么情况都可以先入队列  在最后的for循环中判断 该不该计入返回的字符串中即可
+// // 比如用例  "eabe" k=3 letter="e" repetition=2
+// // 按照常理来说，如果没有题干限制 队列中的元素应该是 "abe", 但是因为有题干限制e的个数至少为2。
+// // 所以第一个e应当保留，同时，a也应当入队列，在最后的for循环中再来决定是否保留
+// //            if(deque.isEmpty()) deque.add(c);
+// //            else if(c==letter) deque.add(c);
+// //            else if(deque.getLast()!=letter) deque.add(c);
+// //            else if(len-k==dcnt) deque.add(c);
+// //            else if(totalLetterNum>=repetition && deque.getLast()==letter && c>deque.getLast()) deque.add(c);
+//                 q.offer(c);
+//             }
+//             StringBuilder sb = new StringBuilder();
+//             while (!q.isEmpty() && sb.length() < k) {
+//                 Character c = q.poll();
+//                 //队头元素如果是letter 直接append, 因为此处有两种可能性
+//                 // 1. 最终队列中 letter的个数刚好等于repetition ，那么此时只要碰到letter就append
+//                 // 2. 最终队列中letter的个数大于repetition， 因为此时队列根据题干条件保持了单调性 此时letter也应该append
+//                 if (c == letter) {
+//                     sb.append(c);
+//                     repetition--;
+//                 } else if (k - sb.length() > repetition) // 如果队头元素不是letter，而且此时还有剩余位置给除了letter之外的其他元素
+//                     sb.append(c);
+//             }
+//             return sb.toString();
+//         }
+
+
+        private Map<Integer, List<Integer>> getMap(int [] arr, int k) {
+            int n = arr.length;
+            Map<Integer, Integer> m = new HashMap<>();
+            for (int i = 0; i < n; i++) 
+                m.put(arr[i], i);
+            Map<Integer, List<Integer>> ma = new HashMap<>(); // key: 1, 2, 3, 4, ... k
+            TreeSet<Integer> one = new TreeSet<>((x, y)->arr[x] != arr[y] ? arr[x] - arr[y] : x - y); // 不写好会漏掉元素
+            for (int i = 0; i < n; i++) one.add(i);
+            if (n > k) {
+                Set<Integer> idx = new HashSet<>();
+                while (one.size() > k) idx.add(one.pollFirst());
+                List<Integer> l = new ArrayList<>();
+                for (int i = 0; i < n; i++) 
+                    if (!idx.contains(i)) l.add(arr[i]);
+                ma.put(k, l);
+            } else ma.put(n, Arrays.stream(arr).boxed().collect(Collectors.toList()));
+            int key = ma.entrySet().iterator().next().getKey()-1;
+            boolean removed = false;
+            while (key >= 0) {
+                List<Integer> l = new ArrayList<>(ma.get(key+1));
+                removed = false;
+                for (int i = 0; i < l.size(); i++) 
+                    if ((i == 0 || i > 0 && l.get(i) < l.get(i-1)) && (i == l.size()-1 || i < l.size()-1 && l.get(i) < l.get(i+1))) {
+                        one.remove(m.get(l.get(i)));
+                        l.remove(i);
+                        removed = true;
+                        break;
                     }
-                    // else i++;
+                if (!removed)
+                    for (int i = l.size()-1; i >= 0; i--)
+                        if ((i == l.size()-1 || i < l.size()-1 && l.get(i) < l.get(i+1)) && (i == 0 || i > 0 && l.get(i) <= l.get(i-1))) {
+                            one.remove(m.get(l.get(i)));
+                            l.remove(i);
+                            removed = true;
+                            break;
+                        }
+                if (!removed) {
+                    int min = arr[one.pollFirst()];
+                    for (int i = 0; i < l.size(); i++) { // 这一步的贪心好像不对？！！！
+                        System.out.println("(l.get(i) == min) : " + (l.get(i) == min) );
+                        if  (l.get(i) == min) {
+                            l.remove(i);
+                            break;
+                        }
+                    }
+                }
+                ma.put(key, l);
+                key --;
+            }
+            return ma;
+        }
+        private String getString(List<Integer> l, int k)  {
+            String ans = "";
+            for (int i = 0; i < Math.min(l.size(), k); i++) 
+                ans += "" + l.get(i);
+            return ans;
+        }
+        private String getString(List<Integer> l, List<Integer> r, int k)  {
+            if (l.size() == 0 || r.size() == 0) return getString(l.size() == 0 ? r : l, k);
+            String ans = "";
+            int i = 0, j = 0, cnt = 0;
+            while (i < l.size() && j < r.size() && cnt < k) {
+                if (l.get(i) > r.get(j)) {
+                    ans += "" + l.get(i++);
+                    cnt++;
+                } else if (l.get(i) < r.get(j)) {
+                    ans += "" + r.get(j++);
+                    cnt++;
+                } else {
+                    if (i < l.size()-1 && l.get(i+1) > l.get(i) && (j == r.size()-1 || r.get(j+1) < l.get(i+1))) {
+                        ans += "" + l.get(i++);
+                        cnt++;
+                    } else if ((j < r.size()-1) && r.get(j+1) > r.get(j)) {
+                        ans += "" + r.get(j++);
+                        cnt++;
+                    } else {
+                        ans += ("" + l.get(i++)).repeat(2);
+                        cnt += 2;
+                        j++;
+                    }
                 }
             }
-            return s;
+            if (i < l.size() && cnt < k) 
+                while (i < l.size() && cnt < k) {
+                    ans += "" + l.get(i++);
+                    cnt++;
+                }
+            if (j < r.size() && cnt < k) 
+                while (j < r.size() && cnt < k) {
+                    ans += "" + r.get(j++);
+                    cnt++;
+                }
+            return ans;
+        }
+        public int[] maxNumber(int[] a, int[] b, int k) { 
+            int m = a.length, n = b.length;
+            Map<Integer, List<Integer>> ma = getMap(a, k);
+            Map<Integer, List<Integer>> mb = getMap(b, k);
+            // System.out.println("ma.size(): " + ma.size());
+            // for (Map.Entry<Integer, List<Integer>> en : ma.entrySet()) {
+            //     System.out.print(en.getKey() + ": ");
+            //     System.out.println(Arrays.toString(en.getValue().toArray()));
+            // }
+            // System.out.println("mb.size(): " + mb.size());
+            // for (Map.Entry<Integer, List<Integer>> en : mb.entrySet()) {
+            //     System.out.print(en.getKey() + ": ");
+            //     System.out.println(Arrays.toString(en.getValue().toArray()));
+            // }
+            int [] ans = new int [k];
+            String res = "", cur = "";
+            for (int i = 0; i <= k; i++) {
+                System.out.println("\n i: " + i);
+                if (i == 0 && mb.get(k) != null)
+                    cur = getString(mb.get(k), k);
+                else if (i == k && ma.get(k) != null)
+                    cur = getString(ma.get(k), k);
+                else if ((i == 0 || i == k) && (ma.get(k) == null || mb.get(k) == null)
+                         || (ma.get(i) == null || mb.get(k-i) == null)) continue;
+                cur = getString(ma.get(i), mb.get(k-i), k);
+                if (cur.compareTo(res) > 0) res = cur;
+            }
+            for (int i = 0; i < res.length(); i++) 
+                ans[i] = res.charAt(i) - '0';
+            return ans;
         }
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        String a = "4321";
-        // String a = "36789";
-        // String a = "9438957234785635408";
-        // String a = "294984148179";
-        // String a = "93381869906586732815534371687369696230051322687490016378041942933200460348432513852584914166787842993563474598524347457856281557167699143528339415965155122059521060208554001075443516880183360428040416140412215526095967089873348197856510612033979776821674655170627819804413472042861407769831876998165526163792402342702036138622047707692796695902441556977048771699631323468264287371021820962794432341872794217422883071195957990944615498558312605572040233912698536404832999788239398876994639785690913111795775346316717010747278939404435247080172656161970012190";
-        
-        String res = s.minInteger(a, 4);
-        System.out.println("res: " + res);
+        String a = "leetcode";
+
+        String r = s.smallestSubsequence(a, 4, 'e', 2);
+        System.out.println("r: " + r);
     }
 }

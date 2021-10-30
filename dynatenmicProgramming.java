@@ -627,32 +627,150 @@ public class dynatenmicProgramming {
         // }
 
 
-        // dp[i][j] 表示途径 i 条道路跳过 j 次休息情况下的最小用时，遍历过程中根据上一道路是否休息选取最小值，结合状态转移方程求解。
-        public int minSkips(int[] dist, int speed, int hoursBefore) {
-            int n = dist.length;
-            double eps = 1e-8, inf = 1e10; // eps用于避免浮点数计算误差导致向上取整后出现错误，inf作为最大值初始化动态规划数组
-            double[][] dp = new double[n+1][n+1];
-            for (int i = 0; i <= n; i++) 
-                Arrays.fill(dp[i], inf);
-            dp[0][0] = 0;
-            for (int i = 1; i <= n; i++) {
-                double t = (double)dist[i-1] / speed;       // 第i条道路耗时
-                dp[i][0] = Math.ceil(dp[i-1][0] - eps) + t; // 单独计算不跳过休息时的值
-                dp[i][i] = dp[i-1][i-1] + t;                // 单独计算跳过所有休息时的值
-                for (int j = i-1; j > 0; j--)               // 根据上一道路是否休息，确定最小值
-                    dp[i][j] = Math.min(Math.ceil(dp[i-1][j] - eps) + t, dp[i-1][j-1] + t);
-            }
-            for (int i = 0; i <= n; i++) 
-                if (dp[n][i] <= hoursBefore + eps) return i;
-            return -1;
-        }
+        // // dp[i][j] 表示途径 i 条道路跳过 j 次休息情况下的最小用时，遍历过程中根据上一道路是否休息选取最小值，结合状态转移方程求解。
+        // public int minSkips(int[] dist, int speed, int hoursBefore) {
+        //     int n = dist.length;
+        //     double eps = 1e-8, inf = 1e10; // eps用于避免浮点数计算误差导致向上取整后出现错误，inf作为最大值初始化动态规划数组
+        //     double[][] dp = new double[n+1][n+1];
+        //     for (int i = 0; i <= n; i++) 
+        //         Arrays.fill(dp[i], inf);
+        //     dp[0][0] = 0;
+        //     for (int i = 1; i <= n; i++) {
+        //         double t = (double)dist[i-1] / speed;       // 第i条道路耗时
+        //         dp[i][0] = Math.ceil(dp[i-1][0] - eps) + t; // 单独计算不跳过休息时的值
+        //         dp[i][i] = dp[i-1][i-1] + t;                // 单独计算跳过所有休息时的值
+        //         for (int j = i-1; j > 0; j--)               // 根据上一道路是否休息，确定最小值
+        //             dp[i][j] = Math.min(Math.ceil(dp[i-1][j] - eps) + t, dp[i-1][j-1] + t);
+        //     }
+        //     for (int i = 0; i <= n; i++) 
+        //         if (dp[n][i] <= hoursBefore + eps) return i;
+        //     return -1;
+        // }
+
+
+//         private int getLargesetTimeNeeded(int [] arr, int mask) { // 存在一个bug，但是不知道怎么改
+//             int max = 0;
+//             for (int i = 0; i < arr.length; i++) 
+//                 if (((mask >> i) & 1 ) == 1)
+//                     max = Math.max(max, arr[i]);
+//             return max;
+//         }
+//         public int minimumTime(int n, int[][] relations, int[] time) {
+//             int [] pre = new int [n]; // bitmask representing prerequirements
+//             for (int i = 0; i < relations.length; i++) {
+//                 int u = relations[i][0] - 1;
+//                 int v = relations[i][1] - 1;
+//                 pre[v] |= (1 << u);
+//             }
+//             int range = (1 << n);
+//             int [] dp = new int [range];          // dp[state] = minimum semesters to complete all the courses of 'state'.
+//             Arrays.fill(dp, Integer.MAX_VALUE/3);
+//             dp[0] = 0;
+//             for (int i = 0; i < range; i++) {
+//                 int available = 0;
+//                 for (int j = 0; j < n; j++)
+//                     if ((i & pre[j]) == pre[j]) // 可是包含了已经选过的课程: 这个bug可能是：有一门耗时很长的课，可以现在选，但我大概可以把它推后到同耗时长的课一起选以减少总消耗时间,可一时半会儿还是想不出来这个bug该如何改
+//                         available |= (1 << j); // Can study course j next, since all required courses have been studied.
+//                 available &= ~i; // Don't want to study those already studied courses.
+//                 int nextCourses = available;
+//                 // dp[i | nextCourses] = Math.min(dp[i | nextCourses], dp[i] + getLargesetTimeNeeded(time, nextCourses));
+//                 while (nextCourses > 0) {
+//                     // System.out.println("Integer.toBinaryString(nextCourses): " + Integer.toBinaryString(nextCourses));
+//                     // System.out.println("getLargesetTimeNeeded(time, nextCourses): " + getLargesetTimeNeeded(time, nextCourses));
+//                     dp[i | nextCourses] = Math.min(dp[i | nextCourses], dp[i] + getLargesetTimeNeeded(time, nextCourses));
+// // 遍历现在可选课程的所有子集： Enumerate all subsets. E.g, available = 101, next: 100 -> 001 -> 000
+//                     nextCourses = (nextCourses -1) & available;
+//                 }
+//             }
+//             return dp[range-1];
+//         }
+        // int [][] a = new int [][] {{2,7},{2,6},{3,6},{4,6},{7,6},{2,1},{3,1},{4,1},{6,1},{7,1},{3,8},{5,8},{7,8},{1,9},{2,9},{6,9},{7,9}};
+        // int []  b = new int []  {9, 5, 9, 5, 8, 7, 7, 8, 4};
+        // int r = s.minimumTime(9, a, b);
+        // 这个题回头再多看看，感觉有思维定势，并且很严重
+        // T = O(V+E) 
+        // S = O(V+E)
+        // public long dfs(int u, List<Integer> [] list, int [] time, long [] comp) {
+        //     long val = 0l;
+        //     for (int v : list[u]) {
+        //         if (comp[v] == -1)
+        //             dfs(v, list, time, comp);
+        //         val = Math.max(val, comp[v]);
+        //     }
+        //     return comp[u] = val + time[u-1];
+        // }
+        // public int minimumTime(int n, int[][] relations, int[] time) {
+        //     List<Integer> list [] = new ArrayList[n+1];
+        //     for (int i = 0; i <= n; i++) 
+        //         list[i] = new ArrayList<>();
+        //     for (int [] r : relations) 
+        //         list[r[1]].add(r[0]);
+        //     long [] comp = new long [n+1];
+        //     Arrays.fill(comp, -1l);
+        //     long ans = 0l;
+        //     for (int i = 1; i <= n; i++) {
+        //         if (comp[i] == -1)
+        //             dfs(i, list, time, comp);
+        //         ans = Math.max(ans, comp[i]);
+        //     }
+        //     return (int)ans;
+        // }
+
+        // 思路：
+        // dp[i][j] 表示：words字符串列表的前 j 列来构造目标字符串target的前 i 个字符；
+        // cnt[i][j] 表示：words字符串列表的第 i 列 一共有多少 字符 j ；
+        // 那dp公式就很好推出来了：
+        // 1.第i个字符不使用第j列时，即通过前 j - 1 列得到
+        //   dp[i][j] = dp[i][j-1];
+        // 2.第i个字符使用第j列时
+        // *   dp[i][j] = dp[i-1][j-1] * cnt[j][第i个字符]；
+        //     dp[i][j] = dp[i][j-1] + dp[i-1][j-1] * cnt[j][第i个字符]
+        // public int numWays(String[] words, String target) {
+        //     int m = target.length(), n = words[0].length();
+        //     int mod = (int)1e9 + 7;
+        //     int [][] cnt = new int [n][26];
+        //     for (int i = 0; i < words.length; i++) 
+        //         for (int j = 0; j < n; j++) 
+        //             cnt[j][words[i].charAt(j)-'a']++;
+        //     long [][] dp = new long [m][n];
+        //     dp[0][0] = cnt[0][target.charAt(0)-'a'] % mod;
+        //     for (int i = 1; i < n; i++) 
+        //         dp[0][i] = (dp[0][i] + dp[0][i-1] + cnt[i][target.charAt(0)-'a']) % mod;
+        //     for (int i = 1; i < m; i++) 
+        //         for (int j = i; j < n; j++) 
+        //             dp[i][j] = (dp[i][j-1] + dp[i-1][j-1]*cnt[j][target.charAt(i)-'a']) % mod;
+        //     return (int)dp[m-1][n-1];
+        // }
+        // public int numWays(String[] words, String target) {
+        //     int m = target.length(), n = words[0].length();
+        //     int mod = (int)1e9 + 7;
+        //     long [] dp = new long [m];
+        //     for (int i = 0; i < n; i++) {
+        //         int [] cnt = new int [26];
+        //         for (String s : words) 
+        //             cnt[s.charAt(i)-'a']++;
+        //         for (int j = Math.min(i, m-1); j >= 0; j--) 
+        //             dp[j] = (dp[j] + (j > 0 ? dp[j-1] : 1) * cnt[target.charAt(j)-'a']) % mod;
+        //     }
+        //     return (int)dp[m-1];
+        // }
+
+
+        
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        int []  a = new int []  { 7, 3, 5, 5};
+        String []  a = new String []  {"abba", "baab"};
+        String b = "bab";
 
-        int r = s.minSkips(a, 2, 10);
+        // String []  a = new String []  {"acca", "bbbb", "caca"};
+        // String b = "aba";
+
+        // String []  a = new String []  {"abcd"};
+        // String b = "abcd";
+
+        int r = s.numWays( a, b);
         System.out.println("r: " + r);
     }
 }

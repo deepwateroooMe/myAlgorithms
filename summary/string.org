@@ -1,0 +1,325 @@
+#+latex_class: book
+#+author: deepwaterooo
+
+* 字符串 
+** 总结
+- KMP算法
+- Rabin-Karp Rolling Hash算法
+- 
+
+** 1910. Remove All Occurrences of a Substring - Medium 可用KMP算法
+Given two strings s and part, perform the following operation on s until all occurrences of the substring part are removed:
+
+Find the leftmost occurrence of the substring part and remove it from s.
+Return s after removing all occurrences of part.
+
+A substring is a contiguous sequence of characters in a string.
+#+BEGIN_SRC java
+public String removeOccurrences(String s, String part) {
+    if (!s.contains(part)) return s;
+    int n = s.length();
+    int m = part.length();
+    while (s.contains(part)) {
+        int idx = s.indexOf(part);
+        s = s.substring(0, idx) + (idx+m-1 == n-1 ? "" : s.substring(idx+m));
+    }
+    return s;
+}
+#+END_SRC
+- 有人用了KMP: 字符串匹配可以用KMP算法，由于p pp始终不变，可以先算一下p pp的next数组，然后每次从s ss中找p pp的第一次出现，删去之，再重复进行这个过程
+#+BEGIN_SRC java
+private int [] buildNext(String s) { // 找与每个位置字符不同的下一个字母的idx
+    int [] next = new int [s.length()];
+    for (int i = 0, j = next[0] = -1; i < s.length()-1; ) {
+        if (j == -1 || s.charAt(i) == s.charAt(j)) {
+            i++;
+            j++;
+            next[i] = s.charAt(i) != s.charAt(j) ? j : next[j];
+        } else j = next[j];
+    }
+    return next;
+}
+private int kmp(String s, String p, int [] next) { // 像是夹生饭，半生不熟的
+    for (int i = 0, j = 0; i < s.length(); ) {
+        if (j == -1 || s.charAt(i) == p.charAt(j)) {
+            i++;
+            j++;
+        } else j = next[j];
+        if (j == p.length()) return i-j;
+    }
+    return -1;
+}
+public String removeOccurrences(String s, String part) {
+    int [] next = buildNext(part);
+    int idx = -1;
+    while ((idx = kmp(s, part, next)) != -1) 
+        s = s.substring(0, idx) + s.substring(idx + part.length());
+    return s;
+}
+#+END_SRC
+
+** 467. Unique Substrings in Wraparound String - Medium Rabin-Karp Rolling Hash算法
+We define the string s to be the infinite wraparound string of "abcdefghijklmnopqrstuvwxyz", so s will look like this:
+
+"...zabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcd....".
+Given a string p, return the number of unique non-empty substrings of p are present in s.
+
+这道题说有一个无限长的封装字符串，然后又给了我们另一个字符串p，问我们p有多少非空子字符串在封装字符串中。我们通过观察题目中的例子可以发现，由于封装字符串是26个字符按顺序无限循环组成的，那么满足题意的p的子字符串要么是单一的字符，要么是按字母顺序的子字符串。这道题遍历p的所有子字符串会TLE，因为如果p很大的话，子字符串很多，会有大量的满足题意的重复子字符串，必须要用到trick，而所谓技巧就是一般来说你想不到的方法。我们看abcd这个字符串，以d结尾的子字符串有abcd, bcd, cd, d，那么我们可以发现bcd或者cd这些以d结尾的字符串的子字符串都包含在abcd中，那么我们知道以某个字符结束的最大字符串包含其他以该字符结束的字符串的所有子字符串，说起来很拗口，但是理解了我上面举的例子就行。那么题目就可以转换为分别求出以每个字符(a-z)为结束字符的最长连续字符串就行了，我们用一个数组cnt记录下来，最后在求出数组cnt的所有数字之和就是我们要的结果啦，
+
+#+BEGIN_SRC java
+public int findSubstringInWraproundString(String p) {
+    int n = p.length();
+    int [] arr = new int [n];
+    int [] cnt = new int [26];
+    for (int i = 0; i < n; i++) 
+        arr[i] = p.charAt(i) - 'a';
+    int res = 0, maxLen = 0;
+    for (int i = 0; i < n; i++) {
+        if (i > 0 && (arr[i-1]+1) % 26 == arr[i]) // 判断前一个位置上的字符比现位字符小1
+            ++maxLen;
+        else maxLen = 1;
+        cnt[arr[i]] = Math.max(cnt[arr[i]], maxLen);
+    }
+    for (int i = 0; i < 26; i++) 
+        res += cnt[i];
+    return res;
+}
+#+END_SRC
+
+** 1044. Longest Duplicate Substring - Hard 
+Given a string s, consider all duplicated substrings: (contiguous) substrings of s that occur 2 or more times. The occurrences may overlap.
+
+Return any duplicated substring that has the longest possible length. If s does not have a duplicated substring, the answer is "".
+#+BEGIN_SRC java
+public static int base = 26; // 256
+public static int mod = (1 << 31) - 1;
+public static boolean match(String str1,String str2) {
+    assert str1.length() == str2.length();
+    for (int i = 0; i < str1.length(); i++) 
+        if (str1.charAt(i) != str2.charAt(i))
+            return false; 
+    return true; 
+}
+private String search(String s, int v) { // v: substring length
+    int n = s.length();
+    long hash = 0L, mp = 1l;             // to avoid overflow, long long long
+    Map<Long, List<Integer>> map = new HashMap<>();
+    for (int j = 0; j < v; j++) {
+        hash = ((hash*base) + s.charAt(j)) % mod;
+        if (j >= 1)
+            mp = mp * base % mod;        // 先乘好准备好，准备着备用 
+    }
+    map.computeIfAbsent(hash, k->new ArrayList<>()).add(0);
+    for (int i = 1; i+v <= n; i++) {
+        hash = ((hash - s.charAt(i-1) * mp % mod + mod) % mod * base % mod + s.charAt(i+v-1)) % mod; // mod 
+        if (map.containsKey(hash)) 
+            for (int idx : map.get(hash)) 
+                if (match(s.substring(i, i+v), s.substring(idx, idx+v)))
+                    return s.substring(i, i+v);
+        map.computeIfAbsent(hash, k->new ArrayList<>()).add(i);
+    }
+    return null;
+}
+public String longestDupSubstring(String s) {
+    int n = s.length();
+    int l = 0, r = n;
+    String res = "";
+    while (l <= r) {
+        int m = l + (r-l) / 2;
+        String tmp = search(s, m);
+        if (tmp == null) r = m-1;
+        else {
+            if (tmp.length() > res.length())
+                res = tmp;
+            l = m+1;
+        }
+    }
+    return res;
+}
+#+END_SRC
+
+** 1156. Swap For Longest Repeated Character Substring - Medium
+You are given a string text. You can swap two of the characters in the text.
+
+Return the length of the longest substring with repeated characters.
+
+给你一个字符串，如何找最长的重复子串，博主会数连续相同的字符，若此时有一个不同字符出现了，只要后面还有相同的字符，就会继续数下去，因为有一次交换的机会，什么时候停止呢，当再次出现不同字符的时候就停止，或者是当前统计个数等于该字符出现的总个数时也停止，因为得到的结果不可能超过某个字符出现的总个数。所以可以先统计每个字符的出现次数，然后开始遍历字符，对于每个遍历到的字符，都开始数之后跟其相等的字符，新建变量j，cnt，和 diff，当j小于n，且当前字符和比较字符相同，或者 diff 等于0，且 cnt 小于比较字符出现的总个数时进行遍历，若当前遍历到的字符和要比较的字符不相等，说明该使用交换操作了，diff 自增1，此时将i更新为 j-1，这是一个优化操作，可以避免一些不必要的计算，下次从这个位置往后统计，也相当于重置了 diff。还有就是这个 cnt 小于字符出现总个数这个条件卡的非常好，即便下一个还是相同字符，也不能再统计了，因为最后的这个相同字符可能是要用来交换前面的断点位置的。每次用统计出来的 cnt 更新结果 res，但是一个方向的遍历可能无法应对所有情况，比如 "acbaaa"，若只是从前往后遍历，那么最终只能得到3，而正确的答案是4，因为可以将b和第一个a交换，所以还需要从后往前进行一次相同的操作，这样才能得到正确的答案，参见代码如下：
+
+#+BEGIN_SRC java
+public int maxRepOpt1(String s) { // O(n^2)
+    int n = s.length(), ans = 0;
+    Map<Character, Integer> charCnt = new HashMap<>();
+    for (char c : s.toCharArray()) 
+        charCnt.put(c, charCnt.getOrDefault(c, 0) + 1);
+    for (int i = 0; i < n; i++) {
+        char cur = s.charAt(i);
+        int j = i, cnt = 0, dif = 0;
+        while (j < n && (cur == s.charAt(j) || dif == 0) && cnt < charCnt.get(cur)) {
+            if (cur != s.charAt(j)) {
+                ++dif;
+                i = j-1; // exchanged once, i moves to be the repeated sequence tail
+            }
+            ++cnt;
+            ++j;
+        }
+        ans = Math.max(ans, cnt);
+    }
+    for (int i = n-1; i >= 0; i--) {
+        char cur = s.charAt(i);
+        int j = i, cnt = 0, dif = 0;
+        while (j >= 0 && (cur == s.charAt(j) || dif == 0) && cnt < charCnt.get(cur)) {
+            if (cur != s.charAt(j)) {
+                ++dif;
+                i = j+1;
+            }
+            ++cnt;
+            --j;
+        }
+        ans = Math.max(ans, cnt);
+    }
+    return res;
+}
+#+END_SRC
+- O(N) 解法
+
+上面的解法严格来说还是平方级的，再来看一种线性时间的解法，可能比较难想，由于这里需要关注的是相同字符的出现位置，所以可以将所有相同的字符的位置都放到一个数组中，那么这里就建立一个字符和其出现位置数组之间的映射。由于题目中限制了只有英文字母，所以可以按照每个字母进行遍历，直接遍历每个字符的位置数组，这里新建变量 cnt，cnt2，和 mx，其中 cnt 统计的是连续字母的个数，cnt2 相当于一个临时变量，当使用交换操作时，保存之前的 cnt 值，mx 为二者之和。在遍历完某个字母位置数组之后，最后看一下若该字母出现总个数大于 mx，则说明交换后的字母还没有统计进去，不管之前有没有使用交换操作，都需要加上这个额外的一个，参见代码如下：
+
+#+BEGIN_SRC java
+public int maxRepOpt1(String s) { // O(n^2)
+    int n = s.length(), ans = 0;
+    Map<Character, List<Integer>> idxMap = new HashMap<>();
+    for (int i = 0; i < n; i++) 
+        idxMap.computeIfAbsent(s.charAt(i), k -> new ArrayList<>()).add(i);
+    for (char c = 'a'; c <= 'z'; c++) {
+        if (!idxMap.containsKey(c)) continue;
+        int cnt = 1, cntb = 0, max = 0;
+        List<Integer> idxs = idxMap.get(c);
+        for (int i = 1; i < idxs.size(); i++) {
+            if (idxs.get(i) == idxs.get(i-1) + 1) // aa
+                ++cnt;
+            else {
+                cntb = (idxs.get(i) == idxs.get(i-1) + 2) ? cnt : 0; // aba ?
+                cnt = 1;
+            }
+            max = Math.max(max, cnt + cntb);
+        }
+        ans = Math.max(ans, max + (idxs.size() > max ? 1 : 0)); // aaaaabaaaaaca 多于两个重复子段，中间替换字符可是是相同的
+    }
+    return ans;
+}
+#+END_SRC
+- 动态规划
+ [[./pic/ssrepeat.png]]
+#+BEGIN_SRC java
+private int solve(char c, String s) {
+    int n = s.length(), max = 0;
+    int f = 0, g = 0, cnt = 0;
+    for (int i = 0; i < n; i++) {
+        if (c == s.charAt(i)) {
+            f++;
+            g++;
+            cnt++;
+        } else {
+            g = f + 1;
+            f = 0;
+        }
+        max = Math.max(max, Math.max(f, g));
+    }
+    return Math.min(max, cnt);
+}
+public int maxRepOpt1(String s) {
+    int n = s.length(), ans = 0;
+    for (char i = 'a'; i <= 'z'; i++) 
+        ans = Math.max(ans, solve(i, s));
+    return ans;
+}
+#+END_SRC
+
+** 395. Longest Substring with At Least K Repeating Characters - Medium
+Given a string s and an integer k, return the length of the longest substring of s such that the frequency of each character in this substring is greater than or equal to k.
+#+BEGIN_SRC java
+//         由于字母只有 26 个，而整型 mask 有 32 位，足够用了，
+//         每一位代表一个字母，如果为1，表示该字母不够k次，如果为0就表示已经出现了k次，这种思路真是太聪明了，
+//         隐约记得这种用法在之前的题目中也用过，但是博主并不能举一反三( 沮丧脸:( )，还得继续努力啊。
+// 遍历字符串，对于每一个字符，都将其视为起点，然后遍历到末尾，增加 HashMap 中字母的出现次数，如果其小于k，将 mask 的对应位改为1，如果大于等于k，将 mask 对应位改为0。
+// 然后看 mask 是否为0，是的话就更新 res 结果，然后把当前满足要求的子字符串的起始位置j保存到 max_idx 中，等内层循环结束后，将外层循环变量i赋值为 max_idx+1，继续循环直至结束
+public int longestSubstring(String s, int k) { // O (N ^ 2)
+    int n = s.length(), res = 0, i = 0;
+    while (i + k <= n) {
+        int [] m = new int [26];
+        int mask = 0, maxIdx = i;
+        for (int j = i; j < n; j++) {
+            int t = s.charAt(j) - 'a';
+            m[t]++;
+            if (m[t] < k) mask |= (1 << t);
+            else mask &= (~(1 << t));
+            if (mask == 0) {
+                res = Math.max(res, j-i+1);
+                maxIdx = j;
+            }
+        }
+        i = maxIdx + 1;
+    }
+    return res;
+}
+#+END_SRC
+- 双指针sliding window O(N)
+#+BEGIN_SRC java
+public int longestSubstring(String s, int k) {
+    int n = s.length(), res = 0;
+    for (int cnt = 1; cnt <= 26; cnt++) {
+        int start = 0, i = 0, uniqueCnt = 0;
+        int [] charCnt = new int [26];
+        while (i < n) {
+            boolean valid = true;
+            if (charCnt[s.charAt(i++)-'a']++ == 0) ++ uniqueCnt;
+            while (uniqueCnt > cnt) 
+                if (--charCnt[s.charAt(start++)-'a'] == 0) --uniqueCnt;
+            for (int j = 0; j < 26; j++)
+                if (charCnt[j] > 0 && charCnt[j] < k) valid = false;
+            if (valid) res = Math.max(res, i-start);
+        }
+    }
+    return res;
+}
+#+END_SRC
+- 分治： 分而治之
+#+BEGIN_SRC java
+public int longestSubstring(String s, int k) { // str.split("[dkfldjf]")
+    int n = s.length();
+    if (n < k) return 0;
+    if (n == k && s.chars().distinct().count() == 1) return k;
+    int [] cnt = new int [26];
+    for (int i = 0; i < n; i++) 
+        cnt[s.charAt(i)-'a']++;
+    if (Arrays.stream(cnt).max().getAsInt() < k) return 0;
+    StringBuilder sb = new StringBuilder("[");
+    for (int i = 0; i < 26; i++) 
+        if (cnt[i] < k && cnt[i] != 0)
+            sb.append((char)(i+'a'));
+    sb.append(']');
+    if (sb.length() == 2) return n;
+    String [] sa = s.split(sb.toString()); // str.split("[-+*/=]") pay attention to the format
+    System.out.println(Arrays.toString(sa));
+    int max = 0;
+    for (int i = 0; i < sa.length; i++) 
+        max = Math.max(max, longestSubstring(sa[i], k));
+    return max;
+}
+public int longestSubstring(String s, int k) { // 人工手动折分
+    int n = s.length(), maxIdx = 0, res = 0;
+    int [] cnt = new int [128];
+    boolean valid = true;
+    for (char c : s.toCharArray()) 
+        cnt[c]++;
+    for (int i = 0; i < n; i++) 
+        if (cnt[s.charAt(i)] < k) {
+            res = Math.max(res, longestSubstring(s.substring(maxIdx, i), k));
+            valid = false;
+            maxIdx = i+1;
+        }
+    return valid ? n : Math.max(res, longestSubstring(s.substring(maxIdx, n), k));
+}
+#+END_SRC
+
+

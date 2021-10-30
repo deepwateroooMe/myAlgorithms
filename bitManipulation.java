@@ -1381,6 +1381,11 @@ public class bitManipulation {
         // }
 
 
+        public int[] findErrorNums(int[] arr) {
+            int max = Arrays.stream(arr).max().getAsInt();
+            int sum = Arrays.stream(arr).sum();
+            
+        }
     }
     public static void main(String[] args) {
         Solution s = new Solution();

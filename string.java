@@ -618,103 +618,6 @@ public class string {
         // }
 
 
-        // private int getMatchedRIdx(String s, int idx) {
-        //     int n = s.length();
-        //     int l = 0, r = 0, i = idx;
-        //     for (; i < n; i++) {
-        //         if (s.charAt(i) == '{') ++l;
-        //         else if (s.charAt(i) == '}') {
-        //             if (l > 0) --l;
-        //             else ++r;
-        //         }
-        //         if (l == r) break;
-        //     }
-        //     return i;
-        // }
-        // private int getChunkIdx(String s, int idx) {
-        //     int n = s.length();
-        //     int l = 0, r = 0, i = idx;
-        //     boolean recnt = true;
-        //     while (i < n) {
-        //         while (i < n && (l != r || l == r && recnt)) {
-        //             if (l == r && recnt) recnt = false;
-        //             if (s.charAt(i) == '{') ++l;
-        //             else if (s.charAt(i) == '}') {
-        //                 if (l > 0) --l;
-        //                 else ++r;
-        //             }
-        //             if (l == r) break;
-        //             ++i;
-        //         }
-        //         if (i < n)
-        //         if (i == n-1 || i < n-1 && s.charAt(i) == ',') return i;
-        //         ++i;
-        //         recnt = true;
-        //     }
-        //     return -1;
-        // }
-        // private Set<String> parseOneChunk(String s) { // { , , } or {c, d}{a, b} or {ab{}, b}
-        //     int n = s.length();
-        //     HashSet<String> ss = new HashSet<>();
-        //     int i = 0, j = getMatchedRIdx(s, i);
-        //     Set<String> tmp = new HashSet<String>(braceExpansionII(s.substring(i+1, j)));
-        //     if (j == n-1) return ss;
-        //     Set<String> rest = new HashSet<String>(braceExpansionII(s.substring(j+1))); // 这里得不到{c, d, e}的结果？！！
-        //     for (String left : tmp) 
-        //         for (String right : rest) 
-        //             ss.add(left + right);
-        //     return ss;
-        // }
-        // public List<String> braceExpansionII(String s) {
-        //     int n = s.length();
-        //     HashSet<String> ss = new HashSet<>();
-        //     if (n == 1) {
-        //         ss.add(s);
-        //         return new ArrayList<String>(ss);
-        //     }
-        //     int i = 0;
-        //     if (s.charAt(i) == '{') { // parse until get valid , not inside commas { , , }
-        //         int j = getChunkIdx(s, i);
-        //         if (j == n-1) return new ArrayList<>(parseOneChunk(s.substring(i, j+1))); // {{}, , }
-        //         Set<String> left = parseOneChunk(s.substring(i, j+1));  // {}{}  or {}{{}{}} etc
-        //         Set<String> right = parseOneChunk(s.substring(j+1));
-        //         for (String leftv : left) 
-        //             for (String rightv : right) 
-        //                 ss.add(leftv + rightv);
-        //         return new ArrayList<>(ss);
-        //     }
-        //     if (Character.isLetter(s.charAt(i))) { // 这里某个地方断掉了，"{a,b}{c,{d,e}}";
-        //         int j = i;  
-        //         while (j < n && Character.isLetter(s.charAt(j))) ++j;  // abcd
-        //         String tmp = s.substring(i, j);
-        //         System.out.println("tmp: " + tmp);
-        //         System.out.println("(j == n || s.charAt(j) == ','): " + (j == n || s.charAt(j) == ','));
-                
-        //         if (j == n || s.charAt(j) == ',') { // j : , {
-        //             ss.add(tmp);
-
-        //             // System.out.println("s.substring(j+1): " + s.substring(j+1));
-        //             // List<String> tmpLs = braceExpansionII(s.substring(j+1));
-        //             // System.out.println("tmpLs.size(): " + tmpLs.size());
-        //             // System.out.println(Arrays.toString(tmpLs.toArray()));
-
-        //             Set<String> rest = new HashSet<>(braceExpansionII(s.substring(j+1))); // 不知道为什么，这里的结果返不回来
-        //             ss.addAll(rest);
-        //             return new ArrayList<>(ss);  
-        //         } else { // if (s.charAt(j) == '{') {, needs to find the matched
-        //             int k = j;
-        //             while (k < n && s.charAt(k) != '}') ++k;
-        //             Set<String> chunk = parseOneChunk(s.substring(j, k)); // [j, k)
-        //             for (String v : chunk) 
-        //                 ss.add(tmp + v);
-        //             if (k == n) return new ArrayList<>(ss);
-        //             i = k+1; // skipped ,
-        //         }
-        //     }
-        //     return new ArrayList<>(ss);
-        // }
-
-
         // public int repeatedStringMatch(String s, String t) {
         //     StringBuilder sb = new StringBuilder();
         //     int cnt = 0;
@@ -1090,33 +993,240 @@ public class string {
         // }
 
 
-        public String orderlyQueue(String s, int k) { // tle tle tle
-            int n = s.length();
-            if (k == n) return Stream.of(s.split("")).sorted().collect(Collectors.joining());
-            TreeSet<String> ts = new TreeSet<>();
-            Queue<String> q = new LinkedList<>();
-            q.offer(s);
-            while (!q.isEmpty()) {
-                String cur = q.poll();
-                for (int i = 0; i < k; i++) {
-                    cur = cur.substring(0, i) + cur.substring(i+1) + cur.charAt(i);
-                    // System.out.println("cur: " + cur);
-                    if (!ts.contains(cur)) {
-                        q.offer(cur);
-                        ts.add(cur);
-                    }
-                }
-            }
-            return ts.first();
-        }
+        // private int getMatchedRIdx(String s, int idx) {
+        //     int n = s.length();
+        //     int l = 0, r = 0, i = idx;
+        //     for (; i < n; i++) {
+        //         if (s.charAt(i) == '{') ++l;
+        //         else if (s.charAt(i) == '}') {
+        //             if (l > 0) --l;
+        //             else ++r;
+        //         }
+        //         if (l == r) break;
+        //     }
+        //     return i;
+        // }
+        // private int getChunkIdx(String s, int idx) {
+        //     int n = s.length();
+        //     int l = 0, r = 0, i = idx;
+        //     boolean recnt = true;
+        //     while (i < n) {
+        //         while (i < n && (l != r || l == r && recnt)) {
+        //             if (l == r && recnt) recnt = false;
+        //             if (s.charAt(i) == '{') ++l;
+        //             else if (s.charAt(i) == '}') {
+        //                 if (l > 0) --l;
+        //                 else ++r;
+        //             }
+        //             if (l == r) break;
+        //             ++i;
+        //         }
+        //         if (i < n)
+        //         if (i == n-1 || i < n-1 && s.charAt(i) == ',') return i;
+        //         ++i;
+        //         recnt = true;
+        //     }
+        //     return -1;
+        // }
+        // private Set<String> parseOneChunk(String s) { // { , , } or {c, d}{a, b} or {ab{}, b}
+        //     int n = s.length();
+        //     HashSet<String> ss = new HashSet<>();
+        //     int i = 0, j = getMatchedRIdx(s, i);
+        //     Set<String> tmp = new HashSet<String>(braceExpansionII(s.substring(i+1, j)));
+        //     if (j == n-1) return ss;
+        //     Set<String> rest = new HashSet<String>(braceExpansionII(s.substring(j+1))); // 这里得不到{c, d, e}的结果？！！
+        //     for (String left : tmp) 
+        //         for (String right : rest) 
+        //             ss.add(left + right);
+        //     return ss;
+        // }
+        // public List<String> braceExpansionII(String s) {
+        //     int n = s.length();
+        //     HashSet<String> ss = new HashSet<>();
+        //     if (n == 1) {
+        //         ss.add(s);
+        //         return new ArrayList<String>(ss);
+        //     }
+        //     int i = 0;
+        //     if (s.charAt(i) == '{') { // parse until get valid , not inside commas { , , }
+        //         int j = getChunkIdx(s, i);
+        //         if (j == n-1) return new ArrayList<>(parseOneChunk(s.substring(i, j+1))); // {{}, , }
+        //         Set<String> left = parseOneChunk(s.substring(i, j+1));  // {}{}  or {}{{}{}} etc
+        //         Set<String> right = parseOneChunk(s.substring(j+1));
+        //         for (String leftv : left) 
+        //             for (String rightv : right) 
+        //                 ss.add(leftv + rightv);
+        //         return new ArrayList<>(ss);
+        //     }
+        //     if (Character.isLetter(s.charAt(i))) { // 这里某个地方断掉了，"{a,b}{c,{d,e}}";
+        //         int j = i;  
+        //         while (j < n && Character.isLetter(s.charAt(j))) ++j;  // abcd
+        //         String tmp = s.substring(i, j);
+        //         System.out.println("tmp: " + tmp);
+        //         System.out.println("(j == n || s.charAt(j) == ','): " + (j == n || s.charAt(j) == ','));
+        //         if (j == n || s.charAt(j) == ',') { // j : , {
+        //             ss.add(tmp);
+        //             // System.out.println("s.substring(j+1): " + s.substring(j+1));
+        //             // List<String> tmpLs = braceExpansionII(s.substring(j+1));
+        //             // System.out.println("tmpLs.size(): " + tmpLs.size());
+        //             // System.out.println(Arrays.toString(tmpLs.toArray()));
+        //             Set<String> rest = new HashSet<>(braceExpansionII(s.substring(j+1))); // 不知道为什么，这里的结果返不回来
+        //             ss.addAll(rest);
+        //             return new ArrayList<>(ss);  
+        //         } else { // if (s.charAt(j) == '{') {, needs to find the matched
+        //             int k = j;
+        //             while (k < n && s.charAt(k) != '}') ++k;
+        //             Set<String> chunk = parseOneChunk(s.substring(j, k)); // [j, k)
+        //             for (String v : chunk) 
+        //                 ss.add(tmp + v);
+        //             if (k == n) return new ArrayList<>(ss);
+        //             i = k+1; // skipped ,
+        //         }
+        //     }
+        //     return new ArrayList<>(ss);
+        // }
+        // public List<String> braceExpansionII(String expression) {
+        //     if (expression.indexOf("{") == -1)
+        //         return Arrays.stream(expression.split(",")).collect(Collectors.toList()); // 
+        //     int n = expression.length();
+        //     char [] s = expression.toCharArray();
+        //     List<String> res = new ArrayList<>();
+        //     ArrayDeque<Character> st = new ArrayDeque<>(); // 双端队列当作stack来用,因为不涉及任何线程安全相关的操作，比stack轻量且高效
+        //     for (int i = 0, j = 0; i < n; i++) {           // j : lastEnd
+        //         if (s[i] == '{') {
+        //             st.push('{');
+        //         } else if (s[i] == '}') {
+        //             st.pop();
+        //             if (st.isEmpty() && (i < n-1 && s[i+1] == ',' || i == n-1)) {
+        //                 res.addAll(braceExpansionIIHelper(expression.substring(j, i+1))); // { , , , }
+        //                 j = i + 2;
+        //             }
+        //         } else if (st.isEmpty() && i == n-1) 
+        //             res.addAll(braceExpansionIIHelper(expression.substring(j, i+1)));
+        //     }
+        //     return res;
+        // }
+        // public List<String> braceExpansionIIHelper(String expression) {
+        //     ArrayDeque<String> q = new ArrayDeque<>();
+        //     q.offer(expression);
+        //     char [] s = expression.toCharArray();
+        //     Set<String> res = new HashSet<>();
+        //     StringBuilder sb = new StringBuilder();
+        //     while (!q.isEmpty()) {
+        //         String cur = q.poll();
+        //         if (cur.indexOf("{") == -1) { // if "{" is not in currExpression, meaning this is a valid res, add it to final res:
+        //             res.add(cur);
+        //             continue;
+        //         }
+        //         int i = 0, left = 0, right = 0;
+        //         while (cur.charAt(i) != '}') {
+        //             if (cur.charAt(i) == '{') left = i;
+        //             i++;
+        //         }
+        //         right = i;
+        //         String bef = cur.substring(0, left);
+        //         String aft = cur.substring(right + 1);
+        //         String [] str = cur.substring(left+1, right).split(",");
+        //         for (String si : str) {
+        //             sb.setLength(0);
+        //             q.offer(sb.append(bef).append(si).append(aft).toString());
+        //         }
+        //     }
+        //     List<String> ans = new ArrayList<>(res);
+        //     Collections.sort(ans);
+        //     return ans;
+        // }
+        // public List<String> braceExpansionII(String expression) {
+        //     return expansion(expression).stream().sorted().collect(Collectors.toList());
+        // }
+        // public Set<String> expansion(String expression) {
+        //     Set<String> res = new HashSet<>();
+        //     char [] s = expression.toCharArray();
+        //     if ("".equals(expression))          //空串返回空结果
+        //         return res;
+        //     else if (!expression.contains("{")) //不含{}，那么直接分割即可
+        //         return Arrays.stream(expression.split(",")).collect(Collectors.toSet());
+        //     else { //pairStart, pairEnd分另表示第一个完整的{}的位置
+        //         int pair = 0, pairStart = -1, pairEnd = -1;
+        //         for (int i = 0; i < expression.length(); i++) {
+        //             if (s[i] == '{') {
+        //                 if (pairStart == -1) 
+        //                     pairStart = i;
+        //                 pair++;
+        //             } else if (s[i] == '}') 
+        //                 pair--;
+        //             if (pair == 0) {
+        //                 if (pairStart != - 1 && pairEnd == -1) 
+        //                     pairEnd = i;
+        //                 //pair==0，即不在某个{}中间，那么可以将表达式分成两段
+        //                 if (s[i] == ',') {
+        //                     res.addAll(expansion(expression.substring(0, i)));
+        //                     res.addAll(expansion(expression.substring(i + 1)));
+        //                     return res;
+        //                 }
+        //             }
+        //         }
+        //         // 现在剩下的只会是{a{b}{c}} a{b}c {}{}这种形式的了
+        //         String prefix = "";
+        //         if (pairStart != 0) //括号起点不为0，说明是a{b}c这种形式
+        //             prefix = expression.substring(0, pairStart);
+        //         Set<String> left = expansion(expression.substring(pairStart + 1, pairEnd)); //剥掉第一个的最外层括号
+        //         Set<String> right = expansion(expression.substring(pairEnd + 1)); //求出第一个完整{}后部分
+        //         if (left.isEmpty()) left.add(""); //为了方便计算加入空串
+        //         if (right.isEmpty()) right.add("");
+        //         for (String l: left)  //拼接
+        //             for (String r: right) 
+        //                 res.add(prefix + l + r);
+        //     }
+        //     return res;
+        // }
+
+
+        // public String orderlyQueue(String s, int k) { // tle tle tle 暴力暴力暴力
+        //     int n = s.length();
+        //     if (k == n) return Stream.of(s.split("")).sorted().collect(Collectors.joining());
+        //     TreeSet<String> ts = new TreeSet<>();
+        //     Queue<String> q = new LinkedList<>();
+        //     q.offer(s);
+        //     while (!q.isEmpty()) {
+        //         String cur = q.poll();
+        //         for (int i = 0; i < k; i++) {
+        //             cur = cur.substring(0, i) + cur.substring(i+1) + cur.charAt(i);
+        //             if (!ts.contains(cur)) {
+        //                 q.offer(cur);
+        //                 ts.add(cur);
+        //             }
+        //         }
+        //     }
+        //     return ts.first();
+        // }
+        // 当K >= 2的时候,我们总是能取前KK个中第一个违反当前前KK个非递减字母序的字母放在最后面。也就是说经过若干次操作后。整个字母序列单调非递减。所以答案就是对SS进行排序。
+        // 当K = 1的时候。将这个字符串序列想象成一个环序列，将一个字母放到最后若干次等价于将这个字符串环中取一个起点作为新字符串的起点。这样的字符串有|S|个，∣S∣个，所以此时答案就是这|S|∣S∣个字符串中字典序最小的那一个。
+        //     时间复杂度O(|S|^2)
+        // public String orderlyQueue(String s, int k) { // tle tle tle 暴力暴力暴力
+        //     if (k > 1) {
+        //         char [] t = s.toCharArray();
+        //         Arrays.sort(t);
+        //         return new String(t);
+        //     }
+        //     String res = "";
+        //     for (int i = 0; i < s.length(); i++) {
+        //         String cur = s.substring(i) + s.substring(0, i);
+        //         if (res.length() == 0 || res.compareTo(cur) > 0)
+        //             res = cur;
+        //     }
+        //     return res;
+        // }
+
+
+        
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        // String a = "scba";
-        String a = "baaca";
+        String a = "cba";
 
-        String r = s.orderlyQueue(a, 3);
+        String r = s.orderlyQueue(a, 1);
         System.out.println("r: " + r);
     }
 }

@@ -1100,91 +1100,336 @@ public class breadtwoFirstSearch {
         //     }
         //     return i;
         // }
-        class UnionFind {
-            int[] parent;
-            int[] rank;
-            int size;
-            public UnionFind(int size) {
-                this.size = size;
-                parent = new int[size];
-                rank = new int[size];
-                for (int i = 0; i < size; i++) parent[i] = i;
-            }
-            public int find(int x) {
-                if (parent[x] != x) 
-                    parent[x] = find(parent[x]);
-                return parent[x];
-            }
-            public boolean union(int x, int y) { // return true if x, y has same parent
-                int xp = find(x);
-                int yp = find(y);
-                if (xp == yp) return false;
-                if (rank[xp] > rank[yp]) 
-                    parent[yp] = xp;
-                else if (rank[xp] < rank[yp]) 
-                    parent[xp] = yp;
-                else {
-                    parent[yp] = xp;
-                    rank[xp]++;
-                }
-                return true;
-            }
-        }
-        // 对于有向图中，如果存在indegree(v) == 2的点，那么要删除的一定是这个点的某条有向边(u -> v)
-        //    因为题目最后保证是一个rooted tree（every node has exactly one parent），具体看第一段定义；
-        // 如果不存在indegree(v) == 2的点，那么直接删去最后一个造成环存在的有向边即可。
-        // 现在存在三种情况：
-        // （1）有向图中只有环。这种情况就简单将两个节点具有共同根节点的边删去就好。
-        // （2）有向图中没有环，但有个节点有两个父节点。这种情况就将第二次出现不同父节点的边删去就好。
-        // （3）有向图中既有环，而且有个节点还有两个父节点。这时就检测当除去第二次出现父节点的边后，剩余边是不是合法的，如果不合法证明应该删掉的是另一个父节点的边。
-        public int[] findRedundantDirectedConnection(int[][] edges) {
-            Set<Integer> points = new HashSet<>();
-            Map<Integer, Integer> parent = new HashMap<>();
-            List<int[]> candidates = new ArrayList<>();
-            for (int[] edge: edges) { // u --> v 
-                int u = edge[0];
-                int v = edge[1];
-                points.add(u);
-                points.add(v);
-                if (!parent.containsKey(v)) { // parent.putIfAbsent(v, u);
-                    parent.put(v, u);
-                    continue;
-                }
-                candidates.add(new int[] {parent.get(v), v}); // if a node has two parents, add to candidates list
-                candidates.add(new int[] {u, v});
-                edge[1] = -1; // invalidate the second edge
-            }
-            UnionFind uf = new UnionFind(points.size());
-            for (int[] edge: edges) {
-                if (edge[1] == -1) continue; // skip invalidated edge
-                int u = edge[0] - 1;
-                int v = edge[1] - 1;
-                if (!uf.union(u, v)) {
-// if we have invalidated the second edge
-// yet still have a cycle
-// we either just formed a cycle with this edge
-// or there still exists a node with two parents
-// which is the first edge stored in candidates.get(0)
-                    if (candidates.isEmpty()) return edge; // 不存在indegree(v) == 2的点，直接删去最后一个造成环存在的有向边即可
-                    return candidates.get(0); // 这里就是有点儿想不通: 应该是构成环的边一定是后于入度为2中的那条先出现的该返回同时构成环和入度的入度边
-                }
-            }
-// no cycle found, meaning the redundant edge
-            // is the second edge in the candidates
-            return candidates.get(1);
-        }
+//         class UnionFind {
+//             int[] parent;
+//             int[] rank;
+//             int size;
+//             public UnionFind(int size) {
+//                 this.size = size;
+//                 parent = new int[size];
+//                 rank = new int[size];
+//                 for (int i = 0; i < size; i++) parent[i] = i;
+//             }
+//             public int find(int x) {
+//                 if (parent[x] != x) 
+//                     parent[x] = find(parent[x]);
+//                 return parent[x];
+//             }
+//             public boolean union(int x, int y) { // return true if x, y has same parent
+//                 int xp = find(x);
+//                 int yp = find(y);
+//                 if (xp == yp) return false;
+//                 if (rank[xp] > rank[yp]) 
+//                     parent[yp] = xp;
+//                 else if (rank[xp] < rank[yp]) 
+//                     parent[xp] = yp;
+//                 else {
+//                     parent[yp] = xp;
+//                     rank[xp]++;
+//                 }
+//                 return true;
+//             }
+//         }
+//         // 对于有向图中，如果存在indegree(v) == 2的点，那么要删除的一定是这个点的某条有向边(u -> v)
+//         //    因为题目最后保证是一个rooted tree（every node has exactly one parent），具体看第一段定义；
+//         // 如果不存在indegree(v) == 2的点，那么直接删去最后一个造成环存在的有向边即可。
+//         // 现在存在三种情况：
+//         // （1）有向图中只有环。这种情况就简单将两个节点具有共同根节点的边删去就好。
+//         // （2）有向图中没有环，但有个节点有两个父节点。这种情况就将第二次出现不同父节点的边删去就好。
+//         // （3）有向图中既有环，而且有个节点还有两个父节点。这时就检测当除去第二次出现父节点的边后，剩余边是不是合法的，如果不合法证明应该删掉的是另一个父节点的边。
+//         public int[] findRedundantDirectedConnection(int[][] edges) {
+//             Set<Integer> points = new HashSet<>();
+//             Map<Integer, Integer> parent = new HashMap<>();
+//             List<int[]> candidates = new ArrayList<>();
+//             for (int[] edge: edges) { // u --> v 
+//                 int u = edge[0];
+//                 int v = edge[1];
+//                 points.add(u);
+//                 points.add(v);
+//                 if (!parent.containsKey(v)) { // parent.putIfAbsent(v, u);
+//                     parent.put(v, u);
+//                     continue;
+//                 }
+//                 candidates.add(new int[] {parent.get(v), v}); // if a node has two parents, add to candidates list
+//                 candidates.add(new int[] {u, v});
+//                 edge[1] = -1; // invalidate the second edge
+//             }
+//             UnionFind uf = new UnionFind(points.size());
+//             for (int[] edge: edges) {
+//                 if (edge[1] == -1) continue; // skip invalidated edge
+//                 int u = edge[0] - 1;
+//                 int v = edge[1] - 1;
+//                 if (!uf.union(u, v)) {
+// // if we have invalidated the second edge
+// // yet still have a cycle
+// // we either just formed a cycle with this edge
+// // or there still exists a node with two parents
+// // which is the first edge stored in candidates.get(0)
+//                     if (candidates.isEmpty()) return edge; // 不存在indegree(v) == 2的点，直接删去最后一个造成环存在的有向边即可
+//                     return candidates.get(0); // 这里就是有点儿想不通: 应该是构成环的边一定是后于入度为2中的那条先出现的该返回同时构成环和入度的入度边
+//                 }
+//             }
+// // no cycle found, meaning the redundant edge
+//             // is the second edge in the candidates
+//             return candidates.get(1);
+//         }
+
+
+        // int N = 10;
+        // int [] arr = new int [N];
+        // int [] pd = new int [N];
+        // int idx = 0;
+        // // public ProductOfNumbers() {
+        // public breadtwoFirstSearch() {
+        //     idx = -1;
+        //     arr = new int [N];
+        //     pd = new int [N];
+        //     pd[0] = 1;
+        // }
+        // public void add(int num) {
+        //     idx += 1;
+        //     arr[idx] = num;
+        //     if (num == 0) Arrays.fill(pd, 1);
+        //     else
+        //         pd[idx] = (idx == 0 ? num : pd[idx-1] * num);
+        // }
+        // public int getProduct(int k) {
+        //     System.out.println(Arrays.toString(arr));
+        //     System.out.println(Arrays.toString(pd));
+        //     if (idx == k) return pd[idx];
+        //     return pd[idx] / pd[idx - k];
+        // }
+
+
+    // Map<Integer, List<Integer>> adj = new HashMap<>();
+    // int [] par; // 不知道哪里错了，题目简单，直接去参考别人答案好了
+    // int [] vis; 
+    // public LockingTree(int[] parent) {
+    //     int n = parent.length;
+    //     this.par = Arrays.copyOf(parent, n);
+    //     for (int i = 0; i < n; i++) {
+    //         adj.computeIfAbsent(parent[i], z -> new ArrayList<>()).add(i);
+    //         if (parent[i] != -1)
+    //             adj.computeIfAbsent(i, z -> new ArrayList<>()).add(parent[i]);
+    //     }
+    //     vis = new int [n];
+    // }
+    // public boolean lock(int num, int user) {
+    //     if (vis[num] > 0) return false;
+    //     vis[num] = user;
+    //     return true;
+    // }
+    // public boolean unlock(int num, int user) {
+    //     if (vis[num] == 0 || vis[num] != user) return false;
+    //     vis[num] = 0;
+    //     return true;
+    // }
+    // public boolean upgrade(int num, int user) {
+    //     if (vis[num] > 0) return false;
+    //     Set<Integer> locked = new HashSet<>();
+    //     if (isAnyAncestorsLocked(0, -1, num, locked)) return false;
+    //     des = new ArrayList<>();
+    //     dfs(num, par[num]);
+    //     if (des.size() == 0) return false;
+    //     for (Integer v : des)
+    //         vis[v] = 0;
+    //     vis[num] = user;
+    //     return true;
+    // }
+    // List<Integer> des;
+    // private void dfs(int idx, int p) {
+    //     if (vis[idx] > 0) 
+    //         des.add(idx);
+    //     List<Integer> l = adj.get(idx);
+    //     for (Integer next : l) {
+    //         if (next == p) continue;
+    //         dfs(next, idx);
+    //     }
+    // }
+    // private boolean isAnyAncestorsLocked(int idx, int p, int end, Set<Integer> path) {
+    //     if (idx == end) {
+    //         for (Integer v : path) 
+    //             if (vis[v] > 0) return true;
+    //         return false;
+    //     }
+    //     path.add(idx);
+    //     List<Integer> l = adj.get(idx);
+    //     for (Integer next : l) {
+    //         if (next == p) continue;
+    //         if (isAnyAncestorsLocked(next, idx, end, path)) return true;
+    //     }
+    //     return false;
+    // }
+    // Map<Integer, Integer> map;
+    // List<Integer> [] tree;
+    // int [] parent;
+    // public LockingTree(int[] parent) {
+    //     int n = parent.length;
+    //     tree = new ArrayList[n];
+    //     map = new HashMap<Integer, Integer>();
+    //     this.parent = parent;
+    //     for (int i = 0; i < n; i++) 
+    //         tree[i] = new ArrayList<Integer>();
+    //     for (int i = 0; i < n; i++)
+    //         if (parent[i] != -1)
+    //             tree[parent[i]].add(i);
+    // }
+    // public boolean lock(int num, int user) {
+    //     if (map.containsKey(num)) return false;
+    //     map.put(num, user);
+    //     return true;
+    // }
+    // public boolean unlock(int num, int user) {
+    //     if (!map.containsKey(num) || map.get(num) != user) return false;
+    //     map.remove(num);
+    //     // map.remove(num, user);
+    //     return true;
+    // }
+    // public boolean upgrade(int num, int user) {
+    //     if (map.containsKey(num)) return false;
+    //     if (!dfs(num, new HashSet<Integer>())) return false;
+    //     int cur = num;       // check if all the ancestor nodes are unlocked
+    //     while (cur != -1) {
+    //         cur = parent[cur];
+    //         if (map.containsKey(cur)) return false;
+    //     }
+    //     unlock(num, user, new HashSet<Integer>()); // unlock all decendants and lock curent node.
+    //     map.put(num, user);
+    //     return true;
+    // }
+    // private boolean unlock(int idx, int user, HashSet<Integer> vis) { // return type does not matter here at all
+    //     if (map.containsKey(idx)) map.remove(idx);
+    //     if (vis.contains(idx)) return false;
+    //     vis.add(idx);
+    //     for (Integer v : tree[idx]) 
+    //         if (unlock(v, user, vis)) return true;
+    //     return false;
+    // }
+    // private boolean dfs(int idx, Set<Integer> vis) {
+    //     if (map.containsKey(idx)) return true;
+    //     if (vis.contains(idx)) return false;
+    //     vis.add(idx);
+    //     for (Integer v : tree[idx]) 
+    //         if (dfs(v, vis)) return true;
+    //     return false;
+    // }
+
+
+        // public int snakesAndLadders(int[][] board) {
+        //     int n = board.length, idx = 1;
+        //     Map<Integer, Integer> m = new HashMap<>();  // idx --> labels
+        //     Map<Integer, Integer> mr = new HashMap<>(); // labels --> idx
+        //     for (int i = n-1; i >= 0; i--) 
+        //         for (int j = 0; j < n; j++) 
+        //             if ((n-1-i) % 2 == 0) {
+        //                 m.put(i*n+j, idx);
+        //                 mr.put(idx++, i*n+j);
+        //             } else {
+        //                 m.put(i*n+n-1-j, idx);
+        //                 mr.put(idx++, i*n+n-1-j);
+        //             } 
+        //     Queue<Integer> q = new LinkedList<>(); //idx
+        //     Set<Integer> vis = new HashSet<>();
+        //     q.offer((n-1)*n);
+        //     int cnt = 0;
+        //     while (!q.isEmpty()) {
+        //         for (int size = q.size()-1; size >= 0; size--) {
+        //             int cur = q.poll();
+        //             if (m.get(cur) == n*n) return cnt;
+        //             if (vis.contains(cur)) continue;
+        //             vis.add(cur);
+        //             int v = m.get(cur);
+        //             for (int k = v + 1; k <= Math.min(v+6, n*n); k++) {
+        //                 int i = mr.get(k) / n, j = mr.get(k) % n;
+        //                 if (board[i][j] > 0) q.offer(mr.get(board[i][j]));
+        //                 else q.offer(mr.get(k));
+        //             }
+        //         }
+        //         cnt++;
+        //     }
+        //     return -1;
+        // }
+
+
+        // private void dfs(int [][] arr, int idx, int level, int levCnt, Set<Integer> vis, Set<Integer> ss) {
+        //     if (levCnt == level) {
+        //         for (Integer v : arr[idx])
+        //             if (!vis.contains(v))
+        //                 ss.add(v);
+        //         return;
+        //     }
+        //     vis.add(idx);
+        //     for (Integer next : arr[idx]) {
+        //         if (vis.contains(next)) continue;
+        //         dfs(arr, next, level, levCnt+1, vis, ss);
+        //     }
+        // } // 脑袋昏了，明明是bfs为什么会当成是dfs呢？
+        // public List<String> watchedVideosByFriends(List<List<String>> watchedVideos, int[][] friends, int id, int level) {
+        //     int n = watchedVideos.size();
+        //     Queue<Integer> q = new LinkedList<>();
+        //     Set<Integer> vis = new HashSet<>();
+        //     Map<String, Integer> cnt = new HashMap<>();
+        //     q.offer(id);
+        //     vis.add(id);
+        //     int step = 0;       
+        //     while (!q.isEmpty() && step <= level) {
+        //         for (int size = q.size()-1; size >= 0; size--) {
+        //             int cur = q.poll();
+        //             // if (vis.contains(cur)) continue; // 这一行不能要
+        //             if (step == level) 
+        //                 for (String v : watchedVideos.get(cur)) 
+        //                     cnt.put(v, cnt.getOrDefault(v, 0) + 1);
+        //             for (Integer next : friends[cur]) 
+        //                 if (!vis.contains(next)) {
+        //                     vis.add(next); // vis add here: 不会做很多无用功，不必要地将队列加得很满，但另一种写法更为简洁
+        //                     q.offer(next);
+        //                 }
+        //         }
+        //         step++;
+        //     }
+        //     List<String> ans = new ArrayList<>();
+        //     Map<Integer, List<String>> map = new TreeMap<>();
+        //     for (String v : cnt.keySet()) 
+        //         map.computeIfAbsent(cnt.get(v), z -> new ArrayList<>()).add(v);
+        //     for (Integer key : map.keySet()) {
+        //         List<String> tmp = map.get(key);
+        //         Collections.sort(tmp);
+        //         ans.addAll(tmp);
+        //     }
+        //     return ans;
+    // }
+            // dfs(friends, id, level, 1, new HashSet<>(), ids);
+            // for (int i = 0; i < n; i++) 
+            //     for (String v : watchedVideos.get(i)) 
+            //         cnt.put(v, cnt.getOrDefault(v, 0) + 1);
+            // TreeSet<String> ts = new TreeSet<>((a, b)-> cnt.get(a) != cnt.get(b) ? cnt.get(a) - cnt.get(b) : a.compareTo(b));
+            // for (Integer i : ids) 
+            //     for (String v : watchedVideos.get(i)) 
+            //         ts.add(v);
+            // List<String> ans = new ArrayList<>();
+            // Iterator it = ts.iterator();
+            // while (it.hasNext()) 
+            //     ans.add(new String((String)it.next()));
+            // return ans;
+        // }
+        
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        int [][] a = new int [][] {{1,2},{1,3},{2,3}};
-        // int [][] a = new int [][] {{1,2},{2,3},{3,4},{4,1},{1,5}};
+        // String [][] a = new String [][] {{"A","B"},{"C"},{"B","C"},{"D"}};
+        // int [][] b = new int [][] {{1,2},{0,3},{0,3},{1,2}};
 
-        int [] r = s.findRedundantDirectedConnection(a);
+        String [][] a = new String [][] {{"A","B"},{"C"},{"B","C"},{"D"}};
+        int [][] b = new int [][] {{1,2},{0,3},{0,3},{1,2}};
 
-        System.out.println("r.length: " + r.length);
-        for (int z = 0; z < r.length; ++z) 
-            System.out.print(r[z] + ", ");
-        System.out.println("");
+        List<List<String>> ll = new ArrayList<>();
+        for (int i = 0; i < a.length; i++) 
+            ll.add(Arrays.asList(a[i]));
+
+        List<String> r = s.watchedVideosByFriends(ll, b, 0, 2);
+        System.out.println("r.size(): " + r.size());
+        System.out.println(Arrays.toString(r.toArray()));
+        
     }
 }

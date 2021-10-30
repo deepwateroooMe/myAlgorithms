@@ -270,17 +270,6 @@ public class twoPointers {
         //     return String.valueOf(ans);
         // }
 
-        // private void shiftRightByOne(int [] arr) { // tle tle tle tle tle tle tle
-        //     int n = arr.length;
-        //     int v = arr[n-1];
-        //     System.arraycopy(arr, 0, arr, 1, n-1);
-        //     arr[0] = v;
-        // }
-        // public void rotate(int[] arr, int k) {
-        //     while (k-- > 0)
-        //         shiftRightByOne(arr);
-        // }
-
 
         // public boolean canTransform(String s, String t) { // 不知道题目说的是什么意思
         //     int n = s.length();
@@ -422,16 +411,44 @@ public class twoPointers {
         // }
 
         
+        // private void shiftRightByOne(int [] arr) { // tle
+        //     int n = arr.length;
+        //     int v = arr[n-1];
+        //     System.arraycopy(arr, 0, arr, 1, n-1);
+        //     arr[0] = v;
+        // }
+        // public void rotate(int[] arr, int k) {
+        //     while (k-- > 0)
+        //         shiftRightByOne(arr);
+        // }
+        private void swap(int [] arr, int i, int j) {
+            int tmp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = tmp;
+        }
+        private void reverse(int [] arr, int i, int j) {
+            while (i < j) {
+                swap(arr, i, j);
+                i++;
+                j--;
+            }
+        }
+        public void rotate(int[] arr, int k) {
+            int n = arr.length;
+            if (n == 1) return;
+            if (k >= n) k %= n;
+            reverse(arr, 0, n-k-1);
+            reverse(arr, n-k, n-1);
+            reverse(arr, 0, n-1);
+        }
     }   
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        // String a = "011010";
-        // String a = "01";
-        String a = "011001110001000";
-
-        boolean r = s.canReach(a, 3, 5);
-        System.out.println("r: " + r);
+        int []  a = new int []  {1, 2};
+        
+        s.rotate(a, 3);
+        System.out.println(Arrays.toString(a));
     }
 }
 
