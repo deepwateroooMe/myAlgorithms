@@ -177,19 +177,22 @@ public class cmp {
                     for (int v : a) {
                         if (cur+v == goal || cur-v == goal || (cur^v) == goal) return cnt + 1;
                         if (!vis.contains(cur + v)) {
-                            if (cur +v  >=0 && cur + v <= 1000)
+                            if (cur +v  >=0 && cur + v <= 1000) {
                                 q.offer(cur + v);
-                            vis.add(cur+v);
+                                vis.add(cur+v);
+                            }
                         }
                         if (!vis.contains(cur - v)) {
-                            if (cur -v  >=0 && cur - v <= 1000)
+                            if (cur -v  >=0 && cur - v <= 1000) {
                                 q.offer(cur - v);
-                            vis.add(cur - v);
+                                vis.add(cur - v);
+                            }
                         }
                         if (!vis.contains(cur^v)) {
-                            if ((cur ^v)  >=0 && (cur ^ v) <= 1000)
+                            if ((cur ^v)  >=0 && (cur ^ v) <= 1000) {
                                 q.offer(cur ^ v);
-                            vis.add(cur^v);
+                                vis.add(cur^v);
+                            }
                         }
                     }
                 }
