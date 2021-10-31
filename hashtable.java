@@ -910,22 +910,6 @@ public class hashtable {
         // }
 
 
-        // public boolean checkSubarraySum(int[] arr, int k) { // tle tle tle 
-        //     int n = arr.length;
-        //     int [] sum = new int [n+1];
-        //     for (int i = 1; i <= n; i++) 
-        //         sum[i] = sum[i-1] + arr[i-1];
-        //     System.out.println("sum[n]: " + sum[n]);
-        //     for (int i = 1; i <= n; i++) {
-        //         for (int j = i-1; j >= 0; j--) {
-        //             if ((sum[i] - sum[j]) % k == 0 && i - j >= 2)
-        //                 return true;
-        //         }
-        //     }
-        //     return false;
-        // }
-
-
         // public int numberOfBoomerangs(int[][] a) { // 不识数，数不清楚！！！
         //     Map<Integer, Integer> m = new HashMap<>();
         //     int ans = 0, cnt = 0;
@@ -943,34 +927,58 @@ public class hashtable {
         // }
 
 
-        public int maxEqualRowsAfterFlips(int[][] mat) {
-            int m = mat.length, n = mat[0].length;
-            Map<String, Integer> cnt = new HashMap<>();
-            for (int [] v : mat) {
-                if (v[0] == 1) {
-                    String cur = "";
-                    for (int i = 0; i < n; i++) 
-                        cur += "" + v[i];
-                    cnt.put(cur, cnt.getOrDefault(cur, 0) + 1);
-                } else {
-                    String cur = "";
-                    for (int i = 0; i < n; i++) 
-                        cur += String.valueOf(1 - v[i]);
-                    cnt.put(cur, cnt.getOrDefault(cur, 0) + 1);
-                }
-            }
-            Map<String, Integer> tmp = cnt.entrySet().stream()
-                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())) 
-                .collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> a, LinkedHashMap::new));
-            return tmp.entrySet().iterator().next().getValue();
-        }
+        // public int maxEqualRowsAfterFlips(int[][] mat) {
+        //     int m = mat.length, n = mat[0].length;
+        //     Map<String, Integer> cnt = new HashMap<>();
+        //     for (int [] v : mat) {
+        //         if (v[0] == 1) {
+        //             String cur = "";
+        //             for (int i = 0; i < n; i++) 
+        //                 cur += "" + v[i];
+        //             cnt.put(cur, cnt.getOrDefault(cur, 0) + 1);
+        //         } else {
+        //             String cur = "";
+        //             for (int i = 0; i < n; i++) 
+        //                 cur += String.valueOf(1 - v[i]);
+        //             cnt.put(cur, cnt.getOrDefault(cur, 0) + 1);
+        //         }
+        //     }
+        //     Map<String, Integer> tmp = cnt.entrySet().stream()
+        //         .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())) 
+        //         .collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> a, LinkedHashMap::new));
+        //     return tmp.entrySet().iterator().next().getValue();
+        // }
+
+        
+        // public boolean checkSubarraySum(int[] arr, int k) { 
+        //     int n = arr.length, j = 0;
+        //     if (n == 1) return false;
+        //     int [] sum = new int [n+1];
+        //     for (int i = 1; i <= n; i++) 
+        //         sum[i] = sum[i-1] + arr[i-1];
+        //     Map<Integer, List<Integer>> m = new HashMap<>();
+        //     m.computeIfAbsent(0, z -> new ArrayList<>()).add(0);
+        //     for (int i = 1; i <= n; i++) {
+        //         int v = sum[i] % k;
+        //         if (m.containsKey(v) && i - m.get(v).get(0) >= 2) return true;
+        //         m.computeIfAbsent(v, z -> new ArrayList<>()).add(i);
+        //     }
+        //     return false;
+        // }
+
+
+        
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        int [][] a = new int [][] {{0,0,0},{0,0,1},{1,1,0}};
+        // int []  a = new int []  {23, 2, 4, 6, 7};
+        // int []  a = new int []  {23, 2, 6, 4, 7};
+        int [] a = new int [] {1, 0};
 
-        int r = s.maxEqualRowsAfterFlips(a);
+        System.out.println(Arrays.toString(a));
+        
+        boolean r = s.checkSubarraySum(a, 2);
         System.out.println("r: " + r);
     }
 }

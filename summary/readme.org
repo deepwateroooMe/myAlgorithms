@@ -2,13 +2,13 @@
 #+title: LeetCode Online Coding Interview Questions -- 错题集
 #+author: deepwaterooo
 
-#+INCLUDE: "./plan.org" :minlevel 1
-#+INCLUDE: "./dp.org" :minlevel 1
-#+INCLUDE: "./hashTree.org" :minlevel 1
-#+INCLUDE: "./binarySearch.org" :minlevel 1
-#+INCLUDE: "./string.org" :minlevel 1
-#+INCLUDE: "./dataStructure.org" :minlevel 1
-#+INCLUDE: "./bitMaskManipulation.org" :minlevel 1
+# #+INCLUDE: "./plan.org" :minlevel 1
+# #+INCLUDE: "./dp.org" :minlevel 1
+# #+INCLUDE: "./hashTree.org" :minlevel 1
+# #+INCLUDE: "./binarySearch.org" :minlevel 1
+# #+INCLUDE: "./string.org" :minlevel 1
+# #+INCLUDE: "./dataStructure.org" :minlevel 1
+# #+INCLUDE: "./bitMaskManipulation.org" :minlevel 1
 
 * sliding window 
 ** 1438. Longest Continuous Subarray With Absolute Diff Less Than or Equal to Limit - Medium 双端队列
@@ -2125,7 +2125,101 @@ public boolean isPrintable(int[][] targetGrid) {
 }
 #+END_SRC
 
+
 * 扫描线
+** 2054. Two Best Non-Overlapping Events - Medium
+You are given a 0-indexed 2D integer array of events where events[i] = [startTimei, endTimei, valuei]. The ith event starts at startTimei and ends at endTimei, and if you attend this event, you will receive a value of valuei. You can choose at most two non-overlapping events to attend such that the sum of their values is maximized.
+
+Return this maximum sum.
+
+Note that the start time and end time is inclusive: that is, you cannot attend two events where one of them starts and the other ends at the same time. More specifically, if you attend an event with end time t, the next event must start at or after t + 1.
+*** 解题思路与分析
+- 因为最多只有两个事件，联想到股票问题的只有两次交易，很容易想到从头到尾扫一遍，从尾到头扫一遍
+- 也是一道扫描线问题，借助TreeMap, PriorityQueue等数据结构，或binary search算法帮助保证正确性以及提速
+- 再熟悉一下NavigableMap类中的floorKey()和ceilingKey()的API：
+|------+-------------------+--------------------------------------------------------|
+| 类型 | 方法              | 描述                                                   |
+|------+-------------------+--------------------------------------------------------|
+| K    | ceilingKey(K key) | 返回大于或等于给定键的最小键，如果没有这样的键，则null |
+| K    | floorKey(K key)   | 返回小于或等于给定键的最大键，如果没有这样的键，则null |
+|------+-------------------+--------------------------------------------------------|
+#+BEGIN_SRC java
+public int maxTwoEvents(int[][] events) {  
+    int n = events.length, maxSeenVal = 0;     // for any timestamp - find max of values to left and max of values to right
+    Arrays.sort(events, (a,b) -> a[1] - b[1]); // Sort by end time - to know what events happened previously
+    TreeMap<Integer, Integer> leftMaxSeen = new TreeMap<>();
+    for (int [] event : events) {
+        int eventVal = event[2];
+        if (eventVal >= maxSeenVal) {
+            maxSeenVal = eventVal;
+            leftMaxSeen.put(event[1], maxSeenVal); // save maxSeenVal event value seen so far at END timestamp
+        }
+    }
+    // Sort by start time but in descending order - as we parse events and store max value of future events to current event start timestamp
+    Arrays.sort(events, (a,b) -> b[0] - a[0]);
+    int ans = 0, maxSeenRight = 0;
+    for (int [] event : events) {
+        int eventVal = event[2];
+        if (eventVal >= maxSeenRight) {
+            maxSeenRight = eventVal;
+            Integer maxOnLeftKey = leftMaxSeen.floorKey(event[0] - 1);
+            if (maxOnLeftKey != null)
+                ans = Math.max(ans, leftMaxSeen.get(maxOnLeftKey) + maxSeenRight);
+        }
+    }
+    return Math.max(maxSeenVal, ans); // 有一种单个事件得最大值的情况不能漏掉
+}
+#+END_SRC  
+- 扫描线算法
+#+BEGIN_SRC java
+public int maxTwoEvents(int[][] events) {
+    int result = 0, maxOfCompletedEvents = 0;
+    Arrays.sort(events, (x,y) -> x[0] - y[0]);   // Sort by Start time
+    PriorityQueue<int[]> inProgressQueue = new PriorityQueue<>((x,y)->x[1]-y[1]); // sorted by end time
+    for (int[] currentEvent : events) {
+        while (!inProgressQueue.isEmpty() && inProgressQueue.peek()[1] < currentEvent[0])
+            maxOfCompletedEvents = Math.max(maxOfCompletedEvents, inProgressQueue.poll()[2]);
+        result = Math.max(result, maxOfCompletedEvents + currentEvent[2]);
+        inProgressQueue.offer(currentEvent);
+    }
+    return result;
+}
+#+END_SRC
+- 二分查找: 改天补上
+
+** 2055. Plates Between Candles - Medium
+There is a long table with a line of plates and candles arranged on top of it. You are given a 0-indexed string s consisting of characters '*' and '|' only, where a '*' represents a plate and a '|' represents a candle.
+
+You are also given a 0-indexed 2D integer array queries where queries[i] = [lefti, righti] denotes the substring s[lefti...righti] (inclusive). For each query, you need to find the number of plates between candles that are in the substring. A plate is considered between candles if there is at least one candle to its left and at least one candle to its right in the substring.
+
+For example, s = "||**||**|*", and a query [3, 8] denotes the substring "*||**|". The number of plates between candles in this substring is 2, as each of the two plates has at least one candle in the substring to its left and right.
+Return an integer array answer where answer[i] is the answer to the ith query.
+*** 解题思路与分析
+- 先把每个调用的最左、以及最右的蜡烛的位置找出来，假如作必要的前置处理的话，可以做到O(1)时间
+- 而要数这最左与最右蜡烛之间的盘子个数的话，如果我们前置数清楚所有位置蜡烛个数，我们也可以做到O(1)时间
+- 所以，使用三个数组，一个记录各个位置蜡烛总个数，另两个分别纪录左右端点
+#+BEGIN_SRC java
+public int[] platesBetweenCandles(String t, int[][] queries) { 
+    int n = t.length();
+    int [] sum = new int [n+1];
+    int [] pre = new int [n+1], suf = new int [n+1];
+    char [] s = t.toCharArray();
+    for (int i = 0; i < n; i++) {
+        sum[i+1] = sum[i] + (s[i] == '|' ? 1 : 0);
+        pre[i+1] = s[i] == '|' ? i : pre[i]; // pre[i] matches i-1
+    }
+    for (int i = n-1; i >= 0; i--)
+        suf[i] = s[i] == '|' ? i : suf[i+1]; // suf[i] matches i
+    int [] ans = new int [queries.length];
+    for (int i = 0; i < queries.length; i++) {
+        int l = suf[queries[i][0]], r = pre[queries[i][1]+1]; // 注意： 右蜡烛边界 
+        if (l < r)
+            ans[i] = r - l  - (sum[r] - sum[l]);
+    }
+    return ans;
+}
+#+END_SRC  
+
 ** 218. The Skyline Problem - Hard
 A city's skyline is the outer contour of the silhouette formed by all the buildings in that city when viewed from a distance. Given the locations and heights of all the buildings, return the skyline formed by these buildings collectively.
 
@@ -2374,6 +2468,54 @@ public int minNumberOfFrogs(String croakOfFrogs) {
 
 
 * PreSum
+** 1674. Minimum Moves to Make Array Complementary - Medium 差分数组
+You are given an integer array nums of even length n and an integer limit. In one move, you can replace any integer from nums with another integer between 1 and limit, inclusive.
+
+The array nums is complementary if for all indices i (0-indexed), nums[i] + nums[n - 1 - i] equals the same number. For example, the array [1,2,3,4] is complementary because for all indices i, nums[i] + nums[n - 1 - i] = 5.
+
+Return the minimum number of moves required to make nums complementary.
+*** 解题思路与分析 Sweep Line / Prefix Sum
+Let a = min(nums[i], nums[n-i-1]), b = max(nums[i], nums[n-i-1])
+
+The key to this problem is how many moves do we need to make a + b == T.
+#+BEGIN_SRC java
+if 2 <= T < a + 1, two moves, lower both a and b.
+if a +1 <= T < a + b, one move, lower b
+if a + b == T, zero move
+if a + b + 1 <= T < b + limit + 1, one move, increase a
+if b + limit + 1 <= T <= 2*limit, two moves, increase both a and b.
+#+END_SRC
+- 关键是找到五个关键点，并利用扫描线、差分数组来暴搜所有数对和，并最全局最优解
+  
+[[./pic/diffArray.png]]
+  
+[[./pic/diffArray2.png]]
+- 用一个实例来看。这里强调一下：不可以使用二分搜索，因为这里的答案并不唯一。  
+
+[[./pic/diffArray3.png]]
+
+#+BEGIN_SRC java
+public int minMoves(int[] nums, int limit) {
+    int n = nums.length;
+    int [] delta = new int [2 * limit + 2]; // 差分数组
+    for (int i = 0; i < n/2; i++) {
+        int a = Math.min(nums[i], nums[n-1-i]);
+        int b = Math.max(nums[i], nums[n-1-i]); // 把各区间所需要的操作简化到五行代码中去了
+        delta[2] += 2; // dec a, decreasing b [2, a] 区间的和 所需要的变换次数都是 2 次
+        --delta[a+1];  // dec a               [a + 1, a+b-1] 区间中的和 所需要变的次数都是1次
+        --delta[a+b];  // no operations
+        ++delta[a+b+1];// inc a               [a+b+1, b+limit] 区间中的和 只需要变动 1 次;
+        ++delta[b+limit+1]; // inc a, inc b
+    }
+    int ans = n, sum = 0;
+    for (int t = 2; t < 2 * limit + 2; t++) {
+        sum += delta[t]; // 差分数组的前缀和等于（共需要的操作次数）
+        ans = Math.min(ans, sum);
+    }
+    return ans;
+}
+#+END_SRC
+
 ** 1074. Number of Submatrices That Sum to Target - Hard 二维数组转化为一维数组:  数组中target Sum的2D版、presum思想的2d版
 Given a matrix and a target, return the number of non-empty submatrices that sum to target.
 

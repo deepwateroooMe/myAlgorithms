@@ -1,4 +1,4 @@
-import com.TreeNode;
+import com.ListNode;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,176 +13,248 @@ import static java.util.stream.Collectors.toMap;
 
 public class cmp {
     public static class Solution {
-        // public String kthDistinct(String[] arr, int k) {
-        //     int cnt = 0, n = arr.length;
-        //     Map<String, Integer> m = new HashMap<>(); // string ,idx
+
+        // public int smallestEqual(int[] a) {
+        //     int n = a.length;
         //     for (int i = 0; i < n; i++) 
-        //         m.put(arr[i], m.getOrDefault(arr[i], 0) + 1);
-        //     String ans = "";
-        //     for (int i = 0; i < n; i++) 
-        //         if (m.get(arr[i]) == 1) {
-        //             cnt += 1;
-        //             if (cnt == k) return arr[i];
-        //         }
-        //     return "";
+        //         if (i % 10 == a[i]) return i;
+        //     return -1;
         // }
 
-        // public int maxTwoEvents(int[][] events) { // [startTimei, endTimei, valuei] 从首尾两端找的思路是对的
-        //     Arrays.sort(events, (a, b)->a[1] != b[1] ? a[1] - b[1] : a[0] - b[0]); 
-
-        //     System.out.println("events.length: " + events.length);
-        //     for (int z = 0; z < events.length; ++z) 
-        //         System.out.println(Arrays.toString(events[z]));
-
-        //     int n = events.length, max = 0, maxIdx = 0;
-        //     int [] pre = new int [n];
-        //     int [] suf = new int [n];
-        //     for (int i = 0; i < n; i++) {
-        //         if (events[i][2] > max) {
-        //             max = events[i][2];
-        //             maxIdx = i;
-        //         } else pre[i] = (i == 0 ? 0 : pre[i-1]);
-        //         pre[i] = maxIdx;
+        // public int[] nodesBetweenCriticalPoints(ListNode head) {
+        //     int cnt = 0;
+        //     ListNode r = head;
+        //     while (r != null) {
+        //         cnt++;
+        //         r = r.next;
         //     }
-        //     System.out.println(Arrays.toString(pre));
-        //     max = 0; maxIdx = n-1;
-        //     for (int i = n-1; i >= 0; i--) {
-        //         if (events[i][2] > max) {
-        //             max = events[i][2];
-        //             maxIdx = i;
-        //         } 
-        //         suf[i] = maxIdx;
-        //     }
-        //     System.out.println(Arrays.toString(suf));
-
-        //     Queue<int []> q = new PriorityQueue<>((a, b)->a[2] != b[2] ? b[2] - a[2] : a[1] - b[1]);
-        //     q.offer(events[0]);
-        //     max = 0;
-        //     for (int i = 1; i < n; i++) {
-        //         System.out.println("\n i: " + i);
-        //         int [] top = q.peek();
-        //         while (i < n && events[i][1] == top[1]) q.offer(events[i++]);
-        //         if (suf[i-1] >= i && events[suf[i-1]][0] > q.peek()[1]) {
-        //             max = Math.max(max, q.peek()[2] + events[suf[i-1]][2]);
-        //         }
-        //     }
-        //     // for (int i = 1; i < n-1; i++) 
-        //     //     if (pre[i] < suf[i] && events[pre[i]][1] < events[suf[i]][0])
-        //     //         max = Math.max(max, events[pre[i]][2] + events[suf[i]][2]);
-        //     return max;
-        // }
-
-        // private int getCnt(String t) {  // tle tle tle 这道题基本属于正常发挥，平时对preprocess的地方比较薄弱
-        //     int n = t.length();
-        //     char [] s = t.toCharArray();
-        //     int i = 0, j = n-1;
-        //     while (i < n && s[i] != '|') i++;
-        //     while (j >= 0 && s[j] != '|') j--;
-        //     if (j < i) return 0;
-        //     int ans = 0;
-        //     while (i <= j) {
-        //         if (s[i] == '*') {
-        //             ans++;
-        //         } 
+        //     if (cnt == 2) return new int [] {-1, -1};
+        //     List<Integer> idx = new ArrayList<>();
+        //     r = head.next; 
+        //     ListNode pre = head, next = r.next;
+        //     int i = 1;
+        //     while (r.next != null) {
+        //         if (r.val > pre.val && r.val > next.val
+        //             || r.val < pre.val && r.val < next.val)
+        //             idx.add(i);
+        //         pre = r;
+        //         r = r.next;
+        //         next = r.next;
         //         i++;
         //     }
-        //     return ans;
-        // }
-        // public int[] platesBetweenCandles(String t, int[][] queries) { // 需要preprocess cnt[i][j] 把所有的可能性全数出来备用，或要用时数一次并设下来备用
-        //     int n = t.length(), m = queries.length;
-        //     List<int []> q = new ArrayList<>();
-        //     for (int i = 0; i < m; i++) 
-        //         q.add(new int [] {i, queries[i][0], queries[i][1]});
-        //     Collections.sort(q, (a, b)->a[1] != b[1] ? a[1] - b[1] : a[2] - b[2]);
-        //     int [] ans = new int [m];
-        //     for (int i = 0; i < m; i++) {
-        //         int [] cur = q.get(i);
-        //         String cs = t.substring(cur[1], cur[2]+1);
-        //         ans[cur[0]] = getCnt(cs);
+        //     if (idx.size() == 0) return new int [] {-1, -1} ;
+        //     int min = Integer.MAX_VALUE, max = 0, minVal = idx.get(0);
+        //     for ( i = 1; i < idx.size(); i++) {
+        //         min = Math.min(min, idx.get(i) - idx.get(i-1));
+        //         minVal = Math.min(minVal, idx.get(i));
+        //         max = Math.max(max, idx.get(i) - minVal);
         //     }
+        //     int a = min == Integer.MAX_VALUE ? -1 : min;
+        //     int b = max == 0 ? -1 : max;
+        //     return new int [] {a, b};
+
+
+// }
+
+        // private List<String> parsesur(String t) {
+        //     int n = t.length();
+        //     char [] s = t.toCharArray();
+        //     List<String> l = new ArrayList<>();
+        //     int i = 0, j = 0;
+        //     while (i < n) {
+        //         while (i < n && Character.isLowerCase(s[i])) i++;
+        //         if (i > j) l.add(t.substring(j, i));
+        //         if (i == n) return l;
+        //         j = i;
+        //         while (i < n && Character.isDigit(s[i])) i++;
+        //         l.add(t.substring(j, i));
+        //         j = i;
+        //     }
+        //     return l;
+        // }
+        // Set<Integer> parseIntString(String s) {
+        //     int n = s.length();
+        //     Set<Integer> set = new HashSet<>();
+        //     for (int d = 1; d <= n; d++) 
+        //         for (int i = 0; i+d <=  n; i++) 
+        //             set.add(Integer.parseInt(s.substring(i, i+d)));
+        //     return set;
+        // }
+        // List<Set<Integer>> parseInt(List<String> l) {
+        //     List<Set<Integer>> ans = new ArrayList<>();
+        //     int cnt = 0;
+        //     for (int i = 0; i < l.size(); i++) 
+        //         if (Character.isDigit(l.get(i).charAt(0)))
+        //             ans.add(parseIntString(l.get(i)));
+        //         else cnt += l.get(i).length();
+        //     Set<Integer> len = new HashSet<>();
+        //     len.add(cnt);
+        //     ans.add(0, len);
         //     return ans;
         // }
+        // private void getLenSet(List<Set<Integer>> ls, int i, Set<Integer> vis) {
+        //     if (i == 1) {
+        //         vis.addAll(ls.get(i));
+        //         return ;
+        //     }
+        //     Set<Integer> next = new HashSet<>();
+        //     // next.addAll(ls.get(i));
+        //     for (Integer v : vis) 
+        //         for (Integer vi : ls.get(i)) 
+        //             next.add(v + vi);
+        //     vis.addAll(next);
+        // }
+        // Set<Integer> res;
+        // Set<Integer> getLength(List<Set<Integer>> ls) {
+        //     if (ls.size() == 2) return ls.get(1);
+        //     res = new HashSet<>();
+        //     getLenSet(ls, 1, res);
+        //     return new HashSet<>(res);
+        // }
+        // private boolean equals(Map<Character, Integer> m, Map<Character, Integer> n) {
+        //     if (m.size() != n.size()) return false;
+        //     for (char key : m.keySet()) 
+        //         if (!n.containsKey(key) || n.get(key) != m.get(key)) return false;
+        //     return true;
+        // }
+        // private boolean leftOrRightMatches(String s, String t) { // 这个corner case不知道该如何填坑了
+            
+        // }
+        // public boolean possiblyEquals(String ss, String tt) {
+        //     int m = ss.length(), n = tt.length();
+        //     Map<Character, Integer> ma = new HashMap<>();
+        //     Map<Character, Integer> mb = new HashMap<>();
+        //     for (char c : ss.toCharArray()) 
+        //         if (Character.isLowerCase(c))
+        //             ma.put(c, ma.getOrDefault(c, 0) + 1);
+        //     for (char c : tt.toCharArray()) 
+        //         if (Character.isLowerCase(c))
+        //             mb.put(c, mb.getOrDefault(c, 0) + 1);
+        //     List<String> a = parsesur(ss);
+        //     List<String> b = parsesur(tt);
+        //     // System.out.println("a.size(): " + a.size());
+        //     // System.out.println(Arrays.toString(a.toArray()));
+        //     // System.out.println("b.size(): " + b.size());
+        //     // System.out.println(Arrays.toString(b.toArray()));
+        //     List<Set<Integer>> aa = parseInt(a);
+        //     List<Set<Integer>> bb = parseInt(b);
+        //     // System.out.println("aa.get(0).size(): " + aa.get(0).size());
+        //     // System.out.println(Arrays.toString(aa.get(0).toArray()));
+        //     // System.out.println("bb.get(0).size(): " + bb.get(0).size());
+        //     // System.out.println(Arrays.toString(bb.get(0).toArray()));
+        //     // System.out.println("bb.get(1).size(): " + bb.get(1).size());
+        //     // System.out.println(Arrays.toString(bb.get(1).toArray()));
+        //     Set<Integer> tmp = new HashSet<>();
+        //     tmp.add(0);
+        //     if (aa.size() < 2) aa.add(tmp);
+        //     if (bb.size() < 2) bb.add(tmp);
+        //     Set<Integer> left = getLength(aa);
+        //     Set<Integer> right = getLength(bb);
+        //     for (Integer va : left) 
+        //         for (Integer vb : right) 
+        //             if (aa.get(0).iterator().next() + va == bb.get(0).iterator().next() + vb)
+        //                 return true;
+        //     return false;
+        // }
+        // // "a5b"
+        // // "c5b"
 
-        // dfs
-        private void getAllPos(int [] pos, int [][] dirs, Set<Integer> vis) { // 最有效的思考都是在比赛的时候进行的，所以要多多参赛！！
-         // private Set<Integer> getAllPos(int [] pos, int [][] dirs, Set<Integer> vis) {
-            int x = pos[0]-1, y = pos[1]-1; // reset from parent func
-            vis.add(x*n +y);
-            for (int [] d : dirs) {
-                int i = x + d[0], j = y + d[1];
-                if (i < 0 || i >= n || j < 0 || j >= n || vis.contains(i*n+j)) continue;
-                vis.add(i * n + j);
-                dfs(new int [] {i, j}, dirs, vis);
-            }
-        }
-        int n = 8;
-        public int countCombinations(String[] pieces, int[][] positions) { // 因为只有三种，所以也可以用数学方法更简单
-            int m = pieces.length, range = (1 << n); // 把两种简单情况先过滤掉
-            if (m <= 2) {
-                if (m == 1) {
-                    int [] pos = positions[0];
-                    Set<Integer> vis = new HashSet<>();
-                    int x = pos[0]-1, y = pos[1]-1;
-                    vis.add(x*n +y);
-                    int [][] d = null;
-                    if (pieces[0].equals("rook")) d = rook;
-                    else if  (pieces[0].equals("queen")) d = queen;
-                    else d = bishop;
-                    getAllPos(pos, d, vis);
-                    return vis.size();
-                }
-                for (int i = 0; i < m; i++) { // 两种大小相乘，再减去交差位置个数相乘
-    
-                }
-            }
-            int [][] rook = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
-            int [][] queen = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}, {-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
-            int [][] bishop = {{-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
-            int x = positions[0]-1, y = positions[1]-1;
-            int rb = 1, qb = 64, bb = 64*64, cur = 0;
-            Map<String, Integer> map = new HashMap<>(); // 只处理n == 3 n == 4 的情况
-            map.put("rook", rb);   // a
-            map.put("queen", qb);  // b
-            map.put("bishop", bb); // c
-            // integer represent state: idx1 * 64^0 + idx2 * 64^1 + idx3 * 64^2
-            Map<Integer, Set<Integer>> dp = new HashMap<>();
-            for (int i = 0; i < m; i++) {
-                int [] p = positions[i];
-                cur += ((p[0]-1)*n + p[1]-1)*map.get(pieces[i]);
-            }
+
+
+        public int minimumOperations(int[] a, int start, int goal) {
+            if (start == goal) return 0;
+            int n = a.length;
+            if (start < 0 || start > 1000) return -1;
+            // Queue<int []> q = new PriorityQueue<>((a, b) -> Math.abs(a-goal) - Math.abs(b-goal));
             Queue<Integer> q = new LinkedList<>();
+            q.offer(start);
             Set<Integer> vis = new HashSet<>();
-            Set<Integer> sn = new HashSet<>();
-            vis.add(cur);
-            int pre = 0;
-            while (vis.size() != pre) {
-                pre = vis.size();
+            vis.add(start);
+            int cnt = 0;
+            while (!q.isEmpty()) {
                 for (int size = q.size()-1; size >= 0; size--) {
                     int cur = q.poll();
-                    int c = cur / bb, b = cur / bb / qb, c = cur / bb % qb;
-                    int ci = c / n, cj = c % n, bi = b / n, bj = b % n, ci = c / n, cj = c % n;
-                    for (int [] dr : rook) { // 最好过滤出板上到底有几样东西
-                        for (int [] dq : queen) {
-                            for (int [] db : bishop) {
-
+                    for (int v : a) {
+                        if (cur+v == goal || cur-v == goal || (cur^v) == goal) return cnt + 1;
+                        if (!vis.contains(cur + v)) {
+                            if (cur +v  >=0 && cur + v <= 1000)
+                                q.offer(cur + v);
+                            vis.add(cur+v);
                         }
-
+                        if (!vis.contains(cur - v)) {
+                            if (cur -v  >=0 && cur - v <= 1000)
+                                q.offer(cur - v);
+                            vis.add(cur - v);
                         }
-
+                        if (!vis.contains(cur^v)) {
+                            if ((cur ^v)  >=0 && (cur ^ v) <= 1000)
+                                q.offer(cur ^ v);
+                            vis.add(cur^v);
+                        }
                     }
-
                 }
+                cnt++;
             }
-            
+            return -1;
         }
+        // public int minimumOperations(int[] a, int start, int goal) { // 
+        //     if (start == goal) return 0;
+        //     int n = a.length;
+        //     if (start < 0 || start > 1000) return -1;
+        //     Queue<int []> q = new PriorityQueue<>((c, b) -> Math.abs(c-goal) - Math.abs(b-goal));
+        //     // Queue<Integer> q = new LinkedList<>();
+        //     q.offer(new int [] {start, 0});
+        //     Set<Integer> vis = new HashSet<>();
+        //     vis.add(start);
+        //     int cnt = 0;
+        //     while (!q.isEmpty()) {
+        //         for (int size = q.size()-1; size >= 0; size--) {
+        //             int [] cur = q.poll();
+        //             for (int v : a) {
+        //                 if (cur[0]+v == goal || cur[0]-v == goal || (cur[0]^v) == goal) return cur[1] + 1;
+        //                 if (!vis.contains(cur[0] + v)) {
+        //                     // if (cur[0] + v == goal) return cnt + 1;
+        //                     if (cur[0] +v  >=0 && cur[0] + v <= 1000)
+        //                         q.offer(new int [] {cur[0] + v, cur[1] + 1});
+        //                     vis.add(cur[0]+v);
+        //                 }
+        //                 if (!vis.contains(cur[0] - v)) {
+        //                     // if (cur[0] - v == goal) return cnt - 1;
+        //                     if (cur[0] -v  >=0 && cur[0] - v <= 1000)
+        //                         q.offer(new int [] {cur[0] - v, cur[1] - 1});
+        //                         // q.offer(cur[0] - v);
+        //                     vis.add(cur[0] - v);
+        //                 }
+        //                 if (!vis.contains(cur[0]^v)) {
+        //                     // if ((cur[0] ^ v) == goal) return cnt ^ 1;
+        //                     if ((cur[0] ^v)  >=0 && (cur[0] ^ v) <= 1000)
+        //                         q.offer(new int [] {cur[0] ^ v, cur[1] ^ 1});
+        //                         // q.offer(cur[0] ^ v);
+        //                     vis.add(cur[0]^v);
+        //                 }
+        //             }
+        //         }
+        //         cnt++;
+        //     }
+        //     return -1;
+        // }
+
+        
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        String a = "***|**|*****|**||**|*";
-        int [][] b = new int [][] {{1,17},{4,5},{14,17},{5,11},{15,16}};
+        String a = "a5b";
+        String b = "c5b";
 
-        int [] r = s.platesBetweenCandles(a, b);
-        System.out.println(Arrays.toString(r));
+        // String a = "internationalization";
+        // String b = "i18n";
+
+        boolean r = s.possiblyEquals(a, b);
+        System.out.println("r: " + r);
     }
 }
+
+// ListNode head = new ListNode(a[0]);
+// head.buildList(head, a);
+// head.printList(head);
