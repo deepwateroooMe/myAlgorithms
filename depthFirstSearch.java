@@ -106,15 +106,6 @@ public class depthFirstSearch {
         // }
 
 
-        // private boolean filesOnly;
-        // private List<String> l;
-        // private void parseStringHelper(String s) {
-        // }
-        // public void lengthLongesPathRecursivet(String r) {
-        // }
-        // public int lengthLongestPath(String input) {
-        // }
-
         // private int res;
         // public void islandPerimeterRecursive(int[][] arr, int i, int j) {
         //     int val = 0;

@@ -887,14 +887,192 @@ public class strtwoing {
         // }
 
 
+        // public String entityParser(String t) {
+        //     int n = t.length(), j = 0, i = 0;
+        //     char [] s = t.toCharArray();
+        //     String ans = "";
+        //     while (i < n) {
+        //         while (i < n && s[i] != '&') i++;
+        //         if (i == n) return ans + t.substring(j, i);
+        //         if (i > j) ans += new String(t.substring(j, i));
+        //         if (s[i] == '&') {
+        //             String cur = t.substring(i);
+        //             if (cur.indexOf(";") == -1) {
+        //                 ans += s[i] + "";
+        //                 i++;
+        //                 j = i;
+        //                 continue;
+        //             }
+        //             j = i;
+        //             while (j < n && s[j] != ';') j++;
+        //             String tmp = t.substring(i, j+1);
+        //             if (tmp.equals("&quot;")) {
+        //                 ans += "\"";
+        //                 i = i + 6;
+        //                 j = i;
+        //             } else if (tmp.equals("&apos;")) {
+        //                 ans += "'";
+        //                 i = i + 6;
+        //                 j = i;
+        //             } else if (tmp.equals("&amp;")) {
+        //                 ans += "&";
+        //                 i = i + 5;
+        //                 j = i;
+        //             } else if (tmp.equals("&gt;")) {
+        //                 ans += ">";
+        //                 i = i + 4;
+        //                 j = i;
+        //             } else if (tmp.equals("&lt;")) {
+        //                 ans += "<";
+        //                 i = i + 4;
+        //                 j = i;
+        //             } else if (tmp.equals("&frasl;")) {
+        //                 ans += "/";
+        //                 i = i + 7;
+        //                 j = i;
+        //             } else {
+        //                 ans += s[i] + "";
+        //                 i += 1;
+        //                 j = i;
+        //             }
+        //         }
+        //     }
+        //     return ans;
+        // }
+
+
+        // private boolean idCheck(String ss, String tt) {
+        //     int [] one = new int [26];
+        //     int [] two = new int [26];
+        //     char [] s = ss.toCharArray();
+        //     char [] t = tt.toCharArray();
+        //     for (int i = 0; i < s.length; i++) 
+        //         one[s[i] - 'a']++;
+        //     for (int i = 0; i < t.length; i++) 
+        //         two[t[i]-'a']++;
+        //     for (int i = 0; i < 26; i++) 
+        //         if (one[i] != two[i])
+        //             return false;
+        //     return true;
+        // }
+        // public boolean isScramble(String s, String t) { // tle tle tle
+        //     int n = s.length();
+        //     if (n == 1) return s.charAt(0) == t.charAt(0);
+        //     if (s.equals(t)) return true;
+        //     if (!idCheck(s, t)) return false;
+        //     for (int i = 1; i < n; i++) {
+        //         System.out.println("\n i: " + i);
+        //         String ls = s.substring(0, i), rs = s.substring(i);
+        //         String ltone = t.substring(0, i), rtone = t.substring(i);
+        //         String lttwo = t.substring(0, n-i), rttwo = t.substring(n-i);
+        //         if (isScramble(ls, ltone) && isScramble(rs, rtone)
+        //             || isScramble(ls, rttwo) && isScramble(rs, lttwo))
+        //             return true;
+        //     }
+        //     return false;
+        // } 
+        // private boolean dfs(String s, String t) {
+        //     String key = s + t;
+        //     if (s.length() == 1 && t.length() == 1)
+        //         return s.charAt(0) == t.charAt(0);
+        //     if (dp.containsKey(key)) return dp.get(key);
+        //     if (s.equals(t)) {
+        //         dp.put(key, true);
+        //         return true;
+        //     }
+        //     if (!idCheck(s, t)) {
+        //         dp.put(key, false);
+        //         return false;
+        //     }
+        //     int n = s.length();
+        //     for (int i = 1; i < s.length(); i++) {
+        //         String a = s.substring(0, i), b = s.substring(i);
+        //         String c = t.substring(0, i), d = t.substring(i);
+        //         String e = t.substring(0, n-i), f = t.substring(n-i);
+        //         if (isScramble(a, c) && isScramble(b, d)
+        //             || isScramble(a, f) && isScramble(b, e)) {
+        //             dp.put(key, true);
+        //             return true;
+        //         }
+        //     }
+        //     dp.put(key, false);
+        //     return false;
+        // }
+        // Map<String, Boolean> dp = new HashMap<>();
+        // public boolean isScramble(String s, String t) {
+        //     int n = s.length();
+        //     if (n == 1) return s.charAt(0) == t.charAt(0);
+        //     if (s.equals(t)) return true;
+        //      if (!idCheck(s, t)) return false;
+        //     return dfs(s, t);
+        // } 
+        // private boolean idCheck(String ss, String tt) {
+        //     int [] one = new int [26];
+        //     int [] two = new int [26];
+        //     char [] s = ss.toCharArray();
+        //     char [] t = tt.toCharArray();
+        //     for (int i = 0; i < s.length; i++) 
+        //         one[s[i] - 'a']++;
+        //     for (int i = 0; i < t.length; i++) 
+        //         two[t[i]-'a']++;
+        //     for (int i = 0; i < 26; i++) 
+        //         if (one[i] != two[i])
+        //             return false;
+        //     return true;
+        // }
+        // private int dfs(int i, int j, int k) { // k: length dp[i][j][len]: 这个dp的设计还是比较难想的！
+        //     if (dp[i][j][k] != 0) return dp[i][j][k];
+        //     String a = s.substring(i, i+k), b = t.substring(j, j+k);
+        //     if (a.equals(b)) return dp[i][j][k] = 1;
+        //     if (!idCheck(a, b)) return dp[i][j][k] = -1;
+        //     for (int l = 1; l < k; l++) {
+        //         if (dfs(i, j, l) == 1 && dfs(i+l, j+l, k-l) == 1)
+        //             return dp[i][j][k] = 1;
+        //         if (dfs(i, j+k-l, l) == 1 && dfs(i+l, j, k-l) == 1)
+        //             return dp[i][j][k] = 1;
+        //     }
+        //     return dp[i][j][k] = -1;
+        // }
+        // int [][][] dp;
+        // String s, t;
+        // int n;
+        // public boolean isScramble(String s, String t) {
+        //     this.s = s;
+        //     this.t = t;
+        //     n = s.length();
+        //     if (s.equals(t)) return true;
+        //     if (!idCheck(s, t)) return false;
+        //     dp = new int [n][n][n+1];
+        //     return dfs(0, 0, s.length()) == 1;
+        // } 
+        // public boolean isScramble(String s, String t) {
+        //     int n = s.length();
+        //     if (s.equals(t)) return true;
+        //     boolean [][][] dp = new boolean [n][n][n+1];
+        //     for (int len = 1; len <= n; len++) 
+        //         for (int i = 0; i+len <= n; i++) 
+        //             for (int j = 0; j+len <= n; j++) {
+        //                 if (len == 1) {
+        //                     dp[i][j][len] = s.charAt(i) == t.charAt(j);
+        //                     continue;
+        //                 }
+        //                 for (int k = 1; k < len; k++) 
+        //                     if (dp[i][j][k] && dp[i+k][j+k][len-k] || dp[i][j+len-k][k] && dp[i+k][j][len-k])
+        //                         dp[i][j][len] = true;
+        //             }
+        //     return dp[0][0][n];
+        // }
         
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        String a = "ababbb";
+        String a = "great";
+        String b = "rgeat";
+        // String a = "abcdbdacbdac";
+        // String b = "bdacabcdbdac";
 
-        long r = s.maxProduct(a);
+        boolean  r = s.isScramble(a, b);
         System.out.println("r: " + r);
     }
 }

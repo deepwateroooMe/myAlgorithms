@@ -1412,24 +1412,41 @@ public class breadtwoFirstSearch {
             //     ans.add(new String((String)it.next()));
             // return ans;
         // }
+
+
+        
+        // public double mincostToHireWorkers(int[] quality, int[] wage, int k) {
+        //     int n = quality.length;
+        //     List<int []> l = new ArrayList<>();
+        //     for (int i = 0; i < n; i++) {
+        //         int [] cur = new int [] {wage[i], quality[i]};
+        //         l.add(cur);
+        //     }
+        //     Collections.sort(l, (a, b) -> Double.compare((double)a[0] / a[1], (double)b[0] / b[1]));
+        //     Queue<Integer> q = new PriorityQueue<>((x, y) -> -Integer.compare(x, y));
+        //     double res = 1e18, sum = 0;
+        //     for (int i = 0; i < n; i++) {
+        //         int [] cur = l.get(i);
+        //         sum += cur[1];
+        //         q.offer(cur[1]);
+        //         if (q.size() > k)
+        //             sum -= q.poll();
+        //         if (q.size() == k)
+        //             res = Math.min(res, sum * (double)cur[0] / (double)cur[1]);
+        //     }
+        //     return res;
+        // }
+
         
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        // String [][] a = new String [][] {{"A","B"},{"C"},{"B","C"},{"D"}};
-        // int [][] b = new int [][] {{1,2},{0,3},{0,3},{1,2}};
+        int []  a = new int []  { 10, 20, 5};
+        int [] b = new int [] {70, 50, 30};
 
-        String [][] a = new String [][] {{"A","B"},{"C"},{"B","C"},{"D"}};
-        int [][] b = new int [][] {{1,2},{0,3},{0,3},{1,2}};
-
-        List<List<String>> ll = new ArrayList<>();
-        for (int i = 0; i < a.length; i++) 
-            ll.add(Arrays.asList(a[i]));
-
-        List<String> r = s.watchedVideosByFriends(ll, b, 0, 2);
-        System.out.println("r.size(): " + r.size());
-        System.out.println(Arrays.toString(r.toArray()));
+        double r = s.mincostToHireWorkers(a, b, 2);
+        System.out.println("r: " + r);
         
     }
 }

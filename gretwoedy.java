@@ -1196,16 +1196,6 @@ public class gretwoedy {
             int m = a.length, n = b.length;
             Map<Integer, List<Integer>> ma = getMap(a, k);
             Map<Integer, List<Integer>> mb = getMap(b, k);
-            // System.out.println("ma.size(): " + ma.size());
-            // for (Map.Entry<Integer, List<Integer>> en : ma.entrySet()) {
-            //     System.out.print(en.getKey() + ": ");
-            //     System.out.println(Arrays.toString(en.getValue().toArray()));
-            // }
-            // System.out.println("mb.size(): " + mb.size());
-            // for (Map.Entry<Integer, List<Integer>> en : mb.entrySet()) {
-            //     System.out.print(en.getKey() + ": ");
-            //     System.out.println(Arrays.toString(en.getValue().toArray()));
-            // }
             int [] ans = new int [k];
             String res = "", cur = "";
             for (int i = 0; i <= k; i++) {

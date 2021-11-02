@@ -103,30 +103,6 @@ public class dynatenmicProgramming {
         // }
 
 
-        // public int getMaxRepetitions(String s1, int n1, String s2, int n2) {
-        //     StringBuilder sb = new StringBuilder();
-        //     for (int i = 0; i < s1.length(); i++)  {
-        //         if (s2.indexOf(s1.charAt(i)) == -1) continue;
-        //         sb.append(s1.charAt(i));
-        //     }
-        //     String s = sb.toString().repeat(n1), t = s2.repeat(n2);
-        //     int n = s.length(), m = t.length();
-        //     if (s.chars().distinct().count() == t.chars().distinct().count() && t.chars().distinct().count() == 1) return n/m;
-        //     int i = 0, j = 0, cnt = 0;
-        //     while (i < n) { 
-        //         while (i < n && s.charAt(i) != t.charAt(j)) i++;
-        //         while (i < n && j < m && s.charAt(i) == t.charAt(j)) {
-        //             i++;
-        //             if (j+1 == m) {
-        //                 j = 0;
-        //                 ++cnt;
-        //             } else j++;
-        //         }
-        //     }
-        //     return cnt;
-        // }
-
-
         // public int countPalindromicSubsequences(String s) { // bug bug bug
         //     int n = s.length();
         //     int mod = (int)1e9 + 7;
@@ -756,21 +732,441 @@ public class dynatenmicProgramming {
         // }
 
 
+        // private int [] computeLongestPrefixSuffix (char [] s) { // 这个要再理解一下
+        //     int n = s.length;
+        //     int [] lps = new int [n];
+        //     for (int i = 1, j = 0; i < n; i++) {
+        //         while (j > 0 && s[i] != s[j]) j = lps[j-1];  // 转向它 j 的前一位字符(在 j-1 下标)所指向的匹配位置 lps[j-1]
+        //         if (s[i] == s[j]) lps[i] = ++j;
+        //     }
+        //     return lps;
+        // }
+        // private int getKey(int i, int j, boolean l, boolean r) { // bits occupied: i 9, j 6, l 1, r 1
+        //     // 9 bits store n (2^9=512), 6 bits for m (2^6=64), 1 bit ro b1, 1 bit for b2
+        //     return (i << 8) | (j << 2) | ((l ? 1 : 0) << 1) | (r ? 1 : 0); // 这是一个压缩空间存key的聪明技巧
+        // } 
+        // private int dfs(int n, int i, int evilMatched, boolean leftBound, boolean rightBound) {
+        //     if (evilMatched == e.length) return 0; // matched evil string, no good
+        //     if (i == n) return 1;                  // DIDN'T match evil string, great
+        //     int key = getKey(i, evilMatched, leftBound, rightBound); // state: represented by <= 17 bits integer
+        //     if (dp[key] > 0) return dp[key];
+        //     char from = leftBound ? s[i] : 'a';
+        //     char to = rightBound ? t[i] : 'z';
+        //     int ans = 0;
+        //     for (char c = from; c <= to; c++) { 
+        //         int j = evilMatched; // j means the next match between current string (end at char `c`) and `evil` string
+        //         while (j > 0 && e[j] != c) j = lps[j-1]; // 向左回塑寻找match字符c的上一个位置 ？
+        //         if (c == e[j]) j++;
+        //         ans += dfs(n, i+1, j, leftBound && (c == from), rightBound && (c == to));
+        //         ans %= mod;
+        //     }
+        //     return dp[key] = ans;
+        // }
+        // int mod = (int)1e9 + 7;
+        // char [] s, t, e;
+        // int [] dp, lps;
+        // public int findGoodStrings(int n, String s1, String s2, String evil) {
+        //     dp = new int [1 << 17]; // Need total 17 bits, according to data limits
+        //     s = s1.toCharArray();
+        //     t = s2.toCharArray();
+        //     e = evil.toCharArray();
+        //     lps = computeLongestPrefixSuffix(e);
+        //     return dfs(n, 0, 0, true, true);
+        // }
+        // public int findGoodStrings(int n, String s1, String s2, String evil) {
+        //     dp = new int [1 << 17]; // Need total 17 bits, according to data limits
+        //     s = s1.toCharArray();
+        //     t = s2.toCharArray();
+        //     e = evil.toCharArray();
+        //     lps = computeLongestPrefixSuffix(e);
+        //     return dfs(n, 0, 0, true, true);
+        // }
+        // static final int mod = 1000000007;
+        // public int findGoodStrings(int n, string s1, string s2, string evil) {
+        //     int m = evil.size();
+        //     int [] next = new int [m + 1];
+        //     next[0] = -1;
+        //     for (int j = 0, k = -1; j < m; ) {
+        //         if (k == -1 || evil[j] == evil[k]) next[++j] = ++k;
+        //         else k = next[k];
+        //     }
+        //     int f = s1.find(evil) == -1 ? 1 : 0;
+        //     return (cal(n, s2, evil, next) - cal(n, s1, evil, next) + f + mod) % mod;
+        // }
+        // int cal(int n, string s, string evil, int [] next) {
+        //     int m = evil.size();
+        //     int [][][] dp = new int [n + 1][m][2];
+        //     // dp[i][j][0] 前i个字符 和evil有j个相同 0不和s相等 1和s相等
+        //     // memset(dp, 0, sizeof dp);
+        //     dp[0][0][1] = 1;
+        //     for (int i = 0; i < n; i++) {
+        //         for (int j = 0; j < m; j++) {
+        //             for (char c = 'a'; c <= 'z'; c++) {
+        //                 int len = getNextLen(evil, next, j, c);
+        //                 if (len < m) {
+        //                     if (c < s[i]) {
+        //                         up(dp[i+1][len][0], dp[i][j][1]);
+        //                     } 
+        //                     if (c == s[i]) {
+        //                         up(dp[i+1][len][1], dp[i][j][1]);
+        //                     }
+        //                     up(dp[i+1][len][0], dp[i][j][0]);
+        //                 }
+        //             }
+        //         }
+        //     }
+        //     int ans = 0;
+        //     for (int i = 0; i < m; i++) {
+        //         up(ans, dp[n][i][0]);
+        //         up(ans, dp[n][i][1]);
+        //     }
+        //     return ans;
+        // }
+        // int getNextLen(string &evil, int nt[], int len, char c) {
+        //     while (len != -1 && evil[len] != c) len = nt[len];
+        //     return len + 1;
+        // }
+        // void up(int &x, int add) {
+        //     x = (x + add) % mod;
+        // }
+
+
+        // public String longestPrefix(String s) {
+        //     int n = s.length(), hashPre = 0, hashSuf = 0;
+        //     int left = 0, right = n-1, pow = 1, maxLen = 0;
+        //     String res = "";
+        //     while (left < n-1) {
+        //         hashPre = hashPre * 31 + s.charAt(left);
+        //         hashSuf = hashSuf + s.charAt(right)*pow;
+        //         if (hashPre == hashSuf) maxLen = left + 1;
+        //         left ++;
+        //         right --;
+        //         pow *= 31;
+        //     }
+        //     return maxLen == 0 ? "" : s.substring(0, maxLen);
+        // }
+        // public String longestPrefix(String ss) {
+        //     int n = ss.length();
+        //     char [] s = ss.toCharArray();
+        //     int [] lps = new int [n];
+        //     for (int i = 1, j = 0; i < n; i++) {
+        //         while (j > 0 && s[i] != s[j])
+        //             j = lps[j-1];
+        //         if (s[i] == s[j])
+        //             lps[i] = ++j;
+        //     }
+        //     return ss.substring(0, lps[n-1]);
+        // }
+
         
+        // public int profitableSchemes(int n, int minProfit, int[] group, int[] profit) { // 0-1背包问题：每场罪恶在每个状态里最多只能存在一次
+        //     int mod = (int)1e9 + 7, ans = 0;
+        //     int m = group.length;
+        //     int [][][] dp = new int [m+1][n+1][minProfit + 1]; 
+        //     dp[0][0][0] = 1;
+        //     for (int k = 1; k <= m; k++) {
+        //         int p = profit[k-1], g = group[k-1];
+        //         for (int i = 0; i <= n; i++) 
+        //             for (int j = 0; j <= minProfit; j++) {
+        //                 dp[k][i][j] = dp[k-1][i][j];
+        //                 if (i >= g)
+        //                     dp[k][i][j] = (dp[k][i][j] + dp[k-1][i-g][Math.max(0, j-p)]) % mod;
+        //             }
+        //     }
+        //     for (int i = 0; i <= n; i++) 
+        //         ans = (ans + dp[m][i][minProfit]) % mod;
+        //     return ans;
+        // }
+        // 设计一个动态规划数组 dp[i][j], 表示参与员工不超过 i 人且利润不小于 j 的计划数，则对所需员工数为 g、利润值为 p 的任务，状态转移方程为 dp[i][j] = dp[i][j] + dp[i - g][Math.max(j - p, 0)]。
+        // public int profitableSchemes(int n, int minProfit, int[] group, int[] profit) { // 0-1背包问题：每场罪恶在每个状态里最多只能存在一次
+        //     int mod = (int)1e9 + 7, ans = 0;
+        //     int m = group.length;
+        //     int [][] dp = new int [n+1][minProfit + 1]; 
+        //     dp[0][0] = 1;
+        //     for (int k = 1; k <= m; k++) {
+        //         int p = profit[k-1], g = group[k-1];
+        //         for (int i = n; i >= g; i--)  // i >= 
+        //             for (int j = minProfit; j >= 0; j--) 
+        //                 dp[i][j] = (dp[i][j] + dp[i-g][Math.max(0, j-p)]) % mod; // 保证了这一行覆盖原数组的正确性
+        //     }
+        //     for (int i = 0; i <= n; i++) 
+        //         ans = (ans + dp[i][minProfit]) % mod;
+        //     return ans;
+        // }
+        // 记忆搜索。记 flag[G][P][k] 为从第 k 个犯罪开始， G 个罪犯， P 的收益， 最大的可能性。 深度优先搜索，并将计算的结果记录下来，下次出现时，直接返回。
+        // private int dfs(int [] group, int [] profit, int n, int j) {
+        // } 
+
+
+//         public int numberOfArithmeticSlices(int [] arr) { // 有一个类似的题目，找3个什么的个数，用几个map
+//             int n = arr.length;
+//             Map<Integer, Integer> need = new HashMap<>(); // k, v: val, needCnt
+//             Map<Integer, List<Integer>> difList = new HashMap<>(); // list 有很多种打头元素的可能性 Set<List<Integer>> to record all same diff differnt lists
+//             for (int i = 0; i < n; i++) { //
+//                 for (int j = i+1; j < n; j++) {
+//                     int dif = arr[j] - arr[i]; // 
+//                     int next = arr[j] + dif;
+//                     need.put(next, need.getOrDefault(next, 0) + 1);
+//                     difList.computeIfAbsent(dif, z -> new ArrayList<>()).add(arr[i]);
+//                     difList.get(dif).add(arr[j]);
+//                 }
+//             }
+// // after getting all different available dif lists, cnt number of subsequences 
+//         }
+        // public int numberOfArithmeticSlices(int [] arr) {
+        //     int n = arr.length, ans = 0;
+        //     Map<Integer, Integer> [] dp = new HashMap[n];
+        //     dp[0] = new HashMap<>();
+        //     for (int i = 1; i < n; i++) {
+        //         dp[i] = new HashMap<>();
+        //         for (int j = 0; j < i; j++) {
+        //             long diff = (long)arr[i] - arr[j];
+        //             if (diff > Integer.MAX_VALUE || diff < Integer.MIN_VALUE) continue;
+        //             int dif = (int)diff;
+        //             int cntI = dp[i].getOrDefault(dif, 0);
+        //             int cntJ = dp[j].getOrDefault(dif, 0);
+        //             ans += cntJ; // 更新结果
+        //             dp[i].put(dif, cntI + cntJ + 1);
+        //         }
+        //     }
+        //     return ans;
+        // }
+
+
+        // public int getMaxRepetitions(String s1, int n1, String s2, int n2) {
+        //     StringBuilder sb = new StringBuilder();
+        //     for (int i = 0; i < s1.length(); i++)  {
+        //         if (s2.indexOf(s1.charAt(i)) == -1) continue;
+        //         sb.append(s1.charAt(i));
+        //     }
+        //     String s = sb.toString().repeat(n1), t = s2.repeat(n2);
+        //     int n = s.length(), m = t.length();
+        //     if (s.chars().distinct().count() == t.chars().distinct().count() && t.chars().distinct().count() == 1) return n/m;
+        //     int i = 0, j = 0, cnt = 0;
+        //     while (i < n) { 
+        //         while (i < n && s.charAt(i) != t.charAt(j)) i++;
+        //         while (i < n && j < m && s.charAt(i) == t.charAt(j)) {
+        //             i++;
+        //             if (j+1 == m) {
+        //                 j = 0;
+        //                 ++cnt;
+        //             } else j++;
+        //         }
+        //     }
+        //     return cnt;
+        // }
+
+
+        // private int dfs(int i) {
+        //     if (i >= n) return 0;
+        //     if (i == n-1) return s[i] == '*' ? (dp[i] = 9) : (s[i] == '0' ? (dp[i] = 0) : (dp[i] = 1));
+        //     if (dp[i] > 0) return dp[i];
+        //     int res = 0;
+        //     if (s[i] == '0') return dp[i] = (int)dfs(i+1) % mod;
+        //     if (s[i+1] == '0') 
+        //         res = dfs(i+2) % mod; // 30 ? s[i+1] == '0'
+        //     else { 
+        //         res = (res + dfs(i+1)) % mod; // separate
+        //         if (s[i] == '1' || ((s[i] == '2' || s[i] == '*') && (s[i+1] == '*' || s[i+1]-'a' <= 6))) // combine together with next digit
+        //             if (s[i] == '1' || s[i+1] != '*')
+        //                 res = (res + dfs(i+1)) % mod;
+        //             // else if (s[i+1] != '*')
+        //             //     res = (res + dfs(s, i+1)) % mod;
+        //             else if ((s[i] == '2' || s[i] == '*') && s[i+1] == '*')
+        //                 res = (res + (i+1 == n-1 ? 6 : 2 * dfs(i+1) / 3)) % mod;
+        //     }
+        //     return dp[i] = (int)res;
+        // }
+        // int mod = (int)(1e9 + 7);
+        // char [] s;
+        // int [] dp;
+        // int n;
+        // public int numDecodings(String t) {
+        //     n = t.length();
+        //     s = t.toCharArray();
+        //     if (n == 1) return s[0] == '*' ? 9 : 1;
+        //     dp = new int [n];
+        //     dfs(0);
+        //     return dp[0];
+        // }
+
+        
+        // private int dfs(String t, int idx, int pre) {
+        //     if (dp[idx][pre] > 0) return dp[idx][pre];
+        //     if (s[idx] == '0') return 0;
+        //     if (idx == n) return 1;
+        //     int ans = 0;
+        //     for (int j = idx; j < n; j++) {
+        //         int cur = Integer.parseInt(t.substring(idx, j+1));
+        //         // if (cur < pre) continue;
+        //         if (cur >= pre) continue;
+        //         ans = (ans + dfs(t, j+1, cur)) % mod;
+        //     }
+        //     return dp[idx][pre] = ans;
+        // }
+        // int mod = (int)1e9 + 7;
+        // int [][] dp;
+        // char [] s;
+        // int n;
+        // public int numberOfCombinations(String t) {
+        //     n = t.length();
+        //     s = t.toCharArray();
+        //     dp = new int [n][];
+        //     return dfs(t, 0, 0);
+        // }
+        // // memory limit exceeded
+        // private void getLongestCommonPrefixLength() { // Pre compute Longest Common Prefix sequence for each index in the string
+        //     for (int i = n-1; i >= 0; i--)            // 从右向左遍历，计算最长公共前缀序列长度
+        //         for (int j = n-1; j >= 0; j--) 
+        //             if (s[i] == s[j])
+        //                 lcp[i][j] = lcp[i+1][j+1] + 1;
+        // }
+        // private boolean compare(int i, int j, int len) { // compare substring of same length for value, 
+        //     int commonLength = lcp[i][j];                // 返回以i开始长度为len的序列 是否 比以j开始长度为len的序列（数值）小
+        //     if (commonLength >= len) return true;
+        //     if (s[i + commonLength] <= s[j + commonLength]) // <= ? 为什么不可以等于呢？
+        //         return true;
+        //     return false;
+        // }
+        // long mod = (int)1e9 + 7;
+        // int [][] lcp;
+        // long [][] dp;
+        // long [][] dps;
+        // char [] s; 
+        // int n;
+        // public int numberOfCombinations(String t) {
+        //     if (t.charAt(0) == '0') return 0;
+        //     n = t.length();
+        //     this.s = t.toCharArray();
+        //     lcp = new int[n + 1][n + 1];
+        //     dp = new long[n + 1][n + 1];
+        //     dps = new long[n + 1][n + 1];   // 从右向左的累加和
+        //     getLongestCommonPrefixLength(); // 计算从右向左遍历的最长公共前缀（右边，其实是后缀）
+        //     for (int i = n-1; i >= 0; i--) {
+        //         if (s[i] == '0') continue; // leading zero at current current index
+        //         long sum = 0; // for substring starting at index i
+        //         for (int j = n-1; j >= i; j--) {
+        //             if (j == n-1) {
+        //                 dp[i][j] = 1; // whole substring from index i is a valid possible list of interger (single integer in this case)
+        //             //     dp[i][j] = sum = (sum + dp[i][j]) % mod;
+        //             //     continue;  // 为什么我这里不可以continue呢？太奇怪了,再想一想
+        //             // }
+        //             } else {
+        //                 int len = j-i + 1;   // length of first integer (i-j) cur integer
+        //                 int bgn = j + 1;     // second integer bgnart index
+        //                 int end = bgn + len-1;// second integer end index
+        //                 dp[i][j] = 0; // equal length integers should be comparend for value 这里 dp[i][j]是对于每个i每个j都重置结果吗？
+        //                 if (end < n && compare(i, bgn, len)) // 为什么第一个数不可以等于后面的数呢？
+        //                     dp[i][j] = dp[bgn][end];
+        //                 if (end + 1 < n)  // including the second integers possibilities with length greater than 1bgn one.
+        //                     dp[i][j] = (dp[i][j] + dps[bgn][end + 1]) % mod; // 从右向左，这里 dps[bgn][end + 1]实际上累积了右边第二个数长度大于第一个数的所有可能性
+        //                 // dps[bgn][end + 1]  = > dp[bgn][end + 1].......dp[bgn][n-1]
+        //             }
+        //             dps[i][j] = sum = (sum + dp[i][j]) % mod; // 从右向左，累加所有的可能性，直到idx 为0
+        //         }
+        //     }
+        //     return (int)dps[0][0];
+        // }
+        // private void getLongestCommonPrefixLength() { // Pre compute Longest Common Prefix sequence for each index in the string
+        //     for (int i = n-1; i >= 0; i--)            // 从右向左遍历，计算最长公共前缀序列长度
+        //         for (int j = n-1; j >= 0; j--) 
+        //             if (s[i] == s[j]) {
+        //                 if (i >= n-1 || j >= n-1) lcp[i][j] = 1;
+        //                 else lcp[i][j] = lcp[i+1][j+1] + 1;
+        //             } else lcp[i][j] = 0;
+        // }
+        // private boolean compare(int i, int j, int len) { // compare substring of same length for value, 
+        //     int commonLength = lcp[i][j];                // 返回以i开始长度为len的序列 是否 比以j开始长度为len的序列（数值）小
+        //     if (commonLength >= len) return true;
+        //     return  s[i + commonLength] <= s[j + commonLength]; // <= ? 为什么不可以等于呢？
+        // }
+        // long mod = (int)1e9 + 7;
+        // int [][] lcp;
+        // char [] s; 
+        // int n;
+        // public int numberOfCombinations(String t) {
+        //     if (t.charAt(0) == '0') return 0;
+        //     n = t.length();
+        //     this.s = t.toCharArray();
+        //     lcp = new int[n][n];
+        //     int [][] f = new int [n][n];
+        //     int [][] pre = new int [n][n];  // 从右向左的累加和
+        //     getLongestCommonPrefixLength(); // 计算从右向左遍历的最长公共前缀（右边，其实是后缀）
+        //     for (int i = 0; i < n; i++) {
+        //         f[0][i] = 1;
+        //         pre[0][i] = 1;
+        //     }
+        //     for (int j = 1; j < n; j++) { // 跟上面超内存的写法是反着走，这次是从左向右遍历，可是两种方法，为什么就有一个会超内存呢？
+        //         for (int i = 1; i <= j; i++) {
+        //             if (s[i] == '0') {
+        //                 f[i][j] = 0;
+        //                 // continue;
+        //             } else {
+        //                 f[i][j] = pre[i-1][i-1];
+        //                 if (i - (j-i+1) >= 0) // 现在长度为 i-j+1 的数，前面是否存在一个同样长度的数，即前一个数的第一个位下标是否 >= 0
+        //                     f[i][j] -= pre[2*i-j-1][i-1];
+        //                 if (i - (j-i+1) >= 0 && compare(i-(j-i+1), i, j-i+1)) {
+        //                     f[i][j] = (int)((f[i][j] + pre[i-(j-i+1)][i-1]) % mod);
+        //                     if (i - (j-i+1) - 1 >= 0)
+        //                         f[i][j] -= pre[i-(j-i+1)-1][i-1];
+        //                 }
+        //             }
+        //             f[i][j] = (int)((f[i][j] + mod) % mod);
+        //             pre[i][j] = (int)((pre[i-1][j] + f[i][j]) % mod);
+        //         }
+        //     }
+        //     return pre[n-1][n-1];
+        // }
+        // https://leetcode.com/problems/number-of-ways-to-separate-numbers/discuss/1417910/Java-O(N2)-Suffix-Array-%2B-Bottom-Up-DP-with-Explanation-(366-ms-beats-100)
+        // https://leetcode.com/problems/number-of-ways-to-separate-numbers/discuss/1418347/Java-Two-solution-using-dp-and-suffix-arrays.-Algorithm-heavy
+        // http://42.192.146.13/problems/number-of-ways-to-separate-numbers/solution/1977-hua-fen-shu-zi-de-fang-an-shu-by-le-lpus/
+        // https://leetcode.com/problems/number-of-ways-to-separate-numbers/discuss/1424340/c-1977-number-of-ways-to-separate-numbers
+        // static int mod = (int) 1e9 + 7;
+        // public int numberOfCombinations(String num) {
+        //     char[] s = num.toCharArray();
+        //     int n = s.length;
+        //     int [][] rank = new int[n][n + 1];
+        //     PriorityQueue<int[]> pq = new PriorityQueue<int[]>(1, (a, b) -> a[1] - b[1]);
+        //     for (int i = 1; i <= n; ++i) {
+        //         int c = 0, prev = 0;
+        //         for (int j = 0; j + i <= n; ++j)
+        //             pq.add(new int [] {j, rank[j][i - 1] * 10 + s[i + j - 1] - '0'});
+        //         while (!pq.isEmpty()) {
+        //             int [] cur = pq.poll();
+        //             if (cur[1] != prev) c++;
+        //             rank[cur[0]][i] = c;
+        //             prev = cur[1];
+        //         }
+        //     }
+        //     int[][] dp = new int[n][n + 1];
+        //     for (int j = n - 1; 0 <= j; --j) {
+        //         if ('0' == s[j]) continue;
+        //         int len = n - j;
+        //         dp[j][len] = 1;
+        //         for (int i = len - 1; 1 <= i; --i) {
+        //             // dp[j][i] means the valid number that can start from j and the length of the first number is at least i
+        //             // thus here I aggregate dp[j][i + 1] into dp[j][i]
+        //             dp[j][i] = dp[j][i + 1];
+        //             int next = i + j;                
+        //             if (next >= n || next + i > n) continue;
+        //             // if the rank of the next part is greater than the current one
+        //             if (rank[j][i] <= rank[next][i]) dp[j][i] = (dp[j][i] + dp[next][i]) % mod;
+        //             // otherwise we append the larger length as it's always greater than the current one
+        //             else if (next + i < n) dp[j][i] = (dp[j][i] + dp[next][i + 1]) % mod;
+        //         }
+        //         dp[j][0] = dp[j][1];
+        //     }
+        //     return dp[0][0];
+        // }
+
+
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        String []  a = new String []  {"abba", "baab"};
-        String b = "bab";
+        String a = "9999999999999";
 
-        // String []  a = new String []  {"acca", "bbbb", "caca"};
-        // String b = "aba";
-
-        // String []  a = new String []  {"abcd"};
-        // String b = "abcd";
-
-        int r = s.numWays( a, b);
+        int r = s.numberOfCombinations(a);
         System.out.println("r: " + r);
     }
 }

@@ -891,18 +891,6 @@ public class depthtwoFirstSearch {
         // }
 
 
-        // public int lengthLongestPath(String input) {
-        //     int n = input.length();
-        //     if (input.indexOf("\\n") == -1) return input.indexOf('.') == -1 ? 0 : n;
-        //     char [] s = input.toCharArray();
-        //     ArrayDeque<String> s = new ArrayDeque<>();
-        //     int cur = 0, idx = 0, i = 0, max = 0;
-        //     while (i < n) {
-        //         while (i < n && s[i] != '\\') i++; // .ext
-        //     }
-        // }
-
-        
     }
     public static void main(String[] args) {
         Solution s = new Solution();

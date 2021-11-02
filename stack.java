@@ -293,33 +293,6 @@ public class stack {
         // }
 
 
-        // public int boxDelivering(int[][] boxes, int portsCount, int maxBoxes, int maxWeight) { // queue
-        //     int cnt = 0, ans = 0, curWit = 0;
-        //     int n = boxes.length, pre = 0;
-        //     Queue<int []> q = new LinkedList<>();
-        //     for (int i = -1; i < n-1; ) {
-        //         cnt = 0;
-        //         curWit = 0; // 这又是试图暴力解题，这里有选择优化成分
-        //         // 需要意识到：不是每次运送到最多箱子个数和最重，答案就是最优解，而是要打尽可能少的运送次数，所以如果能一次送到同一个码头，就不要再多加其它码头的箱子 
-        //         while (i < n-1 && cnt < maxBoxes && curWit + boxes[i+1][1] <= maxWeight) { // i == n-1
-        //             q.offer(boxes[i+1]);
-        //             cnt++;
-        //             curWit += boxes[i++ + 1][1];
-        //         }
-        //         while (!q.isEmpty()) {
-        //             int [] cur = q.poll();
-        //             if (cur[0] != pre) {
-        //                 ans++;
-        //                 pre = cur[0];
-        //             }
-        //         }
-        //         ans++; // go back to storage
-        //         pre = 0;
-        //     }
-        //     return ans;
-        // }
-
-
         // public int maxWidthRamp(int[] arr) {
         //     int n = arr.length, max = 0;
         //     for (int i = 0; i < n; i++) 
@@ -442,45 +415,6 @@ public class stack {
         // }
 
 
-       // public int[] canSeePersonsCount(int[] arr) {
-       //      int n = arr.length, cnt = 0;
-       //      ArrayDeque<Integer> s = new ArrayDeque<>(); // 应该还是需要使用双端队列的双端操作，而不是简单stack了
-       //      s.push(n-1);
-       //      for (int i = n-2; i >= 0; i--) {
-       //          while (!s.isEmpty() && arr[s.peek()] <= arr[i]) s.pop();
-       //          s.push(i);
-       //      }
-       //      System.out.println("s.size(): " + s.size());
-       //      System.out.println(Arrays.toString(s.toArray()));
-       //      int [] ans = new int [n];
-       //      for (int i = 0; i < n-1; i++) {
-       //          ans[i] = s.size();
-       //      }
-       //      // for (int i = 1; i < n; i++) {
-       //      //     while (!s.isEmpty() && arr[s.peek()] >= arr[i]) s.pop();
-       //      //     s.push(i);
-       //      // }
-       //      // int [] ans = new int [n];
-       //      // boolean oneMore = false;
-       //      // for (int i = n-2; i >= 0; i--) { // 这里没有想透
-       //      //     oneMore = false;
-       //      //     while (!s.isEmpty() && s.peek() > i && arr[s.peek()] >= arr[i]) {
-       //      //         s.pop();
-       //      //         if (!oneMore) oneMore = true;
-       //      //     }
-       //      //     cnt = oneMore ? 1 : 0;
-       //      //     while (!s.isEmpty() && s.peek() > i && arr[s.peek()] < arr[i]) {
-       //      //         s.pop();
-       //      //         cnt++;
-       //      //     }
-       //      //     ans[i] = cnt;
-       //      //     if (s.isEmpty() || s.peek() != i)
-       //      //         s.push(i);
-       //      // }
-       //      return ans;
-       // }
-
-
         // public boolean validateStackSequences(int[] pushed, int[] popped) {
         //     int n = pushed.length, i = 0;
         //     if (n == 1) return true;
@@ -542,16 +476,268 @@ public class stack {
         // }
 
         
+        // public int lengthLongestPath(String input) {
+        //     int n = input.length();
+        //     System.out.println("n: " + n);
+        //     char [] s = input.toCharArray();
+        //     System.out.println(Arrays.toString(s));
+        //     System.out.println("s.length: " + s.length);
+        //     ArrayDeque<String> st = new ArrayDeque<>();
+        //     int cur = 0, idx = 0, i = 0, max = 0;
+        //     i = input.indexOf("\n");
+        //     System.out.println("i: " + i);
+        //     // while (i < n) {
+        //     //     while (i < n && s[i] != '\\') i++; 
+        //     // }
+        //     return 0;
+        // }
+        // String a = "dir\n\tsubdir1\n\t\tfile1.ext\n\t\tsubsubdir1\n\tsubdir2\n\t\tsubsubdir2\n\t\t\tfile2.ext";
 
+        // 单调栈思路：
+        // 一个人可以低头看人，也可以抬头看人，抬头只能看见离自己最近的比自己高的，低头看可以看到所有没有被高个子挡住的比自己矮的。
+        // 维护一个单调递减的栈，从右往左把人压栈，如果栈顶元素比自己小，说明自己左边的人看不到这些会被自己挡住的人，出栈即可。再看看里面是否有比自己大的人，有的话自己能看到，最后再把自己压栈。
+        // public int[] canSeePersonsCount(int[] arr) {
+        //      int n = arr.length, cnt = 0;
+        //      ArrayDeque<Integer> s = new ArrayDeque<>(); 
+        //      int [] ans = new int [n];
+        //      s.push(arr[n-1]);
+        //      for (int i = n-2; i >= 0; i--) {
+        //          while (!s.isEmpty() && s.peek() < arr[i]) {
+        //              s.pop();  // 自己会挡住 左边的人看不到的都弹出去
+        //              ans[i]++; // 看到所有比自己矮还没被挡住的小人
+        //          }
+        //          if (!s.isEmpty()) ans[i]++; // 看到最近的比自己高的小人, 题目的意思没能理解对
+        //          s.push(arr[i]);
+        //      }
+        //      return ans;
+        // }
+
+
+
+        // private Map<Integer, List<Integer>> getMap(int [] arr, int k) { // 被自己写得bug满天飞的代码，自己都不想多看一眼
+        //     int n = arr.length;
+        //     Map<Integer, Integer> m = new HashMap<>();
+        //     for (int i = 0; i < n; i++) 
+        //         m.put(arr[i], i);
+        //     Map<Integer, List<Integer>> ma = new HashMap<>(); // key: 1, 2, 3, 4, ... k
+        //     TreeSet<Integer> one = new TreeSet<>((x, y)->arr[x] != arr[y] ? arr[x] - arr[y] : x - y); // 不写好会漏掉元素
+        //     for (int i = 0; i < n; i++) one.add(i);
+        //     if (n > k) {
+        //         Set<Integer> idx = new HashSet<>();
+        //         while (one.size() > k) idx.add(one.pollFirst());
+        //         List<Integer> l = new ArrayList<>();
+        //         for (int i = 0; i < n; i++) 
+        //             if (!idx.contains(i)) l.add(arr[i]);
+        //         ma.put(k, l);
+        //     } else ma.put(n, Arrays.stream(arr).boxed().collect(Collectors.toList()));
+        //     int key = ma.entrySet().iterator().next().getKey()-1;
+        //     boolean removed = false;
+        //     while (key >= 0) {
+        //         List<Integer> l = new ArrayList<>(ma.get(key+1));
+        //         removed = false;
+        //         for (int i = 0; i < l.size(); i++) 
+        //             if ((i == 0 || i > 0 && l.get(i) < l.get(i-1)) && (i == l.size()-1 || i < l.size()-1 && l.get(i) < l.get(i+1))) {
+        //                 one.remove(m.get(l.get(i)));
+        //                 l.remove(i);
+        //                 removed = true;
+        //                 break;
+        //             }
+        //         if (!removed)
+        //             for (int i = l.size()-1; i >= 0; i--)
+        //                 if ((i == l.size()-1 || i < l.size()-1 && l.get(i) < l.get(i+1)) && (i == 0 || i > 0 && l.get(i) <= l.get(i-1))) {
+        //                     one.remove(m.get(l.get(i)));
+        //                     l.remove(i);
+        //                     removed = true;
+        //                     break;
+        //                 }
+        //         if (!removed) {
+        //             int min = arr[one.pollFirst()];
+        //             for (int i = 0; i < l.size(); i++) { // 这一步的贪心好像不对？！！！
+        //                 System.out.println("(l.get(i) == min) : " + (l.get(i) == min) );
+        //                 if  (l.get(i) == min) {
+        //                     l.remove(i);
+        //                     break;
+        //                 }
+        //             }
+        //         }
+        //         ma.put(key, l);
+        //         key --;
+        //     }
+        //     return ma;
+        // }
+        // private String getString(List<Integer> l, int k)  {
+        //     String ans = "";
+        //     for (int i = 0; i < Math.min(l.size(), k); i++) 
+        //         ans += "" + l.get(i);
+        //     return ans;
+        // }
+        // private String getString(List<Integer> l, List<Integer> r, int k)  {
+        //     if (l.size() == 0 || r.size() == 0) return getString(l.size() == 0 ? r : l, k);
+        //     String ans = "";
+        //     int i = 0, j = 0, cnt = 0;
+        //     while (i < l.size() && j < r.size() && cnt < k) {
+        //         if (l.get(i) > r.get(j)) {
+        //             ans += "" + l.get(i++);
+        //             cnt++;
+        //         } else if (l.get(i) < r.get(j)) {
+        //             ans += "" + r.get(j++);
+        //             cnt++;
+        //         } else {
+        //             if (i < l.size()-1 && l.get(i+1) > l.get(i) && (j == r.size()-1 || r.get(j+1) < l.get(i+1))) {
+        //                 ans += "" + l.get(i++);
+        //                 cnt++;
+        //             } else if ((j < r.size()-1) && r.get(j+1) > r.get(j)) {
+        //                 ans += "" + r.get(j++);
+        //                 cnt++;
+        //             } else {
+        //                 ans += ("" + l.get(i++)).repeat(2);
+        //                 cnt += 2;
+        //                 j++;
+        //             }
+        //         }
+        //     }
+        //     if (i < l.size() && cnt < k) 
+        //         while (i < l.size() && cnt < k) {
+        //             ans += "" + l.get(i++);
+        //             cnt++;
+        //         }
+        //     if (j < r.size() && cnt < k) 
+        //         while (j < r.size() && cnt < k) {
+        //             ans += "" + r.get(j++);
+        //             cnt++;
+        //         }
+        //     return ans;
+        // }
+        // private boolean compare(int [] a, int [] b, int i, int j) { // 这里不知道数组的长短
+        //     for (; i < a.length && j < b.length; i++, j++) {
+        //         if (a[i] == b[j]) continue;
+        //         // if (a[i] < b[j]) return true; // 这里写得不对
+        //         return a[i] < b[j];
+        //     }
+        //     return j < b.length;
+        // }
+        // private int [] getNum(int [] arr, int k) { // 还分得清是A或是B吗？ m n
+        //     if (k == 0) return new int [] {};
+        //     int [] ans = new int [k];
+        //     int n = arr.length, idx = 0;
+        //     for (int i = 0; i < arr.length; i++) { // arr i 后面还有足够多的位数来凑齐 k-idx位
+        //         while (idx > 0 && ans[idx-1] < arr[i] && arr.length - i > k - idx) idx--;
+        //         if (idx < k) {
+        //             ans[idx] = arr[i];
+        //             idx++;
+        //         }
+        //     }
+        //     return ans;
+        // }
+        // private int [] merge(int [] a, int [] b, int i, int j) {
+        //     int m = a.length, n = b.length;
+        //     int [] ans = new int [m+n];
+        //     while (i < m || j < n) {
+        //         if (i >= m)
+        //             ans[i+j] = b[j++];
+        //         else if (j >= n) 
+        //             ans[i+j] = a[i++];
+        //         else if (compare(a, b, i, j)) 
+        //             ans[i+j] = b[j++];
+        //         else 
+        //             ans[i+j] = a[i++];
+        //     }
+        //     return ans;
+        // }
+        // public int[] maxNumber(int[] a, int[] b, int k) {
+        //     int [] ans = new int [k];
+        //     for (int i = Math.max(0, k - b.length); i <= a.length && i <= k; i++) {
+        //         int [] tmp = merge(getNum(a, i), getNum(b, k - i), 0, 0);
+        //         if (compare(ans, tmp, 0, 0))
+        //             ans = tmp;
+        //     }
+        //     return ans;
+        // }
+
+
+        // public int boxDelivering(int[][] boxes, int portsCount, int maxBoxes, int maxWeight) { // queue
+        //     int cnt = 0, ans = 0, curWit = 0;
+        //     int n = boxes.length, pre = 0;
+        //     Queue<int []> q = new LinkedList<>();
+        //     for (int i = -1; i < n-1; ) {
+        //         cnt = 0;
+        //         curWit = 0; // 这又是试图暴力解题，这里有选择优化成分
+        //         // 需要意识到：不是每次运送到最多箱子个数和最重，答案就是最优解，而是要找尽可能少的运送次数，所以如果能一次送到同一个码头，就不要再多加其它码头的箱子 
+        //         while (i < n-1 && cnt < maxBoxes && curWit + boxes[i+1][1] <= maxWeight) { // i == n-1
+        //             q.offer(boxes[i+1]);
+        //             cnt++;
+        //             curWit += boxes[i++ + 1][1];
+        //         }
+        //         while (!q.isEmpty()) {
+        //             int [] cur = q.poll();
+        //             if (cur[0] != pre) {
+        //                 ans++;
+        //                 pre = cur[0];
+        //             }
+        //         }
+        //         ans++; // go back to storage
+        //         pre = 0;
+        //     }
+        //     return ans;
+        // }
+        // public int boxDelivering(int[][] boxes, int portsCount, int maxBoxes, int maxWeight) { // O(N)滑动窗口
+        //     int n = boxes.length, j = 0, lastj = 0, cnt = 0;
+        //     int [] dp = new int [n+1];
+        //     Arrays.fill(dp, Integer.MAX_VALUE / 3); // / 3 to avoid overflow
+        //     dp[0] = 0;                              //
+        //     for (int i = 0; i < n; ++i) {
+        //         while (j < n && maxBoxes > 0 && maxWeight >= boxes[j][1]) {
+        //             maxBoxes -= 1;
+        //             maxWeight -= boxes[j][1];
+        //             if (j == 0 || boxes[j][0] != boxes[j-1][0]) { // if the port is different from the previous port
+        //                 lastj = j;
+        //                 cnt++;
+        //             }
+        //             ++j;                        // keep expanding the right pointer when we can
+        //             // dp[++j] = 200000;        // equivalent
+        //         }
+        //         dp[j] = Math.min(dp[j], dp[i] + cnt + 1); // 这里的cnt 相当于是一个快进效果，提速
+        //         dp[lastj] = Math.min(dp[lastj], dp[i] + cnt);
+        //         // 这里下面三行：像是回溯一样，绕得好昏呀: 感觉是向右滑动，再增加一些空间，向右遍历所有可能性，并保存最优解
+        //         maxBoxes += 1;            // now as we move the left pointer i forward (don't put the ith box in this trip), 
+        //         maxWeight += boxes[i][1]; // we increase the number of available boxes and available weights
+        //         if (i == n-1 || boxes[i][0] != boxes[i+1][0]) cnt--;
+        //     }
+        //     return dp[n];
+        // }
+        // public int boxDelivering(int[][] box, int __, int max, int limit) {
+        //     int n = box.length;
+        //     int[] dp = new int[n+1]; // Minimum trips for first n boxes.
+        //     int wit = 0, cost = 2;   // cumulative weight, cumulative cost
+        //     int l = 0;                   // left ptr
+        //     for (int r = 0; r < n; r++) {// right ptr
+        //         wit += box[r][1];
+        //         if (r > 0 && box[r][0] != box[r-1][0]) cost++;
+        //         /* drop box iff:
+        //            - There are too many box (r-l >= max)
+        //            - The box are too heavy (weight > limit)
+        //            - It is redundant to carry them (dp[l] == dp[l+1]).
+        //         */                                 // 送往同一个港口的箱子向右滑动，直到改变消耗的临界点
+        //         while (r - l >= max || wit > limit || (l < r && dp[l] == dp[l+1])) { // 滑动窗口：左窗口右移
+        //             wit -= box[l][1];
+        //             if (box[l+1][0] != box[l][0]) cost--;
+        //             l++;
+        //         }
+        //         dp[r+1] = cost + dp[l]; // 运完下标为 r 的箱子后的最小次数，对应 dp[r+1]
+        //     }
+        //     return dp[n];
+        // }
+
+
+        
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        // String [] a = {"0:start:0", "1:start:2", "1:end:5", "0:end:6"};
-        // String []  a = new String []  {"0:start:0", "0:start:2", "0:end:5", "1:start:6", "1:end:6", "0:end:7"};
-        String []  a = new String []  {"0:start:0", "0:start:2", "0:end:5", "1:start:7", "1:end:7", "0:end:8"};
+        int [][] a = new int [][] {{1,2},{3,3},{3,1},{3,1},{2,4}};
 
-        int [] r = s.exclusiveTime(2, Arrays.asList(a));
-        System.out.println(Arrays.toString(r));
+        int r = s.boxDelivering(a, 3, 3, 6);
+        System.out.println("r: " + r);
+        
     }
 }

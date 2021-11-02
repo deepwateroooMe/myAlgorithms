@@ -101,48 +101,6 @@ public class dynaeightmicProgramming {
 //         }
 
         
-        // private int dfs(String s, int i) {
-        //     System.out.println("\ni: " + i);
-        //     if (i >= n) return 0;
-        //     if (i == n-1) return s.charAt(i) == '*' ? (dp[i] = 9) : (s.charAt(i) == '0' ? (dp[i] = 0) : (dp[i] = 1));
-        //     if (dp[i] > 0) return dp[i];
-        //     int res = 0;
-        //     if (s.charAt(i) == '0') return dp[i] = (int)dfs(s, i+1) % mod;
-        //     if (s.charAt(i+1) == '0') 
-        //         res = dfs(s, i+2) % mod; // 30 ? s.charAt(i+1) == '0'
-        //     else { 
-        //         res = (res + dfs(s, i+1)) % mod; // separate
-        //         // System.out.println("\ni: " + i);
-        //         // System.out.println("res 0: " + res);
-        //         if (s.charAt(i) == '1' || ((s.charAt(i) == '2' || s.charAt(i) == '*') && (s.charAt(i+1) == '*' || s.charAt(i+1)-'a' <= 6))) // combine together with next digit
-        //             if (s.charAt(i) == '1' || s.charAt(i+1) != '*')
-        //                 res = (res + dfs(s, i+1)) % mod;
-        //             // else if (s.charAt(i+1) != '*')
-        //             //     res = (res + dfs(s, i+1)) % mod;
-        //             else if ((s.charAt(i) == '2' || s.charAt(i) == '*') && s.charAt(i+1) == '*')
-        //                 res = (res + (i+1 == n-1 ? 6 : 2 * dfs(s, i+1) / 3)) % mod;
-        //         // System.out.println("\ni: " + i);
-        //         // System.out.println("res 1: " + res);
-        //     }
-        //     return dp[i] = (int)res;
-        // }
-        // int mod = (int)(1e9 + 7);
-        // int [] dp;
-        // int n;
-        // public int numDecodings(String s) {
-        //     n = s.length();
-        //     if (n == 1) return s.charAt(0) == '*' ? 9 : 1;
-        //     dp = new int [n];
-        //     dfs(s, 0);
-        //     // System.out.println("dp.length: " + dp.length);
-        //     // for (int z = 0; z < dp.length; ++z) 
-        //     //     System.out.print(dp[z] + ", ");
-        //     // System.out.println("");
-        //     return dp[0];
-        // }
-        // String a = "**"; // 96
-
-
         // private int [] getMin(int [] a, int [] b) { // 这个题最近需要再写一遍
         //     if (a[0] > b[0]) return b;
         //     if (a[0] < b[0]) return a;

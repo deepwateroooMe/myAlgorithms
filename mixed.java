@@ -715,19 +715,108 @@ public class mixed {
         //     return ans;
         // }
 
+        // public int thirdMax(int[] a) {
+        //     int max = Integer.MIN_VALUE, sec = Integer.MIN_VALUE, ans = Integer.MIN_VALUE;
+        //     Set<Integer> vis = new HashSet<>();
+        //     boolean imi = false;
+        //     for (int i = 0; i < a.length; i++) {
+        //         // System.out.println("\n a[i]: " + a[i]);
+        //         if (vis.contains(a[i])) continue;
+        //         if ( a[i] > max) {
+        //             if (sec == Integer.MIN_VALUE) {
+        //                 sec = max;
+        //             } else if (ans == Integer.MIN_VALUE) {
+        //                 ans = sec;
+        //                 sec = max;
+        //                 if (ans == Integer.MIN_VALUE) imi = true;
+        //             } 
+        //             max = a[i];
+        //         } else if (a[i] > sec) {
+        //             ans = sec;
+        //             sec = a[i];
+        //         } else if (a[i] > ans) ans = a[i];
+        //         vis.add(a[i]);
+        //         // System.out.println("max: " + max);
+        //         // System.out.println("sec: " + sec);
+        //         // System.out.println("ans: " + ans);
+        //     }
+        //     return ans == Integer.MIN_VALUE && !imi ? max : ans;
+        // }
+
+
+        // public String addStrings(String ss, String tt) {
+        //     int m = ss.length(), n = tt.length();
+        //     char [] s = ss.toCharArray();
+        //     char [] t = tt.toCharArray();
+        //     StringBuilder sb = new StringBuilder();
+        //     int i = m-1, j = n-1, cur = 0, cri = 0;
+        //     while (i >= 0 && j >= 0) {
+        //         cur = s[i] - '0' + t[j] - '0' + cri;
+        //         sb.append((char)(cur % 10 + '0'));
+        //         cri = cur / 10;
+        //         i--;
+        //         j--;
+        //     }
+        //     if (i >= 0) 
+        //         while (i >= 0) {
+        //             cur = s[i] - '0' + cri;
+        //             sb.append((char)(cur % 10 + '0'));
+        //             cri = cur / 10;
+        //             i--;
+        //         } 
+        //     else if (j >= 0) 
+        //         while (j >= 0) {
+        //             cur = t[j] - '0' + cri;
+        //             sb.append((char)(cur % 10 + '0'));
+        //             cri = cur / 10;
+        //             j--;
+        //         }
+        //     if (cri > 0) sb.append((char)(cri + '0'));
+        //     return sb.reverse().toString();
+        // }
 
         
+        private boolean isValid(char [] s) {
+            int n = s.length, cl = 0, cu = 0, cd = 0;
+            for (char c : s) {
+                if (Character.isLowerCase(c)) cl++;
+                else if (Character.isDigit(c)) cd++;
+                else if (Character.isUpperCase(c)) cu++;
+            }
+            if (cl == 0 || cd == 0 || cu = 0) return false;
+            int cnt = 1, i = 0, j  = 0;
+            while (i < n) {
+                if (i < n-1 && s[i] == s[i+1]) {
+                    cnt = 1;
+                    while (i < n-1 && s[i] == s[i+1]) {
+                        cnt++;
+                        if (cnt == 3) return false;
+                        i++;
+                    }
+                    if (i == n-1) return true;
+                }
+                while (i < n-1 && s[i] != s[i+1]) i++;
+            }
+            return true;
+        }
+        public int strongPasswordChecker(String t) {
+            int n = t.length();
+            char [] s = t.toCharArray();
+            if (n >= 6 && n <= 20 && isValid(s)) return 0;
+            if (n < 3) return 6-n;
+            if (n >= 3 && n < 6) {
+                
+            }
+
+        }
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        // String a = "abccccdd";
-        // String a = "bb";
-        String a = "AAAAAA";
+        String a = "1";
+        String b = "9";
 
-        System.out.println("a: " + a);
-        
-        int r = s.longestPalindrome(a); // getRandom() should return either 1 or 2 randomly.
+        String r = s.addStrings(a, b); // getRandom() should return either 1 or 2 randomly.
         System.out.println("r: " + r);
     }
 }

@@ -1,4 +1,4 @@
-% Created 2021-10-29 Fri 21:58
+% Created 2021-11-01 Mon 16:14
 \documentclass[9pt, b5paaper]{book}
 \usepackage[UTF8]{ctex}
 \usepackage{xltxtra}
@@ -177,7 +177,7 @@ Return the sum of the points of the students.
 \label{sec-1-5-1}
 \begin{itemize}
 \item 思路是记忆化搜索。先求一下正确答案，然后开始算所有可能得到的错误答案。枚举运算符，然后递归求解两边可能的答案，汇总成当前表达式可能得到的答案。用记忆化的方式避免重复计算。
-\item 时间复杂度O ( l$_{\text{s}}^{\text{3}}$ + l$_{\text{A}}$ ) O(l$_{\text{s}}^{\text{3}}$+l$_{\text{A}}$))，空间O ( l s 2 ) O(l$_{\text{s}}^{\text{2}}$)O(l )。注意有1000这个限制，上面所说的复杂度的常数是1000$^{\text{2，是很大的}}$
+\item 时间复杂度O(l$_{\text{s}}^{\text{3}}$+l$_{\text{A}}$))，空间O(l$_{\text{s}}^{\text{2}}$)。注意有1000这个限制，上面所说的复杂度的常数是1000$^{\text{2，是很大的}}$
 \end{itemize}
 
 \includegraphics[width=.9\linewidth]{./pic/score.png}
@@ -1636,8 +1636,79 @@ public int backPackIII(int[] A, int[] V, int m) {
 }
 \end{minted}
 
-\section{377. Combination Sum IV 没能认出这个题目是考DP}
+\section{879. Profitable Schemes - Hard 0-1背包问题}
 \label{sec-1-26}
+There is a group of n members, and a list of various crimes they could commit. The ith crime generates a profit[i] and requires group[i] members to participate in it. If a member participates in one crime, that member can't participate in another crime.
+
+Let's call a profitable scheme any subset of these crimes that generates at least minProfit profit, and the total number of members participating in that subset of crimes is at most n.
+
+Return the number of schemes that can be chosen. Since the answer may be very large, return it modulo 109 + 7.
+\subsection{解题思路与分析}
+\label{sec-1-26-1}
+
+\includegraphics[width=.9\linewidth]{./pic/crime.png}
+
+\begin{itemize}
+\item 题目中说了结果可能非常大，要对一个超大数取余，看到这里，我们也就该明白为了不爆栈，只能用动态规划 Dynamic Programming 来做，LeetCode 里有好多题都是要对这个 1e9+7 取余，不知道为啥都是对这个数取余。Anyway，who cares，还是来想想 dp 数组如何定义以及怎么推导状态转移方程吧。
+\end{itemize}
+
+首先来看分配黑帮资源时候都需要考虑哪些因素，总共有三点，要干几票买卖，要用多少人，能挣多少钱。所以我们需要一个三维的 dp 数组，其中 dp[k][i][j] 表示最多干k票买卖，总共用了i个人，获得利润为j的情况下分配方案的总数，初始化 dp\footnotemark[2]{}\textsuperscript{,}\,\footnotemark[2]{}\textsuperscript{,}\,\footnotemark[2]{} 为1。
+
+现在来推导状态转移方程，整个规划的核心是买卖，总共买卖的个数是固定的，每多干一票买卖，可能的分配方法就可能增加，但不可能减少的，因为假如当前已经算出来做 k-1 次买卖的分配方法总数，再做一次买卖，之前的分配方法不会减少，顶多是人数不够，做不成当前这票买卖而已，所以我们的 dp[k][i][j] 可以先更新为 dp[k-1][i][j]，然后再来看这第k个买卖还能不能做，我们知道假设这第k个买卖需要g个人，能获得利润p，只有当我们现在的人数i大于等于g的时候，才有可能做这个任务，我们要用g个人来做任务k的话，那么其余的 k-1 个任务只能由 i-g 个人来做了，而且由于整个需要产生利润j，第k个任务能产生利润p，所以其余的 k-1 个任务需要产生利润 j-p，由于利润不能是负值，所以我们还需要跟0比较，取二者的最大值
+
+综上所述，若我们选择做任务k，则能新产生的分配方案的个数为 dp[k-1][i-g][max(0,j-p)]，记得每次累加完要对超大数取余。最终我们需要将 dp[n][i][P] ( 0 <= i <= G ) 累加起来，因为我们不一定要全部使用G个人，只要能产生P的利润，用几个人都没关系，而k是表示最多干的买卖数，可能上并没有干到这么多，所以只需要累加人数这个维度即可，
+
+\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+public int profitableSchemes(int n, int minProfit, int[] group, int[] profit) { // 0-1背包问题：每场罪恶在每个状态里最多只能存在一次
+    int mod = (int)1e9 + 7, ans = 0;
+    int m = group.length;
+    int [][][] dp = new int [m+1][n+1][minProfit + 1]; 
+    dp[0][0][0] = 1;
+    for (int k = 1; k <= m; k++) {
+        int p = profit[k-1], g = group[k-1];
+        for (int i = 0; i <= n; i++) 
+            for (int j = 0; j <= minProfit; j++) {
+                dp[k][i][j] = dp[k-1][i][j];
+                if (i >= g)
+                    dp[k][i][j] = (dp[k][i][j] + dp[k-1][i-g][Math.max(0, j-p)]) % mod;
+            }
+    }
+    for (int i = 0; i <= n; i++) 
+        ans = (ans + dp[m][i][minProfit]) % mod;
+    return ans;
+}
+\end{minted}
+\subsection{优化一下空间复杂度: 二维dp Dimension reduction by using rolling array.}
+\label{sec-1-26-2}
+
+因为当前做的第k个任务，只跟前 k-1 个任务的分配方案有关，所以并不需要保存所有的任务个数的分配方式。这样我们就节省了一个维度，但是需要注意的是，更新的时候i和j只能从大到小更新，这个其实也不难理解，因为此时 dp[i][j] 存的是前 k-1 个任务的分配方式，所以更新第k个任务的时候，一定要从后面开始覆盖，因为用到了前面的值，若从前面的值开始更新的话，就不能保证用到的都是前 k-1 个任务的分配方式，有可能用到的是已经更新过的值，就会出错.
+\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+public int profitableSchemes(int n, int minProfit, int[] group, int[] profit) { // 0-1背包问题：每场罪恶在每个状态里最多只能存在一次
+    int mod = (int)1e9 + 7, ans = 0;
+    int m = group.length;
+    int [][] dp = new int [n+1][minProfit + 1]; 
+    dp[0][0] = 1;
+    for (int k = 1; k <= m; k++) {
+        int p = profit[k-1], g = group[k-1];
+        for (int i = n; i >= g; i--)  // i >= 
+            for (int j = minProfit; j >= 0; j--) 
+                dp[i][j] = (dp[i][j] + dp[i-g][Math.max(0, j-p)]) % mod; // 保证了这一行覆盖原数组的正确性
+    }
+    for (int i = 0; i <= n; i++) 
+        ans = (ans + dp[i][minProfit]) % mod;
+    return ans;
+}
+\end{minted}
+\subsection{递归 + 记忆数组来做 todo: 改天补上}
+\label{sec-1-26-3}
+
+基本思想跟解法一没有太大的区别，递归的记忆数组其实跟迭代形式的 dp 数组没有太大的区别，作用都是保存中间状态从而减少大量的重复计算。这里稍稍需要注意下的就是递归函数中的 corner case，当 k=0 时，则根据j的值来返回0或1，当j小于等于0，返回1，否则返回0，相当于修改了初始化值（之前都初始化为了整型最小值），然后当j小于0时，则j赋值为0，因为利润不能为负值。然后就看若当前的 memo[k][i][j] 已经计算过了，则直接返回即可，
+\begin{itemize}
+\item \url{https://www.cnblogs.com/grandyang/p/11108205.html}
+\end{itemize}
+
+\section{377. Combination Sum IV 没能认出这个题目是考DP}
+\label{sec-1-27}
 Given an array of distinct integers nums and a target integer target, return the number of possible combinations that add up to target.
 The answer is guaranteed to fit in a 32-bit integer.
 \begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
@@ -1656,7 +1727,7 @@ public int combinationSum4(int[] nums, int target) {
 \end{minted}
 
 \section{1049. Last Stone Weight II}
-\label{sec-1-27}
+\label{sec-1-28}
 You are given an array of integers stones where stones[i] is the weight of the ith stone.
 We are playing a game with the stones. On each turn, we choose any two stones and smash them together. Suppose the stones have weights x and y with x <= y. The result of this smash is:
 If x \texttt{= y, both stones are destroyed, and
@@ -1682,7 +1753,7 @@ public int lastStoneWeightII(int[] stones) {
 \end{minted}
 
 \section{1449. Form Largest Integer With Digits That Add up to Target}
-\label{sec-1-28}
+\label{sec-1-29}
 Given an array of integers cost and an integer target. Return the maximum integer you can paint under the following rules:
 The cost of painting a digit (i+1) is given by cost[i] (0 indexed).
 The total cost used must be equal to target.
@@ -1718,7 +1789,7 @@ public String largestNumber(int[] cost, int target) {
 \end{minted}
 
 \section{516. Longest Palindromic Subsequence}
-\label{sec-1-29}
+\label{sec-1-30}
 Given a string s, find the longest palindromic subsequence's length in s.
 A subsequence is a sequence that can be derived from another sequence by deleting some or no elements without changing the order of the remaining elements.
 \begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
@@ -1739,7 +1810,7 @@ A subsequence is a sequence that can be derived from another sequence by deletin
 \end{minted}
 
 \section{1143. Longest Common Subsequence}
-\label{sec-1-30}
+\label{sec-1-31}
 Given two strings text1 and text2, return the length of their longest common subsequence. If there is no common subsequence, return 0.
 A subsequence of a string is a new string generated from the original string with some characters (can be none) deleted without changing the relative order of the remaining characters.
 For example, "ace" is a subsequence of "abcde".
@@ -1758,7 +1829,7 @@ public int longestCommonSubsequence(String S, String T) {
 \end{minted}
 
 \section{1092. Shortest Common Supersequence - Hard}
-\label{sec-1-31}
+\label{sec-1-32}
 Given two strings str1 and str2, return the shortest string that has both str1 and str2 as subsequences. If there are multiple valid strings, return any of them.
 
 A string s is a subsequence of string t if deleting some number of characters from t (possibly 0) results in the string s.
@@ -1851,7 +1922,7 @@ public String shortestCommonSupersequence(String s, String t) {
 }
 \end{minted}
 \section{546. Remove Boxes - Hard}
-\label{sec-1-32}
+\label{sec-1-33}
 You are given several boxes with different colors represented by different positive numbers.
 
 You may experience several rounds to remove boxes until there is no box left. Each time you can choose some continuous boxes with the same color (i.e., composed of k boxes, k >= 1), remove them and get k * k points.
@@ -1882,7 +1953,7 @@ public int removeBoxes(int[] boxes) {
 }
 \end{minted}
 \section{1531. String Compression II - Hard}
-\label{sec-1-33}
+\label{sec-1-34}
 Run-length encoding is a string compression method that works by replacing consecutive identical characters (repeated 2 or more times) with the concatenation of the character and the number marking the count of the characters (length of the run). For example, to compress the string "aabccc" we replace "aa" by "a2" and replace "ccc" by "c3". Thus the compressed string becomes "a2bc3".
 
 Notice that in this problem, we are not adding '1' after single characters.
@@ -1923,13 +1994,13 @@ public int getLengthOfOptimalCompression(String s, int k) {
 }
 \end{minted}
 \subsection{决策类DP总结}
-\label{sec-1-33-1}
+\label{sec-1-34-1}
 \begin{itemize}
 \item \url{https://leetcode-cn.com/problems/string-compression-ii/solution/jie-ti-si-kao-guo-cheng-yu-jie-fa-zong-jie-by-ruit/}
 \end{itemize}
 
 \section{1000. Minimum Cost to Merge Stones}
-\label{sec-1-34}
+\label{sec-1-35}
 There are n piles of stones arranged in a row. The ith pile has stones[i] stones.
 A move consists of merging exactly k consecutive piles into one pile, and the cost of this move is equal to the total number of stones in these k piles.
 Return the minimum cost to merge all piles of stones into one pile. If it is impossible, return -1.
@@ -1957,7 +2028,7 @@ public int mergeStones(int[] stones, int k) {
 \end{minted}
 
 \section{1039. Minimum Score Triangulation of Polygon}
-\label{sec-1-35}
+\label{sec-1-36}
 You have a convex n-sided polygon where each vertex has an integer value. You are given an integer array values where values[i] is the value of the ith vertex (i.e., clockwise order).
 You will triangulate the polygon into n - 2 triangles. For each triangle, the value of that triangle is the product of the values of its vertices, and the total score of the triangulation is the sum of these values over all n - 2 triangles in the triangulation.
 Return the smallest possible total score that you can achieve with some triangulation of the polygon.
@@ -1986,7 +2057,7 @@ public int minScoreTriangulation(int[] arr) {
 \end{minted}
 
 \section{375. Guess Number Higher or Lower II - Medium}
-\label{sec-1-36}
+\label{sec-1-37}
 We are playing the Guessing Game. The game will work as follows:
 
 I pick a number between 1 and n.
@@ -2020,7 +2091,7 @@ public int getMoneyAmount(int n) {
 }
 \end{minted}
 \section{1478. Allocate Mailboxes - Hard}
-\label{sec-1-37}
+\label{sec-1-38}
 Given the array houses and an integer k. where houses[i] is the location of the ith house along a street, your task is to allocate k mailboxes in the street.
 
 Return the minimum total distance between each house and its nearest mailbox.
@@ -2084,7 +2155,7 @@ public int minDistance(int [] houses, int k) {
 \end{minted}
 
 \section{486. Predict the Winner}
-\label{sec-1-38}
+\label{sec-1-39}
 You are given an integer array nums. Two players are playing a game with this array: player 1 and player 2.
 Player 1 and player 2 take turns, with player 1 starting first. Both players start the game with a score of 0. At each turn, the player takes one of the numbers from either end of the array (i.e., nums\footnotemark[2]{} or nums[nums.length - 1]) which reduces the size of the array by 1. The player adds the chosen number to their score. The game ends when there are no more elements in the array.
 Return true if Player 1 can win the game. If the scores of both players are equal, then player 1 is still the winner, and you should also return true. You may assume that both players are playing optimally.
@@ -2108,7 +2179,7 @@ public boolean PredictTheWinner(int[] nums) {
 \end{minted}
 
 \section{877. Stone Game}
-\label{sec-1-39}
+\label{sec-1-40}
 Alice and Bob play a game with piles of stones. There are an even number of piles arranged in a row, and each pile has a positive integer number of stones piles[i].
 The objective of the game is to end with the most stones. The total number of stones across all the piles is odd, so there are no ties.
 Alice and Bob take turns, with Alice starting first. Each turn, a player takes the entire pile of stones either from the beginning or from the end of the row. This continues until there are no more piles left, at which point the person with the most stones wins.
@@ -2145,7 +2216,7 @@ public boolean stoneGame(int[] piles) {
 }
 \end{minted}
 \section{1140. Stone Game II}
-\label{sec-1-40}
+\label{sec-1-41}
 Alice and Bob continue their games with piles of stones.  There are a number of piles arranged in a row, and each pile has a positive integer number of stones piles[i].  The objective of the game is to end with the most stones. 
 Alice and Bob take turns, with Alice starting first.  Initially, M = 1.
 On each player's turn, that player can take all the stones in the first X remaining piles, where 1 <= X <= 2M.  Then, we set M = max(M, X).
@@ -2180,7 +2251,7 @@ public int stoneGameII(int[] piles) {
 }
 \end{minted}
 \section{1872. Stone Game VIII}
-\label{sec-1-41}
+\label{sec-1-42}
 Alice and Bob take turns playing a game, with Alice starting first.
 There are n stones arranged in a row. On each player's turn, while the number of stones is more than one, they will do the following:
 Choose an integer x > 1, and remove the leftmost x stones from the row.
@@ -2210,7 +2281,7 @@ public int stoneGameVIII(int[] stones) {
 \end{minted}
 
 \section{123. Best Time to Buy and Sell Stock III}
-\label{sec-1-42}
+\label{sec-1-43}
 You are given an array prices where prices[i] is the price of a given stock on the ith day.
 Find the maximum profit you can achieve. You may complete at most two transactions.
 Note: You may not engage in multiple transactions simultaneously (i.e., you must sell the stock before you buy again).
@@ -2247,7 +2318,7 @@ public int maxProfit(int[] prices) {
 \end{minted}
 
 \section{188. Best Time to Buy and Sell Stock IV}
-\label{sec-1-43}
+\label{sec-1-44}
 You are given an integer array prices where prices[i] is the price of a given stock on the ith day, and an integer k.
 Find the maximum profit you can achieve. You may complete at most k transactions.
 Note: You may not engage in multiple transactions simultaneously (i.e., you must sell the stock before you buy again).
@@ -2278,7 +2349,7 @@ public int maxProfit(int k, int [] prices) {
 \end{minted}
 
 \section{714. Best Time to Buy and Sell Stock with Transaction Fee}
-\label{sec-1-44}
+\label{sec-1-45}
 You are given an array prices where prices[i] is the price of a given stock on the ith day, and an integer fee representing a transaction fee.
 Find the maximum profit you can achieve. You may complete as many transactions as you like, but you need to pay the transaction fee for each transaction.
 Note: You may not engage in multiple transactions simultaneously (i.e., you must sell the stock before you buy again).
@@ -2297,7 +2368,7 @@ public int maxProfit(int[] prices, int fee) {
 \end{minted}
 
 \section{309. Best Time to Buy and Sell Stock with Cooldown}
-\label{sec-1-45}
+\label{sec-1-46}
 You are given an array prices where prices[i] is the price of a given stock on the ith day.
 Find the maximum profit you can achieve. You may complete as many transactions as you like (i.e., buy one and sell one share of the stock multiple times) with the following restrictions:
 After you sell your stock, you cannot buy stock on the next day (i.e., cooldown one day).
@@ -2330,7 +2401,7 @@ public int maxProfit(int[] prices) {
 \end{minted}
 
 \section{673. Number of Longest Increasing Subsequence}
-\label{sec-1-46}
+\label{sec-1-47}
 Given an integer array nums, return the number of longest increasing subsequences.
 Notice that the sequence has to be strictly increasing.
 \begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
@@ -2360,7 +2431,7 @@ public int findNumberOfLIS(int[] nums) { // dynamic programming
 \end{minted}
 
 \section{1896. Minimum Cost to Change the Final Value of Expression - Hard}
-\label{sec-1-47}
+\label{sec-1-48}
 You are given a valid boolean expression as a string expression consisting of the characters '1','0','\&' (bitwise AND operator),'|' (bitwise OR operator),'(', and ')'.
 
 For example, "()1|1" and "(1)\&()" are not valid while "1", "(((1))|(0))", and "1|(0\&(1))" are valid expressions.
@@ -2414,7 +2485,7 @@ public int minOperationsToFlip(String expression) {
 \end{minted}
 
 \section{823. Binary Trees With Factors}
-\label{sec-1-48}
+\label{sec-1-49}
 Given an array of unique integers, arr, where each integer arr[i] is strictly greater than 1.
 We make a binary tree using these integers, and each number may be used for any number of times. Each non-leaf node's value should be equal to the product of the values of its children.
 Return the number of binary trees we can make. The answer may be too large so return the answer modulo 109 + 7.
@@ -2442,7 +2513,7 @@ public int numFactoredBinaryTrees(int[] arr) {
 \end{minted}
 
 \section{907. Sum of Subarray Minimums}
-\label{sec-1-49}
+\label{sec-1-50}
 Given an array of integers arr, find the sum of min(b), where b ranges over every (contiguous) subarray of arr. Since the answer may be large, return the answer modulo 109 + 7.
 \begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
 public int sumSubarrayMins(int[] arr) {
@@ -2517,7 +2588,7 @@ public int sumSubarrayMins(int[] arr) {
 \end{minted}
 
 \section{494. Target Sum - Medium}
-\label{sec-1-50}
+\label{sec-1-51}
 You are given an integer array nums and an integer target.
 
 You want to build an expression out of nums by adding one of the symbols '+' and '-' before each integer in nums and then concatenate all the integers.
@@ -2564,7 +2635,7 @@ Vn就是nums数组所有数字的组合值之和的集合
 \includegraphics[width=.9\linewidth]{./pic/targetSum2.png}
 
 \section{1477. Find Two Non-overlapping Sub-arrays Each With Target Sum}
-\label{sec-1-51}
+\label{sec-1-52}
 Given an array of integers arr and an integer target.
 You have to find two non-overlapping sub-arrays of arr each with a sum equal target. There can be multiple answers so you have to find an answer where the sum of the lengths of the two sub-arrays is minimum.
 Return the minimum sum of the lengths of the two required sub-arrays, or return -1 if you cannot find such two sub-arrays.
@@ -2598,7 +2669,7 @@ public int minSumOfLengths(int[] arr, int target) {
 \end{minted}
 
 \section{1771. Maximize Palindrome Length From Subsequences}
-\label{sec-1-52}
+\label{sec-1-53}
 You are given two strings, word1 and word2. You want to construct a string in the following manner:
 Choose some non-empty subsequence subsequence1 from word1.
 Choose some non-empty subsequence subsequence2 from word2.
@@ -2634,7 +2705,7 @@ public int longestPalindrome(String s, String t) { // 这个题目没有懂，�
 \end{minted}
 
 \section{907. Sum of Subarray Minimums}
-\label{sec-1-53}
+\label{sec-1-54}
 Given an array of integers arr, find the sum of min(b), where b ranges over every (contiguous) subarray of arr. Since the answer may be large, return the answer modulo 109 + 7.
 \begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
         public int sumSubarrayMins(int[] arr) {
@@ -2709,7 +2780,7 @@ Given an array of integers arr, find the sum of min(b), where b ranges over ever
 \end{minted}
 
 \section{689. Maximum Sum of 3 Non-Overlapping Subarrays}
-\label{sec-1-54}
+\label{sec-1-55}
 Given an integer array nums and an integer k, find three non-overlapping subarrays of length k with maximum sum and return them.
 Return the result as a list of indices representing the starting position of each interval (0-indexed). If there are multiple answers, return the lexicographically smallest one.
 \begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
@@ -2751,7 +2822,7 @@ public int[] maxSumOfThreeSubarrays(int[] nums, int k) {
 \end{minted}
 
 \section{363. Max Sum of Rectangle No Larger Than K}
-\label{sec-1-55}
+\label{sec-1-56}
 Given an m x n matrix matrix and an integer k, return the max sum of a rectangle in the matrix such that its sum is no larger than k.
 It is guaranteed that there will be a rectangle with a sum no larger than k.
 \begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
@@ -2819,7 +2890,7 @@ public int maxSumSubmatrix(int[][] mat, int target) {
 \end{minted}
 
 \section{805. Split Array With Same Average}
-\label{sec-1-56}
+\label{sec-1-57}
 You are given an integer array nums.
 You should move each element of nums into one of the two arrays A and B such that A and B are non-empty, and average(A) == average(B).
 Return true if it is possible to achieve that and false otherwise.
@@ -2853,7 +2924,7 @@ public boolean splitArraySameAverage(int[] nums) {
 \end{minted}
 
 \section{1981. Minimize the Difference Between Target and Chosen Elements}
-\label{sec-1-57}
+\label{sec-1-58}
 You are given an m x n integer matrix mat and an integer target.
 Choose one integer from each row in the matrix such that the absolute difference between target and the sum of the chosen elements is minimized.
 Return the minimum absolute difference.
@@ -2915,7 +2986,7 @@ public int minimizeTheDifference(int[][] mat, int target) {
 \end{minted}
 
 \section{805. Split Array With Same Average}
-\label{sec-1-58}
+\label{sec-1-59}
 You are given an integer array nums.
 You should move each element of nums into one of the two arrays A and B such that A and B are non-empty, and average(A) == average(B).
 Return true if it is possible to achieve that and false otherwise.
@@ -3008,7 +3079,7 @@ bool splitArraySameAverage(vector<int>& A) {  // https://www.cnblogs.com/grandya
 \end{minted}
 
 \section{801. Minimum Swaps To Make Sequences Increasing - Hard}
-\label{sec-1-59}
+\label{sec-1-60}
 You are given two integer arrays of the same length nums1 and nums2. In one operation, you are allowed to swap nums1[i] with nums2[i].
 
 For example, if nums1 = [1,2,3,8], and nums2 = [5,6,7,4], you can swap the element at i = 3 to obtain nums1 = [1,2,3,4] and nums2 = [5,6,7,8].
@@ -3041,7 +3112,7 @@ public int minSwap(int[] a, int[] b) {
 }
 \end{minted}
 \section{837. New 21 Game - Medium}
-\label{sec-1-60}
+\label{sec-1-61}
 Alice plays the following game, loosely based on the card game "21".
 
 Alice starts with 0 points and draws numbers while she has less than k points. During each draw, she gains an integer number of points randomly from the range [1, maxPts], where maxPts is an integer. Each draw is independent and the outcomes have equal probabilities.
@@ -3080,7 +3151,7 @@ public double new21Game(int n, int k, int w) { // k : threshold
 }
 \end{minted}
 \section{1105. Filling Bookcase Shelves - Medium}
-\label{sec-1-61}
+\label{sec-1-62}
 You are given an array books where books[i] = [thicknessi, heighti] indicates the thickness and height of the ith book. You are also given an integer shelfWidth.
 
 We want to place these books in order onto bookcase shelves that have a total width shelfWidth.
@@ -3113,7 +3184,7 @@ public int minHeightShelves(int[][] books, int shelfWidth) {
 }
 \end{minted}
 \section{1997. First Day Where You Have Been in All the Rooms - Medium}
-\label{sec-1-62}
+\label{sec-1-63}
 There are n rooms you need to visit, labeled from 0 to n - 1. Each day is labeled, starting from 0. You will go in and visit one room a day.
 
 Initially on day 0, you visit room 0. The order you visit the rooms for the coming days is determined by the following rules and a given 0-indexed array nextVisit of length n:
@@ -3134,7 +3205,7 @@ public int firstDayBeenInAllRooms(int [] nextVisit) {
 \end{minted}
 
 \section{943. Find the Shortest Superstring - Hard}
-\label{sec-1-63}
+\label{sec-1-64}
 Given an array of strings words, return the smallest string that contains each string in words as a substring. If there are multiple valid strings of the smallest length, return any of them.
 
 You may assume that no string in words is a substring of another string in words.
@@ -3229,7 +3300,7 @@ public String shortestSuperstring(String[] words) {
 \end{minted}
 
 \section{964. Least Operators to Express Number - Hard}
-\label{sec-1-64}
+\label{sec-1-65}
 Given a single positive integer x, we will write an expression of the form x (op1) x (op2) x (op3) x \ldots{} where each operator op1, op2, etc. is either addition, subtraction, multiplication, or division (+, -, *, or /). For example, with x = 3, we might write 3 * 3 / 3 + 3 - 3 which is a value of 3.
 
 When writing such an expression, we adhere to the following conventions:
@@ -3292,7 +3363,7 @@ int leastOpsExpressTarget(int x, int target) {
 }
 \end{minted}
 \section{1955. Count Number of Special Subsequences - Hard}
-\label{sec-1-65}
+\label{sec-1-66}
 A sequence is special if it consists of a positive number of 0s, followed by a positive number of 1s, then a positive number of 2s.
 
 For example, [0,1,2] and [0,0,1,1,1,2] are special.
@@ -3318,6 +3389,75 @@ public int countSpecialSubsequences(int[] arr) { // 去找个降维的参考一�
                     dp[i][j] = ((i == 0 ? 0 : dp[i-1][j]) * 2 % mod + (i == 0 ? 0 : dp[i-1][j-1])) % mod;
         }
     return (int)dp[n-1][2];
+}
+\end{minted}
+
+\section{446. Arithmetic Slices II - Subsequence - Hard}
+\label{sec-1-67}
+Given an integer array nums, return the number of all the arithmetic subsequences of nums.
+
+A sequence of numbers is called arithmetic if it consists of at least three elements and if the difference between any two consecutive elements is the same.
+
+For example, [1, 3, 5, 7, 9], [7, 7, 7, 7], and [3, -1, -5, -9] are arithmetic sequences.
+For example, [1, 1, 2, 5, 7] is not an arithmetic sequence.
+A subsequence of an array is a sequence that can be formed by removing some elements (possibly none) of the array.
+
+For example, [2,5,10] is a subsequence of [1,2,1,2,4,1,5,10].
+The test cases are generated so that the answer fits in 32-bit integer.
+\subsection{解题思路与分析}
+\label{sec-1-67-1}
+这道题是之前那道Arithmetic Slices的延伸，那道题比较简单是因为要求等差数列是连续的，而这道题让我们求是等差数列的子序列，可以跳过某些数字，不一定非得连续，那么难度就加大了，但还是需要用动态规划Dynamic Progrmming来做。
+
+好，既然决定要用DP了，那么首先就要确定dp数组的定义了，刚开始我们可能会考虑使用个一维的dp数组，然后dp[i]定义为范围为[0, i]的子数组中等差数列的个数。定义的很简单，OK，但是基于这种定义的状态转移方程却十分的难想。我们想对于(0, i)之间的任意位置j，如何让 dp[i] 和 dp[j] 产生关联呢？是不是只有 A[i] 和 A[j] 的差值diff，跟A[j]之前等差数列的差值相同，才会有关联，所以差值diff是一个很重要的隐藏信息Hidden Information，我们必须要在dp的定义中考虑进去。所以一维dp数组是罩不住的，必须升维，但是用二维dp数组的话，差值diff那一维的范围又是个问题，数字的范围是整型数，所以差值的范围也很大，为了节省空间，我们建立一个一维数组dp，数组里的元素不是数字，而是放一个HashMap，建立等差数列的差值和当前位置之前差值相同的数字个数之间的映射。我们遍历数组中的所有数字，对于当前遍历到的数字，又从开头遍历到当前数字，计算两个数字之差diff，如果越界了不做任何处理，如果没越界，我们让dp[i]中diff的差值映射自增1，因为此时A[i]前面有相差为diff的A[j]，所以映射值要加1。然后我们看dp[j]中是否有diff的映射，如果有的话，说明此时相差为diff的数字至少有三个了，已经能构成题目要求的等差数列了，将dp[j][diff]加入结果res中，然后再更新dp[i][diff]，这样等遍历完数组，res即为所求。
+
+我们用题目中给的例子数组 [2，4，6，8，10] 来看，因为2之前没有数字了，所以我们从4开始，遍历前面的数字，是2，二者差值为2，那么在dp\footnotemark[3]{}的HashMap就可以建立 2->1 的映射，表示4之前有1个差值为2的数字，即数字2。那么现在i=2指向6了，遍历前面的数字，第一个数是2，二者相差4，那么在dp\footnotemark[5]{}的HashMap就可以建立 4->1 的映射，第二个数是4，二者相差2，那么先在dp\footnotemark[5]{}的HashMap建立 2->1 的映射，由于dp\footnotemark[3]{}的HashMap中也有差值为2的映射，2->1，那么说明此时至少有三个数字差值相同，即这里的 [2 4 6]，我们将dp\footnotemark[3]{}中的映射值加入结果res中，然后当前dp\footnotemark[5]{}中的映射值加上dp\footnotemark[3]{}中的映射值。这应该不难理解，比如当i=3指向数字8时，j=2指向数字6，那么二者差值为2，此时先在dp\footnotemark[1]{}建立 2->1 的映射，由于dp\footnotemark[5]{}中有 2->2 的映射，那么加上数字8其实新增了两个等差数列 [2,4,6,8] 和 [4,6,8]，所以结果res加上的值就是 dp[j][diff]，即2，并且 dp[i][diff] 也需要加上这个值，才能使得 dp\footnotemark[1]{} 中的映射变为 2->3 ，后面数字10的处理情况也相同，这里就不多赘述了，最终的各个位置的映射关系如下所示：
+\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+2     4     6     8     10    
+     2->1  4->1  6->1  8->1
+           2->2  4->1  6->1 
+                 2->3  4->2
+                       2->4
+\end{minted}
+
+最终累计出来的结果是跟上面红色的数字相关，分别对应着如下的等差数列：
+
+\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+2->2：[2,4,6]
+2->3：[2,4,6,8]    [4,6,8]
+4->2：[2,6,10]
+2->4：[2,4,6,8,10]    [4,6,8,10]    [6,8,10]
+\end{minted}
+\begin{itemize}
+\item Both time and space complexities are O(n$^{\text{2}}$)
+\end{itemize}
+
+\includegraphics[width=.9\linewidth]{./pic/arithslice.png}
+
+Define the type of the difference as Integer type instead of Long. This is because there is no valid arithmetic subsequence slice that can have difference out of the Integer value range. But we do need a long integer to filter out those invalid cases.
+
+Preallocate the HashMap to avoid reallocation to deal with extreme cases.
+
+Refrain from using lambda expressions inside loops.
+
+\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+public int numberOfArithmeticSlices(int [] arr) {
+    int n = arr.length, ans = 0;
+    Map<Integer, Integer> [] dp = new HashMap[n];
+    dp[0] = new HashMap<>();
+    for (int i = 1; i < n; i++) {
+        dp[i] = new HashMap<>();
+        for (int j = 0; j < i; j++) {
+            long diff = (long)arr[i] - arr[j];
+            if (diff > Integer.MAX_VALUE || diff < Integer.MIN_VALUE) continue;
+            int dif = (int)diff;
+            dp[i].put(dif, dp[i].getOrDefault(dif, 0) + 1);      // 这里先更新上
+            if (dp[j].containsKey(dif)) {
+                ans += dp[j].get(dif);    // 更新结果
+                dp[i].put(dif, dp[i].get(dif) + dp[j].get(dif)); // 再加上之前累积的
+            }
+        }
+    }
+    return ans;
 }
 \end{minted}
 % Emacs 27.1 (Org mode 8.2.7c)

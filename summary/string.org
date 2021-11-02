@@ -3,10 +3,52 @@
 
 * 字符串 
 ** 总结
-- KMP算法
 - Rabin-Karp Rolling Hash算法
-- 
+** KMP算法
+** 1392. Longest Happy Prefix  - Hard : Use Longest Prefix Suffix (KMP-table) or String Hashing.
+A string is called a happy prefix if is a non-empty prefix which is also a suffix (excluding itself).
 
+Given a string s, return the longest happy prefix of s. Return an empty string "" if no such prefix exists.
+*** 解题思路与分析: KMP算法
+
+    [[./pic/happyString.png]]
+
+#+BEGIN_SRC java
+public String longestPrefix(String ss) {
+    int n = ss.length();
+    char [] s = ss.toCharArray();
+    int [] lps = new int [n];
+    for (int i = 1, j = 0; i < n; i++) {
+        while (j > 0 && s[i] != s[j])
+            j = lps[j-1];
+        if (s[i] == s[j])
+            lps[i] = ++j;
+    }
+    return ss.substring(0, lps[n-1]);
+}
+#+END_SRC
+*** rolling hash
+
+Time complexity: O(n) / worst case: O(n^2)
+
+Space complexity: O(1)
+
+#+BEGIN_SRC java
+public String longestPrefix(String s) { // 容易出错，KMP写起来比较简单
+    int n = s.length(), hashPre = 0, hashSuf = 0;
+    int left = 0, right = n-1, pow = 1, maxLen = 0;
+    String res = "";
+    while (left < n-1) {
+        hashPre = hashPre * 31 + s.charAt(left);
+        hashSuf = hashSuf + s.charAt(right)*pow;
+        if (hashPre == hashSuf) maxLen = left + 1;
+        left ++;
+        right --;
+        pow *= 31;
+    }
+    return maxLen == 0 ? "" : s.substring(0, maxLen);
+}
+#+END_SRC
 ** 1910. Remove All Occurrences of a Substring - Medium 可用KMP算法
 Given two strings s and part, perform the following operation on s until all occurrences of the substring part are removed:
 

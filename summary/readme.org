@@ -2,20 +2,134 @@
 #+title: LeetCode Online Coding Interview Questions -- 错题集
 #+author: deepwaterooo
 
-# #+INCLUDE: "./plan.org" :minlevel 1
-# #+INCLUDE: "./dp.org" :minlevel 1
-# #+INCLUDE: "./hashTree.org" :minlevel 1
-# #+INCLUDE: "./binarySearch.org" :minlevel 1
-# #+INCLUDE: "./string.org" :minlevel 1
-# #+INCLUDE: "./dataStructure.org" :minlevel 1
-# #+INCLUDE: "./bitMaskManipulation.org" :minlevel 1
+#+INCLUDE: "./plan.org" :minlevel 1
+#+INCLUDE: "./dp.org" :minlevel 1
+#+INCLUDE: "./hashTree.org" :minlevel 1
+#+INCLUDE: "./binarySearch.org" :minlevel 1
+#+INCLUDE: "./string.org" :minlevel 1
+#+INCLUDE: "./dataStructure.org" :minlevel 1
+#+INCLUDE: "./bitMaskManipulation.org" :minlevel 1
 
 * sliding window 
+** 数subarray个数(满足某些特定要求的子数组个数)问题： 感觉傻傻永远数不清楚！列几个题，牢记一下
+** 930. Binary Subarrays With Sum
+Given a binary array nums and an integer goal, return the number of non-empty subarrays with a sum goal.
+
+A subarray is a contiguous part of the array.
+#+BEGIN_SRC java
+public int numSubarraysWithSum(int[] arr, int goal) { 
+    int n = arr.length, res = 0, leftCnt = 0, j = 0, sum = 0;
+    for (int i = 0; i < n; i++) {
+        sum += arr[i];
+        while (j < i && sum > goal) sum -= arr[j++];
+        if (sum < goal) continue;
+        if (sum == goal) ++res;
+        for (int k = j; k < i && arr[k] == 0; k++) 
+            ++res;
+    }
+    return res;
+}
+#+END_SRC
+** 713. Subarray Product Less Than K
+Given an array of integers nums and an integer k, return the number of contiguous subarrays where the product of all the elements in the subarray is strictly less than k.
+#+BEGIN_SRC java
+public int numSubarrayProductLessThanK(int[] arr, int k) {
+    if (k == 0) return 0;
+    int n = arr.length, ans = 0, j = 0, cur = 1;
+    for (int i = 0; i < n; i++) {
+        cur *= arr[i];
+        while (j <= i && cur >= k) 
+            cur /= arr[j++];
+        ans += (i - j + 1); // 当确定了窗口的大小后，就可以统计子数组的个数了，就是窗口的大小。
+    }
+    return ans;
+}
+#+END_SRC
+** 双端队列：数据结构，O(N)解法题目参考
+** 862. Shortest Subarray with Sum at Least K - Hard
+Given an integer array nums and an integer k, return the length of the shortest non-empty subarray of nums with a sum of at least k. If there is no such subarray, return -1.
+
+A subarray is a contiguous part of an array.
+#+BEGIN_SRC java
+public int shortestSubarray(int[] nums, int k) { 
+    int n = nums.length;
+    int [] sum = new int[n+1];  
+    for (int i = 1; i <= n; i++)  
+        sum[i] = nums[i-1] + sum[i-1];
+    int res = n + 1;
+    ArrayDeque<Integer> q = new ArrayDeque<>(); // decreasing sum [] deque
+    for (int i = 0; i <= n; i++) {
+        while (!q.isEmpty() && sum[i] - sum[q.peekFirst()] >= k)  // 左出：
+            res = Math.min(res, i - q.pollFirst()); // 取值了      // 取解
+        while (!q.isEmpty() && sum[q.peekLast()] >= sum[i])       // 右出
+            q.pollLast();  
+        q.offerLast(i);                                           // 当前元素进队列
+    }
+    return res <= n ? res : -1;
+}
+#+END_SRC
+
 ** 1438. Longest Continuous Subarray With Absolute Diff Less Than or Equal to Limit - Medium 双端队列
 Given an array of integers nums and an integer limit, return the size of the longest non-empty subarray such that the absolute difference between any two elements of this subarray is less than or equal to limit.
-
-- 这道题希望有一个用两个双端队列的解法，补出来 
-
+*** 解题思路与分析
+- 如果使用普通列表再排序的话会增加一个logn的时间复杂度，会超时！
+- 选对了数据类型后，直接套滑窗模板即可，简单的一。。。
+- Intuition:
+#+BEGIN_SRC java
+ . we can use siliding window but we need to keep track of minimum and maximum in every window 
+ . treemap can be used for this purpose to keep track of min and max both
+#+END_SRC
+- 这是一种临场应对的偷懒解法，选对数据结构，牺牲一点儿效率，但是可以最大限度地保证结果的正确性
+#+BEGIN_SRC java
+// Time complexity: O(N*LogN), insertion in treeMap is logN and for N elements it is O(N*LogN)
+// Auxiliary Space: O(N), every key enters the map once and in worst case every key can be present with frequency one
+public int longestSubarray(int[] arr, int limit) { // TreeMap to keep Min & Max at O(NlogN)
+    TreeMap<Integer, Integer> cnt = new TreeMap<>();
+    int l = 0, r = 0;
+    while (r < arr.length) {
+        cnt.put(arr[r], cnt.getOrDefault(arr[r], 0) + 1);
+        if (cnt.lastEntry().getKey() - cnt.firstEntry().getKey() > limit) {
+            if (cnt.get(arr[l]) > 1)
+                cnt.put(arr[l], cnt.get(arr[l])-1);
+            else cnt.remove(arr[l]);
+            l++;
+        }
+        r++;
+    }
+    return r - l; // 这样维护的就是全局最优解了？！！！
+}
+#+END_SRC
+- 但是在平时练习时，还是要不断地寻求最优解，使用双端队列，得O(N)线性复杂度
+- Intuition:
+#+BEGIN_SRC java
+// . we can use siliding window but we need to keep track of minimum and maximum in every window 
+// . 2 Deques can be used for this purpose to keep track of min and max.
+// Time complexity: O(N), N is number of elements in nums
+// Auxiliary Space: O(N)
+public int longestSubarray(int[] nums, int limit) { // 双端队列：从右边加入
+    ArrayDeque<Integer> min = new ArrayDeque<>();   // 单调递增队列： 左小右大
+    ArrayDeque<Integer> max = new ArrayDeque<>();   // 单调递减队列： 左大右小
+    int l = 0, r = 0, ans = 0;
+    while (r < nums.length) {
+        int rval = nums[r];
+//to ensure that minQ have minimum element as head             
+        while (!min.isEmpty() && min.peekLast() > rval) min.pollLast(); // 维护：右边，比当前待入列值大的，全扔出去
+//to ensure that maxQ have maximum element as head                
+        while (!max.isEmpty() && max.peekLast() < rval) max.pollLast(); // 维护：右边，比当前待入列值小的，全扔出去                
+        min.offerLast(rval); // 入队列，从右边加入
+        max.offerLast(rval); // 
+//In case max-min is greater than the limit slide the left side or window         
+        if (max.peekFirst() - min.peekFirst() > limit) {     // 维护合法窗口范围: 会两个队列都把 l 下标的值抓不出去吗？
+            if (min.peekFirst() == nums[l]) min.pollFirst(); // 
+            if (max.peekFirst() == nums[l]) max.pollFirst(); // 
+            l++;
+        }
+        r++;
+    }
+    return r - l;
+}
+#+END_SRC
+- 另一种把它"刷"过去的应付的写法(MinSeg, MaxSeg列在这里，方便自己以后参考时查找)
 #+BEGIN_SRC java
 public class MaxSeg {
     List<Integer> tree = new ArrayList<>();
@@ -112,26 +226,138 @@ public int longestSubarray(int[] arr, int limit) { // 单调递增队列，左�
     return res;
 }
 #+END_SRC
-** 862. Shortest Subarray with Sum at Least K - Hard
-Given an integer array nums and an integer k, return the length of the shortest non-empty subarray of nums with a sum of at least k. If there is no such subarray, return -1.
+** 1687. Delivering Boxes from Storage to Ports - Hard 滑动窗口
+You have the task of delivering some boxes from storage to their ports using only one ship. However, this ship has a limit on the number of boxes and the total weight that it can carry.
 
-A subarray is a contiguous part of an array.
+You are given an array boxes, where boxes[i] = [ports​​i​, weighti], and three integers portsCount, maxBoxes, and maxWeight.
+
+ports​​i is the port where you need to deliver the ith box and weightsi is the weight of the ith box.
+portsCount is the number of ports.
+maxBoxes and maxWeight are the respective box and weight limits of the ship.
+The boxes need to be delivered in the order they are given. The ship will follow these steps:
+
+The ship will take some number of boxes from the boxes queue, not violating the maxBoxes and maxWeight constraints.
+For each loaded box in order, the ship will make a trip to the port the box needs to be delivered to and deliver it. If the ship is already at the correct port, no trip is needed, and the box can immediately be delivered.
+The ship then makes a return trip to storage to take more boxes from the queue.
+The ship must end at storage after all the boxes have been delivered.
+
+Return the minimum number of trips the ship needs to make to deliver all boxes to their respective ports.
+*** 解题思路与分析: 滑动窗口
+- 这里会需要一种决策：需要总运送次数最少，就涉及到同一船是否只装送往同一满港口的优化与选择问题，用滑动窗口，也有贪心的解法 
+- 时间复杂度： O(N)
 #+BEGIN_SRC java
-public int shortestSubarray(int[] nums, int k) { 
-    int n = nums.length;
-    int [] sum = new int[n+1];  
-    for (int i = 1; i <= n; i++)  
-        sum[i] = nums[i-1] + sum[i-1];
-    int res = n + 1;
-    ArrayDeque<Integer> q = new ArrayDeque<>(); // decreasing sum [] deque
-    for (int i = 0; i <= n; i++) {
-        while (!q.isEmpty() && sum[i] - sum[q.peekFirst()] >= k)  // 左出：
-            res = Math.min(res, i - q.pollFirst()); // 取值了      // 取解
-        while (!q.isEmpty() && sum[q.peekLast()] >= sum[i])       // 右出
-            q.pollLast();  
-        q.offerLast(i);                                           // 当前元素进队列
+public int boxDelivering(int[][] box, int __, int max, int limit) {
+    int n = box.length;
+    int[] dp = new int[n+1]; // Minimum trips for first n boxes.
+    int wit = 0, cost = 2;   // cumulative weight, cumulative cost
+    int l = 0;                   // left ptr
+    for (int r = 0; r < n; r++) {// right ptr
+        wit += box[r][1];
+        if (r > 0 && box[r][0] != box[r-1][0]) cost++;
+        /* drop box iff:
+           - There are too many box (r-l >= max)
+           - The box are too heavy (weight > limit)
+           - It is redundant to carry them (dp[l] == dp[l+1]).
+        */                                 // 送往同一个港口的箱子向右滑动，直到改变消耗的临界点
+        while (r - l >= max || wit > limit || (l < r && dp[l] == dp[l+1])) { // 滑动窗口：左窗口右移
+            wit -= box[l][1];
+            if (box[l+1][0] != box[l][0]) cost--;
+            l++;
+        }
+        dp[r+1] = cost + dp[l]; // 运完下标为 r 的箱子后的最小次数，对应 dp[r+1]
     }
-    return res <= n ? res : -1;
+    return dp[n];
+}
+#+END_SRC
+- 一种dp的写法，写得天外来仙，可惜不是很好懂
+#+BEGIN_SRC java
+public int boxDelivering(int[][] boxes, int portsCount, int maxBoxes, int maxWeight) { // O(N)滑动窗口
+    int n = boxes.length, j = 0, lastj = 0, cnt = 0;
+    int [] dp = new int [n+1];
+    Arrays.fill(dp, Integer.MAX_VALUE / 3); // / 3 to avoid overflow
+    dp[0] = 0;                              //
+    for (int i = 0; i < n; ++i) {
+        while (j < n && maxBoxes > 0 && maxWeight >= boxes[j][1]) {
+            maxBoxes -= 1;
+            maxWeight -= boxes[j][1];
+            if (j == 0 || boxes[j][0] != boxes[j-1][0]) { // if the port is different from the previous port
+                lastj = j;
+                cnt++;
+            }
+            ++j;                        // keep expanding the right pointer when we can
+            // dp[++j] = 200000;        // equivalent
+        }
+        dp[j] = Math.min(dp[j], dp[i] + cnt + 1); // 这里的cnt 相当于是一个快进效果，提速
+        dp[lastj] = Math.min(dp[lastj], dp[i] + cnt);
+        // 这里下面三行：像是回溯一样，绕得好昏呀: 感觉是向右滑动，再增加一些空间，向右遍历所有可能性，并保存最优解
+        maxBoxes += 1;            // now as we move the left pointer i forward (don't put the ith box in this trip), 
+        maxWeight += boxes[i][1]; // we increase the number of available boxes and available weights
+        if (i == n-1 || boxes[i][0] != boxes[i+1][0]) cnt--;
+    }
+    return dp[n];
+}
+#+END_SRC
+** 992. Subarrays with K Different Integers - Hard
+Given an integer array nums and an integer k, return the number of good subarrays of nums.
+
+A good array is an array where the number of different integers in that array is exactly k.
+
+For example, [1,2,3,1,2] has 3 different integers: 1, 2, and 3.
+A subarray is a contiguous part of an array.
+*** 解题思路与分析
+- 思路依然是滑动窗口，但是这一题是没法直接套用76题的模板的，有一些变动（引用）。回忆前面做的滑动窗口的题目，有求过子数组里面最多K个不同元素的题（340），所以这个解法的思路是求子数组里面最多K个不同元素的子数组的数量 - 子数组里面最多K - 1个不同元素的子数组的数量。
+#+BEGIN_SRC java
+private int atMostK(int [] arr, int k) {
+    int ans = 0, l = 0;                    // Left boundary of window
+    Map<Integer, Integer> cnt = new HashMap<>(); // Map to keep track of number of distinct elements in the current window
+    for (int i = 0; i < arr.length; i++) { // i : right
+        cnt.put(arr[i], cnt.getOrDefault(arr[i], 0) + 1);
+        while (cnt.size() > k) {
+            if (cnt.get(arr[l]) > 1) cnt.put(arr[l], cnt.get(arr[l])-1);
+            else cnt.remove(arr[l]);
+            l++;
+        }
+        ans += i - l + 1; // Adding the count of subarrays with at most K distinct elements in the current window
+    }
+    return ans;
+}
+public int subarraysWithKDistinct(int[]arr, int k) {
+    return atMostK(arr, k) - atMostK(arr, k-1);
+}
+#+END_SRC
+
+** 857. Minimum Cost to Hire K Workers - Hard
+There are n workers. You are given two integer arrays quality and wage where quality[i] is the quality of the ith worker and wage[i] is the minimum wage expectation for the ith worker.
+
+We want to hire exactly k workers to form a paid group. To hire a group of k workers, we must pay them according to the following rules:
+
+Every worker in the paid group should be paid in the ratio of their quality compared to other workers in the paid group.
+Every worker in the paid group must be paid at least their minimum wage expectation.
+Given the integer k, return the least amount of money needed to form a paid group satisfying the above conditions. Answers within 10-5 of the actual answer will be accepted.
+*** 解题思路与分析
+- 做题的时候没有想明白，为什么不是性价比最低的k个工人，什么情况下性价比最低的k个工人不是题目要求的答案？
+- 时间复杂度O ( n log ⁡ n )，空间O ( n ) 。
+#+BEGIN_SRC java
+public double mincostToHireWorkers(int[] quality, int[] wage, int k) {
+    int n = quality.length;
+    List<int []> l = new ArrayList<>();
+    for (int i = 0; i < n; i++) {
+        int [] cur = new int [] {wage[i], quality[i]};
+        l.add(cur);
+    }
+    Collections.sort(l, (a, b) -> Double.compare((double)a[0] / a[1], (double)b[0] / b[1]));
+    Queue<Integer> q = new PriorityQueue<>((x, y) -> -Integer.compare(x, y)); // 堆里存所以t值小于等于当前枚举的t值的工人中，q值最小的k个人的q值
+    double res = 1e18, sum = 0;
+    for (int i = 0; i < n; i++) {
+        int [] cur = l.get(i);
+        sum += cur[1];
+        q.offer(cur[1]);
+        if (q.size() > k)
+            sum -= q.poll();
+        if (q.size() == k)
+            res = Math.min(res, sum * (double)cur[0] / (double)cur[1]);
+    }
+    return res;
 }
 #+END_SRC
 
@@ -807,7 +1033,413 @@ private boolean isValid(String num, String first, String second, int index) {
 #+END_SRC
 
 
-* dfs
+* dfs 记忆化搜索
+** 1977. Number of Ways to Separate Numbers - Hard
+You wrote down many positive integers in a string called num. However, you realized that you forgot to add commas to seperate the different numbers. You remember that the list of integers was non-decreasing and that no integer had leading zeros.
+
+Return the number of possible lists of integers that you could have written down to get the string num. Since the answer may be large, return it modulo 109 + 7.
+*** 动态规划与最长公共前缀
+
+全网都找不到一句中文分析
+
+#+BEGIN_SRC java
+private void getLongestCommonPrefixLength() { // Pre compute Longest Common Prefix sequence for each index in the string
+    for (int i = n-1; i >= 0; i--)            // 从右向左遍历，计算最长公共前缀序列长度
+        for (int j = n-1; j >= 0; j--) 
+            if (s[i] == s[j]) {
+                if (i >= n-1 || j >= n-1) lcp[i][j] = 1;
+                else lcp[i][j] = lcp[i+1][j+1] + 1;
+            } else lcp[i][j] = 0;
+}
+private boolean compare(int i, int j, int len) { // compare substring of same length for value, 
+    int commonLength = lcp[i][j];                // 返回以i开始长度为len的序列 是否 比以j开始长度为len的序列（数值）小
+    if (commonLength >= len) return true;
+    return  s[i + commonLength] <= s[j + commonLength]; // <= ? 为什么不可以等于呢？
+}
+long mod = (int)1e9 + 7;
+int [][] lcp;
+char [] s; 
+int n;
+public int numberOfCombinations(String t) {
+    if (t.charAt(0) == '0') return 0;
+    n = t.length();
+    this.s = t.toCharArray();
+    lcp = new int[n][n];
+    int [][] f = new int [n][n];
+    int [][] pre = new int [n][n];  // 从右向左的累加和
+    getLongestCommonPrefixLength(); // 计算从右向左遍历的最长公共前缀（右边，其实是后缀）
+    for (int i = 0; i < n; i++) {
+        f[0][i] = 1;
+        pre[0][i] = 1;
+    }
+    for (int j = 1; j < n; j++) { // 跟上面超内存的写法是反着走，这次是从左向右遍历，可是两种方法，为什么就有一个会超内存呢？
+        for (int i = 1; i <= j; i++) {
+            if (s[i] == '0') {
+                f[i][j] = 0;
+                // continue;
+            } else {
+                f[i][j] = pre[i-1][i-1];
+                if (i - (j-i+1) >= 0) // 现在长度为 i-j+1 的数，前面是否存在一个同样长度的数，即前一个数的第一个位下标是否 >= 0
+                    f[i][j] -= pre[2*i-j-1][i-1];
+                if (i - (j-i+1) >= 0 && compare(i-(j-i+1), i, j-i+1)) {
+                    f[i][j] = (int)((f[i][j] + pre[i-(j-i+1)][i-1]) % mod);
+                    if (i - (j-i+1) - 1 >= 0)
+                        f[i][j] -= pre[i-(j-i+1)-1][i-1];
+                }
+            }
+            f[i][j] = (int)((f[i][j] + mod) % mod);
+            pre[i][j] = (int)((pre[i-1][j] + f[i][j]) % mod);
+        }
+    }
+    return pre[n-1][n-1];
+}
+#+END_SRC
+*** 解题思路与分析 todo: 其它思路，改天补上
+
+** 87. Scramble String - Hard 非常经典：要韧熟于心
+We can scramble a string s to get a string t using the following algorithm:
+
+If the length of the string is 1, stop.
+If the length of the string is > 1, do the following:
+Split the string into two non-empty substrings at a random index, i.e., if the string is s, divide it to x and y where s = x + y.
+Randomly decide to swap the two substrings or to keep them in the same order. i.e., after this step, s may become s = x + y or s = y + x.
+Apply step 1 recursively on each of the two substrings x and y.
+Given two strings s1 and s2 of the same length, return true if s2 is a scrambled string of s1, otherwise, return false.
+*** 朴素解法（TLE）
+一个朴素的做法根据「扰乱字符串」的生成规则进行判断。
+
+由于题目说了整个生成「扰乱字符串」的过程是通过「递归」来进行。
+
+我们要实现 isScrambleisScramble 函数的作用是判断 s1s1 是否可以生成出 s2s2。
+
+这样判断的过程，同样我们可以使用「递归」来做：
+
+假设 s1s1 的长度为 nn， 的第一次分割的分割点为 ii，那么 s1s1 会被分成 [0, i)[0,i) 和 [i, n)[i,n) 两部分。
+
+同时由于生成「扰乱字符串」时，可以选交换也可以选不交换。因此我们的 s2s2 会有两种可能性：
+
+[[./pic/isScramble.png]]
+
+
+因为对于某个确定的分割点，s1s1 固定分为两部分，分别为 [0,i)[0,i) & [i, n)[i,n)。
+
+而 s2s2 可能会有两种分割方式，分别 [0,i)[0,i) & [i,n)[i,n) 和 [0, n-i)[0,n−i) & [n-i,n)[n−i,n)。
+
+我们只需要递归调用 isScrambleisScramble 检查 s1s1 的 [0,i)[0,i) & [i, n)[i,n) 部分能否与 「s2s2 的 [0,i)[0,i) & [i,n)[i,n)」 或者 「s2s2 的 [0, n-i)[0,n−i) & [n-i,n)[n−i,n)」 匹配即可。
+
+同时，我们将「s1s1 和 s2s2 相等」和「s1s1 和 s2s2 词频不同」作为「递归」出口。
+
+理解这套做法十分重要，后续的解法都是基于此解法演变过来。
+#+BEGIN_SRC java
+private boolean idCheck(String ss, String tt) {
+    int [] one = new int [26];
+    int [] two = new int [26];
+    char [] s = ss.toCharArray();
+    char [] t = tt.toCharArray();
+    for (int i = 0; i < s.length; i++) 
+        one[s[i] - 'a']++;
+    for (int i = 0; i < t.length; i++) 
+        two[t[i]-'a']++;
+    for (int i = 0; i < 26; i++) 
+        if (one[i] != two[i])
+            return false;
+    return true;
+}
+public boolean isScramble(String s, String t) { // tle tle tle
+    int n = s.length();
+    if (n == 1) return s.charAt(0) == t.charAt(0);
+    if (s.equals(t)) return true;
+    if (!idCheck(s, t)) return false;
+    for (int i = 1; i < n; i++) {
+        System.out.println("\n i: " + i);
+        String ls = s.substring(0, i), rs = s.substring(i);
+        String ltone = t.substring(0, i), rtone = t.substring(i);
+        String lttwo = t.substring(0, n-i), rttwo = t.substring(n-i);
+        if (isScramble(ls, ltone) && isScramble(rs, rtone)
+            || isScramble(ls, rttwo) && isScramble(rs, lttwo))
+            return true;
+    }
+    return false;
+} 
+#+END_SRC
+
+时间复杂度：O(5^n)
+
+空间复杂度：忽略递归与生成子串带来的空间开销，复杂度为 O(1)
+
+*** 记忆化搜索
+朴素解法卡在了 286 / 288个样例。
+
+我们考虑在朴素解法的基础上，增加「记忆化搜索」功能。
+
+我们可以重新设计我们的「爆搜」逻辑：假设 s1 从 i 位置开始，s2 从 j 位置开始，后面的长度为 len 的字符串是否能形成「扰乱字符串」（互为翻转）。
+
+那么在单次处理中，我们可分割的点的范围为 [1, len)，然后和「递归」一下，将 s1 分割出来的部分尝试去和 s2 的对应位置匹配。
+
+同样的，我们将「入参对应的子串相等」和「入参对应的子串词频不同」作为「递归」出口。
+#+BEGIN_SRC java
+private boolean idCheck(String ss, String tt) {
+    int [] one = new int [26];
+    int [] two = new int [26];
+    char [] s = ss.toCharArray();
+    char [] t = tt.toCharArray();
+    for (int i = 0; i < s.length; i++) 
+        one[s[i] - 'a']++;
+    for (int i = 0; i < t.length; i++) 
+        two[t[i]-'a']++;
+    for (int i = 0; i < 26; i++) 
+        if (one[i] != two[i])
+            return false;
+    return true;
+}
+private int dfs(int i, int j, int k) { // k: length dp[i][j][len]: 这个dp的设计还是比较难想的！
+    if (dp[i][j][k] != 0) return dp[i][j][k];
+    String a = s.substring(i, i+k), b = t.substring(j, j+k);
+    if (a.equals(b)) return dp[i][j][k] = 1;
+    if (!idCheck(a, b)) return dp[i][j][k] = -1;
+    for (int l = 1; l < k; l++) {
+        if (dfs(i, j, l) == 1 && dfs(i+l, j+l, k-l) == 1)
+            return dp[i][j][k] = 1;
+        if (dfs(i, j+k-l, l) == 1 && dfs(i+l, j, k-l) == 1)
+            return dp[i][j][k] = 1;
+    }
+    return dp[i][j][k] = -1;
+}
+int [][][] dp;
+String s, t;
+int n;
+public boolean isScramble(String s, String t) {
+    this.s = s;
+    this.t = t;
+    n = s.length();
+    if (s.equals(t)) return true;
+    if (!idCheck(s, t)) return false;
+    dp = new int [n][n][n+1];
+    return dfs(0, 0, s.length()) == 1;
+} 
+#+END_SRC 
+*** 动态规划（区间 DP）
+当然，这道题也可以用动态规划 Dynamic Programming，根据以往的经验来说，根字符串有关的题十有八九可以用 DP 来做，那么难点就在于如何找出状态转移方程。
+
+其实有了上述「记忆化搜索」方案之后，我们就已经可以直接忽略原问题，将其改成「动态规划」了。
+
+根据「dfs 方法的几个可变入参」作为「状态定义的几个维度」，根据「dfs 方法的返回值」作为「具体的状态值」。
+
+我们可以得到状态定义 f[i][j][len]f[i][j][len]：
+
+f[i][j][len]f[i][j][len] 代表 s1s1 从 ii 开始，s2s2 从 jj 开始，后面长度为 lenlen 的字符是否能形成「扰乱字符串」（互为翻转）。
+
+状态转移方程其实就是翻译我们「记忆化搜索」中的 dfs 主要逻辑部分：
+
+#+BEGIN_SRC java
+    // 对应了「s1 的 [0,i) & [i,n)」匹配「s2 的 [0,i) & [i,n)」
+    if (dfs(i, j, k) && dfs(i + k, j + k, len - k)) {
+        cache[i][j][len] = Y;
+        return true;
+    }
+    // 对应了「s1 的 [0,i) & [i,n)」匹配「s2 的 [n-i,n) & [0,n-i)」
+    if (dfs(i, j + len - k, k) && dfs(i + k, j, len - k)) {
+        cache[i][j][len] = Y;
+        return true;
+    }
+#+END_SRC
+
+从状态定义上，我们就不难发现这是一个「区间 DP」问题，区间长度大的状态值可以由区间长度小的状态值递推而来。
+
+而且由于本身我们在「记忆化搜索」里面就是从小到大枚举 lenlen，因此这里也需要先将 len 这层循环提前，确保我们转移 f[i][j][len] 时所需要的状态都已经被计算好。
+
+这道题看起来是比较复杂的，如果用brute force，每次做切割，然后递归求解，是一个非多项式的复杂度，一般来说这不是面试官想要的答案。
+
+这其实是一道三维动态规划的题目，我们提出维护量res[i][j][n]，其中i是s1的起始字符，j是s2的起始字符，而n是当前的字符串长度，res[i][j][len]表示的是以i和j分别为s1和s2起点的长度为len的字符串是不是互为scramble。
+
+有了维护量我们接下来看看递推式，也就是怎么根据历史信息来得到res[i][j][len]。判断这个是不是满足，其实我们首先是把当前s1[i...i+len-1]字符串劈一刀分成两部分，然后分两种情况：
+
+第一种是左边和s2[j...j+len-1]左边部分是不是scramble，以及右边和s2[j...j+len-1]右边部分是不是scramble；
+
+第二种情况是左边和s2[j...j+len-1]右边部分是不是scramble，以及右边和s2[j...j+len-1]左边部分是不是scramble。
+
+如果以上两种情况有一种成立，说明s1[i...i+len-1]和s2[j...j+len-1]是scramble的。而对于判断这些左右部分是不是scramble我们是有历史信息的，因为长度小于n的所有情况我们都在前面求解过了（也就是长度是最外层循环）。
+
+上面说的是劈一刀的情况，对于s1[i...i+len-1]我们有len-1种劈法，在这些劈法中只要有一种成立，那么两个串就是scramble的。
+
+总结起来递推式是res[i][j][len] = || (res[i][j][k] && res[i+k][j+k][len-k] || res[i][j+len-k][k] && res[i+k][j][len-k]) 对于所有1<=k<len，也就是对于所有len-1种劈法的结果求或运算。因为信息都是计算过的，对于每种劈法只需要常量操作即可完成，因此求解递推式是需要O(len)（因为len-1种劈法）。
+
+如此总时间复杂度因为是三维动态规划，需要三层循环，加上每一步需要线行时间求解递推式，所以是O(n^4)。虽然已经比较高了，但是至少不是指数量级的，动态规划还是有很大有事的，空间复杂度是O(n^3)。
+
+时间复杂度：O(n^4)
+
+空间复杂度：O(n^3)
+
+#+BEGIN_SRC java
+public boolean isScramble(String s, String t) {
+    int n = s.length();
+    if (s.equals(t)) return true;
+    boolean [][][] dp = new boolean [n][n][n+1];
+    for (int len = 1; len <= n; len++) 
+        for (int i = 0; i+len <= n; i++) 
+            for (int j = 0; j+len <= n; j++) {
+                if (len == 1) {
+                    dp[i][j][len] = s.charAt(i) == t.charAt(j);
+                    continue;
+                }
+                for (int k = 1; k < len; k++) 
+                    if (dp[i][j][k] && dp[i+k][j+k][len-k] || dp[i][j+len-k][k] && dp[i+k][j][len-k])
+                        dp[i][j][len] = true;
+            }
+    return dp[0][0][n];
+}
+#+END_SRC
+
+** 1397. Find All Good Strings - Hard 记忆化搜索
+Given the strings s1 and s2 of size n and the string evil, return the number of good strings.
+
+A good string has size n, it is alphabetically greater than or equal to s1, it is alphabetically smaller than or equal to s2, and it does not contain the string evil as a substring. Since the answer can be a huge number, return this modulo 109 + 7.
+*** 解题思路与分析: 记忆化搜索
+  
+[[./pic/goodString.png]]
+
+- Complexity
+
+Time: O(n*m*2*2*26), where n<=500, m<=50 is length of evil
+
+Space: O(m*n*2*2)
+
+#+BEGIN_SRC java
+private int [] computeLongestPrefixSuffix (char [] s) { // 这个要再理解一下: 重中之重
+    int n = s.length;
+    int [] lps = new int [n];
+    for (int i = 1, j = 0; i < n; i++) {
+        while (j > 0 && s[i] != s[j]) j = lps[j-1];  // 转向它 j 的前一位字符(在 j-1 下标)所指向的匹配位置 lps[j-1]
+        if (s[i] == s[j]) lps[i] = ++j; // 同时增加两个的下标     
+    }
+    return lps;
+}
+private int getKey(int i, int j, boolean l, boolean r) { // bits occupied: i 9, j 6, l 1, r 1
+    // 9 bits store n (2^9=512), 6 bits for m (2^6=64), 1 bit ro b1, 1 bit for b2
+    return (i << 8) | (j << 2) | ((l ? 1 : 0) << 1) | (r ? 1 : 0); // 这是一个压缩空间存key的聪明技巧
+} 
+private int dfs(int n, int i, int evilMatched, boolean leftBound, boolean rightBound) {
+    if (evilMatched == e.length) return 0; // matched evil string, no good
+    if (i == n) return 1;                  // DIDN'T match evil string, great
+    int key = getKey(i, evilMatched, leftBound, rightBound); // state: represented by <= 17 bits integer
+    if (dp[key] > 0) return dp[key];
+    char from = leftBound ? s[i] : 'a';
+    char to = rightBound ? t[i] : 'z';
+    int ans = 0;
+    for (char c = from; c <= to; c++) { 
+        int j = evilMatched; // j means the next match between current string (end at char `c`) and `evil` string
+        while (j > 0 && e[j] != c) j = lps[j-1]; // 向左回塑寻找match字符c的上一个位置 ？
+        if (c == e[j]) j++;
+        ans += dfs(n, i+1, j, leftBound && (c == from), rightBound && (c == to));
+        ans %= mod;
+    }
+    return dp[key] = ans;
+}
+int mod = (int)1e9 + 7;
+char [] s, t, e;
+int [] dp, lps;
+public int findGoodStrings(int n, String s1, String s2, String evil) {
+    dp = new int [1 << 17]; // Need total 17 bits, according to data limits
+    s = s1.toCharArray();
+    t = s2.toCharArray();
+    e = evil.toCharArray();
+    lps = computeLongestPrefixSuffix(e);
+    return dfs(n, 0, 0, true, true);
+}
+#+END_SRC
+*** 动态规划: 数位DP + KMP todo: 改天把这个补上
+- https://leetcode-cn.com/problems/find-all-good-strings/solution/shu-wei-dp-kmp-by-qodjf/
+- https://www.cnblogs.com/wenruo/p/12616985.html
+- https://www.codeleading.com/article/42703213478/
+- https://leetcode-cn.com/problems/find-all-good-strings/solution/shu-wei-dp-kmpqian-zhui-shu-zu-java-by-henrylee4/
+- https://leetcode-cn.com/problems/find-all-good-strings/solution/kmpshang-de-dpc-by-zhu-mang-4/
+
+之前做的题大部分是关于数字的数位dp，而现在要的就是字符串的数位dp。
+
+设d p [ p o s ] [ s t a t s ] [ b o u n d ] dp[pos][stats][bound]为数位dp的数组，其中 p o s pospos表示第pos个位置的字符总共有的数量，s t a t s表示的是匹配e v i l的状态，即能够匹配到e v i l 数组的位置。b o u n d 表示此时能够选择字符的范围，即当前字符选择的时候是否有限制。
+
+对于b o u n d 我们用四个数字表示
+#+BEGIN_SRC java
+0 00 表示此时的字符选择是没有限制的，即可以选择的范围为a ∼ z a \sim za∼z
+1 11 表示此时的字符选择是有下限的，所以选择的范围是s 1 [ p o s ] ∼ z s1[pos] \sim zs1[pos]∼z
+2 22 表示此时的字符选择是有上限的，所以可以选择的范围是a ∼ s 2 [ p o s ] a \sim s2[pos]a∼s2[pos]
+3 33 表示此时的字符既有上限又有下限。这种情况只有当s 1 [ p o s ] ∼ s 2 [ p o s ] s1[pos] \sim s2[pos]s1[pos]∼s2[pos]
+#+END_SRC
+
+而对于s t a t s statsstats表示匹配e v i l evilevil字符的状态，由于e v i l evilevil的长度最长为50，所以可以生成字符串e v i l evilevil的next数组。那么当匹配不成立的时候，就可以直接进行跳转。
+
+设一个记忆数组m e m [ e _ p o s ] [ n _ c h a r ] mem[e\_pos][n\_char]mem[e_pos][n_char]表示当匹配e v i l evilevil的位置为e _ p o s e\_pose_pos时，下一个字符为n _ c h a r n\_charn_char时，可以跳转的位置，因为在整个搜索的过程中，可能需要多次调用这个数组，而这个数组大小为m e m [ 50 ] [ 26 ] mem[50][26]mem[50][26]，因此没必要每次都计算。
+
+对于如何生成next的数组，小伙伴们可以去搜索与K M P KMPKMP算法相关的博客查看。
+
+- 
+- 
+
+** 2060. Check if an Original String Exists Given Two Encoded Strings - Hard dfs记忆化搜索
+An original string, consisting of lowercase English letters, can be encoded by the following steps:
+
+Arbitrarily split it into a sequence of some number of non-empty substrings.
+Arbitrarily choose some elements (possibly none) of the sequence, and replace each with its length (as a numeric string).
+Concatenate the sequence as the encoded string.
+For example, one way to encode an original string "abcdefghijklmnop" might be:
+
+Split it as a sequence: ["ab", "cdefghijklmn", "o", "p"].
+Choose the second and third elements to be replaced by their lengths, respectively. The sequence becomes ["ab", "12", "1", "p"].
+Concatenate the elements of the sequence to get the encoded string: "ab121p".
+Given two encoded strings s1 and s2, consisting of lowercase English letters and digits 1-9 (inclusive), return true if there exists an original string that could be encoded as both s1 and s2. Otherwise, return false.
+
+Note: The test cases are generated such that the number of consecutive digits in s1 and s2 does not exceed 3.
+*** 解题思路与分析- （这里需要再好好总结一下）
+- solution is straight forward we have 2 pointer in each string
+#+BEGIN_SRC java
+1.consider the easy case, they all character, we compare s1.charAt(i) == s2.charAt(j)
+2.digit case, we get a number from s1, we can calculate the number s1 has, (descripton said less than 1000), 
+  we can pass this value compare with number from s2 name it diff
+3.character case if we still has remaing diff to spend passed from our parents, 
+  so we can use one dollor a day, one diff one position dfs(i + 1, j, diff - 1
+4.terminating condition, if both reach the end and diff == 0
+#+END_SRC
+
+#+BEGIN_SRC java
+private boolean dfs(int i, int j, int dif) {
+    if (i >= m && j >= n && dif == 0) return true;
+    if (memo[i][j][dif+1000] != null) return memo[i][j][dif+1000]; // + 1000
+    boolean res = false;
+    if (i < m) 
+        if (Character.isDigit(s[i])) {
+            int cur = 0, cnt = 0;
+            while (i+cnt < m && cnt < 3 && Character.isDigit(s[i+cnt])) {
+                cur = cur * 10 + (s[i+cnt] - '0');
+                cnt++;
+                if (dfs(i+cnt, j, dif - cur)) res = true;
+            }
+        } else {
+            if (dif > 0 && dfs(i+1, j, dif-1)) res = true;
+            else if (dif == 0 && j < n && s[i] == t[j] && dfs(i+1, j+1, dif)) res = true;
+        }
+    if (j < n) 
+        if (Character.isDigit(t[j])) {
+            int cur = 0, cnt = 0;
+            while (j+cnt < n && cnt < 3 && Character.isDigit(t[j+cnt])) {
+                cur = cur * 10 + (t[j+cnt] - '0');
+                cnt++;
+                if (dfs(i, j+cnt, dif+cur)) res = true;       // when to + cur when to - cur
+            }
+        } else if (dif < 0 && dfs(i, j+1, dif+1)) res = true; // no limit on i < m any more
+    return memo[i][j][dif+1000] = res;
+}
+Boolean [][][] memo = new Boolean [41][41][2000];
+char [] s, t;
+int m, n;
+public boolean possiblyEquals(String s, String t) {
+    m = s.length();
+    n = t.length();
+    this.s = s.toCharArray();
+    this.t = t.toCharArray();
+    return dfs(0, 0, 0);
+}
+#+END_SRC
+
 ** 464. Can I Win
 In the "100 game" two players take turns adding, to a running total, any integer from 1 to 10. The player who first causes the running total to reach or exceed 100 wins.
 What if we change the game so that players cannot re-use integers?

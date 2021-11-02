@@ -529,131 +529,6 @@ public class slidingWindow {
         // }
 
 
-        // public class MaxSeg {
-        //     List<Integer> tree = new ArrayList<>();
-        //     int n;
-        //     public MaxSeg (int [] arr) {
-        //         n = arr.length;
-        //         tree = new ArrayList<>(2 * n);
-        //         for (int i = 0; i < n; i++)
-        //             tree.add(0);
-        //         for (int i = 0; i < n; i++)
-        //             tree.add(arr[i]); // same effect as below
-        //         for (int i = n-1; i >= 0; i--) // i >= 0
-        //             tree.set(i, Math.max(tree.get(2 * i), tree.get(2 * i+1)));
-        //     }
-        //     public void update(int idx, int v) {
-        //         idx += n;
-        //         tree.set(idx, v);
-        //         while (idx > 1) {
-        //             idx /= 2;
-        //             tree.set(idx, Math.max(tree.get(2 * idx), tree.get(2 * idx+1)));
-        //         }
-        //     }
-        //     public int getMax(int l, int r) {
-        //         l += n;
-        //         r += n;
-        //         int max = Integer.MIN_VALUE;
-        //         while (l < r) {
-        //             if ((l & 1) == 1) {
-        //                 max = Math.max(max, tree.get(l));
-        //                 l++;
-        //             }
-        //             if ((r & 1) == 1) {
-        //                 r--; // order matters !!!
-        //                 max = Math.max(max, tree.get(r));
-        //             }
-        //             l >>= 1;
-        //             r >>= 1;
-        //         }
-        //         return max;
-        //     }
-        // }        
-        // public class MinSeg {
-        //     List<Integer> tree = new ArrayList<>();
-        //     int n;
-        //     public MinSeg (int [] arr) {
-        //         n = arr.length;
-        //         tree = new ArrayList<>(2*n);
-        //         for (int i = 0; i < n; i++) 
-        //             tree.add(0);
-        //         for (int i = 0; i < n; i++) 
-        //             tree.add(arr[i]); 
-        //         for (int i = n-1; i >= 0; i--)  // i >= 0
-        //             tree.set(i,  Math.min(tree.get(2*i),  tree.get(2*i+1)));
-        //     }
-        //     public void update(int idx,  int v) {
-        //         idx += n;
-        //         tree.set(idx,  v);
-        //         while (idx > 1) {
-        //             idx /= 2;
-        //             tree.set(idx,  Math.min(tree.get(2*idx),  tree.get(2*idx+1)));
-        //         }
-        //     }
-        //     public int getMin(int l,  int r) { // [l, r) include left, not included right
-        //         l += n;
-        //         r += n;
-        //         int min = Integer.MAX_VALUE;
-        //         while (l < r) {
-        //             if ((l & 1) == 1) {
-        //                 min = Math.min(min,  tree.get(l));
-        //                 l++;
-        //             }
-        //             if ((r & 1) == 1) {
-        //                 r--; // order matters !!!
-        //                 min = Math.min(min,  tree.get(r));
-        //             }
-        //             l >>= 1;
-        //             r >>= 1;
-        //         }
-        //         return min;
-        //     }
-        // }
-        // public int longestSubarray(int[] arr, int limit) { // 单调递增队列，左小右大，右进左出 
-        //     MaxSeg max = new MaxSeg(arr);
-        //     MinSeg min = new MinSeg(arr);
-        //     int res = 0, tmp = 0, j = 0;
-        //     int n = arr.length;
-        //     for (int i = 1; i <= n; i++) {
-        //         if (max.getMax(j, i) - min.getMin(j, i) <= limit) {
-        //             tmp = i-j;
-        //             res = Math.max(res, tmp);
-        //         } else 
-        //             while (max.getMax(j, i) - min.getMin(j, i) > limit && j < i) ++j;
-        //     }
-        //     return res;
-        // }
-        // public int longestSubarray(int[] arr, int limit) { // 单调递增队列，左小右大，右进左出: 这个方法需要学习的巩固
-        //     int n = arr.length, max = 0;
-        //     ArrayDeque<Integer> q = new ArrayDeque<>(); 
-        //     for (int i = 0; i < n; i++) {
-        //         while (!q.isEmpty() && Math.max(arr[q.peekLast()], arr[i]) - arr[q.peekFirst()] > limit) 
-        //             // while (!q.isEmpty() && arr[i] - arr[q.peekFirst()] > limit) 
-        //             q.pollFirst(); // 出队头的条件没想清楚
-        //         while (!q.isEmpty() && arr[q.peekLast()] >= arr[i]) // 出尾：虽然arr[i]可能比队尾元素小，但当前元素构成的子数组长度最优
-        //             q.pollLast();
-        //         // max = Math.min(max, q.pollLast() - (q.size() > 0 ? q.peekFirst() : 0) + 1);
-        //         q.offerLast(i);   
-        //         max = Math.max(max, q.peekLast() - q.peekFirst() + 1);
-        //     }
-        //     return max;
-        // }
-        // public int longestSubarray(int[] arr, int limit) { // 单调递增队列，左小右大，右进左出 
-        //     ArrayDeque<Integer> minq = new ArrayDeque<>(); // 单调递增队列
-        //     ArrayDeque<Integer> maxq = new ArrayDeque<>(); // 单调递减队列
-        //     for (int i = 0; i < arr.length; i++) {
-        //         while (!minq.isEmpty() && arr[minq.peekLast() >= arr[i]]) 
-        //             minq.pollLast(); 
-        //         while (!maxq.isEmpty() && arr[maxq.peekLast()] >= arr[i]) // 出尾：虽然arr[i]可能比队尾元素小，但当前元素构成的子数组长度最优
-        //             maxq.pollLast();
-        //         minq.offerLast(i);   
-        //         maxq.offerLast(i);   
-        //         max = Math.max(max, Math.max(maxq.peekLast() - minq.peekFirst(), minq.peekLast()-maxq.peekFirst()) + 1);
-        //     }
-        //     return max;
-        // }
-
-
         //  public int findMaxValueOfEquation(int[][] points, int k) {
         //     int n = points.length;
         //     int max = Integer.MIN_VALUE, dif = 0,  tmp = 0, j = 0, i = 1;
@@ -1193,15 +1068,209 @@ public class slidingWindow {
         //     return ans + cnt;
         // }
 
-        
+
+        // public class MaxSeg {
+        //     List<Integer> tree = new ArrayList<>();
+        //     int n;
+        //     public MaxSeg (int [] arr) {
+        //         n = arr.length;
+        //         tree = new ArrayList<>(2 * n);
+        //         for (int i = 0; i < n; i++)
+        //             tree.add(0);
+        //         for (int i = 0; i < n; i++)
+        //             tree.add(arr[i]); // same effect as below
+        //         for (int i = n-1; i >= 0; i--) // i >= 0
+        //             tree.set(i, Math.max(tree.get(2 * i), tree.get(2 * i+1)));
+        //     }
+        //     public void update(int idx, int v) {
+        //         idx += n;
+        //         tree.set(idx, v);
+        //         while (idx > 1) {
+        //             idx /= 2;
+        //             tree.set(idx, Math.max(tree.get(2 * idx), tree.get(2 * idx+1)));
+        //         }
+        //     }
+        //     public int getMax(int l, int r) {
+        //         l += n;
+        //         r += n;
+        //         int max = Integer.MIN_VALUE;
+        //         while (l < r) {
+        //             if ((l & 1) == 1) {
+        //                 max = Math.max(max, tree.get(l));
+        //                 l++;
+        //             }
+        //             if ((r & 1) == 1) {
+        //                 r--; // order matters !!!
+        //                 max = Math.max(max, tree.get(r));
+        //             }
+        //             l >>= 1;
+        //             r >>= 1;
+        //         }
+        //         return max;
+        //     }
+        // }        
+        // public class MinSeg {
+        //     List<Integer> tree = new ArrayList<>();
+        //     int n;
+        //     public MinSeg (int [] arr) {
+        //         n = arr.length;
+        //         tree = new ArrayList<>(2*n);
+        //         for (int i = 0; i < n; i++) 
+        //             tree.add(0);
+        //         for (int i = 0; i < n; i++) 
+        //             tree.add(arr[i]); 
+        //         for (int i = n-1; i >= 0; i--)  // i >= 0
+        //             tree.set(i,  Math.min(tree.get(2*i),  tree.get(2*i+1)));
+        //     }
+        //     public void update(int idx,  int v) {
+        //         idx += n;
+        //         tree.set(idx,  v);
+        //         while (idx > 1) {
+        //             idx /= 2;
+        //             tree.set(idx,  Math.min(tree.get(2*idx),  tree.get(2*idx+1)));
+        //         }
+        //     }
+        //     public int getMin(int l,  int r) { // [l, r) include left, not included right
+        //         l += n;
+        //         r += n;
+        //         int min = Integer.MAX_VALUE;
+        //         while (l < r) {
+        //             if ((l & 1) == 1) {
+        //                 min = Math.min(min,  tree.get(l));
+        //                 l++;
+        //             }
+        //             if ((r & 1) == 1) {
+        //                 r--; // order matters !!!
+        //                 min = Math.min(min,  tree.get(r));
+        //             }
+        //             l >>= 1;
+        //             r >>= 1;
+        //         }
+        //         return min;
+        //     }
+        // }
+        // public int longestSubarray(int[] arr, int limit) { // 单调递增队列，左小右大，右进左出 
+        //     MaxSeg max = new MaxSeg(arr);
+        //     MinSeg min = new MinSeg(arr);
+        //     int res = 0, tmp = 0, j = 0;
+        //     int n = arr.length;
+        //     for (int i = 1; i <= n; i++) {
+        //         if (max.getMax(j, i) - min.getMin(j, i) <= limit) {
+        //             tmp = i-j;
+        //             res = Math.max(res, tmp);
+        //         } else 
+        //             while (max.getMax(j, i) - min.getMin(j, i) > limit && j < i) ++j;
+        //     }
+        //     return res;
+        // }
+        // public int longestSubarray(int[] arr, int limit) { // 单调递增队列，左小右大，右进左出: 这个方法需要学习的巩固
+        //     int n = arr.length, max = 0;
+        //     ArrayDeque<Integer> q = new ArrayDeque<>(); 
+        //     for (int i = 0; i < n; i++) {
+        //         while (!q.isEmpty() && Math.max(arr[q.peekLast()], arr[i]) - arr[q.peekFirst()] > limit) 
+        //             // while (!q.isEmpty() && arr[i] - arr[q.peekFirst()] > limit) 
+        //             q.pollFirst(); // 出队头的条件没想清楚
+        //         while (!q.isEmpty() && arr[q.peekLast()] >= arr[i]) // 出尾：虽然arr[i]可能比队尾元素小，但当前元素构成的子数组长度最优
+        //             q.pollLast();
+        //         // max = Math.min(max, q.pollLast() - (q.size() > 0 ? q.peekFirst() : 0) + 1);
+        //         q.offerLast(i);   
+        //         max = Math.max(max, q.peekLast() - q.peekFirst() + 1);
+        //     }
+        //     return max;
+        // }
+        // public int longestSubarray(int[] arr, int limit) { // 单调递增队列，左小右大，右进左出 
+        //     ArrayDeque<Integer> minq = new ArrayDeque<>(); // 单调递增队列
+        //     ArrayDeque<Integer> maxq = new ArrayDeque<>(); // 单调递减队列
+        //     for (int i = 0; i < arr.length; i++) {
+        //         while (!minq.isEmpty() && arr[minq.peekLast() >= arr[i]]) 
+        //             minq.pollLast(); 
+        //         while (!maxq.isEmpty() && arr[maxq.peekLast()] >= arr[i]) // 出尾：虽然arr[i]可能比队尾元素小，但当前元素构成的子数组长度最优
+        //             maxq.pollLast();
+        //         minq.offerLast(i);   
+        //         maxq.offerLast(i);   
+        //         max = Math.max(max, Math.max(maxq.peekLast() - minq.peekFirst(), minq.peekLast()-maxq.peekFirst()) + 1);
+        //     }
+        //     return max;
+        // }
+        // // Time complexity: O(N*LogN), insertion in treeMap is logN and for N elements it is O(N*LogN)
+        // // Auxiliary Space: O(N), every key enters the map once and in worst case every key can be present with frequency one
+        // public int longestSubarray(int[] arr, int limit) { // TreeMap to keep Min & Max at O(NlogN)
+        //     TreeMap<Integer, Integer> cnt = new TreeMap<>();
+        //     int ans = 0, l = 0, r = 0;
+        //     while (r < arr.length) {
+        //         cnt.put(arr[r], cnt.getOrDefault(arr[r], 0) + 1);
+        //         if (cnt.lastEntry().getKey() - cnt.firstEntry().getKey() > limit) {
+        //             if (cnt.get(arr[l]) > 1)
+        //                 cnt.put(arr[l], cnt.get(arr[l])-1);
+        //             else cnt.remove(arr[l]);
+        //             l++;
+        //         }
+        //         r++;
+        //     }
+        //     return  ans = r - l; // 这样维护的就是全局最优解了？！！！
+        // }
+        // public int longestSubarray(int[] arr, int limit) { // TreeMap to keep Min & Max at O(NlogN)
+        //     TreeMap<Integer, Integer> cnt = new TreeMap<>();
+        //     int l = 0, r = 0;
+        //     while (r < arr.length) {
+        //         cnt.put(arr[r], cnt.getOrDefault(arr[r], 0) + 1);
+        //         if (cnt.lastEntry().getKey() - cnt.firstEntry().getKey() > limit) {
+        //             if (cnt.get(arr[l]) > 1)
+        //                 cnt.put(arr[l], cnt.get(arr[l])-1);
+        //             else cnt.remove(arr[l]);
+        //             l++;
+        //         }
+        //         r++;
+        //     }
+        //     return r - l; // 这样维护的就是全局最优解了？！！！
+        // }
+//         public int longestSubarray(int[] nums, int limit) { // 双端队列：从右边加入
+//             ArrayDeque<Integer> min = new ArrayDeque<>();   // 单调递增队列： 左小右大
+//             ArrayDeque<Integer> max = new ArrayDeque<>();   // 单调递减队列： 左大右小
+//             int l = 0, r = 0, ans = 0;
+//             while (r < nums.length) {
+//                 int rval = nums[r];
+// //to ensure that minQ have minimum element as head             
+//                 while (!min.isEmpty() && min.peekLast() > rval) min.pollLast(); // 维护：右边，比当前待入列值大的，全扔出去
+// //to ensure that maxQ have maximum element as head                
+//                 while (!max.isEmpty() && max.peekLast() < rval) max.pollLast(); // 维护：右边，比当前待入列值小的，全扔出去                
+//                 min.offerLast(rval); // 入队列，从右边加入
+//                 max.offerLast(rval); // 
+// //In case max-min is greater than the limit slide the left side or window         
+//                 if (max.peekFirst() - min.peekFirst() > limit) {     // 维护合法窗口范围: 会两个队列都把 l 下标的值抓不出去吗？
+//                     if (min.peekFirst() == nums[l]) min.pollFirst(); // 
+//                     if (max.peekFirst() == nums[l]) max.pollFirst(); // 
+//                     l++;
+//                 }
+//                 r++;
+//             }
+//             return r - l;
+//         }
+
+        // private int atMostK(int [] arr, int k) {
+        //     int ans = 0, l = 0;                    // Left boundary of window
+        //     Map<Integer, Integer> cnt = new HashMap<>(); // Map to keep track of number of distinct elements in the current window
+        //     for (int i = 0; i < arr.length; i++) { // i : right
+        //         cnt.put(arr[i], cnt.getOrDefault(arr[i], 0) + 1);
+        //         while (cnt.size() > k) {
+        //             if (cnt.get(arr[l]) > 1) cnt.put(arr[l], cnt.get(arr[l])-1);
+        //             else cnt.remove(arr[l]);
+        //             l++;
+        //         }
+        //         ans += i - l + 1; // Adding the count of subarrays with at most K distinct elements in the current window
+        //     }
+        //     return ans;
+        // }
+        // public int subarraysWithKDistinct(int[]arr, int k) {
+        //     return atMostK(arr, k) - atMostK(arr, k-1);
+        // }
     }    
     public static void main(String[] args) {
         Solution s  =  new Solution();
 
-        int [][] a = new int [][] {{2,1},{2,2},{3,3}};
-        int [] b = new int [] {1, 1};
+        int [] a = new int [] {1,2,1,2,3};
 
-        int r  =  s.visiblePoints(a, 90, b);
+        int r =  s.subarraysWithKDistinct(a, 2);
         System.out.println("r: "  +  r);
     }
 }
