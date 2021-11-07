@@ -1,71 +1,25 @@
-% Created 2021-11-01 Mon 16:14
-\documentclass[9pt, b5paaper]{book}
-\usepackage[UTF8]{ctex}
-\usepackage{xltxtra}
-\usepackage{bera}
-\usepackage[T1]{fontenc}
-\usepackage[scaled]{beraserif}
-\usepackage[scaled]{berasans}
-\usepackage[scaled]{beramono}
-\usepackage{graphicx}
-\usepackage{xcolor}
-\usepackage{multirow}
-\usepackage{multicol}
-\usepackage{float}
-\usepackage{textcomp}
-\usepackage{geometry}
-\geometry{left=1.2cm,right=1.2cm,top=1.5cm,bottom=1.2cm}
-\usepackage{algorithm}
-\usepackage{algorithmic}
-\usepackage{latexsym}
-\usepackage{natbib}
-\usepackage{minted}
-\newminted{common-lisp}{fontsize=ootnotesize}
-\usepackage[xetex,colorlinks=true,CJKbookmarks=true,linkcolor=blue,urlcolor=blue,menucolor=blue]{hyperref}
-\date{\today}
-\title{dp}
-\hypersetup{
-  pdfkeywords={},
-  pdfsubject={},
-  pdfcreator={Emacs 27.1 (Org mode 8.2.7c)}}
-\begin{document}
+#+latex_class: book
 
-\maketitle
-\tableofcontents
-
-
-\chapter{Dynamic Programming, 动态规划}
-\label{sec-1}
-\section{总结}
-\label{sec-1-1}
-\begin{itemize}
-\item 根据CLRS，动态规划分为两种：
-\item top-down with memoization (递归记忆化搜索)
-\end{itemize}
+* Dynamic Programming, 动态规划
+** 总结
+- 根据CLRS，动态规划分为两种：
+- top-down with memoization (递归记忆化搜索)
 等价于带缓存的，搜索树上的 DFS
 比较贴近于新问题正常的思考习惯
-\begin{itemize}
-\item bottom-up (自底向上循环迭代)
-\end{itemize}
+- bottom-up (自底向上循环迭代)
 以 "reverse topological order" 处理
 每个子问题下面依赖的所有子问题都算完了才开始计算当前
 一般依赖于子问题之间天然的 "size
 
-\section{198. House Robber - Medium}
-\label{sec-1-2}
+** 198. House Robber - Medium
 You are a professional robber planning to rob houses along a street. Each house has a certain amount of money stashed, the only constraint stopping you from robbing each of them is that adjacent houses have security systems connected and it will automatically contact the police if two adjacent houses were broken into on the same night.
 
 Given an integer array nums representing the amount of money of each house, return the maximum amount of money you can rob tonight without alerting the police.
-\subsection{解题思路与分析}
-\label{sec-1-2-1}
-\begin{itemize}
-\item 对于每一个住户来说，只有两种选择：
-\begin{itemize}
-\item 偷这一户人家的，下一家不要
-\item 不偷这一家的，去偷下一家的
-\end{itemize}
-\end{itemize}
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+*** 解题思路与分析
+- 对于每一个住户来说，只有两种选择：
+  - 偷这一户人家的，下一家不要
+  - 不偷这一家的，去偷下一家的
+#+BEGIN_SRC java
 private int dfs(int [] arr, int idx) {
     if (idx >= n) return 0;
     if (dp[idx] > 0) return dp[idx];
@@ -79,19 +33,15 @@ public int rob(int[] a) {
      dp = new int [n];
      return dfs(a, 0);
 }
-\end{minted}
-\section{213. House Robber II}
-\label{sec-1-3}
+#+END_SRC 
+** 213. House Robber II
 You are a professional robber planning to rob houses along a street. Each house has a certain amount of money stashed. All houses at this place are arranged in a circle. That means the first house is the neighbor of the last one. Meanwhile, adjacent houses have a security system connected, and it will automatically contact the police if two adjacent houses were broken into on the same night.
 Given an integer array nums representing the amount of money of each house, return the maximum amount of money you can rob tonight without alerting the police.
-\subsection{解题思路与分析}
-\label{sec-1-3-1}
-\begin{itemize}
-\item 与上一题不同的是：因为是环形数组，数组首尾相连，相邻的两户人家只能偷一家
-\item 问题就转化成了：我要么去偷[0, n-2]这些人家的，要么去偷[1, n-1]这些人家的，包括首尾
-\item 这成了上一题的稍微变形与套娃
-\end{itemize}
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+*** 解题思路与分析
+- 与上一题不同的是：因为是环形数组，数组首尾相连，相邻的两户人家只能偷一家
+- 问题就转化成了：我要么去偷[0, n-2]这些人家的，要么去偷[1, n-1]这些人家的，包括首尾
+- 这成了上一题的稍微变形与套娃
+#+BEGIN_SRC java
 private int dfs(int [] arr, int i, int j, int idx) {
     if (idx > j) return 0;
     if (dp[idx] != -1) return dp[idx];
@@ -109,19 +59,15 @@ public int rob(int[] arr) {
      // return Math.max(dfs(arr, 1, n-1, 1), dfs(arr, 0, n-2, 0)); // BUG: 因为dp数组不重置，会发生数据混淆，得到错误答案
      return Math.max(max, dfs(arr, 0, n-2, 0));
 }
-\end{minted}
-\section{740. Delete and Earn: 一类题目，变形了你还认得出来吗？}
-\label{sec-1-4}
+#+END_SRC
+** 740. Delete and Earn: 一类题目，变形了你还认得出来吗？
 You are given an integer array nums. You want to maximize the number of points you get by performing the following operation any number of times:
 Pick any nums[i] and delete it to earn nums[i] points. Afterwards, you must delete every element equal to nums[i] - 1 and every element equal to nums[i] + 1.
 Return the maximum number of points you can earn by applying the above operation some number of times.
-\subsection{解题思路与分析}
-\label{sec-1-4-1}
-\begin{itemize}
-\item 关键题意理解：对于nums = [2, 2, 3, 3, 3, 4]，如果我们选了数字3，则要删除每一个（所有）2和4，之后数组变为[3, 3]，此时如果再选3，并不会删除其他元素，剩余数组变为\footnote{DEFINITION NOT FOUND.}，再选3，数组变为空，返回结果是3+3+3=9。
-\item 将上面的例子转化为House Robber的形式，nums' = [0, 0, 22, 33, 4]，nums'[i]代表值为i的数字的总数和(或者数字(下标)i在原数组中出现的次数)，每次若选择nums'数组的一个元素，则相邻元素不能在下一次被选中(包括其所有的重复计数)，相当于被全部删去。转化后，用House Robber的思路来处理nums'数组即可。
-\end{itemize}
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+*** 解题思路与分析
+- 关键题意理解：对于nums = [2, 2, 3, 3, 3, 4]，如果我们选了数字3，则要删除每一个（所有）2和4，之后数组变为[3, 3]，此时如果再选3，并不会删除其他元素，剩余数组变为[3]，再选3，数组变为空，返回结果是3+3+3=9。
+- 将上面的例子转化为House Robber的形式，nums' = [0, 0, 22, 33, 4]，nums'[i]代表值为i的数字的总数和(或者数字(下标)i在原数组中出现的次数)，每次若选择nums'数组的一个元素，则相邻元素不能在下一次被选中(包括其所有的重复计数)，相当于被全部删去。转化后，用House Robber的思路来处理nums'数组即可。
+#+BEGIN_SRC java
 private int dfs(int [] cnt, int i) {
     if (i >= N) return 0;
     if (dp[i] > 0) return dp[i];
@@ -140,11 +86,9 @@ public int deleteAndEarn(int[] nums) {
     while (i < N && cnt[i] == 0) i++;
     return dfs(cnt, i);
 }
-\end{minted}
-\begin{itemize}
-\item dp解
-\end{itemize}
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+END_SRC
+- dp解
+#+BEGIN_SRC java
 public int deleteAndEarn(int[] nums) {
     int n = nums.length, N = 10001;
     int [] cnt = new int [N];
@@ -158,11 +102,10 @@ public int deleteAndEarn(int[] nums) {
     }
     return ans;
 }
-\end{minted}
+#+END_SRC
 
 
-\section{2019. The Score of Students Solving Math Expression - Hard 有人说这是区间dp，无感}
-\label{sec-1-5}
+** 2019. The Score of Students Solving Math Expression - Hard 有人说这是区间dp，无感
 You are given a string s that contains digits 0-9, addition symbols '+', and multiplication symbols '*' only, representing a valid math expression of single digit numbers (e.g., 3+5*2). This expression was given to n elementary school students. The students were instructed to get the answer of the expression by following this order of operations:
 
 Compute multiplication, reading from left to right; Then,
@@ -173,18 +116,15 @@ If an answer equals the correct answer of the expression, this student will be r
 Otherwise, if the answer could be interpreted as if the student applied the operators in the wrong order but had correct arithmetic, this student will be rewarded 2 points;
 Otherwise, this student will be rewarded 0 points.
 Return the sum of the points of the students.
-\subsection{解题思路与分析}
-\label{sec-1-5-1}
-\begin{itemize}
-\item 思路是记忆化搜索。先求一下正确答案，然后开始算所有可能得到的错误答案。枚举运算符，然后递归求解两边可能的答案，汇总成当前表达式可能得到的答案。用记忆化的方式避免重复计算。
-\item 时间复杂度O(l$_{\text{s}}^{\text{3}}$+l$_{\text{A}}$))，空间O(l$_{\text{s}}^{\text{2}}$)。注意有1000这个限制，上面所说的复杂度的常数是1000$^{\text{2，是很大的}}$
-\end{itemize}
+*** 解题思路与分析
+- 思路是记忆化搜索。先求一下正确答案，然后开始算所有可能得到的错误答案。枚举运算符，然后递归求解两边可能的答案，汇总成当前表达式可能得到的答案。用记忆化的方式避免重复计算。
+- 时间复杂度O(l_s^3+l_A))，空间O(l_s^2)。注意有1000这个限制，上面所说的复杂度的常数是1000^2，是很大的
+  
+[[./pic/score.png]]
+  
+[[./pic/score2.png]]
 
-\includegraphics[width=.9\linewidth]{./pic/score.png}
-
-\includegraphics[width=.9\linewidth]{./pic/score2.png}
-
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 private int compute(String t) {
     ArrayDeque<Integer> st = new ArrayDeque<>();
     char [] s = t.toCharArray();
@@ -232,14 +172,13 @@ public int scoreOfStudents(String s, int [] num) {
         else if (can.contains(v)) ans += 2;
     return ans;
 }
-\end{minted}
+#+END_SRC  
 
-\section{312. Burst Balloons 区间型动态规划的典型代表}
-\label{sec-1-6}
+** 312. Burst Balloons 区间型动态规划的典型代表
 You are given n balloons, indexed from 0 to n - 1. Each balloon is painted with a number on it represented by an array nums. You are asked to burst all the balloons.
 If you burst the ith balloon, you will get nums[i - 1] * nums[i] * nums[i + 1] coins. If i - 1 or i + 1 goes out of bounds of the array, then treat it as if there is a balloon with a 1 painted on it.
 Return the maximum coins you can collect by bursting the balloons wisely.
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 public int maxCoins(int[] nums) {
     int n = nums.length;
     int [][]  dp = new int [n+2][n+2];
@@ -283,16 +222,15 @@ public int maxCoins(int[] nums) {
     arr[0] = arr[n-1] = 1;
     return memorizedSearch(arr, 1, n-2);
 }
-\end{minted}
+#+END_SRC
 
 
-\section{1866. Number of Ways to Rearrange Sticks With K Sticks Visible - Hard}
-\label{sec-1-7}
+** 1866. Number of Ways to Rearrange Sticks With K Sticks Visible - Hard
 There are n uniquely-sized sticks whose lengths are integers from 1 to n. You want to arrange the sticks such that exactly k sticks are visible from the left. A stick is visible from the left if there are no longer sticks to the left of it.
 
 For example, if the sticks are arranged [1,3,2,5,4], then the sticks with lengths 1, 3, and 5 are visible from the left.
 Given n and k, return the number of such arrangements. Since the answer may be large, return it modulo 109 + 7.
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 // dp[i][j] 表示前面i根木棍可以看到j根
 // 设 dp[i][j] 表示从高度为 1, 2, ..., i 的木棍中，高度逐渐递减地插入新的木棍，从左侧看恰好看到 k 根木棍的方案数。
 // 后面说看到ith根，不是指从小到大的第ith根棍子，而是指ith这个位置上的棍子
@@ -307,11 +245,9 @@ public int rearrangeSticks(int n, int k) {
             dp[i][j] = (dp[i-1][j-1] + (dp[i-1][j] * (i-1)) % mod) % mod;
     return (int)dp[n][k];
 }
-\end{minted}
-\begin{itemize}
-\item dfs + memo
-\end{itemize}
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+END_SRC
+- dfs + memo 
+#+BEGIN_SRC java
 long mod = 1000_000_000 + 7;
 long[][] dp;
 public int rearrangeSticks(int n, int k) {
@@ -332,11 +268,10 @@ long dfs(int n, int k) {
     ans %= mod;
     return dp[n][k] = ans;
 }
-\end{minted}
+#+END_SRC
 
-\section{1916. Count Ways to Build Rooms in an Ant Colony - Hard}
-\label{sec-1-8}
-You are an ant tasked with adding n new rooms numbered 0 to n-1 to your colony. You are given the expansion plan as a 0-indexed integer array of length n, prevRoom, where prevRoom[i] indicates that you must build room prevRoom[i] before building room i, and these two rooms must be connected directly. Room 0 is already built, so prevRoom\footnote{DEFINITION NOT FOUND.} = -1. The expansion plan is given such that once all the rooms are built, every room will be reachable from room 0.
+** 1916. Count Ways to Build Rooms in an Ant Colony - Hard
+You are an ant tasked with adding n new rooms numbered 0 to n-1 to your colony. You are given the expansion plan as a 0-indexed integer array of length n, prevRoom, where prevRoom[i] indicates that you must build room prevRoom[i] before building room i, and these two rooms must be connected directly. Room 0 is already built, so prevRoom[0] = -1. The expansion plan is given such that once all the rooms are built, every room will be reachable from room 0.
 
 You can only build one room at a time, and you can travel freely between rooms you have already built only if they are connected. You can choose to build any room as long as its previous room is already built.
 
@@ -346,11 +281,11 @@ Return the number of different orders you can build all the rooms in. Since the 
 
 本题求解过程涉及较多前置知识点，包括排列组合、乘法逆元、快速乘方等
 
-\includegraphics[width=.9\linewidth]{./pic/ant1.png}
+[[./pic/ant1.png]]
 
-\includegraphics[width=.9\linewidth]{./pic/ant2.png}
+[[./pic/ant2.png]]
 
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 // 快速计算x^y的乘方
 public int quickMul(int x , int y) {
     long res = 1, cur = x;
@@ -393,10 +328,9 @@ public int waysToBuildRooms(int[] prevRoom) {
     // 动态规划得到总体顺序数量x
     return dfs(0)[1];      
 }
-\end{minted}
+#+END_SRC
 
-\section{1987. Number of Unique Good Subsequences - Hard}
-\label{sec-1-9}
+** 1987. Number of Unique Good Subsequences - Hard
 You are given a binary string binary. A subsequence of binary is considered good if it is not empty and has no leading zeros (with the exception of "0").
 
 Find the number of unique good subsequences of binary.
@@ -405,7 +339,7 @@ For example, if binary = "001", then all the good subsequences are ["0", "0", "1
 Return the number of unique good subsequences of binary. Since the answer may be very large, return it modulo 109 + 7.
 
 A subsequence is a sequence that can be derived from another sequence by deleting some or no elements without changing the order of the remaining elements.
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 public int numberOfUniqueGoodSubsequences(String binary) {
     int mod = (int)1e9 + 7;
     int n = binary.length(), preZoo = 0, preOne = 0, m = 1;
@@ -425,9 +359,9 @@ public int numberOfUniqueGoodSubsequences(String binary) {
     }
     return (int)dp[n] + (s.indexOf("0") != -1 ?  1 : 0);
 }
-\end{minted}
-\includegraphics[width=.9\linewidth]{./pic/distinctSubsequence.png}
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+END_SRC
+[[./pic/distinctSubsequence.png]]
+#+BEGIN_SRC java
 public int numberOfUniqueGoodSubsequences(String binary) {
     int mod = (int)1e9 + 7;
     int endZoo = 0, endOne = 0, hasZoo = 0;
@@ -440,15 +374,11 @@ public int numberOfUniqueGoodSubsequences(String binary) {
         }
     return (endOne + endZoo + hasZoo) % mod;
 }
-\end{minted}
-\begin{itemize}
-\item 还有一个没有看懂的
-\begin{itemize}
-\item \url{https://leetcode-cn.com/problems/number-of-unique-good-subsequences/solution/ju-yi-fan-san-by-avenger-h-34xa/}
-\item \url{https://leetcode-cn.com/problems/distinct-subsequences-ii/solution/dong-tai-gui-hua-cong-fen-xi-dao-shi-xian-by-my10y/}
-\end{itemize}
-\end{itemize}
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{python}
+#+END_SRC
+- 还有一个没有看懂的
+  - https://leetcode-cn.com/problems/number-of-unique-good-subsequences/solution/ju-yi-fan-san-by-avenger-h-34xa/
+  - https://leetcode-cn.com/problems/distinct-subsequences-ii/solution/dong-tai-gui-hua-cong-fen-xi-dao-shi-xian-by-my10y/
+#+BEGIN_SRC python
 def numberOfUniqueGoodSubsequences(self, binary: str) -> int:
         M = 10**9+7
         dp = [0]*10
@@ -461,23 +391,23 @@ def numberOfUniqueGoodSubsequences(self, binary: str) -> int:
                 dp[int(c)] = (sum(dp)) % M
             else:
                 dp[int(c)] = ( 1+ sum(dp)) % M
-        return sum(dp)%M
-\end{minted}
-\section{730. Count Different Palindromic Subsequences - Hard}
-\label{sec-1-10}
+        return sum(dp)%M 
+
+#+END_SRC
+** 730. Count Different Palindromic Subsequences - Hard
 Given a string s, return the number of different non-empty palindromic subsequences in s. Since the answer may be very large, return it modulo 109 + 7.
 
 A subsequence of a string is obtained by deleting zero or more characters from the string.
 
 A sequence is palindromic if it is equal to the sequence reversed.
 
-Two sequences a1, a2, \ldots{} and b1, b2, \ldots{} are different if there is some i for which ai != bi.
+Two sequences a1, a2, ... and b1, b2, ... are different if there is some i for which ai != bi.
 
-\includegraphics[width=.9\linewidth]{./pic/palindromSubSeq.png}
+[[./pic/palindromSubSeq.png]]
 
-\includegraphics[width=.9\linewidth]{./pic/palindromSubSeq2.png}
+[[./pic/palindromSubSeq2.png]]
 
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 private int dfs(char[] s, int i, int j) {
     if (i > j) return 0;
     if (i == j) return 1;
@@ -503,11 +433,9 @@ public int countPalindromicSubsequences(String S) {
     dp = new int[n][n];
     return dfs(S.toCharArray(), 0, n - 1);
 }
-\end{minted}
-\begin{itemize}
-\item dp
-\end{itemize}
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+END_SRC
+- dp
+#+BEGIN_SRC java
 public int countPalindromicSubsequences(String s) {
     int n = s.length();
     int mod = (int)1e9 + 7;
@@ -533,19 +461,18 @@ public int countPalindromicSubsequences(String s) {
     }
     return (int)dp[0][n-1];
 }
-\end{minted}
+#+END_SRC
 
-\section{1125. Smallest Sufficient Team - Hard 这个题要多写几遍}
-\label{sec-1-11}
-In a project, you have a list of required skills req$_{\text{skills}}$, and a list of people. The ith person people[i] contains a list of skills that the person has.
+** 1125. Smallest Sufficient Team - Hard 这个题要多写几遍
+In a project, you have a list of required skills req_skills, and a list of people. The ith person people[i] contains a list of skills that the person has.
 
-Consider a sufficient team: a set of people such that for every required skill in req$_{\text{skills}}$, there is at least one person in the team who has that skill. We can represent these teams by the index of each person.
+Consider a sufficient team: a set of people such that for every required skill in req_skills, there is at least one person in the team who has that skill. We can represent these teams by the index of each person.
 
-For example, team = [0, 1, 3] represents the people with skills people\footnotemark[2]{}, people\footnote{DEFINITION NOT FOUND.}, and people\footnotemark[1]{}.
+For example, team = [0, 1, 3] represents the people with skills people[0], people[1], and people[3].
 Return any sufficient team of the smallest possible size, represented by the index of each person. You may return the answer in any order.
 
 It is guaranteed an answer exists.
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 // 强行剪枝: 收集到的size >= 目前的结果，直接return；
 // 这题的思路就是先把skill 和set of people建立好，
 // 然后去用skill set做backtracking收集，如果temp team的size大于结果，直接return，否则update结果，
@@ -582,11 +509,9 @@ public int[] smallestSufficientTeam(String[] req_skills, List<List<String>> peop
         res[idx++] = person;
     return res;
 }
-\end{minted}
-\begin{itemize}
-\item Java soution using Bit DP 10ms
-\end{itemize}
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+END_SRC
+- Java soution using Bit DP 10ms
+#+BEGIN_SRC java
 public int[] smallestSufficientTeam(String[] req_skills, List<List<String>> people) {
     int n = req_skills.length, range = 1 << n, cur, idx;
     Map<String, Integer> idxMap = new HashMap<>();
@@ -623,14 +548,10 @@ public int[] smallestSufficientTeam(String[] req_skills, List<List<String>> peop
     }
     return res;
 }
-\end{minted}
-\begin{itemize}
-\item DFS + Memorizaion (A real O(2$^{\text{skill}}$ * people) Solution) Java 8ms
-\begin{itemize}
-\item \url{https://leetcode.com/problems/smallest-sufficient-team/discuss/1011135/DFS-\%2B-Memorizaion}-(A-real-O(2skill-*-people)-Solution)-Java-8ms
-\end{itemize}
-\end{itemize}
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+END_SRC
+- DFS + Memorizaion (A real O(2^skill * people) Solution) Java 8ms
+  - https://leetcode.com/problems/smallest-sufficient-team/discuss/1011135/DFS-%2B-Memorizaion-(A-real-O(2skill-*-people)-Solution)-Java-8ms
+#+BEGIN_SRC java
 List<Integer> minComb;
 int[] peopleSkillMasks;
 Integer[] memo;  // 这个方法确实快一点儿
@@ -684,17 +605,12 @@ private int dfs(int curSkillSet, int startIdx) {
     }
     return memo[curSkillSet];
 }
-\end{minted}
-\begin{itemize}
-\item Recursion + Memoization + bit mask , with Simple JAVA solution
-\begin{itemize}
-\item \url{https://leetcode.com/problems/smallest-sufficient-team/discuss/1487180/Recursion-\%2B-Memoization-\%2B-bit-mask-with-Simple-JAVA-solution}
-\end{itemize}
-\end{itemize}
+#+END_SRC
+- Recursion + Memoization + bit mask , with Simple JAVA solution
+  - https://leetcode.com/problems/smallest-sufficient-team/discuss/1487180/Recursion-%2B-Memoization-%2B-bit-mask-with-Simple-JAVA-solution
 上面的这些方法相对较偏，就暂时顾不上了
 
-\section{1575. Count All Possible Routes - Hard}
-\label{sec-1-12}
+** 1575. Count All Possible Routes - Hard
 You are given an array of distinct positive integers locations where locations[i] represents the position of city i. You are also given integers start, finish and fuel representing the starting city, ending city, and the initial amount of fuel you have, respectively.
 
 At each step, if you are at city i, you can pick any city j such that j != i and 0 <= j < locations.length and move to city j. Moving from city i to city j reduces the amount of fuel you have by |locations[i] - locations[j]|. Please notice that |x| denotes the absolute value of x.
@@ -703,8 +619,8 @@ Notice that fuel cannot become negative at any point in time, and that you are a
 
 Return the count of all possible routes from start to finish.
 
-Since the answer may be too large, return it modulo 10$^{\text{9}}$ + 7.
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+Since the answer may be too large, return it modulo 10^9 + 7.
+#+BEGIN_SRC java
 // 自顶向下 （记忆化搜索）
 // 每个dfs搜索当前状态为城市i，油量f到达终点的方案数。这样决策的时候就很直观：当前这个状态的方案数，由可去的城市的，且油量为剩余油量的到达终点方案数加起来。
 // 初始化：每个状态都初始化为-1。
@@ -768,10 +684,9 @@ public int countRoutes(int[] locations, int start, int finish, int fuel) {
         ans = (ans + dp[finish][i]) % mod;
     return ans;
 }
-\end{minted}
+#+END_SRC
 
-\section{1012. Numbers With Repeated Digits - Hard}
-\label{sec-1-13}
+** 1012. Numbers With Repeated Digits - Hard
 Given an integer n, return the number of positive integers in the range [1, n] that have at least one repeated digit.
 
 题意:统计1-N中，满足每个位置都不同的数有几个。
@@ -782,7 +697,7 @@ Given an integer n, return the number of positive integers in the range [1, n] t
 
 赛后发现，别人都是通过一个dfs找重复的数，然后总个数减去。
 
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 private int dfs(int len, int limit, int mask) { // 不重复数的个数
     if (len == 0) return 1;
     if (limit == 0 && dp[len][mask][limit] > 0) return dp[len][mask][limit]; // 记忆化部分
@@ -809,11 +724,9 @@ public int numDupDigitsAtMostN(int N) {
     }
     return sum - dfs(idx, 1, 0);
 }
-\end{minted}
-\begin{itemize}
-\item 这道题给了一个正整数N，让返回所有不大于N且至少有一个重复数字的正整数的个数，题目中给的例子也可以很好的帮助我们理解。要求的是正整数的位数上至少要有一个重复数字，当然最简单暴力的方法就是从1遍历到N，然后对于每个数字判断是否有重复数字，看了一眼题目难度 Hard，想都不用想，肯定是超时的。这道题需要更高效的解法，首先来想，若是直接求至少有一个重复数字的正整数，由于并不知道有多少个重复数字，可能1个，2个，甚至全是重复数字，这样很难找到规律。有时候直接求一个问题不好求，可以考虑求其相反的情况，至少有一个重复数字反过来就是一个重复数字都没有，所以这里可以求不大于N且一个重复数字都没有的正整数的个数，然后用N减去这个数字即为所求。好，接下来看怎么求，对于任意一个N，比如 7918，是个四位数，而所有的三位数，两位数，一位数，都一定比其小，所以可以直接求出没有重复数字的三位数，两位数，和一位数。比如三位数，由于百位上不能有0，则只有9种情况，十位上可以有0，则有9种情况，个位上则有8种情况，所以就是 9*9*8。可以归纳出没有重复数字的n位数的个数，最高位去除0还有9种，剩余的 n-1 位则依次是 9，8，7\ldots{} 则后面的 n-1 位其实是个全排列，从9个数中取出 n-1 个数字的全排列，初中就学过的。这里写一个全排列的子函数，求从m个数字中取n个数字的全排列，方便后面计算。算完这些后，还要来算符合题意的四位数，由于第一位是7，若千位上是小于7的数字（共有6种，千位上不能是0），则后面的百位，十位，个位又都可以全排列了，从9个数字中取3个数字的全排列，再乘以千位上小于7的6种情况。若当千位固定为7，则百位上可以放小于9的数字（共有8种，百位不能放7，但可以放0），则后面的十位和个位都可以全排列了，从8个数字种取出2个数字的全排列，再乘以百位上小于9的8种情况。需要注意的是，遍历给定数字的各个位时，有可能出现重复数字，一旦出现了之后，则该 prefix 就不能再用了，因为已经不合题意了。所以要用一个 HashSet 来记录访问过的数字，一旦遇到重复数字后就直接 break 掉。最后还有一个小 trick 需要注意，由于N本身也需要计算进去，所以再计算的时候，使用 N+1 进行计算的话，就可以把N这种情况算进去了
-\end{itemize}
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+END_SRC
+- 这道题给了一个正整数N，让返回所有不大于N且至少有一个重复数字的正整数的个数，题目中给的例子也可以很好的帮助我们理解。要求的是正整数的位数上至少要有一个重复数字，当然最简单暴力的方法就是从1遍历到N，然后对于每个数字判断是否有重复数字，看了一眼题目难度 Hard，想都不用想，肯定是超时的。这道题需要更高效的解法，首先来想，若是直接求至少有一个重复数字的正整数，由于并不知道有多少个重复数字，可能1个，2个，甚至全是重复数字，这样很难找到规律。有时候直接求一个问题不好求，可以考虑求其相反的情况，至少有一个重复数字反过来就是一个重复数字都没有，所以这里可以求不大于N且一个重复数字都没有的正整数的个数，然后用N减去这个数字即为所求。好，接下来看怎么求，对于任意一个N，比如 7918，是个四位数，而所有的三位数，两位数，一位数，都一定比其小，所以可以直接求出没有重复数字的三位数，两位数，和一位数。比如三位数，由于百位上不能有0，则只有9种情况，十位上可以有0，则有9种情况，个位上则有8种情况，所以就是 9*9*8。可以归纳出没有重复数字的n位数的个数，最高位去除0还有9种，剩余的 n-1 位则依次是 9，8，7... 则后面的 n-1 位其实是个全排列，从9个数中取出 n-1 个数字的全排列，初中就学过的。这里写一个全排列的子函数，求从m个数字中取n个数字的全排列，方便后面计算。算完这些后，还要来算符合题意的四位数，由于第一位是7，若千位上是小于7的数字（共有6种，千位上不能是0），则后面的百位，十位，个位又都可以全排列了，从9个数字中取3个数字的全排列，再乘以千位上小于7的6种情况。若当千位固定为7，则百位上可以放小于9的数字（共有8种，百位不能放7，但可以放0），则后面的十位和个位都可以全排列了，从8个数字种取出2个数字的全排列，再乘以百位上小于9的8种情况。需要注意的是，遍历给定数字的各个位时，有可能出现重复数字，一旦出现了之后，则该 prefix 就不能再用了，因为已经不合题意了。所以要用一个 HashSet 来记录访问过的数字，一旦遇到重复数字后就直接 break 掉。最后还有一个小 trick 需要注意，由于N本身也需要计算进去，所以再计算的时候，使用 N+1 进行计算的话，就可以把N这种情况算进去了
+#+BEGIN_SRC java
 private int A(int m, int n) {
     return n == 0 ? 1 : A(m, n-1) * (m-n+1);
 }
@@ -834,10 +747,9 @@ public int numDupDigitsAtMostN(int n) {
     }
     return n - res;
 }
-\end{minted}
+#+END_SRC
 
-\section{514. Freedom Trail - Hard}
-\label{sec-1-14}
+** 514. Freedom Trail - Hard
 In the video game Fallout 4, the quest "Road to Freedom" requires players to reach a metal dial called the "Freedom Trail Ring" and use the dial to spell a specific keyword to open the door.
 
 Given a string ring that represents the code engraved on the outer ring and another string key that represents the keyword that needs to be spelled, return the minimum number of steps to spell all the characters in the keyword.
@@ -848,14 +760,11 @@ At the stage of rotating the ring to spell the key character key[i]:
 
 You can rotate the ring clockwise or anticlockwise by one place, which counts as one step. The final purpose of the rotation is to align one of ring's characters at the "12:00" direction, where this character must equal key[i].
 If the character key[i] has been aligned at the "12:00" direction, press the center button to spell, which also counts as one step. After the pressing, you could begin to spell the next character in the key (next stage). Otherwise, you have finished all the spelling.
-\subsection{解题思路分析: 这个图把钥匙中每个字母的出现位置记住了，以后拿去用不搜 dfs + 记忆数组}
-\label{sec-1-14-1}
-\begin{itemize}
-\item 记录下所有字母对应的位置，这样在找字母相对位置的时候就不需要循环搜索了
-\item 采用递归的方法，找出当前字母对应的位置最小的步数：只需要把当前字母对应的所有位置找出来，然后计算最小值即可
-\item 下一个位置再次迭代计算即可
-\end{itemize}
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+*** 解题思路分析: 这个图把钥匙中每个字母的出现位置记住了，以后拿去用不搜 dfs + 记忆数组
+- 记录下所有字母对应的位置，这样在找字母相对位置的时候就不需要循环搜索了
+- 采用递归的方法，找出当前字母对应的位置最小的步数：只需要把当前字母对应的所有位置找出来，然后计算最小值即可
+- 下一个位置再次迭代计算即可
+#+BEGIN_SRC java
 public int minLen(int len, int i, int j) {
     int min = Math.min(i, j);
     int max = Math.max(i, j);
@@ -890,15 +799,12 @@ public int findRotateSteps(String ring, String key) {
     }
     return helper(ring, 0, key, 0);
 }
-\end{minted}
-\subsection{解题思路分析 动态规划}
-\label{sec-1-14-2}
-\begin{itemize}
-\item 博主最先尝试的用贪婪算法来做，就是每一步都选最短的转法，但是OJ中总有些test case会引诱贪婪算法得出错误的结果，因为全局最优解不一定都是局部最优解，而贪婪算法一直都是在累加局部最优解，这也是为啥DP解法这么叼的原因。贪婪算法好想好实现，但是不一定能得到正确的结果。DP解法难想不好写，但往往才是正确的解法，这也算一个trade off吧。
-\item 此题需要使用一个二维数组dp，其中dp[i][j]表示转动从i位置开始的key串所需要的最少步数(这里不包括spell的步数，因为spell可以在最后统一加上)，此时表盘的12点位置是ring中的第j个字符。不得不佩服这样的设计的确很巧妙，我们可以从key的末尾往前推，这样dp\footnotemark[2]{}\textsuperscript{,}\,\footnotemark[2]{}就是我们所需要的结果，因为此时是从key的开头开始转动，而且表盘此时的12点位置也是ring的第一个字符。现在我们来看如何找出递推公式，对于dp[i][j]，我们知道此时要将key[i]转动到12点的位置，而此时表盘的12点位置是ring[j]，我们有两种旋转的方式，顺时针和逆时针，我们的目标肯定是要求最小的转动步数，而顺时针和逆时针的转动次数之和刚好为ring的长度n，这样我们求出来一个方向的次数，就可以迅速得到反方向的转动次数。为了将此时表盘上12点位置上的ring[j]转动到key[i]，我们要将表盘转动一整圈，当转到key[i]的位置时，我们计算出转动步数diff，然后计算出反向转动步数，并取二者较小值为整个转动步数step，此时我们更新dp[i][j]，更新对比值为step + dp[i+1][k]，这个也不难理解，因为key的前一个字符key[i+1]的转动情况suppose已经计算好了，那么dp[i+1][k]就是当时表盘12点位置上ring[k]的情况的最短步数，step就是从ring[k]转到ring[j]的步数，也就是key[i]转到ring[j]的步数，用语言来描述就是，从key的i位置开始转动并且此时表盘12点位置为ring[j]的最小步数(dp[i][j])就等价于将ring[k]转动到12点位置的步数(step)加上从key的i+1位置开始转动并且ring[k]已经在表盘12点位置上的最小步数(dp[i+1][k])之和。
-\item 突然发现这不就是之前那道Reverse Pairs中解法一中归纳的顺序重现关系的思路吗，都做了总结，可换个马甲就又不认识了，泪目中。。。
-\end{itemize}
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+END_SRC
+*** 解题思路分析 动态规划
+- 博主最先尝试的用贪婪算法来做，就是每一步都选最短的转法，但是OJ中总有些test case会引诱贪婪算法得出错误的结果，因为全局最优解不一定都是局部最优解，而贪婪算法一直都是在累加局部最优解，这也是为啥DP解法这么叼的原因。贪婪算法好想好实现，但是不一定能得到正确的结果。DP解法难想不好写，但往往才是正确的解法，这也算一个trade off吧。
+- 此题需要使用一个二维数组dp，其中dp[i][j]表示转动从i位置开始的key串所需要的最少步数(这里不包括spell的步数，因为spell可以在最后统一加上)，此时表盘的12点位置是ring中的第j个字符。不得不佩服这样的设计的确很巧妙，我们可以从key的末尾往前推，这样dp[0][0]就是我们所需要的结果，因为此时是从key的开头开始转动，而且表盘此时的12点位置也是ring的第一个字符。现在我们来看如何找出递推公式，对于dp[i][j]，我们知道此时要将key[i]转动到12点的位置，而此时表盘的12点位置是ring[j]，我们有两种旋转的方式，顺时针和逆时针，我们的目标肯定是要求最小的转动步数，而顺时针和逆时针的转动次数之和刚好为ring的长度n，这样我们求出来一个方向的次数，就可以迅速得到反方向的转动次数。为了将此时表盘上12点位置上的ring[j]转动到key[i]，我们要将表盘转动一整圈，当转到key[i]的位置时，我们计算出转动步数diff，然后计算出反向转动步数，并取二者较小值为整个转动步数step，此时我们更新dp[i][j]，更新对比值为step + dp[i+1][k]，这个也不难理解，因为key的前一个字符key[i+1]的转动情况suppose已经计算好了，那么dp[i+1][k]就是当时表盘12点位置上ring[k]的情况的最短步数，step就是从ring[k]转到ring[j]的步数，也就是key[i]转到ring[j]的步数，用语言来描述就是，从key的i位置开始转动并且此时表盘12点位置为ring[j]的最小步数(dp[i][j])就等价于将ring[k]转动到12点位置的步数(step)加上从key的i+1位置开始转动并且ring[k]已经在表盘12点位置上的最小步数(dp[i+1][k])之和。
+- 突然发现这不就是之前那道Reverse Pairs中解法一中归纳的顺序重现关系的思路吗，都做了总结，可换个马甲就又不认识了，泪目中。。。
+#+BEGIN_SRC java
 public int findRotateSteps(String ring, String key) {
     int m = key.length(); 
     int n = ring.length();
@@ -918,27 +824,20 @@ public int findRotateSteps(String ring, String key) {
     }
     return dp[0][0] + m;
 }
-\end{minted}
+#+END_SRC
 
-\subsection{解题思路分析: dfs + 记忆数组}
-\label{sec-1-14-3}
-\begin{itemize}
-\item 过程就是需要一步一步求key里面的每个字符。 如果当前位置已经是对应到这个字符，那么直接按按钮就可以
-\item 如果当前位置不是，那么有两种旋转方式，顺时针或者逆时针, 然后找到第一个字符就是在同一个方向上的最短距离，
-\item 因为在同一个方向上，即使后面有重复的字符，无论后面的字符在那里，遇到第一个符合条件的字符就按按钮一定是最优解。
-\item 但是在不同方向上就不一定了，有可能一个方向上当前字符距离更短，但是有可能后面的字符距离会更远，
-\begin{itemize}
-\item 比如ring=ABCDEFGBF , key=BG, 如果看第一个字符， 那应该是顺时针，只需要转一格就到，逆时针需要转两格，
-\item 但是顺时针第一步快了以后， 后面到G会需要更长的步骤。 而逆时针会比较快。
-\end{itemize}
-\item 所以，基本的逻辑是每一步不能决定当前哪个方向是否是最优解， 只有不断递归，把每步的两个方向全部尝试完到key结束才可以
-\item 当然， 如果不做任何处理，这样做是要超时的（我开始就写了这样一个版本）， 一个直观的做法，就是在递归的基础上
-\begin{itemize}
-\item 加一个记忆表， 针对ring的位置index和key的kindex做记录， 如果已经存在一个解了就可以直接返回结果
-\end{itemize}
-\item 这个递归+memorization的解法，那一定存在一个bottom up的动态规划解法， 这个后面再学习
-\end{itemize}
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+*** 解题思路分析: dfs + 记忆数组
+- 过程就是需要一步一步求key里面的每个字符。 如果当前位置已经是对应到这个字符，那么直接按按钮就可以
+- 如果当前位置不是，那么有两种旋转方式，顺时针或者逆时针, 然后找到第一个字符就是在同一个方向上的最短距离，
+- 因为在同一个方向上，即使后面有重复的字符，无论后面的字符在那里，遇到第一个符合条件的字符就按按钮一定是最优解。
+- 但是在不同方向上就不一定了，有可能一个方向上当前字符距离更短，但是有可能后面的字符距离会更远，
+  - 比如ring=ABCDEFGBF , key=BG, 如果看第一个字符， 那应该是顺时针，只需要转一格就到，逆时针需要转两格，
+  - 但是顺时针第一步快了以后， 后面到G会需要更长的步骤。 而逆时针会比较快。
+- 所以，基本的逻辑是每一步不能决定当前哪个方向是否是最优解， 只有不断递归，把每步的两个方向全部尝试完到key结束才可以
+- 当然， 如果不做任何处理，这样做是要超时的（我开始就写了这样一个版本）， 一个直观的做法，就是在递归的基础上
+  - 加一个记忆表， 针对ring的位置index和key的kindex做记录， 如果已经存在一个解了就可以直接返回结果
+- 这个递归+memorization的解法，那一定存在一个bottom up的动态规划解法， 这个后面再学习
+#+BEGIN_SRC java
 private int helper(String s, String t, int i, int j) { // s: ring, t: key, i: idxRing, j: idxKey
     Map<Integer, Integer> locMap = mem.get(i);
     if (locMap != null) 
@@ -980,13 +879,12 @@ public int findRotateSteps(String ring, String key) {
     n = key.length();
     return helper(ring, key, 0, 0);
 }
-\end{minted}
+#+END_SRC
 
-\section{847. Shortest Path Visiting All Nodes}
-\label{sec-1-15}
+** 847. Shortest Path Visiting All Nodes
 You have an undirected, connected graph of n nodes labeled from 0 to n - 1. You are given an array graph where graph[i] is a list of all the nodes connected with node i by an edge.
 Return the length of the shortest path that visits every node. You may start and stop at any node, you may revisit nodes multiple times, and you may reuse edges.
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 public int shortestPathLength(int[][] graph) {
     int n = graph.length;
     int tar = 0, res = 0;
@@ -1014,16 +912,13 @@ public int shortestPathLength(int[][] graph) {
     }
     return -1;
 }
-\end{minted}
+#+END_SRC
 
-\section{1931. Painting a Grid With Three Different Colors}
-\label{sec-1-16}
+** 1931. Painting a Grid With Three Different Colors
 You are given two integers m and n. Consider an m x n grid where each cell is initially white. You can paint each cell red, green, or blue. All cells must be painted.
 Return the number of ways to color the grid with no two adjacent cells having the same color. Since the answer can be very large, return it modulo 109 + 7.
-\begin{itemize}
-\item lightweighted轻巧点儿的解题方案: bitmask
-\end{itemize}
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+- lightweighted轻巧点儿的解题方案: bitmask
+#+BEGIN_SRC java
 // time O( (2^5) *2 * N)
 // SPACE O(N)
 //     For m = 5, there are at most 48 valid states for a single column so we can handle it column by column.
@@ -1060,11 +955,9 @@ public int colorTheGrid(int m, int n) {
     }
     return (int) res;
 }
-\end{minted}
-\begin{itemize}
-\item 比较传统一点儿的解法，思路清晰
-\end{itemize}
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+END_SRC
+- 比较传统一点儿的解法，思路清晰
+#+BEGIN_SRC java
 // 参考的答案里，这个最逻辑简单、通俗大众易懂，但稍显笨重，两个图，用一个链表来记忆一行的涂色方案，如果有更精巧一点儿的bitmask，是我想找的答案
 // https://leetcode.com/problems/painting-a-grid-with-three-different-colors/discuss/1334366/Easy-Java-comments-28ms-O(n*P*P)-complexity-memory-O(P)-where-P-is-column-permutations-count 这个又稍嫌太偏了，考得极少，不易懂，容易出错，可是bitmask又只能set 1 or 0，BitSet()可以吗？
 // 先预处理得到单行的所有有效涂色方案，
@@ -1130,14 +1023,13 @@ public int colorTheGrid(int m, int n) {
         ans = (ans + dp[i]) % mod;
     return (int)ans;
 }
-\end{minted}
+#+END_SRC
 
-\section{313. Super Ugly Number}
-\label{sec-1-17}
+** 313. Super Ugly Number
 A super ugly number is a positive integer whose prime factors are in the array primes.
 Given an integer n and an array of integers primes, return the nth super ugly number.
 The nth super ugly number is guaranteed to fit in a 32-bit signed integer.
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 static class Node implements Comparable<Node> {
     private int index;
     private int val;
@@ -1168,11 +1060,9 @@ public int nthSuperUglyNumber(int n, int[] primes) {
     }
     return arr[n - 1];
 }
-\end{minted}
-\begin{itemize}
-\item 下面这种解法也很巧妙
-\end{itemize}
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+END_SRC
+- 下面这种解法也很巧妙
+#+BEGIN_SRC java
 public int nthSuperUglyNumber(int n, int[] primes) {
     int m = primes.length;
     int [] ans = new int[n]; // 存放1-n个SuperUglyNumber
@@ -1194,15 +1084,14 @@ public int nthSuperUglyNumber(int n, int[] primes) {
     }
     return ans[n-1];		
 }
-\end{minted}
+#+END_SRC
 
-\section{1786. Number of Restricted Paths From First to Last Node - Dijkstra算法}
-\label{sec-1-18}
+** 1786. Number of Restricted Paths From First to Last Node - Dijkstra算法
 There is an undirected weighted connected graph. You are given a positive integer n which denotes that the graph has n nodes labeled from 1 to n, and an array edges where each edges[i] = [ui, vi, weighti] denotes that there is an edge between nodes ui and vi with weight equal to weighti.
-A path from node start to node end is a sequence of nodes [z0, z1, z2, \ldots{}, zk] such that z0 = start and zk = end and there is an edge between zi and zi+1 where 0 <= i <= k-1.
+A path from node start to node end is a sequence of nodes [z0, z1, z2, ..., zk] such that z0 = start and zk = end and there is an edge between zi and zi+1 where 0 <= i <= k-1.
 The distance of a path is the sum of the weights on the edges of the path. Let distanceToLastNode(x) denote the shortest distance of a path between node n and node x. A restricted path is a path that also satisfies that distanceToLastNode(zi) > distanceToLastNode(zi+1) where 0 <= i <= k-1.
 Return the number of restricted paths from node 1 to node n. Since that number may be too large, return it modulo 109 + 7.
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 public void dijkstra(int n) {
     Queue<int []> q = new PriorityQueue<>((a, b) -> (a[1] - b[1]));
     q.add(new int [] {n, 0});
@@ -1250,14 +1139,13 @@ public int countRestrictedPaths(int n, int[][] edges) {
     Arrays.fill(dp, -1);
     return dfs(n, 1);
 }
-\end{minted}
+#+END_SRC
 
-\section{913. Cat and Mouse}
-\label{sec-1-19}
+** 913. Cat and Mouse
 A game on an undirected graph is played by two players, Mouse and Cat, who alternate turns.
 The graph is given as follows: graph[a] is a list of all nodes b such that ab is an edge of the graph.
 The mouse starts at node 1 and goes first, the cat starts at node 2 and goes second, and there is a hole at node 0.
-During each player's turn, they must travel along one edge of the graph that meets where they are.  For example, if the Mouse is at node 1, it must travel to any node in graph\footnotemark[3]{}.
+During each player's turn, they must travel along one edge of the graph that meets where they are.  For example, if the Mouse is at node 1, it must travel to any node in graph[1].
 Additionally, it is not allowed for the Cat to travel to the Hole (node 0.)
 Then, the game can end in three ways:
 If ever the Cat occupies the same node as the Mouse, the Cat wins.
@@ -1267,7 +1155,7 @@ Given a graph, and assuming both players play optimally, return
 1 if the mouse wins the game,
 2 if the cat wins the game, or
 0 if the game is a draw.
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 private int dfs(int [][] arr, int t, int i, int j) { // t: steps, i: mouse, j: cat, mouse goes first
     if (t == 2 * n) return 0;
     if (i == j) return dp[t][i][j] = 2;
@@ -1306,15 +1194,14 @@ public int catMouseGame(int[][] graph) {
     dfs(graph, 0, 1, 2);
     return dp[0][1][2];
 }
-\end{minted}
+#+END_SRC
 
-\section{1728. Cat and Mouse II}
-\label{sec-1-20}
+** 1728. Cat and Mouse II
 A game is played by a cat and a mouse named Cat and Mouse.
 The environment is represented by a grid of size rows x cols, where each element is a wall, floor, player (Cat, Mouse), or food.
 Players are represented by the characters 'C'(Cat),'M'(Mouse).
 Floors are represented by the character '.' and can be walked on.
-Walls are represented by the character '\#' and cannot be walked on.
+Walls are represented by the character '#' and cannot be walked on.
 Food is represented by the character 'F' and can be walked on.
 There is only one of each character 'C', 'M', and 'F' in grid.
 Mouse and Cat play according to the following rules:
@@ -1329,7 +1216,7 @@ If Cat reaches the food first, Cat wins.
 If Mouse reaches the food first, Mouse wins.
 If Mouse cannot get to the food within 1000 turns, Cat wins.
 Given a rows x cols matrix grid and two integers catJump and mouseJump, return true if Mouse can win the game if both Cat and Mouse play optimally, otherwise return false.
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 private boolean dfs(String [] arr, int t, int i, int j) {
     if (dp[t][i][j] != null) return dp[t][i][j];
     if (t == m*n*2) return false;
@@ -1379,10 +1266,9 @@ public boolean canMouseWin(String[] grid, int catJump, int mouseJump) {
                 y = i * n + j;
     return dfs(grid, 0, x, y);
 }
-\end{minted}
+#+END_SRC
 
-\section{810. Chalkboard XOR Game - Hard}
-\label{sec-1-21}
+** 810. Chalkboard XOR Game - Hard
 You are given an array of integers nums represents the numbers written on a chalkboard.
 
 Alice and Bob take turns erasing exactly one number from the chalkboard, with Alice starting first. If erasing a number causes the bitwise XOR of all the elements of the chalkboard to become 0, then that player loses. The bitwise XOR of one element is that element itself, and the bitwise XOR of no elements is 0.
@@ -1391,7 +1277,7 @@ Also, if any player starts their turn with the bitwise XOR of all the elements o
 
 Return true if and only if Alice wins the game, assuming both players play optimally.
 There are three cases to consider:
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 Case 1- At the beginning of the game, XOR of all the elements are 0, then Alice wins before the game starts.
 
 Case 2 - XOR!=0 and nums.length is even:
@@ -1424,9 +1310,9 @@ Since the number of x1..xn is odd, the number of s in the left bracket is odd, e
 Any number XOR itself becomes zero
 0=s^s=0
 You see here we couldn’t find the contradiction
-\end{minted}
+#+END_SRC
 
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 public boolean xorGame(int[] nums) {
     int xor = 0 ;
     for (int i : nums) 
@@ -1435,11 +1321,9 @@ public boolean xorGame(int[] nums) {
         return true ;
     return false ;
 }
-\end{minted}
-\begin{itemize}
-\item 硬瓣出来的： 注意同猫老鼠游戏2一样，要回的是某一方赢与否，与1有点儿区别.
-\end{itemize}
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+END_SRC
+- 硬瓣出来的： 注意同猫老鼠游戏2一样，要回的是某一方赢与否，与1有点儿区别.
+#+BEGIN_SRC java
 private boolean helper(int [] arr, int i, int xor) { // xor: the current leftover array xor result
     if (i == n) return (i % 2 == 0);
     if (dp[i] != null) return dp[i];
@@ -1477,19 +1361,16 @@ public boolean xorGame(int[] arr) {
         xor[i] = (i == 0 ? 0 : xor[i-1]) ^ arr[i];
     return helper(arr, 0, xor[n-1]); // i: turn
 }
-\end{minted}
+#+END_SRC
 
-\section{2029. Stone Game IX - Medium}
-\label{sec-1-22}
+** 2029. Stone Game IX - Medium
 Alice and Bob continue their games with stones. There is a row of n stones, and each stone has an associated value. You are given an integer array stones, where stones[i] is the value of the ith stone.
 
 Alice and Bob take turns, with Alice starting first. On each turn, the player may remove any stone from stones. The player who removes a stone loses if the sum of the values of all removed stones is divisible by 3. Bob will win automatically if there are no remaining stones (even if it is Alice's turn).
 
 Assuming both players play optimally, return true if Alice wins and false if Bob wins.
-\begin{itemize}
-\item 过程复制
-\end{itemize}
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+- 过程复制
+#+BEGIN_SRC java
 private boolean dfs(int val, int one, int two, int zro) {
     if (val == 0) return true;
     String key = one + "-" + two + "-" + zro + "-" + val;
@@ -1520,12 +1401,10 @@ public boolean stoneGameIX(int[] stones) {
         else two++; // zro % 2: each pair of numbers divisible by 3 cancel each other out, so only parity count of such numbers matters
     return dfs(3, one, two, zro % 2);
 }
-\end{minted}
-\begin{itemize}
-\item 分析一下
-\end{itemize}
+#+END_SRC
+- 分析一下
 Count the frequency of mod3 = 0,1,2.
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 Firstly, don't consider the multiples of 3.
 Alice starts with mod3 = 1, Alice and Bob have to pick 1,1,2,1,2... in order.
 Alice starts with mod3 = 2, Alice and Bob have to pick 2,2,1,2,1... in order.
@@ -1562,8 +1441,8 @@ Alice will lose for no number remaining.
 Complexity
 Time O(n)
 Space O(1)
-\end{minted}
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+END_SRC
+#+BEGIN_SRC java
 public boolean stoneGameIX(int[] stones) {
     int[] cnt = new int[3];
     for (int a: stones)
@@ -1572,13 +1451,12 @@ public boolean stoneGameIX(int[] stones) {
         return Math.max(cnt[1], cnt[2]) > 2 && cnt[0] % 2 > 0;
     return Math.abs(cnt[1] - cnt[2]) > 2 || cnt[0] % 2 == 0;
 }
-\end{minted}
-\section{322. Coin Change}
-\label{sec-1-23}
+#+END_SRC
+** 322. Coin Change
 You are given an integer array coins representing coins of different denominations and an integer amount representing a total amount of money.
 Return the fewest number of coins that you need to make up that amount. If that amount of money cannot be made up by any combination of the coins, return -1.
 You may assume that you have an infinite number of each kind of coin.
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 public int coinChange(int[] coins, int amount) {
     if (amount == 0) return 0;
     int n = coins.length;
@@ -1593,15 +1471,14 @@ public int coinChange(int[] coins, int amount) {
     }
     return dp[amount] == amount + 1 ? -1 : dp[amount];
 }
-\end{minted}
+#+END_SRC
 
-\section{518. Coin Change 2}
-\label{sec-1-24}
+** 518. Coin Change 2
 You are given an integer array coins representing coins of different denominations and an integer amount representing a total amount of money.
 Return the number of combinations that make up that amount. If that amount of money cannot be made up by any combination of the coins, return 0.
 You may assume that you have an infinite number of each kind of coin.
 The answer is guaranteed to fit into a signed 32-bit integer.
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 public int change(int target, int[] nums) {
     int[] dp = new int[target + 1];
     // 初始化dp[0]为1
@@ -1618,11 +1495,10 @@ public int change(int target, int[] nums) {
     }
     return dp[target];
 }
-\end{minted}
+#+END_SRC
 
-\section{backpack III}
-\label{sec-1-25}
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+** backpack III
+#+BEGIN_SRC java
 public int backPackIII(int[] A, int[] V, int m) {
     int n = A.length;
     int [] dp = new int[m+1];
@@ -1634,31 +1510,27 @@ public int backPackIII(int[] A, int[] V, int m) {
     }
     return dp[m];
 }
-\end{minted}
+#+END_SRC
 
-\section{879. Profitable Schemes - Hard 0-1背包问题}
-\label{sec-1-26}
+** 879. Profitable Schemes - Hard 0-1背包问题
 There is a group of n members, and a list of various crimes they could commit. The ith crime generates a profit[i] and requires group[i] members to participate in it. If a member participates in one crime, that member can't participate in another crime.
 
 Let's call a profitable scheme any subset of these crimes that generates at least minProfit profit, and the total number of members participating in that subset of crimes is at most n.
 
 Return the number of schemes that can be chosen. Since the answer may be very large, return it modulo 109 + 7.
-\subsection{解题思路与分析}
-\label{sec-1-26-1}
+*** 解题思路与分析
+    
+    [[./pic/crime.png]]
+    
+- 题目中说了结果可能非常大，要对一个超大数取余，看到这里，我们也就该明白为了不爆栈，只能用动态规划 Dynamic Programming 来做，LeetCode 里有好多题都是要对这个 1e9+7 取余，不知道为啥都是对这个数取余。Anyway，who cares，还是来想想 dp 数组如何定义以及怎么推导状态转移方程吧。
 
-\includegraphics[width=.9\linewidth]{./pic/crime.png}
-
-\begin{itemize}
-\item 题目中说了结果可能非常大，要对一个超大数取余，看到这里，我们也就该明白为了不爆栈，只能用动态规划 Dynamic Programming 来做，LeetCode 里有好多题都是要对这个 1e9+7 取余，不知道为啥都是对这个数取余。Anyway，who cares，还是来想想 dp 数组如何定义以及怎么推导状态转移方程吧。
-\end{itemize}
-
-首先来看分配黑帮资源时候都需要考虑哪些因素，总共有三点，要干几票买卖，要用多少人，能挣多少钱。所以我们需要一个三维的 dp 数组，其中 dp[k][i][j] 表示最多干k票买卖，总共用了i个人，获得利润为j的情况下分配方案的总数，初始化 dp\footnotemark[2]{}\textsuperscript{,}\,\footnotemark[2]{}\textsuperscript{,}\,\footnotemark[2]{} 为1。
+首先来看分配黑帮资源时候都需要考虑哪些因素，总共有三点，要干几票买卖，要用多少人，能挣多少钱。所以我们需要一个三维的 dp 数组，其中 dp[k][i][j] 表示最多干k票买卖，总共用了i个人，获得利润为j的情况下分配方案的总数，初始化 dp[0][0][0] 为1。
 
 现在来推导状态转移方程，整个规划的核心是买卖，总共买卖的个数是固定的，每多干一票买卖，可能的分配方法就可能增加，但不可能减少的，因为假如当前已经算出来做 k-1 次买卖的分配方法总数，再做一次买卖，之前的分配方法不会减少，顶多是人数不够，做不成当前这票买卖而已，所以我们的 dp[k][i][j] 可以先更新为 dp[k-1][i][j]，然后再来看这第k个买卖还能不能做，我们知道假设这第k个买卖需要g个人，能获得利润p，只有当我们现在的人数i大于等于g的时候，才有可能做这个任务，我们要用g个人来做任务k的话，那么其余的 k-1 个任务只能由 i-g 个人来做了，而且由于整个需要产生利润j，第k个任务能产生利润p，所以其余的 k-1 个任务需要产生利润 j-p，由于利润不能是负值，所以我们还需要跟0比较，取二者的最大值
 
 综上所述，若我们选择做任务k，则能新产生的分配方案的个数为 dp[k-1][i-g][max(0,j-p)]，记得每次累加完要对超大数取余。最终我们需要将 dp[n][i][P] ( 0 <= i <= G ) 累加起来，因为我们不一定要全部使用G个人，只要能产生P的利润，用几个人都没关系，而k是表示最多干的买卖数，可能上并没有干到这么多，所以只需要累加人数这个维度即可，
 
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 public int profitableSchemes(int n, int minProfit, int[] group, int[] profit) { // 0-1背包问题：每场罪恶在每个状态里最多只能存在一次
     int mod = (int)1e9 + 7, ans = 0;
     int m = group.length;
@@ -1677,12 +1549,11 @@ public int profitableSchemes(int n, int minProfit, int[] group, int[] profit) { 
         ans = (ans + dp[m][i][minProfit]) % mod;
     return ans;
 }
-\end{minted}
-\subsection{优化一下空间复杂度: 二维dp Dimension reduction by using rolling array.}
-\label{sec-1-26-2}
+#+END_SRC
+*** 优化一下空间复杂度: 二维dp Dimension reduction by using rolling array.
 
 因为当前做的第k个任务，只跟前 k-1 个任务的分配方案有关，所以并不需要保存所有的任务个数的分配方式。这样我们就节省了一个维度，但是需要注意的是，更新的时候i和j只能从大到小更新，这个其实也不难理解，因为此时 dp[i][j] 存的是前 k-1 个任务的分配方式，所以更新第k个任务的时候，一定要从后面开始覆盖，因为用到了前面的值，若从前面的值开始更新的话，就不能保证用到的都是前 k-1 个任务的分配方式，有可能用到的是已经更新过的值，就会出错.
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 public int profitableSchemes(int n, int minProfit, int[] group, int[] profit) { // 0-1背包问题：每场罪恶在每个状态里最多只能存在一次
     int mod = (int)1e9 + 7, ans = 0;
     int m = group.length;
@@ -1698,20 +1569,16 @@ public int profitableSchemes(int n, int minProfit, int[] group, int[] profit) { 
         ans = (ans + dp[i][minProfit]) % mod;
     return ans;
 }
-\end{minted}
-\subsection{递归 + 记忆数组来做 todo: 改天补上}
-\label{sec-1-26-3}
+#+END_SRC
+*** 递归 + 记忆数组来做 todo: 改天补上
 
 基本思想跟解法一没有太大的区别，递归的记忆数组其实跟迭代形式的 dp 数组没有太大的区别，作用都是保存中间状态从而减少大量的重复计算。这里稍稍需要注意下的就是递归函数中的 corner case，当 k=0 时，则根据j的值来返回0或1，当j小于等于0，返回1，否则返回0，相当于修改了初始化值（之前都初始化为了整型最小值），然后当j小于0时，则j赋值为0，因为利润不能为负值。然后就看若当前的 memo[k][i][j] 已经计算过了，则直接返回即可，
-\begin{itemize}
-\item \url{https://www.cnblogs.com/grandyang/p/11108205.html}
-\end{itemize}
+- https://www.cnblogs.com/grandyang/p/11108205.html
 
-\section{377. Combination Sum IV 没能认出这个题目是考DP}
-\label{sec-1-27}
+** 377. Combination Sum IV 没能认出这个题目是考DP
 Given an array of distinct integers nums and a target integer target, return the number of possible combinations that add up to target.
 The answer is guaranteed to fit in a 32-bit integer.
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 public int combinationSum4(int[] nums, int target) {
     int n = nums.length;
     int [] dp = new int [target +1 ];
@@ -1724,17 +1591,16 @@ public int combinationSum4(int[] nums, int target) {
     }
     return dp[target];
 }
-\end{minted}
+#+END_SRC
 
-\section{1049. Last Stone Weight II}
-\label{sec-1-28}
+** 1049. Last Stone Weight II
 You are given an array of integers stones where stones[i] is the weight of the ith stone.
 We are playing a game with the stones. On each turn, we choose any two stones and smash them together. Suppose the stones have weights x and y with x <= y. The result of this smash is:
-If x \texttt{= y, both stones are destroyed, and
-If x !} y, the stone of weight x is destroyed, and the stone of weight y has new weight y - x.
+If x == y, both stones are destroyed, and
+If x != y, the stone of weight x is destroyed, and the stone of weight y has new weight y - x.
 At the end of the game, there is at most one stone left.
 Return the smallest possible weight of the left stone. If there are no stones left, return 0.
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 public int lastStoneWeightII(int[] stones) {
     int n = stones.length;
     int sum = Arrays.stream(stones).sum();
@@ -1750,17 +1616,16 @@ public int lastStoneWeightII(int[] stones) {
         if (dp[i]) return sum - i * 2;
     return 0;
 }
-\end{minted}
+#+END_SRC
 
-\section{1449. Form Largest Integer With Digits That Add up to Target}
-\label{sec-1-29}
+** 1449. Form Largest Integer With Digits That Add up to Target
 Given an array of integers cost and an integer target. Return the maximum integer you can paint under the following rules:
 The cost of painting a digit (i+1) is given by cost[i] (0 indexed).
 The total cost used must be equal to target.
 Integer does not have digits 0.
 Since the answer may be too large, return it as string.
 If there is no way to paint any integer given the condition, return "0".
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 public String largestNumber(int[] cost, int target) { 
     int n = cost.length;
     int [] dp = new int [target+1];
@@ -1786,13 +1651,12 @@ public String largestNumber(int[] cost, int target) {
     }
     return String.valueOf(ans);
 }
-\end{minted}
+#+END_SRC
 
-\section{516. Longest Palindromic Subsequence}
-\label{sec-1-30}
+** 516. Longest Palindromic Subsequence
 Given a string s, find the longest palindromic subsequence's length in s.
 A subsequence is a sequence that can be derived from another sequence by deleting some or no elements without changing the order of the remaining elements.
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
  public int longestPalindromeSubseq(String s) {
     int n = s.length();
     int [][] dp = new int [n][n];
@@ -1807,15 +1671,14 @@ A subsequence is a sequence that can be derived from another sequence by deletin
     }
     return dp[0][n-1];
 }
-\end{minted}
+#+END_SRC
 
-\section{1143. Longest Common Subsequence}
-\label{sec-1-31}
+** 1143. Longest Common Subsequence
 Given two strings text1 and text2, return the length of their longest common subsequence. If there is no common subsequence, return 0.
 A subsequence of a string is a new string generated from the original string with some characters (can be none) deleted without changing the relative order of the remaining characters.
 For example, "ace" is a subsequence of "abcde".
 A common subsequence of two strings is a subsequence that is common to both strings.
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 public int longestCommonSubsequence(String S, String T) {
     int m = S.length();
     int n = T.length();
@@ -1826,17 +1689,14 @@ public int longestCommonSubsequence(String S, String T) {
             else dp[i][j] = Math.max(dp[i-1][j], dp[i][j-1]);
     return dp[m][n];
 }
-\end{minted}
+#+END_SRC
 
-\section{1092. Shortest Common Supersequence - Hard}
-\label{sec-1-32}
+** 1092. Shortest Common Supersequence - Hard
 Given two strings str1 and str2, return the shortest string that has both str1 and str2 as subsequences. If there are multiple valid strings, return any of them.
 
 A string s is a subsequence of string t if deleting some number of characters from t (possibly 0) results in the string s.
-\begin{itemize}
-\item 参考的标准答案：
-\end{itemize}
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+- 参考的标准答案：
+#+BEGIN_SRC java
 public void longestCommonSubsequence(String S, String T) { // 标准模板，记住
     int m = S.length();
     int n = T.length();
@@ -1872,11 +1732,9 @@ public String shortestCommonSupersequence(String s, String t) {
     if (j > 0) sb.append((new StringBuilder(t.substring(0, j))).reverse());
     return sb.reverse().toString();
 }
-\end{minted}
-\begin{itemize}
-\item 自己写的
-\end{itemize}
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+END_SRC
+- 自己写的
+#+BEGIN_SRC java
 public String getLongestCommonSubsequence(String S, String T) { // 标准模板，记住
     int m = S.length();
     int n = T.length();
@@ -1920,15 +1778,14 @@ public String shortestCommonSupersequence(String s, String t) {
     }
     return res + s.substring(i) + t.substring(j);
 }
-\end{minted}
-\section{546. Remove Boxes - Hard}
-\label{sec-1-33}
+#+END_SRC
+** 546. Remove Boxes - Hard
 You are given several boxes with different colors represented by different positive numbers.
 
 You may experience several rounds to remove boxes until there is no box left. Each time you can choose some continuous boxes with the same color (i.e., composed of k boxes, k >= 1), remove them and get k * k points.
 
 Return the maximum points you can get.
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 // 定义dp[l][r][k]表示在[l, r]区间并且在后面包含了k个与boxes[r]相同颜色的boxes的情况下，可以获得的最大得分，显然题目要求的就是dp[0][boxes.size() - 1][0]。
 // 首先将dp[l][r][k]的值初始化为dp[l][r - 1][0] + (k + 1)^2，表示首先消除l到r-1之间的boxes,然后将boxes[r]连同后面的k个boxes一起消除。
 // 然后就尝试对dp[l][r][k]进行更新了：
@@ -1951,9 +1808,8 @@ public int removeBoxes(int[] boxes) {
     dp = new int [n][n][n];
     return dfs(boxes, 0, n-1, 0);
 }
-\end{minted}
-\section{1531. String Compression II - Hard}
-\label{sec-1-34}
+#+END_SRC
+** 1531. String Compression II - Hard
 Run-length encoding is a string compression method that works by replacing consecutive identical characters (repeated 2 or more times) with the concatenation of the character and the number marking the count of the characters (length of the run). For example, to compress the string "aabccc" we replace "aa" by "a2" and replace "ccc" by "c3". Thus the compressed string becomes "a2bc3".
 
 Notice that in this problem, we are not adding '1' after single characters.
@@ -1961,7 +1817,7 @@ Notice that in this problem, we are not adding '1' after single characters.
 Given a string s and an integer k. You need to delete at most k characters from s such that the run-length encoded version of s has minimum length.
 
 Find the minimum length of the run-length encoded version of s after deleting at most k characters.
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
  private int dfs(char [] s, int idx, int cnt) { // 求从下标index开始向后，所有长度为count的子序列中，编码后的最小长度
     if (cnt == 0) return 0;
     if (idx == n) return Integer.MAX_VALUE;   // 当下标越界时还未找到长度为count的子序列
@@ -1992,19 +1848,15 @@ public int getLengthOfOptimalCompression(String s, int k) {
     dp = new int [n][n-k+1];
     return dfs(s.toCharArray(), 0, n-k);
 }
-\end{minted}
-\subsection{决策类DP总结}
-\label{sec-1-34-1}
-\begin{itemize}
-\item \url{https://leetcode-cn.com/problems/string-compression-ii/solution/jie-ti-si-kao-guo-cheng-yu-jie-fa-zong-jie-by-ruit/}
-\end{itemize}
+#+END_SRC
+*** 决策类DP总结
+  - https://leetcode-cn.com/problems/string-compression-ii/solution/jie-ti-si-kao-guo-cheng-yu-jie-fa-zong-jie-by-ruit/
 
-\section{1000. Minimum Cost to Merge Stones}
-\label{sec-1-35}
+** 1000. Minimum Cost to Merge Stones
 There are n piles of stones arranged in a row. The ith pile has stones[i] stones.
 A move consists of merging exactly k consecutive piles into one pile, and the cost of this move is equal to the total number of stones in these k piles.
 Return the minimum cost to merge all piles of stones into one pile. If it is impossible, return -1.
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 public int mergeStones(int[] stones, int k) {
     int n = stones.length;
     if ((n-1) % (k-1) != 0) return -1;
@@ -2025,14 +1877,13 @@ public int mergeStones(int[] stones, int k) {
     }
     return dp[0][n-1];
 }
-\end{minted}
+#+END_SRC
 
-\section{1039. Minimum Score Triangulation of Polygon}
-\label{sec-1-36}
+** 1039. Minimum Score Triangulation of Polygon
 You have a convex n-sided polygon where each vertex has an integer value. You are given an integer array values where values[i] is the value of the ith vertex (i.e., clockwise order).
 You will triangulate the polygon into n - 2 triangles. For each triangle, the value of that triangle is the product of the values of its vertices, and the total score of the triangulation is the sum of these values over all n - 2 triangles in the triangulation.
 Return the smallest possible total score that you can achieve with some triangulation of the polygon.
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 // 动态规划，递归可以使逻辑简单（本质还是动态规划）将多边形起
 // 始位置设为start，end, 用一个数组dp来记录任意起始位置的score
 // 为了计算dp[start][end], 我们用一个index k在start到end之间遍
@@ -2054,10 +1905,9 @@ public int minScoreTriangulation(int[] arr) {
     dp = new int [n][n];
     return dfs(arr, 0, n-1);
 }
-\end{minted}
+#+END_SRC
 
-\section{375. Guess Number Higher or Lower II - Medium}
-\label{sec-1-37}
+** 375. Guess Number Higher or Lower II - Medium
 We are playing the Guessing Game. The game will work as follows:
 
 I pick a number between 1 and n.
@@ -2072,9 +1922,9 @@ Every time you guess a wrong number x, you will pay x dollars. If you run out of
 
 Given a particular n, return the minimum amount of money you need to guarantee a win regardless of what number I pick.
 
-\includegraphics[width=.9\linewidth]{./pic/guessNumber.png}
+[[./pic/guessNumber.png]]
 
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 private int dfs(int l, int r) {
     if (dp[l][r] > 0) return dp[l][r];
     if (l == r) return dp[l][r] = 0;
@@ -2089,9 +1939,8 @@ public int getMoneyAmount(int n) {
     dp = new int[n+1][n+1];
     return dfs(1, n);
 }
-\end{minted}
-\section{1478. Allocate Mailboxes - Hard}
-\label{sec-1-38}
+#+END_SRC
+** 1478. Allocate Mailboxes - Hard
 Given the array houses and an integer k. where houses[i] is the location of the ith house along a street, your task is to allocate k mailboxes in the street.
 
 Return the minimum total distance between each house and its nearest mailbox.
@@ -2101,7 +1950,7 @@ The answer is guaranteed to fit in a 32-bit signed integer.
 解题思路分析：
 
 对于如何安排邮箱位置，看到很多文章说应放在中位数的位置上，比如一共有1，2，3，4这4间房屋，不论房屋间的距离是多少，如果只有一个邮箱的话，放在房间2处（3也可以）最为合理。这个说法虽然正确，但实际上并不恰当。我们简单的讨论一下这个问题：
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 1.当只有1栋房屋，1个邮箱时，显然将邮箱放在房屋处最为合理，这时邮箱与房屋的距离为0。
 2.当有2栋房屋，1个邮箱时，比如房屋1在坐标0处，房屋2在坐标10处，此时如果将邮箱放在坐标0的话，它与两栋房屋的距离和为10。
   放在坐标10的情况下距离和也为10。另外我们可以看出，不论邮箱放在两栋房屋之间的任意位置上，它与房屋的距离和都是10。因此
@@ -2113,7 +1962,7 @@ The answer is guaranteed to fit in a 32-bit signed integer.
 4.当有4栋房屋，1个邮箱时，与上例同理，对于两侧的房子，将邮筒放在他们之间的任何位置对于结果没有任何影响，因此邮箱可以考
   虑放在中间两个房屋的任何一个位置上。另外对于中间两个房屋，不论邮箱放置在其任何一个位置上，对于总距离都不会产生影响
  （这相当于第2条）。
-\end{minted}
+#+END_SRC
 
 因此我们可以得出结论，当有N栋房屋，1个邮箱时，我们将邮箱放在房屋下标的中位数上最为合理。那么，如果有多个邮箱时该怎么办？其实也不难，本题最终可以理解为，我们将一个房屋数组分割为K个子数组（k为邮筒个数），每一个子数组中放置一个邮筒，求最优分割方式。这就变为了经典的动态规划DP问题，对于DP问题我习惯采用递归加记忆数组的方式，本题我们也采用递归方式讲解。
 
@@ -2121,11 +1970,11 @@ The answer is guaranteed to fit in a 32-bit signed integer.
 
 接下来再为递归加上一个记忆数组。记忆数组相当于动态规划中使用到的DP数组。由于递归函数中存在2个变量，因此我们需要使用一个2维数组来描述该递归函数，并记录它的返回值。
 
-最后，上文中提到需要求解子区间内放置一个邮筒后所有房屋与邮筒的距离和。这个问题没有太好的方式，只能暴力累加每个房屋与中位数房屋所在位置的距离。为了提高效率，我们可以事先计算好所有区间（排列组合）内放置一个邮筒时的距离和，方便递归中使用，也避免重复运算。这里可能有人会提出质疑，既然递归方法中已经使用了记忆数组，目的就是防止重复计算，这里为什么还担心重复计算距离和呢？原因很简单，记忆数组是二维数组，即在两个条件都满足的情况下才会使用记忆数组中的数据，比如我们计算过以下标5作为子区间起点，并且当前还剩2个油桶的递归函数返回值为x，即memo\footnote{DEFINITION NOT FOUND.}\textsuperscript{,}\,\footnote{DEFINITION NOT FOUND.}=x，再次遇到相同问题时我们可以直接返回x。但是遇到memo\footnotemark[4]{}\textsuperscript{,}\,\footnotemark[3]{}或者memo\footnotemark[4]{}\textsuperscript{,}\,\footnotemark[1]{}时，我们尚未做出过计算，同样还会进入到递归函数内部，如果没有事前计算好下标5到end（end取值范围是5到length-k）的距离和的话，还要重复计算一遍。
+最后，上文中提到需要求解子区间内放置一个邮筒后所有房屋与邮筒的距离和。这个问题没有太好的方式，只能暴力累加每个房屋与中位数房屋所在位置的距离。为了提高效率，我们可以事先计算好所有区间（排列组合）内放置一个邮筒时的距离和，方便递归中使用，也避免重复运算。这里可能有人会提出质疑，既然递归方法中已经使用了记忆数组，目的就是防止重复计算，这里为什么还担心重复计算距离和呢？原因很简单，记忆数组是二维数组，即在两个条件都满足的情况下才会使用记忆数组中的数据，比如我们计算过以下标5作为子区间起点，并且当前还剩2个油桶的递归函数返回值为x，即memo[5][2]=x，再次遇到相同问题时我们可以直接返回x。但是遇到memo[5][1]或者memo[5][3]时，我们尚未做出过计算，同样还会进入到递归函数内部，如果没有事前计算好下标5到end（end取值范围是5到length-k）的距离和的话，还要重复计算一遍。
 
 对于上述问题，还有一个更好的优化方式即再建立一个保存距离和的记忆数组，计算一个距离和记录一个，方便下次使用。
 
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 private int getDist(int [] arr, int i, int j) { // 求区间start到end间放置邮筒后的距离和 i: left, j: right
     if (dist[i][j] > 0) return dist[i][j];
     int m = i + (j-i)/2, v = arr[m], sum = 0;
@@ -2152,21 +2001,20 @@ public int minDistance(int [] houses, int k) {
     Arrays.sort(houses);
     return dfs(houses, 0, k);
 }
-\end{minted}
+#+END_SRC
 
-\section{486. Predict the Winner}
-\label{sec-1-39}
+** 486. Predict the Winner
 You are given an integer array nums. Two players are playing a game with this array: player 1 and player 2.
-Player 1 and player 2 take turns, with player 1 starting first. Both players start the game with a score of 0. At each turn, the player takes one of the numbers from either end of the array (i.e., nums\footnotemark[2]{} or nums[nums.length - 1]) which reduces the size of the array by 1. The player adds the chosen number to their score. The game ends when there are no more elements in the array.
+Player 1 and player 2 take turns, with player 1 starting first. Both players start the game with a score of 0. At each turn, the player takes one of the numbers from either end of the array (i.e., nums[0] or nums[nums.length - 1]) which reduces the size of the array by 1. The player adds the chosen number to their score. The game ends when there are no more elements in the array.
 Return true if Player 1 can win the game. If the scores of both players are equal, then player 1 is still the winner, and you should also return true. You may assume that both players are playing optimally.
 
 博弈类题目，使用minMax思想,使自己分数最大化，对手分数尽量小，递归自顶向下求解。
 
 该题不使用备忘机制同样能通过测试例，只不过耗时相对较长，单纯的比较取数后两players的分数差即可：Math.max(nums[l] - getScore(nums, l + 1, r), nums[r] - getScore(nums, l, r - 1));
 
-\includegraphics[width=.9\linewidth]{./pic/predictWinner.png}
+[[./pic/predictWinner.png]]
 
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 private int helper( int [] arr, int i, int j) {
     if (i == j) return arr[i];
     else return Math.max(arr[i] - helper(arr, i+1, j), arr[j] - helper(arr, i, j-1));
@@ -2176,15 +2024,14 @@ public boolean PredictTheWinner(int[] nums) {
     if (n == 1) return true;
     return helper(nums, 0, n-1) >= 0;
 }
-\end{minted}
+#+END_SRC
 
-\section{877. Stone Game}
-\label{sec-1-40}
+** 877. Stone Game
 Alice and Bob play a game with piles of stones. There are an even number of piles arranged in a row, and each pile has a positive integer number of stones piles[i].
 The objective of the game is to end with the most stones. The total number of stones across all the piles is odd, so there are no ties.
 Alice and Bob take turns, with Alice starting first. Each turn, a player takes the entire pile of stones either from the beginning or from the end of the row. This continues until there are no more piles left, at which point the person with the most stones wins.
 Assuming Alice and Bob play optimally, return true if Alice wins the game, or false if Bob wins.
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 // 使用helper函数表示Alex能比Lee多选的分数。可能比双函数更简洁易懂了。
 // 记忆化递归的缺点：１．有可能爆栈；２．无法降维，而DP是可以降维的。
 // 模板：
@@ -2214,15 +2061,14 @@ public boolean stoneGame(int[] piles) {
     }
     return dp[0][n-1] > 0;
 }
-\end{minted}
-\section{1140. Stone Game II}
-\label{sec-1-41}
+#+END_SRC
+** 1140. Stone Game II
 Alice and Bob continue their games with piles of stones.  There are a number of piles arranged in a row, and each pile has a positive integer number of stones piles[i].  The objective of the game is to end with the most stones. 
 Alice and Bob take turns, with Alice starting first.  Initially, M = 1.
 On each player's turn, that player can take all the stones in the first X remaining piles, where 1 <= X <= 2M.  Then, we set M = max(M, X).
 The game continues until all the stones have been taken.
 Assuming Alice and Bob play optimally, return the maximum number of stones Alice can get.
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 // dfs + memoization模板
 // 当次取的最优策略是限制下一次取的数量
 private int dfs(int [] arr, int idx, int m) {
@@ -2249,9 +2095,8 @@ public int stoneGameII(int[] piles) {
         suf[i] = suf[i+1] + piles[i];
     return dfs(piles, 0, 1);
 }
-\end{minted}
-\section{1872. Stone Game VIII}
-\label{sec-1-42}
+#+END_SRC
+** 1872. Stone Game VIII
 Alice and Bob take turns playing a game, with Alice starting first.
 There are n stones arranged in a row. On each player's turn, while the number of stones is more than one, they will do the following:
 Choose an integer x > 1, and remove the leftmost x stones from the row.
@@ -2260,7 +2105,7 @@ Place a new stone, whose value is equal to that sum, on the left side of the row
 The game stops when only one stone is left in the row.
 The score difference between Alice and Bob is (Alice's score - Bob's score). Alice's goal is to maximize the score difference, and Bob's goal is the minimize the score difference.
 Given an integer array stones of length n where stones[i] represents the value of the ith stone from the left, return the score difference between Alice and Bob if they both play optimally.
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 // 使用 dp(i) 表示还剩下 [i, n) 要选择的情况下，Alice 所能得到的最大分数差。
 //     对于某个玩家来说，其对应决策可以分为两种：
 //     选取当前数及之前的所有数（等价于 pres[pos]，其中 pos 为上个玩家选完后的下个位置），那么 dp[i] = pres[i] - dp[i+1]。
@@ -2278,14 +2123,13 @@ public int stoneGameVIII(int[] stones) {
         dp[i] = Math.max(dp[i+1], pre[i+1]-dp[i+1]);
     return dp[1];
 }
-\end{minted}
+#+END_SRC
 
-\section{123. Best Time to Buy and Sell Stock III}
-\label{sec-1-43}
+** 123. Best Time to Buy and Sell Stock III
 You are given an array prices where prices[i] is the price of a given stock on the ith day.
 Find the maximum profit you can achieve. You may complete at most two transactions.
 Note: You may not engage in multiple transactions simultaneously (i.e., you must sell the stock before you buy again).
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 // k 次交易 = k 个 non-overlapping subarray
 //     以这个角度去想，无非就是从两个方向扫描，
 //     利用 localMin / localMax 与当前元素的差值，去构造从左边/右边扫的 dp 数组。
@@ -2315,14 +2159,13 @@ public int maxProfit(int[] prices) {
     globalMax = Math.max(globalMax, left[n-1]);
     return globalMax;
 }
-\end{minted}
+#+END_SRC
 
-\section{188. Best Time to Buy and Sell Stock IV}
-\label{sec-1-44}
+** 188. Best Time to Buy and Sell Stock IV
 You are given an integer array prices where prices[i] is the price of a given stock on the ith day, and an integer k.
 Find the maximum profit you can achieve. You may complete at most k transactions.
 Note: You may not engage in multiple transactions simultaneously (i.e., you must sell the stock before you buy again).
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 public int maxProfit(int k, int [] prices) {
     if (prices == null || prices.length == 0) return 0;
     int n = prices.length;
@@ -2346,14 +2189,13 @@ public int maxProfit(int k, int [] prices) {
     }
     return gloMax[n-1][k];
 }
-\end{minted}
+#+END_SRC
 
-\section{714. Best Time to Buy and Sell Stock with Transaction Fee}
-\label{sec-1-45}
+** 714. Best Time to Buy and Sell Stock with Transaction Fee
 You are given an array prices where prices[i] is the price of a given stock on the ith day, and an integer fee representing a transaction fee.
 Find the maximum profit you can achieve. You may complete as many transactions as you like, but you need to pay the transaction fee for each transaction.
 Note: You may not engage in multiple transactions simultaneously (i.e., you must sell the stock before you buy again).
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 public int maxProfit(int[] prices, int fee) {
     int n = prices.length;
     int [] sold = new int[n];
@@ -2365,28 +2207,23 @@ public int maxProfit(int[] prices, int fee) {
     }
     return sold[n-1];
 }
-\end{minted}
+#+END_SRC
 
-\section{309. Best Time to Buy and Sell Stock with Cooldown}
-\label{sec-1-46}
+** 309. Best Time to Buy and Sell Stock with Cooldown
 You are given an array prices where prices[i] is the price of a given stock on the ith day.
 Find the maximum profit you can achieve. You may complete as many transactions as you like (i.e., buy one and sell one share of the stock multiple times) with the following restrictions:
 After you sell your stock, you cannot buy stock on the next day (i.e., cooldown one day).
 Note: You may not engage in multiple transactions simultaneously (i.e., you must sell the stock before you buy again).
-\begin{itemize}
-\item 感觉自己DP的能力还是太弱，越是这样越需要迎难而上。
-\item 这个题和714. Best Time to Buy and Sell Stock with Transaction Fee比较像。做题方法都是使用了两个数组：
-\item cash 该天结束手里没有股票的情况下，已经获得的最大收益
-\item hold 该天结束手里有股票的情况下，已经获得的最大收益
-\item 状态转移方程式这样的：
-\begin{itemize}
-\item cash[i]代表的是手里没有股票的收益，这种可能性是今天卖了或者啥也没干。max(昨天手里有股票的收益+今天卖股票的收益，昨天手里没有股票的收益)， 即max(sell[i - 1], hold[i - 1] + prices[i])；
-\item hold[i]代表的是手里有股票的收益，这种可能性是今天买了股票或者啥也没干，今天买股票必须昨天休息。所以为max(今天买股票是前天卖掉股票的收益-今天股票的价格，昨天手里有股票的收益）。即max(hold[i - 1], sell[i - 2] - prices[i])。
-\end{itemize}
-\item 另外需要注意的是，题目说的是昨天卖了股票的话今天不能买，对于开始的第一天，不可能有卖股票的行为，所以需要做个判断。
-\item 该算法的时间复杂度是O(n)，空间复杂度是O(n)。
-\end{itemize}
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+- 感觉自己DP的能力还是太弱，越是这样越需要迎难而上。
+- 这个题和714. Best Time to Buy and Sell Stock with Transaction Fee比较像。做题方法都是使用了两个数组：
+- cash 该天结束手里没有股票的情况下，已经获得的最大收益
+- hold 该天结束手里有股票的情况下，已经获得的最大收益
+- 状态转移方程式这样的：
+  - cash[i]代表的是手里没有股票的收益，这种可能性是今天卖了或者啥也没干。max(昨天手里有股票的收益+今天卖股票的收益，昨天手里没有股票的收益)， 即max(sell[i - 1], hold[i - 1] + prices[i])；
+  - hold[i]代表的是手里有股票的收益，这种可能性是今天买了股票或者啥也没干，今天买股票必须昨天休息。所以为max(今天买股票是前天卖掉股票的收益-今天股票的价格，昨天手里有股票的收益）。即max(hold[i - 1], sell[i - 2] - prices[i])。
+- 另外需要注意的是，题目说的是昨天卖了股票的话今天不能买，对于开始的第一天，不可能有卖股票的行为，所以需要做个判断。
+- 该算法的时间复杂度是O(n)，空间复杂度是O(n)。
+#+BEGIN_SRC java
 public int maxProfit(int[] prices) {
     int n = prices.length;
     int [] sold = new int [n];
@@ -2398,13 +2235,12 @@ public int maxProfit(int[] prices) {
     }
     return Math.max(sold[n-1], hold[n-1]);
 }
-\end{minted}
+#+END_SRC
 
-\section{673. Number of Longest Increasing Subsequence}
-\label{sec-1-47}
+** 673. Number of Longest Increasing Subsequence
 Given an integer array nums, return the number of longest increasing subsequences.
 Notice that the sequence has to be strictly increasing.
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 public int findNumberOfLIS(int[] nums) { // dynamic programming
     int n = nums.length;
     int [][] arr = new int[n][2];
@@ -2428,24 +2264,23 @@ public int findNumberOfLIS(int[] nums) { // dynamic programming
         if (arr[i][0] == maxLength) cnt += arr[i][1];
     return cnt;
 }
-\end{minted}
+#+END_SRC
 
-\section{1896. Minimum Cost to Change the Final Value of Expression - Hard}
-\label{sec-1-48}
-You are given a valid boolean expression as a string expression consisting of the characters '1','0','\&' (bitwise AND operator),'|' (bitwise OR operator),'(', and ')'.
+** 1896. Minimum Cost to Change the Final Value of Expression - Hard
+You are given a valid boolean expression as a string expression consisting of the characters '1','0','&' (bitwise AND operator),'|' (bitwise OR operator),'(', and ')'.
 
-For example, "()1|1" and "(1)\&()" are not valid while "1", "(((1))|(0))", and "1|(0\&(1))" are valid expressions.
+For example, "()1|1" and "(1)&()" are not valid while "1", "(((1))|(0))", and "1|(0&(1))" are valid expressions.
 Return the minimum cost to change the final value of the expression.
 
-For example, if expression = "1|1|(0\&0)\&1", its value is 1|1|(0\&0)\&1 = 1|1|0\&1 = 1|0\&1 = 1\&1 = 1. We want to apply operations so that the new expression evaluates to 0.
+For example, if expression = "1|1|(0&0)&1", its value is 1|1|(0&0)&1 = 1|1|0&1 = 1|0&1 = 1&1 = 1. We want to apply operations so that the new expression evaluates to 0.
 The cost of changing the final value of an expression is the number of operations performed on the expression. The types of operations are described as follows:
 
 Turn a '1' into a '0'.
 Turn a '0' into a '1'.
-Turn a '\&' into a '|'.
-Turn a '|' into a '\&'.
-Note: '\&' does not take precedence over '|' in the order of calculation. Evaluate parentheses first, then in left-to-right order.
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+Turn a '&' into a '|'.
+Turn a '|' into a '&'.
+Note: '&' does not take precedence over '|' in the order of calculation. Evaluate parentheses first, then in left-to-right order.
+#+BEGIN_SRC java
 private int [] getMinOperations(int va, int vb, int ca, int cb, char sign) {
     if (sign == '&') {
         if (va == 1 && vb == 1)      // 1&1, 将其中一个1反转为0
@@ -2482,14 +2317,13 @@ public int minOperationsToFlip(String expression) {
     }
     return cnt.peek();
 }
-\end{minted}
+#+END_SRC
 
-\section{823. Binary Trees With Factors}
-\label{sec-1-49}
+** 823. Binary Trees With Factors
 Given an array of unique integers, arr, where each integer arr[i] is strictly greater than 1.
 We make a binary tree using these integers, and each number may be used for any number of times. Each non-leaf node's value should be equal to the product of the values of its children.
 Return the number of binary trees we can make. The answer may be too large so return the answer modulo 109 + 7.
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 public int numFactoredBinaryTrees(int[] arr) {
     int n = arr.length;
     Arrays.sort(arr);
@@ -2510,12 +2344,11 @@ public int numFactoredBinaryTrees(int[] arr) {
     }
     return (int)(res % mod);
 }
-\end{minted}
+#+END_SRC
 
-\section{907. Sum of Subarray Minimums}
-\label{sec-1-50}
+** 907. Sum of Subarray Minimums
 Given an array of integers arr, find the sum of min(b), where b ranges over every (contiguous) subarray of arr. Since the answer may be large, return the answer modulo 109 + 7.
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 public int sumSubarrayMins(int[] arr) {
     int n = arr.length;
     // for each A[i], find k <= i <= j, so that A[i] is the min from [k,j]
@@ -2585,21 +2418,18 @@ public int sumSubarrayMins(int[] arr) {
         sum += arr[i] * left[i] * right[i];
     return (int) (sum % mod);
 }
-\end{minted}
+#+END_SRC
 
-\section{494. Target Sum - Medium}
-\label{sec-1-51}
+** 494. Target Sum - Medium
 You are given an integer array nums and an integer target.
 
 You want to build an expression out of nums by adding one of the symbols '+' and '-' before each integer in nums and then concatenate all the integers.
 
 For example, if nums = [2, 1], you can add a '+' before 2 and a '-' before 1 and concatenate them to build the expression "+2-1".
 Return the number of different expressions that you can build, which evaluates to target.
-\begin{itemize}
-\item 该题是一道非常经典的题目，在面试中很可能会考到。该题有多种解法。
-\item 第一种解法：DFS，brute force。我们对nums数组中的每个数字，都尝试在其前面添加正号和负号，最后暴力求解，统计数组中各数字组合值为target的情况。(该理解是错误的，我们可以使用带备忘录机制的自顶向下的DP方法，代码见下)
-\end{itemize}
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+- 该题是一道非常经典的题目，在面试中很可能会考到。该题有多种解法。
+- 第一种解法：DFS，brute force。我们对nums数组中的每个数字，都尝试在其前面添加正号和负号，最后暴力求解，统计数组中各数字组合值为target的情况。(该理解是错误的，我们可以使用带备忘录机制的自顶向下的DP方法，代码见下)
+#+BEGIN_SRC java
 //带备忘录机制的自顶向下DP解法 //map存储重复的值，there are obvious a lot of overlap subproblems
 private int helper(int[] nums, int index, int sum, int S, Map<String, Integer> map){ 
     String encodeString = index + "->" + sum; //经过之前不同的运算过程到达index的sum值碰巧与之前某一个运算过程的结果相同
@@ -2617,29 +2447,26 @@ public int findTargetSumWays(int[] nums, int S) {
     if (nums == null || nums.length == 0) return 0;
     return helper(nums, 0, 0, S, new HashMap<>());
 }
-\end{minted}
-\begin{itemize}
-\item 第二种解法：DP。我们使用Vi来表示数组中的前i个数所能求得的和的集合。初始化时
-\end{itemize}
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+END_SRC
+- 第二种解法：DP。我们使用Vi来表示数组中的前i个数所能求得的和的集合。初始化时
+#+BEGIN_SRC java
 V0 = {0}     //表示前0个数的和为0
 Vi = {V(i-1) + ai} U {V(i-1) - ai}
-\end{minted}
+#+END_SRC
 
 Vn就是nums数组所有数字的组合值之和的集合
 
-根据上面的思路，我们知道数组中数字若全为正号其和为sum，全为负号其和为-sum。若不选数组中任何一个数，则和为0。因此，我们设立一个长度为2*sum+1的数组ways，ways[i]表示我们选择前m个数，其和可能为i的情况数，m = 0,1,\ldots{}nums.length。可参考下图
+根据上面的思路，我们知道数组中数字若全为正号其和为sum，全为负号其和为-sum。若不选数组中任何一个数，则和为0。因此，我们设立一个长度为2*sum+1的数组ways，ways[i]表示我们选择前m个数，其和可能为i的情况数，m = 0,1,...nums.length。可参考下图
 
-\includegraphics[width=.9\linewidth]{./pic/targetSum.png}
+[[./pic/targetSum.png]]
 
-\includegraphics[width=.9\linewidth]{./pic/targetSum2.png}
+[[./pic/targetSum2.png]]
 
-\section{1477. Find Two Non-overlapping Sub-arrays Each With Target Sum}
-\label{sec-1-52}
+** 1477. Find Two Non-overlapping Sub-arrays Each With Target Sum
 Given an array of integers arr and an integer target.
 You have to find two non-overlapping sub-arrays of arr each with a sum equal target. There can be multiple answers so you have to find an answer where the sum of the lengths of the two sub-arrays is minimum.
 Return the minimum sum of the lengths of the two required sub-arrays, or return -1 if you cannot find such two sub-arrays.
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 // 找出数组中等于target的最小非重叠区间的长度，用dp[i]表示当前i以及i之前的满足条件的最小区间长度,状态更新规则为
 //     dp[i]=min(dp[i-1],i-j+1) if sum[j,i]=target
 //     答案更新规则
@@ -2666,10 +2493,9 @@ public int minSumOfLengths(int[] arr, int target) {
     }
     return res == Integer.MAX_VALUE ? -1 : res;
 }
-\end{minted}
+#+END_SRC
 
-\section{1771. Maximize Palindrome Length From Subsequences}
-\label{sec-1-53}
+** 1771. Maximize Palindrome Length From Subsequences
 You are given two strings, word1 and word2. You want to construct a string in the following manner:
 Choose some non-empty subsequence subsequence1 from word1.
 Choose some non-empty subsequence subsequence2 from word2.
@@ -2677,7 +2503,7 @@ Concatenate the subsequences: subsequence1 + subsequence2, to make the string.
 Return the length of the longest palindrome that can be constructed in the described manner. If no palindromes can be constructed, return 0.
 A subsequence of a string s is a string that can be made by deleting some (possibly none) characters from s without changing the order of the remaining characters.
 A palindrome is a string that reads the same forward as well as backward.
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 public int longestPalindrome(String s, String t) { // 这个题目没有懂，需要再好好看一下
     int m = s.length();
     int n = t.length();
@@ -2702,12 +2528,11 @@ public int longestPalindrome(String s, String t) { // 这个题目没有懂，�
     }
     return ans;
 }
-\end{minted}
+#+END_SRC
 
-\section{907. Sum of Subarray Minimums}
-\label{sec-1-54}
+** 907. Sum of Subarray Minimums
 Given an array of integers arr, find the sum of min(b), where b ranges over every (contiguous) subarray of arr. Since the answer may be large, return the answer modulo 109 + 7.
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
         public int sumSubarrayMins(int[] arr) {
             int n = arr.length;
             // for each A[i], find k <= i <= j, so that A[i] is the min from [k,j]
@@ -2777,13 +2602,12 @@ Given an array of integers arr, find the sum of min(b), where b ranges over ever
                 sum += arr[i] * left[i] * right[i];
             return (int) (sum % mod);
         }
-\end{minted}
+#+END_SRC
 
-\section{689. Maximum Sum of 3 Non-Overlapping Subarrays}
-\label{sec-1-55}
+** 689. Maximum Sum of 3 Non-Overlapping Subarrays
 Given an integer array nums and an integer k, find three non-overlapping subarrays of length k with maximum sum and return them.
 Return the result as a list of indices representing the starting position of each interval (0-indexed). If there are multiple answers, return the lexicographically smallest one.
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 public int[] maxSumOfThreeSubarrays(int[] nums, int k) {
     int n = nums.length;
     int [] pre = new int [n+1];
@@ -2819,13 +2643,12 @@ public int[] maxSumOfThreeSubarrays(int[] nums, int k) {
     }
     return res;
 }
-\end{minted}
+#+END_SRC
 
-\section{363. Max Sum of Rectangle No Larger Than K}
-\label{sec-1-56}
+** 363. Max Sum of Rectangle No Larger Than K
 Given an m x n matrix matrix and an integer k, return the max sum of a rectangle in the matrix such that its sum is no larger than k.
 It is guaranteed that there will be a rectangle with a sum no larger than k.
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 public int maxSumSubmatrix(int[][] mat, int k) {
     int m = mat.length;
     int n = mat[0].length;
@@ -2887,15 +2710,14 @@ public int maxSumSubmatrix(int[][] mat, int target) {
     }
     return res;
 }
-\end{minted}
+#+END_SRC
 
-\section{805. Split Array With Same Average}
-\label{sec-1-57}
+** 805. Split Array With Same Average
 You are given an integer array nums.
 You should move each element of nums into one of the two arrays A and B such that A and B are non-empty, and average(A) == average(B).
 Return true if it is possible to achieve that and false otherwise.
 Note that for an array arr, average(arr) is the sum of all the elements of arr over the length of arr.
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 public boolean splitArraySameAverage(int[] nums) {
     int n = nums.length;
     int m = n / 2;
@@ -2921,15 +2743,14 @@ public boolean splitArraySameAverage(int[] nums) {
     }
     return false;
 }
-\end{minted}
+#+END_SRC
 
-\section{1981. Minimize the Difference Between Target and Chosen Elements}
-\label{sec-1-58}
+** 1981. Minimize the Difference Between Target and Chosen Elements
 You are given an m x n integer matrix mat and an integer target.
 Choose one integer from each row in the matrix such that the absolute difference between target and the sum of the chosen elements is minimized.
 Return the minimum absolute difference.
 The absolute difference between two numbers a and b is the absolute value of a - b.
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 // DP + BitSet : 这里面有个小问题需要挑出来
 // 使用一个DP数组存下当前行和之前行每行选一个数可能构成的和，
 // 在本题中，可以使用BitSet（简介）来存储之前行可以组成的和（由于所有数的最大值为70，而行数最大也为70，故BitSet最大的位数即为4900）。
@@ -2983,15 +2804,14 @@ public int minimizeTheDifference(int[][] mat, int target) {
         if (dp[i] > 0) diff = Math.min(diff, Math.abs(i-target));
     return diff;  // min difference
 }
-\end{minted}
+#+END_SRC
 
-\section{805. Split Array With Same Average}
-\label{sec-1-59}
+** 805. Split Array With Same Average
 You are given an integer array nums.
 You should move each element of nums into one of the two arrays A and B such that A and B are non-empty, and average(A) == average(B).
 Return true if it is possible to achieve that and false otherwise.
 Note that for an array arr, average(arr) is the sum of all the elements of arr over the length of arr.
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
     //     1）如果一个长度为n的数组可以被划分为A和B两个数组，我们假设A的长度小于B并且A的大小是k，那么：total_sum / n == A_sum / k == B_sum / (n - k)，其中1 <= k <= n / 2。那么可以知道：A_sum = total_sum * k / n。由于A_sum一定是个整数，所以我们可以推导出total_sum * k % n == 0，那就是说，对于特定的total_sum和n而言，符合条件的k不会太多。这样我们在第一步中就首先验证是否存在符合条件的k，如果不存在就可以提前返回false。
     //     2）如果经过第一步的验证，发现确实有符合条件的k，那么我们在第二步中，就试图产生k个子元素的所有组合，并且计算他们的和。这里的思路就有点类似于背包问题了，vector<unordered_set<int>> sums，其中sums[i][j]表示A[0, i]这个子数组中的任意j个元素的所有可能和。可以得到递推公式是：sums[i][j] = sums[i - 1][j] "join" (sums[i][j - 1] + A[i])，其中等式右边的第一项表示这j个元素中不包含A[i]，而第二项表示这j个元素包含A[i]。这样就可以采用动态规划的思路得到sums[n - 1][k]了（1 <= k <= n / 2）。
     // 3）有了sums[n - 1][k]，我们就检查sums[n - 1][k]中是否包含(total_sum * k / n)。一旦发现符合条件的k，就返回true，否则就返回false。
@@ -3076,17 +2896,16 @@ bool splitArraySameAverage(vector<int>& A) {  // https://www.cnblogs.com/grandya
     }
     return false;
 }
-\end{minted}
+#+END_SRC
 
-\section{801. Minimum Swaps To Make Sequences Increasing - Hard}
-\label{sec-1-60}
+** 801. Minimum Swaps To Make Sequences Increasing - Hard
 You are given two integer arrays of the same length nums1 and nums2. In one operation, you are allowed to swap nums1[i] with nums2[i].
 
 For example, if nums1 = [1,2,3,8], and nums2 = [5,6,7,4], you can swap the element at i = 3 to obtain nums1 = [1,2,3,4] and nums2 = [5,6,7,8].
 Return the minimum number of needed operations to make nums1 and nums2 strictly increasing. The test cases are generated so that the given input always makes it possible.
 
-An array arr is strictly increasing if and only if arr\footnotemark[2]{} < arr\footnotemark[3]{} < arr\footnotemark[5]{} < \ldots{} < arr[arr.length - 1].
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+An array arr is strictly increasing if and only if arr[0] < arr[1] < arr[2] < ... < arr[arr.length - 1].
+#+BEGIN_SRC java
 // 设 dp[0][i] 表示不交换 A[i] 和 B[i] 在下标 i 的交换次数
 // 设 dp[1][i] 表示交换 A[i] 和 B[i] 在下标 i 的交换次数
 // 可以看到交换与否只取决与前一个状态, 可以将空间复杂度压缩到 O(1)
@@ -3110,9 +2929,8 @@ public int minSwap(int[] a, int[] b) {
     }
     return Math.min(dp[0][n-1], dp[1][n-1]);
 }
-\end{minted}
-\section{837. New 21 Game - Medium}
-\label{sec-1-61}
+#+END_SRC
+** 837. New 21 Game - Medium
 Alice plays the following game, loosely based on the card game "21".
 
 Alice starts with 0 points and draws numbers while she has less than k points. During each draw, she gains an integer number of points randomly from the range [1, maxPts], where maxPts is an integer. Each draw is independent and the outcomes have equal probabilities.
@@ -3122,7 +2940,7 @@ Alice stops drawing numbers when she gets k or more points.
 Return the probability that Alice has n or fewer points.
 
 Answers within 10-5 of the actual answer are considered accepted.
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 // When the draws sum up to K, it stops, calculate the possibility K<=sum<=N.
 //     Think about one step earlier, sum = K-1, game is not ended and draw largest card W.
 //     K-1+W is the maximum sum could get when game is ended. If it is <= N, then for sure the possiblity when games end ans sum <= N is 1.
@@ -3149,9 +2967,8 @@ public double new21Game(int n, int k, int w) { // k : threshold
     }
     return res;
 }
-\end{minted}
-\section{1105. Filling Bookcase Shelves - Medium}
-\label{sec-1-62}
+#+END_SRC
+** 1105. Filling Bookcase Shelves - Medium
 You are given an array books where books[i] = [thicknessi, heighti] indicates the thickness and height of the ith book. You are also given an integer shelfWidth.
 
 We want to place these books in order onto bookcase shelves that have a total width shelfWidth.
@@ -3162,7 +2979,7 @@ Note that at each step of the above process, the order of the books we place is 
 
 For example, if we have an ordered list of 5 books, we might place the first and second book onto the first shelf, the third book on the second shelf, and the fourth and fifth book on the last shelf.
 Return the minimum possible height that the total bookshelf can be after placing shelves in this manner.
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 // 求摆放前i本书需要的最小高度，首先需要求摆放前i-1书需要的最小高度，以此类推，最初需要计算的是摆放第0本书需要的最小高度，也就是0。
 // 根据前i-1本书求前i书需要的最小高度的思路是：
 // 尝试①将第i本书放在前i-1本书的下面
@@ -3182,9 +2999,8 @@ public int minHeightShelves(int[][] books, int shelfWidth) {
     }            
     return dp[books.length];
 }
-\end{minted}
-\section{1997. First Day Where You Have Been in All the Rooms - Medium}
-\label{sec-1-63}
+#+END_SRC
+** 1997. First Day Where You Have Been in All the Rooms - Medium
 There are n rooms you need to visit, labeled from 0 to n - 1. Each day is labeled, starting from 0. You will go in and visit one room a day.
 
 Initially on day 0, you visit room 0. The order you visit the rooms for the coming days is determined by the following rules and a given 0-indexed array nextVisit of length n:
@@ -3193,7 +3009,7 @@ Assuming that on a day, you visit room i,
 if you have been in room i an odd number of times (including the current visit), on the next day you will visit a room with a lower or equal room number specified by nextVisit[i] where 0 <= nextVisit[i] <= i;
 if you have been in room i an even number of times (including the current visit), on the next day you will visit room (i + 1) mod n.
 Return the label of the first day where you have been in all the rooms. It can be shown that such a day exists. Since the answer may be very large, return it modulo 109 + 7.
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 public int firstDayBeenInAllRooms(int [] nextVisit) {
     int n = nextVisit.length, mod = (int)1e9 + 7;
     long [] dp = new long [n];
@@ -3202,17 +3018,14 @@ public int firstDayBeenInAllRooms(int [] nextVisit) {
         dp[i] = (2 * dp[i-1] % mod + mod - dp[nextVisit[i-1]] + 2) % mod;
     return (int)dp[n-1];
 }
-\end{minted}
+#+END_SRC
 
-\section{943. Find the Shortest Superstring - Hard}
-\label{sec-1-64}
+** 943. Find the Shortest Superstring - Hard
 Given an array of strings words, return the smallest string that contains each string in words as a substring. If there are multiple valid strings of the smallest length, return any of them.
 
 You may assume that no string in words is a substring of another string in words.
-\begin{itemize}
-\item 深搜 + 记忆数组 + 裁枝
-\end{itemize}
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+- 深搜 + 记忆数组 + 裁枝
+#+BEGIN_SRC java
 private void dfs(int [] tmp, int idx, int curCost, boolean [] vis, int path) {
     if (idx == n) {
         if (curCost > maxCost) {
@@ -3259,11 +3072,9 @@ public String shortestSuperstring(String[] words) {
     }
     return res;
 }
-\end{minted}
-\begin{itemize}
-\item 动态规划
-\end{itemize}
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+END_SRC
+- 动态规划
+#+BEGIN_SRC java
 public String shortestSuperstring(String[] words) {
     int n = words.length;
     String [][] dp = new String [1 << n][n];
@@ -3297,11 +3108,10 @@ public String shortestSuperstring(String[] words) {
             res = dp[last][i];
     return res;
 }
-\end{minted}
+#+END_SRC
 
-\section{964. Least Operators to Express Number - Hard}
-\label{sec-1-65}
-Given a single positive integer x, we will write an expression of the form x (op1) x (op2) x (op3) x \ldots{} where each operator op1, op2, etc. is either addition, subtraction, multiplication, or division (+, -, *, or /). For example, with x = 3, we might write 3 * 3 / 3 + 3 - 3 which is a value of 3.
+** 964. Least Operators to Express Number - Hard
+Given a single positive integer x, we will write an expression of the form x (op1) x (op2) x (op3) x ... where each operator op1, op2, etc. is either addition, subtraction, multiplication, or division (+, -, *, or /). For example, with x = 3, we might write 3 * 3 / 3 + 3 - 3 which is a value of 3.
 
 When writing such an expression, we adhere to the following conventions:
 
@@ -3311,11 +3121,11 @@ We use the usual order of operations: multiplication and division happen before 
 It is not allowed to use the unary negation operator (-). For example, "x - x" is a valid expression as it only uses subtraction, but "-x + x" is not because it uses negation.
 We would like to write an expression with the least number of operators such that the expression equals the given target. Return the least number of operators used.
 
-博主看了一会儿，发现没思路就直接放弃了，直奔论坛上找解法。这里直接参考 donggua$_{\text{fu}}$ 大神的解法吧，首先处理 edge cases，当 x 等于 target 的话，不用加任何运算符，返回0即可。若 x 大于 target，比如 x=5，target=3，我们其实可以迅速的求出运算符的个数，因为5比3大，要凑3就只能先变成1，这里就有两种变法，一种是全部都变成1，然后来凑3，即 5/5 + 5/5 + 5/5，这时的运算符个数是 target * 2 -1，因为加号的个数总是比除号少一个。另一种凑法就是 5 - 5/5 - 5/5，这时候的运算符个数是 (x - target) * 2，此时的加号和除号的个数相同，均为x和 target 的差值。
+博主看了一会儿，发现没思路就直接放弃了，直奔论坛上找解法。这里直接参考 donggua_fu 大神的解法吧，首先处理 edge cases，当 x 等于 target 的话，不用加任何运算符，返回0即可。若 x 大于 target，比如 x=5，target=3，我们其实可以迅速的求出运算符的个数，因为5比3大，要凑3就只能先变成1，这里就有两种变法，一种是全部都变成1，然后来凑3，即 5/5 + 5/5 + 5/5，这时的运算符个数是 target * 2 -1，因为加号的个数总是比除号少一个。另一种凑法就是 5 - 5/5 - 5/5，这时候的运算符个数是 (x - target) * 2，此时的加号和除号的个数相同，均为x和 target 的差值。
 
 接下来就要处理 x 小于 target 的情况了，此时由于不知道x到底比 target 小多少，若差距太大的话，肯定不能用加号，所以应该先用乘号来让x变大，直到刚好大于等于 target 停止，并每次增加次数 cnt。若此时 sum 正好等于 target，太幸运了，直接返回 cnt。但通常情况下 sum 会大于 target，此时 sum - target 的差值就需要另行计算了。这里差值跟 target 的大小关系又要分为两种情况来讨论，当 sum - target < target 时，比如 x=5，sum=25，target=15，则 sum - target=10，就是说现在已经乘到了 25，但需要再减去 10，这个差值 10 可以再次调用原函数来计算，此时新的 target 代入 10 即可，记得返回值要加上 cnt。当然之后还是要再计算一下另一种凑的方法，由于 sum 超过了 target，所以回退一个x，变成 sum / x，此时小于 target，那么它们的差值 target - (sum / x) 就可以通过再次调用函数来计算，注意这里加上 cnt 之后还要减去1，因为回退了一个x，少了一个乘号。最终二者的较小值即为所求，记得要加上个1，以为多加了个运算符，参见代码如下：
 
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 public int leastOpsExpressTarget(int x, int target) {
     if (x == target) return 0;
     if (x > target) return Math.min(target*2-1, (x-target)*2);
@@ -3333,15 +3143,13 @@ public int leastOpsExpressTarget(int x, int target) {
     max = leastOpsExpressTarget(x, (int)(target - (sum / x))) + cnt - 1;
     return Math.min(min, max) + 1; // -
 }
-\end{minted}
-\begin{itemize}
-\item 和race car 那道题类似。注意到，符号的添加就是对数字 进行 -x$^{\text{i}}$ 的操作，最后要减到0，k = logx(t)，有两种方式，可以先到 t 前面的数字，2$^{\text{k}}$, 或者 t后面的数字 2$^{\text{(k+1)}}$。
-\end{itemize}
-注意，2$^{\text{k需要的符号是k，最后因为第一个一定可以是正的，省一个符号。}}$
+#+END_SRC
+- 和race car 那道题类似。注意到，符号的添加就是对数字 进行 -x^i 的操作，最后要减到0，k = logx(t)，有两种方式，可以先到 t 前面的数字，2^k, 或者 t后面的数字 2^(k+1)。
+注意，2^k需要的符号是k，最后因为第一个一定可以是正的，省一个符号。
 
-看了花花酱的题解，感觉更像是bfs。cost小的点先扩展。 \textbf{这个再看一下}
+看了花花酱的题解，感觉更像是bfs。cost小的点先扩展。 *这个再看一下*
 
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{cpp}
+#+BEGIN_SRC cpp
 int leastOpsExpressTarget(int x, int target) {
     priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> que;
     unordered_set<int> s;
@@ -3361,20 +3169,19 @@ int leastOpsExpressTarget(int x, int target) {
     }
     return -1;
 }
-\end{minted}
-\section{1955. Count Number of Special Subsequences - Hard}
-\label{sec-1-66}
+#+END_SRC
+** 1955. Count Number of Special Subsequences - Hard
 A sequence is special if it consists of a positive number of 0s, followed by a positive number of 1s, then a positive number of 2s.
 
 For example, [0,1,2] and [0,0,1,1,1,2] are special.
-In contrast, [2,1,0], \footnotemark[3]{}, and [0,1,2,0] are not special.
+In contrast, [2,1,0], [1], and [0,1,2,0] are not special.
 Given an array nums (consisting of only integers 0, 1, and 2), return the number of different subsequences that are special. Since the answer may be very large, return it modulo 109 + 7.
 
 A subsequence of an array is a sequence that can be derived from the array by deleting some or no elements without changing the order of the remaining elements. Two subsequences are different if the set of indices chosen are different.
 
-\includegraphics[width=.9\linewidth]{./pic/specialSeq.png}
+[[./pic/specialSeq.png]]
 
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 public int countSpecialSubsequences(int[] arr) { // 去找个降维的参考一下
     int mod = (int)1e9 + 7;
     int n = arr.length;
@@ -3390,10 +3197,9 @@ public int countSpecialSubsequences(int[] arr) { // 去找个降维的参考一�
         }
     return (int)dp[n-1][2];
 }
-\end{minted}
+#+END_SRC
 
-\section{446. Arithmetic Slices II - Subsequence - Hard}
-\label{sec-1-67}
+** 446. Arithmetic Slices II - Subsequence - Hard
 Given an integer array nums, return the number of all the arithmetic subsequences of nums.
 
 A sequence of numbers is called arithmetic if it consists of at least three elements and if the difference between any two consecutive elements is the same.
@@ -3404,34 +3210,31 @@ A subsequence of an array is a sequence that can be formed by removing some elem
 
 For example, [2,5,10] is a subsequence of [1,2,1,2,4,1,5,10].
 The test cases are generated so that the answer fits in 32-bit integer.
-\subsection{解题思路与分析}
-\label{sec-1-67-1}
+*** 解题思路与分析
 这道题是之前那道Arithmetic Slices的延伸，那道题比较简单是因为要求等差数列是连续的，而这道题让我们求是等差数列的子序列，可以跳过某些数字，不一定非得连续，那么难度就加大了，但还是需要用动态规划Dynamic Progrmming来做。
 
 好，既然决定要用DP了，那么首先就要确定dp数组的定义了，刚开始我们可能会考虑使用个一维的dp数组，然后dp[i]定义为范围为[0, i]的子数组中等差数列的个数。定义的很简单，OK，但是基于这种定义的状态转移方程却十分的难想。我们想对于(0, i)之间的任意位置j，如何让 dp[i] 和 dp[j] 产生关联呢？是不是只有 A[i] 和 A[j] 的差值diff，跟A[j]之前等差数列的差值相同，才会有关联，所以差值diff是一个很重要的隐藏信息Hidden Information，我们必须要在dp的定义中考虑进去。所以一维dp数组是罩不住的，必须升维，但是用二维dp数组的话，差值diff那一维的范围又是个问题，数字的范围是整型数，所以差值的范围也很大，为了节省空间，我们建立一个一维数组dp，数组里的元素不是数字，而是放一个HashMap，建立等差数列的差值和当前位置之前差值相同的数字个数之间的映射。我们遍历数组中的所有数字，对于当前遍历到的数字，又从开头遍历到当前数字，计算两个数字之差diff，如果越界了不做任何处理，如果没越界，我们让dp[i]中diff的差值映射自增1，因为此时A[i]前面有相差为diff的A[j]，所以映射值要加1。然后我们看dp[j]中是否有diff的映射，如果有的话，说明此时相差为diff的数字至少有三个了，已经能构成题目要求的等差数列了，将dp[j][diff]加入结果res中，然后再更新dp[i][diff]，这样等遍历完数组，res即为所求。
 
-我们用题目中给的例子数组 [2，4，6，8，10] 来看，因为2之前没有数字了，所以我们从4开始，遍历前面的数字，是2，二者差值为2，那么在dp\footnotemark[3]{}的HashMap就可以建立 2->1 的映射，表示4之前有1个差值为2的数字，即数字2。那么现在i=2指向6了，遍历前面的数字，第一个数是2，二者相差4，那么在dp\footnotemark[5]{}的HashMap就可以建立 4->1 的映射，第二个数是4，二者相差2，那么先在dp\footnotemark[5]{}的HashMap建立 2->1 的映射，由于dp\footnotemark[3]{}的HashMap中也有差值为2的映射，2->1，那么说明此时至少有三个数字差值相同，即这里的 [2 4 6]，我们将dp\footnotemark[3]{}中的映射值加入结果res中，然后当前dp\footnotemark[5]{}中的映射值加上dp\footnotemark[3]{}中的映射值。这应该不难理解，比如当i=3指向数字8时，j=2指向数字6，那么二者差值为2，此时先在dp\footnotemark[1]{}建立 2->1 的映射，由于dp\footnotemark[5]{}中有 2->2 的映射，那么加上数字8其实新增了两个等差数列 [2,4,6,8] 和 [4,6,8]，所以结果res加上的值就是 dp[j][diff]，即2，并且 dp[i][diff] 也需要加上这个值，才能使得 dp\footnotemark[1]{} 中的映射变为 2->3 ，后面数字10的处理情况也相同，这里就不多赘述了，最终的各个位置的映射关系如下所示：
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+我们用题目中给的例子数组 [2，4，6，8，10] 来看，因为2之前没有数字了，所以我们从4开始，遍历前面的数字，是2，二者差值为2，那么在dp[1]的HashMap就可以建立 2->1 的映射，表示4之前有1个差值为2的数字，即数字2。那么现在i=2指向6了，遍历前面的数字，第一个数是2，二者相差4，那么在dp[2]的HashMap就可以建立 4->1 的映射，第二个数是4，二者相差2，那么先在dp[2]的HashMap建立 2->1 的映射，由于dp[1]的HashMap中也有差值为2的映射，2->1，那么说明此时至少有三个数字差值相同，即这里的 [2 4 6]，我们将dp[1]中的映射值加入结果res中，然后当前dp[2]中的映射值加上dp[1]中的映射值。这应该不难理解，比如当i=3指向数字8时，j=2指向数字6，那么二者差值为2，此时先在dp[3]建立 2->1 的映射，由于dp[2]中有 2->2 的映射，那么加上数字8其实新增了两个等差数列 [2,4,6,8] 和 [4,6,8]，所以结果res加上的值就是 dp[j][diff]，即2，并且 dp[i][diff] 也需要加上这个值，才能使得 dp[3] 中的映射变为 2->3 ，后面数字10的处理情况也相同，这里就不多赘述了，最终的各个位置的映射关系如下所示：
+#+BEGIN_SRC java
 2     4     6     8     10    
      2->1  4->1  6->1  8->1
            2->2  4->1  6->1 
                  2->3  4->2
                        2->4
-\end{minted}
+#+END_SRC
 
 最终累计出来的结果是跟上面红色的数字相关，分别对应着如下的等差数列：
 
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 2->2：[2,4,6]
 2->3：[2,4,6,8]    [4,6,8]
 4->2：[2,6,10]
 2->4：[2,4,6,8,10]    [4,6,8,10]    [6,8,10]
-\end{minted}
-\begin{itemize}
-\item Both time and space complexities are O(n$^{\text{2}}$)
-\end{itemize}
-
-\includegraphics[width=.9\linewidth]{./pic/arithslice.png}
+#+END_SRC
+- Both time and space complexities are O(n^2)
+  
+[[./pic/arithslice.png]]
 
 Define the type of the difference as Integer type instead of Long. This is because there is no valid arithmetic subsequence slice that can have difference out of the Integer value range. But we do need a long integer to filter out those invalid cases.
 
@@ -3439,7 +3242,7 @@ Preallocate the HashMap to avoid reallocation to deal with extreme cases.
 
 Refrain from using lambda expressions inside loops.
 
-\begin{minted}[frame=lines,fontsize=\scriptsize,linenos=false]{java}
+#+BEGIN_SRC java
 public int numberOfArithmeticSlices(int [] arr) {
     int n = arr.length, ans = 0;
     Map<Integer, Integer> [] dp = new HashMap[n];
@@ -3459,6 +3262,219 @@ public int numberOfArithmeticSlices(int [] arr) {
     }
     return ans;
 }
-\end{minted}
-% Emacs 27.1 (Org mode 8.2.7c)
-\end{document}
+#+END_SRC
+
+** 639. Decode Ways II - Hard
+A message containing letters from A-Z can be encoded into numbers using the following mapping:
+
+'A' -> "1"
+'B' -> "2"
+...
+'Z' -> "26"
+To decode an encoded message, all the digits must be grouped then mapped back into letters using the reverse of the mapping above (there may be multiple ways). For example, "11106" can be mapped into:
+
+"AAJF" with the grouping (1 1 10 6)
+"KJF" with the grouping (11 10 6)
+Note that the grouping (1 11 06) is invalid because "06" cannot be mapped into 'F' since "6" is different from "06".
+
+In addition to the mapping above, an encoded message may contain the '*' character, which can represent any digit from '1' to '9' ('0' is excluded). For example, the encoded message "1*" may represent any of the encoded messages "11", "12", "13", "14", "15", "16", "17", "18", or "19". Decoding "1*" is equivalent to decoding any of the encoded messages it can represent.
+
+Given a string s consisting of digits and '*' characters, return the number of ways to decode it.
+
+Since the answer may be very large, return it modulo 109 + 7.
+*** 解题思路与分析
+给定一个只含数字的长n nn的字符串s ss，再给定一个对应规则，每个大写字母ch可以对应一个数字ch - 'A' + 1。问该s ss有多少种不同的解码方式。s ss中可能含有'*'，这个符号可以对应除了0 00以外的任意一位数。答案模10^9 + 7后返回。
+
+思路是动态规划。设f [ i ] f[i]f[i]是s ss的长i ii的前缀的解码方式数，那么可以按照最后一位（或者两位）是解码成什么字母来分类进行累加。
+#+BEGIN_SRC java
+public int numDecodings(String t) {
+    int mod = (int)1e9 + 7;
+    int n = t.length();
+    char [] s = t.toCharArray();
+    System.out.println(Arrays.toString(s));
+    int [] dp = new int [Math.max(2, n+1)];
+    dp[0] = 1;
+    dp[1] = s[0] == '*' ? 9 : s[0] == '0' ? 0 : 1;
+    for (int i = 2; i <= n; i++) {
+        System.out.println("i: " + i);
+        for (int j = 1; j <= 26; j++) { // 枚举s的长i前缀的末尾可以解码为哪个大写字母
+            char c = s[i-1];
+            if (j <= 9) { // 如果是要解码为A到I，那么最后一个数字得单独解码
+                if (c == '*' || c == '0' + j)
+                    dp[i] += dp[i-1];
+            } else {      // 否则最后两个数字得一起解码
+                char p = s[i-2];
+                int x = j % 10, y = j / 10;
+                if ((p == '*' || p == y+ '0') && ((c == '*' && x != 0) || c == x + '0')) 
+                    dp[i] += dp[i-2];
+            }
+            dp[i] %= mod;
+        }
+    }
+    return dp[n];
+}
+#+END_SRC
+*** 解题思路与分析
+
+定义dp[i]是nums前i个字符可以得到的解码种数，假设之前的字符串是abcx，现在新加入了y，则有以下5种情况：
+
+#+BEGIN_SRC java
+如果x=='0'，且y=='0'，无法解码，返回0；
+如果只有x=='0'，则y只能单独放在最后，不能与x合并(不能以0开头)，此时有：dp[i] = dp[i-1]
+如果只有y=='0'，则y不能单独放置，必须与x合并，并且如果合并结果大于26，返回0，否则有：dp[i] = dp[i-2]
+如果 xy<=26: 则y可以“单独”放在abcx的每个解码结果之后后，并且如果abcx以x单独结尾，此时可以合并xy作为结尾，而这种解码种数就是abc的解码结果，此时有：dp[i+1] = dp[i] + dp[i-1]
+如果 xy>26: 此时x又不能与y合并，y只能单独放在dp[i]的每一种情况的最后，此时有：dp[i+1] = dp[i]
+#+END_SRC
+#+BEGIN_SRC java
+    public int numDecodings(String s) {
+        char[] arr = s.toCharArray();
+        int[] dp = new int[s.length()+1];
+        dp[0] = 1;
+        dp[1] = arr[0]=='0'?0:1;
+        if(s.length()<=1) return dp[1];
+        for(int i=2;i<=s.length();i++){
+            int n = (arr[i-2]-'0')*10+(arr[i-1]-'0');
+            if(arr[i-1]=='0' && arr[i-2]=='0'){
+                return 0;
+            }else if(arr[i-2]=='0'){
+                dp[i] = dp[i-1];
+            }else if(arr[i-1]=='0'){
+                if(n>26) return 0;
+                dp[i] = dp[i-2];
+            }else if(n>26){
+                dp[i] = dp[i-1];
+            }else{
+                dp[i] = dp[i-1]+dp[i-2];
+            }
+        }
+        return dp[dp.length-1];
+    }
+#+END_SRC
+
+** 629. K Inverse Pairs Array - Hard
+For an integer array nums, an inverse pair is a pair of integers [i, j] where 0 <= i < j < nums.length and nums[i] > nums[j].
+
+Given two integers n and k, return the number of different arrays consist of numbers from 1 to n such that there are exactly k inverse pairs. Since the answer can be huge, return it modulo 109 + 7.
+*** 解题思路与分析
+比较容易辨别出来是一道DP的题目，但是确实算是比较难的了，下面是参考网上的代码之后我的理解。定义dp[n][k]表示从1到n构成的数中含有k个逆序对的个数，则我们可以推导出dp[n][k]和dp[n - 1][i]之间的递推关系：
+
+如果我们把n放在最后一位，则所有的k个逆序对均来自于前n - 1个数所构成的逆序对，和n无关；
+
+如果我们把n放在倒数第二位，则有1个逆序对和n有关，有k - 1个逆序对来自前n - 1个数所构成的逆序对；
+
+……
+
+如果我们把n放在第一位，则有n-1个逆序对和n有关，k - (n - 1)个逆序对来自前n - 1个数所构成的逆序对。
+
+所以：dp[n][k] = dp[n-1][k]+dp[n-1][k-1]+dp[n-1][k-2]+…+dp[n-1][k+1-n+1]+dp[n-1][k-n+1]。但问题是 k - (n - 1)有可能为负数，也就是说根据n和k的不同，上面的式子有可能从某个项之后就不合法了，我们这里先写出来占位，从而得到下面两个式子：
+
+#+BEGIN_SRC java
+dp[n][k]     = dp[n-1][k] + dp[n-1][k-1] + dp[n-1][k-2] + … + dp[n-1][k + 1-n + 1] + dp[n-1][k-n + 1] // A
+dp[n][k + 1] = dp[n-1][k + 1] + dp[n-1][k] + dp[n-1][k-1] + dp[n-1][k-2] + … + dp[n-1][k + 1-n + 1]   // B
+dp[n][k+1] - dp[n][k] = dp[n-1][k+1] - dp[n-1][k-n+1]; // B-A           
+dp[n][k+1] = dp[n][k] + dp[n-1][k+1] - dp[n-1][k-n+1]; // 移项
+// 将k+1换回成k，可以得到：
+dp[n][k] = dp[n][k-1] + dp[n - 1][k] - dp[n-1][k-n]
+#+END_SRC
+
+把上面两个式子相减可以推导出：dp[n][k+1] = dp[n][k]+dp[n-1][k+1]-dp[n-1][k+1-n]。这样就可以写出代码了。
+
+当然由于dp[n][k]只和dp[n][x]，dp[n-1][x]有关，所以该代码还可以进一步将空间复杂度从O(nk)降低到O(k)。时间复杂度是O(nk)。
+
+#+BEGIN_SRC java
+public int kInversePairs(int n, int k) {
+    int mod = (int)1e9 + 7;
+    long [][] dp = new long [n+1][k+1];
+    dp[0][0] = 1;
+    for (int i = 1; i <= n; i++) {
+        dp[i][0] = 1;
+        for (int j = 1; j <= k; j++)  {
+            dp[i][j] = dp[i][j-1] + dp[i-1][j];
+            if (j >= i)
+                dp[i][j] -= dp[i-1][j-i];
+            dp[i][j] = (dp[i][j] + mod) % mod;
+        }
+    }
+    return (int)dp[n][k];
+}
+#+END_SRC
+*** 解题思路与分析
+    
+    [[./pic/kinvPair.png]]
+
+#+BEGIN_SRC java
+public int kInversePairs(int n, int k) {
+    int mod = (int)1e9 + 7;
+    int [][] dp = new int [n+1][k+1];
+    dp[0][0] = 1;
+    for (int i = 1; i <= n; i++) {
+        long sum = 0;
+        for (int j = 0; j <= k; j++) {
+            sum += dp[i-1][j];
+            if (j >= i)
+                sum -= dp[i-1][j-i];
+            dp[i][j] = (int)(sum % mod);
+        }
+    }
+    return (int)dp[n][k];
+}
+#+END_SRC
+** 1787. Make the XOR of All Segments Equal to Zero - Hard
+You are given an array nums​​​ and an integer k​​​​​. The XOR of a segment [left, right] where left <= right is the XOR of all the elements with indices between left and right, inclusive: nums[left] XOR nums[left+1] XOR ... XOR nums[right].
+
+Return the minimum number of elements to change in the array such that the XOR of all segments of size k​​​​​​ is equal to zero.
+*** 解题思路与分析
+    
+    [[./pic/xortimes.png]]
+    
+- 根据题目特点，最后所有长度为 k 的区间异或结果等于零，可推出得到的数组满足：
+#+BEGIN_SRC java
+a1 = ak+1 = a2k+1 = …
+a2 = ak+2 = a2k+2 = …
+#+END_SRC
+因此可将数组中的元素按上述规律，每间隔 k 个的数字为一组进行分组。
+
+在此基础上，设计一个动态规划数组 dp[j]，表示到当前第 i 组为止，所有元素异或到对应数字 j 时的更改次数。则对第 i 组 dp[j] 的状态转移方程可能为：
+
+j 可由某一数值和当前组中的某个数 num 异或得到，newDp[j] = dp[j & num] + size[i] - 组中 num 的数量
+
+j 可通过和任意数字异或得到，newDp[j] = 前一 dp 中最小的改变次数 + size[i]
+
+完成 k 个组的动态规划后，dp[0]就是所求的解。
+
+#+BEGIN_SRC java
+public int minChanges(int[] arr, int k) {
+    int n = arr.length;
+    List<Map<Integer, Integer>> group = new ArrayList<>(); // 存储 k 个组、各组中各个数字数量
+    int [] size = new int [k];                             // 各组大小,它们会有可能不同吗？
+    for (int i = 0; i < k; i++) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int j = i; j < n; j += k) {
+            map.put(arr[j], map.getOrDefault(arr[j], 0) + 1);
+            size[i]++;
+        }
+        group.add(map);
+    }
+    int range = 1 << 10;          //  题中nums[i] < 2^10， 为的是遍历所有可能更改值，以取最小
+    int [] dp = new int [range];  // 当前组异或到对应数字时的更改次数
+    Arrays.fill(dp, Integer.MAX_VALUE);
+    dp[0] = 0;
+    for (int i = 0; i < k; i++) {
+        int minVal = Arrays.stream(dp).min().getAsInt();
+        int [] newDp = new int [range];       //  遍历每一个个组，暴搜、取最小
+        Arrays.fill(newDp, minVal + size[i]); // 变为当前组中不存在数字的改变次数：之前的最小改变次数+当前组元素个数
+        for (int j = 0; j < range; j++) {
+            if (dp[j] == Integer.MAX_VALUE) continue; // 对第0组，保证dp[i]是异或到0的最小改变数
+            Iterator it = group.get(i).entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry en = (Map.Entry)it.next();
+                int num = (int)en.getKey(), v = (int)en.getValue();
+                int xorNum = num ^ j;
+                newDp[xorNum] = Math.min(newDp[xorNum], dp[j] + size[i] - v);
+            }
+        }
+        dp = Arrays.copyOf(newDp, range); // 将遍历到当前组、累积较优解的newDp复制入全局最优解dp数组中
+    }
+    return dp[0];
+}
+#+END_SRC

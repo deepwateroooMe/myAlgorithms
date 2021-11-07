@@ -100,81 +100,6 @@ public class trieB {
 
         // public class Trie {
         //     private class Node {
-        //         public int val;
-        //         public boolean isWord;
-        //         public TreeMap<Character, Node> next;
-        //         public Node(boolean isWord) {
-        //             this.isWord = isWord;
-        //             next = new TreeMap<>();
-        //         }
-        //         public Node() {
-        //             this(false);
-        //         }
-        //         public Node(int va) {
-        //             this(true);
-        //             this.val = va;
-        //         }
-        //     }
-        //     private Node root;
-        //     private int size;
-        //     public Trie() {
-        //         root = new Node();
-        //         size = 0;
-        //     }
-        //     public void insert(String word) {
-        //         Node cur = root;
-        //         for (int i = 0; i < word.length(); i++) {
-        //             char c = word.charAt(i);
-        //             if (cur.next.get(c) == null) 
-        //                 cur.next.put(c, new Node());
-        //             cur = cur.next.get(c);
-        //         }
-        //         if (!cur.isWord) {
-        //             cur.isWord = true;
-        //             size++;
-        //         }
-        //     }
-        //     int cnt = 0;
-        //     int res = 0;
-        //     private void getKthValuesRecursive(Node r, StringBuilder s, int k, List<Integer> l) {
-        //         if (r == null) return;
-        //         if (r.isWord) {
-        //             int tmp = Integer.parseInt(s.toString());
-        //             if (!l.contains(tmp)) {
-        //                 l.add(tmp);
-        //                 ++cnt;
-        //                 if (cnt == k) {
-        //                     res = tmp;
-        //                     return;
-        //                 }
-        //             }
-        //         }
-        //         if (r.next == null) return;
-        //         for (Character key : r.next.keySet()) {
-        //             s.append(key);
-        //             getKthValuesRecursive(r.next.get(key), s, k, l);
-        //             s.deleteCharAt(s.length()-1);
-        //         }
-        //     }
-        //     public int getKthSmallestNumber(int k) {
-        //         cnt = 0;
-        //         res = 0;
-        //         getKthValuesRecursive(root, new StringBuilder(), k, new ArrayList<Integer>());
-        //         return res;
-        //     }
-        // }
-        // public int findKthNumber(int n, int k) {
-        //     if (n == 1 && k == 1) return 1;
-        //     Trie t = new Trie();
-        //     for (int i = 1; i <= n; i++) 
-        //         t.insert(String.valueOf(i));
-        //     return t.getKthSmallestNumber(k);
-        // }
-
-
-
-        // public class Trie {
-        //     private class Node {
         //         public String val;
         //         public boolean mark;
         //         public TreeMap<String, Node> next;
@@ -708,15 +633,127 @@ public class trieB {
         //     return find(s, 0, dp);
         // }
 
-        
+
+        // public class Trie {
+        //     private class Node {
+        //         boolean isNum;
+        //         int cnt; // 加上cnt来记录每个根结点下子结点的个数，以空间换时间
+        //         Node [] next;
+        //         public Node() {
+        //             this.isNum = false;
+        //             next = new Node [10];
+        //             cnt = 1;
+        //         }
+        //     }
+        //     private Node root;
+        //     public Trie() {
+        //         root = new Node();
+        //     }
+        //     public void insert(String word) {
+        //         Node cur = root;
+        //         char [] s = word.toCharArray();
+        //         for (int i = 0; i < word.length(); i++) {
+        //             char c = s[i];
+        //             if (cur.next[c-'0'] == null) {
+        //                 cur.next[c-'0'] = new Node();
+        //                 cur.cnt++;
+        //             }
+        //             cur = cur.next[c-'0'];
+        //         }
+        //         if (!cur.isNum) cur.isNum = true;
+        //     }
+        //     int cnt = 0;
+        //     int res = 0;
+        //     private boolean preOrderTraversal(Node r, StringBuilder s, int k, int cur) { // pre-order traversal
+        //         if (r == null) return false;
+        //         if (r.cnt )
+        //         if (r.isNum) {
+        //             cnt++;
+        //             if (cnt == k) {
+        //                 res = Integer.parseInt(s.toString());
+        //                 return true;
+        //             }
+        //         }
+        //         if (r.next == null) return false;
+        //         for (int i = 0; i < 10; i++) {
+        //             s.append((char)(i + '0'));
+        //             if (preOrderTraversal(r.next[i], s, k)) return true;
+        //             s.deleteCharAt(s.length()-1);
+        //         }
+        //         return false;
+        //     }
+        //     public int getKthSmallestNumber(int k) {
+        //         cnt = 0;
+        //         res = 0;
+        //         preOrderTraversal(root, new StringBuilder(), k, 0);
+        //         return res;
+        //     }
+        // }
+        // public int findKthNumber(int n, int k) {
+        //     if (n == 1 && k == 1) return 1;
+        //     Trie t = new Trie();
+        //     for (int i = 1; i <= n; i++) 
+        //         t.insert(String.valueOf(i));
+        //     return t.getKthSmallestNumber(k);
+        // }
+        // 就像dfs时当我们需要两个字符串，遍历字符串，我们并不需要看的去遍历字符串，我们只要移动下标就可以了
+        // 这里我们并不需要真的去建和遍历这样一个字典，我们只要理清数字个数之间的关系就可以了
+        // 还要一个典型案例，把它找出来。。。。 todo
+        private int calSteps(int n, long n1, long n2) { // n1 和 n2得是long类型的, int会产生溢出, 不能通过这个案例: 输入n=681692778, k=351251360, 预期结果=416126219
+            int steps = 0;
+            while (n1 <= n) {
+                steps += Math.min(n2, n+1) - n1;
+                n1 *= 10;
+                n2 *= 10;
+            }
+            return steps;
+        }
+        public int findKthNumber(int n, int k) {
+            int cur = 1; //根据题意, 第一个数是1
+            --k;         //第一个是1, 所以再找出k-1个数后就知道第k个数是多少了
+            while (k > 0) {
+                int steps = calSteps(n, cur, cur+1);
+                if (steps <= k) { //横向扩展, 相当于+steps,
+                    cur += 1;
+                    k -= steps;
+                } else {          //steps > k; 纵向扩展, 相当于+1
+                    cur *= 10;
+                    k -= 1;
+                }
+            }
+            return cur;
+        }
+            
+        //     int cur = 1;
+        //     k = k-1;
+        //     while(k>0){
+        //         int steps = calSteps(n, cur, cur+1);
+        //         if(steps<=k){
+        //             cur +=1 ;
+        //             k -= steps;
+        //         }
+        //         else{
+        //             cur *= 10;
+        //             k-=1;
+        //         }
+        //     }
+        //     return cur;
+        // }
+        // private int calSteps(int n, long n1, long n2){
+        //     int steps = 0;
+        //     while(n1<=n){
+        //         steps += Math.min(n2, n+1) - n1;
+        //         n1 *= 10;
+        //         n2 *= 10;
+        //     }
+        //     return steps;
+        // }
+
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        String a = "abe";
-        String b = "bbc";
-
-        int res = s.countSubstrings(a, b);
+        int res = s.findKthNumber(681692778, 351251360);
         System.out.println("res: " + res);
     }
 }

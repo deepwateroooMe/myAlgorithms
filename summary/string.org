@@ -365,3 +365,118 @@ public int longestSubstring(String s, int k) { // 人工手动折分
 #+END_SRC
 
 
+** 1830. Minimum Number of Operations to Make String Sorted - Hard 排列组合费小马快速幂
+You are given a string s (0-indexed)​​​​​​. You are asked to perform the following operation on s​​​​​​ until you get a sorted string:
+
+Find the largest index i such that 1 <= i < s.length and s[i] < s[i - 1].
+Find the largest index j such that i <= j < s.length and s[k] < s[i - 1] for all the possible values of k in the range [i, j] inclusive.
+Swap the two characters at indices i - 1​​​​ and j​​​​​.
+Reverse the suffix starting at index i​​​​​​.
+Return the number of operations needed to make the string sorted. Since the answer can be too large, return it modulo 109 + 7.
+*** 解题思路与分析
+题中每次对字符串 s 执行的操作，是将其变为由当前字母组成的前一字典序的字符串。因此求最少操作次数，等价于求解该字符串在由当前字母组成的所有排列中的字典序；
+
+求比当前字符串 s 小的排列个数，可通过排列组合公式计算得到；
+
+排列组合公式中的阶乘逆元取模，可通过费马小定理，转化为对模数的乘方进行计算；
+
+可通过快速乘方算法，进一步提高对乘方的计算效率。
+
+#+BEGIN_SRC java
+private int quickmul(int base, int exp) { // 快速乘方算法
+    long ans = 1L;
+    while (exp > 0) {
+        if ((exp & 1) == 1) // 指数是奇数，就先乘一次base
+            ans = ans * base % mod;
+        base = (int)((long)base * base % mod); // 底平方 (指数变偶数之后)
+        exp >>= 1;                              // 指数除2，快速计算
+    }
+    return (int)ans;
+}
+int mod = (int)1e9 + 7;
+public int makeStringSorted(String t) {
+    int n = t.length();
+    char [] s = t.toCharArray();
+    int [] cnt = new int [26]; // 记录剩余字符串中各字母个数
+    Arrays.fill(cnt, 0);
+    for (int i = 0; i < n; i++) 
+        cnt[s[i]-'a']++;
+    int [] fact = new int [n+1];
+    int [] finv = new int [n+1];
+    fact[0] = 1;
+    finv[0] = 1;
+    for (int i = 1; i <= n; i++) {
+        fact[i] = (int)((long)fact[i-1] * i % mod); // fac[i] = i! % mod
+        finv[i] = quickmul(fact[i], mod - 2); // 费马小定理计算乘法逆元, facinv[i] = (i!) ^ -1 % mod
+    }
+    long ans = 0L;
+    for (int i = 0; i < n-1; i++) {
+        int lessCnt = 0; // 比当前位置小的字母总数
+        for (int j = 0; j < s[i]-'a'; j++) 
+            lessCnt += cnt[j];
+        long upper = (long)lessCnt * fact[n-1-i] % mod; // 排列公式分子
+        for (int j = 0; j < 26; j++) 
+            upper = upper * finv[cnt[j]] % mod;
+        ans = (ans + upper) % mod;
+        cnt[s[i]-'a']--; // 指针右移
+    }
+    return (int)ans;
+}
+#+END_SRC
+ 
+** 1960. Maximum Product of the Length of Two Palindromic Substrings - Hard 马拉车算法 todo
+You are given a 0-indexed string s and are tasked with finding two non-intersecting palindromic substrings of odd length such that the product of their lengths is maximized.
+
+More formally, you want to choose four integers i, j, k, l such that 0 <= i <= j < k <= l < s.length and both the substrings s[i...j] and s[k...l] are palindromes and have odd lengths. s[i...j] denotes a substring from index i to index j inclusive.
+
+Return the maximum possible product of the lengths of the two non-intersecting palindromic substrings.
+
+A palindrome is a string that is the same forward and backward. A substring is a contiguous sequence of characters in a string.
+*** 解题思路与分析
+
+这个马拉车，好像还是很半生不熟，要好好理解消化一下
+
+https://leetcode.com/problems/maximum-product-of-the-length-of-two-palindromic-substrings/discuss/1393288/Java-100-O(n)-time-O(n)-space-using-Manacher's-algorithm
+#+BEGIN_SRC java
+private static int[] manacherOdd(String str) {
+    int n = str.length();
+    char[] s = str.toCharArray();
+    int [] ans = new int [n];
+    for (int i = 0, l = 0, r = -1; i < n; i++) {
+        int len = i > r ? 1 : Math.min(ans[l+r-i], r-i+1);
+        int maxLen = Math.min(i, n-1-i);
+        int x = i - len, y = i + len;
+        while (len <= maxLen && s[x--] == s[y++]) len++;
+        ans[i] = len--;
+        if (i + len > r) {
+            l = i - len;
+            r = i + len;
+        }
+    }
+    return ans;
+}
+public long maxProduct(String s) { // 这个马拉车，得多写几遍
+    int n = s.length();
+    int [] d = manacherOdd(s);
+    int [] l = new int [n], r = new int [n];
+    for (int i = 0; i < n; i++) {
+        l[i+d[i]-1] = Math.max(l[i+d[i]-1], 2 * d[i]-1);
+        r[i-d[i]+1] = 2 * d[i] - 1;
+    }
+    for (int i = n-2, j = n-1; i >= 0; i--, j--)
+        l[i] = Math.max(l[i], l[j]-2);
+    for (int i = 1, j = 0; i < n; i++, j++)
+        r[i] = Math.max(r[i], r[j]-2);
+    for (int i = 1, j = 0; i < n; i++, j++) 
+        l[i] = Math.max(l[i], l[j]);
+    for (int i = n-2, j = n-1; i >= 0; i--, j--)
+        r[i] = Math.max(r[i], r[j]);
+    long ans = 1;
+    for (int i = 1; i < n; i++) 
+        ans = Math.max(ans, (long)l[i-1] * r[i]);
+    return ans;
+}
+#+END_SRC
+*** DP解：要再好好理解消化一下
+#+BEGIN_SRC java
+#+END_SRC

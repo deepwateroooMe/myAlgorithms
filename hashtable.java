@@ -737,23 +737,6 @@ public class hashtable {
         // }
 
 
-        // public int minSubarray(int[] arr, int p) { // 有点儿不明白提示说的是什么意思
-        //     int n = arr.length;
-        //     int [] sum = Arrays.copyOf(arr, n);
-        //     Map<Integer, Integer> m = new HashMap<>();
-        //     for (int i = 1; i < n; i++) 
-        //         sum[i] += sum[i-1];
-        //     int rem = sum[n-1] % p; //  [0, 1, 2, ... p-1]
-        //     for (int i = 0; i < n; i++) {
-        //         int tmp = sum[i] % p;
-        //         if (i < n-1)
-        //             m.put(tmp, i);
-        //     }
-        //     if (!m.containsKey(rem)) return -1;
-        //     return n-1-m.get(rem);
-        // }
-
-
         // public List<Integer> peopleIndexes(List<List<String>> favoriteCompanies) {
         //     List<Set<String>> ll = new ArrayList<>();
         //     for (List<String> ls : favoriteCompanies) 

@@ -3099,7 +3099,7 @@ public int minNumberOfFrogs(String croakOfFrogs) {
 #+END_SRC
 
 
-* PreSum
+* PreSum 差分数组 
 ** 1674. Minimum Moves to Make Array Complementary - Medium 差分数组
 You are given an integer array nums of even length n and an integer limit. In one move, you can replace any integer from nums with another integer between 1 and limit, inclusive.
 
@@ -3304,6 +3304,102 @@ public int numSubmatrixSumTarget(int[][] matrix, int target) {
 }
 #+END_SRC
 
+** 798. Smallest Rotation with Highest Score
+Hard
+
+308
+
+19
+
+Add to List
+
+Share
+You are given an array nums. You can rotate it by a non-negative integer k so that the array becomes [nums[k], nums[k + 1], ... nums[nums.length - 1], nums[0], nums[1], ..., nums[k-1]]. Afterward, any entries that are less than or equal to their index are worth one point.
+
+For example, if we have nums = [2,4,1,3,0], and we rotate by k = 2, it becomes [1,3,0,2,4]. This is worth 3 points because 1 > 0 [no points], 3 > 1 [no points], 0 <= 2 [one point], 2 <= 3 [one point], 4 <= 4 [one point].
+Return the rotation index k that corresponds to the highest score we can achieve if we rotated nums by it. If there are multiple answers, return the smallest such index k.
+*** 解题思路与分析
+
+答案的思路也十分巧妙，并没有采用brute force那种直接求每一个K值的得分，而是反其道而行之，对于每个数字，探究其跟K值之间的联系。首先我们要讨论一下边界情况，那么就是当A[i] = 0 或 N 的情况，首先如果A[i] = 0的话，那么0这个数字在任何位置都会小于等于坐标值，所以在任何位置都会得分的，那么其实可以忽略之，因为其不会对最大值产生任何影响，同理，如果A[i] = N的时候，由于长度为N的数组的坐标值范围是[0, N-1]，所以数字N在任何位置都不得分，同样也不会对最大值产生任何影响，可以忽略之。那么我们关心的数字的范围其实是[1, N-1]。在这个范围内的数字在旋转数组的过程中，从位置0变到N-1位置的时候，一定会得分，因为此范围的数字最大就是N-1。这个一定得的分我们在最后统一加上，基于上面的发现，我们再来分析下题目中的例子 [2, 3, 1, 4, 0]，其中红色数字表示不得分的位置：
+
+#+BEGIN_SRC java
+A:    2   3   1   4   0   (K = 0)
+A:    3   1   4   0   2   (K = 1)
+A:    1   4   0   2   3   (K = 2)
+A:    4   0   2   3   1   (K = 3)
+A:    0   2   3   1   4   (K = 4)
+idx:  0   1   2   3   4
+#+END_SRC
+
+对于某个数字A[i]，我们想知道其什么时候能旋转到坐标位置为A[i]的地方，这样就可以得分了。比如上面博主标记了红色的数字3，最开始时的位置为1，此时是不得分的，我们想知道其什么时候能到位置3，答案是当K=3的时候，其刚好旋转到位置3，K再增加的时候，其又开始不得分了。所以这个最后能得分的临界位置是通过 (i - A[i] + N) % N 得到，那么此时如果K再增加1的话，A[i]就开始不得分了（如果我们suppose每个位置都可以得分，那么不得分的地方就可以当作是失分了），所以我们可以在这个刚好开始不得分的地方标记一下，通过-1进行标记，这个位置就是 (i - A[i] + 1 + N) % N。我们用一个长度为N的change数组，对于每个数字，我们都找到其刚好不得分的地方，进行-1操作，那么此时change[i]就表示数组中的数字在i位置会不得分的个数，如果我们仔细观察上面红色的数字，可以发现，由于是左移，坐标在不断减小，所以原先失分的地方，在K+1的时候还是失分，除非你从开头位置跑到末尾去了，那会得分，所以我们要累加change数组，并且K每增加1的时候，要加上额外的1，最后change数组中最大数字的位置就是要求的K值了.
+
+[[./pic/idx.png]]
+
+时间复杂度：O(n)
+
+空间复杂度：O(n)
+
+#+BEGIN_SRC java
+public int bestRotation(int[] a) {
+    int n = a.length, ans = 0;
+    int [] change = new int [n];
+    for (int i = 0; i < n; ++i) change[(i - a[i] + n + 1) % n] -= 1;
+    for (int i = 1; i < n; ++i) {
+        change[i] += change[i-1] + 1;
+        ans = change[i] > change[ans] ? i : ans;
+    }
+    return ans;
+}
+#+END_SRC
+*** Java O(NlgN) optimized Brute Force with Fenwick Tree O(NlogN)
+
+我们假设A的大小为n，如果采用暴力法逐个测试，则时间复杂度为O(n^2)，应该过不了大数据测试。
+
+我采取的方法是：首先计算使得每个元素A[i]要符合条件，需要rotate的K的集合，用线段表示；然后再扫描一遍，求出这些线段中重合最多的点，那么这个点对应的rotate次数就是题目所要计算的K。对应A[i]来讲，如果A[i] <= i，那么它向左移动到j也可能维持A[i] <= j，所以我们计算出此时它向左移动的合法区间[0, i - A[i]]。那么A[i]向右移动的合法区间是多少呢？我们知道它向右移动最多移动到n - 1，即移动n - 1 - i步；而最少需要移动max(1, A[i] - i)步，其中1表示A[i] <= 的情况。那么如果这个区间合法，就可以同样构成了一个合法的移动区间[i + 1, n - max(1, A[i] - i)]。
+
+得到多个线段构成的合法移动区间之后，我们的任务就是求出这些区间的最大重合点。首先对segment中的各个点进行排序，然后采用扫描线的方法计算最大最大重合处。为了便于区分某个点是起点还是终点，我们定义一个pair<int, bool>来表示点，并且让起点的bool值为false，终点的bool值为true，这样就可以在扫描到某个点之后，先处理起点，再处理终点。
+
+由于每个A[i]最多对应2个合法移动区间，所以segments大小也是O(n)量级的。这样可以得知，本算法的时间复杂度是O(nlogn)，空间复杂度是O(n)。
+
+https://www.codeleading.com/article/62063257456/
+
+- 不是我的代码风格，需要再学习一下 
+
+#+BEGIN_SRC java
+public int bestRotation(int[] A) {
+    int LEN = A.length;
+    int score, ans, ansInd, k; score = k = ans = ansInd = 0;
+    for(int i = 0; i < LEN; i++) A[i] -= i;
+    int[] bit = new int[3 * LEN + 1];
+    for(int i = k; i < LEN; i++) bitAdd(bit, 3 * LEN + 1, vToIndex(A[i], LEN), 1);
+    while (k < LEN) {
+        score = bitPreSum(bit, vToIndex(-k, LEN));
+        if(score > ans) {
+            ansInd = k;
+            ans = score;
+        }
+        bitAdd(bit, 3 * LEN + 1, vToIndex(A[k], LEN), -1);
+        bitAdd(bit, 3 * LEN + 1, vToIndex(A[k] - LEN, LEN), 1);
+        k++;
+    }
+    return ansInd;
+}
+void bitAdd(int[] bit, int bLEN, int ind, int delta) {
+    for(; ind < bLEN; ind = (ind | (ind + 1))) {
+        bit[ind] += delta;
+    }
+}
+int bitPreSum(int[] bit, int ind) {
+    int ans = 0;
+    for(; ind >= 0; ind = (ind & (ind + 1)) - 1) {
+        ans += bit[ind];
+    }
+    return ans;
+}
+int vToIndex(int v, int LEN) {
+    return v + 2 * LEN;
+}
+#+END_SRC
 * Greedy
 ** 1585. Check If String Is Transformable With Substring Sort Operations - Hard
 Given two strings s and t, you want to transform string s into string t using the following operation any number of times:
@@ -3559,3 +3655,40 @@ public List<List<Integer>> criticalConnections(int n, List<List<Integer>> connec
 #+END_SRC
 
 
+** 891. Sum of Subsequence Widths - Hard 考sorting和对subsequence的理解
+The width of a sequence is the difference between the maximum and minimum elements in the sequence.
+
+Given an array of integers nums, return the sum of the widths of all the non-empty subsequences of nums. Since the answer may be very large, return it modulo 109 + 7.
+
+A subsequence is a sequence that can be derived from an array by deleting some or no elements without changing the order of the remaining elements. For example, [3,6,2,7] is a subsequence of the array [0,3,1,6,2,2,7].
+*** 解题思路与分析
+- 这道题的最优解法相当的 tricky，基本有点脑筋急转弯的感觉了。在解题之前，我们首先要知道的是一个长度为n的数组，共有多少个子序列，如果算上空集的话，共有 2^n 个。
+
+那么在给数组排序之后，对于其中任意一个数字 A[i]，其前面共有i个数是小于等于 A[i] 的，这i个数字共有 2^i 个子序列，它们加上 A[i] 都可以组成一个新的非空子序列，并且 A[i] 是这里面最大的数字，那么在宽度计算的时候，就要加上 A[i] x (2^i)，
+
+同理，A[i] 后面还有 n-1-i 个数字是大于等于它的，后面可以形成 2^(n-1-i) 个子序列，每个加上 A[i] 就都是一个新的非空子序列，同时 A[i] 是这些子序列中最小的一个，那么结果中就要减去 A[i] x (2 ^ (n-1-i))。对于每个数字都这么计算一下，就是最终要求的所有子序列的宽度之和了。
+
+可能你会怀疑虽然加上了 A[i] 前面 2^i 个子序列的最大值，那些子序列的最小值减去了么？其实是减去了的，虽然不是在遍历 A[i] 的时候减去，在遍历之前的数字时已经将所有该数字是子序列最小值的情况减去了，同理，A[i] 后面的那些 2^(n-1-i) 个子序列的最大值也是在遍历到的时候才加上的，所以不会漏掉任何一个数字。
+
+在写代码的时候有几点需要注意的地方，首先，结果 res 要定义为 long 型，因为虽然每次会对 1e9+7 取余，但是不能保证不会在取余之前就已经整型溢出，所以要定义为长整型。
+
+其次，不能直接算 2^i 和 2^(n-1-i)，很容易溢出，即便是长整型，也有可能溢出。那么解决方案就是，在累加i的同时，每次都乘以个2，那么遍历到i的时候，也就乘到 2^i 了，防止溢出的诀窍就是每次乘以2之后就立马对 1e9+7 取余，这样就避免了指数溢出，同时又不影响结果。
+
+最后，由于这种机制下的 2^i 和 2^(n-1-i) 不方便同时计算，这里又用了一个 trick，就是将 A[i] x (2^(n-1-i)) 转换为了 A[n-1-i] x 2^i，其实二者最终的累加和是相等的：
+#+BEGIN_SRC java
+sum(A[i] * 2^(n-1-i)) = A[0]*2^(n-1) + A[1]*2^(n-2) + A[2]*2^(n-3) + ... + A[n-1]*2^0
+sum(A[n-1 - i] * 2^i) = A[n-1]*2^0 + A[n-2]*2^1 + ... + A[1]*2^(n-2) + A[0]*2^(n-1)
+#+END_SRC
+
+#+BEGIN_SRC java
+public int sumSubseqWidths(int[] a) {
+    long mod = (int)1e9 + 7, c = 1;
+    long ans = 0;
+    Arrays.sort(a);
+    for (int i = 0; i < a.length; i++) {
+        ans = (ans + (long)a[i] * c  - a[a.length-1-i] * c) % mod;
+        c = (c << 1) % mod;
+    }
+    return (int)ans;
+}
+#+END_SRC

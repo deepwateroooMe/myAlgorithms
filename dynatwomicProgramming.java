@@ -612,6 +612,8 @@ public class dynatwomicProgramming {
         //         System.out.print(en[z] + ", ");
         //     System.out.println("");
         // }
+
+        
         // private void helper(String s, int i, int j) {
         //     while (i >= 0 && j < s.length() && s.charAt(i) == s.charAt(j)) {
         //         --i;
@@ -641,6 +643,8 @@ public class dynatwomicProgramming {
         //     } 
         //     return res;
         // }
+
+        
         // int min = Integer.MAX_VALUE;
         // private boolean considerable(List<Integer> nee, List<Integer> off, List<Integer> pri) {
         //     if (nee.size() == 1 && off.get(off.size()-1) > pri.get(0)) return false;

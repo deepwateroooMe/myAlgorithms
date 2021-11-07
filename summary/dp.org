@@ -2,6 +2,9 @@
 
 * Dynamic Programming, 动态规划
 ** 总结
+** 第二次仍不会的题号记这里
+- 1872 (stone game 8)
+
 - 根据CLRS，动态规划分为两种：
 - top-down with memoization (递归记忆化搜索)
 等价于带缓存的，搜索树上的 DFS
@@ -11,99 +14,215 @@
 每个子问题下面依赖的所有子问题都算完了才开始计算当前
 一般依赖于子问题之间天然的 "size
 
-** 198. House Robber - Medium
-You are a professional robber planning to rob houses along a street. Each house has a certain amount of money stashed, the only constraint stopping you from robbing each of them is that adjacent houses have security systems connected and it will automatically contact the police if two adjacent houses were broken into on the same night.
+** 647. Palindromic Substrings - Medium
+Given a string s, return the number of palindromic substrings in it.
 
-Given an integer array nums representing the amount of money of each house, return the maximum amount of money you can rob tonight without alerting the police.
-*** 解题思路与分析
-- 对于每一个住户来说，只有两种选择：
-  - 偷这一户人家的，下一家不要
-  - 不偷这一家的，去偷下一家的
+A string is a palindrome when it reads the same backward as forward.
+
+A substring is a contiguous sequence of characters within the string.
 #+BEGIN_SRC java
-private int dfs(int [] arr, int idx) {
-    if (idx >= n) return 0;
-    if (dp[idx] > 0) return dp[idx];
-    return dp[idx] = Math.max(dfs(arr, idx+2) + arr[idx], dfs(arr, idx+1)); // 不要忘记记忆——记住答案！！！
-}
-int [] dp;
-int n;
-public int rob(int[] a) {
-    if (Arrays.stream(a).sum() == 0) return 0;
-     n = a.length;
-     dp = new int [n];
-     return dfs(a, 0);
-}
-#+END_SRC 
-** 213. House Robber II
-You are a professional robber planning to rob houses along a street. Each house has a certain amount of money stashed. All houses at this place are arranged in a circle. That means the first house is the neighbor of the last one. Meanwhile, adjacent houses have a security system connected, and it will automatically contact the police if two adjacent houses were broken into on the same night.
-Given an integer array nums representing the amount of money of each house, return the maximum amount of money you can rob tonight without alerting the police.
-*** 解题思路与分析
-- 与上一题不同的是：因为是环形数组，数组首尾相连，相邻的两户人家只能偷一家
-- 问题就转化成了：我要么去偷[0, n-2]这些人家的，要么去偷[1, n-1]这些人家的，包括首尾
-- 这成了上一题的稍微变形与套娃
-#+BEGIN_SRC java
-private int dfs(int [] arr, int i, int j, int idx) {
-    if (idx > j) return 0;
-    if (dp[idx] != -1) return dp[idx];
-    return dp[idx] = Math.max(dfs(arr, i, j, idx+2) + arr[idx], dfs(arr, i, j, idx+1));
-}
-int [] dp;
-int n;
-public int rob(int[] arr) {
-     n = arr.length;
-     if (n == 1) return arr[0];
-     dp = new int [n];
-     Arrays.fill(dp, -1);
-     int max = dfs(arr, 1, n-1, 1);
-     Arrays.fill(dp, -1); // 不要忘了dp数组的重置与重新计算
-     // return Math.max(dfs(arr, 1, n-1, 1), dfs(arr, 0, n-2, 0)); // BUG: 因为dp数组不重置，会发生数据混淆，得到错误答案
-     return Math.max(max, dfs(arr, 0, n-2, 0));
-}
-#+END_SRC
-** 740. Delete and Earn: 一类题目，变形了你还认得出来吗？
-You are given an integer array nums. You want to maximize the number of points you get by performing the following operation any number of times:
-Pick any nums[i] and delete it to earn nums[i] points. Afterwards, you must delete every element equal to nums[i] - 1 and every element equal to nums[i] + 1.
-Return the maximum number of points you can earn by applying the above operation some number of times.
-*** 解题思路与分析
-- 关键题意理解：对于nums = [2, 2, 3, 3, 3, 4]，如果我们选了数字3，则要删除每一个（所有）2和4，之后数组变为[3, 3]，此时如果再选3，并不会删除其他元素，剩余数组变为[3]，再选3，数组变为空，返回结果是3+3+3=9。
-- 将上面的例子转化为House Robber的形式，nums' = [0, 0, 22, 33, 4]，nums'[i]代表值为i的数字的总数和(或者数字(下标)i在原数组中出现的次数)，每次若选择nums'数组的一个元素，则相邻元素不能在下一次被选中(包括其所有的重复计数)，相当于被全部删去。转化后，用House Robber的思路来处理nums'数组即可。
-#+BEGIN_SRC java
-private int dfs(int [] cnt, int i) {
-    if (i >= N) return 0;
-    if (dp[i] > 0) return dp[i];
-    return dp[i] = Math.max(dfs(cnt, i+2) + cnt[i]*i, dfs(cnt, i+1));
-}
-int [] dp;
-int N;
-public int deleteAndEarn(int[] nums) {
-    int n = nums.length, max = Arrays.stream(nums).max().getAsInt();
-    N = max+1;
-    int [] cnt = new int [N];
-    for (Integer v : nums) 
-        cnt[v]++;
-    dp = new int [N];
-    int i = 0;
-    while (i < N && cnt[i] == 0) i++;
-    return dfs(cnt, i);
-}
-#+END_SRC
-- dp解
-#+BEGIN_SRC java
-public int deleteAndEarn(int[] nums) {
-    int n = nums.length, N = 10001;
-    int [] cnt = new int [N];
-    for (Integer v : nums) 
-        cnt[v] += v;
-    int preOne = 0, preTwo = 0, ans = 0; // 相当于是滚动数组，把一维dp压缩为两个位置
-    for (Integer v : cnt) {
-        ans = Math.max(preOne, v + preTwo);
-        preTwo = preOne;
-        preOne = ans;
-    }
+public int countSubstrings(String t) {
+    int n = t.length(), ans = 0;
+    char [] s = t.toCharArray();
+    boolean [][] dp = new boolean [n][n];
+    for (int i = n-1; i >= 0; i--) 
+        for (int j = i; j < n; j++) {
+            dp[i][j] = s[i] == s[j] && (j-i <= 2 || dp[i+1][j-1]);
+            if (dp[i][j]) ans++;
+        }
     return ans;
 }
 #+END_SRC
+** 516. Longest Palindromic Subsequence - Medium
+Given a string s, find the longest palindromic subsequence's length in s.
 
+A subsequence is a sequence that can be derived from another sequence by deleting some or no elements without changing the order of the remaining elements.
+
+只要把原字符串反过来，两个字符串找最长公共子序列，就是最长回文了
+
+#+BEGIN_SRC java
+public int longestPalindromeSubseq(String tt) {
+    int n = tt.length();
+    char [] s = tt.toCharArray(); // ori
+    char [] t = (new StringBuilder(tt).reverse().toString()).toCharArray(); // reverse
+    int [][] dp = new int [n+1][n+1];
+    for (int i = 1; i <= n; i++) 
+        for (int j = 1; j <= n; j++) {
+            if (s[i-1] == t[j-1]) dp[i][j] = dp[i-1][j-1] + 1;
+            else dp[i][j] = Math.max(dp[i-1][j], dp[i][j-1]);
+        }
+    return dp[n][n];
+}
+#+END_SRC
+
+** 1872. Stone Game VIII - hard 需要好好理解消化
+Alice and Bob take turns playing a game, with Alice starting first.
+There are n stones arranged in a row. On each player's turn, while the number of stones is more than one, they will do the following:
+Choose an integer x > 1, and remove the leftmost x stones from the row.
+Add the sum of the removed stones' values to the player's score.
+Place a new stone, whose value is equal to that sum, on the left side of the row.
+The game stops when only one stone is left in the row.
+The score difference between Alice and Bob is (Alice's score - Bob's score). Alice's goal is to maximize the score difference, and Bob's goal is the minimize the score difference.
+Given an integer array stones of length n where stones[i] represents the value of the ith stone from the left, return the score difference between Alice and Bob if they both play optimally.
+*** 解题思路与分析
+
+这里我原始的做法dfs+记忆数组会超时，是因为数组发生了改变，萁盘状态发生了改变，所以记忆无效？！！！才会超时（感觉还理解得不透，这里）
+
+所以采用反向遍历的方法，将O(N^2)变为O(N)
+  
+[[./pic/stone8.png]]
+  
+[[./pic/stone82.png]]
+
+
+#+BEGIN_SRC java
+// 使用 dp(i) 表示还剩下 [i, n) 要选择的情况下，Alice 所能得到的最大分数差。
+//     对于某个玩家来说，其对应决策可以分为两种：
+//     选取当前数及之前的所有数（等价于 pres[pos]，其中 pos 为上个玩家选完后的下个位置），那么 dp[i] = pres[i] - dp[i+1]。
+//     这是因为 bob 也会最大化发挥。
+//     不选择当前数（可能选下一个，下下一个。。。 etc），那么 dp[i] = dp[i + 1]
+public int stoneGameVIII(int[] stones) {
+    int n = stones.length;
+    int [] dp = new int [n];
+    Arrays.fill(dp, Integer.MIN_VALUE);
+    int [] pre = new int [n+1];
+    for (int i = 1; i <= n; i++)
+        pre[i] = pre[i-1] + stones[i-1];
+    dp[n-1] = pre[n];
+    for (int i = n-2; i >= 0; i--) 
+        dp[i] = Math.max(dp[i+1], pre[i+1]-dp[i+1]);
+    return dp[1];
+}
+#+END_SRC
+- 更精简的代码如下
+#+BEGIN_SRC java
+public int stoneGameVIII(int[] stones) {
+    int n = stones.length;
+    for (int i = 1; i < n; i++) 
+        stones[i] += stones[i-1]; // 原位求前缀和
+    int ans = stones[n-1];
+    for (int i = n-1; i >= 2; i--) 
+        ans = Math.max(ans, stones[i-1] - ans); // 一遍反向遍历求最优解
+    return ans;
+}
+#+END_SRC
+** 494. Target Sum - Medium
+You are given an integer array nums and an integer target.
+
+You want to build an expression out of nums by adding one of the symbols '+' and '-' before each integer in nums and then concatenate all the integers.
+
+For example, if nums = [2, 1], you can add a '+' before 2 and a '-' before 1 and concatenate them to build the expression "+2-1".
+Return the number of different expressions that you can build, which evaluates to target.
+- 该题是一道非常经典的题目，在面试中很可能会考到。该题有多种解法。
+- 第一种解法：DFS，brute force。我们对nums数组中的每个数字，都尝试在其前面添加正号和负号，最后暴力求解，统计数组中各数字组合值为target的情况。(该理解是错误的，我们可以使用带备忘录机制的自顶向下的DP方法，代码见下)
+*** 回溯 O（2^N）
+#+BEGIN_SRC java
+private int getAllSums(int [] a, int target, int idx, int sum, int cnt) { // (2^20) 可否一试呢？理论上是可以过的
+    if (idx == a.length) {                                                // n < 17 比较好 这个2^N的复朵度，真要命呀。。。。。。
+        if (sum == target) cnt++;
+        return cnt; // 有return int代码更简洁，但是全局变量cnt效率更高
+    }
+    // for (int i = idx; i < a.length; i++) { // 为什么要画蝇添足，加个多余的for loop呢？ 
+        // getAllSums(a, target, idx+1, sum + a[idx]);
+        // getAllSums(a, target, idx+1, sum - a[idx]);
+    // }
+    return getAllSums(a, target, idx+1, sum + a[idx], cnt)
+        + getAllSums(a, target, idx+1, sum - a[idx], cnt);
+}
+public int findTargetSumWays(int[] a, int target) { 
+    int n = a.length;
+    return getAllSums(a, target, 0, 0, 0);
+}
+#+END_SRC
+*** 解题思路与分析: dfs记忆化搜索
+#+BEGIN_SRC java
+private int dfs(int [] a, int target, int idx, int sum) {
+    String key = idx + "_" + sum;
+    if (dp.containsKey(key)) return dp.get(key);
+    if (idx == n) {
+        if (sum == target) return 1;
+        else return 0;
+    }
+    int add = dfs(a, target, idx+1, sum + a[idx]);
+    int sub = dfs(a, target, idx+1, sum - a[idx]);
+    dp.put(key, add+sub);
+    return add + sub;
+}
+Map<String, Integer> dp = new HashMap<>();
+int n;
+public int findTargetSumWays(int[] a, int target) {
+    n = a.length;
+    return dfs(a, target, 0, 0);
+}
+#+END_SRC
+- 上面的方法比较慢，下面这个效率更好一点儿
+#+BEGIN_SRC java
+private int dfs(int [] a, int sum, int idx) {
+    if (idx == a.length) {
+        if (sum == 0) return 1;
+        else return 0;
+    }
+    Map<Integer, Integer> tmp = dp.get(idx);
+    if (tmp != null) {
+        if (tmp.containsKey(sum))
+            return tmp.get(sum);
+    } else {
+        tmp = new HashMap<>();
+        dp.put(idx, tmp);
+    }
+    int cnt = dfs(a, sum - a[idx], idx+1) + dfs(a, sum + a[idx], idx+1);
+    tmp.put(sum, cnt);
+    return cnt;
+}
+Map<Integer, Map<Integer, Integer>> dp = new HashMap<>();
+public int findTargetSumWays(int[] nums, int target) {
+    return dfs(nums, target, 0);
+}
+#+END_SRC
+*** DP
+#+BEGIN_SRC java
+// sum[p] + sum[n] = sum[nums];
+// sum[p] - sum[n] = S;
+// 2sum[p] = sum[nums] + S
+// sum[p] = (sum[nums] +S) / 2
+public int findTargetSumWays(int [] a, int S) {
+    int sum = Arrays.stream(a).sum(), target = (sum + S) / 2; // 根据推导公式，计算出target
+    if (S > 0 && sum < S || S < 0 && -sum > S) return 0; // 如果和小于S，说明无法得到解，返回false。（注意S有可能为负）
+    if ((sum + S) % 2 != 0) return 0; // 如果计算出的target不是整数，返回false。
+    int [] dp = new int [target + 1]; // dp[i]表示在原数组中找出一些数字，并且他们的和为下标i的可能有多少种。
+    dp[0] = 1; // 初始化dp[0]为1
+    for (Integer v : a) 
+        // for (int i = target-v; i >= 0; i--) { // 从0循环到target - n, 注意逆序
+        //     if (dp[i] > 0)        // dp[i]大于0说明，存在dp[i]种组合，其和为i的可能性
+        //         dp[i+v] += dp[i]; // 既然存在和为i的可能，那么i加上当前数字的和也是存在的
+        // }
+        for (int i = target; i >= v; i--)  // 从0循环到target - n, 注意逆序
+            dp[i] += dp[i-v];              // 两种写法都对
+    return dp[target];
+}
+#+END_SRC
+*** dp todo
+我们使用Vi来表示数组中的前i个数所能求得的和的集合。初始化时
+#+BEGIN_SRC java
+V0 = {0}     //表示前0个数的和为0
+Vi = {V(i-1) + ai} U {V(i-1) - ai}
+#+END_SRC
+
+Vn就是nums数组所有数字的组合值之和的集合
+
+根据上面的思路，我们知道数组中数字若全为正号其和为sum，全为负号其和为-sum。若不选数组中任何一个数，则和为0。因此，我们设立一个长度为2*sum+1的数组ways，ways[i]表示我们选择前m个数，其和可能为i的情况数，m = 0,1,...nums.length。可参考下图
+
+[[./pic/targetSum.png]]
+
+[[./pic/targetSum2.png]]
+
+    https://www.cnblogs.com/cnoodle/p/14869498.html
+    https://leetcode.com/problems/target-sum/discuss/97334/Java-(15-ms)-C++-(3-ms)-O(ns)-iterative-DP-solution-using-subset-sum-with-explanation/239290
+    http://www.noteanddata.com/leetcode-494-Target-Sum-java-solution-note.html
+    https://www.i4k.xyz/article/gqk289/54709004
+    https://github.com/cherryljr/LeetCode/blob/master/Target%20Sum.java
+
+** Cherry pickup todo
 
 ** 2019. The Score of Students Solving Math Expression - Hard 有人说这是区间dp，无感
 You are given a string s that contains digits 0-9, addition symbols '+', and multiplication symbols '*' only, representing a valid math expression of single digit numbers (e.g., 3+5*2). This expression was given to n elementary school students. The students were instructed to get the answer of the expression by following this order of operations:
@@ -223,7 +342,6 @@ public int maxCoins(int[] nums) {
     return memorizedSearch(arr, 1, n-2);
 }
 #+END_SRC
-
 
 ** 1866. Number of Ways to Rearrange Sticks With K Sticks Visible - Hard
 There are n uniquely-sized sticks whose lengths are integers from 1 to n. You want to arrange the sticks such that exactly k sticks are visible from the left. A stick is visible from the left if there are no longer sticks to the left of it.
@@ -2026,105 +2144,6 @@ public boolean PredictTheWinner(int[] nums) {
 }
 #+END_SRC
 
-** 877. Stone Game
-Alice and Bob play a game with piles of stones. There are an even number of piles arranged in a row, and each pile has a positive integer number of stones piles[i].
-The objective of the game is to end with the most stones. The total number of stones across all the piles is odd, so there are no ties.
-Alice and Bob take turns, with Alice starting first. Each turn, a player takes the entire pile of stones either from the beginning or from the end of the row. This continues until there are no more piles left, at which point the person with the most stones wins.
-Assuming Alice and Bob play optimally, return true if Alice wins the game, or false if Bob wins.
-#+BEGIN_SRC java
-// 使用helper函数表示Alex能比Lee多选的分数。可能比双函数更简洁易懂了。
-// 记忆化递归的缺点：１．有可能爆栈；２．无法降维，而DP是可以降维的。
-// 模板：
-// dfs + memoization模板
-private int dfs(int [] arr, int l, int r) {
-    if (l > r) return 0;
-    if (dp[l][r] > 0) return dp[l][r]; // 走了来时的路，不需要重走，直接返回
-    dp[l][r] = Math.max(arr[l] - dfs(arr, l+1, r), arr[r]-dfs(arr, l, r-1));
-    return dp[l][r];
-}
-int [][] dp; 
-public boolean stoneGame(int[] piles) {
-    int n = piles.length;
-    dp = new int[n][n];
-    return dfs(piles, 0, n-1) > 0;
-}
-// 动态规划解法比较难想，dp数组的第i个位置表示的是从第i个石头到第i+l-1个石头之间最大的比对手得分。
-// 使用的是一个长度变量和起始索引，计算每个位置开始的长度1～N长度的区间的dp状态。
-public boolean stoneGame(int[] piles) {
-    int n = piles.length;
-    int [][] dp = new int[n][n];
-    for (int i = n-1; i >= 0; i--) { // 最后一列
-        dp[i][i] = piles[i];         // 填右上角
-        for (int j = i+1; j < n; j++) 
-            dp[i][j] = Math.max(piles[i] - dp[i+1][j], piles[j]-dp[i][j-1]);
-
-    }
-    return dp[0][n-1] > 0;
-}
-#+END_SRC
-** 1140. Stone Game II
-Alice and Bob continue their games with piles of stones.  There are a number of piles arranged in a row, and each pile has a positive integer number of stones piles[i].  The objective of the game is to end with the most stones. 
-Alice and Bob take turns, with Alice starting first.  Initially, M = 1.
-On each player's turn, that player can take all the stones in the first X remaining piles, where 1 <= X <= 2M.  Then, we set M = max(M, X).
-The game continues until all the stones have been taken.
-Assuming Alice and Bob play optimally, return the maximum number of stones Alice can get.
-#+BEGIN_SRC java
-// dfs + memoization模板
-// 当次取的最优策略是限制下一次取的数量
-private int dfs(int [] arr, int idx, int m) {
-    if (dp[idx][m] > 0) return dp[idx][m];
-    if (idx == n) return 0;
-    if (idx >= n - 2 * m) {
-        dp[idx][m] = suf[idx];
-        return dp[idx][m];
-    }
-    int min = Integer.MAX_VALUE;
-    for (int i = 1; i <= 2 * m; i++) // 选择限制对手得分最少的情况
-        min = Math.min(min, dfs(arr, idx+i, Math.max(m, i))); 
-    dp[idx][m] = suf[idx] - min;
-    return dp[idx][m];
-}
-int [][] dp; 
-int [] suf;
-int n;
-public int stoneGameII(int[] piles) {
-    n = piles.length;
-    dp = new int [n][2*n];
-    suf = new int [n+1];
-    for (int i = n-1; i >= 0; i--) 
-        suf[i] = suf[i+1] + piles[i];
-    return dfs(piles, 0, 1);
-}
-#+END_SRC
-** 1872. Stone Game VIII
-Alice and Bob take turns playing a game, with Alice starting first.
-There are n stones arranged in a row. On each player's turn, while the number of stones is more than one, they will do the following:
-Choose an integer x > 1, and remove the leftmost x stones from the row.
-Add the sum of the removed stones' values to the player's score.
-Place a new stone, whose value is equal to that sum, on the left side of the row.
-The game stops when only one stone is left in the row.
-The score difference between Alice and Bob is (Alice's score - Bob's score). Alice's goal is to maximize the score difference, and Bob's goal is the minimize the score difference.
-Given an integer array stones of length n where stones[i] represents the value of the ith stone from the left, return the score difference between Alice and Bob if they both play optimally.
-#+BEGIN_SRC java
-// 使用 dp(i) 表示还剩下 [i, n) 要选择的情况下，Alice 所能得到的最大分数差。
-//     对于某个玩家来说，其对应决策可以分为两种：
-//     选取当前数及之前的所有数（等价于 pres[pos]，其中 pos 为上个玩家选完后的下个位置），那么 dp[i] = pres[i] - dp[i+1]。
-//     这是因为 bob 也会最大化发挥。
-//     不选择当前数（可能选下一个，下下一个。。。 etc），那么 dp[i] = dp[i + 1]
-public int stoneGameVIII(int[] stones) {
-    int n = stones.length;
-    int [] dp = new int [n];
-    Arrays.fill(dp, Integer.MIN_VALUE);
-    int [] pre = new int [n+1];
-    for (int i = 1; i <= n; i++)
-        pre[i] = pre[i-1] + stones[i-1];
-    dp[n-1] = pre[n];
-    for (int i = n-2; i >= 0; i--) 
-        dp[i] = Math.max(dp[i+1], pre[i+1]-dp[i+1]);
-    return dp[1];
-}
-#+END_SRC
-
 ** 123. Best Time to Buy and Sell Stock III
 You are given an array prices where prices[i] is the price of a given stock on the ith day.
 Find the maximum profit you can achieve. You may complete at most two transactions.
@@ -2419,48 +2438,6 @@ public int sumSubarrayMins(int[] arr) {
     return (int) (sum % mod);
 }
 #+END_SRC
-
-** 494. Target Sum - Medium
-You are given an integer array nums and an integer target.
-
-You want to build an expression out of nums by adding one of the symbols '+' and '-' before each integer in nums and then concatenate all the integers.
-
-For example, if nums = [2, 1], you can add a '+' before 2 and a '-' before 1 and concatenate them to build the expression "+2-1".
-Return the number of different expressions that you can build, which evaluates to target.
-- 该题是一道非常经典的题目，在面试中很可能会考到。该题有多种解法。
-- 第一种解法：DFS，brute force。我们对nums数组中的每个数字，都尝试在其前面添加正号和负号，最后暴力求解，统计数组中各数字组合值为target的情况。(该理解是错误的，我们可以使用带备忘录机制的自顶向下的DP方法，代码见下)
-#+BEGIN_SRC java
-//带备忘录机制的自顶向下DP解法 //map存储重复的值，there are obvious a lot of overlap subproblems
-private int helper(int[] nums, int index, int sum, int S, Map<String, Integer> map){ 
-    String encodeString = index + "->" + sum; //经过之前不同的运算过程到达index的sum值碰巧与之前某一个运算过程的结果相同
-    if (map.containsKey(encodeString)) return map.get(encodeString);
-    if (index == nums.length)
-        if (sum == S) return 1;
-        else return 0;
-    int curNum = nums[index];
-    int add = helper(nums, index + 1, sum - curNum, S, map);
-    int minus = helper(nums, index + 1, sum + curNum, S, map);
-    map.put(encodeString, add + minus);
-    return add + minus;
-}
-public int findTargetSumWays(int[] nums, int S) {
-    if (nums == null || nums.length == 0) return 0;
-    return helper(nums, 0, 0, S, new HashMap<>());
-}
-#+END_SRC
-- 第二种解法：DP。我们使用Vi来表示数组中的前i个数所能求得的和的集合。初始化时
-#+BEGIN_SRC java
-V0 = {0}     //表示前0个数的和为0
-Vi = {V(i-1) + ai} U {V(i-1) - ai}
-#+END_SRC
-
-Vn就是nums数组所有数字的组合值之和的集合
-
-根据上面的思路，我们知道数组中数字若全为正号其和为sum，全为负号其和为-sum。若不选数组中任何一个数，则和为0。因此，我们设立一个长度为2*sum+1的数组ways，ways[i]表示我们选择前m个数，其和可能为i的情况数，m = 0,1,...nums.length。可参考下图
-
-[[./pic/targetSum.png]]
-
-[[./pic/targetSum2.png]]
 
 ** 1477. Find Two Non-overlapping Sub-arrays Each With Target Sum
 Given an array of integers arr and an integer target.
@@ -3264,3 +3241,383 @@ public int numberOfArithmeticSlices(int [] arr) {
 }
 #+END_SRC
 
+** 639. Decode Ways II - Hard
+A message containing letters from A-Z can be encoded into numbers using the following mapping:
+
+'A' -> "1"
+'B' -> "2"
+...
+'Z' -> "26"
+To decode an encoded message, all the digits must be grouped then mapped back into letters using the reverse of the mapping above (there may be multiple ways). For example, "11106" can be mapped into:
+
+"AAJF" with the grouping (1 1 10 6)
+"KJF" with the grouping (11 10 6)
+Note that the grouping (1 11 06) is invalid because "06" cannot be mapped into 'F' since "6" is different from "06".
+
+In addition to the mapping above, an encoded message may contain the '*' character, which can represent any digit from '1' to '9' ('0' is excluded). For example, the encoded message "1*" may represent any of the encoded messages "11", "12", "13", "14", "15", "16", "17", "18", or "19". Decoding "1*" is equivalent to decoding any of the encoded messages it can represent.
+
+Given a string s consisting of digits and '*' characters, return the number of ways to decode it.
+
+Since the answer may be very large, return it modulo 109 + 7.
+*** 解题思路与分析
+给定一个只含数字的长n nn的字符串s ss，再给定一个对应规则，每个大写字母ch可以对应一个数字ch - 'A' + 1。问该s ss有多少种不同的解码方式。s ss中可能含有'*'，这个符号可以对应除了0 00以外的任意一位数。答案模10^9 + 7后返回。
+
+思路是动态规划。设f [ i ] f[i]f[i]是s ss的长i ii的前缀的解码方式数，那么可以按照最后一位（或者两位）是解码成什么字母来分类进行累加。
+#+BEGIN_SRC java
+public int numDecodings(String t) {
+    int mod = (int)1e9 + 7;
+    int n = t.length();
+    char [] s = t.toCharArray();
+    System.out.println(Arrays.toString(s));
+    int [] dp = new int [Math.max(2, n+1)];
+    dp[0] = 1;
+    dp[1] = s[0] == '*' ? 9 : s[0] == '0' ? 0 : 1;
+    for (int i = 2; i <= n; i++) {
+        System.out.println("i: " + i);
+        for (int j = 1; j <= 26; j++) { // 枚举s的长i前缀的末尾可以解码为哪个大写字母
+            char c = s[i-1];
+            if (j <= 9) { // 如果是要解码为A到I，那么最后一个数字得单独解码
+                if (c == '*' || c == '0' + j)
+                    dp[i] += dp[i-1];
+            } else {      // 否则最后两个数字得一起解码
+                char p = s[i-2];
+                int x = j % 10, y = j / 10;
+                if ((p == '*' || p == y+ '0') && ((c == '*' && x != 0) || c == x + '0')) 
+                    dp[i] += dp[i-2];
+            }
+            dp[i] %= mod;
+        }
+    }
+    return dp[n];
+}
+#+END_SRC
+*** 解题思路与分析
+
+定义dp[i]是nums前i个字符可以得到的解码种数，假设之前的字符串是abcx，现在新加入了y，则有以下5种情况：
+
+#+BEGIN_SRC java
+如果x=='0'，且y=='0'，无法解码，返回0；
+如果只有x=='0'，则y只能单独放在最后，不能与x合并(不能以0开头)，此时有：dp[i] = dp[i-1]
+如果只有y=='0'，则y不能单独放置，必须与x合并，并且如果合并结果大于26，返回0，否则有：dp[i] = dp[i-2]
+如果 xy<=26: 则y可以“单独”放在abcx的每个解码结果之后后，并且如果abcx以x单独结尾，此时可以合并xy作为结尾，而这种解码种数就是abc的解码结果，此时有：dp[i+1] = dp[i] + dp[i-1]
+如果 xy>26: 此时x又不能与y合并，y只能单独放在dp[i]的每一种情况的最后，此时有：dp[i+1] = dp[i]
+#+END_SRC
+#+BEGIN_SRC java
+    public int numDecodings(String s) {
+        char[] arr = s.toCharArray();
+        int[] dp = new int[s.length()+1];
+        dp[0] = 1;
+        dp[1] = arr[0]=='0'?0:1;
+        if(s.length()<=1) return dp[1];
+        for(int i=2;i<=s.length();i++){
+            int n = (arr[i-2]-'0')*10+(arr[i-1]-'0');
+            if(arr[i-1]=='0' && arr[i-2]=='0'){
+                return 0;
+            }else if(arr[i-2]=='0'){
+                dp[i] = dp[i-1];
+            }else if(arr[i-1]=='0'){
+                if(n>26) return 0;
+                dp[i] = dp[i-2];
+            }else if(n>26){
+                dp[i] = dp[i-1];
+            }else{
+                dp[i] = dp[i-1]+dp[i-2];
+            }
+        }
+        return dp[dp.length-1];
+    }
+#+END_SRC
+
+** 629. K Inverse Pairs Array - Hard
+For an integer array nums, an inverse pair is a pair of integers [i, j] where 0 <= i < j < nums.length and nums[i] > nums[j].
+
+Given two integers n and k, return the number of different arrays consist of numbers from 1 to n such that there are exactly k inverse pairs. Since the answer can be huge, return it modulo 109 + 7.
+*** 解题思路与分析
+比较容易辨别出来是一道DP的题目，但是确实算是比较难的了，下面是参考网上的代码之后我的理解。定义dp[n][k]表示从1到n构成的数中含有k个逆序对的个数，则我们可以推导出dp[n][k]和dp[n - 1][i]之间的递推关系：
+
+如果我们把n放在最后一位，则所有的k个逆序对均来自于前n - 1个数所构成的逆序对，和n无关；
+
+如果我们把n放在倒数第二位，则有1个逆序对和n有关，有k - 1个逆序对来自前n - 1个数所构成的逆序对；
+
+……
+
+如果我们把n放在第一位，则有n-1个逆序对和n有关，k - (n - 1)个逆序对来自前n - 1个数所构成的逆序对。
+
+所以：dp[n][k] = dp[n-1][k]+dp[n-1][k-1]+dp[n-1][k-2]+…+dp[n-1][k+1-n+1]+dp[n-1][k-n+1]。但问题是 k - (n - 1)有可能为负数，也就是说根据n和k的不同，上面的式子有可能从某个项之后就不合法了，我们这里先写出来占位，从而得到下面两个式子：
+
+#+BEGIN_SRC java
+dp[n][k]     = dp[n-1][k] + dp[n-1][k-1] + dp[n-1][k-2] + … + dp[n-1][k + 1-n + 1] + dp[n-1][k-n + 1] // A
+dp[n][k + 1] = dp[n-1][k + 1] + dp[n-1][k] + dp[n-1][k-1] + dp[n-1][k-2] + … + dp[n-1][k + 1-n + 1]   // B
+dp[n][k+1] - dp[n][k] = dp[n-1][k+1] - dp[n-1][k-n+1]; // B-A           
+dp[n][k+1] = dp[n][k] + dp[n-1][k+1] - dp[n-1][k-n+1]; // 移项
+// 将k+1换回成k，可以得到：
+dp[n][k] = dp[n][k-1] + dp[n - 1][k] - dp[n-1][k-n]
+#+END_SRC
+
+把上面两个式子相减可以推导出：dp[n][k+1] = dp[n][k]+dp[n-1][k+1]-dp[n-1][k+1-n]。这样就可以写出代码了。
+
+当然由于dp[n][k]只和dp[n][x]，dp[n-1][x]有关，所以该代码还可以进一步将空间复杂度从O(nk)降低到O(k)。时间复杂度是O(nk)。
+
+#+BEGIN_SRC java
+public int kInversePairs(int n, int k) {
+    int mod = (int)1e9 + 7;
+    long [][] dp = new long [n+1][k+1];
+    dp[0][0] = 1;
+    for (int i = 1; i <= n; i++) {
+        dp[i][0] = 1;
+        for (int j = 1; j <= k; j++)  {
+            dp[i][j] = dp[i][j-1] + dp[i-1][j];
+            if (j >= i)
+                dp[i][j] -= dp[i-1][j-i];
+            dp[i][j] = (dp[i][j] + mod) % mod;
+        }
+    }
+    return (int)dp[n][k];
+}
+#+END_SRC
+*** 解题思路与分析
+    
+    [[./pic/kinvPair.png]]
+
+#+BEGIN_SRC java
+public int kInversePairs(int n, int k) {
+    int mod = (int)1e9 + 7;
+    int [][] dp = new int [n+1][k+1];
+    dp[0][0] = 1;
+    for (int i = 1; i <= n; i++) {
+        long sum = 0;
+        for (int j = 0; j <= k; j++) {
+            sum += dp[i-1][j];
+            if (j >= i)
+                sum -= dp[i-1][j-i];
+            dp[i][j] = (int)(sum % mod);
+        }
+    }
+    return (int)dp[n][k];
+}
+#+END_SRC
+** 1787. Make the XOR of All Segments Equal to Zero - Hard
+You are given an array nums​​​ and an integer k​​​​​. The XOR of a segment [left, right] where left <= right is the XOR of all the elements with indices between left and right, inclusive: nums[left] XOR nums[left+1] XOR ... XOR nums[right].
+
+Return the minimum number of elements to change in the array such that the XOR of all segments of size k​​​​​​ is equal to zero.
+*** 解题思路与分析
+    
+    [[./pic/xortimes.png]]
+    
+- 根据题目特点，最后所有长度为 k 的区间异或结果等于零，可推出得到的数组满足：
+#+BEGIN_SRC java
+a1 = ak+1 = a2k+1 = …
+a2 = ak+2 = a2k+2 = …
+#+END_SRC
+因此可将数组中的元素按上述规律，每间隔 k 个的数字为一组进行分组。
+
+在此基础上，设计一个动态规划数组 dp[j]，表示到当前第 i 组为止，所有元素异或到对应数字 j 时的更改次数。则对第 i 组 dp[j] 的状态转移方程可能为：
+
+j 可由某一数值和当前组中的某个数 num 异或得到，newDp[j] = dp[j & num] + size[i] - 组中 num 的数量
+
+j 可通过和任意数字异或得到，newDp[j] = 前一 dp 中最小的改变次数 + size[i]
+
+完成 k 个组的动态规划后，dp[0]就是所求的解。
+
+#+BEGIN_SRC java
+public int minChanges(int[] arr, int k) {
+    int n = arr.length;
+    List<Map<Integer, Integer>> group = new ArrayList<>(); // 存储 k 个组、各组中各个数字数量
+    int [] size = new int [k];                             // 各组大小,它们会有可能不同吗？
+    for (int i = 0; i < k; i++) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int j = i; j < n; j += k) {
+            map.put(arr[j], map.getOrDefault(arr[j], 0) + 1);
+            size[i]++;
+        }
+        group.add(map);
+    }
+    int range = 1 << 10;          //  题中nums[i] < 2^10， 为的是遍历所有可能更改值，以取最小
+    int [] dp = new int [range];  // 当前组异或到对应数字时的更改次数
+    Arrays.fill(dp, Integer.MAX_VALUE);
+    dp[0] = 0;
+    for (int i = 0; i < k; i++) {
+        int minVal = Arrays.stream(dp).min().getAsInt();
+        int [] newDp = new int [range];       //  遍历每一个个组，暴搜、取最小
+        Arrays.fill(newDp, minVal + size[i]); // 变为当前组中不存在数字的改变次数：之前的最小改变次数+当前组元素个数
+        for (int j = 0; j < range; j++) {
+            if (dp[j] == Integer.MAX_VALUE) continue; // 对第0组，保证dp[i]是异或到0的最小改变数
+            Iterator it = group.get(i).entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry en = (Map.Entry)it.next();
+                int num = (int)en.getKey(), v = (int)en.getValue();
+                int xorNum = num ^ j;
+                newDp[xorNum] = Math.min(newDp[xorNum], dp[j] + size[i] - v);
+            }
+        }
+        dp = Arrays.copyOf(newDp, range); // 将遍历到当前组、累积较优解的newDp复制入全局最优解dp数组中
+    }
+    return dp[0];
+}
+#+END_SRC
+
+** 第二次刷DP: 下面的题目只需要注意细节，思路没问题
+** 198. House Robber - Medium
+You are a professional robber planning to rob houses along a street. Each house has a certain amount of money stashed, the only constraint stopping you from robbing each of them is that adjacent houses have security systems connected and it will automatically contact the police if two adjacent houses were broken into on the same night.
+
+Given an integer array nums representing the amount of money of each house, return the maximum amount of money you can rob tonight without alerting the police.
+*** 解题思路与分析
+- 对于每一个住户来说，只有两种选择：
+  - 偷这一户人家的，下一家不要
+  - 不偷这一家的，去偷下一家的
+#+BEGIN_SRC java
+private int dfs(int [] arr, int idx) {
+    if (idx >= n) return 0;
+    if (dp[idx] > 0) return dp[idx];
+    return dp[idx] = Math.max(dfs(arr, idx+2) + arr[idx], dfs(arr, idx+1)); // 不要忘记记忆——记住答案！！！
+}
+int [] dp;
+int n;
+public int rob(int[] a) {
+    if (Arrays.stream(a).sum() == 0) return 0;
+     n = a.length;
+     dp = new int [n];
+     return dfs(a, 0);
+}
+#+END_SRC 
+** 213. House Robber II
+You are a professional robber planning to rob houses along a street. Each house has a certain amount of money stashed. All houses at this place are arranged in a circle. That means the first house is the neighbor of the last one. Meanwhile, adjacent houses have a security system connected, and it will automatically contact the police if two adjacent houses were broken into on the same night.
+Given an integer array nums representing the amount of money of each house, return the maximum amount of money you can rob tonight without alerting the police.
+*** 解题思路与分析
+- 与上一题不同的是：因为是环形数组，数组首尾相连，相邻的两户人家只能偷一家
+- 问题就转化成了：我要么去偷[0, n-2]这些人家的，要么去偷[1, n-1]这些人家的，包括首尾
+- 这成了上一题的稍微变形与套娃
+#+BEGIN_SRC java
+private int dfs(int [] arr, int i, int j, int idx) {
+    if (idx > j) return 0;
+    if (dp[idx] != -1) return dp[idx];
+    return dp[idx] = Math.max(dfs(arr, i, j, idx+2) + arr[idx], dfs(arr, i, j, idx+1));
+}
+int [] dp;
+int n;
+public int rob(int[] arr) {
+     n = arr.length;
+     if (n == 1) return arr[0];
+     dp = new int [n];
+     Arrays.fill(dp, -1);
+     int max = dfs(arr, 1, n-1, 1);
+     Arrays.fill(dp, -1); // 不要忘了dp数组的重置与重新计算
+     // return Math.max(dfs(arr, 1, n-1, 1), dfs(arr, 0, n-2, 0)); // BUG: 因为dp数组不重置，会发生数据混淆，得到错误答案
+     return Math.max(max, dfs(arr, 0, n-2, 0));
+}
+#+END_SRC
+
+** 740. Delete and Earn: 一类题目，变形了你还认得出来吗？
+You are given an integer array nums. You want to maximize the number of points you get by performing the following operation any number of times:
+Pick any nums[i] and delete it to earn nums[i] points. Afterwards, you must delete every element equal to nums[i] - 1 and every element equal to nums[i] + 1.
+Return the maximum number of points you can earn by applying the above operation some number of times.
+*** 解题思路与分析
+- 关键题意理解：对于nums = [2, 2, 3, 3, 3, 4]，如果我们选了数字3，则要删除每一个（所有）2和4，之后数组变为[3, 3]，此时如果再选3，并不会删除其他元素，剩余数组变为[3]，再选3，数组变为空，返回结果是3+3+3=9。
+- 将上面的例子转化为House Robber的形式，nums' = [0, 0, 22, 33, 4]，nums'[i]代表值为i的数字的总数和(或者数字(下标)i在原数组中出现的次数)，每次若选择nums'数组的一个元素，则相邻元素不能在下一次被选中(包括其所有的重复计数)，相当于被全部删去。转化后，用House Robber的思路来处理nums'数组即可。
+#+BEGIN_SRC java
+private int dfs(int [] cnt, int i) {
+    if (i >= N) return 0;
+    if (dp[i] > 0) return dp[i];
+    return dp[i] = Math.max(dfs(cnt, i+2) + cnt[i]*i, dfs(cnt, i+1));
+}
+int [] dp;
+int N;
+public int deleteAndEarn(int[] nums) {
+    int n = nums.length, max = Arrays.stream(nums).max().getAsInt();
+    N = max+1;
+    int [] cnt = new int [N];
+    for (Integer v : nums) 
+        cnt[v]++;
+    dp = new int [N];
+    int i = 0;
+    while (i < N && cnt[i] == 0) i++;
+    return dfs(cnt, i);
+}
+#+END_SRC
+- dp解
+#+BEGIN_SRC java
+public int deleteAndEarn(int[] nums) {
+    int n = nums.length, N = 10001;
+    int [] cnt = new int [N];
+    for (Integer v : nums) 
+        cnt[v] += v;
+    int preOne = 0, preTwo = 0, ans = 0; // 相当于是滚动数组，把一维dp压缩为两个位置
+    for (Integer v : cnt) {
+        ans = Math.max(preOne, v + preTwo);
+        preTwo = preOne;
+        preOne = ans;
+    }
+    return ans;
+}
+#+END_SRC
+
+** 877. Stone Game
+Alice and Bob play a game with piles of stones. There are an even number of piles arranged in a row, and each pile has a positive integer number of stones piles[i].
+The objective of the game is to end with the most stones. The total number of stones across all the piles is odd, so there are no ties.
+Alice and Bob take turns, with Alice starting first. Each turn, a player takes the entire pile of stones either from the beginning or from the end of the row. This continues until there are no more piles left, at which point the person with the most stones wins.
+Assuming Alice and Bob play optimally, return true if Alice wins the game, or false if Bob wins.
+#+BEGIN_SRC java
+// 使用helper函数表示Alex能比Lee多选的分数。可能比双函数更简洁易懂了。
+// 记忆化递归的缺点：１．有可能爆栈；２．无法降维，而DP是可以降维的。
+// 模板：
+// dfs + memoization模板
+private int dfs(int [] arr, int l, int r) {
+    if (l > r) return 0;
+    if (dp[l][r] > 0) return dp[l][r]; // 走了来时的路，不需要重走，直接返回
+    dp[l][r] = Math.max(arr[l] - dfs(arr, l+1, r), arr[r]-dfs(arr, l, r-1));
+    return dp[l][r];
+}
+int [][] dp; 
+public boolean stoneGame(int[] piles) {
+    int n = piles.length;
+    dp = new int[n][n];
+    return dfs(piles, 0, n-1) > 0;
+}
+// 动态规划解法比较难想，dp数组的第i个位置表示的是从第i个石头到第i+l-1个石头之间最大的比对手得分。
+// 使用的是一个长度变量和起始索引，计算每个位置开始的长度1～N长度的区间的dp状态。
+public boolean stoneGame(int[] piles) {
+    int n = piles.length;
+    int [][] dp = new int[n][n];
+    for (int i = n-1; i >= 0; i--) { // 最后一列
+        dp[i][i] = piles[i];         // 填右上角
+        for (int j = i+1; j < n; j++) 
+            dp[i][j] = Math.max(piles[i] - dp[i+1][j], piles[j]-dp[i][j-1]);
+
+    }
+    return dp[0][n-1] > 0;
+}
+#+END_SRC
+** 1140. Stone Game II
+Alice and Bob continue their games with piles of stones.  There are a number of piles arranged in a row, and each pile has a positive integer number of stones piles[i].  The objective of the game is to end with the most stones. 
+Alice and Bob take turns, with Alice starting first.  Initially, M = 1.
+On each player's turn, that player can take all the stones in the first X remaining piles, where 1 <= X <= 2M.  Then, we set M = max(M, X).
+The game continues until all the stones have been taken.
+Assuming Alice and Bob play optimally, return the maximum number of stones Alice can get.
+#+BEGIN_SRC java
+// dfs + memoization模板
+// 当次取的最优策略是限制下一次取的数量
+private int dfs(int [] arr, int idx, int m) {
+    if (dp[idx][m] > 0) return dp[idx][m];
+    if (idx == n) return 0;
+    if (idx >= n - 2 * m) {
+        dp[idx][m] = suf[idx];
+        return dp[idx][m];
+    }
+    int min = Integer.MAX_VALUE;
+    for (int i = 1; i <= 2 * m; i++) // 选择限制对手得分最少的情况
+        min = Math.min(min, dfs(arr, idx+i, Math.max(m, i))); 
+    dp[idx][m] = suf[idx] - min;
+    return dp[idx][m];
+}
+int [][] dp; 
+int [] suf;
+int n;
+public int stoneGameII(int[] piles) {
+    n = piles.length;
+    dp = new int [n][2*n];
+    suf = new int [n+1];
+    for (int i = n-1; i >= 0; i--) 
+        suf[i] = suf[i+1] + piles[i];
+    return dfs(piles, 0, 1);
+}
+#+END_SRC

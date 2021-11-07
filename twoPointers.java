@@ -142,30 +142,6 @@ public class twoPointers {
         // }
 
 
-        // public int expressiveWords(String s, String[] words) {
-        //     int m = words.length;
-        //     int n = s.length(), i, ans = 0;
-        //     int [] cnt = new int [n];
-        //     Arrays.fill(cnt, -1);
-        //     int i = 0, idx = 0;
-        //     while (i < n) {
-        //     }
-        //     for ( i = 0; i < n; i++) 
-        //         cnt[s.charAt(i)]++;
-        //     int [] cur = new int [128];
-        //     for (String t : words) {
-        //         Arrays.fill(cur, 0);
-        //         for ( i = 0; i < t.length(); i++) 
-        //             cur[t.charAt(i)]++;
-        //         for ( i = 0; i < 128; i++) 
-        //             if (cur[i] - cnt[i] > 0 || cnt[i] < 3 && cur[i] < cnt[i] || cnt[i] > 0 && cur[i] == 0) break;
-        //         if (i < 128) continue;
-        //         ++ans;
-        //     }
-        //     return ans;
-        // }
-
-
         // public String lastSubstring(String s) {
         //     int n = s.length();
         //     TreeSet<String> ts = new TreeSet<>();
@@ -334,27 +310,6 @@ public class twoPointers {
         // }
 
 
-        // private boolean isPalindrome(String s) {
-        //     int n = s.length();
-        //     int i = 0, j = n-1;
-        //     while (i < j && s.charAt(i) == s.charAt(j)) {
-        //         i++;
-        //         j--;
-        //     }
-        //     return i >= j;
-        // }
-        // public boolean checkPalindromeFormation(String s, String t) { // tle tle tle
-        //     int n = a.length();
-        //     for (int i = 0; i < n; i++) {
-        //         String a = s.substring(0, i) + t.substring(i);
-        //         if (isPalindrome(a)) return true;
-        //         String b = t.substring(0, i) + s.substring(i);
-        //         if (isPalindrome(b)) return true;
-        //     }            
-        //     return false;
-        // }
-
-
         // public String lastSubstring(String s) { // tle tle tle
         //     int n = s.length();
         //     String res = "";
@@ -421,34 +376,399 @@ public class twoPointers {
         //     while (k-- > 0)
         //         shiftRightByOne(arr);
         // }
-        private void swap(int [] arr, int i, int j) {
-            int tmp = arr[i];
-            arr[i] = arr[j];
-            arr[j] = tmp;
-        }
-        private void reverse(int [] arr, int i, int j) {
-            while (i < j) {
-                swap(arr, i, j);
-                i++;
-                j--;
-            }
-        }
-        public void rotate(int[] arr, int k) {
-            int n = arr.length;
-            if (n == 1) return;
-            if (k >= n) k %= n;
-            reverse(arr, 0, n-k-1);
-            reverse(arr, n-k, n-1);
-            reverse(arr, 0, n-1);
+        // private void swap(int [] arr, int i, int j) {
+        //     int tmp = arr[i];
+        //     arr[i] = arr[j];
+        //     arr[j] = tmp;
+        // }
+        // private void reverse(int [] arr, int i, int j) {
+        //     while (i < j) {
+        //         swap(arr, i, j);
+        //         i++;
+        //         j--;
+        //     }
+        // }
+        // public void rotate(int[] arr, int k) {
+        //     int n = arr.length;
+        //     if (n == 1) return;
+        //     if (k >= n) k %= n;
+        //     reverse(arr, 0, n-k-1);
+        //     reverse(arr, n-k, n-1);
+        //     reverse(arr, 0, n-1);
+        // }
+
+
+        // public int[] numMovesStonesII(int[] stones) {
+        //     Arrays.sort(stones);
+        //     int n = stones.length, low = n, i = 0;
+        //     for (int j = 0; j < n; j++) {
+        //         while (stones[j] - stones[i] + 1 > n) i++;
+        //         int occ = j - i + 1;
+        //         if (occ == n-1 && stones[j] - stones[i] + 1 == n-1) 
+        //             low = Math.min(low, 2);
+        //         else low = Math.min(low, n - occ);
+        //     }
+        //     return new int [] {low, Math.max(stones[n-1] - stones[1]-n+2, stones[n-2] - stones[0]-n+2)};
+        // }
+
+
+        // public int numSubarrayBoundedMax(int[] arr, int left, int right) { // 这里还是那个数个数数不清楚
+        //     int n = arr.length, pre = -1;
+        //     int [] dp = new int [n];
+        //     for (int i = 0; i < n; i++) {
+        //         if (arr[i] < left) 
+        //             dp[i] = (i == 0 ? 0 : dp[i-1]);
+        //         else if (arr[i] > right) {
+        //             dp[i] = 0;
+        //             pre = i;
+        //         } else dp[i] = i - pre;
+        //     }
+        //     return Arrays.stream(dp).sum();
+        // }
+        // public int numSubarrayBoundedMax(int[] arr, int left, int right) { // 这里还是那个数个数数不清楚
+        //     int n = arr.length, pre = -1, ans = 0, cnt = 0, preCnt = 0;
+        //     for (int i = 0; i < n; i++) {
+        //         if (arr[i] < left) {
+        //             cnt = (i == 0 ? 0 : preCnt);
+        //             ans += cnt;
+        //             preCnt = cnt;
+        //         }
+        //         else if (arr[i] > right) {
+        //             preCnt = 0;
+        //             pre = i;
+        //         } else {
+        //             cnt = i - pre;
+        //             ans += cnt;
+        //             preCnt = cnt;
+        //         } 
+        //     }
+        //     return ans;
+        // }
+
+
+        // private int findRightMostIdx(int [] a, int l, int r, int v) { // 寻找右边界
+        //     if (a[l] >= v) return -1;
+        //     while (l < r) {
+        //         int m = l + (r - l) / 2 + 1;
+        //         if (a[m] >= v) r = m -1;
+        //         else l = m;
+        //     }
+        //     return a[r] < v ? r : -1;
+        // }
+        // public int triangleNumber(int[] a) {
+        //     Arrays.sort(a);
+        //     int n = a.length, ans = 0;
+        //     for (int i = 1; i < n-1; i++) {
+        //         for (int j = i-1; j >= 0; j--) {
+        //             if (a[i] + a[j] <= a[i+1]) break;
+        //             int k = findRightMostIdx(a, i, n-1, a[i] + a[j]);
+        //             if (k != -1) ans += k - i;
+        //         }
+        //     }
+        //     return ans;
+        // }
+        // private int binarySearch(int [] a, int l, int v) {
+        //     int r = a.length-1;
+        //     while (l <= r) {
+        //         int m = (l + r) / 2;
+        //         if (a[m] >= v) r = m-1;
+        //         else l = m+1;
+        //     }
+        //     return l;
+        // }
+        // public int triangleNumber(int[] a) { // O(N^2logN)
+        //     Arrays.sort(a);
+        //     int n = a.length, ans = 0;
+        //     for (int i = 0; i < n-2; i++) 
+        //         for (int j = i+1; j < n-1; j++) {
+        //             int k = binarySearch(a, j+1, a[i]+a[j]);
+        //             ans += k - j - 1;
+        //         }
+        //     return ans;
+        // }
+        // // 解法II 排序（Sort） + 双指针（Two Pointers）
+        // // 时间复杂度O(n^2)
+        // //     对输入数组nums排序
+        // //     枚举长度最小的边，利用双指针寻找符合条件的长度较大的两条边。
+        // public int triangleNumber(int[] a) { // O(N^2)
+        //     Arrays.sort(a);
+        //     int n = a.length, ans = 0;
+        //     for (int i = 0; i < n-2; i++) {
+        //         if (a[i] == 0) continue;
+        //         int k = i+2; // i + 2 这里的2
+        //         for (int j = i+1; j < n-1; j++) {
+        //             while (k < n && a[k] < a[i] + a[j]) k++;
+        //             ans += k - j - 1;
+        //         }
+        //     }
+        //     return ans;
+        // }
+        // public int triangleNumber(int[] a) { // O(N^2)
+        //     Arrays.sort(a);
+        //     int n = a.length, ans = 0;
+        //     for (int i = n-1; i >= 2; i--) {
+        //         int l = 0, r = i-1;
+        //         while (l < r) {
+        //             if (a[l] + a[r] > a[i]) {
+        //                 ans += r - l;
+        //                 --r;
+        //             } else l++;
+        //         }
+        //     }
+        //     return ans;
+        // }
+
+
+        // private boolean isMatch(String ss, String tt) {
+        //     int m = ss.length(), n = tt.length(), cs = 0, ct = 0, i = 0, j = 0, k = 0;
+        //     char [] s = ss.toCharArray();
+        //     char [] t = tt.toCharArray();
+        //     for ( i = 0; i < m && j < n; i++) {
+        //         if (s[i] != t[j]) return false;
+        //         k = i;
+        //         cs = 0;
+        //         while (k < m && s[k] == s[i]) {
+        //             k++;
+        //             cs++;
+        //         }
+        //         k = j;
+        //         ct = 0;
+        //         while (k < n && t[k] == t[j]) {
+        //             k++;
+        //             ct++;
+        //         }
+        //         if (cs > ct || cs < ct && ct < 3) return false; // 这里不应该要 >= 的
+        //         i += cs-1;
+        //         j += ct;
+        //     }
+        //     return j == n && i == m;
+        // }
+        // public int expressiveWords(String s, String[] words) {
+        //     int ans = 0;
+        //     for (String v : words) 
+        //         if (isMatch(v, s)) ans++;
+        //     return ans;
+        // }
+
+
+        // private void getAllSubsequences(char [] s, Set<String> ss, int idx, StringBuilder sb) { // 居然不会写有return type的函数
+        //     if (idx == s.length) {
+        //         ss.add(new String(sb.toString()));
+        //         return;
+        //     }
+        //     for (int i = idx; i < s.length; i++) {
+        //         sb.append(s[i]);
+        //         getAllSubsequences(s, ss, i+1, sb);
+        //         sb.deleteCharAt(sb.length()-1);
+        //     }
+        //     getAllSubsequences(s, ss, idx+1, sb); // 这个case不能忘记了
+        // }
+        // private Set<String> getAllSubsequences(String s) {
+        //     Set<String> ss = new HashSet<>();
+        //     if (s.length() == 0) {
+        //         ss.add("");
+        //         return ss;
+        //     }
+        //     Set<String> sub = getAllSubsequences(s.substring(1));
+        //     ss.addAll(sub);
+        //     for (String v : sub) 
+        //         ss.add(s.charAt(0) + v);
+        //     return ss;
+        // }
+        // public int findLUSlength(String[] strs) {
+        //     int n = strs.length;
+        //     Map<String, Integer> m = new HashMap<>();
+        //     for (String s : strs) {
+        //         // Set<String> ss = new HashSet<>();
+        //         // getAllSubsequences(s.toCharArray(), ss, 0, new StringBuilder());
+        //         Set<String> ss = getAllSubsequences(s);
+        //         for (String cur : ss) 
+        //             m.put(cur, m.getOrDefault(cur, 0) + 1);
+        //     }
+        //     int ans = -1;
+        //     for (Map.Entry<String, Integer> en : m.entrySet()) {
+        //         String k = en.getKey();
+        //         if (en.getValue() == 1)
+        //             ans = Math.max(ans, k.length());
+        //     }
+        //     return ans;
+        // }
+        // We can check each string that whether it is a subsequence of any other string.
+        // If a string is not a subsequence of any other string i.e. it is uncommon , we will return maximum length string out of them.
+        //     If no string found, we will return -1.
+        // public int findLUSlength(String [] strs) {
+        //     int max = -1;
+        //     for (int i = 0; i < strs.length; i++) {
+        //         boolean flag = false;
+        //         int curLen = strs[i].length();
+        //         for (int j = 0; j < strs.length; j++) 
+        //             if (i != j && check(strs[i], strs[j])) {
+        //                 flag = true;
+        //                 break;
+        //             }
+        //         if (!flag)
+        //             max = Math.max(max, curLen);
+        //     }
+        //     return max;
+        // }
+        // public boolean check(String ss, String tt) {
+        //     int m = ss.length(), n = tt.length();
+        //     char [] s = ss.toCharArray();
+        //     char [] t = tt.toCharArray();
+        //     while (m > 0 && n > 0) {
+        //         int i = ss.length() - m;
+        //         int j = tt.length() - n;
+        //         if (s[i] == t[j]) m--;
+        //         n--;
+        //     }
+        //     return m == 0;
+        // }
+
+
+        // private int quickmul(int base, int exp) {
+        //     long ans = 1, b = base;
+        //     while (exp > 0) {
+        //         if (exp % 2 == 1)
+        //             ans = (ans * b) % mod;
+        //         b = (b * b) % mod;
+        //         exp >>= 1;
+        //     }
+        //     return (int) ans;
+        // }
+        // public int numSubseq(int[] arr, int target) {
+        //     Arrays.sort(arr);
+        //     int n = arr.length, res = 0, j = 0;
+        //     int mod = (int)1e9 + 7;
+        //     int [] dp = new int [n+1];
+        //     dp[0] = 1;
+        //     for (int i = 1; i <= n; i++) 
+        //         dp[i] = (int)((dp[i-1] * 2) % mod);
+        //     for (int i = 0; i < n; i++) {
+        //         if (arr[i] * 2 > target) break; 
+        //         j = i;
+        //         while (j < n && arr[i] + arr[j] <= target) j++; // 这个向右遍历，我每个i都走了一次，实际上可以全局只一次遍历到最远，再往回缩
+        //         res = (res + dp[j-i-1]) % mod;
+        //     }
+        //     return res;
+        // }
+        // O(nlogn) sorting, O(n)
+        // public int numSubseq(int[] arr, int target) {
+        //     int mod = (int)1e9 + 7;
+        //     int n = arr.length, ans = 0;
+        //     Arrays.sort(arr);
+        //     int [] pow = new int [n];
+        //     pow[0] = 1;
+        //     for (int i = 1; i < n; i++) 
+        //         pow[i] = (int)((pow[i-1] * 2) % mod);
+        //     int l = 0, r = 0;
+        //     while (r < n && arr[l] + arr[r] <= target) r++;
+        //     r--;
+        //     while (l <= r) {
+        //         int cnt = r - l + 1;
+        //         ans = (int)((ans + (long)pow[cnt - 1]) % mod);
+        //         l++;
+        //         while (l < n && r >= 0 && arr[l] + arr[r] > target) r--;
+        //     }
+        //     return ans;
+        // }
+
+
+        // private boolean isPalindrome(String s) {
+        //     int n = s.length();
+        //     int i = 0, j = n-1;
+        //     while (i < j && s.charAt(i) == s.charAt(j)) {
+        //         i++;
+        //         j--;
+        //     }
+        //     return i >= j;
+        // }
+        // public boolean checkPalindromeFormation(String s, String t) { // tle tle tle
+        //     int n = a.length();
+        //     for (int i = 0; i < n; i++) {
+        //         String a = s.substring(0, i) + t.substring(i);
+        //         if (isPalindrome(a)) return true;
+        //         String b = t.substring(0, i) + s.substring(i);
+        //         if (isPalindrome(b)) return true;
+        //     }            
+        //     return false;
+        // }
+        // private boolean isPalindrom(String t) {
+        //     int n = t.length();
+        //     char [] s = t.toCharArray();
+        //     int i = 0, j = n-1;
+        //     while (i < j) {
+        //         if (s[i] == s[j]) {
+        //             i++;
+        //             j--;
+        //         } else break;
+        //     }
+        //     return i >= j;
+        // }
+        // public boolean checkPalindromeFormation(String ss, String tt) { // bug bug bug
+        //     if (isPalindrom(ss) || isPalindrom(tt)) return true;
+        //     int n = ss.length();
+        //     char [] s = ss.toCharArray();
+        //     char [] t = tt.toCharArray();
+        //     int i = 0, j = n-1;
+        //     while (i < n && j >= 0 && i < j) {
+        //         if (s[i] == t[j]) {
+        //             ++i;
+        //             --j;
+        //         } else break;
+        //     }
+        //     if (i == j || i == j+1) return true;
+        //     if (isPalindrom(ss.substring(0, i) + tt.substring(i)) || isPalindrom(tt.substring(0, j+1) + tt.substring(j+1))) return true;
+        //     i = n-1;
+        //     j = 0;
+        //     while (i >= 0 && j < n && j < i) {
+        //         if (s[i] == t[j]) {
+        //             --i;
+        //             ++j;
+        //         } else return false;
+        //     }
+        //     return true;
+        // }
+        // private boolean isPalindrome(String t, int i, int j) {
+        //     char [] s = t.toCharArray();
+        //     while (i < j && s[i] == s[j]) {
+        //         i++;
+        //         j--;
+        //     }
+        //     return i >= j;
+        // }
+        // private boolean check(String ss, String tt) {
+        //     int n = ss.length();
+        //     char [] s = ss.toCharArray();
+        //     char [] t = tt.toCharArray();
+        //     int i = 0, j = n-1;
+        //     while (i < j && s[i] == t[j]) {
+        //         i++;
+        //         j--;
+        //     }
+        //     return isPalindrome(ss, i, j) || isPalindrome(tt, i, j);
+        // }
+        public boolean checkPalindromeFormation(String s, String t) {
+            return check(s, t) || check(t, s);
         }
     }   
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        int []  a = new int []  {1, 2};
+        // String a = "ulacfd";
+        // String b = "jizalu";
+
+        // String a = "cddbcdbdc";
+        // String b = "cdbccbddc";
+
+        String a = "pvhmupgqeltozftlmfjjde";
+        String b = "yjgpzbezspnnpszebzmhvp";
+
+        boolean r = s.checkPalindromeFormation(a, b);
+        System.out.println("r: " + r);
         
-        s.rotate(a, 3);
-        System.out.println(Arrays.toString(a));
     }
 }
+
+// "pvhm u pgqel tozftlmfjjde"
+// "yjgpzbezspnnpszeb z mhvp"
 

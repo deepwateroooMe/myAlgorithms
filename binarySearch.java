@@ -450,22 +450,7 @@ public class binarySearch {
         //     return res;
         // }
 
-        // public int numSubseq(int[] arr, int target) {
-        //     Arrays.sort(arr);
-        //     int mod = (int)1e9 + 7;
-        //     int n = arr.length, res = 0, mod = (int)1e9+7, j = 0;
-        //     for (int i = 0; i < n; i++) {
-        //         j = i+1;
-        //         while (j < n && arr[i] + arr[j] <= target) {
-        //             res = (res + 1) % mod;
-        //             j++;
-        //         }
-        //         res += (j-i+1)*(j-i)/2; // 这里加得不对
-        //     }
-        //     return res;
-        // }
 
-        
         // private boolean valid(int [] a, int [] b, long v) {
         //     int i = 0, j = 0;
         //     while (i < n && j < m) {

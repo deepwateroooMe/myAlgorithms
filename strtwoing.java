@@ -701,46 +701,6 @@ public class strtwoing {
     // }
 
 
-        // private String processInput(String t) {
-        //     char [] s = t.toCharArray();
-        //     // 由于第一个和最后一个字符都是#号，且也需要搜索回文，为了防止越界，我们还需要在首尾再加上非#号字符，实际操作时我们还需给开头加上个非#号字符'$'，结尾加一个'@'
-        //     String ans = "$#"; // 不论原字符串是奇数还是偶数个，处理之后得到的字符串的个数都是奇数个，这样就不用分情况讨论了
-        //     for (int i = 0; i < t.length(); i++) 
-        //         ans += s[i] + "#";
-        //     ans += "@";
-        //     return ans;
-        // }
-        // public long maxProduct(String t) {
-        //     int m = t.length();
-        //     t = processInput(t);
-        //     char [] s = t.toCharArray();
-        //     int n = s.length;
-        //     // 如何求 len 数组，需要新增两个辅助变量 r 和 idx，其中 idx 为最大回文子串中心的位置，r 是回文串能延伸到的最右端的位置
-        //     int r = 0, idx = 0; // 最大右边界、最大回文串的中心位置
-        //     int [] len = new int [n];
-        //     for (int i = 1; i < n-1; i++) {
-        //         len[i] = r > i ? Math.min(len[2*idx-i], r-i) : 1;
-        //         while (i + len[i] < n-1 && i - len[i] >= 0 && s[i+len[i]] == s[i-len[i]])
-        //             ++len[i];
-        //         if (r < len[i]+i) {
-        //             r = len[i] + i;
-        //             idx = i;
-        //         }
-        //     }
-        //     System.out.println(Arrays.toString(s));
-        //     System.out.println(Arrays.toString(len)); // bug bug bug, 改天再回来写这个题
-        //     int [] arr = new int [m];
-        //     idx = 0;
-        //     for (int i = 2; i < n-1; i++) 
-        //         if (s[i] != '#' && s[i] != '@') arr[idx++] = len[i] - len[i-1];
-        //     System.out.println("t: " + t);
-        //     System.out.println(Arrays.toString(arr));
-        //     int [] pre = new int [m]; 
-        //     int [] suf = new int [m];
-        //     return 0;
-        // }
-
-
         // private int getGCD(int x, int y) {
         //     return y == 0 ? x : getGCD(y, x % y);
         // }
@@ -1062,17 +1022,287 @@ public class strtwoing {
         //             }
         //     return dp[0][0][n];
         // }
+
+
+        // private int quickmul(int base, int exp) { // 快速乘方算法
+        //     long ans = 1L;
+        //     while (exp > 0) {
+        //         if ((exp & 1) == 1) // 指数是奇数，就先乘一次base
+        //             ans = ans * base % mod;
+        //         base = (int)((long)base * base % mod); // 底平方 (指数变偶数之后)
+        //         exp >>= 1;                              // 指数除2，快速计算
+        //     }
+        //     return (int)ans;
+        // }
+        // int mod = (int)1e9 + 7;
+        // public int makeStringSorted(String t) {
+        //     int n = t.length();
+        //     char [] s = t.toCharArray();
+        //     int [] cnt = new int [26]; // 记录剩余字符串中各字母个数
+        //     Arrays.fill(cnt, 0);
+        //     for (int i = 0; i < n; i++) 
+        //         cnt[s[i]-'a']++;
+        //     int [] fact = new int [n+1];
+        //     int [] finv = new int [n+1];
+        //     fact[0] = 1;
+        //     finv[0] = 1;
+        //     for (int i = 1; i <= n; i++) {
+        //         fact[i] = (int)((long)fact[i-1] * i % mod); // fac[i] = i! % mod
+        //         finv[i] = quickmul(fact[i], mod - 2); // 费马小定理计算乘法逆元, facinv[i] = (i!) ^ -1 % mod
+        //     }
+        //     long ans = 0L;
+        //     for (int i = 0; i < n-1; i++) {
+        //         int lessCnt = 0; // 比当前位置小的字母总数
+        //         for (int j = 0; j < s[i]-'a'; j++) 
+        //             lessCnt += cnt[j];
+        //         long upper = (long)lessCnt * fact[n-1-i] % mod; // 排列公式分子
+        //         for (int j = 0; j < 26; j++) 
+        //             upper = upper * finv[cnt[j]] % mod;
+        //         ans = (ans + upper) % mod;
+        //         cnt[s[i]-'a']--; // 指针右移
+        //     }
+        //     return (int)ans;
+        // }
+
+
+        // public String lastSubstring(String t) { // 我又是在真正的找和比较字符串，我是不是只比较一下字符和长短就可以了？
+        //     int n = t.length();
+        //     char [] s = t.toCharArray();
+        //     Map<Character, List<Integer>> m = new HashMap<>();
+        //     char max = 'a';
+        //     for (int i = 0; i < n; i++) {
+        //         if (i > 0 && s[i] == max && s[i-1] == max) continue;
+        //         max = (char)(Math.max(s[i]-'a', max-'a')+'a');
+        //         m.computeIfAbsent(s[i], z -> new ArrayList<>()).add(i);
+        //     }
+        //     List<Integer> idx = m.get(max);
+        //     String ans = "";
+        //     int ridx = -1;
+        //     if (idx.size() == 1) return t.substring(idx.get(0));
+        //     for (int i = 0; i < idx.size(); i++) {
+        //         String tmp = t.substring(idx.get(i), i == idx.size()-1 ? n : idx.get(i+1));
+        //         if (ans.equals("") || (ans.compareTo(tmp) < 0 || i < idx.size()-1 && ans.length() == tmp.length()+1 && ans.compareTo(tmp + max) < 0)) {
+        //             ans = tmp;
+        //             ridx = i == idx.size()-1 ? n : idx.get(i+1);
+        //         }
+        //     }
+        //     return ridx == n ? ans : ans + t.substring(ridx);
+        // }
+        // public String lastSubstring(String t) { // tle tle tle: 对于重复连续字符会超时
+        //     int n = t.length();
+        //     char [] s = t.toCharArray();
+        //     int i = 0, j = 1, k = 0;
+        //     while (j+k < n) {
+        //         if (s[i+k] == s[j+k]) {
+        //             k++;
+        //         } else if (s[i+k] < s[j+k]) {   // 找到了一个更优解
+        //             // i = j; // tle tle tle    // 那么从j开始，再重新找起，看能否再找到更优解 ? !!!
+        //             i = Math.max(i + k + 1, j); // 可是 j 不是已经扫过 k 个字符了吗？为什么还要再扫一遍呢？
+        //             j = i + 1;
+        //             k = 0; 
+        //         } else { // s[i+k] > s[j+k] // i 所对应的正是比j更好的解，所以更新j, 重新走起
+        //             // j++;  // tle tle tle
+        //             j += k + 1; // 把 j 扫过的 k 个字符全部跳过去
+        //             k = 0;
+        //         }
+        //     }
+        //     return t.substring(i);
+        // }
+
+
+        // private String processInput(String t) {
+        //     char [] s = t.toCharArray();
+        //     // 由于第一个和最后一个字符都是#号，且也需要搜索回文，为了防止越界，我们还需要在首尾再加上非#号字符，实际操作时我们还需给开头加上个非#号字符'$'，结尾加一个'@'
+        //     String ans = "$#"; // 不论原字符串是奇数还是偶数个，处理之后得到的字符串的个数都是奇数个，这样就不用分情况讨论了
+        //     for (int i = 0; i < t.length(); i++) 
+        //         ans += s[i] + "#";
+        //     ans += "@";
+        //     return ans;
+        // }
+        // public long maxProduct(String t) {
+        //     int m = t.length();
+        //     t = processInput(t);
+        //     char [] s = t.toCharArray();
+        //     int n = s.length;
+        //     // 如何求 len 数组，需要新增两个辅助变量 r 和 idx，其中 idx 为最大回文子串中心的位置，r 是回文串能延伸到的最右端的位置
+        //     int r = 0, idx = 0; // 最大右边界、最大回文串的中心位置
+        //     int [] len = new int [n];
+        //     for (int i = 1; i < n-1; i++) {
+        //         len[i] = r > i ? Math.min(len[2*idx-i], r-i) : 1;
+        //         while (i + len[i] < n-1 && i - len[i] >= 0 && s[i+len[i]] == s[i-len[i]])
+        //             ++len[i];
+        //         if (r < len[i]+i) {
+        //             r = len[i] + i;
+        //             idx = i;
+        //         }
+        //     }
+        //     int [] arr = new int [m];
+        //     idx = 0;
+        //     for (int i = 2; i < n-1; i++) 
+        //         if (s[i] != '#' && s[i] != '@') arr[idx++] = len[i] - len[i-1];
+        //     int [] pre = new int [m]; 
+        //     int [] suf = new int [m];
+        //     return 0;
+        // }
+        // private int expand(int l, int r, String s) {
+        //     while (l >= 0 && r < s.length() && s.charAt(l) == s.charAt(r)) {
+        //         l--;
+        //         r++;
+        //     }
+        //     return (r - l - 2) / 2;
+        // }
+        // private int [] manacher(String s) {
+        //     int [] ans = new int [s.length()];
+        //     int idx = -1, r = -1;
+        //     for (int i = 0; i < s.length(); i++) {
+        //         int cur = (i <= r ? Math.min(r-i, ans[2 * idx - i]) + 1 : 1);
+        //         ans[i] = expand(i-cur, i+cur, s);
+        //         if (ans[i] + i > r) {
+        //             idx = i;
+        //             r = ans[i] + i;
+        //         }
+        //     }
+        //     return ans;
+        // }
+        // public long maxProduct(String t) { // bug bug bug 不知道哪里错掉了
+        //     int n = t.length();
+        //     int [] len = manacher(t);
+        //     int [] pre = new int [n], suf = new int [n];
+        //     for (int i = 0; i < n; i++) {
+        //         pre[i] = i;
+        //         suf[i] = i;
+        //     }
+        //     for (int i = 0; i < n; i++) {
+        //         suf[i - len[i]] = Math.max(i, suf[i - len[i]]);
+        //         pre[i + len[i]] = Math.min(i, pre[i + len[i]]);
+        //     }
+        //     for (int i = 1; i < n; i++)
+        //         suf[i] = Math.max(suf[i], suf[i-1]);
+        //     for (int i = n-2; i >= 0; i--) 
+        //         pre[i] = Math.min(pre[i], pre[i+1]);
+        //     int [] pp = new int [n], ss = new int [n];
+        //     pp[0] = 2 * pre[0] + 1;
+        //     for (int i = 1; i < n; i++) 
+        //         pp[i] = Math.max(pp[i-1], 2 * (i - pre[i]) + 1);
+        //     ss[n-1] = 2 * (n-1 - suf[n-1]) + 1;
+        //     for (int i = n-2; i >= 0; i--) 
+        //         ss[i] = Math.max(suf[i+1], 2 * (suf[i] - i) + 1);
+        //     long ans = 1;
+        //     for (int i = 0; i < n-1; i++)
+        //         ans = Math.max(ans, (long)pp[i] * ss[i+1]);
+        //     return ans;
+        // }
+
+
+        // private static int[] manacherOdd(String str) {
+        //     int n = str.length();
+        //     char[] s = str.toCharArray();
+        //     int [] ans = new int [n];
+        //     for (int i = 0, l = 0, r = -1; i < n; i++) {
+        //         int len = i > r ? 1 : Math.min(ans[l+r-i], r-i+1);
+        //         int maxLen = Math.min(i, n-1-i);
+        //         int x = i - len, y = i + len;
+        //         while (len <= maxLen && s[x--] == s[y++]) len++;
+        //         ans[i] = len--;
+        //         if (i + len > r) {
+        //             l = i - len;
+        //             r = i + len;
+        //         }
+        //     }
+        //     return ans;
+        // }
+        // public long maxProduct(String s) { // 这个马拉车，得多写几遍
+        //     int n = s.length();
+        //     int [] d = manacherOdd(s);
+        //     int [] l = new int [n], r = new int [n];
+        //     for (int i = 0; i < n; i++) {
+        //         l[i+d[i]-1] = Math.max(l[i+d[i]-1], 2 * d[i]-1);
+        //         r[i-d[i]+1] = 2 * d[i] - 1;
+        //     }
+        //     for (int i = n-2, j = n-1; i >= 0; i--, j--)
+        //         l[i] = Math.max(l[i], l[j]-2);
+        //     for (int i = 1, j = 0; i < n; i++, j++)
+        //         r[i] = Math.max(r[i], r[j]-2);
+        //     for (int i = 1, j = 0; i < n; i++, j++) 
+        //         l[i] = Math.max(l[i], l[j]);
+        //     for (int i = n-2, j = n-1; i >= 0; i--, j--)
+        //         r[i] = Math.max(r[i], r[j]);
+        //     long ans = 1;
+        //     for (int i = 1; i < n; i++) 
+        //         ans = Math.max(ans, (long)l[i-1] * r[i]);
+        //     return ans;
+        // }
+
+
+        // public List<List<String>> findDuplicate(String[] paths) {
+        //     Map<String, List<String>> m = new HashMap<>();
+        //     List<List<String>> ans = new ArrayList<>();
+        //     for (String s : paths) {
+        //         String [] cur = s.split("\\s+");
+        //         if (cur.length == 1) continue;
+        //         for (int i = 1; i < cur.length; i++) {
+        //             int bgn = cur[i].indexOf('(');
+        //             String key = cur[i].substring(bgn, cur[i].length()-1);
+        //             String path = cur[0] + "/" + cur[i].substring(0, bgn);
+        //             m.computeIfAbsent(key, z -> new ArrayList<>()).add(path);
+        //         }
+        //     }
+        //     for (Map.Entry<String, List<String>> en : m.entrySet()) {
+        //         List<String> l = en.getValue();
+        //         if (l.size() < 2) continue;
+        //         ans.add(l);
+        //     }
+        //     return ans;
+        // }
+
+
+        // private String maskEmail(String t) {
+        //     int n = t.length();
+        //     char [] s = t.toCharArray();
+        //     int idx = t.indexOf('@');
+        //     String ans = Character.toLowerCase(s[0]) + "*****" + Character.toLowerCase(s[idx-1])+"@";
+        //     for (int i = idx+1; i < n; i++) {
+        //         if (Character.isUpperCase(s[i]))
+        //             ans += Character.toLowerCase(s[i]);
+        //         else ans += ""+s[i];
+        //     }
+        //     return ans;
+        // }
+        // private String maskPhone(String t) {
+        //     int n = t.length();
+        //     if (n == 10) return "***-***-" + t.substring(6);
+        //     char [] s = t.toCharArray();
+        //     int cnt = 0;
+        //     for (int i = 0; i < n; i++)
+        //         if (Character.isDigit(s[i])) cnt++;
+        //     String ans = "";
+        //     if (cnt == 13) ans = "+***-***-***-";
+        //     else if (cnt == 12) ans = "+**-***-***-";
+        //     else if (cnt == 11) ans = "+*-***-***-";
+        //     else ans = "***-***-";
+        //     StringBuilder sb = new StringBuilder();
+        //     cnt = 0;
+        //     for (int i = n-1; i >= 0; i--) 
+        //         if (Character.isDigit(s[i])) {
+        //             sb.append(s[i]);
+        //             cnt++;
+        //             if (cnt == 4)
+        //                 return ans + sb.reverse().toString();
+        //         }
+        //     return ans;
+        // }
+        // public String maskPII(String t) {
+        //     int n = t.length();
+        //         if (n < 8 || n > 20 || t.indexOf('@') != -1)
+        //             return maskEmail(t);
+        //         else return maskPhone(t);
+        // }
+
+
         
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        String a = "great";
-        String b = "rgeat";
-        // String a = "abcdbdacbdac";
-        // String b = "bdacabcdbdac";
-
-        boolean  r = s.isScramble(a, b);
-        System.out.println("r: " + r);
     }
 }

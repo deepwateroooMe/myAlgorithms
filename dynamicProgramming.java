@@ -751,64 +751,7 @@ public class dynamicProgramming {
         //     return res;
         // }
 
-        // private boolean 
-        // private int getPalindromeCnts(String s) {
-        //     if (s.length() == 2) return 3;
-        //     int n = s.length();
-        //     int res = n;
-        //     int i = 1;
-        //     while (i < n && s.charAt(i) == s.charAt(i-1)) {
-        //         ++res;
-        //         ++i;
-        //     }
-        //     if (i == n) {
-        //         return n*(n+1)/2;
-        //     }
-        //     // HashMap<Character, Integer> m = new HashMap<>();
-        //     // i = 0;
-        //     // while (i < n && !m.containsKey(s.charAt(i))) {
-        //     //     m.put(s.charAt(i), i);
-        //     //     ++i;  
-        //     // } 
-            
-        //     if (n % 2 == 0) return n + n/2;
-        //     else return n + (n-1)/2;
-        // }
-        // public int countSubstrings(String s) {
-        //     if (s.length() == 1) return 1;
-        //     int n = s.length();
-        //     HashMap<Character, Integer> m = new HashMap<>();
-        //     int i = 0, j = 0, res = 0;
-        //     while (i < n) {
-        //         while (i < n && !m.containsKey(s.charAt(i))) {
-        //             m.put(s.charAt(i), i);
-        //             ++i;  
-        //         } 
-        //         if (i == n) return n;
-        //         if (m.containsKey(s.charAt(i))) {
-        //             j = m.get(s.charAt(i));
-        //             if (i - j <= 2) {
-        //                 while (i < n-1 && j > 0 && s.charAt(i+1) == s.charAt(j-1)) {
-        //                     ++i;
-        //                     --j;
-        //                 }
-        //                 if (i == n) {
-        //                     res = j + getPalindromeCnts(s.substring(j, i-j+1));
-        //                 } else {
-        //                     res = j + getPalindromeCnts(s.substring(j, i-j+1)) + countSubstrings(s.substring(i+1));
-        //                 }
-        //                 return res;
-        //             }
-        //         }
-        //     }
-        //     return -1;
-        // }
-
-        // public int countVowelStrings(int n) {
-        // }
-        // private int count(int n, char c) {
-        // }
-
+        
         // HashMap<Character, Integer> ma = new HashMap<>();
         // HashMap<Character, Integer> mb = new HashMap<>();
         // int n;

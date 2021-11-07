@@ -11,7 +11,7 @@ import java.util.Set;
 
 import static java.util.stream.Collectors.toMap;
 
-public class cmp {
+public class competition_1030_1 {
     public static class Solution {
 
         // public String kthDistinct(String[] arr, int k) {
@@ -219,43 +219,104 @@ public class cmp {
         //     }
         //     return ans;
         // } // presum 部分我还没有写，所以对字符串类的presum preprocessing 写不出来不足为奇, good good study, day dap up~~!!
-        public int[] platesBetweenCandles(String t, int[][] queries) { 
-            int n = t.length();
-            int [] sum = new int [n+1];
-            int [] pre = new int [n+1], suf = new int [n+1];
-            char [] s = t.toCharArray();
-            for (int i = 0; i < n; i++) {
-                sum[i+1] = sum[i] + (s[i] == '|' ? 1 : 0);
-                pre[i+1] = s[i] == '|' ? i : pre[i];
-            }
-            for (int i = n-1; i >= 0; i--)
-                suf[i] = s[i] == '|' ? i : suf[i+1];
-            int [] ans = new int [queries.length];
-            for (int i = 0; i < queries.length; i++) {
-                int l = suf[queries[i][0]], r = pre[queries[i][1]+1]; // 注意： 右蜡烛边界 
-                if (l < r)
-                    ans[i] = r - l  - (sum[r] - sum[l]);
-            }
-            System.out.println("2*256*256: " + 2*256*256);
-            return ans;
-        }
-
+        // public int[] platesBetweenCandles(String t, int[][] queries) { 
+        //     int n = t.length();
+        //     int [] sum = new int [n+1];
+        //     int [] pre = new int [n+1], suf = new int [n+1];
+        //     char [] s = t.toCharArray();
+        //     for (int i = 0; i < n; i++) {
+        //         sum[i+1] = sum[i] + (s[i] == '|' ? 1 : 0);
+        //         pre[i+1] = s[i] == '|' ? i : pre[i];
+        //     }
+        //     for (int i = n-1; i >= 0; i--)
+        //         suf[i] = s[i] == '|' ? i : suf[i+1];
+        //     int [] ans = new int [queries.length];
+        //     for (int i = 0; i < queries.length; i++) {
+        //         int l = suf[queries[i][0]], r = pre[queries[i][1]+1]; // 注意： 右蜡烛边界 
+        //         if (l < r)
+        //             ans[i] = r - l  - (sum[r] - sum[l]);
+        //     }
+        //     return ans;
+        // }
 
         
+        static int[][] B_DIRS= {{1,-1},{1,1},{-1,1},{-1,-1}};
+        static int[][] R_DIRS= {{1,0},{0,1},{-1,0},{0,-1}};
+        static int[][] Q_DIRS= {{1,-1},{1,1},{-1,1},{-1,-1},{1,0},{0,1},{-1,0},{0,-1}};
+        static int DIR = 0, MULT = 1, X = 0, Y = 1; // move ids (direction, distance multiplier), direction indexes
+        static int B = 0, R = 1, Q = 2; // piece types
+        int[][] positions;// original positions
+        int[] pieces;     // piece types
+        int[][] lastMove; // last generated move combination
+        int[][] sim;      // simulated position (used in isValid)
+        int cnt;          // valid move combinations
+        int n;            // number of pieces
+        public int countCombinations(String[] pieces, int[][] positions) {
+            this.n = pieces.length;
+            this.pieces = new int[n];
+            for (int i = 0; i < n; i++)
+                if (pieces[i].equals("bishop")) this.pieces[i] = B;
+                else if (pieces[i].equals("rook")) this.pieces[i] = R;
+                else this.pieces[i] = Q;
+            this.positions = positions;
+            this.cnt = 0;
+            this.lastMove = new int[n][];
+            this.sim = new int[n][2];
+            generateCombinations(0);
+            return this.cnt;
+        }
+        private void generateCombinations(int idx) { // generate combinations of moves for all pieces
+            if (idx == n) {
+                cnt += isValid() ? 1 : 0;
+                return;
+            }
+            while (nextMove(idx))
+                generateCombinations(idx + 1);
+            lastMove[idx] = null;
+        }
+        private boolean nextMove(int idx) { // generate next move for the specified piece
+            if (lastMove[idx] == null) {
+                lastMove[idx] = new int [] {0, 0}; // last move for piece i: direction index, mult [1..7]
+                return true;
+            }
+            int [][] dirs = pieces[idx] == B ? B_DIRS : pieces[idx] == R ? R_DIRS : Q_DIRS;
+            int [] last = lastMove[idx];
+            for (; last[DIR] < dirs.length; ++last[DIR], last[MULT] = 0) { // 遍历每一个方向，遍历下一步的每一种可能性
+                int dir = last[DIR];
+                ++last[MULT];
+                int x = positions[idx][X] + last[MULT] * dirs[dir][X], y = positions[idx][Y] + last[MULT] * dirs[dir][Y];
+                if (x >= 1 && x <= 8 && y >= 1 && y <= 8) return true;
+            }
+            return false;
+        }
+        private boolean isValid() { // simulate the combination to verify if it is valid
+            for (int idx = 0; idx < n; idx++) {
+                sim[idx][X] = positions[idx][X];
+                sim[idx][Y] = positions[idx][Y];
+            }
+            for (int t = 1; t <= 7; t++) {
+                for (int idx = 0; idx < n; idx++) {
+                    int [][] ds = pieces[idx] == B ? B_DIRS : pieces[idx] == R ? R_DIRS : Q_DIRS;
+                    int [] last = lastMove[idx];
+                    int d = last[DIR], m = last[MULT];
+                    if (m >= t) {
+                        sim[idx][X] += ds[d][X];
+                        sim[idx][Y] += ds[d][Y];
+                    }
+                    for (int i = 0; i < idx; i++) 
+                        if (sim[idx][X] == sim[i][X] && sim[idx][Y] == sim[i][Y]) return false;
+                }
+            }
+            return true;
+        }
     }
     public static void main(String[] args) {
-        Solution s = new Solution();
+        Solution s  = new Solution();
 
-        // String a = "***|**|*****|**||**|*";
-        // int [][] b = new int [][] {{1,17},{4,5},{14,17},{5,11},{15,16}};
+        String [] a = {"rook","rook"};
+        int [][] b = new int [][] {{1,1},{8,8}};
 
-        String a = "**|**|***|";
-        int [][] b = new int [][] {{2,5},{5,9}};
-
-        // // int [][] a = new int [][] {{1,3,2},{4,5,2},{2,4,3}};
-        // int [][] a = new int [][] {{1,3,2},{4,5,2},{1,5,5}};
-
-        int [] r = s.platesBetweenCandles(a, b);
-        System.out.println(Arrays.toString(r));
+        int r  = s.countCombinations(a, b);
+        System.out.println("r: " + r);
     }
 }

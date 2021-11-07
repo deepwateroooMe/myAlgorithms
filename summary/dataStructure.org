@@ -542,6 +542,7 @@ private boolean isValid(TreeNode node, int min, int max) { // 这些个递归写
 }
 #+END_SRC
 
+
 * Trie
 应用
 Trie树最直观的定义就是LinkedList of HashMap。所以Trie和HashMap都可以用来查询某个单词是否在字典当中。我们需要知道他们的优缺点。
@@ -555,6 +556,46 @@ search
 startWith
 其中insert记得把最后一个node标记为isEnd = true。其中search和startWith都可以通过同一个searchHelper helper method来实现，我们只需要return 最后一个node就可以，如果isEnd == true，那么说明找到一个完整的单词，否则至少找到了prefix。别忘了使用trie的第一步是preprocess，把字典里的所有word加入到trie树当中。
 题目
+** 440. K-th Smallest in Lexicographical Order -  Hard
+Given two integers n and k, return the kth lexicographically smallest integer in the range [1, n].
+*** 解题思路与分析
+就像dfs时当我们需要两个字符串，遍历字符串，我们并不需要看的去遍历字符串，我们只要移动下标就可以了
+
+这里我们并不需要真的去建和遍历这样一个字典，我们只要理清数字个数之间的关系就可以了
+
+还要一个典型案例，把它找出来。。。。 todo
+
+[[./pic/trie.png]]
+
+[[./pic/trie2.png]]
+
+#+BEGIN_SRC java
+private int calSteps(int n, long n1, long n2) { // n1 和 n2得是long类型的, int会产生溢出, 不能通过这个案例: 输入n=681692778, k=351251360, 预期结果=416126219
+    int steps = 0;
+    while (n1 <= n) {
+        steps += Math.min(n2, n+1) - n1;
+        n1 *= 10;
+        n2 *= 10;
+    }
+    return steps;
+}
+public int findKthNumber(int n, int k) {
+    int cur = 1; //根据题意, 第一个数是1
+    --k;         //第一个是1, 所以再找出k-1个数后就知道第k个数是多少了
+    while (k > 0) {
+        int steps = calSteps(n, cur, cur+1);
+        if (steps <= k) { //横向扩展, 相当于+steps,
+            cur += 1;
+            k -= steps;
+        } else {          //steps > k; 纵向扩展, 相当于+1
+            cur *= 10;
+            k -= 1;
+        }
+    }
+    return cur;
+}
+#+END_SRC
+
 ** 208. Implement Trie (Prefix Tree)
 ** 212. Word Search II
 ** 211. Add and Search Word - Data structure design (Facebook店面)

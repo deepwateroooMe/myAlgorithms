@@ -776,47 +776,82 @@ public class mixed {
         // }
 
         
-        private boolean isValid(char [] s) {
-            int n = s.length, cl = 0, cu = 0, cd = 0;
-            for (char c : s) {
-                if (Character.isLowerCase(c)) cl++;
-                else if (Character.isDigit(c)) cd++;
-                else if (Character.isUpperCase(c)) cu++;
-            }
-            if (cl == 0 || cd == 0 || cu = 0) return false;
-            int cnt = 1, i = 0, j  = 0;
-            while (i < n) {
-                if (i < n-1 && s[i] == s[i+1]) {
-                    cnt = 1;
-                    while (i < n-1 && s[i] == s[i+1]) {
-                        cnt++;
-                        if (cnt == 3) return false;
-                        i++;
-                    }
-                    if (i == n-1) return true;
-                }
-                while (i < n-1 && s[i] != s[i+1]) i++;
-            }
-            return true;
-        }
-        public int strongPasswordChecker(String t) {
-            int n = t.length();
-            char [] s = t.toCharArray();
-            if (n >= 6 && n <= 20 && isValid(s)) return 0;
-            if (n < 3) return 6-n;
-            if (n >= 3 && n < 6) {
-                
-            }
+        // private boolean isValid(char [] s) {
+        //     int n = s.length, cl = 0, cu = 0, cd = 0;
+        //     for (char c : s) {
+        //         if (Character.isLowerCase(c)) cl++;
+        //         else if (Character.isDigit(c)) cd++;
+        //         else if (Character.isUpperCase(c)) cu++;
+        //     }
+        //     if (cl == 0 || cd == 0 || cu = 0) return false;
+        //     int cnt = 1, i = 0, j  = 0;
+        //     while (i < n) {
+        //         if (i < n-1 && s[i] == s[i+1]) {
+        //             cnt = 1;
+        //             while (i < n-1 && s[i] == s[i+1]) {
+        //                 cnt++;
+        //                 if (cnt == 3) return false;
+        //                 i++;
+        //             }
+        //             if (i == n-1) return true;
+        //         }
+        //         while (i < n-1 && s[i] != s[i+1]) i++;
+        //     }
+        //     return true;
+        // }
+        // public int strongPasswordChecker(String t) {
+        //     int n = t.length();
+        //     char [] s = t.toCharArray();
+        //     if (n >= 6 && n <= 20 && isValid(s)) return 0;
+        //     if (n < 3) return 6-n;
+        //     if (n >= 3 && n < 6) {
+        //     }
+        // }
 
-        }
+        // public int countSegments(String s) {
+        //     s = s.replaceFirst("^\\s*", "");
+        //     if (s == null || s.length() == 0) return 0;
+        //     return s.split("\\s+").length;
+        // }
+
+        // public int arrangeCoins(int n) {
+        //     int ans = 0, cnt = n, i = 1;
+        //     while (cnt >= i) {
+        //         cnt -= i;
+        //         ans++;
+        //         i++;
+        //     }
+        //     return ans;
+        // }
+
+        // public List<Integer> findDisappearedNumbers(int[] a) {
+        //     List<Integer> l = new ArrayList<>();
+        //     Arrays.sort(a);
+        //     int cur = 1;
+        //     for (int i = 0; i < a.length; i++) {
+        //         if (a[i] == cur) {
+        //             cur++;
+        //             continue;
+        //         } else if (a[i] > cur) {
+        //             for (int j = cur; j < a[i]; j++) 
+        //                 l.add(j);
+        //             cur = a[i] + 1;
+        //         } 
+        //     }
+        //     if (cur <= a.length) 
+        //         for (int i = cur; i <= a.length; i++) 
+        //             l.add(i);
+        //     return l;
+        // }
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        String a = "1";
-        String b = "9";
+        // int []  a = new int []  {4, 3, 2, 7, 8, 2, 3, 1};
+        int [] a = new int [] {1, 1};
 
-        String r = s.addStrings(a, b); // getRandom() should return either 1 or 2 randomly.
-        System.out.println("r: " + r);
+        List<Integer> r = s.findDisappearedNumbers(a); // getRandom() should return either 1 or 2 randomly.
+        System.out.println("r.size(): " + r.size());
+        System.out.println(Arrays.toString(r.toArray()));
     }
 }

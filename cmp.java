@@ -13,241 +13,127 @@ import static java.util.stream.Collectors.toMap;
 
 public class cmp {
     public static class Solution {
+ 
+        public int countVowelSubstrings(String t) {  // sliding window思路是对的，只是个数数得不对
+            System.out.println("t: " + t);
+            int n = t.length(), ans = 0, j = 0;
+            char [] s = t.toCharArray();
+            Set<Character> sc = new HashSet<>(List.of('a', 'e', 'i', 'o', 'u'));
+            Map<Character, Integer> m = new HashMap<>();
+            for (int i = 0; i < n; i++) {
+                if (!sc.contains(s[i])) continue;
+                System.out.println("\n i: " + i);
+                j = i;
+                while (j < n && sc.contains(s[j])) {
+                    System.out.println("\n j: " + j);
+                    System.out.println("s[j]: " + s[j]);
 
-        // public int smallestEqual(int[] a) {
-        //     int n = a.length;
-        //     for (int i = 0; i < n; i++) 
-        //         if (i % 10 == a[i]) return i;
-        //     return -1;
-        // }
-
-        // public int[] nodesBetweenCriticalPoints(ListNode head) {
-        //     int cnt = 0;
-        //     ListNode r = head;
-        //     while (r != null) {
-        //         cnt++;
-        //         r = r.next;
-        //     }
-        //     if (cnt == 2) return new int [] {-1, -1};
-        //     List<Integer> idx = new ArrayList<>();
-        //     r = head.next; 
-        //     ListNode pre = head, next = r.next;
-        //     int i = 1;
-        //     while (r.next != null) {
-        //         if (r.val > pre.val && r.val > next.val
-        //             || r.val < pre.val && r.val < next.val)
-        //             idx.add(i);
-        //         pre = r;
-        //         r = r.next;
-        //         next = r.next;
-        //         i++;
-        //     }
-        //     if (idx.size() == 0) return new int [] {-1, -1} ;
-        //     int min = Integer.MAX_VALUE, max = 0, minVal = idx.get(0);
-        //     for ( i = 1; i < idx.size(); i++) {
-        //         min = Math.min(min, idx.get(i) - idx.get(i-1));
-        //         minVal = Math.min(minVal, idx.get(i));
-        //         max = Math.max(max, idx.get(i) - minVal);
-        //     }
-        //     int a = min == Integer.MAX_VALUE ? -1 : min;
-        //     int b = max == 0 ? -1 : max;
-        //     return new int [] {a, b};
-// }
-
-
-        // public int minimumOperations(int[] a, int start, int goal) {
-        //     if (start == goal) return 0;
-        //     int n = a.length;
-        //     if (start < 0 || start > 1000) return -1;
-        //     Queue<Integer> q = new LinkedList<>();
-        //     q.offer(start);
-        //     Set<Integer> vis = new HashSet<>();
-        //     vis.add(start);
-        //     int cnt = 0;
-        //     while (!q.isEmpty()) {
-        //         for (int size = q.size()-1; size >= 0; size--) {
-        //             int cur = q.poll();
-        //             for (int v : a) {
-        //                 if (cur+v == goal || cur-v == goal || (cur^v) == goal) return cnt + 1;
-        //                 if (!vis.contains(cur + v)) {
-        //                     if (cur +v  >=0 && cur + v <= 1000) {
-        //                         q.offer(cur + v);
-        //                         vis.add(cur+v);
-        //                     }
-        //                 }
-        //                 if (!vis.contains(cur - v)) {
-        //                     if (cur -v  >=0 && cur - v <= 1000) {
-        //                         q.offer(cur - v);
-        //                         vis.add(cur - v);
-        //                     }
-        //                 }
-        //                 if (!vis.contains(cur^v)) {
-        //                     if ((cur ^v)  >=0 && (cur ^ v) <= 1000) {
-        //                         q.offer(cur ^ v);
-        //                         vis.add(cur^v);
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //         cnt++;
-        //     }
-        //     return -1;
-        // }
-
-        
-        // private List<String> parsesur(String t) { // 被我这个还不太会思考的弱弱在考场吐了一大片无用的代码。。。。。。。
-        //     int n = t.length();
-        //     char [] s = t.toCharArray();
-        //     List<String> l = new ArrayList<>();
-        //     int i = 0, j = 0;
-        //     while (i < n) {
-        //         while (i < n && Character.isLowerCase(s[i])) i++;
-        //         if (i > j) l.add(t.substring(j, i));
-        //         if (i == n) return l;
-        //         j = i;
-        //         while (i < n && Character.isDigit(s[i])) i++;
-        //         l.add(t.substring(j, i));
-        //         j = i;
-        //     }
-        //     return l;
-        // }
-        // Set<Integer> parseIntString(String s) {
-        //     int n = s.length();
-        //     Set<Integer> set = new HashSet<>();
-        //     for (int d = 1; d <= n; d++) 
-        //         for (int i = 0; i+d <=  n; i++) 
-        //             set.add(Integer.parseInt(s.substring(i, i+d)));
-        //     return set;
-        // }
-        // List<Set<Integer>> parseInt(List<String> l) {
-        //     List<Set<Integer>> ans = new ArrayList<>();
-        //     int cnt = 0;
-        //     for (int i = 0; i < l.size(); i++) 
-        //         if (Character.isDigit(l.get(i).charAt(0)))
-        //             ans.add(parseIntString(l.get(i)));
-        //         else cnt += l.get(i).length();
-        //     Set<Integer> len = new HashSet<>();
-        //     len.add(cnt);
-        //     ans.add(0, len);
-        //     return ans;
-        // }
-        // private void getLenSet(List<Set<Integer>> ls, int i, Set<Integer> vis) { // 这个方法得出来的值不对
-        //     if (i == 1) {
-        //         vis.addAll(ls.get(i));
-        //         return ;
-        //     }
-        //     Set<Integer> next = new HashSet<>();
-        //     for (Integer v : vis) 
-        //         for (Integer vi : ls.get(i)) 
-        //             next.add(v + vi);
-        //     vis.addAll(next);
-        // }
-        // Set<Integer> res;
-        // Set<Integer> getLength(List<Set<Integer>> ls) {
-        //     if (ls.size() == 2) return ls.get(1);
-        //     res = new HashSet<>();
-        //     getLenSet(ls, 1, res);
-        //     return new HashSet<>(res);
-        // }
-        // private boolean equals(Map<Character, Integer> m, Map<Character, Integer> n) {
-        //     if (m.size() != n.size()) return false;
-        //     for (char key : m.keySet()) 
-        //         if (!n.containsKey(key) || n.get(key) != m.get(key)) return false;
-        //     return true;
-        // }
-        // public boolean possiblyEquals(String ss, String tt) {
-        //     int m = ss.length(), n = tt.length();
-        //     if (Character.isLowerCase(ss.charAt(0)) && Character.isLowerCase(tt.charAt(0))) {
-        //         int i = 0, j = 0;
-        //         while (i < m && j < n && Character.isLowerCase(ss.charAt(i)) && Character.isLowerCase(tt.charAt(j))
-        //                && ss.charAt(i) == tt.charAt(j)) {
-        //             i++;
-        //             j++;
-        //         }
-        //         if (i < m && j < n && Character.isLowerCase(ss.charAt(i)) && Character.isLowerCase(tt.charAt(j))
-        //             && ss.charAt(i) != tt.charAt(j)) return false;
-        //         if ((i == m && j < n || i < m && j == n)
-        //             && (j < n && Character.isLowerCase(tt.charAt(j)) || i < m && Character.isLowerCase(ss.charAt(i))))
-        //             return false;
-        //     }
-        //     Map<Character, Integer> ma = new HashMap<>();
-        //     Map<Character, Integer> mb = new HashMap<>();
-        //     for (char c : ss.toCharArray()) 
-        //         if (Character.isLowerCase(c))
-        //             ma.put(c, ma.getOrDefault(c, 0) + 1);
-        //     for (char c : tt.toCharArray()) 
-        //         if (Character.isLowerCase(c))
-        //             mb.put(c, mb.getOrDefault(c, 0) + 1);
-        //     List<String> a = parsesur(ss);
-        //     List<String> b = parsesur(tt);
-        //     List<Set<Integer>> aa = parseInt(a);
-        //     List<Set<Integer>> bb = parseInt(b);
-        //     Set<Integer> tmp = new HashSet<>();
-        //     tmp.add(0);
-        //     if (aa.size() < 2) aa.add(tmp);
-        //     if (bb.size() < 2) bb.add(tmp);
-        //     Set<Integer> left = getLength(aa);
-        //     Set<Integer> right = getLength(bb);
-        //     for (Integer va : left) 
-        //         for (Integer vb : right) 
-        //             if (aa.get(0).iterator().next() + va == bb.get(0).iterator().next() + vb)
-        //                 return true;
-        //     return false;
-        // }
-        private boolean dfs(int i, int j, int dif) {
-            if (i >= m && j >= n && dif == 0) return true;
-            if (memo[i][j][dif+1000] != null) return memo[i][j][dif+1000]; // + 1000
-            boolean res = false;
-            if (i < m) 
-                if (Character.isDigit(s[i])) {
-                    int cur = 0, cnt = 0;
-                    while (i+cnt < m && cnt < 3 && Character.isDigit(s[i+cnt])) {
-                        cur = cur * 10 + (s[i+cnt] - '0');
-                        cnt++;
-                        if (dfs(i+cnt, j, dif - cur)) res = true;
-                    }
-                } else {
-                    if (dif > 0 && dfs(i+1, j, dif-1)) res = true;
-                    else if (dif == 0 && j < n && s[i] == t[j] && dfs(i+1, j+1, dif)) res = true;
+                    m.put(s[j], m.getOrDefault(s[j], 0) + 1);
+                    System.out.println("(m.size() == 5) : " + (m.size() == 5) );
+                    if (m.size() == 5) ans++;
+                    System.out.println("ans: " + ans);
+                    j++;
                 }
-            if (j < n) 
-                if (Character.isDigit(t[j])) {
-                    int cur = 0, cnt = 0;
-                    while (j+cnt < n && cnt < 3 && Character.isDigit(t[j+cnt])) {
-                        cur = cur * 10 + (t[j+cnt] - '0');
-                        cnt++;
-                        if (dfs(i, j+cnt, dif+cur)) res = true;       // when to + cur when to - cur
+                System.out.println("j: " + j);
+                System.out.println("ans: " + ans);
+                if (j - i >= 4 || m.size() == 5) {
+                    while (i <= j && m.size() == 5) {
+                        System.out.println("\n i: " + i);
+                        m.put(s[i], m.get(s[i])-1);
+                        if (m.get(s[i]) == 0) m.remove(s[i]);
+                        i++;
+                        System.out.println("(m.size() == 5) : " + (m.size() == 5) );
+                        if (m.size() == 5) ans++;
+                        else if (m.size() < 5) break;
+                        System.out.println("ans: " + ans);
                     }
-                } else if (dif < 0 && dfs(i, j+1, dif+1)) res = true; // no limit on i < m any more
-            return memo[i][j][dif+1000] = res;
+                }
+                m.clear();
+                i = j-1;
+            }
+            return ans;
         }
-        Boolean [][][] memo = new Boolean [41][41][2000];
-        char [] s, t;
-        int m, n;
-        public boolean possiblyEquals(String s, String t) {
-            m = s.length();
-            n = t.length();
-            this.s = s.toCharArray();
-            this.t = t.toCharArray();
-            return dfs(0, 0, 0);
+
+        public long countVowels(String t) {
+            int n = t.length();
+            long sum = 0, ans = 0;
+            Set<Character> sc = new HashSet<>(List.of('a', 'e', 'i', 'o', 'u'));
+            char [] s = t.toCharArray();
+            long [] cnt = new long [n];
+            for (int i = 0; i < n; i++) { // O(N^2)
+            // for (int i = n-1; i >= 0; i--) {
+                sum += (sc.contains(s[i]) ? 1 : 0);
+                cnt[i] = sum;
+            }
+            for (int i = 0; i < n; i++) 
+                for (int j = i+1; j <= n; j++) 
+                    ans += cnt[j-1] - (i == 0 ? 0 : cnt[i-1]);
+            return ans;
+            // for (int i = 0; i < n; i++) {
+            //     if (!sc.contains(s[i])) continue;
+            //     ans += n-i;
+            // }
+            // System.out.println("ans: " + ans);
+            // return ans;
+        }
+
+        public int minimizedMaximum(int n, int[] a) {
+            Arrays.sort(a);
+            System.out.println(Arrays.toString(a));
+            int m = a.length;
+            if (m == 1 && n == 1) return a[0];
+            if (m == n) return Arrays.stream(a).max().getAsInt();
+            if (n % m == 0) return Arrays.stream(a).max().getAsInt() / (n / m);
+            int v = n / m, g = n % m;
+            System.out.println("v: " + v);
+            System.out.println("g: " + g);
+
+            int max = 0, cnt = 0;
+            for (int i = m-1; i >= 0; i--) {
+                if (cnt < g) {
+                    int cur = a[i] / (v+1) + (a[i] % (v+1) == 0 ? 0 : 1);
+                    max = Math.max(max, cur);
+                    cnt ++;
+                } else {
+                    int cur = a[i] / v + (a[i] % v == 0 ? 0 : 1);
+                    max = Math.max(max, cur);
+                }
+            }
+            return max;
+        }
+
+        private void dfs(int idx, int p, int t, int time, Map<Integer, Set<Integer>> map) { // 自顶向下：走到尽可能远的地方，但往返时间不超过限制
+            for (int [] next : adj.get(idx)) {
+                if (time + next[1] * 2 <= t)
+            }
+        }
+        // 这里对于重复往返多次，应该纪录的信息想得不是很透
+        Map<Integer, Map<Integer, Set<Integer>>> ss = new HashSet<>();  // k: node [0, n-1], v map: time and paths nodes 
+        Map<Integer, List<int []>> adj = new HashMap<>();
+        public int maximalPathQuality(int[] values, int[][] edges, int maxTime) { // 应该算是树形dp的题目，基本只做了一两题：打家劫舍3，和longest zigzai path长度还不算dp
+            for (int [] e : edges) {
+                int u = e[0], v = e[1], t = e[2];
+                adj.computeIfAbsent(u, z -> new ArrayList<>()).add(new int [] {v, t});;
+                adj.computeIfAbsent(v, z -> new ArrayList<>()).add(new int [] {u, t});;
+            }
+            dfs(0, -1, maxTime, 0, new HashMap<>());
+            
         }
     }
-    public static void main(String[] args) 
+    public static void main(String[] args) {
         Solution s = new Solution();
 
-        String a = "a5b";
-        String b = "c5b";
-        // String a = "internationalization";
-        // String b = "i18n";
-        // String a = "x94";
-        // // String b = "x14";
-        // String a = "112s";
-        // String b = "g841";
-        // String a = "28a72b5a8a";
-        // String b =  "a496a189";
+    // String a = "aeiouu";
+    // String a = "unicornarihan";
+    // String a = "cuaieuouac";
+    // String a = "noosabasboosa";
+    // String a = "aba";
 
-        boolean r = s.possiblyEquals(a, b);
-        System.out.println("r: " + r);
+        int []  a = new int []  {25, 11, 29, 6, 24, 4, 29, 18, 6, 13, 25, 30};
+
+    int r = s.minimizedMaximum(22, a);
+System.out.println("r: " + r);
+
     }
 }
 

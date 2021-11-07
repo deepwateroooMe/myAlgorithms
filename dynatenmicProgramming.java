@@ -933,30 +933,6 @@ public class dynatenmicProgramming {
         // }
 
 
-        // public int getMaxRepetitions(String s1, int n1, String s2, int n2) {
-        //     StringBuilder sb = new StringBuilder();
-        //     for (int i = 0; i < s1.length(); i++)  {
-        //         if (s2.indexOf(s1.charAt(i)) == -1) continue;
-        //         sb.append(s1.charAt(i));
-        //     }
-        //     String s = sb.toString().repeat(n1), t = s2.repeat(n2);
-        //     int n = s.length(), m = t.length();
-        //     if (s.chars().distinct().count() == t.chars().distinct().count() && t.chars().distinct().count() == 1) return n/m;
-        //     int i = 0, j = 0, cnt = 0;
-        //     while (i < n) { 
-        //         while (i < n && s.charAt(i) != t.charAt(j)) i++;
-        //         while (i < n && j < m && s.charAt(i) == t.charAt(j)) {
-        //             i++;
-        //             if (j+1 == m) {
-        //                 j = 0;
-        //                 ++cnt;
-        //             } else j++;
-        //         }
-        //     }
-        //     return cnt;
-        // }
-
-
         // private int dfs(int i) {
         //     if (i >= n) return 0;
         //     if (i == n-1) return s[i] == '*' ? (dp[i] = 9) : (s[i] == '0' ? (dp[i] = 0) : (dp[i] = 1));
@@ -1160,13 +1136,225 @@ public class dynatenmicProgramming {
         // }
 
 
+        // public int numDecodings(String t) { // 这里面要考虑的状态好多呀
+        //     if (t.charAt(0) == '0') return 0;
+        //     int n = t.length() + 1;
+        //     if (n == 1) return t.charAt(0) != '*' ? 1 : 9;
+        //     int mod = (int)1e9 + 7;
+        //     t = "#" + t;
+        //     char [] s = t.toCharArray();
+        //     int [] dp = new int [n+1];
+        //     dp[0] = 1;
+        //     dp[1] = s[1] == '*' ? 9 : 1;
+        //     for (int i = 2; i <= n; i++) { // 要把 * 号的考虑情况加进去
+        //         char c = s[i], p = s[i-1];
+        //         if (c == '0') {
+        //             if (p != '*' && p-'0' >= 3) return 0;
+        //             if (p != '*' && p - '0' <= 2)
+        //                 dp[i] = dp[i-2];
+        //             if (p == '*') dp[i] = dp[i-2] * 2;
+        //         } else if (c != '*') { // [1, 9]
+        //             dp[i] = dp[i-1];
+        //             if (p != '*' && Integer.parseInt(t.substring(i-1, i+1) <= 26))
+        //                 dp[i] += dp[i-2];
+        //             else if (p == '*') {
+        //                 if (c - '0' <= 6)     
+        //                     dp[i] += dp[i-2] * 2;
+        //                 else dp[i] += dp[i-2];
+        //             }
+        //         } else { // p == '*'
+        //             if (c == '*') dp[i] = 9 * dp[i-1];
+        //             else if (c == '1') dp[i] += 9 * dp[i-2];
+        //             else if (c == '2') {
+        //                 if ()
+        //             }
+        //         }
+        //     }
+        // }
+        // public int numDecodings(String t) {
+        //     int mod = (int)1e9 + 7;
+        //     int n = t.length();
+        //     char [] s = t.toCharArray();
+        //     System.out.println(Arrays.toString(s));
+        //     int [] dp = new int [Math.max(2, n+1)];
+        //     dp[0] = 1;
+        //     dp[1] = s[0] == '*' ? 9 : s[0] == '0' ? 0 : 1;
+        //     for (int i = 2; i <= n; i++) {
+        //         System.out.println("i: " + i);
+        //         for (int j = 1; j <= 26; j++) { // 枚举s的长i前缀的末尾可以解码为哪个大写字母
+        //             char c = s[i-1];
+        //             if (j <= 9) { // 如果是要解码为A到I，那么最后一个数字得单独解码
+        //                 if (c == '*' || c == '0' + j)
+        //                     dp[i] += dp[i-1];
+        //             } else {      // 否则最后两个数字得一起解码
+        //                 char p = s[i-2];
+        //                 int x = j % 10, y = j / 10;
+        //                 if ((p == '*' || p == y+ '0') && ((c == '*' && x != 0) || c == x + '0')) 
+        //                     dp[i] += dp[i-2];
+        //             }
+        //             dp[i] %= mod;
+        //         }
+        //     }
+        //     return dp[n];
+        // }
+
+
+        // public int getMaxRepetitions(String s1, int n1, String s2, int n2) { // tle tle tle
+        //     StringBuilder sb = new StringBuilder();
+        //     for (int i = 0; i < s1.length(); i++)  {
+        //         if (s2.indexOf(s1.charAt(i)) == -1) continue;
+        //         sb.append(s1.charAt(i));
+        //     }
+        //     String s = sb.toString().repeat(n1), t = s2.repeat(n2);
+        //     int n = s.length(), m = t.length();
+        //     if (s.chars().distinct().count() == t.chars().distinct().count() && t.chars().distinct().count() == 1) return n/m;
+        //     int i = 0, j = 0, cnt = 0;
+        //     while (i < n) { 
+        //         while (i < n && s.charAt(i) != t.charAt(j)) i++;
+        //         while (i < n && j < m && s.charAt(i) == t.charAt(j)) {
+        //             i++;
+        //             if (j+1 == m) {
+        //                 j = 0;
+        //                 ++cnt;
+        //             } else j++;
+        //         }
+        //     }
+        //     return cnt;
+        // }
+        // public int getMaxRepetitions(String s1, int n1, String s2, int n2) {
+        //     char [] s = s1.toCharArray();
+        //     char [] t = s2.toCharArray();
+        //     int cnt = 0, ans = 0, idx = 0; // idx: index for s2
+        //     while (cnt < n1) {
+        //         for (int i = 0; i < s.length; i++)
+        //             if (s[i] == t[idx]) {
+        //                 idx++;
+        //                 if (idx == t.length) {
+        //                     idx = 0;
+        //                     ans++;
+        //                 }
+        //             }
+        //         cnt++;
+        //     }
+        //     return ans / n2;
+        // }
+
+         
+        // public int kInversePairs(int n, int k) {
+        //     int mod = (int)1e9 + 7;
+        //     long [][] dp = new long [n+1][k+1];
+        //     dp[0][0] = 1;
+        //     for (int i = 1; i <= n; i++) {
+        //         dp[i][0] = 1;
+        //         for (int j = 1; j <= k; j++)  {
+        //             dp[i][j] = dp[i][j-1] + dp[i-1][j];
+        //             if (j >= i)
+        //                 dp[i][j] -= dp[i-1][j-i];
+        //             dp[i][j] = (dp[i][j] + mod) % mod;
+        //         }
+        //     }
+        //     return (int)dp[n][k];
+        // }
+        // public int kInversePairs(int n, int k) {
+        //     int mod = (int)1e9 + 7;
+        //     int [][] dp = new int [n+1][k+1];
+        //     dp[0][0] = 1;
+        //     for (int i = 1; i <= n; i++) {
+        //         long sum = 0;
+        //         for (int j = 0; j <= k; j++) {
+        //             sum += dp[i-1][j];
+        //             if (j >= i)
+        //                 sum -= dp[i-1][j-i];
+        //             dp[i][j] = (int)(sum % mod);
+        //         }
+        //     }
+        //     return (int)dp[n][k];
+        // }
+
+        
+        // public int minChanges(int[] nums, int k) {
+        //     int n = nums.length;
+        //     int [][] cnt = new int [2007][1025];
+        //     for (int v : nums) cnt[v]++;
+        //     int [][] dp = new int [2007][1025];
+        //     return dp[k][n];
+        // }
+
+        // public int minChanges(int[] arr, int k) {
+        //     int n = arr.length;
+        //     List<Map<Integer, Integer>> groups = new ArrayList<>();
+        //     for (int i = 0; i < k; i++) 
+        //         groups.add(new HashMap<>());
+        //     int [] cnt = new int [k];
+        //     for (int i = 0; i < k; i++) {
+        //         for (int j = i; j < n; j += k) {
+        //             groups.get(i).put(arr[j], groups.get(i).getOrDefault(arr[j], 0) + 1);
+        //             cnt[i]++;
+        //         }
+        //     }
+        //     int [] dp = new int [1 << 10]; // dp[val]表示处理到当前组时，异或值为val的最小修改次数
+        //     Arrays.fill(dp, Integer.MAX_VALUE);
+        //     dp[0] = 0;
+        //     for (int i = 0; i < k; i++) {
+        //         int lo = Arrays.stream(dp).min().getAsInt();
+        //         int [] ndp = new int [1 << 10]; // 对每一组分别进行计数
+        //         Arrays.fill(ndp, lo + cnt[i]);
+        //         for (int j = 0; j < (1 << 10); j++) { // 遍历数组中每个元素的候选更换最小次数，相当于是暴搜
+        //             if (dp[j] == Integer.MAX_VALUE) continue;
+        //             for (Map.Entry<Integer, Integer> en : groups.get(i).entrySet()) {
+        //                 int key = en.getKey(), v = en.getValue();
+        //                 int next = key ^ j;
+        //                 ndp[next] = Math.min(ndp[next], dp[j] + cnt[i] - v);
+        //             }
+        //         }
+        //         dp = ndp;
+        //     }
+        //     return dp[0];
+        // }
+        // public int minChanges(int[] arr, int k) {
+        //     int n = arr.length;
+        //     List<Map<Integer, Integer>> group = new ArrayList<>(); // 存储 k 个组、各组中各个数字数量
+        //     int [] size = new int [k];                             // 各组大小,它们会有可能不同吗？
+        //     for (int i = 0; i < k; i++) {
+        //         Map<Integer, Integer> map = new HashMap<>();
+        //         for (int j = i; j < n; j += k) {
+        //             map.put(arr[j], map.getOrDefault(arr[j], 0) + 1);
+        //             size[i]++;
+        //         }
+        //         group.add(map);
+        //     }
+        //     int range = 1 << 10;          //  题中nums[i] < 2^10， 为的是遍历所有可能更改值，以取最小
+        //     int [] dp = new int [range];  // 当前组异或到对应数字时的更改次数
+        //     Arrays.fill(dp, Integer.MAX_VALUE);
+        //     dp[0] = 0;
+        //     for (int i = 0; i < k; i++) {
+        //         int minVal = Arrays.stream(dp).min().getAsInt();
+        //         int [] newDp = new int [range];       //  遍历每一个个组，暴搜、取最小
+        //         Arrays.fill(newDp, minVal + size[i]); // 变为当前组中不存在数字的改变次数：之前的最小改变次数+当前组元素个数
+        //         for (int j = 0; j < range; j++) {
+        //             if (dp[j] == Integer.MAX_VALUE) continue; // 对第0组，保证dp[i]是异或到0的最小改变数
+        //             Iterator it = group.get(i).entrySet().iterator();
+        //             while (it.hasNext()) {
+        //                 Map.Entry en = (Map.Entry)it.next();
+        //                 int num = (int)en.getKey(), v = (int)en.getValue();
+        //                 int xorNum = num ^ j;
+        //                 newDp[xorNum] = Math.min(newDp[xorNum], dp[j] + size[i] - v);
+        //             }
+        //         }
+        //         dp = Arrays.copyOf(newDp, range); // 将遍历到当前组、累积较优解的newDp复制入全局最优解dp数组中
+        //     }
+        //     return dp[0];
+        // }
+
+        
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        String a = "9999999999999";
+        // int [] a = new int [] {1,2,0,3,0};
+        int [] a = new int [] {1,2,4,1,2,5,1,2,6};
 
-        int r = s.numberOfCombinations(a);
+        int r = s.minChanges(a, 3);
         System.out.println("r: " + r);
     }
 }

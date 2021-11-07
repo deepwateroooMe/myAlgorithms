@@ -765,24 +765,6 @@ public class string {
         // }
 
 
-        // public int countHomogenous(String s) { // bug bug bug
-        //     int n = s.length();
-        //     int mod = (int)1e9 + 7;
-        //     int j = 0, i = 0, cnt = 1;
-        //     long ans = 0;
-        //     while (i < n) {
-        //         while (i < n-1 && s.charAt(i) == s.charAt(i+1)) {
-        //             i++;
-        //             cnt++;
-        //         }
-        //         ans = (ans + (cnt+1)*cnt % mod /2 ) % mod;
-        //         cnt = 1;
-        //         i++;
-        //     }
-        //     return (int)ans;
-        // }
-
-
         // public String alphabetBoardPath(String target) {
         //     String ans = "";
         //     int i = 0, j = 0;

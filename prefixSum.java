@@ -222,41 +222,8 @@ public class prefixSum {
         //     return -1;
         // }
 
-        // private boolean isValid(int [][] arr, int i, int j, int x, int y) {
-        //     int rval = row[i][y] - (j == 0 ? 0 : row[i][j-1]);
-        //     for (int k = i+1; k <= x; k++) 
-        //         if (row[k][y] - (j == 0 ? 0 : row[k][j-1]) != rval) return false;
-        //     int cval = col[x][y] - (i == 0 ? 0 : col[i-1][j]);
-        //     if (cval != rval) return false;
-        //     for (int k = j+1; k <= y; k++) 
-        //         if (col[x][k] - (i == 0 ? 0 : col[i-1][k]) != cval) return false;
-        //     int sumA = 0, sumB = 0;
-        //     for (int k = i; k <= x; k++)
-        //         sumA += arr[i][k-(i >= j ? i-j : j-i)]; // 这里好像写得有点儿问题
-        //     if (sumA != rval) return false;
-        //     sum = 0;
-        // }
-        // int [][] row;
-        // int [][] col;
-        // int m, n;
-        // public int largestMagicSquare(int[][] grid) {
-        //     m = grid.length;
-        //     n = grid[0].length;
-        //     row = new int [m][n];
-        //     col = new int [m][n];
-        //     for (int i = 0; i < m; i++)
-        //         for (int j = 0; j < n; j++) 
-        //             row[i][j] = (j == 0 ? 0 : row[i][j-1]) + grid[i][j];
-        //     for (int i = 0; i < m; i++) 
-        //         for (int j = 0; j < n; j++) 
-        //             col[i][j] = (i == 0 ? 0 : col[i-1][j]) + grid[i][j];
-        //     for (int d = 1; d <= Math.min(m, n); d++) {
-        //         for (int i = 0; i+d <= m; i++) {
-        //             for (int j = 0; j+d <= n; j++) {
-        //                 int x = i + d -1, y = j + d - j;
 
-
-    // int [] arr;
+        // int [] arr;
     // double [] probs;
     // TreeMap<Double, Integer> map = new TreeMap<>();
     // Random rand;
@@ -320,58 +287,6 @@ public class prefixSum {
         //     System.out.println(Arrays.toString(r.get(z).toArray()));
 
 
-        // public int findMaxLength(int[] a) {
-        //     int n = a.length, ca = 0, cb = 0;
-        //     int [] one = new int [n];
-        //     int [] zoo = new int [n];
-        //     for (int i = 0; i < n; i++) {
-        //         if (a[i] == 1) ca++;
-        //         else cb++;
-        //         one[i] = ca;
-        //         zoo[i] = cb;
-        //     }
-        //     int j = 0, max = 0;
-        //     for (int i = 0; i < n; i++) {
-        //         if (one[i] == zoo[i]) {
-        //             max = Math.max(max, i+1);
-        //             continue;
-        //         } else if (one[i] - (j == 0 ? 0 : one[j-1]) == zoo[i] - (j == 0 ? 0 : zoo[j-1])) {
-        //             max = Math.max(max, i-j+1);
-        //         }
-        //         ca = one[i];
-        //         cb = zoo[i];
-        //         while (ca > cb && a[j] == 1 && j < i
-        //                || ca < cb && a[j] == 0 && j < i) {
-        //             if (a[j] == 1) ca--;
-        //             else cb--;
-        //             j++;
-        //         }
-        //         if (ca == cb && j < i)
-        //             max = Math.max(max, i-j+1);
-        //     }
-        //     return max;
-        // }
-        // public int findMaxLength(int[] a) {
-        //     int n = a.length, j = 0, max = 0, cnt = 0;
-        //     int [] sum = new int [n+1];
-        //     for (int i = 1; i <= n; i++) 
-        //         sum[i] = sum[i-1] + a[i-1];
-        //     // System.out.println(Arrays.toString(a));
-        //     // System.out.println(Arrays.toString(sum));
-        //     for (int i = 0; i < n; i++) {
-        //         System.out.println("\n i: " + i);
-        //         if (i+1 == sum[i+1] * 2) {
-        //             max = Math.max(max, i+1);
-        //             continue;
-        //         }
-        //         while (sum[i+1] - sum[j] < i-j - (sum[i+1] - sum[j]) && j < i && a[j] == 0
-        //                || sum[i+1] - sum[j] > i-j - (sum[i+1] - sum[j]) && j < i && a[j] == 1) j++;
-        //         if (sum[i+1]-sum[j] * 2 == i-j)
-        //             max = Math.max(max, i-j+1);
-        //     }
-        //     return max;
-        // }
-
         // public static int minMoves(int[] nums,int limit) {
         //     int n = nums.length , lessStep = Integer.MAX_VALUE;
         //     // 所有可能的结果是[2,limit * 2] , steps[i] 表示将 所有的数对 和 置为 i 时 所需要 移动的次数;
@@ -407,35 +322,286 @@ public class prefixSum {
         //         lessStep = Math.min(lessStep, steps[i]);
         //     return lessStep;
         // }
-        public int minMoves(int[] nums, int limit) {
-            int n = nums.length;
-            int [] delta = new int [2 * limit + 2]; // 差分数组
-            for (int i = 0; i < n/2; i++) {
-                int a = Math.min(nums[i], nums[n-1-i]);
-                int b = Math.max(nums[i], nums[n-1-i]); // 把各区间所需要的操作简化到五行代码中去了
-                delta[2] += 2; // dec a, decreasing b [2, a] 区间的和 所需要的变换次数都是 2 次
-                delta[a+1]--;  // dec a               [a + 1, a+b-1] 区间中的和 所需要变的次数都是1次
-                delta[a+b]--;  // no operations
-                delta[a+b+1]++;// inc a               [a+b+1, b+limit] 区间中的和 只需要变动 1 次;
-                delta[b+limit+1]++; // inc a, inc b
+        // public int minMoves(int[] nums, int limit) {
+        //     int n = nums.length;
+        //     int [] delta = new int [2 * limit + 2]; // 差分数组
+        //     for (int i = 0; i < n/2; i++) {
+        //         int a = Math.min(nums[i], nums[n-1-i]);
+        //         int b = Math.max(nums[i], nums[n-1-i]); // 把各区间所需要的操作简化到五行代码中去了
+        //         delta[2] += 2; // dec a, decreasing b [2, a] 区间的和 所需要的变换次数都是 2 次
+        //         delta[a+1]--;  // dec a               [a + 1, a+b-1] 区间中的和 所需要变的次数都是1次
+        //         delta[a+b]--;  // no operations
+        //         delta[a+b+1]++;// inc a               [a+b+1, b+limit] 区间中的和 只需要变动 1 次;
+        //         delta[b+limit+1]++; // inc a, inc b
+        //     }
+        //     int ans = 2 * n, sum = 0;
+        //     for (int t = 2; t <= 2 * limit; t++) {
+        //         sum += delta[t]; // 差分数组的前缀和等于（共需要的操作次数）
+        //         ans = Math.min(ans, sum);
+        //     }
+        //     return ans;
+        // }
+
+
+        // public int minCharacters(String a, String b) {
+        //     // System.out.println("a: " + a);
+        //     // System.out.println("b: " + b);
+        //     int m = a.length(), n = b.length();
+        //     char [] s = a.toCharArray();
+        //     char [] t = b.toCharArray();
+        //      char as = 'z', al = 'a', bs = 'z', bl = 'a';
+        //     int [] one = new int [26], two = new int [26];
+        //     for (int i = 0; i < m; i++) {
+        //         one[s[i]-'a']++;
+        //          as = (char)(Math.min(as - 'a', s[i]-'a') + 'a');
+        //          al = (char)(Math.max(al-'a', s[i]-'a') + 'a');
+        //     }
+        //     for (int i = 0; i < n; i++)  {
+        //         two[t[i]-'a']++;
+        //          bs = (char)(Math.min(bs-'a', t[i]-'a') + 'a');
+        //          bl = (char)(Math.max(bl-'a', t[i]-'a') + 'a');
+        //     }
+        //     if (al < bs || bl < as || al == as && bl == bs && al == bl) return 0;
+        //     int [] pa = Arrays.copyOf(one, 26);
+        //     int [] pb = Arrays.copyOf(two, 26);
+        //     for (int i = 1; i < 26; i++) 
+        //         pa[i] += pa[i-1];
+        //     for (int i = 1; i < 26; i++) 
+        //         pb[i] += pb[i-1];
+        //     // System.out.println(Arrays.toString(pa));
+        //     // System.out.println(Arrays.toString(pb));
+        //     int min = Math.max(m, n), cur = min;
+        //     for (char c = 'a'; c <= 'z'; c++) {
+        //         // System.out.println("\n c: " + c);
+        //         cur = min;
+        //         // if (c < bs)
+        //         if (c < 'z')
+        //             cur = Math.min(cur, m - one[c-'a'] + pb[c-'a']);
+        //         // System.out.println("cur: " + cur);
+        //         if (c > 'a')
+        //             cur = Math.min(cur, n - two[c-'a'] + pa[al-'a'-1]);
+        //         // System.out.println("cur: " + cur);
+        //         cur = Math.min(cur, m-one[c-'a'] + n - two[c-'a']);
+        //         // System.out.println("cur: " + cur);
+        //         min = Math.min(min, cur);
+        //         // System.out.println("min: " + min);
+        //     }                
+        //     return min;
+        // }
+
+
+        // private boolean isValid(int [][] arr, int i, int j, int x, int y) {
+        //     int rval = row[i][y] - (j == 0 ? 0 : row[i][j-1]);
+        //     for (int k = i+1; k <= x; k++) 
+        //         if (row[k][y] - (j == 0 ? 0 : row[k][j-1]) != rval) return false;
+        //     int cval = col[x][y] - (i == 0 ? 0 : col[i-1][j]);
+        //     if (cval != rval) return false;
+        //     for (int k = j+1; k <= y; k++) 
+        //         if (col[x][k] - (i == 0 ? 0 : col[i-1][k]) != cval) return false;
+        //     int sumA = 0, sumB = 0;
+        //     for (int k = i; k <= x; k++)
+        //         sumA += arr[i][k-(i >= j ? i-j : j-i)]; // 这里好像写得有点儿问题
+        //     if (sumA != rval) return false;
+        //     sum = 0;
+        // }
+        // private boolean isValid(int [][] arr, int i, int j, int x, int y, int d) {
+        //     int rval = row[i][y] - row[i][j-1];
+        //     for (int k = i+1; k <= x; k++) 
+        //         if (row[k][y] - row[k][j-1] != rval) return false;
+        //     int cval = col[x][j] - col[i-1][j];
+        //     if (cval != rval) return false;
+        //     for (int k = j+1; k <= y; k++) 
+        //         if (col[x][k] - col[i-1][k] != cval) return false;
+        //     int sumA = 0, sumB = 0;
+        //     for (int k = 1; k <= d; k++) {
+        //         sumA += arr[i+k-1][j+k-1];
+        //         sumB += arr[i+k-1][j-k+1];
+        //     }
+        //     // System.out.println("\n i: " + i);
+        //     // System.out.println("j: " + j);
+        //     // System.out.println("d: " + d);
+        //     // System.out.println("rval: " + rval);
+        //     // System.out.println("cval: " + cval);
+        //     // System.out.println("sumA: " + sumA);
+        //     // System.out.println("sumB: " + sumB);
+        //     if (sumA != rval || sumB != rval) return false;
+        //     return true;
+        // }
+        // int [][] row;
+        // int [][] col;
+        // int m, n;
+        // public int largestMagicSquare(int[][] grid) {
+        //     m = grid.length;
+        //     n = grid[0].length;
+        //     row = new int [m+1][n+1];
+        //     col = new int [m+1][n+1];
+        //     for (int i = 1; i <= m; i++)
+        //         for (int j = 1; j <= n; j++)
+        //             row[i][j] = row[i][j-1] + grid[i-1][j-1];
+        //     for (int i = 1; i <= m; i++) 
+        //         for (int j = 1; j <= n; j++)
+        //             col[i][j] = col[i-1][j] + grid[i-1][j-1];
+        //     // System.out.println("row.length: " + row.length);
+        //     // for (int z = 0; z < row.length; ++z) 
+        //     //     System.out.println(Arrays.toString(row[z]));
+        //     // System.out.println("col.length: " + col.length);
+        //     // for (int z = 0; z < col.length; ++z) 
+        //     //     System.out.println(Arrays.toString(col[z]));
+        //     int ans = 1;
+        //     for (int d = 2; d <= Math.min(m, n); d++) {
+        //     for (int i = 1; i+d <= m+1; i++) 
+        //         for (int j = 1; j+d <= n+1; j++) {
+        //                 // if (i + d > m || j + d > n) continue;
+        //                 int x = i + d -1, y = j + d - 1;
+        //                 if (isValid(grid, i, j, x, y, d)) ans = Math.max(ans, d);
+        //                 // else break;
+        //             }
+        //         }
+        //     return ans;
+        // }
+
+
+        // public int findMaxLength(int[] a) { 
+        //     int n = a.length, max = 0, cur = 0;
+        //     Map<Integer, Integer> m = new HashMap<>();
+        //     for (int i = 0; i < n; i++) 
+        //         if (a[i] == 0) a[i] = -1;
+        //     m.put(0, -1);
+        //     for (int i = 0; i < n; i++) {
+        //         cur += a[i];
+        //         if (m.containsKey(cur))
+        //             max = Math.max(max, i - m.get(cur));
+        //         else m.put(cur, i);
+        //     }
+        //     return max;
+        // }
+
+        // public int sumOfFlooredPairs(int[] a) { // tle tle tle
+        //     int n = a.length, ans = 0;
+        //     TreeMap<Integer, Integer> m = new TreeMap<>();
+        //     for (int i = 0; i < n; i++)
+        //         m.put(a[i], m.getOrDefault(a[i], 0) + 1);
+        //     for (Map.Entry<Integer, Integer> en : m.entrySet()) {
+        //         int k = en.getKey(), v = en.getValue();
+        //         Iterator<Map.Entry<Integer, Integer>> it = m.entrySet().iterator();
+        //         while (it.hasNext()) {
+        //             Map.Entry<Integer, Integer> e = it.next();
+        //             int key = e.getKey(), val = e.getValue();
+        //             if (key > k) break;
+        //             ans += v * Math.floor(k / key) * val;
+        //         }
+        //     }
+        //     return ans;
+        // }
+        // 时间复杂度：O(nlogn)
+        // 空间复杂度：O(n)
+        // public int sumOfFlooredPairs(int[] arr) {
+        //     int mod = (int)1e9 + 7;
+        //     int N = 100001;
+        //     int [] cnt = new int [N]; // 记录每个数出现多少次
+        //     for (Integer v : arr) cnt[v]++;
+        //     for (int i = 1; i < N; i++) cnt[i] += cnt[i-1];  // 前缀和
+        //     long res = 0;
+        //     for (int i = 1; i < N; i++) 
+        //         for (int j = 1; j*i < N; j++) {
+        //             int l = j*i, r = Math.min(N-1, (j+1)*i-1);
+        //             int sum = (cnt[r] - cnt[l-1]) * j % mod; // 倍数×区间内的元素总个数 = 元素i在该段区间的函数值总和
+        //             res = (res + (long)sum * (cnt[i] - cnt[i-1]) % mod) % mod;
+        //         }
+        //     return (int)res;
+        // }
+        // static final int N = (int)1e5;
+        // static final int mod = (int)1e9 + 7;
+        // public int sumOfFlooredPairs(int[] arr) {
+        //     int [] cnt = new int [N+1];
+        //     for (Integer v : arr) cnt[v]++;
+        //     for (int i = 1; i <= N; i++) cnt[i] += cnt[i-1];
+        //     long ans = 0;
+        //     for (int i = 1; i <= N; i++) {
+        //         if (cnt[i] > cnt[i-1]) {
+        //             long sum = 0; // [i * j, i * (j + 1)) would derive a quotient of j
+        //             for (int j = 1; j * i <= N; j++) {
+        //                 int l = i*j-1, r = i *(j+1) - 1;
+        //                 sum += (cnt[Math.min(r, N)] - cnt[l]) * (long)j;
+        //             }
+        //             ans = (ans + (sum % mod) * (cnt[i] - cnt[i-1])) % mod;
+        //         }
+        //     }
+        //     return (int)ans;
+        // }
+
+
+        // public int bestRotation(int[] a) {
+        //     int n = a.length, ans = 0;
+        //     int [] change = new int [n];
+        //     for (int i = 0; i < n; ++i) change[(i - a[i] + n + 1) % n] -= 1;
+        //     for (int i = 1; i < n; ++i) {
+        //         change[i] += change[i-1] + 1;
+        //         ans = change[i] > change[ans] ? i : ans;
+        //     }
+        //     return ans;
+        // }
+        // public int bestRotation(int[] a) { // double check this answer
+        //     int n = a.length, ans = 0;
+        //     int [] bad = new int [n];
+        //     for (int i = 0; i < n; i++) {
+        //         //把这里换成差分的形式
+        //         //对于A【i】小于等于i是加分的
+        //         //那么 i - A[i] + 1 和 i之间是没有分的
+        //         //这样就可以转换成left位置没分，right有分
+        //         int l = (i - a[i] + n + 1) % n;
+        //         int r = (i + 1) % n;
+        //         bad[l]--;
+        //         bad[r]++;
+        //     }
+        //     int best = -n, ans = 0, cur = 0;
+        //     for (int i = 0; i < n; i++) {
+        //         cur += bad[i];
+        //         if (cur > best) {
+        //             best = cur;
+        //             ans = i;
+        //         }
+        //     }
+        //     return ans;
+        // }
+
+
+        public int minSubarray(int[] arr, int p) { 
+            int n = arr.length, ans = Integer.MAX_VALUE;
+            long [] sum = new long [n];
+            sum [0] = arr[0];
+            for (int i = 1; i < n; i++) 
+                sum[i] = sum[i-1] + arr[i];
+            Map<Integer, Integer> m = new HashMap<>(); 
+            // map.put(0, 0);
+            int rem = (int)(sum[n-1] % p);   //  [0, 1, 2, ... p-1]
+            if (rem == 0) return 0;
+            for (int i = 0; i < n; i++) {
+                // int v = (int)(sum[i] % p), vb = arr[i] % p;
+                // if (vb == rem) return 1;
+                // if (v == rem || vb == rem) {
+                //     if (m.containsKey(0)) ans = Math.min(ans, i - m.get(0) + 1);
+                //     else ans = Math.min(ans, i+1);
+                // }
+                for (int j = 0; j <= i; j++) {
+                    if ((sum[i] - (j == 0 ? 0 : sum[j-1])) % p == rem)
+                        ans = Math.min(ans, i-j+1);
+                }
+                m.put(v, i);
             }
-            int ans = 2 * n, sum = 0;
-            for (int t = 2; t <= 2 * limit; t++) {
-                sum += delta[t]; // 差分数组的前缀和等于（共需要的操作次数）
-                ans = Math.min(ans, sum);
-            }
-            return ans;
+            // if (!m.containsKey(rem)) return -1;
+            // return n-1-m.get(rem);
+            return ans == Integer.MAX_VALUE ? -1 : ans;
         }
-
-
-        
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        int []  a = new int []  {1, 2, 4, 3};
+        int [] a = new int [] {6,3,5,2};
+        // int []  a = new int []  {3, 1, 4, 2};
+        // int []  a = new int []  {1000000000, 1000000000, 1000000000};
 
-        int r = s.minMoves(a, 4);
+        int r = s.minSubarray(a, 6);
         System.out.println("r: " + r);
     }
 }
