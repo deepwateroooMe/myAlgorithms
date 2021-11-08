@@ -203,7 +203,18 @@ public class bittwoManipulation {
         // }
 
         // public int binaryGap(int v) {
-        //     int pre = -1, max = 0;
+        //     int pre = -1, max = 0, cnt = 0;
+        //     // while (v != 0) {
+        //     //     if ((v & 1) == 1) {
+        //     //         if (pre < 0) pre = cnt;
+        //     //         else {
+        //     //             max = Math.max(max, cnt - pre);
+        //     //             pre = cnt;
+        //     //         }
+        //     //     }
+        //     //     v >>= 1; // 这里还是没有办法使用 i = i & (i-1)的，因为要记住各个位的位置
+        //     //     cnt++;
+        //     // }
         //     for (int i = 30; i >= 0; i--) 
         //         if (((v >> i) & 1) == 1) {
         //             if (pre < 0) pre = i;
@@ -215,12 +226,36 @@ public class bittwoManipulation {
         //     return max;
         // }
 
-        
+        // private boolean isNice(String t) {
+        //     int n = t.length();
+        //     char [] s = t.toCharArray();
+        //     int l = 0, u = 0;
+        //     for (int i = 0; i < n; i++) {
+        //         if (Character.isUpperCase(s[i])) u |= (1 << (s[i] - 'A'));
+        //         else l |= (1 << (s[i] - 'a'));
+        //     }
+        //     return (l ^ u) == 0;
+        // }
+        // public String longestNiceSubstring(String s) {
+        //     int n = s.length();
+        //     String ans = "";
+        //     for (int i = 0; i < n; i++) 
+        //         for (int j = i+1; j <= n; j++) {
+        //             String cur = s.substring(i, j);
+        //             if (isNice(cur) && (ans.length() == 0 || ans.length() < j-i)) 
+        //                 ans = cur;
+        //         }
+        //     return ans;
+        // }
+
+        public boolean hasAlternatingBits(int n) {
+            return (n & (n-1)) == 0;
+        }
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        int r = s.binaryGap(22);
+        boolean r = s.hasAlternatingBits(5);
         System.out.println("r: " + r);
     }
 }
