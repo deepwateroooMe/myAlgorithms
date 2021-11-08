@@ -1290,6 +1290,86 @@ public boolean isScramble(String s, String t) {
 }
 #+END_SRC
 
+** 2065. Maximum Path Quality of a Graph - Hard 记忆化搜索+ 重复遍历
+There is an undirected graph with n nodes numbered from 0 to n - 1 (inclusive). You are given a 0-indexed integer array values where values[i] is the value of the ith node. You are also given a 0-indexed 2D integer array edges, where each edges[j] = [uj, vj, timej] indicates that there is an undirected edge between the nodes uj and vj, and it takes timej seconds to travel between the two nodes. Finally, you are given an integer maxTime.
+
+A valid path in the graph is any path that starts at node 0, ends at node 0, and takes at most maxTime seconds to complete. You may visit the same node multiple times. The quality of a valid path is the sum of the values of the unique nodes visited in the path (each node's value is added at most once to the sum).
+
+Return the maximum quality of a valid path.
+
+Note: There are at most four edges connected to each node.
+*** 解题思路与分析
+
+A straightforward idea is to try all paths from node 0 and calculate the max path quality for paths also end with node 0.
+
+One *optimization* we can add is: once we cannot return back to node 0, we stop. The min_time required from any node to node 0 can be pre-computed using Dijkstra algorithm.
+
+*Time complexity:* O(4^10)
+
+*Note the constraints:* 10 <= time_j, maxTime <= 100 and There are at most four edges connected to each node..
+
+It means the max levels of dfs search is 10, and at each level we have maximum of 4 neighbouring nodes to try.
+
+So the time complexity is: O(4^10).
+
+#+BEGIN_SRC java
+private int [] dijkstra() {
+    int [] ans = new int [n];
+    Arrays.fill(ans, Integer.MAX_VALUE);
+    ans[0] = 0;
+    // boolean [] vis = new boolean [n]; // 因为可以重复遍历，要允许它重复遍历  
+    // vis[idx] = true;                  // 因为可以重复遍历，要允许它重复遍历  
+    // Queue<int []> q = new LinkedList<>();
+    Queue<int []> q = new PriorityQueue<>((a, b)->a[1] - b[1]);
+    q.offer(new int [] {0, 0});
+    while (!q.isEmpty()) {
+        int [] cur = q.poll();
+        if (cur[1] > ans[cur[0]]) continue;
+        for (int [] nei : adj.get(cur[0])) 
+            // if (nei[0] == cur[0]) continue; // 因为可以重复遍历，要允许它重复遍历  
+            if (nei[1] + cur[1] < ans[nei[0]]) {
+                ans[nei[0]] = nei[1] + cur[1];
+                // if (!vis[nei[0]]) {
+                q.offer(new int [] {nei[0], ans[nei[0]]});
+                // vis[nei[0]] = true;
+            }
+    }
+    return ans;
+}
+private void dfs(int idx, int avaTime, int [] t, int [] v, Set<Integer> vis) {
+    if (idx == 0) {
+        int cur = 0;
+        for (Integer node : vis) 
+            cur += v[node];
+        ans = Math.max(ans, cur);
+    }
+    for (int [] nei : adj.get(idx)) 
+        if (t[nei[0]] + nei[1] <= avaTime) { //
+            boolean added = vis.add(nei[0]);
+            dfs(nei[0], avaTime - nei[1], t, v, vis);
+            if (added)
+                vis.remove(nei[0]);
+        }
+}
+int [] time;
+List<List<int []>> adj = new ArrayList<>();
+int n, ans = 0;
+public int maximalPathQuality(int[] values, int[][] edges, int maxTime) {
+    n = values.length;
+    for (int i = 0; i < n; i++) 
+        adj.add(new ArrayList<>());
+    for (int [] e : edges) {
+        adj.get(e[0]).add(new int [] {e[1], e[2]});
+        adj.get(e[1]).add(new int [] {e[0], e[2]});
+    }
+    time = dijkstra();
+    Set<Integer> si = new HashSet<>();
+    si.add(0);
+    dfs(0, maxTime, time, values, si);
+    return ans;
+}
+#+END_SRC
+
 ** 1397. Find All Good Strings - Hard 记忆化搜索
 Given the strings s1 and s2 of size n and the string evil, return the number of good strings.
 

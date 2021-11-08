@@ -47,15 +47,15 @@
 |------------+------------|
 
 
-[[./pic/bigo.jpeg]]
+[[./summary/pic/bigo.jpeg]]
 
-[[./pic/bigo2.jpeg]]
+[[./summary/pic/bigo2.jpeg]]
 
-[[./pic/bigo3.jpeg]]
+[[./summary/pic/bigo3.jpeg]]
 
-[[./pic/bigo4.jpeg]]
+[[./summary/pic/bigo4.jpeg]]
 
-[[./pic/bigo5.jpeg]]
+[[./summary/pic/bigo5.jpeg]]
 
 
 * Bit Manipulations

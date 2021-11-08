@@ -889,20 +889,53 @@ public class depthtwoFirstSearch {
         //     dfs(board, ans, click[0], click[1]);
         //     return ans;
         // }
-
-
+ 
+        // private int getLevel(String s) { // 数\t符号的个数，就是文件或文件夹的深度
+        //     String tmp = s.replaceAll("\t", "");
+        //     return s.length() - tmp.length();
+        // }
+        // public int lengthLongestPath(String t) {
+        //     int n = t.length();
+        //     String [] parts = t.split("\n");
+        //     if (parts == null | parts.length == 0) return 0;
+        //     ArrayDeque<String> st = new ArrayDeque<>();
+        //     int max = 0, cnt = 0;
+        //     for (int i = 0; i < parts.length; i++) {
+        //         String s = parts[i];
+        //         int level = getLevel(s);
+        //         while (!st.isEmpty() && level <= st.size()-1) { // 当前元素深度小于栈顶深度，出栈
+        //             String top = st.pop();
+        //             cnt -= (top.length() + 1);
+        //         }
+        //         String removeT = s.replaceAll("\t", "");
+        //         st.push(removeT); 
+        //         cnt += removeT.length() + 1; // 1: '/' mark to separate dirs
+        //         if (removeT.indexOf(".") != -1)
+        //             max = Math.max(max, cnt);
+        //     }
+        //     return max == 0 ? 0 : max - 1;
+        // }
+        // public int lengthLongestPath(String input) {
+        //     int res = 0;
+        //     Map<Integer, Integer> m = new HashMap<>();
+        //     m.put(0, 0); // level 可以 = 0
+        //     for (String s : input.split("\n")) {
+        //         int level = s.lastIndexOf("\t") + 1;
+        //         int len = s.substring(level).length();
+        //         if (s.contains(".")) 
+        //             res = Math.max(res, m.get(level) + len);
+        //         else m.put(level + 1, m.get(level) + len + 1);
+        //     }
+        //     return res;
+        // }
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        char [][] a = new char [][] {{'E','E','E','E','E'},{'E','E','M','E','E'},{'E','E','E','E','E'},{'E','E','E','E','E'}}; 
-        int [] b = new int [] {3, 0};
+        // String a = "dir\n\tsubdir1\n\t\tfile1.ext\n\t\tsubsubdir1\n\tsubdir2\n\t\tsubsubdir2\n\t\t\tfile2.ext";
+        String a = "file1.txt\nfile2.txt\nlongfile.txt";
 
-        char [][] r = s.updateBoard(a, b);
-
-        System.out.println("r.length: " + r.length);
-        for (int z = 0; z < r.length; ++z) 
-            System.out.println(Arrays.toString(r[z]));
-        
+        int r = s.lengthLongestPath(a);
+        System.out.println("r: " + r);
     }
 }
