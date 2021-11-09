@@ -1119,23 +1119,6 @@ public class dpone {
         // }
 
 
-        // private int maxzigZag(TreeNode r, TreeNode p,  int l) { // left 1 or not 0
-        //     if (r == null) return 0;                            // 总体思路没问题，不知道哪里细节错了
-        //     String key = r + "_" + l;
-        //     if (m.containsKey(key)) return m.get(key);
-        //     int base = 0;
-        //     if (p != null) base = 1;
-        //     if (l == 1) m.put(key, Math.max(base + maxzigZag(r.right, r, 1-l), maxzigZag(r.left, r, 1)));
-        //     else m.put(key, Math.max(base + maxzigZag(r.left, r, 1-l), maxzigZag(r.right, r, 0)));
-        //     return m.get(key);
-        // }
-        // Map<String, Integer> m = new HashMap<>();
-        // TreeNode GRoot;
-        // public int longestZigZag(TreeNode root) {
-        //     GRoot = root;
-        //     return Math.max(maxzigZag(root, null, 1), maxzigZag(root, null, 0));
-        // }
-
         //  public int maxAbsoluteSum(int[] a) {
         //     int n = a.length;
         //     int max = a[0], min = a[0];

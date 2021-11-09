@@ -3,7 +3,7 @@
 * Dynamic Programming, 动态规划
 ** 总结
 ** 第二次仍不会的题号记这里
-- 1872 (stone game 8)
+- 1872 (stone game 8), 647 329 494 131 518 1723(need summary)
 
 - 根据CLRS，动态规划分为两种：
 - top-down with memoization (递归记忆化搜索)
@@ -222,6 +222,31 @@ Vn就是nums数组所有数字的组合值之和的集合
     https://www.i4k.xyz/article/gqk289/54709004
     https://github.com/cherryljr/LeetCode/blob/master/Target%20Sum.java
 
+** 518. Coin Change 2
+You are given an integer array coins representing coins of different denominations and an integer amount representing a total amount of money.
+Return the number of combinations that make up that amount. If that amount of money cannot be made up by any combination of the coins, return 0.
+You may assume that you have an infinite number of each kind of coin.
+The answer is guaranteed to fit into a signed 32-bit integer.
+#+BEGIN_SRC java
+public int change(int target, int[] nums) {
+    int[] dp = new int[target + 1];
+    // 初始化dp[0]为1
+    dp[0] = 1;
+    // 循环数组中所有数字
+    for (int val : nums) {
+        for (int i = 0; i <= target - val; i++) {
+            // dp[i]大于0说明，存在dp[i]种组合，其和为i的可能性
+            if (dp[i] > 0) {
+                // 既然存在和为i的可能，那么i加上当前数字的和也是存在的
+                dp[i + val] += dp[i];
+            }
+        }
+    }
+    return dp[target];
+}
+#+END_SRC
+
+
 ** Cherry pickup todo
 
 ** 2019. The Score of Students Solving Math Expression - Hard 有人说这是区间dp，无感
@@ -292,56 +317,6 @@ public int scoreOfStudents(String s, int [] num) {
     return ans;
 }
 #+END_SRC  
-
-** 312. Burst Balloons 区间型动态规划的典型代表
-You are given n balloons, indexed from 0 to n - 1. Each balloon is painted with a number on it represented by an array nums. You are asked to burst all the balloons.
-If you burst the ith balloon, you will get nums[i - 1] * nums[i] * nums[i + 1] coins. If i - 1 or i + 1 goes out of bounds of the array, then treat it as if there is a balloon with a 1 painted on it.
-Return the maximum coins you can collect by bursting the balloons wisely.
-#+BEGIN_SRC java
-public int maxCoins(int[] nums) {
-    int n = nums.length;
-    int [][]  dp = new int [n+2][n+2];
-    int [] arr = new int [n+2];
-    System.arraycopy(nums, 0, arr, 1, n);
-    arr[0] = arr[n+1] = 1;  // [0, n+1] ==> [1, n]
-    int j = 0;
-    for (int len = 1; len <= n; len++) { // [1, n]
-        for (int i = 1; i+len-1 <= n; i++) { // [1, n]
-            j = i + len - 1;
-            for (int k = i; k <= j; k++) 
-                dp[i][j] = Math.max(dp[i][j], dp[i][k-1] + dp[k+1][j] + arr[i-1]*arr[k]*arr[j+1]);
-        }
-    }
-    return dp[1][n];
-}
-// 0    0    0    0    0    0
-// 0    3    30   159  167  0
-// 0    0    15   135  159  0
-// 0    0    0    40   48   0
-// 0    0    0    0    40   0
-// 0    0    0    0    0    0
-private int memorizedSearch(int [] arr, int x, int y) {
-    if (dp[x][y] > 0) return dp[x][y];
-    // if (x == y) return dp[x][y] = arr[x]; // 没有这些个边际条件
-    // if (x == y-1) 
-    //     return dp[x][y] = arr[x] * arr[y] + Math.max(arr[x], arr[y]);
-    int max = 0;
-    for (int i = x; i <= y; i++) {
-        max = Math.max(max, memorizedSearch(arr, x, i-1) + memorizedSearch(arr, i+1, y) + arr[x-1]*arr[i]*arr[y+1]);
-    }
-    return dp[x][y] = max;
-}
-int [][] dp;
-int n;
-public int maxCoins(int[] nums) {
-    int n = nums.length + 2;
-    dp = new int [n][n];
-    int [] arr = new int [n];
-    System.arraycopy(nums, 0, arr, 1, n-2);
-    arr[0] = arr[n-1] = 1;
-    return memorizedSearch(arr, 1, n-2);
-}
-#+END_SRC
 
 ** 1866. Number of Ways to Rearrange Sticks With K Sticks Visible - Hard
 There are n uniquely-sized sticks whose lengths are integers from 1 to n. You want to arrange the sticks such that exactly k sticks are visible from the left. A stick is visible from the left if there are no longer sticks to the left of it.
@@ -1478,140 +1453,6 @@ public boolean xorGame(int[] arr) {
     for (int i = 0; i < n; i++) 
         xor[i] = (i == 0 ? 0 : xor[i-1]) ^ arr[i];
     return helper(arr, 0, xor[n-1]); // i: turn
-}
-#+END_SRC
-
-** 2029. Stone Game IX - Medium
-Alice and Bob continue their games with stones. There is a row of n stones, and each stone has an associated value. You are given an integer array stones, where stones[i] is the value of the ith stone.
-
-Alice and Bob take turns, with Alice starting first. On each turn, the player may remove any stone from stones. The player who removes a stone loses if the sum of the values of all removed stones is divisible by 3. Bob will win automatically if there are no remaining stones (even if it is Alice's turn).
-
-Assuming both players play optimally, return true if Alice wins and false if Bob wins.
-- 过程复制
-#+BEGIN_SRC java
-private boolean dfs(int val, int one, int two, int zro) {
-    if (val == 0) return true;
-    String key = one + "-" + two + "-" + zro + "-" + val;
-    if (dp.containsKey(key)) return dp.get(key);
-    if (one == 0 && two == 0 && zro == 0) return n % 2 != 0; // 题目这个要求我可能没有理解清楚
-    boolean res = false;
-    if (!res && one > 0 && val != 2) 
-        if (!dfs((val+1) % 3, one-1, two, zro)) 
-            res = true;
-    if (!res && two > 0 && val != 1)
-        if (!dfs((val + 2) % 3, one, two-1, zro))
-            res = true;
-    if (!res && zro > 0 && val != 0)
-        if (!dfs((val+0) % 3, one, two, zro-1))
-            res = true;
-    dp.put(key, res);
-    return res;
-}
-Map<String, Boolean> dp = new HashMap<>();
-int n;
-public boolean stoneGameIX(int[] stones) {
-    n = stones.length;
-    dp = new HashMap<String, Boolean>();
-    int one = 0, two = 0, zro = 0;
-    for (int v : stones)
-        if (v % 3 == 0) zro++;
-        else if (v % 3 == 1) one++;
-        else two++; // zro % 2: each pair of numbers divisible by 3 cancel each other out, so only parity count of such numbers matters
-    return dfs(3, one, two, zro % 2);
-}
-#+END_SRC
-- 分析一下
-Count the frequency of mod3 = 0,1,2.
-#+BEGIN_SRC java
-Firstly, don't consider the multiples of 3.
-Alice starts with mod3 = 1, Alice and Bob have to pick 1,1,2,1,2... in order.
-Alice starts with mod3 = 2, Alice and Bob have to pick 2,2,1,2,1... in order.
-If Alice starts with 1, then Alice needs 1 and Bob needs 2.
-If 1 is much more than 2, then Bob is going to lose.
-So if cnt[0] == 0, the result can be decided by Alice.
-Then, consider the number of multiples of 3.
-If cnt[0] is even,
-Bob picks a 3, Alice can always picks one another.
-the result won't be affected.
-If cnt[0] is odd,
-the final result will be reversed,
-(unless the case Bob win for all numbers consumed)
-
-Missing Case
-[1,1,1,3] gave by @mittal582 and @qingqi_lei,
-which can hack some solution.
-Explanation
-If cnt[1] == 0, Alice needs to start with mod3 = 2,
-If cnt[2] == 0, Alice needs to start with mod3 = 1.
-Alice can win if max(cnt[1], cnt[2]) > 2 && cnt[0] % 2 > 0,
-for example [1,1,1,3].
-
-If cnt[0] % 2 == 0, easy case for Alice.
-Alice can win in at leasy one of the two options, picking the less one.
-
-Otherwise cnt[0] % 2 == 1, this will reverse the result.
-If abs(cnt[1] - cnt[2]) > 2,
-Alice will pick mod3=2 if mod3=2 is more
-Alice will pick mod3=1 if mod3=1 is more
-If abs(cnt[1] - cnt[2]) <= 2,
-Alice will lose for no number remaining.
-
-Complexity
-Time O(n)
-Space O(1)
-#+END_SRC
-#+BEGIN_SRC java
-public boolean stoneGameIX(int[] stones) {
-    int[] cnt = new int[3];
-    for (int a: stones)
-        cnt[a % 3]++;
-    if (Math.min(cnt[1], cnt[2]) == 0)
-        return Math.max(cnt[1], cnt[2]) > 2 && cnt[0] % 2 > 0;
-    return Math.abs(cnt[1] - cnt[2]) > 2 || cnt[0] % 2 == 0;
-}
-#+END_SRC
-** 322. Coin Change
-You are given an integer array coins representing coins of different denominations and an integer amount representing a total amount of money.
-Return the fewest number of coins that you need to make up that amount. If that amount of money cannot be made up by any combination of the coins, return -1.
-You may assume that you have an infinite number of each kind of coin.
-#+BEGIN_SRC java
-public int coinChange(int[] coins, int amount) {
-    if (amount == 0) return 0;
-    int n = coins.length;
-    int [] dp = new int [amount + 1];
-    Arrays.fill(dp, amount + 1);
-    dp[0] = 0;
-    for (int i = 0; i <= amount; i++) {
-        for (int v : coins) {
-            if (i - v < 0) continue;
-            dp[i] = Math.min(dp[i], dp[i-v] + 1);
-        }
-    }
-    return dp[amount] == amount + 1 ? -1 : dp[amount];
-}
-#+END_SRC
-
-** 518. Coin Change 2
-You are given an integer array coins representing coins of different denominations and an integer amount representing a total amount of money.
-Return the number of combinations that make up that amount. If that amount of money cannot be made up by any combination of the coins, return 0.
-You may assume that you have an infinite number of each kind of coin.
-The answer is guaranteed to fit into a signed 32-bit integer.
-#+BEGIN_SRC java
-public int change(int target, int[] nums) {
-    int[] dp = new int[target + 1];
-    // 初始化dp[0]为1
-    dp[0] = 1;
-    // 循环数组中所有数字
-    for (int val : nums) {
-        for (int i = 0; i <= target - val; i++) {
-            // dp[i]大于0说明，存在dp[i]种组合，其和为i的可能性
-            if (dp[i] > 0) {
-                // 既然存在和为i的可能，那么i加上当前数字的和也是存在的
-                dp[i + val] += dp[i];
-            }
-        }
-    }
-    return dp[target];
 }
 #+END_SRC
 
@@ -3456,7 +3297,59 @@ public int minChanges(int[] arr, int k) {
 }
 #+END_SRC
 
+
 ** 第二次刷DP: 下面的题目只需要注意细节，思路没问题
+** 312. Burst Balloons 区间型动态规划的典型代表 仍是典型，最好不扔掉
+You are given n balloons, indexed from 0 to n - 1. Each balloon is painted with a number on it represented by an array nums. You are asked to burst all the balloons.
+If you burst the ith balloon, you will get nums[i - 1] * nums[i] * nums[i + 1] coins. If i - 1 or i + 1 goes out of bounds of the array, then treat it as if there is a balloon with a 1 painted on it.
+Return the maximum coins you can collect by bursting the balloons wisely.
+#+BEGIN_SRC java
+public int maxCoins(int[] nums) {
+    int n = nums.length;
+    int [][]  dp = new int [n+2][n+2];
+    int [] arr = new int [n+2];
+    System.arraycopy(nums, 0, arr, 1, n);
+    arr[0] = arr[n+1] = 1;  // [0, n+1] ==> [1, n]
+    int j = 0;
+    for (int len = 1; len <= n; len++) { // [1, n]
+        for (int i = 1; i+len-1 <= n; i++) { // [1, n]
+            j = i + len - 1;
+            for (int k = i; k <= j; k++) 
+                dp[i][j] = Math.max(dp[i][j], dp[i][k-1] + dp[k+1][j] + arr[i-1]*arr[k]*arr[j+1]);
+        }
+    }
+    return dp[1][n];
+}
+// 0    0    0    0    0    0
+// 0    3    30   159  167  0
+// 0    0    15   135  159  0
+// 0    0    0    40   48   0
+// 0    0    0    0    40   0
+// 0    0    0    0    0    0
+private int memorizedSearch(int [] arr, int x, int y) {
+    if (dp[x][y] > 0) return dp[x][y];
+    // if (x == y) return dp[x][y] = arr[x]; // 没有这些个边际条件
+    // if (x == y-1) 
+    //     return dp[x][y] = arr[x] * arr[y] + Math.max(arr[x], arr[y]);
+    int max = 0;
+    for (int i = x; i <= y; i++) {
+        max = Math.max(max, memorizedSearch(arr, x, i-1) + memorizedSearch(arr, i+1, y) + arr[x-1]*arr[i]*arr[y+1]);
+    }
+    return dp[x][y] = max;
+}
+int [][] dp;
+int n;
+public int maxCoins(int[] nums) {
+    int n = nums.length + 2;
+    dp = new int [n][n];
+    int [] arr = new int [n];
+    System.arraycopy(nums, 0, arr, 1, n-2);
+    arr[0] = arr[n-1] = 1;
+    return memorizedSearch(arr, 1, n-2);
+}
+#+END_SRC
+
+
 ** 198. House Robber - Medium
 You are a professional robber planning to rob houses along a street. Each house has a certain amount of money stashed, the only constraint stopping you from robbing each of them is that adjacent houses have security systems connected and it will automatically contact the police if two adjacent houses were broken into on the same night.
 
@@ -3621,3 +3514,113 @@ public int stoneGameII(int[] piles) {
     return dfs(piles, 0, 1);
 }
 #+END_SRC
+** 2029. Stone Game IX - Medium
+Alice and Bob continue their games with stones. There is a row of n stones, and each stone has an associated value. You are given an integer array stones, where stones[i] is the value of the ith stone.
+
+Alice and Bob take turns, with Alice starting first. On each turn, the player may remove any stone from stones. The player who removes a stone loses if the sum of the values of all removed stones is divisible by 3. Bob will win automatically if there are no remaining stones (even if it is Alice's turn).
+
+Assuming both players play optimally, return true if Alice wins and false if Bob wins.
+- 过程复制
+#+BEGIN_SRC java
+private boolean dfs(int val, int one, int two, int zro) {
+    if (val == 0) return true;
+    String key = one + "-" + two + "-" + zro + "-" + val;
+    if (dp.containsKey(key)) return dp.get(key);
+    if (one == 0 && two == 0 && zro == 0) return n % 2 != 0; // 题目这个要求我可能没有理解清楚
+    boolean res = false;
+    if (!res && one > 0 && val != 2) 
+        if (!dfs((val+1) % 3, one-1, two, zro)) 
+            res = true;
+    if (!res && two > 0 && val != 1)
+        if (!dfs((val + 2) % 3, one, two-1, zro))
+            res = true;
+    if (!res && zro > 0 && val != 0)
+        if (!dfs((val+0) % 3, one, two, zro-1))
+            res = true;
+    dp.put(key, res);
+    return res;
+}
+Map<String, Boolean> dp = new HashMap<>();
+int n;
+public boolean stoneGameIX(int[] stones) {
+    n = stones.length;
+    dp = new HashMap<String, Boolean>();
+    int one = 0, two = 0, zro = 0;
+    for (int v : stones)
+        if (v % 3 == 0) zro++;
+        else if (v % 3 == 1) one++;
+        else two++; // zro % 2: each pair of numbers divisible by 3 cancel each other out, so only parity count of such numbers matters
+    return dfs(3, one, two, zro % 2);
+}
+#+END_SRC
+- 分析一下
+Count the frequency of mod3 = 0,1,2.
+#+BEGIN_SRC java
+Firstly, don't consider the multiples of 3.
+Alice starts with mod3 = 1, Alice and Bob have to pick 1,1,2,1,2... in order.
+Alice starts with mod3 = 2, Alice and Bob have to pick 2,2,1,2,1... in order.
+If Alice starts with 1, then Alice needs 1 and Bob needs 2.
+If 1 is much more than 2, then Bob is going to lose.
+So if cnt[0] == 0, the result can be decided by Alice.
+Then, consider the number of multiples of 3.
+If cnt[0] is even,
+Bob picks a 3, Alice can always picks one another.
+the result won't be affected.
+If cnt[0] is odd,
+the final result will be reversed,
+(unless the case Bob win for all numbers consumed)
+
+Missing Case
+[1,1,1,3] gave by @mittal582 and @qingqi_lei,
+which can hack some solution.
+Explanation
+If cnt[1] == 0, Alice needs to start with mod3 = 2,
+If cnt[2] == 0, Alice needs to start with mod3 = 1.
+Alice can win if max(cnt[1], cnt[2]) > 2 && cnt[0] % 2 > 0,
+for example [1,1,1,3].
+
+If cnt[0] % 2 == 0, easy case for Alice.
+Alice can win in at leasy one of the two options, picking the less one.
+
+Otherwise cnt[0] % 2 == 1, this will reverse the result.
+If abs(cnt[1] - cnt[2]) > 2,
+Alice will pick mod3=2 if mod3=2 is more
+Alice will pick mod3=1 if mod3=1 is more
+If abs(cnt[1] - cnt[2]) <= 2,
+Alice will lose for no number remaining.
+
+Complexity
+Time O(n)
+Space O(1)
+#+END_SRC
+#+BEGIN_SRC java
+public boolean stoneGameIX(int[] stones) {
+    int[] cnt = new int[3];
+    for (int a: stones)
+        cnt[a % 3]++;
+    if (Math.min(cnt[1], cnt[2]) == 0)
+        return Math.max(cnt[1], cnt[2]) > 2 && cnt[0] % 2 > 0;
+    return Math.abs(cnt[1] - cnt[2]) > 2 || cnt[0] % 2 == 0;
+}
+#+END_SRC
+** 322. Coin Change
+You are given an integer array coins representing coins of different denominations and an integer amount representing a total amount of money.
+Return the fewest number of coins that you need to make up that amount. If that amount of money cannot be made up by any combination of the coins, return -1.
+You may assume that you have an infinite number of each kind of coin.
+#+BEGIN_SRC java
+public int coinChange(int[] coins, int amount) {
+    if (amount == 0) return 0;
+    int n = coins.length;
+    int [] dp = new int [amount + 1];
+    Arrays.fill(dp, amount + 1);
+    dp[0] = 0;
+    for (int i = 0; i <= amount; i++) {
+        for (int v : coins) {
+            if (i - v < 0) continue;
+            dp[i] = Math.min(dp[i], dp[i-v] + 1);
+        }
+    }
+    return dp[amount] == amount + 1 ? -1 : dp[amount];
+}
+#+END_SRC
+
