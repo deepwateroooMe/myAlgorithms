@@ -132,30 +132,6 @@ public class dpthree {
             return map.get(n);
         }
 
-        public int numTeams(int[] a) { // bug bug bug
-            int n = a.length, ans = 0;
-            TreeSet<Integer> left = new TreeSet<>();
-            TreeSet<Integer> right = new TreeSet<>();
-            for (int i = n-1; i >= 2; i--) right.add(a[i]);
-            left.add(a[0]);
-            for (int i = 1; i < n-1; i++) {
-                Integer lower = left.lower(a[i]);
-                if (lower != null) {
-                    Integer higher = right.higher(a[i]);
-                    if (higher != null) ans++;
-                }
-                Integer higher = left.higher(a[i]);
-                if (higher != null) {
-                    lower = right.lower(a[i]);
-                    if (lower != null) 
-                        ans++;
-                }
-                left.add(a[i]);
-                right.remove(a[i+1]);
-            }
-            return ans;
-        }
-
         public List<Integer> diffWaysToCompute(String t) {
             List<Integer> ans = new ArrayList<>();
             int n = t.length();
@@ -196,29 +172,6 @@ public class dpthree {
                 if (s[i] == 'b' && pre[i] <= suf[i]) ans++;
                 else if (s[i] == 'a' && pre[i] > suf)
             }
-        }
-
-        private int dfs(int [] a, int i, int j) { // 没有搞明白这个题目的划分到底是怎么回事，以及终止条件
-            System.out.println("\n i: " + i);
-            System.out.println("j: " + j);
-            // if (i == j) return a[i];
-            if (j - i == 2) return dp[i][j] = a[i] * a[i+1] * a[j];
-                                // if (i > j) return 0;
-            if (dp[i][j] > 0) return dp[i][j];
-            int ans = Integer.MAX_VALUE;
-            for (int k = i; k < j; k++) 
-                ans = Math.min(ans, a[i]*a[k]*a[j] + dfs(a, i+1, k) + dfs(a, k+1, j));
-             dp[i][j] = ans;
-             System.out.println("dp[i][j]: " + dp[i][j]);
-             return ans;
-            // return dp[i][j] = ans;
-        }
-        int [][] dp;
-        int n;
-        public int minScoreTriangulation(int[] a) {
-            n = a.length;
-            dp = new int [n][n];
-            return dfs(a, 0, n-1);
         }
 
         private int getLongestPalinSubsequence(String ss) {
@@ -310,24 +263,6 @@ public class dpthree {
             m = n;
             dp = new int [n+1];
             return dfs(n);
-        }
-
-        public int findLength(int[] a, int[] b) { // 这个题没想透 bug bug bug
-            int m = a.length, n = b.length;
-            int [][] dp = new int [m][n];
-            for (int j = 0; j < n; j++) 
-                if (a[0] == b[j]) dp[0][j] = 1;
-                else dp[0][j] = (j == 0 ? 0 : dp[0][j-1]);
-            for (int i = 0; i < m; i++) 
-                if (a[i] == b[0]) dp[i][0] = 1;
-                else dp[i][0] = (i == 0 ? 0 : dp[i-1][0]);
-            for (int i = 1; i < m; i++) 
-                for (int j = 1; j < n; j++) {
-                    if (a[i] == b[j] && a[i-1] == b[j-1])
-                        dp[i][j] = dp[i-1][j-1] + 1;
-                    else dp[i][j] = Math.max(dp[i-1][j], dp[i][j-1]);
-                }
-            return dp[m-1][n-1];
         }
 
         private void getAllPerm(int [] a, int idx, List<Integer> l) { // tle tle tle 

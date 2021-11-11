@@ -108,29 +108,6 @@ public class dptwo {
             return ans;
         }
 
-        public int longestArithSeqLength(int[] a) { // 这里哪里可能想得不够清楚，再想想
-            int n = a.length, max = 2;
-            Map<Integer, Map<Integer, Integer>> dp = new HashMap<>();
-            for (int i = 0; i < n; i++) {
-                for (int j = i+1; j < n; j++) {
-                    int dif = a[j] - a[i];
-                    if (dp.containsKey(dif)) {
-                        Map<Integer, Integer> tmp = dp.get(dif);
-                        if (tmp.containsKey(a[i])) {
-                            tmp.put(a[j], tmp.get(a[i]) + 1);
-                            // tmp.remove(a[i]); // 为什么这里不能移掉？
-                            max = Math.max(max, tmp.get(a[j]));
-                        } else tmp.put(a[j], 2);
-                    } else {
-                        Map<Integer, Integer> tmp = new HashMap<>();
-                        tmp.put(a[j], 2);
-                        dp.put(dif, tmp);
-                    }
-                }
-            }
-            return max;
-        }
- 
         public int lenLongestFibSubseq(int [] a) {  // bug bug bug here
             int n = a.length, max = 0;
             int [] dp = new int [n];
@@ -575,34 +552,6 @@ public class dptwo {
             int ans = Integer.MIN_VALUE;
             for (int i = 0; i < m+1; i++) 
                 ans = Math.max(ans, dp[i][m-i]);
-            return ans;
-        }
-
-        private void backtracking(int [] a, int limit, int idx, List<Integer> list) { // 不知道哪里错了
-            if (list.size() >= ans) return;
-            if (idx < 0) {
-                // ans = Math.min(ans, list.size());
-                ans = list.size();
-                return;
-            }
-            for (int i = idx; i >= 0; i--) {
-                for (int j = 0; j < list.size(); j++) {
-                    if (list.get(j) + a[i] > limit) continue;
-                    if (j > 0 && list.get(j) == list.get(j-1)) continue;
-                    list.set(j, list.get(j) + a[i]);
-                    backtracking(a, limit, i-1, list);
-                    list.set(j, list.get(j) - a[i]);
-                }
-                list.add(a[idx]);
-                backtracking(a, limit, idx-1, list);
-            }
-        }
-        int n, ans;
-        public int minSessions(int[] tasks, int sessionTime) {
-            n = tasks.length;
-            ans = n;
-            Arrays.sort(tasks);
-            backtracking(tasks, sessionTime, n-1, new ArrayList<>());
             return ans;
         }
 
