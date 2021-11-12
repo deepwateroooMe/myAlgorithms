@@ -580,23 +580,6 @@ public class dptwo {
             return max;
         }
 
-        private int dfs(int [][] a, int i, int j, int k) {
-        }
-        int [][][] dp;
-        int m, n;
-        public int cherryPickup(int[][] grid) {
-            int m = grid.length, n = grid[0].length;
-            int [][][] dp = new int [m][n][n];
-            dp[0][0][n-1] = grid[0][0] + grid[0][n-1];
-            for (int i = 1; i < m; i++) {
-                for (int j = 0; j < n; j++) {
-                    for (int k = 0; k < n; k++) {
-                        if (j == k) continue;
-                    }
-                }
-            }
-        }
-
         public class MinSeg { // 算法对于n不是2的次方的情况同样适用。这也是为什么我在上文中说线段树是一棵完全二叉树而非满二叉树的原因
             private ArrayList<Integer> minSeg;
             private int n;
@@ -810,35 +793,7 @@ public class dptwo {
             return cnt;
         }
 
-        public String shortestCommonSupersequence(String ss, String tt) {
-            int m = ss.length(), n = tt.length();
-            char [] s = ss.toCharArray();
-            char [] t = tt.toCharArray();
-            int [][] dp = new int [m+1][n+1];
-            for (int i = 1; i <= m; i++) 
-                for (int j = 1; j <= n; j++) 
-                    if (s[i-1] == t[j-1]) dp[i][j] = dp[i-1][j-1] + 1;
-                    else dp[i][j] = Math.max(dp[i-1][j], dp[i][j-1]);
-            // System.out.println("dp.length: " + dp.length);
-            // for (int z = 0; z < dp.length; ++z) 
-            //     System.out.println(Arrays.toString(dp[z]));
-            int i = m-1, j = n-1;
-            StringBuilder sb = new StringBuilder(); // reversed Longest Common Subsequence
-            while (i >= 0 && j >= 0) {
-                if (dp[i+1][j+1] == dp[i][j] + 1) {
-                    sb.append(s[i]);
-                    --i;
-                    --j;
-                } else if (dp[i+1][j+1] == dp[i][j+1]) {
-                    --i;
-                } else --j;
-            }
-            // System.out.println("sb.toString(): " + sb.toString());
-            // merge 3 strings
-            return "";
-        }
-
-        private int dfs(int [] a, int i, int j) {
+    private int dfs(int [] a, int i, int j) {
             if (i == j) return a[i]; // when i == j -1
             if (dp[i][j] > 0) return dp[i][j];
             int ans = 0; // when i == j -1, default to be 0
@@ -876,50 +831,6 @@ public class dptwo {
             dp = new int [m+2][m+2];
             System.out.println(Arrays.toString(arr));
             return dfs(arr, 0, m+1);
-        }
-
-        private void dfs(int [] a, int idx, List<Integer> l) { // tle tle tle
-            if (l.size() == n) {
-                if (!ll.contains(l)) ll.add(new ArrayList<>(l));
-                return ;
-            }
-            for (int i = 0; i < n; i++) {
-                if (!vis[i]) {
-                    vis[i] = true;
-                    l.add(a[i]);
-                    dfs(a, i+1, l);
-                    l.remove(l.size()-1);
-                    vis[i] = false;
-                }
-            }
-        }
-        private boolean isSquare(int v) {
-            return Math.pow((int)Math.sqrt(v), 2) == v;
-        }
-        private boolean isValid(List<Integer> l) {
-            for (int i = 0; i <= l.size()-2; i++) 
-                if (!isSquare(l.get(i) + l.get(i+1))) return false;
-            return true;
-        }
-        List<List<Integer>> ll = new ArrayList<>();
-        boolean [] vis;
-        int n;
-        public int numSquarefulPerms(int[] a) {
-            n = a.length;
-            if (Arrays.stream(a).distinct().count() == 1) {
-                for (int i = 0; i < n-1; i++) 
-                    if (!isSquare(a[i] + a[i+1])) return 0;
-                return 1;
-            }
-            int [] arr = new int [n];
-            for (int i = 0; i < n; i++) 
-                arr[i] = i;
-            vis = new boolean[n];
-            dfs(a, 0, new ArrayList<>());
-            int ans = 0;
-            for (List<Integer>  l : ll) 
-                if (isValid(l)) ans++;
-            return ans;
         }
 
         private int dfs(int [] a, int i, int k) {
@@ -1018,19 +929,11 @@ public class dptwo {
             return min;
         }
 
-        int [][] dp;
-        int n;
-        public int mergeStones(int[] a, int k) {
-            n = a.length;
-            dp = new int [n][n];
-                
+}
+public static void main(String[] args) {
+    Solution s = new Solution();
 
-        }
-    }
-    public static void main(String[] args) {
-        Solution s = new Solution();
-
-        int []  a = new int []  {81, 823, 399, 421, 758, 520, 44, 346, 426, 380, 933, 766};
+    int []  a = new int []  {81, 823, 399, 421, 758, 520, 44, 346, 426, 380, 933, 766};
 
         int r = s.minimumTimeRequired(a, 12);
         System.out.println("r: " + r);

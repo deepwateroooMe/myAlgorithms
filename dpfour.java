@@ -675,34 +675,6 @@ public class dpfour {
         //     return ans;
         // }
 
-        // private boolean dfs(int sum, int t, bint target, int max) { // 没有体会到这个题与其它类似题的不同，force a win到底是什么意思呢？
-        //     if (sum >= target) return t % 2 == 0;                   // 感觉思路想得挺清楚的，不知道细节哪里错了，改天再回来写这题
-        //     if (dp[sum][t%2] != null) return dp[sum][t%2];
-        //     boolean res = (t % 2 == 0 ? false : true);
-        //     for (int i = 1; i <= max; i++) {
-        //         if (!vis[i]) {
-        //             vis[i] = true;
-        //             boolean tmp = dfs(sum + i, t+1, target, max);
-        //             if (t % 2 == 0 && tmp)
-        //                 res |= true;
-        //                 // return dp[sum][t%2] = true;
-        //             else if (t % 2 == 1 && !tmp)
-        //                 res = false;
-        //                 // return dp[sum][t%2] = false;
-        //             vis[i] = false;
-        //         }
-        //     }
-        //     return dp[sum][t%2] = res;
-        //     // return dp[sum][t%2] = (t % 2 == 0 ? false : true);
-        // }
-        // Boolean [][] dp;
-        // boolean [] vis;
-        // public boolean canIWin(int maxChoosableInteger, int desiredTotal) {
-        //     dp = new Boolean[desiredTotal+1][2];
-        //     vis = new boolean [maxChoosableInteger + 1];
-        //     return dfs(0, 0, desiredTotal, maxChoosableInteger);
-        // }
-
         // 要点一：怎么求解某课程的最快完成时间
         //   要知道课程编号为k的最快完成时间，我们就得求它的所有前置课程的最快完成时间，递归求解即可，当某课程没有前置课程，那么它的最快完成时间就是time[k]
         // 要点二：怎么遍历
@@ -782,26 +754,743 @@ public class dpfour {
         //         }
         //     return max;
         // }
+
+        // public int countVowelPermutation(int n) {
+        //     Map<Character, Integer> idx = new HashMap<>();
+        //     idx.put('a', 0);
+        //     idx.put('e', 1);
+        //     idx.put('i', 2);
+        //     idx.put('o', 3);
+        //     idx.put('u', 4);
+        //     Map<Integer, List<Character>> m = new HashMap<>();
+        //     m.put(0, List.of('e'));
+        //     m.put(1, List.of('a', 'i'));
+        //     m.put(2, List.of('a', 'e', 'o', 'u'));
+        //     m.put(3, List.of('i', 'u'));
+        //     m.put(4, List.of('a'));
+        //     int mod = (int)1e9 + 7;
+        //     int [][] dp = new int [n][5];
+        //     for (int i = 0; i < 5; i++) 
+        //         dp[0][i] = 1;
+        //     for (int i = 1; i < n; i++) 
+        //         for (int j = 0; j < 5; j++) {
+        //             if (dp[i-1][j] == 0) continue;
+        //             for (char c : m.get(j)) 
+        //                 dp[i][idx.get(c)] = (dp[i][idx.get(c)] + dp[i-1][j]) % mod;
+        //         }
+        //     long ans = 0;
+        //     for (int i = 0; i < 5; i++) 
+        //         ans = (ans + dp[n-1][i]) % mod;
+        //     return (int)ans;
+        // }
+
+        // public int findNumberOfLIS(int[] a) {
+        //     int n = a.length;
+        //     int [] dp = new int [n];
+        //     Arrays.fill(dp, 1);
+        //     int [] cnt = new int [n];
+        //     int max = 0, maxIdx = -1;
+        //     for (int i = 0; i < n; i++) {
+        //         for (int j = i+1; j < n; j++) {
+        //             System.out.println("\n i: " + i);
+        //             System.out.println("j: " + j);
+        //             if (a[j] > a[i]) {
+        //                 dp[j] = Math.max(dp[j], dp[i]+1);
+        //                 if (dp[j] == dp[i]+1)
+        //                     cnt[j]++;
+        //                 // cnt[j] += cnt[i];
+        //             }
+        //         }
+        //         if (dp[i] > max) {
+        //             max = dp[i];
+        //             maxIdx = i;
+        //         }
+        //         System.out.println(Arrays.toString(dp));
+        //         System.out.println(Arrays.toString(cnt));
+        //     }
+        //     return cnt[maxIdx] - 1;
+        // }
+
+        // public int cherryPickup(int[][] grid) {
+        //     int m = grid.length, n = grid[0].length;
+        //     int [][][] dp = new int [m][n][n];
+        //     for (int i = 0; i < m; i++) 
+        //         for (int j = 0; j < n; j++) 
+        //             Arrays.fill(dp[i][j], -1);
+        //     dp[0][0][n-1] = grid[0][0] + grid[0][n-1];
+        //     for (int i = 1; i < m; i++) 
+        //         for (int j = 0; j < n; j++) 
+        //             for (int k = 0; k < n; k++) {
+        //                 if (j == k || dp[i-1][j][k] == -1) continue;
+        //                 for (int x = Math.max(0, j-1); x <= Math.min(n-1, j+1); x++) 
+        //                     for (int y = Math.max(0, k-1); y <= Math.min(n-1, k+1); y++) {
+        //                         if (x == y) continue;
+        //                         dp[i][x][y] = Math.max(dp[i][x][y], dp[i-1][j][k] + grid[i][x] + grid[i][y]);
+        //                     }
+        //             }
+        //     int max = 0;
+        //     for (int i = 0; i < n; i++) 
+        //         for (int j = 0; j < n; j++) 
+        //             max = Math.max(max, dp[m-1][i][j]);
+        //     return max;
+        // }
+
+        // public int maxJumps(int [] a, int d) {
+        //     int n = a.length, j = 0, k = 0, cur = 0;
+        //     int [] dp = new int [n];
+        //     Arrays.fill(dp, 1);
+        //     for (int i = 0; i < n; i++) {
+        //         for ( j = i+1; j <= Math.min(n-1, i+d); j++) 
+        //             if (a[i] <= a[j]) break;
+        //         dp[i] = Math.max(dp[i], b) // 没想清楚
+        //     }
+        // }
+
+        // private int getCnt(String t) {
+        //     int n = t.length(), cnt = 0;
+        //     char [] s = t.toCharArray();
+        //     int i = 0, j = n-1;
+        //     while (i < j) {
+        //         if (s[i] != s[j]) cnt++;
+        //         i++;
+        //         j--;
+        //     }
+        //     return cnt;
+        // }
+        // // 记 dp[i][j] = v 表示s[0:j]区间内分割成j段，只需要改变v个字符就可以使得每一段的子串都是回文串。
+        // //     要求dp[i][j]的值，关键就是找出j和j-1的分割点。
+        // //     很显然有dp[i][j] = min(dp[m][j-1] + s[m:j]需要改变的字符的个数)，只需要找出最小的分割点m即可。        
+        // public int palindromePartition(String t, int k) { // 不知道哪里的细节错了，改天再改
+        //     int n = t.length();
+        //     // if (k == n) return 0;
+        //     char [] s = t.toCharArray();
+        //     Map<String, Integer> m = new HashMap<>();
+        //     for (int i = 0; i < n; i++) 
+        //         for (int j = i+1; j <= n; j++) {
+        //             String cur = t.substring(i, j);
+        //             if (!m.containsKey(cur)) m.put(cur, getCnt(cur));
+        //         }
+        //     int [][] dp = new int [n][k+1];
+        //     for (int i = 0; i < n; i++) 
+        //         Arrays.fill(dp[i], Integer.MAX_VALUE / 2);
+        //     dp[0][0] = 0;
+        //     // for (int i = 0; i < n; i++) 
+        //     //     dp[i][1] = m.get(t.substring(0, i+1));
+        //     for (int d = 1; d <= k; d++) 
+        //         for (int i = 0; i < n; i++) {
+        //             int min = Integer.MAX_VALUE;
+        //             for (int j = 0; j < i; j++) 
+        //                 min = Math.min(min, dp[j][d-1] + m.get(t.substring(j+1, i+1)));
+        //             dp[i][d] = Math.min(dp[i][d], min);
+        //         }
+        //     return dp[n-1][k];
+        // }
+
+        // int [][][] dp; // tle: 应该是对重复字母的处理久缺，需要把这个bug解决了 todo 
+        // int n;
+        // // 思路：记忆化搜索，top down dp，两个手指move，可以写一个cost function计算两个点的cost，这个没有问题，那么问题转换成下一个move由谁来完成，cost分别是多少。
+        // // top down就是最后一步，如果由左边完成，cost + dfs(左边)， 由右边完成，cost + dfs(右边）
+        // // 建立一个三维的dp，[leftindex][rightindex][pos in word]来标记计算过的结果；Time ( n * 27 ^ 2); Space ( n * 27 ^ 2);
+        // public int minimumDistance(String t) { // 需要一个三维的状态来表示整个动态规划的过程，包括当前考虑的字母下标，左指的键位，右指的键位。
+        //     n = t.length();
+        //     dp = new int [27][27][n]; // 27，只是为了char为null的时候，index可以包含null的情况，设置为0；
+        //     return dfs(t, 0, null, null); // 刚开始设置为null，这样两个指头走上第一char的时候，cost 会return 0；
+        // }
+    // https://leetcode.com/problems/minimum-distance-to-type-a-word-using-two-fingers/discuss/1435135/Simple-Solution-Java-DFS-memorization
+        // private int dfs(String t, int idx, Character a, Character b) { // 想要输入位置在idx的字符时，两手指的位置分别指向a b
+        //     if (idx == n) return 0;
+        //     int i = a == null ? 0 : a - 'A' + 1;
+        //     int j = b == null ? 0 : b - 'A' + 1;
+        //     if (dp[i][j][idx] != 0) return dp[i][j][idx];
+        //     int k = t.charAt(idx) - 'A' + 1;
+        //     return dp[i][j][idx] = Math.min(cost(i, k) + dfs(t, idx+1, t.charAt(idx), b),
+        //                                     cost(j, k) + dfs(t, idx+1, a, t.charAt(idx)));
+        // }
+        // private int cost(int x, int y) {
+        //     if (x == 0 || y == 0) return 0;
+        //     int i = (x-1) / 6, j = (x-1) % 6;
+        //     int u = (y-1) / 6, v = (y-1) % 6;
+        //     return Math.abs(i-u) + Math.abs(j-v);
+        // }
+        // public int minimumDistance(String word) { // 空间战胜比较高
+        //     int[][][] dp = new int[301][26][26];
+        //     for (int i = 1; i <= 300; i++) 
+        //         for (int j = 0; j < 26; j++) 
+        //             Arrays.fill(dp[i][j], Integer.MAX_VALUE);
+        //     int ans = Integer.MAX_VALUE;
+        //     char[] ca = word.toCharArray();
+        //     for (int i = 1; i <= word.length(); i++) { // 遍历每个字母
+        //         int v = ca[i - 1] - 'A';     // 遍历上一个阶段左指键位
+        //         for (int l = 0; l < 26; l++) // 遍历上一个阶段右指键位
+        //             for (int r = 0; r < 26; r++) { // 判断上一个阶段的状态是否存在
+        //                 if (dp[i - 1][l][r] != Integer.MAX_VALUE) {
+        //                     dp[i][v][r] = Math.min(dp[i][v][r], dp[i - 1][l][r] + help(l, v)); // 移动左指
+        //                     dp[i][l][v] = Math.min(dp[i][l][v], dp[i - 1][l][r] + help(r, v)); // 移动右指
+        //                 }
+        //                 if (i == word.length()) {
+        //                     ans = Math.min(ans, dp[i][v][r]);
+        //                     ans = Math.min(ans, dp[i][l][v]);
+        //                 }
+        //             }
+        //     }            
+        //     return ans;
+        // }
+        // public int help(int a, int b) { // 计算距离
+        //     int x = a / 6, y = a % 6;
+        //     int x2 = b / 6, y2 = b % 6;
+        //     return (int)(Math.abs(x - x2)) + (int)(Math.abs(y - y2));
+        // }
+        // 时间复杂度：O(26 * 26 * N)，其中 N 为字符串 word 的长度。
+        //     空间复杂度：O(26 * 26 * 2)
+        // public int minimumDistance(String word) { // 压缩空间
+        //     int[][][] dp = new int[2][26][26];
+        //     for (int j = 0; j < 26; j++) 
+        //         Arrays.fill(dp[1][j], Integer.MAX_VALUE);
+        //     int ans = Integer.MAX_VALUE;
+        //     char[] ca = word.toCharArray();
+        //     for (int i = 1; i <= word.length(); i++) { // 遍历每个字母
+        //         int v = ca[i - 1] - 'A';     // 遍历上一个阶段左指键位
+        //         for (int l = 0; l < 26; l++) // 遍历上一个阶段右指键位
+        //             for (int r = 0; r < 26; r++) { // 判断上一个阶段的状态是否存在
+        //                 if (dp[(i-1)%2][l][r] != Integer.MAX_VALUE) {
+        //                     dp[i%2][v][r] = Math.min(dp[i%2][v][r], dp[(i-1) % 2][l][r] + help(l, v)); // 移动左指
+        //                     dp[i%2][l][v] = Math.min(dp[i%2][l][v], dp[(i-1) % 2][l][r] + help(r, v)); // 移动右指
+        //                 }
+        //                 if (i == word.length()) {
+        //                     ans = Math.min(ans, dp[i%2][v][r]);
+        //                     ans = Math.min(ans, dp[i%2][l][v]);
+        //                 }
+        //             }
+        //         for (int l = 0; l < 26; l++)  // 重新初始化另外一个数组
+        //             for (int r = 0; r < 26; r++) 
+        //                 dp[(i-1) % 2][l][r] = Integer.MAX_VALUE;
+        //     }            
+        //     return ans;
+        // }
+        // public int help(int a, int b) { // 计算距离
+        //     int x = a / 6, y = a % 6;
+        //     int x2 = b / 6, y2 = b % 6;
+        //     return (int)(Math.abs(x - x2)) + (int)(Math.abs(y - y2));
+        // }
+        // // 时间复杂度：O(26 * N)O(26∗N)，其中 N 为字符串 word 的长度。
+        // // 空间复杂度：O(26 * 2)O(26∗2)
+        // public int minimumDistance(String word) {
+        //     int len = word.length();
+        //     int ans = Integer.MAX_VALUE;
+        //     char[] ca = word.toCharArray();
+        //     int[][] dp = new int[2][26]; // 第一个字母的初始值为 0，从第二个字母开始考虑。
+        //     Arrays.fill(dp[1], Integer.MAX_VALUE);
+        //     for (int i = 2; i <= word.length(); i++) { // 遍历每个字母
+        //         int v = ca[i - 1] - 'A';
+        //         for (int j = 0; j < 26; j++) { // 遍历上一个阶段键位
+        //             if (dp[i % 2][j] == Integer.MAX_VALUE) continue;
+        //             int preV = ca[i - 2] - 'A';
+        //             dp[(i + 1) % 2][j] = Math.min(dp[(i + 1) % 2][j], dp[i % 2][j] + help(preV, v));
+        //             dp[(i + 1) % 2][preV] = Math.min(dp[(i + 1) % 2][preV], dp[i % 2][j] + help(j, v));
+        //             if (i == word.length()) {
+        //                 ans = Math.min(ans, dp[(i + 1) % 2][j]);
+        //                 ans = Math.min(ans, dp[(i + 1) % 2][preV]);
+        //             }
+        //         }
+        //         Arrays.fill(dp[i % 2], Integer.MAX_VALUE);
+        //     }
+        //     return ans;
+        // }
+
+        // private long dfs(int [] a, int end, int f, int bgn) {
+        // }
+        // long mod = (int)1e9 + 7;
+        // long [][] dp;
+        // int n;
+        // public int countRoutes(int [] locations, int start, int finish, int fuel) {
+        //     n = locations.length;
+        //     dp = new long [fuel+1][n];
+        //     return (int)dfs(locations, finish, fuel, start);
+        // }
+
+        // public int ways(String[] pizza, int p) { // 自底向上
+        //     int mod = (int)1e9 + 7;
+        //     int m = pizza.length, n = pizza[0].length();
+        //     int [][] cnt = new int [m+1][n+1]; // 苹果数的前缀和，用于快速获得在指定矩阵范围内的苹果数量，两个维度也分别是左上角的x、y
+        //     for (int i = m-1; i >= 0; i--) 
+        //         for (int j = n-1; j >= 0; j--) 
+        //             cnt[i][j] = cnt[i+1][j] + cnt[i][j+1] - cnt[i+1][j+1] + (pizza[i].charAt(j) == 'A' ? 1 : 0);
+        //     int [][][] dp = new int [m+1][n+1][p+1]; // 状态数组，三个维度分别表示以x、y为左上角的矩阵中，分给k个人，元素值表示方案数
+        //     for (int i = m-1; i >= 0; i--)       // 遍历矩阵，获取指定左上角矩阵中范围内的苹果数量
+        //         for (int j = n-1; j >= 0; j--) { // 从右下角开始，向左上角开始枚举所有状态
+        //             if (cnt[i][j] > 0) dp[i][j][1] = 1; // 如果这个范围矩阵内存在苹果，那么这个矩阵肯定可以分给1个人，且方案数为1
+        //             for (int k = 2; k <= p; k++) {      // 枚举所有人数状态下的方案，前面已经判断了人数为1的状态，所以这里只需要从2开始枚举
+        //                 for (int x = m-1-i; x >= 0; x--)     // 横着切，枚举所有切法
+        //                     if (cnt[i][j] - cnt[i+x][j] > 0) // 如果当前切掉的矩阵内存在苹果，则可以进行状态转移
+        //                         dp[i][j][k] = (dp[i][j][k] + dp[i+x][j][k-1]) % mod;
+        //                 for (int y = n-1-j; y >= 0; y--)     // 竖着切
+        //                     if (cnt[i][j] - cnt[i][j+y] > 0)
+        //                         dp[i][j][k] = (dp[i][j][k] + dp[i][j+y][k-1]) % mod;
+        //             }
+        //         }
+        //     return (int)dp[0][0][p];
+        // }
+        // public int ways(String[] pizza, int p) { // 自顶向下
+        //     int mod = (int)1e9 + 7;
+        //     int m = pizza.length, n = pizza[0].length();
+        //     int [][] cnt = new int [m][n]; // 苹果数的前缀和，用于快速获得在指定矩阵范围内的苹果数量，两个维度也分别是左上角的x、y
+        //     for (int i = 0; i < m; i++) 
+        //         cnt[i][0] = (i == 0 ? 0 : cnt[i-1][0]) + (pizza[i].charAt(0) == 'A' ? 1 : 0);
+        //     for (int j = 0; j < n; j++) 
+        //         cnt[0][j] = (j == 0 ? 0 : cnt[0][j-1]) + (pizza[0].charAt(j) == 'A' ? 1 : 0);
+        //     for (int i = 1; i < m; i++) 
+        //         for (int j = 1; j < n; j++) 
+        //             cnt[i][j] = cnt[i-1][j] + cnt[i][j-1] - cnt[i-1][j-1] + (pizza[i].charAt(j) == 'A' ? 1 : 0);
+        //     int [][][] dp = new int [m][n][p+1]; // dp[i][j][k]表示切完k次后，剩余蛋糕左上角 在i,j位置时的方案数
+        //     dp[0][0][0] = 1;
+        //     for (int k = 1; k < p; k++) 
+        //         for (int i = 0; i < m; i++) 
+        //             for (int j = 0; j < n; j++) {
+        //                 if (dp[i][j][k-1] == 0) continue; //上一次cut完后，剩余蛋糕左上角在i,j
+        //                 for (int x = i+1; x < m; x++) {  // 横向切，切完后的剩余左上角为 x, j
+        //                     int appCnt = cnt[x-1][n-1] - (j > 0 ? cnt[x-1][j-1] : 0) - (i > 0 ? cnt[i-1][n-1] : 0) + (i > 0 && j > 0 ? cnt[i-1][j-1] : 0);
+        //                     if (appCnt > 0)
+        //                         dp[x][j][k] = (dp[x][j][k] + dp[i][j][k-1]) % mod;
+        //                 }
+        //                 for (int y = j+1; y < n; y++) { //竖向切
+        //                     int appCnt = cnt[m-1][y-1] - (i > 0 ? cnt[i-1][y-1] : 0) - (j > 0 ? cnt[m-1][j-1] : 0) + (i > 0 && j > 0 ? cnt[i-1][j-1] : 0);
+        //                     if (appCnt > 0)
+        //                         dp[i][y][k] = (dp[i][y][k] + dp[i][j][k-1]) % mod;
+        //                 }
+        //             }
+        //     long ans = 0;
+        //     for (int i = 0; i < m; i++) 
+        //         for (int j = 0; j < n; j++) {
+        //             int appCnt = cnt[m-1][n-1] - (i > 0 ? cnt[i-1][n-1] : 0) - (j > 0 ? cnt[m-1][j-1] : 0) + (i > 0 && j > 0 ? cnt[i-1][j-1] : 0);
+        //             if (appCnt > 0) ans = (ans + dp[i][j][p-1]) % mod;
+        //         }
+        //     return (int)ans;
+        // }
+        // public int ways(String[] pizza, int p) { // 自顶向下: 与自底向上相比
+        //     int mod = (int)1e9 + 7;
+        //     int m = pizza.length, n = pizza[0].length();
+        //     int [][] cnt = new int [m+1][n+1];  // 苹果数的前缀和，用于快速获得在指定矩阵范围内的苹果数量，两个维度也分别是左上角的x、y
+        //     for (int i = 1; i <= m; i++) 
+        //         for (int j = 1; j <= n; j++) 
+        //             cnt[i][j] = cnt[i-1][j] + cnt[i][j-1] - cnt[i-1][j-1] + (pizza[i-1].charAt(j-1) == 'A' ? 1 : 0);
+        //     int [][][] dp = new int [m+1][n+1][p]; // dp[i][j][k]表示切完k次后，剩余蛋糕左上角 在i,j位置时的方案数
+        //     dp[1][1][0] = 1; // 初始值是为了程序的运行，
+        //     for (int k = 1; k < p; k++) 
+        //         for (int i = 1; i <= m; i++) 
+        //             for (int j = 1; j <= n; j++) {
+        //                 System.out.println("(dp[i][j][k-1] == 0) : " + (dp[i][j][k-1] == 0) );
+        //                 if (dp[i][j][k-1] == 0) continue; // 上一次cut完后，剩余蛋糕左上角在i,j
+        //                 for (int x = i+1; x <= m; x++)   // 横向切，切完后的剩余左上角为 x, j
+        //                     if (cnt[x-1][n] - cnt[i-1][n] - cnt[x-1][j-1] + cnt[i-1][j-1] > 0)
+        //                         dp[x][j][k] = (dp[x][j][k] + dp[i][j][k-1]) % mod;
+        //                 for (int y = j+1; y <= n; y++)  // 竖向切
+        //                     if (cnt[m][y-1] - cnt[m][j-1] - cnt[i-1][y-1] + cnt[i-1][j-1] > 0)
+        //                         dp[i][y][k] = (dp[i][y][k] + dp[i][j][k-1]) % mod;
+        //             }
+        //     long ans = 0;
+        //     for (int i = 1; i <= m; i++) 
+        //         for (int j = 1; j <= n; j++) 
+        //             if (cnt[m][n] - cnt[i-1][n] - cnt[m][j-1] + cnt[i-1][j-1] > 0) // 先前并没有确认切的结果有效，即最后剩下的那块是否有苹果
+        //                 ans = (ans + dp[i][j][p-1]) % mod;                         // 统计结果的时候，要先确保有效
+        //     return (int)ans;
+        // }
+
+        // public boolean canIWin(int maxChoosableInteger, int desiredTotal) { // 这个师与其它类假题相比，为什么顺序无关？
+        //     if (desiredTotal == 0) return true; // 如果1到最大能选的值所有和都不能满足目标值，那么肯定失败
+        //     if ((maxChoosableInteger+1) * maxChoosableInteger / 2 < desiredTotal) return false;
+        //     char [] state = new char [maxChoosableInteger];
+        //     for (int i = 0; i < maxChoosableInteger; i++) state[i] = '0';
+        //     return dfs(desiredTotal, state, new HashMap<>());
+        // }
+        // private boolean dfs(int sum, char [] st, Map<String, Boolean> map) {
+        //     String key = new String(st);
+        //     if (map.containsKey(key)) return map.get(key);
+        //     for (int i = 0; i < st.length; i++) {
+        //         if (st[i] != '0') continue;
+        //         st[i] = '1';
+        //         if (sum <= i+1 || !dfs(sum - (i+1), st, map)) {
+        //             map.put(key, true);
+        //             st[i] = '0';
+        //             return true;
+        //         }
+        //         st[i] = '0';
+        //     }
+        //     map.put(key, false);
+        //     return false;
+        // }
+        // public boolean canIWin(int maxChoosableInteger, int desiredTotal) { // 下面这个效率更高 
+        //     if (desiredTotal <= 0) return true;
+        //     int sum = (maxChoosableInteger + 1) * maxChoosableInteger / 2;
+        //     if (sum < desiredTotal) return false;
+        //     boolean[] vis = new boolean[maxChoosableInteger+1];
+        //     return helper(desiredTotal, vis);
+        // }
+        // Map<Integer, Boolean> map = new HashMap<>();
+        // public boolean helper(int desiredTotal, boolean[] vis) {
+        //     if (desiredTotal <= 0) return false;
+        //     int symbol = format(vis);
+        //     if (map.containsKey(symbol)) return map.get(symbol);
+        //     for (int i = 1 ; i < vis.length ; i++) {
+        //         if (!vis[i]) {
+        //             vis[i] = true;
+        //             if (!helper(desiredTotal-i, vis)) {
+        //                 vis[i] = false; // 这里不回复状态会影响其它结果
+        //                 map.put(symbol, true);
+        //                 return true;
+        //             }
+        //             vis[i] = false;
+        //         }
+        //     }
+        //     map.put(symbol, false);
+        //     return false;
+        // }
+        // public int format(boolean[] vis) {
+        //     int symbol = 0;
+        //     for (boolean select : vis) {
+        //         symbol <<= 1;
+        //         if (select) symbol |= 1;
+        //     }
+        //     return symbol;
+        // }
+        // private boolean dfs(int sum, int t, int target, int max) { // 没有体会到这个题与其它类似题的不同，force a win到底是什么意思呢？ bug bug bug
+        //     if (sum >= target) return t % 2 == 0;                   // 感觉思路想得挺清楚的，不知道细节哪里错了，改天再回来写这题
+        //     if (dp[sum][t%2] != null) return dp[sum][t%2];
+        //     boolean res = (t % 2 == 0 ? false : true);
+        //     for (int i = 1; i <= max; i++) {
+        //         if (!vis[i]) {
+        //             vis[i] = true;
+        //             boolean tmp = dfs(sum + i, t+1, target, max);
+        //             if (t % 2 == 0 && tmp)
+        //                 res |= true;
+        //                 // return dp[sum][t%2] = true;
+        //             else if (t % 2 == 1 && !tmp)
+        //                 res = false;
+        //                 // return dp[sum][t%2] = false;
+        //             vis[i] = false;
+        //         }
+        //     }
+        //     return dp[sum][t%2] = res;
+        //     // return dp[sum][t%2] = (t % 2 == 0 ? false : true);
+        // }
+        // Boolean [][] dp;
+        // boolean [] vis; // 就是说，这个数组并不能正确记录乘余可以选择的数字的状态
+        // public boolean canIWin(int maxChoosableInteger, int desiredTotal) {
+        //     dp = new Boolean[desiredTotal+1][2];
+        //     vis = new boolean [maxChoosableInteger + 1];
+        //     return dfs(0, 0, desiredTotal, maxChoosableInteger); // 这里dfs自顶向下方向写反了，另则顺序无关
+        // }
+ 
+        // public int minOperationsToFlip(String t) { // bug: 不知道自己写的错到哪里去了 todo , bug
+        //     int n = t.length();
+        //     s = t.toCharArray();
+        //     ArrayDeque<Integer> st = new ArrayDeque<>();
+        //     for (int i = 0; i < n; i++) 
+        //         if (s[i] == '(') st.push(i);
+        //         else if (s[i] == ')') m.put(i, st.pop());
+        //     int [] res = dfs(0, n-1, t);
+        //     return Math.max(res[0], res[1]); // 有一个必为0
+        // }
+        // Map<Integer, Integer> m = new HashMap<>(); // ) ( matched idxes
+        // char [] s;
+        // private int [] dfs(int l, int r, String t) { // 返回{表达式为0的最小flip次数， 表达式为1的最小flip次数}
+        //     if (l == r) {
+        //         if (s[l] == 0) return new int [] {0, 1};
+        //         else return new int [] {1, 0} ;
+        //     }
+        //     if (s[r] == ')' && m.get(r) == l)
+        //         return dfs(l+1, r-1, t);
+        //     // expression[r]只能是0，1，）
+        //     // expression[m]只能是｜，&
+        //     int mid = r-1;
+        //     if (s[r] == ')') mid = m.get(r)-1; 
+        //     System.out.println("mid: " + mid);
+        //     int [] left = dfs(l, mid-1, t);
+        //     int [] right = dfs(mid+1, r, t);
+        //     int minCostToOne = 0, minCostToOOO = 0;
+        //     if (s[mid] == '|') {
+        //         minCostToOne = Math.min(left[1], right[1]); // left or right to 1
+        //         minCostToOOO = Math.min(left[0] + right[0], Math.min(left[0], right[0]) + 1); // 0 | 0 or 0 & 1 or 1 & 0
+        //     } else if (s[mid] == '&') {
+        //         minCostToOOO = Math.min(left[0], right[0]);
+        //         minCostToOne = Math.min(left[1] + right[1], Math.min(left[1], right[1]) + 1); // 1 & 1 or 1 | 0 or 0 | 1
+        //     }
+        //     return new int [] {minCostToOOO, minCostToOne};
+        // }
+        // private int[] dfs(int l, int r, String expression, Map<Integer, Integer> pre) {
+        //     if (l == r) {
+        //         if (expression.charAt(l) == '0') {
+        //             return new int[] {0, 1};
+        //         } else {
+        //             return new int[] {1, 0};
+        //         }
+        //     }
+        //     if (expression.charAt(r) == ')' && pre.get(r) == l) {
+        //         return dfs(l + 1, r - 1, expression, pre);
+        //     }
+        //     // expression[r]只能是0，1，）
+        //     // expression[m]只能是｜，&
+        //     int m = r - 1;
+        //     if (expression.charAt(r) == ')') {
+        //         m = pre.get(r) - 1;
+        //     }
+        //     int[] left = dfs(l, m - 1, expression, pre);
+        //     int[] right = dfs(m + 1, r, expression, pre);
+        //     int changeExpressionToZero = 0;
+        //     int changeExpressionToOne = 0;
+        //     if (expression.charAt(m) == '|') {
+        //         // 左右有一个1
+        //         changeExpressionToOne = Math.min(left[1], right[1]);
+        //         // 左右都是0，左右有一个0且把符号改成&
+        //         changeExpressionToZero = Math.min(left[0] + right[0], Math.min(left[0], right[0]) + 1);
+        //     } else if (expression.charAt(m) == '&') {
+        //         // 左右有一个0, &后就是0
+        //         changeExpressionToZero = Math.min(left[0], right[0]);
+        //         // 左右都是1，或者左右有一个1且把符号改成｜
+        //         changeExpressionToOne = Math.min(left[1] + right[1], Math.min(left[1], right[1]) + 1);
+        //     }
+        //     return new int[] {changeExpressionToZero, changeExpressionToOne};
+        // }
+        // public int minOperationsToFlip(String expression) {
+        //     Stack<Integer> stack = new Stack<>();
+        //     Map<Integer, Integer> pre = new HashMap<>();
+        //     for (int i = 0; i < expression.length(); i++) {
+        //         if (expression.charAt(i) == '(') {
+        //             stack.push(i);
+        //         } else if (expression.charAt(i) == ')') {
+        //             pre.put(i, stack.pop());
+        //         }
+        //     }
+        //     int[] result = dfs(0, expression.length() - 1, expression, pre);
+        //     // 有一个必为0
+        //     return Math.max(result[0], result[1]);
+        // }
+
+
+        // public String shortestCommonSupersequence(String ss, String tt) {
+        //     int m = ss.length(), n = tt.length();
+        //     char [] s = ss.toCharArray();
+        //     char [] t = tt.toCharArray();
+        //     int [][] dp = new int [m+1][n+1];
+        //     for (int i = 1; i <= m; i++) 
+        //         for (int j = 1; j <= n; j++) 
+        //             if (s[i-1] == t[j-1]) dp[i][j] = dp[i-1][j-1] + 1;
+        //             else dp[i][j] = Math.max(dp[i-1][j], dp[i][j-1]);
+        //     int i = m, j = n;
+        //     StringBuilder sb = new StringBuilder(); // reversed Longest Common Subsequence
+        //     while (i-1 >= 0 && j-1 >= 0 && dp[i][j] > 0) {
+        //         if (s[i-1] == t[j-1]) {
+        //             sb.insert(0, s[i-1]);
+        //             --i;
+        //             --j;
+        //         } else {
+        //             if (dp[i-1][j] >= dp[i][j-1]) --i;
+        //             else --j;
+        //         }
+        //     }
+        //     // while (i >= 0 && j >= 0 && dp[i+1][j+1] > 0) { // bug 这里写得不对
+        //     //     if (dp[i+1][j+1] == dp[i][j] + 1) {
+        //     //         sb.append(s[i]);
+        //     //         --i;
+        //     //         --j;
+        //     //     } else if (dp[i+1][j+1] == dp[i][j+1]) {
+        //     //         --i;
+        //     //     } else --j;
+        //     // }
+        //     String sub = sb.toString();
+        //     i = 0;
+        //     j = 0;
+        //     String ans = "";
+        //     for (char c : sub.toCharArray()) {
+        //         while (s[i] != c) {
+        //             ans += s[i];
+        //             i++;
+        //         }
+        //         while (t[j] != c) {
+        //             ans += t[j];
+        //             j++;
+        //         }
+        //         ans += c;
+        //         i++;
+        //         j++;
+        //     }
+        //     return ans + ss.substring(i) + tt.substring(j);
+        // }
         
-    } 
+        // public int countVowelStrings(int n) {
+        //     int mod = (int)1e9 + 7;
+        //     Map<Integer, List<Integer>> m = new HashMap<>();
+        //     m.put(0, List.of(0, 1, 2, 3, 4));
+        //     m.put(1, List.of(1, 2, 3, 4));
+        //     m.put(2, List.of(2, 3, 4));
+        //     m.put(3, List.of(3, 4));
+        //     m.put(4, List.of(4));
+        //     long [][] dp = new long [n][5];
+        //     for (int i = 0; i < 5; i++) 
+        //         dp[0][i] = 1;
+        //     for (int i = 1; i < n; i++) 
+        //         for (int j = 0; j < 5; j++) {
+        //             if (dp[i-1][j] == 0) continue;
+        //             for (Integer v : m.get(j)) 
+        //                 dp[i][v] = (dp[i][v] + dp[i-1][j]) % mod;
+        //         }
+        //     long ans = 0;
+        //     for (int i = 0; i < 5; i++) 
+        //         ans = (ans + dp[n-1][i]) % mod;
+        //     return (int)ans;
+        // }
+
+        // public int jobScheduling(int[] startTime, int[] endTime, int[] profit) {
+        //     List<int []> j = new ArrayList<>();
+        //     for (int i = 0; i < startTime.length; i++) 
+        //         j.add(List.of(endTime[i], startTime[i], profit[i]));
+        //     Collections.sort(j, (a, b)->a[0] - b[0]);
+        //     // TreeMap<Integer, Integer> m = new TreeMap<>();
+        // }
+
+        // public int countOrders(int n) {
+        //     int mod = (int)1e9 + 7;
+        //     int spots = n * 2;
+        //     long ans = 1;
+        //     for (int i = n; i >= 2; i--) {
+        //         ans = (ans * spots * (spots - 1) / 2l) % mod;
+        //         spots -= 2;
+        //     }
+        //     return (int)ans;
+        // }
+
+        // public boolean isMatch(String s, String p) {
+        //     int m = s.length();
+        //     int n = p.length();
+        //     boolean[][] f = new boolean[m + 1][n + 1];
+        //     f[0][0] = true;
+        //     for (int i = 0; i <= m; ++i) 
+        //         for (int j = 1; j <= n; ++j) 
+        //             if (p.charAt(j - 1) == '*') {
+        //                 f[i][j] = f[i][j - 2];
+        //                 if (matches(s, p, i, j - 1)) 
+        //                     f[i][j] = f[i][j] || f[i - 1][j];
+        //             } else {
+        //                 if (matches(s, p, i, j)) 
+        //                     f[i][j] = f[i - 1][j - 1];
+        //             }
+        //     return f[m][n];
+        // }
+        // public boolean matches(String s, String p, int i, int j) {
+        //     if (i == 0) return false;
+        //     if (p.charAt(j - 1) == '.') return true;
+        //     return s.charAt(i - 1) == p.charAt(j - 1);
+        // }
+        // public boolean isMatch(String s, String t) { // bug: 错哪里了呢？
+        //     int m = s.length(), n = t.length();
+        //     boolean[][] dp = new boolean[m+1][n+1];
+        //     dp[0][0] = true;
+        //     for (int i = 1; i < n; i++) { // 处理tt以星号开头的特殊情况
+        //         if (t.charAt(i) != '*') break;
+        //             dp[0][i] = true;
+        //         }
+        //     for (int i = 1; i < m; i++) 
+        //         for (int j = 1; j < n; j++) 
+        //             if (s.charAt(i) == t.charAt(j) || t.charAt(j) == '.') dp[i][j] = dp[i-1][j-1];
+        //             else if (t.charAt(j) == '*') {
+        //                 if (s.charAt(i) == t.charAt(j-1)) dp[i][j] = dp[i-1][j] || dp[i][j-2]; // 匹配 ss 末尾的一个字符，将该字符扔掉，而该组合还可以继续进行匹配；
+        //                 else dp[i][j] = dp[i][j-2]; // 不匹配字符，将该组合扔掉，不再进行匹配。
+        //             }
+        //     return dp[m-1][n-1];
+        // }
+
+        // public static int getMaxDiff(int[] array) {
+        //     int sum = Arrays.stream(array).sum();
+        //     int length = array.length;
+        //     int [][] f = new int[length+1][sum/2+1];
+        //     for (int i = 0; i < length; i++) 
+        //         for (int j = 1; j <  = sum/2; j++) {
+        //             f[i+1][j]  =  f[i][j];
+        //             if (array[i] <= j && f[i][j-array[i]] + array[i] > f[i][j]) 
+        //                 f[i+1][j] = f[i][j-array[i]] + array[i];
+        //         }
+        //     return sum-2*f[length][sum/2];
+        // }
+
+        // private static int lengthOfLongest(int[] set){
+        //     Arrays.sort(set);
+        //     int n = set.length;
+        //     if (n <= 2) return n;
+        //     int llap = 2;
+        //     int[][] dp = new int[n][n];
+        //     for (int i=0; i<n; i++) dp[i][n-1] = 2;
+        //     for (int j=n-2; j>=1; j--) {
+        //         int i=j-1, k=j+1;
+        //         while (i>=0 && k<=n-1) {
+        //             if (set[i] + set[k] < 2 * set[j])
+        //                 k++;
+        //             else if (set[i] + set[k] > 2 * set[j]) {
+        //                 dp[i][j] = 2;
+        //                 i--;
+        //             } else {
+        //                 dp[i][j] = dp[j][k] + 1;
+        //                 llap = Math.max(llap, dp[i][j]);
+        //                 i--;
+        //                 k++;
+        //             }
+        //         }
+        //         while (i >= 0) {
+        //             dp[i][j] = 2;
+        //             i--;
+        //         }
+        //     }
+        //     return llap;
+        // }
+
+        // private static int getMaxLength(int[] arr){
+        //     if (arr.length <= 2) return arr.length;
+        //     int[][] dp = new int[arr.length][2];
+        //     dp[0][0] = 1;
+        //     dp[0][1] = 1;
+        //     for (int i = 1; i < arr.length; i++) {
+        //         dp[i][0] = dp[i-1][0]+1;
+        //         if (arr[i] <= arr[i-1])
+        //             dp[i][0]--;
+        //         if (dp[i-1][0] == dp[i-1][1] && arr[i] <= arr[i-1]) {// 说明前面还没有改的
+        //             dp[i][1] = dp[i][0] + 1;
+        //             arr[i] = arr[i-1]+1;
+        //         } else {//说明前面已经改动或者arr[i] <= arr[i-1]
+        //             if (arr[i] > arr[i-1]) {
+        //                 //判断前面是否已经改动
+        //                 dp[i][1] = dp[i-1][1]+1;
+        //                 if (dp[i-1][0] != dp[i-1][1]) 
+        //                     dp[i][1]--;
+        //             } else
+        //                 dp[i][1] = dp[i-1][1];
+        //         }
+        //     }
+        //     return dp[arr.length-1][1];
+        // }
+
+        // public int numDistinct(String ss, String tt) {
+        //     int m = ss.length(), n = tt.length();
+        //     char [] s = ("#"+ss).toCharArray();
+        //     char [] t = ("#"+tt).toCharArray();
+        //     int [][] dp = new int [m+1][n+1];
+        //     dp[0][0] = 1;
+        //     for (int j = 1; j <= n; j++) // 注意这两行初始状态的设置
+        //         dp[0][j] = 0;
+        //     for (int i = 1; i <= m; i++) 
+        //         dp[i][0] = 1;
+        //     for (int i = 1; i <= m; i++) 
+        //         for (int j = 1; j <= n; j++) 
+        //             if (s[i] == t[j])
+        //                 dp[i][j] = dp[i-1][j-1] + dp[i-1][j];
+        //             else dp[i][j] = dp[i-1][j];
+        //     return dp[m][n];
+        // }
+    }
     public static void main(String[] args) {
-        Solution s = new Solution();
+        Solution s  =  new Solution();
 
-        String a = "aaa";
-        
+        String a = "babgbag";
+        String b = "bag";
 
-        // // String a = "elvtoelvto";
-        // String a = "nufbkflwjjlwjjnufbkf";
-
-        int  r = s.longestDecomposition(a);
+        int  r  =  s.numDistinct(a, b);
         System.out.println("r: " + r);
-        
     }
 }
-
-//   TreeNode root = new TreeNode(a{0});
-//   root.buildTree(root, a);
-//   root.levelPrintTree(root);
-
-//    for (TreeNode v : r) 
-//        v.levelPrintTree(v);

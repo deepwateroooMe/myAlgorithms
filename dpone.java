@@ -351,24 +351,6 @@ public class dpone {
         }
 
 
-        public boolean isMatch(String ss, String tt) { // 应该还是用dp比较好做一点儿吧，几年前做的，现在完整没有思路了。。。
-            int m = ss.length(), n = tt.length();
-            char [] s = ss.toCharArray();
-            char [] t = tt.toCharArray();
-            int i = 0, j = 0;
-            char pre = null;
-            while (i < m && j < n) {
-                if (s[i] == t[j] || t[j] == '.') {
-                    pre = s[i];
-                    i++;
-                    j++;
-                    continue;
-                }
-                if (t[j]== '*' && s[i] != pre) return false;
-            }
-        }
-
-        
         private void dfs(int i, int j, int [][] a) {
         }
         int [][] dirs = {{0, 1}, {1, 0}};

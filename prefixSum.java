@@ -583,7 +583,7 @@ public class prefixSum {
                 //     if (m.containsKey(0)) ans = Math.min(ans, i - m.get(0) + 1);
                 //     else ans = Math.min(ans, i+1);
                 // }
-                for (int j = 0; j <= i; j++) {
+    for (int j = 0; j <= i; j++) {
                     if ((sum[i] - (j == 0 ? 0 : sum[j-1])) % p == rem)
                         ans = Math.min(ans, i-j+1);
                 }

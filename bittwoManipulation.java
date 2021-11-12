@@ -248,9 +248,14 @@ public class bittwoManipulation {
         //     return ans;
         // }
 
-        public boolean hasAlternatingBits(int n) {
-            return (n & (n-1)) == 0;
-        }
+        // public boolean hasAlternatingBits(int n) {
+        //     String t = Integer.toBinaryString(n);
+        //     char [] s = t.toCharArray();
+        //     n = s.length;
+        //     for (int i = 0; i < n-1; i++) 
+        //         if (s[i] == s[i+1]) return false;
+        //     return true;
+        // }
     }
     public static void main(String[] args) {
         Solution s = new Solution();

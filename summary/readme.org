@@ -807,6 +807,136 @@ public boolean containsNearbyAlmostDuplicate(int[] nums, int k, int t) {
 
 
 * backTracking 回溯
+** 1723 Find Minimum Time to Finish All Jobs
+You are given an integer array jobs, where jobs[i] is the amount of time it takes to complete the ith job.
+
+There are k workers that you can assign jobs to. Each job should be assigned to exactly one worker. The working time of a worker is the sum of the time it takes to complete all jobs assigned to them. Your goal is to devise an optimal assignment such that the maximum working time of any worker is minimized.
+
+Return the minimum possible maximum working time of any assignment.
+#+BEGIN_SRC java
+private void dfs(int [] a, int k, int idx) { // todo: 这类题需要总结一下，外加其它高效方法汇总
+    if (Arrays.stream(dp).max().getAsInt() >= min) return; // 这里可以豪爽地把 == min的全扔了
+    if (idx < 0) {
+        int tmp = Arrays.stream(dp).sum();
+        if (tmp != sum) return ;
+        int cur = Arrays.stream(dp).max().getAsInt();
+        // if (cur < min)
+            min = cur; // 这里也就可以用再比较，直接取结果
+        return ;
+    }
+    // for (int i = idx; i >= 0; i--) { // 为什么会画蛇添足地多加个没用的loop呢？？？！！！
+        for (int j = 0; j < k; j++) {
+            if (j > 0 && dp[j] == dp[j-1]) continue;
+            dp[j] += a[idx];
+            dfs(a, k, idx-1);
+            dp[j] -= a[idx];
+        }
+    // }
+}
+int n, sum, min = Integer.MAX_VALUE;
+int [] dp;
+public int minimumTimeRequired(int[] jobs, int k) {
+    n = jobs.length;
+    dp = new int [k];
+    Arrays.sort(jobs);
+    sum = Arrays.stream(jobs).sum();
+    dfs(jobs, k, n-1);
+    return min;
+}
+#+END_SRC
+** 1986. Minimum Number of Work Sessions to Finish the Tasks - Medium
+There are n tasks assigned to you. The task times are represented as an integer array tasks of length n, where the ith task takes tasks[i] hours to finish. A work session is when you work for at most sessionTime consecutive hours and then take a break.
+
+You should finish the given tasks in a way that satisfies the following conditions:
+
+If you start a task in a work session, you must complete it in the same work session.
+You can start a new task immediately after finishing the previous one.
+You may complete the tasks in any order.
+Given tasks and sessionTime, return the minimum number of work sessions needed to finish all the tasks following the conditions above.
+
+The tests are generated such that sessionTime is greater than or equal to the maximum element in tasks[i].
+
+#+BEGIN_SRC java
+private void backtracking(int [] a, int limit, int idx, List<Integer> list) { // 说明对回溯的原理理解得不够透彻
+    if (list.size() >= ans) return;
+    if (idx < 0) {
+        if (sum == list.stream().collect(Collectors.summingInt(Integer::intValue))) // 这个前提条件一定不能忘记
+            ans = list.size();
+        return;
+    }
+    // for (int i = idx; i >= 0; i--) { // 画蛇添足： 第三次！！！
+    for (int j = 0; j < list.size(); j++) {
+        if (list.get(j) + a[idx] > limit) continue;
+        if (j > 0 && list.get(j) == list.get(j-1)) continue;
+        list.set(j, list.get(j) + a[idx]);
+        backtracking(a, limit, idx-1, list);
+        list.set(j, list.get(j) - a[idx]);
+    }
+    list.add(a[idx]);
+    backtracking(a, limit, idx-1, list);
+    list.remove(list.size()-1); // backtracking: 这里是需要回缩的
+    // 
+    // }
+}
+// boolean [] vis; // 全排列的时候用vis，顺序遍历应该不用 
+int n, ans, sum;
+public int minSessions(int[] tasks, int sessionTime) {
+    n = tasks.length;
+    ans = n;
+    Arrays.sort(tasks);
+    sum = Arrays.stream(tasks).sum();
+    // vis = new boolean[n];
+    backtracking(tasks, sessionTime, n-1, new ArrayList<>());
+    return ans;
+}
+#+END_SRC
+
+** 996. Number of Squareful Arrays - Hard 对重复数字的处理
+An array is squareful if the sum of every pair of adjacent elements is a perfect square.
+
+Given an integer array nums, return the number of permutations of nums that are squareful.
+
+Two permutations perm1 and perm2 are different if there is some index i such that perm1[i] != perm2[i].
+#+BEGIN_SRC java
+List<List<Integer>> ll = new ArrayList<>();
+boolean [] vis;
+int n;
+public int numSquarefulPerms(int[] a) {
+    n = a.length;
+    if (Arrays.stream(a).distinct().count() == 1) {
+        if (!isSquare(a[0] + a[1])) return 0;
+        return 1;
+    }
+    vis = new boolean[n];
+    dfs(a, 0, new ArrayList<>());
+    return ll.size();
+}
+private void dfs(int [] a, int idx, List<Integer> l) { // tle tle tle
+    if (l.size() >= 2 && !isValid(l)) return;
+    if (l.size() == n) {
+        if (isValid(l) && !ll.contains(l)) ll.add(new ArrayList<>(l));
+        return ;
+    }
+    for (int i = 0; i < n; i++) {
+        if (i > 0 && a[i] == a[i-1] && vis[i-1]) continue; // 很重要
+        if (!vis[i]) {
+            vis[i] = true;
+            l.add(a[i]);
+           dfs(a, i+1, l);
+            l.remove(l.size()-1);
+            vis[i] = false;
+        }
+    }
+}
+private boolean isSquare(int v) {
+    return Math.pow((int)Math.sqrt(v), 2) == v;
+}
+private boolean isValid(List<Integer> l) {
+    for (int i = 0; i <= l.size()-2; i++) 
+        if (!isSquare(l.get(i) + l.get(i+1))) return false;
+    return true;
+}
+#+END_SRC
 ** 491. Increasing Subsequences
 Given an integer array nums, return all the different possible increasing subsequences of the given array with at least two elements. You may return the answer in any order.
 
@@ -1517,38 +1647,6 @@ public boolean possiblyEquals(String s, String t) {
     this.s = s.toCharArray();
     this.t = t.toCharArray();
     return dfs(0, 0, 0);
-}
-#+END_SRC
-
-** 464. Can I Win
-In the "100 game" two players take turns adding, to a running total, any integer from 1 to 10. The player who first causes the running total to reach or exceed 100 wins.
-What if we change the game so that players cannot re-use integers?
-For example, two players might take turns drawing from a common pool of numbers from 1 to 15 without replacement until they reach a total >= 100.
-Given two integers maxChoosableInteger and desiredTotal, return true if the first player to move can force a win, otherwise, return false. Assume both players play optimally.
-#+BEGIN_SRC java
-// state是前走的人走完之后的局面，sum是当前数字总和，返回的是当前走的人是否能赢
-private boolean dfs(int max, int target, int state, int val) {
-    if (dp[state] != -1) return dp[state] > 0;
-    if (val >= target) { // 如果对方取数的时候总和达到target了，则当前走的人输了，做记忆并返回false
-        dp[state] = 0;
-        return false;
-    }
-    for (int i = 1; i <= max; i++) {  // 枚举当前人取哪个数
-        if ((state >> i-1 & 1) == 0 && !dfs(max, target, state | (1 << i-1), val + i)) {
-            dp[state] = 1;
-            return true;
-        }
-    }
-    dp[state] = 0;
-    return false;
-}
-int [] dp;
-public boolean canIWin(int maxChoosableInteger, int desiredTotal) {
-    if (desiredTotal <= maxChoosableInteger) return true;
-    if (desiredTotal > (maxChoosableInteger + 1)*maxChoosableInteger / 2) return false;
-    dp = new int[1 << maxChoosableInteger]; // 时空复杂度O ( 2 m ) O(2^m)O(2 
-    Arrays.fill(dp, -1);
-    return dfs(maxChoosableInteger, desiredTotal, 0, 0);
 }
 #+END_SRC
 

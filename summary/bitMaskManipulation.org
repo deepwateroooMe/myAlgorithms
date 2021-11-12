@@ -1234,39 +1234,6 @@ int minStickers(vector<string>& stickers, string target) {
 }
 #+END_SRC
 
-** 1723. Find Minimum Time to Finish All Jobs
-You are given an integer array jobs, where jobs[i] is the amount of time it takes to complete the ith job.
-
-There are k workers that you can assign jobs to. Each job should be assigned to exactly one worker. The working time of a worker is the sum of the time it takes to complete all jobs assigned to them. Your goal is to devise an optimal assignment such that the maximum working time of any worker is minimized.
-
-Return the minimum possible maximum working time of any assignment.
-#+BEGIN_SRC java
-private void dfs(int [] arr, int k, int idx) { 
-    if (Arrays.stream(dp).max().getAsInt() >= min) return;
-    if (idx < 0) {
-        min = Math.min(min, Arrays.stream(dp).max().getAsInt());
-        return;
-    }
-    for (int i = 0; i < k; i++) {
-        if (i > 0 && dp[i] == dp[i-1]) continue;
-        dp[i] += arr[idx];
-        dfs(arr, k, idx-1);
-        dp[i] -= arr[idx];
-    }
-}
-int sum, min, n;
-int [] dp;
-public int minimumTimeRequired(int[] jobs, int k) {
-    n = jobs.length;
-    sum = Arrays.stream(jobs).sum();
-    min = sum;
-    dp = new int [k];
-    Arrays.sort(jobs);
-    dfs(jobs, k, n-1);
-    return min;
-}
-#+END_SRC
-
 ** 1986. Minimum Number of Work Sessions to Finish the Tasks
 There are n tasks assigned to you. The task times are represented as an integer array tasks of length n, where the ith task takes tasks[i] hours to finish. A work session is when you work for at most sessionTime consecutive hours and then take a break.
 You should finish the given tasks in a way that satisfies the following conditions:
