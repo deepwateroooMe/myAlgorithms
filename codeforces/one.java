@@ -17,38 +17,31 @@ import static java.util.stream.Collectors.toMap;
 public class one {
     public static class solution {
 
-        public int getCost(char [] s, char [] t) {
-            int m = s.length, n = t.length;
-            Map<Character, Integer> map = new HashMap<>();
-            for (int i = 0; i < m; i++) 
-                map.put(s[i], i);
-            int ans = 0;
-            for (int i = 1; i < n; i++) 
-                ans += Math.abs(map.get(t[i]) - map.get(t[i-1]));
-            return ans;
+        public int getCost(int [] a) {
+            int minDif = Math.abs(a[0] + a[2] - 2 * a[1]), cnt = 0;
+            while (cnt < 1000) {
+                
+            }
         }
     }
     public static void main(String[] args)  throws IOException {
         solution s = new solution();
 
-// Path path = Paths.get("onesur.txt");
-//         Scanner in = new Scanner(path);
-        Scanner in = new Scanner(System.in);
+        Path path = Paths.get("onesur.txt");
+        Scanner in = new Scanner(path);
+        // Scanner in = new Scanner(System.in);
         
-        int tests = Integer.parseInt(in.nextLine());
-        // System.out.println("tests: " + tests);
-        String [] sur = new String [2 * tests];
-        for (int i = 0; i < 2 * tests; i++) 
-            sur[i] = in.nextLine();
-        // System.out.println(Arrays.toString(sur));
-        in.close();
-        int idx = 0;
-        for (int i = 0; i < tests; i++) {
-            String ss = sur[idx++];
-            String t = sur[idx++];
-            int v = s.getCost(ss.toCharArray(), t.toCharArray());
-            System.out.println(v);
+        int [] cur = new int [3];
+        int N = Integer.parseInt(in.nextLine());
+        // System.out.println("N: " + N);
+        for (int i = 0; i <  N; i++) {
+            cur = in.nextLine();
+            if (cur[0] + cur[2] == 2 * cur[1])
+                System.out.println(0);
+            else {
+                int v = getCost(cur);
+                System.out.println(v);
+            }
         }
-
     }
 }

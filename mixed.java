@@ -843,14 +843,221 @@ public class mixed {
         //             l.add(i);
         //     return l;
         // }
+
+        // public boolean isSelfCrossing(int [] d) {
+        //     int n = d.length;
+        //     if (n < 4) return false;
+        //     for (int i = 3; i < n; i++) { // 4 >= 2 && 1 >= 3
+        //         // if (i % 3 == 0 && d[i] >= d[i-2] && d[i-3] >= d[i-1]) return true; 
+        //         // else if (i % 4 == 0 && d[i-1] == d[i-3] && d[i] >= d[i-2] - d[i-4]) return true; // 2 == 4 && 5 >= 3-1
+        //         // else if (i % 5 == 0 && d[i-2] >= d[i-4] && d[i-3] >= d[i-1] && d[i-1] >= d[i-3] - d[i-5] && d[i] >= d[i-2] - d[i-4])
+        //             if (d[i] >= d[i-2] && d[i-3] >= d[i-1]) return true; 
+        //             else if (i >= 4 && d[i-1] == d[i-3] && d[i] >= d[i-2] - d[i-4]) return true; // 2 == 4 && 5 >= 3-1
+        //             else if (i >= 5 && d[i-2] >= d[i-4] && d[i-3] >= d[i-1] && d[i-1] >= d[i-3] - d[i-5] && d[i] >= d[i-2] - d[i-4])
+        //             return true;
+        //         // else if (i % 6 == 0 && d[i-4] + d[i] >= d[i-2] && d[i-1] <= d[i-3] && d[i-5] + d[i-1] >= d[i-3]) return true; // 这个条件不对
+        //     }
+        //     return false;
+        // }
+
+        // public boolean isRectangleCover(int[][] rectangles) { // bug
+        //     int ai = Integer.MAX_VALUE, aj = Integer.MAX_VALUE, bx = 0, by = 0, sum = 0;
+        //     int li = 0, lj = 0, rx = 0, ry = 0;
+        //     for (int [] a : rectangles) {
+        //         System.out.println(Arrays.toString(a));
+        //         int i = a[0], j = a[1], x = a[2], y = a[3];
+        //         int ti = x, tj = j, tx = i, ty = y;
+        //         if (ti <= li && tj >= lj) {
+        //             li = ti;
+        //             lj = tj;
+        //         }
+        //         if (tx <= rx && ty >= ry) {
+        //             rx = tx;
+        //             ry = ty;
+        //         }
+        //         sum += (x - i) * (y - j);
+        //         if (i <= ai && j <= aj) {
+        //             ai = i;
+        //             aj = j;
+        //         }
+        //         if (x >= bx && y >= by) {
+        //             bx = x;
+        //             by = y;
+        //         }
+        //     }
+        //     return sum == (bx - ai) * (by - aj) && li == bx && lj == aj && rx == ai && ry == by;
+        // }
+        // public boolean isRectangleCover(int[][] rectangles) {
+        //     Map<String, Integer> m = new HashMap<>();
+        //     for (int [] a : rectangles) 
+        //         for (int i = 0; i < 4; i++) {
+        //             String tmp = Integer.toString(a[i/2*2]) + "," + Integer.toString(a[i % 2 * 2 + 1]); // 
+        //             if ((m.getOrDefault(tmp, 0) & (1 << i)) > 0) return false;
+        //             m.put(tmp, m.getOrDefault(tmp, 0) | (1 << i));
+        //         }
+        //     int cntCorner = 0;
+        //     for (Map.Entry<String, Integer> en : m.entrySet()) {
+        //         int v = en.getValue();
+        //         if ((v & (v -1)) == 0 && cntCorner++ > 4) return false;
+        //         if ((v & (v-1)) > 0 && !(v == 3 || v == 12 || v == 5 || v == 10 || v ==  15))
+        //             return false;
+        //     }
+        //     return true;
+        // }
+        // public boolean isRectangleCover(int[][] rectangles) {
+        //     Set<String> st = new HashSet<>();
+        //     int i = Integer.MAX_VALUE, j = Integer.MAX_VALUE, x = Integer.MIN_VALUE, y = Integer.MIN_VALUE, sum = 0;
+        //     for (int [] a : rectangles) {
+        //         i = Math.min(i, a[0]);
+        //         j = Math.min(j, a[1]);
+        //         x = Math.max(x, a[2]);
+        //         y = Math.max(y, a[3]);
+        //         sum += (a[2] - a[0]) * (a[3] - a[1]); 
+        //         String e = a[0] + "_" + a[1]; // bot - left
+        //         String b = a[0] + "_" + a[3]; // top - left
+        //         String c = a[2] + "_" + a[3]; // top - right
+        //         String d = a[2] + "_" + a[1]; // bot - right
+        //         if (st.contains(e)) st.remove(e); else st.add(e);
+        //         if (st.contains(b)) st.remove(b); else st.add(b);
+        //         if (st.contains(c)) st.remove(c); else st.add(c);
+        //         if (st.contains(d)) st.remove(d); else st.add(d);
+        //     }
+        //     String a = i + "_" + j;
+        //     String b = i + "_" + y;
+        //     String c = x + "_" + y;
+        //     String d = x + "_" + j;
+        //     if (!st.contains(a) || !st.contains(b) || !st.contains(c) || !st.contains(d) || st.size() != 4)
+        //         return false;
+        //     return sum == (y - j) * (x - i);
+        // }
+
+        // public List<Integer> fallingSquares(int[][] p) {
+        //     List<Integer> ans = new ArrayList<>();
+        //     int n = p.length, cur = 0;
+        //     int [] hi = new int [n];
+        //     for (int i = 0; i < n; i++) {
+        //         int len = p[i][1], l = p[i][0], r = l + len;
+        //         hi[i] += len;
+        //         for (int j = i+1; j < n; j++) { // 采用brute force的思想，对于每个一个下落的方块，我们都去看和后面将要落下的方块有没有重叠
+        //             int ll = p[j][0], rr = ll + p[j][1]; // 有的话，和后面将要落下的方块的位置相比较，取二者中较大值为后面要落下的方块位置高度heights[j]
+        //             // [[6,1],[9,2],[2,4]] 因为不能保证是从左往下延x轴顺序掉落，所以加上l < rr 也狠重要 确保不管左右边有交叠
+        //             if (ll < r && l < rr) // 判读两个方块是否重叠的方法是如果方块2的左边界小于方块1的右边界，并且方块2点右边界大于方块1点左边界
+        //                 hi[j] = Math.max(hi[j], hi[i]); // 这里提前检查是否重叠，是为后来的更新打下base,再接下来遍历i时直接累加就可以了
+        //         }
+        //     }
+        //     for (int v : hi) {
+        //         cur = Math.max(cur, v);
+        //         ans.add(cur);
+        //     }
+        //     return ans;
+        // }
+        class SegTree {  // 实现一下带懒标记的线段树: 这棵树好强大
+            class Node { // v是[l, r]区间的最大值，lazy是懒标记
+                int l, r, v, lazy;
+                public Node(int l, int r) {
+                    this.l = l;
+                    this.r = r;
+                }
+            }
+            private Node [] tr;
+            public SegTree(int size) {
+                tr = new Node[size << 2]; // * 4
+                build(1, 0, size - 1);
+            }
+            public void build(int u, int l, int r) { // 下标从1开始 自顶向下
+                tr[u] = new Node(l, r);
+                if (l == r) return;
+                int mid = l + r >> 1; // / 2
+                build(u << 1, l, mid);         // 分别构建左右子树
+                build(u << 1 | 1, mid + 1, r);
+            }
+            private void pushup(int u) { // 最大树： 当前节点的值为左右子节点的最大值
+                tr[u].v = Math.max(tr[u << 1].v, tr[u << 1 | 1].v);
+            }
+            private void pushdown(int u) { // 下传懒标记 
+                int c = tr[u].lazy;
+                if (c != 0) {
+                    tr[u].lazy = 0;
+                    tr[u << 1].v = tr[u << 1 | 1].v = c; // 根据父节点的值，懒标记下传一层，更新左右子树的值，并更新下传而来的标记
+                    tr[u << 1].lazy = tr[u << 1 | 1].lazy = c;
+                }
+            }
+            public void update(int u, int l, int r, int c) {
+                // for (int i = 1; i < tr.length; i++)
+                //     if (tr[i] != null)
+                //         System.out.println("[" + tr[i].l + "," + tr[i].r + "], v: " + tr[i].v + ", lazy: " + tr[i].lazy);
+
+                if (l <= tr[u].l && tr[u].r <= r) { // 任务不需要下发，可以用懒标记懒住
+                    tr[u].v = tr[u].lazy = c;       // 整棵树落在左右区间内，可以发懒，暂不下传
+                    // System.out.println("[" + tr[u].l + "," + tr[u].r + "], v: " + tr[u].v + ", lazy: " + tr[u].lazy);
+                    return;
+                }
+                pushdown(u); // 任务不得不下发，则先下发给两个孩子
+                int mid = tr[u].l + tr[u].r >> 1;
+                if (l <= mid) update(u << 1, l, r, c); // 回归调用，下传更新至左右子节点
+                if (mid + 1 <= r) update(u << 1 | 1, l, r, c);
+                pushup(u); // 孩子完成了任务，再修改自己的值
+            }
+            public int query(int u, int l, int r) {
+                if (l <= tr[u].l && tr[u].r <= r) return tr[u].v;
+                pushdown(u);
+                int res = 0, mid = tr[u].l + tr[u].r >> 1;
+                if (l <= mid) res = Math.max(res, query(u << 1, l, r));
+                if (mid + 1 <= r) res = Math.max(res, query(u << 1 | 1, l, r));
+                return res;
+            }
+            public int query() {
+                return tr[1].v;
+            }
+        }
+        public List<Integer> fallingSquares(int[][] positions) {
+            List<Integer> xs = new ArrayList<>();
+            for (int[] p : positions) {
+                int a = p[0], b = a + p[1];
+                xs.add(a * 2);
+                xs.add(b * 2);
+                xs.add(a + b);
+            }
+            xs = unique(xs); // 排序并去重
+            SegTree segTree = new SegTree(xs.size());
+            List<Integer> res = new ArrayList<>();
+            for (int [] p : positions) {
+                int a = p[0], b = a + p[1];
+                a = get(a * 2, xs);
+                b = get(b * 2, xs);
+                int h = segTree.query(1, a + 1, b - 1);
+                segTree.update(1, a, b, h + p[1]);
+                res.add(segTree.query());
+            }
+            return res;
+        }
+        private int get(int x, List<Integer> xs) { // 找到x在离散化之后的值是多少，其实就是求xs里x的下标，可以二分来找到
+            int l = 0, r = xs.size() - 1;
+            while (l < r) {
+                int m = l + r >> 1;
+                if (xs.get(m) >= x) 
+                    r = m;
+                else 
+                    l = m + 1;
+            }
+            return l;
+        }
+        private List<Integer> unique(List<Integer> list) { // 将list排序后去重
+            list.sort(Integer::compareTo);
+            int j = 0;
+            for (int i = 0; i < list.size(); i++) 
+                if (i == 0 || list.get(j - 1) != list.get(i)) 
+                    list.set(j++, list.get(i));
+            return list.subList(0, j); // subList()
+        }
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        // int []  a = new int []  {4, 3, 2, 7, 8, 2, 3, 1};
-        int [] a = new int [] {1, 1};
+        int [][] a = new int [][] {{1,2},{2,3}};
+        // int [][] a = new int [][] {{1,2},{2,3},{6,1}};
 
-        List<Integer> r = s.findDisappearedNumbers(a); // getRandom() should return either 1 or 2 randomly.
+        List<Integer> r = s.fallingSquares(a); 
         System.out.println("r.size(): " + r.size());
         System.out.println(Arrays.toString(r.toArray()));
     }

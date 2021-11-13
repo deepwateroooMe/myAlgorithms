@@ -52,17 +52,25 @@ public class four {
     public static void main(String[] args)  throws IOException {
         solution s = new solution();
 
-        // Path path = Paths.get("four-sur.txt");
-        // Scanner in = new Scanner(path);
-        Scanner in = new Scanner(System.in);
+        Path path = Paths.get("four-sur.txt");
+        Scanner in = new Scanner(path);
+        // Scanner in = new Scanner(System.in);
         
-        int n = Integer.parseInt(in.nextLine());
-        // System.out.println("n: " + n);
+        int N = Integer.parseInt(in.nextLine());
+        System.out.println("n: " + n);
 
         int [] cnt = new int [n];
         String [] sur = new String [n];
         String [] st = new String [n];
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < N; i++) {
+            int n = Integer.parseInt(in.nextLine);
+            if (n == 1) {
+                System.out.println(1);
+                continue;
+            }
+            for (int j = 0; j < n-1; j++) {
+                
+            }
             cnt[i] = Integer.parseInt(in.nextLine());
             sur[i] =  in.nextLine();
             st[i] =  in.nextLine();

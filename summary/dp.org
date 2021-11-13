@@ -3707,6 +3707,123 @@ public int minChanges(int[] arr, int k) {
 }
 #+END_SRC
 
+*** 1735. Count Ways to Make Array With Product - Hard 乘积为K的质因子数排列组合的总个数： 分解质因子
+You are given a 2D integer array, queries. For each queries[i], where queries[i] = [ni, ki], find the number of different ways you can place positive integers into an array of size ni such that the product of the integers is ki. As the number of ways may be too large, the answer to the ith query is the number of ways modulo 109 + 7.
+
+Return an integer array answer where answer.length == queries.length, and answer[i] is the answer to the ith query.
+ 
+*** 解题思路与分析
+    
+    [[./pic/1735.png]]
+
+#+BEGIN_SRC java
+// 在找出每个变量的上界之后，就可以在O(maxn}{maxc}^2)的时间内预处理dp 数组。
+//     随后，我们还要预先求出 [2, maxn] 之间的全部质数，复杂度为 O(maxn)。
+public int[] waysToFillArray(int[][] q) {
+    int n = q.length;
+    int mod = (int)1e9 + 7;
+    int maxC = 15;          // 找出「加和」的最大值cmax。根据前面的描述，cmax 即为质因数数量的最大值。
+    int maxN = 0, maxK = 0; // 而由于质因数最小为 22，maxkmaxk 最大为 10^4因此质因数数量不会超过log_2 10^4 < 15
+    for (int i = 0; i < n; i++) { // 需要遍历数组，找到所有 n, kn,k 的最大值maxn,maxk
+        maxN = Math.max(maxN, q[i][0]);
+        maxK = Math.max(maxK, q[i][1]);
+    }
+    long [][] dp = new long [maxN + 1][maxC + 1]; // dp[i][j] 代表给定一个正整数 jj，满足长度为 ii，且加和为 jj的非负整数排列的数量。
+    for (int i = 1; i <= maxC; i++) 
+        dp[1][i] = 1;
+    for (int i = 1; i <= maxN; i++) 
+        dp[i][0] = 1;
+    for (int i = 2; i <= maxN; i++) 
+        for (int j = 1; j <= maxC; j++) 
+            for (int k = 0; k <= j; k++) { // 为了求解dp[i][j]，我们考虑排列中的第一个整数，它的取值范围为 [0,j][0,j]，
+                dp[i][j] += dp[i-1][j-k];  // 若它取值为 kk，则余下 i-1i−1 个整数的加和需要为 j-kj−k，对应的方案数目为dp[i−1][j−k]
+                dp[i][j] %= mod;
+            }
+    int [] isPrime = new int [maxK + 1]; // 分解乘积的质因子
+    Arrays.fill(isPrime, 1);
+    List<Integer> primes = new ArrayList<>();
+    for (int i = 2; i <= maxK; i++) {
+        if (isPrime[i] == 1) 
+            primes.add(i);
+        for (int j = i*2; j <= i*i && j <= maxK; j += i) // 最大乘积为maxK的数组，分解出小的质因子了，那么凡是小质因子的乘积倍数的数都不是质数
+            isPrime[j] = 0;
+    }
+    int [] ans = new int [n];
+    for (int i = 0; i < n; i++) {
+        int m = q[i][0], k = q[i][1];
+        List<Integer> cs = new ArrayList<>(); // 乘积k的质因子表
+        for (int p : primes) {
+            if (p > k) break;
+            int cnt = 0, left = k;
+            while (left % p == 0) {
+                left /= p;
+                cnt++;
+            }
+            if (cnt > 0) cs.add(cnt); // 乘积k中各质因子的个数（指数）
+        }
+        long res = 1;
+        for (int c : cs) {
+            res *= dp[m][c]; // 数组长度为n,数组和为质因子c的指数个数的所有可能的分布数合数，各质因子之间个数之间相乘
+            res %= mod;
+        }
+        ans[i] = (int)res;
+    }
+    return ans;
+}
+#+END_SRC
+- 下面这种方法理解得还不是很透
+#+BEGIN_SRC java
+public int[] waysToFillArray(int[][] queries) {
+    int[] result = new int[queries.length];
+    int resultIdx = 0;
+    Combination combination = new Combination(10030, 20);
+    for (int[] q : queries) {
+        int n = q[0]; // 长度为n
+        int k = q[1]; // 乘积为k
+        long product = 1L;
+        for (int power : getPrimeFactors(k).values()) {
+            // power个球，分到n个位置，每个位置可以为空
+            // 等价于：（power+n）个球，分到n个位置，每个位置不能为空  
+            // Why？ 等价后得到一种分法，每组减去1，就是原来的解
+            // 插板法可得 C（power + n - 1， n - 1） = C（power + n - 1， power）
+            product = (product * combination.get(n + power - 1, power)) % mod;
+        }
+        result[resultIdx++] = (int)(product);
+    }
+    return result;
+}
+long mod = (int)1e9 + 7;
+public HashMap<Integer, Integer> getPrimeFactors(int n) {
+    HashMap<Integer, Integer> map = new HashMap();
+    for(int i = 2; i <= n; i++) {
+        if (n % i == 0) {
+            int cnt = 0;
+            while (n % i == 0) {
+                cnt++;
+                n = n / i;
+            }
+            map.put(i, cnt);
+        }
+    }
+    return map;
+}
+class Combination {
+    long[][] c;
+    Combination (int n, int m) {
+        c = new long[n + 1][m + 1];
+        c[0][0] = 1;
+        for(int i = 1; i <= n; i++){
+            c[i][0] = 1;
+            for(int j = 1; j <= m; j++) 
+                c[i][j] = (c[i-1][j-1] + c[i-1][j]) % mod;
+        }
+    }
+    public long get(int n, int m) {
+        return c[n][m];
+    }
+}
+#+END_SRC
+
 *** 1359. Count All Valid Pickup and Delivery Options - Hard
 Given n orders, each order consist in pickup and delivery services. 
 
@@ -3736,259 +3853,6 @@ public int countOrders(int n) {
 
 ** 第二次刷DP: 下面的题目只需要注意细节，思路没问题
 
-*** 198. House Robber - Medium
-You are a professional robber planning to rob houses along a street. Each house has a certain amount of money stashed, the only constraint stopping you from robbing each of them is that adjacent houses have security systems connected and it will automatically contact the police if two adjacent houses were broken into on the same night.
-
-Given an integer array nums representing the amount of money of each house, return the maximum amount of money you can rob tonight without alerting the police.
-**** 解题思路与分析
-- 对于每一个住户来说，只有两种选择：
-  - 偷这一户人家的，下一家不要
-  - 不偷这一家的，去偷下一家的
-#+BEGIN_SRC java
-private int dfs(int [] arr, int idx) {
-    if (idx >= n) return 0;
-    if (dp[idx] > 0) return dp[idx];
-    return dp[idx] = Math.max(dfs(arr, idx+2) + arr[idx], dfs(arr, idx+1)); // 不要忘记记忆——记住答案！！！
-}
-int [] dp;
-int n;
-public int rob(int[] a) {
-    if (Arrays.stream(a).sum() == 0) return 0;
-     n = a.length;
-     dp = new int [n];
-     return dfs(a, 0);
-}
-#+END_SRC 
-*** 213. House Robber II
-You are a professional robber planning to rob houses along a street. Each house has a certain amount of money stashed. All houses at this place are arranged in a circle. That means the first house is the neighbor of the last one. Meanwhile, adjacent houses have a security system connected, and it will automatically contact the police if two adjacent houses were broken into on the same night.
-Given an integer array nums representing the amount of money of each house, return the maximum amount of money you can rob tonight without alerting the police.
-**** 解题思路与分析
-- 与上一题不同的是：因为是环形数组，数组首尾相连，相邻的两户人家只能偷一家
-- 问题就转化成了：我要么去偷[0, n-2]这些人家的，要么去偷[1, n-1]这些人家的，包括首尾
-- 这成了上一题的稍微变形与套娃
-#+BEGIN_SRC java
-private int dfs(int [] arr, int i, int j, int idx) {
-    if (idx > j) return 0;
-    if (dp[idx] != -1) return dp[idx];
-    return dp[idx] = Math.max(dfs(arr, i, j, idx+2) + arr[idx], dfs(arr, i, j, idx+1));
-}
-int [] dp;
-int n;
-public int rob(int[] arr) {
-     n = arr.length;
-     if (n == 1) return arr[0];
-     dp = new int [n];
-     Arrays.fill(dp, -1);
-     int max = dfs(arr, 1, n-1, 1);
-     Arrays.fill(dp, -1); // 不要忘了dp数组的重置与重新计算
-     // return Math.max(dfs(arr, 1, n-1, 1), dfs(arr, 0, n-2, 0)); // BUG: 因为dp数组不重置，会发生数据混淆，得到错误答案
-     return Math.max(max, dfs(arr, 0, n-2, 0));
-}
-#+END_SRC
-
-*** 740. Delete and Earn: 一类题目，变形了你还认得出来吗？
-You are given an integer array nums. You want to maximize the number of points you get by performing the following operation any number of times:
-Pick any nums[i] and delete it to earn nums[i] points. Afterwards, you must delete every element equal to nums[i] - 1 and every element equal to nums[i] + 1.
-Return the maximum number of points you can earn by applying the above operation some number of times.
-**** 解题思路与分析
-- 关键题意理解：对于nums = [2, 2, 3, 3, 3, 4]，如果我们选了数字3，则要删除每一个（所有）2和4，之后数组变为[3, 3]，此时如果再选3，并不会删除其他元素，剩余数组变为[3]，再选3，数组变为空，返回结果是3+3+3=9。
-- 将上面的例子转化为House Robber的形式，nums' = [0, 0, 22, 33, 4]，nums'[i]代表值为i的数字的总数和(或者数字(下标)i在原数组中出现的次数)，每次若选择nums'数组的一个元素，则相邻元素不能在下一次被选中(包括其所有的重复计数)，相当于被全部删去。转化后，用House Robber的思路来处理nums'数组即可。
-#+BEGIN_SRC java
-private int dfs(int [] cnt, int i) {
-    if (i >= N) return 0;
-    if (dp[i] > 0) return dp[i];
-    return dp[i] = Math.max(dfs(cnt, i+2) + cnt[i]*i, dfs(cnt, i+1));
-}
-int [] dp;
-int N;
-public int deleteAndEarn(int[] nums) {
-    int n = nums.length, max = Arrays.stream(nums).max().getAsInt();
-    N = max+1;
-    int [] cnt = new int [N];
-    for (Integer v : nums) 
-        cnt[v]++;
-    dp = new int [N];
-    int i = 0;
-    while (i < N && cnt[i] == 0) i++;
-    return dfs(cnt, i);
-}
-#+END_SRC
-- dp解
-#+BEGIN_SRC java
-public int deleteAndEarn(int[] nums) {
-    int n = nums.length, N = 10001;
-    int [] cnt = new int [N];
-    for (Integer v : nums) 
-        cnt[v] += v;
-    int preOne = 0, preTwo = 0, ans = 0; // 相当于是滚动数组，把一维dp压缩为两个位置
-    for (Integer v : cnt) {
-        ans = Math.max(preOne, v + preTwo);
-        preTwo = preOne;
-        preOne = ans;
-    }
-    return ans;
-}
-#+END_SRC
-
-*** 877. Stone Game
-Alice and Bob play a game with piles of stones. There are an even number of piles arranged in a row, and each pile has a positive integer number of stones piles[i].
-The objective of the game is to end with the most stones. The total number of stones across all the piles is odd, so there are no ties.
-Alice and Bob take turns, with Alice starting first. Each turn, a player takes the entire pile of stones either from the beginning or from the end of the row. This continues until there are no more piles left, at which point the person with the most stones wins.
-Assuming Alice and Bob play optimally, return true if Alice wins the game, or false if Bob wins.
-#+BEGIN_SRC java
-// 使用helper函数表示Alex能比Lee多选的分数。可能比双函数更简洁易懂了。
-// 记忆化递归的缺点：１．有可能爆栈；２．无法降维，而DP是可以降维的。
-// 模板：
-// dfs + memoization模板
-private int dfs(int [] arr, int l, int r) {
-    if (l > r) return 0;
-    if (dp[l][r] > 0) return dp[l][r]; // 走了来时的路，不需要重走，直接返回
-    dp[l][r] = Math.max(arr[l] - dfs(arr, l+1, r), arr[r]-dfs(arr, l, r-1));
-    return dp[l][r];
-}
-int [][] dp; 
-public boolean stoneGame(int[] piles) {
-    int n = piles.length;
-    dp = new int[n][n];
-    return dfs(piles, 0, n-1) > 0;
-}
-// 动态规划解法比较难想，dp数组的第i个位置表示的是从第i个石头到第i+l-1个石头之间最大的比对手得分。
-// 使用的是一个长度变量和起始索引，计算每个位置开始的长度1～N长度的区间的dp状态。
-public boolean stoneGame(int[] piles) {
-    int n = piles.length;
-    int [][] dp = new int[n][n];
-    for (int i = n-1; i >= 0; i--) { // 最后一列
-        dp[i][i] = piles[i];         // 填右上角
-        for (int j = i+1; j < n; j++) 
-            dp[i][j] = Math.max(piles[i] - dp[i+1][j], piles[j]-dp[i][j-1]);
-
-    }
-    return dp[0][n-1] > 0;
-}
-#+END_SRC
-*** 1140. Stone Game II
-Alice and Bob continue their games with piles of stones.  There are a number of piles arranged in a row, and each pile has a positive integer number of stones piles[i].  The objective of the game is to end with the most stones. 
-Alice and Bob take turns, with Alice starting first.  Initially, M = 1.
-On each player's turn, that player can take all the stones in the first X remaining piles, where 1 <= X <= 2M.  Then, we set M = max(M, X).
-The game continues until all the stones have been taken.
-Assuming Alice and Bob play optimally, return the maximum number of stones Alice can get.
-#+BEGIN_SRC java
-// dfs + memoization模板
-// 当次取的最优策略是限制下一次取的数量
-private int dfs(int [] arr, int idx, int m) {
-    if (dp[idx][m] > 0) return dp[idx][m];
-    if (idx == n) return 0;
-    if (idx >= n - 2 * m) {
-        dp[idx][m] = suf[idx];
-        return dp[idx][m];
-    }
-    int min = Integer.MAX_VALUE;
-    for (int i = 1; i <= 2 * m; i++) // 选择限制对手得分最少的情况
-        min = Math.min(min, dfs(arr, idx+i, Math.max(m, i))); 
-    dp[idx][m] = suf[idx] - min;
-    return dp[idx][m];
-}
-int [][] dp; 
-int [] suf;
-int n;
-public int stoneGameII(int[] piles) {
-    n = piles.length;
-    dp = new int [n][2*n];
-    suf = new int [n+1];
-    for (int i = n-1; i >= 0; i--) 
-        suf[i] = suf[i+1] + piles[i];
-    return dfs(piles, 0, 1);
-}
-#+END_SRC
-*** 2029. Stone Game IX - Medium
-Alice and Bob continue their games with stones. There is a row of n stones, and each stone has an associated value. You are given an integer array stones, where stones[i] is the value of the ith stone.
-
-Alice and Bob take turns, with Alice starting first. On each turn, the player may remove any stone from stones. The player who removes a stone loses if the sum of the values of all removed stones is divisible by 3. Bob will win automatically if there are no remaining stones (even if it is Alice's turn).
-
-Assuming both players play optimally, return true if Alice wins and false if Bob wins.
-- 过程复制
-#+BEGIN_SRC java
-private boolean dfs(int val, int one, int two, int zro) {
-    if (val == 0) return true;
-    String key = one + "-" + two + "-" + zro + "-" + val;
-    if (dp.containsKey(key)) return dp.get(key);
-    if (one == 0 && two == 0 && zro == 0) return n % 2 != 0; // 题目这个要求我可能没有理解清楚
-    boolean res = false;
-    if (!res && one > 0 && val != 2) 
-        if (!dfs((val+1) % 3, one-1, two, zro)) 
-            res = true;
-    if (!res && two > 0 && val != 1)
-        if (!dfs((val + 2) % 3, one, two-1, zro))
-            res = true;
-    if (!res && zro > 0 && val != 0)
-        if (!dfs((val+0) % 3, one, two, zro-1))
-            res = true;
-    dp.put(key, res);
-    return res;
-}
-Map<String, Boolean> dp = new HashMap<>();
-int n;
-public boolean stoneGameIX(int[] stones) {
-    n = stones.length;
-    dp = new HashMap<String, Boolean>();
-    int one = 0, two = 0, zro = 0;
-    for (int v : stones)
-        if (v % 3 == 0) zro++;
-        else if (v % 3 == 1) one++;
-        else two++; // zro % 2: each pair of numbers divisible by 3 cancel each other out, so only parity count of such numbers matters
-    return dfs(3, one, two, zro % 2);
-}
-#+END_SRC
-- 分析一下
-Count the frequency of mod3 = 0,1,2.
-#+BEGIN_SRC java
-Firstly, don't consider the multiples of 3.
-Alice starts with mod3 = 1, Alice and Bob have to pick 1,1,2,1,2... in order.
-Alice starts with mod3 = 2, Alice and Bob have to pick 2,2,1,2,1... in order.
-If Alice starts with 1, then Alice needs 1 and Bob needs 2.
-If 1 is much more than 2, then Bob is going to lose.
-So if cnt[0] == 0, the result can be decided by Alice.
-Then, consider the number of multiples of 3.
-If cnt[0] is even,
-Bob picks a 3, Alice can always picks one another.
-the result won't be affected.
-If cnt[0] is odd,
-the final result will be reversed,
-(unless the case Bob win for all numbers consumed)
-
-Missing Case
-[1,1,1,3] gave by @mittal582 and @qingqi_lei,
-which can hack some solution.
-Explanation
-If cnt[1] == 0, Alice needs to start with mod3 = 2,
-If cnt[2] == 0, Alice needs to start with mod3 = 1.
-Alice can win if max(cnt[1], cnt[2]) > 2 && cnt[0] % 2 > 0,
-for example [1,1,1,3].
-
-If cnt[0] % 2 == 0, easy case for Alice.
-Alice can win in at leasy one of the two options, picking the less one.
-
-Otherwise cnt[0] % 2 == 1, this will reverse the result.
-If abs(cnt[1] - cnt[2]) > 2,
-Alice will pick mod3=2 if mod3=2 is more
-Alice will pick mod3=1 if mod3=1 is more
-If abs(cnt[1] - cnt[2]) <= 2,
-Alice will lose for no number remaining.
-
-Complexity
-Time O(n)
-Space O(1)
-#+END_SRC
-#+BEGIN_SRC java
-public boolean stoneGameIX(int[] stones) {
-    int[] cnt = new int[3];
-    for (int a: stones)
-        cnt[a % 3]++;
-    if (Math.min(cnt[1], cnt[2]) == 0)
-        return Math.max(cnt[1], cnt[2]) > 2 && cnt[0] % 2 > 0;
-    return Math.abs(cnt[1] - cnt[2]) > 2 || cnt[0] % 2 == 0;
-}
-#+END_SRC
 *** 322. Coin Change
 You are given an integer array coins representing coins of different denominations and an integer amount representing a total amount of money.
 Return the fewest number of coins that you need to make up that amount. If that amount of money cannot be made up by any combination of the coins, return -1.

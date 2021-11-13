@@ -17,24 +17,63 @@ import static java.util.stream.Collectors.toMap;
 public class three {
     public static class solution {
 
-        private int getMaxiPossiOfMinValRe(int [] arr, int n, int i, int j) {
-            int ans = arr[i];
-            while (i < j) {
-                ans = Math.max(ans, arr[i]);
-                for (int k = i+1; k <= j; k++) 
-                    arr[k] -= arr[i];
-                i++;
+        private boolean isValid(String t) {
+            int n = t.length();
+            if (n < 2) return false;
+            char [] s = t.toCharArray();
+            int a = 0, b = 0, c = 0;
+            for (int i = 0; i < n; i++) {
+                if (s[i] == 'a') a++;
+                else if (s[i]== 'b') b++;
+                else c++;
             }
-            ans = Math.max(ans, arr[i]);
-            return ans;
+            return a > b && a > c;
         }
-        public int getMaxiPossiOfMinVal(int n, int [] arr) {
-            Arrays.sort(arr);
-            return getMaxiPossiOfMinValRe(arr, n, 0, n-1);
+        private int getSmallest(int n, String t) {
+            if (t.indexOf("a") == -1) return -1;
+            char [] s = t.toCharArray();
+            String res = "";
+            int ans = 0;
+            for (int i = 0; i < n; i++) {
+                if (s[i] != 'a') continue;
+                int d = 2;
+                for (d = 2; d <= n; d++)
+                    for (int j = i; j+d <= n; j++) {
+                        int k = j + d;
+                        String cur = t.substring(i, j);
+                        if (isValid(cur) && (res.length() == 0 || res.length() > cur.length())) {
+                            res = cur;
+                            break;
+                        }
+                    }
+                int c = 2;
+                for ( c = 2; c <= i+1; c++) {
+                    for (int j = i; j-c+1 >= 0; j--) {
+                        int k = j-c+1;
+                        String cur = t.substring(k, j+1);
+                        if (isValid(cur) && (res.length() == 0 || res.length() > cur.length())) {
+                            res = cur;
+                            break;
+                        }
+                    }
+                }
+                // System.out.println("t: " + t);
+                // System.out.println("t.length(): " + t.length());
+                for (int x = i; x >= Math.max(0, i-c+1); x--) {
+                    for (int y = i+1; y <= Math.min(n, i+d); y++) {
+                        // System.out.println("x: " + x);
+                        // System.out.println("y: " + y);
+                        String cur = t.substring(x, y);
+                        if (isValid(cur) && (res.length() == 0 || res.length() > cur.length())) 
+                            res = cur;
+                    }
+                if (res.length() == 2) return 2;
+            }
+            return res.length() > 0 ? res.length() : -1;
         }
     }
-    public static void main(String[] args)  throws IOException {
-        solution s = new solution();
+        public static void main(String[] args)  throws IOException {
+            solution s = new solution();
 
         // Path path = Paths.get("three-sur.txt");
         // Scanner in = new Scanner(path);
@@ -54,12 +93,10 @@ public class three {
         // System.out.println(Arrays.toString(sur));
 
         for (int i = 0; i < n; i++) {
-            String [] tmp = sur[i].split("\\s+");
-            int [] a = new int [tmp.length];
-            for (int j = 0; j < tmp.length; j++) 
-                a[j] = Integer.parseInt(tmp[j]);
-                
-            int v = s.getMaxiPossiOfMinVal(cnt[i], a);
+            int N = cnt[i];
+            String cur = sur[i];
+            
+            int v = s.getSmallest(N, cur);
             System.out.println(v);
         }
     }
