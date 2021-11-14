@@ -443,14 +443,315 @@ public class dpfive {
         //     return value.longValue();
         // }
 
+        // public int numberOfUniqueGoodSubsequences(String t) {
+        //     int mod = (int)1e9 + 7;
+        //     t = "#" + t;
+        //     char [] s = t.toCharArray();
+        //     int n = t.length(), ooo = 0, one = 0, i = 1;
+        //     long [] dp = new long [n];
+        //     while (i < n && s[i] == '0') i++;
+        //     if (i == n) return 1;
+        //     dp[i] = 1;
+        //     one = i;
+        //     ooo = i-1;
+        //     for (int j = i+1; j < n; j++) {
+        //         int k = (s[j] == '0' ? ooo : one); // 
+        //         dp[j] = (2 * dp[j-1] % mod - (k >= 1 ? dp[k-1] : 0) + mod) % mod;
+        //         if (s[j] == '0') ooo = j;
+        //         else one = j;
+        //     }
+        //     return (int)dp[n-1] + (t.indexOf("0") != -1 ? 1 : 0);
+        // }
+        // public int numberOfUniqueGoodSubsequences(String t) { // bug
+        //     long mod = (int)1e9 + 7;
+        //     int n = t.length();
+        //     long [] dp = new long [2];
+        //     String b = "" + Long.parseLong(t); // 自动去掉开头的0: 这里字符串的长度很长 bug
+        //     int  l =  n - b.length();
+        //     if (l > 0) dp[0] = 1;
+        //     long sum = dp[0];
+        //     for (char c : b.toCharArray()) {
+        //         if (dp[0] >= 1)
+        //             dp[c-'0'] = (long)Arrays.stream(dp).sum() % mod;
+        //         else dp[c-'0'] = (1 + (long)Arrays.stream(dp).sum()) % mod;
+        //     }
+        //     return (int)((long)Arrays.stream(dp).sum() % mod);
+        // }
+
+        // public int superEggDrop(int k, int n) {
+        //     int dp [][] = new int [k + 1][n + 1];
+	    //     for(int i = 1 ; i <= n ; i++) dp[1][i] = i;
+	    //     for(int i = 2 ; i <= k; i++) {
+	    //         int x = 0 , y = 0;
+	    //         for(int j = 1 ; j <= n ; j++) { 
+        //             dp[i][j] = 1 + Math.max(dp[i][x] , dp[i-1][y]);
+        //             if (dp[i-1][y+1] > dp[i][x+1] || dp[i][x] == dp[i][x+1]) x++;
+        //             else y++;   
+	    //         }
+	    //     }    
+        //     return dp[k][n];
+        // }
+        // public int twoEggDrop(int n) { // 1 + 2 + 3 + ... + x >= n ==> get x
+        //     if (n <= 2) return n;
+        //     return (int)(Math.ceil((-1 + Math.sqrt((long)n * 8 + 1)) / 2.0));
+        // }
+        // 思路： https://zhuanlan.zhihu.com/p/41257286
+        // DP[i][j]表示用i个鸡蛋，j层楼的情况下最坏情况下所需扔鸡蛋的最少数目。
+        // 可知初始条件为：
+        // DP[1][0] = 0; DP[2][0] = 0;
+        // DP[1][1] = 1; DP[2][1] = 1;
+        // DP[1][i] = i; //i = 1 … n
+        // 对于DP[2][i], i = 2 … n的情况，我们可以这样考虑：
+        //     遍历j=2…i，求DP[2][j]，分两种情况：
+        //     如果第1个鸡蛋在第j-1层摔破了，则我们在第j层只需摔第2个鸡蛋一次即可，此时总摔鸡蛋数为DP[1][j-1]+1。
+        //     注意上面的1是因为第j层需要摔第2个鸡蛋1次。为什么DP[1][j-1]不能写成1呢？因为第1个鸡蛋在第j-1层摔破了，我们不能肯定在第1,2,…,j-2层不会破，所以要用DP[1][j-1]。
+        //     如果第1个鸡蛋在第j-1层没有摔破，则我们在第j到i层有2个鸡蛋可以摔，此时退化到DP[2][i-j]的情况。该种情形下总共扔1+DP[2][i-j]。那个1就是表示第1个鸡蛋在第j-1层扔了1次。这里我们为什么只考虑用1，而不用考虑DP[1][j-1]呢？因为如果第j-1层没有摔破，第1,2,…,j-2层也就不用考虑了。
+        //     因为是求最坏情况下的数目，所以DP[2][j]=1 + max(DP[1][j-1]+1, DP[2][i-j])。
+        //     而我们是要求所有最坏情况下的最少数目，所以DP[2][j]=min(1 + max(DP[1][j-1]+1, DP[2][i-j]))。i = 2…n, j = 2…i。
+        // public int twoEggDrop(int n) { // 1 + 2 + 3 + ... + x >= n ==> get x
+        //     if (n <= 1) return n;
+        //     int [][] dp = new int [3][n+1]; // DP[i][j]表示用i个鸡蛋，j层楼的情况下最坏情况下所需扔鸡蛋的最少数目。
+        //     for (int i = 0; i < 3; i++) 
+        //         Arrays.fill(dp[i], Integer.MAX_VALUE);
+        //     dp[1][0] = 0;
+        //     dp[1][1] = 1;
+        //     dp[2][0] = 0;
+        //     dp[2][1] = 1;
+        //     for (int i = 1; i <= n; i++) dp[1][i] = i;
+        //     for (int i = 2; i <= n; i++) 
+        //         for (int j = 2; j <= i; j++) 
+        //             dp[2][i] = Math.min(dp[2][i], 1 + Math.max(dp[1][j-1], dp[2][i-j])); // 1: 这个鸡蛋在j-i层扔了一次，要统计入结果
+        //     return dp[2][n];
+        // }
+//         public int superEggDrop(int k, int n) { // tle:  
+//             if (k < 1 || n < 1) return 0;
+//             int [] pre = new int [n+1]; //上一层备忘录，存储鸡蛋数量-1的n层楼条件下的最优化尝试次数
+//             int [] cur = new int [n+1]; // 当前备忘录，存储当前鸡蛋数量的n层楼条件下的最优化尝试次数
+//             for (int i = 1; i <= n; i++) // 把备忘录每个元素初始化成最大的尝试次数
+//                 cur[i] = i;
+//             for (int i = 2; i <= k; i++) {
+//                 pre = cur.clone(); // 当前备忘录拷贝给上一次备忘录，并重新初始化当前备忘录
+//                 for (int j = 1; j <= n; j++) cur[j] = j;
+//                 for (int j = 1; j <= n; j++) // 需要想办法去优化时间复杂度。这种写法里面我们枚举了 [1, j] 范围所有的k值，总时间复杂度为 O(KN^2)，
+//                     for (int x = 1; x < j; x++) 
+// // 扔鸡蛋的楼层从1到m枚举一遍，如果当前算出的尝试次数小于上一次算出的尝试次数，则取代上一次的尝试次数。
+// // 这里可以打印k的值，从而知道第一个鸡蛋是从第几次扔的。
+//                         cur[j] = Math.min(cur[j], 1 + Math.max(pre[x-1], cur[j-x]));
+//             }
+//             return cur[n];
+//         }
+//         // 若我们仔细观察 dp[i - 1][k - 1] 和 dp[i][j - k]，可以发现前者是随着k递增，后者是随着k递减，且每次变化的值最多为1，
+//         // 所以只要存在某个k值使得二者相等，那么就能得到最优解，否则取最相近的两个k值做比较，
+//         // 由于这种单调性，我们可以在 [1, j] 范围内对k进行二分查找，找到第一个使得 dp[i - 1][k - 1] 不小于 dp[i][j - k] 的k值，然后用这个k值去更新 dp[i][j] 即可，
+//         // 这样时间复杂度就减少到了 O(KNlgN)
+//         public int superEggDrop(int k, int n) {
+//             int dp [][] = new int [k + 1][n + 1];
+// 	        for(int i = 1 ; i <= n ; i++) dp[1][i] = i;
+// 	        for(int i = 2 ; i <= k; i++) {
+//                 for (int j = 1; j <= n; j++) {
+//                     dp[i][j] = j;
+//                     int left = 1, right = j;
+//                     while (left < right) {
+//                         int mid = left + (right - left) / 2;
+//                         if (dp[i-1][mid-1] < dp[i][j-mid]) left = mid + 1;
+//                         else right = mid;
+//                     }
+//                     dp[i][j] = Math.min(dp[i][j], Math.max(dp[i-1][right-1], dp[i][j-right]) + 1);
+//                 }
+// 	        }    
+//             return dp[k][n];
+//         }
+        // public int superEggDrop(int k, int n) {
+        //     int dp [][] = new int [k + 1][n + 1];
+	    //     for(int i = 1 ; i <= n ; i++) dp[1][i] = i;
+	    //     for(int i = 2 ; i <= k; i++) {
+        //         int s = 1;
+        //         for (int j = 1; j <= n; j++) {
+        //             dp[i][j] = j;
+        //             while (s < j && dp[i-1][s-1] < dp[i][j-s]) ++s;
+        //             dp[i][j] = Math.min(dp[i][j], Math.max(dp[i-1][s-1], dp[i][j-s]) + 1);
+        //         }
+	    //     }    
+        //     return dp[k][n];
+        // }
+        // public int superEggDrop(int k, int n) {
+        //     int dp [][] = new int [n + 1][k + 1];
+        //     int m = 0;
+        //     while (dp[m][k] < n) {
+        //         ++m;
+        //         for (int j = 1; j <= k; j++)
+        //             dp[m][j] = dp[m-1][j-1] + dp[m-1][j] + 1;
+        //     }
+        //     return m;
+        // }
+        // public int superEggDrop(int k, int n) {
+        //     int [] dp = new int [k+1];
+        //     int ans = 0;
+        //     for (; dp[k] < n; ans++) 
+        //         for (int i = k; i > 0; i--) 
+        //             dp[i] = dp[i] + dp[i-1] + 1;
+        //     return ans;
+        // }
+        // public int superEggDrop(int k, int n) {
+        //     int l = 1, r = n;
+        //     while (l < r) {
+        //         int m = l + (r - l) / 2;
+        //         if (helper(m, k, n) < n) l = m + 1;
+        //         else r = m;
+        //     }
+        //     return r;
+        // }
+        // private int helper(int x, int k, int n) {
+        //     int ans = 0, r = 1;
+        //     for (int i = 1; i <= k; i++) {
+        //         r *= x - i + 1;
+        //         r /= i;
+        //         ans += r;
+        //         if (ans >= n) break;
+        //     }
+        //     return ans;
+        // }
+
+        // public int mincostTickets(int[] d, int[] c) {
+        //     int n = d.length, max = d[n-1]; // <= 365
+        //     int [] dp = new int [max+1];
+        //     boolean [] vis = new boolean [max + 1];
+        //     for (Integer v : d) vis[v] = true;
+        //     for (int i = 0; i <= max; i++) {
+        //         if (!vis[i]) {
+        //             dp[i] = dp[i-1];
+        //             continue;
+        //         }
+        //         dp[i] = dp[i-1] + c[0];
+        //         dp[i] = Math.min(dp[i], dp[Math.max(0, i-7)] + c[1]); // 这种写法很简洁
+        //         dp[i] = Math.min(dp[i], dp[Math.max(0, i-30)] + c[2]);
+        //     }
+        //     return dp[max];
+        // }
+
+        // public double nthPersonGetsNthSeat(int n) {
+        //     if (n == 1) return 1.0;
+        //     double [] dp = new double [n];
+        //     double sum = 0;
+        //     for (int i = 1; i < n; i++) {
+        //         dp[i] = (1 + sum) / (i + 1);
+        //         sum += dp[i];
+        //     }
+        //     return dp[n-1];
+        // }
+
+        // public int jobScheduling(int[] startTime, int[] endTime, int[] profit) { // bug: 这个前后的时间点总是没能确定，所以思路不清晰
+        //     int n = startTime.length;
+        //     List<int []> map = new ArrayList<>();
+        //     for (int i = 0; i < startTime.length; i++) 
+        //         map.add(new int [] {startTime[i], endTime[i], profit[i]});
+        //     Collections.sort(map, (a, b) -> a[0] - b[0]);
+        //     for (int [] zz : map) 
+        //         System.out.println(Arrays.toString(zz));
+        //     int [] dp = new int [n];
+        //     for (int i = 0; i < n; i++) 
+        //         dp[i] = map.get(i)[2]; // 单个能取得的利润
+        //     for (int i = 1; i < n; i++) {
+        //         dp[i] = Math.max(dp[i-1], map.get(i)[2]);
+        //         for (int j = i-1; j >= 0; j--) { 
+        //             if (map.get(j)[1] <= map.get(i)[0]) {
+        //                 dp[i] = Math.max(dp[i], dp[j] + map.get(i)[2]);
+        //                 // break;
+        //             }
+        //             // else dp[i] = Math.max(dp[i], dp[i-1]);
+        //         }
+        //     }
+        //     System.out.println(Arrays.toString(dp));
+        //     // return Arrays.stream(dp).max().getAsInt();
+        //     return dp[n-1];
+        // }
+        // 目标：在最接近自己startime的endtime里得到最大的proft前缀
+        // 维护一个递增的endtime序列
+        // 该序列同时记录在此endtime下的最大profit
+        // 按递增endtime遍历工作
+        // 如果本次工作后profit比更早的endtime下的更多，就把这个工作记进去，不然做个p
+        // 因为升序，所以还能二分查找。exciting！
+        // public int jobScheduling(int[] startTime, int[] endTime, int[] profit) { // 这个前后的时间点总是没能确定，所以思路不清晰
+        //     int n = startTime.length;
+        //     List<int []> map = new ArrayList<>();
+        //     for (int i = 0; i < startTime.length; i++) 
+        //         map.add(new int [] {startTime[i], endTime[i], profit[i]});
+        //     Collections.sort(map, (a, b) -> a[0] - b[0]);
+        //     for (int [] zz : map) 
+        //         System.out.println(Arrays.toString(zz));
+            
+        //     int [] dp = new int [n];
+        //     dp[n-1] = map.get(n-1)[2]; // 反向逆序遍历的优点：遍历过的时间点一定在当前事件之后，只有选与不选当前事件两种策略中取最优解
+        //     int j = 0;
+        //     for (int i = n-2; i >= 0; i--) {
+        //         j = binarySearchNext(i+1, map);
+        //         // j = getNext(i, map);
+        //         dp[i] = Math.max(dp[i+1], (j == -1 ? 0 : dp[j]) + map.get(i)[2]);
+        //     }
+        //     return dp[0];
+        // }
+        // private int getNext(int idx, List<int []> ll) {
+        //     for (int i = idx+1; i < ll.size(); i++) 
+        //         if (ll.get(i)[0] >= ll.get(idx)[1]) return i;
+        //     return -1;
+        // }
+        // private int binarySearchNext(int x, List<int []> ll) { // 这里居然写出bug来了 // bug todo
+        //     int l = x + 1, r = ll.size()-1, v = ll.get(x)[1], ans = -1; // x end time
+        //     while (l <= r) {
+        //         int m = l + (r - l) / 2;
+        //         if (ll.get(m)[0] >= v) {
+        //             ans = m;
+        //             r = m-1;
+        //         } else l = m+1;
+        //     }
+        //     // return l < ll.size() && ll.get(l)[0] >= v ? l : -1;
+        //     return ans;
+        // }
+
+        // public int[] maxSumOfThreeSubarrays(int[] a, int k) {
+        //     int n = a.length;
+        //     int [] sum = new int [n+1];
+        //     for (int i = 1; i <= n; i++) 
+        //         sum[i] = sum[i-1] + a[i-1];
+        //     int [] left = new int [n];
+        //     int [] rite = new int [n];
+        //     int [] ans = new int [3];
+        //     int cur = sum[k] - sum[0];
+        //     for (int i = k; i < n; i++) 
+        //         if (sum[i+1] - sum[i-k+1] > cur) {
+        //             left[i] = i-k+1;
+        //             cur = sum[i+1] - sum[i-k+1];
+        //         } else left[i] = left[i-1];
+        //     Arrays.fill(rite, n-k);
+        //     cur = sum[n] - sum[n-k];
+        //     for (int i = n-k-1; i >= 0; i--) {
+        //         int v = sum[i+k] - sum[i];
+        //         if (v >= cur) { // == 当等的时候，也是需要更新答案的
+        //             cur = v;
+        //             rite[i] = i;
+        //         } else rite[i] = rite[i+1];
+        //     }
+        //     int max = Integer.MIN_VALUE;
+        //     for (int i = k; i <= n-k * 2; i++) {
+        //         int l = left[i-1], r = rite[i+k];
+        //         cur = sum[i+k] - sum[i] + sum[l+k] - sum[l] + sum[r+k] - sum[r];
+        //         if (cur > max) {
+        //             max = cur;
+        //             ans = new int [] {l, i, r};
+        //         }
+        //     }
+        //     return ans;
+        // }
+
         
     }
     public static void main(String[] args) {
         Solution s  =  new Solution();
 
-        int [][] a = new int [][] {{2,6},{5,1},{73,660}};
+        // int [] a = new int [] {1,2,1,2,6,7,5,1};
+        int []  a = new int []  {1, 2, 1, 2, 1, 2, 1, 2, 1};
 
-        int [] r  =  s.waysToFillArray(a);
+        int [] r  =  s.maxSumOfThreeSubarrays(a, 2);
         System.out.println(Arrays.toString(r));
     }
 }

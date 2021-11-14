@@ -1339,14 +1339,6 @@ public class dpfour {
         //     return (int)ans;
         // }
 
-        // public int jobScheduling(int[] startTime, int[] endTime, int[] profit) {
-        //     List<int []> j = new ArrayList<>();
-        //     for (int i = 0; i < startTime.length; i++) 
-        //         j.add(List.of(endTime[i], startTime[i], profit[i]));
-        //     Collections.sort(j, (a, b)->a[0] - b[0]);
-        //     // TreeMap<Integer, Integer> m = new TreeMap<>();
-        // }
-
         // public int countOrders(int n) {
         //     int mod = (int)1e9 + 7;
         //     int spots = n * 2;
@@ -1483,14 +1475,16 @@ public class dpfour {
         //             else dp[i][j] = dp[i-1][j];
         //     return dp[m][n];
         // }
+
     }
     public static void main(String[] args) {
         Solution s  =  new Solution();
 
-        String a = "babgbag";
-        String b = "bag";
+        int []  a = new int []  { 1, 2, 3, 4, 6};
+        int [] b = new int [] {3,5,10,6,9};
+        int [] c = new int [] {20,20,100,70,60};
 
-        int  r  =  s.numDistinct(a, b);
+        int  r  =  s.jobScheduling(a, b, c);
         System.out.println("r: " + r);
     }
 }

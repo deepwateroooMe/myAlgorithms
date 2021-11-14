@@ -13,157 +13,205 @@ import static java.util.stream.Collectors.toMap;
 
 public class cmp {
     public static class Solution {
-        
-        // public boolean checkAlmostEquivalent(String ss, String tt) {
-        //     int m = ss.length(), n = tt.length();
-        //     char [] s = ss.toCharArray();
-        //     char [] t = tt.toCharArray();
-        //     int [] one = new int [26];
-        //     int [] two = new int [26];
-        //     for (int i = 0; i < m; i++) 
-        //         one[s[i]-'a']++;
-        //     for (int i = 0; i < n; i++) 
-        //         two[t[i]-'a']++;
-        //     for (int i = 0; i < 26; i++) 
-        //         if (Math.abs(one[i] - two[i]) > 3) return false;
-        //     return true;
-        // }
 
-        // public int[] maximumBeauty(int[][] it, int[] que) {
-        //     int n = it.length, m = que.length;
-        //     List<int []> l = new ArrayList<>();
-        //     for (int i = 0; i < m; i++) 
-        //         l.add(new int [] {i, que[i]});
-        //     Collections.sort(l, (a, b)->a[1] - b[1]);
-        //     Arrays.sort(it, (a, b) -> a[0] - b[0]);
-        //     Queue<int []> q = new PriorityQueue<>((a, b)->b[1] - a[1]);
-        //     int [] ans = new int [m];
-        //     int idx = 0;
-        //     for (int i = 0; i < m; i++) { // l
-        //         int p = l.get(i)[1];
-        //         while (idx < n && it[idx][0] <= p) {
-        //             q.offer(it[idx]);
-        //             idx++;
+        // public int timeRequiredToBuy(int[] t, int k) {
+        //     int n = t.length, sum = Arrays.stream(t).sum();
+        //     int ans = 0, i = -1;
+        //     while (t[k] > 0) {
+        //         i = (i + 1 + n) % n;
+        //         while (t[i] == 0) {
+        //             i = (i + 1 + n) % n;
         //         }
-        //         if (!q.isEmpty()) ans[l.get(i)[0]] = q.peek()[1];
+        //         if (t[i] > 0 && t[k] > 0) {
+        //             ans++;
+        //             t[i]--;
+        //             if (i == k && t[k] == 0) return ans;
+        //         }
         //     }
-        //     return ans;
+        //     return -1;
         // }
 
-    // int [][] dirs = {{0, 1}, {-1, 0}, {0, -1}, {1, 0}}; // tle 
-    // int m, n, x, y, g;
-    //     int [][] a;
-    //     public Robot(int width, int height) {
-    //     // public cmp(int width, int height) {
-    //         this.m = height;
-    //         this.n = width;
-    //         a = new int [m][n];
-    //         this.x = m-1;
-    //         this.y = 0;
-    //         this.g = 0;
-    //     }
-    
-    // public void move(int num) {
-    //     num %= (2 * n + 2 * m - 4);
-    //     int cnt = 0;
-    //     int i = 0, j = 0;
-    //     i = x + dirs[g][0];
-    //     j = y + dirs[g][1];
-    //     if  (i < 0 || i >= m || j < 0 || j >= n) {
-    //         while (i < 0 || i >= m || j < 0 || j>= n) {
-    //             g = (g + 1) % 4;
-    //             i = x + dirs[g][0];
-    //             j = y + dirs[g][1];
-    //         }
-    //         x = i;
-    //         y = j;
-    //         cnt++; // 1
-    //     } 
-    //     while (cnt < num) {
-    //         i = x + dirs[g][0];
-    //         j = y + dirs[g][1];
-    //         if  (i < 0 || i >= m || j < 0 || j>= n) {
-    //             while (i < 0 || i >= m || j < 0 || j>= n) {
-    //                 g = (g + 1) % 4;
-    //                 i = x + dirs[g][0];
-    //                 j = y + dirs[g][1];
-    //             }
-    //             x = i;
-    //             y = j;
-    //             cnt++;
-    //         } else {
-    //             cnt ++;
-    //             x = i;
-    //             y = j;
-    //         }
-    //     }
-    //     x = i;
-    //     y = j;
-    // }
-    // public int[] getPos() {
-    //     return new int [] {y, m-1 - x};
-    // }
-    // public String getDir() {
-    //     return g == 0 ? "East" : (g == 1 ? "North" : (g == 2 ? "West" : "South"));
-    // }
+        // private ListNode reverseList(ListNode head) {
+        //     List<Integer> l = new ArrayList<>();
+        //     ListNode r = head;
+        //     while ( r!= null) {
+        //         l.add(r.val);
+        //         r = r.next;
+        //     }
+        //     List<Integer> li = new ArrayList<>();
+        //     for (int i = l.size()-1; i >= 0; i--) 
+        //         li.add(l.get(i));
+        //     r = head;
+        //     int idx = 0;
+        //     while (r != null) {
+        //         r.val = li.get(idx);
+        //         idx++;
+        //         r = r.next;
+        //     }
+        //     return head;
+        // }
+        // public ListNode reverseEvenLengthGroups(ListNode head) {
+        //     int idx = 1, cnt = 0, sum = 0, totCnt = 0;
+        //     ListNode r = head,  newHead = head, p = null;
+        //     List<ListNode> arr = new ArrayList<>();
+        //     while (r != null) {
+        //         totCnt++;
+        //         r = r.next;
+        //     }
+        //     // System.out.println("totCnt: " + totCnt);
+        //     r = head;
+        //     while (r != null) {
+        //         while (cnt < idx && r != null) {
+        //             p = r;
+        //             r = r.next;
+        //             cnt++;
+        //         }
+        //         if (cnt == idx) {
+        //             sum += idx;
+        //             idx++;
+        //             cnt = 0;
+        //             arr.add(newHead);
+        //             newHead = r;
+        //             p.next = null;
+        //         }
+        //     }
+        //     System.out.println("(sum < totCnt): " + (sum < totCnt));
+            
+        //     if (sum < totCnt) arr.add(newHead);
+        //     System.out.println("arr.size(): " + arr.size());
+        //     for (ListNode tmp  : arr) 
+        //         tmp.printList(tmp);
+            
+        //     ListNode dummy = new ListNode(-1);
+        //     p = dummy;
+        //     for (int i = 0; i < arr.size(); i++) {
+        //         r = arr.get(i);
+        //         if (i % 2 == 0 && (i != arr.size()-1 || i == arr.size()-1 && (totCnt == sum || totCnt != sum && (totCnt - sum) % 2 == 1))
+        //             || i % 2 == 1 && i == arr.size()-1 && totCnt != sum && (totCnt - sum) % 2 == 1) {
+        //             p.next = r;
+        //             while (p.next != null) 
+        //                 p = p.next;
+        //         } else {
+        //             ListNode cur = reverseList(r);
+        //             p.next = cur;
+        //             while (p.next != null) {
+        //                 p = p.next;
+        //             }
+        //         }
+        //     }
+        //     return dummy.next;
+        // }
 
-        public int maxTaskAssign(int[] t, int[] w, int p, int s) {
-            int n = t.length, m = w.length, ans = 0;
-            Arrays.sort(t);
-            Arrays.sort(w);
-            System.out.println(Arrays.toString(t));
-            System.out.println(Arrays.toString(w));
-            int bgn = 0, end = n-1, i = 0, j = m-1;
-            while (end >= 0 && t[end] > w[j] + (p > 0 ? s : 0)) end--;
-            while (bgn < m && w[bgn] + (p > 0 ? s : 0) < t[i]) bgn++;
-            // int i = 0, j = 0;
-            j = bgn;
-            System.out.println("end: " + end);
-            System.out.println("j: " + j);
-
-            while (i < end && j < m) {
-                if (w[j] >= t[i] || (p > 0 && w[j] + s >= t[i])) {
-                    ans++;
-                    if (w[j] < t[i]) p--; // 什么时候用药丸，有一种选择和策略在里面
-                    i++;
-                    j++;
+        private class UnionFind {
+            int [] id; // parent
+            int [] cnt;// size
+            public UnionFind (int n) {
+                id = new int [n];
+                cnt = new int [n];
+                for (int i = 0; i < n; i++) {
+                    id[i] = i;
+                    cnt[i] = 1;
                 }
-                while (j < m && (p == 0 && t[i] > w[j] || p > 0 && t[i] > w[j] + s)) j++;
+            }
+            public int find(int i) {
+                while (id[i] != i) {
+                    id[i] = id[id[i]];
+                    i = id[i];
+                }
+                return i;
+            }
+            public boolean sameGroup(int i, int j) {
+                return find(i) == find(j);
+            }
+            public void union(int i, int j) {
+                int rootI = find(i);
+                int rootJ = find(j);
+                if (rootI != rootJ) {
+                    id[rootI] = rootJ;
+                    cnt[rootJ] += cnt[rootI];
+                }
+            }
+            public Set<Integer> getCompoent(int idx) {
+                Set<Integer> si = new HashSet<>();
+                int p = find(idx);
+                System.out.println("p: " + p);
+                for (int i = 0; i < id.length; i++)  
+                    find(i);
+                System.out.println(Arrays.toString(id));
+                
+                for (int i = 0; i < id.length; i++)  {
+                    if (id[i] == p)
+                        si.add(i);
+                }
+                return si;
+            }
+        }
+        public boolean[] friendRequests(int n, int[][] rs, int[][] req) { // 这里面还有一点逻辑没能理清楚
+            UnionFind uf = new UnionFind(n);
+            Map<Integer, Set<Integer>> m = new HashMap<>();
+            for (int [] v : rs) {
+                m.computeIfAbsent(v[0], z -> new HashSet<>()).add(v[1]);
+                m.computeIfAbsent(v[1], z -> new HashSet<>()).add(v[0]);
+            }
+            // System.out.println("");
+            // System.out.println("m.size(): " + m.size());
+            // for (Map.Entry<Integer, Set<Integer>> en : m.entrySet()) {
+            //     System.out.print(en.getKey() + ", "  + ": \n");
+            //     System.out.println("en.getValue().size(): " + en.getValue().size());
+            //     System.out.println(Arrays.toString(en.getValue().toArray()));
+            // }
+            
+            boolean [] ans = new boolean[req.length];
+            for (int i = 0; i < req.length; i++) {
+                // System.out.println("\n i: " + i);
+                int [] cur = req[i];
+                // System.out.println(Arrays.toString(cur));
+                
+                if (uf.sameGroup(cur[0], cur[1])) {
+                    ans[i] = true;
+                    continue;
+                }
+                if (m.get(cur[0]) != null && m.get(cur[0]).contains(cur[1]) || m.get(cur[1]) != null && m.get(cur[1]).contains(cur[0]))
+                    ans[i] = false;
+                else {
+                    Set<Integer> one = uf.getCompoent(cur[0]);
+                    Set<Integer> two = uf.getCompoent(cur[1]);
+
+                    // System.out.println("one.size(): " + one.size());
+                    // System.out.println(Arrays.toString(new ArrayList<>(one).toArray()));
+                    // System.out.println("two.size(): " + two.size());
+                    // System.out.println(Arrays.toString(new ArrayList<>(two).toArray()));
+                    boolean flag = false;
+
+                    for (Integer a : one) 
+                        for (Integer b : two) {
+                            // System.out.println("a: " + a);
+                            // System.out.println("b: " + b);
+                            // System.out.println("(m.get(a) != null && m.get(a).contains(b) || m.get(b) != null && m.get(b).contains(a)): " + (m.get(a) != null && m.get(a).contains(b) || m.get(b) != null && m.get(b).contains(a)));
+                            
+                            if (m.get(a) != null && m.get(a).contains(b) || m.get(b) != null && m.get(b).contains(a)) {
+                                ans[i] = false;
+                                flag = true;
+                                break;
+                            }
+                        }
+                    if (flag) continue;
+                    ans[i] = true;
+                    uf.union(cur[0], cur[1]);
+                }
             }
             return ans;
         }
+        
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        int []  a = new int []  {5, 9, 8, 5, 9};
-        int []  b = new int []  {1, 6, 4, 2, 6};
-
-        int  r = s.maxTaskAssign(a, b, 1, 5);
-        System.out.println("r: " + r);
-       
-    //     cmp s = new cmp(6, 3); // Initialize the grid and the robot at (0, 0) facing East.
-    //     s.move(2);  // It moves two steps East to (2, 0), and faces East.
-    //     s.move(2);  // It moves two steps East to (4, 0), and faces East.
-    //     int [] r =        s.getPos(); // return [4, 0]
-    //     System.out.println(Arrays.toString(r));
-
-    //  String str =   s.getDir(); // return "East"
-    //  System.out.println("str: " + str);
-     
-    //     s.move(2);  // It moves one step East to (5, 0), and faces East.
-    //     // Moving the next step East would be out of bounds, so it turns and faces North.
-    //     // Then, it moves one step North to (5, 1), and faces North.
-    //     s.move(1);  // It moves one step North to (5, 2), and faces North (not West).
-    //     s.move(4);  // Moving the next step North would be out of bounds, so it turns and faces West.
-    //     // Then, it moves four steps West to (1, 2), and faces West.
-    //   int [] b =  s.getPos(); // return [1, 2]
-    //   System.out.println(Arrays.toString(b));
-      
-    //     s.getDir(); // return "West"
-    // }
+        int [][] a = new int [][] {{0,1},{1,2},{2,3}};
+        int [][] b = new int [][] {{0,4},{1,2},{3,1},{3,4}};
+        
+        boolean [] r = s.friendRequests(5, a, b);
+        System.out.println(Arrays.toString(r));
+    }
 }
 
-// ListNode head = new ListNode(a[0]);
-// head.buildList(head, a);
-// head.printList(head);

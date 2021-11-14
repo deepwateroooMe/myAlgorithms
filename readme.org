@@ -132,7 +132,7 @@ Place a new stone, whose value is equal to that sum, on the left side of the row
 The game stops when only one stone is left in the row.
 The score difference between Alice and Bob is (Alice's score - Bob's score). Alice's goal is to maximize the score difference, and Bob's goal is the minimize the score difference.
 Given an integer array stones of length n where stones[i] represents the value of the ith stone from the left, return the score difference between Alice and Bob if they both play optimally.
-**** 解题思路与分析
+***** 解题思路与分析
 
 这里我原始的做法dfs+记忆数组会超时，是因为数组发生了改变，萁盘状态发生了改变，所以记忆无效？！！！才会超时（感觉还理解得不透，这里）
 
@@ -298,7 +298,7 @@ public int findTargetSumWays(int[] a, int target) {
     return getAllSums(a, target, 0, 0, 0);
 }
 #+END_SRC
-**** 解题思路与分析: dfs记忆化搜索
+***** 解题思路与分析: dfs记忆化搜索
 #+BEGIN_SRC java
 private int dfs(int [] a, int target, int idx, int sum) {
     String key = idx + "_" + sum;
@@ -416,7 +416,7 @@ Given a rectangular pizza represented as a rows x cols matrix containing the fol
 For each cut you choose the direction: vertical or horizontal, then you choose a cut position at the cell boundary and cut the pizza into two pieces. If you cut the pizza vertically, give the left part of the pizza to a person. If you cut the pizza horizontally, give the upper part of the pizza to a person. Give the last piece of pizza to the last person.
 
 Return the number of ways of cutting the pizza such that each piece contains at least one apple. Since the answer can be a huge number, return this modulo 10^9 + 7.
-**** 解题思路与分析: 自底向上
+***** 解题思路与分析: 自底向上
 
 常规的矩阵DP做法，这里还需要通过前缀和的思想来快速获取指定范围矩阵的苹果数量。
 
@@ -454,7 +454,7 @@ public int ways(String[] pizza, int p) {
     return (int)dp[0][0][p];
 }
 #+END_SRC
-**** 解题思路与分析: 自顶向下
+***** 解题思路与分析: 自顶向下
 
 先用dp方法求出以（i,j）位置为右下角，左上角为（0,0）的区域的苹果数量
 
@@ -522,7 +522,7 @@ Given an input string s and a pattern p, implement regular expression matching w
 '.' Matches any single character.​​​​
 '*' Matches zero or more of the preceding element.
 The matching should cover the entire input string (not partial).
-**** 解题思路与分析
+***** 解题思路与分析
     
     [[./pic/regMatch.png]]
 
@@ -638,7 +638,7 @@ Given two strings s and t, return the number of distinct subsequences of s which
 A string's subsequence is a new string formed from the original string by deleting some (can be none) of the characters without disturbing the remaining characters' relative positions. (i.e., "ACE" is a subsequence of "ABCDE" while "AEC" is not).
 
 It is guaranteed the answer fits on a 32-bit signed integer.
-**** 解题思路与分析
+***** 解题思路与分析
 这道题不是求两个字符串是匹配，而是判断S有多少种方式可以得到T。但其实还是动态规划，我们一个定义二维数组dp，dp[i][j]为字符串s(0,i)变换到t(0,j)的变换方法的个数。
 
 如果S[i]==T[j]，那么dp[i][j] = dp[i-1][j-1] + dp[i-1][j]
@@ -682,7 +682,7 @@ If an answer equals the correct answer of the expression, this student will be r
 Otherwise, if the answer could be interpreted as if the student applied the operators in the wrong order but had correct arithmetic, this student will be rewarded 2 points;
 Otherwise, this student will be rewarded 0 points.
 Return the sum of the points of the students.
-**** 解题思路与分析
+***** 解题思路与分析
 - 思路是记忆化搜索。先求一下正确答案，然后开始算所有可能得到的错误答案。枚举运算符，然后递归求解两边可能的答案，汇总成当前表达式可能得到的答案。用记忆化的方式避免重复计算。
 - 时间复杂度O(l_s^3+l_A))，空间O(l_s^2)。注意有1000这个限制，上面所说的复杂度的常数是1000^2，是很大的
   
@@ -898,6 +898,64 @@ public int waysToBuildRooms(int[] prevRoom) {
 #+END_SRC
 
 
+** 扫描线类、时间戳
+*** 1235. Maximum Profit in Job Scheduling - Hard
+We have n jobs, where every job is scheduled to be done from startTime[i] to endTime[i], obtaining a profit of profit[i].
+
+You're given the startTime, endTime and profit arrays, return the maximum profit you can take such that there are no two jobs in the subset with overlapping time range.
+
+If you choose a job that ends at time X you will be able to start another job that starts at time X.
+*** 解题思路与分析
+
+Sort the elements by starting time, then define the dp[i] as the maximum profit taking elements from the suffix starting at i.
+
+Use binarySearch (lower_bound/upper_bound on C++) to get the next index for the DP transition.- 
+
+#+BEGIN_SRC java
+// 目标：在最接近自己startime的endtime里得到最大的proft前缀
+// 维护一个递增的endtime序列
+// 该序列同时记录在此endtime下的最大profit
+// 按递增endtime遍历工作
+// 如果本次工作后profit比更早的endtime下的更多，就把这个工作记进去，不然做个p
+// 因为升序，所以还能二分查找。exciting！
+public int jobScheduling(int[] startTime, int[] endTime, int[] profit) { // 这个前后的时间点总是没能确定，所以思路不清晰
+    int n = startTime.length;
+    List<int []> map = new ArrayList<>();
+    for (int i = 0; i < startTime.length; i++) 
+        map.add(new int [] {startTime[i], endTime[i], profit[i]});
+    Collections.sort(map, (a, b) -> a[0] - b[0]);
+    for (int [] zz : map) 
+        System.out.println(Arrays.toString(zz));
+
+    int [] dp = new int [n];
+    dp[n-1] = map.get(n-1)[2]; // 反向逆序遍历的优点：遍历过的时间点一定在当前事件之后，只有选与不选当前事件两种策略中取最优解
+    int j = 0;
+    for (int i = n-2; i >= 0; i--) {
+        j = binarySearchNext(i+1, map);
+        // j = getNext(i, map);
+        dp[i] = Math.max(dp[i+1], (j == -1 ? 0 : dp[j]) + map.get(i)[2]);
+    }
+    return dp[0];
+}
+private int getNext(int idx, List<int []> ll) {
+    for (int i = idx+1; i < ll.size(); i++) 
+        if (ll.get(i)[0] >= ll.get(idx)[1]) return i;
+    return -1;
+}
+private int binarySearchNext(int x, List<int []> ll) { // 这里居然写出bug来了 // bug todo
+    int l = x + 1, r = ll.size()-1, v = ll.get(x)[1], ans = -1; // x end time
+    while (l <= r) {
+        int m = l + (r - l) / 2;
+        if (ll.get(m)[0] >= v) {
+            ans = m;
+            r = m-1;
+        } else l = m+1;
+    }
+    // return l < ll.size() && ll.get(l)[0] >= v ? l : -1;
+    return ans;
+}
+#+END_SRC
+
 *** 1987. Number of Unique Good Subsequences - Hard
 You are given a binary string binary. A subsequence of binary is considered good if it is not empty and has no leading zeros (with the exception of "0").
 
@@ -907,6 +965,28 @@ For example, if binary = "001", then all the good subsequences are ["0", "0", "1
 Return the number of unique good subsequences of binary. Since the answer may be very large, return it modulo 109 + 7.
 
 A subsequence is a sequence that can be derived from another sequence by deleting some or no elements without changing the order of the remaining elements.
+
+这里的思路是：扫出从左起第一个1所在的位置，从左到右遍历，对于当前字符来说就是 *用* 当前字符或 *不用* 当前字符两种选择，然后会有重复的部分，需要把重复的部分减掉
+#+BEGIN_SRC java
+小写字母a的ascii编码值为97，小写字母z的ascii编码值为122，
+将数字97表示为小写字母a,那么每一个字母都可以由97+i来表示,i=0~25
+例如 b --> 97+1
+所以，dp[i]的下标i就能用来表示字母97+i,这样只需要26个空间即可表示所有的26个字母
+然后dp[i]，这里表示的是以97+i结尾的子序列的个数
+下面是对字符串S，从左到右进行遍历
+这样的遍历，有这样的特点，以字符串"abcsade"为例子来描述
+当遍历到字符s的时候，显然前面的字符"abc"都已经遍历了一次，
+注意！子问题出现 : 
+假设前面的"abc"，已经找出了所有的不重复的子序列:a,b,c,ab,ac,bc
+那么当遍历到's'时，这个's'可以添加到所有上述子序列的末尾，构成新的子序列
+由于原子序列不重复，显然在其所有子序列后添加一个字符's'得到的新的一系列子序列，
+依然是不重复的。
+所以能发现，以's'结尾的新的子序列实际就是上述这些末尾添加了's'的子序列
+但是考虑到's'字符可以单独作为一个子序列，因此还需要加上1，表示这一特例
+那么总结上述推断,假设dp[i]表示当前遍历到字符97+i时，以此字符结尾的子序列的个数
+dp[i] = 1+dp[0]+dp[1]+dp[2]+...+dp[i-1] = 1+sum(dp)
+#+END_SRC
+
 #+BEGIN_SRC java
 public int numberOfUniqueGoodSubsequences(String binary) {
     int mod = (int)1e9 + 7;
@@ -1953,7 +2033,7 @@ There is a group of n members, and a list of various crimes they could commit. T
 Let's call a profitable scheme any subset of these crimes that generates at least minProfit profit, and the total number of members participating in that subset of crimes is at most n.
 
 Return the number of schemes that can be chosen. Since the answer may be very large, return it modulo 109 + 7.
-**** 解题思路与分析
+***** 解题思路与分析
     
     [[./pic/crime.png]]
     
@@ -3504,7 +3584,7 @@ A subsequence of an array is a sequence that can be formed by removing some elem
 
 For example, [2,5,10] is a subsequence of [1,2,1,2,4,1,5,10].
 The test cases are generated so that the answer fits in 32-bit integer.
-**** 解题思路与分析
+***** 解题思路与分析
 这道题是之前那道Arithmetic Slices的延伸，那道题比较简单是因为要求等差数列是连续的，而这道题让我们求是等差数列的子序列，可以跳过某些数字，不一定非得连续，那么难度就加大了，但还是需要用动态规划Dynamic Progrmming来做。
 
 好，既然决定要用DP了，那么首先就要确定dp数组的定义了，刚开始我们可能会考虑使用个一维的dp数组，然后dp[i]定义为范围为[0, i]的子数组中等差数列的个数。定义的很简单，OK，但是基于这种定义的状态转移方程却十分的难想。我们想对于(0, i)之间的任意位置j，如何让 dp[i] 和 dp[j] 产生关联呢？是不是只有 A[i] 和 A[j] 的差值diff，跟A[j]之前等差数列的差值相同，才会有关联，所以差值diff是一个很重要的隐藏信息Hidden Information，我们必须要在dp的定义中考虑进去。所以一维dp数组是罩不住的，必须升维，但是用二维dp数组的话，差值diff那一维的范围又是个问题，数字的范围是整型数，所以差值的范围也很大，为了节省空间，我们建立一个一维数组dp，数组里的元素不是数字，而是放一个HashMap，建立等差数列的差值和当前位置之前差值相同的数字个数之间的映射。我们遍历数组中的所有数字，对于当前遍历到的数字，又从开头遍历到当前数字，计算两个数字之差diff，如果越界了不做任何处理，如果没越界，我们让dp[i]中diff的差值映射自增1，因为此时A[i]前面有相差为diff的A[j]，所以映射值要加1。然后我们看dp[j]中是否有diff的映射，如果有的话，说明此时相差为diff的数字至少有三个了，已经能构成题目要求的等差数列了，将dp[j][diff]加入结果res中，然后再更新dp[i][diff]，这样等遍历完数组，res即为所求。
@@ -3576,7 +3656,7 @@ In addition to the mapping above, an encoded message may contain the '*' charact
 Given a string s consisting of digits and '*' characters, return the number of ways to decode it.
 
 Since the answer may be very large, return it modulo 109 + 7.
-**** 解题思路与分析
+***** 解题思路与分析
 给定一个只含数字的长n nn的字符串s ss，再给定一个对应规则，每个大写字母ch可以对应一个数字ch - 'A' + 1。问该s ss有多少种不同的解码方式。s ss中可能含有'*'，这个符号可以对应除了0 00以外的任意一位数。答案模10^9 + 7后返回。
 
 思路是动态规划。设f [ i ] f[i]f[i]是s ss的长i ii的前缀的解码方式数，那么可以按照最后一位（或者两位）是解码成什么字母来分类进行累加。
@@ -3608,7 +3688,7 @@ public int numDecodings(String t) {
     return dp[n];
 }
 #+END_SRC
-**** 解题思路与分析
+***** 解题思路与分析
 
 定义dp[i]是nums前i个字符可以得到的解码种数，假设之前的字符串是abcx，现在新加入了y，则有以下5种情况：
 
@@ -3649,7 +3729,7 @@ public int numDecodings(String t) {
 For an integer array nums, an inverse pair is a pair of integers [i, j] where 0 <= i < j < nums.length and nums[i] > nums[j].
 
 Given two integers n and k, return the number of different arrays consist of numbers from 1 to n such that there are exactly k inverse pairs. Since the answer can be huge, return it modulo 109 + 7.
-**** 解题思路与分析
+***** 解题思路与分析
 比较容易辨别出来是一道DP的题目，但是确实算是比较难的了，下面是参考网上的代码之后我的理解。定义dp[n][k]表示从1到n构成的数中含有k个逆序对的个数，则我们可以推导出dp[n][k]和dp[n - 1][i]之间的递推关系：
 
 如果我们把n放在最后一位，则所有的k个逆序对均来自于前n - 1个数所构成的逆序对，和n无关；
@@ -3692,7 +3772,7 @@ public int kInversePairs(int n, int k) {
     return (int)dp[n][k];
 }
 #+END_SRC
-**** 解题思路与分析
+***** 解题思路与分析
     
     [[./pic/kinvPair.png]]
 
@@ -3717,7 +3797,7 @@ public int kInversePairs(int n, int k) {
 You are given an array nums​​​ and an integer k​​​​​. The XOR of a segment [left, right] where left <= right is the XOR of all the elements with indices between left and right, inclusive: nums[left] XOR nums[left+1] XOR ... XOR nums[right].
 
 Return the minimum number of elements to change in the array such that the XOR of all segments of size k​​​​​​ is equal to zero.
-**** 解题思路与分析
+***** 解题思路与分析
     
     [[./pic/xortimes.png]]
     
@@ -3778,7 +3858,7 @@ You are given a 2D integer array, queries. For each queries[i], where queries[i]
 
 Return an integer array answer where answer.length == queries.length, and answer[i] is the answer to the ith query.
  
-*** 解题思路与分析
+**** 解题思路与分析
     
     [[./pic/1735.png]]
 
@@ -3896,7 +3976,7 @@ Given n orders, each order consist in pickup and delivery services.
 Count all valid pickup/delivery possible sequences such that delivery(i) is always after of pickup(i). 
 
 Since the answer may be too large, return it modulo 10^9 + 7.
-**** 解题思路与分析
+***** 解题思路与分析
  
 就是总共有2N个位置，每次放一两个，还剩下多少个位置可以合理占用
 
@@ -3913,6 +3993,206 @@ public int countOrders(int n) {
 }
 #+END_SRC
 
+*** 1884. Egg Drop With 2 Eggs and N Floors - Medium
+You are given two identical eggs and you have access to a building with n floors labeled from 1 to n.
+
+You know that there exists a floor f where 0 <= f <= n such that any egg dropped at a floor higher than f will break, and any egg dropped at or below floor f will not break.
+
+In each move, you may take an unbroken egg and drop it from any floor x (where 1 <= x <= n). If the egg breaks, you can no longer use it. However, if the egg does not break, you may reuse it in future moves.
+
+Return the minimum number of moves that you need to determine with certainty what the value of f is.
+#+BEGIN_SRC java
+    // 思路： https://zhuanlan.zhihu.com/p/41257286 可以借这个思路理解一下
+    // DP[i][j]表示用i个鸡蛋，j层楼的情况下最坏情况下所需扔鸡蛋的最少数目。
+    // 可知初始条件为：
+    // DP[1][0] = 0; DP[2][0] = 0;
+    // DP[1][1] = 1; DP[2][1] = 1;
+    // DP[1][i] = i; //i = 1 … n
+    // 对于DP[2][i], i = 2 … n的情况，我们可以这样考虑：
+    //     遍历j=2…i，求DP[2][j]，分两种情况：
+    //     如果第1个鸡蛋在第j-1层摔破了，则我们在第j层只需摔第2个鸡蛋一次即可，此时总摔鸡蛋数为DP[1][j-1]+1。
+    //     注意上面的1是因为第j层需要摔第2个鸡蛋1次。为什么DP[1][j-1]不能写成1呢？因为第1个鸡蛋在第j-1层摔破了，我们不能肯定在第1,2,…,j-2层不会破，所以要用DP[1][j-1]。
+    //     如果第1个鸡蛋在第j-1层没有摔破，则我们在第j到i层有2个鸡蛋可以摔，此时退化到DP[2][i-j]的情况。该种情形下总共扔1+DP[2][i-j]。那个1就是表示第1个鸡蛋在第j-1层扔了1次。这里我们为什么只考虑用1，而不用考虑DP[1][j-1]呢？因为如果第j-1层没有摔破，第1,2,…,j-2层也就不用考虑了。
+    //     因为是求最坏情况下的数目，所以DP[2][j]=1 + max(DP[1][j-1]+1, DP[2][i-j])。
+    //     而我们是要求所有最坏情况下的最少数目，所以DP[2][j]=min(1 + max(DP[1][j-1]+1, DP[2][i-j]))。i = 2…n, j = 2…i。
+public int twoEggDrop(int n) { // 1 + 2 + 3 + ... + x >= n ==> get x
+    if (n <= 1) return n;
+    int [][] dp = new int [3][n+1]; // DP[i][j]表示用i个鸡蛋，j层楼的情况下最坏情况下所需扔鸡蛋的最少数目。
+    for (int i = 0; i < 3; i++) 
+        Arrays.fill(dp[i], Integer.MAX_VALUE);
+    dp[1][0] = 0;
+    dp[1][1] = 1;
+    dp[2][0] = 0;
+    dp[2][1] = 1;
+    for (int i = 1; i <= n; i++) dp[1][i] = i;
+    for (int i = 2; i <= n; i++) 
+        for (int j = 2; j <= i; j++) 
+            dp[2][i] = Math.min(dp[2][i], 1 + Math.max(dp[1][j-1], dp[2][i-j])); // 1: 这个鸡蛋在j-i层扔了一次，要统计入结果
+    return dp[2][n];
+}
+public int twoEggDrop(int n) { // 1 + 2 + 3 + ... + x >= n ==> get x
+    if (n <= 2) return n;
+    return (int)(Math.ceil((-1 + Math.sqrt((long)n * 8 + 1)) / 2.0));
+}
+#+END_SRC
+*** 887. Super Egg Drop - Hard
+You are given k identical eggs and you have access to a building with n floors labeled from 1 to n.
+
+You know that there exists a floor f where 0 <= f <= n such that any egg dropped at a floor higher than f will break, and any egg dropped at or below floor f will not break.
+
+Each move, you may take an unbroken egg and drop it from any floor x (where 1 <= x <= n). If the egg breaks, you can no longer use it. However, if the egg does not break, you may reuse it in future moves.
+
+Return the minimum number of moves that you need to determine with certainty what the value of f is.
+**** 解题思路与分析
+- https://charlesliuyx.github.io/2018/10/11/%E3%80%90%E7%9B%B4%E8%A7%82%E7%AE%97%E6%B3%95%E3%80%91Egg%20Puzzle%20%E9%B8%A1%E8%9B%8B%E9%9A%BE%E9%A2%98/
+- https://www.shuzhiduo.com/A/D8548M4Q5E/
+**** 解题思路与分析
+
+1 <= K <= 100
+
+1 <= N <= 10000
+
+这道题说给了我们K个鸡蛋，还有一栋共N层的大楼，说是鸡蛋有个临界点的层数F，高于这个层数扔鸡蛋就会碎，否则就不会，问我们找到这个临界点最小需要多少操作，注意这里的操作只有当前还有没碎的鸡蛋才能进行。这道题是基于经典的扔鸡蛋的问题改编的，原题是有 100 层楼，为了测鸡蛋会碎的临街点，最少可以扔几次？答案是只用扔 14 次就可以测出来了，讲解可以参见[油管上的这个视频](https://www.youtube.com/watch?v=NGtt7GJ1uiM)，这两道题看着很相似，其实是有不同的。这道题限制了鸡蛋的个数K，假设我们只有1个鸡蛋，碎了就不能再用了，这时我们要测 100 楼的临界点的时候，只能一层一层去测，当某层鸡蛋碎了之后，就知道临界点了，所以最坏情况要测 100 次，注意要跟经典题目中扔 14 次要区分出来。那么假如有两个鸡蛋呢，其实需要的次数跟经典题目中的一样，都是 14 次，这是为啥呢？因为在经典题目中，我们是分别间隔 14，13，12，...，2，1，来扔鸡蛋的，当我们有两个鸡蛋的时候，我们也可以这么扔，第一个鸡蛋仍在 14 楼，若碎了，说明临界点一定在 14 楼以内，可以用第二个鸡蛋去一层一层的测试，所以最多操作 14 次。若第一个鸡蛋没碎，则下一次扔在第 27 楼，假如碎了，说明临界点在 (14,27] 范围内，用第二个鸡蛋去一层一层测，总次数最多 13 次。若第一个鸡蛋还没碎，则继续按照 39, 50, ..., 95, 99，等层数去测，总次数也只可能越来越少，不会超过 14 次的。但是照这种思路分析的话，博主就不太清楚有3个鸡蛋，在 100 楼测，最少的步骤数，答案是9次，博主不太会分析怎么测的，各位看官大神知道的话一定要告诉博主啊。
+
+其实这道题比较好的解法是用动态规划 Dynamic Programming，因为这里有两个变量，鸡蛋数K和楼层数N，所以就要使用一个二维数组 DP，其中 dp[i][j] 表示有i个鸡蛋，j层楼要测需要的最小操作数。那么我们在任意k层扔鸡蛋的时候就有两种情况（注意这里的k跟鸡蛋总数K没有任何关系，k的范围是 [1, j]）：
+#+BEGIN_SRC java
+鸡蛋碎掉：接下来就要用 i-1 个鸡蛋来测 k-1 层，所以需要 dp[i-1][k-1] 次操作。
+鸡蛋没碎：接下来还可以用i个鸡蛋来测 j-k 层，所以需要 dp[i][j-k] 次操作。
+#+END_SRC
+
+因为我们每次都要面对最坏的情况，所以在第j层扔，需要 max(dp[i-1][k-1], dp[i][j-k])+1 步，状态转移方程为：
+
+dp[i][j] = min(dp[i][j], max(dp[i - 1][k - 1], dp[i][j - k]) + 1) ( 1 <= k <= j )
+
+#+BEGIN_SRC java
+public int superEggDrop(int k, int n) { // tle 
+    if (k < 1 || n < 1) return 0;
+    int [] pre = new int [n+1]; //上一层备忘录，存储鸡蛋数量-1的n层楼条件下的最优化尝试次数
+    int [] cur = new int [n+1]; // 当前备忘录，存储当前鸡蛋数量的n层楼条件下的最优化尝试次数
+    for (int i = 1; i <= n; i++) // 把备忘录每个元素初始化成最大的尝试次数
+        cur[i] = i;
+    for (int i = 2; i <= k; i++) {
+        pre = cur.clone(); // 当前备忘录拷贝给上一次备忘录，并重新初始化当前备忘录
+        for (int j = 1; j <= n; j++) cur[j] = j;
+        for (int j = 1; j <= n; j++) // 需要想办法去优化时间复杂度。这种写法里面我们枚举了 [1, j] 范围所有的k值，总时间复杂度为 O(KN^2)，
+            for (int x = 1; x < j; x++) 
+// 扔鸡蛋的楼层从1到m枚举一遍，如果当前算出的尝试次数小于上一次算出的尝试次数，则取代上一次的尝试次数。
+// 这里可以打印k的值，从而知道第一个鸡蛋是从第几次扔的。
+                cur[j] = Math.min(cur[j], 1 + Math.max(pre[x-1], cur[j-x]));
+    }
+    return cur[n];
+}
+#+END_SRC 
+
+这种写法会超时 Time Limit Exceeded，代码请参见评论区1楼，OJ 对时间卡的还是蛮严格的，所以我们就需要想办法去优化时间复杂度。这种写法里面我们枚举了 [1, j] 范围所有的k值，总时间复杂度为 O(KN^2)，若我们仔细观察 dp[i - 1][k - 1] 和 dp[i][j - k]，可以发现前者是随着k递增，后者是随着k递减，且每次变化的值最多为1，所以只要存在某个k值使得二者相等，那么就能得到最优解，否则取最相近的两个k值做比较，由于这种单调性，我们可以在 [1, j] 范围内对k进行二分查找，找到第一个使得 dp[i - 1][k - 1] 不小于 dp[i][j - k] 的k值，然后用这个k值去更新 dp[i][j] 即可，这样时间复杂度就减少到了 O(KNlgN)，其实也是险过，参见代码如下：
+
+#+BEGIN_SRC java
+// 若我们仔细观察 dp[i - 1][k - 1] 和 dp[i][j - k]，可以发现前者是随着k递增，后者是随着k递减，且每次变化的值最多为1，
+// 所以只要存在某个k值使得二者相等，那么就能得到最优解，否则取最相近的两个k值做比较，
+// 由于这种单调性，我们可以在 [1, j] 范围内对k进行二分查找，找到第一个使得 dp[i - 1][k - 1] 不小于 dp[i][j - k] 的k值，然后用这个k值去更新 dp[i][j] 即可，
+// 这样时间复杂度就减少到了 O(KNlgN)
+public int superEggDrop(int k, int n) {
+    int dp [][] = new int [k + 1][n + 1];
+    for(int i = 1 ; i <= n ; i++) dp[1][i] = i;
+    for(int i = 2 ; i <= k; i++) {
+        for (int j = 1; j <= n; j++) {
+            dp[i][j] = j;
+            int left = 1, right = j;
+            while (left < right) {
+                int mid = left + (right - left) / 2;
+                if (dp[i-1][mid-1] < dp[i][j-mid]) left = mid + 1;
+                else right = mid;
+            }
+            dp[i][j] = Math.min(dp[i][j], Math.max(dp[i-1][right-1], dp[i][j-right]) + 1);
+        }
+    }    
+    return dp[k][n];
+}
+#+END_SRC
+
+进一步来想，对于固定的k，dp[i][j-k] 会随着j的增加而增加，最优决策点也会随着j单调递增，所以在每次移动j后，从上一次的最优决策点的位置来继续向后查找最优点即可，这样时间复杂度就优化到了 O(KN)，我们使用一个变量s表示当前的j值下的的最优决策点，然后当j值改变了，我们用一个 while 循环，来找到第下一个最优决策点s，使得 dp[i - 1][s - 1] 不小于 dp[i][j - s]，参见代码如下：
+
+#+BEGIN_SRC java
+public int superEggDrop(int k, int n) {
+    int dp [][] = new int [k + 1][n + 1];
+    for(int i = 1 ; i <= n ; i++) dp[1][i] = i;
+    for(int i = 2 ; i <= k; i++) {
+        int s = 1;
+        for (int j = 1; j <= n; j++) {
+            dp[i][j] = j;
+            while (s < j && dp[i-1][s-1] < dp[i][j-s]) ++s;
+            dp[i][j] = Math.min(dp[i][j], Math.max(dp[i-1][s-1], dp[i][j-s]) + 1);
+        }
+    }    
+    return dp[k][n];
+}
+#+END_SRC
+
+其实我们还可以进一步优化时间复杂度到 O(KlgN)，不过就比较难想到了，需要将问题转化一下，变成已知鸡蛋个数，和操作次数，求最多能测多少层楼的临界点。还是使用动态规划 Dynamic Programming 来做，用一个二维 DP 数组，其中 dp[i][j] 表示当有i次操作，且有j个鸡蛋时能测出的最高的楼层数。再来考虑状态转移方程如何写，由于 dp[i][j] 表示的是在第i次移动且使用第j个鸡蛋测试第 dp[i-1][j-1]+1 层，因为上一个状态是第i-1次移动，且用第j-1个鸡蛋。此时还是有两种情况：
+
+鸡蛋碎掉：说明至少可以测到的不会碎的层数就是 dp[i-1][j-1]。
+
+鸡蛋没碎：那这个鸡蛋可以继续利用，此时我们还可以再向上查找 dp[i-1][j] 层。
+
+那么加上当前层，总共可以通过i次操作和j个鸡蛋查找的层数范围是 [0, dp[i-1][j-1] + dp[i-1][j] + 1]，这样就可以得到状态转移方程如下：
+
+dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j] + 1
+
+当 dp[i][K] 正好小于N的时候，i就是我们要求的最小次数了，参见代码如下：
+
+#+BEGIN_SRC java
+public int superEggDrop(int k, int n) {
+    int dp [][] = new int [n + 1][k + 1];
+    int m = 0;
+    while (dp[m][k] < n) {
+        ++m;
+        for (int j = 1; j <= k; j++)
+            dp[m][j] = dp[m-1][j-1] + dp[m-1][j] + 1;
+    }
+    return m;
+}
+#+END_SRC
+
+我们可以进一步的优化空间，因为当前的操作次数值的更新只跟上一次操作次数有关，所以我们并不需要保存所有的次数，可以使用一个一维数组，其中 dp[i] 表示当前次数下使用i个鸡蛋可以测出的最高楼层。状态转移方程的推导思路还是跟上面一样，参见代码如下：
+
+#+BEGIN_SRC java
+public int superEggDrop(int k, int n) {
+    int [] dp = new int [k+1];
+    int ans = 0;
+    for (; dp[k] < n; ans++) 
+        for (int i = k; i > 0; i--) 
+            dp[i] = dp[i] + dp[i-1] + 1;
+    return ans;
+}
+#+END_SRC
+
+下面这种方法就非常的 tricky 了，居然推导出了使用k个鸡蛋，移动x次所能测的最大楼层数的通项公式，推导过程可以参见[这个帖子](https://leetcode.com/problems/super-egg-drop/discuss/181702/Clear-C%2B%2B-codeRuntime-0-msO(1)-spacewith-explation.No-DPWhat-we-need-is-mathematical-thought!)，通项公式如下：
+
+f(k,x) = x(x-1)..(x-k)/k! + ... + x(x-1)(x-2)/3! + x(x-1)/2! + x
+
+这数学功底也太好了吧，有了通向公式后，我们就可以通过二分搜索法 Binary Search 来快速查找满足题目的x。这里其实是博主之前总结贴 [LeetCode Binary Search Summary 二分搜索法小结](http://www.cnblogs.com/grandyang/p/6854825.html) 中的第四类，用子函数当作判断关系，这里子函数就是用来实现上面的通向公式的，不过要判断，当累加和大于等于N的时候，就要把当的累加和返回，这样相当于进行了剪枝，因为在二分法中只需要知道其跟N的大小关系，并不 care 到底大了多少，这样快速定位x的方法运行速度貌似比上面的 DP 解法要快不少，但是这通项公式尼玛谁能容易的推导出来，只能膜拜叹服了，参见代码如下：
+
+#+BEGIN_SRC java
+public int superEggDrop(int k, int n) {
+    int l = 1, r = n;
+    while (l < r) {
+        int m = l + (r - l) / 2;
+        if (helper(m, k, n) < n) l = m + 1;
+        else r = m;
+    }
+    return r;
+}
+private int helper(int x, int k, int n) {
+    int ans = 0, r = 1;
+    for (int i = 1; i <= k; i++) {
+        r *= x - i + 1;
+        r /= i;
+        ans += r;
+        if (ans >= n) break;
+    }
+    return ans;
+}
+#+END_SRC
 
 ** BitMask掩码相关的
 
@@ -6000,7 +6280,7 @@ public int minimumDifference(int[] nums) {
 ** 数有多少个数组数不清楚
 ** 336. Palindrome Pairs - Hard
 Given a list of unique words, return all the pairs of the distinct indices (i, j) in the given list, so that the concatenation of the two words words[i] + words[j] is a palindrome.
-*** 解题思路与分析
+**** 解题思路与分析
 - 利用字典wmap保存单词 -> 下标的键值对
 - 遍历单词列表words，记当前单词为word，下标为idx：
 #+BEGIN_SRC java
@@ -7005,7 +7285,7 @@ public int shortestSubarray(int[] nums, int k) {
 
 ** 1438. Longest Continuous Subarray With Absolute Diff Less Than or Equal to Limit - Medium 双端队列
 Given an array of integers nums and an integer limit, return the size of the longest non-empty subarray such that the absolute difference between any two elements of this subarray is less than or equal to limit.
-*** 解题思路与分析
+**** 解题思路与分析
 - 如果使用普通列表再排序的话会增加一个logn的时间复杂度，会超时！
 - 选对了数据类型后，直接套滑窗模板即可，简单的一。。。
 - Intuition:
@@ -7176,7 +7456,7 @@ The ship then makes a return trip to storage to take more boxes from the queue.
 The ship must end at storage after all the boxes have been delivered.
 
 Return the minimum number of trips the ship needs to make to deliver all boxes to their respective ports.
-*** 解题思路与分析: 滑动窗口
+**** 解题思路与分析: 滑动窗口
 - 这里会需要一种决策：需要总运送次数最少，就涉及到同一船是否只装送往同一满港口的优化与选择问题，用滑动窗口，也有贪心的解法 
 - 时间复杂度： O(N)
 #+BEGIN_SRC java
@@ -7238,7 +7518,7 @@ A good array is an array where the number of different integers in that array is
 
 For example, [1,2,3,1,2] has 3 different integers: 1, 2, and 3.
 A subarray is a contiguous part of an array.
-*** 解题思路与分析
+**** 解题思路与分析
 - 思路依然是滑动窗口，但是这一题是没法直接套用76题的模板的，有一些变动（引用）。回忆前面做的滑动窗口的题目，有求过子数组里面最多K个不同元素的题（340），所以这个解法的思路是求子数组里面最多K个不同元素的子数组的数量 - 子数组里面最多K - 1个不同元素的子数组的数量。
 #+BEGIN_SRC java
 private int atMostK(int [] arr, int k) {
@@ -7268,7 +7548,7 @@ We want to hire exactly k workers to form a paid group. To hire a group of k wor
 Every worker in the paid group should be paid in the ratio of their quality compared to other workers in the paid group.
 Every worker in the paid group must be paid at least their minimum wage expectation.
 Given the integer k, return the least amount of money needed to form a paid group satisfying the above conditions. Answers within 10-5 of the actual answer will be accepted.
-*** 解题思路与分析
+**** 解题思路与分析
 - 做题的时候没有想明白，为什么不是性价比最低的k个工人，什么情况下性价比最低的k个工人不是题目要求的答案？
 - 时间复杂度O ( n log ⁡ n )，空间O ( n ) 。
 #+BEGIN_SRC java
@@ -7747,7 +8027,7 @@ public boolean containsNearbyAlmostDuplicate(int[] nums, int k, int t) {
 A string is called a happy prefix if is a non-empty prefix which is also a suffix (excluding itself).
 
 Given a string s, return the longest happy prefix of s. Return an empty string "" if no such prefix exists.
-*** 解题思路与分析: KMP算法
+**** 解题思路与分析: KMP算法
 
     [[./pic/happyString.png]]
 
@@ -8111,7 +8391,7 @@ Find the largest index j such that i <= j < s.length and s[k] < s[i - 1] for all
 Swap the two characters at indices i - 1​​​​ and j​​​​​.
 Reverse the suffix starting at index i​​​​​​.
 Return the number of operations needed to make the string sorted. Since the answer can be too large, return it modulo 109 + 7.
-*** 解题思路与分析
+**** 解题思路与分析
 题中每次对字符串 s 执行的操作，是将其变为由当前字母组成的前一字典序的字符串。因此求最少操作次数，等价于求解该字符串在由当前字母组成的所有排列中的字典序；
 
 求比当前字符串 s 小的排列个数，可通过排列组合公式计算得到；
@@ -8170,7 +8450,7 @@ More formally, you want to choose four integers i, j, k, l such that 0 <= i <= j
 Return the maximum possible product of the lengths of the two non-intersecting palindromic substrings.
 
 A palindrome is a string that is the same forward and backward. A substring is a contiguous sequence of characters in a string.
-*** 解题思路与分析
+**** 解题思路与分析
 
 这个马拉车，好像还是很半生不熟，要好好理解消化一下
 
@@ -8636,7 +8916,7 @@ public int numberOfCombinations(String t) {
     return pre[n-1][n-1];
 }
 #+END_SRC
-*** 解题思路与分析 todo: 其它思路，改天补上
+**** 解题思路与分析 todo: 其它思路，改天补上
 
 ** 87. Scramble String - Hard 非常经典：要韧熟于心
 We can scramble a string s to get a string t using the following algorithm:
@@ -8840,7 +9120,7 @@ A valid path in the graph is any path that starts at node 0, ends at node 0, and
 Return the maximum quality of a valid path.
 
 Note: There are at most four edges connected to each node.
-*** 解题思路与分析
+**** 解题思路与分析
 
 A straightforward idea is to try all paths from node 0 and calculate the max path quality for paths also end with node 0.
 
@@ -8916,7 +9196,7 @@ public int maximalPathQuality(int[] values, int[][] edges, int maxTime) {
 Given the strings s1 and s2 of size n and the string evil, return the number of good strings.
 
 A good string has size n, it is alphabetically greater than or equal to s1, it is alphabetically smaller than or equal to s2, and it does not contain the string evil as a substring. Since the answer can be a huge number, return this modulo 109 + 7.
-*** 解题思路与分析: 记忆化搜索
+**** 解题思路与分析: 记忆化搜索
   
 [[./pic/goodString.png]]
 
@@ -9011,7 +9291,7 @@ Concatenate the elements of the sequence to get the encoded string: "ab121p".
 Given two encoded strings s1 and s2, consisting of lowercase English letters and digits 1-9 (inclusive), return true if there exists an original string that could be encoded as both s1 and s2. Otherwise, return false.
 
 Note: The test cases are generated such that the number of consecutive digits in s1 and s2 does not exceed 3.
-*** 解题思路与分析- （这里需要再好好总结一下）
+**** 解题思路与分析- （这里需要再好好总结一下）
 - solution is straight forward we have 2 pointer in each string
 #+BEGIN_SRC java
 1.consider the easy case, they all character, we compare s1.charAt(i) == s2.charAt(j)
@@ -9463,7 +9743,7 @@ Each square is dropped one at a time from a height above any landed squares. It 
 After each square is dropped, you must record the height of the current tallest stack of squares.
 
 Return an integer array ans where ans[i] represents the height described above after dropping the ith square.
-*** 解题思路与分析: O(N^2) 本能土办法
+**** 解题思路与分析: O(N^2) 本能土办法
 方块的大小不是固定的，有可能很大，但是不管方块再大，只要有一点点部分搭在其他方块上面，整个方块都会在上面，并不会掉下来，让我们求每落下一个方块后的最大高度。我们知道返回的是每落下一个方块后当前场景中的最大高度，那么返回的数组的长度就应该和落下方块的个数相同。所以我们可以建立一个heights数组，其中heights[i]表示第i块方块落下后所在的高度，那么第i块方块落下后场景的最大高度就是[0, i]区间内的最大值。那么我们在求出heights数组后，只要不停返回[0, i]区间内的最大值即可。继续来看，这道题的难点就是方块重叠的情况，我们先来想，如果各个方块不重叠，那么heights[i]的高度就是每个方块自身的高度。一旦重叠了，就得在已有的基础上再加上自身的高度。那么我们可以采用brute force的思想，对于每个一个下落的方块，我们都去看和后面将要落下的方块有没有重叠，有的话，和后面将要落下的方块的位置相比较，取二者中较大值为后面要落下的方块位置高度heights[j]。判读两个方块是否重叠的方法是如果方块2的左边界小于方块1的右边界，并且方块2点右边界大于方块1点左边界。就拿题目中的例子1来举例吧，第一个下落的方块的范围是[1, 3]，长度为2，则heights[0]=2，然后我们看其和第二个方块[2, 5]是否重叠，发现是重叠的，则heights[1]更新为2，再看第三个方块[6, 7]，不重叠，不更新。然后第二个方块落下，此时累加高度，则heights[1]=5，再看第三个方块，不重叠，不更新。然后第三个方块落下, heights[2]=1。此时我们heights数组更新好了，然后我们开始从头遍历，维护一个当前最大值curMax，每次将[0, i]中最大值加入结果res即可，
 #+BEGIN_SRC java
 public List<Integer> fallingSquares(int[][] p) {
@@ -9487,7 +9767,7 @@ public List<Integer> fallingSquares(int[][] p) {
     return ans;
 }
 #+END_SRC
-*** 解题思路与分析： 线段树 + 离散化
+**** 解题思路与分析： 线段树 + 离散化
 
 想象x xx轴是地面，如果某个方块掉落的过程中遇到了之前的某个方块（擦边而过不算），则该方块会叠到上面。现在给定一个长n nn数组A AA，A [ i ] A[i]A[i]存了第i ii个掉落的方块的信息，其中A [ i ] [ 0 ] A[i][0]A[i][0]表示它的左下角的x xx坐标，A [ i ] [ 1 ] A[i][1]A[i][1]表示它的边长。要求返回一个长n nn数组B BB，使得B [ i ] B[i]B[i]表示在A [ i ] A[i]A[i]掉落之后，当前所有方块的最高点的y yy坐标。
 
@@ -9762,7 +10042,7 @@ startWith
 题目
 ** 440. K-th Smallest in Lexicographical Order -  Hard
 Given two integers n and k, return the kth lexicographically smallest integer in the range [1, n].
-*** 解题思路与分析
+**** 解题思路与分析
 就像dfs时当我们需要两个字符串，遍历字符串，我们并不需要看的去遍历字符串，我们只要移动下标就可以了
 
 这里我们并不需要真的去建和遍历这样一个字典，我们只要理清数字个数之间的关系就可以了
@@ -11574,7 +11854,7 @@ You are given a 0-indexed 2D integer array of events where events[i] = [startTim
 Return this maximum sum.
 
 Note that the start time and end time is inclusive: that is, you cannot attend two events where one of them starts and the other ends at the same time. More specifically, if you attend an event with end time t, the next event must start at or after t + 1.
-*** 解题思路与分析
+**** 解题思路与分析
 - 因为最多只有两个事件，联想到股票问题的只有两次交易，很容易想到从头到尾扫一遍，从尾到头扫一遍
 - 也是一道扫描线问题，借助TreeMap, PriorityQueue等数据结构，或binary search算法帮助保证正确性以及提速
 - 再熟悉一下NavigableMap类中的floorKey()和ceilingKey()的API：
@@ -11635,7 +11915,7 @@ You are also given a 0-indexed 2D integer array queries where queries[i] = [left
 
 For example, s = "||**||**|*", and a query [3, 8] denotes the substring "*||**|". The number of plates between candles in this substring is 2, as each of the two plates has at least one candle in the substring to its left and right.
 Return an integer array answer where answer[i] is the answer to the ith query.
-*** 解题思路与分析
+**** 解题思路与分析
 - 先把每个调用的最左、以及最右的蜡烛的位置找出来，假如作必要的前置处理的话，可以做到O(1)时间
 - 而要数这最左与最右蜡烛之间的盘子个数的话，如果我们前置数清楚所有位置蜡烛个数，我们也可以做到O(1)时间
 - 所以，使用三个数组，一个记录各个位置蜡烛总个数，另两个分别纪录左右端点
@@ -12018,7 +12298,7 @@ You are given an integer array nums of even length n and an integer limit. In on
 The array nums is complementary if for all indices i (0-indexed), nums[i] + nums[n - 1 - i] equals the same number. For example, the array [1,2,3,4] is complementary because for all indices i, nums[i] + nums[n - 1 - i] = 5.
 
 Return the minimum number of moves required to make nums complementary.
-*** 解题思路与分析 Sweep Line / Prefix Sum
+**** 解题思路与分析 Sweep Line / Prefix Sum
 Let a = min(nums[i], nums[n-i-1]), b = max(nums[i], nums[n-i-1])
 
 The key to this problem is how many moves do we need to make a + b == T.
@@ -12230,7 +12510,7 @@ You are given an array nums. You can rotate it by a non-negative integer k so th
 
 For example, if we have nums = [2,4,1,3,0], and we rotate by k = 2, it becomes [1,3,0,2,4]. This is worth 3 points because 1 > 0 [no points], 3 > 1 [no points], 0 <= 2 [one point], 2 <= 3 [one point], 4 <= 4 [one point].
 Return the rotation index k that corresponds to the highest score we can achieve if we rotated nums by it. If there are multiple answers, return the smallest such index k.
-*** 解题思路与分析
+**** 解题思路与分析
 
 答案的思路也十分巧妙，并没有采用brute force那种直接求每一个K值的得分，而是反其道而行之，对于每个数字，探究其跟K值之间的联系。首先我们要讨论一下边界情况，那么就是当A[i] = 0 或 N 的情况，首先如果A[i] = 0的话，那么0这个数字在任何位置都会小于等于坐标值，所以在任何位置都会得分的，那么其实可以忽略之，因为其不会对最大值产生任何影响，同理，如果A[i] = N的时候，由于长度为N的数组的坐标值范围是[0, N-1]，所以数字N在任何位置都不得分，同样也不会对最大值产生任何影响，可以忽略之。那么我们关心的数字的范围其实是[1, N-1]。在这个范围内的数字在旋转数组的过程中，从位置0变到N-1位置的时候，一定会得分，因为此范围的数字最大就是N-1。这个一定得的分我们在最后统一加上，基于上面的发现，我们再来分析下题目中的例子 [2, 3, 1, 4, 0]，其中红色数字表示不得分的位置：
 
@@ -12574,7 +12854,7 @@ The width of a sequence is the difference between the maximum and minimum elemen
 Given an array of integers nums, return the sum of the widths of all the non-empty subsequences of nums. Since the answer may be very large, return it modulo 109 + 7.
 
 A subsequence is a sequence that can be derived from an array by deleting some or no elements without changing the order of the remaining elements. For example, [3,6,2,7] is a subsequence of the array [0,3,1,6,2,2,7].
-*** 解题思路与分析
+**** 解题思路与分析
 - 这道题的最优解法相当的 tricky，基本有点脑筋急转弯的感觉了。在解题之前，我们首先要知道的是一个长度为n的数组，共有多少个子序列，如果算上空集的话，共有 2^n 个。
 
 那么在给数组排序之后，对于其中任意一个数字 A[i]，其前面共有i个数是小于等于 A[i] 的，这i个数字共有 2^i 个子序列，它们加上 A[i] 都可以组成一个新的非空子序列，并且 A[i] 是这里面最大的数字，那么在宽度计算的时候，就要加上 A[i] x (2^i)，
@@ -12620,7 +12900,7 @@ You are given an array of integers distance.
 You start at point (0,0) on an X-Y plane and you move distance[0] meters to the north, then distance[1] meters to the west, distance[2] meters to the south, distance[3] meters to the east, and so on. In other words, after each move, your direction changes counter-clockwise.
 
 Return true if your path crosses itself, and false if it does not.
-*** 解题思路与分析
+**** 解题思路与分析
 - 参考的网上大神们的解法，实际上相交的情况只有以下三种情况：
 #+BEGIN_SRC java
      x(1)
@@ -12674,7 +12954,7 @@ public boolean isSelfCrossing(int [] d) {
 Given an array rectangles where rectangles[i] = [xi, yi, ai, bi] represents an axis-aligned rectangle. The bottom-left point of the rectangle is (xi, yi) and the top-right point of it is (ai, bi).
 
 Return true if all the rectangles together form an exact cover of a rectangular region.
-*** 解题思路与分析: 数顶点个数：掩码O(N)
+**** 解题思路与分析: 数顶点个数：掩码O(N)
     
     [[./pic/rect.png]]
     
@@ -12697,7 +12977,7 @@ public boolean isRectangleCover(int[][] rectangles) { // 这个还需要好好�
     return true;
 }
 #+END_SRC
-*** 解题思路与分析: 这个就当帮上一个方法理解消化
+**** 解题思路与分析: 这个就当帮上一个方法理解消化
     
     [[./pic/rect3.png]]
 #+BEGIN_SRC cpp
@@ -12730,7 +13010,7 @@ bool isValid(unordered_map<string, int>& m, string corner, int type) {
     return true;
 }
 #+END_SRC
-*** 解题思路与分析
+**** 解题思路与分析
     
     [[./pic/rect2.png]]
 #+BEGIN_SRC java
