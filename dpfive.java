@@ -743,15 +743,758 @@ public class dpfive {
         //     return ans;
         // }
 
+        // private int dfs(int [] a, int i, int j) {
+        //     if (j - i < 2) return 0; // 最开始终止条件没有写对
+        //     if (dp[i][j] > 0) return dp[i][j];
+        //     int ans = Integer.MAX_VALUE;
+        //     for (int k = i+1; k < j; k++) 
+        //         ans = Math.min(ans, a[i]*a[k]*a[j] + dfs(a, i, k) + dfs(a, k, j));
+        //     return dp[i][j] = ans;
+        // }
+        // int [][] dp;
+        // int n;
+        // public int minScoreTriangulation(int[] a) {
+        //     n = a.length;
+        //     dp = new int [n][n];
+        //     return dfs(a, 0, n-1);
+        // }
+
+        // public int minSteps(int n) {
+        //     if (n == 1) return 0;
+        //     int [] dp = new int [n+1];
+        //     dp[1] = 0;
+        //     dp[2] = 2;     // copy A + paste A 
+        //     for (int i = 3; i <= n; i++) {
+        //         dp[i] = i; // 最多操作i次，在dp[2] = 2的基础上每多加一个字母就多paste一次
+        //         for (int j = i-1; j >= 2; j--) {
+        //             if (i % j == 0) // 可以在面板上有j个A的基础上，copy j个A，再paste i/j-1次
+        //                 dp[i] = Math.min(dp[i], dp[j]+1 + i/j-1);
+        //         }
+        //     }
+        //     return dp[n];
+        // }
+
+        // 首先我们对矩阵进行数据初始化。即求出每一行以及每一列上的前缀和。
+        // 遍历矩阵每一个点（两层循环），并以该点最为起点（row, col），向右下方向画矩形（两层循环，分别循环矩形的宽width和高height），
+              // 注意矩形范围不能越界。起始时width和height分别为0，即当前点自身是一个矩形。
+        // 当width扩大一格后，实际上是增加了(row, col+width)到(row+height, col+width)这一部分的面积（宽为width，高为height），
+              // 我们通过前缀和数组求出该区域和是否等于height，如果等于，返回结果加一即可。
+        // width扩大一格的操作同理。
+        // public int numSubmat(int[][] mat) {
+        //     int m = mat.length, n = mat[0].length;
+        //     int [][] row = new int [m][n]; // 每一行的前缀和
+        //     int [][] col = new int [m][n]; // 每一列的前缀和
+        //     for (int i = 0; i < m; i++)
+        //         for (int j = 0; j < n; j++) 
+        //             row[i][j] = (j == 0 ? 0 : row[i][j-1]) + mat[i][j];
+        //     for (int j = 0; j < n; j++) 
+        //         for (int i = 0; i < m; i++) 
+        //             col[i][j] = (i == 0 ? 0 : col[i-1][j]) + mat[i][j];
+        //     int ans = 0;
+        //     for (int i = 0; i < m; i++) 
+        //         for (int j = 0; j < n; j++) 
+        //             for (int r = 0; i+r < m; r++)       // 以当前点为顶点，向下扩大一格, r = 0 起点是0，当前格自身也是答案
+        //                 for (int c = 0; j+c < n; c++) { // 以当前点为顶点，向右扩大一格
+        //                     int x = i + r, y = j + c;
+        //                     // 数新扩张区域内每行每列区域内长度累加和都等于长度，即新增区域每格都是1
+        //                     if ((j == 0 && row[x][y] == c+1 || j > 0 && row[x][y] - row[x][j-1] == c+1)
+        //                         && (i == 0 && col[x][y] == r+1 || i > 0 && col[x][y] - col[i-1][y] == r+1))
+        //                         ans++;
+        //                     else break;
+        //                 }
+        //     return ans;
+        // }
+        // Used two Arrays to store number of consecutive ones on the left, and number of consecutive ones above(up)
+        //     In one m*n loop we can count the number of order 1xM rectangles where M belongs to [1,m-1]
+        //     and we can count rectangles of order MxN each time where M>1. in the k index loop.
+        // public int numSubmat(int[][] mat) {
+        //     int m = mat.length, n = mat[0].length;
+        //     int [][] left = new int [m][n]; // 每一行的前缀和
+        //     int [][] abov = new int [m][n]; // 每一列的前缀和
+        //     int ans = 0;
+        //     for (int i = 0; i < m; i++) 
+        //         for (int j = 0; j < n; j++) 
+        //             if (mat[i][j] == 1)  {
+        //                 left[i][j] = (j == 0 ? 0 : left[i][j-1]) + 1;
+        //                 ans += (j == 0 ? 1 : left[i][j]);
+        //                 abov[i][j] = (i == 0 ? 0 : abov[i-1][j]) + 1;
+        //                 if (i > 0) {
+        //                     int min = left[i][j];
+        //                     for (int k = 1; k < abov[i][j]; k++) {
+        //                         min = Math.min(min, left[i-k][j]);
+        //                         ans += min;
+        //                     }
+        //                 }
+        //             }
+        //     return ans;
+        // }
+        // // In the first pass through the matrix, we store the heights of 1s above a given i,j
+        // // In the second pass, we go through each element that is nonzero, scan leftwards,
+        // //     adding the minimum of the heights encountered until we reach the beginning of the row or hit a zero.
+        // public int numSubmat(int[][] mat) {
+        //     int m = mat.length, n = mat[0].length;
+        //     for (int j = 0; j < n; j++) {
+        //         int colsum = 0;
+        //         for (int i = 0; i < m; i++) {
+        //             if (mat[i][j] == 0) colsum = 0;
+        //             else colsum += mat[i][j];
+        //             mat[i][j] = colsum;
+        //         }
+        //     }
+        //     int tot = 0;
+        //     for (int i = 0; i < m; i++) 
+        //         for (int j = 0; j < mat[i].length; j++) {
+        //             int k = j;
+        //             int min = Integer.MAX_VALUE;
+        //             while (k >= 0 && mat[i][k] != 0) {
+        //                 min = Math.min(min, mat[i][k]);
+        //                 tot += min;
+        //                 k--;
+        //             }
+        //         }
+        //     return tot;
+        // }
+        // private int res = 0; // todo
+        // private int n;
+        // public int numSubmat(int[][] mat) {
+        //     this.n = mat[0].length;
+        //     // dp[j] : the height (number of consecutive '1's) of column j 
+        //     int[] dp = new int[n];
+        //     for (int i = 0; i < mat.length; i++) {
+        //         // calculating (updating) heights
+        //         for (int j = 0; j < n; j++) 
+        //             dp[j] = mat[i][j] == 1 ? dp[j] + 1 : 0;
+        //         enumerateRowByMinHeight(dp);
+        //     }
+        //     return res;
+        // }
+        // public void enumerateRowByMinHeight(int[] dp) {
+        //     // monotonic stack storing indices : for index p < q in stack, dp[p] < dp[q]
+        //     Deque<Integer> stack = new LinkedList<>();
+        //     stack.offerLast(-1);
+        //     for (int j = 0; j < n; j++) {
+        //         while (stack.peekLast() != -1 && dp[stack.peekLast()] >= dp[j]) {
+        //             int idx = stack.pollLast();
+        //             res += dp[idx] * (idx - stack.peekLast()) * (j - idx);
+        //         }
+        //         stack.offerLast(j);
+        //     }
+        //     while (stack.peekLast() != -1) {
+        //         int idx = stack.pollLast();
+        //         res += dp[idx] * (idx - stack.peekLast()) * (n - idx);
+        //     }
+        // }
+
+        // public int minFlipsMonoIncr(String t) { // bug
+        //     int n = t.length();
+        //     char [] s = t.toCharArray();
+        //     boolean hasOne = false, hasZoo = false;
+        //     int cntOne = 0, cntZoo = 0;
+        //     int i = 0, j = 0;
+        //     while (i < n && s[i] != '1') i++; // 去头0
+        //     if (i == n) return 0;
+        //     hasOne = true; // ??
+        //     i++;
+        //     while (i < n) {
+        //         if (s[i] == '0') cntZoo++;
+        //         i++;
+        //     }
+        //     i = n-1;
+        //     while (i >= 0 && s[i] != '0') i--; // 去尾1
+        //     i--;
+        //     while (i >= 0) {
+        //         if (s[i] == '1') cntOne++;
+        //         i--;
+        //     }
+        //     // 这种思路乍看上去没什么问题，但是实际上是有问题的，比如对于这个例子 "10011111110010111011"，如果按这种思路的话，
+        //     //     就应该将所有的0变为1，从而返回6，但实际上更优的解法是将第一个1变为0，将后4个0变为1即可，最终可以返回5，这说明了之前的解法是不正确的。
+        //     return Math.min(cntOne, cntZoo); // 然后保留换0 1 的最小次数，思路不对
+        // }
+        // 可以用动态规划 Dynamic Programming 来做，需要使用两个 dp 数组，其中 cnt1[i] 表示将范围是 [0, i-1] 的子串内最小的将1转为0的个数，从而形成单调字符串。
+        // 同理，cnt0[j] 表示将范围是 [j, n-1] 的子串内最小的将0转为1的个数，从而形成单调字符串。
+        // 这样最终在某个位置使得 cnt0[i]+cnt1[i] 最小的时候，就是变为单调串的最优解，
+        // public int minFlipsMonoIncr(String t) { // bug
+        //     int n = t.length();
+        //     char [] s = t.toCharArray();
+        //     int [] l = new int [n+1], r = new int [n];
+        //     for (int i = 1; i <= n; i++) 
+        //         l[i] = l[i-1] + (s[i-1] == '0' ? 0 : 1); // cnt left --> right 1--> 0
+        //     for (int i = n-1; i >= 0; i--) 
+        //         r[i] = (i == n-1 ? 0 : r[i+1]) + (s[i] == '0' ? 1 : 0);
+        //     int min = Integer.MAX_VALUE;
+        //     for (int i = 0; i < n; i++) 
+        //         min = Math.min(l[i] + r[i], min);
+        //     min = Math.min(min, l[n]);
+        //     return min;
+        // }
+        // public int minFlipsMonoIncr(String t) { // bug
+        //     int n = t.length(), ans = Integer.MAX_VALUE;
+        //     char [] s = t.toCharArray();
+        //     int [] l = new int [n+1], r = new int [n+1];
+        //     for (int i = 1, j = n-1; i <= n; i++, --j) {
+        //         l[i] = l[i-1] + (s[i-1] == '0' ? 0 : 1); // cnt left --> right 1--> 0
+        //         r[j] = r[j+1] + (s[j] == '0' ? 1 : 0);
+        //     }
+        //     for (int i = 0; i <= n; i++) 
+        //         ans = Math.min(l[i] + r[i], ans);
+        //     return ans;
+        // }
+        // 用一个变量 cnt1 来记录当前位置时1出现的次数，同时 res 表示使到当前位置的子串变为单调串的翻转次数，
+        // 用来记录0的个数，因为遇到0就翻1一定可以组成单调串，但不一定是最优解，
+        // 每次都要和 cnt1 比较以下，若 cnt1 较小，就将 res 更新为 cnt1，
+        // 此时保证了到当前位置的子串变为单调串的翻转次数最少，并不关心到底是把0变为1，还是1变为0了
+        // public int minFlipsMonoIncr(String t) { // bug
+        //     int n = t.length(), res = 0, cntOne = 0;
+        //     char [] s = t.toCharArray();
+        //     for (int i = 0; i < n; i++) {
+        //         if (s[i] == '0') res++;
+        //         else cntOne++;
+        //         res = Math.min(res, cntOne);
+        //     }
+        //     return res;
+        // }
+
+       // public int maxScoreSightseeingPair(int[] a) {
+       //      int n = a.length;
+       //      int idx = 0, ans = 0;
+       //      for (int i = 1; i < n; i++) {
+       //          if (a[i] + a[idx] + idx - i > ans) 
+       //              ans = a[i] + a[idx] + idx - i;
+       //          if (a[i] + i > a[idx] + idx)
+       //              idx = i;
+       //      }
+       //      return ans;
+       //  }
+
+        // public int longestSubarray(int[] a) { // bug出多了，自己也能悟出来：数据结构能帮大忙：
+        //     int n = a.length, cnt = 0, i = 0, max = 0; // 以后比赛的时候就这么写，自己数下标，数得累死还bug满天飞，借助一个双端队列，至少自动过滤掉不少bug
+        //     ArrayDeque<Integer> q = new ArrayDeque<>();
+        //     boolean hasO = false; // {0, 0, 1, 1} 这个特例不能忘记了
+        //     while (i < n && a[i] == 0) {
+        //         hasO = true;
+        //         i++;
+        //     }
+        //     if (i == n) return 0;
+        //     for (; i < n; i++) {
+        //         q.offerLast(a[i]);
+        //         if (a[i] == 0) {
+        //             cnt++;
+        //             if (cnt == 2) {
+        //                 max = Math.max(max, q.size()-cnt);
+        //                 while (!q.isEmpty() && q.peek() != 0) q.pollFirst();
+        //                 q.pollFirst();
+        //                 cnt--;
+        //             }
+        //         }
+        //     }
+        //     if (a[n-1] == 1) max = Math.max(max, q.size()-(cnt > 0 ? cnt : (hasO ? 0 : 1)));
+        //     else max = Math.max(max, q.size()-cnt);
+        //     return max;
+        // }
+        // int longestSubarray(vector<int>& nums) {
+        //     const int n = nums.size();
+        //     int ans = 0;
+        //     int sum = 0; // sum of nums[l~r].
+        //     for (int l = 0, r = 0; r < n; ++r) {
+        //         sum += nums[r];
+        //         while (l < r && sum < r - l) // Maintain sum >= r - l, at most 1 zero.
+        //             sum -= nums[l++];
+        //         ans = max(ans, r - l);
+        //     }
+        //     return ans;
+        // }
+        // count1：当前包含一个非1的连续长度。
+        // count2：当前全是1的连续长度。
+        // 循环数组每一个数字，如果当前数字是1，count1和count2同时加一，同时使用count1更新全局最大值。
+        // 重点来了，如果当前数字是非1，则设count1等于count2，count2设为0。最后处理一下全是1的特例即可。
+        // public int longestSubarray(int[] a) { // bug出多了，自己也能悟出来：数据结构帮大忙：
+        //     int n = a.length, ans = 0, cnt = 0, one = 0, zoo = 0;
+        //     for (Integer v : a) {
+        //         if (v == 0) {
+        //             zoo++;
+        //             cnt = one;
+        //             one = 0;
+        //         } else {
+        //             cnt++;
+        //             one++;
+        //             ans = Math.max(ans, cnt);
+        //         }
+        //     }
+        //     return ans == n ? n-1 : ans;
+        // }
+        // int longestSubarray(vector<int>& nums) {
+        //     const int n = nums.size();
+        //     vector<int> l(n);
+        //     vector<int> r(n);
+        //     for (int i = 0; i < n; ++i)
+        //         l[i] = (i > 0 ? l[i - 1] * nums[i] : 0) + nums[i];
+        //     for (int i = n - 1; i >= 0; --i)
+        //         r[i] = (i < n - 1 ? r[i + 1] * nums[i] : 0) + nums[i];
+        //     int ans = 0;
+        //     for (int i = 0; i < n; ++i)
+        //         ans = max(ans, (i > 0 ? l[i - 1] : 0) + 
+        //                        (i < n - 1 ? r[i + 1] : 0));
+        //     return ans;
+        // }
+        // int longestSubarray(vector<int>& nums) {
+        //     const int n = nums.size();
+        //     // dp[i][0] := longest subarray ends with nums[i-1] has no zeros.
+        //     // dp[i][0] := longest subarray ends with nums[i-1] has 1 zero.
+        //     vector<vector<int>> dp(n + 1, vector<int>(2));
+        //     int ans = 0;
+        //     for (int i = 1; i <= n; ++i) {
+        //         if (nums[i - 1] == 1) {
+        //             dp[i][0] = dp[i - 1][0] + 1;
+        //             dp[i][1] = dp[i - 1][1] + 1;
+        //         } else {
+        //             dp[i][0] = 0;
+        //             dp[i][1] = dp[i - 1][0] + 1;
+        //         }
+        //         ans = max({ans, dp[i][0] - 1, dp[i][1] - 1});
+        //     }
+        //     return ans;
+        // }
+
+        // public long maxAlternatingSum(int[] a) {
+        //     long odd = 0, evn = a[0]; // 上一元素为偶数下标、奇数下标时的最大交替和
+        //     for (int i = 1; i < a.length; i++) {
+        //         evn = Math.max(evn, odd + a[i]); // 偶数下标交替和转移
+        //         odd = Math.max(odd, evn - a[i]); // 奇数下标交替和转移
+        //     }
+        //     return evn;
+        // }
+        // public long maxAlternatingSum(int[] a) {
+        //     int [] b = new int [a.length+1];
+        //     System.arraycopy(a, 0, b, 1, a.length);
+        //     long ans = 0;
+        //     for (int i = 1; i < b.length; i++) 
+        //         if (b[i] - b[i-1] > 0) ans += b[i] - b[i-1];
+        //     return ans;
+        // }
+        // public long maxAlternatingSum(int[] arr) { // ?
+        //     int n = arr.length;
+        //     if (n == 1) return arr[0];
+        //     int i = 0;
+        //     long res = 0;
+        //     while (true) {
+        //         while (i < n-1 && arr[i+1] > arr[i]) ++i;
+        //         res += arr[i];
+        //         if (i == n-1) return res;
+        //         ++i;
+        //         while (i < n-1 && arr[i+1] < arr[i]) ++i;
+        //         if (i == n-1) return res;
+        //         res -= arr[i];
+        //         ++i;
+        //     }
+        // }
+        
+        // public int minimumDeletions(String t) { // bug
+        //     int n = t.length();
+        //     char [] s = t.toCharArray();
+        //     int [] pre = new int [n]; // b
+        //     int [] suf = new int [n]; // a
+        //     int cnt = 0, ans = Integer.MAX_VALUE;
+        //     for (int i = 0; i < n; i++)
+        //         pre[i] = s[i] == 'b' ? ++cnt : cnt;
+        //     cnt = 0;
+        //     for (int i = n-1; i >= 0; i--)
+        //         suf[i] = s[i] == 'a' ? ++cnt : cnt;
+        //     for (int i = 0; i < n; i++) {
+        //         if (pre[i] == 0 || suf[i] == 0) continue;
+        //         ans = Math.min(ans, (i == 0 ? 0 : pre[i]) + (i == n-1 ? 0 : suf[i])-1);
+        //     } // "aaaaaabbbbabaaaabbabaaabbabbbaaabababaaaaaaabbaaabaaababaaabababa"
+        //     return ans == Integer.MAX_VALUE ? 0 : ans;
+        // }
+        // public int minimumDeletions(String t) { // 
+        //     int n = t.length();
+        //     char [] s = t.toCharArray();
+        //     int a = 0, b = 0;
+        //     for (int i = 0; i < n; i++) 
+        //         a += s[i] == 'a' ? 1 : 0;
+        //     int ans = a;
+        //     for (int i = 0; i < n; i++) { // 对于每个当前位置来说，数了前面的b 和 后面的a, 那么遍历一遍取最小值就可以了
+        //         b += s[i] == 'b' ? 1 : 0;
+        //         a -= s[i] == 'a' ? 1 : 0;
+        //         ans = Math.min(ans, a + b - (s[i] == 'b' ? 1 : 0));
+        //     }
+        //     return ans;
+        // }
+
+        // public int largest1BorderedSquare(int[][] g) {
+        //     int m = g.length, n = g[0].length, cnt = 0;
+        //     int [][] rite = new int [m][n], down = new int [m][n];
+        //     for (int i = 0; i < m; i++) 
+        //         for (int j = n-1; j >= 0; j--) 
+        //             rite[i][j] = j == n-1 ? g[i][j] : (g[i][j] == 1 ? rite[i][j+1]+1 : 0);
+        //     for (int j = 0; j < n; j++) 
+        //         for (int i = m-1; i >= 0; i--) 
+        //             down[i][j] = i == m-1 ? g[i][j] : (g[i][j] == 1 ? down[i+1][j]+1 : 0);
+        //     int ans = 0;
+        //     for (int i = 0; i < m; i++) 
+        //         for (int j = 0; j < n; j++) {
+        //             if (g[i][j] == 0) continue;
+        //             if (down[i][j] == 1 || rite[i][j] == 1) {
+        //                 if (ans == 0) ans = 1;
+        //                 continue;
+        //             }
+        //             int max = Math.min(down[i][j], rite[i][j]);
+        //             while (max > 1) {
+        //                 if (rite[i+max-1][j] < max || down[i][j+max-1] < max) {
+        //                     max--;
+        //                     continue;
+        //                 } else break;
+        //             }
+        //             ans = Math.max(ans, max*max);
+        //         }
+        //     return ans;
+        // }
+
+        // public int eraseOverlapIntervals(int[][] a) { // 刚过去周六早上的比赛简单的当时就想出来O(NlogN)的解法了，这里居然还有些不通
+        //     int n = a.length, max = 0;
+        //     Arrays.sort(a, (x, y) -> x[0] != y[0] ? x[0] - y[0] : x[1] - y[1]); // starttime, then end time
+        //     int [] dp = new int [n];
+        //     Arrays.fill(dp, 1);
+        //     for (int i = 0; i < n; i++) {
+        //         for (int j = 0; j < i; j++) {
+        //             if (a[j][1] > a[i][0]) continue;
+        //             dp[i] = Math.max(dp[i], dp[j] + 1);
+        //         }
+        //         max = Math.max(max, dp[i]);
+        //     }
+        //     return n-max;
+        // }
+        // public int eraseOverlapIntervals(int[][] a) {  // bug
+        //     int n = a.length, max = 0;
+        //     Arrays.sort(a, (x, y) -> x[0] != y[0] ? x[0] - y[0] : x[1] - y[1]); // starttime, then end time
+        //     int [] dp = new int [n];
+        //     Arrays.fill(dp, 1);
+        //     Queue<Integer> q = new PriorityQueue<>((x, y)-> dp[y] - dp[x]); // end time decreasing
+        //     for (int i = 0; i < n; i++) {
+        //         // for (int j = 0; j < i; j++) {
+        //         //     if (a[j][1] > a[i][0]) continue;
+        //         //     dp[i] = Math.max(dp[i], dp[j] + 1);
+        //         // }
+        //         while (!q.isEmpty() && a[q.peek()][1] > a[i][0]) q.poll();
+        //         if (!q.isEmpty())
+        //             dp[i] = Math.max(dp[i], dp[q.peek()] + 1);
+        //         q.offer(i);
+        //         max = Math.max(max, dp[i]);
+        //         maxDp[i] = max;
+        //     }
+        //     return n-max;
+        // }
+        // public int eraseOverlapIntervals(int[][] intervals) {
+        //     if (intervals.length == 0) return 0;
+        //     Arrays.sort(intervals, (a, b)->a[1] - b[1]);
+        //     int n = intervals.length;
+        //     int right = intervals[0][1];
+        //     int ans = 1;
+        //     for (int i = 1; i < n; ++i) 
+        //         if (intervals[i][0] >= right) {
+        //             ++ans;
+        //             right = intervals[i][1];
+        //         }
+        //     return n - ans;
+        // }
+
+        // public int findTheCity(int n, int[][] edge, int distThreshold) {
+        //     int [][] g = new int [n][n];
+        //     for (int i = 0; i < n; i++) 
+        //         Arrays.fill(g[i], Integer.MAX_VALUE);
+        //     for (int [] e : edge) {
+        //         g[e[0]][e[1]] = e[2];
+        //         g[e[1]][e[0]] = e[2];
+        //     }
+        //     for (int k = 0; k < n; k++) 
+        //         for (int i = 0; i < n; i++) 
+        //             for (int j = 0; j < n; j++) {
+        //                 if (i == j || g[i][k] == Integer.MAX_VALUE || g[k][j] == Integer.MAX_VALUE) continue;
+        //                 g[i][j] = Math.min(g[i][j], g[i][k] + g[k][j]);
+        //             }
+        //     int [] cnt = new int [n];
+        //     for (int i = 0; i < n; i++)
+        //         for (int j = 0; j < n; j++) 
+        //             if (g[i][j] <= distThreshold) cnt[i]++;
+        //     int min = Integer.MAX_VALUE, ans = n;
+        //     for (int i = 0; i < n; i++) 
+        //         if (cnt[i] <= min) {
+        //             min = cnt[i];
+        //             ans = i;
+        //         }
+        //     return ans;
+        // }
+
+        // public int videoStitching(int[][] clips, int time) { // bug bug bug 
+        //     int n = clips.length;
+        //     Arrays.sort(clips, (a, b)-> a[0] != b[0] ? a[0] - b[0] : a[1] - b[1]);
+        //     if (clips[0][0] > 0) return -1;
+        //     int [] dp = new int [n];
+        //     Arrays.fill(dp, n);
+        //     dp[0] = 0;
+        //     int min = n+1;
+        //     for (int i = 0; i < n; i++) {
+        //         int [] c = clips[i];
+        //         for (int j = i-1; j >= 0; j--) {
+        //             int [] p = clips[j];
+        //             if (p[1] < c[0]) continue;
+        //             dp[i] = Math.min(dp[i], dp[j] + 1);
+        //         }
+        //         if (c[1] >= time) min = Math.min(min, dp[i]);
+        //     }
+        //     System.out.println(Arrays.toString(dp));
+        //     return min == n+1 ? -1 : min;
+        // }
+        // public int videoStitching(int[][] clips, int time) { // bug bug bug 
+        //     int n = clips.length;
+        //     Arrays.sort(clips, (a, b)-> a[0] != b[0] ? a[0] - b[0] : a[1] - b[1]);
+        //     if (clips[0][0] > 0) return -1;
+        //     int [][] dp = new int [n][time+1];
+        //     dp[0][0] = 0;
+        //     for (int j = Math.max(0, clips[0][0]); j <= clips[0][1]; j++) 
+        //         dp[0][j] = 1;
+        //     int min = n+1;
+        //     for (int i = 1; i < n; i++) { // 这里的状态转移还有点儿逻辑不清
+        //         int [] c = clips[i];
+        //         if (dp[i][c[0]] == 0) return -1;
+        //         for (int j = c[0]; j <= c[1]; j++) {
+        //         }
+        //     }
+        //     return min == n+1 ? -1 : min;
+        // }
+        // public int videoStitching(int[][] clips, int time) { // bug bug bug 
+        //     int n = clips.length, min = n+1;
+        //     Arrays.sort(clips, (a, b)-> a[0] != b[0] ? a[0] - b[0] : a[1] - b[1]);
+        //     // System.out.println("clips.length: " + clips.length);
+        //     // for (int z = 0; z < clips.length; ++z) 
+        //     //     System.out.println(Arrays.toString(clips[z]));
+        //     if (clips[0][0] > 0) return -1;
+        //     int [][] dp = new int [n][time+1];
+        //     for (int i = 0; i < n; i++) 
+        //         Arrays.fill(dp[i], Integer.MAX_VALUE);
+        //     for (int j = clips[0][0]; j <= clips[0][1]; j++) 
+        //         dp[0][j] = 1;
+        //     for (int i = 1; i < n; i++) {
+        //         int [] c = clips[i];
+        //         for (int j = i-1; j >= 0; j--) {
+        //             int [] p = clips[j];
+        //             if (p[1] >= c[0])
+        //                 // for (int k = p[1]+1; k <= c[1]; k++)
+        //                     // dp[i][k] = Math.min(dp, b)
+        //                     dp[i][c[1]] = Math.min(dp[i][c[1]], dp[j][p[1]] + 1);
+        //         }
+        //         if (c[1] >= time) min = Math.min(min, dp[i][time]);
+        //     }
+        //     // System.out.println("dp.length: " + dp.length);
+        //     // for (int z = 0; z < dp.length; ++z) 
+        //     //     System.out.println(Arrays.toString(dp[z]));
+        //     return min == n+1 ? -1 : min;
+        // }
+
+        // public int longestArithSeqLength(int[] a) { // dif < 0 就说明不能再用数组了，必须改用图
+        //     int n = a.length, N = 501, max = 2;
+        //     int [][] dp = new int [n][N];
+        //     for (int i = 0; i < n; i++) {
+        //         dp[i][0] = 1;
+        //         for (int j = 0; j < i; j++) {
+        //             int dif = a[i] - a[j];
+        //             dp[i][dif] = Math.max(dp[i][dif], dp[j][dif] == 0 ? 2 : dp[j][dif] + 1);
+        //             max = Math.max(max, dp[i][dif]);
+        //         }
+        //     }
+        //     return max;
+        // }
+        // public int longestArithSeqLength(int[] arr) { // 上一次写的，看来本质一样呀
+        //     int n = arr.length;
+        //     List<Map<Integer, Integer>> lm = new ArrayList<>();
+        //     lm.add(new HashMap<>());
+        //     int diff = 0;
+        //     int max = 0, locMax = 0;
+        //     for (int i = 1; i < n; i++) {
+        //         Map<Integer, Integer> m = new HashMap<>();
+        //         for (int j = i-1; j >= 0; j--) {
+        //             diff = arr[i] - arr[j];
+        //             locMax = Math.max(m.getOrDefault(diff, 2), lm.get(j).getOrDefault(diff, 1) + 1);
+        //             m.put(diff, locMax);
+        //             max = Math.max(max, locMax);
+        //         }
+        //         lm.add(m);
+        //     }
+        //     return max;
+        // }
+        // public int longestArithSeqLength(int[] a) { // 原来就是这样的呀，看来自己多想想还是能够独立想得出来的嘛
+        //     int n = a.length, max = 2;
+        //     if (n <= 2) return n;
+        //     Map<Integer, Integer> [] dp = new HashMap[n];
+        //     dp[0] = new HashMap<>();
+        //     for (int i = 1; i < n; i++) {
+        //         dp[i] = new HashMap<>();
+        //         for (int j = 0; j < i; j++) {
+        //             int dif = a[i] - a[j];
+        //             int tmp = Math.max(dp[i].getOrDefault(dif, 2), dp[j].getOrDefault(dif, 1) + 1);
+        //             dp[i].put(dif, tmp);
+        //             max = Math.max(max, tmp);
+        //         }
+        //     }
+        //     return max;
+        // }
+
+        // public int orderOfLargestPlusSign(int n, int[][] mine) {
+        //     int [][] a = new int [n][n];
+        //     for (int i = 0; i < n; i++) 
+        //         Arrays.fill(a[i], 1);
+        //     for (int [] v : mine) 
+        //         a[v[0]][v[1]] = 0;
+        //     int [][] u = new int [n][n];
+        //     int [][] d = new int [n][n];
+        //     int [][] l = new int [n][n];
+        //     int [][] r = new int [n][n];
+        //     int cnt = 0, k = 0;
+        //     for (int i = 0; i < n; i++) 
+        //         for (int j = 0; j < n; j++) {
+        //             if (a[i][j] == 0) continue;
+        //             u[i][j] = 1; d[i][j] = 1;
+        //             l[i][j] = 1; r[i][j] = 1;
+                    
+        //             cnt = 1; k = i-1;
+        //             while (k >= 0 && a[k][j] == 1) {
+        //                 cnt++;
+        //                 k--;
+        //             }
+        //             u[i][j] = cnt;
+        //             cnt = 1; k = i+1;
+        //             while (k < n && a[k][j] == 1) {
+        //                 cnt++;
+        //                 k++;
+        //             }
+        //             d[i][j] = cnt;
+        //             cnt = 1; k = j+1;
+        //             while (k < n && a[i][k] == 1) {
+        //                 cnt++;
+        //                 k++;
+        //             }
+        //             r[i][j] = cnt;
+        //             cnt = 1; k = j-1;
+        //             while (k >= 0 && a[i][k] == 1) {
+        //                 cnt++;
+        //                 k--;
+        //             }
+        //             l[i][j] = cnt;
+        //         }
+        //     int max = 0;
+        //     for (int i = 0; i < n; i++)
+        //         for (int j = 0; j < n; j++) {
+        //             if (a[i][j] == 0) continue;
+        //             int c = Math.min(u[i][j], d[i][j]);
+        //             int b = Math.min(l[i][j], r[i][j]);
+        //             max = Math.max(max, Math.min(c, b));
+        //         }
+        //     return max;
+        // }
+
+        // private int binarySearch(int [] a, int l, int r, int v) { 
+        //     while (l <= r) {
+        //         int m = (l+r) / 2;
+        //         if (a[m] == v) return m;
+        //         if (a[m] > v) r = m-1;
+        //         else l = m + 1;
+        //     }
+        //     return -1;
+        // }
+        // public int lenLongestFibSubseq(int[] a) { // tle 
+        //     int n = a.length, max = 0;
+        //     int [] dp = new int [n];
+        //     Arrays.fill(dp, 1);
+        //     for (int i = 0; i < n; i++) {
+        //         if (i + max > n) break;
+        //         for (int j = i+1; j < n; j++) {
+        //             Arrays.fill(dp, 1);
+        //             int next = a[i] + a[j];
+        //             int idx = binarySearch(a, j+1, n-1, next);
+        //             int k = j;
+        //             if (idx != -1) dp[k] = Math.max(dp[k], dp[i]+1);
+        //             while (idx != -1) {
+        //                 dp[idx] = Math.max(dp[idx], dp[k]+1);
+        //                 max = Math.max(max, dp[idx]);
+        //                 next = a[k] + a[idx];
+        //                 k = idx;
+        //                 idx = binarySearch(a, idx+1, n-1, next);
+        //             }
+        //         }
+        //     }
+        //     return max;
+        // }
+        // public int lenLongestFibSubseq(int[] a) {
+        //     int n = a.length, max = 0, pre = 0, cur = 0, next = 0, cnt = 0;
+        //     int [] dp = new int [n];
+        //     Arrays.fill(dp, 1);
+        //     Set<Integer> s = new HashSet<>(Arrays.stream(a).boxed().collect(Collectors.toList()));
+        //     for (int i = 1; i < n; i++) {
+        //         for (int j = 0; j < i; j++) {
+        //             next = a[i] + a[j];
+        //             if (!s.contains(next)) continue;
+        //             pre = a[i];
+        //             cur = next;
+        //             cnt = 3;
+        //             while (s.contains(pre + cur)) {
+        //                 cnt++;
+        //                 next = pre + cur;
+        //                 pre = cur;
+        //                 cur = next;
+        //             }
+        //             max = Math.max(max, cnt);
+        //         }
+        //     }
+        //     return max;
+        // }
+
+        // public int maxTurbulenceSize(int[] a) { // 好像这个题的思路傻掉了
+        //     int n = a.length, max = 0, cnt = 0;
+        //     if (n < 2) return n;
+        //     boolean up = false, down = false;
+        //     for (int i = 0; i < n-1; i++) {
+        //         // if (!up && !down) {
+        //         //     if (a[i] < a[i+1]) up = true;
+        //         //     else if (a[i] > a[i+1]) down = true;
+        //         //     if (up || down) cnt = 2;
+        //         //     max = Math.max(max, cnt);
+        //         //     continue;
+        //         // }
+        //         if (up && a[i] > a[i+1] || down && a[i] < a[i+1]) {
+        //             cnt++;
+        //             if (up) {
+        //                 up = false;
+        //                 down = true;
+        //             } else {
+        //                 down = false;
+        //                 up = true;
+        //             } 
+        //         } else if (a[i] == a[i+1]) {
+        //             max = Math.max(max, cnt);
+        //             up = false;
+        //             down = false;
+        //         } else {
+        //         // if (!up && !down) {
+        //             up = false;
+        //             down = false;
+        //             if (a[i] < a[i+1]) up = true;
+        //             else if (a[i] > a[i+1]) down = true;
+        //             if (up || down) cnt = 2;
+        //             max = Math.max(max, cnt);
+        //             // continue;
+        //         }
+        //     }
+        //     max = Math.max(max, cnt);
+        //     return max;
+        // }
+
         
     }
     public static void main(String[] args) {
         Solution s  =  new Solution();
 
-        // int [] a = new int [] {1,2,1,2,6,7,5,1};
-        int []  a = new int []  {1, 2, 1, 2, 1, 2, 1, 2, 1};
+        int []  a = new int []  {2, 0, 2, 4, 2, 5, 0, 1, 2, 3};
 
-        int [] r  =  s.maxSumOfThreeSubarrays(a, 2);
-        System.out.println(Arrays.toString(r));
+        int r =  s.maxTurbulenceSize( a);
+        System.out.println("r: " + r);
     }
 }

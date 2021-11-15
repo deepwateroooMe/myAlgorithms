@@ -1076,31 +1076,6 @@ public class dpone {
         }
 
         
-        public int minFlipsMonoIncr(String t) {
-            int n = t.length();
-            char [] s = t.toCharArray();
-            boolean hasOne = false, hasZoo = false;
-            int cntOne = 0, cntZoo = 0;
-            int i = 0, j = 0;
-            while (i < n && s[i] != '1') i++;
-            if (i == n) return 0;
-            hasOne = true;
-            i++;
-            while (i < n) {
-                if (s[i] == '0') cntZoo++;
-                i++;
-            }
-            i = n-1;
-            while (i >= 0 && s[i] != '0') i--;
-            i--;
-            while (i >= 0) {
-                if (s[i] == '1') cntOne++;
-                i--;
-            }
-            return Math.min(cntOne, cntZoo);
-        }
-
-
          public int maxAbsoluteSum(int[] a) {
             int n = a.length;
             int max = a[0], min = a[0];
@@ -1428,27 +1403,6 @@ public class dpone {
             return dp[0][a.length - 1] * 2 >= sum;
         }
 
-        public int videoStitching(int[][] clips, int time) { // bug bug bug 
-            int n = clips.length;
-            Arrays.sort(clips, (a, b)-> a[0] != b[0] ? a[0] - b[0] : a[1] - b[1]);
-            if (clips[0][0] > 0) return -1;
-            int [] dp = new int [n];
-            Arrays.fill(dp, n);
-            dp[0] = 0;
-            int min = n+1;
-            for (int i = 0; i < n; i++) {
-                int [] c = clips[i];
-                for (int j = i-1; j >= 0; j--) {
-                    int [] p = clips[j];
-                    if (p[1] < c[0]) continue;
-                    dp[i] = Math.min(dp[i], dp[j] + 1);
-                }
-                if (c[1] >= time) min = Math.min(min, dp[i]);
-            }
-            return min == n+1 ? -1 : min;
-        }
-
-        
     }
     public static void main(String[] args) {
         Solution s = new Solution();

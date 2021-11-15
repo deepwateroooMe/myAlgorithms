@@ -14,93 +14,85 @@ import static java.util.stream.Collectors.toMap;
 public class cmp {
     public static class Solution {
 
-        // public int timeRequiredToBuy(int[] t, int k) {
-        //     int n = t.length, sum = Arrays.stream(t).sum();
-        //     int ans = 0, i = -1;
-        //     while (t[k] > 0) {
-        //         i = (i + 1 + n) % n;
-        //         while (t[i] == 0) {
-        //             i = (i + 1 + n) % n;
-        //         }
-        //         if (t[i] > 0 && t[k] > 0) {
-        //             ans++;
-        //             t[i]--;
-        //             if (i == k && t[k] == 0) return ans;
-        //         }
-        //     }
-        //     return -1;
-        // }
+        public int timeRequiredToBuy(int[] t, int k) {
+            int n = t.length, sum = Arrays.stream(t).sum();
+            int ans = 0, i = -1;
+            while (t[k] > 0) {
+                i = (i + 1 + n) % n;
+                while (t[i] == 0) 
+                    i = (i + 1 + n) % n;
+                if (t[i] > 0 && t[k] > 0) {
+                    ans++;
+                    t[i]--;
+                    if (i == k && t[k] == 0) return ans;
+                }
+            }
+            return -1;
+        }
 
-        // private ListNode reverseList(ListNode head) {
-        //     List<Integer> l = new ArrayList<>();
-        //     ListNode r = head;
-        //     while ( r!= null) {
-        //         l.add(r.val);
-        //         r = r.next;
-        //     }
-        //     List<Integer> li = new ArrayList<>();
-        //     for (int i = l.size()-1; i >= 0; i--) 
-        //         li.add(l.get(i));
-        //     r = head;
-        //     int idx = 0;
-        //     while (r != null) {
-        //         r.val = li.get(idx);
-        //         idx++;
-        //         r = r.next;
-        //     }
-        //     return head;
-        // }
-        // public ListNode reverseEvenLengthGroups(ListNode head) {
-        //     int idx = 1, cnt = 0, sum = 0, totCnt = 0;
-        //     ListNode r = head,  newHead = head, p = null;
-        //     List<ListNode> arr = new ArrayList<>();
-        //     while (r != null) {
-        //         totCnt++;
-        //         r = r.next;
-        //     }
-        //     // System.out.println("totCnt: " + totCnt);
-        //     r = head;
-        //     while (r != null) {
-        //         while (cnt < idx && r != null) {
-        //             p = r;
-        //             r = r.next;
-        //             cnt++;
-        //         }
-        //         if (cnt == idx) {
-        //             sum += idx;
-        //             idx++;
-        //             cnt = 0;
-        //             arr.add(newHead);
-        //             newHead = r;
-        //             p.next = null;
-        //         }
-        //     }
-        //     System.out.println("(sum < totCnt): " + (sum < totCnt));
-            
-        //     if (sum < totCnt) arr.add(newHead);
-        //     System.out.println("arr.size(): " + arr.size());
-        //     for (ListNode tmp  : arr) 
-        //         tmp.printList(tmp);
-            
-        //     ListNode dummy = new ListNode(-1);
-        //     p = dummy;
-        //     for (int i = 0; i < arr.size(); i++) {
-        //         r = arr.get(i);
-        //         if (i % 2 == 0 && (i != arr.size()-1 || i == arr.size()-1 && (totCnt == sum || totCnt != sum && (totCnt - sum) % 2 == 1))
-        //             || i % 2 == 1 && i == arr.size()-1 && totCnt != sum && (totCnt - sum) % 2 == 1) {
-        //             p.next = r;
-        //             while (p.next != null) 
-        //                 p = p.next;
-        //         } else {
-        //             ListNode cur = reverseList(r);
-        //             p.next = cur;
-        //             while (p.next != null) {
-        //                 p = p.next;
-        //             }
-        //         }
-        //     }
-        //     return dummy.next;
-        // }
+        private ListNode reverseList(ListNode head) {
+            List<Integer> l = new ArrayList<>();
+            ListNode r = head;
+            while ( r!= null) {
+                l.add(r.val);
+                r = r.next;
+            }
+            List<Integer> li = new ArrayList<>();
+            for (int i = l.size()-1; i >= 0; i--) 
+                li.add(l.get(i));
+            r = head;
+            int idx = 0;
+            while (r != null) {
+                r.val = li.get(idx);
+                idx++;
+                r = r.next;
+            }
+            return head;
+        }
+        public ListNode reverseEvenLengthGroups(ListNode head) {
+            int idx = 1, cnt = 0, sum = 0, totCnt = 0;
+            ListNode r = head,  newHead = head, p = null;
+            List<ListNode> arr = new ArrayList<>();
+            while (r != null) {
+                totCnt++;
+                r = r.next;
+            }
+            r = head;
+            while (r != null) {
+                while (cnt < idx && r != null) {
+                    p = r;
+                    r = r.next;
+                    cnt++;
+                }
+                if (cnt == idx) {
+                    sum += idx;
+                    idx++;
+                    cnt = 0;
+                    arr.add(newHead);
+                    newHead = r;
+                    p.next = null;
+                }
+            }
+            if (sum < totCnt) arr.add(newHead);
+            ListNode dummy = new ListNode(-1);
+            p = dummy;
+            for (int i = 0; i < arr.size(); i++) {
+                r = arr.get(i);
+                if (i % 2 == 0 && (i != arr.size()-1 || i == arr.size()-1 && (totCnt == sum || totCnt != sum && (totCnt - sum) % 2 == 1))
+                    || i % 2 == 1 && i == arr.size()-1 && totCnt != sum && (totCnt - sum) % 2 == 1) {
+                    p.next = r;
+                    while (p.next != null) 
+                        p = p.next;
+                } else {
+                    ListNode cur = reverseList(r);
+                    p.next = cur;
+                    while (p.next != null) {
+                        p = p.next;
+                    }
+                }
+            }
+            return dummy.next;
+        }
 
         private class UnionFind {
             int [] id; // parent
@@ -153,20 +145,9 @@ public class cmp {
                 m.computeIfAbsent(v[0], z -> new HashSet<>()).add(v[1]);
                 m.computeIfAbsent(v[1], z -> new HashSet<>()).add(v[0]);
             }
-            // System.out.println("");
-            // System.out.println("m.size(): " + m.size());
-            // for (Map.Entry<Integer, Set<Integer>> en : m.entrySet()) {
-            //     System.out.print(en.getKey() + ", "  + ": \n");
-            //     System.out.println("en.getValue().size(): " + en.getValue().size());
-            //     System.out.println(Arrays.toString(en.getValue().toArray()));
-            // }
-            
             boolean [] ans = new boolean[req.length];
             for (int i = 0; i < req.length; i++) {
-                // System.out.println("\n i: " + i);
                 int [] cur = req[i];
-                // System.out.println(Arrays.toString(cur));
-                
                 if (uf.sameGroup(cur[0], cur[1])) {
                     ans[i] = true;
                     continue;
@@ -176,19 +157,9 @@ public class cmp {
                 else {
                     Set<Integer> one = uf.getCompoent(cur[0]);
                     Set<Integer> two = uf.getCompoent(cur[1]);
-
-                    // System.out.println("one.size(): " + one.size());
-                    // System.out.println(Arrays.toString(new ArrayList<>(one).toArray()));
-                    // System.out.println("two.size(): " + two.size());
-                    // System.out.println(Arrays.toString(new ArrayList<>(two).toArray()));
                     boolean flag = false;
-
                     for (Integer a : one) 
                         for (Integer b : two) {
-                            // System.out.println("a: " + a);
-                            // System.out.println("b: " + b);
-                            // System.out.println("(m.get(a) != null && m.get(a).contains(b) || m.get(b) != null && m.get(b).contains(a)): " + (m.get(a) != null && m.get(a).contains(b) || m.get(b) != null && m.get(b).contains(a)));
-                            
                             if (m.get(a) != null && m.get(a).contains(b) || m.get(b) != null && m.get(b).contains(a)) {
                                 ans[i] = false;
                                 flag = true;
@@ -202,16 +173,29 @@ public class cmp {
             }
             return ans;
         }
-        
+
+        public String decodeCiphertext(String en, int r) { // 还没有写完，今天太累，实在没有精力去折腾这个该死的字符串
+            String [] str = en.split("\\s+");
+            int idx = 0;
+            StringBuilder sb = new StringBuilder();
+            while (idx < str[0].length()) {
+                for (int i = 0; i < str.length; i++) {
+                    if (str[i].length() == idx && idx == str[0].length()-1) break;
+                    sb.append(str[i].charAt(idx));
+                }
+                idx++;
+            }
+            return sb.toString();
+        }
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        int [][] a = new int [][] {{0,1},{1,2},{2,3}};
-        int [][] b = new int [][] {{0,4},{1,2},{3,1},{3,4}};
-        
-        boolean [] r = s.friendRequests(5, a, b);
-        System.out.println(Arrays.toString(r));
+        // String a = "ch   ie   pr";
+        String a = "iveo    eed   l te   olc";
+
+        String r = s.decodeCiphertext(a, 4);
+        System.out.println("r: " + r);
     }
 }
 

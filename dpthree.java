@@ -157,23 +157,6 @@ public class dpthree {
             return ans;
         }
 
-        public int minimumDeletions(String t) {
-            int n = t.length();
-            char [] s = t.toCharArray();
-            int [] pre = new int [n];
-            int [] suf = new int [n];
-            int cnt = 0, ans = 0;
-            for (int i = 0; i < n; i++)
-                pre[i] = s[i] == 'b' ? ++cnt : cnt;
-            cnt = 0;
-            for (int i = n-1; i >= 0; i--)
-                suf[i] = s[i] == 'a' ? ++cnt : cnt;
-            for (int i = 0; i < n; i++) {
-                if (s[i] == 'b' && pre[i] <= suf[i]) ans++;
-                else if (s[i] == 'a' && pre[i] > suf)
-            }
-        }
-
         private int getLongestPalinSubsequence(String ss) {
             int n = ss.length();
             String tt = new StringBuilder(ss).reverse().toString();
@@ -202,41 +185,6 @@ public class dpthree {
                 max = Math.max(max, va * vb);
                 // String a = "accbcaxxcxx";  // todo: ??? !!!
                 // max = Math.max(max, getLongestPalinSubsequence(a.toString())) * getLongestPalinSubsequence(b.toString()); // 为什么这里连写就算得不对呢？
-            }
-            return max;
-        }
-
-        public int longestSubarray(int[] a) { // bug bug bug
-            int n = a.length, i = 0, j = -1, max = 0, cnt = 0;
-            boolean leadingZoo = false;
-            while (i < n && a[i] == 0) {
-                if (!leadingZoo) leadingZoo = true;
-                i++;
-            }
-            if (i > 0) j = i-1;
-            // System.out.println("i: " + i);
-            // System.out.println("j: " + j);
-            while (i < n) {
-                while (i < n && cnt <= 1) {
-                    if (a[i] == 0) ++cnt;
-                    i++;
-                }
-                // System.out.println("i: " + i);
-                // System.out.println("cnt: " + cnt);
-                max = Math.max(max, i-j-1- Math.max(cnt, leadingZoo ? 0 : 1));
-                if (leadingZoo) leadingZoo = false;
-                cnt = 0;
-                while (i < n && a[i] == 0) {
-                    if (!leadingZoo) leadingZoo = true;
-                    i++;
-                }
-                while (cnt > 1) {
-                    if (a[j] == 0) --cnt;
-                    j++;
-                }
-                j -= 1;
-                max = Math.max(max, i-j-1- Math.max(cnt, leadingZoo ? 0 : 1));
-                // j = i-1;
             }
             return max;
         }
