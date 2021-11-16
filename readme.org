@@ -983,6 +983,54 @@ private int binarySearchNext(int x, List<int []> ll) { // 这里居然写出bug�
     return ans;
 }
 #+END_SRC
+*** 2008. Maximum Earnings From Taxi - Medium
+There are n points on a road you are driving your taxi on. The n points on the road are labeled from 1 to n in the direction you are going, and you want to drive from point 1 to point n to make money by picking up passengers. You cannot change the direction of the taxi.
+
+The passengers are represented by a 0-indexed 2D integer array rides, where rides[i] = [starti, endi, tipi] denotes the ith passenger requesting a ride from point starti to point endi who is willing to give a tipi dollar tip.
+
+For each passenger i you pick up, you earn endi - starti + tipi dollars. You may only drive at most one passenger at a time.
+
+Given n and rides, return the maximum number of dollars you can earn by picking up the passengers optimally.
+
+Note: You may drop off a passenger and pick up a different passenger at the same point.
+**** 解题思路与分析
+     #+BEGIN_SRC java
+public long maxTaxiEarnings(int n, int[][] rides) {
+    Arrays.sort(rides, (a, b)-> (a[0] != b[0] ? a[0] - b[0] : a[1] - b[1]));
+    Map<Integer, Set<int []>> m = new HashMap<>();
+    for (int [] r : rides) 
+        m.computeIfAbsent(r[1], z -> new HashSet<>()).add(r);
+    long [] dp = new long [n+1];
+    for (int i = 1; i <= n; i++) {
+        dp[i] = dp[i-1];
+        if (m.containsKey(i)) 
+            for (int [] r : m.get(i)) 
+                dp[r[1]] = Math.max(dp[r[1]], dp[r[0]] + r[1] - r[0] + r[2]);
+    }
+    return dp[n];
+}
+     #+END_SRC
+**** 解题思路与分析
+     #+BEGIN_SRC java
+// Similar to 1235. Maximum Profit in Job Scheduling
+// Sort by the end time to get non-overlapping intervals.
+// Use the treemap to find the previous ride before the current ride.
+public long maxTaxiEarnings(int n, int[][] rides) {
+    if (rides == null || rides.length == 0) return 0;
+    for (int[] r : rides) 
+        r[2] = r[1] - r[0] + r[2];
+    Arrays.sort(rides, (a, b) -> (a[1] - b[1]));
+    TreeMap<Long, Long> map = new TreeMap<>();
+    map.put((long)0, (long)0); 
+    for (int[] r : rides) {
+        long cur = map.floorEntry((long)r[0]).getValue() + r[2];
+        if (cur > map.lastEntry().getValue()) {
+            map.put((long)r[1], cur);
+        }
+    }
+    return map.lastEntry().getValue();
+}
+     #+END_SRC
 
 *** 926. Flip String to Monotone Increasing - Medium
 A binary string is monotone increasing if it consists of some number of 0's (possibly none), followed by some number of 1's (also possibly none).
@@ -2039,55 +2087,53 @@ A path from node start to node end is a sequence of nodes [z0, z1, z2, ..., zk] 
 The distance of a path is the sum of the weights on the edges of the path. Let distanceToLastNode(x) denote the shortest distance of a path between node n and node x. A restricted path is a path that also satisfies that distanceToLastNode(zi) > distanceToLastNode(zi+1) where 0 <= i <= k-1.
 Return the number of restricted paths from node 1 to node n. Since that number may be too large, return it modulo 109 + 7.
 #+BEGIN_SRC java
-public void dijkstra(int n) {
-    Queue<int []> q = new PriorityQueue<>((a, b) -> (a[1] - b[1]));
-    q.add(new int [] {n, 0});
+public int countRestrictedPaths(int n, int[][] edges) {
+    this.n = n;
+    for (int [] e : edges) {
+        adj.computeIfAbsent(e[0], z -> new HashMap<>()).put(e[1], e[2]);
+        adj.computeIfAbsent(e[1], z -> new HashMap<>()).put(e[0], e[2]);
+    }
+    dist = new int [n+1];
     Arrays.fill(dist, Integer.MAX_VALUE);
     dist[n] = 0;
-    int [] cur = null;
-    int u = 0, d = 0;
-    while (!q.isEmpty()) {
-        cur = q.poll();
-        u = cur[0];
-        d = cur[1];
-        if (dist[u] < d) continue;
-        if (m.get(u) != null) 
-            for (int v : m.get(u).keySet()) 
-                if (dist[v] > dist[u] + m.get(u).get(v)) {
-                    dist[v] = dist[u] + m.get(u).get(v);
-                    q.offer(new int [] {v, dist[v]});
-                }
-    }
-}
-private int dfs(int n, int i) { 
-    if (i == n) return 1;
-    if (dp[i] != -1) return dp[i];
-    long res = 0;
-    if (m.get(i) != null) {
-        for (int v : m.get(i).keySet()) {
-            if (dist[i] > dist[v])
-                res = (res + dfs(n, v)) % mod;
-        }
-    }
-    return dp[i] = (int)res;
-}
-HashMap<Integer, Map<Integer, Integer>> m = new HashMap<>();
-int mod = (int)(1e9+7);
-int [] dist;
-int [] dp;
-public int countRestrictedPaths(int n, int[][] edges) {
-    for (int [] v : edges) {
-        m.computeIfAbsent(v[0], k->new HashMap<>()).put(v[1], v[2]);
-        m.computeIfAbsent(v[1], k->new HashMap<>()).put(v[0], v[2]);
-    }
-    dist = new int[n+1];
-    dijkstra(n);
+    dijkstra();
     dp = new int [n+1];
     Arrays.fill(dp, -1);
-    return dfs(n, 1);
+    return (int)dfs(1);
+}
+HashMap<Integer, Map<Integer, Integer>> adj = new HashMap<>();
+int mod = (int)1e9 + 7;
+int [] dist;
+int [] dp;
+int n;
+private long dfs(int u) {
+    if (u == n) return 1;
+    if (dp[u] != -1) return dp[u];
+    long ans = 0;
+    Map<Integer, Integer> tmp = adj.get(u);
+    if (tmp != null) 
+        for (Integer v : tmp.keySet()) 
+            if (dist[u] > dist[v])
+                ans = (ans + dfs(v)) % mod;
+    return dp[u] = (int)ans;
+}
+private void dijkstra() {
+    // Queue<int []> q = new LinkedList<>(); // tle 
+    Queue<int []> q = new PriorityQueue<>((a, b)->a[1] - b[1]); // 狠重要
+    q.offer(new int [] {n, 0});
+    while (!q.isEmpty()) {
+        int [] u = q.poll();
+        if (dist[u[0]] < u[1]) continue; // 狠重要
+        Map<Integer, Integer> tmp = adj.get(u[0]);
+        if (tmp == null) continue;
+        for (Integer v : tmp.keySet()) 
+            if (u[1] + tmp.get(v) < dist[v]) {
+                dist[v] = u[1] + tmp.get(v);
+                q.offer(new int [] {v, dist[v]});
+            }
+    }
 }
 #+END_SRC
-
 
 *** backpack III
 #+BEGIN_SRC java
@@ -4509,7 +4555,7 @@ public int coinChange(int[] coins, int amount) {
 You wrote down many positive integers in a string called num. However, you realized that you forgot to add commas to seperate the different numbers. You remember that the list of integers was non-decreasing and that no integer had leading zeros.
 
 Return the number of possible lists of integers that you could have written down to get the string num. Since the answer may be large, return it modulo 109 + 7.
-*** 动态规划与最长公共前缀
+**** 动态规划与最长公共前缀
 
 全网都找不到一句中文分析
 
@@ -4565,9 +4611,9 @@ public int numberOfCombinations(String t) {
     return pre[n-1][n-1];
 }
 #+END_SRC
-**** 解题思路与分析 todo: 其它思路，改天补上
+***** 解题思路与分析 todo: 其它思路，改天补上
 
-** 87. Scramble String - Hard 非常经典：要韧熟于心
+*** 87. Scramble String - Hard 非常经典：要韧熟于心
 We can scramble a string s to get a string t using the following algorithm:
 
 If the length of the string is 1, stop.
@@ -4576,7 +4622,7 @@ Split the string into two non-empty substrings at a random index, i.e., if the s
 Randomly decide to swap the two substrings or to keep them in the same order. i.e., after this step, s may become s = x + y or s = y + x.
 Apply step 1 recursively on each of the two substrings x and y.
 Given two strings s1 and s2 of the same length, return true if s2 is a scrambled string of s1, otherwise, return false.
-*** 朴素解法（TLE）
+**** 朴素解法（TLE）
 一个朴素的做法根据「扰乱字符串」的生成规则进行判断。
 
 由于题目说了整个生成「扰乱字符串」的过程是通过「递归」来进行。
@@ -4638,7 +4684,7 @@ public boolean isScramble(String s, String t) { // tle tle tle
 
 空间复杂度：忽略递归与生成子串带来的空间开销，复杂度为 O(1)
 
-*** 记忆化搜索
+**** 记忆化搜索
 朴素解法卡在了 286 / 288个样例。
 
 我们考虑在朴素解法的基础上，增加「记忆化搜索」功能。
@@ -4689,7 +4735,7 @@ public boolean isScramble(String s, String t) {
     return dfs(0, 0, s.length()) == 1;
 } 
 #+END_SRC 
-*** 动态规划（区间 DP）
+**** 动态规划（区间 DP）
 当然，这道题也可以用动态规划 Dynamic Programming，根据以往的经验来说，根字符串有关的题十有八九可以用 DP 来做，那么难点就在于如何找出状态转移方程。
 
 其实有了上述「记忆化搜索」方案之后，我们就已经可以直接忽略原问题，将其改成「动态规划」了。
@@ -4761,7 +4807,7 @@ public boolean isScramble(String s, String t) {
 }
 #+END_SRC
 
-** 2065. Maximum Path Quality of a Graph - Hard 记忆化搜索+ 重复遍历
+*** 2065. Maximum Path Quality of a Graph - Hard 记忆化搜索+ 重复遍历
 There is an undirected graph with n nodes numbered from 0 to n - 1 (inclusive). You are given a 0-indexed integer array values where values[i] is the value of the ith node. You are also given a 0-indexed 2D integer array edges, where each edges[j] = [uj, vj, timej] indicates that there is an undirected edge between the nodes uj and vj, and it takes timej seconds to travel between the two nodes. Finally, you are given an integer maxTime.
 
 A valid path in the graph is any path that starts at node 0, ends at node 0, and takes at most maxTime seconds to complete. You may visit the same node multiple times. The quality of a valid path is the sum of the values of the unique nodes visited in the path (each node's value is added at most once to the sum).
@@ -4769,7 +4815,7 @@ A valid path in the graph is any path that starts at node 0, ends at node 0, and
 Return the maximum quality of a valid path.
 
 Note: There are at most four edges connected to each node.
-**** 解题思路与分析
+***** 解题思路与分析
 
 A straightforward idea is to try all paths from node 0 and calculate the max path quality for paths also end with node 0.
 
@@ -4841,11 +4887,11 @@ public int maximalPathQuality(int[] values, int[][] edges, int maxTime) {
 }
 #+END_SRC
 
-** 1397. Find All Good Strings - Hard 记忆化搜索
+*** 1397. Find All Good Strings - Hard 记忆化搜索
 Given the strings s1 and s2 of size n and the string evil, return the number of good strings.
 
 A good string has size n, it is alphabetically greater than or equal to s1, it is alphabetically smaller than or equal to s2, and it does not contain the string evil as a substring. Since the answer can be a huge number, return this modulo 109 + 7.
-**** 解题思路与分析: 记忆化搜索
+***** 解题思路与分析: 记忆化搜索
   
 [[./pic/goodString.png]]
 
@@ -4898,7 +4944,7 @@ public int findGoodStrings(int n, String s1, String s2, String evil) {
     return dfs(n, 0, 0, true, true);
 }
 #+END_SRC
-*** 动态规划: 数位DP + KMP todo: 改天把这个补上
+**** 动态规划: 数位DP + KMP todo: 改天把这个补上
 - https://leetcode-cn.com/problems/find-all-good-strings/solution/shu-wei-dp-kmp-by-qodjf/
 - https://www.cnblogs.com/wenruo/p/12616985.html
 - https://www.codeleading.com/article/42703213478/
@@ -4926,7 +4972,7 @@ public int findGoodStrings(int n, String s1, String s2, String evil) {
 - 
 - 
 
-** 2060. Check if an Original String Exists Given Two Encoded Strings - Hard dfs记忆化搜索
+*** 2060. Check if an Original String Exists Given Two Encoded Strings - Hard dfs记忆化搜索
 An original string, consisting of lowercase English letters, can be encoded by the following steps:
 
 Arbitrarily split it into a sequence of some number of non-empty substrings.
@@ -4991,7 +5037,161 @@ public boolean possiblyEquals(String s, String t) {
 }
 #+END_SRC
 
+*** 638. Shopping Offers - Medium 记忆化搜索 or 背包动态规划
+In LeetCode Store, there are n items to sell. Each item has a price. However, there are some special offers, and a special offer consists of one or more different kinds of items with a sale price.
 
+You are given an integer array price where price[i] is the price of the ith item, and an integer array needs where needs[i] is the number of pieces of the ith item you want to buy.
+
+You are also given an array special where special[i] is of size n + 1 where special[i][j] is the number of pieces of the jth item in the ith offer and special[i][n] (i.e., the last integer in the array) is the price of the ith offer.
+
+Return the lowest price you have to pay for exactly certain items as given, where you could make optimal use of the special offers. You are not allowed to buy more items than you want, even if that would lower the overall price. You could use any of the special offers as many times as you want.
+**** 解题思路与分析: 记忆化搜索 List作key
+     #+BEGIN_SRC java
+// 在java里，List的哈希方式，是将其哈希成开头加个1后的31进制整数，例如对于列表[ 1 , 2 , 3 ]，java会将其哈希成31进制下的1123，也就是哈希成
+// 1*31^3 + 1 * 32^2 + 2 * 31 + 3 = 30817，而List里判断是否equals，是逐个比较列表里的值，如果值全相等就返回true。
+//     所以在记忆化的时候，可以直接把key设为是List类型的。
+public int shoppingOffers(List<Integer> p, List<List<Integer>> of, List<Integer> need) {
+    n = p.size();
+    return dfs(p, of, need);
+}
+Map<List<Integer>, Integer> dp = new HashMap<>();
+int n;
+private int dfs(List<Integer> p, List<List<Integer>> of, List<Integer> need) {
+    if (dp.containsKey(need)) return dp.get(need);  // 首先检查记忆
+    int ans = 0;
+    for (int i = 0; i < n; i++) 
+        ans += p.get(i) * need.get(i);
+    if (ans == 0) return ans; // ? 这里就不需要记忆了？
+    for (List<Integer> cur : of) {
+        if (cur.get(cur.size()-1) >= ans) continue; // >=
+        List<Integer> newNeed = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            if (cur.get(i) > need.get(i)) break;
+            newNeed.add(need.get(i) - cur.get(i));
+        }
+        if (newNeed.size() == need.size()) // 即当前礼包合法
+            ans = Math.min(ans, cur.get(cur.size()-1) + dfs(p, of, newNeed));
+    }
+    dp.put(need, ans);
+    return ans;
+}
+     #+END_SRC
+**** 解题思路与分析: 背包动态规划 todo bug fix
+
+当然此题也可以用背包的递推公式来做记忆化搜索，并且使用状态压缩记录每个物品有多少个。由于最多有6 66种物品，每个物品最多6 66个，所以可以用个6 × 3 6\times 36×3位二进制数来表示每个物品有多少个。
+
+     #+BEGIN_SRC java
+public int shoppingOffers(List<Integer> price, List<List<Integer>> special, List<Integer> needs) { // todo: rest 6 test cases bug to be fixed
+    n = price.size();
+    int[][] dp = new int[special.size() + 1][1 << (n * 3)]; // 开一个记忆化数组，dp[i][s]表示如果只考虑前i个套餐的话，要买到s这个状态，至少需要多少花费
+    System.out.println("(1 << n*3): " + (1 << n*3));
+    for (int [] row : dp) Arrays.fill(row, -1); // 先初始化为-1
+    int target = 0; // 求一下needs代表的状态，这里target的最低3位表示的是下标是0的商品要买多少个，以此类推
+    for (int i = needs.size() - 1; i >= 0; i--) 
+        target = (target << 3) + needs.get(i);
+    System.out.println("Integer.toBinaryString(target): " + Integer.toBinaryString(target));
+    return dfs(special.size(), target, special, price, dp);
+}
+int n;
+// 返回的是，如果只考虑前count个套餐的话，要达到state这个状态的最小花费（当然单买也是考虑的）
+private int dfs(int count, int state, List<List<Integer>> special, List<Integer> price, int[][] dp) {
+    // System.out.println("state: " + state);
+    // if (state >= (1 << n*3)) return 0;
+    if (dp[count][state] != -1) return dp[count][state]; // 如果之前已经算出来过，则直接返回
+    if (count == 0) { // 如果一个套餐都不考虑，那就是全单买
+        dp[count][state] = 0;
+        // 求一下每个商品买多少个，然后累加一下花费
+        for (int i = 0; i < n; i++) {
+            int c = state >> i * 3 & 7;
+            dp[count][state] += c * price.get(i);
+        }
+        return dp[count][state];
+    }
+    dp[count][state] = dfs(count - 1, state, special, price, dp); // 考虑不选第count个套餐的情况
+    List<Integer> sp = special.get(count - 1);                    // 考虑选第count个套餐的情况
+    int nextState = 0; // 存一下考虑完当前套餐后的需求状态
+    for (int i = n - 1; i >= 0; i--) { // 逆序遍历是为了方便nextState的计算
+        int c = state >> i * 3 & 7;
+        // System.out.println("c: " + c);
+        if (c < sp.get(i)) { // 小了，说明当前套餐是不能选的，标记为-1并退出循环
+            nextState = -1;
+            break;
+        }
+        // System.out.println("(c - sp.get(i)): " + (c - sp.get(i)));
+        nextState = (nextState << 3) + c - sp.get(i);
+        // System.out.println("Integer.toBinaryString(nextState): " + Integer.toBinaryString(nextState));
+    }
+    if (nextState != -1)  // 如果当前套餐能选，再算一下选了当前套餐的情况下的最小花费
+        dp[count][state] = Math.min(dp[count][state], sp.get(n) + dfs(count, nextState, special, price, dp));
+    return dp[count][state];
+}
+     #+END_SRC
+*** 474. Ones and Zeroes - Medium
+You are given an array of binary strings strs and two integers m and n.
+
+Return the size of the largest subset of strs such that there are at most m 0's and n 1's in the subset.
+
+A set x is a subset of a set y if all elements of x are also elements of y.
+**** 解题思路与分析
+     #+BEGIN_SRC java
+public int findMaxForm(String[] strs, int m, int p) { // m: 0 p: 1 dfs记忆化搜索
+    n = strs.length;
+    int [] one = new int [n]; // cnt 1s
+    int [] two = new int [n]; // cnt 0s
+    int cntOne = 0, cntZero = 0;
+    for (int i = 0; i < n; i++) {
+        String cur = strs[i];
+        cntOne = 0;
+        cntZero = 0;
+        for (char c : cur.toCharArray()) {
+            if (c == '0') cntZero++;
+            else cntOne++;
+        }
+        one[i] = cntOne;
+        two[i] = cntZero;
+    }
+    List<String> l = new ArrayList<>();
+   cnt = new ArrayList<>();
+    for (int i = 0; i < n; i++) {
+        if (one[i] > p || two[i] > m) continue;
+        l.add(strs[i]);
+        cnt.add(new int [] {two[i], one[i]});
+    }
+    dp = new int [l.size()][m+1][p+1];
+    return dfs(l, 0, m, p);
+}
+int [][][] dp;
+List<int []> cnt;
+int n;
+private int dfs(List<String> l, int idx, int i, int j) { 
+    if (idx >= l.size() || i < 0 || j < 0) return 0;
+    if (i == 0 && j == 0) return 0;
+    if (dp[idx][i][j] > 0) return dp[idx][i][j];
+    int x = i - cnt.get(idx)[0], y = j - cnt.get(idx)[1];
+    int ans = x >= 0 && y >= 0 ? 1 : 0;
+    return dp[idx][i][j] = Math.max(ans + dfs(l, idx+1, x, y), dfs(l, idx+1, i, j));
+ }
+     #+END_SRC
+**** 解题思路与分析: DP
+
+DP的写法要熟悉起来
+
+     #+BEGIN_SRC java
+public int findMaxForm(String[] strs, int m, int n) {
+    int [][] dp = new int [m+1][n+1];
+    dp[0][0] = 0;
+    for (String s : strs) {
+        int one = 0, zoo = 0;
+        for (int i = 0; i < s.length(); i++) 
+            if (s.charAt(i) == '0') ++ zoo;
+            else ++one;
+        for (int i = m; i >= zoo; i--) 
+            for (int j = n; j >= one; j--) 
+                dp[i][j] = Math.max(dp[i][j], dp[i-zoo][j-one] + 1);
+    }
+    return dp[m][n];
+}
+     #+END_SRC
 * Segment Tree与Binary Index Tree 线段树与树状数组 
 
 线段树（segment tree），顾名思义， 是用来存放给定区间（segment, or interval）内对应信息的一种数据结构。与树状数组（binary indexed tree）相似，线段树也用来处理数组相应的区间查询（range query）和元素更新（update）操作。与树状数组不同的是，线段树不止可以适用于区间求和的查询，也可以进行区间最大值，区间最小值（Range Minimum/Maximum Query problem）或者区间异或值的查询。

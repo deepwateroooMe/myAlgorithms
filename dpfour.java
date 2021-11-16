@@ -358,24 +358,6 @@ public class dpfour {
             }
         }
         
-        private boolean isValid(List<Integer> l, List<Integer> s) { // bug
-            for (int i = 0; i < l.size(); i++) 
-                if (l.get(i) > s.get(i)) return false;
-            return true;
-        }
-        public int shoppingOffers(List<Integer> p, List<List<Integer>> of, List<Integer> need) {
-            int ans = Integer.MAX_VALUE, n = p.size(), cur = 0;
-            for (List<Integer> vv : of) { // 这里需要考虑的是：一个offer可以用多次，以及合用几个offer，用回塑但太慢，用动态规划得
-                List<Integer> v = new ArrayList<>(vv);
-                while (isValid(v, need)) cur = v.get(n);
-                for (int i = 0; i < n; i++) 
-                    if (need.get(i) > v.get(i))
-                        cur += p.get(i) * (need.get(i) - v.get(i));
-                ans = Math.min(ans, cur);
-            }
-            return ans;
-        }
-
         public long countVowels(String t) {
             long n = t.length();
             char [] s = t.toCharArray();
@@ -783,46 +765,6 @@ public class dpfour {
                     if (a[i] <= a[j]) break;
                 dp[i] = Math.max(dp[i], b) // 没想清楚
             }
-        }
-
-        private int getCnt(String t) {
-            int n = t.length(), cnt = 0;
-            char [] s = t.toCharArray();
-            int i = 0, j = n-1;
-            while (i < j) {
-                if (s[i] != s[j]) cnt++;
-                i++;
-                j--;
-            }
-            return cnt;
-        }
-        // 记 dp[i][j] = v 表示s[0:j]区间内分割成j段，只需要改变v个字符就可以使得每一段的子串都是回文串。
-        //     要求dp[i][j]的值，关键就是找出j和j-1的分割点。
-        //     很显然有dp[i][j] = min(dp[m][j-1] + s[m:j]需要改变的字符的个数)，只需要找出最小的分割点m即可。        
-        public int palindromePartition(String t, int k) { // 不知道哪里的细节错了，改天再改
-            int n = t.length();
-            // if (k == n) return 0;
-            char [] s = t.toCharArray();
-            Map<String, Integer> m = new HashMap<>();
-            for (int i = 0; i < n; i++) 
-                for (int j = i+1; j <= n; j++) {
-                    String cur = t.substring(i, j);
-                    if (!m.containsKey(cur)) m.put(cur, getCnt(cur));
-                }
-            int [][] dp = new int [n][k+1];
-            for (int i = 0; i < n; i++) 
-                Arrays.fill(dp[i], Integer.MAX_VALUE / 2);
-            dp[0][0] = 0;
-            // for (int i = 0; i < n; i++) 
-            //     dp[i][1] = m.get(t.substring(0, i+1));
-            for (int d = 1; d <= k; d++) 
-                for (int i = 0; i < n; i++) {
-                    int min = Integer.MAX_VALUE;
-                    for (int j = 0; j < i; j++) 
-                        min = Math.min(min, dp[j][d-1] + m.get(t.substring(j+1, i+1)));
-                    dp[i][d] = Math.min(dp[i][d], min);
-                }
-            return dp[n-1][k];
         }
 
         int [][][] dp; // tle: 应该是对重复字母的处理久缺，需要把这个bug解决了 todo 
