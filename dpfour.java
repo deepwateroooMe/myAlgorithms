@@ -213,65 +213,6 @@ public class dpfour {
             return Math.max(hold[n-1], sold[n-1]);
         }
 
-        public int maxProfit(int[] p) { // bug
-            int n = p.length;
-            int [] sold = new int [n];
-            int [] hold = new int [n];
-            hold[0] = -p[0]; // 因为买进投资了，还没有产出，所以是负数
-            for (int i = 1; i < n; i++) {
-                sold[i] = Math.max(p[i] + hold[i-1], (i > 2 ? hold[i-2] : 0)); // 卖或不卖
-                hold[i] = Math.max((i > 2 ? sold[i-2] - p[i] : 0), (i > 2 ? sold[i-2] : 0)); // 买或不买: 因为卖完要休息一天，只能是最早前2天的结果
-            }
-            System.out.println(Arrays.toString(sold));
-            System.out.println(Arrays.toString(hold));
-            return Math.max(hold[n-1], sold[n-1]);
-        }
-
-        public int maxProfit(int[] p) { // bug
-            int n = p.length, lmin = 0, lmax = 0, gmax = 0;
-            int [] l = new int [n];
-            int [] r = new int [n];
-            lmin = p[0];
-            lmax = p[0];
-            for (int i = 1; i < n; i++) {
-                 System.out.println("\n i: " + i);
-                if (p[i] < lmin) {
-                    gmax = Math.max(gmax, lmax - lmin);
-                    lmin = p[i];
-                    lmax = 0;
-                } else {
-                    lmax = Math.max(lmax, p[i]);
-                    gmax = Math.max(gmax, lmax - lmin);
-                }
-                l[i] = gmax;
-                 System.out.println(Arrays.toString(l));
-            }
-            lmin = p[n-1];
-            lmax = p[n-1];
-            gmax = 0;
-            for (int i = n-2; i >= 0; i--) {
-                 System.out.println("\n i: " + i);
-                if (p[i] < lmin) {
-                    lmin = Math.min(lmin, p[i]);
-                    gmax = Math.max(gmax, lmax - lmin);
-                    lmax = 0;
-                } else {
-                    gmax = Math.max(gmax, lmax - lmin);
-                    lmax = Math.max(lmax, p[i]);
-                    // lmin = 0;
-                }
-                r[i] = gmax;
-                // System.out.println("lmax: " + lmax);
-                // System.out.println("lmin: " + lmin);
-                //  System.out.println("r[i]: " + r[i]);
-                //  System.out.println(Arrays.toString(r));
-            }
-            gmax = 0;
-            for (int i = 1; i < n; i++) 
-                gmax = Math.max(gmax, l[i] + r[i]);
-            return gmax;
-        }
-
         public int minimumDeleteSum(String ss, String tt) { // 字符串中的dp还是需要再多熟悉 712
             int m = ss.length(), n = tt.length();
             char [] s = ss.toCharArray();

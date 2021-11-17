@@ -163,13 +163,6 @@ public class dptwo {
             return dp[target];
         }
 
-        public int maxTurbulenceSize(int[] a) {
-            int n = a.length, bgn = 0, max = 0;
-            if (n <= 2) return n;
-            for (int i = 0; i < n; i++) {
-            }
-        }
-
         public int lengthOfLIS(int[] a) { // 为什么这么写感觉比下面的写法更快呢？
             int n = a.length, max = 1;
             int [] dp = new int [n];
@@ -286,24 +279,6 @@ public class dptwo {
                 dp[i][0] = 1;
                 for (int j = i+1; j < n; j++) {
                     if (a[i] < a[j]) // 这里要怎么数呢，再想想
-                }
-            }
-        }
-
-        public List<Integer> largestDivisibleSubset(int[] a) {
-            Arrays.sort(a);
-            // List<List<Integer>> ll = new ArrayList<>();
-            List<Integer> ans = new ArrayList<>();
-            List<Integer> l = new ArrayList<>();
-            int next = 0;
-            for (int i = 0; i < n; i++) {
-                for (int j = i+1; j < n; j++) {
-                    if (a[j] % a[i] == 0) {
-                        l = new ArrayList<>();
-                        l.add(a[i]);
-                        l.add(a[j]);
-                        next = a[j] * ()                        
-                    }                    
                 }
             }
         }
