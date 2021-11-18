@@ -683,43 +683,6 @@ public class dpsix {
             }
         }
 
-        // public int [] smallestSufficientTeam(String[] req_skills, List<List<String>> people) {
-        public int smallestSufficientTeam(String[] req_skills, List<List<String>> people) { // bug: 有些什么地方没有写对
-            Map<String, Integer> m = new HashMap<>();
-            for (int i = 0; i < req_skills.length; i++) 
-                m.put(req_skills[i], i);
-            int range = 1 << req_skills.length;
-            int [] dp = new int [range];
-            Arrays.fill(dp, Integer.MAX_VALUE);
-            dp[0] = 0;
-            for (int i = 0; i < people.size(); i++) {
-                // for (List<String> p : people) {
-                int cur = 0;
-                for (String s : people.get(i)) 
-                    if (m.keySet().contains(s)) cur |= (1 << m.get(s));
-                // System.out.println("Integer.toBinaryString(cur): " + Integer.toBinaryString(cur));
-                dp[cur] = 1;
-                for (int j = 0; j < range; j++) {
-                    if ((j & cur) == cur)
-                        dp[j] = Math.min(dp[j], dp[j ^ cur] + 1 ); // 有可能遍历的方向可以反着来？
-                }
-                // for (int i = range-1; i >= cur; i--) {
-                //     // if (dp[i] != Integer.MAX_VALUE && (i & cur) == cur)
-                //     if ((i & cur) == cur)
-                //         dp[i] = Math.min(dp[i], dp[i ^ cur] + 1);
-                // }
-            }
-            System.out.println(Arrays.toString(dp));
-            return dp[range-1];
-        }
-        // String []  a = new String []  {"algorithms", "math", "java", "reactjs", "csharp", "aws"};
-        // String [][] b = new String [][] {{"algorithms","math","java"},{"algorithms","math","reactjs"},{"java","csharp","aws"},{"reactjs","csharp"},{"csharp","math"},{"aws","java"}};
-        // String []  a = new String []  {"java", "nodejs", "reactjs"};
-        // String [][] b = new String [][] {{"java"},{"nodejs"},{"nodejs","reactjs"}};
-        // List<List<String>> ll = new ArrayList<>();
-        // for (int i = 0; i < b.length; i++) 
-        //     ll.add(Arrays.asList(b[i]));
-
         public int dieSimulator(int n, int [] r) { // DP(pos, last) which means we are at the position pos having as last the last character seen.
             long mod = (int)1e9 + 7;
             long [][] dp = new long [n][7];

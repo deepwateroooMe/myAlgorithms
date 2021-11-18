@@ -834,23 +834,6 @@ public class dptwo {
             return dfs(a, 0, m);
         }
 
-        private int cntUnique(String s) {
-            int [] cnt = new int [26];
-            for (char c : s.toCharArray())
-                cnt[c-'A']++;
-            int ans = 0;
-            for (Integer v : cnt) 
-                if (v == 1) ans++;
-            return ans;
-        }
-        public int uniqueLetterString(String s) { // tle tle tle
-            int n = s.length(), ans = 0;
-            for (int i = 0; i < n; i++) 
-                for (int j = i+1; j <= n; j++) 
-                    ans += cntUnique(s.substring(i, j));
-            return ans;
-        }
-
         private int dfs(int [] a, int i, int j, int k) {
             if (i > j || k == 0) return 0;
             if (dp[i][j][k] > 0) return dp[i][j][k];
