@@ -669,20 +669,6 @@ public class dpsix {
             // 这里的递推 还有点儿不清楚
         }
 
-        public int minTaps(int n, int[] r) {
-            int [][] a = new int [n+1][];
-            for (int i = 0; i <= n; i++) 
-                a[i] = new int [] {i-r[i], i + r[i]};
-            Arrays.sort(a, (x, y)-> x[0] != y[0] ? x[0] - y[0] : x[1] - y[1]);
-            int j = 0, cnt = 0;
-            if (a[0][0] > 0) return -1;
-            for (int i = 0; i < n; i++) {
-                j = i+1;
-                while (j < n && a[j][0] < a[i][1]) {
-                }
-            }
-        }
-
         public int dieSimulator(int n, int [] r) { // DP(pos, last) which means we are at the position pos having as last the last character seen.
             long mod = (int)1e9 + 7;
             long [][] dp = new long [n][7];

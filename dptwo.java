@@ -459,43 +459,6 @@ public class dptwo {
             return res == Integer.MAX_VALUE?-1:res;
         }
 
-        private long [] dfs(int [][] a, int x, int y) { // bug bug bug
-            if (x < 0 || y < 0) return new long []{1, -1};
-            if (x == 0 && y == 0) return new long [] {a[x][y] > 0 ? a[x][y] : -1, a[x][y] < 0 ? a[x][y] : 1};
-            if (dp.containsKey(x * n + y)) return dp.get(x*n+y);
-            long max = Long.MIN_VALUE, min = Long.MAX_VALUE;
-            long [] v = dfs(a, x-1, y);
-            max = Math.max(max, Math.max(v[0] * a[x][y], v[1] * a[x][y]));
-            min = Math.min(min, Math.min(v[0] * a[x][y], v[1] * a[x][y]));
-            v =  dfs(a, x, y-1);
-            max = Math.max(max, Math.max(v[0] * a[x][y], v[1] * a[x][y]));
-            min = Math.min(min, Math.min(v[0] * a[x][y], v[1] * a[x][y]));
-            dp.put(x*n+y, new long [] {max, min});
-            return dp.get(x*n+y);
-        }
-        Map<Integer, long []> dp = new HashMap<>(); // [0, 1]: max, min
-        int mod = (int)1e9 + 7;
-        int m, n;
-        public int maxProductPath(int[][] grid) {
-            if (grid[0][0] == 0) return 0;
-            m = grid.length;
-            n = grid[0].length;
-            long [] v = dfs(grid, m-1, n-1);
-            System.out.println(Arrays.toString(v));
-            return (int)(v[0] % mod);
-        }
-        public int maxProductPath(int[][] grid) { // 还是不怎么会写dp
-            int m = grid.length;
-            int n = grid[0].length;
-            long [][][] dp = new long [m][n][2];
-            for (int i = 0; i < m; i++) {
-                for (int j = 0; j < n; j++) {
-                    dp[i][j] = min[i][j] = (j == 0 ? grid[i][j] : dp[i][j-1] * grid[i][j]);
-                    if (i == 0) continue;
-                }
-            }
-        }
-
         private int dfs(int [] a, int [] b, int i, int k) { 
             if (k == m) return 0;
             if (dp[i][k] != Integer.MIN_VALUE) return dp[i][k];

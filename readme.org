@@ -12992,6 +12992,49 @@ public int minAbsDifference(int[] arr, int goal) {
   - https://leetcode.com/problems/closest-subsequence-sum/discuss/1055432/Java-252ms-or-47.4-MB-or-Horowitz-and-Sahni's-Subset-Sum-or-comments-or-links
 - 好像还有一个类似提交python关于子集的位操作的java方法,回头再找来参考一下
 
+** 2035. Partition Array Into Two Arrays to Minimize Sum Difference - Hard 上一题：分成两半的套娃题
+You are given an integer array nums of 2 * n integers. You need to partition nums into two arrays of length n to minimize the absolute difference of the sums of the arrays. To partition nums, put each element of nums into one of the two arrays.
+
+Return the minimum possible absolute difference.
+#+BEGIN_SRC java
+public int minimumDifference(int[] nums) {
+    int n = nums.length;
+    int sum = Arrays.stream(nums).sum();
+    TreeSet<Integer>[] sets = new TreeSet[n/2+1]; // 数组，而不是hashMap，这个应该关系不是很大
+    for (int i = 0; i < (1 << (n / 2)); ++i) {    // 一次遍历，而不是n次遍历
+        int curSum = 0;
+        int m = 0; // element Cnts                         
+        for (int j = 0; j < n / 2; ++j) 
+            if ((i & (1<<j)) != 0) {
+                curSum += nums[j]; // 左半部分
+                m ++;
+            }
+        if (sets[m] == null) sets[m] = new TreeSet<Integer>();
+        sets[m].add(curSum);
+    }
+
+    int res = Integer.MAX_VALUE;
+    for (int i = 0; i < (1 << (n / 2)); ++i) {
+        int curSum = 0;
+        int m = 0;
+        for (int j = 0; j < n / 2; ++j) 
+            if ((i & (1<<j)) != 0) {
+                curSum += nums[n/2 + j]; // 遍历计算右半部分的和：边遍历，边解决问题
+                m ++;
+            }
+        int target = (sum - 2 * curSum) / 2;
+        Integer left = sets[n/2-m].floor(target), right = sets[n/2-m].ceiling(target);
+        if (left != null) 
+            res = Math.min(res, Math.abs(sum - 2 * (curSum + left.intValue())));
+        if (right != null) 
+            res = Math.min(res, Math.abs(sum - 2 * (curSum + right.intValue())));
+        if (res == 0) return 0;
+    }
+    return res;
+}
+#+END_SRC
+- 做题的时候有想起tallest billboard，但因为有负数，就去想别的了，却忘记了上面那个一分为二的经典题型
+
 ** 956. Tallest Billboard: 折腰轨半第三次：重要的题型重复三遍
 You are installing a billboard and want it to have the largest height. The billboard will have two steel supports, one on each side. Each steel support must be an equal height.
 You are given a collection of rods that can be welded together. For example, if you have rods of lengths 1, 2, and 3, you can weld them together to make a support of length 6.
@@ -13215,49 +13258,6 @@ public int tallestBillboard(int[] rods) {
     return dp.get(0);
 }
 #+END_SRC
-
-** 2035. Partition Array Into Two Arrays to Minimize Sum Difference - Hard 上一题：分成两半的套娃题
-You are given an integer array nums of 2 * n integers. You need to partition nums into two arrays of length n to minimize the absolute difference of the sums of the arrays. To partition nums, put each element of nums into one of the two arrays.
-
-Return the minimum possible absolute difference.
-#+BEGIN_SRC java
-public int minimumDifference(int[] nums) {
-    int n = nums.length;
-    int sum = Arrays.stream(nums).sum();
-    TreeSet<Integer>[] sets = new TreeSet[n/2+1]; // 数组，而不是hashMap，这个应该关系不是很大
-    for (int i = 0; i < (1 << (n / 2)); ++i) {    // 一次遍历，而不是n次遍历
-        int curSum = 0;
-        int m = 0; // element Cnts                         
-        for (int j = 0; j < n / 2; ++j) 
-            if ((i & (1<<j)) != 0) {
-                curSum += nums[j]; // 左半部分
-                m ++;
-            }
-        if (sets[m] == null) sets[m] = new TreeSet<Integer>();
-        sets[m].add(curSum);
-    }
-
-    int res = Integer.MAX_VALUE;
-    for (int i = 0; i < (1 << (n / 2)); ++i) {
-        int curSum = 0;
-        int m = 0;
-        for (int j = 0; j < n / 2; ++j) 
-            if ((i & (1<<j)) != 0) {
-                curSum += nums[n/2 + j]; // 遍历计算右半部分的和：边遍历，边解决问题
-                m ++;
-            }
-        int target = (sum - 2 * curSum) / 2;
-        Integer left = sets[n/2-m].floor(target), right = sets[n/2-m].ceiling(target);
-        if (left != null) 
-            res = Math.min(res, Math.abs(sum - 2 * (curSum + left.intValue())));
-        if (right != null) 
-            res = Math.min(res, Math.abs(sum - 2 * (curSum + right.intValue())));
-        if (res == 0) return 0;
-    }
-    return res;
-}
-#+END_SRC
-- 做题的时候有想起tallest billboard，但因为有负数，就去想别的了，却忘记了上面那个一分为二的经典题型
 
 ** 1815. Maximum Number of Groups Getting Fresh Donuts - Hard
 There is a donuts shop that bakes donuts in batches of batchSize. They have a rule where they must serve all of the donuts of a batch before serving any donuts of the next batch. You are given an integer batchSize and an integer array groups, where groups[i] denotes that there is a group of groups[i] customers that will visit the shop. Each customer will get exactly one donut.
