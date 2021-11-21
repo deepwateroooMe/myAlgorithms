@@ -14,188 +14,114 @@ import static java.util.stream.Collectors.toMap;
 public class cmp {
     public static class Solution {
 
-        public int timeRequiredToBuy(int[] t, int k) {
-            int n = t.length, sum = Arrays.stream(t).sum();
-            int ans = 0, i = -1;
-            while (t[k] > 0) {
-                i = (i + 1 + n) % n;
-                while (t[i] == 0) 
-                    i = (i + 1 + n) % n;
-                if (t[i] > 0 && t[k] > 0) {
-                    ans++;
-                    t[i]--;
-                    if (i == k && t[k] == 0) return ans;
-                }
-            }
-            return -1;
-        }
+        // public int maxDistance(int[] a) {
+        //     int n = a.length;
+        //     if (n < 2) return 0;
+        //     if (a[0] != a[n-1]) return n-1;
+        //     int i = 0, j = n-1;
+        //     while (i < n-1 && a[i] == a[i+1]) i++;
+        //     if (i == n) return 0;
+        //     while (j > 0 && a[j-1] == a[j]) j--;
+        //     return Math.max(j-1 - 0, n-1-(i+1));
+        // }
 
-        private ListNode reverseList(ListNode head) {
-            List<Integer> l = new ArrayList<>();
-            ListNode r = head;
-            while ( r!= null) {
-                l.add(r.val);
-                r = r.next;
-            }
-            List<Integer> li = new ArrayList<>();
-            for (int i = l.size()-1; i >= 0; i--) 
-                li.add(l.get(i));
-            r = head;
-            int idx = 0;
-            while (r != null) {
-                r.val = li.get(idx);
-                idx++;
-                r = r.next;
-            }
-            return head;
-        }
-        public ListNode reverseEvenLengthGroups(ListNode head) {
-            int idx = 1, cnt = 0, sum = 0, totCnt = 0;
-            ListNode r = head,  newHead = head, p = null;
-            List<ListNode> arr = new ArrayList<>();
-            while (r != null) {
-                totCnt++;
-                r = r.next;
-            }
-            r = head;
-            while (r != null) {
-                while (cnt < idx && r != null) {
-                    p = r;
-                    r = r.next;
-                    cnt++;
-                }
-                if (cnt == idx) {
-                    sum += idx;
-                    idx++;
-                    cnt = 0;
-                    arr.add(newHead);
-                    newHead = r;
-                    p.next = null;
-                }
-            }
-            if (sum < totCnt) arr.add(newHead);
-            ListNode dummy = new ListNode(-1);
-            p = dummy;
-            for (int i = 0; i < arr.size(); i++) {
-                r = arr.get(i);
-                if (i % 2 == 0 && (i != arr.size()-1 || i == arr.size()-1 && (totCnt == sum || totCnt != sum && (totCnt - sum) % 2 == 1))
-                    || i % 2 == 1 && i == arr.size()-1 && totCnt != sum && (totCnt - sum) % 2 == 1) {
-                    p.next = r;
-                    while (p.next != null) 
-                        p = p.next;
-                } else {
-                    ListNode cur = reverseList(r);
-                    p.next = cur;
-                    while (p.next != null) {
-                        p = p.next;
-                    }
-                }
-            }
-            return dummy.next;
-        }
+        // public int wateringPlants(int[] p, int cap) {
+        //     int n = p.length, cnt = 0, cur = cap;
+        //     int [] dp = new int [n];
+        //     for (int i = 0; i < n; i++) {
+        //         if (cur >= p[i]) {
+        //             dp[i] = (i == 0 ? 0 : dp[i-1]) + 1;
+        //             cur -= p[i];
+        //         } else {
+        //             dp[i] = dp[i-1] + 2 * (i-1 +1) + 1;
+        //             cur = cap - p[i];
+        //         }
+        //     }
+        //     return dp[n-1];
+        // }
 
-        private class UnionFind {
-            int [] id; // parent
-            int [] cnt;// size
-            public UnionFind (int n) {
-                id = new int [n];
-                cnt = new int [n];
-                for (int i = 0; i < n; i++) {
-                    id[i] = i;
-                    cnt[i] = 1;
-                }
-            }
-            public int find(int i) {
-                while (id[i] != i) {
-                    id[i] = id[id[i]];
-                    i = id[i];
-                }
-                return i;
-            }
-            public boolean sameGroup(int i, int j) {
-                return find(i) == find(j);
-            }
-            public void union(int i, int j) {
-                int rootI = find(i);
-                int rootJ = find(j);
-                if (rootI != rootJ) {
-                    id[rootI] = rootJ;
-                    cnt[rootJ] += cnt[rootI];
-                }
-            }
-            public Set<Integer> getCompoent(int idx) {
-                Set<Integer> si = new HashSet<>();
-                int p = find(idx);
-                System.out.println("p: " + p);
-                for (int i = 0; i < id.length; i++)  
-                    find(i);
-                System.out.println(Arrays.toString(id));
-                
-                for (int i = 0; i < id.length; i++)  {
-                    if (id[i] == p)
-                        si.add(i);
-                }
-                return si;
-            }
-        }
-        public boolean[] friendRequests(int n, int[][] rs, int[][] req) { // 这里面还有一点逻辑没能理清楚
-            UnionFind uf = new UnionFind(n);
-            Map<Integer, Set<Integer>> m = new HashMap<>();
-            for (int [] v : rs) {
-                m.computeIfAbsent(v[0], z -> new HashSet<>()).add(v[1]);
-                m.computeIfAbsent(v[1], z -> new HashSet<>()).add(v[0]);
-            }
-            boolean [] ans = new boolean[req.length];
-            for (int i = 0; i < req.length; i++) {
-                int [] cur = req[i];
-                if (uf.sameGroup(cur[0], cur[1])) {
-                    ans[i] = true;
-                    continue;
-                }
-                if (m.get(cur[0]) != null && m.get(cur[0]).contains(cur[1]) || m.get(cur[1]) != null && m.get(cur[1]).contains(cur[0]))
-                    ans[i] = false;
-                else {
-                    Set<Integer> one = uf.getCompoent(cur[0]);
-                    Set<Integer> two = uf.getCompoent(cur[1]);
-                    boolean flag = false;
-                    for (Integer a : one) 
-                        for (Integer b : two) {
-                            if (m.get(a) != null && m.get(a).contains(b) || m.get(b) != null && m.get(b).contains(a)) {
-                                ans[i] = false;
-                                flag = true;
-                                break;
-                            }
-                        }
-                    if (flag) continue;
-                    ans[i] = true;
-                    uf.union(cur[0], cur[1]);
-                }
-            }
-            return ans;
-        }
+        // Map<Integer, Map<Integer, Integer>> m = new HashMap<>();
+        // int [] a;
+        // int n;
+        // // public RangeFreqQuery(int[] arr) {
+        // public cmp(int[] arr) {
+        //     n = arr.length;
+        //     a = Arrays.copyOf(arr, n);
+        //     int [] cnt = new int [10001];
+        //     for (int i = 0; i < n; i++) {
+        //         cnt[arr[i]]++;
+        //         Map<Integer, Integer> tmp = new HashMap<>();
+        //         for (int j = 0; j < 10001; j++) 
+        //             if (cnt[j] > 0)
+        //                 tmp.put(j, cnt[j]);
+        //         m.put(i, tmp);
+        //     }            
+        // }
+    
+        // public int query(int left, int right, int value) {
+        //     // System.out.println("right: " + right);
+        //     // System.out.println("left: " + left);
+        //     // Map<Integer, Integer> tmp  = m.get(left);
+        //     // System.out.println("tmp.size(): " + tmp.size());
+        //     // for (Map.Entry<Integer, Integer> en : tmp.entrySet()) 
+        //     //     System.out.print(en.getKey() + ", " + en.getValue() + "\n");
+        //     // System.out.println("(m.get(left-1) == null): " + (m.get(left-1) == null));
+        //     if (m.get(right).get(value) == null) return 0;
+        //     return m.get(right).get(value) - (left == 0 ? 0 : (m.get(left-1) == null ? 0 : m.get(left-1).get(value) == null ? 0 : m.get(left-1).get(value)));
+        // }
 
-        public String decodeCiphertext(String en, int r) { // 还没有写完，今天太累，实在没有精力去折腾这个该死的字符串
-            String [] str = en.split("\\s+");
-            int idx = 0;
-            StringBuilder sb = new StringBuilder();
-            while (idx < str[0].length()) {
-                for (int i = 0; i < str.length; i++) {
-                    if (str[i].length() == idx && idx == str[0].length()-1) break;
-                    sb.append(str[i].charAt(idx));
-                }
-                idx++;
-            }
-            return sb.toString();
+        // private int  getBaseKValue (int v, int k) {
+        //     String ans = v % k == 0 ? "" : "" + v % k;
+        //     int cur = v - v % k;
+        //     cur /= k;
+        //     while (cur > 0) {
+        //         if (cur < k) {
+        //             ans = ""+ cur + ans;
+        //             break;
+        //         } else {
+        //                 }
+        //     }
+        // }
+        public static String baseConversion(String number, int sBase, int dBase) {
+            // Parse the number with source radix
+            // and return in specified radix(base)
+            return Integer.toString(Integer.parseInt(number, sBase), dBase);
+        }
+        public long kMirror(int k, int n) {
+           long sum = 0;
+           // int cnt = 17;
+           // Set<Integer> s = new HashSet<>(List.of(1, 2, 3, 4, 5, 6, 8, 121, 171, 242, 292, 16561, 65656, 2137312, 4602064, 6597956, 6958596));
+           int cnt = 0, i = 1;
+           while (cnt < n) {
+               String v = baseConversion("" + i, 10, k);
+               // System.out.println("v: " + v);
+               if (valid(v) && valid(i)) {
+                   sum += i;
+                   cnt++;
+                   i++;
+               }
+           }
+           return sum;
+        }
+        private boolean valid(int i) {
+            String s = "" + i;
+            if (s.length() == 1) return true;
+            return new StringBuilder (s).reverse().toString().equals(s);
+        }
+        private boolean valid(String s) {
+            return new StringBuilder (s).reverse().toString().equals(s);
         }
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        // String a = "ch   ie   pr";
-        String a = "iveo    eed   l te   olc";
+        // int []  a = new int []  {1, 1, 1, 2, 2};
+        // // int [] a = new int [] {12, 33, 4, 56, 22, 2, 34, 33, 22, 12, 34, 56};
+        // cmp s = new cmp(a);
 
-        String r = s.decodeCiphertext(a, 4);
+        long r = s.kMirror(7, 17);
         System.out.println("r: " + r);
+        
     }
 }
 

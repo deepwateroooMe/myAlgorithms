@@ -143,62 +143,6 @@ public class dpfive {
             return ans;
         }
 
-        public int[] countSubgraphsForEachDiameter(int n, int[][] edges) { // bug
-            int m = n-1, range = 1 << m, root = 0, cnt = 0;
-            int [] ans = new int [m];
-            for (int i = 1; i < range; i++) {
-                System.out.println("\n Integer.toBinaryString(i): " + Integer.toBinaryString(i));
-                root = -1;
-                Map<Integer, List<Integer>> adj = new HashMap<>();
-                for (int j = 0; j < m; j++)  // m edges
-                    if (((i >> j) & 1) == 1) {
-                        int [] e = edges[j];
-                        if (root == -1) root = e[0];
-                        adj.computeIfAbsent(e[0], z -> new ArrayList<>()).add(e[1]);
-                        adj.computeIfAbsent(e[1], z -> new ArrayList<>()).add(e[0]);
-                    }
-                cnt = Integer.bitCount(i);
-                Set<Integer> vis = new HashSet<>();
-                dia = new int [n];
-                System.out.println("root: " + root);
-                
-                int d = dfs(root, -1, adj, vis);
-                System.out.println("d: " + d);
-                System.out.println("(vis.size() != cnt): " + (vis.size() != cnt + 1));
-                
-                if (vis.size() != cnt + 1) continue;
-                // int d = maxWidth(adj);
-                ans[d-1]++;
-                System.out.println(Arrays.toString(ans));
-            }
-            System.out.println(Arrays.toString(dia));
-            return ans;
-        }
-        int [] dia; // 这里需要记忆吗，应该不用吧。数据小，树在不断变化 
-        private int dfs(int u, int p, Map<Integer, List<Integer>> m, Set<Integer> vis) { // 这里树的最大直径算得不对，改天再写
-            System.out.println("\n u: " + u);
-            
-            vis.add(u);
-            if (m.get(u).size() == 1 && m.get(u).get(0) == p) return 0;
-            int max = 0, sec = -1;
-            for (Integer v : m.get(u)) {
-                if (v == p) continue;
-                System.out.println("\n v: " + v);
-                int cur = 1 + dfs(v, u, m, vis);
-                System.out.println("cur: " + cur);
-                if (cur > max) {
-                    sec = max;
-                    max = cur;
-                } else if (cur > sec) sec = cur;
-                // System.out.println("max: " + max);
-                // System.out.println("sec: " + sec);
-            }
-            // System.out.println("max: " + max);
-            // System.out.println("sec: " + sec);
-            dia[u-1] = max + (sec == -1 ? 0 : sec);
-            return max + (sec == -1 ? 0 : sec);
-        }
-
         private static int [] cnts = new int [31];
         public int minimumOneBitOperations(int n) { // 2^30 > 1e9 可能思路理得还不是太清楚吧，改天再写这个
             if (n == 0) return 0;

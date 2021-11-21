@@ -669,57 +669,6 @@ public class dpsix {
             // 这里的递推 还有点儿不清楚
         }
 
-        public int dieSimulator(int n, int [] r) { // DP(pos, last) which means we are at the position pos having as last the last character seen.
-            long mod = (int)1e9 + 7;
-            long [][] dp = new long [n][7];
-            int [] cnt = new int [7];
-            Arrays.fill(cnt, 1);
-            for (int i = 1; i < 7; i++) dp[0][i] = 1;
-            for (int i = 1; i < n; i++) {
-                for (int j = 1; j < 7; j++) {
-                    if (dp[i-1][j] == 0) continue;
-                    for (int k = 1; k < 7; k++) {
-                        if (j != k) {
-                            dp[i][k] = (dp[i][k] + dp[i-1][j]) % mod;
-                            cnt[k] = 1;
-                        } else if (j == k && cnt[j] < r[j-1]) {
-                            dp[i][k] = (dp[i][k] + dp[i-1][k]) % mod;
-                            cnt[k]++;
-                        } else if ()  // 这么着好像没有纪录连续多少次同一个数字
-                    }
-                }
-            }
-        }
-        public int dieSimulator(int n, int [] r) { // DP(pos, last) which means we are at the position pos having as last the last character seen.
-            this.n = n;
-            dp = new long [n+1][7][16];
-            long ans = 0;
-            // for (int i = 1; i < 7; i++) 
-            //     ans = (ans + dfs(n-1, i, 1, r)) % mod;
-            // return (int)ans;
-            return (int)dfs(n, -1, 0, r);
-        }
-        int mod = (int)1e9 + 7;
-       long [][][] dp;
-        int n;
-        private long dfs(int i, int j, int k, int [] a) { // 感觉自项向下、自底向上，这里的上下方向有些混乱，条理不清楚
-            if (i <= 0) return 0;
-            if (i == 1) return k < a[j-1] ? 1 : 0;
-            if (j != -1 && dp[i][j][k] > 0) return dp[i][j][k];
-            long ans = 0;
-            for (int x = 1; x < 7; x++) {
-                if (j == -1 || j != x)
-                    ans = (ans + dfs(i-1, x, 1, a)) % mod;
-                if (j == x && k < a[j-1])
-                    ans = (ans + dfs(i-1, j, k+1, a)) % mod;
-                // else if (j == x && k = a[j-1])
-            }
-            if (j != -1)
-                dp[i][j][k] = ans;
-            return ans;
-            // return dp[i][j][k] = ans;
-        }
-
         public int minHeightShelves(int [][] b, int w) { 
             int n = b.length, curLayerWidth = 0, max = 0;
             int [] dp = new int [n+1];

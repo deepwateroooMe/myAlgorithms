@@ -513,71 +513,6 @@ public class dpseven {
         // 建个图：topological 排序，大致是这个意思，改天回来写 1591
         }
 
-        public int maxScore(int[] a) {
-            n = a.length;
-            vis = new boolean [n];
-            for (int i = 0; i < n; i++) 
-                for (int j = 0; j < n; j++) 
-                    gcd[i][j] = getGcd(a[i], a[j]);
-            return dfs(a, 0, 1, 0);
-        }
-        int [][] gcd;
-        boolean [] vis;
-        int n, max = 0;
-        private int dfs(int [] a, int i, int v, int cur) { // 这里的思路还是没有想清楚
-            if (i == n) {
-                if (cur > max) max = cur;
-                return ;
-            }
-            for (int j = 0; j < n; j++) {
-                if (j == i || vis[j]) continue;
-                if (!vis[j]) {
-                    vis[j] = true;
-                    dfs(a, )
-                }
-            }
-        }
-        private int getGcd(int i, int j) { // complexity of Euclid's algorithm is O(Log min(n1, n2)) 
-            if (j == 0) return i;
-            return getGcd(j, i % j);
-        }
-
-        public int minStickers(String [] s, String t) {
-            tt = new int [26];
-            for (int i = 0; i < t.length(); i++) tt[t.charAt(i)-'a']++;
-            Set<Character> tc = new HashSet<>(t.toCharArray());
-            List<String> l = new ArrayList<>();
-            for (String v : s) {
-                StringBuilder sb = new StringBuilder();
-                for (char c : v.toCharArray()) 
-                    if (tc.contains(c)) 
-                        sb.append(c);
-                if (sb.length() == 0) continue;
-                l.add(sb.toString());
-            }
-            n = l.size();
-            return dfs(l, 0, tt, t);
-        }
-        Map<Integer, Integer> dp = new HashMap<>(); // 2^50不能用回塑，顶多记忆化搜索
-        int [] tt;
-        int n;
-        private int dfs(List<String> l, int i, int [] cnt, String t) {
-            if (i == n) {
-                for (int i = 0; i < 26; i++) 
-                    if (tt[i] > 0) return Integer.MAX_VALUE;
-                return 0;
-            }
-            String key = Arrays.toString(cnt)+"_"+i;
-            if (dp.containsKey(key)) return dp.get(key);
-            int ans = dfs(l, i+1, cnt, t);
-            int [] next = Arrays.copyOf(cnt, 26);
-            for (char c : l.get(i).toCharArray())
-                next[c-'a'] = Math.max(0, --cnt[c-'a']);
-            ans = Math.min(ans, 1 + dfs(l, i, next, t)); // 同一个词用几次的标准是什么， 怎么才能遍历到下一个idx,
-            dp.put(key, ans);
-            return ans;
-        }
-
         public int connectTwoGroups(List<List<Integer>> cost) {
             m = cost.size();
             n = cost.get(0).size();
@@ -1277,69 +1212,6 @@ public class dpseven {
             return cnt;
         }
 
-        //  可以用回塑技能2^16，人择优录用,写起来相对复杂, 如同 万能的dfs记忆化搜索, 2^20对回塑来说也是灵丹炒药
-        //  public int [] smallestSufficientTeam(String[] req_skills, List<List<String>> people) {
-        //      n = req_skills.length;
-        //  }
-        //  int n;
-         public int [] smallestSufficientTeam(String[] req_skills, List<List<String>> people) { // 不知道哪里写错了,改天再回来写这个题
-             int n = req_skills.length, range = 1 << n;;
-             Map<String, Integer> m = new HashMap<>(); // k, v: String k, 1 << i
-             for (int i = 0; i < n; i++) 
-                 m.put(req_skills[i], 1 << i); 
-             Map<Integer, Set<Integer>> dp = new HashMap<>();
-             Map<Integer, Set<Integer>> tmp = new HashMap<>();
-             dp.put(0, new HashSet<>());
-             int [] cnt = new int [range];
-             Arrays.fill(cnt, Integer.MAX_VALUE);
-             cnt[0] = 0;
-             for (int i = 0; i < people.size(); i++) {
-                 System.out.println("\n i: " + i);
-                 int cur = 0;
-                 for (String s : people.get(i)) 
-                     if (m.keySet().contains(s)) cur += m.get(s);
-                 System.out.println("Integer.toBinaryString(cur): " + Integer.toBinaryString(cur));
-                 Set<Integer> si = new HashSet<>();
-                 si.add(i);
-                 dp.put(cur, si);
-                 cnt[cur] = 1;
-                 tmp.clear();
-                 for (Integer key : dp.keySet())
-                     if ((key & cur) == cur && dp.get(key).size() > dp.get(key ^ cur).size() + 1) {
-                         Set<Integer> tmpSet = new HashSet<>(dp.get(key ^ cur));
-                         tmpSet.add(i);
-                         tmp.put(key, tmpSet);
-                     }
-                     // if (!dp.containsKey(key | cur) || dp.get(key | cur).size() > dp.get(key).size() + 1) {
-                     //     Set<Integer> tmpSet = new HashSet<>(dp.get(key));
-                     //     tmpSet.add(i);
-                     //     tmp.put(key | cur, tmpSet);
-                     // }
-                 for (Integer key : tmp.keySet()) 
-                     dp.put(key, new HashSet<>(tmp.get(key)));
-                 System.out.println("dp.size(): " + dp.size());
-                 for (Map.Entry<Integer, Set<Integer>> en : dp.entrySet())  {
-                     System.out.print(en.getKey() + ": " + "\n");
-                     // System.out.println("en.getValue().size(): " + en.getValue().size());
-                     System.out.println(Arrays.toString(en.getValue().toArray()));
-                 }
-             }
-             int [] ans = new int [dp.get(range-1).size()];
-             int idx = 0;
-             for (Integer v : dp.get(range-1)) 
-                 ans[idx++] = v;
-             return ans;
-         }
-        // String []  a = new String []  {"algorithms", "math", "java", "reactjs", "csharp", "aws"};
-        // String [][] b = new String [][] {{"algorithms","math","java"},{"algorithms","math","reactjs"},{"java","csharp","aws"},{"reactjs","csharp"},{"csharp","math"},{"aws","java"}};
-        String []  a = new String []  {"java", "nodejs", "reactjs"};
-        String [][] b = new String [][] {{"java"},{"nodejs"},{"nodejs","reactjs"}};
-
-        List<List<String>> ll = new ArrayList<>();
-        for (int i = 0; i < b.length; i++) 
-            ll.add(Arrays.asList(b[i]));
-        int [] r = s.smallestSufficientTeam(a, ll);
-
         public int constrainedSubsetSum(int[] a, int k) { // PriorityQueue O(NlogN) vs O(N) Deque
             int n = a.length, max = Integer.MIN_VALUE, j = 0;
             int [] dp = new int [n];
@@ -1373,30 +1245,6 @@ public class dpseven {
             char [] s = ("#" + t).toCharArray();
             int [] dp = new int [n];
         }
-
-         public boolean canCross(int [] s) { // bug
-             n = s.length;
-             dp = new Boolean [n][n];
-             return dfs(s, 0, 0);
-         }
-         Boolean [][] dp;
-         int n;
-         private boolean dfs(int [] a, int i, int j) {
-             if (i == n) return false;
-             if (dp[i][j] != null) return dp[i][j];
-             if (i == n-1) return dp[i][j] = true;
-             int k = i;
-             if (k < n-1 && a[k+1] > a[i] + j+1) return dp[i][j] = false;
-             while (k < n-1 && a[k+1] < a[i] + j-1) k++;
-             if (k == n-1) return dp[i][j] = false;
-             if (k > i)
-                 k += 1;
-             for (; k < n && a[k] >= a[i] + Math.max(1, j-1) && a[k] <= a[i] + j+1; k++) {
-                 if (dfs(a, k, a[k] - a[i]))
-                     return dp[i][j] = true;
-             }
-             return dp[i][j] = false;
-         }
 
         public int oddEvenJumps(int [] a) { // bug
             int n = a.length;

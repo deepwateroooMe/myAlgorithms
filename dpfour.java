@@ -452,15 +452,6 @@ public class dpfour {
             // }
         }
 
-        public int firstDayBeenInAllRooms(int[] nextVisit) { // bug
-            int n = nextVisit.length;
-            int [] dp = new int [n];
-            dp[0] = 0;
-            for (int i = 1; i < n; i++) {
-                dp[i] = dp[i-1] + nextVisit[i-1] + 1;
-            }
-        }
-        
         public boolean checkValidString(String t) {
             if (t.charAt(0) == ')') return false;
             int n = t.length();
