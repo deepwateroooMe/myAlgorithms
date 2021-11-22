@@ -12,32 +12,24 @@
 
 * Weekly Plan
 ** 总结题型
-- 等dynamic programming专题的几道题目写完后，会试图再注册一个账号，将这个专题的题目重新再写一遍。这将会是第一个着力重新写的专题，也是因为它有难度，值得挑战。
-- 这个周第二次回去刷了一些dynamic programming的题目，真的是感觉似曾相识，这次再回去做的过程中，可以清楚地感觉到以前不会的、或是想得不透彻的地方现在能够想得相对深远一些了，说明好好刷一遍、重要的话说三遍，典型题型多刷几遍是有效用的，认识深刻，二刷的感觉完全不一样
+- dynamic programming二刷：308 open questions, 容易的基本都写完了，截至目前更新这个计划是还剩67个可能是一刷时自己没能理解透彻的或记忆不深的。这最后剩下的67题对自己来说都是精华，计划再用这多一周的时间把这最后剩下的对自己来说的能量，这一次理解消化透彻！！！
 
-- 等把这第二次的dynamic programming专题的题目刷完，我会边刷题，一边准备android projects.算法题目中关于数组的部分，我觉得不重要，可刷可不刷。（这两天，今天傍晚、明天和后天我需要搬房间到另一个空出来的，所以这两天周一和周二可能做题会少一点儿）
-- I will keep his repository alive for quite a while. And from this week, I will try daily udpates later this week after I have finished moving. 
+- 再这之后，会写一些Android Project，同时大量发简历、找工作，并每天抽部分时间（可能几个小时吧）继续总结和刷完剩下不感兴趣、或觉得不值一写的几个leetcode open problems.
 
-- 这周刷得跟上一周差不多。计划接下来几周，每天刷10个题左右，一周60-70个题目，边刷边记错题进小本，到接下来的周六刷到1250左右，多作总结，希望比赛的成绩能更稳定一些；
-
-- 这个周主要复习了基础的部分，hashing, hashtable string two pointers, 以前很讨厌字符串，这个周写字符串看来，感觉基础的只要自己能够想得清楚的，都能很快实现出来，写得还比较得心应手。TreeMap, TreeSet也用得比较顺一点儿了
-- 写树的题目，dfs, bfs graph各种node,现在也是写得很顺心了，只是通过不断地测试加强巩固
+- 但不管接下来自己的项目是集中在安桌上，还是向unity game偏，leetcode和codeforce的周赛、比赛等都还是会尽量参加、在精神状态允许下，争取把题目都写出来
 
 - 完成打基础的部分： hashing, hashmap, string, two pointer, sliding window,这些基础部分的题目，希望扫完
 - 如果某天头脑比较清醒、精力比较好的时候，会试图去慢速解决自己平时困难的地方：动态规划/ hashmap/hashing中数数组的个数，不常用的算法等
 
 - 数组相关的 segemnt tree, binary index tree等的基础，希望能够理解得再彻底一些，到能活学活用的程度
 - Deque双端队列O（n）解法的概念在建立，还需要很多的练习和熟悉
-- 最讨厌扫描线，几个双数怎么也数不清楚 heap等。。。。。。这个周扫几个出去
+- 最讨厌扫描线和数字相关的，几个双数怎么也数不清楚 heap等。。。。。。这个周扫几个出去
 
 - 如果说以前是迷迷糊糊刷题求AC,现在基本的概念在建立，希望从以前代码和题目的算法效率向代码优化中等偏优，寻求高效、最优解法的提升
 - bit manipulation, bitmasks基础知识基本掌握，还剩几道难题take my time慢慢解（感觉现在对bit操作，相对自信得心应手得多了！） 
 - union find 的几个题，基本算是基本扫完吧，剩下的几下慢慢写。。。。。。
- 
-- 很喜欢现在自己搭建出来的window刷题环境：WSL system, Zsh power shell, emacs configurations, locally everything, except Leetcode server is too slow, have to tolerant its latency......
 
-- 至昨天晚上我终于意识到确定右侧单耳耳鸣，搬到现居住处后发病的（感觉现居住处到处都是电磁波干扰、洗衣烘衣的车床，厨房的冰箱，曾整小时整小时开过的洗手间风扇等），已经有几个周了。对于自2013年秋天野鸡大学的住宿环境以来，备受各种居住环境的困扰，尤其是2019年9月10月以来，我自小的听力受损，现在单侧耳鸣，可能的原因有家族遗传性高血压、遗传性脑血管肿瘤（外公舅舅和妈妈都受此脑溢血困扰过，大我五岁的亲姐姐前几个月也刚发此重病一次）等等。今天在网上稍搜索了一下相关信息，回想这几年的居住环境噪音和人为打扰与睡眠干扰、心里戚戚很不是滋味，希望我不至于会失去听力。 
-- But my suffering is still only my/a personal suffering. Unless I could find an appropriate job, nobody cares if you are sick or not.因此，自信是本能，向往强大也是一种本能的向往。Anything happens, 我还是必须努力努力刷题，直到找到合适的工作.所以会近几周把剩下的一点儿题目刷完（hard and medium only, keep easy untouched dont care）不喜欢数字，也数字无缘，不打算写数组题目，如果一定要写，可能也只会把难题写一写吧
+- 经过一段时间的饮食调理，现在右耳单耳电磁波一样的叫声已经小了很多，希望通过再多一段时间的饮食调理它会自动消失掉。前天和昨天连续两天晚上都没能消息好(前天晚上可能是因为在它们炒作的枪口上写出了自己一直以来的愿望吧，昨天一天、到晚上明明已经很累了，晚上还出去稍微运动了一下希望晚上能早点儿入睡能休息好，却偏偏还是没能安时入眠)，直接导致今天早上起床稍微有点儿困难，我比较喜欢现在这个自9月来养成的早上6点起床的极少失眠的作息（这两三个月来也没再喝咖啡），希望赶快把作息再次调整恢复正常（现在还不想换成浪费早上时候，午休90分钟深睡眠的作息）。
 
 ** 比赛
 - 会尽量多参加一些比赛，比赛时的效率还是相对好一点儿，所以leetcode上以后每周一次、每半月一次，以及以后codeforces上的比赛，希望都能够尽量地多参加一些。
@@ -72,6 +64,8 @@
 
 ** 第二次仍不会的题号记这里
 - 1872 (stone game 8), 647 329 494 131 518 1723(need summary)
+
+- 需要重写的： 1187，2035, 1000
 
 - 根据CLRS，动态规划分为两种：
 - top-down with memoization (递归记忆化搜索)
@@ -672,6 +666,38 @@ private static int getMaxLength(int[] arr){
 
 
 ** 区间型DP
+- https://leetcode-cn.com/problems/minimum-cost-to-merge-stones/solution/yi-dong-you-yi-dao-nan-yi-bu-bu-shuo-ming-si-lu-he/
+
+区间dp问题，旨在通过动态规划去求一个区间的最优解，通过将大区间划分为很多个小区间，再由小区间的解来组合出大区间的解，这体现了分治的思想。
+
+- 区间动态规划三部曲
+  - 定义状态：dp[i, j]为区间[i, j]的最优解
+  - 定义状态转移方程：最常见的写法为：dp[i,j] = max/min{dp[i,j], dp[i, k] + dp[k+1, j] + cost}。选取[i, j]之间的一个分界点k，分别计算[i, k]和[k+1, j]的最优解，从而组合出[i, j]的最优解。
+  - 初始化：dp[i][i] = 常数。区间长度为1时的最优解应当是已知的。
+
+假设要求的区间最优解为dp[1, n]，区间dp问题有两种编码方法：
+
+- 第一种：
+#+BEGIN_SRC java
+for (int i = n; i >= 1; --i) 
+	for (int j = i + 1; j <= n; ++j) 
+		for (int k = i; k < j; ++k) 
+			dp[i,j] = max/min(dp[i,j], dp[i,k] + dp[k+1, j] + cost)
+#+END_SRC
+
+这种写法就是常规的dp写法，枚举i为子区间左边界，枚举j为子区间有边界，枚举k为分界点。要注意由于要求的是dp[1,n]，所以i必须从大往小遍历，j必须从小往大遍历。这样在状态转移方程中利用的就是已求解的dp状态。
+- 第二种：
+#+BEGIN_SRC java
+for (int len = 2; len <= n; ++len) 
+	for (int i = 1; i + len - 1  <= n; ++i) {
+		int j = i + len - 1;
+		for (int k = i; k < j; ++k) 
+			dp[i,j] = max/min(dp[i,j], dp[i,k] + dp[k+1, j] + cost;
+    }
+#+END_SRC
+
+这种写法最常见，枚举len为区间长度，枚举i为区间左端点，由此可以计算出区间右端点j，枚举k为分界点。区间长度从2到n，跟上一种写法相同。这种写法的正确性可能不如上一种那么直观，它从小到大枚举出所有区间，在求解大区间时，状态转移方程中利用的状态都是小区间的状态，必定在它之前被求解，所以也是正确的。
+
 *** 1039. Minimum Score Triangulation of Polygon - Medium
 You have a convex n-sided polygon where each vertex has an integer value. You are given an integer array values where values[i] is the value of the ith vertex (i.e., clockwise order).
 
@@ -821,17 +847,84 @@ public int maxCoins(int[] nums) {
 
 *** 1000. Minimum Cost to Merge Stones - Hard
 There are n piles of stones arranged in a row. The ith pile has stones[i] stones.
-
 A move consists of merging exactly k consecutive piles into one pile, and the cost of this move is equal to the total number of stones in these k piles.
-
 Return the minimum cost to merge all piles of stones into one pile. If it is impossible, return -1.
-
 **** 解题思路与分析
 
 看到了论坛上有人定义了三维的 dp 数组，把每次合并的堆数K也当作一维放入到 dp 数组中了，其实博主觉得不是很有必要，因为像这种必须要对 dp 数组进行升维操作的是当题目中有隐藏信息 Hidden Information，而当前定义的 dp 数组无法重现子问题，即无法找到状态转移方程的时候必须要做的，最典型的例子就是之前那道 Remove Boxes，那道题自区间的 dp 值非常依赖于区间左边相同的数字的个数，而这道题每次合并的堆数K并不是很依赖其他小于K的合并的堆数，所以博主感觉没有必要加。
 
+#+BEGIN_SRC java
+public int mergeStones(int[] stones, int k) {
+    int n = stones.length;
+    if ((n-1) % (k-1) != 0) return -1;
+    int [][] dp = new int[n][n];
+    int [] pre = new int[n+1];
+    for (int i = 1; i <= n; i++) 
+        pre[i] = pre[i-1] + stones[i-1];
+    int j = 0;
+    for (int len = k; len <= n; len++) {
+        for (int i = 0; i+len-1 < n; i++) {
+            j = i + len -1;
+            dp[i][j] = Integer.MAX_VALUE; // have to initialize it here !!!
+            for (int x = i; x < j; x += k-1) 
+                dp[i][j] = Math.min(dp[i][j], dp[i][x] + dp[x+1][j]);
+            if ((j - i) % (k - 1) == 0) // 如果总长度满足合并只剩一个数的条件，则可以再合并一次
+                dp[i][j] += pre[j+1] - pre[i];
+        }
+    }
+    return dp[0][n-1];
+}
+#+END_SRC
+**** 解题思路与分析: 上述解法的时间复杂度是O(n^3*k).我们可以对它进行优化。
+- https://leetcode.com/problems/minimum-cost-to-merge-stones/discuss/247657/JAVA-Bottom-Up-%2B-Top-Down-DP-With-Explaination
+
+定义dp[i][j]为尽可能多的合并区间[i, j] 所需的成本，不一定能合并成一堆，但合并完成后剩下的堆数一定小于k，更具体地，剩余的堆数一定是(n - 1) % (k - 1) + 1。
+
+证明：
+
+已知一次合并会导致堆数减少k-1，假设最多进行了a次合并，则有
+
+remain = n - (k - 1) * a，1 <= remain <= k - 1，
+
+\Rightarrow⇒ remain - 1 = n - 1 - (k - 1) * a
+
+\Rightarrow⇒ remain - 1 = (n - 1) % (k - 1)
+
+\Rightarrow⇒ remain = (n - 1) % (k - 1) + 1
+
+证毕。
+
+我们参照解法一来定义状态转移方程，同样将区间[i，j]划分为两部分。
+
+我们保证将左部分合并成1堆，而尽可能多地合并右部分。（左部分需要满足(len - 1) % (k - 1) == 0）。
+
+右部分剩余堆数满足1 <= remain <= k - 1，如果最后右部分剩余k-1堆（也即(j - i) % (k - 1) == 0），则还可以继续将这两部分合并成1堆。
+
+因此合并区间[i，j]的成本是合并其左右部分成本之和（对于最优的划分）。如果可以进一步合并的话，则额外的成本是sum(i, j)。
+
+状态转移方程为：dp[i][j] = min(dp[i][p] + dp[p + 1][j]), i <= p < j，如果可以继续合并，dp[i][j] += sum(i, j)。
+
+这样的话枚举的区间长度就必须从k开始了，因为长度在[1，k-1]之间的区间已经无法进行合并了，它们的dp[i][j] == 0。
+
      #+BEGIN_SRC java
+public int mergeStones(int[] s, int k) {
+    int n = s.length;
+    if ((n - 1) % (k - 1) != 0) return -1;
+    int [][] dp = new int [n+1][n+1];
+    int [] sum = new int [n+1];
+    for (int i = 1; i <= n; i++)  sum[i] = sum[i-1] + s[i-1];
+    for (int len = k; len <= n; len++) // 枚举区间长度
+        for (int i = 1; i+len <= n+1; i++) { // 枚举区间起点
+            int j = i + len - 1;
+            dp[i][j] = Integer.MAX_VALUE;
+            for (int p = i; p < j; p += k-1) // 枚举分界点
+                dp[i][j] = Math.min(dp[i][j], dp[i][p] + dp[p+1][j]);
+            if ((j - i) % (k-1) == 0) dp[i][j] += sum[j] - sum[i-1];
+        }
+    return dp[1][n];
+}
      #+END_SRC
+
 *** 546. Remove Boxes - Hard: 带隐含信息，需要第三维参数加入的
 You are given several boxes with different colors represented by different positive numbers.
 
@@ -1869,29 +1962,6 @@ def numberOfUniqueGoodSubsequences(self, binary: str) -> int:
         return sum(dp)%M 
 
 #+END_SRC
-*** 650. 2 Keys Keyboard - Medium
-There is only one character 'A' on the screen of a notepad. You can perform two operations on this notepad for each step:
-
-Copy All: You can copy all the characters present on the screen (a partial copy is not allowed).
-Paste: You can paste the characters which are copied last time.
-Given an integer n, return the minimum number of operations to get the character 'A' exactly n times on the screen.
-**** 解题思路与分析
-#+BEGIN_SRC java
-public int minSteps(int n) {
-    if (n == 1) return 0;
-    int [] dp = new int [n+1];
-    dp[1] = 0;
-    dp[2] = 2;     // copy A + paste A 
-    for (int i = 3; i <= n; i++) {
-        dp[i] = i; // 最多操作i次，在dp[2] = 2的基础上每多加一个字母就多paste一次
-        for (int j = i-1; j >= 2; j--) {
-            if (i % j == 0) // 可以在面板上有j个A的基础上，copy j个A，再paste i/j-1次
-                dp[i] = Math.min(dp[i], dp[j]+1 + i/j-1);
-        }
-    }
-    return dp[n];
-}
-#+END_SRC
 *** 714. Best Time to Buy and Sell Stock with Transaction Fee
 You are given an array prices where prices[i] is the price of a given stock on the ith day, and an integer fee representing a transaction fee.
 Find the maximum profit you can achieve. You may complete as many transactions as you like, but you need to pay the transaction fee for each transaction.
@@ -2335,133 +2405,6 @@ public int lastStoneWeightII(int[] stones) {
 }
 #+END_SRC
 
-*** 913. Cat and Mouse
-A game on an undirected graph is played by two players, Mouse and Cat, who alternate turns.
-The graph is given as follows: graph[a] is a list of all nodes b such that ab is an edge of the graph.
-The mouse starts at node 1 and goes first, the cat starts at node 2 and goes second, and there is a hole at node 0.
-During each player's turn, they must travel along one edge of the graph that meets where they are.  For example, if the Mouse is at node 1, it must travel to any node in graph[1].
-Additionally, it is not allowed for the Cat to travel to the Hole (node 0.)
-Then, the game can end in three ways:
-If ever the Cat occupies the same node as the Mouse, the Cat wins.
-If ever the Mouse reaches the Hole, the Mouse wins.
-If ever a position is repeated (i.e., the players are in the same position as a previous turn, and it is the same player's turn to move), the game is a draw.
-Given a graph, and assuming both players play optimally, return
-1 if the mouse wins the game,
-2 if the cat wins the game, or
-0 if the game is a draw.
-#+BEGIN_SRC java
-private int dfs(int [][] arr, int t, int i, int j) { // t: steps, i: mouse, j: cat, mouse goes first
-    if (t == 2 * n) return 0;
-    if (i == j) return dp[t][i][j] = 2;
-    if (i == 0) return dp[t][i][j] = 1;
-    if (dp[t][i][j] != -1) return dp[t][i][j];
-    int tmp = 0;
-    if (t % 2 == 0) { // mouse's turn
-        boolean catWin = true;
-        for (int k = 0; k < arr[i].length; k++) {
-            tmp = dfs(arr, t+1, arr[i][k], j);
-            if (tmp == 1) return dp[t][i][j] = 1;
-            else if (tmp != 2) catWin = false;
-        }
-        if (catWin) return dp[t][i][j] = 2;
-        else return dp[t][i][j] = 0;
-    } else { // cat's turn, can NOT step on node # 0
-        boolean mouseWin = true;
-        for (int k = 0; k < arr[j].length; k++) {
-            if (arr[j][k] == 0) continue;
-            tmp = dfs(arr, t+1, i, arr[j][k]);
-            if (tmp == 2) return dp[t][i][j] = 2;
-            else if (tmp != 1) mouseWin = false;
-        }
-        if (mouseWin) return dp[t][i][j] = 1;
-        else return  dp[t][i][j] = 0;
-    }
-}
-int [][][] dp;
-int n;
-public int catMouseGame(int[][] graph) {
-    n = graph.length;
-    dp = new int [2*n][n][n];
-    for (int i = 0; i < 2*n; i++) 
-        for (int j = 0; j < n; j++)
-            Arrays.fill(dp[i][j], -1);
-    dfs(graph, 0, 1, 2);
-    return dp[0][1][2];
-}
-#+END_SRC
-
-*** 1728. Cat and Mouse II
-A game is played by a cat and a mouse named Cat and Mouse.
-The environment is represented by a grid of size rows x cols, where each element is a wall, floor, player (Cat, Mouse), or food.
-Players are represented by the characters 'C'(Cat),'M'(Mouse).
-Floors are represented by the character '.' and can be walked on.
-Walls are represented by the character '#' and cannot be walked on.
-Food is represented by the character 'F' and can be walked on.
-There is only one of each character 'C', 'M', and 'F' in grid.
-Mouse and Cat play according to the following rules:
-Mouse moves first, then they take turns to move.
-During each turn, Cat and Mouse can jump in one of the four directions (left, right, up, down). They cannot jump over the wall nor outside of the grid.
-catJump, mouseJump are the maximum lengths Cat and Mouse can jump at a time, respectively. Cat and Mouse can jump less than the maximum length.
-Staying in the same position is allowed.
-Mouse can jump over Cat.
-The game can end in 4 ways:
-If Cat occupies the same position as Mouse, Cat wins.
-If Cat reaches the food first, Cat wins.
-If Mouse reaches the food first, Mouse wins.
-If Mouse cannot get to the food within 1000 turns, Cat wins.
-Given a rows x cols matrix grid and two integers catJump and mouseJump, return true if Mouse can win the game if both Cat and Mouse play optimally, otherwise return false.
-#+BEGIN_SRC java
-private boolean dfs(String [] arr, int t, int i, int j) {
-    if (dp[t][i][j] != null) return dp[t][i][j];
-    if (t == m*n*2) return false;
-    if (arr[i/n].charAt(i%n) == 'F') return true;
-    if (arr[j/n].charAt(j%n) == 'F') return false;
-    if (i == j) return false;
-    int r = 0, c = 0;
-    if (t % 2 == 0) { // mouse's turn 老鼠的：只要它能赢一个状态就是赢了
-        for (int [] d : dirs) 
-            for (int k = 0; k <= mj; k++) {
-                r = i / n + d[0] * k;
-                c = i % n + d[1] * k;
-                if (r >= 0 && r < m && c >= 0 && c < n && arr[r].charAt(c) != '#') {
-                    if (dfs(arr, t+1, r*n+c, j))
-                        return dp[t][i][j] = true; // Mouse could win
-                } else break;
-            }
-        return dp[t][i][j] = false;
-    } else { // cat's turn：但是当是猎的：需要猫不能赢，老鼠才能赢；但是当猫哪怕是赢了只一局，老鼠也就输了
-        for (int [] d : dirs) 
-            for (int k = 0; k <= cj; k++) {
-                r = j / n + d[0] * k;
-                c = j % n + d[1] * k;
-                if (r >= 0 && r < m && c >= 0 && c < n && arr[r].charAt(c) != '#') {
-                    if (!dfs(arr, t+1, i, r*n+c))  // Can cat find a path that mouse looses in it?
-                        return dp[t][i][j] = false; // Cat wins = mouse loose
-                } else break; // 上面这一点儿狠重要
-            }
-        return dp[t][i][j] = true;
-    }
-}
-int [][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
-Boolean [][][] dp;
-int m, n, cj, mj;
-public boolean canMouseWin(String[] grid, int catJump, int mouseJump) {
-    m = grid.length;
-    n = grid[0].length();
-    cj = catJump;
-    mj = mouseJump;
-    dp = new Boolean [1001][m*n][m*n];
-    int x = 0, y = 0;
-    for (int i = 0; i < m; i++) 
-        for (int j = 0; j < n; j++) 
-            if (grid[i].charAt(j) == 'M')
-                x = i * n + j;
-            else if (grid[i].charAt(j) == 'C')
-                y = i * n + j;
-    return dfs(grid, 0, x, y);
-}
-#+END_SRC
-
 *** 810. Chalkboard XOR Game - Hard
 You are given an array of integers nums represents the numbers written on a chalkboard.
 
@@ -2790,33 +2733,6 @@ public int getLengthOfOptimalCompression(String s, int k) {
 #+END_SRC
 **** 决策类DP总结
   - https://leetcode-cn.com/problems/string-compression-ii/solution/jie-ti-si-kao-guo-cheng-yu-jie-fa-zong-jie-by-ruit/
-
-*** 1000. Minimum Cost to Merge Stones
-There are n piles of stones arranged in a row. The ith pile has stones[i] stones.
-A move consists of merging exactly k consecutive piles into one pile, and the cost of this move is equal to the total number of stones in these k piles.
-Return the minimum cost to merge all piles of stones into one pile. If it is impossible, return -1.
-#+BEGIN_SRC java
-public int mergeStones(int[] stones, int k) {
-    int n = stones.length;
-    if ((n-1) % (k-1) != 0) return -1;
-    int [][] dp = new int[n][n];
-    int [] pre = new int[n+1];
-    for (int i = 1; i <= n; i++) 
-        pre[i] = pre[i-1] + stones[i-1];
-    int j = 0;
-    for (int len = k; len <= n; len++) {
-        for (int i = 0; i+len-1 < n; i++) {
-            j = i + len -1;
-            dp[i][j] = Integer.MAX_VALUE; // have to initialize it here !!!
-            for (int x = i; x < j; x += k-1) 
-                dp[i][j] = Math.min(dp[i][j], dp[i][x] + dp[x+1][j]);
-            if ((j - i) % (k - 1) == 0) // 如果总长度满足合并只剩一个数的条件，则可以再合并一次
-                dp[i][j] += pre[j+1] - pre[i];
-        }
-    }
-    return dp[0][n-1];
-}
-#+END_SRC
 
 *** 1039. Minimum Score Triangulation of Polygon
 You have a convex n-sided polygon where each vertex has an integer value. You are given an integer array values where values[i] is the value of the ith vertex (i.e., clockwise order).
@@ -4109,7 +4025,7 @@ int leastOpsExpressTarget(int x, int target) {
     return -1;
 }
 #+END_SRC
-*** 1955. Count Number of Special Subsequences - Hard
+*** 1955. Count Number of Special Subsequences - Hard 把这些个递推公式记住
 A sequence is special if it consists of a positive number of 0s, followed by a positive number of 1s, then a positive number of 2s.
 
 For example, [0,1,2] and [0,0,1,1,1,2] are special.
@@ -4558,6 +4474,75 @@ public int countOrders(int n) {
 }
 #+END_SRC
 
+*** 1187. Make Array Strictly Increasing - Hard 需要重写
+Given two integer arrays arr1 and arr2, return the minimum number of operations (possibly zero) needed to make arr1 strictly increasing.
+
+In one operation, you can choose two indices 0 <= i < arr1.length and 0 <= j < arr2.length and do the assignment arr1[i] = arr2[j].
+
+If there is no way to make arr1 strictly increasing, return -1.
+**** 解题思路与分析
+     #+BEGIN_SRC java
+public int makeArrayIncreasing(int[] a, int[] b) {
+    b = Arrays.stream(b).distinct().toArray();
+    Arrays.sort(b);
+    int m = a.length, n = b.length;
+    int minCnt = 0, minVal = 0;
+    Queue<int []> q = new LinkedList<>();
+    q.offer(new int [] {-1, 0}); // 初始化，假想第0位的前一位是-1
+    for (int i = 0; i < m; i++) {
+        minCnt = Integer.MAX_VALUE;
+        for (int size = q.size()-1; size >= 0; size--) {
+            int [] cur = q.poll(); // 取前一位的一个选择
+            if (a[i] > cur[0]) minCnt = Math.min(minCnt, cur[1]); // 先不急将当前选择加入queue中，找到最小的再说
+            minVal = binarySearchMin(b, cur[0]); // 查找一个比前一个数大的最小数
+            if (minVal != -1) q.offer(new int [] {minVal, cur[1] + 1}); // 将这个最小数加入到queue中，操作次数在前一位的基础上加一
+         }
+        if (minCnt != Integer.MAX_VALUE) // 如果当前位可以保持不变，将最小次数加入到queue中
+            q.offer(new int [] {a[i], minCnt}); 
+    }
+    if (q.size() == 0) return -1; // 如果最后一位没有合法的选择方案，返回-1
+    int ans = Integer.MAX_VALUE;
+    while (!q.isEmpty()) ans = Math.min(ans, q.poll()[1]);
+    return ans;
+}
+private int binarySearchMin(int [] arr, int v) {
+    int l = 0, r = arr.length-1, m = 0;
+    while (l < r) { // l,r: [0, 1]
+        m = l + (r-l) / 2;
+        if (arr[m] <= v) l = m+1;
+        else r = m;
+    }
+    return arr[l] > v ? arr[l] : -1; // 所以这里要再判断一下
+}
+     #+END_SRC
+**** 解题思路与分析
+
+这里若是要替换后面的数字为较大的数字，那么就需要在 arr2 中找到比当前数字大的数字，为了让整个数组更容易的递增，那么这个较大数应该尽量越小越好，所以就是要找到第一个比当前数字大的数。为了更容易的在 arr2 中查找，而不是每次都遍历整个数组，需要给 arr2 排个序，然后用二分搜索来查找更高效一些，这里也可以将 arr2 放到一个 TreeSet 中，利用其自动排序的特点，之后再进行二分搜索就行了。这道题的正确解法是用动态规划 Dynamic Programming，这里的 dp 表达式比较难想，一般来说，dp 值都是定义为题目中要求的值，而这道题是个例外，这里的 dp[i][j] 表示对于数组中的前j个数字组成的子数组中，需要替换i次可以使得其变为严格递增，且第j个数字的最小值为 dp[i][j]。这里的 dp 值不是定义为替换次数，而是第j个数字的最小值（可能是替换后的值），因为要保证数组严格递增，最后一个数字的大小很重要，这是个关键信息，而这个数字的大小跟数组坐标之间没有啥必然联系，所以这个信息不太好放到 dp 数组的坐标中，而所求的替换次数跟数组长度是相关的，因为其不可能超过数组的总长度，最差的情况也就是将整个 arr1 数组都替换了（当然还需要考虑 arr2 的长度）。
+
+接下来就来考虑状态转移方程怎么写，由于这里的j表示前j个数字，那么第j个数字实际上是 arr1[j-1]，若第j个数字大于 dp[i][j-1]，这里表示对于前 j-1 个数字，替换i次可以使得其严格递增，且第 j-1 个数字为 dp[i][j-1]，这样的话就不需要额外的替换操作，还是严格递增增的，则 dp[i][j] 可以赋值为 arr1[j-1]。若此时i大于0，说明之前已经进行过替换操作，则上一个操作状态是 dp[i-1][j-1]，当前操作是从 arr2 中选一个数字替换 arr1 的第j个数字，这里就要在 arr2 中选择第一个大于 dp[i-1][j-1] 的数字，若存在的话，就用这个数字来更新 dp[i][j] 的值。若某个时刻j等于n了，说明已经到 arr1 的末尾了，若此时 dp[i][j] 不等于 INT_MAX（初始值），说明是可以将整个 arr1 替换成严格递增的数组的，替换次数就是i，直接返回即可。最终循环退出了，返回 -1，参见代码如下：
+     #+BEGIN_SRC cpp
+int makeArrayIncreasing(vector<int>& arr1, vector<int>& arr2) {
+    int n = arr1.size();
+    if (n == 1) return 0;
+    set<int> st(arr2.begin(), arr2.end());
+    vector<vector<int>> dp(n + 1, vector<int>(n + 1, INT_MAX));
+    dp[0][0] = INT_MIN;
+    for (int j = 1; j <= n; ++j) {
+        for (int i = 0; i <= j; ++i) {
+            if (arr1[j - 1] > dp[i][j - 1]) {
+                dp[i][j] = arr1[j - 1];
+            }
+            if (i > 0) {
+                auto it = st.upper_bound(dp[i - 1][j - 1]);
+                if (it != st.end()) dp[i][j] = min(dp[i][j], *it);
+            }  
+            if (j == n && dp[i][j] != INT_MAX) return i;
+        }
+    }
+    return -1;
+}
+     #+END_SRC
+
 ** 多维数个数、数种类数 多一维k介入的 dp[i][j][k]
 *** 1866. Number of Ways to Rearrange Sticks With K Sticks Visible - Hard
 There are n uniquely-sized sticks whose lengths are integers from 1 to n. You want to arrange the sticks such that exactly k sticks are visible from the left. A stick is visible from the left if there are no longer sticks to the left of it.
@@ -4575,32 +4560,26 @@ public int rearrangeSticks(int n, int k) {
     long [][] dp = new long [n+1][k+1];
     dp[0][0] = 1;
     for (int i = 1; i <= n; i++) 
-        for (int j = 1; j <= Math.min(n, k); j++) 
-            dp[i][j] = (dp[i-1][j-1] + (dp[i-1][j] * (i-1)) % mod) % mod;
+        for (int j = 1; j <= k; j++) 
+            dp[i][j] = (dp[i-1][j-1] + (i - 1) * dp[i-1][j]) % mod;
     return (int)dp[n][k];
 }
 #+END_SRC
 - dfs + memo 
 #+BEGIN_SRC java
-long mod = 1000_000_000 + 7;
-long[][] dp;
 public int rearrangeSticks(int n, int k) {
-    dp = new long[n + 1][k + 1];
-    long ans = dfs(n, k);
-    return (int) (ans % mod);
+    dp = new long [n+1][k+1];
+    return (int)dfs(n, k);
 }
-long dfs(int n, int k) {
-    if(n < k || k == 0) return 0;
-    if(n == k) return 1;
-    if(dp[n][k] != 0) return dp[n][k];
-    long ans = 0;
+int mod = (int)1e9 + 7;
+long [][] dp;
+private long dfs(int n, int k) {
+    if (n < k || k == 0) return 0;
+    if (n == k) return 1;
+    if (dp[n][k] != 0) return dp[n][k];
     // instead of iterating for every stick
     // we are just multiplying number of ways with (n - 1)
-    ans += (((n - 1) * dfs(n - 1, k)) % mod);
-    ans %= mod;
-    ans += dfs(n - 1, k - 1);
-    ans %= mod;
-    return dp[n][k] = ans;
+    return dp[n][k] = (dfs(n-1, k-1) + (n - 1) * dfs(n-1, k)) % mod;
 }
 #+END_SRC
 
@@ -5025,6 +5004,156 @@ public int maxProfit(int k, int [] prices) {
         }
     }
     return gloMax[n-1][k];
+}
+#+END_SRC
+
+*** 650. 2 Keys Keyboard - Medium
+There is only one character 'A' on the screen of a notepad. You can perform two operations on this notepad for each step:
+
+Copy All: You can copy all the characters present on the screen (a partial copy is not allowed).
+Paste: You can paste the characters which are copied last time.
+Given an integer n, return the minimum number of operations to get the character 'A' exactly n times on the screen.
+**** 解题思路与分析
+#+BEGIN_SRC java
+public int minSteps(int n) {
+    if (n == 1) return 0;
+    int [] dp = new int [n+1];
+    dp[1] = 0;
+    dp[2] = 2;     // copy A + paste A 
+    for (int i = 3; i <= n; i++) {
+        dp[i] = i; // 最多操作i次，在dp[2] = 2的基础上每多加一个字母就多paste一次
+        for (int j = i-1; j >= 2; j--) {
+            if (i % j == 0) // 可以在面板上有j个A的基础上，copy j个A，再paste i/j-1次
+                dp[i] = Math.min(dp[i], dp[j]+1 + i/j-1);
+        }
+    }
+    return dp[n];
+}
+#+END_SRC
+*** 913. Cat and Mouse
+A game on an undirected graph is played by two players, Mouse and Cat, who alternate turns.
+The graph is given as follows: graph[a] is a list of all nodes b such that ab is an edge of the graph.
+The mouse starts at node 1 and goes first, the cat starts at node 2 and goes second, and there is a hole at node 0.
+During each player's turn, they must travel along one edge of the graph that meets where they are.  For example, if the Mouse is at node 1, it must travel to any node in graph[1].
+Additionally, it is not allowed for the Cat to travel to the Hole (node 0.)
+Then, the game can end in three ways:
+If ever the Cat occupies the same node as the Mouse, the Cat wins.
+If ever the Mouse reaches the Hole, the Mouse wins.
+If ever a position is repeated (i.e., the players are in the same position as a previous turn, and it is the same player's turn to move), the game is a draw.
+Given a graph, and assuming both players play optimally, return
+1 if the mouse wins the game,
+2 if the cat wins the game, or
+0 if the game is a draw.
+#+BEGIN_SRC java
+private int dfs(int [][] arr, int t, int i, int j) { // t: steps, i: mouse, j: cat, mouse goes first
+    if (t == 2 * n) return 0;
+    if (i == j) return dp[t][i][j] = 2;
+    if (i == 0) return dp[t][i][j] = 1;
+    if (dp[t][i][j] != -1) return dp[t][i][j];
+    int tmp = 0;
+    if (t % 2 == 0) { // mouse's turn
+        boolean catWin = true;
+        for (int k = 0; k < arr[i].length; k++) {
+            tmp = dfs(arr, t+1, arr[i][k], j);
+            if (tmp == 1) return dp[t][i][j] = 1;
+            else if (tmp != 2) catWin = false;
+        }
+        if (catWin) return dp[t][i][j] = 2;
+        else return dp[t][i][j] = 0;
+    } else { // cat's turn, can NOT step on node # 0
+        boolean mouseWin = true;
+        for (int k = 0; k < arr[j].length; k++) {
+            if (arr[j][k] == 0) continue;
+            tmp = dfs(arr, t+1, i, arr[j][k]);
+            if (tmp == 2) return dp[t][i][j] = 2;
+            else if (tmp != 1) mouseWin = false;
+        }
+        if (mouseWin) return dp[t][i][j] = 1;
+        else return  dp[t][i][j] = 0;
+    }
+}
+int [][][] dp;
+int n;
+public int catMouseGame(int[][] graph) {
+    n = graph.length;
+    dp = new int [2*n][n][n];
+    for (int i = 0; i < 2*n; i++) 
+        for (int j = 0; j < n; j++)
+            Arrays.fill(dp[i][j], -1);
+    dfs(graph, 0, 1, 2);
+    return dp[0][1][2];
+}
+#+END_SRC
+
+*** 1728. Cat and Mouse II
+A game is played by a cat and a mouse named Cat and Mouse.
+The environment is represented by a grid of size rows x cols, where each element is a wall, floor, player (Cat, Mouse), or food.
+Players are represented by the characters 'C'(Cat),'M'(Mouse).
+Floors are represented by the character '.' and can be walked on.
+Walls are represented by the character '#' and cannot be walked on.
+Food is represented by the character 'F' and can be walked on.
+There is only one of each character 'C', 'M', and 'F' in grid.
+Mouse and Cat play according to the following rules:
+Mouse moves first, then they take turns to move.
+During each turn, Cat and Mouse can jump in one of the four directions (left, right, up, down). They cannot jump over the wall nor outside of the grid.
+catJump, mouseJump are the maximum lengths Cat and Mouse can jump at a time, respectively. Cat and Mouse can jump less than the maximum length.
+Staying in the same position is allowed.
+Mouse can jump over Cat.
+The game can end in 4 ways:
+If Cat occupies the same position as Mouse, Cat wins.
+If Cat reaches the food first, Cat wins.
+If Mouse reaches the food first, Mouse wins.
+If Mouse cannot get to the food within 1000 turns, Cat wins.
+Given a rows x cols matrix grid and two integers catJump and mouseJump, return true if Mouse can win the game if both Cat and Mouse play optimally, otherwise return false.
+#+BEGIN_SRC java
+private boolean dfs(String [] arr, int t, int i, int j) {
+    if (dp[t][i][j] != null) return dp[t][i][j];
+    if (t == m*n*2) return false;
+    if (arr[i/n].charAt(i%n) == 'F') return true;
+    if (arr[j/n].charAt(j%n) == 'F') return false;
+    if (i == j) return false;
+    int r = 0, c = 0;
+    if (t % 2 == 0) { // mouse's turn 老鼠的：只要它能赢一个状态就是赢了
+        for (int [] d : dirs) 
+            for (int k = 0; k <= mj; k++) {
+                r = i / n + d[0] * k;
+                c = i % n + d[1] * k;
+                if (r >= 0 && r < m && c >= 0 && c < n && arr[r].charAt(c) != '#') {
+                    if (dfs(arr, t+1, r*n+c, j))
+                        return dp[t][i][j] = true; // Mouse could win
+                } else break;
+            }
+        return dp[t][i][j] = false;
+    } else { // cat's turn：但是当是猎的：需要猫不能赢，老鼠才能赢；但是当猫哪怕是赢了只一局，老鼠也就输了
+        for (int [] d : dirs) 
+            for (int k = 0; k <= cj; k++) {
+                r = j / n + d[0] * k;
+                c = j % n + d[1] * k;
+                if (r >= 0 && r < m && c >= 0 && c < n && arr[r].charAt(c) != '#') {
+                    if (!dfs(arr, t+1, i, r*n+c))  // Can cat find a path that mouse looses in it?
+                        return dp[t][i][j] = false; // Cat wins = mouse loose
+                } else break; // 上面这一点儿狠重要
+            }
+        return dp[t][i][j] = true;
+    }
+}
+int [][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+Boolean [][][] dp;
+int m, n, cj, mj;
+public boolean canMouseWin(String[] grid, int catJump, int mouseJump) {
+    m = grid.length;
+    n = grid[0].length();
+    cj = catJump;
+    mj = mouseJump;
+    dp = new Boolean [1001][m*n][m*n];
+    int x = 0, y = 0;
+    for (int i = 0; i < m; i++) 
+        for (int j = 0; j < n; j++) 
+            if (grid[i].charAt(j) == 'M')
+                x = i * n + j;
+            else if (grid[i].charAt(j) == 'C')
+                y = i * n + j;
+    return dfs(grid, 0, x, y);
 }
 #+END_SRC
 
@@ -5669,6 +5798,127 @@ public int findMaxForm(String[] strs, int m, int n) {
                 dp[i][j] = Math.max(dp[i][j], dp[i-zoo][j-one] + 1);
     }
     return dp[m][n];
+}
+     #+END_SRC
+*** 1900. The Earliest and Latest Rounds Where Players Compete
+Hard
+
+142
+
+11
+
+Add to List
+
+Share
+There is a tournament where n players are participating. The players are standing in a single row and are numbered from 1 to n based on their initial standing position (player 1 is the first player in the row, player 2 is the second player in the row, etc.).
+
+The tournament consists of multiple rounds (starting from round number 1). In each round, the ith player from the front of the row competes against the ith player from the end of the row, and the winner advances to the next round. When the number of players is odd for the current round, the player in the middle automatically advances to the next round.
+
+For example, if the row consists of players 1, 2, 4, 6, 7
+Player 1 competes against player 7.
+Player 2 competes against player 6.
+Player 4 automatically advances to the next round.
+After each round is over, the winners are lined back up in the row based on the original ordering assigned to them initially (ascending order).
+
+The players numbered firstPlayer and secondPlayer are the best in the tournament. They can win against any other player before they compete against each other. If any two other players compete against each other, either of them might win, and thus you may choose the outcome of this round.
+
+Given the integers n, firstPlayer, and secondPlayer, return an integer array containing two values, the earliest possible round number and the latest possible round number in which these two players will compete against each other, respectively.
+**** 解题思路与分析：分析本质不同的站位情况 + 记忆化搜索
+
+本题思维难度较大。其中的有些技巧可能在其它的题目中很少出现。
+
+读者在第一次阅读本题解时，可以多去思考「怎么做」，而尽量不要去思考「为什么要这么做」。
+
+***** 思路与算法
+
+我们可以用 F(n, f, s)F(n,f,s) 表示还剩余 nn 个人，并且两名最佳运动员分别是一排中从左往右数的第 ff 和 ss 名运动员时，他们比拼的最早回合数。
+
+同理，我们用 G(n, f, s)G(n,f,s) 表示他们比拼的最晚回合数。
+
+那么如何进行状态转移呢？
+
+只考虑本质不同的站位情况
+
+如果我们单纯地用 F(n, f, s)F(n,f,s) 来进行状态转移，会使得设计出的算法和编写出的代码都相当复杂。例如我们需要考虑 ff 是在左侧（即从前往后数）、中间（即轮空）还是右侧（即从后往前数），对于 ss 也需要考虑那么多情况，这样状态转移方程就相当麻烦。
+
+我们可以考虑分析出本质不同的站位情况，得到下面的表格：
+|-----------+--------------------------------+--------------------------------+--------------------------------|
+|           | s 在左侧                      | s 在中间                      | s 在右侧                      |
+|-----------+--------------------------------+--------------------------------+--------------------------------|
+| f 在左侧 | 保持不变                       | 保持不变                       | 保持不变                       |
+| f 在中间 | 等价于「f 在左侧，s 在中间」 | 不存在这种情况                 | 等价于「f 在左侧，s 在中间」 |
+| f 在右侧 | 等价于「f 在左侧，s 在右侧」 | 等价于「f 在左侧，s 在中间」 | 等价于「f 在左侧，s 在左侧」 |
+|-----------+--------------------------------+--------------------------------+--------------------------------|
+其正确性在于：
+
+- F(n, f, s) = F(n, s, f) 恒成立。即我们交换两名最佳运动员的位置，结果不会发生变化；
+- F(n, f, s) = F(n, n+1-s, n+1-f) 恒成立。因为我们会让从前往后数的第 ii 运动员与从后往前数的第 ii 名运动员进行比拼，那么我们将所有的运动员看成一个整体，整体翻转一下，结果同样不会发生变化。
+
+我们使用这两条变换规则，就可以保证在 F(n, f, s)F(n,f,s) 中，ff 一定小于 ss，那么 ff 一定在左侧，而 ss 可以在左侧、中间或者右侧。这样我们就将原本的 88 种情况减少到了 33 种情况。
+
+对于 G(n, f, s)G(n,f,s)，其做法是完全相同的。
+
+[[./pic/1900.png]]
+
+***** 细节
+
+在「本质不同的站位情况」一节中，我们提到了两种变换规则。那么我们具体应当在 n, f, s满足什么关系（而不是抽象的「左侧」「中间」「右侧」）时使用其中的哪些规则呢？
+
+这里有很多种设计方法，我们介绍一种较为简单的，题解代码中使用的方法：
+
+首先我们使用自顶向下的记忆化搜索代替动态规划进行状态转移，这样写更加简洁直观，并且无需考虑状态的求值顺序；
+
+记忆化搜索的入口为 F(n,firstPlayer,secondPlayer)。我们在开始记忆化搜索之前，先通过变换规则 F(n,f,s)=F(n,s,f) 使得firstPlayer 一定小于 secondPlayer，这样一来，由于另一条变换规则 F(n,f,s)=F(n,n+1−s,n+1−f) 不会改变 ff 与 ss 间的大小关系，因此在接下来的记忆化搜索中，f<s 是恒成立的，我们也就无需使用变换规则 F(n,f,s)=F(n,s,f) 了；
+
+在之前表格中，我们需要变换的情况有 55 种，分别是：「ff 在中间，ss 在左侧」「ff 在中间，ss 在右侧」「ff 在右侧，ss 在左侧」「ff 在右侧，ss 在中间」「ff 在右侧，ss 在右侧」。由于我们已经保证了 f < sf<s 恒成立，因此这 55 种情况中只剩下 22 种是需要处理的，即：「ff 在中间，ss 在右侧」和「ff 在右侧，ss 在右侧」。此外，我们在「状态转移方程的设计」一节中还发现了一种需要处理的情况，即「ff 在左侧，ss 在右侧，并且 f> s' =n+1−s」。
+
+那么这 33 种情况是否可以统一呢？对于最后一种情况，我们有 f+s>n+1，而「ff 在中间，ss 在右侧」和「ff 在右侧，ss 在右侧」也恰好满足 f+s > n+1f+s>n+1，并且所有不需要变换的情况都不满足 f+s>n+1。因此我们只需要在 f+s>n+1 时，使用一次变换规则F(n,f,s)=F(n,n+1−s,n+1−f) 就行了。
+
+     #+BEGIN_SRC java
+// 3种情况是否可以统一呢？
+// 对于最后一种情况，我们有 f+s > n+1f+s>n+1，
+// 而「ff 在中间，ss 在右侧」和「ff 在右侧，ss 在右侧」也恰好满足 f+s > n+1f+s>n+1，
+// 并且所有不需要变换的情况都不满足 f+s > n+1f+s>n+1。
+// 因此我们只需要在 f+s > n+1 时，使用一次变换规则 F(n, f, s) = F(n, n+1-s, n+1-f) 就行
+public int [] earliestAndLatest(int n, int firstPlayer, int secondPlayer) {
+    min = new int [n+1][n+1][n+1];
+    max = new int [n+1][n+1][n+1];
+    if (firstPlayer < secondPlayer) return dfs(n, firstPlayer, secondPlayer);
+    return dfs(n, secondPlayer, firstPlayer);
+}
+int [][][] min, max;
+private int [] dfs(int n, int f, int s) { // f: firstPlayer, // s: secondPlayer
+    if (min[n][f][s] > 0) return new int [] {min[n][f][s], max[n][f][s]};
+    if (f + s == n+1) return new int [] {1, 1}; // 刚好第一轮就可以碰上
+    if (f + s > n + 1) { // 三种特殊情况的变换：
+        int [] res = dfs(n, n+1 - s, n+1 - f);
+        min[n][f][s] = res[0];
+        max[n][f][s] = res[1];
+        return res;
+    }
+    int glbMin = Integer.MAX_VALUE, glbMax = 0;
+    int half = (n+1) >> 1;
+    if (s <= half) // // 在左侧或者中间
+        for (int i = 0; i < f; i++) // f左侧人数
+            for (int j = 0; j < s-f; j++) { // f和s之间的人数
+                int [] res = dfs(half, i+1, i+j+2);
+                glbMin = Math.min(glbMin, res[0]);
+                glbMax = Math.max(glbMax, res[1]);
+            }
+    else {// s在右侧
+        int s_prime = n + 1 - s;
+        int mid = (n - 2 * s_prime + 1) / 2;
+        for (int i = 0; i < f; i++) 
+            for (int j = 0; j < s_prime - f; j++) { // s': n+1-s
+                int [] res = dfs(half, i+1, i+j+2 + mid);
+                // int [] res = dfs(half, i+1, i+j+2+(s*2-n-1)/2);
+                glbMin = Math.min(glbMin, res[0]);
+                glbMax = Math.max(glbMax, res[1]); 
+            }
+    }
+    min[n][f][s] = glbMin + 1;
+    max[n][f][s] = glbMax + 1;
+    return new int [] {glbMin + 1, glbMax + 1};
 }
      #+END_SRC
 * Segment Tree与Binary Index Tree 线段树与树状数组 
@@ -8347,537 +8597,6 @@ int popAtStack(int index) Returns the value at the top of the stack with the giv
     }
 #+END_SRC
 
-
-* binary Search
-** LeetCode Binary Search Summary 二分搜索法小结
-- https://segmentfault.com/a/1190000016825704
-- https://www.cnblogs.com/grandyang/p/6854825.html
-*** 标准二分查找
-#+BEGIN_SRC java
-public int search(int[] nums, int target) {
-    int left = 0;
-    int right = nums.length - 1;
-    while (left <= right) {
-        int mid = left + ((right - left) >> 1);
-        if (nums[mid] == target) return mid;
-        else if (nums[mid] > target) 
-            right = mid - 1;
-        else 
-            left = mid + 1;
-    }
-    return -1;
-}
-#+END_SRC
-
-循环终止的条件包括：
-
-- 找到了目标值
-- left > right （这种情况发生于当left, mid, right指向同一个数时，这个数还不是目标值，则整个查找结束。）
-
-left + ((right -left) >> 1) 对于目标区域长度为奇数而言，是处于正中间的，对于长度为偶数而言，是中间偏左的。因此左右边界相遇时，只会是以下两种情况：
-
-- left/mid , right (left, mid 指向同一个数，right指向它的下一个数)
-- left/mid/right （left, mid, right 指向同一个数）
-
-即因为mid对于长度为偶数的区间总是偏左的，所以当区间长度小于等于2时，mid 总是和 left在同一侧。
-*** 二分查找左边界
-
-利用二分法寻找左边界是二分查找的一个变体，应用它的题目常常有以下几种特性之一：
-
-- 数组有序，但包含重复元素
-- 数组部分有序，且不包含重复元素
-- 数组部分有序，且包含重复元素
-**** 左边界查找类型1
-
-类型1包括了上面说的第一种，第二种情况。
-
-既然要寻找左边界，搜索范围就需要从右边开始，不断往左边收缩，也就是说即使我们找到了nums[mid] == target, 这个mid的位置也不一定就是最左侧的那个边界，我们还是要向左侧查找，所以我们在nums[mid]偏大或者nums[mid]就等于目标值的时候，继续收缩右边界，算法模板如下：
-#+BEGIN_SRC java
-public int search(int[] nums, int target) {
-    int left = 0;
-    int right = nums.length - 1;
-    while (left < right) {
-        int mid = left + (right - left) / 2;
-        if (nums[mid] < target) 
-            left = mid + 1;
-        else 
-            right = mid;
-    }
-    return nums[left] == target ? left : -1;
-}
-#+END_SRC
-
-返回值： nums[left] == target ? left : -1
-
-与标准的二分查找不同：
-
-首先，这里的右边界的更新是right = mid，因为我们需要在找到目标值后，继续向左寻找左边界。
-
-其次，这里的循环条件是left < right。
-
-因为在最后left与right相邻的时候，mid和left处于相同的位置(前面说过，mid偏左)，则下一步，无论怎样，left, mid, right都将指向同一个位置，如果此时循环的条件是left <= right，则我们需要再进入一遍循环，此时，如果nums[mid] < target还好说，循环正常终止；否则，我们会令right = mid，这样并没有改变left,mid,right的位置，将进入死循环。
-
-事实上，我们只需要遍历到left和right相邻的情况就行了，因为这一轮循环后，无论怎样，left,mid,right都会指向同一个位置，而如果这个位置的值等于目标值，则它就一定是最左侧的目标值；如果不等于目标值，则说明没有找到目标值，这也就是为什么返回值是nums[left] == target ? left : -1。
- 
-#+BEGIN_SRC java
-public int searchInsert(int[] nums, int target) {
-    int len = nums.length;
-    if (nums[len - 1] < target) return len;
-    int left = 0;
-    int right = len - 1;
-    while (left <= right) {
-        int mid = (left + right) / 2;
-        // 等于的情况最简单，我们应该放在第 1 个分支进行判断
-        if (nums[mid] == target) {
-            return mid;
-        } else if (nums[mid] < target) {
-            // 题目要我们返回大于或者等于目标值的第 1 个数的索引
-            // 此时 mid 一定不是所求的左边界，
-            // 此时左边界更新为 mid + 1
-            left = mid + 1;
-        } else {
-            // 既然不会等于，此时 nums[mid] > target
-            // mid 也一定不是所求的右边界
-            // 此时右边界更新为 mid - 1
-            right = mid - 1;
-        }
-    }
-    // 注意：一定得返回左边界 left，
-    // 理由是对于 [1,3,5,6]，target = 2，返回大于等于 target 的第 1 个数的索引，此时应该返回 1
-    // 在上面的 while (left <= right) 退出循环以后，right < left，right = 0 ，left = 1
-    // 根据题意应该返回 left，
-    // 如果题目要求你返回小于等于 target 的所有数里最大的那个索引值，应该返回 right
-    return left;
-}
-#+END_SRC
-**** 左边界查找类型2
-
-左边界查找的第二种类型用于数组部分有序且包含重复元素的情况，这种条件下在我们向左收缩的时候，不能简单的令 right = mid，因为有重复元素的存在，这会导致我们有可能遗漏掉一部分区域，此时向左收缩只能采用比较保守的方式，代码模板如下：
-#+BEGIN_SRC java
-public int search(int[] nums, int target) {
-    int left = 0;
-    int right = nums.length - 1;
-    while (left < right) {
-        int mid = left + (right - left) / 2;
-        if (nums[mid] < target) 
-            left = mid + 1;
-        else if (nums[mid] > target) 
-            right = mid;
-        else 
-            right--;
-    }
-    return nums[left] == target ? left : -1;
-}
-#+END_SRC
-
-它与类型1的唯一区别就在于对右侧值的收缩更加保守。这种收缩方式可以有效地防止我们一下子跳过了目标边界从而导致了搜索区域的遗漏。
-
-*** 二分查找右边界
-#+BEGIN_SRC java
-public int search(int[] nums, int target) {
-    int left = 0;
-    int right = nums.length - 1;
-    while (left < right) {
-        int mid = left + ((right - left) >> 1) + 1;
-        if (nums[mid] > target) 
-            right = mid - 1;
-        else 
-            left = mid;
-    }
-    return nums[right] == target ? right : -1;
-}
-#+END_SRC
-- 循环条件： left < right
-- 中间位置计算： mid = left + ((right -left) >> 1) + 1
-- 左边界更新：left = mid
-- 右边界更新： right = mid - 1
-- 返回值： nums[right] == target ? right : -1
-
-这里大部分和寻找左边界是对称着来写的，唯独有一点需要尤其注意——中间位置的计算变了，我们在末尾多加了1。这样，无论对于奇数还是偶数，这个中间的位置都是偏右的。
-
-对于这个操作的理解，从对称的角度看，寻找左边界的时候，中间位置是偏左的，那寻找右边界的时候，中间位置就应该偏右呗，但是这显然不是根本原因。根本原因是，在最后left和right相邻时，如果mid偏左，则left, mid指向同一个位置，right指向它们的下一个位置，在nums[left]已经等于目标值的情况下，这三个位置的值都不会更新，从而进入了死循环。所以我们应该让mid偏右，这样left就能向右移动。这也就是为什么我们之前一直强调查找条件，判断条件和左右边界的更新方式三者之间需要配合使用。
-
-右边界的查找一般来说不会单独使用，如有需要，一般是需要同时查找左右边界。
-
-*** 二分查找左右边界
-前面我们介绍了左边界和右边界的查找，那么查找左右边界就容易很多了——只要分别查找左边界和右边界就行了。
-*** 二分查找极值
-二分查找还有一种有趣的变体是二分查找极值点，之前我们使用nums[mid]去比较的时候，常常是和给定的目标值target比，或者和左右边界比较，在二分查找极值点的应用中，我们是和相邻元素去比，以完成某种单调性的检测。关于这一点，我们直接来看一个例子就明白了。
-
-Find Peak Element
-
-A peak element is an element that is greater than its neighbors.
-
-Given an input array nums, where nums[i] ≠ nums[i+1], find a peak element and return its index.
-
-The array may contain multiple peaks, in that case return the index to any one of the peaks is fine.
-
-You may imagine that nums[-1] = nums[n] = -∞.
-
-这一题的有趣之处在于他要求求一个局部极大值点，并且整个数组不包含重复元素。所以整个数组甚至可以是无序的——你可能很难想象我们可以在一个无序的数组中直接使用二分查找，但是没错！我们确实可以这么干！谁要人家只要一个局部极大值即可呢。
-#+BEGIN_SRC java
-public int findPeakElement(int[] nums) {
-    int left = 0;
-    int right = nums.length - 1;
-    while (left < right) {
-        int mid = left + ((right - left) >> 1);
-        if (nums[mid] < nums[mid + 1]) 
-            left = mid + 1;
-        else 
-            right = mid;
-    }
-    return left;
-}
-#+END_SRC
-#+BEGIN_SRC java
-public int binarySearch2(int[] nums, int target) {
-    // left和right都在数组下标范围内
-    // [left, right]
-    int left = 0;
-    int right = nums.length - 1;
-    // while循环跳出的条件是left > right
-    // 所以如果没找到target的话，也不需要特判了
-    while (left <= right) {
-        int mid = left + (right - left) / 2;
-        if (nums[mid] == target) return mid;
-        else if (nums[mid] < target) 
-            left = mid + 1;
-        else
-            right = mid - 1;
-    }
-    // 如果没找到就只能返回-1
-    return -1;
-}
-// 模板二，适合判断当前 index 和 index + 1 之间的关系。
-// right 指针一开始的定义是在数组下标范围外的，[left, right)，所以在需要移动 right 指针的时候不能写成 right = mid。这样会遗漏掉一些下标的判断。
-public int binarySearch3(int[] nums, int target) {
-    // right不在下标范围内
-    // [left, right)
-    int left = 0;
-    int right = nums.length;
-    // while循环跳出的条件是left == right
-    // 这个模板比较适合判断当前index和index + 1之间的关系
-    // left < right, example, left = 0, right = 1
-    while (left < right) {
-        int mid = left + (right - left) / 2;
-        if (nums[mid] == target) return mid;
-        else if (nums[mid] < target) 
-            left = mid + 1;
-        else
-            // 因为搜索范围是左闭右开所以这里不能-1
-            right = mid;
-    }
-    // 最后的特判
-    if (left != nums.length && nums[left] == target) 
-        return left;
-    return -1;
-}
-// while条件不满足的时候，left + 1 == right，两下标应该指向某个下标 i 和 i + 1。这样如果有什么特殊的值需要判断，应该不是 left 就是 right 了。
-public int binarySearch1(int[] nums, int target) {
-    // left和right都在数组下标范围内
-    // [left, right]
-    int left = 0;
-    int right = nums.length - 1;
-    // 举例，start - 0, end = 3
-    // 中间隔了起码有start + 1和start + 2两个下标
-    // 这样跳出while循环的时候，start + 1 == end
-    // 才有了最后的两个判断
-    while (left + 1 < right) {
-        int mid = left + (right - left) / 2;
-        if (nums[mid] == target) return mid;
-        else if (nums[mid] < target) 
-            left = mid;
-        else 
-            right = mid;
-    }
-    // 特判
-    if (nums[left] == target) return left;
-    if (nums[right] == target) return right;
-    // 如果没找到就只能返回-1
-    return -1;
-}
-#+END_SRC
-
-[[./pic/binarySearch.png]] 
-
-*** 第一类： 需查找和目标值完全相等的数
-
-这是最简单的一类，也是我们最开始学二分查找法需要解决的问题，比如我们有数组 [2, 4, 5, 6, 9]，target = 6，那么我们可以写出二分查找法的代码如下：
-#+BEGIN_SRC c++
-int find(vector<int>& nums, int target) {
-    int left = 0, right = nums.size();
-    while (left < right) {
-        int mid = left + (right - left) / 2;
-        if (nums[mid] == target) return mid;
-        else if (nums[mid] < target) left = mid + 1;
-        else right = mid;
-    }
-    return -1;
-}
-#+END_SRC
-
-会返回3，也就是 target 的在数组中的位置。注意二分查找法的写法并不唯一，主要可以变动地方有四处：
-
-第一处是 right 的初始化，可以写成 nums.size() 或者 nums.size() - 1。
-
-第二处是 left 和 right 的关系，可以写成 left < right 或者 left <= right。
-
-第三处是更新 right 的赋值，可以写成 right = mid 或者 right = mid - 1。
-
-第四处是最后返回值，可以返回 left，right，或 right - 1。
-
-- 但是这些不同的写法并不能随机的组合，像博主的那种写法，
-  - 若 right 初始化为了 nums.size()，那么就必须用 left < right，而最后的 right 的赋值必须用 right = mid。
-  - 但是如果我们 right 初始化为 nums.size() - 1，那么就必须用 left <= right，并且right的赋值要写成 right = mid - 1，不然就会出错。
-
-所以博主的建议是选择一套自己喜欢的写法，并且记住，实在不行就带简单的例子来一步一步执行，确定正确的写法也行。
-
-第一类应用实例：
-
-Intersection of Two Arrays
-
-*** 第二类： 查找第一个不小于目标值的数，可变形为查找最后一个小于目标值的数
-
-这是比较常见的一类，因为我们要查找的目标值不一定会在数组中出现，也有可能是跟目标值相等的数在数组中并不唯一，而是有多个，那么这种情况下 nums[mid] == target 这条判断语句就没有必要存在。比如在数组 [2, 4, 5, 6, 9] 中查找数字3，就会返回数字4的位置；在数组 [0, 1, 1, 1, 1] 中查找数字1，就会返回第一个数字1的位置。我们可以使用如下代码：
-#+BEGIN_SRC c++
-int find(vector<int>& nums, int target) {
-    int left = 0, right = nums.size();
-    while (left < right) {
-        int mid = left + (right - left) / 2;
-        if (nums[mid] < target) left = mid + 1;
-        else right = mid;
-    }
-    return right;
-}
-#+END_SRC
-
-最后我们需要返回的位置就是 right 指针指向的地方。在 C++ 的 STL 中有专门的查找第一个不小于目标值的数的函数 lower_bound，在博主的解法中也会时不时的用到这个函数。但是如果面试的时候人家不让使用内置函数，那么我们只能老老实实写上面这段二分查找的函数。
-
-这一类可以轻松的变形为查找最后一个小于目标值的数，怎么变呢。我们已经找到了第一个不小于目标值的数，那么再往前退一位，返回 right - 1，就是最后一个小于目标值的数。
-
-第二类应用实例：
-
-Heaters， Arranging Coins， Valid Perfect Square，Max Sum of Rectangle No Larger Than K，Russian Doll Envelopes
- 
-第二类变形应用：Valid Triangle Number
- 
-*** 第三类： 查找第一个大于目标值的数，可变形为查找最后一个不大于目标值的数
-
-这一类也比较常见，尤其是查找第一个大于目标值的数，在 C++ 的 STL 也有专门的函数 upper_bound，这里跟上面的那种情况的写法上很相似，只需要添加一个等号，将之前的 nums[mid] < target 变成 nums[mid] <= target，就这一个小小的变化，其实直接就改变了搜索的方向，使得在数组中有很多跟目标值相同的数字存在的情况下，返回最后一个相同的数字的下一个位置。比如在数组 [2, 4, 5, 6, 9] 中查找数字3，还是返回数字4的位置，这跟上面那查找方式返回的结果相同，因为数字4在此数组中既是第一个不小于目标值3的数，也是第一个大于目标值3的数，所以 make sense；在数组 [0, 1, 1, 1, 1] 中查找数字1，就会返回坐标5，通过对比返回的坐标和数组的长度，我们就知道是否存在这样一个大于目标值的数。参见下面的代码：
-#+BEGIN_SRC c++
-int find(vector<int>& nums, int target) {
-    int left = 0, right = nums.size();
-    while (left < right) {
-        int mid = left + (right - left) / 2;
-        if (nums[mid] <= target) left = mid + 1;
-        else right = mid;
-    }
-    return right;
-}
-#+END_SRC
-
-这一类可以轻松的变形为查找最后一个不大于目标值的数，怎么变呢。我们已经找到了第一个大于目标值的数，那么再往前退一位，返回 right - 1，就是最后一个不大于目标值的数。比如在数组 [0, 1, 1, 1, 1] 中查找数字1，就会返回最后一个数字1的位置4，这在有些情况下是需要这么做的。
-
-第三类应用实例：
-
-Kth Smallest Element in a Sorted Matrix
-
-第三类变形应用示例：
-
-Sqrt(x)
-
-*** 第四类： 用子函数当作判断关系（通常由 mid 计算得出）
-
-这是最令博主头疼的一类，而且通常情况下都很难。因为这里在二分查找法重要的比较大小的地方使用到了子函数，并不是之前三类中简单的数字大小的比较，比如 Split Array Largest Sum 那道题中的解法一，就是根据是否能分割数组来确定下一步搜索的范围。类似的还有 Guess Number Higher or Lower 这道题，是根据给定函数 guess 的返回值情况来确定搜索的范围。对于这类题目，博主也很无奈，遇到了只能自求多福了。
-
-第四类应用实例：
-
-Split Array Largest Sum， Guess Number Higher or Lower，Find K Closest Elements，Find K-th Smallest Pair Distance，Kth Smallest Number in Multiplication Table，Maximum Average Subarray II，Minimize Max Distance to Gas Station，Swim in Rising Water，Koko Eating Bananas，Nth Magical Number
-
-*** 第五类： 其他（通常 target 值不固定）
-
-有些题目不属于上述的四类，但是还是需要用到二分搜索法，比如这道 Find Peak Element，求的是数组的局部峰值。由于是求的峰值，需要跟相邻的数字比较，那么 target 就不是一个固定的值，而且这道题的一定要注意的是 right 的初始化，一定要是 nums.size() - 1，这是由于算出了 mid 后，nums[mid] 要和 nums[mid+1] 比较，如果 right 初始化为 nums.size() 的话，mid+1 可能会越界，从而不能找到正确的值，同时 while 循环的终止条件必须是 left < right，不能有等号。
-
-类似的还有一道 H-Index II，这道题的 target 也不是一个固定值，而是 len-mid，这就很意思了，跟上面的 nums[mid+1] 有异曲同工之妙，target 值都随着 mid 值的变化而变化，这里的right的初始化，一定要是 nums.size() - 1，而 while 循环的终止条件必须是 left <= right，这里又必须要有等号，是不是很头大 -.-!!!
-
-其实仔细分析的话，可以发现其实这跟第四类还是比较相似，相似点是都很难 -.-!!!，第四类中虽然是用子函数来判断关系，但大部分时候 mid 也会作为一个参数带入子函数进行计算，这样实际上最终算出的值还是受 mid 的影响，但是 right 却可以初始化为数组长度，循环条件也可以不带等号，大家可以对比区别一下～
-
-第五类应用实例：
-
-Find Peak Element
-
-H-Index II
-
-** 793. Preimage Size of Factorial Zeroes Function
-Let f(x) be the number of zeroes at the end of x!. Recall that x! = 1 * 2 * 3 * ... * x and by convention, 0! = 1.
-
-For example, f(3) = 0 because 3! = 6 has no zeroes at the end, while f(11) = 2 because 11! = 39916800 has two zeroes at the end.
-Given an integer k, return the number of non-negative integers x have the property that f(x) = k.
-
-#+BEGIN_SRC java
-private long numberOfTrailingZeros(long v) {
-    long cnt = 0;
-    for (; v > 0; v /= 5) 
-        cnt += v / 5;
-    return cnt;
-}
-public int preimageSizeFZF(int k) {
-    long left = 0, right = 5l * (k + 1);
-    while (left < right) {
-        long mid = left + (right - left) / 2;
-        long cnt = numberOfTrailingZeros(mid);
-        if (cnt == k) return 5;
-        if (cnt < k) left = mid + 1;
-        else right = mid;
-    }
-    return 0;
-}
-#+END_SRC
-- 下面这种解法是把子函数融到了 while 循环内，使得看起来更加简洁一些，解题思路跟上面的解法一模一样，参见代码如下： 
-#+BEGIN_SRC java
-public int preimageSizeFZF(int k) {
-    long left = 0, right = 5l * (k + 1);
-    while (left < right) {
-        long mid = left + (right - left) / 2, cnt = 0;
-        for (long i = 5; mid / i > 0; i *= 5) 
-            cnt += mid / i;
-        if (cnt == k) return 5;
-        if (cnt < k) left = mid + 1;
-        else right = mid;
-    }
-    return 0;
-}
-#+END_SRC
-
-下面这种解法也挺巧妙的，也是根据观察规律推出来的，我们首先来看x为1到 25 的情况：
-#+BEGIN_SRC java
-x:    1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25
-f(x): 0 0 0 0 1 1 1 1 1 2  2  2  2  2  3  3  3  3  3  4  4  4  4  4  6
-g(x): 0 0 0 0 1 0 0 0 0 1  0  0  0  0  1  0  0  0  0  1  0  0  0  0  2
-#+END_SRC
-
-这里，f(x) 是表示 x! 末尾零的个数，而 g(x) = f(x) - f(x-1)，其实还可以通过观察发现，f(x) = sum(g(x)).
-
-再仔细观察上面的数字，发现 g(x) 有正值的时候都是当x是5的倍数的时候，那么来专门看一下x是5的倍数时的情况吧：
-
-#+BEGIN_SRC java
-x:    5 10 15 20 25 30 35 40 45 50 55 60 65 70 75 80 85 90 95 100 105 110 115 120 125
-g(x): 1 1  1  1  2  1  1  1  1  2  1  1  1  1  2  1  1  1  1   2   1   1   1   1   3
-#+END_SRC 
-
-仔细观察上面的红色数字，g(x)=1 时，是5的倍数，g(x)=2 时，都是 25 的倍数，g(x)=3 时，是 125 的倍数，那么就有：
-#+BEGIN_SRC java
-g(x) = 0     if x % 5 != 0,
-g(x) >= 1    if x % 5 == 0,
-g(x) >= 2   if x % 25 == 0.
-#+END_SRC
-
-如果继续将上面的数字写下去，就可以发现规律，g(x) 按照 1 1 1 1 x 的规律重复五次，第五次的时候x自增1。再继续观察:
-
-当 x=25 时，g(x)=2，此时 K=5 被跳过了。
-
-当 x=50 时，g(x)=2，此时 K=11 被跳过了。
-
-当 x=75 时，g(x)=2，此时 K=17 被跳过了。
-
-当 x=100 时，g(x)=2，此时 K=23 被跳过了。
-
-当 x=125 时，g(x)=3，此时 K=29，30 被跳过了。
-
-进一步，可以发现如下规律：
-
-5(=1*5), 11(=6*1+5), 17(=6*2+5), 23(=6*3+5), 29(=6*4+5), 30(=6*5), 36(=31+5), 42(=31+6+5), 48(=31+6*2+5)
-
-这些使得x不存在的K，出现都是有规律的，它们减去一个特定的基数 base 后，都是余5，而余 1，2，3，4 的，都是返回5。那么这个基 数base，实际是 1，6，31，156，...，是由 base = base * 5 + 1，不断构成的，通过这种不断对基数取余的操作，可以最终将K降为小于等于5的数，就可以直接返回结果了，参见代码如下：
-#+BEGIN_SRC java
-public int preimageSizeFZF(int k) {
-    if (k < 5) return 5;
-    int base = 1;
-    while (base * 5 + 1 <= k) 
-        base = base * 5 + 1;
-    if (k / base == 5) return 0;
-    return preimageSizeFZF(k % base);
-}
-#+END_SRC
-
-** 2040. Kth Smallest Product of Two Sorted Arrays - Hard
-Given two sorted 0-indexed integer arrays nums1 and nums2 as well as an integer k, return the kth (1-based) smallest product of nums1[i] * nums2[j] where 0 <= i < nums1.length and 0 <= j < nums2.length.
-
-[[./pic/binarySearch2.png]]
-
-#+BEGIN_SRC java
-private static long INF = (long)1e10;
-public long kthSmallestProduct(int[] a, int[] b, long k) { 
-    int m = a.length, n = b.length;
-    long lo = -INF-1, hi = INF + 1;
-    while (lo < hi) {
-        long mid = lo + (hi - lo) / 2, cnt = 0;
-        for (int  i : a) { // 对于数组a中的每一个数与b中元素的乘积，数<=mid的个数，二分搜索
-            if (i >= 0) {
-                int l = 0, r = n-1, p = 0;
-                while (l <= r) {
-                    int c = l + (r - l) / 2;
-                    long mul = i * (long)b[c];
-                    if (mul <= mid) {
-                        p = c + 1;
-                        l = c + 1;
-                    } else r = c - 1;
-                }
-                cnt += p;
-            } else { // i < 0
-                int l = 0, r = n-1, p = 0;
-                while (l <= r) {
-                    int c = l + (r - l) / 2;
-                    long mul = i * (long)b[c];
-                    if (mul <= mid) {
-                        p = n - c; // i < 0, 数右边<= mid的个数
-                        r = c - 1;
-                    } else l = c + 1;
-                }
-                cnt += p;
-            }
-        }
-        if (cnt >= k) hi = mid;
-        else lo = mid + 1l;
-    }
-    return lo;
-}
-#+END_SRC
-- 另一种相当于换汤不换药的写法
-#+BEGIN_SRC java
-private static long INF = (long)1e10;
-public long kthSmallestProduct(int[] a, int[] b, long k) { 
-    long lo = -INF, hi = INF;
-    while (lo < hi) {
-        long mid = lo + hi + 1 >> 1;
-        if (f(a, b, mid) < k) lo = mid;
-        else hi = mid - 1;
-    }
-    return lo;
-}
-private long f(int [] a, int [] b, long mid) {
-    long cnt = 0;
-    for (int v : a) {
-        int l = 0, r = b.length;
-        if (v < 0) {
-            while (l < r) {
-                int m = l + r >> 1;
-                if ((long)v * b[m] >= mid) l = m + 1;
-                else r = m;
-            }
-            cnt += b.length - l;
-        } else { // v >= 0
-            while (l < r) {
-                int m = l + r >> 1;
-                if ((long)v * b[m] < mid) l = m + 1;
-                else r = m;
-            }
-            cnt += l;
-        }
-    }
-    return cnt;
-}
-#+END_SRC
 
 * backTracking 回溯
 ** 1723 Find Minimum Time to Finish All Jobs
@@ -12992,7 +12711,7 @@ public int minAbsDifference(int[] arr, int goal) {
   - https://leetcode.com/problems/closest-subsequence-sum/discuss/1055432/Java-252ms-or-47.4-MB-or-Horowitz-and-Sahni's-Subset-Sum-or-comments-or-links
 - 好像还有一个类似提交python关于子集的位操作的java方法,回头再找来参考一下
 
-** 2035. Partition Array Into Two Arrays to Minimize Sum Difference - Hard 上一题：分成两半的套娃题
+** 2035. Partition Array Into Two Arrays to Minimize Sum Difference - Hard 上一题：分成两半的套娃题 todo: + binarySearch等解法
 You are given an integer array nums of 2 * n integers. You need to partition nums into two arrays of length n to minimize the absolute difference of the sums of the arrays. To partition nums, put each element of nums into one of the two arrays.
 
 Return the minimum possible absolute difference.
@@ -13033,7 +12752,47 @@ public int minimumDifference(int[] nums) {
     return res;
 }
 #+END_SRC
-- 做题的时候有想起tallest billboard，但因为有负数，就去想别的了，却忘记了上面那个一分为二的经典题型
+- 看一下另一个写法
+#+BEGIN_SRC java
+public int minimumDifference(int[] a) { 
+    int n = a.length, ans = Integer.MAX_VALUE;
+    int [] left = Arrays.copyOfRange(a, 0, n/2);
+    int [] right = Arrays.copyOfRange(a, n/2, n);
+    Map<Integer, TreeSet<Integer>> lsum = new HashMap<>();
+    Map<Integer, TreeSet<Integer>> rsum = new HashMap<>();
+    for (int i = 1; i < (1 << (n/2)); i++) { // 这里一次遍历把左右两边的都算出来了
+        int sumLeft = 0, sumRight = 0, cnt = 0;
+        for (int j = 0; j < n/2; j++) {
+            cnt += (i >> j) & 1;
+            if (((i >> j) & 1) == 1) {
+                sumLeft += left[j];
+                sumRight -= right[j];
+            } else {
+                sumLeft -= left[j];
+                sumRight += right[j];
+            }
+        }
+        lsum.computeIfAbsent(cnt, z -> new TreeSet<>()).add(sumLeft);
+        rsum.computeIfAbsent(cnt, z -> new TreeSet<>()).add(sumRight);
+    }
+    for (int i = 1; i <= n/2; i++) 
+        for (Integer lv : lsum.get(i)) {
+            if (rsum.get(i).contains(-lv)) return 0;
+            Integer ceiling = rsum.get(i).ceiling(-lv);
+            Integer floor = rsum.get(i).floor(-lv);
+            if (ceiling != null)
+                ans = Math.min(ans, Math.abs(ceiling + lv));
+            if (floor != null)
+                ans = Math.min(ans, Math.abs(floor + lv));
+        }
+        // 暴力匹配会超时
+        // for (int i = 1; i < n/2; i++) 
+        //     for (int lv : lsum.get(i))
+        //         for (int rv : rsum.get(i)) 
+        //             ans = Math.min(ans, Math.abs(lv - rv));
+    return ans;
+}
+#+END_SRC
 
 ** 956. Tallest Billboard: 折腰轨半第三次：重要的题型重复三遍
 You are installing a billboard and want it to have the largest height. The billboard will have two steel supports, one on each side. Each steel support must be an equal height.
@@ -13957,22 +13716,21 @@ Students can see the answers of those sitting next to the left, right, upper lef
 
 Students must be placed in seats in good condition.
 #+BEGIN_SRC java
-public int maxStudents(char[][] seats) {
-    int m = seats.length;
-    int n = seats[0].length;
-    int range = 1 << n, mask = 0;
+public int maxStudents(char[][] s) {
+    int m = s.length, n = s[0].length, r = 1 << n;
     int [] rowMax = new int [m+1]; // 相比于我的第一行，他是先生成了每一行的mask base
-    for (int i = 0; i < m; i++) { 
-        mask = 0;
+    for (int i = 0; i < m; i++) {
+        int cur = 0;
         for (int j = 0; j < n; j++) 
-            mask = mask * 2 + (seats[i][j] == '.' ? 1 : 0);
-        rowMax[i+1] = mask;
+            cur =  cur * 2 + (s[i][j] == '.' ? 1 : 0); // bug: () important
+        // cur = (cur << 1) | (s[i][j] == '.' ? 1 : 0);// 上下两行：效果一样
+        rowMax[i+1] = cur;
     }
-    int [][] dp = new int [m+1][range];
+    int [][] dp = new int [m+1][r];
     for (int i = 0; i <= m; i++) 
         Arrays.fill(dp[i], -1);
     dp[0][0] = 0;
-    //             如果想要满足限制条件2，则需要第i排可能的bitmask 与第 i - 1排可能的bitmask进行检测
+    // 如果想要满足限制条件2，则需要第i排可能的bitmask 与第 i - 1排可能的bitmask进行检测
     // // upper left and upper right are valid or not
     //                 (mask >> 1) & prev_mask 
     //                 mask & (prev_mask >> 1)
@@ -13980,50 +13738,50 @@ public int maxStudents(char[][] seats) {
     //                 基于以上的分析，动规方程可以归纳为以下
     //                 dp[r][mask] = max(dp[r][mask], dp[r - 1][prev_mask] + bit_count(mask)
     for (int i = 1; i <= m; i++) 
-        for (int curMask = 0; curMask <= rowMax[i]; curMask++) 
-            if ((curMask & rowMax[i]) == curMask && (curMask & (curMask >> 1)) == 0) // 现行所有的有效掩码: 既不会坐墙上，也左右无人
-                for (int preMask = 0; preMask < range; preMask++) 
-                    if (dp[i-1][preMask] != -1 && (curMask & (preMask >> 1)) == 0 && ((curMask >> 1) & preMask) == 0)
-                        dp[i][curMask] = Math.max(dp[i][curMask], dp[i-1][preMask] + Integer.bitCount(curMask));
-
+        for (int j = 0; j <= rowMax[i]; j++) // 遍历curMask（的所有子集）: 要保证它是rowMax[i]的有效子集
+            if ((j & rowMax[i]) == j && (j & (j >> 1)) == 0) // 是每行可坐最多人数与布位的有效子集（&后=本身），并保证set位的左右无人
+                for (int k = 0; k <= rowMax[i-1]; k++)  // 遍历preMask（的所有子集）k是（i-1行的）有效子集，并且保证了当前位的左上方、和右上方无人
+                    if (dp[i-1][k] != -1 && (j & (k >> 1)) == 0 && ((j >> 1) & k) == 0)
+                        dp[i][j] = Math.max(dp[i][j], dp[i-1][k] + Integer.bitCount(j));
     int max = 0;
-    for (int i = 0; i < range; i++) 
+    for (int i = 0; i < r; i++) 
         max = Math.max(max, dp[m][i]);
     return max;
 }
 #+END_SRC
-- 自己写的，bug还有找出来。。。。
+- 自己写的，bug终于是被自己找出来了。。。。。。
 #+BEGIN_SRC java
-private boolean isValid(char [][] arr, int v, int idx) { // 自己写的，不知道自己写的错哪里了，改天把它找出来
-    for (int i = 0; i < n; i++) 
-        if (((v >> i) & 1) == 1 && arr[idx][i] != '.') return false;
-    return true;
-}
-int m, n;
 public int maxStudents(char[][] seats) {
     m = seats.length;
     n = seats[0].length;
-    int range = 1 << n;
-    int [][] dp = new int [m+1][range];
+    int r = 1 << n;
+    int [][] dp = new int [m+1][r];
     for (int i = 0; i <= m; i++) 
         Arrays.fill(dp[i], -1);
     dp[0][0] = 0;
-    for (int i = 1; i < m; i++) {
-        for (int k = 0; k < range; k++) { // cur mask == k
-            if (!isValid(seats, k, i-1)) continue;
-            for (int j = 0; j < range; j++) { // pre mask == j
-                if (dp[i-1][j] == -1) continue;
+    for (int i = 1; i <= m; i++) 
+        for (int k = 0; k < r; k++) { 
+            if (!isValid(seats, k, i-1)) continue; 
+            if ((k & (k >> 1)) != 0) continue;  // BUG: 要保证每个set过的位左右无人,这一行不可少
+            for (int j = 0; j < r; j++) {  
+                if (dp[i-1][j] == -1) continue; // 前一排坐位的遍历,j可能不是有效子集，比如坐墙上或左右有人
                 if (((k >> 1) & j) == 0 && (k & (j >> 1)) == 0)
                     dp[i][k] = Math.max(dp[i][k], dp[i-1][j] + Integer.bitCount(k));
             }
         }
-    }
     int max = 0;
-    for (int i = 1; i < range; i++) 
+    for (int i = 0; i < r; i++) 
         max = Math.max(max, dp[m][i]);
     return max;
 }
+int m, n;
+private boolean isValid(char [][] arr, int v, int idx) { // 只是检查不会坐在樯上: 方法应该是对的，但可能会比较慢
+    for (int i = 0; i < n; i++) 
+        if (((v >> i) & 1) == 1 && arr[idx][i] != '.') return false;
+    return true; 
+}
 #+END_SRC
+
 ** 1434. Number of Ways to Wear Different Hats to Each Other - Hard
 There are n people and 40 types of hats labeled from 1 to 40.
 
@@ -14233,3 +13991,760 @@ public int numPermsDISequence(String s) {
 }
 #+END_SRC
  
+*** 1569. Number of Ways to Reorder Array to Get Same BST - Hard
+Given an array nums that represents a permutation of integers from 1 to n. We are going to construct a binary search tree (BST) by inserting the elements of nums in order into an initially empty BST. Find the number of different ways to reorder nums so that the constructed BST is identical to that formed from the original array nums.
+
+For example, given nums = [2,1,3], we will have 2 as the root, 1 as a left child, and 3 as a right child. The array [2,3,1] also yields the same BST but [3,2,1] yields a different BST.
+
+Return the number of ways to reorder nums such that the BST formed is identical to the original BST formed from nums.
+
+Since the answer may be very large, return it modulo 10^9 + 7.
+**** 解题思路与分析: 官方题解
+- https://leetcode-cn.com/problems/number-of-ways-to-reorder-array-to-get-same-bst/solution/jiang-zi-shu-zu-zhong-xin-pai-xu-de-dao-tong-yi-2/ 
+根节点是数组第一个数
+
+然后分为左右两个子树，左右子树之间的顺序不乱就可以
+
+假设左子树 L 长度 nL，右子树 R 长度 nR，存在方案数为C_{nL+nR}^{nL}*f(L)*f(R)
+
+     #+BEGIN_SRC java
+public int numOfWays(int [] a) {
+    int n = a.length;
+    f = new int [n+1][n+1];
+    f[1][0] = 1; // C_1^0 = 1
+    f[1][1] = 1; // C_1^1 = 1
+    for (int i = 2; i <= n; i++) // DP 求解组合数
+        for (int j = 0; j <= i; j++) 
+            if (j == 0 || j == i) f[i][j] = 1; // C_n^0 = C_n^n = 1
+            else f[i][j] = (f[i-1][j-1] + f[i-1][j]) % mod; // 选与不选第j个数
+    return (int)((dfs(Arrays.stream(a).boxed().collect(Collectors.toList())) - 1) % mod);
+}
+int mod = (int)1e9 + 7;
+int [][] f;
+private long dfs(List<Integer> a) {
+    if (a.size() <= 1) return 1;
+    int root = a.get(0), n = a.size();
+    List<Integer> l = new ArrayList<>();
+    List<Integer> r = new ArrayList<>();
+    for (int v : a) 
+        if (v < root) l.add(v);
+        else if (v > root) r.add(v);
+    long cntLeft = dfs(l), cntRight = dfs(r);
+    return ((f[n-1][l.size()] * cntLeft % mod) * cntRight) % mod;
+}
+     #+END_SRC
+**** 解题思路与分析: 先根据数组 \textit{nums}nums 把整棵二叉查找树 TT 建立出来
+     #+BEGIN_SRC java
+static final int mod = (int)1e9 + 7;
+long [][] c;
+public int numOfWays(int [] a) {
+    int n = a.length;
+    if (n == 1) return 0;
+    c = new long [n][n];
+    c[0][0] = 1;
+    for (int i = 1; i < n; ++i) {
+        c[i][0] = 1;
+        for (int j = 1; j < n; ++j) 
+            c[i][j] = (c[i - 1][j - 1] + c[i - 1][j]) % mod;
+    }
+    TreeNode root = new TreeNode(a[0]);
+    for (int i = 1; i < n; ++i) {
+        int val = a[i];
+        insert(root, val);
+    }
+    dfs(root);
+    return (root.ans - 1 + mod) % mod;
+}
+public void insert(TreeNode root, int v) {
+    TreeNode r = root;
+    while (true) {
+        ++r.size;
+        if (v < r.val) {
+            if (r.left == null) {
+                r.left = new TreeNode(v);
+                return;
+            }
+            r = r.left;
+        } else {
+            if (r.right == null) {
+                r.right = new TreeNode(v);
+                return;
+            }
+            r = r.right;
+        }
+    }
+}
+public void dfs(TreeNode r) {
+    if (r == null) return;
+    dfs(r.left);
+    dfs(r.right);
+    int lsize = r.left != null ? r.left.size : 0;
+    int rsize = r.right != null ? r.right.size : 0;
+    int lans = r.left != null ? r.left.ans : 1;
+    int rans = r.right != null ? r.right.ans : 1;
+    r.ans = (int) (c[lsize + rsize][lsize] % mod * lans % mod * rans % mod);
+}
+class TreeNode {
+    TreeNode left;
+    TreeNode right;
+    int val;
+    int size;
+    int ans;
+    TreeNode(int v) {
+        this.val = v;
+        this.size = 1;
+        this.ans = 0;
+    }
+}
+     #+END_SRC
+- 复杂度分析
+
+时间复杂度：O(n^2)
+
+时间复杂度由以下三部分组成：
+
+预处理组合数的时间复杂度为 O(n^2)
+
+建立二叉查找树的平均时间复杂度为 O(nlogn)。但在最坏情况下，当数组 nums 中的数单调递增或递减时，二叉查找树退化成链式结构，建立的时间复杂度为 O(n^2)
+
+动态规划的时间复杂度为 O(n)O(n)，即为对二叉查找树进行遍历需要的时间。
+
+空间复杂度：O(n^2)
+
+**** 解题思路与分析: 并查集 + 乘法逆元优化
+     #+BEGIN_SRC java
+static final int mod = (int)1e9 + 7;
+long [] fac;
+long [] inv;
+long [] facInv;
+public int numOfWays(int[] a) { // 这个方法还要再消化一下
+    int n = a.length;
+    if (n == 1) return 0;
+    fac = new long[n];
+    inv = new long[n];
+    facInv = new long[n];
+    fac[0] = inv[0] = facInv[0] = 1;
+    fac[1] = inv[1] = facInv[1] = 1;
+    for (int i = 2; i < n; ++i) {
+        fac[i] = fac[i - 1] * i % mod;
+        inv[i] = (mod - mod / i) * inv[mod % i] % mod;
+        facInv[i] = facInv[i - 1] * inv[i] % mod;
+    }
+    Map<Integer, TreeNode> found = new HashMap<Integer, TreeNode>();
+    UnionFind uf = new UnionFind(n);
+    for (int i = n - 1; i >= 0; --i) {
+        int val = a[i] - 1;
+        TreeNode node = new TreeNode();
+        if (val > 0 && found.containsKey(val - 1)) {
+            int lchild = uf.getroot(val - 1);
+            node.left = found.get(lchild);
+            node.size += node.left.size;
+            uf.findAndUnite(val, lchild);
+        }
+        if (val < n - 1 && found.containsKey(val + 1)) {
+            int rchild = uf.getroot(val + 1);
+            node.right = found.get(rchild);
+            node.size += node.right.size;
+            uf.findAndUnite(val, rchild);
+        }
+        int lsize = node.left != null ? node.left.size : 0;
+        int rsize = node.right != null ? node.right.size : 0;
+        int lans = node.left != null ? node.left.ans : 1;
+        int rans = node.right != null ? node.right.ans : 1;
+        node.ans = (int) (fac[lsize + rsize] * facInv[lsize] % mod * facInv[rsize] % mod * lans % mod * rans % mod);
+        found.put(val, node);
+    }
+
+    return (found.get(a[0] - 1).ans - 1 + mod) % mod;
+}
+class UnionFind {
+    public int[] parent;
+    public int[] size;
+    public int[] root;
+    public int n;
+    public UnionFind(int n) {
+        this.n = n;
+        parent = new int[n];
+        size = new int[n];
+        root = new int[n];
+        Arrays.fill(size, 1);
+        for (int i = 0; i < n; i++) {
+            parent[i] = i;
+            root[i] = i;
+        }
+    }
+    public int findset(int x) {
+        return parent[x] == x ? x : (parent[x] = findset(parent[x]));
+    }
+    public int getroot(int x) {
+        return root[findset(x)];
+    }
+    public void unite(int x, int y) {
+        root[y] = root[x];
+        if (size[x] < size[y]) {
+            int temp = x;
+            x = y;
+            y = temp;
+        }
+        parent[y] = x;
+        size[x] += size[y];
+    }
+    public boolean findAndUnite(int x, int y) {
+        int i = findset(x);
+        int j = findset(y);
+        if (i != j) {
+            unite(i, j);
+            return true;
+        }
+        return false;
+    }
+}
+class TreeNode {
+    TreeNode left;
+    TreeNode right;
+    int size;
+    int ans;
+    TreeNode() {
+        size = 1;
+        ans = 0;
+    }
+}
+     #+END_SRC
+
+- 复杂度分析
+
+时间复杂度：O(nα(n))。
+
+空间复杂度：O(n)
+
+* binary Search
+** LeetCode Binary Search Summary 二分搜索法小结
+- https://segmentfault.com/a/1190000016825704
+- https://www.cnblogs.com/grandyang/p/6854825.html
+*** 标准二分查找
+#+BEGIN_SRC java
+public int search(int[] nums, int target) {
+    int left = 0;
+    int right = nums.length - 1;
+    while (left <= right) {
+        int mid = left + ((right - left) >> 1);
+        if (nums[mid] == target) return mid;
+        else if (nums[mid] > target) 
+            right = mid - 1;
+        else 
+            left = mid + 1;
+    }
+    return -1;
+}
+#+END_SRC
+
+循环终止的条件包括：
+
+- 找到了目标值
+- left > right （这种情况发生于当left, mid, right指向同一个数时，这个数还不是目标值，则整个查找结束。）
+
+left + ((right -left) >> 1) 对于目标区域长度为奇数而言，是处于正中间的，对于长度为偶数而言，是中间偏左的。因此左右边界相遇时，只会是以下两种情况：
+
+- left/mid , right (left, mid 指向同一个数，right指向它的下一个数)
+- left/mid/right （left, mid, right 指向同一个数）
+
+即因为mid对于长度为偶数的区间总是偏左的，所以当区间长度小于等于2时，mid 总是和 left在同一侧。
+*** 二分查找左边界
+
+利用二分法寻找左边界是二分查找的一个变体，应用它的题目常常有以下几种特性之一：
+
+- 数组有序，但包含重复元素
+- 数组部分有序，且不包含重复元素
+- 数组部分有序，且包含重复元素
+**** 左边界查找类型1
+
+类型1包括了上面说的第一种，第二种情况。
+
+既然要寻找左边界，搜索范围就需要从右边开始，不断往左边收缩，也就是说即使我们找到了nums[mid] == target, 这个mid的位置也不一定就是最左侧的那个边界，我们还是要向左侧查找，所以我们在nums[mid]偏大或者nums[mid]就等于目标值的时候，继续收缩右边界，算法模板如下：
+#+BEGIN_SRC java
+public int search(int[] nums, int target) {
+    int left = 0;
+    int right = nums.length - 1;
+    while (left < right) {
+        int mid = left + (right - left) / 2;
+        if (nums[mid] < target) 
+            left = mid + 1;
+        else 
+            right = mid;
+    }
+    return nums[left] == target ? left : -1;
+}
+#+END_SRC
+
+返回值： nums[left] == target ? left : -1
+
+与标准的二分查找不同：
+
+首先，这里的右边界的更新是right = mid，因为我们需要在找到目标值后，继续向左寻找左边界。
+
+其次，这里的循环条件是left < right。
+
+因为在最后left与right相邻的时候，mid和left处于相同的位置(前面说过，mid偏左)，则下一步，无论怎样，left, mid, right都将指向同一个位置，如果此时循环的条件是left <= right，则我们需要再进入一遍循环，此时，如果nums[mid] < target还好说，循环正常终止；否则，我们会令right = mid，这样并没有改变left,mid,right的位置，将进入死循环。
+
+事实上，我们只需要遍历到left和right相邻的情况就行了，因为这一轮循环后，无论怎样，left,mid,right都会指向同一个位置，而如果这个位置的值等于目标值，则它就一定是最左侧的目标值；如果不等于目标值，则说明没有找到目标值，这也就是为什么返回值是nums[left] == target ? left : -1。
+ 
+#+BEGIN_SRC java
+public int searchInsert(int[] nums, int target) {
+    int len = nums.length;
+    if (nums[len - 1] < target) return len;
+    int left = 0;
+    int right = len - 1;
+    while (left <= right) {
+        int mid = (left + right) / 2;
+        // 等于的情况最简单，我们应该放在第 1 个分支进行判断
+        if (nums[mid] == target) {
+            return mid;
+        } else if (nums[mid] < target) {
+            // 题目要我们返回大于或者等于目标值的第 1 个数的索引
+            // 此时 mid 一定不是所求的左边界，
+            // 此时左边界更新为 mid + 1
+            left = mid + 1;
+        } else {
+            // 既然不会等于，此时 nums[mid] > target
+            // mid 也一定不是所求的右边界
+            // 此时右边界更新为 mid - 1
+            right = mid - 1;
+        }
+    }
+    // 注意：一定得返回左边界 left，
+    // 理由是对于 [1,3,5,6]，target = 2，返回大于等于 target 的第 1 个数的索引，此时应该返回 1
+    // 在上面的 while (left <= right) 退出循环以后，right < left，right = 0 ，left = 1
+    // 根据题意应该返回 left，
+    // 如果题目要求你返回小于等于 target 的所有数里最大的那个索引值，应该返回 right
+    return left;
+}
+#+END_SRC
+**** 左边界查找类型2
+
+左边界查找的第二种类型用于数组部分有序且包含重复元素的情况，这种条件下在我们向左收缩的时候，不能简单的令 right = mid，因为有重复元素的存在，这会导致我们有可能遗漏掉一部分区域，此时向左收缩只能采用比较保守的方式，代码模板如下：
+#+BEGIN_SRC java
+public int search(int[] nums, int target) {
+    int left = 0;
+    int right = nums.length - 1;
+    while (left < right) {
+        int mid = left + (right - left) / 2;
+        if (nums[mid] < target) 
+            left = mid + 1;
+        else if (nums[mid] > target) 
+            right = mid;
+        else 
+            right--;
+    }
+    return nums[left] == target ? left : -1;
+}
+#+END_SRC
+
+它与类型1的唯一区别就在于对右侧值的收缩更加保守。这种收缩方式可以有效地防止我们一下子跳过了目标边界从而导致了搜索区域的遗漏。
+
+*** 二分查找右边界
+#+BEGIN_SRC java
+public int search(int[] nums, int target) {
+    int left = 0;
+    int right = nums.length - 1;
+    while (left < right) {
+        int mid = left + ((right - left) >> 1) + 1;
+        if (nums[mid] > target) 
+            right = mid - 1;
+        else 
+            left = mid;
+    }
+    return nums[right] == target ? right : -1;
+}
+#+END_SRC
+- 循环条件： left < right
+- 中间位置计算： mid = left + ((right -left) >> 1) + 1
+- 左边界更新：left = mid
+- 右边界更新： right = mid - 1
+- 返回值： nums[right] == target ? right : -1
+
+这里大部分和寻找左边界是对称着来写的，唯独有一点需要尤其注意——中间位置的计算变了，我们在末尾多加了1。这样，无论对于奇数还是偶数，这个中间的位置都是偏右的。
+
+对于这个操作的理解，从对称的角度看，寻找左边界的时候，中间位置是偏左的，那寻找右边界的时候，中间位置就应该偏右呗，但是这显然不是根本原因。根本原因是，在最后left和right相邻时，如果mid偏左，则left, mid指向同一个位置，right指向它们的下一个位置，在nums[left]已经等于目标值的情况下，这三个位置的值都不会更新，从而进入了死循环。所以我们应该让mid偏右，这样left就能向右移动。这也就是为什么我们之前一直强调查找条件，判断条件和左右边界的更新方式三者之间需要配合使用。
+
+右边界的查找一般来说不会单独使用，如有需要，一般是需要同时查找左右边界。
+
+*** 二分查找左右边界
+前面我们介绍了左边界和右边界的查找，那么查找左右边界就容易很多了——只要分别查找左边界和右边界就行了。
+*** 二分查找极值
+二分查找还有一种有趣的变体是二分查找极值点，之前我们使用nums[mid]去比较的时候，常常是和给定的目标值target比，或者和左右边界比较，在二分查找极值点的应用中，我们是和相邻元素去比，以完成某种单调性的检测。关于这一点，我们直接来看一个例子就明白了。
+
+Find Peak Element
+
+A peak element is an element that is greater than its neighbors.
+
+Given an input array nums, where nums[i] ≠ nums[i+1], find a peak element and return its index.
+
+The array may contain multiple peaks, in that case return the index to any one of the peaks is fine.
+
+You may imagine that nums[-1] = nums[n] = -∞.
+
+这一题的有趣之处在于他要求求一个局部极大值点，并且整个数组不包含重复元素。所以整个数组甚至可以是无序的——你可能很难想象我们可以在一个无序的数组中直接使用二分查找，但是没错！我们确实可以这么干！谁要人家只要一个局部极大值即可呢。
+#+BEGIN_SRC java
+public int findPeakElement(int[] nums) {
+    int left = 0;
+    int right = nums.length - 1;
+    while (left < right) {
+        int mid = left + ((right - left) >> 1);
+        if (nums[mid] < nums[mid + 1]) 
+            left = mid + 1;
+        else 
+            right = mid;
+    }
+    return left;
+}
+#+END_SRC
+#+BEGIN_SRC java
+public int binarySearch2(int[] nums, int target) {
+    // left和right都在数组下标范围内
+    // [left, right]
+    int left = 0;
+    int right = nums.length - 1;
+    // while循环跳出的条件是left > right
+    // 所以如果没找到target的话，也不需要特判了
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+        if (nums[mid] == target) return mid;
+        else if (nums[mid] < target) 
+            left = mid + 1;
+        else
+            right = mid - 1;
+    }
+    // 如果没找到就只能返回-1
+    return -1;
+}
+// 模板二，适合判断当前 index 和 index + 1 之间的关系。
+// right 指针一开始的定义是在数组下标范围外的，[left, right)，所以在需要移动 right 指针的时候不能写成 right = mid。这样会遗漏掉一些下标的判断。
+public int binarySearch3(int[] nums, int target) {
+    // right不在下标范围内
+    // [left, right)
+    int left = 0;
+    int right = nums.length;
+    // while循环跳出的条件是left == right
+    // 这个模板比较适合判断当前index和index + 1之间的关系
+    // left < right, example, left = 0, right = 1
+    while (left < right) {
+        int mid = left + (right - left) / 2;
+        if (nums[mid] == target) return mid;
+        else if (nums[mid] < target) 
+            left = mid + 1;
+        else
+            // 因为搜索范围是左闭右开所以这里不能-1
+            right = mid;
+    }
+    // 最后的特判
+    if (left != nums.length && nums[left] == target) 
+        return left;
+    return -1;
+}
+// while条件不满足的时候，left + 1 == right，两下标应该指向某个下标 i 和 i + 1。这样如果有什么特殊的值需要判断，应该不是 left 就是 right 了。
+public int binarySearch1(int[] nums, int target) {
+    // left和right都在数组下标范围内
+    // [left, right]
+    int left = 0;
+    int right = nums.length - 1;
+    // 举例，start - 0, end = 3
+    // 中间隔了起码有start + 1和start + 2两个下标
+    // 这样跳出while循环的时候，start + 1 == end
+    // 才有了最后的两个判断
+    while (left + 1 < right) {
+        int mid = left + (right - left) / 2;
+        if (nums[mid] == target) return mid;
+        else if (nums[mid] < target) 
+            left = mid;
+        else 
+            right = mid;
+    }
+    // 特判
+    if (nums[left] == target) return left;
+    if (nums[right] == target) return right;
+    // 如果没找到就只能返回-1
+    return -1;
+}
+#+END_SRC
+
+[[./pic/binarySearch.png]] 
+
+*** 第一类： 需查找和目标值完全相等的数
+
+这是最简单的一类，也是我们最开始学二分查找法需要解决的问题，比如我们有数组 [2, 4, 5, 6, 9]，target = 6，那么我们可以写出二分查找法的代码如下：
+#+BEGIN_SRC c++
+int find(vector<int>& nums, int target) {
+    int left = 0, right = nums.size();
+    while (left < right) {
+        int mid = left + (right - left) / 2;
+        if (nums[mid] == target) return mid;
+        else if (nums[mid] < target) left = mid + 1;
+        else right = mid;
+    }
+    return -1;
+}
+#+END_SRC
+
+会返回3，也就是 target 的在数组中的位置。注意二分查找法的写法并不唯一，主要可以变动地方有四处：
+
+第一处是 right 的初始化，可以写成 nums.size() 或者 nums.size() - 1。
+
+第二处是 left 和 right 的关系，可以写成 left < right 或者 left <= right。
+
+第三处是更新 right 的赋值，可以写成 right = mid 或者 right = mid - 1。
+
+第四处是最后返回值，可以返回 left，right，或 right - 1。
+
+- 但是这些不同的写法并不能随机的组合，像博主的那种写法，
+  - 若 right 初始化为了 nums.size()，那么就必须用 left < right，而最后的 right 的赋值必须用 right = mid。
+  - 但是如果我们 right 初始化为 nums.size() - 1，那么就必须用 left <= right，并且right的赋值要写成 right = mid - 1，不然就会出错。
+
+所以博主的建议是选择一套自己喜欢的写法，并且记住，实在不行就带简单的例子来一步一步执行，确定正确的写法也行。
+
+第一类应用实例：
+
+Intersection of Two Arrays
+
+*** 第二类： 查找第一个不小于目标值的数，可变形为查找最后一个小于目标值的数
+
+这是比较常见的一类，因为我们要查找的目标值不一定会在数组中出现，也有可能是跟目标值相等的数在数组中并不唯一，而是有多个，那么这种情况下 nums[mid] == target 这条判断语句就没有必要存在。比如在数组 [2, 4, 5, 6, 9] 中查找数字3，就会返回数字4的位置；在数组 [0, 1, 1, 1, 1] 中查找数字1，就会返回第一个数字1的位置。我们可以使用如下代码：
+#+BEGIN_SRC c++
+int find(vector<int>& nums, int target) {
+    int left = 0, right = nums.size();
+    while (left < right) {
+        int mid = left + (right - left) / 2;
+        if (nums[mid] < target) left = mid + 1;
+        else right = mid;
+    }
+    return right;
+}
+#+END_SRC
+
+最后我们需要返回的位置就是 right 指针指向的地方。在 C++ 的 STL 中有专门的查找第一个不小于目标值的数的函数 lower_bound，在博主的解法中也会时不时的用到这个函数。但是如果面试的时候人家不让使用内置函数，那么我们只能老老实实写上面这段二分查找的函数。
+
+这一类可以轻松的变形为查找最后一个小于目标值的数，怎么变呢。我们已经找到了第一个不小于目标值的数，那么再往前退一位，返回 right - 1，就是最后一个小于目标值的数。
+
+第二类应用实例：
+
+Heaters， Arranging Coins， Valid Perfect Square，Max Sum of Rectangle No Larger Than K，Russian Doll Envelopes
+ 
+第二类变形应用：Valid Triangle Number
+ 
+*** 第三类： 查找第一个大于目标值的数，可变形为查找最后一个不大于目标值的数
+
+这一类也比较常见，尤其是查找第一个大于目标值的数，在 C++ 的 STL 也有专门的函数 upper_bound，这里跟上面的那种情况的写法上很相似，只需要添加一个等号，将之前的 nums[mid] < target 变成 nums[mid] <= target，就这一个小小的变化，其实直接就改变了搜索的方向，使得在数组中有很多跟目标值相同的数字存在的情况下，返回最后一个相同的数字的下一个位置。比如在数组 [2, 4, 5, 6, 9] 中查找数字3，还是返回数字4的位置，这跟上面那查找方式返回的结果相同，因为数字4在此数组中既是第一个不小于目标值3的数，也是第一个大于目标值3的数，所以 make sense；在数组 [0, 1, 1, 1, 1] 中查找数字1，就会返回坐标5，通过对比返回的坐标和数组的长度，我们就知道是否存在这样一个大于目标值的数。参见下面的代码：
+#+BEGIN_SRC c++
+int find(vector<int>& nums, int target) {
+    int left = 0, right = nums.size();
+    while (left < right) {
+        int mid = left + (right - left) / 2;
+        if (nums[mid] <= target) left = mid + 1;
+        else right = mid;
+    }
+    return right;
+}
+#+END_SRC
+
+这一类可以轻松的变形为查找最后一个不大于目标值的数，怎么变呢。我们已经找到了第一个大于目标值的数，那么再往前退一位，返回 right - 1，就是最后一个不大于目标值的数。比如在数组 [0, 1, 1, 1, 1] 中查找数字1，就会返回最后一个数字1的位置4，这在有些情况下是需要这么做的。
+
+第三类应用实例：
+
+Kth Smallest Element in a Sorted Matrix
+
+第三类变形应用示例：
+
+Sqrt(x)
+
+*** 第四类： 用子函数当作判断关系（通常由 mid 计算得出）
+
+这是最令博主头疼的一类，而且通常情况下都很难。因为这里在二分查找法重要的比较大小的地方使用到了子函数，并不是之前三类中简单的数字大小的比较，比如 Split Array Largest Sum 那道题中的解法一，就是根据是否能分割数组来确定下一步搜索的范围。类似的还有 Guess Number Higher or Lower 这道题，是根据给定函数 guess 的返回值情况来确定搜索的范围。对于这类题目，博主也很无奈，遇到了只能自求多福了。
+
+第四类应用实例：
+
+Split Array Largest Sum， Guess Number Higher or Lower，Find K Closest Elements，Find K-th Smallest Pair Distance，Kth Smallest Number in Multiplication Table，Maximum Average Subarray II，Minimize Max Distance to Gas Station，Swim in Rising Water，Koko Eating Bananas，Nth Magical Number
+
+*** 第五类： 其他（通常 target 值不固定）
+
+有些题目不属于上述的四类，但是还是需要用到二分搜索法，比如这道 Find Peak Element，求的是数组的局部峰值。由于是求的峰值，需要跟相邻的数字比较，那么 target 就不是一个固定的值，而且这道题的一定要注意的是 right 的初始化，一定要是 nums.size() - 1，这是由于算出了 mid 后，nums[mid] 要和 nums[mid+1] 比较，如果 right 初始化为 nums.size() 的话，mid+1 可能会越界，从而不能找到正确的值，同时 while 循环的终止条件必须是 left < right，不能有等号。
+
+类似的还有一道 H-Index II，这道题的 target 也不是一个固定值，而是 len-mid，这就很意思了，跟上面的 nums[mid+1] 有异曲同工之妙，target 值都随着 mid 值的变化而变化，这里的right的初始化，一定要是 nums.size() - 1，而 while 循环的终止条件必须是 left <= right，这里又必须要有等号，是不是很头大 -.-!!!
+
+其实仔细分析的话，可以发现其实这跟第四类还是比较相似，相似点是都很难 -.-!!!，第四类中虽然是用子函数来判断关系，但大部分时候 mid 也会作为一个参数带入子函数进行计算，这样实际上最终算出的值还是受 mid 的影响，但是 right 却可以初始化为数组长度，循环条件也可以不带等号，大家可以对比区别一下～
+
+第五类应用实例：
+
+Find Peak Element
+
+H-Index II
+
+** 793. Preimage Size of Factorial Zeroes Function
+Let f(x) be the number of zeroes at the end of x!. Recall that x! = 1 * 2 * 3 * ... * x and by convention, 0! = 1.
+
+For example, f(3) = 0 because 3! = 6 has no zeroes at the end, while f(11) = 2 because 11! = 39916800 has two zeroes at the end.
+Given an integer k, return the number of non-negative integers x have the property that f(x) = k.
+
+#+BEGIN_SRC java
+private long numberOfTrailingZeros(long v) {
+    long cnt = 0;
+    for (; v > 0; v /= 5) 
+        cnt += v / 5;
+    return cnt;
+}
+public int preimageSizeFZF(int k) {
+    long left = 0, right = 5l * (k + 1);
+    while (left < right) {
+        long mid = left + (right - left) / 2;
+        long cnt = numberOfTrailingZeros(mid);
+        if (cnt == k) return 5;
+        if (cnt < k) left = mid + 1;
+        else right = mid;
+    }
+    return 0;
+}
+#+END_SRC
+- 下面这种解法是把子函数融到了 while 循环内，使得看起来更加简洁一些，解题思路跟上面的解法一模一样，参见代码如下： 
+#+BEGIN_SRC java
+public int preimageSizeFZF(int k) {
+    long left = 0, right = 5l * (k + 1);
+    while (left < right) {
+        long mid = left + (right - left) / 2, cnt = 0;
+        for (long i = 5; mid / i > 0; i *= 5) 
+            cnt += mid / i;
+        if (cnt == k) return 5;
+        if (cnt < k) left = mid + 1;
+        else right = mid;
+    }
+    return 0;
+}
+#+END_SRC
+
+下面这种解法也挺巧妙的，也是根据观察规律推出来的，我们首先来看x为1到 25 的情况：
+#+BEGIN_SRC java
+x:    1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25
+f(x): 0 0 0 0 1 1 1 1 1 2  2  2  2  2  3  3  3  3  3  4  4  4  4  4  6
+g(x): 0 0 0 0 1 0 0 0 0 1  0  0  0  0  1  0  0  0  0  1  0  0  0  0  2
+#+END_SRC
+
+这里，f(x) 是表示 x! 末尾零的个数，而 g(x) = f(x) - f(x-1)，其实还可以通过观察发现，f(x) = sum(g(x)).
+
+再仔细观察上面的数字，发现 g(x) 有正值的时候都是当x是5的倍数的时候，那么来专门看一下x是5的倍数时的情况吧：
+
+#+BEGIN_SRC java
+x:    5 10 15 20 25 30 35 40 45 50 55 60 65 70 75 80 85 90 95 100 105 110 115 120 125
+g(x): 1 1  1  1  2  1  1  1  1  2  1  1  1  1  2  1  1  1  1   2   1   1   1   1   3
+#+END_SRC 
+
+仔细观察上面的红色数字，g(x)=1 时，是5的倍数，g(x)=2 时，都是 25 的倍数，g(x)=3 时，是 125 的倍数，那么就有：
+#+BEGIN_SRC java
+g(x) = 0     if x % 5 != 0,
+g(x) >= 1    if x % 5 == 0,
+g(x) >= 2   if x % 25 == 0.
+#+END_SRC
+
+如果继续将上面的数字写下去，就可以发现规律，g(x) 按照 1 1 1 1 x 的规律重复五次，第五次的时候x自增1。再继续观察:
+
+当 x=25 时，g(x)=2，此时 K=5 被跳过了。
+
+当 x=50 时，g(x)=2，此时 K=11 被跳过了。
+
+当 x=75 时，g(x)=2，此时 K=17 被跳过了。
+
+当 x=100 时，g(x)=2，此时 K=23 被跳过了。
+
+当 x=125 时，g(x)=3，此时 K=29，30 被跳过了。
+
+进一步，可以发现如下规律：
+
+5(=1*5), 11(=6*1+5), 17(=6*2+5), 23(=6*3+5), 29(=6*4+5), 30(=6*5), 36(=31+5), 42(=31+6+5), 48(=31+6*2+5)
+
+这些使得x不存在的K，出现都是有规律的，它们减去一个特定的基数 base 后，都是余5，而余 1，2，3，4 的，都是返回5。那么这个基 数base，实际是 1，6，31，156，...，是由 base = base * 5 + 1，不断构成的，通过这种不断对基数取余的操作，可以最终将K降为小于等于5的数，就可以直接返回结果了，参见代码如下：
+#+BEGIN_SRC java
+public int preimageSizeFZF(int k) {
+    if (k < 5) return 5;
+    int base = 1;
+    while (base * 5 + 1 <= k) 
+        base = base * 5 + 1;
+    if (k / base == 5) return 0;
+    return preimageSizeFZF(k % base);
+}
+#+END_SRC
+
+** 2040. Kth Smallest Product of Two Sorted Arrays - Hard
+Given two sorted 0-indexed integer arrays nums1 and nums2 as well as an integer k, return the kth (1-based) smallest product of nums1[i] * nums2[j] where 0 <= i < nums1.length and 0 <= j < nums2.length.
+
+[[./pic/binarySearch2.png]]
+
+#+BEGIN_SRC java
+private static long INF = (long)1e10;
+public long kthSmallestProduct(int[] a, int[] b, long k) { 
+    int m = a.length, n = b.length;
+    long lo = -INF-1, hi = INF + 1;
+    while (lo < hi) {
+        long mid = lo + (hi - lo) / 2, cnt = 0;
+        for (int  i : a) { // 对于数组a中的每一个数与b中元素的乘积，数<=mid的个数，二分搜索
+            if (i >= 0) {
+                int l = 0, r = n-1, p = 0;
+                while (l <= r) {
+                    int c = l + (r - l) / 2;
+                    long mul = i * (long)b[c];
+                    if (mul <= mid) {
+                        p = c + 1;
+                        l = c + 1;
+                    } else r = c - 1;
+                }
+                cnt += p;
+            } else { // i < 0
+                int l = 0, r = n-1, p = 0;
+                while (l <= r) {
+                    int c = l + (r - l) / 2;
+                    long mul = i * (long)b[c];
+                    if (mul <= mid) {
+                        p = n - c; // i < 0, 数右边<= mid的个数
+                        r = c - 1;
+                    } else l = c + 1;
+                }
+                cnt += p;
+            }
+        }
+        if (cnt >= k) hi = mid;
+        else lo = mid + 1l;
+    }
+    return lo;
+}
+#+END_SRC
+- 另一种相当于换汤不换药的写法
+#+BEGIN_SRC java
+private static long INF = (long)1e10;
+public long kthSmallestProduct(int[] a, int[] b, long k) { 
+    long lo = -INF, hi = INF;
+    while (lo < hi) {
+        long mid = lo + hi + 1 >> 1;
+        if (f(a, b, mid) < k) lo = mid;
+        else hi = mid - 1;
+    }
+    return lo;
+}
+private long f(int [] a, int [] b, long mid) {
+    long cnt = 0;
+    for (int v : a) {
+        int l = 0, r = b.length;
+        if (v < 0) {
+            while (l < r) {
+                int m = l + r >> 1;
+                if ((long)v * b[m] >= mid) l = m + 1;
+                else r = m;
+            }
+            cnt += b.length - l;
+        } else { // v >= 0
+            while (l < r) {
+                int m = l + r >> 1;
+                if ((long)v * b[m] < mid) l = m + 1;
+                else r = m;
+            }
+            cnt += l;
+        }
+    }
+    return cnt;
+}
+#+END_SRC
+

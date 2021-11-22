@@ -652,23 +652,6 @@ public class dpsix {
             return ans;
         }
 
-        public int minCost(int[] houses, int[][] cost, int m, int n, int target) { 
-            this.m = m;
-            this.n = n;
-            dp = new Integer [m][n+1][target+1];
-            return dfs(0, -1, target, houses, cost);
-        }
-        Integer [][][] dp; // dp[i][j][k]: the minimum cost where we have k neighborhoods in the first i houses and the i-th house is painted with the color j.
-        int m, n;
-        private int dfs(int i, int j, int k, int [] h, int [][] c) {
-            if (target < 0) return 0;
-            if (i == m) return target == 0 ? 1 : 0;
-            if (dp[i][j][k] != null) return dp[i][j][k];
-            int ans = 0;
-            if (h[i] > 0 && h[i] != j) return dp[i][j][k] = Integer.MAX_VALUE;
-            // 这里的递推 还有点儿不清楚
-        }
-
         public int minHeightShelves(int [][] b, int w) { 
             int n = b.length, curLayerWidth = 0, max = 0;
             int [] dp = new int [n+1];

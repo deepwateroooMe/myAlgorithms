@@ -7,6 +7,8 @@
 ** 第二次仍不会的题号记这里
 - 1872 (stone game 8), 647 329 494 131 518 1723(need summary)
 
+- 需要重写的： 1187，2035, 1000
+
 - 根据CLRS，动态规划分为两种：
 - top-down with memoization (递归记忆化搜索)
 等价于带缓存的，搜索树上的 DFS
@@ -16,25 +18,6 @@
 每个子问题下面依赖的所有子问题都算完了才开始计算当前
 一般依赖于子问题之间天然的 "size
 
-*** 647. Palindromic Substrings - Medium
-Given a string s, return the number of palindromic substrings in it.
-
-A string is a palindrome when it reads the same backward as forward.
-
-A substring is a contiguous sequence of characters within the string.
-#+BEGIN_SRC java
-public int countSubstrings(String t) {
-    int n = t.length(), ans = 0;
-    char [] s = t.toCharArray();
-    boolean [][] dp = new boolean [n][n];
-    for (int i = n-1; i >= 0; i--) 
-        for (int j = i; j < n; j++) {
-            dp[i][j] = s[i] == s[j] && (j-i <= 2 || dp[i+1][j-1]);
-            if (dp[i][j]) ans++;
-        }
-    return ans;
-}
-#+END_SRC
 *** 516. Longest Palindromic Subsequence - Medium
 Given a string s, find the longest palindromic subsequence's length in s.
 
@@ -57,6 +40,30 @@ public int longestPalindromeSubseq(String tt) {
 }
 #+END_SRC
 
+*** 518. Coin Change 2
+You are given an integer array coins representing coins of different denominations and an integer amount representing a total amount of money.
+Return the number of combinations that make up that amount. If that amount of money cannot be made up by any combination of the coins, return 0.
+You may assume that you have an infinite number of each kind of coin.
+The answer is guaranteed to fit into a signed 32-bit integer.
+#+BEGIN_SRC java
+public int change(int target, int[] nums) {
+    int[] dp = new int[target + 1];
+    // 初始化dp[0]为1
+    dp[0] = 1;
+    // 循环数组中所有数字
+    for (int val : nums) {
+        for (int i = 0; i <= target - val; i++) {
+            // dp[i]大于0说明，存在dp[i]种组合，其和为i的可能性
+            if (dp[i] > 0) {
+                // 既然存在和为i的可能，那么i加上当前数字的和也是存在的
+                dp[i + val] += dp[i];
+            }
+        }
+    }
+    return dp[target];
+}
+#+END_SRC
+
 *** 1872. Stone Game VIII - hard 需要好好理解消化
 Alice and Bob take turns playing a game, with Alice starting first.
 There are n stones arranged in a row. On each player's turn, while the number of stones is more than one, they will do the following:
@@ -66,7 +73,7 @@ Place a new stone, whose value is equal to that sum, on the left side of the row
 The game stops when only one stone is left in the row.
 The score difference between Alice and Bob is (Alice's score - Bob's score). Alice's goal is to maximize the score difference, and Bob's goal is the minimize the score difference.
 Given an integer array stones of length n where stones[i] represents the value of the ith stone from the left, return the score difference between Alice and Bob if they both play optimally.
-**** 解题思路与分析
+***** 解题思路与分析
 
 这里我原始的做法dfs+记忆数组会超时，是因为数组发生了改变，萁盘状态发生了改变，所以记忆无效？！！！才会超时（感觉还理解得不透，这里）
 
@@ -232,7 +239,7 @@ public int findTargetSumWays(int[] a, int target) {
     return getAllSums(a, target, 0, 0, 0);
 }
 #+END_SRC
-**** 解题思路与分析: dfs记忆化搜索
+***** 解题思路与分析: dfs记忆化搜索
 #+BEGIN_SRC java
 private int dfs(int [] a, int target, int idx, int sum) {
     String key = idx + "_" + sum;
@@ -320,37 +327,32 @@ Vn就是nums数组所有数字的组合值之和的集合
     https://www.i4k.xyz/article/gqk289/54709004
     https://github.com/cherryljr/LeetCode/blob/master/Target%20Sum.java
 
-*** 518. Coin Change 2
-You are given an integer array coins representing coins of different denominations and an integer amount representing a total amount of money.
-Return the number of combinations that make up that amount. If that amount of money cannot be made up by any combination of the coins, return 0.
-You may assume that you have an infinite number of each kind of coin.
-The answer is guaranteed to fit into a signed 32-bit integer.
+*** 647. Palindromic Substrings - Medium
+Given a string s, return the number of palindromic substrings in it.
+
+A string is a palindrome when it reads the same backward as forward.
+
+A substring is a contiguous sequence of characters within the string.
 #+BEGIN_SRC java
-public int change(int target, int[] nums) {
-    int[] dp = new int[target + 1];
-    // 初始化dp[0]为1
-    dp[0] = 1;
-    // 循环数组中所有数字
-    for (int val : nums) {
-        for (int i = 0; i <= target - val; i++) {
-            // dp[i]大于0说明，存在dp[i]种组合，其和为i的可能性
-            if (dp[i] > 0) {
-                // 既然存在和为i的可能，那么i加上当前数字的和也是存在的
-                dp[i + val] += dp[i];
-            }
+public int countSubstrings(String t) {
+    int n = t.length(), ans = 0;
+    char [] s = t.toCharArray();
+    boolean [][] dp = new boolean [n][n];
+    for (int i = n-1; i >= 0; i--) 
+        for (int j = i; j < n; j++) {
+            dp[i][j] = s[i] == s[j] && (j-i <= 2 || dp[i+1][j-1]);
+            if (dp[i][j]) ans++;
         }
-    }
-    return dp[target];
+    return ans;
 }
 #+END_SRC
-
 *** 1444. Number of Ways of Cutting a Pizza - Hard
 Given a rectangular pizza represented as a rows x cols matrix containing the following characters: 'A' (an apple) and '.' (empty cell) and given the integer k. You have to cut the pizza into k pieces using k-1 cuts. 
 
 For each cut you choose the direction: vertical or horizontal, then you choose a cut position at the cell boundary and cut the pizza into two pieces. If you cut the pizza vertically, give the left part of the pizza to a person. If you cut the pizza horizontally, give the upper part of the pizza to a person. Give the last piece of pizza to the last person.
 
 Return the number of ways of cutting the pizza such that each piece contains at least one apple. Since the answer can be a huge number, return this modulo 10^9 + 7.
-**** 解题思路与分析: 自底向上
+***** 解题思路与分析: 自底向上
 
 常规的矩阵DP做法，这里还需要通过前缀和的思想来快速获取指定范围矩阵的苹果数量。
 
@@ -388,7 +390,7 @@ public int ways(String[] pizza, int p) {
     return (int)dp[0][0][p];
 }
 #+END_SRC
-**** 解题思路与分析: 自顶向下
+***** 解题思路与分析: 自顶向下
 
 先用dp方法求出以（i,j）位置为右下角，左上角为（0,0）的区域的苹果数量
 
@@ -484,6 +486,43 @@ public boolean matches(String s, String p, int i, int j) {
     return s.charAt(i - 1) == p.charAt(j - 1);
 }
 #+END_SRC
+*** 115. Distinct Subsequences - Hard
+Given two strings s and t, return the number of distinct subsequences of s which equals t.
+
+A string's subsequence is a new string formed from the original string by deleting some (can be none) of the characters without disturbing the remaining characters' relative positions. (i.e., "ACE" is a subsequence of "ABCDE" while "AEC" is not).
+
+It is guaranteed the answer fits on a 32-bit signed integer.
+***** 解题思路与分析
+这道题不是求两个字符串是匹配，而是判断S有多少种方式可以得到T。但其实还是动态规划，我们一个定义二维数组dp，dp[i][j]为字符串s(0,i)变换到t(0,j)的变换方法的个数。
+
+如果S[i]==T[j]，那么dp[i][j] = dp[i-1][j-1] + dp[i-1][j]
+
+意思是：如果当前S[i]==T[j]，那么当前这个字符即可以保留也可以抛弃，所以变换方法等于保留这个字符的变换方法加上不用这个字符的变换方法， 
+
+dp[i-1][j-1]为保留这个字符时的变换方法个数，dp[i-1][j]表示抛弃这个字符时的变换方法个数。
+
+如果S[i]!=T[i]，那么dp[i][j] = dp[i-1][j]，意思是如果当前字符不等，那么就只能抛弃当前这个字符。
+
+#+BEGIN_SRC java
+public int numDistinct(String ss, String tt) {
+    int m = ss.length(), n = tt.length();
+    char [] s = ("#"+ss).toCharArray();
+    char [] t = ("#"+tt).toCharArray();
+    int [][] dp = new int [m+1][n+1];
+    dp[0][0] = 1;
+    for (int j = 1; j <= n; j++) // 注意这两行初始状态的设置
+        dp[0][j] = 0;
+    for (int i = 1; i <= m; i++) 
+        dp[i][0] = 1;
+    for (int i = 1; i <= m; i++) 
+        for (int j = 1; j <= n; j++) 
+            if (s[i] == t[j])
+                dp[i][j] = dp[i-1][j-1] + dp[i-1][j];
+            else dp[i][j] = dp[i-1][j];
+    return dp[m][n];
+}
+#+END_SRC
+
 *** 将一个数组分为两个部分，分别求和S1与S2，使得|S1-S2|最小
     
     [[./pic/dpArray.png]]
@@ -566,45 +605,69 @@ private static int getMaxLength(int[] arr){
     return dp[arr.length-1][1];
 }
 #+END_SRC    
-*** 115. Distinct Subsequences - Hard
-Given two strings s and t, return the number of distinct subsequences of s which equals t.
-
-A string's subsequence is a new string formed from the original string by deleting some (can be none) of the characters without disturbing the remaining characters' relative positions. (i.e., "ACE" is a subsequence of "ABCDE" while "AEC" is not).
-
-It is guaranteed the answer fits on a 32-bit signed integer.
-**** 解题思路与分析
-这道题不是求两个字符串是匹配，而是判断S有多少种方式可以得到T。但其实还是动态规划，我们一个定义二维数组dp，dp[i][j]为字符串s(0,i)变换到t(0,j)的变换方法的个数。
-
-如果S[i]==T[j]，那么dp[i][j] = dp[i-1][j-1] + dp[i-1][j]
-
-意思是：如果当前S[i]==T[j]，那么当前这个字符即可以保留也可以抛弃，所以变换方法等于保留这个字符的变换方法加上不用这个字符的变换方法， 
-
-dp[i-1][j-1]为保留这个字符时的变换方法个数，dp[i-1][j]表示抛弃这个字符时的变换方法个数。
-
-如果S[i]!=T[i]，那么dp[i][j] = dp[i-1][j]，意思是如果当前字符不等，那么就只能抛弃当前这个字符。
-
-#+BEGIN_SRC java
-public int numDistinct(String ss, String tt) {
-    int m = ss.length(), n = tt.length();
-    char [] s = ("#"+ss).toCharArray();
-    char [] t = ("#"+tt).toCharArray();
-    int [][] dp = new int [m+1][n+1];
-    dp[0][0] = 1;
-    for (int j = 1; j <= n; j++) // 注意这两行初始状态的设置
-        dp[0][j] = 0;
-    for (int i = 1; i <= m; i++) 
-        dp[i][0] = 1;
-    for (int i = 1; i <= m; i++) 
-        for (int j = 1; j <= n; j++) 
-            if (s[i] == t[j])
-                dp[i][j] = dp[i-1][j-1] + dp[i-1][j];
-            else dp[i][j] = dp[i-1][j];
-    return dp[m][n];
-}
-#+END_SRC
 
 
 ** 区间型DP
+- https://leetcode-cn.com/problems/minimum-cost-to-merge-stones/solution/yi-dong-you-yi-dao-nan-yi-bu-bu-shuo-ming-si-lu-he/
+
+区间dp问题，旨在通过动态规划去求一个区间的最优解，通过将大区间划分为很多个小区间，再由小区间的解来组合出大区间的解，这体现了分治的思想。
+
+- 区间动态规划三部曲
+  - 定义状态：dp[i, j]为区间[i, j]的最优解
+  - 定义状态转移方程：最常见的写法为：dp[i,j] = max/min{dp[i,j], dp[i, k] + dp[k+1, j] + cost}。选取[i, j]之间的一个分界点k，分别计算[i, k]和[k+1, j]的最优解，从而组合出[i, j]的最优解。
+  - 初始化：dp[i][i] = 常数。区间长度为1时的最优解应当是已知的。
+
+假设要求的区间最优解为dp[1, n]，区间dp问题有两种编码方法：
+
+- 第一种：
+#+BEGIN_SRC java
+for (int i = n; i >= 1; --i) 
+	for (int j = i + 1; j <= n; ++j) 
+		for (int k = i; k < j; ++k) 
+			dp[i,j] = max/min(dp[i,j], dp[i,k] + dp[k+1, j] + cost)
+#+END_SRC
+
+这种写法就是常规的dp写法，枚举i为子区间左边界，枚举j为子区间有边界，枚举k为分界点。要注意由于要求的是dp[1,n]，所以i必须从大往小遍历，j必须从小往大遍历。这样在状态转移方程中利用的就是已求解的dp状态。
+- 第二种：
+#+BEGIN_SRC java
+for (int len = 2; len <= n; ++len) 
+	for (int i = 1; i + len - 1  <= n; ++i) {
+		int j = i + len - 1;
+		for (int k = i; k < j; ++k) 
+			dp[i,j] = max/min(dp[i,j], dp[i,k] + dp[k+1, j] + cost;
+    }
+#+END_SRC
+
+这种写法最常见，枚举len为区间长度，枚举i为区间左端点，由此可以计算出区间右端点j，枚举k为分界点。区间长度从2到n，跟上一种写法相同。这种写法的正确性可能不如上一种那么直观，它从小到大枚举出所有区间，在求解大区间时，状态转移方程中利用的状态都是小区间的状态，必定在它之前被求解，所以也是正确的。
+
+*** 1039. Minimum Score Triangulation of Polygon - Medium
+You have a convex n-sided polygon where each vertex has an integer value. You are given an integer array values where values[i] is the value of the ith vertex (i.e., clockwise order).
+
+You will triangulate the polygon into n - 2 triangles. For each triangle, the value of that triangle is the product of the values of its vertices, and the total score of the triangulation is the sum of these values over all n - 2 triangles in the triangulation.
+
+Return the smallest possible total score that you can achieve with some triangulation of the polygon.
+
+#+BEGIN_SRC java
+// 动态规划，递归可以使逻辑简单（本质还是动态规划）将多边形起始位置设为start，end, 用一个数组dp来记录任意起始位置的score
+// 为了计算dp[start][end], 我们用一个index k在start到end之间遍历
+// dp[start][end] = min(dp[start][k] + dp[k][end] + A[start]* A[k] * A[end])结果为dp[0][n - 1]注意：相邻的dp[i][i + 1] = 0, 因为两条边无法组成三角形
+private int dfs(int [] a, int i, int j) {
+    if (j - i < 2) return 0; // 最开始终止条件没有写对
+    if (dp[i][j] > 0) return dp[i][j];
+    int ans = Integer.MAX_VALUE;
+    for (int k = i+1; k < j; k++) 
+        ans = Math.min(ans, a[i]*a[k]*a[j] + dfs(a, i, k) + dfs(a, k, j));
+    return dp[i][j] = ans;
+}
+int [][] dp;
+int n;
+public int minScoreTriangulation(int[] a) {
+    n = a.length;
+    dp = new int [n][n];
+    return dfs(a, 0, n-1);
+}
+#+END_SRC
+
 *** 2019. The Score of Students Solving Math Expression - Hard 有人说这是区间dp，无感
 You are given a string s that contains digits 0-9, addition symbols '+', and multiplication symbols '*' only, representing a valid math expression of single digit numbers (e.g., 3+5*2). This expression was given to n elementary school students. The students were instructed to get the answer of the expression by following this order of operations:
 
@@ -674,7 +737,7 @@ public int scoreOfStudents(String s, int [] num) {
 }
 #+END_SRC  
 
-*** 312. Burst Balloons 区间型动态规划的典型代表 仍是典型，最好不扔掉
+*** 312. Burst Balloons 区间型动态规划的典型代表
 You are given n balloons, indexed from 0 to n - 1. Each balloon is painted with a number on it represented by an array nums. You are asked to burst all the balloons.
 If you burst the ith balloon, you will get nums[i - 1] * nums[i] * nums[i + 1] coins. If i - 1 or i + 1 goes out of bounds of the array, then treat it as if there is a balloon with a 1 painted on it.
 Return the maximum coins you can collect by bursting the balloons wisely.
@@ -724,178 +787,380 @@ public int maxCoins(int[] nums) {
 }
 #+END_SRC
 
+*** 1000. Minimum Cost to Merge Stones - Hard
+There are n piles of stones arranged in a row. The ith pile has stones[i] stones.
+A move consists of merging exactly k consecutive piles into one pile, and the cost of this move is equal to the total number of stones in these k piles.
+Return the minimum cost to merge all piles of stones into one pile. If it is impossible, return -1.
+**** 解题思路与分析
 
-** 多维数个数、数种类数的
-*** 1866. Number of Ways to Rearrange Sticks With K Sticks Visible - Hard
-There are n uniquely-sized sticks whose lengths are integers from 1 to n. You want to arrange the sticks such that exactly k sticks are visible from the left. A stick is visible from the left if there are no longer sticks to the left of it.
+看到了论坛上有人定义了三维的 dp 数组，把每次合并的堆数K也当作一维放入到 dp 数组中了，其实博主觉得不是很有必要，因为像这种必须要对 dp 数组进行升维操作的是当题目中有隐藏信息 Hidden Information，而当前定义的 dp 数组无法重现子问题，即无法找到状态转移方程的时候必须要做的，最典型的例子就是之前那道 Remove Boxes，那道题自区间的 dp 值非常依赖于区间左边相同的数字的个数，而这道题每次合并的堆数K并不是很依赖其他小于K的合并的堆数，所以博主感觉没有必要加。
 
-For example, if the sticks are arranged [1,3,2,5,4], then the sticks with lengths 1, 3, and 5 are visible from the left.
-Given n and k, return the number of such arrangements. Since the answer may be large, return it modulo 109 + 7.
 #+BEGIN_SRC java
-// dp[i][j] 表示前面i根木棍可以看到j根
-// 设 dp[i][j] 表示从高度为 1, 2, ..., i 的木棍中，高度逐渐递减地插入新的木棍，从左侧看恰好看到 k 根木棍的方案数。
-// 后面说看到ith根，不是指从小到大的第ith根棍子，而是指ith这个位置上的棍子
-// 如果可以看到ith根的话，那么数量为dp[i-1][j-1]
-// 如果看不到ith的话，那么取前面(i-1)里面任意一个出来放在ith的最后，接下来就是从前面i-1个棍子里面看到j根，所以结果是 (i-1)* dp[i-1][j]
-public int rearrangeSticks(int n, int k) {
-    int mod = (int)1e9 + 7;
-    long [][] dp = new long [n+1][k+1];
-    dp[0][0] = 1;
+public int mergeStones(int[] stones, int k) {
+    int n = stones.length;
+    if ((n-1) % (k-1) != 0) return -1;
+    int [][] dp = new int[n][n];
+    int [] pre = new int[n+1];
     for (int i = 1; i <= n; i++) 
-        for (int j = 1; j <= Math.min(n, k); j++) 
-            dp[i][j] = (dp[i-1][j-1] + (dp[i-1][j] * (i-1)) % mod) % mod;
-    return (int)dp[n][k];
-}
-#+END_SRC
-- dfs + memo 
-#+BEGIN_SRC java
-long mod = 1000_000_000 + 7;
-long[][] dp;
-public int rearrangeSticks(int n, int k) {
-    dp = new long[n + 1][k + 1];
-    long ans = dfs(n, k);
-    return (int) (ans % mod);
-}
-long dfs(int n, int k) {
-    if(n < k || k == 0) return 0;
-    if(n == k) return 1;
-    if(dp[n][k] != 0) return dp[n][k];
-    long ans = 0;
-    // instead of iterating for every stick
-    // we are just multiplying number of ways with (n - 1)
-    ans += (((n - 1) * dfs(n - 1, k)) % mod);
-    ans %= mod;
-    ans += dfs(n - 1, k - 1);
-    ans %= mod;
-    return dp[n][k] = ans;
-}
-#+END_SRC
-
-*** 1916. Count Ways to Build Rooms in an Ant Colony - Hard
-You are an ant tasked with adding n new rooms numbered 0 to n-1 to your colony. You are given the expansion plan as a 0-indexed integer array of length n, prevRoom, where prevRoom[i] indicates that you must build room prevRoom[i] before building room i, and these two rooms must be connected directly. Room 0 is already built, so prevRoom[0] = -1. The expansion plan is given such that once all the rooms are built, every room will be reachable from room 0.
-
-You can only build one room at a time, and you can travel freely between rooms you have already built only if they are connected. You can choose to build any room as long as its previous room is already built.
-
-Return the number of different orders you can build all the rooms in. Since the answer may be large, return it modulo 109 + 7.
-
-对每个节点，可根据所有以其子节点为根的树的节点及排列数量，计算出以当前节点为根的树的节点及排列数量。
-
-本题求解过程涉及较多前置知识点，包括排列组合、乘法逆元、快速乘方等
-
-[[./pic/ant1.png]]
-
-[[./pic/ant2.png]]
-
-#+BEGIN_SRC java
-// 快速计算x^y的乘方
-public int quickMul(int x , int y) {
-    long res = 1, cur = x;
-    while (y > 0) {
-        if ((y & 1) == 1)
-            res = res * cur % mod;
-        cur = cur * cur % mod;
-        y >>= 1;
-    }
-    return (int)res;
-}
-// 深度优先搜索，返回以当前节点为根的子树节点个数 及 内部排列数
-public int [] dfs (int idx) {
-    if (!map.containsKey(idx)) return new int [] {1, 1}; // 子节点，节点个数及内部排列数均为1
-    int cnt = 1, res = 1;       //  子树的节点个数、内部排列数
-    for (Integer node : map.get(idx)) {
-      int [] cur = dfs(node); // 递归得到子节点对应树的节点个数和排列数
-        cnt += cur[0];
-        res = (int)((long)res * cur[1] % mod * inv[cur[0]] % mod);
-    }
-    res = (int)((long)res * fac[cnt-1] % mod);
-    return new int [] {cnt, res};
-}
-int mod = (int)1e9 + 7;
-Map<Integer, List<Integer>> map = new HashMap<>();
-int [] fac, inv;
-public int waysToBuildRooms(int[] prevRoom) {
-    int n = prevRoom.length;
-    // 求阶乘数列及对应逆元
-    this.fac = new int [n]; // fac[i]=i!
-    this.inv = new int [n]; // inv[i]=i!^(-1)
-    fac[0] = inv[0] = 1;
-    for (int i = 1; i < n; i++) {
-        fac[i] = (int)((long)fac[i-1] * i % mod);
-        inv[i] = quickMul(fac[i], mod - 2); // 费马小定理: (fac[i]^(-1))%mod = (fac[i]^(mod-2))%mod
-    }
-    // 记录各个节点与子节点之间的边
-    for (int i = 1; i < n; i++) 
-        map.computeIfAbsent(prevRoom[i], k->new ArrayList<>()).add(i);
-    // 动态规划得到总体顺序数量x
-    return dfs(0)[1];      
-}
-#+END_SRC
-
-
-*** 1987. Number of Unique Good Subsequences - Hard
-You are given a binary string binary. A subsequence of binary is considered good if it is not empty and has no leading zeros (with the exception of "0").
-
-Find the number of unique good subsequences of binary.
-
-For example, if binary = "001", then all the good subsequences are ["0", "0", "1"], so the unique good subsequences are "0" and "1". Note that subsequences "00", "01", and "001" are not good because they have leading zeros.
-Return the number of unique good subsequences of binary. Since the answer may be very large, return it modulo 109 + 7.
-
-A subsequence is a sequence that can be derived from another sequence by deleting some or no elements without changing the order of the remaining elements.
-#+BEGIN_SRC java
-public int numberOfUniqueGoodSubsequences(String binary) {
-    int mod = (int)1e9 + 7;
-    int n = binary.length(), preZoo = 0, preOne = 0, m = 1;
-    long [] dp = new long [n+1];
-    String s = "#" + binary;
-    while (m <= n && s.charAt(m) == '0') m++;
-    if (m == n+1) return 1;
-    dp[m] = 1;
-    preOne = m;
-    preZoo = m-1;
-    for (int i = m+1; i <= n; i++) {
-        char c = s.charAt(i);
-        int j = (c == '0' ? preZoo : preOne);
-        dp[i] = (2 * dp[i-1] % mod - (j >= 1 ? dp[j-1] : 0) + mod) % mod;
-        if (c == '0') preZoo = i;
-        else preOne = i;
-    }
-    return (int)dp[n] + (s.indexOf("0") != -1 ?  1 : 0);
-}
-#+END_SRC
-[[./pic/distinctSubsequence.png]]
-#+BEGIN_SRC java
-public int numberOfUniqueGoodSubsequences(String binary) {
-    int mod = (int)1e9 + 7;
-    int endZoo = 0, endOne = 0, hasZoo = 0;
-    for (int i = 0; i < binary.length(); i++) 
-        if (binary.charAt(i) == '1')
-            endOne = (endOne + endZoo + 1) % mod;
-        else {
-            endZoo = (endZoo + endOne) % mod;
-            hasZoo = 1;
+        pre[i] = pre[i-1] + stones[i-1];
+    int j = 0;
+    for (int len = k; len <= n; len++) {
+        for (int i = 0; i+len-1 < n; i++) {
+            j = i + len -1;
+            dp[i][j] = Integer.MAX_VALUE; // have to initialize it here !!!
+            for (int x = i; x < j; x += k-1) 
+                dp[i][j] = Math.min(dp[i][j], dp[i][x] + dp[x+1][j]);
+            if ((j - i) % (k - 1) == 0) // 如果总长度满足合并只剩一个数的条件，则可以再合并一次
+                dp[i][j] += pre[j+1] - pre[i];
         }
-    return (endOne + endZoo + hasZoo) % mod;
+    }
+    return dp[0][n-1];
 }
 #+END_SRC
-- 还有一个没有看懂的
-  - https://leetcode-cn.com/problems/number-of-unique-good-subsequences/solution/ju-yi-fan-san-by-avenger-h-34xa/
-  - https://leetcode-cn.com/problems/distinct-subsequences-ii/solution/dong-tai-gui-hua-cong-fen-xi-dao-shi-xian-by-my10y/
-#+BEGIN_SRC python
-def numberOfUniqueGoodSubsequences(self, binary: str) -> int:
-        M = 10**9+7
-        dp = [0]*10
-        b = str(int(binary))
-        l = len(binary) - len(b)
-        if l > 0:
-            dp[0] = 1
-        for c in b:
-            if dp[0] >= 1:
-                dp[int(c)] = (sum(dp)) % M
-            else:
-                dp[int(c)] = ( 1+ sum(dp)) % M
-        return sum(dp)%M 
+**** 解题思路与分析: 上述解法的时间复杂度是O(n^3*k).我们可以对它进行优化。
+- https://leetcode.com/problems/minimum-cost-to-merge-stones/discuss/247657/JAVA-Bottom-Up-%2B-Top-Down-DP-With-Explaination
 
+定义dp[i][j]为尽可能多的合并区间[i, j] 所需的成本，不一定能合并成一堆，但合并完成后剩下的堆数一定小于k，更具体地，剩余的堆数一定是(n - 1) % (k - 1) + 1。
+
+证明：
+
+已知一次合并会导致堆数减少k-1，假设最多进行了a次合并，则有
+
+remain = n - (k - 1) * a，1 <= remain <= k - 1，
+
+\Rightarrow⇒ remain - 1 = n - 1 - (k - 1) * a
+
+\Rightarrow⇒ remain - 1 = (n - 1) % (k - 1)
+
+\Rightarrow⇒ remain = (n - 1) % (k - 1) + 1
+
+证毕。
+
+我们参照解法一来定义状态转移方程，同样将区间[i，j]划分为两部分。
+
+我们保证将左部分合并成1堆，而尽可能多地合并右部分。（左部分需要满足(len - 1) % (k - 1) == 0）。
+
+右部分剩余堆数满足1 <= remain <= k - 1，如果最后右部分剩余k-1堆（也即(j - i) % (k - 1) == 0），则还可以继续将这两部分合并成1堆。
+
+因此合并区间[i，j]的成本是合并其左右部分成本之和（对于最优的划分）。如果可以进一步合并的话，则额外的成本是sum(i, j)。
+
+状态转移方程为：dp[i][j] = min(dp[i][p] + dp[p + 1][j]), i <= p < j，如果可以继续合并，dp[i][j] += sum(i, j)。
+
+这样的话枚举的区间长度就必须从k开始了，因为长度在[1，k-1]之间的区间已经无法进行合并了，它们的dp[i][j] == 0。
+
+     #+BEGIN_SRC java
+public int mergeStones(int[] s, int k) {
+    int n = s.length;
+    if ((n - 1) % (k - 1) != 0) return -1;
+    int [][] dp = new int [n+1][n+1];
+    int [] sum = new int [n+1];
+    for (int i = 1; i <= n; i++)  sum[i] = sum[i-1] + s[i-1];
+    for (int len = k; len <= n; len++) // 枚举区间长度
+        for (int i = 1; i+len <= n+1; i++) { // 枚举区间起点
+            int j = i + len - 1;
+            dp[i][j] = Integer.MAX_VALUE;
+            for (int p = i; p < j; p += k-1) // 枚举分界点
+                dp[i][j] = Math.min(dp[i][j], dp[i][p] + dp[p+1][j]);
+            if ((j - i) % (k-1) == 0) dp[i][j] += sum[j] - sum[i-1];
+        }
+    return dp[1][n];
+}
+     #+END_SRC
+
+*** 546. Remove Boxes - Hard: 带隐含信息，需要第三维参数加入的
+You are given several boxes with different colors represented by different positive numbers.
+
+You may experience several rounds to remove boxes until there is no box left. Each time you can choose some continuous boxes with the same color (i.e., composed of k boxes, k >= 1), remove them and get k * k points.
+
+Return the maximum points you can get.
+**** 解题思路与分析
+     #+BEGIN_SRC java
+public int removeBoxes(int [] b) { // 区间型dp
+    n = b.length;
+    dp = new int [n][n][n];
+    return dfs(b, 0, n-1, 0);
+}
+int [][][] dp;
+int n;
+private int dfs(int [] a, int i, int j, int k) {
+    if (i > j) return 0;
+    if (dp[i][j][k] > 0) return dp[i][j][k];
+    int ans = dfs(a, i, j-1, 0) + (k+1) * (k+1); // 消除[i, j-1]区间后，（k+1）个a[j]就可以连续消除
+    for (int x = i; x < j; x++) 
+        if (a[x] == a[j])       // 试图先消除掉 [x+1, j-1]范围内的数，然后剩下a[x], a[j] 以及j后面有k个连续与a[j]相等的数
+            ans = Math.max(ans, dfs(a, x+1, j-1, 0) + dfs(a, i, x, k+1)); // [x+1,j-1]消除后，a[x]后面就跟了k+1个连续与a[x]相等的数
+    return dp[i][j][k] = ans;
+}
+     #+END_SRC
+*** 664. Strange Printer - Hard
+There is a strange printer with the following two special properties:
+
+The printer can only print a sequence of the same character each time.
+At each turn, the printer can print new characters starting from and ending at any place and will cover the original existing characters.
+Given a string s, return the minimum number of turns the printer needed to print it.
+**** 解题思路与分析
+     #+BEGIN_SRC java
+public int strangePrinter(String t) { // dfs + memo
+    n = t.length();
+    s = t.toCharArray();
+    dp = new int [n][n];
+    return dfs(0, n-1);
+}
+int [][] dp;
+char [] s;
+int n;
+private int dfs(int i, int j) {
+    if (i > j) return 0;
+    if (dp[i][j] > 0) return dp[i][j];
+    int ans = dfs(i+1, j) + 1; // 初始化为先打i位置，再打[i+1, j]区间覆盖原 [i, j]区间
+    for (int k = i+1; k <= j; k++) 
+        if (s[i] == s[k])
+            ans = Math.min(ans, dfs(i+1, k-1) + dfs(k, j));
+    return dp[i][j] = ans;
+}
+public int strangePrinter(String s) { // dp
+    int n = s.length();
+    int [][] dp = new int[n][n];
+    for (int i = n-1; i >= 0; i--) 
+        for (int j = i; j < n; j++) {
+            dp[i][j] = i == j ? 1 : 1 + dp[i+1][j]; // 同样是先打出[i, j]区间一次，再用[i+1,j]区间覆盖
+            for (int k = i+1; k <= j; k++) 
+                if (s.charAt(k) == s.charAt(i))     // 如果存在相同的字符，就可以进一步地优化
+                    dp[i][j] = Math.min(dp[i][j], dp[i+1][k-1]+dp[k][j]);
+        }
+    return dp[0][n-1];
+}[
+     #+END_SRC
+*** 1591. Strange Printer II - Hard todo
+There is a strange printer with the following two special requirements:
+
+On each turn, the printer will print a solid rectangular pattern of a single color on the grid. This will cover up the existing colors in the rectangle.
+Once the printer has used a color for the above operation, the same color cannot be used again.
+You are given a m x n matrix targetGrid, where targetGrid[row][col] is the color in the position (row, col) of the grid.
+
+Return true if it is possible to print the matrix targetGrid, otherwise, return false.
+**** 解题思路与分析
+
+关于含有隐藏信息的 dp 题目，感觉巅峰就属于拣樱桃那题 Cherry Pickup ???
+
+     #+BEGIN_SRC java
+     #+END_SRC
+
+** 扫描线类、时间戳、一维线性DP/ 单序列/ 接龙型
+*** 1235. Maximum Profit in Job Scheduling - Hard
+We have n jobs, where every job is scheduled to be done from startTime[i] to endTime[i], obtaining a profit of profit[i].
+
+You're given the startTime, endTime and profit arrays, return the maximum profit you can take such that there are no two jobs in the subset with overlapping time range.
+
+If you choose a job that ends at time X you will be able to start another job that starts at time X.
+**** 解题思路与分析
+
+Sort the elements by starting time, then define the dp[i] as the maximum profit taking elements from the suffix starting at i.
+
+Use binarySearch (lower_bound/upper_bound on C++) to get the next index for the DP transition.- 
+
+#+BEGIN_SRC java
+// 目标：在最接近自己startime的endtime里得到最大的proft前缀
+// 维护一个递增的endtime序列
+// 该序列同时记录在此endtime下的最大profit
+// 按递增endtime遍历工作
+// 如果本次工作后profit比更早的endtime下的更多，就把这个工作记进去，不然做个p
+// 因为升序，所以还能二分查找。exciting！
+public int jobScheduling(int[] startTime, int[] endTime, int[] profit) { // 这个前后的时间点总是没能确定，所以思路不清晰
+    int n = startTime.length;
+    List<int []> map = new ArrayList<>();
+    for (int i = 0; i < startTime.length; i++) 
+        map.add(new int [] {startTime[i], endTime[i], profit[i]});
+    Collections.sort(map, (a, b) -> a[0] - b[0]);
+    for (int [] zz : map) 
+        System.out.println(Arrays.toString(zz));
+
+    int [] dp = new int [n];
+    dp[n-1] = map.get(n-1)[2]; // 反向逆序遍历的优点：遍历过的时间点一定在当前事件之后，只有选与不选当前事件两种策略中取最优解
+    int j = 0;
+    for (int i = n-2; i >= 0; i--) {
+        j = binarySearchNext(i+1, map);
+        // j = getNext(i, map);
+        dp[i] = Math.max(dp[i+1], (j == -1 ? 0 : dp[j]) + map.get(i)[2]);
+    }
+    return dp[0];
+}
+private int getNext(int idx, List<int []> ll) {
+    for (int i = idx+1; i < ll.size(); i++) 
+        if (ll.get(i)[0] >= ll.get(idx)[1]) return i;
+    return -1;
+}
+private int binarySearchNext(int x, List<int []> ll) { // 这里居然写出bug来了 // bug todo
+    int l = x + 1, r = ll.size()-1, v = ll.get(x)[1], ans = -1; // x end time
+    while (l <= r) {
+        int m = l + (r - l) / 2;
+        if (ll.get(m)[0] >= v) {
+            ans = m;
+            r = m-1;
+        } else l = m+1;
+    }
+    // return l < ll.size() && ll.get(l)[0] >= v ? l : -1;
+    return ans;
+}
 #+END_SRC
+*** 2008. Maximum Earnings From Taxi - Medium
+There are n points on a road you are driving your taxi on. The n points on the road are labeled from 1 to n in the direction you are going, and you want to drive from point 1 to point n to make money by picking up passengers. You cannot change the direction of the taxi.
+
+The passengers are represented by a 0-indexed 2D integer array rides, where rides[i] = [starti, endi, tipi] denotes the ith passenger requesting a ride from point starti to point endi who is willing to give a tipi dollar tip.
+
+For each passenger i you pick up, you earn endi - starti + tipi dollars. You may only drive at most one passenger at a time.
+
+Given n and rides, return the maximum number of dollars you can earn by picking up the passengers optimally.
+
+Note: You may drop off a passenger and pick up a different passenger at the same point.
+**** 解题思路与分析
+     #+BEGIN_SRC java
+public long maxTaxiEarnings(int n, int[][] rides) {
+    Arrays.sort(rides, (a, b)-> (a[0] != b[0] ? a[0] - b[0] : a[1] - b[1]));
+    Map<Integer, Set<int []>> m = new HashMap<>();
+    for (int [] r : rides) 
+        m.computeIfAbsent(r[1], z -> new HashSet<>()).add(r);
+    long [] dp = new long [n+1];
+    for (int i = 1; i <= n; i++) {
+        dp[i] = dp[i-1];
+        if (m.containsKey(i)) 
+            for (int [] r : m.get(i)) 
+                dp[r[1]] = Math.max(dp[r[1]], dp[r[0]] + r[1] - r[0] + r[2]);
+    }
+    return dp[n];
+}
+     #+END_SRC
+**** 解题思路与分析
+     #+BEGIN_SRC java
+// Similar to 1235. Maximum Profit in Job Scheduling
+// Sort by the end time to get non-overlapping intervals.
+// Use the treemap to find the previous ride before the current ride.
+public long maxTaxiEarnings(int n, int[][] rides) {
+    if (rides == null || rides.length == 0) return 0;
+    for (int[] r : rides) 
+        r[2] = r[1] - r[0] + r[2];
+    Arrays.sort(rides, (a, b) -> (a[1] - b[1]));
+    TreeMap<Long, Long> map = new TreeMap<>();
+    map.put((long)0, (long)0); 
+    for (int[] r : rides) {
+        long cur = map.floorEntry((long)r[0]).getValue() + r[2];
+        if (cur > map.lastEntry().getValue()) {
+            map.put((long)r[1], cur);
+        }
+    }
+    return map.lastEntry().getValue();
+}
+     #+END_SRC
+
+*** 1786. Number of Restricted Paths From First to Last Node - Dijkstra算法
+There is an undirected weighted connected graph. You are given a positive integer n which denotes that the graph has n nodes labeled from 1 to n, and an array edges where each edges[i] = [ui, vi, weighti] denotes that there is an edge between nodes ui and vi with weight equal to weighti.
+A path from node start to node end is a sequence of nodes [z0, z1, z2, ..., zk] such that z0 = start and zk = end and there is an edge between zi and zi+1 where 0 <= i <= k-1.
+The distance of a path is the sum of the weights on the edges of the path. Let distanceToLastNode(x) denote the shortest distance of a path between node n and node x. A restricted path is a path that also satisfies that distanceToLastNode(zi) > distanceToLastNode(zi+1) where 0 <= i <= k-1.
+Return the number of restricted paths from node 1 to node n. Since that number may be too large, return it modulo 109 + 7.
+#+BEGIN_SRC java
+public int countRestrictedPaths(int n, int[][] edges) {
+    this.n = n;
+    for (int [] e : edges) {
+        adj.computeIfAbsent(e[0], z -> new HashMap<>()).put(e[1], e[2]);
+        adj.computeIfAbsent(e[1], z -> new HashMap<>()).put(e[0], e[2]);
+    }
+    dist = new int [n+1];
+    Arrays.fill(dist, Integer.MAX_VALUE);
+    dist[n] = 0;
+    dijkstra();
+    dp = new int [n+1];
+    Arrays.fill(dp, -1);
+    return (int)dfs(1);
+}
+HashMap<Integer, Map<Integer, Integer>> adj = new HashMap<>();
+int mod = (int)1e9 + 7;
+int [] dist;
+int [] dp;
+int n;
+private long dfs(int u) {
+    if (u == n) return 1;
+    if (dp[u] != -1) return dp[u];
+    long ans = 0;
+    Map<Integer, Integer> tmp = adj.get(u);
+    if (tmp != null) 
+        for (Integer v : tmp.keySet()) 
+            if (dist[u] > dist[v])
+                ans = (ans + dfs(v)) % mod;
+    return dp[u] = (int)ans;
+}
+private void dijkstra() {
+    // Queue<int []> q = new LinkedList<>(); // tle 
+    Queue<int []> q = new PriorityQueue<>((a, b)->a[1] - b[1]); // 狠重要
+    q.offer(new int [] {n, 0});
+    while (!q.isEmpty()) {
+        int [] u = q.poll();
+        if (dist[u[0]] < u[1]) continue; // 狠重要
+        Map<Integer, Integer> tmp = adj.get(u[0]);
+        if (tmp == null) continue;
+        for (Integer v : tmp.keySet()) 
+            if (u[1] + tmp.get(v) < dist[v]) {
+                dist[v] = u[1] + tmp.get(v);
+                q.offer(new int [] {v, dist[v]});
+            }
+    }
+}
+#+END_SRC
+
+*** 1911. Maximum Alternating Subsequence Sum - Medium todo: 还需要总结题解
+The alternating sum of a 0-indexed array is defined as the sum of the elements at even indices minus the sum of the elements at odd indices.
+
+For example, the alternating sum of [4,2,5,3] is (4 + 5) - (2 + 3) = 4.
+Given an array nums, return the maximum alternating sum of any subsequence of nums (after reindexing the elements of the subsequence).
+
+A subsequence of an array is a new array generated from the original array by deleting some elements (possibly none) without changing the remaining elements' relative order. For example, [2,7,4] is a subsequence of [4,2,3,7,2,1,4] (the underlined elements), while [2,4,2] is not.
+**** 解题思路与分析: DP
+
+设计两个长整数 evenDp 和 oddDp，分别记录上一元素为偶数下标、奇数下标时当前的最大交替和。根据是否添加当前元素，状态转移方程为：
+
+evenDp = Math.max(上一 evenDp, 上一 oddDp + 当前元素)
+
+oddDp = Math.max(上一 oddDp, 上一 evenDp + 当前元素)
+
+最终得到的 evenDp 即为最大交替和。
+
+     #+BEGIN_SRC java
+public long maxAlternatingSum(int[] a) {
+    long odd = 0, evn = a[0]; // 上一元素为偶数下标、奇数下标时的最大交替和
+    for (int i = 1; i < a.length; i++) {
+        evn = Math.max(evn, odd + a[i]); // 偶数下标交替和转移
+        odd = Math.max(odd, evn - a[i]); // 奇数下标交替和转移
+    }
+    return evn;
+}
+     #+END_SRC
+**** 解题思路与分析: 最大股票收益
+参考Leetcode题解，发现有一个方法很巧妙。将样例[6,2,1,2,4,5]转化为[0,6,2,1,2,4,5]，那么题面就转化为模拟股票交易，数组中的数为股票价格，index为天数。
+
+你可以在第i天买入股票，第j天卖出股票，其中i<=j。
+
+那么其实我们可以用上帝视角来看，只要股票价格后一天比当天高，我们就当天买入，后一天卖出。
+
+那么就如下所示：
+#+BEGIN_SRC java
+买入    卖出    收益
+第0天   第1天   6-0=6
+第3天   第4天   2-1=1
+第4天   第5天   4-2=2
+第5天   第6天   5-4=1  
+#+END_SRC
+
+那么总收益为6+1+2+1=10，即6-0+2-1+4-2+5-4，抵消之后就是6-1+5，就是样例中的最优子序列[6,1,5]~
+     #+BEGIN_SRC java
+public long maxAlternatingSum(int[] a) {
+    int [] b = new int [a.length+1];
+    System.arraycopy(a, 0, b, 1, a.length);
+    long ans = 0;
+    for (int i = 1; i < b.length; i++) 
+        if (b[i] - b[i-1] > 0) ans += b[i] - b[i-1];
+    return ans;
+}
+     #+END_SRC
+
 *** 730. Count Different Palindromic Subsequences - Hard
 Given a string s, return the number of different non-empty palindromic subsequences in s. Since the answer may be very large, return it modulo 109 + 7.
 
@@ -1383,6 +1648,280 @@ public int findRotateSteps(String ring, String key) {
 }
 #+END_SRC
 
+*** 368. Largest Divisible Subset - Medium 要求返回序列的接龙型
+Given a set of distinct positive integers nums, return the largest subset answer such that every pair (answer[i], answer[j]) of elements in this subset satisfies:
+
+answer[i] % answer[j] == 0, or
+answer[j] % answer[i] == 0
+If there are multiple solutions, return any of them.
+**** 解题思路与分析: 万能的dfs记忆化搜索
+     #+BEGIN_SRC java
+public List<Integer> largestDivisibleSubset(int[] a) { // 出来一个新题: 恁是认不是它是dfs记忆化搜索，岂不是很悲催？
+    Arrays.sort(a);
+    n = a.length;
+    dp = new List [n];
+    for (int i = 0; i < n; i++) {
+        List<Integer> cur = dfs(a, i, 1);
+        if (cur.size() > ans.size())
+            ans = cur;
+    }
+    return ans;
+}
+List<Integer> ans = new ArrayList<>();
+List<Integer> [] dp;
+int n;
+// pre: dfs路径中前一节点
+// 返回值：当前节点的倍数数组（包含当前节点）
+private List<Integer> dfs(int [] a, int i, int pre) { 
+    int cur = a[i];
+    if (cur % pre != 0) return new ArrayList<>(); 
+    if (dp[i] != null) return dp[i]; // 记忆数组存在当前结果的话直接返回，避免重复计算
+    List<Integer> maxList = new ArrayList<>();
+    for (int j = i+1; j < n; j++) {
+        List<Integer> tmp = dfs(a, j, cur);
+        if (tmp.size() > maxList.size())
+            maxList = new ArrayList<>(tmp);
+        // maxList = tmp; // bug: 
+    }
+    maxList.add(cur); // 将当前节点加入到集合中, 有点儿回溯的样子，把路径中的数字反序加了回来
+    dp[i] = maxList;  // 将当前结果存入记忆数组
+    return maxList;
+}
+     #+END_SRC
+**** 解题思路与分析: 接龙型动态规划
+
+属于接龙型动态规划，类似于 Longest Increasing Subsequence 的做法。 这个题不同之处有两点：
+
+需要记录具体方案O（N^2） 的时间复杂度不能通过测试
+
+具体的优化在于找上一个接龙的数的时候，不是 for 循环所有比他小的数，而是直接 for 循环他的因子。而获取因子可以用O(√n) 的时间做到。
+
+     #+BEGIN_SRC java
+public List<Integer> largestDivisibleSubset(int[] a) { // todo: 感觉想得还不是很透
+    if (a == null || a.length == 0) return new ArrayList();
+    Arrays.sort(a);
+    int n = a.length;
+    HashMap<Integer, Integer> dp = new HashMap();
+    HashMap<Integer, Integer> pre = new HashMap();
+    for (int i = 0; i < n; i++) {
+        dp.put(a[i], 1);
+        pre.put(a[i], -1);
+    }
+    int lastNum = a[0];
+    for (int i = 0; i < n; i++) {
+        int num = a[i];
+        for (Integer factor : getFactors(num)) {
+            if (!dp.containsKey(factor)) continue;
+            if (dp.get(num) < dp.get(factor) + 1) {
+                dp.put(num, dp.get(factor) + 1);
+                pre.put(num, factor);
+            }
+        }
+        if (dp.get(num) > dp.get(lastNum)) 
+            lastNum = num;
+    }
+    return getPath(pre, lastNum);
+}
+private List<Integer> getPath(HashMap<Integer, Integer> pre, int lastNum) {
+    List<Integer> path = new ArrayList();
+    while (lastNum != -1) {
+        path.add(lastNum);
+        lastNum = pre.get(lastNum);
+    }
+    Collections.reverse(path);
+    return path;
+}
+private List<Integer> getFactors(int num) {
+    List<Integer> factors = new ArrayList();
+    if (num == 1) return factors;
+    int factor = 1;
+    while (factor * factor <= num) {
+        if (num % factor == 0) {
+            factors.add(factor);
+            if (factor != 1 && num / factor != factor) // 这里会把所有质因子的倍数也加进去，怕数组中不存在最小质因子，而是存在其某个倍数？
+                factors.add(num / factor);
+        }
+        factor++;
+    }
+    return factors;
+}
+     #+END_SRC
+**** 解题思路与分析: 一个极为简洁的dp
+
+这里有个很简单的数学性质，就是整除的传递性，如果a%b==0 且 b%c == 0，那么a%c == 0，说白了如果c是b的因子，b又是a的因子，那么c肯定是a的因子。这样我们就可以在数组中找出很多整除链（a->b->c->d，其中b是a的因子，c是b的因子，d是c的因子），这样的链条就满足两两整除的条件，题目就变成了求最长的链条。
+
+     #+BEGIN_SRC java
+public List<Integer> largestDivisibleSubset(int[] nums) {
+    int n = nums.length;
+    List<Integer> ans = new ArrayList<Integer>();
+    if (n < 2) {
+        if (n == 0) return ans;
+        ans.add(nums[0]);
+        return ans;
+    }
+    Arrays.sort(nums);
+    int[] preFactIdx = new int[n];
+    int[] factCnt = new int[n];
+    int maxlength = 0;
+    int maxnum = 0;
+    for (int i = n-1; i >= 0; i--) 
+        for (int j = i; j < n; j++) 
+            if (nums[j] % nums[i] == 0 && factCnt[i] < factCnt[j]+1) {
+                factCnt[i] = factCnt[j]+1;
+                preFactIdx[i] = j;
+                if (factCnt[i] > maxlength) {
+                    maxlength = factCnt[i];
+                    maxnum = i;
+                }
+            }
+    for (int i = 0; i < maxlength; i++) {
+        ans.add(nums[maxnum]);
+        maxnum = preFactIdx[maxnum];
+    }
+    return ans;
+}
+     #+END_SRC
+
+首先我先对nums排序，这里我用了两个数组prefactors[]和factorcount[]，prefactors[i]里其实保存的是以nums[i]未结尾的整除链前面一个数的下标，factorcount[i]存的是以nums[i]结尾的整除链长度。这里我们就可以用动态规划的方式求出factorcount[i]的值了，取最大的一个，然后再根据prefactors[i]推算出整除链中所有的元素。
+
+　　这里开两个脑洞，发散下思维。
+
+- 脑洞1：　　其实所有整除链可以合并为一个多叉整除树，这里得增加一个额外的根节点，使得根节点可以被nums中任何一个数整除。这个整除树有个很重要的性质——除根节点以为任意节点可以整除其父节点。 这道题就会演变成求整除树中最深的路径。 对于树的问题，我们往往能用递归的方式解决，代码也会变得比较好理解。
+- 脑洞2：　　看下代码，是不是很像01背包，其实我觉得这到题可以认为是带限制条件的01背包，限制条件可以简化为放入背包的数必须能整除背包中最小的一个数，背包为无穷大，每个数的价值为1。
+
+*** 673. Number of Longest Increasing Subsequence
+Given an integer array nums, return the number of longest increasing subsequences.
+Notice that the sequence has to be strictly increasing.
+#+BEGIN_SRC java
+public int findNumberOfLIS(int[] nums) { // dynamic programming
+    int n = nums.length;
+    int [][] arr = new int[n][2];
+    int maxLength = 1;
+    for (int i = 0; i < n; i++) 
+        Arrays.fill(arr[i], 1);
+    for (int i = 0; i < n; i++) {
+        for (int j = i+1; j < n; j++) {
+            if (nums[j] > nums[i]) {
+                if (arr[i][0] + 1 > arr[j][0]) {
+                    arr[j][0] = arr[i][0] +1;
+                    arr[j][1] = arr[i][1];
+                    maxLength = Math.max(maxLength, arr[j][0]);
+                } else if (arr[i][0] + 1 == arr[j][0])
+                    arr[j][1] += arr[i][1];
+            }
+         }
+    }
+    int cnt = 0;
+    for (int i = 0; i < n; i++) 
+        if (arr[i][0] == maxLength) cnt += arr[i][1];
+    return cnt;
+}
+#+END_SRC
+
+*** 1987. Number of Unique Good Subsequences - Hard
+You are given a binary string binary. A subsequence of binary is considered good if it is not empty and has no leading zeros (with the exception of "0").
+
+Find the number of unique good subsequences of binary.
+
+For example, if binary = "001", then all the good subsequences are ["0", "0", "1"], so the unique good subsequences are "0" and "1". Note that subsequences "00", "01", and "001" are not good because they have leading zeros.
+Return the number of unique good subsequences of binary. Since the answer may be very large, return it modulo 109 + 7.
+
+A subsequence is a sequence that can be derived from another sequence by deleting some or no elements without changing the order of the remaining elements.
+
+这里的思路是：扫出从左起第一个1所在的位置，从左到右遍历，对于当前字符来说就是 *用* 当前字符或 *不用* 当前字符两种选择，然后会有重复的部分，需要把重复的部分减掉
+#+BEGIN_SRC java
+小写字母a的ascii编码值为97，小写字母z的ascii编码值为122，
+将数字97表示为小写字母a,那么每一个字母都可以由97+i来表示,i=0~25
+例如 b --> 97+1
+所以，dp[i]的下标i就能用来表示字母97+i,这样只需要26个空间即可表示所有的26个字母
+然后dp[i]，这里表示的是以97+i结尾的子序列的个数
+下面是对字符串S，从左到右进行遍历
+这样的遍历，有这样的特点，以字符串"abcsade"为例子来描述
+当遍历到字符s的时候，显然前面的字符"abc"都已经遍历了一次，
+注意！子问题出现 : 
+假设前面的"abc"，已经找出了所有的不重复的子序列:a,b,c,ab,ac,bc
+那么当遍历到's'时，这个's'可以添加到所有上述子序列的末尾，构成新的子序列
+由于原子序列不重复，显然在其所有子序列后添加一个字符's'得到的新的一系列子序列，
+依然是不重复的。
+所以能发现，以's'结尾的新的子序列实际就是上述这些末尾添加了's'的子序列
+但是考虑到's'字符可以单独作为一个子序列，因此还需要加上1，表示这一特例
+那么总结上述推断,假设dp[i]表示当前遍历到字符97+i时，以此字符结尾的子序列的个数
+dp[i] = 1+dp[0]+dp[1]+dp[2]+...+dp[i-1] = 1+sum(dp)
+#+END_SRC
+
+#+BEGIN_SRC java
+public int numberOfUniqueGoodSubsequences(String binary) {
+    int mod = (int)1e9 + 7;
+    int n = binary.length(), preZoo = 0, preOne = 0, m = 1;
+    long [] dp = new long [n+1];
+    String s = "#" + binary;
+    while (m <= n && s.charAt(m) == '0') m++;
+    if (m == n+1) return 1;
+    dp[m] = 1;
+    preOne = m;
+    preZoo = m-1;
+    for (int i = m+1; i <= n; i++) {
+        char c = s.charAt(i);
+        int j = (c == '0' ? preZoo : preOne);
+        dp[i] = (2 * dp[i-1] % mod - (j >= 1 ? dp[j-1] : 0) + mod) % mod;
+        if (c == '0') preZoo = i;
+        else preOne = i;
+    }
+    return (int)dp[n] + (s.indexOf("0") != -1 ?  1 : 0);
+}
+#+END_SRC
+[[./pic/distinctSubsequence.png]]
+#+BEGIN_SRC java
+public int numberOfUniqueGoodSubsequences(String binary) {
+    int mod = (int)1e9 + 7;
+    int endZoo = 0, endOne = 0, hasZoo = 0;
+    for (int i = 0; i < binary.length(); i++) 
+        if (binary.charAt(i) == '1')
+            endOne = (endOne + endZoo + 1) % mod;
+        else {
+            endZoo = (endZoo + endOne) % mod;
+            hasZoo = 1;
+        }
+    return (endOne + endZoo + hasZoo) % mod;
+}
+#+END_SRC
+- 还有一个没有看懂的
+  - https://leetcode-cn.com/problems/number-of-unique-good-subsequences/solution/ju-yi-fan-san-by-avenger-h-34xa/
+  - https://leetcode-cn.com/problems/distinct-subsequences-ii/solution/dong-tai-gui-hua-cong-fen-xi-dao-shi-xian-by-my10y/
+#+BEGIN_SRC python
+def numberOfUniqueGoodSubsequences(self, binary: str) -> int:
+        M = 10**9+7
+        dp = [0]*10
+        b = str(int(binary))
+        l = len(binary) - len(b)
+        if l > 0:
+            dp[0] = 1
+        for c in b:
+            if dp[0] >= 1:
+                dp[int(c)] = (sum(dp)) % M
+            else:
+                dp[int(c)] = ( 1+ sum(dp)) % M
+        return sum(dp)%M 
+
+#+END_SRC
+*** 714. Best Time to Buy and Sell Stock with Transaction Fee
+You are given an array prices where prices[i] is the price of a given stock on the ith day, and an integer fee representing a transaction fee.
+Find the maximum profit you can achieve. You may complete as many transactions as you like, but you need to pay the transaction fee for each transaction.
+Note: You may not engage in multiple transactions simultaneously (i.e., you must sell the stock before you buy again).
+#+BEGIN_SRC java
+public int maxProfit(int[] prices, int fee) {
+    int n = prices.length;
+    int [] sold = new int[n];
+    int [] hold = new int[n];
+    hold[0] = -prices[0];
+    for (int i = 1; i < n; i++) {
+        sold[i] = Math.max(sold[i-1], hold[i-1]+prices[i]-fee);
+        hold[i] = Math.max(hold[i-1], sold[i-1]-prices[i]);
+    }
+    return sold[n-1];
+}
+#+END_SRC
+
 *** 847. Shortest Path Visiting All Nodes
 You have an undirected, connected graph of n nodes labeled from 0 to n - 1. You are given an array graph where graph[i] is a list of all the nodes connected with node i by an edge.
 Return the length of the shortest path that visits every node. You may start and stop at any node, you may revisit nodes multiple times, and you may reuse edges.
@@ -1415,6 +1954,58 @@ public int shortestPathLength(int[][] graph) {
     return -1;
 }
 #+END_SRC
+
+*** 926. Flip String to Monotone Increasing - Medium
+A binary string is monotone increasing if it consists of some number of 0's (possibly none), followed by some number of 1's (also possibly none).
+
+You are given a binary string s. You can flip s[i] changing it from 0 to 1 or from 1 to 0.
+
+Return the minimum number of flips to make s monotone increasing.
+**** 解题思路与分析：动态规划
+
+这道题给了我们一个只有0和1的字符串，现在说是可以将任意位置的数翻转，即0变为1，或者1变为0，让组成一个单调递增的序列，即0必须都在1的前面，博主刚开始想的策略比较直接，就是使用双指针分别指向开头和结尾，开头的指针先跳过连续的0，末尾的指针向前跳过连续的1，然后在中间的位置分别记录0和1的个数，返回其中较小的那个。这种思路乍看上去没什么问题，但是实际上是有问题的，比如对于这个例子 "10011111110010111011"，如果按这种思路的话，就应该将所有的0变为1，从而返回6，但实际上更优的解法是将第一个1变为0，将后4个0变为1即可，最终可以返回5.
+
+这说明了之前的解法是不正确的。这道题可以用动态规划 Dynamic Programming 来做，需要使用两个 dp 数组，其中 cnt1[i] 表示将范围是 [0, i-1] 的子串内最小的将1转为0的个数，从而形成单调字符串。同理，cnt0[j] 表示将范围是 [j, n-1] 的子串内最小的将0转为1的个数，从而形成单调字符串。这样最终在某个位置使得 cnt0[i]+cnt1[i] 最小的时候，就是变为单调串的最优解，这样就可以完美的解决上面的例子，子串 "100" 的最优解是将1变为0，而后面的 "11111110010111011" 的最优解是将4个0变为1，总共加起来就是5，参见代码如下：
+
+     #+BEGIN_SRC java
+// 可以用动态规划 Dynamic Programming 来做，需要使用两个 dp 数组，其中 cnt1[i] 表示将范围是 [0, i-1] 的子串内最小的将1转为0的个数，从而形成单调字符串。
+// 同理，cnt0[j] 表示将范围是 [j, n-1] 的子串内最小的将0转为1的个数，从而形成单调字符串。
+// 这样最终在某个位置使得 cnt0[i]+cnt1[i] 最小的时候，就是变为单调串的最优解，
+public int minFlipsMonoIncr(String t) { // bug
+    int n = t.length(), ans = Integer.MAX_VALUE;
+    char [] s = t.toCharArray();
+    int [] l = new int [n+1], r = new int [n+1];
+    for (int i = 1, j = n-1; i <= n; i++, --j) {
+        l[i] = l[i-1] + (s[i-1] == '0' ? 0 : 1); // cnt left --> right 1--> 0
+        r[j] = r[j+1] + (s[j] == '0' ? 1 : 0);
+    }
+    for (int i = 0; i <= n; i++) 
+        ans = Math.min(l[i] + r[i], ans);
+    return ans;
+}
+#+END_SRC
+**** 解题思路与分析: 空间压缩与简化
+
+我们可以进一步优化一下空间复杂度，用一个变量 cnt1 来记录当前位置时1出现的次数，同时 res 表示使到当前位置的子串变为单调串的翻转次数，用来记录0的个数，因为遇到0就翻1一定可以组成单调串，但不一定是最优解，每次都要和 cnt1 比较以下，若 cnt1 较小，就将 res 更新为 cnt1，此时保证了到当前位置的子串变为单调串的翻转次数最少，并不关心到底是把0变为1，还是1变为0了，其实核心思想跟上面的解法很相近
+
+#+BEGIN_SRC java
+// 用一个变量 cnt1 来记录当前位置时1出现的次数，同时 res 表示使到当前位置的子串变为单调串的翻转次数，
+// 用来记录0的个数，因为遇到0就翻1一定可以组成单调串，但不一定是最优解，
+// 每次都要和 cnt1 比较以下，若 cnt1 较小，就将 res 更新为 cnt1，
+// 此时保证了到当前位置的子串变为单调串的翻转次数最少，并不关心到底是把0变为1，还是1变为0了
+public int minFlipsMonoIncr(String t) { // bug
+    int n = t.length(), res = 0, cntOne = 0;
+    char [] s = t.toCharArray();
+    for (int i = 0; i < n; i++) {
+        if (s[i] == '0') res++;
+        else cntOne++;
+        res = Math.min(res, cntOne);
+    }
+    return res;
+}
+     #+END_SRC
+ 
+早上的时候不是刚写过一个这样的题吗 ？ 与1493 的第二种解法有什么区别？ 
 
 *** 1931. Painting a Grid With Three Different Colors
 You are given two integers m and n. Consider an m x n grid where each cell is initially white. You can paint each cell red, green, or blue. All cells must be painted.
@@ -1588,185 +2179,171 @@ public int nthSuperUglyNumber(int n, int[] primes) {
 }
 #+END_SRC
 
-*** 1786. Number of Restricted Paths From First to Last Node - Dijkstra算法
-There is an undirected weighted connected graph. You are given a positive integer n which denotes that the graph has n nodes labeled from 1 to n, and an array edges where each edges[i] = [ui, vi, weighti] denotes that there is an edge between nodes ui and vi with weight equal to weighti.
-A path from node start to node end is a sequence of nodes [z0, z1, z2, ..., zk] such that z0 = start and zk = end and there is an edge between zi and zi+1 where 0 <= i <= k-1.
-The distance of a path is the sum of the weights on the edges of the path. Let distanceToLastNode(x) denote the shortest distance of a path between node n and node x. A restricted path is a path that also satisfies that distanceToLastNode(zi) > distanceToLastNode(zi+1) where 0 <= i <= k-1.
-Return the number of restricted paths from node 1 to node n. Since that number may be too large, return it modulo 109 + 7.
+*** backpack III
 #+BEGIN_SRC java
-public void dijkstra(int n) {
-    Queue<int []> q = new PriorityQueue<>((a, b) -> (a[1] - b[1]));
-    q.add(new int [] {n, 0});
-    Arrays.fill(dist, Integer.MAX_VALUE);
-    dist[n] = 0;
-    int [] cur = null;
-    int u = 0, d = 0;
-    while (!q.isEmpty()) {
-        cur = q.poll();
-        u = cur[0];
-        d = cur[1];
-        if (dist[u] < d) continue;
-        if (m.get(u) != null) 
-            for (int v : m.get(u).keySet()) 
-                if (dist[v] > dist[u] + m.get(u).get(v)) {
-                    dist[v] = dist[u] + m.get(u).get(v);
-                    q.offer(new int [] {v, dist[v]});
-                }
-    }
-}
-private int dfs(int n, int i) { 
-    if (i == n) return 1;
-    if (dp[i] != -1) return dp[i];
-    long res = 0;
-    if (m.get(i) != null) {
-        for (int v : m.get(i).keySet()) {
-            if (dist[i] > dist[v])
-                res = (res + dfs(n, v)) % mod;
+public int backPackIII(int[] A, int[] V, int m) {
+    int n = A.length;
+    int [] dp = new int[m+1];
+    for (int i = 1; i <= m; i++) {
+        for (int j = 0; j < n; j++) {
+            if (i - A[j] >= 0)
+                dp[i] = Math.max(dp[i], dp[i-A[j]] + V[j]);
         }
     }
-    return dp[i] = (int)res;
-}
-HashMap<Integer, Map<Integer, Integer>> m = new HashMap<>();
-int mod = (int)(1e9+7);
-int [] dist;
-int [] dp;
-public int countRestrictedPaths(int n, int[][] edges) {
-    for (int [] v : edges) {
-        m.computeIfAbsent(v[0], k->new HashMap<>()).put(v[1], v[2]);
-        m.computeIfAbsent(v[1], k->new HashMap<>()).put(v[0], v[2]);
-    }
-    dist = new int[n+1];
-    dijkstra(n);
-    dp = new int [n+1];
-    Arrays.fill(dp, -1);
-    return dfs(n, 1);
+    return dp[m];
 }
 #+END_SRC
 
-*** 913. Cat and Mouse
-A game on an undirected graph is played by two players, Mouse and Cat, who alternate turns.
-The graph is given as follows: graph[a] is a list of all nodes b such that ab is an edge of the graph.
-The mouse starts at node 1 and goes first, the cat starts at node 2 and goes second, and there is a hole at node 0.
-During each player's turn, they must travel along one edge of the graph that meets where they are.  For example, if the Mouse is at node 1, it must travel to any node in graph[1].
-Additionally, it is not allowed for the Cat to travel to the Hole (node 0.)
-Then, the game can end in three ways:
-If ever the Cat occupies the same node as the Mouse, the Cat wins.
-If ever the Mouse reaches the Hole, the Mouse wins.
-If ever a position is repeated (i.e., the players are in the same position as a previous turn, and it is the same player's turn to move), the game is a draw.
-Given a graph, and assuming both players play optimally, return
-1 if the mouse wins the game,
-2 if the cat wins the game, or
-0 if the game is a draw.
+*** 879. Profitable Schemes - Hard 0-1背包问题
+There is a group of n members, and a list of various crimes they could commit. The ith crime generates a profit[i] and requires group[i] members to participate in it. If a member participates in one crime, that member can't participate in another crime.
+
+Let's call a profitable scheme any subset of these crimes that generates at least minProfit profit, and the total number of members participating in that subset of crimes is at most n.
+
+Return the number of schemes that can be chosen. Since the answer may be very large, return it modulo 109 + 7.
+***** 解题思路与分析
+    
+    [[./pic/crime.png]]
+    
+- 题目中说了结果可能非常大，要对一个超大数取余，看到这里，我们也就该明白为了不爆栈，只能用动态规划 Dynamic Programming 来做，LeetCode 里有好多题都是要对这个 1e9+7 取余，不知道为啥都是对这个数取余。Anyway，who cares，还是来想想 dp 数组如何定义以及怎么推导状态转移方程吧。
+
+首先来看分配黑帮资源时候都需要考虑哪些因素，总共有三点，要干几票买卖，要用多少人，能挣多少钱。所以我们需要一个三维的 dp 数组，其中 dp[k][i][j] 表示最多干k票买卖，总共用了i个人，获得利润为j的情况下分配方案的总数，初始化 dp[0][0][0] 为1。
+
+现在来推导状态转移方程，整个规划的核心是买卖，总共买卖的个数是固定的，每多干一票买卖，可能的分配方法就可能增加，但不可能减少的，因为假如当前已经算出来做 k-1 次买卖的分配方法总数，再做一次买卖，之前的分配方法不会减少，顶多是人数不够，做不成当前这票买卖而已，所以我们的 dp[k][i][j] 可以先更新为 dp[k-1][i][j]，然后再来看这第k个买卖还能不能做，我们知道假设这第k个买卖需要g个人，能获得利润p，只有当我们现在的人数i大于等于g的时候，才有可能做这个任务，我们要用g个人来做任务k的话，那么其余的 k-1 个任务只能由 i-g 个人来做了，而且由于整个需要产生利润j，第k个任务能产生利润p，所以其余的 k-1 个任务需要产生利润 j-p，由于利润不能是负值，所以我们还需要跟0比较，取二者的最大值
+
+综上所述，若我们选择做任务k，则能新产生的分配方案的个数为 dp[k-1][i-g][max(0,j-p)]，记得每次累加完要对超大数取余。最终我们需要将 dp[n][i][P] ( 0 <= i <= G ) 累加起来，因为我们不一定要全部使用G个人，只要能产生P的利润，用几个人都没关系，而k是表示最多干的买卖数，可能上并没有干到这么多，所以只需要累加人数这个维度即可，
+
 #+BEGIN_SRC java
-private int dfs(int [][] arr, int t, int i, int j) { // t: steps, i: mouse, j: cat, mouse goes first
-    if (t == 2 * n) return 0;
-    if (i == j) return dp[t][i][j] = 2;
-    if (i == 0) return dp[t][i][j] = 1;
-    if (dp[t][i][j] != -1) return dp[t][i][j];
-    int tmp = 0;
-    if (t % 2 == 0) { // mouse's turn
-        boolean catWin = true;
-        for (int k = 0; k < arr[i].length; k++) {
-            tmp = dfs(arr, t+1, arr[i][k], j);
-            if (tmp == 1) return dp[t][i][j] = 1;
-            else if (tmp != 2) catWin = false;
-        }
-        if (catWin) return dp[t][i][j] = 2;
-        else return dp[t][i][j] = 0;
-    } else { // cat's turn, can NOT step on node # 0
-        boolean mouseWin = true;
-        for (int k = 0; k < arr[j].length; k++) {
-            if (arr[j][k] == 0) continue;
-            tmp = dfs(arr, t+1, i, arr[j][k]);
-            if (tmp == 2) return dp[t][i][j] = 2;
-            else if (tmp != 1) mouseWin = false;
-        }
-        if (mouseWin) return dp[t][i][j] = 1;
-        else return  dp[t][i][j] = 0;
+public int profitableSchemes(int n, int minProfit, int[] group, int[] profit) { // 0-1背包问题：每场罪恶在每个状态里最多只能存在一次
+    int mod = (int)1e9 + 7, ans = 0;
+    int m = group.length;
+    int [][][] dp = new int [m+1][n+1][minProfit + 1]; 
+    dp[0][0][0] = 1;
+    for (int k = 1; k <= m; k++) {
+        int p = profit[k-1], g = group[k-1];
+        for (int i = 0; i <= n; i++) 
+            for (int j = 0; j <= minProfit; j++) {
+                dp[k][i][j] = dp[k-1][i][j];
+                if (i >= g)
+                    dp[k][i][j] = (dp[k][i][j] + dp[k-1][i-g][Math.max(0, j-p)]) % mod;
+            }
     }
+    for (int i = 0; i <= n; i++) 
+        ans = (ans + dp[m][i][minProfit]) % mod;
+    return ans;
 }
-int [][][] dp;
-int n;
-public int catMouseGame(int[][] graph) {
-    n = graph.length;
-    dp = new int [2*n][n][n];
-    for (int i = 0; i < 2*n; i++) 
-        for (int j = 0; j < n; j++)
-            Arrays.fill(dp[i][j], -1);
-    dfs(graph, 0, 1, 2);
-    return dp[0][1][2];
+#+END_SRC
+**** 优化一下空间复杂度: 二维dp Dimension reduction by using rolling array.
+
+因为当前做的第k个任务，只跟前 k-1 个任务的分配方案有关，所以并不需要保存所有的任务个数的分配方式。这样我们就节省了一个维度，但是需要注意的是，更新的时候i和j只能从大到小更新，这个其实也不难理解，因为此时 dp[i][j] 存的是前 k-1 个任务的分配方式，所以更新第k个任务的时候，一定要从后面开始覆盖，因为用到了前面的值，若从前面的值开始更新的话，就不能保证用到的都是前 k-1 个任务的分配方式，有可能用到的是已经更新过的值，就会出错.
+#+BEGIN_SRC java
+public int profitableSchemes(int n, int minProfit, int[] group, int[] profit) { // 0-1背包问题：每场罪恶在每个状态里最多只能存在一次
+    int mod = (int)1e9 + 7, ans = 0;
+    int m = group.length;
+    int [][] dp = new int [n+1][minProfit + 1]; 
+    dp[0][0] = 1;
+    for (int k = 1; k <= m; k++) {
+        int p = profit[k-1], g = group[k-1];
+        for (int i = n; i >= g; i--)  // i >= 
+            for (int j = minProfit; j >= 0; j--) 
+                dp[i][j] = (dp[i][j] + dp[i-g][Math.max(0, j-p)]) % mod; // 保证了这一行覆盖原数组的正确性
+    }
+    for (int i = 0; i <= n; i++) 
+        ans = (ans + dp[i][minProfit]) % mod;
+    return ans;
+}
+#+END_SRC
+**** 递归 + 记忆数组来做 todo: 改天补上
+
+基本思想跟解法一没有太大的区别，递归的记忆数组其实跟迭代形式的 dp 数组没有太大的区别，作用都是保存中间状态从而减少大量的重复计算。这里稍稍需要注意下的就是递归函数中的 corner case，当 k=0 时，则根据j的值来返回0或1，当j小于等于0，返回1，否则返回0，相当于修改了初始化值（之前都初始化为了整型最小值），然后当j小于0时，则j赋值为0，因为利润不能为负值。然后就看若当前的 memo[k][i][j] 已经计算过了，则直接返回即可，
+- https://www.cnblogs.com/grandyang/p/11108205.html
+
+*** 377. Combination Sum IV 没能认出这个题目是考DP
+Given an array of distinct integers nums and a target integer target, return the number of possible combinations that add up to target.
+The answer is guaranteed to fit in a 32-bit integer.
+**** 解题思路与分析: dfs记忆化搜索
+
+思路: 一开始想到用DFS来做, 但是有个问题就是这种方式得到的答案各个数字排列是无序的, 也就是1, 3和3, 1这种只是一个答案, 
+
+#+BEGIN_SRC java
+public int combinationSum4(int[] a, int target) { // 带记忆化的来搜索,用数组还是用图，可能也看数据规模吧
+    return helper(a, target);
+}
+Map<Integer, Integer> dp = new HashMap<>();
+private int helper(int[] a, int target) {
+    if (target < 0) return 0;
+    if (target == 0) return 1;
+    if (dp.containsKey(target)) return dp.get(target);
+    int ans = 0;
+    for (int i = 0; i < a.length; i++) 
+        ans += helper(a, target-a[i]);
+    dp.put(target, ans);
+    return ans;
+}
+#+END_SRC
+**** 解题思路与分析: DP
+
+然后又想把数字保存起来, 在得到一个答案的时候对这些数字再求一次总共排列的个数, 这种方式还有问题就是在求总排列个数的时候比如2, 1, 1三个加一起等于4, 总的排列个数即为(3!/2!), 但是当数字个数很多的时候阶乘太大, 根本无法计算.
+
+然后就想到可以用动态规划来做, 也是一个背包问题, 求出[1, target]之间每个位置有多少种排列方式, 这样将问题分化为子问题. 状态转移方程可以得到为: 
+
+dp[i] = sum(dp[i - nums[j]]),  (i-nums[j] > 0);
+
+如果允许有负数的话就必须要限制每个数能用的次数了, 不然的话就会得到无限大的排列方式, 比如1, -1, target = 1;
+
+#+BEGIN_SRC java
+public int combinationSum4(int[] nums, int target) {
+    int n = nums.length;
+    int [] dp = new int [target +1 ];
+    dp [0] = 1;
+    for (int i = 1; i <= target; i++) {
+        for (int j = 0; j < n; j++) {
+            if (i - nums[j] >= 0)
+                dp[i] += dp[i-nums[j]];
+        }
+    }
+    return dp[target];
 }
 #+END_SRC
 
-*** 1728. Cat and Mouse II
-A game is played by a cat and a mouse named Cat and Mouse.
-The environment is represented by a grid of size rows x cols, where each element is a wall, floor, player (Cat, Mouse), or food.
-Players are represented by the characters 'C'(Cat),'M'(Mouse).
-Floors are represented by the character '.' and can be walked on.
-Walls are represented by the character '#' and cannot be walked on.
-Food is represented by the character 'F' and can be walked on.
-There is only one of each character 'C', 'M', and 'F' in grid.
-Mouse and Cat play according to the following rules:
-Mouse moves first, then they take turns to move.
-During each turn, Cat and Mouse can jump in one of the four directions (left, right, up, down). They cannot jump over the wall nor outside of the grid.
-catJump, mouseJump are the maximum lengths Cat and Mouse can jump at a time, respectively. Cat and Mouse can jump less than the maximum length.
-Staying in the same position is allowed.
-Mouse can jump over Cat.
-The game can end in 4 ways:
-If Cat occupies the same position as Mouse, Cat wins.
-If Cat reaches the food first, Cat wins.
-If Mouse reaches the food first, Mouse wins.
-If Mouse cannot get to the food within 1000 turns, Cat wins.
-Given a rows x cols matrix grid and two integers catJump and mouseJump, return true if Mouse can win the game if both Cat and Mouse play optimally, otherwise return false.
-#+BEGIN_SRC java
-private boolean dfs(String [] arr, int t, int i, int j) {
-    if (dp[t][i][j] != null) return dp[t][i][j];
-    if (t == m*n*2) return false;
-    if (arr[i/n].charAt(i%n) == 'F') return true;
-    if (arr[j/n].charAt(j%n) == 'F') return false;
-    if (i == j) return false;
-    int r = 0, c = 0;
-    if (t % 2 == 0) { // mouse's turn 老鼠的：只要它能赢一个状态就是赢了
-        for (int [] d : dirs) 
-            for (int k = 0; k <= mj; k++) {
-                r = i / n + d[0] * k;
-                c = i % n + d[1] * k;
-                if (r >= 0 && r < m && c >= 0 && c < n && arr[r].charAt(c) != '#') {
-                    if (dfs(arr, t+1, r*n+c, j))
-                        return dp[t][i][j] = true; // Mouse could win
-                } else break;
-            }
-        return dp[t][i][j] = false;
-    } else { // cat's turn：但是当是猎的：需要猫不能赢，老鼠才能赢；但是当猫哪怕是赢了只一局，老鼠也就输了
-        for (int [] d : dirs) 
-            for (int k = 0; k <= cj; k++) {
-                r = j / n + d[0] * k;
-                c = j % n + d[1] * k;
-                if (r >= 0 && r < m && c >= 0 && c < n && arr[r].charAt(c) != '#') {
-                    if (!dfs(arr, t+1, i, r*n+c))  // Can cat find a path that mouse looses in it?
-                        return dp[t][i][j] = false; // Cat wins = mouse loose
-                } else break; // 上面这一点儿狠重要
-            }
-        return dp[t][i][j] = true;
-    }
+- 针对适当情况的优化：如果 target 远大于 nums 数组的个数的话，上面的算法可以做适当的优化，先给 nums 数组排个序，然后从1遍历到 target，对于i小于数组中的数字x时，直接 break 掉，因为后面的数更大，其余地方不变
+     #+BEGIN_SRC java
+public int combinationSum4(int[] a, int target) { // if target 远大于 数组元素个数
+    int n = a.length;
+    Arrays.sort(a);
+    int [] dp = new int [target + 1];
+    dp[0] = 1;
+    for (int i = 1; i <= target; i++)
+        for (Integer v : a) {
+            if (i < v) break;
+            dp[i] += dp[i-v];
+        }
+    return dp[target];
 }
-int [][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
-Boolean [][][] dp;
-int m, n, cj, mj;
-public boolean canMouseWin(String[] grid, int catJump, int mouseJump) {
-    m = grid.length;
-    n = grid[0].length();
-    cj = catJump;
-    mj = mouseJump;
-    dp = new Boolean [1001][m*n][m*n];
-    int x = 0, y = 0;
-    for (int i = 0; i < m; i++) 
-        for (int j = 0; j < n; j++) 
-            if (grid[i].charAt(j) == 'M')
-                x = i * n + j;
-            else if (grid[i].charAt(j) == 'C')
-                y = i * n + j;
-    return dfs(grid, 0, x, y);
+     #+END_SRC
+
+
+*** 1049. Last Stone Weight II
+You are given an array of integers stones where stones[i] is the weight of the ith stone.
+We are playing a game with the stones. On each turn, we choose any two stones and smash them together. Suppose the stones have weights x and y with x <= y. The result of this smash is:
+If x == y, both stones are destroyed, and
+If x != y, the stone of weight x is destroyed, and the stone of weight y has new weight y - x.
+At the end of the game, there is at most one stone left.
+Return the smallest possible weight of the left stone. If there are no stones left, return 0.
+#+BEGIN_SRC java
+public int lastStoneWeightII(int[] stones) {
+    int n = stones.length;
+    int sum = Arrays.stream(stones).sum();
+    boolean[] dp = new boolean[sum+1];
+    dp[0] = true;
+    sum = 0;
+    for (int v : stones) {
+        sum += v;
+        for (int i = sum; i >= v; i--) 
+            if (dp[i-v]) dp[i] = true;
+    }
+    for (int i = sum/2; i >= 0; i--) 
+        if (dp[i]) return sum - i * 2;
+    return 0;
 }
 #+END_SRC
 
@@ -1862,128 +2439,6 @@ public boolean xorGame(int[] arr) {
     for (int i = 0; i < n; i++) 
         xor[i] = (i == 0 ? 0 : xor[i-1]) ^ arr[i];
     return helper(arr, 0, xor[n-1]); // i: turn
-}
-#+END_SRC
-
-
-*** backpack III
-#+BEGIN_SRC java
-public int backPackIII(int[] A, int[] V, int m) {
-    int n = A.length;
-    int [] dp = new int[m+1];
-    for (int i = 1; i <= m; i++) {
-        for (int j = 0; j < n; j++) {
-            if (i - A[j] >= 0)
-                dp[i] = Math.max(dp[i], dp[i-A[j]] + V[j]);
-        }
-    }
-    return dp[m];
-}
-#+END_SRC
-
-*** 879. Profitable Schemes - Hard 0-1背包问题
-There is a group of n members, and a list of various crimes they could commit. The ith crime generates a profit[i] and requires group[i] members to participate in it. If a member participates in one crime, that member can't participate in another crime.
-
-Let's call a profitable scheme any subset of these crimes that generates at least minProfit profit, and the total number of members participating in that subset of crimes is at most n.
-
-Return the number of schemes that can be chosen. Since the answer may be very large, return it modulo 109 + 7.
-**** 解题思路与分析
-    
-    [[./pic/crime.png]]
-    
-- 题目中说了结果可能非常大，要对一个超大数取余，看到这里，我们也就该明白为了不爆栈，只能用动态规划 Dynamic Programming 来做，LeetCode 里有好多题都是要对这个 1e9+7 取余，不知道为啥都是对这个数取余。Anyway，who cares，还是来想想 dp 数组如何定义以及怎么推导状态转移方程吧。
-
-首先来看分配黑帮资源时候都需要考虑哪些因素，总共有三点，要干几票买卖，要用多少人，能挣多少钱。所以我们需要一个三维的 dp 数组，其中 dp[k][i][j] 表示最多干k票买卖，总共用了i个人，获得利润为j的情况下分配方案的总数，初始化 dp[0][0][0] 为1。
-
-现在来推导状态转移方程，整个规划的核心是买卖，总共买卖的个数是固定的，每多干一票买卖，可能的分配方法就可能增加，但不可能减少的，因为假如当前已经算出来做 k-1 次买卖的分配方法总数，再做一次买卖，之前的分配方法不会减少，顶多是人数不够，做不成当前这票买卖而已，所以我们的 dp[k][i][j] 可以先更新为 dp[k-1][i][j]，然后再来看这第k个买卖还能不能做，我们知道假设这第k个买卖需要g个人，能获得利润p，只有当我们现在的人数i大于等于g的时候，才有可能做这个任务，我们要用g个人来做任务k的话，那么其余的 k-1 个任务只能由 i-g 个人来做了，而且由于整个需要产生利润j，第k个任务能产生利润p，所以其余的 k-1 个任务需要产生利润 j-p，由于利润不能是负值，所以我们还需要跟0比较，取二者的最大值
-
-综上所述，若我们选择做任务k，则能新产生的分配方案的个数为 dp[k-1][i-g][max(0,j-p)]，记得每次累加完要对超大数取余。最终我们需要将 dp[n][i][P] ( 0 <= i <= G ) 累加起来，因为我们不一定要全部使用G个人，只要能产生P的利润，用几个人都没关系，而k是表示最多干的买卖数，可能上并没有干到这么多，所以只需要累加人数这个维度即可，
-
-#+BEGIN_SRC java
-public int profitableSchemes(int n, int minProfit, int[] group, int[] profit) { // 0-1背包问题：每场罪恶在每个状态里最多只能存在一次
-    int mod = (int)1e9 + 7, ans = 0;
-    int m = group.length;
-    int [][][] dp = new int [m+1][n+1][minProfit + 1]; 
-    dp[0][0][0] = 1;
-    for (int k = 1; k <= m; k++) {
-        int p = profit[k-1], g = group[k-1];
-        for (int i = 0; i <= n; i++) 
-            for (int j = 0; j <= minProfit; j++) {
-                dp[k][i][j] = dp[k-1][i][j];
-                if (i >= g)
-                    dp[k][i][j] = (dp[k][i][j] + dp[k-1][i-g][Math.max(0, j-p)]) % mod;
-            }
-    }
-    for (int i = 0; i <= n; i++) 
-        ans = (ans + dp[m][i][minProfit]) % mod;
-    return ans;
-}
-#+END_SRC
-**** 优化一下空间复杂度: 二维dp Dimension reduction by using rolling array.
-
-因为当前做的第k个任务，只跟前 k-1 个任务的分配方案有关，所以并不需要保存所有的任务个数的分配方式。这样我们就节省了一个维度，但是需要注意的是，更新的时候i和j只能从大到小更新，这个其实也不难理解，因为此时 dp[i][j] 存的是前 k-1 个任务的分配方式，所以更新第k个任务的时候，一定要从后面开始覆盖，因为用到了前面的值，若从前面的值开始更新的话，就不能保证用到的都是前 k-1 个任务的分配方式，有可能用到的是已经更新过的值，就会出错.
-#+BEGIN_SRC java
-public int profitableSchemes(int n, int minProfit, int[] group, int[] profit) { // 0-1背包问题：每场罪恶在每个状态里最多只能存在一次
-    int mod = (int)1e9 + 7, ans = 0;
-    int m = group.length;
-    int [][] dp = new int [n+1][minProfit + 1]; 
-    dp[0][0] = 1;
-    for (int k = 1; k <= m; k++) {
-        int p = profit[k-1], g = group[k-1];
-        for (int i = n; i >= g; i--)  // i >= 
-            for (int j = minProfit; j >= 0; j--) 
-                dp[i][j] = (dp[i][j] + dp[i-g][Math.max(0, j-p)]) % mod; // 保证了这一行覆盖原数组的正确性
-    }
-    for (int i = 0; i <= n; i++) 
-        ans = (ans + dp[i][minProfit]) % mod;
-    return ans;
-}
-#+END_SRC
-**** 递归 + 记忆数组来做 todo: 改天补上
-
-基本思想跟解法一没有太大的区别，递归的记忆数组其实跟迭代形式的 dp 数组没有太大的区别，作用都是保存中间状态从而减少大量的重复计算。这里稍稍需要注意下的就是递归函数中的 corner case，当 k=0 时，则根据j的值来返回0或1，当j小于等于0，返回1，否则返回0，相当于修改了初始化值（之前都初始化为了整型最小值），然后当j小于0时，则j赋值为0，因为利润不能为负值。然后就看若当前的 memo[k][i][j] 已经计算过了，则直接返回即可，
-- https://www.cnblogs.com/grandyang/p/11108205.html
-
-*** 377. Combination Sum IV 没能认出这个题目是考DP
-Given an array of distinct integers nums and a target integer target, return the number of possible combinations that add up to target.
-The answer is guaranteed to fit in a 32-bit integer.
-#+BEGIN_SRC java
-public int combinationSum4(int[] nums, int target) {
-    int n = nums.length;
-    int [] dp = new int [target +1 ];
-    dp [0] = 1;
-    for (int i = 1; i <= target; i++) {
-        for (int j = 0; j < n; j++) {
-            if (i - nums[j] >= 0)
-                dp[i] += dp[i-nums[j]];
-        }
-    }
-    return dp[target];
-}
-#+END_SRC
-
-*** 1049. Last Stone Weight II
-You are given an array of integers stones where stones[i] is the weight of the ith stone.
-We are playing a game with the stones. On each turn, we choose any two stones and smash them together. Suppose the stones have weights x and y with x <= y. The result of this smash is:
-If x == y, both stones are destroyed, and
-If x != y, the stone of weight x is destroyed, and the stone of weight y has new weight y - x.
-At the end of the game, there is at most one stone left.
-Return the smallest possible weight of the left stone. If there are no stones left, return 0.
-#+BEGIN_SRC java
-public int lastStoneWeightII(int[] stones) {
-    int n = stones.length;
-    int sum = Arrays.stream(stones).sum();
-    boolean[] dp = new boolean[sum+1];
-    dp[0] = true;
-    sum = 0;
-    for (int v : stones) {
-        sum += v;
-        for (int i = sum; i >= v; i--) 
-            if (dp[i-v]) dp[i] = true;
-    }
-    for (int i = sum/2; i >= 0; i--) 
-        if (dp[i]) return sum - i * 2;
-    return 0;
 }
 #+END_SRC
 
@@ -2221,33 +2676,6 @@ public int getLengthOfOptimalCompression(String s, int k) {
 **** 决策类DP总结
   - https://leetcode-cn.com/problems/string-compression-ii/solution/jie-ti-si-kao-guo-cheng-yu-jie-fa-zong-jie-by-ruit/
 
-*** 1000. Minimum Cost to Merge Stones
-There are n piles of stones arranged in a row. The ith pile has stones[i] stones.
-A move consists of merging exactly k consecutive piles into one pile, and the cost of this move is equal to the total number of stones in these k piles.
-Return the minimum cost to merge all piles of stones into one pile. If it is impossible, return -1.
-#+BEGIN_SRC java
-public int mergeStones(int[] stones, int k) {
-    int n = stones.length;
-    if ((n-1) % (k-1) != 0) return -1;
-    int [][] dp = new int[n][n];
-    int [] pre = new int[n+1];
-    for (int i = 1; i <= n; i++) 
-        pre[i] = pre[i-1] + stones[i-1];
-    int j = 0;
-    for (int len = k; len <= n; len++) {
-        for (int i = 0; i+len-1 < n; i++) {
-            j = i + len -1;
-            dp[i][j] = Integer.MAX_VALUE; // have to initialize it here !!!
-            for (int x = i; x < j; x += k-1) 
-                dp[i][j] = Math.min(dp[i][j], dp[i][x] + dp[x+1][j]);
-            if ((j - i) % (k - 1) == 0) // 如果总长度满足合并只剩一个数的条件，则可以再合并一次
-                dp[i][j] += pre[j+1] - pre[i];
-        }
-    }
-    return dp[0][n-1];
-}
-#+END_SRC
-
 *** 1039. Minimum Score Triangulation of Polygon
 You have a convex n-sided polygon where each vertex has an integer value. You are given an integer array values where values[i] is the value of the ith vertex (i.e., clockwise order).
 You will triangulate the polygon into n - 2 triangles. For each triangle, the value of that triangle is the product of the values of its vertices, and the total score of the triangulation is the sum of these values over all n - 2 triangles in the triangulation.
@@ -2320,16 +2748,16 @@ The answer is guaranteed to fit in a 32-bit signed integer.
 
 对于如何安排邮箱位置，看到很多文章说应放在中位数的位置上，比如一共有1，2，3，4这4间房屋，不论房屋间的距离是多少，如果只有一个邮箱的话，放在房间2处（3也可以）最为合理。这个说法虽然正确，但实际上并不恰当。我们简单的讨论一下这个问题：
 #+BEGIN_SRC java
-1.当只有1栋房屋，1个邮箱时，显然将邮箱放在房屋处最为合理，这时邮箱与房屋的距离为0。
-2.当有2栋房屋，1个邮箱时，比如房屋1在坐标0处，房屋2在坐标10处，此时如果将邮箱放在坐标0的话，它与两栋房屋的距离和为10。
-  放在坐标10的情况下距离和也为10。另外我们可以看出，不论邮箱放在两栋房屋之间的任意位置上，它与房屋的距离和都是10。因此
-  通过此例可得出，中位数的说法虽然正确，但并不全面，不过这不影响本题解题，对于本题，我们统一将邮箱安排在房屋位置上是为
-  了方便计算，因此才得出中位数的说法（本例房屋1和2都可以看做是中位数）。
-3.当有3栋房屋，1个邮箱时，此时通过上面的例子可知，对于两侧的房子，将邮筒放在他们之间的任何位置对于结果没有任何影响，距
-  离和都是两栋房子间的距离。但邮箱的位置会对中间的房子产生影响，因此，将其放置在中间房子的坐标上最为合理，这样邮箱与中
-  间房屋的距离为0，可使得全局总距离最小。而中间的房屋正是3个房屋的中位数。
-4.当有4栋房屋，1个邮箱时，与上例同理，对于两侧的房子，将邮筒放在他们之间的任何位置对于结果没有任何影响，因此邮箱可以考
-  虑放在中间两个房屋的任何一个位置上。另外对于中间两个房屋，不论邮箱放置在其任何一个位置上，对于总距离都不会产生影响
+1.当只有1栋房屋, 1个邮箱时, 显然将邮箱放在房屋处最为合理, 这时邮箱与房屋的距离为0。
+2.当有2栋房屋, 1个邮箱时, 比如房屋1在坐标0处, 房屋2在坐标10处, 此时如果将邮箱放在坐标0的话, 它与两栋房屋的距离和为10。
+  放在坐标10的情况下距离和也为10。另外我们可以看出, 不论邮箱放在两栋房屋之间的任意位置上, 它与房屋的距离和都是10。因此
+  通过此例可得出, 中位数的说法虽然正确, 但并不全面, 不过这不影响本题解题, 对于本题, 我们统一将邮箱安排在房屋位置上是为
+  了方便计算, 因此才得出中位数的说法（本例房屋1和2都可以看做是中位数）。
+3.当有3栋房屋, 1个邮箱时, 此时通过上面的例子可知, 对于两侧的房子, 将邮筒放在他们之间的任何位置对于结果没有任何影响, 距
+  离和都是两栋房子间的距离。但邮箱的位置会对中间的房子产生影响, 因此, 将其放置在中间房子的坐标上最为合理, 这样邮箱与中
+  间房屋的距离为0, 可使得全局总距离最小。而中间的房屋正是3个房屋的中位数。
+4.当有4栋房屋, 1个邮箱时, 与上例同理, 对于两侧的房子, 将邮筒放在他们之间的任何位置对于结果没有任何影响, 因此邮箱可以考
+  虑放在中间两个房屋的任何一个位置上。另外对于中间两个房屋, 不论邮箱放置在其任何一个位置上, 对于总距离都不会产生影响
  （这相当于第2条）。
 #+END_SRC
 
@@ -2371,6 +2799,101 @@ public int minDistance(int [] houses, int k) {
     return dfs(houses, 0, k);
 }
 #+END_SRC
+**** 解题思路与分析: 动态规划
+- 复杂度分析
+
+时间复杂度：O(n^2k)，其中 nn 是数组 houses 的长度。在预处理部分，需要的时间为 O(n^2)；在动态规划部分，我们需要 O(nk)O(nk) 的时间枚举每个状态 f[i][j]，并使用O(n) 的时间枚举进行状态转移，相乘即可得到总时间复杂度。
+
+空间复杂度：O(n^2 + nk), 即为存储 \mathrm{cost}cost 以及动态规划的状态需要的空间。
+
+     #+BEGIN_SRC java
+public int minDistance(int[] h, int k) {
+    int n = h.length;
+    Arrays.sort(h);
+    int [][] medsum = new int[n][n];
+    for (int i = n - 2; i >= 0; --i) 
+        for (int j = i + 1; j < n; ++j) 
+            medsum[i][j] = medsum[i + 1][j - 1] + h[j] - h[i];
+    int [][] f = new int[n][k + 1];
+    for (int i = 0; i < n; ++i) 
+        Arrays.fill(f[i], Integer.MAX_VALUE / 2);
+    for (int i = 0; i < n; ++i) {
+        f[i][1] = medsum[0][i];
+        for (int j = 2; j <= k && j <= i + 1; ++j)
+            for (int x = 0; x < i; x++) 
+                f[i][j] = Math.min(f[i][j], f[x][j-1] + medsum[x+1][i]);
+    }
+    return f[n - 1][k];
+}
+     #+END_SRC
+
+*** 1477. Find Two Non-overlapping Sub-arrays Each With Target Sum
+Given an array of integers arr and an integer target.
+You have to find two non-overlapping sub-arrays of arr each with a sum equal target. There can be multiple answers so you have to find an answer where the sum of the lengths of the two sub-arrays is minimum.
+Return the minimum sum of the lengths of the two required sub-arrays, or return -1 if you cannot find such two sub-arrays.
+#+BEGIN_SRC java
+// 找出数组中等于target的最小非重叠区间的长度，用dp[i]表示当前i以及i之前的满足条件的最小区间长度,状态更新规则为
+//     dp[i]=min(dp[i-1],i-j+1) if sum[j,i]=target
+//     答案更新规则
+//     res=min(res,dp[j−1]+i−j+1)
+public int minSumOfLengths(int[] arr, int target) {
+    int n = arr.length;
+    int [] dp = new int [n];
+    Arrays.fill(dp, Integer.MAX_VALUE);
+    int cur = 0, s = 0;
+    int res = Integer.MAX_VALUE, minLen = Integer.MAX_VALUE;
+    for (int i = 0; i < n; i++) {
+        cur += arr[i];
+        while (cur > target) {
+            cur -= arr[s];
+            s += 1;
+        }
+        if (cur == target) {
+            int curLen = i - s + 1;
+            if (s > 0 && dp[s-1] != Integer.MAX_VALUE) 
+                res = Math.min(res, curLen + dp[s-1]);
+            minLen = Math.min(minLen, curLen);
+        }
+        dp[i] = minLen;
+    }
+    return res == Integer.MAX_VALUE ? -1 : res;
+}
+#+END_SRC
+
+*** 1771. Maximize Palindrome Length From Subsequences
+You are given two strings, word1 and word2. You want to construct a string in the following manner:
+Choose some non-empty subsequence subsequence1 from word1.
+Choose some non-empty subsequence subsequence2 from word2.
+Concatenate the subsequences: subsequence1 + subsequence2, to make the string.
+Return the length of the longest palindrome that can be constructed in the described manner. If no palindromes can be constructed, return 0.
+A subsequence of a string s is a string that can be made by deleting some (possibly none) characters from s without changing the order of the remaining characters.
+A palindrome is a string that reads the same forward as well as backward.
+#+BEGIN_SRC java
+public int longestPalindrome(String s, String t) { // 这个题目没有懂，需要再好好看一下
+    int m = s.length();
+    int n = t.length();
+    int mn = m + n;
+    String st = s + t;
+    int [][] dp = new int [mn][mn];
+    for (int i = 0; i < mn; i++)
+        dp[i][i] = 1;
+    for (int l = 2; l <= mn; l++) {
+        for (int i = 0, j = i+l-1; j < mn; i++,j++) { // 
+            if (st.charAt(i) == st.charAt(j))
+                dp[i][j] = dp[i+1][j-1] + 2;
+            else dp[i][j] = Math.max(dp[i+1][j], dp[i][j-1]);                         
+        }
+    }
+    int ans = 0;
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            if (s.charAt(i) == t.charAt(j))
+                ans = Math.max(ans, dp[i][m+j]); // 
+        }
+    }
+    return ans;
+}
+#+END_SRC
 
 *** 486. Predict the Winner
 You are given an integer array nums. Two players are playing a game with this array: player 1 and player 2.
@@ -2392,147 +2915,6 @@ public boolean PredictTheWinner(int[] nums) {
     int n = nums.length;
     if (n == 1) return true;
     return helper(nums, 0, n-1) >= 0;
-}
-#+END_SRC
-
-*** 123. Best Time to Buy and Sell Stock III
-You are given an array prices where prices[i] is the price of a given stock on the ith day.
-Find the maximum profit you can achieve. You may complete at most two transactions.
-Note: You may not engage in multiple transactions simultaneously (i.e., you must sell the stock before you buy again).
-#+BEGIN_SRC java
-// k 次交易 = k 个 non-overlapping subarray
-//     以这个角度去想，无非就是从两个方向扫描，
-//     利用 localMin / localMax 与当前元素的差值，去构造从左边/右边扫的 dp 数组。
-//     left[i] : 从最左面到 i 所能获得的最大利益（单次交易）
-//     right[i] : 从 i 到最右面所能获得的最大利益（单次交易）
-public int maxProfit(int[] prices) {
-    int n = prices.length;
-    int [] left = new int [n];
-    int [] right = new int[n];
-    int locMin = prices[0];
-    int globalMax = Integer.MIN_VALUE;
-    for (int i = 1; i < n; i++) {
-        globalMax = Math.max(globalMax, Math.max(0, prices[i] - locMin));
-        locMin = Math.min(locMin, prices[i]);
-        left[i] = globalMax;
-    }
-    int locMax = prices[n-1];
-    globalMax = Integer.MIN_VALUE;
-    for (int i = n-2; i >= 0; i--) {
-        globalMax = Math.max(globalMax, Math.max(0, locMax - prices[i]));
-        locMax = Math.max(locMax, prices[i]);
-        right[i] = globalMax;
-    }
-    globalMax = 0;
-    for (int i = 0; i < n-1; i++) 
-        globalMax = Math.max(globalMax, left[i] + right[i+1]);
-    globalMax = Math.max(globalMax, left[n-1]);
-    return globalMax;
-}
-#+END_SRC
-
-*** 188. Best Time to Buy and Sell Stock IV
-You are given an integer array prices where prices[i] is the price of a given stock on the ith day, and an integer k.
-Find the maximum profit you can achieve. You may complete at most k transactions.
-Note: You may not engage in multiple transactions simultaneously (i.e., you must sell the stock before you buy again).
-#+BEGIN_SRC java
-public int maxProfit(int k, int [] prices) {
-    if (prices == null || prices.length == 0) return 0;
-    int n = prices.length;
-    int diff = 0;
-    if (k >= n/2) {
-        int res = 0;
-        for (int i = 1; i < n; i++) {
-           diff = prices[i] - prices[i-1];
-            if (diff > 0) res += diff;
-        }
-        return res;
-    }
-    int [][] locMax = new int [n][k+1];
-    int [][] gloMax = new int [n][k+1];
-    for (int i = 1; i < n; i++) {
-        diff = prices[i] - prices[i-1];
-        for (int j = 1; j <= k && j * 2 <= i+1; j++) {
-            locMax[i][j] = Math.max(locMax[i-1][j], gloMax[i-1][j-1]) + diff;
-            gloMax[i][j] = Math.max(locMax[i][j], gloMax[i-1][j]);
-        }
-    }
-    return gloMax[n-1][k];
-}
-#+END_SRC
-
-*** 714. Best Time to Buy and Sell Stock with Transaction Fee
-You are given an array prices where prices[i] is the price of a given stock on the ith day, and an integer fee representing a transaction fee.
-Find the maximum profit you can achieve. You may complete as many transactions as you like, but you need to pay the transaction fee for each transaction.
-Note: You may not engage in multiple transactions simultaneously (i.e., you must sell the stock before you buy again).
-#+BEGIN_SRC java
-public int maxProfit(int[] prices, int fee) {
-    int n = prices.length;
-    int [] sold = new int[n];
-    int [] hold = new int[n];
-    hold[0] = -prices[0];
-    for (int i = 1; i < n; i++) {
-        sold[i] = Math.max(sold[i-1], hold[i-1]+prices[i]-fee);
-        hold[i] = Math.max(hold[i-1], sold[i-1]-prices[i]);
-    }
-    return sold[n-1];
-}
-#+END_SRC
-
-*** 309. Best Time to Buy and Sell Stock with Cooldown
-You are given an array prices where prices[i] is the price of a given stock on the ith day.
-Find the maximum profit you can achieve. You may complete as many transactions as you like (i.e., buy one and sell one share of the stock multiple times) with the following restrictions:
-After you sell your stock, you cannot buy stock on the next day (i.e., cooldown one day).
-Note: You may not engage in multiple transactions simultaneously (i.e., you must sell the stock before you buy again).
-- 感觉自己DP的能力还是太弱，越是这样越需要迎难而上。
-- 这个题和714. Best Time to Buy and Sell Stock with Transaction Fee比较像。做题方法都是使用了两个数组：
-- cash 该天结束手里没有股票的情况下，已经获得的最大收益
-- hold 该天结束手里有股票的情况下，已经获得的最大收益
-- 状态转移方程式这样的：
-  - cash[i]代表的是手里没有股票的收益，这种可能性是今天卖了或者啥也没干。max(昨天手里有股票的收益+今天卖股票的收益，昨天手里没有股票的收益)， 即max(sell[i - 1], hold[i - 1] + prices[i])；
-  - hold[i]代表的是手里有股票的收益，这种可能性是今天买了股票或者啥也没干，今天买股票必须昨天休息。所以为max(今天买股票是前天卖掉股票的收益-今天股票的价格，昨天手里有股票的收益）。即max(hold[i - 1], sell[i - 2] - prices[i])。
-- 另外需要注意的是，题目说的是昨天卖了股票的话今天不能买，对于开始的第一天，不可能有卖股票的行为，所以需要做个判断。
-- 该算法的时间复杂度是O(n)，空间复杂度是O(n)。
-#+BEGIN_SRC java
-public int maxProfit(int[] prices) {
-    int n = prices.length;
-    int [] sold = new int [n];
-    int [] hold = new int [n];
-    hold[0] = -prices[0];
-    for (int i = 1; i < n; i++) {   // ith: do nothing, selling hold[i-1]
-        sold[i] = Math.max((i >= 2 ? sold[i-1] : 0), hold[i-1] + prices[i]); // 今天卖了股票，或者今天什么也没有干
-        hold[i] = Math.max(hold[i-1], (i >= 2 ? sold[i-2] : 0) - prices[i]); // 今天买了股票，或者今天什么也没有干
-    }
-    return Math.max(sold[n-1], hold[n-1]);
-}
-#+END_SRC
-
-*** 673. Number of Longest Increasing Subsequence
-Given an integer array nums, return the number of longest increasing subsequences.
-Notice that the sequence has to be strictly increasing.
-#+BEGIN_SRC java
-public int findNumberOfLIS(int[] nums) { // dynamic programming
-    int n = nums.length;
-    int [][] arr = new int[n][2];
-    int maxLength = 1;
-    for (int i = 0; i < n; i++) 
-        Arrays.fill(arr[i], 1);
-    for (int i = 0; i < n; i++) {
-        for (int j = i+1; j < n; j++) {
-            if (nums[j] > nums[i]) {
-                if (arr[i][0] + 1 > arr[j][0]) {
-                    arr[j][0] = arr[i][0] +1;
-                    arr[j][1] = arr[i][1];
-                    maxLength = Math.max(maxLength, arr[j][0]);
-                } else if (arr[i][0] + 1 == arr[j][0])
-                    arr[j][1] += arr[i][1];
-            }
-         }
-    }
-    int cnt = 0;
-    for (int i = 0; i < n; i++) 
-        if (arr[i][0] == maxLength) cnt += arr[i][1];
-    return cnt;
 }
 #+END_SRC
 
@@ -2625,36 +3007,120 @@ public int sumSubarrayMins(int[] arr) {
     // sum += A[i] * (i-k+1) * (j-i+1)
     // so we need to find the next min to the right and to the left
     //这个过程可以简化为使用一个栈。对于被某个数从栈中弹出的数而言，它右侧第一个比它小的数就是这个数。所以我们可以对所有被弹出的数得到左侧的区间范围和右侧的区间范围。我觉得这是一种非常聪明的做法。 这个栈我看得稀里糊涂，再想一下
-    long [] right = new long [n];  // next smaller element index to the right 
-    long [] left = new long[n];    // next smaller element index to the left
-    Stack<Integer> s = new Stack<>();
+public int sumSubarrayMins(int[] a) { // 以每一个数为最小值找出左右边界。累加和
+    int mod = (int)1e9 + 7;
+    int n = a.length;
+    int [] l = new int [n]; // 以每个当前数为最小值的左右最长边界
+    int [] r = new int [n];
+    ArrayDeque<Integer> s = new ArrayDeque<>();
     for (int i = 0; i < n; i++) {
-        while (!s.isEmpty() && arr[i] <= arr[s.peek()]) {
-            right[s.pop()] = i-1;
-        }
+        while (!s.isEmpty() && a[i] <= a[s.peek()]) // bug: a[i] < a[s.peek()]
+            r[s.pop()] = i-1;
         s.push(i);
     }
-    while (!s.isEmpty()) {
-        right[s.pop()] = n-1;
-    }
-    s.clear();
+    while (!s.isEmpty()) r[s.pop()] = n-1;
     for (int i = n-1; i >= 0; i--) {
-        while (!s.isEmpty() && arr[i] < arr[s.peek()])
-            left[s.pop()] = i+1;
+        while (!s.isEmpty() && a[i] < a[s.peek()])
+            l[s.pop()] = i+1;
         s.push(i);
     }
-    while (!s.isEmpty())
-        left[s.pop()] = 0;
+    while (!s.isEmpty()) 
+        l[s.pop()] = 0;
     long sum = 0;
-    long leftsize = 0, rightsize = 0;
+    long lcnt = 0, rcnt = 0;
     for (int i = 0; i < n; i++) {
-        leftsize = i - left[i] +1;
-        rightsize = right[i] - i + 1;
-        sum += arr[i] * leftsize * rightsize;
+        lcnt = i - l[i] + 1;
+        rcnt = r[i] - i + 1;
+        sum += a[i] * lcnt * rcnt;
         sum %= mod;
     }
     return (int)sum;
 }
+     #+END_SRC
+**** 解题思路与分析
+ 
+思路是单调栈。开一个单调递增栈，里面存A AA中的数的下标，并且要保持下标对应的A AA的值单调递增。
+
+遍历A AA，当遍历到A [ i ] A[i]A[i]的时候，如果栈不空并且栈顶t tt对应的值A [ t ] > A [ i ]，那么我们就知道了A [ t ]作为最小值的最长的那个区间的左右端点，
+
+先pop掉A [ t ] ，如果栈空了，说明左端点可以取到0 ，否则取栈顶加1（因为栈顶是A [ t ]左边第一个小于等于它的数的下标），而A [ i ] 是A [ t ]右边第一个小于它的数，所以右端点可以取到i − 1。
+
+设左端点取l右端点取r，则以A [ t ]为最小值的区间的数量就是( t − l + 1 ) ( r − t + 1 ) 这么多，所以答案只需要累加一下A [ t ] × ( t − l + 1 ) ( r − t + 1 )即可。
+
+     #+BEGIN_SRC java
+public int sumSubarrayMins(int[] a) { // 将上面的三次遍历three passes变为一次遍历求结果
+    int mod = (int)1e9 + 7;
+    Deque<Integer> s = new ArrayDeque<>();
+    long res = 0;
+    for (int i = 0; i < a.length; i++) {
+        while (!s.isEmpty() && a[i] < a[s.peek()]) { // 对于pop()出来的每一个数，计算出以它为最小值的左右边界，并累加和
+            int pos = s.pop();                       // l和r是a[pos]左右数的选择数
+            long l = pos - (s.isEmpty() ? -1 : s.peek()), r = i - pos;
+            res += (l * r % mod) * a[pos] % mod;
+            res %= mod;
+        }
+        s.push(i);
+    }
+    while (!s.isEmpty()) {
+        int pos = s.pop();
+        long l = pos - (s.isEmpty() ? -1 : s.peek()), r = a.length - pos;
+        res += (l * r % mod) * a[pos] % mod;
+        res %= mod;
+    }
+    return (int) res;
+}
+     #+END_SRC
+- 上面的写法是包装出来的方法，用原始函数来写，效率狠好
+#+BEGIN_SRC java
+private int MOD = (int)(1e9 + 7);
+public int sumSubarrayMins(int[] arr) {
+    int n = arr.length;
+    Deque<Integer> dk = new LinkedList<>(); // 单调递增栈， 效率狠好！
+    long res = 0;
+    for (int i = 0; i < n; i++) {
+        while (!dk.isEmpty() && arr[dk.peekLast()] > arr[i]) {
+            int pkIdx = dk.pollLast();
+            int stIdx;
+            if (dk.isEmpty()) stIdx = -1;
+            else stIdx = dk.peekLast();
+            res += (long)arr[pkIdx] * (long)(i - pkIdx) * (long)(pkIdx - stIdx);
+        }
+        dk.offerLast(i);
+    }
+    while (!dk.isEmpty()) {
+        int pkIdx = dk.pollLast();
+        int stIdx;
+        if (dk.isEmpty()) stIdx = -1;
+        else stIdx = dk.peekLast();
+        res += (long)arr[pkIdx] * (long)(n - pkIdx) * (long)(pkIdx - stIdx);
+    }
+    return (int)(res % MOD);
+}
+#+END_SRC
+- 找到的效率最高的写法
+#+BEGIN_SRC java
+public int sumSubarrayMins(int[] arr) {
+    int sum = 0;
+    int mod = (int) 1e9 + 7;
+    int curStVal = 0;
+    Deque<int[]> s = new ArrayDeque<>(); // int [] {value, count}
+    for (int i = 0; i < arr.length; i++) {
+        int curCnt = 1;
+        int curVal = arr[i];
+        while (!s.isEmpty() && s.peek()[0] >= curVal) {
+            int[] popped = s.pop();
+            curStVal -= popped[1] * popped[0];
+            curCnt += popped[1]; // assign all previous count to current
+        }
+        s.push(new int[]{curVal, curCnt});
+        curStVal += curVal * curCnt;
+        sum = (sum + curStVal) % mod;
+    }
+    return sum;
+}
+#+END_SRC
+**** 解题思路与分析: 另一种解法吧
+     #+BEGIN_SRC java
 int mod = 1_000_000_007;
 public int sumSubarrayMins(int[] arr) {
     int n = arr.length;
@@ -2688,148 +3154,6 @@ public int sumSubarrayMins(int[] arr) {
         sum += arr[i] * left[i] * right[i];
     return (int) (sum % mod);
 }
-#+END_SRC
-
-*** 1477. Find Two Non-overlapping Sub-arrays Each With Target Sum
-Given an array of integers arr and an integer target.
-You have to find two non-overlapping sub-arrays of arr each with a sum equal target. There can be multiple answers so you have to find an answer where the sum of the lengths of the two sub-arrays is minimum.
-Return the minimum sum of the lengths of the two required sub-arrays, or return -1 if you cannot find such two sub-arrays.
-#+BEGIN_SRC java
-// 找出数组中等于target的最小非重叠区间的长度，用dp[i]表示当前i以及i之前的满足条件的最小区间长度,状态更新规则为
-//     dp[i]=min(dp[i-1],i-j+1) if sum[j,i]=target
-//     答案更新规则
-//     res=min(res,dp[j−1]+i−j+1)
-public int minSumOfLengths(int[] arr, int target) {
-    int n = arr.length;
-    int [] dp = new int [n];
-    Arrays.fill(dp, Integer.MAX_VALUE);
-    int cur = 0, s = 0;
-    int res = Integer.MAX_VALUE, minLen = Integer.MAX_VALUE;
-    for (int i = 0; i < n; i++) {
-        cur += arr[i];
-        while (cur > target) {
-            cur -= arr[s];
-            s += 1;
-        }
-        if (cur == target) {
-            int curLen = i - s + 1;
-            if (s > 0 && dp[s-1] != Integer.MAX_VALUE) 
-                res = Math.min(res, curLen + dp[s-1]);
-            minLen = Math.min(minLen, curLen);
-        }
-        dp[i] = minLen;
-    }
-    return res == Integer.MAX_VALUE ? -1 : res;
-}
-#+END_SRC
-
-*** 1771. Maximize Palindrome Length From Subsequences
-You are given two strings, word1 and word2. You want to construct a string in the following manner:
-Choose some non-empty subsequence subsequence1 from word1.
-Choose some non-empty subsequence subsequence2 from word2.
-Concatenate the subsequences: subsequence1 + subsequence2, to make the string.
-Return the length of the longest palindrome that can be constructed in the described manner. If no palindromes can be constructed, return 0.
-A subsequence of a string s is a string that can be made by deleting some (possibly none) characters from s without changing the order of the remaining characters.
-A palindrome is a string that reads the same forward as well as backward.
-#+BEGIN_SRC java
-public int longestPalindrome(String s, String t) { // 这个题目没有懂，需要再好好看一下
-    int m = s.length();
-    int n = t.length();
-    int mn = m + n;
-    String st = s + t;
-    int [][] dp = new int [mn][mn];
-    for (int i = 0; i < mn; i++)
-        dp[i][i] = 1;
-    for (int l = 2; l <= mn; l++) {
-        for (int i = 0, j = i+l-1; j < mn; i++,j++) { // 
-            if (st.charAt(i) == st.charAt(j))
-                dp[i][j] = dp[i+1][j-1] + 2;
-            else dp[i][j] = Math.max(dp[i+1][j], dp[i][j-1]);                         
-        }
-    }
-    int ans = 0;
-    for (int i = 0; i < m; i++) {
-        for (int j = 0; j < n; j++) {
-            if (s.charAt(i) == t.charAt(j))
-                ans = Math.max(ans, dp[i][m+j]); // 
-        }
-    }
-    return ans;
-}
-#+END_SRC
-
-*** 907. Sum of Subarray Minimums
-Given an array of integers arr, find the sum of min(b), where b ranges over every (contiguous) subarray of arr. Since the answer may be large, return the answer modulo 109 + 7.
-#+BEGIN_SRC java
-        public int sumSubarrayMins(int[] arr) {
-            int n = arr.length;
-            // for each A[i], find k <= i <= j, so that A[i] is the min from [k,j]
-            // sum += A[i] * (i-k+1) * (j-i+1)
-            // so we need to find the next min to the right and to the left
-            //这个过程可以简化为使用一个栈。对于被某个数从栈中弹出的数而言，它右侧第一个比它小的数就是这个数。所以我们可以对所有被弹出的数得到左侧的区间范围和右侧的区间范围。我觉得这是一种非常聪明的做法。 这个栈我看得稀里糊涂，再想一下
-            long [] right = new long [n];  // next smaller element index to the right 
-            long [] left = new long[n];    // next smaller element index to the left
-            Stack<Integer> s = new Stack<>();
-            for (int i = 0; i < n; i++) {
-                while (!s.isEmpty() && arr[i] <= arr[s.peek()]) {
-                    right[s.pop()] = i-1;
-                }
-                s.push(i);
-            }
-            while (!s.isEmpty()) {
-                right[s.pop()] = n-1;
-            }
-            s.clear();
-            for (int i = n-1; i >= 0; i--) {
-                while (!s.isEmpty() && arr[i] < arr[s.peek()])
-                    left[s.pop()] = i+1;
-                s.push(i);
-            }
-            while (!s.isEmpty())
-                left[s.pop()] = 0;
-            long sum = 0;
-            long leftsize = 0, rightsize = 0;
-            for (int i = 0; i < n; i++) {
-                leftsize = i - left[i] +1;
-                rightsize = right[i] - i + 1;
-                sum += arr[i] * leftsize * rightsize;
-                sum %= mod;
-            }
-            return (int)sum;
-        }
-        int mod = 1_000_000_007;
-        public int sumSubarrayMins(int[] arr) {
-            int n = arr.length;
-            long [] left = new long[n];
-            long [] right = new long[n];
-            long sum = 0;
-            long cnt = 0;
-            int j = 0;
-            for (int i = 0; i < n; i++) { // 计算左边比自身大的数的个数
-                cnt = 1;
-                j = i-1;
-                while (j >= 0 && arr[j] >= arr[i]) {
-                    cnt += left[j];
-                    j -= left[j];
-                }
-                left[i] = cnt;
-            }
-            // 就是因为计算了两个方向，所以对于数组里面有相同元素的情况下，需要特别考虑一下。
-            //     不能重复计算， 也不能漏掉，
-            //     具体就是一个方向的时候用<=, 另外一个方向的时候用<。 这个在做的时候也bug了。
-            for (int i = n-1; i >= 0; i--) { // 计算右边比自身大的数的个数
-                cnt = 1;
-                j = i+1;
-                while (j < n && arr[j] > arr[i]) {
-                    cnt += right[j];
-                    j += right[j];
-                }
-                right [i] = cnt;
-            }
-            for (int i = 0; i < n; i++) 
-                sum += arr[i] * left[i] * right[i];
-            return (int) (sum % mod);
-        }
 #+END_SRC
 
 *** 689. Maximum Sum of 3 Non-Overlapping Subarrays
@@ -2970,6 +3294,207 @@ public boolean splitArraySameAverage(int[] nums) {
             return true;
     }
     return false;
+}
+#+END_SRC
+
+*** 1884. Egg Drop With 2 Eggs and N Floors - Medium
+You are given two identical eggs and you have access to a building with n floors labeled from 1 to n.
+
+You know that there exists a floor f where 0 <= f <= n such that any egg dropped at a floor higher than f will break, and any egg dropped at or below floor f will not break.
+
+In each move, you may take an unbroken egg and drop it from any floor x (where 1 <= x <= n). If the egg breaks, you can no longer use it. However, if the egg does not break, you may reuse it in future moves.
+
+Return the minimum number of moves that you need to determine with certainty what the value of f is.
+#+BEGIN_SRC java
+    // 思路： https://zhuanlan.zhihu.com/p/41257286 可以借这个思路理解一下
+    // DP[i][j]表示用i个鸡蛋，j层楼的情况下最坏情况下所需扔鸡蛋的最少数目。
+    // 可知初始条件为：
+    // DP[1][0] = 0; DP[2][0] = 0;
+    // DP[1][1] = 1; DP[2][1] = 1;
+    // DP[1][i] = i; //i = 1 … n
+    // 对于DP[2][i], i = 2 … n的情况，我们可以这样考虑：
+    //     遍历j=2…i，求DP[2][j]，分两种情况：
+    //     如果第1个鸡蛋在第j-1层摔破了，则我们在第j层只需摔第2个鸡蛋一次即可，此时总摔鸡蛋数为DP[1][j-1]+1。
+    //     注意上面的1是因为第j层需要摔第2个鸡蛋1次。为什么DP[1][j-1]不能写成1呢？因为第1个鸡蛋在第j-1层摔破了，我们不能肯定在第1,2,…,j-2层不会破，所以要用DP[1][j-1]。
+    //     如果第1个鸡蛋在第j-1层没有摔破，则我们在第j到i层有2个鸡蛋可以摔，此时退化到DP[2][i-j]的情况。该种情形下总共扔1+DP[2][i-j]。那个1就是表示第1个鸡蛋在第j-1层扔了1次。这里我们为什么只考虑用1，而不用考虑DP[1][j-1]呢？因为如果第j-1层没有摔破，第1,2,…,j-2层也就不用考虑了。
+    //     因为是求最坏情况下的数目，所以DP[2][j]=1 + max(DP[1][j-1]+1, DP[2][i-j])。
+    //     而我们是要求所有最坏情况下的最少数目，所以DP[2][j]=min(1 + max(DP[1][j-1]+1, DP[2][i-j]))。i = 2…n, j = 2…i。
+public int twoEggDrop(int n) { // 1 + 2 + 3 + ... + x >= n ==> get x
+    if (n <= 1) return n;
+    int [][] dp = new int [3][n+1]; // DP[i][j]表示用i个鸡蛋，j层楼的情况下最坏情况下所需扔鸡蛋的最少数目。
+    for (int i = 0; i < 3; i++) 
+        Arrays.fill(dp[i], Integer.MAX_VALUE);
+    dp[1][0] = 0;
+    dp[1][1] = 1;
+    dp[2][0] = 0;
+    dp[2][1] = 1;
+    for (int i = 1; i <= n; i++) dp[1][i] = i;
+    for (int i = 2; i <= n; i++) 
+        for (int j = 2; j <= i; j++) 
+            dp[2][i] = Math.min(dp[2][i], 1 + Math.max(dp[1][j-1], dp[2][i-j])); // 1: 这个鸡蛋在j-i层扔了一次，要统计入结果
+    return dp[2][n];
+}
+public int twoEggDrop(int n) { // 1 + 2 + 3 + ... + x >= n ==> get x
+    if (n <= 2) return n;
+    return (int)(Math.ceil((-1 + Math.sqrt((long)n * 8 + 1)) / 2.0));
+}
+#+END_SRC
+*** 887. Super Egg Drop - Hard
+You are given k identical eggs and you have access to a building with n floors labeled from 1 to n.
+
+You know that there exists a floor f where 0 <= f <= n such that any egg dropped at a floor higher than f will break, and any egg dropped at or below floor f will not break.
+
+Each move, you may take an unbroken egg and drop it from any floor x (where 1 <= x <= n). If the egg breaks, you can no longer use it. However, if the egg does not break, you may reuse it in future moves.
+
+Return the minimum number of moves that you need to determine with certainty what the value of f is.
+**** 解题思路与分析
+- https://charlesliuyx.github.io/2018/10/11/%E3%80%90%E7%9B%B4%E8%A7%82%E7%AE%97%E6%B3%95%E3%80%91Egg%20Puzzle%20%E9%B8%A1%E8%9B%8B%E9%9A%BE%E9%A2%98/
+- https://www.shuzhiduo.com/A/D8548M4Q5E/
+**** 解题思路与分析
+
+1 <= K <= 100
+
+1 <= N <= 10000
+
+这道题说给了我们K个鸡蛋，还有一栋共N层的大楼，说是鸡蛋有个临界点的层数F，高于这个层数扔鸡蛋就会碎，否则就不会，问我们找到这个临界点最小需要多少操作，注意这里的操作只有当前还有没碎的鸡蛋才能进行。这道题是基于经典的扔鸡蛋的问题改编的，原题是有 100 层楼，为了测鸡蛋会碎的临街点，最少可以扔几次？答案是只用扔 14 次就可以测出来了，讲解可以参见[油管上的这个视频](https://www.youtube.com/watch?v=NGtt7GJ1uiM)，这两道题看着很相似，其实是有不同的。这道题限制了鸡蛋的个数K，假设我们只有1个鸡蛋，碎了就不能再用了，这时我们要测 100 楼的临界点的时候，只能一层一层去测，当某层鸡蛋碎了之后，就知道临界点了，所以最坏情况要测 100 次，注意要跟经典题目中扔 14 次要区分出来。那么假如有两个鸡蛋呢，其实需要的次数跟经典题目中的一样，都是 14 次，这是为啥呢？因为在经典题目中，我们是分别间隔 14，13，12，...，2，1，来扔鸡蛋的，当我们有两个鸡蛋的时候，我们也可以这么扔，第一个鸡蛋仍在 14 楼，若碎了，说明临界点一定在 14 楼以内，可以用第二个鸡蛋去一层一层的测试，所以最多操作 14 次。若第一个鸡蛋没碎，则下一次扔在第 27 楼，假如碎了，说明临界点在 (14,27] 范围内，用第二个鸡蛋去一层一层测，总次数最多 13 次。若第一个鸡蛋还没碎，则继续按照 39, 50, ..., 95, 99，等层数去测，总次数也只可能越来越少，不会超过 14 次的。但是照这种思路分析的话，博主就不太清楚有3个鸡蛋，在 100 楼测，最少的步骤数，答案是9次，博主不太会分析怎么测的，各位看官大神知道的话一定要告诉博主啊。
+
+其实这道题比较好的解法是用动态规划 Dynamic Programming，因为这里有两个变量，鸡蛋数K和楼层数N，所以就要使用一个二维数组 DP，其中 dp[i][j] 表示有i个鸡蛋，j层楼要测需要的最小操作数。那么我们在任意k层扔鸡蛋的时候就有两种情况（注意这里的k跟鸡蛋总数K没有任何关系，k的范围是 [1, j]）：
+#+BEGIN_SRC java
+鸡蛋碎掉：接下来就要用 i-1 个鸡蛋来测 k-1 层，所以需要 dp[i-1][k-1] 次操作。
+鸡蛋没碎：接下来还可以用i个鸡蛋来测 j-k 层，所以需要 dp[i][j-k] 次操作。
+#+END_SRC
+
+因为我们每次都要面对最坏的情况，所以在第j层扔，需要 max(dp[i-1][k-1], dp[i][j-k])+1 步，状态转移方程为：
+
+dp[i][j] = min(dp[i][j], max(dp[i - 1][k - 1], dp[i][j - k]) + 1) ( 1 <= k <= j )
+
+#+BEGIN_SRC java
+public int superEggDrop(int k, int n) { // tle 
+    if (k < 1 || n < 1) return 0;
+    int [] pre = new int [n+1]; //上一层备忘录，存储鸡蛋数量-1的n层楼条件下的最优化尝试次数
+    int [] cur = new int [n+1]; // 当前备忘录，存储当前鸡蛋数量的n层楼条件下的最优化尝试次数
+    for (int i = 1; i <= n; i++) // 把备忘录每个元素初始化成最大的尝试次数
+        cur[i] = i;
+    for (int i = 2; i <= k; i++) {
+        pre = cur.clone(); // 当前备忘录拷贝给上一次备忘录，并重新初始化当前备忘录
+        for (int j = 1; j <= n; j++) cur[j] = j;
+        for (int j = 1; j <= n; j++) // 需要想办法去优化时间复杂度。这种写法里面我们枚举了 [1, j] 范围所有的k值，总时间复杂度为 O(KN^2)，
+            for (int x = 1; x < j; x++) 
+// 扔鸡蛋的楼层从1到m枚举一遍，如果当前算出的尝试次数小于上一次算出的尝试次数，则取代上一次的尝试次数。
+// 这里可以打印k的值，从而知道第一个鸡蛋是从第几次扔的。
+                cur[j] = Math.min(cur[j], 1 + Math.max(pre[x-1], cur[j-x]));
+    }
+    return cur[n];
+}
+#+END_SRC 
+
+这种写法会超时 Time Limit Exceeded，代码请参见评论区1楼，OJ 对时间卡的还是蛮严格的，所以我们就需要想办法去优化时间复杂度。这种写法里面我们枚举了 [1, j] 范围所有的k值，总时间复杂度为 O(KN^2)，若我们仔细观察 dp[i - 1][k - 1] 和 dp[i][j - k]，可以发现前者是随着k递增，后者是随着k递减，且每次变化的值最多为1，所以只要存在某个k值使得二者相等，那么就能得到最优解，否则取最相近的两个k值做比较，由于这种单调性，我们可以在 [1, j] 范围内对k进行二分查找，找到第一个使得 dp[i - 1][k - 1] 不小于 dp[i][j - k] 的k值，然后用这个k值去更新 dp[i][j] 即可，这样时间复杂度就减少到了 O(KNlgN)，其实也是险过，参见代码如下：
+
+#+BEGIN_SRC java
+// 若我们仔细观察 dp[i - 1][k - 1] 和 dp[i][j - k]，可以发现前者是随着k递增，后者是随着k递减，且每次变化的值最多为1，
+// 所以只要存在某个k值使得二者相等，那么就能得到最优解，否则取最相近的两个k值做比较，
+// 由于这种单调性，我们可以在 [1, j] 范围内对k进行二分查找，找到第一个使得 dp[i - 1][k - 1] 不小于 dp[i][j - k] 的k值，然后用这个k值去更新 dp[i][j] 即可，
+// 这样时间复杂度就减少到了 O(KNlgN)
+public int superEggDrop(int k, int n) {
+    int dp [][] = new int [k + 1][n + 1];
+    for(int i = 1 ; i <= n ; i++) dp[1][i] = i;
+    for(int i = 2 ; i <= k; i++) {
+        for (int j = 1; j <= n; j++) {
+            dp[i][j] = j;
+            int left = 1, right = j;
+            while (left < right) {
+                int mid = left + (right - left) / 2;
+                if (dp[i-1][mid-1] < dp[i][j-mid]) left = mid + 1;
+                else right = mid;
+            }
+            dp[i][j] = Math.min(dp[i][j], Math.max(dp[i-1][right-1], dp[i][j-right]) + 1);
+        }
+    }    
+    return dp[k][n];
+}
+#+END_SRC
+
+进一步来想，对于固定的k，dp[i][j-k] 会随着j的增加而增加，最优决策点也会随着j单调递增，所以在每次移动j后，从上一次的最优决策点的位置来继续向后查找最优点即可，这样时间复杂度就优化到了 O(KN)，我们使用一个变量s表示当前的j值下的的最优决策点，然后当j值改变了，我们用一个 while 循环，来找到第下一个最优决策点s，使得 dp[i - 1][s - 1] 不小于 dp[i][j - s]，参见代码如下：
+
+#+BEGIN_SRC java
+public int superEggDrop(int k, int n) {
+    int dp [][] = new int [k + 1][n + 1];
+    for(int i = 1 ; i <= n ; i++) dp[1][i] = i;
+    for(int i = 2 ; i <= k; i++) {
+        int s = 1;
+        for (int j = 1; j <= n; j++) {
+            dp[i][j] = j;
+            while (s < j && dp[i-1][s-1] < dp[i][j-s]) ++s;
+            dp[i][j] = Math.min(dp[i][j], Math.max(dp[i-1][s-1], dp[i][j-s]) + 1);
+        }
+    }    
+    return dp[k][n];
+}
+#+END_SRC
+
+其实我们还可以进一步优化时间复杂度到 O(KlgN)，不过就比较难想到了，需要将问题转化一下，变成已知鸡蛋个数，和操作次数，求最多能测多少层楼的临界点。还是使用动态规划 Dynamic Programming 来做，用一个二维 DP 数组，其中 dp[i][j] 表示当有i次操作，且有j个鸡蛋时能测出的最高的楼层数。再来考虑状态转移方程如何写，由于 dp[i][j] 表示的是在第i次移动且使用第j个鸡蛋测试第 dp[i-1][j-1]+1 层，因为上一个状态是第i-1次移动，且用第j-1个鸡蛋。此时还是有两种情况：
+
+鸡蛋碎掉：说明至少可以测到的不会碎的层数就是 dp[i-1][j-1]。
+
+鸡蛋没碎：那这个鸡蛋可以继续利用，此时我们还可以再向上查找 dp[i-1][j] 层。
+
+那么加上当前层，总共可以通过i次操作和j个鸡蛋查找的层数范围是 [0, dp[i-1][j-1] + dp[i-1][j] + 1]，这样就可以得到状态转移方程如下：
+
+dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j] + 1
+
+当 dp[i][K] 正好小于N的时候，i就是我们要求的最小次数了，参见代码如下：
+
+#+BEGIN_SRC java
+public int superEggDrop(int k, int n) {
+    int dp [][] = new int [n + 1][k + 1];
+    int m = 0;
+    while (dp[m][k] < n) {
+        ++m;
+        for (int j = 1; j <= k; j++)
+            dp[m][j] = dp[m-1][j-1] + dp[m-1][j] + 1;
+    }
+    return m;
+}
+#+END_SRC
+
+我们可以进一步的优化空间，因为当前的操作次数值的更新只跟上一次操作次数有关，所以我们并不需要保存所有的次数，可以使用一个一维数组，其中 dp[i] 表示当前次数下使用i个鸡蛋可以测出的最高楼层。状态转移方程的推导思路还是跟上面一样，参见代码如下：
+
+#+BEGIN_SRC java
+public int superEggDrop(int k, int n) {
+    int [] dp = new int [k+1];
+    int ans = 0;
+    for (; dp[k] < n; ans++) 
+        for (int i = k; i > 0; i--) 
+            dp[i] = dp[i] + dp[i-1] + 1;
+    return ans;
+}
+#+END_SRC
+
+下面这种方法就非常的 tricky 了，居然推导出了使用k个鸡蛋，移动x次所能测的最大楼层数的通项公式，推导过程可以参见[这个帖子](https://leetcode.com/problems/super-egg-drop/discuss/181702/Clear-C%2B%2B-codeRuntime-0-msO(1)-spacewith-explation.No-DPWhat-we-need-is-mathematical-thought!)，通项公式如下：
+
+f(k,x) = x(x-1)..(x-k)/k! + ... + x(x-1)(x-2)/3! + x(x-1)/2! + x
+
+这数学功底也太好了吧，有了通向公式后，我们就可以通过二分搜索法 Binary Search 来快速查找满足题目的x。这里其实是博主之前总结贴 [LeetCode Binary Search Summary 二分搜索法小结](http://www.cnblogs.com/grandyang/p/6854825.html) 中的第四类，用子函数当作判断关系，这里子函数就是用来实现上面的通向公式的，不过要判断，当累加和大于等于N的时候，就要把当的累加和返回，这样相当于进行了剪枝，因为在二分法中只需要知道其跟N的大小关系，并不 care 到底大了多少，这样快速定位x的方法运行速度貌似比上面的 DP 解法要快不少，但是这通项公式尼玛谁能容易的推导出来，只能膜拜叹服了，参见代码如下：
+
+#+BEGIN_SRC java
+public int superEggDrop(int k, int n) {
+    int l = 1, r = n;
+    while (l < r) {
+        int m = l + (r - l) / 2;
+        if (helper(m, k, n) < n) l = m + 1;
+        else r = m;
+    }
+    return r;
+}
+private int helper(int x, int k, int n) {
+    int ans = 0, r = 1;
+    for (int i = 1; i <= k; i++) {
+        r *= x - i + 1;
+        r /= i;
+        ans += r;
+        if (ans >= n) break;
+    }
+    return ans;
 }
 #+END_SRC
 
@@ -3228,6 +3753,50 @@ public int minHeightShelves(int[][] books, int shelfWidth) {
     return dp[books.length];
 }
 #+END_SRC
+- 后来又出的bug
+#+BEGIN_SRC java
+public int minHeightShelves(int [][] b, int w) { 
+    int n = b.length, curLayerWidth = 0, max = 0;
+    int [] dp = new int [n+1];
+    Arrays.fill(dp, n+1);
+    dp[0] = 0;
+    for (int i = 1; i <= n; i++) {   // 依次求摆放前i本书的最小高度
+        dp[i] = dp[i-1] + b[i-1][1]; // 初始化为最大值：单列一行，再看之前的行有没有空隙可以放入之前的层？
+        curLayerWidth = b[i-1][0];
+         max = b[i-1][1];
+        for (int j = i-1; j > 0 && curLayerWidth + b[j-1][0] <= w; j--) { // 将前i - 1本书从第i - 1本开始放在与i同一层，直到这一层摆满或者所有的书都摆好
+            curLayerWidth += b[j-1][0];
+            max = Math.max(max, b[j-1][1]);
+            // dp[i] = Math.min(dp[i], dp[j] + max);  // bug: dp[j] + max 是从第j本开始，包括第j本，这与之后的书放到最后一层所能形成的最小高度
+            dp[i] = Math.min(dp[i], dp[j - 1] + max); // 所以，是用j之前所开成的最小高度，dp[j-1]加上最后一层所能形成的最小高度
+        }
+    }
+    return dp[n];
+}
+#+END_SRC
+*** 790. Domino and Tromino Tiling
+You have two types of tiles: a 2 x 1 domino shape and a tromino shape. You may rotate these shapes.
+
+Given an integer n, return the number of ways to tile an 2 x n board. Since the answer may be very large, return it modulo 109 + 7.
+
+In a tiling, every square must be covered by a tile. Two tilings are different if and only if there are two 4-directionally adjacent cells on the board such that exactly one of the tilings has both squares occupied by a tile.
+**** 解题思路与分析
+     
+     [[./pic/790.png]]
+     
+     #+BEGIN_SRC java
+public int numTilings(int n) {
+    int mod = (int)1e9 + 7;
+    int [][] dp = new int [n+1][2];
+    dp[0][0] = 1;
+    dp[1][0] = 1;
+    for (int i = 2; i <= n; i++) {
+        dp[i][0] = (int)((dp[i-1][0] + dp[i-2][0]) % mod + (2 * dp[i-1][1]) % mod) % mod;
+        dp[i][1] = (int)(dp[i-2][0] + dp[i-1][1]) % mod;
+    }
+    return dp[n][0];
+}
+     #+END_SRC
 *** 1997. First Day Where You Have Been in All the Rooms - Medium
 There are n rooms you need to visit, labeled from 0 to n - 1. Each day is labeled, starting from 0. You will go in and visit one room a day.
 
@@ -3398,7 +3967,7 @@ int leastOpsExpressTarget(int x, int target) {
     return -1;
 }
 #+END_SRC
-*** 1955. Count Number of Special Subsequences - Hard
+*** 1955. Count Number of Special Subsequences - Hard 把这些个递推公式记住
 A sequence is special if it consists of a positive number of 0s, followed by a positive number of 1s, then a positive number of 2s.
 
 For example, [0,1,2] and [0,0,1,1,1,2] are special.
@@ -3438,7 +4007,7 @@ A subsequence of an array is a sequence that can be formed by removing some elem
 
 For example, [2,5,10] is a subsequence of [1,2,1,2,4,1,5,10].
 The test cases are generated so that the answer fits in 32-bit integer.
-**** 解题思路与分析
+***** 解题思路与分析
 这道题是之前那道Arithmetic Slices的延伸，那道题比较简单是因为要求等差数列是连续的，而这道题让我们求是等差数列的子序列，可以跳过某些数字，不一定非得连续，那么难度就加大了，但还是需要用动态规划Dynamic Progrmming来做。
 
 好，既然决定要用DP了，那么首先就要确定dp数组的定义了，刚开始我们可能会考虑使用个一维的dp数组，然后dp[i]定义为范围为[0, i]的子数组中等差数列的个数。定义的很简单，OK，但是基于这种定义的状态转移方程却十分的难想。我们想对于(0, i)之间的任意位置j，如何让 dp[i] 和 dp[j] 产生关联呢？是不是只有 A[i] 和 A[j] 的差值diff，跟A[j]之前等差数列的差值相同，才会有关联，所以差值diff是一个很重要的隐藏信息Hidden Information，我们必须要在dp的定义中考虑进去。所以一维dp数组是罩不住的，必须升维，但是用二维dp数组的话，差值diff那一维的范围又是个问题，数字的范围是整型数，所以差值的范围也很大，为了节省空间，我们建立一个一维数组dp，数组里的元素不是数字，而是放一个HashMap，建立等差数列的差值和当前位置之前差值相同的数字个数之间的映射。我们遍历数组中的所有数字，对于当前遍历到的数字，又从开头遍历到当前数字，计算两个数字之差diff，如果越界了不做任何处理，如果没越界，我们让dp[i]中diff的差值映射自增1，因为此时A[i]前面有相差为diff的A[j]，所以映射值要加1。然后我们看dp[j]中是否有diff的映射，如果有的话，说明此时相差为diff的数字至少有三个了，已经能构成题目要求的等差数列了，将dp[j][diff]加入结果res中，然后再更新dp[i][diff]，这样等遍历完数组，res即为所求。
@@ -3510,7 +4079,7 @@ In addition to the mapping above, an encoded message may contain the '*' charact
 Given a string s consisting of digits and '*' characters, return the number of ways to decode it.
 
 Since the answer may be very large, return it modulo 109 + 7.
-**** 解题思路与分析
+***** 解题思路与分析
 给定一个只含数字的长n nn的字符串s ss，再给定一个对应规则，每个大写字母ch可以对应一个数字ch - 'A' + 1。问该s ss有多少种不同的解码方式。s ss中可能含有'*'，这个符号可以对应除了0 00以外的任意一位数。答案模10^9 + 7后返回。
 
 思路是动态规划。设f [ i ] f[i]f[i]是s ss的长i ii的前缀的解码方式数，那么可以按照最后一位（或者两位）是解码成什么字母来分类进行累加。
@@ -3542,7 +4111,7 @@ public int numDecodings(String t) {
     return dp[n];
 }
 #+END_SRC
-**** 解题思路与分析
+***** 解题思路与分析
 
 定义dp[i]是nums前i个字符可以得到的解码种数，假设之前的字符串是abcx，现在新加入了y，则有以下5种情况：
 
@@ -3583,7 +4152,7 @@ public int numDecodings(String t) {
 For an integer array nums, an inverse pair is a pair of integers [i, j] where 0 <= i < j < nums.length and nums[i] > nums[j].
 
 Given two integers n and k, return the number of different arrays consist of numbers from 1 to n such that there are exactly k inverse pairs. Since the answer can be huge, return it modulo 109 + 7.
-**** 解题思路与分析
+***** 解题思路与分析
 比较容易辨别出来是一道DP的题目，但是确实算是比较难的了，下面是参考网上的代码之后我的理解。定义dp[n][k]表示从1到n构成的数中含有k个逆序对的个数，则我们可以推导出dp[n][k]和dp[n - 1][i]之间的递推关系：
 
 如果我们把n放在最后一位，则所有的k个逆序对均来自于前n - 1个数所构成的逆序对，和n无关；
@@ -3626,7 +4195,7 @@ public int kInversePairs(int n, int k) {
     return (int)dp[n][k];
 }
 #+END_SRC
-**** 解题思路与分析
+***** 解题思路与分析
     
     [[./pic/kinvPair.png]]
 
@@ -3651,7 +4220,7 @@ public int kInversePairs(int n, int k) {
 You are given an array nums​​​ and an integer k​​​​​. The XOR of a segment [left, right] where left <= right is the XOR of all the elements with indices between left and right, inclusive: nums[left] XOR nums[left+1] XOR ... XOR nums[right].
 
 Return the minimum number of elements to change in the array such that the XOR of all segments of size k​​​​​​ is equal to zero.
-**** 解题思路与分析
+***** 解题思路与分析
     
     [[./pic/xortimes.png]]
     
@@ -3712,7 +4281,7 @@ You are given a 2D integer array, queries. For each queries[i], where queries[i]
 
 Return an integer array answer where answer.length == queries.length, and answer[i] is the answer to the ith query.
  
-*** 解题思路与分析
+**** 解题思路与分析
     
     [[./pic/1735.png]]
 
@@ -3830,7 +4399,7 @@ Given n orders, each order consist in pickup and delivery services.
 Count all valid pickup/delivery possible sequences such that delivery(i) is always after of pickup(i). 
 
 Since the answer may be too large, return it modulo 10^9 + 7.
-**** 解题思路与分析
+***** 解题思路与分析
  
 就是总共有2N个位置，每次放一两个，还剩下多少个位置可以合理占用
 
@@ -3847,9 +4416,418 @@ public int countOrders(int n) {
 }
 #+END_SRC
 
+*** 1187. Make Array Strictly Increasing - Hard 需要重写
+Given two integer arrays arr1 and arr2, return the minimum number of operations (possibly zero) needed to make arr1 strictly increasing.
+
+In one operation, you can choose two indices 0 <= i < arr1.length and 0 <= j < arr2.length and do the assignment arr1[i] = arr2[j].
+
+If there is no way to make arr1 strictly increasing, return -1.
+**** 解题思路与分析
+     #+BEGIN_SRC java
+public int makeArrayIncreasing(int[] a, int[] b) {
+    b = Arrays.stream(b).distinct().toArray();
+    Arrays.sort(b);
+    int m = a.length, n = b.length;
+    int minCnt = 0, minVal = 0;
+    Queue<int []> q = new LinkedList<>();
+    q.offer(new int [] {-1, 0}); // 初始化，假想第0位的前一位是-1
+    for (int i = 0; i < m; i++) {
+        minCnt = Integer.MAX_VALUE;
+        for (int size = q.size()-1; size >= 0; size--) {
+            int [] cur = q.poll(); // 取前一位的一个选择
+            if (a[i] > cur[0]) minCnt = Math.min(minCnt, cur[1]); // 先不急将当前选择加入queue中，找到最小的再说
+            minVal = binarySearchMin(b, cur[0]); // 查找一个比前一个数大的最小数
+            if (minVal != -1) q.offer(new int [] {minVal, cur[1] + 1}); // 将这个最小数加入到queue中，操作次数在前一位的基础上加一
+         }
+        if (minCnt != Integer.MAX_VALUE) // 如果当前位可以保持不变，将最小次数加入到queue中
+            q.offer(new int [] {a[i], minCnt}); 
+    }
+    if (q.size() == 0) return -1; // 如果最后一位没有合法的选择方案，返回-1
+    int ans = Integer.MAX_VALUE;
+    while (!q.isEmpty()) ans = Math.min(ans, q.poll()[1]);
+    return ans;
+}
+private int binarySearchMin(int [] arr, int v) {
+    int l = 0, r = arr.length-1, m = 0;
+    while (l < r) { // l,r: [0, 1]
+        m = l + (r-l) / 2;
+        if (arr[m] <= v) l = m+1;
+        else r = m;
+    }
+    return arr[l] > v ? arr[l] : -1; // 所以这里要再判断一下
+}
+     #+END_SRC
+**** 解题思路与分析
+
+这里若是要替换后面的数字为较大的数字，那么就需要在 arr2 中找到比当前数字大的数字，为了让整个数组更容易的递增，那么这个较大数应该尽量越小越好，所以就是要找到第一个比当前数字大的数。为了更容易的在 arr2 中查找，而不是每次都遍历整个数组，需要给 arr2 排个序，然后用二分搜索来查找更高效一些，这里也可以将 arr2 放到一个 TreeSet 中，利用其自动排序的特点，之后再进行二分搜索就行了。这道题的正确解法是用动态规划 Dynamic Programming，这里的 dp 表达式比较难想，一般来说，dp 值都是定义为题目中要求的值，而这道题是个例外，这里的 dp[i][j] 表示对于数组中的前j个数字组成的子数组中，需要替换i次可以使得其变为严格递增，且第j个数字的最小值为 dp[i][j]。这里的 dp 值不是定义为替换次数，而是第j个数字的最小值（可能是替换后的值），因为要保证数组严格递增，最后一个数字的大小很重要，这是个关键信息，而这个数字的大小跟数组坐标之间没有啥必然联系，所以这个信息不太好放到 dp 数组的坐标中，而所求的替换次数跟数组长度是相关的，因为其不可能超过数组的总长度，最差的情况也就是将整个 arr1 数组都替换了（当然还需要考虑 arr2 的长度）。
+
+接下来就来考虑状态转移方程怎么写，由于这里的j表示前j个数字，那么第j个数字实际上是 arr1[j-1]，若第j个数字大于 dp[i][j-1]，这里表示对于前 j-1 个数字，替换i次可以使得其严格递增，且第 j-1 个数字为 dp[i][j-1]，这样的话就不需要额外的替换操作，还是严格递增增的，则 dp[i][j] 可以赋值为 arr1[j-1]。若此时i大于0，说明之前已经进行过替换操作，则上一个操作状态是 dp[i-1][j-1]，当前操作是从 arr2 中选一个数字替换 arr1 的第j个数字，这里就要在 arr2 中选择第一个大于 dp[i-1][j-1] 的数字，若存在的话，就用这个数字来更新 dp[i][j] 的值。若某个时刻j等于n了，说明已经到 arr1 的末尾了，若此时 dp[i][j] 不等于 INT_MAX（初始值），说明是可以将整个 arr1 替换成严格递增的数组的，替换次数就是i，直接返回即可。最终循环退出了，返回 -1，参见代码如下：
+     #+BEGIN_SRC cpp
+int makeArrayIncreasing(vector<int>& arr1, vector<int>& arr2) {
+    int n = arr1.size();
+    if (n == 1) return 0;
+    set<int> st(arr2.begin(), arr2.end());
+    vector<vector<int>> dp(n + 1, vector<int>(n + 1, INT_MAX));
+    dp[0][0] = INT_MIN;
+    for (int j = 1; j <= n; ++j) {
+        for (int i = 0; i <= j; ++i) {
+            if (arr1[j - 1] > dp[i][j - 1]) {
+                dp[i][j] = arr1[j - 1];
+            }
+            if (i > 0) {
+                auto it = st.upper_bound(dp[i - 1][j - 1]);
+                if (it != st.end()) dp[i][j] = min(dp[i][j], *it);
+            }  
+            if (j == n && dp[i][j] != INT_MAX) return i;
+        }
+    }
+    return -1;
+}
+     #+END_SRC
+
+** 多维数个数、数种类数 多一维k介入的 dp[i][j][k]
+*** 1866. Number of Ways to Rearrange Sticks With K Sticks Visible - Hard
+There are n uniquely-sized sticks whose lengths are integers from 1 to n. You want to arrange the sticks such that exactly k sticks are visible from the left. A stick is visible from the left if there are no longer sticks to the left of it.
+
+For example, if the sticks are arranged [1,3,2,5,4], then the sticks with lengths 1, 3, and 5 are visible from the left.
+Given n and k, return the number of such arrangements. Since the answer may be large, return it modulo 109 + 7.
+#+BEGIN_SRC java
+// dp[i][j] 表示前面i根木棍可以看到j根
+// 设 dp[i][j] 表示从高度为 1, 2, ..., i 的木棍中，高度逐渐递减地插入新的木棍，从左侧看恰好看到 k 根木棍的方案数。
+// 后面说看到ith根，不是指从小到大的第ith根棍子，而是指ith这个位置上的棍子
+// 如果可以看到ith根的话，那么数量为dp[i-1][j-1]
+// 如果看不到ith的话，那么取前面(i-1)里面任意一个出来放在ith的最后，接下来就是从前面i-1个棍子里面看到j根，所以结果是 (i-1)* dp[i-1][j]
+public int rearrangeSticks(int n, int k) {
+    int mod = (int)1e9 + 7;
+    long [][] dp = new long [n+1][k+1];
+    dp[0][0] = 1;
+    for (int i = 1; i <= n; i++) 
+        for (int j = 1; j <= k; j++) 
+            dp[i][j] = (dp[i-1][j-1] + (i - 1) * dp[i-1][j]) % mod;
+    return (int)dp[n][k];
+}
+#+END_SRC
+- dfs + memo 
+#+BEGIN_SRC java
+public int rearrangeSticks(int n, int k) {
+    dp = new long [n+1][k+1];
+    return (int)dfs(n, k);
+}
+int mod = (int)1e9 + 7;
+long [][] dp;
+private long dfs(int n, int k) {
+    if (n < k || k == 0) return 0;
+    if (n == k) return 1;
+    if (dp[n][k] != 0) return dp[n][k];
+    // instead of iterating for every stick
+    // we are just multiplying number of ways with (n - 1)
+    return dp[n][k] = (dfs(n-1, k-1) + (n - 1) * dfs(n-1, k)) % mod;
+}
+#+END_SRC
+
+*** 1916. Count Ways to Build Rooms in an Ant Colony - Hard
+You are an ant tasked with adding n new rooms numbered 0 to n-1 to your colony. You are given the expansion plan as a 0-indexed integer array of length n, prevRoom, where prevRoom[i] indicates that you must build room prevRoom[i] before building room i, and these two rooms must be connected directly. Room 0 is already built, so prevRoom[0] = -1. The expansion plan is given such that once all the rooms are built, every room will be reachable from room 0.
+
+You can only build one room at a time, and you can travel freely between rooms you have already built only if they are connected. You can choose to build any room as long as its previous room is already built.
+
+Return the number of different orders you can build all the rooms in. Since the answer may be large, return it modulo 109 + 7.
+
+对每个节点，可根据所有以其子节点为根的树的节点及排列数量，计算出以当前节点为根的树的节点及排列数量。
+
+本题求解过程涉及较多前置知识点，包括排列组合、乘法逆元、快速乘方等
+
+[[./pic/ant1.png]]
+
+[[./pic/ant2.png]]
+
+#+BEGIN_SRC java
+// 快速计算x^y的乘方
+public int quickMul(int x , int y) {
+    long res = 1, cur = x;
+    while (y > 0) {
+        if ((y & 1) == 1)
+            res = res * cur % mod;
+        cur = cur * cur % mod;
+        y >>= 1;
+    }
+    return (int)res;
+}
+// 深度优先搜索，返回以当前节点为根的子树节点个数 及 内部排列数
+public int [] dfs (int idx) {
+    if (!map.containsKey(idx)) return new int [] {1, 1}; // 子节点，节点个数及内部排列数均为1
+    int cnt = 1, res = 1;       //  子树的节点个数、内部排列数
+    for (Integer node : map.get(idx)) {
+      int [] cur = dfs(node); // 递归得到子节点对应树的节点个数和排列数
+        cnt += cur[0];
+        res = (int)((long)res * cur[1] % mod * inv[cur[0]] % mod);
+    }
+    res = (int)((long)res * fac[cnt-1] % mod);
+    return new int [] {cnt, res};
+}
+int mod = (int)1e9 + 7;
+Map<Integer, List<Integer>> map = new HashMap<>();
+int [] fac, inv;
+public int waysToBuildRooms(int[] prevRoom) {
+    int n = prevRoom.length;
+    // 求阶乘数列及对应逆元
+    this.fac = new int [n]; // fac[i]=i!
+    this.inv = new int [n]; // inv[i]=i!^(-1)
+    fac[0] = inv[0] = 1;
+    for (int i = 1; i < n; i++) {
+        fac[i] = (int)((long)fac[i-1] * i % mod);
+        inv[i] = quickMul(fac[i], mod - 2); // 费马小定理: (fac[i]^(-1))%mod = (fac[i]^(mod-2))%mod
+    }
+    // 记录各个节点与子节点之间的边
+    for (int i = 1; i < n; i++) 
+        map.computeIfAbsent(prevRoom[i], k->new ArrayList<>()).add(i);
+    // 动态规划得到总体顺序数量x
+    return dfs(0)[1];      
+}
+#+END_SRC
+
+*** 1504. Count Submatrices With All Ones - Medium
+Given an m x n binary matrix mat, return the number of submatrices that have all ones.
+**** 解题思路与分析
+
+首先我们对矩阵进行数据初始化。即求出每一行以及每一列上的前缀和。
+
+遍历矩阵每一个点（两层循环），并以该点最为起点（row, col），向右下方向画矩形（两层循环，分别循环矩形的宽width和高height），注意矩形范围不能越界。起始时width和height分别为0，即当前点自身是一个矩形。
+
+当width扩大一格后，实际上是增加了(row, col+width)到(row+height, col+width)这一部分的面积（宽为width，高为height），我们通过前缀和数组求出该区域和是否等于height，如果等于，返回结果加一即可。
+
+width扩大一格的操作同理。
+     #+BEGIN_SRC java
+public int numSubmat(int[][] mat) {
+    int m = mat.length, n = mat[0].length;
+    int [][] row = new int [m][n]; // 每一行的前缀和
+    int [][] col = new int [m][n]; // 每一列的前缀和
+    for (int i = 0; i < m; i++)
+        for (int j = 0; j < n; j++) 
+            row[i][j] = (j == 0 ? 0 : row[i][j-1]) + mat[i][j];
+    for (int j = 0; j < n; j++) 
+        for (int i = 0; i < m; i++) 
+            col[i][j] = (i == 0 ? 0 : col[i-1][j]) + mat[i][j];
+    int ans = 0;
+    for (int i = 0; i < m; i++) 
+        for (int j = 0; j < n; j++) 
+            for (int r = 0; i+r < m; r++)       // 以当前点为顶点，向下扩大一格, r = 0 起点是0，当前格自身也是答案
+                for (int c = 0; j+c < n; c++) { // 以当前点为顶点，向右扩大一格
+                    int x = i + r, y = j + c;
+                    // 数新扩张区域内每行每列区域内长度累加和都等于长度，即新增区域每格都是1
+                    if ((j == 0 && row[x][y] == c+1 || j > 0 && row[x][y] - row[x][j-1] == c+1)
+                        && (i == 0 && col[x][y] == r+1 || i > 0 && col[x][y] - col[i-1][y] == r+1))
+                        ans++;
+                    else break;
+                }
+    return ans;
+}
+     #+END_SRC
+**** 解题思路与分析: 单调栈 todo
+     #+BEGIN_SRC java
+private int res = 0;
+private int n;
+public int numSubmat(int[][] mat) {
+    this.n = mat[0].length;
+    // dp[j] : the height (number of consecutive '1's) of column j 
+    int[] dp = new int[n];
+    for (int i = 0; i < mat.length; i++) {
+        // calculating (updating) heights
+        for (int j = 0; j < n; j++) 
+            dp[j] = mat[i][j] == 1 ? dp[j] + 1 : 0;
+        enumerateRowByMinHeight(dp);
+    }
+    return res;
+}
+public void enumerateRowByMinHeight(int[] dp) {
+    // monotonic stack storing indices : for index p < q in stack, dp[p] < dp[q]
+    Deque<Integer> stack = new LinkedList<>();
+    stack.offerLast(-1);
+    for (int j = 0; j < n; j++) {
+        while (stack.peekLast() != -1 && dp[stack.peekLast()] >= dp[j]) {
+            int idx = stack.pollLast();
+            res += dp[idx] * (idx - stack.peekLast()) * (j - idx);
+        }
+        stack.offerLast(j);
+    }
+    while (stack.peekLast() != -1) {
+        int idx = stack.pollLast();
+        res += dp[idx] * (idx - stack.peekLast()) * (n - idx);
+    }
+}
+     #+END_SRC
+     #+BEGIN_SRC java
+// Used two Arrays to store number of consecutive ones on the left, and number of consecutive ones above(up)
+//     In one m*n loop we can count the number of order 1xM rectangles where M belongs to [1,m-1]
+//     and we can count rectangles of order MxN each time where M>1. in the k index loop.
+public int numSubmat(int[][] mat) {
+    int m = mat.length, n = mat[0].length;
+    int [][] left = new int [m][n]; // 每一行的前缀和
+    int [][] abov = new int [m][n]; // 每一列的前缀和
+    int ans = 0;
+    for (int i = 0; i < m; i++) 
+        for (int j = 0; j < n; j++) 
+            if (mat[i][j] == 1)  {
+                left[i][j] = (j == 0 ? 0 : left[i][j-1]) + 1;
+                ans += (j == 0 ? 1 : left[i][j]);
+                abov[i][j] = (i == 0 ? 0 : abov[i-1][j]) + 1;
+                if (i > 0) {
+                    int min = left[i][j];
+                    for (int k = 1; k < abov[i][j]; k++) {
+                        min = Math.min(min, left[i-k][j]);
+                        ans += min;
+                    }
+                }
+            }
+    return ans;
+}
+     #+END_SRC
+     #+BEGIN_SRC java
+// In the first pass through the matrix, we store the heights of 1s above a given i,j
+// In the second pass, we go through each element that is nonzero, scan leftwards,
+//     adding the minimum of the heights encountered until we reach the beginning of the row or hit a zero.
+public int numSubmat(int[][] mat) {
+    int m = mat.length, n = mat[0].length;
+    for (int j = 0; j < n; j++) {
+        int colsum = 0;
+        for (int i = 0; i < m; i++) {
+            if (mat[i][j] == 0) colsum = 0;
+            else colsum += mat[i][j];
+            mat[i][j] = colsum;
+        }
+    }
+    int tot = 0;
+    for (int i = 0; i < m; i++) 
+        for (int j = 0; j < mat[i].length; j++) {
+            int k = j;
+            int min = Integer.MAX_VALUE;
+            while (k >= 0 && mat[i][k] != 0) {
+                min = Math.min(min, mat[i][k]);
+                tot += min;
+                k--;
+            }
+        }
+    return tot;
+}
+     #+END_SRC
+*** 1621. Number of Sets of K Non-Overlapping Line Segments - Medium
+Given n points on a 1-D plane, where the ith point (from 0 to n-1) is at x = i, find the number of ways we can draw exactly k non-overlapping line segments such that each segment covers two or more points. The endpoints of each segment must have integral coordinates. The k line segments do not have to cover all n points, and they are allowed to share endpoints.
+
+Return the number of ways we can draw k non-overlapping line segments. Since this number can be huge, return it modulo 109 + 7.
+**** 解题思路与分析: dfs记忆化搜索, 很慢很慢很慢。。。。。。
+     #+BEGIN_SRC java
+public int numberOfSets(int n, int k) { 
+    if (k == n-1) return 1;
+    this.n = n;
+    dp = new Long [n][k+1];
+    return (int)dfs(0, k);
+}
+long mod = (int)1e9 + 7;
+Long [][] dp; // have to be Long, Integer overflow
+int n;
+private long dfs(int idx, int k) {
+    if (dp[idx][k] != null) return dp[idx][k];
+    if (k == 0) return 1;
+    long ans = 0;
+    for (int i = idx+1; i < n; i++)
+        ans += (i - idx) * dfs(i, k-1);
+    return dp[idx][k] = ans % mod;
+}
+     #+END_SRC
+**** 解题思路与分析: dp[i][j][k]
+
+记 f[i][j]f[i][j] 表示使用 0 .. i 的点构造了 jj 条线段的方案数。我们需要区分第 jj 条线段的右端点是否就是 ii，因此可以考虑把 f[i][j] 拆分成两个状态：
+
+  - f[i][j][0] 表示第 jj 条线段的右端点不是 ii，也就是说我们没有办法继续延长第 jj 条线段；
+  - f[i][j][1] 表示第 jj 条线段的右端点就是 ii，也就是说我们可以选择是否继续延长第 jj 条线段。
+
+如何进行状态转移呢？
+
+首先考虑 f[i][j][0]f[i][j][0]，因为第 jj 条线段的右端点不是 ii，因此第 ii 个点没有用上，那么 0 .. i-1 的点构造了 jj 条线段，即
+
+  - f[i][j][0] = f[i-1][j][0] + f[i-1][j][1]
+
+再考虑 f[i][j][1]f[i][j][1]，因为第 jj 条线段的右端点就是 ii，因此有两种情况：
+
+第 jj 条线段长度为 11，那么 0 .. i-1 的点构造了 j-1j−1 条线段，即
+
+  - f[i][j][1] = f[i-1][j-1][0] + f[i-1][j-1][1]
+
+第 jj 条线段长度大于 11，那么删去第 jj 条线段 i-1 .. i 的这一部分，0 .. i-1 的点仍然构造了 jj 条线段，并且点 i-1i−1 是属于第 jj 条线段的，即
+
+  - f[i][j][1] = f[i-1][j][1]
+
+加上边界条件 f[0][0][0] = 1，最终答案即为 f[n-1][k][0] + f[n-1][k][1].
+
+    #+BEGIN_SRC java
+public int numberOfSets(int n, int k) {
+    int mod = (int)1e9 + 7;
+    long [][][] dp = new long [n][k+1][2]; // dp[i][j][0/1]: 0, 1, 2 ... i形成j段线段，并且第j段线段是1（否0）以点i结尾
+    dp[0][0][0] = 1;
+    for (int i = 1; i < n; i++) {
+        for (int j = 0; j <= k; j++) {
+            dp[i][j][0] = (dp[i-1][j][0] + dp[i-1][j][1]) % mod;
+            dp[i][j][1] = dp[i-1][j][1];
+            if (j > 0)
+                dp[i][j][1] = (dp[i][j][1] + dp[i-1][j-1][0] + dp[i-1][j-1][1]) % mod; 
+        }
+    }
+    return (int)((dp[n-1][k][0] + dp[n-1][k][1]) % mod);
+}
+    #+END_SRC
+**** 解题思路与分析: dp[i][j]
+
+dp[i][j] means how many number of ways we cut j segments for first i points. The result will be dp[n - 1][k]
+
+It is easy to come up with O(N * N * K) solutions
+#+BEGIN_SRC java
+1. Initial value: dp[0][0] = 1. It is only 1 ways to cut first 0 points to 0 segments.
+2. For i > 0, dp[i][j] = dp[i - 1][j]. This is assuming that we don't have jth segment ends up with i th points but j segments can be formed by first i - 1 points.
+3. Now lets' handle those cases that j th segment which will ends up with ith points. jth segments length varies.
+#+END_SRC
+
+dp[i][j] = sum(dp[0][j - 1] ..... dp[i - 1][j - 1])
+
+     #+BEGIN_SRC java
+int mod = 1_000_000_007;                // tle
+public int numberOfSets(int n, int k) { // tle
+    long[][] dp = new long[n][k + 1];
+    dp[0][0] = 1;
+    for (int i = 0; i < n; i++) 
+        for (int j = 0; j <= Math.min(k, i); j++) {
+            if (i > 0) dp[i][j] = dp[i - 1][j];
+            if (j > 0) 
+                for (int h = i - 1; h >= 0; h--) 
+                    dp[i][j] = (dp[i][j] + dp[h][j - 1]) % mod;
+        }
+    return (int)dp[n - 1][k];
+}
+     #+END_SRC
+
+- However it won't pass LC, because the time complexity is too high. Let's optimize it. We can see the inner for loop. It counts ALL values of dp[0...i - 1][j - 1].
+#+BEGIN_SRC java
+for (int h = i - 1; h >= 0; h--) 
+    dp[i][j] = (dp[i][j] + dp[h][j - 1]) % mod;
+#+END_SRC
+
+- We can use a new array to store the previous sum of it. In this way, we don't need compute again. In order to use previous sum, we have to reverse the order of for (int j = 0; j <= Math.min(k, i); j++) to for (int j = Math.min(k, i); j >= 0; j--).
+#+BEGIN_SRC java
+int mod = 1_000_000_007;
+public int numberOfSets(int n, int k) {
+    long[][] dp = new long[n][k + 1];
+    dp[0][0] = 1;
+    long[] sums = new long[k + 1];
+    for (int i = 0; i < n; i++) 
+        for (int j = Math.min(k, i); j >= 0; j--) {
+            if (i > 0) dp[i][j] = dp[i - 1][j];
+            if (j > 0) dp[i][j] = (sums[j - 1] + dp[i][j]) % mod;
+            sums[j] = (sums[j] + dp[i][j]) % mod;
+        }
+    return (int)dp[n - 1][k];
+}
+#+END_SRC
+
 
 ** BitMask掩码相关的
-
 
 ** 第二次刷DP: 下面的题目只需要注意细节，思路没问题
 
@@ -3871,6 +4849,253 @@ public int coinChange(int[] coins, int amount) {
         }
     }
     return dp[amount] == amount + 1 ? -1 : dp[amount];
+}
+#+END_SRC
+
+*** 309. Best Time to Buy and Sell Stock with Cooldown 
+You are given an array prices where prices[i] is the price of a given stock on the ith day.
+Find the maximum profit you can achieve. You may complete as many transactions as you like (i.e., buy one and sell one share of the stock multiple times) with the following restrictions:
+After you sell your stock, you cannot buy stock on the next day (i.e., cooldown one day).
+Note: You may not engage in multiple transactions simultaneously (i.e., you must sell the stock before you buy again).
+
+这个题和714. Best Time to Buy and Sell Stock with Transaction Fee比较像。做题方法都是使用了两个数组：
+
+cash 该天结束手里没有股票的情况下，已经获得的最大收益
+
+hold 该天结束手里有股票的情况下，已经获得的最大收益
+
+- 状态转移方程式这样的：
+  - cash[i]代表的是手里没有股票的收益，这种可能性是今天卖了或者啥也没干。max(昨天手里有股票的收益+今天卖股票的收益，昨天手里没有股票的收益)， 即max(sell[i 1], hold[i 1] + prices[i])；
+
+该算法的时间复杂度是O(n)，空间复杂度是O(n)。
+
+#+BEGIN_SRC java
+public int maxProfit(int[] prices) {
+    int n = prices.length;
+    int [] sold = new int [n];
+    int [] hold = new int [n];
+    hold[0] = -prices[0];
+    for (int i = 1; i < n; i++) {   // ith: do nothing, selling hold[i-1]
+        sold[i] = Math.max((i >= 2 ? sold[i-1] : 0), hold[i-1] + prices[i]); // 今天卖了股票，或者今天什么也没有干
+        hold[i] = Math.max(hold[i-1], (i >= 2 ? sold[i-2] : 0) - prices[i]); // 今天买了股票，或者今天什么也没有干
+    }
+    return Math.max(sold[n-1], hold[n-1]);
+}
+#+END_SRC
+
+*** 123. Best Time to Buy and Sell Stock III
+You are given an array prices where prices[i] is the price of a given stock on the ith day.
+Find the maximum profit you can achieve. You may complete at most two transactions.
+Note: You may not engage in multiple transactions simultaneously (i.e., you must sell the stock before you buy again).
+#+BEGIN_SRC java
+// k 次交易 = k 个 non-overlapping subarray
+//     以这个角度去想，无非就是从两个方向扫描，
+//     利用 localMin / localMax 与当前元素的差值，去构造从左边/右边扫的 dp 数组。
+//     left[i] : 从最左面到 i 所能获得的最大利益（单次交易）
+//     right[i] : 从 i 到最右面所能获得的最大利益（单次交易）
+public int maxProfit(int[] prices) {
+    int n = prices.length;
+    int [] left = new int [n];
+    int [] right = new int[n];
+    int locMin = prices[0];
+    int globalMax = Integer.MIN_VALUE;
+    for (int i = 1; i < n; i++) {
+        globalMax = Math.max(globalMax, Math.max(0, prices[i] - locMin));
+        locMin = Math.min(locMin, prices[i]);
+        left[i] = globalMax;
+    }
+    int locMax = prices[n-1];
+    globalMax = Integer.MIN_VALUE;
+    for (int i = n-2; i >= 0; i--) {
+        globalMax = Math.max(globalMax, Math.max(0, locMax - prices[i]));
+        locMax = Math.max(locMax, prices[i]);
+        right[i] = globalMax;
+    }
+    globalMax = 0;
+    for (int i = 0; i < n-1; i++) 
+        globalMax = Math.max(globalMax, left[i] + right[i+1]);
+    globalMax = Math.max(globalMax, left[n-1]);
+    return globalMax;
+}
+#+END_SRC
+
+*** 188. Best Time to Buy and Sell Stock IV
+You are given an integer array prices where prices[i] is the price of a given stock on the ith day, and an integer k.
+Find the maximum profit you can achieve. You may complete at most k transactions.
+Note: You may not engage in multiple transactions simultaneously (i.e., you must sell the stock before you buy again).
+#+BEGIN_SRC java
+public int maxProfit(int k, int [] prices) {
+    if (prices == null || prices.length == 0) return 0;
+    int n = prices.length;
+    int diff = 0;
+    if (k >= n/2) {
+        int res = 0;
+        for (int i = 1; i < n; i++) {
+           diff = prices[i] - prices[i-1];
+            if (diff > 0) res += diff;
+        }
+        return res;
+    }
+    int [][] locMax = new int [n][k+1];
+    int [][] gloMax = new int [n][k+1];
+    for (int i = 1; i < n; i++) {
+        diff = prices[i] - prices[i-1];
+        for (int j = 1; j <= k && j * 2 <= i+1; j++) {
+            locMax[i][j] = Math.max(locMax[i-1][j], gloMax[i-1][j-1]) + diff;
+            gloMax[i][j] = Math.max(locMax[i][j], gloMax[i-1][j]);
+        }
+    }
+    return gloMax[n-1][k];
+}
+#+END_SRC
+
+*** 650. 2 Keys Keyboard - Medium
+There is only one character 'A' on the screen of a notepad. You can perform two operations on this notepad for each step:
+
+Copy All: You can copy all the characters present on the screen (a partial copy is not allowed).
+Paste: You can paste the characters which are copied last time.
+Given an integer n, return the minimum number of operations to get the character 'A' exactly n times on the screen.
+**** 解题思路与分析
+#+BEGIN_SRC java
+public int minSteps(int n) {
+    if (n == 1) return 0;
+    int [] dp = new int [n+1];
+    dp[1] = 0;
+    dp[2] = 2;     // copy A + paste A 
+    for (int i = 3; i <= n; i++) {
+        dp[i] = i; // 最多操作i次，在dp[2] = 2的基础上每多加一个字母就多paste一次
+        for (int j = i-1; j >= 2; j--) {
+            if (i % j == 0) // 可以在面板上有j个A的基础上，copy j个A，再paste i/j-1次
+                dp[i] = Math.min(dp[i], dp[j]+1 + i/j-1);
+        }
+    }
+    return dp[n];
+}
+#+END_SRC
+*** 913. Cat and Mouse
+A game on an undirected graph is played by two players, Mouse and Cat, who alternate turns.
+The graph is given as follows: graph[a] is a list of all nodes b such that ab is an edge of the graph.
+The mouse starts at node 1 and goes first, the cat starts at node 2 and goes second, and there is a hole at node 0.
+During each player's turn, they must travel along one edge of the graph that meets where they are.  For example, if the Mouse is at node 1, it must travel to any node in graph[1].
+Additionally, it is not allowed for the Cat to travel to the Hole (node 0.)
+Then, the game can end in three ways:
+If ever the Cat occupies the same node as the Mouse, the Cat wins.
+If ever the Mouse reaches the Hole, the Mouse wins.
+If ever a position is repeated (i.e., the players are in the same position as a previous turn, and it is the same player's turn to move), the game is a draw.
+Given a graph, and assuming both players play optimally, return
+1 if the mouse wins the game,
+2 if the cat wins the game, or
+0 if the game is a draw.
+#+BEGIN_SRC java
+private int dfs(int [][] arr, int t, int i, int j) { // t: steps, i: mouse, j: cat, mouse goes first
+    if (t == 2 * n) return 0;
+    if (i == j) return dp[t][i][j] = 2;
+    if (i == 0) return dp[t][i][j] = 1;
+    if (dp[t][i][j] != -1) return dp[t][i][j];
+    int tmp = 0;
+    if (t % 2 == 0) { // mouse's turn
+        boolean catWin = true;
+        for (int k = 0; k < arr[i].length; k++) {
+            tmp = dfs(arr, t+1, arr[i][k], j);
+            if (tmp == 1) return dp[t][i][j] = 1;
+            else if (tmp != 2) catWin = false;
+        }
+        if (catWin) return dp[t][i][j] = 2;
+        else return dp[t][i][j] = 0;
+    } else { // cat's turn, can NOT step on node # 0
+        boolean mouseWin = true;
+        for (int k = 0; k < arr[j].length; k++) {
+            if (arr[j][k] == 0) continue;
+            tmp = dfs(arr, t+1, i, arr[j][k]);
+            if (tmp == 2) return dp[t][i][j] = 2;
+            else if (tmp != 1) mouseWin = false;
+        }
+        if (mouseWin) return dp[t][i][j] = 1;
+        else return  dp[t][i][j] = 0;
+    }
+}
+int [][][] dp;
+int n;
+public int catMouseGame(int[][] graph) {
+    n = graph.length;
+    dp = new int [2*n][n][n];
+    for (int i = 0; i < 2*n; i++) 
+        for (int j = 0; j < n; j++)
+            Arrays.fill(dp[i][j], -1);
+    dfs(graph, 0, 1, 2);
+    return dp[0][1][2];
+}
+#+END_SRC
+
+*** 1728. Cat and Mouse II
+A game is played by a cat and a mouse named Cat and Mouse.
+The environment is represented by a grid of size rows x cols, where each element is a wall, floor, player (Cat, Mouse), or food.
+Players are represented by the characters 'C'(Cat),'M'(Mouse).
+Floors are represented by the character '.' and can be walked on.
+Walls are represented by the character '#' and cannot be walked on.
+Food is represented by the character 'F' and can be walked on.
+There is only one of each character 'C', 'M', and 'F' in grid.
+Mouse and Cat play according to the following rules:
+Mouse moves first, then they take turns to move.
+During each turn, Cat and Mouse can jump in one of the four directions (left, right, up, down). They cannot jump over the wall nor outside of the grid.
+catJump, mouseJump are the maximum lengths Cat and Mouse can jump at a time, respectively. Cat and Mouse can jump less than the maximum length.
+Staying in the same position is allowed.
+Mouse can jump over Cat.
+The game can end in 4 ways:
+If Cat occupies the same position as Mouse, Cat wins.
+If Cat reaches the food first, Cat wins.
+If Mouse reaches the food first, Mouse wins.
+If Mouse cannot get to the food within 1000 turns, Cat wins.
+Given a rows x cols matrix grid and two integers catJump and mouseJump, return true if Mouse can win the game if both Cat and Mouse play optimally, otherwise return false.
+#+BEGIN_SRC java
+private boolean dfs(String [] arr, int t, int i, int j) {
+    if (dp[t][i][j] != null) return dp[t][i][j];
+    if (t == m*n*2) return false;
+    if (arr[i/n].charAt(i%n) == 'F') return true;
+    if (arr[j/n].charAt(j%n) == 'F') return false;
+    if (i == j) return false;
+    int r = 0, c = 0;
+    if (t % 2 == 0) { // mouse's turn 老鼠的：只要它能赢一个状态就是赢了
+        for (int [] d : dirs) 
+            for (int k = 0; k <= mj; k++) {
+                r = i / n + d[0] * k;
+                c = i % n + d[1] * k;
+                if (r >= 0 && r < m && c >= 0 && c < n && arr[r].charAt(c) != '#') {
+                    if (dfs(arr, t+1, r*n+c, j))
+                        return dp[t][i][j] = true; // Mouse could win
+                } else break;
+            }
+        return dp[t][i][j] = false;
+    } else { // cat's turn：但是当是猎的：需要猫不能赢，老鼠才能赢；但是当猫哪怕是赢了只一局，老鼠也就输了
+        for (int [] d : dirs) 
+            for (int k = 0; k <= cj; k++) {
+                r = j / n + d[0] * k;
+                c = j % n + d[1] * k;
+                if (r >= 0 && r < m && c >= 0 && c < n && arr[r].charAt(c) != '#') {
+                    if (!dfs(arr, t+1, i, r*n+c))  // Can cat find a path that mouse looses in it?
+                        return dp[t][i][j] = false; // Cat wins = mouse loose
+                } else break; // 上面这一点儿狠重要
+            }
+        return dp[t][i][j] = true;
+    }
+}
+int [][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+Boolean [][][] dp;
+int m, n, cj, mj;
+public boolean canMouseWin(String[] grid, int catJump, int mouseJump) {
+    m = grid.length;
+    n = grid[0].length();
+    cj = catJump;
+    mj = mouseJump;
+    dp = new Boolean [1001][m*n][m*n];
+    int x = 0, y = 0;
+    for (int i = 0; i < m; i++) 
+        for (int j = 0; j < n; j++) 
+            if (grid[i].charAt(j) == 'M')
+                x = i * n + j;
+            else if (grid[i].charAt(j) == 'C')
+                y = i * n + j;
+    return dfs(grid, 0, x, y);
 }
 #+END_SRC
 

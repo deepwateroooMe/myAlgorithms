@@ -437,7 +437,6 @@ public class bitMask {
         //                 for (int preMask = 0; preMask < range; preMask++) 
         //                     if (dp[i-1][preMask] != -1 && (curMask & (preMask >> 1)) == 0 && ((curMask >> 1) & preMask) == 0)
         //                         dp[i][curMask] = Math.max(dp[i][curMask], dp[i-1][preMask] + Integer.bitCount(curMask));
-                    
         //     int max = 0;
         //     for (int i = 0; i < range; i++) 
         //         max = Math.max(max, dp[m][i]);
