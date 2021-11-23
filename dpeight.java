@@ -124,47 +124,6 @@ public class dpeight {
             return (int)(max % mod);
         }
 
-        public int maxSumBST(TreeNode root) { // tle
-            bottomUpTraverse(root);
-            return max < 0 ? 0 : max;
-        }
-        int max = Integer.MIN_VALUE;
-        private void bottomUpTraverse(TreeNode r) { // 以前什么时候写的忘记了，这个题再想想，怎么把分开的每个node遍历合并成可剪枝的一次系统性遍历 ？
-            if (r == null) return ;
-            bottomUpTraverse(r.left);
-            bottomUpTraverse(r.right);
-            Rn cur = traverse(r);
-            if (cur.bst) max = Math.max(max, cur.sum);
-        }
-        private Rn traverse(TreeNode r) {
-            if (r == null) return null;
-            if (r.left == null && r.right == null) 
-                return new Rn(r.val, true, r.val, r.val);
-            Rn left = traverse(r.left);
-            Rn right = traverse(r.right);
-            if (left == null || right == null) {
-                return new Rn((left == null ? right.sum : left.sum) + r.val,
-                              left == null ? right.bst && right.min > r.val : left.bst && left.max < r.val,
-                              Math.min(r.val, (left == null ? right.min : left.min)),
-                              Math.max(r.val, (left == null ? right.max : left.max)));
-            }
-            return new Rn(left.sum + right.sum + r.val,
-                          left.bst && right.bst && r.val > left.max && r.val < right.min,
-                          Math.min(r.val, Math.min(left.min, right.min)),
-                          Math.max(r.val, Math.max(left.max, right.max)));
-        }
-        public class Rn {
-            int sum;
-            boolean bst;
-            int min, max;// from left
-             public Rn(int a, boolean b, int c, int d) {
-                sum = a;
-                bst = b;
-                min = c;
-                max = d;
-            }
-        }
-
         public int minimumIncompatibility(int[] a, int k) { // bug
             n = a.length;
             dp = new TreeSet [k];
@@ -404,40 +363,6 @@ public class dpeight {
                     return Math.min(integerReplacement(n+1), integerReplacement(n-1)) + 1 + cnt;
             }
             return cnt;
-        }
-
-         public String largestNumber(int[] cost, int target) { // bug
-            n = cost.length;
-            dp = new String [target + 1];
-            return dfs(target, cost);
-        }
-        String [] dp;
-        int n;
-        private String dfs(int i, int [] a) {
-            System.out.println("\n i: " + i);
-            if (i == 0) return "";
-            if (dp[i] != null) return dp[i];
-            String ans = "";
-            for (int j = 0; j < a.length; j++) {
-                if (i < a[j]) continue;
-                // String cur = Integer.toString(j+1) + dfs(i - a[j], a);
-                String cur = ("" + (j+1)) + dfs(i - a[j], a);
-                if (cur.length() >= ans.length()) {
-                    if (cur.length() > ans.length()) ans = new String(cur);
-                    else {
-                        System.out.println("ans: " + ans);
-                        System.out.println("cur: " + cur);
-                        char [] sans = ans.toCharArray();
-                        char [] scur = cur.toCharArray();
-                        Arrays.sort(sans);
-                        Arrays.sort(scur);
-                        if ((new String(sans)).compareTo(new String(scur)) < 0)
-                            ans = new String(cur);
-                    }
-                }
-            }
-            System.out.println("dp[i]: " + dp[i]);
-            return dp[i] = ans;
         }
 
         public int dieSimulator(int n, int [] r) { // DP(pos, last) which means we are at the position pos having as last the last character seen.
@@ -927,12 +852,6 @@ public class dpeight {
                     dp[i][j] = tmp;
                 }
             return dp[m-1][n-1];
-        }
-
-        public int distinctSubseqII(String t) { // 每个当前字符，可出现、或不出现在子序列中，两种情况 * 之前的结束，对重复出现字符的处理
-            int n = t.length();
-            char [] s = ("#" + t).toCharArray();
-            int [] dp = new int [n];
         }
 
         public boolean canCross(int[] stones) { 
@@ -1504,6 +1423,7 @@ public class dpeight {
         Solution s = new Solution();
 
 
+        
         // int []  a = new int []  {0, 1, 2, 2};
         // int [] a = new int [] {2,2,0,0};
         // int [] a = new int [] {0,1,2,0,1,2};
@@ -1513,10 +1433,3 @@ public class dpeight {
         System.out.println("r: " + r);
     }
 }
-
-// int []  a = new int []  {1, 4, 3, 2, 4, 2, 5, -1, -1, -1, -1, -1, -1, 4, 6};
-// TreeNode root = new TreeNode(a[0]);
-// root.buildTree(root, a);
-// root.levelPrintTree(root);
-// int r = s.maxSumBST(root);
-// System.out.println("r: " + r);

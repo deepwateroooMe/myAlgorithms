@@ -1226,52 +1226,6 @@ public class dpseven {
             return max;
         }
 
-        public int minimumMountainRemovals(int[] a) {
-            int n = a.length, max = 1, i = 0, j = n-1;
-            int [] dp = new int [n];
-            while (i < n-1 && a[i] >= a[i+1]) i++;
-            while (j > 0 && a[j-1] <= a[j]) j--;
-            dp[i] = 1;
-            i++;
-            for (; i <= j; i++) {
-                if (a[i] > a[i-1]) dp[i] = dp[i-1] + 1;
-                else if (a[i] == a[i-1]) dp[i] = dp[i-1];
-                else // ? up [] dn [] ? 这中间关于升除还有点没能想透
-            }
-        }
-
-        public int distinctSubseqII(String t) {
-            int n = t.length();
-            char [] s = ("#" + t).toCharArray();
-            int [] dp = new int [n];
-        }
-
-        public int oddEvenJumps(int [] a) { // bug
-            int n = a.length;
-            Set<Integer> idx = new HashSet<>();
-            ArrayDeque<Integer> max = new ArrayDeque<>(); // 单调递增 右进
-            ArrayDeque<Integer> min = new ArrayDeque<>(); // 单调递减 左进 --》这里有点儿想不太明白了，这个思路可能不能，改天再写这个
-            boolean [] odd = new boolean [n];
-            boolean [] evn = new boolean [n];
-            odd[n-1] = true;
-            evn[n-1] = true;
-            idx.add(n-1);
-            max.offerLast(n-1);
-            min.offerLast(n-1);
-            for (int i = n-2; i >= 0; i--) {
-                if (!max.isEmpty() && evn[max.peekFirst()]) {
-                    odd[i] = true;
-                    idx.add(i);
-                }
-                while (!min.isEmpty() &&  a[i] < a[min.peekFirst()]) min.pollFirst(); // 去头：不合法的扔出去
-                if (!min.isEmpty() && odd[min.peekFirst()]) 
-                    evn[i] = true;
-                while (!max.isEmpty() && a[max.peekLast()] >= a[i]) max.pollLast();
-                max.offerLast(i);
-                min.offerFirst(i);
-            }
-        }
-
         // 1）dp（里面不含有A，并且结尾不是“L”）：只能以P结尾，所以dp[i] = dp[i-1] + dpl[i-1] + dpll[i-1]。
         // 2）dpl（里面不含有A，并且结尾是“L”）：只能在dp的基础上加上L结尾，所以dpl[i] = dp[i-1]。
         // 3）dpll（里面不含有A，并且结尾是“LL”）：只能在dpl的基础上加上L结尾，所以dpll[i] = dpl[i-1]。

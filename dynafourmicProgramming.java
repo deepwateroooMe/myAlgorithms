@@ -360,20 +360,6 @@ public class dynafourmicProgramming {
         // }
 
 
-        // public String shortestCommonSupersequence(String s, String t) {
-        //     int m = s.length();
-        //     int n = t.length();
-        //     int [][] dp = new int [m][n];
-        // }
-
-
-        // public int minCost(int n, int[] cuts) {
-        //     int m = cuts.length;
-        //     int [][] dp = new int [n][n];
-        //     Arrays.sort(cuts);
-        // }
-
-
         // public long solve(List<Integer> l) {
         //     int n = l.size();
         //     if (n <= 1) return 1;

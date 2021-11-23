@@ -501,15 +501,6 @@ public class dpsix {
             return (int)g[n][k][m];
         }
 
-        public int numMusicPlaylists(int n, int goal, int k) {
-            long mod = (int)1e9 + 7;
-            long [][] dp = new long [goal+1][n+1]; // dp[i][j]: 播完i首用了j首不同的曲子，分第爱首播不播第这首两种情况
-            // 要怎么初始化呢？
-            for (int j = 1; j <= k; j++) 
-                dp[1][j] = n;
-            return (int)dp[goal][n];
-        }
-
         // 记 dp[i][j] = v 表示s[0:j]区间内分割成j段，只需要改变v个字符就可以使得每一段的子串都是回文串。
         //     要求dp[i][j]的值，关键就是找出j和j-1的分割点。
         //     很显然有dp[i][j] = min(dp[m][j-1] + s[m:j]需要改变的字符的个数)，只需要找出最小的分割点m即可。        

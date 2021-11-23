@@ -680,19 +680,19 @@ private static int getMaxLength(int[] arr){
 - 第一种：
 #+BEGIN_SRC java
 for (int i = n; i >= 1; --i) 
-	for (int j = i + 1; j <= n; ++j) 
-		for (int k = i; k < j; ++k) 
-			dp[i,j] = max/min(dp[i,j], dp[i,k] + dp[k+1, j] + cost)
+    for (int j = i + 1; j <= n; ++j) 
+        for (int k = i; k < j; ++k) 
+            dp[i,j] = max/min(dp[i,j], dp[i,k] + dp[k+1, j] + cost)
 #+END_SRC
 
 这种写法就是常规的dp写法，枚举i为子区间左边界，枚举j为子区间有边界，枚举k为分界点。要注意由于要求的是dp[1,n]，所以i必须从大往小遍历，j必须从小往大遍历。这样在状态转移方程中利用的就是已求解的dp状态。
 - 第二种：
 #+BEGIN_SRC java
 for (int len = 2; len <= n; ++len) 
-	for (int i = 1; i + len - 1  <= n; ++i) {
-		int j = i + len - 1;
-		for (int k = i; k < j; ++k) 
-			dp[i,j] = max/min(dp[i,j], dp[i,k] + dp[k+1, j] + cost;
+    for (int i = 1; i + len - 1  <= n; ++i) {
+        int j = i + len - 1;
+        for (int k = i; k < j; ++k) 
+            dp[i,j] = max/min(dp[i,j], dp[i,k] + dp[k+1, j] + cost;
     }
 #+END_SRC
 
@@ -1585,44 +1585,36 @@ At the stage of rotating the ring to spell the key character key[i]:
 
 You can rotate the ring clockwise or anticlockwise by one place, which counts as one step. The final purpose of the rotation is to align one of ring's characters at the "12:00" direction, where this character must equal key[i].
 If the character key[i] has been aligned at the "12:00" direction, press the center button to spell, which also counts as one step. After the pressing, you could begin to spell the next character in the key (next stage). Otherwise, you have finished all the spelling.
-**** 解题思路分析: 这个图把钥匙中每个字母的出现位置记住了，以后拿去用不搜 dfs + 记忆数组
+**** 解题思路分析: dfs + 记忆数组(这个图把钥匙中每个字母的出现位置记住了，以后拿去用不搜)
 - 记录下所有字母对应的位置，这样在找字母相对位置的时候就不需要循环搜索了
 - 采用递归的方法，找出当前字母对应的位置最小的步数：只需要把当前字母对应的所有位置找出来，然后计算最小值即可
 - 下一个位置再次迭代计算即可
 #+BEGIN_SRC java
-public int minLen(int len, int i, int j) {
-    int min = Math.min(i, j);
-    int max = Math.max(i, j);
-    return Math.min(Math.abs(i - j), Math.abs(len + min - max));
-}
-public int helper(String ring, int i, String key, int j) {
-    if (j >= n) return 0;
-    if (dp[i][j] > 0) return dp[i][j];
-    List<Integer> nextPos = map.get(key.charAt(j));
-    int min = Integer.MAX_VALUE;
-    for (int k = 0; k < nextPos.size(); k++) 
-        min = Math.min(min, helper(ring, nextPos.get(k), key, j+1) + minLen(m, nextPos.get(k), i) + 1);
-    dp[i][j] = min;
-    return dp[i][j];
-}
-Map<Character, List<Integer>> map = new HashMap<>(); // 这个图把钥匙中每个字母的出现位置记住了，以后拿去用不搜
-int[][] dp;
-int m, n;
-public int findRotateSteps(String ring, String key) {
+public int findRotateSteps(String ring, String key) { // dfs
     m = ring.length();
     n = key.length();
-    dp = new int[m][n];
+    char [] s = ring.toCharArray();
     for (int i = 0; i < m; i++) {
-        if (key.indexOf(ring.charAt(i)) == -1) continue;
-        char c = ring.charAt(i);
-        List<Integer> li = map.get(c);
-        if (li == null) {
-            li = new ArrayList<>();
-            map.put(c, li);
-        }
-        li.add(i);
+        if (key.indexOf(s[i]) == -1) continue; // 只记录在key中出现过的字母的位置
+        idx.computeIfAbsent(s[i], z -> new ArrayList<>()).add(i);
     }
-    return helper(ring, 0, key, 0);
+    dp = new int [m][n];
+    return dfs(0, 0, ring, key);
+}
+Map<Character, List<Integer>> idx = new HashMap<>();
+int [][] dp;
+int m, n;
+private int dfs(int i, int j, String s, String t) {
+    if (j == n) return 0;
+    if (dp[i][j] > 0) return dp[i][j];
+    int ans = Integer.MAX_VALUE;
+    for (Integer v : idx.get(t.charAt(j))) 
+        ans = Math.min(ans, dfs(v, j+1, s, t) + getDist(v, i) + 1); // + 1 for confirm push
+    return dp[i][j] = ans;
+}
+private int getDist(int i, int j) {
+    int min = Math.min(i, j), max = Math.max(i, j);
+    return Math.min(Math.abs(i - j), Math.abs(m - max + min)); 
 }
 #+END_SRC
 **** 解题思路分析 动态规划
@@ -1630,38 +1622,48 @@ public int findRotateSteps(String ring, String key) {
 - 此题需要使用一个二维数组dp，其中dp[i][j]表示转动从i位置开始的key串所需要的最少步数(这里不包括spell的步数，因为spell可以在最后统一加上)，此时表盘的12点位置是ring中的第j个字符。不得不佩服这样的设计的确很巧妙，我们可以从key的末尾往前推，这样dp[0][0]就是我们所需要的结果，因为此时是从key的开头开始转动，而且表盘此时的12点位置也是ring的第一个字符。现在我们来看如何找出递推公式，对于dp[i][j]，我们知道此时要将key[i]转动到12点的位置，而此时表盘的12点位置是ring[j]，我们有两种旋转的方式，顺时针和逆时针，我们的目标肯定是要求最小的转动步数，而顺时针和逆时针的转动次数之和刚好为ring的长度n，这样我们求出来一个方向的次数，就可以迅速得到反方向的转动次数。为了将此时表盘上12点位置上的ring[j]转动到key[i]，我们要将表盘转动一整圈，当转到key[i]的位置时，我们计算出转动步数diff，然后计算出反向转动步数，并取二者较小值为整个转动步数step，此时我们更新dp[i][j]，更新对比值为step + dp[i+1][k]，这个也不难理解，因为key的前一个字符key[i+1]的转动情况suppose已经计算好了，那么dp[i+1][k]就是当时表盘12点位置上ring[k]的情况的最短步数，step就是从ring[k]转到ring[j]的步数，也就是key[i]转到ring[j]的步数，用语言来描述就是，从key的i位置开始转动并且此时表盘12点位置为ring[j]的最小步数(dp[i][j])就等价于将ring[k]转动到12点位置的步数(step)加上从key的i+1位置开始转动并且ring[k]已经在表盘12点位置上的最小步数(dp[i+1][k])之和。
 - 突然发现这不就是之前那道Reverse Pairs中解法一中归纳的顺序重现关系的思路吗，都做了总结，可换个马甲就又不认识了，泪目中。。。
 #+BEGIN_SRC java
-public int findRotateSteps(String ring, String key) {
-    int m = key.length(); 
-    int n = ring.length();
-    int [][] dp = new int[m+1][n];
-    int diff = 0, step = 0;
-    for (int i = m-1; i >= 0; i--) {
-        for (int j = 0; j < n; j++) {
+public int findRotateSteps(String ring, String key) { // dfs
+    int m = key.length(), n = ring.length();
+    char [] s = key.toCharArray();
+    char [] t = ring.toCharArray();
+    int [][] dp = new int [m+1][n];
+    int dif = 0, cnt = 0;
+    for (int i = m-1; i >= 0; i--) 
+        for (int j = 0; j < n; j++) { // j 是固定在12点钟表盘的位置
             dp[i][j] = Integer.MAX_VALUE;
-            for (int k = 0; k < n; k++) {
-                if (ring.charAt(k) == key.charAt(i)) {
-                    diff = Math.abs(j - k);
-                    step = Math.min(diff, n-diff);
-                    dp[i][j] = Math.min(dp[i][j], step + dp[i+1][k]);
+            for (int k = 0; k < n; k++) 
+                if (s[i] == t[k]) {
+                    dif = Math.abs(j - k);
+                    cnt = Math.min(dif, n - dif);
+                    dp[i][j] = Math.min(dp[i][j], cnt + dp[i+1][k]);
                 }
-            }
         }
-    }
     return dp[0][0] + m;
 }
 #+END_SRC
 
-**** 解题思路分析: dfs + 记忆数组
-- 过程就是需要一步一步求key里面的每个字符。 如果当前位置已经是对应到这个字符，那么直接按按钮就可以
-- 如果当前位置不是，那么有两种旋转方式，顺时针或者逆时针, 然后找到第一个字符就是在同一个方向上的最短距离，
-- 因为在同一个方向上，即使后面有重复的字符，无论后面的字符在那里，遇到第一个符合条件的字符就按按钮一定是最优解。
-- 但是在不同方向上就不一定了，有可能一个方向上当前字符距离更短，但是有可能后面的字符距离会更远，
-  - 比如ring=ABCDEFGBF , key=BG, 如果看第一个字符， 那应该是顺时针，只需要转一格就到，逆时针需要转两格，
-  - 但是顺时针第一步快了以后， 后面到G会需要更长的步骤。 而逆时针会比较快。
-- 所以，基本的逻辑是每一步不能决定当前哪个方向是否是最优解， 只有不断递归，把每步的两个方向全部尝试完到key结束才可以
-- 当然， 如果不做任何处理，这样做是要超时的（我开始就写了这样一个版本）， 一个直观的做法，就是在递归的基础上
-  - 加一个记忆表， 针对ring的位置index和key的kindex做记录， 如果已经存在一个解了就可以直接返回结果
-- 这个递归+memorization的解法，那一定存在一个bottom up的动态规划解法， 这个后面再学习
+**** 解题思路分析: dfs + 记忆数组 todo: 这个写得太繁琐了，没看 
+
+过程就是需要一步一步求key里面的每个字符。 如果当前位置已经是对应到这个字符，那么直接按按钮就可以
+
+如果当前位置不是，那么有两种旋转方式，顺时针或者逆时针, 然后找到第一个字符就是在同一个方向上的最短距离，
+
+因为在同一个方向上，即使后面有重复的字符，无论后面的字符在那里，遇到第一个符合条件的字符就按按钮一定是最优解。
+
+但是在不同方向上就不一定了，有可能一个方向上当前字符距离更短，但是有可能后面的字符距离会更远，
+
+  比如ring=ABCDEFGBF , key=BG, 如果看第一个字符， 那应该是顺时针，只需要转一格就到，逆时针需要转两格，
+
+  但是顺时针第一步快了以后， 后面到G会需要更长的步骤。 而逆时针会比较快。
+
+所以，基本的逻辑是每一步不能决定当前哪个方向是否是最优解， 只有不断递归，把每步的两个方向全部尝试完到key结束才可以
+
+当然， 如果不做任何处理，这样做是要超时的（我开始就写了这样一个版本）， 一个直观的做法，就是在递归的基础上
+
+  加一个记忆表， 针对ring的位置index和key的kindex做记录， 如果已经存在一个解了就可以直接返回结果
+
+这个递归+memorization的解法，那一定存在一个bottom up的动态规划解法， 这个后面再学习
+
 #+BEGIN_SRC java
 private int helper(String s, String t, int i, int j) { // s: ring, t: key, i: idxRing, j: idxKey
     Map<Integer, Integer> locMap = mem.get(i);
@@ -2258,7 +2260,7 @@ There is a group of n members, and a list of various crimes they could commit. T
 Let's call a profitable scheme any subset of these crimes that generates at least minProfit profit, and the total number of members participating in that subset of crimes is at most n.
 
 Return the number of schemes that can be chosen. Since the answer may be very large, return it modulo 109 + 7.
-***** 解题思路与分析
+***** 解题思路与分析: DP
     
     [[./pic/crime.png]]
     
@@ -2271,18 +2273,18 @@ Return the number of schemes that can be chosen. Since the answer may be very la
 综上所述，若我们选择做任务k，则能新产生的分配方案的个数为 dp[k-1][i-g][max(0,j-p)]，记得每次累加完要对超大数取余。最终我们需要将 dp[n][i][P] ( 0 <= i <= G ) 累加起来，因为我们不一定要全部使用G个人，只要能产生P的利润，用几个人都没关系，而k是表示最多干的买卖数，可能上并没有干到这么多，所以只需要累加人数这个维度即可，
 
 #+BEGIN_SRC java
-public int profitableSchemes(int n, int minProfit, int[] group, int[] profit) { // 0-1背包问题：每场罪恶在每个状态里最多只能存在一次
-    int mod = (int)1e9 + 7, ans = 0;
-    int m = group.length;
-    int [][][] dp = new int [m+1][n+1][minProfit + 1]; 
+static final int mod = (int)1e9 + 7;
+public int profitableSchemes(int n, int minProfit, int[] group, int[] profit) {
+    int m = group.length, ans = 0;
+    int [][][] dp = new int [m+1][n+1][minProfit+1];
     dp[0][0][0] = 1;
-    for (int k = 1; k <= m; k++) {
-        int p = profit[k-1], g = group[k-1];
-        for (int i = 0; i <= n; i++) 
-            for (int j = 0; j <= minProfit; j++) {
-                dp[k][i][j] = dp[k-1][i][j];
-                if (i >= g)
-                    dp[k][i][j] = (dp[k][i][j] + dp[k-1][i-g][Math.max(0, j-p)]) % mod;
+    for (int i = 1; i <= m; i++) {   // 遍历每桩案件
+        int g = group[i-1], p = profit[i-1];
+        for (int j = 0; j <= n; j++) // 遍历人数
+            for (int k = 0; k <= minProfit; k++) {
+                dp[i][j][k] = dp[i-1][j][k];
+                if (j >= g)   // 在本桩案件人手够用的前提下，办与不办此案的方案数相加
+                    dp[i][j][k] = (dp[i][j][k] + dp[i-1][j-g][Math.max(0, k-p)]) % mod;
             }
     }
     for (int i = 0; i <= n; i++) 
@@ -2294,26 +2296,50 @@ public int profitableSchemes(int n, int minProfit, int[] group, int[] profit) { 
 
 因为当前做的第k个任务，只跟前 k-1 个任务的分配方案有关，所以并不需要保存所有的任务个数的分配方式。这样我们就节省了一个维度，但是需要注意的是，更新的时候i和j只能从大到小更新，这个其实也不难理解，因为此时 dp[i][j] 存的是前 k-1 个任务的分配方式，所以更新第k个任务的时候，一定要从后面开始覆盖，因为用到了前面的值，若从前面的值开始更新的话，就不能保证用到的都是前 k-1 个任务的分配方式，有可能用到的是已经更新过的值，就会出错.
 #+BEGIN_SRC java
-public int profitableSchemes(int n, int minProfit, int[] group, int[] profit) { // 0-1背包问题：每场罪恶在每个状态里最多只能存在一次
-    int mod = (int)1e9 + 7, ans = 0;
-    int m = group.length;
-    int [][] dp = new int [n+1][minProfit + 1]; 
+static final int mod = (int)1e9 + 7;
+public int profitableSchemes(int n, int minProfit, int[] group, int[] profit) {
+    int m = group.length, ans = 0;
+    int [][] dp = new int [n+1][minProfit+1];
     dp[0][0] = 1;
-    for (int k = 1; k <= m; k++) {
-        int p = profit[k-1], g = group[k-1];
-        for (int i = n; i >= g; i--)  // i >= 
-            for (int j = minProfit; j >= 0; j--) 
-                dp[i][j] = (dp[i][j] + dp[i-g][Math.max(0, j-p)]) % mod; // 保证了这一行覆盖原数组的正确性
+    for (int i = 1; i <= m; i++) {   // 遍历每桩案件
+        int g = group[i-1], p = profit[i-1];
+        for (int j = n; j >= g; j--)  // 当压缩了一维空间，从后往前遍历以免产生赃数据
+            for (int k = minProfit; k >= 0; k--) 
+                dp[j][k] = (dp[j][k] + dp[j-g][Math.max(0, k-p)]) % mod;
     }
     for (int i = 0; i <= n; i++) 
         ans = (ans + dp[i][minProfit]) % mod;
     return ans;
 }
 #+END_SRC
-**** 递归 + 记忆数组来做 todo: 改天补上
+**** 递归dfs + 记忆数组
 
-基本思想跟解法一没有太大的区别，递归的记忆数组其实跟迭代形式的 dp 数组没有太大的区别，作用都是保存中间状态从而减少大量的重复计算。这里稍稍需要注意下的就是递归函数中的 corner case，当 k=0 时，则根据j的值来返回0或1，当j小于等于0，返回1，否则返回0，相当于修改了初始化值（之前都初始化为了整型最小值），然后当j小于0时，则j赋值为0，因为利润不能为负值。然后就看若当前的 memo[k][i][j] 已经计算过了，则直接返回即可，
-- https://www.cnblogs.com/grandyang/p/11108205.html
+基本思想跟解法一没有太大的区别，递归的记忆数组其实跟迭代形式的 dp 数组没有太大的区别，作用都是保存中间状态从而减少大量的重复计算。这里稍稍需要注意下的就是递归函数中的 corner case，当 k=0 时，则根据j的值来返回0或1，当j小于等于0，返回1，否则返回0，相当于修改了初始化值（之前都初始化为了整型最小值），然后当j小于0时，则j赋值为0，因为利润不能为负值。然后就看若当前的 memo[k][i][j] 已经计算过了，则直接返回即可
+#+BEGIN_SRC java
+public int profitableSchemes(int n, int minProfit, int[] group, int[] profit) {
+    m = group.length;
+    this.n = n;
+    this.minProfit = minProfit;
+    dp = new int [m+1][n+1][minProfit+1];
+    for (int i = 0; i <= m; i++) 
+        for (int j = 0; j <= n; j++) 
+            Arrays.fill(dp[i][j], Integer.MIN_VALUE);
+    return dfs(m, n, minProfit, group, profit);
+}
+static final int mod = (int)1e9 + 7;
+int m, n, minProfit;
+int [][][] dp;
+private int dfs(int i, int j, int k, int [] group, int [] profit) {
+    if (i == 0) return k <= 0 ? 1 : 0;
+    if (k < 0) k = 0;
+    if (dp[i][j][k] != Integer.MIN_VALUE) return dp[i][j][k];
+    int g = group[i-1], p = profit[i-1];
+    int ans = dfs(i-1, j, k, group, profit);
+    if (j >= g)
+        ans = (ans + dfs(i-1, j-g, Math.max(0, k-p), group, profit)) % mod;
+    return dp[i][j][k] = ans;
+}
+#+END_SRC
 
 *** 377. Combination Sum IV 没能认出这个题目是考DP
 Given an array of distinct integers nums and a target integer target, return the number of possible combinations that add up to target.
@@ -3881,90 +3907,167 @@ Given an array of strings words, return the smallest string that contains each s
 You may assume that no string in words is a substring of another string in words.
 - 深搜 + 记忆数组 + 裁枝
 #+BEGIN_SRC java
-private void dfs(int [] tmp, int idx, int curCost, boolean [] vis, int path) {
-    if (idx == n) {
-        if (curCost > maxCost) {
-            maxCost = curCost;
-            best = Arrays.copyOf(tmp, n); // best = tmp.clone();
-        }
-        return;
-    }
-    for (int i = 0; i < n; i++) 
-        if (!vis[i]) {
-            int tmpCost = idx == 0 ? 0 : curCost + cost[tmp[idx-1]][i];
-            int tmpPath = (path | (1 << i));
-            int maxCost = dp[tmpPath][i];
-            if (maxCost > 0 && tmpCost <= maxCost) continue;
-            tmp[idx] = i;
-            dp[tmpPath][i] = tmpCost; // need to remember the res
-            vis[i] = true;
-            dfs(tmp, idx+1, tmpCost, vis, tmpPath);
-            vis[i] = false;
-        }
-}
-int n, maxCost = Integer.MIN_VALUE; // 最长公共子串的长度和，越大越好
-int [][] dp;
-int [][] cost;
-int [] best;
-public String shortestSuperstring(String[] words) {
-    n = words.length;
-    cost = new int [n][n];
+public String shortestSuperstring(String [] sa) { // 回塑: 暴搜+剪枝,但回塑仍然是最慢的方法
+    n = sa.length;
+    max = new int [n][n];
     for (int i = 0; i < n; i++) 
         for (int j = 0; j < n; j++) {
             if (i == j) continue;
-            for (int k = 1; k <= words[i].length() && k <= words[j].length(); k++) {
-                if (words[i].substring(words[i].length()-k).equals(words[j].substring(0, k)))
-                    cost[i][j] = k;
-            }
-        }
+            for (int k = Math.min(sa[i].length(), sa[j].length()); k >= 1; k--) // 不想遍历所有，找到一个有效最优解，就剪枝中断
+                if (sa[i].substring(sa[i].length()-k).equals(sa[j].substring(0, k))) {
+                    max[i][j] = k; // sa[i] 的尾 与 sa[j]的头的 最长公共后前缀 长度
+                    break;
+                }
+        }                
     dp = new int [1 << n][n];
-    best = new int [n];
-    dfs(new int [n], 0, 0, new boolean [n], 0);
-    String res = words[best[0]];
-    for (int i = 1; i < n; i++) {
-        int costVal = cost[best[i-1]][best[i]];
-        res += words[best[i]].substring(costVal);
+    ans = new int [n]; // 最终答案： 最小长度的字符串下标位置
+    vis = new boolean [n];
+    dfs(new int [n], 0, 0, 0);
+    String s = sa[ans[0]];
+    for (int i = 1; i < n; i++) { // 当前字符串的前缀已经被上一个字符串的后缀cover了，所以只取后没被覆盖住的后半部分
+        int cmnLen = max[ans[i-1]][ans[i]];
+        s += sa[ans[i]].substring(cmnLen);
     }
-    return res;
+    return s;
+}
+int [][] dp;
+int [][] max; // max common length between two strings
+boolean [] vis;
+int n, maxLen = Integer.MIN_VALUE; // BUG: has to be initialized 
+int [] ans;
+private void dfs(int [] a, int idx, int sum, int state) {
+    if (idx == n) {
+        if (sum > maxLen) {
+            maxLen = sum;
+            // ans = Arrays.copyOf(a, n);
+            ans = a.clone(); // 效果一样
+        }
+        return ;
+    }
+    for (int i = 0; i < n; i++) {
+        if (vis[i]) continue;
+        int mask = state | (1 << i);
+        int curLen = sum + (idx == 0 ? 0 : max[a[idx-1]][i]);
+        if (dp[mask][i] > 0 && dp[mask][i] >= curLen) continue; // == 的情况可以剪枝，因为dp[][]本来就是记忆着各路径状态下的全局最优解，不能更优就剪掉
+        vis[i] = true;
+        a[idx] = i;
+        dp[mask][i] = curLen; // BUG: 需要这一行记忆化，加速搜索与剪枝，重中之重不可记忆, otherwise tle ！！！
+        dfs(a, idx+1, curLen, mask);
+        vis[i] = false;
+    }
 }
 #+END_SRC
 - 动态规划
 #+BEGIN_SRC java
-public String shortestSuperstring(String[] words) {
-    int n = words.length;
-    String [][] dp = new String [1 << n][n];
-    int [][] overlap = new int [n][n];
+public String shortestSuperstring(String[] s) {
+    int n = s.length;
+    String [][] dp = new String [1 << n][n]; // 这个dp的设计还比较新颖奇特:
+    int [][] max = new int [n][n];
     for (int i = 0; i < n; i++) 
         for (int j = 0; j < n; j++) {
             if (i == j) continue;
-            for (int k = Math.min(words[i].length(), words[j].length()); k > 0; k--) {
-                if (words[i].substring(words[i].length()-k).equals(words[j].substring(0, k))) {
-                    overlap[i][j] = k;
+            for (int k = Math.min(s[i].length(), s[j].length()); k >= 1; k--) 
+                 if (s[i].substring(s[i].length()-k).equals(s[j].substring(0, k))) {
+                    max[i][j] = k;
                     break;
                 }
+        }
+    for (int i = 0; i < n; i++) dp[1 << i][i] = s[i]; // 初始化：每个字符串与自己的最长公共后前缀串就是它本身
+    for (int r = 1; r < 1 << n; r++) 
+        for (int i = 0; i < n; i++) {
+            if (((r >> i) & 1) == 0) continue;
+            for (int j = 0; j < n; j++) {
+                if (i == j || (((r >> j) & 1) == 0)) continue; // 保证状态r是包含了字符串i和j的有效state
+                String cur = dp[r ^ (1 << j)][i] + s[j].substring(max[i][j]);
+                if (dp[r][j] == null || dp[r][j].length() > cur.length()) // dp[i][j]: 这里比较字符串的长度操作起来就比较复杂一点儿
+                    dp[r][j] = cur;
             }
         }
-    for (int i = 0; i < n; i++)
-        dp[1 << i][i] = words[i];
-    for (int mask = 1; mask < (1 << n); mask++) 
-        for (int j = 0; j < n; j++) {
-            if ((mask & (1 << j)) == 0) continue;
-            for (int i = 0; i < n; i++) {
-                if (i == j || (mask & (1 << i)) == 0) continue;
-                String tmp = dp[mask ^ (1 << j)][i] + words[j].substring(overlap[i][j]);
-                if (dp[mask][j] == null || tmp.length() < dp[mask][j].length()) // str.isEmpty()
-                    dp[mask][j] = tmp;
-            }
-        }
-    int last = (1 << n) - 1;
-    String res = dp[last][0];
+     int r = (1 << n) - 1;
+    String ans = dp[r][0];
     for (int i = 1; i < n; i++) 
-        if (dp[last][i].length() < res.length())
-            res = dp[last][i];
-    return res;
+        if (dp[r][i].length() < ans.length()) ans = dp[r][i];
+    return ans;
 }
 #+END_SRC
+**** 解题思路与分析
 
+我们的算法包括三个部分：
+
+预先计算出所有的 overlap(A[i], A[j])；
+
+使用动态规划计算出所有的 dp(mask, i)，并记录每个状态从哪个状态转移得来，记为 parent；
+
+通过 parent 还原这个字符串。
+
+     #+BEGIN_SRC java
+public String shortestSuperstring(String[] A) {
+    int N = A.length;
+    int[][] overlaps = new int[N][N];
+    for (int i = 0; i < N; ++i)
+        for (int j = 0; j < N; ++j) if (i != j) {
+                int m = Math.min(A[i].length(), A[j].length());
+                for (int k = m; k >= 0; --k)
+                    if (A[i].endsWith(A[j].substring(0, k))) {
+                        overlaps[i][j] = k;
+                        break;
+                    }
+            }
+    int[][] dp = new int[1<<N][N]; // dp[mask][i] = most overlap with mask, ending with ith element
+    int[][] parent = new int[1<<N][N];
+    for (int mask = 0; mask < (1<<N); ++mask) {
+        Arrays.fill(parent[mask], -1);
+        for (int bit = 0; bit < N; ++bit) if (((mask >> bit) & 1) > 0) {
+                // Let's try to find dp[mask][bit].  Previously, we had a collection of items represented by pmask.
+                int pmask = mask ^ (1 << bit);
+                if (pmask == 0) continue;
+                for (int i = 0; i < N; ++i) if (((pmask >> i) & 1) > 0) {
+                        // For each bit i in pmask, calculate the value if we ended with word i, then added word 'bit'.
+                        int val = dp[pmask][i] + overlaps[i][bit];
+                        if (val > dp[mask][bit]) {
+                            dp[mask][bit] = val;
+                            parent[mask][bit] = i;
+                        }
+                    }
+            }
+    }
+    // # Answer will have length sum(len(A[i]) for i) - max(dp[-1])
+    // Reconstruct answer, first as a sequence 'perm' representing the indices of each word from left to right.
+    int[] perm = new int[N];
+    boolean[] vis = new boolean[N];
+    int t = 0;
+    int mask = (1 << N) - 1;
+    // p: the last element of perm (last word written left to right)
+    int p = 0;
+    for (int j = 0; j < N; ++j)
+        if (dp[(1<<N) - 1][j] > dp[(1<<N) - 1][p])
+            p = j;
+    // Follow parents down backwards path that retains maximum overlap
+    while (p != -1) {
+        perm[t++] = p;
+        vis[p] = true;
+        int p2 = parent[mask][p];
+        mask ^= 1 << p;
+        p = p2;
+    }
+    // Reverse perm
+    for (int i = 0; i < t/2; ++i) {
+        int v = perm[i];
+        perm[i] = perm[t-1-i];
+        perm[t-1-i] = v;
+    }
+    // Fill in remaining words not yet added
+    for (int i = 0; i < N; ++i)
+        if (!vis[i]) perm[t++] = i;
+    // Reconstruct final answer given perm
+    StringBuilder ans = new StringBuilder(A[perm[0]]);
+    for (int i = 1; i < N; ++i) {
+        int overlap = overlaps[perm[i-1]][perm[i]];
+        ans.append(A[perm[i]].substring(overlap));
+    }
+    return ans.toString();
+}
+     #+END_SRC
 *** 964. Least Operators to Express Number - Hard
 Given a single positive integer x, we will write an expression of the form x (op1) x (op2) x (op3) x ... where each operator op1, op2, etc. is either addition, subtraction, multiplication, or division (+, -, *, or /). For example, with x = 3, we might write 3 * 3 / 3 + 3 - 3 which is a value of 3.
 
@@ -4544,6 +4647,131 @@ int makeArrayIncreasing(vector<int>& arr1, vector<int>& arr2) {
      #+END_SRC
 
 ** 多维数个数、数种类数 多一维k介入的 dp[i][j][k]
+*** 1473. Paint House III - Hard
+There is a row of m houses in a small city, each house must be painted with one of the n colors (labeled from 1 to n), some houses that have been painted last summer should not be painted again.
+
+A neighborhood is a maximal group of continuous houses that are painted with the same color.
+
+For example: houses = [1,2,2,3,3,2,1,1] contains 5 neighborhoods [{1}, {2,2}, {3,3}, {2}, {1,1}].
+Given an array houses, an m x n matrix cost and an integer target where:
+
+houses[i]: is the color of the house i, and 0 if the house is not painted yet.
+cost[i][j]: is the cost of paint the house i with the color j + 1.
+Return the minimum cost of painting all the remaining houses in such a way that there are exactly target neighborhoods. If it is not possible, return -1.
+**** 解题思路与分析
+     #+BEGIN_SRC java
+public int minCost(int[] houses, int[][] cost, int m, int n, int target) { // bug
+    this.m = m; // 就是最开始： 上一个房子的着色，自顶向下传递的着色 与 自底向上传递的答案之间的交错，最开始理解起来有些理不清楚
+    this.n = n;
+    dp = new Integer [m][n+1][target+1];
+    return dfs(0, 0, target, houses, cost); // 这里始终没能想清楚：初始化的着色0为什么分为不同的街区
+}
+Integer [][][] dp;
+int m, n;
+private int dfs(int i, int j, int k, int [] h, int [][] c) { // i: idx, j: color, k: target
+    if (k < 0) return -1; 
+    if (i == m) return k == 0 ? 0 : -1;
+    if (dp[i][j][k] != null) return dp[i][j][k];
+    int ans = Integer.MAX_VALUE, v = 0;
+    if (h[i] > 0) 
+        return dp[i][j][k] = dfs(i+1, h[i], h[i] == j ? k : k-1, h, c); // 如果与上一间房屋颜色不同，开启新街区，target减一 ！！！
+    for (int x = 0; x < n; x++) {
+        v = dfs(i+1, x+1, (x+1 == j ? k : k-1), h, c);
+        if (v != -1)
+            ans = Math.min(ans, v + c[i][x]);
+    }
+    return  dp[i][j][k] = ans == Integer.MAX_VALUE ? -1 : ans;
+}
+     #+END_SRC
+**** 解题思路与分析: DP
+     #+BEGIN_SRC java
+static final int INFTY = Integer.MAX_VALUE / 2; // 选择 Integer.MAX_VALUE / 2 的原因是防止整数相加溢出
+public int minCost(int[] houses, int[][] cost, int m, int n, int target) { // todo: dp 优化解 官方
+    // 将颜色调整为从 0 开始编号，没有被涂色标记为 -1
+    for (int i = 0; i < m; ++i) --houses[i];
+    // dp 所有元素初始化为极大值
+    int[][][] dp = new int[m][n][target];
+    for (int i = 0; i < m; ++i) 
+        for (int j = 0; j < n; ++j) 
+            Arrays.fill(dp[i][j], INFTY);
+    for (int i = 0; i < m; ++i) 
+        for (int j = 0; j < n; ++j) {
+            if (houses[i] != -1 && houses[i] != j) continue;
+            for (int k = 0; k < target; ++k) {
+                for (int x = 0; x < n; x++) {
+                    if (j == x) {
+                        if (i == 0) {
+                            if (k == 0) dp[i][j][k] = 0;
+                        } else
+                            dp[i][j][k] = Math.min(dp[i][j][k], dp[i-1][j][k]);
+                    } else if (i > 0 && k > 0)
+                        dp[i][j][k] = Math.min(dp[i][j][k], dp[i-1][x][k-1]);
+                }
+                if (dp[i][j][k] != INFTY && houses[i] == -1)
+                    dp[i][j][k] += cost[i][j];
+            }
+        }
+    int ans = INFTY;
+    for (int j = 0; j < n; ++j) 
+        ans = Math.min(ans, dp[m - 1][j][target - 1]);
+    return ans == INFTY ? -1 : ans;
+}
+     #+END_SRC
+
+*** 920. Number of Music Playlists - Hard
+Your music player contains n different songs. You want to listen to goal songs (not necessarily different) during your trip. To avoid boredom, you will create a playlist so that:
+
+Every song is played at least once.
+A song can only be played again only if k other songs have been played.
+Given n, goal, and k, return the number of possible playlists that you can create. Since the answer can be very large, return it modulo 109 + 7.
+**** 解题思路与分析
+
+当加入的是一首新歌，则表示之前的 L-1 首歌中有 j-1 首不同的歌曲，其所有的组合情况都可以加上这首新歌，那么当前其实有 N-(j-1) 首新歌可以选。
+
+当加入的是一首重复的歌，则表示之前的 L-1 首歌中已经有了 j 首不同的歌，那么若没有K的限制，则当前有 j 首重复的歌可以选。但是现在有了K的限制，意思是两首重复歌中间必须要有K首其他的歌，则当前只有 j-K 首可以选。而当 j<k 时，其实这种情况是为0的。<="" li="" >
+
+综上所述可以得到状态转移方程：
+
+#+BEGIN_SRC java
+            dp[i-1][j-1]*(N-(j-1)) + dp[i-1][j]*(j-k)    (j > K)	
+           /	
+dp[i][j] = 	
+           \	
+            dp[i-1][j-1] x (N-(j-1))   (j <= K)
+#+END_SRC
+     #+BEGIN_SRC java
+public int numMusicPlaylists(int n, int goal, int k) {
+    long mod = (int)1e9 + 7;
+    long [][] dp = new long [goal+1][n+1]; // dp[i][j]: 播完i首用了j首不同的曲子，分第i首播不播第j首两种情况 (i >= j for sure)
+    for (int i = 1; i <= goal; i++) 
+        for (int j = 1; j <= n; j++) {
+            if (i < j) dp[i][j] = 0; // 这行不能省略   
+            else if (i == 1 && j == 1) dp[i][j] = n; // 用1首歌放完1次，共有n种不同的选择
+            else if (i > 1 && j == 1) {
+                if (k == 0) dp[i][j] = n; // 相当于没有任何外加限制条件
+                // else dp[i][1] = 0;     // 这行可略
+            } else // 分两种情况： 第i首不播第j首歌（那么可以从前面j-k首里面选择一首），和第i首播第j首歌（第j首就可以从不曾播放过的n-(j-1)首里面选择一首播放）
+                dp[i][j] = (dp[i-1][j] * Math.max(j-k, 0) + (j == 0 ? 0 : dp[i-1][j-1] * (n - (j-1)))) % mod;
+        }
+    return (int)dp[goal][n];
+}
+     #+END_SRC
+- 简化一下代码
+#+BEGIN_SRC java
+static final int mod = (int)1e9 + 7;
+public int numMusicPlaylists(int n, int goal, int k) {
+    long [][] dp = new long [goal+1][n+1]; // dp[i][j]: 播完i首用了j首不同的曲子，分第i首播不播第j首两种情况 (i >= j for sure)
+    dp[0][0] = 1;
+    for (int i = 1; i <= goal; i++) 
+        for (int j = 1; j <= n; j++) {
+            dp[i][j] = (dp[i-1][j-1] * (n - (j-1))) % mod; // 第j首放新歌
+            if (j > k)                                     // 第j首放（j-k）之前的某首歌
+                dp[i][j] = (dp[i][j] + dp[i-1][j] * (j-k)) % mod;
+        }
+    return (int)dp[goal][n];
+}
+#+END_SRC
+
 *** 1866. Number of Ways to Rearrange Sticks With K Sticks Visible - Hard
 There are n uniquely-sized sticks whose lengths are integers from 1 to n. You want to arrange the sticks such that exactly k sticks are visible from the left. A stick is visible from the left if there are no longer sticks to the left of it.
 
@@ -12470,6 +12698,7 @@ The ith customer gets exactly quantity[i] integers,
 The integers the ith customer gets are all equal, and
 Every customer is satisfied.
 Return true if it is possible to distribute nums according to the above conditions.
+**** 解题思路与分析: dfs回塑
 #+BEGIN_SRC java
 private boolean backTracking(int [] arr, int [] quantity, int idx) {
     if (idx < 0) return true;
@@ -12524,6 +12753,56 @@ private boolean distribute(int[] nums, int[] quantity, int idx) {
     return false;
 }
 #+END_SRC
+**** 解题思路与分析: 状态压缩DP
+首先，容易发现nums 的具体取值是不重要的：只有每个取值出现的次数是重要的。因此，我们构造nums 的频次数组cnt，代表了原数组中每个数字出现的次数。
+
+例如，在数组 [3,2,2,5] 中，只有数字 2 出现了 2 次，故频次数组为 [1,2,1]（其顺序无关紧要）。
+
+考虑到订单数目最多为 10，故使用状态压缩动态规划解决本题：用一个 0 - 2^{10}(=1024)的整数代表 mm 个顾客的一个子集。随后，用 dp[i][j] 表示：cnt 数组中的前 i 个元素，能否满足顾客的子集合 j 的订单需求。
+
+考虑 dp[i][j] 时，为了满足子集 j 的需求，我们可以让 cnt[i] 满足 j 的某个子集 ss， 并让 cnt[0..i−1] 满足子集 j−s。对于特定的某个子集 ss 而言，该种方案如果可行，必然有dp[i−1][j−s] 为 true，且子集 s的订单需求总和不超过 cnt[i]。
+
+因此，当且仅当能找到这样的子集 s 时，dp[i][j]=true。
+
+     #+BEGIN_SRC java
+public boolean canDistribute(int [] a, int[] quantity) { 
+    Map<Integer, Integer> map = new HashMap<>();
+    for (Integer v : a)
+        map.put(v, map.getOrDefault(v, 0) + 1);
+    int n = map.size(), idx = 0, m = quantity.length, r = 1 << m;
+    int [] cnt = new int [n];
+    for (Integer v : map.values()) cnt[idx++] = v;
+    int [] sum = new int [r];
+    for (int i = 1; i < r; i++) 
+        for (int j = 0; j < m; j++) 
+            if (((i >> j) & 1) == 1) {
+                int left = i - (1 << j);
+                sum[i] = sum[left] + quantity[j];
+                break;
+            }
+    boolean [][] dp = new boolean [n][r]; // dp[i][j] 表示：cnt 数组中的前i个元素，能否满足顾客的子集合 j 的订单需求
+    for (int i = 0; i < n; i++) 
+        dp[i][0] = true;
+    for (int i = 0; i < n; i++)       // 遍历 cnt数组
+        for (int j = 0; j < r; j++) { // 遍历客户组合子集
+            if (i > 0 && dp[i-1][j]) {
+                dp[i][j] = true;
+                continue;
+            }
+            for (int k = j; k != 0; k = ((k-1) & j)) { // 子集s枚举，详见 https://oi-wiki.org/math/bit/#_14
+                int pre = j - k; // 前 i-1 个元素需要满足子集 prev = j-s
+                boolean last = (i == 0) ? (pre == 0) : dp[i-1][pre]; // cnt[0..i-1] 能否满足子集 prev
+                boolean need = sum[k] <= cnt[i]; // cnt[i] 能否满足子集 s
+                if (last && need) {
+                    dp[i][j] = true;
+                    break;
+                }
+            }
+        }
+    return dp[n-1][r-1];
+}
+     #+END_SRC
+
 ** 1659. Maximize Grid Happiness - Hard
 You are given four integers, m, n, introvertsCount, and extrovertsCount. You have an m x n grid, and there are two types of people: introverts and extroverts. There are introvertsCount introverts and extrovertsCount extroverts.
 
@@ -13781,7 +14060,93 @@ private boolean isValid(char [][] arr, int v, int idx) { // 只是检查不会�
     return true; 
 }
 #+END_SRC
-
+- 有个姑娘总结的dfs记忆化搜索
+#+BEGIN_SRC java
+public int maxStudents(char[][] s) { // todo: 再好好理解一下
+    // state代表某一行安排座椅的情况，用二进制表示
+    // int state = 1;
+    // // 求出state的最大值，即当前行每一列都安排座位的情况
+    // for (int c=0;c<s[0].length;c++){
+    //     state = ((1<<c) | state);
+    // }
+    // 利用行数和state的最大值初始化记忆数组
+    // memo=new int[s.length][state];
+    memo=new int[s.length][1 << s[0].length];
+    // 递归求解，从第0行第0列开始递归
+    // 即求出第0行第0列以及它后面一共最多可以安排座椅的最大数量
+    return help(s,0,0,0);
+}
+int[][] memo; // 记忆数组
+// r：当前行
+// c：当前列
+// rowState：当前行安排的座位状态
+// 返回值：当前位置及之后的位置一共可以安排座位的做大数量
+int help(char[][] s, int r, int c, int rowState){
+    // 如果当前是某一行的第一列
+    if (c==0&&r>0){
+        // 当前为第一列时，rowState值为上一行完整的座位安排情况
+        // 查看记忆数组中是否存在上一行该座位安排情况的值
+        // 如果存在，返回记忆数组中的值
+        if (memo[r-1][rowState]>0) return memo[r-1][rowState];
+    }
+    // 当前位置字符
+    char ch = s[r][c];
+    // 计算下一个递归位置
+    int nextR=r, nextC=c;
+    // 如果当前列加一小于总列数
+    if (c+1<s[0].length){
+        // 下一位置列数加一，行数不变
+        nextC=c+1;
+    }else{ // 如果当前列加一超出总列数
+        // 下一位置列数为0
+        nextC=0;
+        // 下一位置行数加一
+        nextR=r+1;
+    }
+    // 查看当前位置是否可以安排座位
+    boolean canSit=canSit(s,r,c);
+    // 如果当前位置是矩阵最后一格（递归终止条件）
+    if (nextR==s.length){
+        // 如果能安排座位返回1，否则返回0
+        return canSit?1:0;
+    }
+    // 第一种选择，为当前位置安排座位
+    int count1=0;
+    // 如果当前位置能安排座位
+    if (canSit(s,r,c)){
+        // 将当前位置设置为S，代表安排了座位
+        s[r][c]='S';
+        // 递归求解下一个位置以及之后位置一共能安排的做多座位数
+        // 再加上一代表当前位置安排了一个座位
+        count1=1+help(s, nextR,nextC,c==0?1:((rowState<<1)|1));
+        // 递归结束后，将当前位置还原成原始字符，以便之后查询其他递归可能
+        s[r][c]=ch;
+    }
+    // 第二种选择，不为当前位置安排座位
+    int count2=help(s, nextR,nextC,c==0?0:((rowState<<1)|0));
+    // 两种选择的最大值为当前结果
+    int res = Math.max(count1,count2);
+    // 如果当前是某一行的首列
+    if (c==0&&r>0){
+        // 将当前结果计入记忆数组
+        memo[r-1][rowState]=res;
+    }
+    return res;
+}
+// 判断当前位置是否可以安排座位
+boolean canSit(char[][] s, int r, int c){
+    if (s[r][c]=='#') return false;
+    if (r>0&&c>0) // 左前方有座位，当前不能安排座位
+        if (s[r-1][c-1]=='S') return false;
+    if (r>0&&c<s[0].length-1) // 右前方有座位，当前不能安排座位
+        if (s[r-1][c+1]=='S') return false;
+    // 右方有座位，当前不能安排座位
+    if (c>0)
+        if (s[r][c-1]=='S') return false;
+    // 因为递归顺序是从上至下，从左至右，因此右方和下方都是空位不需判断
+    return true;
+}
+#+END_SRC
 ** 1434. Number of Ways to Wear Different Hats to Each Other - Hard
 There are n people and 40 types of hats labeled from 1 to 40.
 
@@ -13967,9 +14332,12 @@ Return the number of valid permutations perm. Since the answer may be large, ret
 
 当是降序时，下一个数字不小于当前最后一个数字，反之是升序时，下一个数字小于当前最后一个数字，所以可以写出状态转移方程如下所示：
 #+BEGIN_SRC java
-if (S[i-1] == 'D')    dp[i][j] += dp[i-1][k]    ( j <= k <= i-1 )
+if (S[i-1] == 'D')    dp[i][j] += dp[i-1][k]    ( j <= k <= i )
 else                  dp[i][j] += dp[i-1][k]    ( 0 <= k < j )
 #+END_SRC
+
+[[./pic/903.png]]
+
 #+BEGIN_SRC java
 public int numPermsDISequence(String s) {
     int n = s.length(), mod = (int)1e9 + 7, res = 0;
@@ -13982,7 +14350,7 @@ public int numPermsDISequence(String s) {
                 for (int k = j; k <= i; k++) 
                     dp[i][j] = (dp[i][j] + dp[i-1][k]) % mod;
             else // 考虑当前最后一个元素为j
-                // 把该序列中所有大于等于j(k < j <= i)的数字都加上1，并在末尾添加一个j得到dp[i][j]中的一种方案
+                 // 把该序列中所有大于等于j(k < j <= i)的数字都加上1，并在末尾添加一个j得到dp[i][j]中的一种方案
                 for (int k = 0; k < j; k++) // 把序列中所有大等于j的元素都加上1,再把j放在序列末尾得到
                     dp[i][j] = (dp[i][j] + dp[i-1][k]) % mod;
     for (int i = 0; i <= n; i++) 
@@ -13990,7 +14358,80 @@ public int numPermsDISequence(String s) {
     return (int)res;
 }
 #+END_SRC
- 
+**** 解题思路与分析: (优化版本动态规划) O(n2)
+
+题解2:动态规划优化。延续上述的思路，但是我们发现我们的重复计算太多了。
+
+当s[i - 1] == 'D'的时候：
+#+BEGIN_SRC java
+dp[i][j] = dp[i - 1][j] + dp[i - 1][j + 1] + dp[i - 1][j + 2] + ... + dp[i][i - 1]
+dp[i][j + 1] = dp[i - 1][j + 1] + dp[i - 1][j + 2] + ... + dp[i][i - 1]
+dp[i][j] = dp[i][j + 1] + dp[i - 1][j]
+基于此，我们需要从后往前计算，而且从i - 1开始计算就可以了，一方面是当s[i - 1] = 'D'的时候，i不可能出现在最后一个位置上，同时也避免了j + 1越界。
+#+END_SRC
+
+当s[i - 1] = 'I'的时候
+#+BEGIN_SRC java
+
+dp[i][j - 1] = dp[i - 1][0] + dp[i - 1][1] + ... + dp[i - 1][j - 2]
+dp[i][j] = dp[i][j - 1] + dp[i - 1][j - 1]
+基于此，我们需要从前往后计算，而且从1开始计算就可以了，一方式是当s[i - 1] = 'I'的时候，0不可能出现在最后一个位置上，同时也避免了j - 1越界。
+dp[i][j] = dp[i - 1][0] + dp[i - 1][1] + ... + dp[i - 1][j - 1]
+#+END_SRC
+
+时间复杂度:O(n2)
+
+     #+BEGIN_SRC java
+static final int mod = (int)1e9 + 7;
+public int numPermsDISequence(String t) {
+    int n = t.length(), ans = 0;
+    char [] s = t.toCharArray();
+    int [][] dp = new int [n + 1][n + 1];
+    dp[0][0] = 1;
+    for (int i = 1; i <= n; i ++) 
+        if (s[i - 1] == 'D') 
+            for (int j = i - 1 ; j >= 0 ; j --)
+                dp[i][j] = (dp[i][j + 1] + dp[i - 1][j]) % mod;
+        else for (int j = 1; j <= i; j ++)
+                dp[i][j] = (dp[i][j - 1] + dp[i - 1][j - 1]) % mod;
+    for (int i = 0 ; i <= n ; i ++)
+        ans = (ans + dp[n][i]) % mod;
+    return ans;
+}
+     #+END_SRC
+**** 解题思路与分析
+     
+     [[./pic/9032.png]]
+     
+     #+BEGIN_SRC java
+static final int mod = (int)1e9 + 7;
+public int numPermsDISequence(String t) {
+    int n = t.length(), ans = 0;
+    char [] s = t.toCharArray();
+    long [][] dp = new long [n+1][n+1];
+    long [][] c = new long [n+2][n+2];
+    for (int i = 0; i <= n; i++)
+        dp[i][i] = 1;
+    for (int i = 0; i <= n+1; i++) {
+        c[i][0] = 1;
+        for (int j = 1; j <= i; j++) 
+            c[i][j] = (int)((c[i-1][j] + c[i-1][j-1]) % mod);
+    }
+    for (int len = 2; len <= n+1; len++) 
+        for (int i = 0; i+len-1 <= n; i++) {
+            int j = i + len - 1;
+            if (s[i] == 'D')   // 如果s[i] = 'D'，那么最大的元素可以放在p[i]上。dp[i][j] += dp[i + 1][j]
+                dp[i][j] = (dp[i][j] + dp[i+1][j]) % mod;
+            if (s[j-1] == 'I') // 如果s[j - 1] = 'I'，那么最大的元素可以放在p[j]上。dp[i][j] += dp[i][j - 1]
+                dp[i][j] = (dp[i][j] + dp[i][j-1]) % mod;
+            for (int k = i+1; k <= j-1; k++)
+                if (s[k-1] == 'I' && s[k] == 'D')
+                    dp[i][j] = (dp[i][j] + (1l * c[len-1][k-i]) * dp[i][k-1] % mod * dp[k+1][j] % mod) % mod;
+        }
+    return (int)dp[0][n];
+}
+     #+END_SRC
+
 *** 1569. Number of Ways to Reorder Array to Get Same BST - Hard
 Given an array nums that represents a permutation of integers from 1 to n. We are going to construct a binary search tree (BST) by inserting the elements of nums in order into an initially empty BST. Find the number of different ways to reorder nums so that the constructed BST is identical to that formed from the original array nums.
 

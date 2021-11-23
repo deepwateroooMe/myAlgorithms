@@ -302,16 +302,762 @@ public class dpnine {
         //         if (((v >> i) & 1) == 1 && arr[idx][i] != '.') return false;
         //     return true; 
         // }
+//         public int maxStudents(char[][] s) { // todo: 再好好理解一下
+//             // state代表某一行安排座椅的情况，用二进制表示
+//             // int state = 1;
+//             // // 求出state的最大值，即当前行每一列都安排座位的情况
+//             // for (int c=0;c<s[0].length;c++){
+//             //     state = ((1<<c) | state);
+//             // }
+//             // 利用行数和state的最大值初始化记忆数组
+//             // memo=new int[s.length][state];
+//             memo=new int[s.length][1 << s[0].length];
+//             // 递归求解，从第0行第0列开始递归
+//             // 即求出第0行第0列以及它后面一共最多可以安排座椅的最大数量
+//             return help(s,0,0,0);
+//         }
+//         int[][] memo; // 记忆数组
+// // r：当前行
+// // c：当前列
+// // rowState：当前行安排的座位状态
+// // 返回值：当前位置及之后的位置一共可以安排座位的做大数量
+//         int help(char[][] s, int r, int c, int rowState){
+//             // 如果当前是某一行的第一列
+//             if (c==0&&r>0){
+//                 // 当前为第一列时，rowState值为上一行完整的座位安排情况
+//                 // 查看记忆数组中是否存在上一行该座位安排情况的值
+//                 // 如果存在，返回记忆数组中的值
+//                 if (memo[r-1][rowState]>0) return memo[r-1][rowState];
+//             }
+//             // 当前位置字符
+//             char ch = s[r][c];
+//             // 计算下一个递归位置
+//             int nextR=r, nextC=c;
+//             // 如果当前列加一小于总列数
+//             if (c+1<s[0].length){
+//                 // 下一位置列数加一，行数不变
+//                 nextC=c+1;
+//             }else{ // 如果当前列加一超出总列数
+//                 // 下一位置列数为0
+//                 nextC=0;
+//                 // 下一位置行数加一
+//                 nextR=r+1;
+//             }
+//             // 查看当前位置是否可以安排座位
+//             boolean canSit=canSit(s,r,c);
+//             // 如果当前位置是矩阵最后一格（递归终止条件）
+//             if (nextR==s.length){
+//                 // 如果能安排座位返回1，否则返回0
+//                 return canSit?1:0;
+//             }
+//             // 第一种选择，为当前位置安排座位
+//             int count1=0;
+//             // 如果当前位置能安排座位
+//             if (canSit(s,r,c)){
+//                 // 将当前位置设置为S，代表安排了座位
+//                 s[r][c]='S';
+//                 // 递归求解下一个位置以及之后位置一共能安排的做多座位数
+//                 // 再加上一代表当前位置安排了一个座位
+//                 count1=1+help(s, nextR,nextC,c==0?1:((rowState<<1)|1));
+//                 // 递归结束后，将当前位置还原成原始字符，以便之后查询其他递归可能
+//                 s[r][c]=ch;
+//             }
+//             // 第二种选择，不为当前位置安排座位
+//             int count2=help(s, nextR,nextC,c==0?0:((rowState<<1)|0));
+//             // 两种选择的最大值为当前结果
+//             int res = Math.max(count1,count2);
+//             // 如果当前是某一行的首列
+//             if (c==0&&r>0){
+//                 // 将当前结果计入记忆数组
+//                 memo[r-1][rowState]=res;
+//             }
+//             return res;
+//         }
+// // 判断当前位置是否可以安排座位
+//         boolean canSit(char[][] s, int r, int c){
+//             if (s[r][c]=='#') return false;
+//             if (r>0&&c>0) // 左前方有座位，当前不能安排座位
+//                 if (s[r-1][c-1]=='S') return false;
+//             if (r>0&&c<s[0].length-1) // 右前方有座位，当前不能安排座位
+//                 if (s[r-1][c+1]=='S') return false;
+//             // 右方有座位，当前不能安排座位
+//             if (c>0)
+//                 if (s[r][c-1]=='S') return false;
+//             // 因为递归顺序是从上至下，从左至右，因此右方和下方都是空位不需判断
+//             return true;
+//         }
 
-        
+        // public String shortestSuperstring(String [] sa) { // 回塑: 暴搜+剪枝,但回塑仍然是最慢的方法
+        //     n = sa.length;
+        //     max = new int [n][n];
+        //     for (int i = 0; i < n; i++) 
+        //         for (int j = 0; j < n; j++) {
+        //             if (i == j) continue;
+        //             for (int k = Math.min(sa[i].length(), sa[j].length()); k >= 1; k--) // 不想遍历所有，找到一个有效最优解，就剪枝中断
+        //                 if (sa[i].substring(sa[i].length()-k).equals(sa[j].substring(0, k))) {
+        //                     max[i][j] = k; // sa[i] 的尾 与 sa[j]的头的 最长公共后前缀 长度
+        //                     break;
+        //                 }
+        //         }                
+        //     dp = new int [1 << n][n];
+        //     ans = new int [n]; // 最终答案： 最小长度的字符串下标位置
+        //     vis = new boolean [n];
+        //     dfs(new int [n], 0, 0, 0);
+        //     String s = sa[ans[0]];
+        //     for (int i = 1; i < n; i++) { // 当前字符串的前缀已经被上一个字符串的后缀cover了，所以只取后没被覆盖住的后半部分
+        //         int cmnLen = max[ans[i-1]][ans[i]];
+        //         s += sa[ans[i]].substring(cmnLen);
+        //     }
+        //     return s;
+        // }
+        // int [][] dp;
+        // int [][] max; // max common length between two strings
+        // boolean [] vis;
+        // int [] ans;
+        // int n, maxLen = Integer.MIN_VALUE; // bug: has to be initialized 
+        // private void dfs(int [] a, int idx, int sum, int state) {
+        //     if (idx == n) {
+        //         if (sum > maxLen) {
+        //             maxLen = sum;
+        //             // ans = Arrays.copyOf(a, n);
+        //             ans = a.clone(); // 效果一样
+        //         }
+        //         return ;
+        //     }
+        //     for (int i = 0; i < n; i++) {
+        //         if (vis[i]) continue;
+        //         int mask = state | (1 << i);
+        //         int curLen = sum + (idx == 0 ? 0 : max[a[idx-1]][i]);
+        //         if (dp[mask][i] > 0 && dp[mask][i] >= curLen) continue; // == 的情况可以剪枝，因为dp[][]本来就是记忆着各路径状态下的全局最优解，不能更优就剪掉
+        //         vis[i] = true;
+        //         a[idx] = i;
+        //         dp[mask][i] = curLen; // BUG: 需要这一行记忆化，加速搜索与剪枝，重中之重不可记忆, otherwise tle ！！！
+        //         dfs(a, idx+1, curLen, mask);
+        //         vis[i] = false;
+        //     }
+        // }
+        // public String shortestSuperstring(String[] s) {
+        //     int n = s.length;
+        //     String [][] dp = new String [1 << n][n]; // 这个dp的设计还比较新颖奇特:
+        //     int [][] max = new int [n][n];
+        //     for (int i = 0; i < n; i++) 
+        //         for (int j = 0; j < n; j++) {
+        //             if (i == j) continue;
+        //             for (int k = Math.min(s[i].length(), s[j].length()); k >= 1; k--) 
+        //                  if (s[i].substring(s[i].length()-k).equals(s[j].substring(0, k))) {
+        //                     max[i][j] = k;
+        //                     break;
+        //                 }
+        //         }
+        //     for (int i = 0; i < n; i++) dp[1 << i][i] = s[i]; // 初始化：每个字符串与自己的最长公共后前缀串就是它本身
+        //     for (int r = 1; r < 1 << n; r++) 
+        //         for (int i = 0; i < n; i++) {
+        //             if (((r >> i) & 1) == 0) continue;
+        //             for (int j = 0; j < n; j++) {
+        //                 if (i == j || (((r >> j) & 1) == 0)) continue; // 保证状态r是包含了字符串i和j的有效state
+        //                 String cur = dp[r ^ (1 << j)][i] + s[j].substring(max[i][j]);
+        //                 if (dp[r][j] == null || dp[r][j].length() > cur.length()) // dp[i][j]: 这里比较字符串的长度操作起来就比较复杂一点儿
+        //                     dp[r][j] = cur;
+        //             }
+        //         }
+        //      int r = (1 << n) - 1;
+        //     String ans = dp[r][0];
+        //     for (int i = 1; i < n; i++) 
+        //         if (dp[r][i].length() < ans.length()) ans = dp[r][i];
+        //     return ans;
+        // }
+        // public String shortestSuperstring(String[] A) {
+        //     int N = A.length;
+        //     int[][] overlaps = new int[N][N];
+        //     for (int i = 0; i < N; ++i)
+        //         for (int j = 0; j < N; ++j) if (i != j) {
+        //                 int m = Math.min(A[i].length(), A[j].length());
+        //                 for (int k = m; k >= 0; --k)
+        //                     if (A[i].endsWith(A[j].substring(0, k))) {
+        //                         overlaps[i][j] = k;
+        //                         break;
+        //                     }
+        //             }
+        //     int[][] dp = new int[1<<N][N]; // dp[mask][i] = most overlap with mask, ending with ith element
+        //     int[][] parent = new int[1<<N][N];
+        //     for (int mask = 0; mask < (1<<N); ++mask) {
+        //         Arrays.fill(parent[mask], -1);
+        //         for (int bit = 0; bit < N; ++bit) if (((mask >> bit) & 1) > 0) {
+        //                 // Let's try to find dp[mask][bit].  Previously, we had a collection of items represented by pmask.
+        //                 int pmask = mask ^ (1 << bit);
+        //                 if (pmask == 0) continue;
+        //                 for (int i = 0; i < N; ++i) if (((pmask >> i) & 1) > 0) {
+        //                         // For each bit i in pmask, calculate the value if we ended with word i, then added word 'bit'.
+        //                         int val = dp[pmask][i] + overlaps[i][bit];
+        //                         if (val > dp[mask][bit]) {
+        //                             dp[mask][bit] = val;
+        //                             parent[mask][bit] = i;
+        //                         }
+        //                     }
+        //             }
+        //     }
+        //     // # Answer will have length sum(len(A[i]) for i) - max(dp[-1])
+        //     // Reconstruct answer, first as a sequence 'perm' representing the indices of each word from left to right.
+        //     int[] perm = new int[N];
+        //     boolean[] vis = new boolean[N];
+        //     int t = 0;
+        //     int mask = (1 << N) - 1;
+        //     // p: the last element of perm (last word written left to right)
+        //     int p = 0;
+        //     for (int j = 0; j < N; ++j)
+        //         if (dp[(1<<N) - 1][j] > dp[(1<<N) - 1][p])
+        //             p = j;
+        //     // Follow parents down backwards path that retains maximum overlap
+        //     while (p != -1) {
+        //         perm[t++] = p;
+        //         vis[p] = true;
+        //         int p2 = parent[mask][p];
+        //         mask ^= 1 << p;
+        //         p = p2;
+        //     }
+        //     // Reverse perm
+        //     for (int i = 0; i < t/2; ++i) {
+        //         int v = perm[i];
+        //         perm[i] = perm[t-1-i];
+        //         perm[t-1-i] = v;
+        //     }
+        //     // Fill in remaining words not yet added
+        //     for (int i = 0; i < N; ++i)
+        //         if (!vis[i]) perm[t++] = i;
+        //     // Reconstruct final answer given perm
+        //     StringBuilder ans = new StringBuilder(A[perm[0]]);
+        //     for (int i = 1; i < N; ++i) {
+        //         int overlap = overlaps[perm[i-1]][perm[i]];
+        //         ans.append(A[perm[i]].substring(overlap));
+        //     }
+        //     return ans.toString();
+        // }
+        // // String r = s.shortestSuperstring(a);
+        // // String []  a = new String []  {"cedefifgstkyxfcuajfa", "ooncedefifgstkyxfcua", "assqjfwarvjcjedqtoz", "fcuajfassqjfwarvjc", "fwarvjcjedqtozctcd", "zppedxfumcfsngp", "kyxfcuajfassqjfwa", "fumcfsngphjyfhhwkqa", "fassqjfwarvjcjedq", "ppedxfumcfsngphjyf", "dqtozctcdk"};
+
+        // public int minimumMountainRemovals(int[] a) {
+        //     int n = a.length;
+        //     int [] up = new int [n];
+        //     int [] dn = new int [n];
+        //     Arrays.fill(up, 1);
+        //     Arrays.fill(dn, 1);
+        //     for (int i = 1; i < n; i++) 
+        //         for (int j = 0; j < i; j++) 
+        //             if (a[j] < a[i])
+        //                 up[i] = Math.max(up[i], up[j] + 1);
+        //     for (int i = n-2; i >= 0; i--) 
+        //         for (int j = i+1; j < n; j++) 
+        //             if (a[i] > a[j])
+        //                 dn[i] = Math.max(dn[i], dn[j] + 1);
+        //     int min = n;
+        //     for (int i = 1; i < n-1; i++)
+        //         if (up[i] != 1 && dn[i] != 1)
+        //             min = Math.min(min, n - (up[i] + dn[i] -1));
+        //     return min;
+        // }
+
+        // public int maxSumBST(TreeNode root) { // 注意： 不要画蛇添足再嵌套一层树的遍历
+        //     traverse(root);
+        //     return max < 0 ? 0 : max;
+        // }
+        // int max = Integer.MIN_VALUE;
+        // private Rn traverse(TreeNode r) {
+        //     if (r == null) return null;
+        //     if (r.left == null && r.right == null) {
+        //         if (r.val > max) max = r.val;
+        //         return new Rn(r.val, true, r.val, r.val);
+        //     }
+        //     Rn left = traverse(r.left);
+        //     Rn right = traverse(r.right);
+        //     if (left == null || right == null) {
+        //         boolean isBst = left == null ? right.bst && right.min > r.val : left.bst && left.max < r.val;
+        //         int sum = isBst ? (left == null ? right.sum : left.sum) + r.val : (left == null ? right.sum : left.sum);
+        //         if (sum > max) max = sum;
+        //         return new Rn(sum, isBst, 
+        //                       Math.min(r.val, (left == null ? right.min : left.min)),
+        //                       Math.max(r.val, (left == null ? right.max : left.max)));
+        //     }
+        //     boolean isBst = left.bst && left.max < r.val && right.bst && right.min > r.val;
+        //     int sum = isBst ? left.sum + right.sum + r.val :
+        //         (left.bst && right.bst ? Math.max(left.sum, right.sum) :
+        //          (left.bst ? left.sum :
+        //           (right.bst ? right.sum : Math.max(left.sum, right.sum))));
+        //     if (isBst && sum > max) max = sum;
+        //     else if (left.bst && left.sum > max || right.bst && right.sum > max) {
+        //         // sum = left.bst ? left.sum : right.sum; // BUG: not suppose to change the sum value here, skip this line
+        //         max = Math.max(max, left.bst ? left.sum : right.sum);
+        //     }
+        //     return new Rn(sum, isBst, 
+        //                   Math.min(r.val, Math.min(left.min, right.min)),
+        //                   Math.max(r.val, Math.max(left.max, right.max)));
+        // }
+        // public class Rn {
+        //     int sum;
+        //     boolean bst;
+        //     int min, max;// from left
+        //     public Rn(int a, boolean b, int c, int d) {
+        //         sum = a;
+        //         bst = b;
+        //         min = c;
+        //         max = d;
+        //     }
+        // }
+        // private int res;
+        // public int maxSumBST(TreeNode root) {
+        //     dfs(root);
+        //     return res;
+        // }
+        // private int[] dfs(TreeNode r) {
+        //     if (r == null) return null; // [bst_1/0, sum, min, max]
+        //     int[] left = dfs(r.left), right = dfs(r.right); // 递归求解左右子树的信息
+        //     int[] ans = {1, r.val, r.val, r.val};
+        //     // 判断一下r子树是否是BST，如果不是，就不用再继续了，直接返回
+        //     if (left != null && (left[3] >= r.val || left[0] == 0) || right != null && (right[2] <= r.val || right[0] == 0)) {
+        //         ans[0] = 0;
+        //         return ans;
+        //     }
+        //     // 否则r节点构成的子树是BST，更新其信息
+        //     ans[1] += (left != null ? left[1] : 0) + (right != null ? right[1] : 0); // sum
+        //     if (left != null) ans[2] = left[2];   // min
+        //     if (right != null) ans[3] = right[3]; // max
+        //     // 由于r子树是BST，所以用其数值总和更新答案
+        //     res = Math.max(res, ans[1]);
+        //     return ans;
+        // }
+
+        // public int racecar(int t) { // 这个题： 什么时候考虑重复，跟扫描线、青蛙跳类一起总结一下
+        //     Queue<int []> q = new LinkedList<>();
+        //     Set<String> vis = new HashSet<>();
+        //     q.offer(new int [] {0, 1});
+        //     vis.add("0_1");
+        //     vis.add("0_-1"); //
+        //     int cnt = 0;
+        //     while (true) {
+        //         for (int size = q.size()-1; size >= 0; size--) {
+        //             int [] cur = q.poll();
+        //             int p = cur[0], s = cur[1];
+        //             if (p + s == t) return cnt + 1;
+        //             int pos = p + s, spe = s * 2;
+        //             String tmp = pos + "_" + spe;
+        //             if (pos > 0 && pos < t * 2)
+        //                 q.offer(new int [] {pos, spe});
+        //             pos = p; // 只有转换方向的时候才考虑重复的问题
+        //             spe = s > 0 ? -1 : 1;
+        //             tmp = pos + "_" + spe;
+        //             if (!vis.contains(tmp)) {
+        //                 q.offer(new int [] {pos, spe});
+        //                 vis.add(tmp);
+        //             }
+        //         }
+        //         cnt++;
+        //     }
+        // }
+
+        // static final int mod = (int)1e9 + 7; // 感觉test case 很弱
+        // public int distinctSubseqII(String t) { // 每个当前字符，可出现、或不出现在子序列中，两种情况 * 之前的结束，对重复出现字符的处理
+        //     int n = t.length();
+        //     char [] s = ("#" + t).toCharArray();
+        //     int [] preIdx = new int [26];
+        //     Arrays.fill(preIdx, -1);
+        //     long [] dp = new long [n+1];
+        //     dp[0] = 1; // 引子 {}
+        //     for (int i = 1; i <= n; i++) {
+        //         int j = preIdx[s[i] - 'a'];
+        //         dp[i] = (2 * dp[i-1] % mod - (j != -1 ? dp[j-1] : 0) + mod) % mod; // 还没能想很透这里的j不是应该需要是 j >= 1 的吗？
+        //         preIdx[s[i]-'a'] = i;
+        //     }
+        //     return (int)dp[n] - 1;
+        // }
+
+        // public String largestNumber(int[] cost, int target) { // bug
+        //     n = cost.length;
+        //     dp = new String [target + 1];
+        //     return dfs(target, cost);
+        // }
+        // String [] dp;
+        // int n;
+        // private String dfs(int i, int [] a) {
+        //     if (i == 0) return "";
+        //     if (dp[i] != null) return dp[i];
+        //     String ans = "";
+        //     // for (int j = 0; j < a.length; j++) {
+        //         for (int j = a.length-1; j >= 0; j--) {
+        //         if (i < a[j]) continue;
+        //         String cur = dfs(i - a[j], a);
+        //         if (cur.equals("0")) continue;
+        //         // cur = "" + (j+1) + cur; // 加在前面加在后面关系不大
+        //         cur += (j+1); // 将子问题解加上当前选择的数字
+        //         if (cur.length() >= ans.length()) {
+        //             if (cur.length() > ans.length() || cur.length() == ans.length() && cur.compareTo(ans) > 0) // 如果当前解大于max，更新max值
+        //                 ans = cur;
+        //         }
+        //     }
+        //     if (ans.equals("")) ans = "0"; // 这个细节不能忘
+        //     return dp[i] = ans;
+        // }
+        // // https://leetcode-cn.com/problems/form-largest-integer-with-digits-that-add-up-to-target/solution/shu-wei-cheng-ben-he-wei-mu-biao-zhi-de-dnh86/
+        // public String largestNumber(int[] cost, int target) { // todo: 官方题解及优化
+        //     int[][] dp = new int[10][target + 1];
+        //     for (int i = 0; i < 10; ++i) 
+        //         Arrays.fill(dp[i], Integer.MIN_VALUE);
+        //     int [][] from = new int[10][target + 1];
+        //     dp[0][0] = 0;
+        //     for (int i = 0; i < 9; ++i) {
+        //         int c = cost[i];
+        //         for (int j = 0; j <= target; ++j) {
+        //             if (j < c) {
+        //                 dp[i + 1][j] = dp[i][j];
+        //                 from[i + 1][j] = j;
+        //             } else {
+        //                 if (dp[i][j] > dp[i + 1][j - c] + 1) {
+        //                     dp[i + 1][j] = dp[i][j];
+        //                     from[i + 1][j] = j;
+        //                 } else {
+        //                     dp[i + 1][j] = dp[i + 1][j - c] + 1;
+        //                     from[i + 1][j] = j - c;
+        //                 }
+        //             }
+        //         }
+        //     }
+        //     if (dp[9][target] < 0) return "0";
+        //     StringBuffer sb = new StringBuffer();
+        //     int i = 9, j = target;
+        //     while (i > 0) {
+        //         if (j == from[i][j]) {
+        //             --i;
+        //         } else {
+        //             sb.append(i);
+        //             j = from[i][j];
+        //         }
+        //     }
+        //     return sb.toString();
+        // }
+        // public String largestNumber(int[] cost, int target) {
+        //     int n = cost.length;
+        //     int [] dp = new int [target + 1];
+        //     Arrays.fill(dp, -1);
+        //     dp[0] = 0;
+        //     for (int i = 0; i < n; i++) 
+        //         for (int j = cost[i]; j <= target; j++) 
+        //             if (dp[j - cost[i]] >= 0) // dp loop出由target可以组装出的最大长度
+        //                 dp[j] = Math.max(dp[j], dp[j-cost[i]] + 1);
+        //     if (dp[target] == -1) return "0";
+        //     char [] a = new char [dp[target]];
+        //     int leftOver = target;
+        //     for (int i = 0; i < dp[target]; i++) // ans array a idx loop
+        //         for (int j = n; j > 0; j--)      // tracing back the longest path,再根据dp出的最大长度找出原始最长及最大路径， 数字由大到小
+        //             if (leftOver  >= cost[j-1] && dp[leftOver] == dp[leftOver - cost[j-1]] + 1) {
+        //                 a[i] = (char)('0' + j);
+        //                 leftOver -= cost[j-1];
+        //                 break;
+        //             }
+        //     return String.valueOf(a);
+        // }
+        // public String largestNumber(int[] cost, int target) {
+        //     int[] dp = new int[target + 1];
+        //     Arrays.fill(dp, Integer.MIN_VALUE);
+        //     dp[0] = 0;
+        //     for (int c : cost) 
+        //         for (int j = c; j <= target; ++j) 
+        //             dp[j] = Math.max(dp[j], dp[j - c] + 1);
+        //     if (dp[target] < 0) return "0";
+        //     StringBuffer sb = new StringBuffer(); // 这种写法还是很流畅的
+        //     for (int i = 8, j = target; i >= 0; i--) 
+        //         for (int c = cost[i]; j >= c && dp[j] == dp[j - c] + 1; j -= c) 
+        //             sb.append(i + 1);
+        //     return sb.toString();
+        // }
+
+        // static final int mod = (int)1e9 + 7;
+        // public int profitableSchemes(int n, int minProfit, int[] group, int[] profit) {
+        //     int m = group.length, ans = 0;
+        //     int [][][] dp = new int [m+1][n+1][minProfit+1];
+        //     dp[0][0][0] = 1;
+        //     for (int i = 1; i <= m; i++) {   // 遍历每桩案件
+        //         int g = group[i-1], p = profit[i-1];
+        //         for (int j = 0; j <= n; j++) // 遍历人数
+        //             for (int k = 0; k <= minProfit; k++) {
+        //                 dp[i][j][k] = dp[i-1][j][k];
+        //                 if (j >= g)   // 在本桩案件人手够用的前提下，办与不办此案的方案数相加
+        //                     dp[i][j][k] = (dp[i][j][k] + dp[i-1][j-g][Math.max(0, k-p)]) % mod;
+        //             }
+        //     }
+        //     for (int i = 0; i <= n; i++) 
+        //         ans = (ans + dp[m][i][minProfit]) % mod;
+        //     return ans;
+        // }
+        // static final int mod = (int)1e9 + 7;
+        // public int profitableSchemes(int n, int minProfit, int[] group, int[] profit) {
+        //     int m = group.length, ans = 0;
+        //     int [][] dp = new int [n+1][minProfit+1];
+        //     dp[0][0] = 1;
+        //     for (int i = 1; i <= m; i++) {   // 遍历每桩案件
+        //         int g = group[i-1], p = profit[i-1];
+        //         for (int j = n; j >= g; j--)  // 当压缩了一维空间，从后往前遍历以免产生赃数据
+        //             for (int k = minProfit; k >= 0; k--) 
+        //                 dp[j][k] = (dp[j][k] + dp[j-g][Math.max(0, k-p)]) % mod;
+        //     }
+        //     for (int i = 0; i <= n; i++) 
+        //         ans = (ans + dp[i][minProfit]) % mod;
+        //     return ans;
+        // }
+        // public int profitableSchemes(int n, int minProfit, int[] group, int[] profit) {
+        //     m = group.length;
+        //     this.n = n;
+        //     this.minProfit = minProfit;
+        //     dp = new int [m+1][n+1][minProfit+1];
+        //     for (int i = 0; i <= m; i++) 
+        //         for (int j = 0; j <= n; j++) 
+        //             Arrays.fill(dp[i][j], Integer.MIN_VALUE);
+        //     return dfs(m, n, minProfit, group, profit);
+        // }
+        // static final int mod = (int)1e9 + 7;
+        // int m, n, minProfit;
+        // int [][][] dp;
+        // private int dfs(int i, int j, int k, int [] group, int [] profit) {
+        //     if (i == 0) return k <= 0 ? 1 : 0;
+        //     if (k < 0) k = 0;
+        //     if (dp[i][j][k] != Integer.MIN_VALUE) return dp[i][j][k];
+        //     int g = group[i-1], p = profit[i-1];
+        //     int ans = dfs(i-1, j, k, group, profit);
+        //     if (j >= g)
+        //         ans = (ans + dfs(i-1, j-g, Math.max(0, k-p), group, profit)) % mod;
+        //     return dp[i][j][k] = ans;
+        // }
+
+        // public boolean canDistribute(int [] a, int[] quantity) {
+        //     for (Integer v : a)
+        //         m.put(v, m.getOrDefault(v, 0) + 1);
+        //     n = m.size();
+        //     cnt = new int [n];
+        //     int idx = 0;
+        //     for (Integer v : m.values()) cnt[idx++] = v;
+        //     Arrays.sort(cnt);
+        //     Arrays.sort(quantity);
+        //     if (quantity[quantity.length-1] > cnt[n-1]) return false;
+        //     return dfs(quantity.length-1, quantity);
+        // }
+        // Map<Integer, Integer> m = new HashMap<>();
+        // int [] cnt;
+        // int n;
+        // private boolean dfs(int i, int [] quantity) {
+        //     if (i < 0) return true;
+        //     Set<Integer> vis = new HashSet<>(); // 忘记这个了，是否与下面行效果一样呢？
+        //     for (int j = n-1; j >= 0; j--) {
+        //         if (vis.contains(cnt[j])) continue;
+        //         vis.add(cnt[j]);
+        //         // if (j < n-1 && cnt[j] == cnt[j+1]) continue; // 应该是用了vis.这个就可以不用了
+        //         if (cnt[j] < quantity[i]) continue;
+        //         cnt[j] -= quantity[i];
+        //         if (dfs(i-1, quantity)) return true;
+        //         cnt[j] += quantity[i];
+        //     }
+        //     return false;
+        // }
+        // public boolean canDistribute(int [] a, int[] quantity) { 
+        //     Map<Integer, Integer> map = new HashMap<>();
+        //     for (Integer v : a)
+        //         map.put(v, map.getOrDefault(v, 0) + 1);
+        //     int n = map.size(), idx = 0, m = quantity.length, r = 1 << m;
+        //     int [] cnt = new int [n];
+        //     for (Integer v : map.values()) cnt[idx++] = v;
+        //     int [] sum = new int [r];
+        //     for (int i = 1; i < r; i++) 
+        //         for (int j = 0; j < m; j++) 
+        //             if (((i >> j) & 1) == 1) {
+        //                 int left = i - (1 << j);
+        //                 sum[i] = sum[left] + quantity[j];
+        //                 break;
+        //             }
+        //     boolean [][] dp = new boolean [n][r]; // dp[i][j] 表示：cnt 数组中的前i个元素，能否满足顾客的子集合 j 的订单需求
+        //     for (int i = 0; i < n; i++) 
+        //         dp[i][0] = true;
+        //     for (int i = 0; i < n; i++)       // 遍历 cnt数组
+        //         for (int j = 0; j < r; j++) { // 遍历客户组合子集
+        //             if (i > 0 && dp[i-1][j]) {
+        //                 dp[i][j] = true;
+        //                 continue;
+        //             }
+        //             for (int k = j; k != 0; k = ((k-1) & j)) { // 子集s枚举，详见 https://oi-wiki.org/math/bit/#_14
+        //                 int pre = j - k; // 前 i-1 个元素需要满足子集 prev = j-s
+        //                 boolean last = (i == 0) ? (pre == 0) : dp[i-1][pre]; // cnt[0..i-1] 能否满足子集 prev
+        //                 boolean need = sum[k] <= cnt[i]; // cnt[i] 能否满足子集 s
+        //                 if (last && need) {
+        //                     dp[i][j] = true;
+        //                     break;
+        //                 }
+        //             }
+        //         }
+        //     return dp[n-1][r-1];
+        // }
+
+        // static final int mod = (int)1e9 + 7;
+        // public int numPermsDISequence(String t) {
+        //     int n = t.length(), ans = 0;
+        //     char [] s = t.toCharArray();
+        //     int [][] dp = new int [n+1][n+1];
+        //     dp[0][0] = 1;
+        //     for (int i = 1; i <= n; i++) 
+        //         for (int j = 0; j <= i; j++) { // 当前最后一个元素是j
+        //             if (s[i-1] == 'D')
+        //                 for (int k = j; k <= i; k++)
+        //                     dp[i][j] = (dp[i][j] + dp[i-1][k]) % mod;
+        //             else for (int k = 0; k < j; k++)
+        //                      dp[i][j] = (dp[i][j] + dp[i-1][k]) % mod;
+        //         }
+        //     for (int i = 0; i <= n; i++) 
+        //         ans = (ans + dp[n][i]) % mod;
+        //     return (int) ans;
+        // }
+        // static final int mod = (int)1e9 + 7;
+        // public int numPermsDISequence(String t) {
+        //     int n = t.length(), ans = 0;
+        //     char [] s = t.toCharArray();
+        //     int [][] dp = new int [n + 1][n + 1];
+        //     dp[0][0] = 1;
+        //     for (int i = 1; i <= n; i ++) 
+        //         if (s[i - 1] == 'D') 
+        //             for (int j = i - 1 ; j >= 0 ; j --)
+        //                 dp[i][j] = (dp[i][j + 1] + dp[i - 1][j]) % mod;
+        //         else for (int j = 1; j <= i; j ++)
+        //                 dp[i][j] = (dp[i][j - 1] + dp[i - 1][j - 1]) % mod;
+        //     for (int i = 0 ; i <= n ; i ++)
+        //         ans = (ans + dp[n][i]) % mod;
+        //     return ans;
+        // }
+        // static final int mod = (int)1e9 + 7;
+        // public int numPermsDISequence(String t) {
+        //     int n = t.length(), ans = 0;
+        //     char [] s = t.toCharArray();
+        //     long [][] dp = new long [n+1][n+1];
+        //     long [][] c = new long [n+2][n+2];
+        //     for (int i = 0; i <= n; i++)
+        //         dp[i][i] = 1;
+        //     for (int i = 0; i <= n+1; i++) {
+        //         c[i][0] = 1;
+        //         for (int j = 1; j <= i; j++) 
+        //             c[i][j] = (int)((c[i-1][j] + c[i-1][j-1]) % mod);
+        //     }
+        //     for (int len = 2; len <= n+1; len++) 
+        //         for (int i = 0; i+len-1 <= n; i++) {
+        //             int j = i + len - 1;
+        //             if (s[i] == 'D')   // 如果s[i] = 'D'，那么最大的元素可以放在p[i]上。dp[i][j] += dp[i + 1][j]
+        //                 dp[i][j] = (dp[i][j] + dp[i+1][j]) % mod;
+        //             if (s[j-1] == 'I') // 如果s[j - 1] = 'I'，那么最大的元素可以放在p[j]上。dp[i][j] += dp[i][j - 1]
+        //                 dp[i][j] = (dp[i][j] + dp[i][j-1]) % mod;
+        //             for (int k = i+1; k <= j-1; k++)
+        //                 if (s[k-1] == 'I' && s[k] == 'D')
+        //                     dp[i][j] = (dp[i][j] + (1l * c[len-1][k-i]) * dp[i][k-1] % mod * dp[k+1][j] % mod) % mod;
+        //         }
+        //     return (int)dp[0][n];
+        // }
+
+        // public int numMusicPlaylists(int n, int goal, int k) {
+        //     long mod = (int)1e9 + 7;
+        //     long [][] dp = new long [goal+1][n+1]; // dp[i][j]: 播完i首用了j首不同的曲子，分第i首播不播第j首两种情况 (i >= j for sure)
+        //     for (int i = 1; i <= goal; i++) 
+        //         for (int j = 1; j <= n; j++) {
+        //             if (i < j) dp[i][j] = 0; // 这行不能省略   
+        //             else if (i == 1 && j == 1) dp[i][j] = n; // 用1首歌放完1次，共有n种不同的选择
+        //             else if (i > 1 && j == 1) {
+        //                 if (k == 0) dp[i][j] = n; // 相当于没有任何外加限制条件
+        //                 // else dp[i][1] = 0;     // 这行可略
+        //             } else // 分两种情况： 第i首不播第j首歌（那么可以从前面j-k首里面选择一首），和第i首播第j首歌（第j首就可以从不曾播放过的n-(j-1)首里面选择一首播放）
+        //                 dp[i][j] = (dp[i-1][j] * Math.max(j-k, 0) + (j == 0 ? 0 : dp[i-1][j-1] * (n - (j-1)))) % mod;
+        //         }
+        //     return (int)dp[goal][n];
+        // }
+        // static final int mod = (int)1e9 + 7;
+        // public int numMusicPlaylists(int n, int goal, int k) {
+        //     long [][] dp = new long [goal+1][n+1]; // dp[i][j]: 播完i首用了j首不同的曲子，分第i首播不播第j首两种情况 (i >= j for sure)
+        //     dp[0][0] = 1;
+        //     for (int i = 1; i <= goal; i++) 
+        //         for (int j = 1; j <= n; j++) {
+        //             dp[i][j] = (dp[i-1][j-1] * (n - (j-1))) % mod; // 第j首放新歌
+        //             if (j > k)                                     // 第j首放（j-k）之前的某首歌
+        //                 dp[i][j] = (dp[i][j] + dp[i-1][j] * (j-k)) % mod;
+        //         }
+        //     return (int)dp[goal][n];
+        // }
+
+        // public int findRotateSteps(String ring, String key) { // dfs
+        //     m = ring.length();
+        //     n = key.length();
+        //     char [] s = ring.toCharArray();
+        //     for (int i = 0; i < m; i++) {
+        //         if (key.indexOf(s[i]) == -1) continue; // 只记录在key中出现过的字母的位置
+        //         idx.computeIfAbsent(s[i], z -> new ArrayList<>()).add(i);
+        //     }
+        //     dp = new int [m][n];
+        //     return dfs(0, 0, ring, key);
+        // }
+        // Map<Character, List<Integer>> idx = new HashMap<>();
+        // int [][] dp;
+        // int m, n;
+        // private int dfs(int i, int j, String s, String t) {
+        //     if (j == n) return 0;
+        //     if (dp[i][j] > 0) return dp[i][j];
+        //     int ans = Integer.MAX_VALUE;
+        //     for (Integer v : idx.get(t.charAt(j))) 
+        //         ans = Math.min(ans, dfs(v, j+1, s, t) + getDist(v, i) + 1); // + 1 for confirm push
+        //     return dp[i][j] = ans;
+        // }
+        // private int getDist(int i, int j) {
+        //     int min = Math.min(i, j), max = Math.max(i, j);
+        //     return Math.min(Math.abs(i - j), Math.abs(m - max + min)); 
+        // }
+        // public int findRotateSteps(String ring, String key) { // dfs
+        //     int m = key.length(), n = ring.length();
+        //     char [] s = key.toCharArray();
+        //     char [] t = ring.toCharArray();
+        //     int [][] dp = new int [m+1][n];
+        //     int dif = 0, cnt = 0;
+        //     for (int i = m-1; i >= 0; i--) 
+        //         for (int j = 0; j < n; j++) { // j 是固定在12点钟表盘的位置
+        //             dp[i][j] = Integer.MAX_VALUE;
+        //             for (int k = 0; k < n; k++) 
+        //                 if (s[i] == t[k]) {
+        //                     dif = Math.abs(j - k);
+        //                     cnt = Math.min(dif, n - dif);
+        //                     dp[i][j] = Math.min(dp[i][j], cnt + dp[i+1][k]);
+        //                 }
+        //         }
+        //     return dp[0][0] + m;
+        // }
+
+        public int oddEvenJumps(int [] a) { // bug
+            int n = a.length;
+            Set<Integer> idx = new HashSet<>();
+            ArrayDeque<Integer> max = new ArrayDeque<>(); // 单调递增 右进
+            ArrayDeque<Integer> min = new ArrayDeque<>(); // 单调递减 左进 --》这里有点儿想不太明白了，这个思路可能不能，改天再写这个
+            boolean [] odd = new boolean [n];
+            boolean [] evn = new boolean [n];
+            odd[n-1] = true;
+            evn[n-1] = true;
+            idx.add(n-1);
+            max.offerLast(n-1);
+            min.offerLast(n-1);
+            for (int i = n-2; i >= 0; i--) {
+                if (!max.isEmpty() && evn[max.peekFirst()]) {
+                    odd[i] = true;
+                    idx.add(i);
+                }
+                while (!min.isEmpty() &&  a[i] < a[min.peekFirst()]) min.pollFirst(); // 去头：不合法的扔出去
+                if (!min.isEmpty() && odd[min.peekFirst()]) 
+                    evn[i] = true;
+                while (!max.isEmpty() && a[max.peekLast()] >= a[i]) max.pollLast();
+                max.offerLast(i);
+                min.offerFirst(i);
+            }
+        }
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        // char [][] a = new char [][] {{'#','.','.','.','#'},{'.','#','.','#','.'},{'.','.','#','.','.'},{'.','#','.','#','.'},{'#','.','.','.','#'}};
-        char [][] a = new char [][] {{'.','#','#'},{'#','#','#'},{'#','#','#'}}; 
+        String a = "godding";
+        String b = "gd";
 
-        int r = s.maxStudents(a);
+        int r = s.findRotateSteps(a, b);
         System.out.println("r: " + r);
     }
 }
