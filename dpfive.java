@@ -143,38 +143,6 @@ public class dpfive {
             return ans;
         }
 
-        private static int [] cnts = new int [31];
-        public int minimumOneBitOperations(int n) { // 2^30 > 1e9 可能思路理得还不是太清楚吧，改天再写这个
-            if (n == 0) return 0;
-            String t = Integer.toBinaryString(n);
-            char [] s = t.toCharArray();
-            int m = t.length(), cnt = Integer.bitCount(n), ans = 0;
-            if (cnt == 1) {
-                if (cnts[n] > 0) return cnts[n];
-                int i = m-1;
-                while (cnt < m) {
-                    s[i] = '1';
-                    --i;
-                    cnt++;
-                }
-                cnts[n] = cnt * 2 + 1;
-                return cnt * 2 + 1;
-            }
-            int tmp = 0, i = ;
-            while (Integer.bitCount(n) > 1) {
-                for (int i = 0; i <= 30; i++) {
-                    if ((n & 1) == 0) {
-                        n |= 1;
-                        tmp++;
-                    }
-                }
-            char [] s = t.toCharArray();
-            int i = m-1;
-            while (i >= 0 && s[i] == '0') i--;
-            int [] cnt = new int [31];
-            return 0;
-        }
-
         public int shortestPathLength(int[][] g) { // 主要考点：对状态的遍历，以及对重复节点、反复遍历的调控
             int n = g.length;
             int target = 0, cnt = 0;

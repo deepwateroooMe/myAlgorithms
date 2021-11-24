@@ -33,63 +33,6 @@ public class dpeight {
             return max;
         }
  
-        public int[] pathsWithMaxScore(List<String> bd) { // bug
-            int m = bd.size(), n = bd.get(0).length();
-            int [][] a = new int [m][n];
-            for (int i = 0; i < m; i++) 
-                for (int j = 0; j < n; j++) {
-                    char c = bd.get(i).charAt(j);
-                    a[i][j] = ((c == 'X' || c == 'S' || c == 'E') ? 0 : c-'0');
-                }
-            // System.out.println("a.length: " + a.length);
-            // for (int z = 0; z < a.length; ++z) 
-            //     System.out.println(Arrays.toString(a[z]));
-            
-            int [][] dirs = {{-1, -1}, {-1, 0}, {0, -1}};
-            int [][] dp = new int [m][n];
-            int [][] cnt = new int [m][n];
-            cnt[m-1][n-1] = 1;
-            boolean poss = false;
-            for (int i = m-1; i >= 0; i--) {
-                for (int j = n-1; j >= 0; j--) {
-                    // System.out.println("\n i: " + i);
-                    // System.out.println("j: " + j);
-
-                    if (a[i][j] == 0 && !(i == 0 && j == 0) && !(i == m-1 && j == n-1)) continue;
-                    poss = false;
-                    for (int [] d : dirs) {
-                        int x = i + d[0], y = j + d[1];
-                        if (x < 0 || x >= m || y < 0 || y >= n) continue;
-                        // System.out.println("(a[x][y] == 0 && !(x == 0 && y == 0)) : " + (a[x][y] == 0 && !(x == 0 && y == 0)) );
-                        if (a[x][y] == 0 && !(x == 0 && y == 0)) continue;
-                        poss = true;
-                        if (dp[x][y] == 0) {
-                            dp[x][y] = dp[i][j] + a[x][y];
-                            cnt[x][y] = cnt[i][j];
-                        } else if (dp[x][y] < dp[i][j] + a[x][y]) {
-                            dp[x][y] = dp[i][j] + a[x][y];
-                            cnt[x][y] = cnt[i][j];
-                        } else if (dp[x][y] == dp[i][j] + a[x][y])
-                            cnt[x][y] += cnt[i][j];
-                    }
-                    if (!poss && !(i == 0 && j == 0)) return new int [2];
-                    // System.out.println("dp.length: " + dp.length);
-                    // for (int z = 0; z < dp.length; ++z) 
-                    //     System.out.println(Arrays.toString(dp[z]));
-                    // System.out.println("cnt.length: " + cnt.length);
-                    // for (int z = 0; z < cnt.length; ++z) 
-                    //     System.out.println(Arrays.toString(cnt[z]));
-                }
-            }
-            // System.out.println("dp.length: " + dp.length);
-            // for (int z = 0; z < dp.length; ++z) 
-            //     System.out.println(Arrays.toString(dp[z]));
-            // System.out.println("cnt.length: " + cnt.length);
-            // for (int z = 0; z < cnt.length; ++z) 
-            //     System.out.println(Arrays.toString(cnt[z]));
-            return new int [] {dp[0][0], cnt[0][0]} ;
-        }
-
         public int maxSum(int [] a, int [] b) {
             int mod = (int)1e9 + 7;
             int m = a.length, n = b.length;
@@ -151,20 +94,6 @@ public class dpeight {
             }
         }
 
-        public int cherryPickup(int[][] gd) { // bug: 想的是类似于cherry pickup II两条路线同时走的最大值
-            m = gd.length;
-            n = gd[0].length;
-            dp = new int [m][n][m]; // dp[i][j][x]: 一个机器人的坐标[i,j]和另一个机器人的坐标[x, y] i+j == x+y
-            return dfs(0, 0, gd);
-        }
-        int [][][] dp;
-        int m, n;
-        private int dfs(int i, int j, int k, int [][] a) {
-            if (i == m-1 && j == n-1) return a[m-1][n-1] + a[k][m+n-2-k];
-            if (x < 0 || x >= m || y < 0 || y >= n)
-            if (dp[i][j] > 0) return dp[i][j];
-        }
-
         public int minAbsDifference(int[] a, int goal) {
             int n = a.length, idx = 0, min = Integer.MAX_VALUE;
             int [] left = Arrays.copyOfRange(a, 0, n/2); // [0, n/2)
@@ -205,39 +134,6 @@ public class dpeight {
             }
             getSum(i+1, sum + a[i], a, ss);
             getSum(i+1, sum, a, ss);
-        }
-
-        public int calculateMinimumHP(int[][] g) { // 有个bug: 如果过程中因为power up而获得能量，还需要纪录过程中一度出现过的最小值才对
-            int m = g.length, n = g[0].length;
-            int [][] f = new int [m][n];
-            int [][] dirs = {{1, 0}, {0, 1}};
-            f[0][0] = g[0][0];
-            for (int i = 0; i < m; i++) 
-                for (int j = 0; j < n; j++) 
-                    for (int [] d : dirs) {
-                        int x = i + d[0], y = j + d[1];
-                        if (x < 0 || x >= m || y < 0 || y >= n) continue;
-                        f[x][y] = Math.max(f[x][y], f[i][j] + g[x][y]);
-                    }
-            return Math.abs(f[m-1][n-1]) + 1;
-        }
-        public int calculateMinimumHP(int[][] g) { // 有个bug: 如果过程中因为power up而获得能量，还需要纪录过程中一度出现过的最小值才对
-            m = g.length;
-            n = g[0].length;
-            // f = new int [m][n];
-            dfs(0, 0, 0, 0);
-            return 
-        }
-        int m, n, gmin = Integer.MAX_VALUE;
-        // int [][] f;
-        private void dfs(int i, int j, int sum, int locMin) {
-            if (i == m-1 && j == n-1) {
-                if (sum < 0 && (gmin < sum || locMin))
-            }
-        }
-
-        public int minRefuelStops(int target, int startFuel, int[][] stations) {
-            if (startFuel >= target) return 0;
         }
 
         public String largestMultipleOfThree(int[] d) {
@@ -363,63 +259,6 @@ public class dpeight {
                     return Math.min(integerReplacement(n+1), integerReplacement(n-1)) + 1 + cnt;
             }
             return cnt;
-        }
-
-        public int dieSimulator(int n, int [] r) { // DP(pos, last) which means we are at the position pos having as last the last character seen.
-            this.n = n;
-            dp = new long [n+1][7][16];
-            long ans = 0;
-            // for (int i = 1; i < 7; i++) 
-            //     ans = (ans + dfs(n-1, i, 1, r)) % mod;
-            // return (int)ans;
-            return (int)dfs(n, -1, 0, r);
-        }
-        int mod = (int)1e9 + 7;
-        long [][][] dp;
-        int n;
-        private long dfs(int i, int j, int k, int [] a) { // 感觉自项向下、自底向上，这里的上下方向有些混乱，条理不清楚
-            if (i <= 0) return 0;
-            if (i == 1) return k < a[j-1] ? 1 : 0;
-            if (j != -1 && dp[i][j][k] > 0) return dp[i][j][k];
-            long ans = 0;
-            for (int x = 1; x < 7; x++) {
-                if (j == -1 || j != x)
-                    ans = (ans + dfs(i-1, x, 1, a)) % mod;
-                if (j == x && k < a[j-1])
-                    ans = (ans + dfs(i-1, j, k+1, a)) % mod;
-                // else if (j == x && k = a[j-1])
-            }
-            if (j != -1)
-                dp[i][j][k] = ans;
-            return ans;
-            // return dp[i][j][k] = ans;
-        }
-        public int dieSimulator(int n, int [] r) { // DP(pos, last) which means we are at the position pos having as last the last character seen.
-            long mod = (int)1e9 + 7;
-            long [][] dp = new long [n][7];
-            for (int i = 1; i < 7; i++) dp[0][i] = 1;
-            for (int i = 1; i < n; i++) 
-                for (int j = 1; j < 7; j++) {
-                    if (dp[i-1][j] == 0) continue; // 根据 dp[i-1][j] 这一个格，更新接下来的所有可能的后续
-                    for (int k = 1; k < 7; k++) {  // 遍历限制 r[]
-                        if (j != k) {
-                            dp[i][k] = (dp[i][k] + dp[i-1][j]) % mod;
-                            // cnt[k] = 1;
-                        } else if (j == k) {
-                            if (r[j-1] == 1) continue;
-                            dp[i][k] = (dp[i][k] + dp[i-1][k] + (i-r[j-1] >= 0 ? dp[i-r[j-1]][k] : 0)) % mod; // 这上下两种写法都有bug
-                            // for (int x = i; x < Math.min(n, i+r[j-1]-1); x++) // bug: 应该会重复计算
-                            //     dp[x][j] = (dp[x][j] + dp[i-1][j]) % mod;
-                        }
-                    }
-                }
-            System.out.println("dp.length: " + dp.length);
-            for (int z = 0; z < dp.length; ++z) 
-                System.out.println(Arrays.toString(dp[z]));
-            long ans = 0;
-            for (int j = 1; j < 7; j++) 
-                ans = (ans + dp[n-1][j]) % mod;
-            return (int) ans;
         }
 
         public int [] smallestSufficientTeam(String[] req_skills, List<List<String>> people) { // todo: bitmask写法 不知道哪里写错了,改天再回来写这个题

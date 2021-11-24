@@ -1025,39 +1025,472 @@ public class dpnine {
         //     return dp[0][0] + m;
         // }
 
-        public int oddEvenJumps(int [] a) { // bug
-            int n = a.length;
-            Set<Integer> idx = new HashSet<>();
-            ArrayDeque<Integer> max = new ArrayDeque<>(); // 单调递增 右进
-            ArrayDeque<Integer> min = new ArrayDeque<>(); // 单调递减 左进 --》这里有点儿想不太明白了，这个思路可能不能，改天再写这个
-            boolean [] odd = new boolean [n];
-            boolean [] evn = new boolean [n];
-            odd[n-1] = true;
-            evn[n-1] = true;
-            idx.add(n-1);
-            max.offerLast(n-1);
-            min.offerLast(n-1);
-            for (int i = n-2; i >= 0; i--) {
-                if (!max.isEmpty() && evn[max.peekFirst()]) {
-                    odd[i] = true;
-                    idx.add(i);
-                }
-                while (!min.isEmpty() &&  a[i] < a[min.peekFirst()]) min.pollFirst(); // 去头：不合法的扔出去
-                if (!min.isEmpty() && odd[min.peekFirst()]) 
-                    evn[i] = true;
-                while (!max.isEmpty() && a[max.peekLast()] >= a[i]) max.pollLast();
-                max.offerLast(i);
-                min.offerFirst(i);
-            }
+        // public double new21Game(int n, int k, int m) { // m: maxPts
+        //     if (k == 0 || n >= (k + m)) return 1.0;
+        //     if (k > n) return 0;
+        //     double [] dp = new double [n+1];
+        //     dp[0] = 1.0;
+        //     double sum = 1, ans = 0;
+        //     for (int i = 1; i <= n; i++) {
+        //         dp[i] = sum / m;
+        //         if (i < k) sum += dp[i];
+        //         else ans += dp[i];
+        //         if (i >= m) sum -= dp[i-m];
+        //     }
+        //     return ans;
+        // }
+
+        // public int minimumOneBitOperations(int n) { // O(logN)
+        //     if (n == 0) return 0;
+        //     int k = 1;
+        //     while (k << 1 <= n)
+        //         k <<= 1;
+        //     return minimumOneBitOperations(k ^ (k >> 1) ^ n) + k;
+        // }
+        // public int minimumOneBitOperations(int n) {
+        //     int ans = 0;
+        //     while (n > 0) {
+        //         ans ^= n;
+        //         n /= 2;
+        //     }
+        //     return ans;
+        // }
+
+        // public int dieSimulator(int n, int [] r) { // dfs记忆化搜索：数据传递时，自顶向下传递的同一个值出现的次数， 与自底向上返回的方案数的交互，要熟悉起来，
+        //     dp = new Integer [7][16][n+1]; // 最开始的dp定义想的是对的， 与房子涂成几个街区类似
+        //     return (int)dfs(0, 0, n, r);
+        // }
+        // static final int mod = (int)1e9 + 7;
+        // Integer [][][] dp;
+        // private long dfs(int i, int j, int k, int [] cnt) { // i: val, j: continuous cnt, k: cnt out of n times
+        //     if (k == 0) return 1;
+        //     if (dp[i][j][k] != null) return dp[i][j][k];
+        //     long ans = 0;
+        //     for (int x = 1; x <= 6; x++) {
+        //         if (x == i && cnt[x-1] > j)
+        //             ans = (ans + dfs(x, j+1, k-1, cnt)) % mod;
+        //         else if (x != i)
+        //             ans = (ans + dfs(x, 1, k-1, cnt)) % mod;
+        //     }
+        //     return dp[i][j][k] = (int)ans;
+        // }
+        // (动态规划) O(nm)
+        // f(i,j,k) 表示前 i 次投，最后一次结果为 j 且最后的数字连续了 k 次的方案数。
+        // 初始时，f(0,j,1) = 1，其余均为 0。
+        // 转移时，对于每一个 i和 j，枚举上一次最后的结果 t，如果 j==t，则转移f(i,j,k)=f(i,j,k)+f(i−1,j,k−1)；否则f(i,j,1)=f(i,j,1)+f(i−1,t,k)。
+        //     最终答案为f(n−1,j,k) 的总和。
+        // static final long mod = (int)1e9 + 7;
+        // public int dieSimulator(int n, int [] r) { // 因为第三个限制条件的出现，而增加到三维dp[i][j][k]题型 ，总结一下
+        //     long [][][] dp = new long [n][6][16]; 
+        //     for (int i = 0; i < 6; i++) dp[0][i][1] = 1; // 第一次投掷，各个数出现一次的次数均为1
+        //     for (int i = 1; i < n; i++) 
+        //         for (int j = 0; j < 6; j++) 
+        //             for (int x = 0; x < 6; x++)  // x t: 把它当作上一次的最后结果 
+        //                 if (j == x) 
+        //                     for (int k = 2; k <= r[j]; k++) 
+        //                         dp[i][j][k] = (dp[i][j][k] + dp[i-1][j][k-1]) % mod;
+        //                 else for (int k = 1; k <= r[x]; k++) // 因为是新的数字出现，没有任何限制，所以把前面的结果全累积起来
+        //                         dp[i][j][1] = (dp[i][j][1] +  dp[i-1][x][k]) % mod;
+        //     long ans = 0;
+        //     for (int j = 0; j < 6; j++)
+        //         for (int k = 1; k <= r[j]; k++) 
+        //             ans = (ans + dp[n-1][j][k]) % mod;
+        //     return (int) ans;
+        // }
+
+//         // 把二维数组按行或列拆成多个一维数组，然后利用一维数组的累加和来找符合要求的数字，
+//         // 这里用了 lower _ bound 来加快的搜索速度，也可以使用二分搜索法来替代。
+//         public int maxSumSubmatrix(int[][] mat, int target) {
+//             int x = mat.length, y = mat[0].length, ans = Integer.MIN_VALUE;
+//             boolean flag = x <= y;
+//             int m = Math.min(x, y), n = Math.max(x, y);
+//             int [] sum = new int [n]; // 定义一维大的数组
+//             TreeSet<Integer> ts = new TreeSet<>();
+//             for (int i = 0; i < m; i++) { // 找从第 i 行开始一直到第 0 行这 i+1 行的可能组成的矩形长度
+//                 Arrays.fill(sum, 0);
+//                 for (int j = i; j >= 0; j--) { // 遍历行: 行的和的累加是通过每列列的和的累加sum数组的值来实现的
+//                     ts.clear();
+//                     ts.add(0);
+//                     int cur = 0;
+// // 因为要满足 （ sum-set 中的元素） <=target,
+// // 而且 sum-set 中的元素的值要尽可能的大，sum - target <= setElement(要set中的元素，尽可能地小)
+// // 所以也就是在求大于等于 sum-target 中满足条件的元素的最小的一个
+// // 正好 TreeSet 中提供了这个方法 ceil() ，可以很方便的找出这个元素： 返回大于或等于e的最小元素；如果没有这样的元素，则返回null
+//                     for (int k = 0; k < n; k++) { // 遍历列： 原始矩阵的行的和，或者是列的和，比较长的大的那一维的和
+//                         if (flag) sum[k] += mat[j][k];
+//                         else sum[k] += mat[k][j];
+//                         cur += sum[k];
+//                         Integer tmp = ts.ceiling(cur - target);
+//                         if (tmp != null) ans = Math.max(ans, cur - tmp);
+//                         ts.add(cur);
+//                     }
+//                 }
+//             }
+//             return ans;
+//         }
+        // public int maxSumSubmatrix(int[][] mat, int target) { // 这么再看一下，就清清楚楚地啦
+        //     int m = mat.length, n = mat[0].length, ans = Integer.MIN_VALUE;
+        //     int M = Math.min(m, n), N = Math.max(m, n);
+        //     for (int i = 0; i < M; i++) {
+        //         int [] sum = new int [N];
+        //         for (int j = i; j < M; j++) {
+        //             TreeSet<Integer> ts = new TreeSet<>();
+        //             int cur = 0;
+        //             for (int k = 0; k < N; k++) {
+        //                 sum[k] += m > n ? mat[k][j] : mat[j][k];
+        //                 cur += sum[k];
+        //                 if (cur <= target) ans = Math.max(ans, cur);
+        //                 Integer tmp = ts.ceiling(cur - target);
+        //                 if (tmp != null) ans = Math.max(ans, cur - tmp);
+        //                 ts.add(cur);
+        //             }
+        //         }
+        //     }
+        //     return ans;
+        // }
+
+        // static final int mod = (int)1e9 + 7;
+        // public int numberWays(List<List<Integer>> hats) {
+        //     int n = hats.size(), r = 1 << n;
+        //     Map<Integer, List<Integer>> m = new HashMap<>(); // [k, v]: [帽子id, List<Integer> persons]
+        //     List<Integer> id = new ArrayList<>();
+        //     for (int i = 0; i < n; i++) {
+        //         List<Integer> l = hats.get(i);
+        //         for (Integer v : l) {
+        //             m.computeIfAbsent(v, z -> new ArrayList<>()).add(i);
+        //             if (!id.contains(v)) id.add(v);
+        //         }
+        //     }
+        //     int [][] dp = new int [r][id.size()+1];
+        //     dp[0][0] = 1;
+        //     for (int j = 1; j <= id.size(); j++) // 遍历帽子id
+        //         for (int i = 0; i < r; i++) {    // 遍历人戴帽子的子集状态mask
+        //             dp[i][j] = dp[i][j-1];       // 这顶帽子是可以——不分配出去——的
+        //             List<Integer> candi = m.get(id.get(j-1)); // 分配出去：遍历子集状态mask里的每个戴帽子的人，假如第j顶帽子是分给这个人的方案数
+        //             for (Integer p : candi) 
+        //                 if (((i >> p) & 1) == 1)
+        //                     dp[i][j] = (dp[i][j] + dp[i ^ (1 << p)][j-1]) % mod;
+        //         }
+        //     return (int)dp[r-1][id.size()];
+        // }
+
+        // public int minimumXORSum(int[] a, int[] b) { // 就像前面有题可以一个字母一个字母地match寻找最少单词个数，这里有每增加一个数对的异或都优化结果的细节在
+        //     int n = a.length, r = 1 << n;
+        //     int [] dp = new int [r]; // dp[]: 这个设计奇特，最开始居然没能想起来，要熟悉起来
+        //     Arrays.fill(dp, Integer.MAX_VALUE);
+        //     dp[0] = 0; // 每一个数对取最小值结果的优化是从0开始
+        //     for (int i = 0; i < r; i++) 
+        //         for (int j = 0; j < n; j++) 
+        //             if (((i >> j) & 1) == 1)
+        //                 dp[i] = Math.min(dp[i], dp[i ^ (1 << j)] + (a[Integer.bitCount(i)-1] ^ b[j])); 
+        //                 // dp[i] = Math.min(dp[i], dp[i ^ (1 << j)] + a[Integer.bitCount(i)-1] ^ b[j]); // BUG: ^ 位操作符优先给很低，需要（）起来
+        //     return dp[r-1];
+        // }
+        // public int minimumXORSum(int[] a, int[] b) { // 自顶向下
+        //     int n = a.length, r = 1 << n;
+        //     int [] dp = new int [r]; 
+        //     Arrays.fill(dp, Integer.MAX_VALUE);
+        //     for (int i = 0; i < n; i++) 
+        //         dp[1 << i] = a[0] ^ b[i];
+        //     int [] cnt = new int [r];
+        //     for (int i = 0; i < r; i++)
+        //         cnt[i] = Integer.bitCount(i);
+        //     for (int i = 1; i < n; i++) 
+        //         for (int j = r-1; j > 0; j--) { // 为避免产生赃数据，这里需要倒序遍历
+        //             if (dp[j] == Integer.MAX_VALUE) continue;
+        //             if (cnt[j] == i) // 原状态的 1 的个数 为 i 个，可以进行状态转移
+        //                 for (int k = 0; k < n; k++) 
+        //                     if (((j >> k) & 1) == 0 && (j | (1 << k)) < r) // 遍历所有的位，碰到 state 0 的位置可以放一个异或
+        //                         dp[j | (1 << k)] = Math.min(dp[j | (1 << k)], dp[j] + (a[i] ^ b[k])); // 新产生的数据向后覆盖
+        //         }
+        //     return dp[r-1];
+        // }
+
+        // public int oddEvenJumps(int [] a) { // 写出这种状况：就该强调，选对数据结构，事半功倍！
+        //     int n = a.length, ans = 1; // n-1算答案里的一个
+        //     boolean [] odd = new boolean [n]; 
+        //     boolean [] evn = new boolean [n];
+        //     TreeMap<Integer, Integer> m = new TreeMap<>(); // 这里用treemap就比用ArrayDeque好用
+        //     odd[n-1] = evn[n-1] = true;
+        //     m.put(a[n-1], n-1);
+        //     for (int i = n-2; i >= 0; i--) {
+        //         Integer higher = m.ceilingKey(a[i]); // higherKey() 返回的是键key
+        //         Integer lower = m.floorKey(a[i]);    // lowerKey()
+        //         if (higher != null) odd[i] = evn[m.get(higher)]; // 仍需取值，而非用键
+        //         if (lower != null) evn[i] = odd[m.get(lower)];
+        //         if (odd[i]) ans++;
+        //         m.put(a[i], i);
+        //     }
+        //     return ans;
+        // }
+        // public int oddEvenJumps(int [] a) { 
+        //     int n = a.length, ans = 1;
+        //     ArrayDeque<Integer> s = new ArrayDeque<>();
+        //     Integer [] idx = new Integer [n];       // idx存储的都是A数组的下标
+        //     for (int i = 0; i < n; i++) idx[i] = i;
+        //     Arrays.sort(idx, (x, y)-> a[x] - a[y]); // 将A数组的下标按A中的元素的大小进行排序
+        //     int [] odIdx = new int [n]; 
+        //     for (int i = 0; i < n; i++) {
+        //         while (!s.isEmpty() && s.peekLast() < idx[i]) // 利用单调栈获取每一个元素进行奇数跳时所到达的位置
+        //             odIdx[s.pollLast()] = idx[i];
+        //         s.offerLast(idx[i]);
+        //     }
+        //     Arrays.sort(idx, (x, y) -> a[y] - a[x]);
+        //     s.clear();
+        //     int [] enIdx = new int [n];
+        //     for (int i = 0; i < n; i++) {
+        //         while (!s.isEmpty() && s.peekLast() < idx[i])
+        //             enIdx[s.pollLast()] = idx[i];
+        //         s.offerLast(idx[i]);
+        //     }
+        //     boolean [] odd = new boolean [n], evn = new boolean [n];
+        //     odd[n-1] = evn[n-1] = true;
+        //     for (int i = n-2; i >= 0; i--) {
+        //         odd[i] = evn[odIdx[i]];
+        //         evn[i] = odd[enIdx[i]];
+        //         if (odd[i]) ans++;
+        //     }
+        //     return ans;
+        // }
+
+        // public int minSwap(int[] a, int[] b) {
+        //     int n = a.length;
+        //     int [][] dp = new int [n][2]; // 0: 不换， 1: 换
+        //     for (int i = 0; i < n; i++) 
+        //         Arrays.fill(dp[i], Integer.MAX_VALUE);
+        //     dp[0][0] = 0;
+        //     dp[0][1] = 1;
+        //     for (int i = 1; i < n; i++) {
+        //         if (a[i] > a[i-1] && b[i] > b[i-1]) {
+        //             dp[i][0] = Math.min(dp[i][0], dp[i-1][0]);     // 不换，取一个较小值
+        //             dp[i][1] = Math.min(dp[i][1], dp[i-1][1] + 1); // 换就两个都换
+        //         }
+        //         if (a[i] > b[i-1] && b[i] > a[i-1]) {
+        //             dp[i][0] = Math.min(dp[i][0], dp[i-1][1]); 
+        //             dp[i][1] = Math.min(dp[i][1], dp[i-1][0] + 1);
+        //         }
+        //     }
+        //     return Math.min(dp[n-1][0], dp[n-1][1]);
+        // }
+
+        //  public int numberOfArithmeticSlices(int [] a) {
+        //     int n = a.length, ans = 0;
+        //     Map<Integer, Integer> [] dp = new HashMap[n];
+        //     dp[0] = new HashMap<>();
+        //     for (int i = 1; i < n; i++) {
+        //         dp[i] = new HashMap<>();
+        //         for (int j = 0; j < i; j++) {
+        //         // for (int j = i-1; j >= 0; j--) { // BUG： 反向遍历不可以
+        //             long diff = (long)a[i] - a[j];  // bug: (long)a[i]
+        //             if (diff > Integer.MAX_VALUE || diff < Integer.MIN_VALUE) continue;
+        //             int dif = (int)diff;
+        //             dp[i].put(dif, dp[i].getOrDefault(dif, 0) + 1); // bug: 这里加的是1，不是2
+        //             if (dp[j].containsKey(dif)) {
+        //                 ans += dp[j].get(dif); // 只自增1（而不是记为2），为的是方便这里统计结果
+        //                 dp[i].put(dif, dp[i].get(dif) + dp[j].get(dif));
+        //             }
+        //         }
+        //     }
+        //     return ans;
+        // }
+
+        // public int minSkips(int [] dist, int speed, int hoursBefore) {
+        //     int n = dist.length;
+        //     double [][] dp = new double [n+1][n+1]; // dp[i][j]: 途经i条道路，跳过j次休息下的最小用时
+        //     for (int i = 0; i <= n; i++) 
+        //         Arrays.fill(dp[i], Integer.MAX_VALUE);
+        //     dp[0][0] = 0;
+        //     double eps = 1e-8;
+        //     for (int i = 1; i <= n; i++) {
+        //         double t = (double)dist[i-1] / speed;       
+        //         dp[i][0] = Math.ceil(dp[i-1][0] - eps) + t;
+        //         dp[i][i] = dp[i-1][i-1] + t;
+        //         for (int j = i-1; j > 0; j--) // 根据上一条路是否休息，来优化最小值
+        //             dp[i][j] = Math.min(Math.ceil(dp[i-1][j] - eps) + t, dp[i-1][j-1] + t);
+        //     }
+        //     for (int i = 0; i <= n; i++) 
+        //         if (dp[n][i] <= hoursBefore + eps) return i;
+        //     return -1;
+        // }
+
+        // static final int mod = (int)1e9 + 7;
+        // public int[] pathsWithMaxScore(List<String> a) {
+        //     int m = a.size(), n = a.get(0).length();
+        //     int [][] dirs = {{-1, -1}, {-1, 0}, {0, -1}};
+        //     int [][] dp = new int [m][n];
+        //     long [][] cnt = new long [m][n];
+        //     cnt[m-1][n-1] = 1;
+        //     for (int i = m-1; i >= 0; i--) {
+        //         for (int j = n-1; j >= 0; j--) {
+        //             if (a.get(i).charAt(j) == 'X') continue;
+        //             for (int [] d : dirs) {
+        //                 int x = i + d[0], y = j + d[1];
+        //                 if (x < 0 || x >= m || y < 0 || y >= n) continue;
+        //                 if (a.get(x).charAt(y) == 'X') continue;
+        //                 if (dp[x][y] == 0) {
+        //                     dp[x][y] = dp[i][j] + a.get(x).charAt(y) - '0';
+        //                     cnt[x][y] = cnt[i][j];
+        //                 } else if (dp[x][y] < dp[i][j] + a.get(x).charAt(y) - '0') {
+        //                     dp[x][y] = dp[i][j] + a.get(x).charAt(y) - '0';
+        //                     cnt[x][y] = cnt[i][j];
+        //                 } else if (dp[x][y] == dp[i][j] + a.get(x).charAt(y) - '0')
+        //                     cnt[x][y] = (cnt[x][y] + cnt[i][j]) % mod;
+        //             }
+        //         }
+        //     }
+        //     if (cnt[0][0] == 0) return new int [2];
+        //     return new int [] {dp[0][0]-('E'-'0'), (int)cnt[0][0]} ;
+        // }
+
+        // public int cherryPickup(int[][] a) { // 时间复杂度:  O(N^3) 空间复杂度: O(N^3)
+        //     int n  = a.length;
+        //     int [][][] dp = new int [n+1][n+1][n+1];
+        //     for (int i = 0; i <= n; i++) 
+        //         for (int j = 0; j <= n; j++) 
+        //             Arrays.fill(dp[i][j], -1);
+        //     dp[1][1][1] = a[0][0];
+        //     for (int i = 1; i <= n; i++) 
+        //         for (int j = 1; j <= n; j++) 
+        //             for (int x = 1; x <= n; x++) {
+        //                 int y = i + j - x;
+        //                 if (dp[i][j][x] != -1 || y < 1 || y > n || a[i-1][j-1] < 0 || a[x-1][y-1] < 0) continue;
+        //                 int m = Math.max(dp[i-1][j][x], dp[i][j-1][x]);      // [i-1,j][x,y-1] [i,j-1][x,y-1] 目的就是cover住现两格分别来自于两个方向的四种组合
+        //                 int mi = Math.max(dp[i-1][j][x-1], dp[i][j-1][x-1]); // [i-1,j][x-1,y] [i,j-1][x-1,y]
+        //                 int max = Math.max(m, mi);
+        //                 if (max == -1) continue;
+        //                 dp[i][j][x] = max + a[i-1][j-1];
+        //                 if (x != i) dp[i][j][x] += a[x-1][y-1];
+        //             }
+        //     return Math.max(0, dp[n][n][n]);
+        // }
+        // public int cherryPickup(int[][] gd) { // bug: 想不出来是哪里出错了 todo 把自己的bug给找出来
+        //     m = gd.length;
+        //     n = gd[0].length;
+        //     if (m == 1 && n == 1) return gd[0][0] != -1 ? gd[0][0] : 0;
+        //     dp = new Integer [m][n][m]; // dp[i][j][x]: 一个机器人的坐标[i,j]和另一个机器人的坐标[x, y] i+j == x+y
+        //     dfs(0, 0, 0, gd);
+        //     return valid ? dp[0][0][0] : 0;
+        // }
+        // int [][] dirs = {{1, 0}, {0, 1}};
+        // Integer [][][] dp;
+        // boolean valid = false;
+        // int m, n;
+        // private int dfs(int i, int j, int k, int [][] a) {
+        //     if (i == m-1 && j == n-1 || k == m-1 && i +j == m+n-2) {
+        //         valid = true;
+        //         return a[m-1][n-1] + (i == m-1 && j == n-1 ? a[k][m+n-2-k] : a[i][j]);
+        //     }
+        //     if (dp[i][j][k] != null) return dp[i][j][k];
+        //     int ans = 0;
+        //     for (int [] d : dirs) {
+        //         int x = i + d[0], y = j + d[1];
+        //         if (x < 0 || x >= m || y < 0 || y >= n || a[x][y] == -1) continue;
+        //         for (int [] c : dirs) {
+        //             int u = k + d[0], v = i + j - k + d[1];
+        //             if (u < 0 || u >= m || v < 0 || v >= n || a[u][v] == -1) continue;
+        //             ans = Math.max(ans, dfs(x, y, u, a) + (i == k && j == i+j-k ? a[i][j] : a[i][j] + a[k][i+j-k]));
+        //         }
+        //     }
+        //     return dp[i][j][k] = ans;
+        // }
+        // public int cherryPickup(int[][] grid) {
+        //     n = grid.length;
+        //     dp = new Integer[n][n][n][n];
+        //     int ans = dfs(0, 0, 0, 0, grid);
+        //     return ans < 0 ? 0 : ans;
+        // }
+        // Integer [][][][] dp;
+        // int n;
+        // private int dfs(int i, int j, int x, int y, int [][] a) {
+        //     if (i < 0 || i >= n || j < 0 || j >= n || x < 0 || x >= n || y < 0 || y >= n) return Integer.MIN_VALUE;
+        //     if (a[i][j] == -1 || a[x][y] == -1) return Integer.MIN_VALUE;
+        //     if (i == n-1 && j == n-1) return a[i][j];
+        //     if (dp[i][j][x][y] != null) return dp[i][j][x][y];
+        //     int ans = 0;
+        //     if (i == x && j == y) ans += a[i][j];
+        //     else ans += a[i][j] + a[x][y];
+        //     int f1 = dfs(i, j+1, x, y+1, a);
+        //     int f2 = dfs(i+1, j, x+1, y, a);
+        //     int f3 = dfs(i, j+1, x+1, y, a);
+        //     int f4 = dfs(i+1, j, x, y+1, a);
+        //     ans += Math.max(Math.max(f1, f2), Math.max(f3, f4));
+        //     return dp[i][j][x][y] = ans;
+        // }
+
+        // public int minRefuelStops(int target, int startFuel, int[][] stations) {
+        //     int n = stations.length;
+        //     if (startFuel >= target) return 0;
+        //     if (startFuel < target && n == 0 || startFuel < stations[0][0]) return -1;
+        //     Queue<Integer> q = new PriorityQueue<>((a, b)->b-a); // 这里有一种贪心
+        //     q.offer(startFuel);
+        //     int idx = 0, gas = 0, cur = 0, cnt = 0;
+        //     while (!q.isEmpty()) {
+        //         gas = q.poll();
+        //         cur += gas;
+        //         if (cur >= target) return cnt; // 在目前测量允许、路过的所有可以加油的加油站里，选择站里油量最多的那个加油站加，以最大限度在减少加油次数
+        //         while (idx < n && stations[idx][0] <= cur) q.offer(stations[idx++][1]);
+        //         cnt++;
+        //     }
+        //     return -1;
+        // }
+
+        // public int calculateMinimumHP(int[][] g) {
+        //     int m = g.length, n = g[0].length;
+        //     int [][] f = new int [m][n];
+        //     f[m-1][n-1] = Math.max(1 - g[m-1][n-1], 1);
+        //     for (int i = m-2; i >= 0; i--) 
+        //         f[i][n-1] = Math.max(f[i+1][n-1] - g[i][n-1], 1);
+        //     for (int j = n-2; j >= 0; j--) 
+        //         f[m-1][j] = Math.max(f[m-1][j+1] - g[m-1][j], 1);
+        //     for (int i = m-2; i >= 0; i--) 
+        //         for (int j = n-2; j >= 0; j--) {
+        //             int fromDown = Math.max(f[i+1][j] - g[i][j], 1);
+        //             int fromRight = Math.max(f[i][j+1] - g[i][j], 1);
+        //             f[i][j] = Math.min(fromDown, fromRight);
+        //         }
+        //     return f[0][0];
+        // }
+
+        public int minimumIncompatibility(int[] a, int k) {
+            n = a.length;
+            if (n < k || n % k != 0) return -1;
+            dp = new TreeSet [k];
+            for (int i = 0; i < k; i++) 
+                dp[i] = new TreeSet<>();
+            Arrays.sort(a);
+            dfs(n-1, a, k);
+            return min == Integer.MAX_VALUE ? -1 : min;
         }
+        TreeSet<Integer> [] dp;
+        int n, min = Integer.MAX_VALUE;
+        private void dfs(int idx, int [] a, int k) {
+            if (idx < 0) {
+                int sum = 0;
+                for (int i = 0; i < k; i++) {
+                    if (dp[i].size() != n / k) return ;
+                    sum += dp[i].last() - dp[i].first();
+                }
+                min = sum;
+                return ;
+            }
+            for (int i = 0; i < k; i++) {
+                if (dp[i].contains(a[idx])) continue;
+                // int last = dp[i].size() > 0 ? dp[i].last() : 0;
+                dp[i].add(a[idx]);
+                dfs(idx-1, a, k);
+                dp[i].remove(a[idx]);
+            }
+        }           
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        String a = "godding";
-        String b = "gd";
+        // int [] a = new int [] {5,3,3,6,3,3};
 
-        int r = s.findRotateSteps(a, b);
+        int []  a = new int []  {6, 3, 8, 1, 3, 1, 2, 2};
+        // int [] a = new int [] {1,2,1,4};
+
+        int r = s.minimumIncompatibility(a, 4);
         System.out.println("r: " + r);
     }
 }
