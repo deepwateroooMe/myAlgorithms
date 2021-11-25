@@ -698,6 +698,74 @@ public int minSwap(int[] a, int[] b) {
 }
     #+END_SRC
 
+*** 1639. Number of Ways to Form a Target String Given a Dictionary - Hard
+You are given a list of strings of the same length words and a string target.
+
+Your task is to form target using the given words under the following rules:
+
+target should be formed from left to right.
+To form the ith character (0-indexed) of target, you can choose the kth character of the jth string in words if target[i] = words[j][k].
+Once you use the kth character of the jth string of words, you can no longer use the xth character of any string in words where x <= k. In other words, all characters to the left of or at index k become unusuable for every string.
+Repeat the process until you form the string target.
+Notice that you can use multiple characters from the same string in words provided the conditions above are met.
+
+Return the number of ways to form target from words. Since the answer may be too large, return it modulo 109 + 7.
+**** 解题思路与分析: dp
+     #+BEGIN_SRC java
+        思路：
+        dp[i][j]  表示：words字符串列表的前 j 列来构造目标字符串target的前 i 个字符；
+        cnt[i][j] 表示：words字符串列表的第 i 列 一共有多少 字符 j ；
+        那dp公式就很好推出来了：
+        1.第i个字符不使用第j列时，即通过前 j - 1 列得到
+          dp[i][j] = dp[i][j-1];
+        2.第i个字符使用第j列时
+        *   dp[i][j] = dp[i-1][j-1] * cnt[j][第i个字符]；
+        ==>>dp[i][j] = dp[i][j-1] + dp[i-1][j-1] * cnt[j][第i个字符]
+     #+END_SRC
+     #+BEGIN_SRC java
+static final int mod = (int)1e9 + 7;
+public int numWays(String[] words, String target) {
+    int m = target.length(), n = words[0].length();
+    char [] s = target.toCharArray();
+    int [][] cnt = new int [n][26];
+    for (String w : words) 
+        for (int j = 0; j < n; j++) 
+            cnt[j][w.charAt(j)-'a']++;
+    // long [][] dp = new long [m][n];
+    // dp[0][0] = cnt[0][s[0]-'a'];
+    // for (int i = 1; i < n; i++) // 初始化： 由前i列来构成target第一个字符的方案数
+    //     dp[0][i] = (dp[0][i] + dp[0][i-1] + cnt[i][s[0]-'a']) % mod;
+    // for (int i = 1; i < m; i++) 
+    //     for (int j = i; j < n; j++) 
+    //         dp[i][j] = (dp[i][j-1] + dp[i-1][j-1] * cnt[j][s[i]-'a']) % mod;
+    // return (int)dp[m-1][n-1];
+    long [][] dp = new long [m+1][n+1];
+    Arrays.fill(dp[0], 1l);
+    // dp[0] = LongStream.range(0, n+1).map(e->1).toArray(); // 上下两行，效果差不多，filling first row of array with 1
+    for (int i = 1; i <= m; i++)
+        for (int j = i; j <= n + i - m; j++) 
+            dp[i][j] = (dp[i][j-1] + dp[i-1][j-1] * cnt[j-1][s[i-1]-'a'] % mod) % mod;
+    return (int)dp[m][n];
+}
+     #+END_SRC
+- dp降维，压缩空间
+#+BEGIN_SRC java
+static final int mod = (int)1e9 + 7;
+public int numWays(String[] words, String target) { // dp降维，压缩空间，但二维dp仍然是思路最为清晰好理解的
+    int m = target.length(), n = words[0].length();
+    char [] s = target.toCharArray();
+    long [] dp = new long [m];
+    for (int i = 0; i < n; i++) {  // 遍历字符数组的各列
+        int [] cnt = new int [26]; // 当前-列-所有字符的出现次数
+        for (String w : words) 
+            cnt[w.charAt(i)-'a']++;
+        for (int j = Math.min(i, m-1); j >= 0; j--) // 记住： 降维就容易产生赃数据，需要倒序遍历
+            dp[j] = (dp[j] + (j > 0 ? dp[j-1] : 1) * cnt[s[j]-'a']) % mod;
+    }
+    return (int)dp[m-1];
+}
+#+END_SRC
+
 ** 区间型DP
 - https://leetcode-cn.com/problems/minimum-cost-to-merge-stones/solution/yi-dong-you-yi-dao-nan-yi-bu-bu-shuo-ming-si-lu-he/
 
@@ -5587,14 +5655,60 @@ public boolean canMouseWin(String[] grid, int catJump, int mouseJump) {
 
 
 * dfs 记忆化搜索
-** 1977. Number of Ways to Separate Numbers - Hard
+*** 1977. Number of Ways to Separate Numbers - Hard
 You wrote down many positive integers in a string called num. However, you realized that you forgot to add commas to seperate the different numbers. You remember that the list of integers was non-decreasing and that no integer had leading zeros.
 
 Return the number of possible lists of integers that you could have written down to get the string num. Since the answer may be large, return it modulo 109 + 7.
-**** 动态规划与最长公共前缀
+**** 动态规划: 与最长公共前缀
+     
+     [[./pic/1977-1.png]]
 
-全网都找不到一句中文分析
+需要注意的是：为了防止状态转移方程显得过于复杂，我们在状态转移方程中：
 
+没有考虑2i−j 和 2i−j−1 是否超出边界。但在实际的代码编写中，需要保证求和式中 kk 的最小值不能小于 00；
+
+没有考虑 num(i,j) 是否包含前导零。如果num[i]=0，那么f[i][j]=0。特别地，如果num[0]=0，那么不会有任何满足要求的划分方案，直接返回 00 作为答案，无需进行动态规划。
+
+动态规划的边界条件为 f[0][..] = 1其余的状态的初始值均为 00。最终的答案即为所有 f[..][n - 1]f[..][n−1] 的和，其中 nn 是字符串 \textit{num}num 的长度。
+     
+     [[./pic/1977-2.png]]
+     
+     [[./pic/1977-3.png]]
+
+#+BEGIN_SRC java
+static final int mod = (int)1e9 + 7;
+public int numberOfCombinations(String t) {
+    int n = t.length();
+    char [] s = t.toCharArray();
+    if (s[0] == '0') return 0;
+    int [][] lcp = new int [n][n];   // 求的是： 以s[i]开始的后缀，与以s[j]开始的后缀，两字符串的最长公共前缀长度
+    for (int i = n-1; i >= 0; i--) { // 预处理 lcp
+        lcp[i][n-1] = s[i] == s[n-1] ? 1 : 0;
+        for (int j = i+1; j < n-1; j++) 
+            lcp[i][j] = s[i] == s[j] ? lcp[i+1][j+1] + 1 : 0;
+    }
+    int [][] dp = new int [n][n];
+    for (int i = 0; i < n; i++) dp[0][i] = 1; // dp[0][...] = 1
+    for (int i = 1; i < n; i++) {
+        if (s[i] == '0') continue; // 有前导零，无需转移
+        int preSum = 0;
+        for (int j = i; j < n; j++) {
+            int length = j - i + 1; // s[i,j]
+            dp[i][j] = preSum;      // dp[i][j] = d[i][j-1] + (one item) // 这里是j 从 i开始累加的dp[...]前缀和
+            if (i - length >= 0) {  // 使用 lcp 比较 s[2i-j-1,i-1] 与 s[i,j] 的大小关系
+                if (lcp[i-length][i] >= length || s[i - length + lcp[i-length][i]] < s[i + lcp[i-length][i]])
+                    dp[i][j] = (dp[i][j] + dp[i-length][i-1]) % mod;
+                preSum = (preSum + dp[i-length][i-1]) % mod; // 更新前缀和,这里是 j 从 i 开始累加的dp[...]前缀和
+            }
+        }
+    }
+    int ans = 0;
+    for (int i = 0; i < n; i++) // 最终答案即为所有 dp[..][n-1] 的和
+        ans = (ans + dp[i][n-1]) % mod;
+    return ans;
+}
+#+END_SRC
+- 另一种写法
 #+BEGIN_SRC java
 private void getLongestCommonPrefixLength() { // Pre compute Longest Common Prefix sequence for each index in the string
     for (int i = n-1; i >= 0; i--)            // 从右向左遍历，计算最长公共前缀序列长度
@@ -5993,20 +6107,17 @@ public int findGoodStrings(int n, String s1, String s2, String evil) {
 
 对于b o u n d 我们用四个数字表示
 #+BEGIN_SRC java
-0 00 表示此时的字符选择是没有限制的，即可以选择的范围为a ∼ z a \sim za∼z
-1 11 表示此时的字符选择是有下限的，所以选择的范围是s 1 [ p o s ] ∼ z s1[pos] \sim zs1[pos]∼z
-2 22 表示此时的字符选择是有上限的，所以可以选择的范围是a ∼ s 2 [ p o s ] a \sim s2[pos]a∼s2[pos]
-3 33 表示此时的字符既有上限又有下限。这种情况只有当s 1 [ p o s ] ∼ s 2 [ p o s ] s1[pos] \sim s2[pos]s1[pos]∼s2[pos]
+0 00 表示此时的字符选择是没有限制的，即可以选择的范围为a ∼ z
+1 11 表示此时的字符选择是有下限的，所以选择的范围是s 1 [ p o s ] ∼ z
+2 22 表示此时的字符选择是有上限的，所以可以选择的范围是a ∼ s 2 [ p o s ]
+3 33 表示此时的字符既有上限又有下限。这种情况只有当s 1 [ p o s ] ∼ s 2 [ p o s ]
 #+END_SRC
 
-而对于s t a t s statsstats表示匹配e v i l evilevil字符的状态，由于e v i l evilevil的长度最长为50，所以可以生成字符串e v i l evilevil的next数组。那么当匹配不成立的时候，就可以直接进行跳转。
+而对于stats表示匹配e v i l evilevil字符的状态，由于e v i l evilevil的长度最长为50，所以可以生成字符串e v i l evilevil的next数组。那么当匹配不成立的时候，就可以直接进行跳转。
 
-设一个记忆数组m e m [ e _ p o s ] [ n _ c h a r ] mem[e\_pos][n\_char]mem[e_pos][n_char]表示当匹配e v i l evilevil的位置为e _ p o s e\_pose_pos时，下一个字符为n _ c h a r n\_charn_char时，可以跳转的位置，因为在整个搜索的过程中，可能需要多次调用这个数组，而这个数组大小为m e m [ 50 ] [ 26 ] mem[50][26]mem[50][26]，因此没必要每次都计算。
+设一个记忆数组mem[e_pos][n_char]表示当匹配e v i l evilevil的位置为e_pos时，下一个字符为n_char时，可以跳转的位置，因为在整个搜索的过程中，可能需要多次调用这个数组，而这个数组大小为mem[50][26]，因此没必要每次都计算。
 
 对于如何生成next的数组，小伙伴们可以去搜索与K M P KMPKMP算法相关的博客查看。
-
-- 
-- 
 
 *** 2060. Check if an Original String Exists Given Two Encoded Strings - Hard dfs记忆化搜索
 An original string, consisting of lowercase English letters, can be encoded by the following steps:
@@ -6034,42 +6145,35 @@ Note: The test cases are generated such that the number of consecutive digits in
 #+END_SRC
 
 #+BEGIN_SRC java
-private boolean dfs(int i, int j, int dif) {
-    if (i >= m && j >= n && dif == 0) return true;
-    if (memo[i][j][dif+1000] != null) return memo[i][j][dif+1000]; // + 1000
-    boolean res = false;
-    if (i < m) 
-        if (Character.isDigit(s[i])) {
-            int cur = 0, cnt = 0;
-            while (i+cnt < m && cnt < 3 && Character.isDigit(s[i+cnt])) {
-                cur = cur * 10 + (s[i+cnt] - '0');
-                cnt++;
-                if (dfs(i+cnt, j, dif - cur)) res = true;
-            }
-        } else {
-            if (dif > 0 && dfs(i+1, j, dif-1)) res = true;
-            else if (dif == 0 && j < n && s[i] == t[j] && dfs(i+1, j+1, dif)) res = true;
-        }
-    if (j < n) 
-        if (Character.isDigit(t[j])) {
-            int cur = 0, cnt = 0;
-            while (j+cnt < n && cnt < 3 && Character.isDigit(t[j+cnt])) {
-                cur = cur * 10 + (t[j+cnt] - '0');
-                cnt++;
-                if (dfs(i, j+cnt, dif+cur)) res = true;       // when to + cur when to - cur
-            }
-        } else if (dif < 0 && dfs(i, j+1, dif+1)) res = true; // no limit on i < m any more
-    return memo[i][j][dif+1000] = res;
+public boolean possiblyEquals(String ss, String tt) {
+    m = ss.length(); N = 1000;
+    n = tt.length();
+    s = ss.toCharArray();
+    t = tt.toCharArray();
+    dp = new Boolean [m+1][n+1][2001]; // dp[i][j][diff] means if s1[i:] truncated by <diff> characters if diff > 0 
+    return dfs(0, 0, 0);               // and s2[j:] truncated by <-diff> characters if diff < 0 are equal
 }
-Boolean [][][] memo = new Boolean [41][41][2000];
+Boolean [][][] dp;
 char [] s, t;
-int m, n;
-public boolean possiblyEquals(String s, String t) {
-    m = s.length();
-    n = t.length();
-    this.s = s.toCharArray();
-    this.t = t.toCharArray();
-    return dfs(0, 0, 0);
+int m, n, N;
+private boolean dfs(int i, int j, int k) { // k: dif
+    if (i == m && j == n) return k == 0;
+    if (dp[i][j][k+N] != null) return dp[i][j][k+N];
+    if (i < m && j < n && k == 0 && s[i] == t[j] && dfs(i+1, j+1, 0))   // Literal matching on s1[i] and s2[j]
+        return dp[i][j][N] = true;
+    if (i < m && !Character.isDigit(s[i]) && k > 0 && dfs(i+1, j, k-1)) // Literal matching on s1[i]
+        return dp[i][j][k+N] = true;
+    if (j < n && !Character.isDigit(t[j]) && k < 0 && dfs(i, j+1, k+1)) // Literal matching on s2[j]
+        return dp[i][j][k+N] = true;
+    for (int x = i, val = 0; x < m && Character.isDigit(s[x]); x++) {   // Wildcard matching on s1[i]
+        val = val * 10 + s[x] - '0';
+        if (dfs(x+1, j, k-val)) return dp[i][j][k+N] = true;
+    }
+    for (int x = j, val = 0; x < n && Character.isDigit(t[x]); x++) {   // Wildcard matching on s2[j]
+        val = val * 10 + t[x] - '0';
+        if (dfs(i, x+1, k+val)) return dp[i][j][k+N] = true;
+    }
+    return dp[i][j][k+N] = false;
 }
 #+END_SRC
 
@@ -6228,16 +6332,7 @@ public int findMaxForm(String[] strs, int m, int n) {
     return dp[m][n];
 }
      #+END_SRC
-*** 1900. The Earliest and Latest Rounds Where Players Compete
-Hard
-
-142
-
-11
-
-Add to List
-
-Share
+*** 1900. The Earliest and Latest Rounds Where Players Compete - Hard
 There is a tournament where n players are participating. The players are standing in a single row and are numbered from 1 to n based on their initial standing position (player 1 is the first player in the row, player 2 is the second player in the row, etc.).
 
 The tournament consists of multiple rounds (starting from round number 1). In each round, the ith player from the front of the row competes against the ith player from the end of the row, and the winner advances to the next round. When the number of players is odd for the current round, the player in the middle automatically advances to the next round.
@@ -6355,7 +6450,7 @@ private int [] dfs(int n, int f, int s) { // f: firstPlayer, // s: secondPlayer
 
 对应于树状数组，线段树进行更新（update）的操作为O(logn)，进行区间查询（range query）的操作也为O(logn)。
 
-** 1157. Online Majority Element In Subarray - Hard
+*** 1157. Online Majority Element In Subarray - Hard
 Design a data structure that efficiently finds the majority element of a given subarray.
 
 The majority element of a subarray is an element that occurs threshold times or more in the subarray.
@@ -6569,7 +6664,7 @@ public int query(int left, int right, int threshold) {
 }
 #+END_SRC
 
-** 1825. Finding MK Average - Hard
+*** 1825. Finding MK Average - Hard
 You are given two integers, m and k, and a stream of integers. You are tasked to implement a data structure that calculates the MKAverage for the stream.
 
 The MKAverage can be calculated using these steps:
@@ -6739,7 +6834,7 @@ class FenWick {
 }
 #+END_SRC
 
-** 699. Falling Squares - Hard
+*** 699. Falling Squares - Hard
 There are several squares being dropped onto the X-axis of a 2D plane.
 
 You are given a 2D integer array positions where positions[i] = [lefti, sideLengthi] represents the ith square with a side length of sideLengthi that is dropped with its left edge aligned with X-coordinate lefti.
@@ -6879,6 +6974,82 @@ private List<Integer> unique(List<Integer> list) { // 将list排序后去重
     return list.subList(0, j); // subList()
 }
 #+END_SRC
+
+*** 1483. Kth Ancestor of a Tree Node - Hard 倍增法 binary lifting
+ You are given a tree with n nodes numbered from 0 to n - 1 in the form of a parent array parent where parent[i] is the parent of ith node. The root of the tree is node 0. Find the kth ancestor of a given node.
+
+The kth ancestor of a tree node is the kth node in the path from that node to the root node.
+
+Implement the TreeAncestor class:
+
+TreeAncestor(int n, int[] parent) Initializes the object with the number of nodes in the tree and the parent array.
+int getKthAncestor(int node, int k) return the kth ancestor of the given node node. If there is no such ancestor, return -1.
+**** 解题思路与分析: 倍增 binary lifting
+     
+     [[./pic/1483.png]]
+
+- 预处理时间复杂度O(nlogn)，每次询问时间O(logn)，空间O(nlogn)。
+
+     #+BEGIN_SRC java
+    private int [][] p;
+    private int log;
+    public TreeAncestor(int n, int[] parent) {
+        log = (int) (Math.log(n - 1) / Math.log(2)) + 1;
+        p = new int[n][log];
+        for (int i = 0; i < parent.length; i++) // 初始化p数组
+            p[i][0] = parent[i];
+        for (int i = 1; i < log; i++) // 按公式递推p数组
+            for (int j = 0; j < n; j++) 
+                if (p[j][i-1] != -1) 
+                    p[j][i] = p[p[j][i-1]][i-1];
+                else p[j][i] = -1;
+    }
+    public int getKthAncestor(int node, int k) {
+        int pow = 0;
+        while (k > 0) {
+            if (pow >= log || node == -1) return -1;
+            if ((k & 1) == 1) 
+                node = p[node][pow];
+            k >>= 1;
+            pow++;
+        }
+        return node;
+    }
+     #+END_SRC
+**** 解题思路与分析
+     #+BEGIN_SRC java
+    Map<Integer, List<Integer>> adj;
+    int [][] par;
+    public TreeAncestor(int n, int[] parent) {
+        par = new int [n][30]; // 30 , 16: 不能证它是一棵很平衡的二叉树
+        adj = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            Arrays.fill(par[i], -1);
+            adj.put(i, new ArrayList<>());
+        }
+        for (int i = 0; i < parent.length; i++) 
+            if (parent[i] != -1) {
+                adj.get(parent[i]).add(i); // 自顶向下： 父 --》子节点
+                par[i][0] = parent[i];     // 每个子节点的第一个父节点（2^0 = 1），即为父节点 // 自底向上： 子节点： 2^0父节点、 2^1节点、 2^2节点
+            }
+        dfs(0);
+    }
+    public int getKthAncestor(int node, int k) {
+        for (int i = 0; k > 0; i++, k >>= 1) // k /= 2
+            if ((k & 1) == 1) {
+                node = par[node][i];
+                if (node < 0) return -1;
+            }
+        return node;
+    }
+    private void dfs(int idx) { // 自顶向下：从父节点遍历子节点
+        for (int i = 1; par[idx][i-1] >= 0; i++) // 穷追塑源：一直找到整棵树的根节点： 0
+            par[idx][i] = par[par[idx][i-1]][i-1]; // 这里多想想
+        for (int next : adj.get(idx)) 
+            dfs(next);
+    }
+     #+END_SRC
+*** 236 二叉树的最近公共祖先
 
 
 * Trie
@@ -9027,6 +9198,171 @@ int popAtStack(int index) Returns the value at the top of the stack with the giv
 
 
 * backTracking 回溯
+** 1681. Minimum Incompatibility 再写一遍
+You are given an integer array nums​​​ and an integer k. You are asked to distribute this array into k subsets of equal size such that there are no two equal elements in the same subset.
+
+A subset's incompatibility is the difference between the maximum and minimum elements in that array.
+
+Return the minimum possible sum of incompatibilities of the k subsets after distributing the array optimally, or return -1 if it is not possible.
+
+A subset is a group integers that appear in the array with no particular order.
+- Java O(k^n) solution with early termination (9ms 98%)
+
+This problem is asking us to do the reversal of "merging k sorted lists into one sorted list".
+
+In other words, considering we are "distributing a sorted list to k sorted lists".
+
+The time complexity is O(k^n) since each number can have k choices.
+**** 解题思路与分析
+
+This problem is asking us to do the reversal of "merging k sorted lists into one sorted list".
+
+In other words, considering we are "distributing a sorted list to k sorted lists".
+
+The time complexity is O(k^n) since each number can have k choices.
+
+#+BEGIN_SRC java
+private void backTracking(int [] arr, int k, int idx, int total) {
+    if (total >= min) return; // early termination
+    if (idx == n) {
+        min = total; // With early termination, Math.min() is no longer needed.
+        return;
+    }
+    for (int i = 0; i < dp.size(); i++) {
+        LinkedList<Integer> bucket = dp.get(i);
+        int dist = 0;
+        if (bucket.size() < n/k && bucket.peekLast() < arr[idx]) {
+            dist = arr[idx] - bucket.peekLast(); // ......
+            bucket.addLast(arr[idx]);
+            backTracking(arr, k, idx+1, total + dist);
+            bucket.removeLast();
+        }
+    }
+    if (dp.size() < k) { // 记住这个分组，总是有可以多分出一个组的情况需要考虑到
+        LinkedList<Integer> bucket = new LinkedList<>();
+        bucket.add(arr[idx]);
+        dp.addLast(bucket);
+        backTracking(arr, k, idx+1, total);
+        dp.removeLast();
+    }
+}
+int min = Integer.MAX_VALUE;
+LinkedList<LinkedList<Integer>> dp;
+int n;
+public int minimumIncompatibility(int[] arr, int k) {
+    n = arr.length;
+    dp = new LinkedList<>();
+    Arrays.sort(arr);
+    backTracking(arr, k, 0, 0);
+    return min == Integer.MAX_VALUE ? -1 : min;
+}
+#+END_SRC
+- Optimized version (9ms): Replacing LinkedList with int[], where int[]{length, tail element} represents a sorted list/bucket since we only need to remember the length and the tail element of each sorted list.
+#+BEGIN_SRC java
+public int minimumIncompatibility(int[] a, int k) {
+    n = a.length;
+    dp = new int [k][2];
+    Arrays.sort(a);
+    dfs(0, 0, 0, n/k, a);
+    return min == Integer.MAX_VALUE ? -1 : min;
+}
+int n, min = Integer.MAX_VALUE;
+int [][] dp; // dp[i]:  int[] {length, tail element}
+private void dfs(int idx, int x, int sum, int size, int [] a) {
+    if (sum >= min) return ;
+    if (idx == n) {
+        min = sum;
+        return ;
+    }
+    for (int i = 0; i < x; i++) { // x: dp[][] idx
+        if (dp[i][0] < size && dp[i][1] < a[idx]) { // 现数组里的元素个数不够，且满足要求
+            int dist = a[idx] - dp[i][1], last = dp[i][1];
+            dp[i][0]++;
+            dp[i][1] = a[idx];
+            dfs(idx+1, x, sum + dist, size, a);
+            dp[i][0]--;
+            dp[i][1] = last;
+        }
+    }
+    if (dp.length > x) {
+        dp[x][0] = 1;
+        dp[x][1] = a[idx];
+        dfs(idx+1, x+1, sum, size, a);
+        dp[x][0] = 0;
+    }
+}           
+#+END_SRC
+
+** 1986. Minimum Number of Work Sessions to Finish the Tasks
+There are n tasks assigned to you. The task times are represented as an integer array tasks of length n, where the ith task takes tasks[i] hours to finish. A work session is when you work for at most sessionTime consecutive hours and then take a break.
+You should finish the given tasks in a way that satisfies the following conditions:
+If you start a task in a work session, you must complete it in the same work session.
+You can start a new task immediately after finishing the previous one.
+You may complete the tasks in any order.
+Given tasks and sessionTime, return the minimum number of work sessions needed to finish all the tasks following the conditions above.
+
+The tests are generated such that sessionTime is greater than or equal to the maximum element in tasks[i].
+#+BEGIN_SRC java
+private void dfs(int [] arr, int t, int i, int cnt) { // cnt: sessionCnt
+    if (cnt > res) return;
+    if (i < 0) {
+        res = Math.min(res, cnt);
+        return;
+    }
+    for (int j = 0; j < cnt; j++) 
+        if (sessions[j] + arr[i] <= t) { // 把当前task 放入旧的sessions里
+            sessions[j] += arr[i];
+            dfs(arr, t, i-1, cnt);
+            sessions[j] -= arr[i];
+        }
+    sessions[cnt] += arr[i]; // 把当前task 放入新的sessions里
+    dfs(arr, t, i-1, cnt + 1);
+    sessions[cnt] -= arr[i];
+}
+int [] sessions;
+int n, res;
+public int minSessions(int[] tasks, int sessionTime) {
+    n = tasks.length;
+    res = n;
+    sessions = new int [n];
+    Arrays.sort(tasks);
+    dfs(tasks, sessionTime, n-1, 0);
+    return res;
+}
+#+END_SRC
+- 另一种写法
+#+BEGIN_SRC java
+private int [] getMin(int [] a, int [] b) { // 这个题最近需要再写一遍
+    if (a[0] > b[0]) return b;
+    if (a[0] < b[0]) return a;
+    if (a[1] > b[1]) return b;
+    return a;
+}
+// dp[mask] = {a, b} where
+// a - minimum number of session
+// b - minimum time of last session
+// The idea is to go through all tasks who belong to mask and optimally choose the last task 't' that was added to last session.
+public int minSessions(int[] tasks, int sessionTime) {
+    int n = tasks.length;
+    int [][] dp = new int [1 << n][2];  // 在[1, 1 << n)范围内枚举每一个mask 计算其包含的时间的总和
+    dp[0][0] = 1;
+    dp[0][1] = 0;
+    for (int i = 1; i < 1 << n; i++) {
+        dp[i][0] = Integer.MAX_VALUE;
+        dp[i][1] = 0;
+        int sum = 0;
+        for (int t = 0; t < n; t++) {
+            if ((i & (1 << t)) == 0) continue;
+            int [] pre = dp[(1 << t) ^ i];
+            if (pre[1] + tasks[t] <= sessionTime)
+                dp[i] = getMin(dp[i], new int [] {pre[0], pre[1] + tasks[t]});
+            else dp[i] = getMin(dp[i], new int []{pre[0]+1, tasks[t]});
+        }
+    }
+    return dp[(1 << n) -1][0];
+}
+#+END_SRC
+
 ** 1723 Find Minimum Time to Finish All Jobs
 You are given an integer array jobs, where jobs[i] is the amount of time it takes to complete the ith job.
 
@@ -9184,7 +9520,6 @@ public List<List<Integer>> findSubsequences(int[] arr) {
 }
 #+END_SRC
  
-
 * 排序与recursion
 
 [[./pic/sort.png]]
@@ -9381,7 +9716,6 @@ private boolean isValid(String num, String first, String second, int index) {
     return false;
 }
 #+END_SRC
-
 
 
 * Union Find 并查集
@@ -10006,7 +10340,6 @@ int main() {
 }
 #+END_SRC
 
-
 ** 某个网友列的相关题目： 并查集参考：数据结构–并查集（Disjoint-Set）
 - 261. 以图判树（全部连通+边数=V-1）
 - 305. 岛屿数量 II（并查集）
@@ -10025,7 +10358,6 @@ int main() {
 - 1319. 连通网络的操作次数（BFS/DFS/并查集）
 - 5510. 保证图可完全遍历（并查集）
 - 程序员面试金典 - 面试题 17.07. 婴儿名字（并查集）
-
 
 * Graph
 ** 2045. Second Minimum Time to Reach Destination - Hard
@@ -10565,7 +10897,6 @@ public boolean isPrintable(int[][] targetGrid) {
 }
 #+END_SRC
 
-
 * 扫描线
 ** 435. Non-overlapping Intervals - Medium 动态规划 贪心
 Given an array of intervals intervals where intervals[i] = [starti, endi], return the minimum number of intervals you need to remove to make the rest of the intervals non-overlapping.
@@ -10947,7 +11278,6 @@ public int minNumberOfFrogs(String croakOfFrogs) {
 }
 #+END_SRC
 
-
 * 单调栈
 *** 975. Odd Even Jump - Hard
 You are given an integer array arr. From some starting index, you can make a series of jumps. The (1st, 3rd, 5th, ...) jumps in the series are called odd-numbered jumps, and the (2nd, 4th, 6th, ...) jumps in the series are called even-numbered jumps. Note that the jumps are numbered, not the indices.
@@ -11094,7 +11424,7 @@ public String longestPrefix(String s) { // 容易出错，KMP写起来比较简�
     return maxLen == 0 ? "" : s.substring(0, maxLen);
 }
 #+END_SRC
-** 1910. Remove All Occurrences of a Substring - Medium 可用KMP算法
+*** 1910. Remove All Occurrences of a Substring - Medium 可用KMP算法
 Given two strings s and part, perform the following operation on s until all occurrences of the substring part are removed:
 
 Find the leftmost occurrence of the substring part and remove it from s.
@@ -11145,7 +11475,77 @@ public String removeOccurrences(String s, String part) {
 }
 #+END_SRC
 
-** 467. Unique Substrings in Wraparound String - Medium Rabin-Karp Rolling Hash算法
+*** 1316. Distinct Echo Substrings - Hard
+Return the number of distinct non-empty substrings of text that can be written as the concatenation of some string with itself (i.e. it can be written as a + a where a is some string).
+**** 解题思路与分析: 枚举
+我们在 text 中枚举位置 i 和 j，若字符串 text[i:j] 和 text[j:j*2-i] 相等，那么字符串 text[i:j*2-i] 就是一个满足条件的子串，其中 text[x:y] 表示字符串 text 中以位置 x 开始，位置 y 结束并且不包含位置 y 的子串。
+
+由于题目需要求出不同的子串数目，因此我们还需要使用哈希集合（HashSet）对所有满足条件的子串进行去重操作。
+
+     #+BEGIN_SRC java
+public int distinctEchoSubstrings(String t) { 
+    int n = t.length(), j = 0;
+    Set<String> ss = new HashSet<>();
+    for (int d = 1; d <= n/2; d++) 
+        for (int i = 0; i+d <= n-d; i++) {
+            if (t.substring(i, i+d).equals(t.substring(i+d, i+d+d)))
+                ss.add(t.substring(i, i+d));
+        }
+    return ss.size();
+}
+     #+END_SRC
+
+[[./pic/1316-1.png]]
+**** 解题思路与分析: 滚动哈希 + 前缀和
+
+本方法需要一些关于「滚动哈希」或「Rabin-Karp 算法」的预备知识，其核心是将字符串看成一个 k 进制的整数，其中 k 是字符串中可能出现的字符种类，本题中字符串只包含小写字母，即 k = 26（也可以取比 k 大的整数，一般来说可以取一个质数，例如 29 或 31）。这样做的好处是绕开了字符串操作，将字符串看成整数进行比较，并可以在常数时间内将字符串加入哈希集合中。
+
+关于「滚动哈希」或「Rabin-Karp 算法」的知识，可以参考 1044. 最长重复子串的官方题解 或使用搜索引擎，这里对算法本身的流程不再赘述。
+
+[[./pic/1316-2.png]]
+
+     #+BEGIN_SRC java
+static final int mod = (int)1e9 + 7;
+public int distinctEchoSubstrings(String t) {  
+    int n = t.length(), ans = 0;
+    char [] s = t.toCharArray();
+    int base = 31;
+    int [] pre = new int [n+1], mul = new int [n+1];
+    mul[0] = 1;
+    for (int i = 1; i <= n; i++) {
+        pre[i] = (int)(((long)pre[i-1] * base + s[i-1]) % mod);
+        mul[i] = (int)((long)mul[i-1] * base % mod);
+    }
+    Set<Integer> [] vis = new HashSet[n];
+    for (int i = 0; i < n; i++) vis[i] = new HashSet<>();
+    for (int i = 0; i < n; i++) 
+        for (int j = i+1; j < n; j++) {
+            int l = j - i;
+            if (j + l <= n) {
+                int hash_left = gethash(pre, mul, i, j-1);
+                if (!vis[l-1].contains(hash_left) && hash_left == gethash(pre, mul, j, j+l-1)) {
+                    ++ans;
+                    vis[l-1].add(hash_left);
+                }
+            }
+        }
+    return ans;
+}
+private int gethash(int [] pre, int [] mul, int l, int r) {
+    return (int)((pre[r+1] - (long)pre[l] * mul[r-l+1] % mod + mod) % mod);
+}
+     #+END_SRC
+- 注意事项
+
+由于 Rabin-Karp 算法会将字符串对应的整数值进行取模，那么：
+
+如果字符串 S1 和 S2 对应的整数值 I1 和 I2 不相等，那么 S1 和 S2 一定不相等；
+
+如果字符串 S1 和 S2 对应的整数值 I1 和 I2 相等，并不代表 S1 和 S2 一定相等；
+
+这与实际应用中使用的哈希算法也是一致的，即先判断两个实例的哈希值是否相等，再判断它们本质上是否相等。而在竞赛题目中，由于数据量较少，几乎不会产生哈希冲突，因此我们可以直接用 I1 和 I2 的相等代替 S1 和 S2 的相等，减少时间复杂度。但需要牢记在实际应用中，这样做是不严谨的。
+
+*** 467. Unique Substrings in Wraparound String - Medium Rabin-Karp Rolling Hash算法
 We define the string s to be the infinite wraparound string of "abcdefghijklmnopqrstuvwxyz", so s will look like this:
 
 "...zabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcd....".
@@ -11173,7 +11573,7 @@ public int findSubstringInWraproundString(String p) {
 }
 #+END_SRC
 
-** 1044. Longest Duplicate Substring - Hard 
+*** 1044. Longest Duplicate Substring - Hard 
 Given a string s, consider all duplicated substrings: (contiguous) substrings of s that occur 2 or more times. The occurrences may overlap.
 
 Return any duplicated substring that has the longest possible length. If s does not have a duplicated substring, the answer is "".
@@ -11225,7 +11625,7 @@ public String longestDupSubstring(String s) {
 }
 #+END_SRC
 
-** 1156. Swap For Longest Repeated Character Substring - Medium
+*** 1156. Swap For Longest Repeated Character Substring - Medium
 You are given a string text. You can swap two of the characters in the text.
 
 Return the length of the longest substring with repeated characters.
@@ -11322,7 +11722,7 @@ public int maxRepOpt1(String s) {
 }
 #+END_SRC
 
-** 395. Longest Substring with At Least K Repeating Characters - Medium
+*** 395. Longest Substring with At Least K Repeating Characters - Medium
 Given a string s and an integer k, return the length of the longest substring of s such that the frequency of each character in this substring is greater than or equal to k.
 #+BEGIN_SRC java
 //         由于字母只有 26 个，而整型 mask 有 32 位，足够用了，
@@ -11409,8 +11809,7 @@ public int longestSubstring(String s, int k) { // 人工手动折分
 }
 #+END_SRC
 
-
-** 1830. Minimum Number of Operations to Make String Sorted - Hard 排列组合费小马快速幂
+*** 1830. Minimum Number of Operations to Make String Sorted - Hard 排列组合费小马快速幂
 You are given a string s (0-indexed)​​​​​​. You are asked to perform the following operation on s​​​​​​ until you get a sorted string:
 
 Find the largest index i such that 1 <= i < s.length and s[i] < s[i - 1].
@@ -11469,7 +11868,7 @@ public int makeStringSorted(String t) {
 }
 #+END_SRC
  
-** 1960. Maximum Product of the Length of Two Palindromic Substrings - Hard 马拉车算法 todo
+*** 1960. Maximum Product of the Length of Two Palindromic Substrings - Hard 马拉车算法 todo
 You are given a 0-indexed string s and are tasked with finding two non-intersecting palindromic substrings of odd length such that the product of their lengths is maximized.
 
 More formally, you want to choose four integers i, j, k, l such that 0 <= i <= j < k <= l < s.length and both the substrings s[i...j] and s[k...l] are palindromes and have odd lengths. s[i...j] denotes a substring from index i to index j inclusive.
@@ -11522,7 +11921,7 @@ public long maxProduct(String s) { // 这个马拉车，得多写几遍
     return ans;
 }
 #+END_SRC
-*** DP解：要再好好理解消化一下
+**** DP解：要再好好理解消化一下
 #+BEGIN_SRC java
 #+END_SRC
 
@@ -11828,7 +12227,6 @@ int vToIndex(int v, int LEN) {
 }
 #+END_SRC
 
-
 * Greedy
 ** 1585. Check If String Is Transformable With Substring Sort Operations - Hard
 Given two strings s and t, you want to transform string s into string t using the following operation any number of times:
@@ -11892,7 +12290,6 @@ public int maxValueAfterReverse(int[] a) {
     return ans;
 }
 #+END_SRC
-
 
 * others
 ** Predict the Winner
@@ -12083,7 +12480,6 @@ public List<List<Integer>> criticalConnections(int n, List<List<Integer>> connec
     return res;
 }
 #+END_SRC
-
 
 ** 891. Sum of Subsequence Widths - Hard 考sorting和对subsequence的理解
 The width of a sequence is the difference between the maximum and minimum elements in the sequence.
@@ -13895,164 +14291,6 @@ int minStickers(vector<string>& stickers, string target) {
 }
 #+END_SRC
 
-** 1681. Minimum Incompatibility
-You are given an integer array nums​​​ and an integer k. You are asked to distribute this array into k subsets of equal size such that there are no two equal elements in the same subset.
-
-A subset's incompatibility is the difference between the maximum and minimum elements in that array.
-
-Return the minimum possible sum of incompatibilities of the k subsets after distributing the array optimally, or return -1 if it is not possible.
-
-A subset is a group integers that appear in the array with no particular order.
-- Java O(k^n) solution with early termination (9ms 98%)
-
-This problem is asking us to do the reversal of "merging k sorted lists into one sorted list".
-
-In other words, considering we are "distributing a sorted list to k sorted lists".
-
-The time complexity is O(k^n) since each number can have k choices.
-
-#+BEGIN_SRC java
-private void backTracking(int [] arr, int k, int idx, int total) {
-    if (total >= min) return; // early termination
-    if (idx == n) {
-        min = total; // With early termination, Math.min() is no longer needed.
-        return;
-    }
-    for (int i = 0; i < dp.size(); i++) {
-        LinkedList<Integer> bucket = dp.get(i);
-        int dist = 0;
-        if (bucket.size() < n/k && bucket.peekLast() < arr[idx]) {
-            dist = arr[idx] - bucket.peekLast(); // ......
-            bucket.addLast(arr[idx]);
-            backTracking(arr, k, idx+1, total + dist);
-            bucket.removeLast();
-        }
-    }
-    if (dp.size() < k) { // 记住这个分组，总是有可以多分出一个组的情况需要考虑到
-        LinkedList<Integer> bucket = new LinkedList<>();
-        bucket.add(arr[idx]);
-        dp.addLast(bucket);
-        backTracking(arr, k, idx+1, total);
-        dp.removeLast();
-    }
-}
-int min = Integer.MAX_VALUE;
-LinkedList<LinkedList<Integer>> dp;
-int n;
-public int minimumIncompatibility(int[] arr, int k) {
-    n = arr.length;
-    dp = new LinkedList<>();
-    Arrays.sort(arr);
-    backTracking(arr, k, 0, 0);
-    return min == Integer.MAX_VALUE ? -1 : min;
-}
-#+END_SRC
-- Optimized version (9ms): Replacing LinkedList with int[], where int[]{length, tail element} represents a sorted list/bucket since we only need to remember the length and the tail element of each sorted list.
-#+BEGIN_SRC java
-int ans = Integer.MAX_VALUE;
-void helper(int[] nums, int s, int[][] buckets, int idx, int size, int total) {
-    if(total >= ans) return; //early termination
-    if (s == nums.length) {
-        ans = total; // With early termination, Math.min() is no longer needed.
-    } else {
-        // distribute current number to an existing bucket
-        for (int i=0; i<idx; i++) {
-            if (buckets[i][0] < size && buckets[i][1] < nums[s]) {
-                int distance = nums[s] - buckets[i][1];
-                int last = buckets[i][1];
-                buckets[i][0]++;
-                buckets[i][1] = nums[s];
-                helper(nums, s+1, buckets, idx, size, total+distance);
-                buckets[i][0]--;
-                buckets[i][1] = last;
-            }
-        }
-        // distribute current number to an empty bucket
-        if (buckets.length > idx) {
-            buckets[idx][0] = 1;
-            buckets[idx][1] = nums[s];
-            helper(nums, s+1, buckets, idx+1, size, total);
-            buckets[idx][0] = 0;
-        }
-    }
-}
-public int minimumIncompatibility(int[] nums, int k) {
-    Arrays.sort(nums);
-    helper(nums, 0, new int[k][2], 0, nums.length/k, 0);
-    return ans == Integer.MAX_VALUE?-1: ans;
-}
-#+END_SRC
-
-** 1986. Minimum Number of Work Sessions to Finish the Tasks
-There are n tasks assigned to you. The task times are represented as an integer array tasks of length n, where the ith task takes tasks[i] hours to finish. A work session is when you work for at most sessionTime consecutive hours and then take a break.
-You should finish the given tasks in a way that satisfies the following conditions:
-If you start a task in a work session, you must complete it in the same work session.
-You can start a new task immediately after finishing the previous one.
-You may complete the tasks in any order.
-Given tasks and sessionTime, return the minimum number of work sessions needed to finish all the tasks following the conditions above.
-
-The tests are generated such that sessionTime is greater than or equal to the maximum element in tasks[i].
-#+BEGIN_SRC java
-private void dfs(int [] arr, int t, int i, int cnt) { // cnt: sessionCnt
-    if (cnt > res) return;
-    if (i < 0) {
-        res = Math.min(res, cnt);
-        return;
-    }
-    for (int j = 0; j < cnt; j++) 
-        if (sessions[j] + arr[i] <= t) { // 把当前task 放入旧的sessions里
-            sessions[j] += arr[i];
-            dfs(arr, t, i-1, cnt);
-            sessions[j] -= arr[i];
-        }
-    sessions[cnt] += arr[i]; // 把当前task 放入新的sessions里
-    dfs(arr, t, i-1, cnt + 1);
-    sessions[cnt] -= arr[i];
-}
-int [] sessions;
-int n, res;
-public int minSessions(int[] tasks, int sessionTime) {
-    n = tasks.length;
-    res = n;
-    sessions = new int [n];
-    Arrays.sort(tasks);
-    dfs(tasks, sessionTime, n-1, 0);
-    return res;
-}
-#+END_SRC
-- 另一种写法
-#+BEGIN_SRC java
-private int [] getMin(int [] a, int [] b) { // 这个题最近需要再写一遍
-    if (a[0] > b[0]) return b;
-    if (a[0] < b[0]) return a;
-    if (a[1] > b[1]) return b;
-    return a;
-}
-// dp[mask] = {a, b} where
-// a - minimum number of session
-// b - minimum time of last session
-// The idea is to go through all tasks who belong to mask and optimally choose the last task 't' that was added to last session.
-public int minSessions(int[] tasks, int sessionTime) {
-    int n = tasks.length;
-    int [][] dp = new int [1 << n][2];  // 在[1, 1 << n)范围内枚举每一个mask 计算其包含的时间的总和
-    dp[0][0] = 1;
-    dp[0][1] = 0;
-    for (int i = 1; i < 1 << n; i++) {
-        dp[i][0] = Integer.MAX_VALUE;
-        dp[i][1] = 0;
-        int sum = 0;
-        for (int t = 0; t < n; t++) {
-            if ((i & (1 << t)) == 0) continue;
-            int [] pre = dp[(1 << t) ^ i];
-            if (pre[1] + tasks[t] <= sessionTime)
-                dp[i] = getMin(dp[i], new int [] {pre[0], pre[1] + tasks[t]});
-            else dp[i] = getMin(dp[i], new int []{pre[0]+1, tasks[t]});
-        }
-    }
-    return dp[(1 << n) -1][0];
-}
-#+END_SRC
-
 ** 1994. The Number of Good Subsets
 You are given an integer array nums. We call a subset of nums good if its product can be represented as a product of one or more distinct prime numbers.
 
@@ -14069,66 +14307,66 @@ In one semester, you can take at most k courses as long as you have taken all th
 
 Return the minimum number of semesters needed to take all courses. The testcases will be generated such that it is possible to take every course.
 #+BEGIN_SRC java
-public int minNumberOfSemesters(int n, int [][] relations, int k) {
+public int minNumberOfSemesters(int n, int[][] relations, int k) {
     int [] pre = new int [n]; // bitmask representing prerequirements
-    for (int i = 0; i < relations.length; i++) {
-        int u = relations[i][0] - 1;
-        int v = relations[i][1] - 1;
-        pre[v] |= (1 << u);
+    int r = 1 << n;
+    for (int [] v : relations) {
+        int x = v[0]-1, y = v[1] - 1;
+        pre[y] |= 1 << x;
     }
-    int range = (1 << n);
-    int [] cnt = new int [range]; // 所有的状态只数一遍位数
-    for (int i = 0; i < range; i++) 
-        cnt[i] = Integer.bitCount(i);
-    int [] dp = new int [range];  // dp[state] = minimum semesters to complete all the courses of 'state'.
+    int [] cnt = new int [r];
+    for (int i = 0; i < r; i++) cnt[i] = Integer.bitCount(i);
+    int [] dp = new int [r]; // dp[state] = minimum semesters to complete all the courses of 'state'.
     Arrays.fill(dp, n);
     dp[0] = 0;
-    for (int i = 0; i < range; i++) {
-        int available = 0;
-        for (int j = 0; j < n; j++) 
-            if ((i & pre[j]) == pre[j]) // 可是包含了忆经选过的课程
-                available |= (1 << j);  // Can study course j next, since all required courses have been studied.
-        available &= ~i; // Don't want to study those already studied courses.
-        int nextCourses = available;
-        while (nextCourses > 0) {
-            if (cnt[nextCourses] <= k)
-                dp[i | nextCourses] = Math.min(dp[i | nextCourses], dp[i] + 1);
-// 遍历现在可选课程的所有子集：Enumerate all subsets. E.g, available = 101, next: 100 -> 001 -> 000
-            nextCourses = (nextCourses -1) & available; 
+    for (int i = 0; i < r; i++) {   // 遍历所有可能的状态，对每个状态进行最大可能地优化
+        int cur = 0;
+        for (int j = 0; j < n; j++) // 遍历课程，筛出当前子集mask下，可选课程的集全
+            // if ((i & pre[j]) == pre[j]) // 这门课可选，但是可能已经选过 Can study course j next, since all required courses studied.
+            if (((i >> j) & 1) == 0 && (i & pre[j]) == pre[j]) // 这门课可选，并且还没有选修过 
+                cur |= 1 << j;
+        // cur &= ~i;   // 这个最容易忽视： 选过的课程是不用再选的 // Don't want to study those already studied courses.
+        int next = cur; // 所有可选课程的集合
+        while (next > 0) {
+            if (cnt[next] <= k) // 寻找和遍历符合条件的子集
+                dp[i | next] = Math.min(dp[i | next], dp[i] + 1);
+            next = (next - 1) & cur; // 高效速度快：遍历现在可选课程的所有子集：Enumerate all subsets. E.g, available = 101, next: 100 -> 001 -> 000
         }
     }
-     return dp[range-1];
+    return dp[r-1];
 }
 #+END_SRC
-- 另一种用以++写的递归的
+- 另一种慢很多的：通过递归来优化选课时间的
 
 [[./pic/courseII.png]]
-#+BEGIN_SRC cpp
-void solve(int i, int s, int k, int n, int s0, int s1, vector<int> &f) {
-    if (k == 0 || i == n) {
-        f[s0 | s] = min(f[s0 | s], f[s0] + 1);
-        return;
-    }
-    solve(i + 1, s, k, n, s0, s1, f);
-    if ((s1 >> i) & 1)
-        solve(i + 1, s | 1 << i, k - 1, n, s0, s1, f);
-}
-int minNumberOfSemesters(int n, vector<vector<int>>& dependencies, int k) {
-    vector<int> pre(n, 0);
-    for (const auto &v : dependencies)
-        pre[v[1] - 1] |= 1 << (v[0] - 1);
-    vector<int> f(1 << n, INT_MAX);
+#+BEGIN_SRC java
+public int minNumberOfSemesters(int n, int[][] relations, int k) {
+    int [] pre = new int [n];
+    int r = 1 << n;
+    for (int [] v : relations) pre[v[1]-1] |= 1 << (v[0] - 1);
+    f = new int [1 << n];
+    Arrays.fill(f, Integer.MAX_VALUE);
     f[0] = 0;
-    for (int s0 = 0; s0 < (1 << n); s0++) {
-        if (f[s0] == INT_MAX)
-            continue;
-        int s1 = 0;
-        for (int i = 0; i < n; i++)
-            if (!((s0 >> i) & 1) && ((pre[i] & s0) == pre[i]))
-                s1 |= 1 << i;
-        solve(0, 0, k, n, s0, s1, f);
+    for (int i = 0; i < (1 << n); i++) {
+        if (f[i] == Integer.MAX_VALUE) continue;
+        int cur = 0;
+        for (int j = 0; j < n; j++) {
+            if (((i >> j) & 1) == 0 && ((pre[j] & i) == pre[j]))
+                cur |= 1 << j;
+            solve(0, 0, i, cur, k, n);  // 看得很昏乎：
+        }
     }
-    return f[(1 << n) - 1];
+    return f[r-1];
+}
+int [] f; // dp
+private void solve(int i, int s, int state, int cur, int k, int n) {
+    if (k == 0 || i == n) { // 看得很昏乎：int i: 通过对现可选课程cur一位一位遍历的方式找出最优级解，速度慢
+        f[state | s] = Math.min(f[state | s], f[state] + 1);
+        return ;
+    }
+    solve(i+1, s, state, cur, k, n);
+    if (((cur >> i) & 1) == 1) // int i: 遍历已选课程state子集下，所有可选课程的子集合，通过遍历i优化每门可选课的时间来优化结果
+        solve(i+1, s | 1 << i, state, cur, k-1, n);
 }
 #+END_SRC
 

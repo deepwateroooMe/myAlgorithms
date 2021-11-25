@@ -912,45 +912,6 @@ public class dpsix {
             return Math.max(hold[n-1], sold[n-1]);
         }
 
-        public int maxProfit(int[] p) { // bug, to be finished
-            int n = p.length, lmin = 0, lmax = 0, gmax = 0;
-            int [] l = new int [n];
-            int [] r = new int [n];
-            lmin = p[0];
-            lmax = p[0];
-            for (int i = 1; i < n; i++) {
-                if (p[i] < lmin) {
-                    gmax = Math.max(gmax, lmax - lmin);
-                    lmin = p[i];
-                    lmax = 0;
-                } else {
-                    lmax = Math.max(lmax, p[i]);
-                    gmax = Math.max(gmax, lmax - lmin);
-                }
-                l[i] = gmax;
-            }
-            lmin = p[n-1];
-            lmax = p[n-1];
-            gmax = 0;
-            for (int i = n-2; i >= 0; i--) {
-                if (p[i] < lmin) {
-                    lmin = Math.min(lmin, p[i]);
-                    gmax = Math.max(gmax, lmax - lmin);
-                    lmax = 0;
-                } else {
-                    gmax = Math.max(gmax, lmax - lmin);
-                    lmax = Math.max(lmax, p[i]);
-                    // lmin = 0;
-                }
-                r[i] = gmax;
-            }
-            gmax = 0;
-            for (int i = 1; i < n; i++) 
-                gmax = Math.max(gmax, l[i] + r[i]);
-            return gmax;
-        }
-
-
         public int nthUglyNumber(int n) {
             if (n <= 5) return n;
             int [] a = new int [n];
