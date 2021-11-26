@@ -1404,6 +1404,39 @@ public long maxAlternatingSum(int[] a) {
 }
      #+END_SRC
 
+*** 1928. Minimum Cost to Reach Destination in Time - Hard
+There is a country of n cities numbered from 0 to n - 1 where all the cities are connected by bi-directional roads. The roads are represented as a 2D integer array edges where edges[i] = [xi, yi, timei] denotes a road between cities xi and yi that takes timei minutes to travel. There may be multiple roads of differing travel times connecting the same two cities, but no road connects a city to itself.
+
+Each time you pass through a city, you must pay a passing fee. This is represented as a 0-indexed integer array passingFees of length n where passingFees[j] is the amount of dollars you must pay when you pass through city j.
+
+In the beginning, you are at city 0 and want to reach city n - 1 in maxTime minutes or less. The cost of your journey is the summation of passing fees for each city that you passed through at some moment of your journey (including the source and destination cities).
+
+Given maxTime, edges, and passingFees, return the minimum cost to complete your journey, or -1 if you cannot complete it within maxTime minutes.
+**** 解题思路与分析
+     #+BEGIN_SRC java
+// 设计一个动态规划数组 dp[maxTime + 1][n]，其中 dp[t][i] 表示第 t 分钟到达城市 i 时的最少费用，则状态转移方程为：
+// dp[t][c1] = Math.min(dp[t][c1], dp[t - time][c2] + passingFees[c1])
+// dp[t][c2] = Math.min(dp[t][c2], dp[t - time][c1] + passingFees[c2])
+public int minCost(int maxTime, int[][] edges, int[] passingFees) {
+    int n = passingFees.length;
+    int [][] dp = new int [maxTime+1][n];
+    for (int i = 0; i <= maxTime; i++) 
+        Arrays.fill(dp[i], Integer.MAX_VALUE / 2);
+    dp[0][0] = passingFees[0];
+    for (int t = 0; t <= maxTime; t++) 
+        for (int [] e : edges) {
+            if (e[2] > t) continue;
+            int u = e[0], v = e[1], time = e[2];
+            dp[t][u] = Math.min(dp[t][u], dp[t-time][v] + passingFees[u]); // v --> u
+            dp[t][v] = Math.min(dp[t][v], dp[t-time][u] + passingFees[v]); // u --> v
+        }
+    int ans = Integer.MAX_VALUE / 2;
+    for (int i = 1; i <= maxTime; i++)
+        ans = Math.min(ans, dp[i][n-1]);
+    return ans == Integer.MAX_VALUE / 2 ? -1 : ans;
+}
+     #+END_SRC
+
 *** 730. Count Different Palindromic Subsequences - Hard
 Given a string s, return the number of different non-empty palindromic subsequences in s. Since the answer may be very large, return it modulo 109 + 7.
 
@@ -4615,37 +4648,32 @@ j 可通过和任意数字异或得到，newDp[j] = 前一 dp 中最小的改变
 完成 k 个组的动态规划后，dp[0]就是所求的解。
 
 #+BEGIN_SRC java
-public int minChanges(int[] arr, int k) {
-    int n = arr.length;
-    List<Map<Integer, Integer>> group = new ArrayList<>(); // 存储 k 个组、各组中各个数字数量
-    int [] size = new int [k];                             // 各组大小,它们会有可能不同吗？
+public int minChanges(int [] a, int k) {
+    int n = a.length;
+    Map<Integer, Integer> [] group = new HashMap[k]; // 存储 k 个组、各组中各个数字数量
+    int [] cnt = new int [k]; // k元素片段里，每个下标对应的所有元素总个数 // 各组大小,它们会有可能不同吗？
     for (int i = 0; i < k; i++) {
-        Map<Integer, Integer> map = new HashMap<>();
-        for (int j = i; j < n; j += k) {
-            map.put(arr[j], map.getOrDefault(arr[j], 0) + 1);
-            size[i]++;
+        group[i] = new HashMap<>();
+        for (int j = i; j < n; j += k) { // 将数组中的每个元素分布到其在k元素片段中下标位置所在的组里去，并统计重复出现次数
+            group[i].put(a[j], group[i].getOrDefault(a[j], 0) + 1);
+            cnt[i]++;
         }
-        group.add(map);
     }
-    int range = 1 << 10;          //  题中nums[i] < 2^10， 为的是遍历所有可能更改值，以取最小
-    int [] dp = new int [range];  // 当前组异或到对应数字时的更改次数
+    int r = 1 << 10; // 题中nums[i] < 2^10， 为的是遍历所有可能更改值，以取最小
+    int [] dp = new int [r], curDp = new int [r]; // 当前组异或到对应数字时的更改次数
     Arrays.fill(dp, Integer.MAX_VALUE);
     dp[0] = 0;
-    for (int i = 0; i < k; i++) {
-        int minVal = Arrays.stream(dp).min().getAsInt();
-        int [] newDp = new int [range];       //  遍历每一个个组，暴搜、取最小
-        Arrays.fill(newDp, minVal + size[i]); // 变为当前组中不存在数字的改变次数：之前的最小改变次数+当前组元素个数
-        for (int j = 0; j < range; j++) {
-            if (dp[j] == Integer.MAX_VALUE) continue; // 对第0组，保证dp[i]是异或到0的最小改变数
-            Iterator it = group.get(i).entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry en = (Map.Entry)it.next();
-                int num = (int)en.getKey(), v = (int)en.getValue();
-                int xorNum = num ^ j;
-                newDp[xorNum] = Math.min(newDp[xorNum], dp[j] + size[i] - v);
+    for (int i = 0; i < k; i++) { // 遍历k个元素的片段——中的每个元素，逐元素优化出全局最优解
+        int minVal = Arrays.stream(dp).min().getAsInt(); // 累积到上一个元素的全局最优解
+        Arrays.fill(curDp, minVal + cnt[i]); // 变为当前组中不存在数字的改变次数：之前的最小改变次数+当前组元素个数
+        for (int j = 0; j < r; j++) {
+            if (dp[j] == Integer.MAX_VALUE) continue;
+            for (Map.Entry<Integer, Integer> en : group[i].entrySet()) {
+                int num = en.getKey(), v = en.getValue(), xorNum = num ^ j;
+                curDp[xorNum] = Math.min(curDp[xorNum], dp[j] + cnt[i] - v);
             }
         }
-        dp = Arrays.copyOf(newDp, range); // 将遍历到当前组、累积较优解的newDp复制入全局最优解dp数组中
+        dp = Arrays.copyOf(curDp, r); // 将遍历到当前组、累积较优解的curDp复制入全局最优解dp数组中
     }
     return dp[0];
 }
@@ -5095,32 +5123,7 @@ Return the number of different orders you can build all the rooms in. Since the 
 [[./pic/ant2.png]]
 
 #+BEGIN_SRC java
-// 快速计算x^y的乘方
-public int quickMul(int x , int y) {
-    long res = 1, cur = x;
-    while (y > 0) {
-        if ((y & 1) == 1)
-            res = res * cur % mod;
-        cur = cur * cur % mod;
-        y >>= 1;
-    }
-    return (int)res;
-}
-// 深度优先搜索，返回以当前节点为根的子树节点个数 及 内部排列数
-public int [] dfs (int idx) {
-    if (!map.containsKey(idx)) return new int [] {1, 1}; // 子节点，节点个数及内部排列数均为1
-    int cnt = 1, res = 1;       //  子树的节点个数、内部排列数
-    for (Integer node : map.get(idx)) {
-      int [] cur = dfs(node); // 递归得到子节点对应树的节点个数和排列数
-        cnt += cur[0];
-        res = (int)((long)res * cur[1] % mod * inv[cur[0]] % mod);
-    }
-    res = (int)((long)res * fac[cnt-1] % mod);
-    return new int [] {cnt, res};
-}
-int mod = (int)1e9 + 7;
-Map<Integer, List<Integer>> map = new HashMap<>();
-int [] fac, inv;
+static final int mod = (int)1e9 + 7;
 public int waysToBuildRooms(int[] prevRoom) {
     int n = prevRoom.length;
     // 求阶乘数列及对应逆元
@@ -5128,14 +5131,35 @@ public int waysToBuildRooms(int[] prevRoom) {
     this.inv = new int [n]; // inv[i]=i!^(-1)
     fac[0] = inv[0] = 1;
     for (int i = 1; i < n; i++) {
-        fac[i] = (int)((long)fac[i-1] * i % mod);
-        inv[i] = quickMul(fac[i], mod - 2); // 费马小定理: (fac[i]^(-1))%mod = (fac[i]^(mod-2))%mod
+        fac[i] = (int)((long)fac[i-1] * i % mod); // 算阶层
+        inv[i] = quickMultiply(fac[i], mod - 2);  // 乘法逆元：费马小定理 : (fac[i]^(-1))%mod = (fac[i]^(mod-2))%mod 转换成快速幂操作
     }
-    // 记录各个节点与子节点之间的边
-    for (int i = 1; i < n; i++) 
-        map.computeIfAbsent(prevRoom[i], k->new ArrayList<>()).add(i);
-    // 动态规划得到总体顺序数量x
-    return dfs(0)[1];      
+    for (int i = 0; i < n; i++) // 记录各个节点与子节点之间的边
+        m.computeIfAbsent(prevRoom[i], z -> new ArrayList<>()).add(i);
+    return dfs(0)[1]; // 动态规划得到总体顺序数量x
+}
+Map<Integer, List<Integer>> m = new HashMap<>();
+int [] fac, inv;  
+private int [] dfs(int idx) { // 返回以当前节点为根的子树节点个数 及 内部排列数
+    if (!m.containsKey(idx)) return new int [] {1, 1}; // 子节点，节点个数及内部排列数均为1
+    int cnt = 1, ans = 1; // 子树的结点个数、内部排列数
+    for (Integer next : m.get(idx)) {
+        int [] cur = dfs(next); // 递归得到子节点对应树的节点个数和排列数
+        cnt += cur[0];
+        ans = (int)((long)ans * cur[1] % mod * inv[cur[0]] % mod);
+    }
+    ans = (int)((long)ans * fac[cnt-1] % mod);
+    return new int [] {cnt, ans} ;
+}
+private int quickMultiply(int x, int y) { // 快速幂: 快速计算x^y的乘方
+    long ans = 1, base = x;
+    while (y > 0) {
+        if ((y & 1) == 1)
+            ans = (ans * base) % mod; // 指数是奇数次，就先乘一次底数
+        base = base * base % mod; // 指数剩偶数次了，就可以直接底数先平方，指数除以2
+        y >>= 1; // 指数除2
+    }
+    return (int) ans;
 }
 #+END_SRC
 
@@ -6444,6 +6468,181 @@ private int [] dfs(int n, int f, int s) { // f: firstPlayer, // s: secondPlayer
     return new int [] {glbMin + 1, glbMax + 1};
 }
      #+END_SRC
+*** 488. Zuma Game - Hard
+You are playing a variation of the game Zuma.
+
+In this variation of Zuma, there is a single row of colored balls on a board, where each ball can be colored red 'R', yellow 'Y', blue 'B', green 'G', or white 'W'. You also have several colored balls in your hand.
+
+Your goal is to clear all of the balls from the board. On each turn:
+
+Pick any ball from your hand and insert it in between two balls in the row or on either end of the row.
+If there is a group of three or more consecutive balls of the same color, remove the group of balls from the board.
+If this removal causes more groups of three or more of the same color to form, then continue removing each group until there are none left.
+If there are no more balls on the board, then you win the game.
+Repeat this process until you either win or do not have any more balls in your hand.
+Given a string board, representing the row of balls on the board, and a string hand, representing the balls in your hand, return the minimum number of balls you have to insert to clear all the balls from the board. If you cannot clear all the balls from the board using the balls in your hand, return -1.
+**** 解题思路与分析: bfs广度优先搜索 todo
+     #+BEGIN_SRC java
+public int findMinStep(String board, String hand) {
+    char[] arr = hand.toCharArray();
+    Arrays.sort(arr);
+    hand = new String(arr);
+    // 初始化用队列维护的状态队列：其中的三个元素分别为桌面球状态、手中球状态和回合数
+    Queue<State> queue = new ArrayDeque<State>();
+    queue.offer(new State(board, hand, 0));
+    // 初始化用哈希集合维护的已访问过的状态
+    Set<String> visited = new HashSet<String>();
+    visited.add(board + " " + hand);
+    while (!queue.isEmpty()) {
+        State state = queue.poll();
+        String curBoard = state.board;
+        String curHand = state.hand;
+        int step = state.step;
+        for (int i = 0; i <= curBoard.length(); ++i) {
+            for (int j = 0; j < curHand.length(); ++j) {
+                // 第 1 个剪枝条件: 当前球的颜色和上一个球的颜色相同
+                if (j > 0 && curHand.charAt(j) == curHand.charAt(j - 1)) 
+                    continue;
+                // 第 2 个剪枝条件: 只在连续相同颜色的球的开头位置插入新球
+                if (i > 0 && curBoard.charAt(i - 1) == curHand.charAt(j)) 
+                    continue;
+                // 第 3 个剪枝条件: 只在以下两种情况放置新球
+                boolean choose = false;
+                //  - 第 1 种情况 : 当前球颜色与后面的球的颜色相同
+                if (i < curBoard.length() && curBoard.charAt(i) == curHand.charAt(j)) 
+                    choose = true;
+                //  - 第 2 种情况 : 当前后颜色相同且与当前颜色不同时候放置球
+                if (i > 0 && i < curBoard.length() && curBoard.charAt(i - 1) == curBoard.charAt(i) && curBoard.charAt(i - 1) != curHand.charAt(j))
+                    choose = true;
+                if (choose) {
+                    String newBoard = clean(curBoard.substring(0, i) + curHand.charAt(j) + curBoard.substring(i));
+                    String newHand = curHand.substring(0, j) + curHand.substring(j + 1);
+                    if (newBoard.length() == 0) return step + 1;
+                    String str = newBoard + " " + newHand;
+                    if (visited.add(str)) 
+                        queue.offer(new State(newBoard, newHand, step + 1));
+                }
+            }
+        }
+    }
+    return -1;
+}
+public String clean(String s) {
+    StringBuffer sb = new StringBuffer();
+    Deque<Character> letterStack = new ArrayDeque<Character>();
+    Deque<Integer> countStack = new ArrayDeque<Integer>();
+    for (int i = 0; i < s.length(); ++i) {
+        char c = s.charAt(i);
+        while (!letterStack.isEmpty() && c != letterStack.peek() && countStack.peek() >= 3) {
+            letterStack.pop();
+            countStack.pop();
+        }
+        if (letterStack.isEmpty() || c != letterStack.peek()) {
+            letterStack.push(c);
+            countStack.push(1);
+        } else countStack.push(countStack.pop() + 1);
+    }
+    if (!countStack.isEmpty() && countStack.peek() >= 3) {
+        letterStack.pop();
+        countStack.pop();
+    }
+    while (!letterStack.isEmpty()) {
+        char letter = letterStack.pop();
+        int count = countStack.pop();
+        for (int i = 0; i < count; ++i) 
+            sb.append(letter);
+    }
+    sb.reverse();
+    return sb.toString();
+}
+class State {
+    String board;
+    String hand;
+    int step;
+    public State(String board, String hand, int step) {
+        this.board = board;
+        this.hand = hand;
+        this.step = step;
+    }
+}
+     #+END_SRC
+**** 解题思路与分析: dfs记忆化搜索
+     #+BEGIN_SRC java
+Map<String, Integer> dp = new HashMap<String, Integer>();
+public int findMinStep(String b, String h) {
+    char [] s = h.toCharArray();
+    Arrays.sort(s);
+    h = new String(s);
+    int ans = dfs(b, h);
+    return ans <= 5 ? ans : -1;
+}
+private int dfs(String b, String h) {
+    if (b.length() == 0) return 0;
+    String key = b + "_" + h;
+    if (dp.containsKey(key)) return dp.get(key);
+    int ans = 6;
+    for (int j = 0; j < h.length(); j++) {
+        if (j > 0 && h.charAt(j) == h.charAt(j - 1)) continue; // 第 1 个剪枝条件: 当前球的颜色和上一个球的颜色相同
+        for (int i = 0; i <= b.length(); ++i) {
+            if (i > 0 && b.charAt(i - 1) == h.charAt(j)) continue; // 第 2 个剪枝条件: 只在连续相同颜色的球的开头位置插入新球, 代码不懂 b[i] == b[i-1]?
+            boolean choose = false; // 第 3 个剪枝条件: 只在以下两种情况放置新球
+            //  - 第 1 种情况 : 当前球颜色与后面的球的颜色相同
+            if (i < b.length() && b.charAt(i) == h.charAt(j)) 
+                choose = true;
+            //  - 第 2 种情况 : 当前后颜色相同且与当前颜色不同时候放置球 (在两个相同着色的中间放置不同着色的球？)
+            if (i > 0 && i < b.length() && b.charAt(i - 1) == b.charAt(i) && b.charAt(i - 1) != h.charAt(j)) 
+                choose = true;
+            if (choose) {
+                String newB = clean(b.substring(0, i) + h.charAt(j) + b.substring(i));
+                String newH = h.substring(0, j) + h.substring(j + 1);
+                ans = Math.min(ans, dfs(newB, newH) + 1);
+            }
+        }
+    }
+    dp.put(key, ans);
+    return dp.get(key);
+}
+public String clean(String t) {
+    Deque<Character> charSt = new ArrayDeque<Character>();
+    Deque<Integer> cntSt = new ArrayDeque<Integer>();
+    StringBuffer sb = new StringBuffer();
+    char [] s = t.toCharArray();
+    for (int i = 0; i < s.length; ++i) {
+        char c = s[i];
+        while (!charSt.isEmpty() && c != charSt.peek() && cntSt.peek() >= 3) { // 把能消除的先消除掉
+            charSt.pop();
+            cntSt.pop();
+        }
+        if (charSt.isEmpty() || c != charSt.peek()) { // 要么栈空了，要么字符不同，入栈（2个）
+            charSt.push(c);
+            cntSt.push(1); // 记数为1
+        } else // 栈顶有相同的字符，但计数不够3，入栈，加数
+            cntSt.push(cntSt.pop() + 1);
+    }
+    if (!cntSt.isEmpty() && cntSt.peek() >= 3) {
+        charSt.pop();
+        cntSt.pop();
+    }
+    while (!charSt.isEmpty()) {
+        char letter = charSt.pop();
+        int count = cntSt.pop();
+        sb.append(String.valueOf(letter).repeat(count));
+        // for (int i = 0; i < count; ++i) sb.append(letter);
+    }
+    sb.reverse();
+    return sb.toString();
+}
+class St {
+    String b, h;
+    int cnt;
+    public St(String bd, String hd, int cnt) {
+        this.b = bd;
+        this.h = hd;
+        this.cnt = cnt;
+    }
+}
+     #+END_SRC
+
 * Segment Tree与Binary Index Tree 线段树与树状数组 
 
 线段树（segment tree），顾名思义， 是用来存放给定区间（segment, or interval）内对应信息的一种数据结构。与树状数组（binary indexed tree）相似，线段树也用来处理数组相应的区间查询（range query）和元素更新（update）操作。与树状数组不同的是，线段树不止可以适用于区间求和的查询，也可以进行区间最大值，区间最小值（Range Minimum/Maximum Query problem）或者区间异或值的查询。
@@ -7066,10 +7265,10 @@ startWith
 其中insert记得把最后一个node标记为isEnd = true。其中search和startWith都可以通过同一个searchHelper helper method来实现，我们只需要return 最后一个node就可以，如果isEnd == true，那么说明找到一个完整的单词，否则至少找到了prefix。别忘了使用trie的第一步是preprocess，把字典里的所有word加入到trie树当中。
 题目
 ** 208. Implement Trie (Prefix Tree)
-** 212. Word Search II
-** 211. Add and Search Word - Data structure design (Facebook店面)
-** 14. Longest Common Prefix (这道题可以稍作改编，比如说string list会经常update，会经常query，那这时很明显用trie更好)
-** 440. K-th Smallest in Lexicographical Order -  Hard
+*** 212. Word Search II
+*** 211. Add and Search Word - Data structure design (Facebook店面)
+*** 14. Longest Common Prefix (这道题可以稍作改编，比如说string list会经常update，会经常query，那这时很明显用trie更好)
+*** 440. K-th Smallest in Lexicographical Order -  Hard
 Given two integers n and k, return the kth lexicographically smallest integer in the range [1, n].
 **** 解题思路与分析
 就像dfs时当我们需要两个字符串，遍历字符串，我们并不需要看的去遍历字符串，我们只要移动下标就可以了
@@ -7109,7 +7308,7 @@ public int findKthNumber(int n, int k) {
 }
 #+END_SRC
 
-** 421. Maximum XOR of Two Numbers in an Array
+*** 421. Maximum XOR of Two Numbers in an Array
 Given an integer array nums, return the maximum result of nums[i] XOR nums[j], where 0 <= i <= j < n.
 
  [[./pic/numTrie.png]]
@@ -7220,7 +7419,7 @@ public int findMaximumXOR(int[] nums) { // 这种解法没有用到上面的这�
 // 此解法时间复杂度为O(32n)=O(n)，空间复杂度上，我们使用了一个HashSet用于存储所有数字，因此空间复杂度是O(n)
 #+END_SRC
 
-** 1617. Count Subtrees With Max Distance Between Cities - Hard
+*** 1617. Count Subtrees With Max Distance Between Cities - Hard
 There are n cities numbered from 1 to n. You are given an array edges of size n-1, where edges[i] = [ui, vi] represents a bidirectional edge between cities ui and vi. There exists a unique path between each pair of cities. In other words, the cities form a tree.
 
 A subtree is a subset of cities where every city is reachable from every other city in the subset, where the path between each pair passes through only the cities from the subset. Two subtrees are different if there is a city in one subtree that is not present in the other.
@@ -7231,6 +7430,97 @@ Return an array of size n-1 where the dth element (1-indexed) is the number of s
 
 Notice that the distance between the two cities is the number of edges in the path between them.
 - So apparently the brute-force approach passed this question. I guess for future contests, I should really pay attention to the input size...
+**** 解题思路与分析: 自己凭感觉写的，看别人的代码（尤其写得比较烦琐的前提下）好累，不如自己的代码简炼
+     #+BEGIN_SRC java
+public int[] countSubgraphsForEachDiameter(int n, int[][] edges) { 
+    int m = n-1, range = 1 << m, root = 0, cnt = 0;
+    int [] ans = new int [m];
+    for (int i = 1; i < range; i++) {
+        root = -1;
+        Map<Integer, List<Integer>> adj = new HashMap<>();
+        for (int j = 0; j < m; j++)  // m edges
+            if (((i >> j) & 1) == 1) {
+                int [] e = edges[j];
+                if (root == -1) root = e[0];
+                adj.computeIfAbsent(e[0], z -> new ArrayList<>()).add(e[1]);
+                adj.computeIfAbsent(e[1], z -> new ArrayList<>()).add(e[0]);
+            }
+        cnt = Integer.bitCount(i);
+        Set<Integer> vis = new HashSet<>();
+        max = 1;
+        dfs(root, -1, adj, vis);
+        if (vis.size() != cnt + 1) continue;
+        ans[max-1]++;
+    }
+    return ans;
+}
+int max = 1;
+private int dfs(int u, int p, Map<Integer, List<Integer>> m, Set<Integer> vis) { // 树的最大直径:
+    vis.add(u);
+    if (m.get(u).size() == 1 && m.get(u).get(0) == p) return 1; // 叶子节点 
+    int fst = 0, sec = 0;
+    for (Integer v : m.get(u)) {
+        if (v == p) continue;
+        int cur = dfs(v, u, m, vis);
+        if (cur >= fst) {
+            sec = fst;
+            fst = cur;
+        } else sec = Math.max(sec, cur);
+    }
+    max = Math.max(max, fst + sec); // bug: 这里 fst + sec 不需要 +1
+    return fst + 1;
+}
+     #+END_SRC
+- 另一种位操作法
+#+BEGIN_SRC java
+One way in which we can find the diameter of a tree is using DFS, just like if our tree is represented using tree nodes instead of as grpah
+    1. Make a call to DFS from any node as root, lets say 1 as root
+    2. Maintain a global max parameter
+    3. For each call to dfs, of all current nodes children (excluding parent)
+       find top two distances from current node to any leaf reachable from current node
+    4. Sum of these top two distances froms the longes path passing through current node to all its children. Update if this path is maximum
+    5. return 1 + top distance for this dfs call. Need to add 1 since,
+       max length of path that can be reached from current ndoe is current ndoe + max distance reachable from current ndoes's children
+#+END_SRC
+#+BEGIN_SRC java
+public int [] countSubgraphsForEachDiameter(int n, int[][] edges) {
+    ans = new int [n-1];
+    for (int [] i : edges) { // if our node is 5, we store it as 1 << 4 which is 2^4
+        graph.computeIfAbsent(1 << (i[0]-1), ArrayList::new).add(1 << (i[1]-1));
+        graph.computeIfAbsent(1 << (i[1]-1), ArrayList::new).add(1 << (i[0]-1));
+    }
+    int range = (1 << n) - 1;  // (int)Math.pow(2, n) - 1;
+    for (int subset = 3; subset <= range; subset++) {
+        boolean isPowerOf2 = subset != 0 && (subset & (subset - 1)) == 0; // is power of 2
+        if (isPowerOf2) continue;      // Single node subtrees can be excluded.
+        max = 0; vis = 0;
+        dfs(subset, Integer.highestOneBit(subset), -1); // Integer.highestOneBit(subset): subset: 0b1100, highest: 0b1000
+        if (vis == subset)   // If visited is not equal to our current subset, all nodes are not reachable.
+            ans[max - 1] ++; // In otherwords is not a proper subtree, hence dont include in the maxwer
+    }
+    return ans;
+}
+Map<Integer, List<Integer>> graph = new HashMap<>();
+int max = 0, vis = 0;
+int [] ans;
+private int dfs(int subset, int cur, int pre) {
+    if ((subset & cur) == 0) return 0; // 只遍历子集中存在的节点，换句话说，只遍历子集中存在的边，这样总图只建一遍就可以了
+    vis = vis | cur; 
+    int fstMax = 0, sndMax = 0;
+    for (Integer next : graph.get(cur)) {
+        if (next == pre) continue;
+        int dist = dfs(subset, next, cur);
+        if (dist > fstMax) {
+            sndMax = fstMax;
+            fstMax = dist;
+        } else sndMax = Math.max(sndMax, dist);
+    }
+    max = Math.max(max, fstMax + sndMax); // top two distances from this node c
+// top distance this cur node to any leaf is topdistance from c's children + 1. Adding 1 since we need to include cur node
+    return 1 + fstMax;
+}
+#+END_SRC
+- 以前参考过的代码
 #+BEGIN_SRC java
 public int [] countSubgraphsForEachDiameter(int n, int[][] edges) {
     int [] res = new int [n-1];
@@ -7283,58 +7573,8 @@ private void generateSubsets(int [][] arr, List<int []> cur, List<List<int []>> 
     }
 }
 #+END_SRC
-- 另一种位操作法
-#+BEGIN_SRC java
-// One way in which we can find the diameter of a tree is using DFS, just like if our tree is represented using tree nodes instead of as grpah
-//     1. Make a call to DFS from any node as root, lets say 1 as root
-//     2. Maintain a global max parameter
-//     3. For each call to dfs, of all current node's children (excluding parent)
-//        find top two distances from current node to any leaf reachable from current node
-//     4. Sum of these top two distances froms the longes path passing through current node to all its children. Update if this path is maximum
-//     5. return 1 + top distance for this dfs call. Need to add 1 since,
-//        max length of path that can be reached from current ndoe is current ndoe + max distance reachable from current ndoes's children
-int ans = 0, vis = 0;
-int [] res;
-public int [] countSubgraphsForEachDiameter(int n, int[][] edges) {
-    res = new int [n-1];
-    ans = 0; vis = 0;
-    Map<Integer, List<Integer>> graph = new HashMap<>();
-    for (int [] i : edges) { // if our node is 5, we store it as 1 << 4 which is 2^4
-        graph.computeIfAbsent(1 << (i[0]-1), ArrayList::new).add(1 << (i[1]-1));
-        graph.computeIfAbsent(1 << (i[1]-1), ArrayList::new).add(1 << (i[0]-1));
-    }
-    int range = (1 << n) - 1;  // (int)Math.pow(2, n) - 1;
-    for (int subset = 3; subset <= range; subset++) {
-        boolean isPowerOf2 = subset != 0 && (subset & (subset - 1)) == 0; // is power of 2
-        if (isPowerOf2) continue;      // Single node subtrees can be excluded.
-        ans = 0; vis = 0;
-        dfs(graph, subset, Integer.highestOneBit(subset), -1); // Integer.highestOneBit(subset): subset: 0b1100, highest: 0b1000
-        if (vis == subset)   // If visited is not equal to our current subset, all nodes are not reachable.
-            res[ans - 1] ++; // In otherwords is not a proper subtree, hence dont include in the answer
-    }
-    return res;
-}
-// we can pass any node in this subset as root for dfs, we are passing node represented with highest set bit as root
-// pass -1 as parent of root, since it has no root
-private int dfs(Map<Integer, List<Integer>> graph, int subset, int cur, int pre) {
-    if ((subset & cur) == 0) return 0;
-    vis = vis | cur; 
-    int fstMax = 0, sndMax = 0;
-    for (Integer next : graph.get(cur)) {
-        if (next == pre) continue;
-        int dist = dfs(graph, subset, next, cur);
-        if (dist > fstMax) {
-            sndMax = fstMax;
-            fstMax = dist;
-        } else sndMax = Math.max(sndMax, dist);
-    }
-    ans = Math.max(ans, fstMax + sndMax); // top two distances from this node c
-// top distance this cur node to any leaf is topdistance from c's children + 1. Adding 1 since we need to include cur node
-    return 1 + fstMax; // 这里要再想一下 ？？？
-}
-#+END_SRC
 
-** 1938. Maximum Genetic Difference Query - Hard 离线算法、离线思维、批量处理、顺序无关
+*** 1938. Maximum Genetic Difference Query - Hard 离线算法、离线思维、批量处理、顺序无关
 There is a rooted tree consisting of n nodes numbered 0 to n - 1. Each node's number denotes its unique genetic value (i.e. the genetic value of node x is x). The genetic difference between two genetic values is defined as the bitwise-XOR of their values. You are given the integer array parents, where parents[i] is the parent for node i. If node x is the root of the tree, then parents[x] == -1.
 
 You are also given the array queries where queries[i] = [nodei, vali]. For each query i, find the maximum genetic difference between vali and pi, where pi is the genetic value of any node that is on the path between nodei and the root (including nodei and the root). More formally, you want to maximize vali XOR pi.
@@ -7435,7 +7675,7 @@ public int[] maxGeneticDifference(int[] parents, int[][] queries) {
 
 空间复杂度：O(n\log C + q)O(nlogC+q)。我们需要 O(n)O(n) 的空间存储树本身，O(n \log C)O(nlogC) 的空间存储字典树，O(q)O(q) 的空间存储将询问进行离线，分配到每个节点上。
 
-** 792. Number of Matching Subsequences - Medium
+*** 792. Number of Matching Subsequences - Medium
 Given a string s and an array of strings words, return the number of words[i] that is a subsequence of s.
 
 A subsequence of a string is a new string generated from the original string with some characters (can be none) deleted without changing the relative order of the remaining characters.
@@ -7471,7 +7711,7 @@ public int numMatchingSubseq(String s, String[] words) {
 }
 #+END_SRC
 
-** 472. Concatenated Words - Hard
+*** 472. Concatenated Words - Hard
 Given an array of strings words (without duplicates), return all the concatenated words in the given list of words.
 
 A concatenated word is defined as a string that is comprised entirely of at least two shorter words in the given array.
@@ -7601,7 +7841,7 @@ public List<String> findAllConcatenatedWordsInADict(String[] words) {
 }
 #+END_SRC
 
-** 1948. Delete Duplicate Folders in System - Hard
+*** 1948. Delete Duplicate Folders in System - Hard
 Due to a bug, there are many duplicate folders in a file system. You are given a 2D array paths, where paths[i] is an array representing an absolute path to the ith folder in the file system.
 
 For example, ["one", "two", "three"] represents the path "/one/two/three".
@@ -7690,7 +7930,7 @@ public List<List<String>> deleteDuplicateFolder(List<List<String>> paths) {
 
 
 * sliding window 
-** 数subarray个数(满足某些特定要求的子数组个数)问题： 感觉傻傻永远数不清楚！列几个题，牢记一下
+*** 数subarray个数(满足某些特定要求的子数组个数)问题： 感觉傻傻永远数不清楚！列几个题，牢记一下
 *** 930. Binary Subarrays With Sum
 Given a binary array nums and an integer goal, return the number of non-empty subarrays with a sum goal.
 
@@ -8117,7 +8357,7 @@ public int[] maxSlidingWindow(int[] arr, int k) {
 }
 #+END_SRC
 
-** 双端队列：数据结构，O(N)解法类题目
+*** 双端队列：数据结构，O(N)解法类题目
 *** 862. Shortest Subarray with Sum at Least K - Hard
 Given an integer array nums and an integer k, return the length of the shortest non-empty subarray of nums with a sum of at least k. If there is no such subarray, return -1.
 
@@ -8631,7 +8871,7 @@ public double[] medianSlidingWindow(int[] nums, int k) {
 
 * Tree树结构：各种新型数据结构
 
-** 687. Longest Univalue Path
+*** 687. Longest Univalue Path
 Given the root of a binary tree, return the length of the longest path, where each node in the path has the same value. This path may or may not pass through the root.
 
 The length of the path between two nodes is represented by the number of edges between them.
@@ -8654,7 +8894,7 @@ public int longestUnivaluePath(TreeNode root) {
 }
 #+END_SRC
 
-** 652. Find Duplicate Subtrees
+*** 652. Find Duplicate Subtrees
 Given the root of a binary tree, return all duplicate subtrees.
 
 For each kind of duplicate subtrees, you only need to return the root node of any one of them.
@@ -8792,7 +9032,7 @@ numberMap.size(): 4
 1
 #+END_SRC
 
-** 979. Distribute Coins in Binary Tree
+*** 979. Distribute Coins in Binary Tree
 You are given the root of a binary tree with n nodes where each node in the tree has node.val coins. There are n coins in total throughout the whole tree.
 
 In one move, we may choose two adjacent nodes and move one coin from one node to another. A move may be from parent to child, or from child to parent.
@@ -8813,7 +9053,7 @@ public int distributeCoins(TreeNode root) {
 }
 #+END_SRC
 
-** 1696. Jump Game VI
+*** 1696. Jump Game VI
 You are given a 0-indexed integer array nums and an integer k.
 You are initially standing at index 0. In one move, you can jump at most k steps forward without going outside the boundaries of the array. That is, you can jump from index i to any index in the range [i + 1, min(n - 1, i + k)] inclusive.
 You want to reach the last index of the array (index n - 1). Your score is the sum of all nums[j] for each index j you visited in the array.
@@ -8847,7 +9087,7 @@ public int maxResult(int[] nums, int k) { // BigO: O (NlogN)
 }
 #+END_SRC
 
-** 1932. Merge BSTs to Create Single BST
+*** 1932. Merge BSTs to Create Single BST
 You are given n BST (binary search tree) root nodes for n separate BSTs stored in an array trees (0-indexed). Each BST in trees has at most 3 nodes, and no two roots have the same value. In one operation, you can:
 
 Select two distinct indices i and j such that the value stored at one of the leaves of trees[i] is equal to the root value of trees[j].
@@ -8892,7 +9132,7 @@ private boolean isValid(TreeNode node, int min, int max) { // 这些个递归写
 }
 #+END_SRC
 
-** 968. Binary Tree Cameras
+*** 968. Binary Tree Cameras
 You are given the root of a binary tree. We install cameras on the tree nodes where each camera at a node can monitor its parent, itself, and its immediate children.
 Return the minimum number of cameras needed to monitor all nodes of the tree.
 #+BEGIN_SRC java
@@ -8922,7 +9162,7 @@ public int minCameraCover(TreeNode root) {
     return (dfs(root) == 0 ? 1 : 0) + res;
 }
 #+END_SRC
-** Create Sorted Array through Instructions
+*** Create Sorted Array through Instructions
 Given an integer array instructions, you are asked to create a sorted array from the elements in instructions. You start with an empty container nums. For each element from left to right in instructions, insert it into nums. The cost of each insertion is the minimum of the following:
 The number of elements currently in nums that are strictly less than instructions[i].
 The number of elements currently in nums that are strictly greater than instructions[i].
@@ -8964,8 +9204,8 @@ public int createSortedArray(int[] instructions) {
 
 
 * HashMap
-** 数有多少个数组数不清楚
-** 1392. Longest Happy Prefix - Hard
+*** 数有多少个数组数不清楚
+*** 1392. Longest Happy Prefix - Hard
 A string is called a happy prefix if is a non-empty prefix which is also a suffix (excluding itself).
 
 Given a string s, return the longest happy prefix of s. Return an empty string "" if no such prefix exists.
@@ -8993,7 +9233,7 @@ public String longestPrefix(String s) {
     return maxLen == 0 ? "" : s.substring(0, maxLen);
 }
 #+END_SRC
-** 336. Palindrome Pairs - Hard
+*** 336. Palindrome Pairs - Hard
 Given a list of unique words, return all the pairs of the distinct indices (i, j) in the given list, so that the concatenation of the two words words[i] + words[j] is a palindrome.
 **** 解题思路与分析
 - 利用字典wmap保存单词 -> 下标的键值对
@@ -9096,7 +9336,7 @@ string longestPrefix(string s) {
     return s.substr(0, lps.back());
 }
 #+END_SRC
-** 1172. Dinner Plate Stacks - Hard
+*** 1172. Dinner Plate Stacks - Hard
 You have an infinite number of stacks arranged in a row and numbered (left to right) from 0, each of the stacks has the same maximum capacity.
 
 Implement the DinnerPlates class:
@@ -9198,7 +9438,7 @@ int popAtStack(int index) Returns the value at the top of the stack with the giv
 
 
 * backTracking 回溯
-** 1681. Minimum Incompatibility 再写一遍
+*** 1681. Minimum Incompatibility 再写一遍
 You are given an integer array nums​​​ and an integer k. You are asked to distribute this array into k subsets of equal size such that there are no two equal elements in the same subset.
 
 A subset's incompatibility is the difference between the maximum and minimum elements in that array.
@@ -9293,7 +9533,7 @@ private void dfs(int idx, int x, int sum, int size, int [] a) {
 }           
 #+END_SRC
 
-** 1986. Minimum Number of Work Sessions to Finish the Tasks
+*** 1986. Minimum Number of Work Sessions to Finish the Tasks
 There are n tasks assigned to you. The task times are represented as an integer array tasks of length n, where the ith task takes tasks[i] hours to finish. A work session is when you work for at most sessionTime consecutive hours and then take a break.
 You should finish the given tasks in a way that satisfies the following conditions:
 If you start a task in a work session, you must complete it in the same work session.
@@ -9363,7 +9603,7 @@ public int minSessions(int[] tasks, int sessionTime) {
 }
 #+END_SRC
 
-** 1723 Find Minimum Time to Finish All Jobs
+*** 1723 Find Minimum Time to Finish All Jobs
 You are given an integer array jobs, where jobs[i] is the amount of time it takes to complete the ith job.
 
 There are k workers that you can assign jobs to. Each job should be assigned to exactly one worker. The working time of a worker is the sum of the time it takes to complete all jobs assigned to them. Your goal is to devise an optimal assignment such that the maximum working time of any worker is minimized.
@@ -9400,7 +9640,7 @@ public int minimumTimeRequired(int[] jobs, int k) {
     return min;
 }
 #+END_SRC
-** 1986. Minimum Number of Work Sessions to Finish the Tasks - Medium
+*** 1986. Minimum Number of Work Sessions to Finish the Tasks - Medium
 There are n tasks assigned to you. The task times are represented as an integer array tasks of length n, where the ith task takes tasks[i] hours to finish. A work session is when you work for at most sessionTime consecutive hours and then take a break.
 
 You should finish the given tasks in a way that satisfies the following conditions:
@@ -9447,7 +9687,7 @@ public int minSessions(int[] tasks, int sessionTime) {
 }
 #+END_SRC
 
-** 996. Number of Squareful Arrays - Hard 对重复数字的处理
+*** 996. Number of Squareful Arrays - Hard 对重复数字的处理
 An array is squareful if the sum of every pair of adjacent elements is a perfect square.
 
 Given an integer array nums, return the number of permutations of nums that are squareful.
@@ -9493,7 +9733,7 @@ private boolean isValid(List<Integer> l) {
     return true;
 }
 #+END_SRC
-** 491. Increasing Subsequences
+*** 491. Increasing Subsequences
 Given an integer array nums, return all the different possible increasing subsequences of the given array with at least two elements. You may return the answer in any order.
 
 The given array may contain duplicates, and two equal integers should also be considered a special case of increasing sequence.
@@ -9526,7 +9766,7 @@ public List<List<Integer>> findSubsequences(int[] arr) {
 
 [[./pic/sort2.png]]
 
-** 1996. The Number of Weak Characters in the Game 桶排序
+*** 1996. The Number of Weak Characters in the Game 桶排序
 You are playing a game that contains multiple characters, and each of the characters has two main properties: attack and defense. You are given a 2D integer array properties where properties[i] = [attacki, defensei] represents the properties of the ith character in the game.
 A character is said to be weak if any other character has both attack and defense levels strictly greater than this character's attack and defense levels. More formally, a character i is said to be weak if there exists another character j where attackj > attacki and defensej > defensei.
 Return the number of weak characters.
@@ -9567,7 +9807,7 @@ public int numberOfWeakCharacters(int[][] properties) {
 }
 #+END_SRC
 
-** 632. Smallest Range Covering Elements from K Lists
+*** 632. Smallest Range Covering Elements from K Lists
 You have k lists of sorted integers in non-decreasing order. Find the smallest range that includes at least one number from each of the k lists.
 We define the range [a, b] is smaller than range [c, d] if b - a < d - c or a < c if b - a == d - c.
 #+BEGIN_SRC java
@@ -9667,7 +9907,7 @@ public int[] smallestRange(List<List<Integer>> nums) {
 }  
 #+END_SRC
 
-** Reverse Pairs
+*** Reverse Pairs
 Given an integer array nums, return the number of reverse pairs in the array.
 A reverse pair is a pair (i, j) where 0 <= i < j < nums.length and nums[i] > 2 * nums[j].
 #+BEGIN_SRC java
@@ -9689,7 +9929,7 @@ public int reversePairs(int[] nums) {
 // bit 的解法： https://www.cnblogs.com/grandyang/p/6657956.html
 #+END_SRC
 
-** 306. Additive Number
+*** 306. Additive Number
 Additive number is a string whose digits can form additive sequence.
 
 A valid additive sequence should contain at least three numbers. Except for the first two numbers, each subsequent number in the sequence must be the sum of the preceding two.
@@ -9719,7 +9959,7 @@ private boolean isValid(String num, String first, String second, int index) {
 
 
 * Union Find 并查集
-** 1697. Checking Existence of Edge Length Limited Paths - Hard
+*** 1697. Checking Existence of Edge Length Limited Paths - Hard
 An undirected graph of n nodes is defined by edgeList, where edgeList[i] = [ui, vi, disi] denotes an edge between nodes ui and vi with distance disi. Note that there may be multiple edges between two nodes.
 
 Given an array queries, where queries[j] = [pj, qj, limitj], your task is to determine for each queries[j] whether there is a path between pj and qj such that each edge on the path has a distance strictly less than limitj .
@@ -9807,7 +10047,7 @@ public boolean[] distanceLimitedPathsExist(int n, int[][] edgeList, int[][] quer
 // Runtime is bound by sorting: O(ElogE + NlogN + N + E);
 #+END_SRC
 
-** 2003. Smallest Missing Genetic Value in Each Subtree - Hard
+*** 2003. Smallest Missing Genetic Value in Each Subtree - Hard
 There is a family tree rooted at 0 consisting of n nodes numbered 0 to n - 1. You are given a 0-indexed integer array parents, where parents[i] is the parent for node i. Since node 0 is the root, parents[0] == -1.
 
 There are 105 genetic values, each represented by an integer in the inclusive range [1, 105]. You are given a 0-indexed integer array nums, where nums[i] is a distinct genetic value for node i.
@@ -9857,7 +10097,7 @@ public int[] smallestMissingValueSubtree(int[] parents, int[] nums) {
 }
 #+END_SRC
 
-** 803. Bricks Falling When Hit - Hard 反向： 变de-Union vs为 Re-Union
+*** 803. Bricks Falling When Hit - Hard 反向： 变de-Union vs为 Re-Union
 You are given an m x n binary grid, where each 1 represents a brick and 0 represents an empty space. A brick is stable if:
 
 It is directly connected to the top of the grid, or
@@ -9936,7 +10176,7 @@ public int[] hitBricks(int[][] grid, int[][] hits) {
 }
 #+END_SRC
 
-** 721. Accounts Merge
+*** 721. Accounts Merge
 Given a list of accounts where each element accounts[i] is a list of strings, where the first element accounts[i][0] is a name, and the rest of the elements are emails representing emails of the account.
 
 Now, we would like to merge these accounts. Two accounts definitely belong to the same person if there is some common email to both accounts. Note that even if two accounts have the same name, they may belong to different people as people could have the same name. A person can have any number of accounts initially, but all of their accounts definitely have the same name.
@@ -9988,7 +10228,7 @@ public List<List<String>> accountsMerge(List<List<String>> accounts) {
 }                
 #+END_SRC
 
-** 1202. Smallest String With Swaps
+*** 1202. Smallest String With Swaps
 You are given a string s, and an array of pairs of indices in the string pairs where pairs[i] = [a, b] indicates 2 indices(0-indexed) of the string.
 
 You can swap the characters at any pair of indices in the given pairs any number of times.
@@ -10037,7 +10277,7 @@ public String smallestStringWithSwaps(String s, List<List<Integer>> pairs) {
 // Space Complexity: O(N).
 #+END_SRC
 
-** 1998. GCD Sort of an Array - Hard
+*** 1998. GCD Sort of an Array - Hard
 You are given an integer array nums, and you can perform the following operation any number of times on nums:
 
 Swap the positions of two elements nums[i] and nums[j] if gcd(nums[i], nums[j]) > 1 where gcd(nums[i], nums[j]) is the greatest common divisor of nums[i] and nums[j].
@@ -10093,7 +10333,7 @@ public boolean gcdSort(int[] arr) {
 }
 #+END_SRC
 
-** 1724 给定一个n nn个顶点的无向带权图，要求在线回答若干询问，每次询问是个三元组( p , q , x ) (p,q,x)(p,q,x)，是问是否存在p pp到q qq的每条边都小于x xx的路径。
+*** 1724 给定一个n nn个顶点的无向带权图，要求在线回答若干询问，每次询问是个三元组( p , q , x ) (p,q,x)(p,q,x)，是问是否存在p pp到q qq的每条边都小于x xx的路径。
 
 先以Kruskal算法求最小生成森林，显然对于任何p pp和q qq，它们之间所有路径中最大边最小的那条路径的最大边一定是最小生成树的某条边（如果存在路径的话）。建树完成之后，对每个连通块，以任意顶点为根，将该连通块做成一棵有根树。对于每次询问，我们只需求p pp和q qq所有到它们的最近公共祖先所经过的边的最大边权就行了。可以考虑用倍增思想（以下的内容可以参考https://blog.csdn.net/qq_46105170/article/details/116217633），开两个数组f ff和g gg，其中f [ i ] [ k ] f[i][k]f[i][k]指的是从i ii节点向上跳2 k 2^k2 
 k
@@ -10245,7 +10485,7 @@ public class DistanceLimitedPathsExist {
 // 初始化时间复杂度O ( m log ⁡ m + n log ⁡ n ) O(m\log m+n\log n)O(mlogm+nlogn)，每次询问时间O ( log ⁡ n ) O(\log n)O(logn)，空间O ( m + n + n log ⁡ n ) O(m+n+n\log n)O(m+n+nlogn)。
 #+END_SRC
 
-** 1172. 祖孙询问
+*** 1172. 祖孙询问
 给定一棵包含n nn个节点的有根无向树，节点编号互不相同，但不一定是1 ∼ n 1∼n1∼n。有m mm个询问，每个询问给出了一对节点的编号x xx和y yy，询问x xx与y yy的祖孙关系。
 
 输入格式：
@@ -10340,7 +10580,7 @@ int main() {
 }
 #+END_SRC
 
-** 某个网友列的相关题目： 并查集参考：数据结构–并查集（Disjoint-Set）
+*** 某个网友列的相关题目： 并查集参考：数据结构–并查集（Disjoint-Set）
 - 261. 以图判树（全部连通+边数=V-1）
 - 305. 岛屿数量 II（并查集）
 - 323. 无向图中连通分量的数目（并查集）
@@ -10360,7 +10600,86 @@ int main() {
 - 程序员面试金典 - 面试题 17.07. 婴儿名字（并查集）
 
 * Graph
-** 2045. Second Minimum Time to Reach Destination - Hard
+** 拓扑排序
+*** 1857. Largest Color Value in a Directed Graph - Hard
+There is a directed graph of n colored nodes and m edges. The nodes are numbered from 0 to n - 1.
+
+You are given a string colors where colors[i] is a lowercase English letter representing the color of the ith node in this graph (0-indexed). You are also given a 2D array edges where edges[j] = [aj, bj] indicates that there is a directed edge from node aj to node bj.
+
+A valid path in the graph is a sequence of nodes x1 -> x2 -> x3 -> ... -> xk such that there is a directed edge from xi to xi+1 for every 1 <= i < k. The color value of the path is the number of nodes that are colored the most frequently occurring color along that path.
+
+Return the largest color value of any valid path in the given graph, or -1 if the graph contains a cycle.
+**** 解题思路与分析
+     #+BEGIN_SRC java
+public int largestPathValue(String colors, int[][] edges) {
+    List<List<Integer>> adj = new ArrayList<>();
+    int n = colors.length(), cnt = 0; 
+    int [] ins = new int [n], topo = new int [n]; 
+    for (int i = 0; i < n; i++) adj.add(new ArrayList<>());
+    for (int [] e : edges) {
+        ins[e[1]]++;
+        adj.get(e[0]).add(e[1]);
+    }
+    Queue<Integer> q = new LinkedList<>();
+    for (int i = 0; i < n; i++)
+        if (ins[i] == 0)
+            q.offer(i);
+    while (!q.isEmpty()) {
+        int u = q.poll();
+        topo[cnt++] = u; // 将所有的节点按照拓扑排序
+        for (Integer v : adj.get(u)) 
+            if (--ins[v] == 0)
+                q.offer(v);
+    }
+    if (cnt < n) return -1; // 说明图中有环
+    int ans = 0;
+    char [] s = colors.toCharArray();
+    for (int i = 0; i < 26; i++) {
+        char c = (char)(i + 'a');
+        int [] dp = new int [n];
+        for (int j = n-1; j >= 0; j--) {
+            int u = topo[j];
+            for (Integer v : adj.get(u)) 
+                dp[u] = Math.max(dp[u], dp[v]);
+            if (s[u] == c) dp[u]++;
+            ans = Math.max(ans, dp[u]);
+        }
+    }
+    return ans;
+}
+#+END_SRC
+- 另一种更为简洁的写法
+#+BEGIN_SRC java
+public int largestPathValue(String colors, int[][] edges) {
+    int n = colors.length(), ans = 0, processed = 0;
+    int[] ins = new int[n];
+    ArrayList<Integer> [] adj = new ArrayList[n];
+    Queue<Integer> q = new LinkedList<>();
+    int[][] cnt = new int[n][26];
+    for (int i = 0; i < n; ++i) adj[i] = new ArrayList<>();
+    for (int [] e : edges) {
+        adj[e[0]].add(e[1]);
+        ++ins[e[1]];
+    }
+    for (int i = 0; i < n; ++i)
+        if (ins[i] == 0)
+            q.offer(i);
+    char [] s = colors.toCharArray();
+    while (!q.isEmpty()) {
+        int u = q.poll();
+        ++processed;
+        ans = Math.max(ans, ++cnt[u][s[u] - 'a']);
+        for (int v : adj[u]) {
+            for (int i = 0; i < 26; ++i)
+                cnt[v][i] = Math.max(cnt[v][i], cnt[u][i]); // 这里是不是可以再简化一下？
+            if (--ins[v] == 0)
+                q.offer(v);
+        }
+    }
+    return processed == n ? ans : -1;
+}
+     #+END_SRC
+*** 2045. Second Minimum Time to Reach Destination - Hard
 A city is represented as a bi-directional connected graph with n vertices where each vertex is labeled from 1 to n (inclusive). The edges in the graph are represented as a 2D integer array edges, where each edges[i] = [ui, vi] denotes a bi-directional edge between vertex ui and vertex vi. Every vertex pair is connected by at most one edge, and no vertex has an edge to itself. The time taken to traverse any edge is time minutes.
 
 Each vertex has a traffic signal which changes its color from green to red and vice versa every change minutes. All signals change at the same time. You can enter a vertex at any time, but can leave a vertex only when the signal is green. You cannot wait at a vertex if the signal is green.
@@ -10455,7 +10774,7 @@ public int secondMinimum(int n, int [][] edges, int time, int change) {
 把可以重复遍历当作是多余的，不想去重复遍历；又被n迷惑住，全然忘记其它node也会被重复遍历到；明明知道pq里还有一堆杂物，比赛时却浑然想不到我是可以去裁枝优化的？！！！
 昨天晚上的比赛应该是最近几周参加比赛以来做得相对较好的一次，可相比于早上最后一道题完全没有时间做、几乎没有下笔思路，这个最后一题留有整整一个小时，考点也都练习到过，却探肩而过、失之交臂、被自己活活折腾死。。。感触很多。。。。。。或许这也是一个磨砺心志、相定信念的过程吧？！！！练习练习练习、总结总结总结，让它们深入骨髓，一看便知似曾相识？
 
-** 1334. Floyd算法 - Find the City With the Smallest Number of Neighbors at a Threshold Distance - Medium
+*** 1334. Floyd算法 - Find the City With the Smallest Number of Neighbors at a Threshold Distance - Medium
 There are n cities numbered from 0 to n-1. Given the array edges where edges[i] = [fromi, toi, weighti] represents a bidirectional and weighted edge between cities fromi and toi, and given the integer distanceThreshold.
 
 Return the city with the smallest number of cities that are reachable through some path and whose distance is at most distanceThreshold, If there are multiple such cities, return the city with the greatest number.
@@ -10542,7 +10861,7 @@ public int findTheCity(int n, int[][] edges, int distanceThreshold) {
 }
 #+END_SRC
 
-** 1129. Shortest Path with Alternating Colors - Medium
+*** 1129. Shortest Path with Alternating Colors - Medium
 Consider a directed graph, with nodes labelled 0, 1, ..., n-1.  In this graph, each edge is either red or blue, and there could be self-edges or parallel edges.
 
 Each [i, j] in red_edges denotes a red directed edge from node i to node j.  Similarly, each [i, j] in blue_edges denotes a blue directed edge from node i to node j.
@@ -10628,7 +10947,7 @@ public void dfs(int [][] red, int [][] blue, int color, int node, int[][] red_ed
 }
 #+END_SRC
 
-** 882. Reachable Nodes In Subdivided Graph - Hard
+*** 882. Reachable Nodes In Subdivided Graph - Hard
 You are given an undirected graph (the "original graph") with n nodes labeled from 0 to n - 1. You decide to subdivide each edge in the graph into a chain of nodes, with the number of new nodes varying between each edge.
 
 The graph is given as a 2D array of edges where edges[i] = [ui, vi, cnti] indicates that there is an edge between nodes ui and vi in the original graph, and cnti is the total number of new nodes that you will subdivide the edge into. Note that cnti == 0 means you will not subdivide the edge.
@@ -10701,7 +11020,7 @@ public int reachableNodes(int[][] edges, int maxMoves, int n) {
 }
 #+END_SRC
 
-** 1782. Count Pairs Of Nodes - Hard
+*** 1782. Count Pairs Of Nodes - Hard
 You are given an undirected graph defined by an integer n, the number of nodes, and a 2D integer array edges, the edges in the graph, where edges[i] = [ui, vi] indicates that there is an undirected edge between ui and vi. You are also given an integer array queries.
 
 Let incident(a, b) be defined as the number of edges that are connected to either node a or b.
@@ -10746,7 +11065,7 @@ public int[] countPairs(int n, int[][] edges, int[] queries) { // 别人家的�
 # // https://leetcode.com/problems/count-pairs-of-nodes/discuss/1096432/Java-or-Two-Steps-or-O(NlgN-%2B-Q(N%2BE))
 # // 这个也可以再参考一下
 
-** 332. Reconstruct Itinerary - Medium
+*** 332. Reconstruct Itinerary - Medium
 You are given a list of airline tickets where tickets[i] = [fromi, toi] represent the departure and the arrival airports of one flight. Reconstruct the itinerary in order and return it.
 
 All of the tickets belong to a man who departs from "JFK", thus, the itinerary must begin with "JFK". If there are multiple valid itineraries, you should return the itinerary that has the smallest lexical order when read as a single string.
@@ -10771,7 +11090,7 @@ public List<String> findItinerary(List<List<String>> tickets) {
 }
 #+END_SRC
 
-** 1591. Strange Printer II - Hard
+*** 1591. Strange Printer II - Hard
 There is a strange printer with the following two special requirements:
 
 On each turn, the printer will print a solid rectangular pattern of a single color on the grid. This will cover up the existing colors in the rectangle.
@@ -10898,7 +11217,7 @@ public boolean isPrintable(int[][] targetGrid) {
 #+END_SRC
 
 * 扫描线
-** 435. Non-overlapping Intervals - Medium 动态规划 贪心
+*** 435. Non-overlapping Intervals - Medium 动态规划 贪心
 Given an array of intervals intervals where intervals[i] = [starti, endi], return the minimum number of intervals you need to remove to make the rest of the intervals non-overlapping.
 **** 解题思路与分析: 动态规划 O（N^2） tle
      
@@ -10939,7 +11258,7 @@ public int eraseOverlapIntervals(int[][] intervals) {
     return n - ans;
 }
      #+END_SRC
-** 2054. Two Best Non-Overlapping Events - Medium
+*** 2054. Two Best Non-Overlapping Events - Medium
 You are given a 0-indexed 2D integer array of events where events[i] = [startTimei, endTimei, valuei]. The ith event starts at startTimei and ends at endTimei, and if you attend this event, you will receive a value of valuei. You can choose at most two non-overlapping events to attend such that the sum of their values is maximized.
 
 Return this maximum sum.
@@ -10999,7 +11318,7 @@ public int maxTwoEvents(int[][] events) {
 #+END_SRC
 - 二分查找: 改天补上
 
-** 2055. Plates Between Candles - Medium
+*** 2055. Plates Between Candles - Medium
 There is a long table with a line of plates and candles arranged on top of it. You are given a 0-indexed string s consisting of characters '*' and '|' only, where a '*' represents a plate and a '|' represents a candle.
 
 You are also given a 0-indexed 2D integer array queries where queries[i] = [lefti, righti] denotes the substring s[lefti...righti] (inclusive). For each query, you need to find the number of plates between candles that are in the substring. A plate is considered between candles if there is at least one candle to its left and at least one candle to its right in the substring.
@@ -11032,7 +11351,7 @@ public int[] platesBetweenCandles(String t, int[][] queries) {
 }
 #+END_SRC  
 
-** 218. The Skyline Problem - Hard
+*** 218. The Skyline Problem - Hard
 A city's skyline is the outer contour of the silhouette formed by all the buildings in that city when viewed from a distance. Given the locations and heights of all the buildings, return the skyline formed by these buildings collectively.
 
 The geometric information of each building is given in the array buildings where buildings[i] = [lefti, righti, heighti]:
@@ -11084,7 +11403,7 @@ public List<List<Integer>> getSkyline(int[][] buildings) { // 从左向右扫一
 }
 #+END_SRC
 
-** 715. Range Module - Hard
+*** 715. Range Module - Hard
 A Range Module is a module that tracks ranges of numbers. Design a data structure to track the ranges represented as half-open intervals and query about them.
 
 A half-open interval [left, right) denotes all the real numbers x where left <= x < right.
@@ -11137,7 +11456,7 @@ void removeRange(int left, int right) Stops tracking every real number currently
     }
 #+END_SRC
 
-** 352. Data Stream as Disjoint Intervals - Hard
+*** 352. Data Stream as Disjoint Intervals - Hard
 Given a data stream input of non-negative integers a1, a2, ..., an, summarize the numbers seen so far as a list of disjoint intervals.
 
 Implement the SummaryRanges class:
@@ -11187,7 +11506,7 @@ int[][] getIntervals() Returns a summary of the integers in the stream currently
     }
 #+END_SRC
 
-** 1419. Minimum Number of Frogs Croaking - Medium
+*** 1419. Minimum Number of Frogs Croaking - Medium
 Given the string croakOfFrogs, which represents a combination of the string "croak" from different frogs, that is, multiple frogs can croak at the same time, so multiple “croak” are mixed. Return the minimum number of different frogs to finish all the croak in the given string.
 
 A valid "croak" means a frog is printing 5 letters ‘c’, ’r’, ’o’, ’a’, ’k’ sequentially. The frogs have to print all five letters to finish a croak. If the given string is not a combination of valid "croak" return -1.
@@ -12841,7 +13160,7 @@ public int getSum(int a, int b) { // (-1, 1) 过不了
 }
 #+END_SRC
 
-** 201. Bitwise AND of Numbers Range
+*** 201. Bitwise AND of Numbers Range
 Given two integers left and right that represent the range [left, right], return the bitwise AND of all numbers in this range, inclusive.
 #+BEGIN_SRC java
 public int rangeBitwiseAnd(int left, int right) {
@@ -12858,7 +13177,7 @@ public int rangeBitwiseAnd(int left, int right) {
 }
 #+END_SRC
 
-** 1835. Find XOR Sum of All Pairs Bitwise AND - Hard
+*** 1835. Find XOR Sum of All Pairs Bitwise AND - Hard
 The XOR sum of a list is the bitwise XOR of all its elements. If the list only contains one element, then its XOR sum will be equal to this element.
 
 For example, the XOR sum of [1,2,3,4] is equal to 1 XOR 2 XOR 3 XOR 4 = 4, and the XOR sum of [3] is equal to 3.
@@ -12886,7 +13205,7 @@ public int getXORSum(int[] a, int[] b) {
 }
 #+END_SRC
 
-** 982. Triples with Bitwise AND Equal To Zero 平生不识 TwoSum，刷尽 LeetCode 也枉然
+*** 982. Triples with Bitwise AND Equal To Zero 平生不识 TwoSum，刷尽 LeetCode 也枉然
 Given an integer array nums, return the number of AND triples.
 
 An AND triple is a triple of indices (i, j, k) such that:
@@ -12928,7 +13247,7 @@ public int countTriplets(int[] arr) { // 这种方法执行起来效率更高一
 }
 #+END_SRC
 
-** 187. Repeated DNA Sequences - Medium
+*** 187. Repeated DNA Sequences - Medium
 The DNA sequence is composed of a series of nucleotides abbreviated as 'A', 'C', 'G', and 'T'.
 
 For example, "ACGAATTCCG" is a DNA sequence.
@@ -12974,7 +13293,7 @@ public List<String> findRepeatedDnaSequences(String s) {
     return res;
 }
 #+END_SRC 
-** 1915. Number of Wonderful Substrings - Medium
+*** 1915. Number of Wonderful Substrings - Medium
 A wonderful string is a string where at most one letter appears an odd number of times.
 
 For example, "ccjjc" and "abab" are wonderful, but "ab" is not.
@@ -13000,7 +13319,7 @@ public long wonderfulSubstrings(String word) {
 }
 #+END_SRC
 
-** 782. Transform to Chessboard- Hard
+*** 782. Transform to Chessboard- Hard
 You are given an n x n binary grid board. In each move, you can swap any two rows with each other, or any two columns with each other.
 
 Return the minimum number of moves to transform the board into a chessboard board. If the task is impossible, return -1.
@@ -13103,7 +13422,7 @@ public int analyzeCount(Map<Integer, Integer> count, int N) {
 }
 #+END_SRC
 
-** 1803. Count Pairs With XOR in a Range - Hard
+*** 1803. Count Pairs With XOR in a Range - Hard
 Given a (0-indexed) integer array nums and two integers low and high, return the number of nice pairs.
 
 A nice pair is a pair (i, j) where 0 <= i < j < nums.length and low <= (nums[i] XOR nums[j]) <= high.
@@ -13182,7 +13501,7 @@ public int countPairs(int[] arr, int low, int high) {
 }
 #+END_SRC
 
-** 1734. Decode XORed Permutation - Medium
+*** 1734. Decode XORed Permutation - Medium
 There is an integer array perm that is a permutation of the first n positive integers, where n is always odd.
 
 It was encoded into another integer array encoded of length n - 1, such that encoded[i] = perm[i] XOR perm[i + 1]. For example, if perm = [1,3,2], then encoded = [2,1].
@@ -13210,7 +13529,7 @@ public int[] decode(int[] encoded) {
 }
 #+END_SRC
 
-** 957. Prison Cells After N Days - Medium
+*** 957. Prison Cells After N Days - Medium
 There are 8 prison cells in a row and each cell is either occupied or vacant.
 
 Each day, whether the cell is occupied or vacant changes according to the following rules:
@@ -13366,7 +13685,7 @@ protected int nextDay(int stateBitmap) {
 #+END_SRC
 
 * Bit Masks
-** 总结一下
+*** 总结一下
 对于一个含有 N 个元素的集合，其总共包含  个子集，因此有  个掩码的可能，每一个掩码表示一个子集。事实上，每一个掩码就是一个用二进制表示的整数，比如 1001 就是 9 。
 
 Bitmasking 是为每个掩码分配一个值（即为每个子集分配一个值），然后使用已经计算出的掩码值来计算新掩码的值。通常，我们的主要目标是为整个集合（即掩码11111111）计算值。
@@ -13385,7 +13704,7 @@ Bitmasking 是为每个掩码分配一个值（即为每个子集分配一个值
   - ③将第 i 位设置为0：S & ~(1 << i) ,意思是将 S 与第 i 位为 0，其余位为 1 的数进行与运算；
   - ④取第 i 位的值：S & (1 << i)
 
-** 1655. Distribute Repeating Integers - Hard
+*** 1655. Distribute Repeating Integers - Hard
 You are given an array of n integers, nums, where there are at most 50 unique values in the array. You are also given an array of m customer order quantities, quantity, where quantity[i] is the amount of integers the ith customer ordered. Determine if it is possible to distribute nums such that:
 
 The ith customer gets exactly quantity[i] integers,
@@ -13497,7 +13816,7 @@ public boolean canDistribute(int [] a, int[] quantity) {
 }
      #+END_SRC
 
-** 1659. Maximize Grid Happiness - Hard
+*** 1659. Maximize Grid Happiness - Hard
 You are given four integers, m, n, introvertsCount, and extrovertsCount. You have an m x n grid, and there are two types of people: introverts and extroverts. There are introvertsCount introverts and extrovertsCount extroverts.
 
 You should decide how many people you want to live in the grid and assign each of them one grid cell. Note that you do not have to have all the people living in the grid.
@@ -13513,61 +13832,129 @@ The grid happiness is the sum of each person's happiness. Return the maximum pos
 [[./pic/happiness.png]] 
 #+BEGIN_SRC java
 public int getMaxGridHappiness(int m, int n, int introvertsCount, int extrovertsCount) {
-    return helper(m, n, 0, 0, introvertsCount, extrovertsCount, 0, new Integer[m][n][introvertsCount+1][extrovertsCount+1][243]);
-}        
-private int get(int preN, int i) {       // Ternary get ith bit value (0, 1 or 2)
-    preN /= ((int) Math.pow(3, i));
-    return preN % 3;
+    this.m = m; this.n = n;
+    dp = new Integer [m][n][introvertsCount+1][extrovertsCount+1][243]; // 3^5=243
+    return dfs(0, 0, introvertsCount, extrovertsCount, 0);
 }
-private int set(int curRow, int value) { // Ternary set new-coming bit to value
-    return (curRow * 3 + value) % 243;
-}                                        // Ternary bit meaning -> empty: 0, intro: 1, extro: 2
-private int helper(int m, int n, int x, int y, int inCnt, int exCnt, int preN, Integer [][][][][] dp) {
-    if (y == n) { // advance pointer
-        y = 0;
-        x++;
-    }
+Integer [][][][][] dp;
+int m, n, mod = 243;
+private int dfs(int i, int j, int inCnt, int exCnt, int preMask) {
     if (inCnt == 0 && exCnt == 0) return 0;
-    if (x == m) return 0;
-    if (dp[x][y][inCnt][exCnt][preN] != null) return dp[x][y][inCnt][exCnt][preN];
-    int res = helper(m, n, x, y+1, inCnt, exCnt, set(preN, 0), dp); // leave the cell empty
-    int up = get(preN, n-1); // get up bit -> which is at (n - 1)th
-    int left = get(preN, 0); // get left bit -> which is at (0)th
-    if (inCnt > 0) {
-        int cur = preN;
-        cur = set(cur, 1); // set new-coming bit to 1
-        int addOn = 120;
-        if (x-1 >= 0 && up != 0) { // up: 1 or 2
-            addOn -= 30;
-            if (up == 1) addOn -= 30;
-            else addOn += 20;
+    if (j == n) return dfs(i+1, 0, inCnt, exCnt, preMask); // 有到达边界，直接看下一行
+    if (i == m) return 0;
+    if (dp[i][j][inCnt][exCnt][preMask] != null) return dp[i][j][inCnt][exCnt][preMask];
+    int up = getBit(preMask, n-1), left = getBit(preMask, 0);
+    int ans = dfs(i,  j+1, inCnt, exCnt, setBit(preMask, 0)); // 不安排任何人在这个格
+    if (inCnt > 0) { // 考虑安放一个内向的人在这个格子，算最优可能性
+        int addon = 120, cur = setBit(preMask, 1);
+        if (i >= 1 && up != 0) { // up: 1 / 2
+            addon -= 30; // 当前格内向的人，上面有人他不开心
+            if (up == 1) addon -= 30; // 当前格上一格，如果是内向的人，他不开心
+            else addon += 20;         // 当前格上一格，如果是外向的人，他很开心
         }
-        if (y-1 >= 0 && left != 0) {
-            addOn -= 30;
-            if (left == 1) addOn -= 30;
-            else addOn += 20;
+        if (j >= 1 && left != 0) {
+            addon -= 30;
+            if (left == 1) addon -= 30;
+            else addon += 20;
         }
-        res = Math.max(res, helper(m, n, x, y+1, inCnt-1, exCnt, cur, dp) + addOn);
+        ans = Math.max(ans, addon + dfs(i, j+1, inCnt-1, exCnt, cur));
     }
-    if (exCnt > 0) {
-        int cur = preN;
-        cur = set(cur, 2); // set new-coming bit to 1
-        int addOn = 40 ;
-        if (x-1 >= 0 && up != 0) { // up: 1 or 2
-            addOn += 20;
-            if (up == 1) addOn -= 30;
-            else addOn += 20;
+    if (exCnt > 0) { // 考虑安放一个外向的人在这个格子，算最优可能性
+        int addon = 40, cur = setBit(preMask, 2);
+        if (i >= 1 && up != 0) {
+            addon += 20;
+            if (up == 1) addon -= 30;
+            else addon += 20;
         }
-        if (y-1 >= 0 && left != 0) {
-            addOn += 20;
-            if (left == 1) addOn -= 30;
-            else addOn += 20;
+        if (j >= 1 && left != 0) {
+            addon += 20;
+            if (left == 1) addon -= 30;
+            else addon += 20;
         }
-        res = Math.max(res, helper(m, n, x, y+1, inCnt  , exCnt-1, cur, dp) + addOn);
+        ans = Math.max(ans, addon + dfs(i, j+1, inCnt, exCnt-1, cur));
     }
-    return dp[x][y][inCnt][exCnt][preN] = res;
+    return dp[i][j][inCnt][exCnt][preMask] = ans;
+}
+private int getBit(int v, int i) {
+    v /= (int)Math.pow(3, i);
+    return v % 3;
+}
+private int setBit(int v, int i) {
+    return (v * 3 + i) % mod;
 }
 #+END_SRC
+- 简洁版的代码
+#+BEGIN_SRC java
+private int statemax = 1, mod = 0, R = 0, C = 0;
+private int [][][][][] dp;
+public int getMaxGridHappiness(int m, int n, int introvertsCount, int extrovertsCount) {
+    R = m;
+    C = n;
+    for (int i = 0; i < n; i ++) statemax *= 3;
+    mod = statemax / 3;
+    dp = new int[m][n][introvertsCount + 1][extrovertsCount + 1][statemax];
+    return dfs(0, 0, introvertsCount, extrovertsCount, 0);
+}
+private int dfs(int x, int y, int in, int ex, int last){
+    if (x == R) return 0;
+    if (y == C) return dfs(x + 1, 0, in, ex, last); 
+    if (dp[x][y][in][ex][last] != 0) return dp[x][y][in][ex][last];
+    int res = dfs(x, y + 1, in, ex, last % mod * 3); // 不安排
+    if (in != 0) { // 安排内向
+        int addon = 120, up = last / mod, left = last % 3;
+        if (x - 1 >= 0 && up != 0) {
+            addon -= 30;
+            addon += up == 1 ? -30 : 20;
+        }
+        if (y - 1 >= 0 && left != 0) {
+            addon -= 30;
+            addon += left == 1 ? -30 : 20;
+        }
+        res = Math.max(res, addon + dfs(x, y + 1, in - 1, ex, last % mod * 3 + 1));
+    }
+    if (ex != 0) { // 安排外向
+        int addon = 40, up = last / mod, left = last % 3;;
+        if (x - 1 >= 0 && up != 0) {
+            addon += 20;
+            addon += up == 1 ? -30 : 20;
+        }
+        if (y - 1 >= 0 && left != 0) {
+            addon += 20;
+            addon += left == 1 ? -30 : 20;
+        }
+        res = Math.max(res, addon + dfs(x, y + 1, in, ex - 1, last % mod * 3 + 2));
+    }
+    return dp[x][y][in][ex][last] = res;
+}
+#+END_SRC
+**** 解题思路与分析: 有一种状压，叫做滑动窗口状压（112ms）
+     #+BEGIN_SRC java
+public int getMaxGridHappiness(int m, int n, int introvertsCount, int extrovertsCount) {
+    int r = (int)Math.pow(3, n), rless = (int)Math.pow(3, n-1);
+    int [][] offset = {{0, 0, 0}, {0, -60, -10}, {0, -10, 40}};
+    int [][][][] dp = new int [m*n+1][introvertsCount+1][extrovertsCount+1][r]; // [m*n+1]：+1为的是去处理dp[i+1][j][k][cur]的i = m*n-1格的特殊情况
+    for (int i = m*n-1; i >= 0; i--) { // i: idx, coordinates
+        int x = i / n, y = i % n;
+        for (int j = 0; j <= introvertsCount; j++) 
+            for (int k = 0; k <= extrovertsCount; k++) {
+                for (int pre = 0; pre < r; pre++) { //  pre 就是前 n 个格子的状态（三进制）
+                    int cur = (pre * 3) % r;
+                    if (j > 0) { // 当前格安放一个内向的人
+                        int dif = 120 + (y != 0 ? 1 : 0) * offset[1][pre % 3] + offset[1][pre / rless];
+                        dp[i][j][k][pre] = Math.max(dp[i][j][k][pre], dif + dp[i+1][j-1][k][cur + 1]);
+                    }
+                    if (k > 0) { // 当前格安放一个外向的人
+                        int dif = 40 + (y != 0 ? 1 : 0) * offset[2][pre % 3] + offset[2][pre / rless];
+                        dp[i][j][k][pre] = Math.max(dp[i][j][k][pre], dif + dp[i+1][j][k-1][cur + 2]);
+                    }
+                    dp[i][j][k][pre] = Math.max(dp[i][j][k][pre], dp[i+1][j][k][cur]); // 当前格不安放任何人
+                }
+            }
+    }
+    return dp[0][introvertsCount][extrovertsCount][0];
+}
+     #+END_SRC
+**** 解题思路与分析: 其它
 
 [[./pic/happiness2.png]] 
 #+BEGIN_SRC java
@@ -13605,7 +13992,7 @@ private int calScore(int i, int j, int v) {
 }
 #+END_SRC
 - 还有一种其它语言写的，行与行之间以行为单位进行动态规划状态转移的，可以搜出来参考一下
-** 1755. Closest Subsequence Sum - Hard 分成两半:由O(2^N)降为O(NlogN)
+*** 1755. Closest Subsequence Sum - Hard 分成两半:由O(2^N)降为O(NlogN)
 You are given an integer array nums and an integer goal.
 
 You want to choose a subsequence of nums such that the sum of its elements is the closest possible to goal. That is, if the sum of the subsequence's elements is sum, then you want to minimize the absolute difference abs(sum - goal).
@@ -13684,7 +14071,7 @@ public int minAbsDifference(int[] arr, int goal) {
   - https://leetcode.com/problems/closest-subsequence-sum/discuss/1055432/Java-252ms-or-47.4-MB-or-Horowitz-and-Sahni's-Subset-Sum-or-comments-or-links
 - 好像还有一个类似提交python关于子集的位操作的java方法,回头再找来参考一下
 
-** 2035. Partition Array Into Two Arrays to Minimize Sum Difference - Hard 上一题：分成两半的套娃题 todo: + binarySearch等解法
+*** 2035. Partition Array Into Two Arrays to Minimize Sum Difference - Hard 上一题：分成两半的套娃题 todo: + binarySearch等解法
 You are given an integer array nums of 2 * n integers. You need to partition nums into two arrays of length n to minimize the absolute difference of the sums of the arrays. To partition nums, put each element of nums into one of the two arrays.
 
 Return the minimum possible absolute difference.
@@ -13767,7 +14154,7 @@ public int minimumDifference(int[] a) {
 }
 #+END_SRC
 
-** 956. Tallest Billboard: 折腰轨半第三次：重要的题型重复三遍
+*** 956. Tallest Billboard: 折腰轨半第三次：重要的题型重复三遍
 You are installing a billboard and want it to have the largest height. The billboard will have two steel supports, one on each side. Each steel support must be an equal height.
 You are given a collection of rods that can be welded together. For example, if you have rods of lengths 1, 2, and 3, you can weld them together to make a support of length 6.
 Return the largest possible height of your billboard installation. If you cannot support the billboard, return 0.
@@ -13991,7 +14378,7 @@ public int tallestBillboard(int[] rods) {
 }
 #+END_SRC
 
-** 1815. Maximum Number of Groups Getting Fresh Donuts - Hard
+*** 1815. Maximum Number of Groups Getting Fresh Donuts - Hard
 There is a donuts shop that bakes donuts in batches of batchSize. They have a rule where they must serve all of the donuts of a batch before serving any donuts of the next batch. You are given an integer batchSize and an integer array groups, where groups[i] denotes that there is a group of groups[i] customers that will visit the shop. Each customer will get exactly one donut.
 
 When a group visits the shop, all customers of the group must be served before serving any of the following groups. A group will be happy if they all get fresh donuts. That is, the first customer of the group does not receive a donut that was left over from the previous group.
@@ -13999,125 +14386,66 @@ When a group visits the shop, all customers of the group must be served before s
 You can freely rearrange the ordering of the groups. Return the maximum possible number of happy groups after rearranging the groups.
 
 [[./pic/donut.png]]
-
+**** 解题思路与分析: // 回塑 DFS + 记忆化搜索
 #+BEGIN_SRC java
-private int dfsBackTracking(int [] cnt, int batchSize, int lastGroup, int leftOverGroups) { // DFS+记忆化搜索求最多开心组数
-    if (leftOverGroups == 0) return 0;
-    String key = Arrays.toString(cnt); // 剩余组情况生成String作为哈希表的键, this is so called HASHING
-    if (dp.containsKey(key)) return dp.get(key);
-    int res = 0;
-    for (int i = 1; i < batchSize; i++) {
-        if (cnt[i] == 0) continue;
-        --cnt[i]; 
-        res = Math.max(res, dfsBackTracking(cnt, batchSize, lastGroup+i, leftOverGroups-1) + (lastGroup % batchSize == 0 ? 1 : 0));
-        ++cnt[i]; 
-    }
-    dp.put(key, res);
-    return res;
-}
-Map<String, Integer> dp;
-int n;
-public int maxHappyGroups(int batchSize, int[] groups) { // group size 30 is too large for backtracking WITHOUT modifications
+public int maxHappyGroups(int batchSize, int [] groups) { 
+    this.batchSize = batchSize;
     n = groups.length;
-    int [] cnt = new int [batchSize];
-    for (int v : groups) 
-        cnt[v % batchSize]++;
-    dp = new HashMap<>();
-    return dfsBackTracking(cnt, batchSize, 0, n-cnt[0]) + cnt[0];
-}
-#+END_SRC
-- 一点儿稍微的优化，以减少回溯backtracking的耗时
-#+BEGIN_SRC java
-private int dfsBackTracking(int [] cnt, int batchSize, int lastGroup, int leftOverGroups) { // DFS+记忆化搜索求最多开心组数
-    if (leftOverGroups == 0) return 0;
-    String key = Arrays.toString(cnt); // 剩余组情况生成String作为哈希表的键, this is so called HASHING
-    if (dp.containsKey(key)) return dp.get(key);
-    int res = 0;
-    for (int i = 1; i < batchSize; i++) {
-        if (cnt[i] == 0) continue;
-        --cnt[i]; 
-        res = Math.max(res, dfsBackTracking(cnt, batchSize, lastGroup+i, leftOverGroups-1) + (lastGroup % batchSize == 0 ? 1 : 0));
-        ++cnt[i]; 
-    }
-    dp.put(key, res);
-    return res;
-}
-Map<String, Integer> dp;
-int n;
-public int maxHappyGroups(int batchSize, int[] groups) { // group size 30 is too large for backtracking WITHOUT modifications
-    n = groups.length;
-    int [] cnt = new int [batchSize];
-    for (int v : groups) 
-        cnt[v % batchSize]++;
+    cnt = new int [batchSize];  // group size 30 is too large for backtracking WITHOUT modifications
+    for (Integer v : groups)    // 预处理： 压缩输入以便回塑
+        cnt[v % batchSize] ++;
     // take out the 2 remainder's min groups if their sum is batchSize.
     // it still works but slow without this step
     // Note: < batchSize / 2 to avoid when i is batchSize / 2 it will subtract itself
-    int res = cnt[0], min = 0;
-    for (int i = 1; i < batchSize/2; i++) {
+    int ans = cnt[0], min = 0;  // 优化：通过这里的优化，将回塑的数据规模大副减小
+    for (int i = 1; i < batchSize / 2; i++) {
         min = Math.min(cnt[i], cnt[batchSize-i]);
         cnt[i] -= min;
         cnt[batchSize-i] -= min;
-        res += min;
+        ans += min;
     }
-    dp = new HashMap<>();
-    return res + dfsBackTracking(cnt, batchSize, 0, n-cnt[0]);
+    return dfs(0, n - cnt[0]) + ans;
 }
-#+END_SRC
-- 压缩方法里的参数
-#+BEGIN_SRC java
-private int dfsBackTracking(int [] cnt, int batchSize, int s) { // DFS+记忆化搜索
-    String key = Arrays.toString(cnt); 
+Map<String, Integer> dp = new HashMap<>();
+int [] cnt;
+int n, batchSize;
+private int dfs(int sum, int leftOver) {
+    if (leftOver == 0) return 0;
+    String key = Arrays.toString(cnt);
     if (dp.containsKey(key)) return dp.get(key);
-    int res = 0;
+    int ans = 0;
     for (int i = 1; i < batchSize; i++) {
         if (cnt[i] == 0) continue;
-        --cnt[i]; 
-        res = Math.max(res, dfsBackTracking(cnt, batchSize, (s+i) % batchSize) + (s == 0 ? 1 : 0));
-        ++cnt[i]; 
+        cnt[i]--;                                      // 上一批顾客恰好买完一批甜甜圈，当前组开心
+        ans = Math.max(ans, dfs(sum + i, leftOver-1) + (sum % batchSize == 0 ? 1 : 0));
+        cnt[i]++;
+        if ((sum + i) % batchSize == 0) break; // 当前顾客恰好能买完一批甜甜圈，已是最优情况之一，可剪枝 <<<======               
     }
-    dp.put(key, res);
-    return res;
-}
-Map<String, Integer> dp;
-int n;
-public int maxHappyGroups(int batchSize, int[] groups) { 
-    n = groups.length;
-    int [] cnt = new int [batchSize];
-    for (int v : groups) 
-        cnt[v % batchSize]++;
-    int res = cnt[0], min = 0;
-    for (int i = 1; i < batchSize/2; i++) {
-        min = Math.min(cnt[i], cnt[batchSize-i]);
-        cnt[i] -= min;
-        cnt[batchSize-i] -= min;
-        res += min;
-    }
-    dp = new HashMap<>();
-    return res + dfsBackTracking(cnt, batchSize, 0);
+    dp.put(key, ans);
+    return ans;
 }
 #+END_SRC
 - 另一种DP超时的做法，掌握这个方法
 #+BEGIN_SRC java
 // Time complexity: O(n*2n) TLE TLE TLE
 // Space complexity: O(2n)  TLE TLE TLE
-public int maxHappyGroups(int batchSize, int[] groups) {
+public int maxHappyGroups(int batchSize, int[] groups) { // tle 
     int n = groups.length;
     int [] dp = new int [1 << n];
-    int s = 0;
-    for (int mask = 0; mask < 1 << n; mask++) { 
-        s = 0;
-        for (int i = 0; i < n; i++) 
-            if ((mask & (1 << i)) >= 1)
+    for (int mask = 0; mask < 1 << n; mask++) {
+        int s = 0;
+        for (int i = 0; i < n; i++)
+            if ((mask & (1 << i)) > 0)
                 s = (s + groups[i]) % batchSize;
-        for (int i = 0; i < n; i++) 
+        for (int i = 0; i < n; i++)
             if ((mask & (1 << i)) == 0)
                 dp[mask | (1<<i)] = Math.max(dp[mask | (1<<i)], dp[mask] + (s == 0 ? 1 : 0));
-    }            
+    }
     return dp[(1 << n) -1];
 }
 #+END_SRC
 
-** 691. Stickers to Spell Word - Hard
+*** 691. Stickers to Spell Word - Hard
 We are given n different types of stickers. Each sticker has a lowercase English word on it.
 
 You would like to spell out the given string target by cutting individual letters from your collection of stickers and rearranging them. You can use each sticker more than once if you want, and you have infinite quantities of each sticker.
@@ -14291,7 +14619,7 @@ int minStickers(vector<string>& stickers, string target) {
 }
 #+END_SRC
 
-** 1994. The Number of Good Subsets
+*** 1994. The Number of Good Subsets
 You are given an integer array nums. We call a subset of nums good if its product can be represented as a product of one or more distinct prime numbers.
 
 For example, if nums = [1, 2, 3, 4]:
@@ -14300,7 +14628,7 @@ For example, if nums = [1, 2, 3, 4]:
 Return the number of different good subsets in nums modulo 109 + 7.
 
 A subset of nums is any array that can be obtained by deleting some (possibly none or all) elements from nums. Two subsets are different if and only if the chosen indices to delete are different.
-** 1494. Parallel Courses II - Hard
+*** 1494. Parallel Courses II - Hard
 You are given an integer n, which indicates that there are n courses labeled from 1 to n. You are also given an array relations where relations[i] = [prevCoursei, nextCoursei], representing a prerequisite relationship between course prevCoursei and course nextCoursei: course prevCoursei has to be taken before course nextCoursei. Also, you are given the integer k.
 
 In one semester, you can take at most k courses as long as you have taken all the prerequisites in the previous semester for the courses you are taking.
@@ -14524,7 +14852,7 @@ public int numberOfGoodSubsets(int[] nums) {
 - https://leetcode-cn.com/problems/the-number-of-good-subsets/solution/java-yu-chu-li-bao-sou-by-1iin-n5re/
 - 暂略
 
-** 1349. Maximum Students Taking Exam - Hard
+*** 1349. Maximum Students Taking Exam - Hard
 Given a m * n matrix seats  that represent seats distributions in a classroom. If a seat is broken, it is denoted by '#' character otherwise it is denoted by a '.' character.
 
 Students can see the answers of those sitting next to the left, right, upper left and upper right, but he cannot see the answers of the student sitting directly in front or behind him. Return the maximum number of students that can take the exam together without any cheating being possible..
@@ -14683,7 +15011,7 @@ boolean canSit(char[][] s, int r, int c){
     return true;
 }
 #+END_SRC
-** 1434. Number of Ways to Wear Different Hats to Each Other - Hard
+*** 1434. Number of Ways to Wear Different Hats to Each Other - Hard
 There are n people and 40 types of hats labeled from 1 to 40.
 
 Given a list of list of integers hats, where hats[i] is a list of all hats preferred by the i-th person.
@@ -14721,7 +15049,7 @@ public int numberWays(List<List<Integer>> hats) {
 }
 #+END_SRC
 
-** 1595. Minimum Cost to Connect Two Groups of Points - Hard 自顶向下（dfs + 记忆数组）；自底向上：DP table
+*** 1595. Minimum Cost to Connect Two Groups of Points - Hard 自顶向下（dfs + 记忆数组）；自底向上：DP table
 You are given two groups of points where the first group has size1 points, the second group has size2 points, and size1 >= size2.
 
 The cost of the connection between any two points are given in an size1 x size2 matrix where cost[i][j] is the cost of connecting point i of the first group and point j of the second group. The groups are connected if each point in both groups is connected to one or more points in the opposite group. In other words, each point in the first group must be connected to at least one point in the second group, and each point in the second group must be connected to at least one point in the first group.

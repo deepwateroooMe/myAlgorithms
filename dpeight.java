@@ -431,46 +431,6 @@ public class dpeight {
             return dp[r-1] == Integer.MAX_VALUE ? -1 : dp[r-1];
         }
 
-        public int[] countSubgraphsForEachDiameter(int n, int[][] edges) { // bug
-            int m = n-1, range = 1 << m, root = 0, cnt = 0;
-            int [] ans = new int [m];
-            for (int i = 1; i < range; i++) {
-                root = -1;
-                Map<Integer, List<Integer>> adj = new HashMap<>();
-                for (int j = 0; j < m; j++)  // m edges
-                    if (((i >> j) & 1) == 1) {
-                        int [] e = edges[j];
-                        if (root == -1) root = e[0];
-                        adj.computeIfAbsent(e[0], z -> new ArrayList<>()).add(e[1]);
-                        adj.computeIfAbsent(e[1], z -> new ArrayList<>()).add(e[0]);
-                    }
-                cnt = Integer.bitCount(i);
-                Set<Integer> vis = new HashSet<>();
-                max = 1;
-                 dfs(root, -1, adj, vis);
-                if (vis.size() != cnt + 1) continue;
-                ans[max-1]++;
-            }
-            return ans;
-        }
-        int max = 1;
-        // int [] dia; // 这里需要记忆吗，应该不用吧。数据小，树在不断变化 
-        private int dfs(int u, int p, Map<Integer, List<Integer>> m, Set<Integer> vis) { // 树的最大直径: bug 还是改天再写这个题
-            vis.add(u);
-            if (m.get(u).size() == 1 && m.get(u).get(0) == p) return 1; // 叶子节点 
-            int fst = 0, sec = 0;
-            for (Integer v : m.get(u)) {
-                if (v == p) continue;
-                int cur = dfs(v, u, m, vis);
-                if (cur >= fst) {
-                    sec = fst;
-                    fst = cur;
-                } else if (cur > sec) sec = cur;
-                max = Math.max(max, fst + sec + 1);
-            }
-            return fst + 1;
-        }
-
         private int getGcd(int i, int j) { // complexity of Euclid's algorithm is O(Log min(n1, n2)) 
             if (j == 0) return i;
             return getGcd(j, i % j);
