@@ -1729,7 +1729,7 @@ public int countRoutes(int[] locations, int start, int finish, int fuel) {
 }
 #+END_SRC
 
-*** 1012. Numbers With Repeated Digits - Hard
+*** 1012. Numbers With Repeated Digits - Hard 数位DP + 压缩状态 经典
 Given an integer n, return the number of positive integers in the range [1, n] that have at least one repeated digit.
 
 题意:统计1-N中，满足每个位置都不同的数有几个。
@@ -1768,7 +1768,43 @@ public int numDupDigitsAtMostN(int N) {
     return sum - dfs(idx, 1, 0);
 }
 #+END_SRC
-- 这道题给了一个正整数N，让返回所有不大于N且至少有一个重复数字的正整数的个数，题目中给的例子也可以很好的帮助我们理解。要求的是正整数的位数上至少要有一个重复数字，当然最简单暴力的方法就是从1遍历到N，然后对于每个数字判断是否有重复数字，看了一眼题目难度 Hard，想都不用想，肯定是超时的。这道题需要更高效的解法，首先来想，若是直接求至少有一个重复数字的正整数，由于并不知道有多少个重复数字，可能1个，2个，甚至全是重复数字，这样很难找到规律。有时候直接求一个问题不好求，可以考虑求其相反的情况，至少有一个重复数字反过来就是一个重复数字都没有，所以这里可以求不大于N且一个重复数字都没有的正整数的个数，然后用N减去这个数字即为所求。好，接下来看怎么求，对于任意一个N，比如 7918，是个四位数，而所有的三位数，两位数，一位数，都一定比其小，所以可以直接求出没有重复数字的三位数，两位数，和一位数。比如三位数，由于百位上不能有0，则只有9种情况，十位上可以有0，则有9种情况，个位上则有8种情况，所以就是 9*9*8。可以归纳出没有重复数字的n位数的个数，最高位去除0还有9种，剩余的 n-1 位则依次是 9，8，7... 则后面的 n-1 位其实是个全排列，从9个数中取出 n-1 个数字的全排列，初中就学过的。这里写一个全排列的子函数，求从m个数字中取n个数字的全排列，方便后面计算。算完这些后，还要来算符合题意的四位数，由于第一位是7，若千位上是小于7的数字（共有6种，千位上不能是0），则后面的百位，十位，个位又都可以全排列了，从9个数字中取3个数字的全排列，再乘以千位上小于7的6种情况。若当千位固定为7，则百位上可以放小于9的数字（共有8种，百位不能放7，但可以放0），则后面的十位和个位都可以全排列了，从8个数字种取出2个数字的全排列，再乘以百位上小于9的8种情况。需要注意的是，遍历给定数字的各个位时，有可能出现重复数字，一旦出现了之后，则该 prefix 就不能再用了，因为已经不合题意了。所以要用一个 HashSet 来记录访问过的数字，一旦遇到重复数字后就直接 break 掉。最后还有一个小 trick 需要注意，由于N本身也需要计算进去，所以再计算的时候，使用 N+1 进行计算的话，就可以把N这种情况算进去了
+**** 解题思路与分析: 降维一下 数位DP + 压缩状态 经典
+     #+BEGIN_SRC java
+public int numDupDigitsAtMostN(int n) {
+    if (n <= 10) return 0;
+    int m = n + 1, r = 1 << 10, idx = 0; // r = 1 << 10 表示n值最多会有10个位，通过记忆化暴搜每个位的可能性、来数<=n的不重复数的个数
+    d = new int[10]; // n 转化为数组
+    while (n != 0) {
+        d[idx++] = n % 10;
+        n /= 10;
+    }
+    dp = new int [r][idx];
+    for (int i = 0; i < r; i++) Arrays.fill(dp[i], -1);
+    return m - dfs(idx-1, 0, 1); // 自底向上 
+}
+int [][] dp;
+int [] d;  // dfs: 返回不得复数的个数
+private int dfs(int idx, int r, int l) {   // l: limit flag: 当第一次搜到某数位，该数位能取的最大值是受限制的
+    if (idx == -1) return 1;               // l: limit 有没有限制， 这个参数结合两种方法看得还是有些迷糊
+    if (dp[r][idx] != -1 && l == 0) return dp[r][idx];
+    int up = l == 1 ? d[idx] : 9, ans = 0; // 当前位的最大取值，求出当前位最高可以枚举到哪个数字
+    for (int i = 0; i <= up; i++) { // 遍历当前位的所有可能的取值: [0, 1, 2, ... up]
+        // 首先当前位的状态没有出现过 
+        //（本体计算的是不满足 至少两次的所有情况 逆向思维） 
+        if ((r & (1 << i)) == 0) { // 当前位第i位在r的状态里还没有出现过
+            if (i == 0 && r == 0)  // 001的情况: 有前导 0, 所以 0 不能统计 , 不更新mask r(就是这个最高位为0的数不计入结果，去遍历下一个低位的数。。)
+                ans += dfs(idx-1, r, 0);
+            else // 当前数没有前导0、完全合法，计入结果，并进一步统计
+                ans += dfs(idx-1, r | (1 << i), (l == 1 && i == d[idx] ? 1 : 0));
+        }
+    }
+    if (l == 0) dp[r][idx] = ans; // 如果没有限制 , 代表搜满了 , 可以记忆化 , 否则就不能
+    return ans;
+}
+     #+END_SRC
+**** 解题思路与分析
+
+这道题给了一个正整数N，让返回所有不大于N且至少有一个重复数字的正整数的个数，题目中给的例子也可以很好的帮助我们理解。要求的是正整数的位数上至少要有一个重复数字，当然最简单暴力的方法就是从1遍历到N，然后对于每个数字判断是否有重复数字，看了一眼题目难度 Hard，想都不用想，肯定是超时的。这道题需要更高效的解法，首先来想，若是直接求至少有一个重复数字的正整数，由于并不知道有多少个重复数字，可能1个，2个，甚至全是重复数字，这样很难找到规律。有时候直接求一个问题不好求，可以考虑求其相反的情况，至少有一个重复数字反过来就是一个重复数字都没有，所以这里可以求不大于N且一个重复数字都没有的正整数的个数，然后用N减去这个数字即为所求。好，接下来看怎么求，对于任意一个N，比如 7918，是个四位数，而所有的三位数，两位数，一位数，都一定比其小，所以可以直接求出没有重复数字的三位数，两位数，和一位数。比如三位数，由于百位上不能有0，则只有9种情况，十位上可以有0，则有9种情况，个位上则有8种情况，所以就是 9*9*8。可以归纳出没有重复数字的n位数的个数，最高位去除0还有9种，剩余的 n-1 位则依次是 9，8，7... 则后面的 n-1 位其实是个全排列，从9个数中取出 n-1 个数字的全排列，初中就学过的。这里写一个全排列的子函数，求从m个数字中取n个数字的全排列，方便后面计算。算完这些后，还要来算符合题意的四位数，由于第一位是7，若千位上是小于7的数字（共有6种，千位上不能是0），则后面的百位，十位，个位又都可以全排列了，从9个数字中取3个数字的全排列，再乘以千位上小于7的6种情况。若当千位固定为7，则百位上可以放小于9的数字（共有8种，百位不能放7，但可以放0），则后面的十位和个位都可以全排列了，从8个数字种取出2个数字的全排列，再乘以百位上小于9的8种情况。需要注意的是，遍历给定数字的各个位时，有可能出现重复数字，一旦出现了之后，则该 prefix 就不能再用了，因为已经不合题意了。所以要用一个 HashSet 来记录访问过的数字，一旦遇到重复数字后就直接 break 掉。最后还有一个小 trick 需要注意，由于N本身也需要计算进去，所以再计算的时候，使用 N+1 进行计算的话，就可以把N这种情况算进去了
 #+BEGIN_SRC java
 private int A(int m, int n) {
     return n == 0 ? 1 : A(m, n-1) * (m-n+1);
@@ -1791,6 +1827,60 @@ public int numDupDigitsAtMostN(int n) {
     return n - res;
 }
 #+END_SRC
+
+*** 600. Non-negative Integers without Consecutive Ones - Hard
+Given a positive integer n, return the number of the integers in the range [0, n] whose binary representations do not contain consecutive ones.
+**** 解题思路与分析
+
+我们就可以通过DP的方法求出长度为k的二进制数的无连续1的数字个数。由于题目给我们的并不是一个二进制数的长度，而是一个二进制数，比如100，如果我们按长度为3的情况计算无连续1点个数个数，就会多计算101这种情况。所以我们的目标是要将大于num的情况去掉。下面从头来分析代码，首先我们要把十进制数转为二进制数，将二进制数存在一个字符串中，并统计字符串的长度。然后我们利用这个帖子中的方法，计算该字符串长度的二进制数所有无连续1的数字个数，然后我们从倒数第二个字符开始往前遍历这个二进制数字符串，如果当前字符和后面一个位置的字符均为1，说明我们并没有多计算任何情况，不明白的可以带例子来看。如果当前字符和后面一个位置的字符均为0，说明我们有多计算一些情况，就像之前举的100这个例子，我们就多算了101这种情况。我们怎么确定多了多少种情况呢，假如给我们的数字是8，二进制为1000，我们首先按长度为4算出所有情况，共8种。仔细观察我们十进制转为二进制字符串的写法，发现转换结果跟真实的二进制数翻转了一下，所以我们的t为"0001"，那么我们从倒数第二位开始往前遍历，到i=1时，发现有两个连续的0出现，那么i=1这个位置上能出现1的次数，就到one数组中去找，那么我们减去1，减去的就是0101这种情况，再往前遍历，i=0时，又发现两个连续0，那么i=0这个位置上能出1的次数也到one数组中去找，我们再减去1，减去的是1001这种情况
+
+     #+BEGIN_SRC java
+public int findIntegers(int n) {
+    int cnt = 0;
+    String t = "";
+    while (n > 0) {
+        ++cnt;
+        t += (n & 1) == 1 ? "1" : "0"; // 这里把t倒过来了
+        n >>= 1;
+    }
+    char [] s = t.toCharArray();
+    int [] one = new int [cnt], zero = new int [cnt];
+    one[0] = zero[0] = 1;
+    for (int i = 1; i < cnt; i++) {
+        zero[i] = zero[i-1] + one[i-1];
+        one[i] = zero[i-1];
+    }
+    int ans = zero[cnt-1] + one[cnt-1]; // 长度为cnt的所有不含重复1的数字的个数，但数多了
+    for (int i = cnt-2; i >= 0; i--) {
+        if (s[i] == '1' && s[i+1] == '1') break;
+        if (s[i] == '0' && s[i+1] == '0') ans -= one[i];
+    }
+    return ans;
+}
+     #+END_SRC
+**** 解题思路与分析
+
+其实长度为k的二进制数字符串没有连续的1的个数是一个斐波那契数列f(k)。比如当k=5时，二进制数的范围是00000-11111，我们可以将其分为两个部分，00000-01111和10000-10111，因为任何大于11000的数字都是不成立的，因为有开头已经有了两个连续1。而我们发现其实00000-01111就是f(4)，而10000-10111就是f(3)，所以f(5) = f(4) + f(3)，这就是一个斐波那契数列啦。那么我们要做的首先就是建立一个这个数组，方便之后直接查值。我们从给定数字的最高位开始遍历，如果某一位是1，后面有k位，就加上f(k)，因为如果我们把当前位变成0，那么后面k位就可以直接从斐波那契数列中取值了。然后标记pre为1，再往下遍历，如果遇到0位，则pre标记为0。如果当前位是1，pre也是1，那么直接返回结果。最后循环退出后我们要加上数字本身这种情况
+
+     #+BEGIN_SRC java
+public int findIntegers(int n) {
+    int k = 31, pre = 0, ans = 0;
+    int [] dp = new int [32];
+    dp[0] = 1;
+    dp[1] = 2;
+    for (int i = 2; i < 32; i++) 
+        dp[i] = dp[i-1] + dp[i-2];
+    while (k >= 0) {
+        if ((n & (1 << k)) > 0) {
+            ans += dp[k];
+            if (pre == 1) return ans;
+            pre = 1;
+        } else pre = 0;
+        k--;
+    }
+    return ans + 1;
+}
+     #+END_SRC
 
 *** 514. Freedom Trail - Hard
 In the video game Fallout 4, the quest "Road to Freedom" requires players to reach a metal dial called the "Freedom Trail Ring" and use the dial to spell a specific keyword to open the door.
@@ -2944,37 +3034,67 @@ Given a string s and an integer k. You need to delete at most k characters from 
 
 Find the minimum length of the run-length encoded version of s after deleting at most k characters.
 #+BEGIN_SRC java
- private int dfs(char [] s, int idx, int cnt) { // 求从下标index开始向后，所有长度为count的子序列中，编码后的最小长度
-    if (cnt == 0) return 0;
-    if (idx == n) return Integer.MAX_VALUE;   // 当下标越界时还未找到长度为count的子序列
-    if (dp[idx][cnt] > 0) return dp[idx][cnt];
-    int min = Integer.MAX_VALUE, leftCnt = 0;
+public int getLengthOfOptimalCompression(String t, int k) {
+    n = t.length();
+    s = t.toCharArray();
+    dp = new Integer [n][n-k+1]; // int [n][n-k+1] 而不是 [n][k+1] 
+    return dfs(0, n-k);
+}
+Integer [][] dp;
+char [] s;
+int n;
+private int dfs(int idx, int k) { // 求从下标 i 开始向后，所有长度为 k 的子序列中，编码后的最小长度
+    if (k == 0) return 0;         // 当下标越界时还未找到长度为 k 的子序列
+    if (idx == n) return Integer.MAX_VALUE;
+    if (dp[idx][k] != null) return dp[idx][k];
+    int ans = Integer.MAX_VALUE, cnt = 0;
     boolean [] vis = new boolean [26];
     for (int i = idx; i < n; i++) {
-        if (vis[s[i]-'a']) continue;   // 优化：已处理过当前的字母，跳过
-        if (idx > 0 && s[i] == s[idx-1]) continue;
-        vis[s[i]-'a'] = true;
-        leftCnt = 0;
+        if (vis[s[i]-'a']) continue; // 优化：当前字母是已处理过的字母, 遍历26个字母的可能性，重复的跳过
+        if (idx > 0 && s[i] == s[idx-1]) continue; // 另一种重复的处理
+        cnt = 0;
         for (int j = i; j < n; j++) {
             if (s[j] != s[i]) continue;
-            leftCnt++;
-            if (cnt - leftCnt < 0) break;  // 如果左半部分长度大于子序列长度，退出
-            int right = dfs(s, j+1, cnt - leftCnt);
-            if (right == Integer.MAX_VALUE) continue;
-            int left = String.valueOf(leftCnt).length();
-            min = Math.min(min, left + right + (left == 1 && leftCnt == 1 ? 0 : 1));
+            cnt++; // 数左半片段中，与s[i]相同的字母的个数
+            if (k - cnt < 0) break; // 如果左半部分长度大于子序列长度，退出
+            int rite = dfs(j+1, k-cnt);
+            if (rite == Integer.MAX_VALUE) continue; 
+            int left = ("" + cnt).length();
+            ans = Math.min(ans, left + rite + (left == 1 && cnt == 1 ? 0 : 1));
         }
     }
-    return dp[idx][cnt] = min;
-}
-int [][] dp;
-int n;
-public int getLengthOfOptimalCompression(String s, int k) {
-    n = s.length();
-    dp = new int [n][n-k+1];
-    return dfs(s.toCharArray(), 0, n-k);
+    return dp[idx][k] = ans;
 }
 #+END_SRC
+**** 解题思路与分析: 动态规划
+     #+BEGIN_SRC java
+public int getLengthOfOptimalCompression(String s, int k) { // 与上面的思路差不多，这里自顶向下，上面的dfs自底向上
+    int n = s.length();
+    int [][] f = new int[n+1][k+1];
+    for (int i = 0; i <= n; i++) 
+        Arrays.fill(f[i], Integer.MAX_VALUE >> 1);
+    f[0][0] = 0;
+    for (int i = 1; i <= n; ++i) 
+        for (int j = 0; j <= k && j <= i; ++j) {
+            if (j > 0) // 先初始化为删除当前字符为删除的第j个字符的情况
+                f[i][j] = f[i - 1][j - 1];
+            int same = 0, diff = 0;
+            for (int x = i; x >= 1 && diff <= j; x--) {
+                if (s.charAt(x-1) == s.charAt(i-1)) {
+                    same++; // 数与当前字符连续相同的字符的个数
+                    f[i][j] = Math.min(f[i][j], f[x-1][j - diff] + calc(same));
+                } else diff++;
+            }
+        }
+    return f[n][k];
+}
+public int calc(int x) {
+    if (x == 1) return 1;
+    if (x < 10) return 2;
+    if (x < 100) return 3;
+    return 4;
+}
+     #+END_SRC
 **** 决策类DP总结
   - https://leetcode-cn.com/problems/string-compression-ii/solution/jie-ti-si-kao-guo-cheng-yu-jie-fa-zong-jie-by-ruit/
 
@@ -3171,29 +3291,44 @@ Return the length of the longest palindrome that can be constructed in the descr
 A subsequence of a string s is a string that can be made by deleting some (possibly none) characters from s without changing the order of the remaining characters.
 A palindrome is a string that reads the same forward as well as backward.
 #+BEGIN_SRC java
-public int longestPalindrome(String s, String t) { // 这个题目没有懂，需要再好好看一下
-    int m = s.length();
-    int n = t.length();
-    int mn = m + n;
-    String st = s + t;
-    int [][] dp = new int [mn][mn];
-    for (int i = 0; i < mn; i++)
+public int longestPalindrome(String ss, String tt) { // 比较喜欢2维dp，比较直接直观
+    int m = ss.length(), n = m + tt.length(), ans = 0;
+    char [] s = (ss + tt).toCharArray(); // 先求这个联接合并字条串的最长回文子序列
+    int [][] dp = new int [n][n];
+    for (int i = n-2; i >= 0; i--) {
         dp[i][i] = 1;
-    for (int l = 2; l <= mn; l++) {
-        for (int i = 0, j = i+l-1; j < mn; i++,j++) { // 
-            if (st.charAt(i) == st.charAt(j))
+        for (int j = i+1; j < n; j++) 
+            if (s[i] == s[j]) {
                 dp[i][j] = dp[i+1][j-1] + 2;
-            else dp[i][j] = Math.max(dp[i+1][j], dp[i][j-1]);                         
-        }
-    }
-    int ans = 0;
-    for (int i = 0; i < m; i++) {
-        for (int j = 0; j < n; j++) {
-            if (s.charAt(i) == t.charAt(j))
-                ans = Math.max(ans, dp[i][m+j]); // 
-        }
+                if (i < m && j >= m) // 确认来自于两个不同的字条串
+                    ans = Math.max(ans, dp[i][j]);
+            } else dp[i][j] = Math.max(dp[i+1][j], dp[i][j-1]);
     }
     return ans;
+}
+#+END_SRC
+- 下面是降了一维空间的
+#+BEGIN_SRC java
+public int longestPalindrome(String ss, String tt) {
+    int m = ss.length(), n = m + tt.length(), ans = 0;
+    char [] s = (ss + tt).toCharArray(); // 先求这个联接合并字条串的最长回文子序列
+    int [] dp = new int[n];
+    Arrays.fill(dp, 1);
+    int max = 0;
+    for (int i = n - 1; i >= 0; i--) {
+        int curMax = 0;
+        for (int j = i + 1; j < n; j++) {
+            int mem = dp[j]; // remember prev dp[j] val
+            // curMax = Math.max(curMax, dp[j]);  // bug: curMax 不可以提前更新
+            if (s[i] == s[j]) {
+                dp[j] = curMax + 2; // 要用更新前的值
+                if (i < m && j >= m)
+                    max = Math.max(max, dp[j]);
+            }
+            curMax = Math.max(mem, curMax);
+        }
+    }
+    return max;
 }
 #+END_SRC
 
@@ -4561,6 +4696,7 @@ For an integer array nums, an inverse pair is a pair of integers [i, j] where 0 
 
 Given two integers n and k, return the number of different arrays consist of numbers from 1 to n such that there are exactly k inverse pairs. Since the answer can be huge, return it modulo 109 + 7.
 ***** 解题思路与分析
+
 比较容易辨别出来是一道DP的题目，但是确实算是比较难的了，下面是参考网上的代码之后我的理解。定义dp[n][k]表示从1到n构成的数中含有k个逆序对的个数，则我们可以推导出dp[n][k]和dp[n - 1][i]之间的递推关系：
 
 如果我们把n放在最后一位，则所有的k个逆序对均来自于前n - 1个数所构成的逆序对，和n无关；
@@ -8398,7 +8534,7 @@ The ship must end at storage after all the boxes have been delivered.
 
 Return the minimum number of trips the ship needs to make to deliver all boxes to their respective ports.
 **** 解题思路与分析: 滑动窗口
-- 这里会需要一种决策：需要总运送次数最少，就涉及到同一船是否只装送往同一满港口的优化与选择问题，用滑动窗口，也有贪心的解法 
+- 这里会需要一种决策：需要总运送次数最少，就涉及到同一船是否只装送往同一个港口的优化与选择问题，用滑动窗口，也有贪心的解法 
 - 时间复杂度： O(N)
 #+BEGIN_SRC java
 public int boxDelivering(int[][] box, int __, int max, int limit) {
@@ -8408,7 +8544,7 @@ public int boxDelivering(int[][] box, int __, int max, int limit) {
     int l = 0;                   // left ptr
     for (int r = 0; r < n; r++) {// right ptr
         wit += box[r][1];
-        if (r > 0 && box[r][0] != box[r-1][0]) cost++;
+        if (r > 0 && box[r][0] != box[r-1][0]) cost++; // 现箱子与上一个箱子运往的目的地不同
         /* drop box iff:
            - There are too many box (r-l >= max)
            - The box are too heavy (weight > limit)
@@ -8426,28 +8562,27 @@ public int boxDelivering(int[][] box, int __, int max, int limit) {
 #+END_SRC
 - 一种dp的写法，写得天外来仙，可惜不是很好懂
 #+BEGIN_SRC java
-public int boxDelivering(int[][] boxes, int portsCount, int maxBoxes, int maxWeight) { // O(N)滑动窗口
-    int n = boxes.length, j = 0, lastj = 0, cnt = 0;
+public int boxDelivering(int [][] box, int portsCount, int maxBox, int maxWeight) {
+    int n = box.length, j = 0, lastj = 0, cnt = 0; // cnt: cost
     int [] dp = new int [n+1];
-    Arrays.fill(dp, Integer.MAX_VALUE / 3); // / 3 to avoid overflow
-    dp[0] = 0;                              //
-    for (int i = 0; i < n; ++i) {
-        while (j < n && maxBoxes > 0 && maxWeight >= boxes[j][1]) {
-            maxBoxes -= 1;
-            maxWeight -= boxes[j][1];
-            if (j == 0 || boxes[j][0] != boxes[j-1][0]) { // if the port is different from the previous port
-                lastj = j;
-                cnt++;
+    Arrays.fill(dp, Integer.MAX_VALUE / 2);
+    dp[0] = 0;
+    for (int i = 0; i < n; i++) {
+        while (j < n && maxBox > 0 && maxWeight >= box[j][1]) {
+            maxBox -= 1;
+            maxWeight -= box[j][1];
+            if (j == 0 || box[j][0] != box[j-1][0]) {
+                lastj = j; // 新目的地港口的第一个下标
+                cnt++; // 增加消耗
             }
-            ++j;                        // keep expanding the right pointer when we can
-            // dp[++j] = 200000;        // equivalent
+            ++j; // keep expanding the right pointer when we can 右窗口尽可能地向右延伸：只要有空间，延伸至最远
         }
-        dp[j] = Math.min(dp[j], dp[i] + cnt + 1); // 这里的cnt 相当于是一个快进效果，提速
+        dp[j] = Math.min(dp[j], dp[i] + cnt + 1);
         dp[lastj] = Math.min(dp[lastj], dp[i] + cnt);
-        // 这里下面三行：像是回溯一样，绕得好昏呀: 感觉是向右滑动，再增加一些空间，向右遍历所有可能性，并保存最优解
-        maxBoxes += 1;            // now as we move the left pointer i forward (don't put the ith box in this trip), 
-        maxWeight += boxes[i][1]; // we increase the number of available boxes and available weights
-        if (i == n-1 || boxes[i][0] != boxes[i+1][0]) cnt--;
+        // 随着i的增加，左窗口右移：移走第i个箱子所腾出的空间（箱子个安数、重量，以及潜在可能减少的一次消耗）都需要更新
+        maxBox += 1; // now as we move the left pointer i forward (don't put the ith box in this trip),
+        maxWeight += box[i][1];  // we increase the number of available boxes and available weights
+        if (i == n-1 || box[i][0] != box[i+1][0]) cnt--;
     }
     return dp[n];
 }
@@ -9436,6 +9571,132 @@ int popAtStack(int index) Returns the value at the top of the stack with the giv
     }
 #+END_SRC
 
+*** 2080. Range Frequency Queries - Medium
+Design a data structure to find the frequency of a given value in a given subarray.
+
+The frequency of a value in a subarray is the number of occurrences of that value in the subarray.
+
+Implement the RangeFreqQuery class:
+
+RangeFreqQuery(int[] arr) Constructs an instance of the class with the given 0-indexed integer array arr.
+int query(int left, int right, int value) Returns the frequency of value in the subarray arr[left...right].
+A subarray is a contiguous sequence of elements within an array. arr[left...right] denotes the subarray that contains the elements of nums between indices left and right (inclusive).
+**** 解题思路与分析: 最简单粗暴的
+     #+BEGIN_SRC java
+    Map<Integer, TreeMap<Integer, Integer>> m = new HashMap<>();
+    public RangeFreqQuery(int[] arr) {
+        for (int i = 0; i < arr.length; i++) 
+            m.computeIfAbsent(arr[i], z -> new TreeMap<>()).put(i, m.get(arr[i]).size()); // 这里写得好tricky，考试的时候紧张就想不到！！！
+    }
+    public int query(int left, int right, int value) {
+        if (!m.containsKey(value)) return 0;
+        TreeMap<Integer, Integer> map = m.get(value);
+        Integer a = map.ceilingKey(left), b = map.floorKey(right);
+        if (a == null || b == null) return 0;
+        return map.get(b) - map.get(a) + 1;
+    }
+     #+END_SRC
+**** 解题思路与分析: binary Search
+     #+BEGIN_SRC java
+    Map<Integer, List<Integer>> map = new HashMap<>();
+    public RangeFreqQuery(int[] arr) {
+        for (int i = 0; i < arr.length; i++) 
+            map.computeIfAbsent(arr[i], z -> new ArrayList<>()).add(i);
+    }
+    public int query(int left, int right, int value) {
+        if (!map.containsKey(value)) return 0;
+        List<Integer> l = map.get(value);
+        int s = Collections.binarySearch(l, left);
+        int e = Collections.binarySearch(l, right);
+        if (s < 0) s = (s + 1) * (-1);
+        if (e < 0) e = (e + 2) * (-1);
+        return e - s + 1;
+    }
+#+END_SRC
+- 与上面相同的想法，但自己实现函数的
+#+BEGIN_SRC java
+    Map<Integer, List<Integer>> map = new HashMap();
+    public RangeFreqQuery(int[] arr) {
+        int n = arr.length;
+        for(int i = 0; i < n; i++)
+            map.computeIfAbsent(arr[i], z -> new ArrayList<>()).add(i);
+    }
+    public int query(int left, int right, int value) {
+        List<Integer> A = map.get(value);
+        if (A == null || left > A.get(A.size()-1) || right < A.get(0))
+            return 0;
+        int i = ceil(A, left), j = floor(A, right);        
+        return j-i+1;
+    }
+    public int ceil(List<Integer> A, int x){
+        int left = 0, right = A.size()-1; 
+        if (x < A.get(0))
+            return 0;
+        while (left < right) {
+            int mid = (left+right)/2;
+            if (A.get(mid) < x)
+                left = mid + 1;
+            else 
+                right = mid;
+        }
+        return left;
+    }
+    public int floor(List<Integer> A, int x){
+        int left = 0, right = A.size ()-1; 
+        if (x > A.get (right))
+            return right;
+        while (left < right) {
+            int mid =  (left+right)/2+1;
+            if (A.get (mid) > x)
+                right = mid - 1;
+            else 
+                left = mid;
+        }
+        return left;
+    }
+     #+END_SRC
+**** 解题思路与分析: segment tree
+     #+BEGIN_SRC java
+    Map<Integer, Integer>[] freq;
+    int n;
+    public RangeFreqQuery(int[] arr) {
+        n = arr.length;
+        freq = new HashMap[4 * n];
+        for(int i = 0; i < 4 * n; i++)
+            freq[i] = new HashMap<>();
+        build(1, 0, n - 1, arr);
+    }
+    private void build(int id, int start, int end, int[] arr){
+        if(start == end)
+            freq[id].put(arr[start], 1);
+        else{
+            int mid = (start + end) / 2, left = 2 * id, right = 2 * id + 1;
+            build(left, start, mid, arr);
+            build(right, mid + 1, end, arr);
+            for(int i : freq[left].keySet())
+                freq[id].put(i, freq[id].getOrDefault(i, 0) + freq[left].get(i));
+            for(int i : freq[right].keySet())
+                freq[id].put(i, freq[id].getOrDefault(i, 0) + freq[right].get(i));
+        }
+    }
+    public int query(int left, int right, int value) {
+        return find(1, 0, n - 1, left, right, value);
+    }
+    private int find(int id, int start, int end, int l, int r, int value){
+        if(r < start || end < l)
+            return 0;
+        else if(start == end)
+            return freq[id].getOrDefault(value, 0);
+        else if(l <= start && end <= r)
+            return freq[id].getOrDefault(value, 0);
+        else{
+            int mid = (start + end) / 2;
+            int left = find(2 * id, start, mid, l, r, value);
+            int right = find(2 * id + 1, mid + 1, end, l, r, value);
+            return left + right;
+        }
+    }
+     #+END_SRC
 
 * backTracking 回溯
 *** 1681. Minimum Incompatibility 再写一遍
@@ -15148,6 +15409,52 @@ public int minimumOneBitOperations(int n) {
 }
      #+END_SRC
 
+*** 1643. Kth Smallest Instructions - Hard
+Bob is standing at cell (0, 0), and he wants to reach destination: (row, column). He can only travel right and down. You are going to help Bob by providing instructions for him to reach destination.
+
+The instructions are represented as a string, where each character is either:
+
+'H', meaning move horizontally (go right), or
+'V', meaning move vertically (go down).
+Multiple instructions will lead Bob to destination. For example, if destination is (2, 3), both "HHHVV" and "HVHVH" are valid instructions.
+
+However, Bob is very picky. Bob has a lucky number k, and he wants the kth lexicographically smallest instructions that will lead him to destination. k is 1-indexed.
+
+Given an integer array destination and an integer k, return the kth lexicographically smallest instructions that will take Bob to destination.
+**** 解题思路与分析
+     
+     [[./pic/1643.png]]
+     
+     #+BEGIN_SRC java
+public String kthSmallestPath(int [] a, int k) {
+    int m = a[0], n = a[1], mn = m + n; // m rows, n cols
+    int [][] c = new int [m+n][n]; // calculate combinations
+    c[0][0] = 1;
+    for (int i = 1; i < m+n; i++) {
+        c[i][0] = 1; // 从这些数量中选0个的可能性： 1--》就是什么也不选
+        for (int j = 1; j <= i && j < n; j++) // 对于第j个数，有两种选择:
+            c[i][j] = c[i-1][j] + c[i-1][j-1]; // 可以不选j，则所有选的j个数由前i-1个数选出；或选j,则从前i-1个数中选择出j-1个数
+    }
+    String ans = "";
+    for (int i = 0; i < mn; i++) { // loop出m+n步中，根据k值的大小，每一步的选择
+        if (n > 0) { // 如果当前选择的是“V”: 那么所有最高位为 H 的字符串的字典序都比它小，这样的字符串共有cnt种
+            int cnt = c[m+n-1][n-1]; // 会有多少种选择
+            if (k > cnt) {  // k比这个值大，说明必须选V
+                ans += "V"; // 我们将 vv 减少 11，并且需要将 kk 减少 oo，这是因为剩余部分应当是包含 (h,v-1)(h,v−1) 的字典序第 k-ok−o 小的字符串；
+                --m; // BUG: 这里可能没有理解对, 想要减少‘V’，减少的当然是行数呀
+                k -= cnt;
+            } else {
+                ans += "H";
+                --n; // BUG: 减少H，减少的是列数
+            }
+        } else {
+            ans += "V";
+            --m;
+        }
+    }
+    return ans;
+}       
+     #+END_SRC
 *** 1467. Probability of a Two Boxes Having The Same Number of Distinct Balls - Hard
 Given 2n balls of k distinct colors. You will be given an integer array balls of size k where balls[i] is the number of balls of color i. 
 
@@ -15166,7 +15473,70 @@ for second ball, we can put ball in first bin and 0 ball in second bin, similarl
 same thing with the third ball
 
 Try all possible permutations recursively. And, in the end check, if there are equal number of distinct balls in both bins or not.
+**** 解题思路与分析
 
+思路比较朴素，就是先把这2n个数字分成两块，对应两个括号。先不考虑括号里这些数字的排列情况。对于每一种颜色的球，可以放 0, 1, 2, ... balls[i]个到第一个块。
+
+依次类推到其他颜色的球。我们可以遍历所有的这些可能的分块方法。balls[i] <= 6, balls.length <= 8，所以一共最多有7 ^ 8种方法可能不算太多。
+
+对于上述每一种分块，都会有P(ballsA) * P(ballsB) 种可能。P(balls)就是我们下面要计算的，给定每种球的数量，有多少种不同的排列。
+
+P(balls) = sum(balls)! / (balls[0]! * balls[1]! * balls[2]! ....balls[n - 1]!);
+
+可以从小到大依次计算
+
+把balls[0] + balls[1] + ... balls[i - 1] = sum
+
+P[0 : i] = p[0 : i - 1] * (sum + 1) * (sum + 2) * ....(sum + balls[i]) / factorial[balls[i]]
+
+修改了下题解，不需要用BigInteger了，java的Double就足够大。
+
+     #+BEGIN_SRC java
+private static final double [] fact = {1, 1, 2, 6, 24, 120, 720};
+private double difCnt = 0;
+int n;
+public double getProbability(int[] balls) { // 居然是个回塑 + 裁枝
+    n = balls.length;
+    double totCnt = getPermutation(balls);
+    dfs(0, balls, new int [n]);
+    return difCnt / totCnt;
+}
+private double getPermutation(int [] a) {
+    double [] ans = new double [n];
+    ans[0] = 1;
+    int sum = a[0];
+    for (int i = 1; i < n; i++) {
+        ans[i] = ans[i-1];
+        for (int j = sum+1; j <= sum + a[i]; j++) 
+            ans[i] *= j;
+        ans[i] /= fact[a[i]];
+        sum += a[i];
+    }
+    return ans[n-1];
+}
+private void dfs(int idx, int [] a, int [] b) {
+    if (idx == n) {
+        int ca = 0, cb = 0, sa = 0, sb = 0;
+        for (int i = 0; i < n; i++) {
+            sa += a[i];
+            sb += b[i];
+            if (a[i] > 0) ca ++;
+            if (b[i] > 0) cb ++;
+        }
+        if (ca == cb && sa == sb)
+            difCnt += getPermutation(a) * getPermutation(b);
+        return ;
+    }
+    for (int i = 0; i <= a[idx]; i++) {
+        a[idx] -= i;
+        b[idx] += i;
+        dfs(idx+1, a, b);
+        b[idx] -= i;
+        a[idx] += i;
+    }
+}
+     #+END_SRC
+- 以前参考过的题解
 #+BEGIN_SRC java
 public double getProbability(int[] balls) {
     int sum = Arrays.stream(balls).sum();

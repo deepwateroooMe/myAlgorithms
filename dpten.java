@@ -1193,13 +1193,460 @@ public class dpten {
         //     return fst + 1;
         // }
 
+        // private static final double [] fact = {1, 1, 2, 6, 24, 120, 720};
+        // private double difCnt = 0;
+        // int n;
+        // public double getProbability(int[] balls) {
+        //     n = balls.length;
+        //     double totCnt = getPermutation(balls);
+        //     dfs(0, balls, new int [n]);
+        //     return difCnt / totCnt;
+        // }
+        // private double getPermutation(int [] a) {
+        //     double [] ans = new double [n];
+        //     ans[0] = 1;
+        //     int sum = a[0];
+        //     for (int i = 1; i < n; i++) {
+        //         ans[i] = ans[i-1];
+        //         for (int j = sum+1; j <= sum + a[i]; j++) 
+        //             ans[i] *= j;
+        //         ans[i] /= fact[a[i]];
+        //         sum += a[i];
+        //     }
+        //     return ans[n-1];
+        // }
+        // private void dfs(int idx, int [] a, int [] b) {
+        //     if (idx == n) {
+        //         int ca = 0, cb = 0, sa = 0, sb = 0;
+        //         for (int i = 0; i < n; i++) {
+        //             sa += a[i];
+        //             sb += b[i];
+        //             if (a[i] > 0) ca ++;
+        //             if (b[i] > 0) cb ++;
+        //         }
+        //         if (ca == cb && sa == sb)
+        //             difCnt += getPermutation(a) * getPermutation(b);
+        //         return ;
+        //     }
+        //     for (int i = 0; i <= a[idx]; i++) {
+        //         a[idx] -= i;
+        //         b[idx] += i;
+        //         dfs(idx+1, a, b);
+        //         b[idx] -= i;
+        //         a[idx] += i;
+        //     }
+        // }
+
+        // public String kthSmallestPath(int [] a, int k) {
+        //     int m = a[0], n = a[1], mn = m + n; // m rows, n cols
+        //     int [][] c = new int [m+n][n]; // calculate combinations
+        //     c[0][0] = 1;
+        //     for (int i = 1; i < m+n; i++) {
+        //         c[i][0] = 1; // 从这些数量中选0个的可能性： 1--》就是什么也不选
+        //         for (int j = 1; j <= i && j < n; j++) // 对于第j个数，有两种选择:
+        //             c[i][j] = c[i-1][j] + c[i-1][j-1]; // 可以不选j，则所有选的j个数由前i-1个数选出；或选j,则从前i-1个数中选择出j-1个数
+        //     }
+        //     String ans = "";
+        //     for (int i = 0; i < mn; i++) { // loop出m+n步中，根据k值的大小，每一步的选择
+        //         if (n > 0) { // 如果当前选择的是“V”: 那么所有最高位为 H 的字符串的字典序都比它小，这样的字符串共有cnt种
+        //             int cnt = c[m+n-1][n-1]; // 会有多少种选择
+        //             if (k > cnt) {  // k比这个值大，说明必须选V
+        //                 ans += "V"; // 我们将 vv 减少 11，并且需要将 kk 减少 oo，这是因为剩余部分应当是包含 (h,v-1)(h,v−1) 的字典序第 k-ok−o 小的字符串；
+        //                 --m; // BUG: 这里可能没有理解对, 想要减少‘V’，减少的当然是行数呀
+        //                 k -= cnt;
+        //             } else {
+        //                 ans += "H";
+        //                 --n; // BUG: 减少H，减少的是列数
+        //             }
+        //         } else {
+        //             ans += "V";
+        //             --m;
+        //         }
+        //     }
+        //     return ans;
+        // }
+
+        // public int boxDelivering(int [][] box, int portsCount, int maxBox, int maxWeight) {
+        //     int n = box.length;
+        //     int [] dp = new int [n+1];
+        //     int weiSum = 0, costSum = 2, l = 0; // l: left
+        //     for (int i = 0; i < n; i++) {    // i: r, right
+        //         int [] cur = box[i];
+        //         weiSum += cur[1];
+        //         if (i > 0 && cur[0] != box[i-1][0]) costSum++; 
+        //         while (i - l >= maxBox || weiSum > maxWeight || (l < i && dp[l] == dp[l+1])) { // 左窗口右移
+        //             weiSum -= box[l][1];
+        //             if (box[l+1][0] != box[l][0]) costSum--;
+        //             l++;
+        //         }
+        //         dp[i+1] = costSum + dp[l];
+        //     }
+        //     return dp[n];
+        // }
+        // public int boxDelivering(int [][] box, int portsCount, int maxBox, int maxWeight) {
+        //     int n = box.length, j = 0, lastj = 0, cnt = 0; // cnt: cost
+        //     int [] dp = new int [n+1];
+        //     Arrays.fill(dp, Integer.MAX_VALUE / 2);
+        //     dp[0] = 0;
+        //     for (int i = 0; i < n; i++) {
+        //         while (j < n && maxBox > 0 && maxWeight >= box[j][1]) {
+        //             maxBox -= 1;
+        //             maxWeight -= box[j][1];
+        //             if (j == 0 || box[j][0] != box[j-1][0]) {
+        //                 lastj = j; // 新目的地港口的第一个下标
+        //                 cnt++; // 增加消耗
+        //             }
+        //             ++j; // keep expanding the right pointer when we can 右窗口尽可能地向右延伸：只要有空间，延伸至最远
+        //         }
+        //         dp[j] = Math.min(dp[j], dp[i] + cnt + 1);
+        //         dp[lastj] = Math.min(dp[lastj], dp[i] + cnt);
+        //         // 随着i的增加，左窗口右移：移走第i个箱子所腾出的空间（箱子个安数、重量，以及潜在可能减少的一次消耗）都需要更新
+        //         maxBox += 1; // now as we move the left pointer i forward (don't put the ith box in this trip),
+        //         maxWeight += box[i][1];  // we increase the number of available boxes and available weights
+        //         if (i == n-1 || box[i][0] != box[i+1][0]) cnt--;
+        //     }
+        //     return dp[n];
+        // }
+
+        // public int longestPalindrome(String ss, String tt) {
+        //     int m = ss.length(), n = tt.length(), mn = m + n;
+        //     String st = ss + tt; // 先求这个联接合并字条串的最长回文子序列长度
+        //     char [] s = ss.toCharArray();
+        //     char [] t = tt.toCharArray();
+        //     char [] so = st.toCharArray();
+        //     int [][] dp = new int [mn][mn];
+        //     for (int i = 0; i < mn; i++) 
+        //         dp[i][i] = 1;
+        //     for (int d = 2; d <= mn; d++) 
+        //         for (int i = 0, j = i+d-1; j < mn; i++, j++) {
+        //             if (so[i] == so[j])
+        //                 dp[i][j] = dp[i+1][j-1] + 2;
+        //             else dp[i][j] = Math.max(dp[i+1][j], dp[i][j-1]);
+        //         }
+        //     // return dp[mn-1][mn-1]; // BUG: 这个答案无法保证子序列包含原始两个字符串中的字符，它可能只来源于某——一个——字符串
+        //     int ans = 0;
+        //     for (int i = 0; i < m; i++) 
+        //         for (int j = 0; j < n; j++) 
+        //             if (s[i] == t[j]) // 确认：答案来源于两个不同的字符串
+        //                 ans = Math.max(ans, dp[i][m+j]); // 并取全局最优
+        //     return ans;
+        // }
+        // public int longestPalindrome(String ss, String tt) { // 比较喜欢2维dp，比较直接直观
+        //     int m = ss.length(), n = m + tt.length(), ans = 0;
+        //     char [] s = (ss + tt).toCharArray(); // 先求这个联接合并字条串的最长回文子序列
+        //     int [][] dp = new int [n][n];
+        //     for (int i = n-2; i >= 0; i--) {
+        //         dp[i][i] = 1;
+        //         for (int j = i+1; j < n; j++) 
+        //             if (s[i] == s[j]) {
+        //                 dp[i][j] = dp[i+1][j-1] + 2;
+        //                 if (i < m && j >= m) // 确认来自于两个不同的字条串
+        //                     ans = Math.max(ans, dp[i][j]);
+        //             } else dp[i][j] = Math.max(dp[i+1][j], dp[i][j-1]);
+        //     }
+        //     return ans;
+        // }
+        // public int longestPalindrome(String ss, String tt) {
+        //     int m = ss.length(), n = m + tt.length(), ans = 0;
+        //     char [] s = (ss + tt).toCharArray(); // 先求这个联接合并字条串的最长回文子序列
+        //     int [] dp = new int[n];
+        //     Arrays.fill(dp, 1);
+        //     int max = 0;
+        //     for (int i = n - 1; i >= 0; i--) {
+        //         int curMax = 0;
+        //         for (int j = i + 1; j < n; j++) {
+        //             int mem = dp[j]; // remember prev dp[j] val
+        //             // curMax = Math.max(curMax, dp[j]);  // bug: curMax 不可以提前更新
+        //             if (s[i] == s[j]) {
+        //                 dp[j] = curMax + 2; // 要用更新前的值
+        //                 if (i < m && j >= m)
+        //                     max = Math.max(max, dp[j]);
+        //             }
+        //             curMax = Math.max(mem, curMax);
+        //         }
+        //     }
+        //     return max;
+        // }
+
+        // public int getLengthOfOptimalCompression(String t, int k) {
+        //     n = t.length();
+        //     s = t.toCharArray();
+        //     dp = new Integer [n][n-k+1]; // int [n][n-k+1] 而不是 [n][k+1] 
+        //     return dfs(0, n-k);
+        // }
+        // Integer [][] dp;
+        // char [] s;
+        // int n;
+        // private int dfs(int idx, int k) { // 求从下标 i 开始向后，所有长度为 k 的子序列中，编码后的最小长度
+        //     if (k == 0) return 0;         // 当下标越界时还未找到长度为 k 的子序列
+        //     if (idx == n) return Integer.MAX_VALUE;
+        //     if (dp[idx][k] != null) return dp[idx][k];
+        //     int ans = Integer.MAX_VALUE, cnt = 0;
+        //     boolean [] vis = new boolean [26];
+        //     for (int i = idx; i < n; i++) {
+        //         if (vis[s[i]-'a']) continue; // 优化：当前字母是已处理过的字母, 遍历26个字母的可能性，重复的跳过
+        //         if (idx > 0 && s[i] == s[idx-1]) continue; // 另一种重复的处理
+        //         cnt = 0;
+        //         for (int j = i; j < n; j++) {
+        //             if (s[j] != s[i]) continue;
+        //             cnt++; // 数左半片段中，与s[i]相同的字母的个数
+        //             if (k - cnt < 0) break; // 如果左半部分长度大于子序列长度，退出
+        //             int rite = dfs(j+1, k-cnt);
+        //             if (rite == Integer.MAX_VALUE) continue; 
+        //             int left = ("" + cnt).length();
+        //             ans = Math.min(ans, left + rite + (left == 1 && cnt == 1 ? 0 : 1));
+        //         }
+        //     }
+        //     return dp[idx][k] = ans;
+        // }
+        // public int getLengthOfOptimalCompression(String s, int k) { // 与上面的思路差不多，这里自顶向下，上面的dfs自底向上
+        //     int n = s.length();
+        //     int [][] f = new int[n+1][k+1];
+        //     for (int i = 0; i <= n; i++) 
+        //         Arrays.fill(f[i], Integer.MAX_VALUE >> 1);
+        //     f[0][0] = 0;
+        //     for (int i = 1; i <= n; ++i) 
+        //         for (int j = 0; j <= k && j <= i; ++j) {
+        //             if (j > 0) // 先初始化为删除当前字符为删除的第j个字符的情况
+        //                 f[i][j] = f[i - 1][j - 1];
+        //             int same = 0, diff = 0;
+        //             for (int x = i; x >= 1 && diff <= j; x--) {
+        //                 if (s.charAt(x-1) == s.charAt(i-1)) {
+        //                     same++; // 数与当前字符连续相同的字符的个数
+        //                     f[i][j] = Math.min(f[i][j], f[x-1][j - diff] + calc(same));
+        //                 } else diff++;
+        //             }
+        //         }
+        //     return f[n][k];
+        // }
+        // public int calc(int x) {
+        //     if (x == 1) return 1;
+        //     if (x < 10) return 2;
+        //     if (x < 100) return 3;
+        //     return 4;
+        // }
+
+        // // dp[n][k] = dp[n-1][k] + dp[n-1][k-1] + dp[n-1][k-2] + … + dp[n-1][k + 1-n + 1] + dp[n-1][k-n + 1] // A
+        // // dp[n][k + 1] = dp[n-1][k + 1] + dp[n-1][k] + dp[n-1][k-1] + dp[n-1][k-2] + … + dp[n-1][k + 1-n + 1] // B
+        // // dp[n][k+1] - dp[n][k] = dp[n-1][k+1] - dp[n-1][k-n+1]; // B-A
+        // // dp[n][k+1] = dp[n][k] + dp[n-1][k+1] - dp[n-1][k-n+1]; // 移项
+        // // // 将 k+1 换回成 k ，可以得到：
+        // // dp[n][k] = dp[n][k-1] + dp[n - 1][k] - dp[n-1][k-n] // 套这个公式，套娃。。。。。。
+        // static final int mod = (int)1e9 + 7;
+        // public int kInversePairs(int n, int k) {
+        //     long [][] dp = new long [n+1][k+1];
+        //     dp[0][0] = 1;
+        //     for (int i = 1; i <= n; i++) {
+        //         dp[i][0] = 1;
+        //         for (int j = 1; j <= k; j++) {
+        //             dp[i][j] = dp[i][j-1] + dp[i-1][j];
+        //             if (j >= i)
+        //                 dp[i][j] -= dp[i-1][j-i];
+        //             dp[i][j] = (dp[i][j] + mod) % mod;
+        //         }
+        //     }
+        //     return (int)dp[n][k];
+        // }
+
+        // public int maxProfit(int k, int[] prices) {
+        //     int n = prices.length, dif = 0;
+        //     if (k >= n / 2) {
+        //         int ans = 0;
+        //         for (int i = 1; i < n; i++) {
+        //             dif = prices[i] - prices[i-1];
+        //             if (dif > 0) ans += dif;
+        //         }
+        //         return ans;
+        //     }
+        //     int [][] dp = new int [n][k+1];
+        //     int [][] max = new int [n][k+1];
+        //     for (int i = 1; i < n; i++) {
+        //         dif = prices[i] - prices[i-1];
+        //         for (int j = 1; j <= k && j * 2 <= i+1; j++) {
+        //             max[i][j] = Math.max(max[i-1][j], dp[i-1][j-1]) + dif; // 对于眼下当前来讲，两个最好的 + 当前的眼前的利益
+        //             dp[i][j] = Math.max(dp[i-1][j], max[i][j]); // 对于全局最优来说，要么选此次大单，要么续集前全局最优
+        //         }
+        //     }
+        // }
+
+        // public String largestMultipleOfThree(int[] d) {
+        //     int n = d.length, fstOne = 9, secOne = 9, fstTwo = 9, secTwo = 9, sum = 0;
+        //     int [] cnt = new int [10];
+        //     for (int i = 0; i < n; i++) {
+        //         cnt[d[i]]++;
+        //         sum += d[i];
+        //         if (d[i] % 3 == 1) {
+        //             if (d[i] < fstOne) fstOne = d[i];
+        //             else if (d[i] < secOne) secOne = d[i];
+        //         } else if (d[i] % 3 == 2) {
+        //             if (d[i] < fstTwo) {
+        //                 secTwo = fstTwo;
+        //                 fstTwo = d[i];
+        //             } else if (d[i] < secTwo) secTwo = d[i];
+        //         }
+        //     }
+        //     StringBuilder s = new StringBuilder();
+        //     if (sum == 0) return "0";
+        //     if (sum % 3 == 1) {
+        //         if (fstOne < 9) cnt[fstOne]--;
+        //         else {
+        //             cnt[fstTwo]--;
+        //             cnt[secTwo]--;
+        //         }
+        //     } else if (sum % 3 == 2) {
+        //         if (fstTwo < 9) cnt[fstTwo]--;
+        //         else {
+        //             cnt[fstOne]--;
+        //             cnt[secOne]--;
+        //         }
+        //     }
+        //     for (int i = 9; i >= 0; i--) 
+        //         while (cnt[i] > 0) {
+        //             s.append((char)(i+'0'));
+        //             cnt[i]--;
+        //         }
+        //     return s.toString();
+        // }
+        // public String largestMultipleOfThree(int[] d) {
+        //     int [] sorted = Arrays.stream(d).boxed()
+        //         .sorted(Comparator.reverseOrder()) // just use 'sorted()' for ascending order
+        //         .mapToInt(Integer::intValue).toArray();
+        //     System.out.println(Arrays.toString(sorted));
+        //     int n = d.length;
+        //     int [][] dp = new int [n][3];
+        //     // Arrays.sort(d);
+        //     int sum = Arrays.stream(d).sum();
+        //     return "";
+        // }
+
+        // // https://leetcode-cn.com/problems/numbers-with-repeated-digits/solution/zui-kuai-zui-qing-xi-de-jie-fa-by-woodnote/
+    //     private int dp(int n) {
+    //         List<Integer> d = new ArrayList<>();
+    //         while (n > 0) {
+    //             d.add(n % 10);
+    //             n /= 10;
+    //         }
+    //         int m = d.size();
+    //         int [] vis = new int [10];
+    //         int cnt = 0;
+    //         for (int i = 1; i < m; i++)
+    //             cnt += 9 * A(9, i-1);
+    //         for (int i = m-1; i >= 0; i--) {
+    //             int v = d.get(i);
+    //             for (int j = (i == m-1 ? 1 :  0); j < v; j++) {
+    //                 if (vis[j] != 0) continue;
+    //                 cnt += A(10-(m-i), i);
+    //             }
+    //             if (++vis[v] > 1) break;
+    //             if (i == 0) cnt += 1;
+    //         }
+    //         return cnt;
+    //     }
+    //     public int numDupDigitsAtMostN(int n) {
+    //         return n - dp(n);
+    //     }
+    //     public int fact(int n) {
+    //         if (n == 1 || n == 0) return 1;
+    //         return n * fact(n-1);
+    //     }
+    //     public int A(int m, int n) {
+    //         return fact(m) / fact(m - n);
+    //     }
+        // // 数位DP + 压缩状态 经典
+        // public int numDupDigitsAtMostN(int n) {
+        //     if (n <= 10) return 0;
+        //     int m = n + 1, r = 1 << 10, idx = 0; // r = 1 << 10 表示n值最多会有10个位，通过记忆化暴搜每个位的可能性、来数<=n的不重复数的个数
+        //     d = new int[10]; // n 转化为数组
+        //     while (n != 0) {
+        //         d[idx++] = n % 10;
+        //         n /= 10;
+        //     }
+        //     dp = new int [r][idx];
+        //     for (int i = 0; i < r; i++) Arrays.fill(dp[i], -1);
+        //     return m - dfs(idx-1, 0, 1); // 自底向上 
+        // }
+        // int [][] dp;
+        // int [] d;  // dfs: 返回不得复数的个数
+        // private int dfs(int idx, int r, int l) {   // l: limit flag: 当第一次搜到某数位，该数位能取的最大值是受限制的
+        //     if (idx == -1) return 1;               // l: limit 有没有限制， 这个参数结合两种方法看得还是有些迷糊
+        //     if (dp[r][idx] != -1 && l == 0) return dp[r][idx];
+        //     int up = l == 1 ? d[idx] : 9, ans = 0; // 当前位的最大取值，求出当前位最高可以枚举到哪个数字
+        //     for (int i = 0; i <= up; i++) { // 遍历当前位的所有可能的取值: [0, 1, 2, ... up]
+        //         // 首先当前位的状态没有出现过 
+        //         //（本体计算的是不满足 至少两次的所有情况 逆向思维） 
+        //         if ((r & (1 << i)) == 0) { // 当前位第i位在r的状态里还没有出现过
+        //             if (i == 0 && r == 0)  // 001的情况: 有前导 0, 所以 0 不能统计 , 不更新mask r(就是这个最高位为0的数不计入结果，去遍历下一个低位的数。。)
+        //                 ans += dfs(idx-1, r, 0);
+        //             else // 当前数没有前导0、完全合法，计入结果，并进一步统计
+        //                 ans += dfs(idx-1, r | (1 << i), (l == 1 && i == d[idx] ? 1 : 0));
+        //         }
+        //     }
+        //     if (l == 0) dp[r][idx] = ans; // 如果没有限制 , 代表搜满了 , 可以记忆化 , 否则就不能
+        //     return ans;
+        // }
+
+        // public int atMostNGivenDigitSet(String[] digits, int n) {
+        //     String s = "" + n;
+        //     int m = s.length(), N = digits.length, ans = 0;
+        //     for (int i = 1; i < m; i++) ans += Math.pow(N, i);
+        //     for (int i = 0; i < m; i++) {
+        //         boolean same = false;
+        //         for (String v : digits) {
+        //             if (v.charAt(0) < s.charAt(i)) ans += Math.pow(N, m-1-i);
+        //             else if (v.charAt(0) == s.charAt(i)) same = true;
+        //         }
+        //         if (!same) return ans;
+        //     }
+        //     return ans + 1;
+        // }
+
+        // public int findIntegers(int n) {
+        //     int cnt = 0;
+        //     String t = "";
+        //     while (n > 0) {
+        //         ++cnt;
+        //         t += (n & 1) == 1 ? "1" : "0"; // 这里把t倒过来了
+        //         n >>= 1;
+        //     }
+        //     char [] s = t.toCharArray();
+        //     int [] one = new int [cnt], zero = new int [cnt];
+        //     one[0] = zero[0] = 1;
+        //     for (int i = 1; i < cnt; i++) {
+        //         zero[i] = zero[i-1] + one[i-1];
+        //         one[i] = zero[i-1];
+        //     }
+        //     int ans = zero[cnt-1] + one[cnt-1]; // 长度为cnt的所有不含重复1的数字的个数，但数多了
+        //     for (int i = cnt-2; i >= 0; i--) {
+        //         if (s[i] == '1' && s[i+1] == '1') break;
+        //         if (s[i] == '0' && s[i+1] == '0') ans -= one[i];
+        //     }
+        //     return ans;
+        // }
+        // public int findIntegers(int n) {
+        //     int k = 31, pre = 0, ans = 0;
+        //     int [] dp = new int [32];
+        //     dp[0] = 1;
+        //     dp[1] = 2;
+        //     for (int i = 2; i < 32; i++) 
+        //         dp[i] = dp[i-1] + dp[i-2];
+        //     while (k >= 0) {
+        //         if ((n & (1 << k)) > 0) {
+        //             ans += dp[k];
+        //             if (pre == 1) return ans;
+        //             pre = 1;
+        //         } else pre = 0;
+        //         k--;
+        //     }
+        //     return ans + 1;
+        // }
+        
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        int [] a = new int [] {2,1,1};
+        String [] a = new String [] {"1","3","5","7"};
 
-        double r = s.getProbability(a);
-        System.out.println(Arrays.toString(r));
+        int r = s.findIntegers(5);
+        System.out.println("r: " + r);
     }
 }

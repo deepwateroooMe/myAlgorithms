@@ -951,114 +951,180 @@ public class mixed {
         //     }
         //     return ans;
         // }
-        class SegTree {  // 实现一下带懒标记的线段树: 这棵树好强大
-            class Node { // v是[l, r]区间的最大值，lazy是懒标记
-                int l, r, v, lazy;
-                public Node(int l, int r) {
-                    this.l = l;
-                    this.r = r;
-                }
-            }
-            private Node [] tr;
-            public SegTree(int size) {
-                tr = new Node[size << 2]; // * 4
-                build(1, 0, size - 1);
-            }
-            public void build(int u, int l, int r) { // 下标从1开始 自顶向下
-                tr[u] = new Node(l, r);
-                if (l == r) return;
-                int mid = l + r >> 1; // / 2
-                build(u << 1, l, mid);         // 分别构建左右子树
-                build(u << 1 | 1, mid + 1, r);
-            }
-            private void pushup(int u) { // 最大树： 当前节点的值为左右子节点的最大值
-                tr[u].v = Math.max(tr[u << 1].v, tr[u << 1 | 1].v);
-            }
-            private void pushdown(int u) { // 下传懒标记 
-                int c = tr[u].lazy;
-                if (c != 0) {
-                    tr[u].lazy = 0;
-                    tr[u << 1].v = tr[u << 1 | 1].v = c; // 根据父节点的值，懒标记下传一层，更新左右子树的值，并更新下传而来的标记
-                    tr[u << 1].lazy = tr[u << 1 | 1].lazy = c;
-                }
-            }
-            public void update(int u, int l, int r, int c) {
-                // for (int i = 1; i < tr.length; i++)
-                //     if (tr[i] != null)
-                //         System.out.println("[" + tr[i].l + "," + tr[i].r + "], v: " + tr[i].v + ", lazy: " + tr[i].lazy);
+        // class SegTree {  // 实现一下带懒标记的线段树: 这棵树好强大
+        //     class Node { // v是[l, r]区间的最大值，lazy是懒标记
+        //         int l, r, v, lazy;
+        //         public Node(int l, int r) {
+        //             this.l = l;
+        //             this.r = r;
+        //         }
+        //     }
+        //     private Node [] tr;
+        //     public SegTree(int size) {
+        //         tr = new Node[size << 2]; // * 4
+        //         build(1, 0, size - 1);
+        //     }
+        //     public void build(int u, int l, int r) { // 下标从1开始 自顶向下
+        //         tr[u] = new Node(l, r);
+        //         if (l == r) return;
+        //         int mid = l + r >> 1; // / 2
+        //         build(u << 1, l, mid);         // 分别构建左右子树
+        //         build(u << 1 | 1, mid + 1, r);
+        //     }
+        //     private void pushup(int u) { // 最大树： 当前节点的值为左右子节点的最大值
+        //         tr[u].v = Math.max(tr[u << 1].v, tr[u << 1 | 1].v);
+        //     }
+        //     private void pushdown(int u) { // 下传懒标记 
+        //         int c = tr[u].lazy;
+        //         if (c != 0) {
+        //             tr[u].lazy = 0;
+        //             tr[u << 1].v = tr[u << 1 | 1].v = c; // 根据父节点的值，懒标记下传一层，更新左右子树的值，并更新下传而来的标记
+        //             tr[u << 1].lazy = tr[u << 1 | 1].lazy = c;
+        //         }
+        //     }
+        //     public void update(int u, int l, int r, int c) {
+        //         // for (int i = 1; i < tr.length; i++)
+        //         //     if (tr[i] != null)
+        //         //         System.out.println("[" + tr[i].l + "," + tr[i].r + "], v: " + tr[i].v + ", lazy: " + tr[i].lazy);
 
-                if (l <= tr[u].l && tr[u].r <= r) { // 任务不需要下发，可以用懒标记懒住
-                    tr[u].v = tr[u].lazy = c;       // 整棵树落在左右区间内，可以发懒，暂不下传
-                    // System.out.println("[" + tr[u].l + "," + tr[u].r + "], v: " + tr[u].v + ", lazy: " + tr[u].lazy);
-                    return;
+        //         if (l <= tr[u].l && tr[u].r <= r) { // 任务不需要下发，可以用懒标记懒住
+        //             tr[u].v = tr[u].lazy = c;       // 整棵树落在左右区间内，可以发懒，暂不下传
+        //             // System.out.println("[" + tr[u].l + "," + tr[u].r + "], v: " + tr[u].v + ", lazy: " + tr[u].lazy);
+        //             return;
+        //         }
+        //         pushdown(u); // 任务不得不下发，则先下发给两个孩子
+        //         int mid = tr[u].l + tr[u].r >> 1;
+        //         if (l <= mid) update(u << 1, l, r, c); // 回归调用，下传更新至左右子节点
+        //         if (mid + 1 <= r) update(u << 1 | 1, l, r, c);
+        //         pushup(u); // 孩子完成了任务，再修改自己的值
+        //     }
+        //     public int query(int u, int l, int r) {
+        //         if (l <= tr[u].l && tr[u].r <= r) return tr[u].v;
+        //         pushdown(u);
+        //         int res = 0, mid = tr[u].l + tr[u].r >> 1;
+        //         if (l <= mid) res = Math.max(res, query(u << 1, l, r));
+        //         if (mid + 1 <= r) res = Math.max(res, query(u << 1 | 1, l, r));
+        //         return res;
+        //     }
+        //     public int query() {
+        //         return tr[1].v;
+        //     }
+        // }
+        // public List<Integer> fallingSquares(int[][] positions) {
+        //     List<Integer> xs = new ArrayList<>();
+        //     for (int[] p : positions) {
+        //         int a = p[0], b = a + p[1];
+        //         xs.add(a * 2);
+        //         xs.add(b * 2);
+        //         xs.add(a + b);
+        //     }
+        //     xs = unique(xs); // 排序并去重
+        //     SegTree segTree = new SegTree(xs.size());
+        //     List<Integer> res = new ArrayList<>();
+        //     for (int [] p : positions) {
+        //         int a = p[0], b = a + p[1];
+        //         a = get(a * 2, xs);
+        //         b = get(b * 2, xs);
+        //         int h = segTree.query(1, a + 1, b - 1);
+        //         segTree.update(1, a, b, h + p[1]);
+        //         res.add(segTree.query());
+        //     }
+        //     return res;
+        // }
+        // private int get(int x, List<Integer> xs) { // 找到x在离散化之后的值是多少，其实就是求xs里x的下标，可以二分来找到
+        //     int l = 0, r = xs.size() - 1;
+        //     while (l < r) {
+        //         int m = l + r >> 1;
+        //         if (xs.get(m) >= x) 
+        //             r = m;
+        //         else 
+        //             l = m + 1;
+        //     }
+        //     return l;
+        // }
+        // private List<Integer> unique(List<Integer> list) { // 将list排序后去重
+        //     list.sort(Integer::compareTo);
+        //     int j = 0;
+        //     for (int i = 0; i < list.size(); i++) 
+        //         if (i == 0 || list.get(j - 1) != list.get(i)) 
+        //             list.set(j++, list.get(i));
+        //     return list.subList(0, j); // subList()
+        // }
+
+        // public boolean circularArrayLoop(int[] a) {
+        //     int n = a.length;
+        //     boolean [] vis = new boolean [n];
+        //     for (int i = 0; i < n; i++) {
+        //         if (vis[i]) continue;
+        //         vis[i] = true;
+        //         Map<Integer, Integer> m = new HashMap<>();
+        //         int cur = i;
+        //         while (true) {
+        //             // int next = (cur + a[cur] + n) % n; // a[cur] < 0; n可能会比|a[cur]|小，如果是负数==》cur+a[cur]+n仍可能是负数
+        //             int next = ((cur + a[cur]) % n + n) % n; // why not (cur + a[cur] + n) % n ?
+        //             if (next == cur || a[next] * a[cur] < 0) break; // 符号不同，或者长度太小
+        //             if (m.containsKey(next)) return true;
+        //             m.put(cur, next);
+        //             cur = next;
+        //             vis[next] = true;
+        //         }
+        //     }
+        //     return false;
+        // }
+        // bool circularArrayLoop(vector<int>& nums) {
+        //     int n = nums.size();
+        //     for (int i = 0; i < n; ++i) {
+        //         if (nums[i] == 0) continue;
+        //         int slow = i, fast = getNext(nums, i), val = nums[i];
+        //         while (val * nums[fast] > 0 && val * nums[getNext(nums, fast)] > 0) {
+        //             if (slow == fast) {
+        //                 if (slow == getNext(nums, slow)) break;
+        //                 return true;
+        //             }
+        //             slow = getNext(nums, slow);
+        //             fast = getNext(nums, getNext(nums, fast));
+        //         }
+        //         slow = i;
+        //         while (val * nums[slow] > 0) {
+        //             int next = getNext(nums, slow);
+        //             nums[slow] = 0;
+        //             slow = next;
+        //         }
+        //     }
+        //     return false;
+        // }
+        public boolean circularArrayLoop(int[] a) {
+            int n = a.length;
+            for (int i = 0; i < n; i++) {
+                int slow = i, fast = getNext(a, i), val = a[i];
+                while (val * a[fast] > 0 && val * a[getNext(a, fast)] > 0) {
+                    if (slow == fast) {
+                        if (slow == getNext(a, slow)) break;
+                        return true;
+                    }
+                    slow = getNext(a, slow);
+                    fast = getNext(a, getNext(a, fast));
                 }
-                pushdown(u); // 任务不得不下发，则先下发给两个孩子
-                int mid = tr[u].l + tr[u].r >> 1;
-                if (l <= mid) update(u << 1, l, r, c); // 回归调用，下传更新至左右子节点
-                if (mid + 1 <= r) update(u << 1 | 1, l, r, c);
-                pushup(u); // 孩子完成了任务，再修改自己的值
+                slow = i;
+                while (val * a[slow] > 0) {
+                    int next = getNext(a, slow);
+                    a[slow] = 0;
+                    slow = next;
+                }
             }
-            public int query(int u, int l, int r) {
-                if (l <= tr[u].l && tr[u].r <= r) return tr[u].v;
-                pushdown(u);
-                int res = 0, mid = tr[u].l + tr[u].r >> 1;
-                if (l <= mid) res = Math.max(res, query(u << 1, l, r));
-                if (mid + 1 <= r) res = Math.max(res, query(u << 1 | 1, l, r));
-                return res;
-            }
-            public int query() {
-                return tr[1].v;
-            }
+            return false;
         }
-        public List<Integer> fallingSquares(int[][] positions) {
-            List<Integer> xs = new ArrayList<>();
-            for (int[] p : positions) {
-                int a = p[0], b = a + p[1];
-                xs.add(a * 2);
-                xs.add(b * 2);
-                xs.add(a + b);
-            }
-            xs = unique(xs); // 排序并去重
-            SegTree segTree = new SegTree(xs.size());
-            List<Integer> res = new ArrayList<>();
-            for (int [] p : positions) {
-                int a = p[0], b = a + p[1];
-                a = get(a * 2, xs);
-                b = get(b * 2, xs);
-                int h = segTree.query(1, a + 1, b - 1);
-                segTree.update(1, a, b, h + p[1]);
-                res.add(segTree.query());
-            }
-            return res;
-        }
-        private int get(int x, List<Integer> xs) { // 找到x在离散化之后的值是多少，其实就是求xs里x的下标，可以二分来找到
-            int l = 0, r = xs.size() - 1;
-            while (l < r) {
-                int m = l + r >> 1;
-                if (xs.get(m) >= x) 
-                    r = m;
-                else 
-                    l = m + 1;
-            }
-            return l;
-        }
-        private List<Integer> unique(List<Integer> list) { // 将list排序后去重
-            list.sort(Integer::compareTo);
-            int j = 0;
-            for (int i = 0; i < list.size(); i++) 
-                if (i == 0 || list.get(j - 1) != list.get(i)) 
-                    list.set(j++, list.get(i));
-            return list.subList(0, j); // subList()
+        private int getNext(int [] a, int i) {
+            int n = a.length;
+            return (((a[i] + i) % n) + n) % n;
         }
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        int [][] a = new int [][] {{1,2},{2,3}};
-        // int [][] a = new int [][] {{1,2},{2,3},{6,1}};
+        int [] a = new int [] {2,-1,1,2,2};
 
-        List<Integer> r = s.fallingSquares(a); 
-        System.out.println("r.size(): " + r.size());
-        System.out.println(Arrays.toString(r.toArray()));
+        boolean r = s.circularArrayLoop(a); 
+        System.out.println("r: " + r);
     }
 }

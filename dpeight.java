@@ -136,15 +136,6 @@ public class dpeight {
             getSum(i+1, sum, a, ss);
         }
 
-        public String largestMultipleOfThree(int[] d) {
-            int [] sorted = Arrays.stream(d).boxed()
-                .sorted(Comparator.reverseOrder()) // just use 'sorted()' for ascending order
-                .mapToInt(Integer::intValue).toArray();
-            System.out.println(Arrays.toString(sorted));
-            int sum = Arrays.stream(d).sum();
-            return "";
-        }
-
         public int scoreOfStudents(String t, int[] a) {
             int answer = getAns(t);
             n = t.length();
