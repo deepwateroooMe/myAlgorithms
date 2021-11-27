@@ -137,30 +137,36 @@ public class cmp {
                     if (i == 0 && s[i+1] != '.') return -1;
                     if (i == n-1 && s[i-1] != '.') return -1;
                     if (i > 0 && s[i-1] != '.' && s[i+1] != '.') return -1;
+                    if (vis[i]) continue;
+                    cnt++;
+                    if (i < n-2 && s[i+1] == '.' && s[i+2] == 'H') {
+                        vis[i] = true;
+                        vis[i+2] = true;
+                    }
                     continue;
                 }
-                if (i == 0 && n >= 3 && s[i+1] == 'H' && s[i+2] == 'H') {
-                    cnt++;
-                    vis[i] = true;
-                    vis[i+1] = true;
-                } else if (i > 0 && s[i-1] == 'H' && !vis[i-1]) {
-                    cnt++;
-                    vis[i-1] = true;
-                    vis[i] = true;
-                    if (i < n-1)
-                        vis[i+1] = true;
-                }
-                if (i == n-2 && s[i+1] == 'H') {
-                    cnt++;
-                    vis[i] = true;
-                    vis[i+1] = true;
-                    
-                } else if (i == n-1 && s[i-2] == 'H' && !vis[i-2]) {
-                    cnt++;
-                    vis[i-1] = true;
-                    vis[i] = true;
-                } else if (s[i] == 'H' && i > 0 && s[i-1] == 'H' && i < n-1 && s[i+1] == 'H')
-                    return -1;
+            //     if (i == 0 && n >= 3 && s[i+1] == 'H' && s[i+2] == 'H') {
+            //         cnt++;
+            //         vis[i] = true;
+            //         vis[i+1] = true;
+            //     } else if (i > 0 && s[i-1] == 'H' && !vis[i-1]) {
+            //         cnt++;
+            //         vis[i-1] = true;
+            //         vis[i] = true;
+            //         if (i < n-1)
+            //             vis[i+1] = true;
+            //     }
+            //     if (i == n-2 && s[i+1] == 'H') {
+            //         cnt++;
+            //         vis[i] = true;
+            //         vis[i+1] = true;
+            //     } else if (i == n-1 && s[i-2] == 'H' && !vis[i-2]) {
+            //         cnt++;
+            //         vis[i-1] = true;
+            //         vis[i] = true;
+            //     }
+            //     // else if (s[i] == 'H' && i > 0 && s[i-1] == 'H' && i < n-1 && s[i+1] == 'H')
+            //     //     return -1;
             }
             return cnt;
         }
