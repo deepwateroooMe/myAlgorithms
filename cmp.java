@@ -53,80 +53,104 @@ public class cmp {
                             Math.min(minIdx+1+n-maxIdx, maxIdx+1+n-minIdx));
         }
 
-        private Set<Integer> dfs(int idx, int t) {
-            Set<Integer> ans = new HashSet<>();
-            return ans;
-        }
-        Set<Integer> ans = new HashSet<>();
-        // List<int []> l = new ArrayList<>();
-        Set<Integer> [] dp;
-        int N = 100001;
+        // class UnionFind {
+        //     public int[] parent;
+        //     public int[] size;
+        //     public int[] root;
+        //     public int n;
+        //     public UnionFind(int n) {
+        //         this.n = n;
+        //         parent = new int[n];
+        //         size = new int[n];
+        //         root = new int[n];
+        //         Arrays.fill(size, 1);
+        //         for (int i = 0; i < n; i++) {
+        //             parent[i] = i;
+        //             root[i] = i;
+        //         }
+        //     }
+        //     public int findset(int x) {
+        //         return parent[x] == x ? x : (parent[x] = findset(parent[x]));
+        //     }
+        //     public int getroot(int x) {
+        //         return root[findset(x)];
+        //     }
+        //     public boolean sameGroup(int x, int y) {
+        //         return findset(x) == findset(y);
+        //     }
+        //     public void unite(int x, int y) {
+        //         root[y] = root[x];
+        //         if (size[x] < size[y]) {
+        //             int temp = x;
+        //             x = y;
+        //             y = temp;
+        //         }
+        //         parent[y] = x;
+        //         size[x] += size[y];
+        //     }
+        //     public boolean findAndUnite(int x, int y) {
+        //         int i = findset(x);
+        //         int j = findset(y);
+        //         if (i != j) {
+        //             unite(i, j);
+        //             return true;
+        //         }
+        //         return false;
+        //     }
+        // }
+        // public List<Integer> findAllPeople(int n, int[][] meetings, int firstPerson) { // 这个题像是考脱壳了，完全没有搞明白它在问什么、考什么,脑袋短路了
+        //     Set<Integer> ans = new HashSet<>(); // 就现在的代码量和思路来看，不是很简单吗？可是比赛的时候就是读不懂题目，早上写这种题型写得。。。。。。倒背如流。。。。。。
+        //     Queue<int []> q = new PriorityQueue<>((x, y) -> x[1] - y[1]); // [idx, time]
+        //     q.offer(new int [] {0, 0});
+        //     q.offer(new int [] {firstPerson, 0});
+        //     Map<Integer, List<int []>> adj = new HashMap<>();
+        //     for (int [] meet : meetings) {
+        //         adj.computeIfAbsent(meet[0], z -> new ArrayList<>()).add(new int [] {meet[1], meet[2]});;
+        //         adj.computeIfAbsent(meet[1], z -> new ArrayList<>()).add(new int [] {meet[0], meet[2]});;
+        //     }
+        //     while (!q.isEmpty()) {
+        //         int [] p = q.poll();
+        //         ans.add(p[0]);
+        //         if (!adj.containsKey(p[0])) continue;
+        //         List<int []> l = adj.get(p[0]);
+        //         for (int [] m : l) {
+        //             if (m[1] < p[1]) continue;
+        //             q.offer(new int [] {m[0], m[1]});
+        //         }
+        //         adj.remove(p[0]); // tle without this line
+        //     }
+        //     return new ArrayList<>(ans);
+        // }
         public List<Integer> findAllPeople(int n, int[][] meetings, int firstPerson) {
-            int m = meetings.length;
-            // List<int []> l = new ArrayList<>();
-            Map<Integer, Set<Integer>> adj = new HashMap<>();
-            for (int [] v : meetings) {
-                adj.computeIfAbsent(v[2], z -> new HashSet<>()).add(v[0]);
-                adj.get(v[2]).add(v[1]);
-            }
-            Map<Integer, Set<Integer>> tmp = map.entrySet().stream()
-                .sorted(Map.Entry.comparingByKey())  // Comparator.reverseOrder()
-                .collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> a, LinkedHashMap::new));
-            // for (int [] v : meetings) l.add(new int [] {Math.min(v[0], v[1]), Math.max(v[0], v[1]), v[2]});
-            // Collections.sort(l, (a, b)-> a[2] != b[2] ? a[2] - b[2] : a[0] != b[0] ? a[0] - b[0] : a[1] - b[1]);
-            // dp = new Set<Integer> [N];
-            // dp[0] = new HashSet<>(List.of(0, firstPerson));
-            ans.addAll(List.of(0, firstPerson));
-            // dfs(0, 0);
-            // dfs(firstPerson, 0);
-            // return ans;
-            // int r = l.get(m-1)[2];
-            // Set<Integer> [][] adj = new Set<Integer> [n][r+1];
-            // for (int i = 0; i < n; i++) 
-            //     for (int j = 0; j <= r; j++) 
-            //         adj[i][j] = new HashSet<>();
-            // for (int i = 0; i < m; i++) {
-            //     int [] cur = l.get(i);
-            //     adj[cur[0]][cur[2]].add(cur[1]);
-            //     adj[cur[1]][cur[2]].add(cur[0]);
-            // }
-            // Set<Integer> [] dp = new Set<Integer> [r+1];
-            // dp[0] = new HashSet<>(List.of(0, firstPerson));
-            // for (int i = 0; i < m; i++) {
-            //     int [] cur = l.get(i);
-            //     for (int t = 0; t <= cur[2]; t++) {
-            //     }
-            //     for (int t = 1; t <= r; t++) {
-            //         dp[i] = new HashSet<>();
-            //         for (Integer v : dp[t-1]) {
-            //         }
-            //     }
-            // }
-            
-            for (int i = 0; i < m; i++) {
-                int [] cur = l.get(i);
+            ans.add(0);
+            ans.add(firstPerson);
+            Arrays.sort(meetings, Comparator.comparingInt(a -> a[2])); // sort by time
+            for (int i = 0; i < meetings.length; ) {
+                if (ans.size() == n) return new ArrayList<>(ans);
+                HashMap<Integer, List<Integer>> map = new HashMap<>();
                 int j = i;
-                while (j < m && l.get(j)[2] <= cur[2]) {
-                    if (ans.contains(l.get(j)[0]) || ans.contains(l.get(j)[1])) {
-                        ans.add(l.get(j)[0]);
-                        ans.add(l.get(j)[1]);
-                    }
+                while (j < meetings.length && meetings[j][2] == meetings[i][2]) {
+                    int[] m = meetings[j];
+                    map.computeIfAbsent(m[0], z -> new ArrayList<>()).add(m[1]);
+                    map.computeIfAbsent(m[1], z -> new ArrayList<>()).add(m[0]);
                     j++;
                 }
-                for (int k = i; k < j; k++) {
-                    cur = l.get(k);
-                    if (ans.contains(l.get(k)[0]) || ans.contains(l.get(k)[1])) {
-                        ans.add(l.get(k)[0]);
-                        ans.add(l.get(k)[1]);
-                    }
-                }
-                if (j > i)
-                    i = j-1;
+                Set<Integer> tmp = new HashSet<>(map.keySet());
+                tmp.retainAll(ans); // 
+                for (Integer start : tmp) 
+                    dfs(start, map);
+                i = j;
             }
-            List<Integer> res = new ArrayList<>(ans);
-            Collections.sort(res);
-            return res;
-            // return new ArrayList<>(ans);
+            return new ArrayList<>(ans);
+        }
+        Set<Integer> ans = new HashSet<>();
+        private void dfs(Integer start, HashMap<Integer, List<Integer>> map) {
+            List<Integer> path = map.get(start);
+            for (Integer v : path) {
+                if (ans.contains(v)) continue;
+                ans.add(v);
+                dfs(v, map);
+            }
         }
     }
     public static void main (String[] args) {
@@ -151,6 +175,3 @@ public class cmp {
         
 // TreeNode res = s.(root );
 // res.levelPrintTree(res);
-
-// [0,4,11,13,22,24,27,32,37,38,42,55,59,63,69,70,71,73,79,85,87,88,102,106,112,124,128,139,149,156,159,168,175,183,184,189,192,193,194,199,201,205,210,214,215,218,222,230,232,234,249,255,259,264,269,271,283,285,287,288]
-// [0,4,11,13,22,24,27,32,37,38,42,55,59,63,69,70,71,73,79,85,87,88,102,106,112,124,128,139,149,156,159,168,175,183,184,189,190,192,193,194,199,201,205,210,211,214,215,218,222,225,230,232,234,244,249,250,255,259,261,264,269,271,283,285,287,288]
