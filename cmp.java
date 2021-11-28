@@ -14,173 +14,133 @@ import static java.util.stream.Collectors.toMap;
 public class cmp {
     public static class Solution {
 
-        public int countWords(String[] a, String[] b) {
-            int m = a.length, n = b.length;
-            Map<String, Integer> one = new HashMap<>();
-            Map<String, Integer> two = new HashMap<>();
-            for (String sa : a) 
-                one.put(sa, one.getOrDefault(sa, 0) + 1);
-            for (String sb : b) 
-                two.put(sb, two.getOrDefault(sb, 0) + 1);
-            int ans = 0, both = 0;
-            Set<String> vis = new HashSet<>();
-            for (String key : one.keySet()) 
-                if (one.get(key) == 1 && two.containsKey(key) && two.get(key) == 1) {
-                    ans++;
-                    vis.add(key);
-                }
-            for (String key : two.keySet()) {
-                if (vis.contains(key)) continue;
-                if (two.get(key) == 1 && one.containsKey(key) && one.get(key) == 1) 
-                    ans++;
-            }
+        public List<Integer> targetIndices(int[] a, int target) {
+            Arrays.sort(a);
+            List<Integer> ans = new ArrayList<>();
+            for (int i = 0; i < a.length; i++) 
+                if (a[i] == target)
+                    ans.add(i);
             return ans;
         }
 
-        public int countPyramids(int[][] g) {
-            int m = g.length, n = g[0].length, ans = 0;
-            int [][] r = new int [m][n];
-            for (int i = 0; i < m; i++) 
-                for (int j = 0; j < n; j++) 
-                    r[i][j] = (j == 0 ? 0 : r[i][j-1]) + g[i][j];
-            for (int i = 0; i < m-1; i++) 
-                for (int j = 1; j < n-1; j++) {
-                    if (g[i][j] == 0) continue;
-                    for (int d = 2; d <= Math.min(m, n) && i+d-1 < m && j-(d-1) >= 0 && j+(d-1) < n; d++) {
-                        if (r[i+d-1][j+d-1] - (j-(d-1) == 0 ? 0 : r[i+d-1][j-(d-1)-1]) == 2 * d - 1) ans++;
-                        else break;
-                    }
-                }
-            for (int i = m-1; i > 0; i--) 
-                for (int j = 1; j < n-1; j++) {
-                    if (g[i][j] == 0) continue;
-                    for (int d = 2; d <= Math.min(m, n) && i-(d-1) >= 0 && j-(d-1) >= 0 && j+(d-1) < n; d++) {
-                        int x = i-(d-1), yl = j - (d-1), yr = j + (d-1);
-                        if (r[x][yr] - (yl == 0 ? 0 : r[x][yl-1]) == 2 * d - 1) ans++;
-                        else break;
-                    }
-                }
-            return ans;
-        }
-
-        public int minimumBuckets(String t) { // 还有几个case没过
-            int n = t.length(), cnt = 0;
-            if (n > 0 && t.indexOf(".") == -1) return -1;
-            if (t.chars().distinct().count() == 1 && t.charAt(0) == '.') return 0;
-            char [] s = t.toCharArray();
-            if (n == 1) return s[0] == '.' ? 0 : -1;
-            boolean [] vis = new boolean[n];
+        public int[] getAverages(int[] a, int k) {
+            int n = a.length;
+            long [] sum = new long [n];
+            for (int i = 0; i < n; i++) 
+                sum[i] = (i == 0 ? 0 : sum[i-1]) + a[i];
+            int [] ans = new int [n];
+            Arrays.fill(ans, -1);
             for (int i = 0; i < n; i++) {
-                // if (s[i] == 'H') continue;
-                if (s[i] == 'H') {
-                    if (i == 0 && s[i+1] != '.') return -1;
-                    if (i == n-1 && s[i-1] != '.') return -1;
-                    if (i > 0 && s[i-1] != '.' && s[i+1] != '.') return -1;
-                    if (vis[i]) continue;
-                    cnt++;
-                    if (i < n-2 && s[i+1] == '.' && s[i+2] == 'H') {
-                        vis[i] = true;
-                        vis[i+2] = true;
-                    }
-                    continue;
-                }
+                if (i-k < 0 || i+k >= n) continue;
+                ans[i] = (int)((sum[i+k] - (i-k == 0 ? 0 : sum[i-k-1])) / (2l * k + 1l));
             }
-            return cnt;
+            return ans;
         }
 
-        // 这个题：一开始想的是四个方面priorityQue O(NlogN)的解法。tle
-        // 后来试过 dfs后想到我只需要两个方向
-        // 但两个方向的仍然超时了，时间卡得极严
-        int [][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}}; 
-        int min = Integer.MAX_VALUE;
-        public int minCost(int[] s, int[] t, int[] rowCosts, int[] colCosts) {
-            if (s[0] == t[0] && s[1] == t[1]) return 0;
-            int m = rowCosts.length, n = colCosts.length;
-            int [][] ds = new int [2][2];
-            if (t[0] >= s[0] && t[1] >= s[1]) ds = new int [][] {{1, 0}, {0, 1}};
-            else if (t[0] >= s[0] && t[1] < s[1]) ds = new int [][] {{1, 0}, {0, -1}};
-            else if (t[0] < s[0] && t[1] >= s[1]) ds = new int [][] {{-1, 0}, {0, 1}};
-            else ds = new int [][] {{-1, 0}, {0, -1}};
-            Set<Integer> vis = new HashSet<>();
-            Queue<int []> q = new PriorityQueue<>((x, y) -> x[1] - y[1]);
-            q.offer(new int [] {s[0] * n + s[1], 0});
-            vis.add(s[0] * n + s[1]);
-            while (!q.isEmpty()) {
-                for (int size = q.size()-1; size >= 0; size--) {
-                    int [] cur = q.poll();
-                    if (cur[0] / n == t[0] && cur[0] % n == t[1]) return cur[1];
-                    for (int i = 0; i < 2; i++) {
-                        int x = cur[0] / n + ds[i][0], y = cur[0] % n + ds[i][1];
-                        if (x < 0 || x >= m || y < 0 || y >= n || vis.contains(x*n + y)) continue;
-                        vis.add(x * n + y);
-                        q.offer(new int [] {x * n + y, cur[1] + (i < 1 ? rowCosts[x] : colCosts[y])});
+        public int minimumDeletions(int[] a) {
+            int n = a.length, minIdx = -1, maxIdx = -1;
+            ArrayDeque<Integer> min = new ArrayDeque<>(); // 单调递增
+            ArrayDeque<Integer> max = new ArrayDeque<>(); // 单调递减
+            for (int i = 0; i < n; i++) {
+                while (!max.isEmpty() && a[max.peekLast()] <= a[i]) max.pollLast();
+                max.offerLast(i);
+                while (!min.isEmpty() && a[min.peekLast()] >= a[i]) min.pollLast();
+                min.offerLast(i);
+            }
+            minIdx = min.peekFirst();
+            maxIdx = max.peekFirst();
+            return Math.min(Math.min(Math.max(minIdx+1, maxIdx+1), Math.max(n-minIdx, n-maxIdx)),
+                            Math.min(minIdx+1+n-maxIdx, maxIdx+1+n-minIdx));
+        }
+
+        private Set<Integer> dfs(int idx, int t) {
+            Set<Integer> ans = new HashSet<>();
+            return ans;
+        }
+        Set<Integer> ans = new HashSet<>();
+        // List<int []> l = new ArrayList<>();
+        Set<Integer> [] dp;
+        int N = 100001;
+        public List<Integer> findAllPeople(int n, int[][] meetings, int firstPerson) {
+            int m = meetings.length;
+            // List<int []> l = new ArrayList<>();
+            Map<Integer, Set<Integer>> adj = new HashMap<>();
+            for (int [] v : meetings) {
+                adj.computeIfAbsent(v[2], z -> new HashSet<>()).add(v[0]);
+                adj.get(v[2]).add(v[1]);
+            }
+            Map<Integer, Set<Integer>> tmp = map.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey())  // Comparator.reverseOrder()
+                .collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> a, LinkedHashMap::new));
+            // for (int [] v : meetings) l.add(new int [] {Math.min(v[0], v[1]), Math.max(v[0], v[1]), v[2]});
+            // Collections.sort(l, (a, b)-> a[2] != b[2] ? a[2] - b[2] : a[0] != b[0] ? a[0] - b[0] : a[1] - b[1]);
+            // dp = new Set<Integer> [N];
+            // dp[0] = new HashSet<>(List.of(0, firstPerson));
+            ans.addAll(List.of(0, firstPerson));
+            // dfs(0, 0);
+            // dfs(firstPerson, 0);
+            // return ans;
+            // int r = l.get(m-1)[2];
+            // Set<Integer> [][] adj = new Set<Integer> [n][r+1];
+            // for (int i = 0; i < n; i++) 
+            //     for (int j = 0; j <= r; j++) 
+            //         adj[i][j] = new HashSet<>();
+            // for (int i = 0; i < m; i++) {
+            //     int [] cur = l.get(i);
+            //     adj[cur[0]][cur[2]].add(cur[1]);
+            //     adj[cur[1]][cur[2]].add(cur[0]);
+            // }
+            // Set<Integer> [] dp = new Set<Integer> [r+1];
+            // dp[0] = new HashSet<>(List.of(0, firstPerson));
+            // for (int i = 0; i < m; i++) {
+            //     int [] cur = l.get(i);
+            //     for (int t = 0; t <= cur[2]; t++) {
+            //     }
+            //     for (int t = 1; t <= r; t++) {
+            //         dp[i] = new HashSet<>();
+            //         for (Integer v : dp[t-1]) {
+            //         }
+            //     }
+            // }
+            
+            for (int i = 0; i < m; i++) {
+                int [] cur = l.get(i);
+                int j = i;
+                while (j < m && l.get(j)[2] <= cur[2]) {
+                    if (ans.contains(l.get(j)[0]) || ans.contains(l.get(j)[1])) {
+                        ans.add(l.get(j)[0]);
+                        ans.add(l.get(j)[1]);
+                    }
+                    j++;
+                }
+                for (int k = i; k < j; k++) {
+                    cur = l.get(k);
+                    if (ans.contains(l.get(k)[0]) || ans.contains(l.get(k)[1])) {
+                        ans.add(l.get(k)[0]);
+                        ans.add(l.get(k)[1]);
                     }
                 }
+                if (j > i)
+                    i = j-1;
             }
-            return -1;
-        }
-        public int minCost(int[] s, int[] t, int[] rowCosts, int[] colCosts) {
-            if (s[0] == t[0] && s[1] == t[1]) return 0;
-            m = rowCosts.length;
-            n = colCosts.length;
-            vis = new boolean [m][n];
-            int [][] ds = new int [2][2];
-            if (t[0] >= s[0] && t[1] >= s[1]) ds = new int [][] {{1, 0}, {0, 1}};
-            else if (t[0] >= s[0] && t[1] < s[1]) ds = new int [][] {{1, 0}, {0, -1}};
-            else if (t[0] < s[0] && t[1] >= s[1]) ds = new int [][] {{-1, 0}, {0, 1}};
-            else ds = new int [][] {{-1, 0}, {0, -1}};
-            dfs(s[0], s[1], 0, t, rowCosts, colCosts, ds);
-            return min;
-        }
-        // int [][] dirsOne = {{1, 0}, {0, 1}, {0, -1}};
-        int [][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}}; // 是否可以考虑只走两个方向
-        boolean [][] vis;
-        int m, n, min = Integer.MAX_VALUE;
-        private void dfs(int i, int j, int sum, int [] t, int [] r, int [] c, int [][] ds) {
-            if (i == t[0] && j == t[1]) {
-                min = Math.min(min, sum);
-                return ;
-            }
-            vis[i][j] = true;
-            for (int k = 0; k < 2; k++) {
-                int x = i + ds[k][0], y = j + ds[k][1];
-                if (x < 0 || x >= m || y < 0 || y >= n || vis[x][y]) continue;
-                dfs(x, y, sum + (k < 1 ? r[x] : c[y]), t, r, c, ds);
-            }
-            vis[i][j] = false;
-        }
-        // 最后的解题答案其实非常简单
-        public int minCost(int[] startPos, int[] homePos, int[] rowCosts, int[] colCosts) {
-            if (startPos[0] == homePos[0] && startPos[1] == homePos[1])
-                return 0;
-            int minRow = Math.min(startPos[0], homePos[0]);
-            int maxRow = Math.max(startPos[0], homePos[0]);
-            int minCol = Math.min(startPos[1], homePos[1]);
-            int maxCol = Math.max(startPos[1], homePos[1]);
-            int res = 0;
-            for (int i = minRow; i <= maxRow; i++) 
-                res += rowCosts[i];
-            for (int i = minCol; i <= maxCol; i++) 
-                res += colCosts[i];
-            res = res - rowCosts[startPos[0]] - colCosts[startPos[1]];
+            List<Integer> res = new ArrayList<>(ans);
+            Collections.sort(res);
             return res;
+            // return new ArrayList<>(ans);
         }
-
     }
     public static void main (String[] args) {
         Solution s = new Solution ();
 
-        // int [] a = new int [] {1, 0};
-        // int [] b = new int [] {2, 3};
-        // int [] c = new int [] {5, 4, 3};
-        // int [] d = new int [] {8, 2, 6, 7};
-        String a = ".....HH...";
-        // String a = ".HH.H.H.H..";
-        int r = s.minimumBuckets(a);
+        // int [][] a = new int [][] {{3,4,2},{1,2,1},{2,3,1}};
+        int [][] a = new int [][] {{0,2,1},{1,3,1},{4,5,1}};
 
-        // int r = s.minCost(a, b, c, d);
-        System.out.println ("r: " + r);
+        List<Integer> r = s.findAllPeople(294, a, 27);
 
+        // List<Integer> r = s.findAllPeople(294, a, 27);
+        System.out.println("r.size(): " + r.size());
+        System.out.println(Arrays.toString(r.toArray()));
+        
     }
 }
 // cmp s = new cmp (a);
@@ -191,3 +151,6 @@ public class cmp {
         
 // TreeNode res = s.(root );
 // res.levelPrintTree(res);
+
+// [0,4,11,13,22,24,27,32,37,38,42,55,59,63,69,70,71,73,79,85,87,88,102,106,112,124,128,139,149,156,159,168,175,183,184,189,192,193,194,199,201,205,210,214,215,218,222,230,232,234,249,255,259,264,269,271,283,285,287,288]
+// [0,4,11,13,22,24,27,32,37,38,42,55,59,63,69,70,71,73,79,85,87,88,102,106,112,124,128,139,149,156,159,168,175,183,184,189,190,192,193,194,199,201,205,210,211,214,215,218,222,225,230,232,234,244,249,250,255,259,261,264,269,271,283,285,287,288]

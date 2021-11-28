@@ -285,52 +285,6 @@ public class backtwoTracking {
         // }
         
 
-        // public boolean splitString(String s) {
-        //     int n = s.length();
-        //     if (n < 2) return false;
-        //     if (n == 2) return s.charAt(0) > s.charAt(1);
-        //     for (int i = 1; i <= s.length() >> 1; i++)
-        //         for (int j = 1; j + i <= s.length(); j++)  {
-        //             System.out.println("\ni: " + i);
-        //             System.out.println("j: " + j);
-        //             System.out.println("s.substring(0, i): " + s.substring(0, i));
-        //             System.out.println("s.substring(i, i + j): " + s.substring(i, i + j));
-        //             if (isValid(s, s.substring(0, i), s.substring(i, i + j), i + j)) return true;
-        //         }
-        //     return false;
-        // }
-        // private boolean isValid(String s, String first, String second, int index) {
-        //     if (first.length() == 1 && first.equals("0")) return false;
-        //     long sum = Long.parseLong(first) - Long.parseLong(second);
-        //     if (index == s.length() && sum == 1) return true; 
-        //     long third = Long.parseLong(second) -1;
-        //     System.out.println("third: " + String.valueOf(third));
-        //     System.out.println("s: " + s);
-
-        //     // int j = 0;
-        //     // if (s.charAt(index) != (third+"").charAt(0) && s.charAt(index) == '0') {
-        //     //    j = index;
-        //     //     while (j < s.length() && s.charAt(j) == '0') ++j;
-        //     // }
-        //     // System.out.println("(s.startsWith(third + '', index) || String.valueOf(Long.parseLong(s.substring(index))).startsWith(third+'', 0)): " + (s.startsWith(third + "", index) || String.valueOf(Long.parseLong(s.substring(index))).startsWith(third+"", 0)));
-            
-
-        //     if (s.startsWith(third + "", index) || String.valueOf(Long.parseLong(s.substring(index))).startsWith(third+"", 0)) {
-        //         int i = index;
-        //         if (!s.startsWith(third + "", index)) {
-        //             while (s.charAt(i) == '0') ++i;
-        //         }
-        //         // System.out.println("index: " + index);
-        //         // System.out.println("i: " + i);
-        //         // System.out.println("s.charAt(i): " + s.charAt(i));
-        //         // System.out.println("(i + (third +: " + (i + (third + "").length()));
-        //         // System.out.println("(isValid(s, second, third  " + (isValid(s, second, third + "", i + (third + "").length())));
-        //         if (isValid(s, second, third + "", i + (third + "").length())) return true;
-        //     }  
-        //     return false;
-        // }
-
-
         // private boolean isValid(String ori) {
         //     int x = 0, y = 0;
         //     for (int i = 0; i < ori.length(); i++) {

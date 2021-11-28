@@ -15582,119 +15582,6 @@ private double fact(double n) {
 // Complexity: There can be total of (8 * 6) balls with 8 distinct. Complexity of recursion is f * s * disF * disS = O(48 * 48 * 8 * 8)
 #+END_SRC
 
-*** 903. Valid Permutations for DI Sequence - Hard
-You are given a string s of length n where s[i] is either:
-
-'D' means decreasing, or
-'I' means increasing.
-A permutation perm of n + 1 integers of all the integers in the range [0, n] is called a valid permutation if for all valid i:
-
-If s[i] == 'D', then perm[i] > perm[i + 1], and
-If s[i] == 'I', then perm[i] < perm[i + 1].
-Return the number of valid permutations perm. Since the answer may be large, return it modulo 109 + 7.
-
-当是降序时，下一个数字不小于当前最后一个数字，反之是升序时，下一个数字小于当前最后一个数字，所以可以写出状态转移方程如下所示：
-#+BEGIN_SRC java
-if (S[i-1] == 'D')    dp[i][j] += dp[i-1][k]    ( j <= k <= i )
-else                  dp[i][j] += dp[i-1][k]    ( 0 <= k < j )
-#+END_SRC
-
-[[./pic/903.png]]
-
-#+BEGIN_SRC java
-public int numPermsDISequence(String s) {
-    int n = s.length(), mod = (int)1e9 + 7, res = 0;
-    int [][] dp = new int [n+1][n+1];
-    dp[0][0] = 1;
-    for (int i = 1; i <= n; i++) 
-        for (int j = 0; j <= i; j++) // 考虑当前最后一个元素为j
-            if (s.charAt(i-1) == 'D')
-                // 可以把序列中所有大于等于j的元素都加上1得到新序列（这个时候是不会改变当前序列的大小关系的），再把j添加到序列末尾得到
-                for (int k = j; k <= i; k++) 
-                    dp[i][j] = (dp[i][j] + dp[i-1][k]) % mod;
-            else // 考虑当前最后一个元素为j
-                 // 把该序列中所有大于等于j(k < j <= i)的数字都加上1，并在末尾添加一个j得到dp[i][j]中的一种方案
-                for (int k = 0; k < j; k++) // 把序列中所有大等于j的元素都加上1,再把j放在序列末尾得到
-                    dp[i][j] = (dp[i][j] + dp[i-1][k]) % mod;
-    for (int i = 0; i <= n; i++) 
-        res = (res + dp[n][i]) % mod;
-    return (int)res;
-}
-#+END_SRC
-**** 解题思路与分析: (优化版本动态规划) O(n2)
-
-题解2:动态规划优化。延续上述的思路，但是我们发现我们的重复计算太多了。
-
-当s[i - 1] == 'D'的时候：
-#+BEGIN_SRC java
-dp[i][j] = dp[i - 1][j] + dp[i - 1][j + 1] + dp[i - 1][j + 2] + ... + dp[i][i - 1]
-dp[i][j + 1] = dp[i - 1][j + 1] + dp[i - 1][j + 2] + ... + dp[i][i - 1]
-dp[i][j] = dp[i][j + 1] + dp[i - 1][j]
-基于此，我们需要从后往前计算，而且从i - 1开始计算就可以了，一方面是当s[i - 1] = 'D'的时候，i不可能出现在最后一个位置上，同时也避免了j + 1越界。
-#+END_SRC
-
-当s[i - 1] = 'I'的时候
-#+BEGIN_SRC java
-
-dp[i][j - 1] = dp[i - 1][0] + dp[i - 1][1] + ... + dp[i - 1][j - 2]
-dp[i][j] = dp[i][j - 1] + dp[i - 1][j - 1]
-基于此，我们需要从前往后计算，而且从1开始计算就可以了，一方式是当s[i - 1] = 'I'的时候，0不可能出现在最后一个位置上，同时也避免了j - 1越界。
-dp[i][j] = dp[i - 1][0] + dp[i - 1][1] + ... + dp[i - 1][j - 1]
-#+END_SRC
-
-时间复杂度:O(n2)
-
-     #+BEGIN_SRC java
-static final int mod = (int)1e9 + 7;
-public int numPermsDISequence(String t) {
-    int n = t.length(), ans = 0;
-    char [] s = t.toCharArray();
-    int [][] dp = new int [n + 1][n + 1];
-    dp[0][0] = 1;
-    for (int i = 1; i <= n; i ++) 
-        if (s[i - 1] == 'D') 
-            for (int j = i - 1 ; j >= 0 ; j --)
-                dp[i][j] = (dp[i][j + 1] + dp[i - 1][j]) % mod;
-        else for (int j = 1; j <= i; j ++)
-                dp[i][j] = (dp[i][j - 1] + dp[i - 1][j - 1]) % mod;
-    for (int i = 0 ; i <= n ; i ++)
-        ans = (ans + dp[n][i]) % mod;
-    return ans;
-}
-     #+END_SRC
-**** 解题思路与分析
-     
-     [[./pic/9032.png]]
-     
-     #+BEGIN_SRC java
-static final int mod = (int)1e9 + 7;
-public int numPermsDISequence(String t) {
-    int n = t.length(), ans = 0;
-    char [] s = t.toCharArray();
-    long [][] dp = new long [n+1][n+1];
-    long [][] c = new long [n+2][n+2];
-    for (int i = 0; i <= n; i++)
-        dp[i][i] = 1;
-    for (int i = 0; i <= n+1; i++) {
-        c[i][0] = 1;
-        for (int j = 1; j <= i; j++) 
-            c[i][j] = (int)((c[i-1][j] + c[i-1][j-1]) % mod);
-    }
-    for (int len = 2; len <= n+1; len++) 
-        for (int i = 0; i+len-1 <= n; i++) {
-            int j = i + len - 1;
-            if (s[i] == 'D')   // 如果s[i] = 'D'，那么最大的元素可以放在p[i]上。dp[i][j] += dp[i + 1][j]
-                dp[i][j] = (dp[i][j] + dp[i+1][j]) % mod;
-            if (s[j-1] == 'I') // 如果s[j - 1] = 'I'，那么最大的元素可以放在p[j]上。dp[i][j] += dp[i][j - 1]
-                dp[i][j] = (dp[i][j] + dp[i][j-1]) % mod;
-            for (int k = i+1; k <= j-1; k++)
-                if (s[k-1] == 'I' && s[k] == 'D')
-                    dp[i][j] = (dp[i][j] + (1l * c[len-1][k-i]) * dp[i][k-1] % mod * dp[k+1][j] % mod) % mod;
-        }
-    return (int)dp[0][n];
-}
-     #+END_SRC
-
 *** 1569. Number of Ways to Reorder Array to Get Same BST - Hard
 Given an array nums that represents a permutation of integers from 1 to n. We are going to construct a binary search tree (BST) by inserting the elements of nums in order into an initially empty BST. Find the number of different ways to reorder nums so that the constructed BST is identical to that formed from the original array nums.
 
@@ -15921,6 +15808,295 @@ class TreeNode {
 
 空间复杂度：O(n)
 
+*** 903. Valid Permutations for DI Sequence - Hard
+You are given a string s of length n where s[i] is either:
+
+'D' means decreasing, or
+'I' means increasing.
+A permutation perm of n + 1 integers of all the integers in the range [0, n] is called a valid permutation if for all valid i:
+
+If s[i] == 'D', then perm[i] > perm[i + 1], and
+If s[i] == 'I', then perm[i] < perm[i + 1].
+Return the number of valid permutations perm. Since the answer may be large, return it modulo 109 + 7.
+
+当是降序时，下一个数字不小于当前最后一个数字，反之是升序时，下一个数字小于当前最后一个数字，所以可以写出状态转移方程如下所示：
+#+BEGIN_SRC java
+if (S[i-1] == 'D')    dp[i][j] += dp[i-1][k]    ( j <= k <= i )
+else                  dp[i][j] += dp[i-1][k]    ( 0 <= k < j )
+#+END_SRC
+
+[[./pic/903.png]]
+
+#+BEGIN_SRC java
+public int numPermsDISequence(String s) {
+    int n = s.length(), mod = (int)1e9 + 7, res = 0;
+    int [][] dp = new int [n+1][n+1];
+    dp[0][0] = 1;
+    for (int i = 1; i <= n; i++) 
+        for (int j = 0; j <= i; j++) // 考虑当前最后一个元素为j
+            if (s.charAt(i-1) == 'D')
+                // 可以把序列中所有大于等于j的元素都加上1得到新序列（这个时候是不会改变当前序列的大小关系的），再把j添加到序列末尾得到
+                for (int k = j; k <= i; k++) 
+                    dp[i][j] = (dp[i][j] + dp[i-1][k]) % mod;
+            else // 考虑当前最后一个元素为j
+                 // 把该序列中所有大于等于j(k < j <= i)的数字都加上1，并在末尾添加一个j得到dp[i][j]中的一种方案
+                for (int k = 0; k < j; k++) // 把序列中所有大等于j的元素都加上1,再把j放在序列末尾得到
+                    dp[i][j] = (dp[i][j] + dp[i-1][k]) % mod;
+    for (int i = 0; i <= n; i++) 
+        res = (res + dp[n][i]) % mod;
+    return (int)res;
+}
+#+END_SRC
+**** 解题思路与分析: (优化版本动态规划) O(n2)
+
+题解2:动态规划优化。延续上述的思路，但是我们发现我们的重复计算太多了。
+
+当s[i - 1] == 'D'的时候：
+#+BEGIN_SRC java
+dp[i][j] = dp[i - 1][j] + dp[i - 1][j + 1] + dp[i - 1][j + 2] + ... + dp[i][i - 1]
+dp[i][j + 1] = dp[i - 1][j + 1] + dp[i - 1][j + 2] + ... + dp[i][i - 1]
+dp[i][j] = dp[i][j + 1] + dp[i - 1][j]
+基于此，我们需要从后往前计算，而且从i - 1开始计算就可以了，一方面是当s[i - 1] = 'D'的时候，i不可能出现在最后一个位置上，同时也避免了j + 1越界。
+#+END_SRC
+
+当s[i - 1] = 'I'的时候
+#+BEGIN_SRC java
+
+dp[i][j - 1] = dp[i - 1][0] + dp[i - 1][1] + ... + dp[i - 1][j - 2]
+dp[i][j] = dp[i][j - 1] + dp[i - 1][j - 1]
+基于此，我们需要从前往后计算，而且从1开始计算就可以了，一方式是当s[i - 1] = 'I'的时候，0不可能出现在最后一个位置上，同时也避免了j - 1越界。
+dp[i][j] = dp[i - 1][0] + dp[i - 1][1] + ... + dp[i - 1][j - 1]
+#+END_SRC
+
+时间复杂度:O(n2)
+
+     #+BEGIN_SRC java
+static final int mod = (int)1e9 + 7;
+public int numPermsDISequence(String t) {
+    int n = t.length(), ans = 0;
+    char [] s = t.toCharArray();
+    int [][] dp = new int [n + 1][n + 1];
+    dp[0][0] = 1;
+    for (int i = 1; i <= n; i ++) 
+        if (s[i - 1] == 'D') 
+            for (int j = i - 1 ; j >= 0 ; j --)
+                dp[i][j] = (dp[i][j + 1] + dp[i - 1][j]) % mod;
+        else for (int j = 1; j <= i; j ++)
+                dp[i][j] = (dp[i][j - 1] + dp[i - 1][j - 1]) % mod;
+    for (int i = 0 ; i <= n ; i ++)
+        ans = (ans + dp[n][i]) % mod;
+    return ans;
+}
+     #+END_SRC
+**** 解题思路与分析
+     
+     [[./pic/9032.png]]
+     
+     #+BEGIN_SRC java
+static final int mod = (int)1e9 + 7;
+public int numPermsDISequence(String t) {
+    int n = t.length(), ans = 0;
+    char [] s = t.toCharArray();
+    long [][] dp = new long [n+1][n+1];
+    long [][] c = new long [n+2][n+2];
+    for (int i = 0; i <= n; i++)
+        dp[i][i] = 1;
+    for (int i = 0; i <= n+1; i++) {
+        c[i][0] = 1;
+        for (int j = 1; j <= i; j++) 
+            c[i][j] = (int)((c[i-1][j] + c[i-1][j-1]) % mod);
+    }
+    for (int len = 2; len <= n+1; len++) 
+        for (int i = 0; i+len-1 <= n; i++) {
+            int j = i + len - 1;
+            if (s[i] == 'D')   // 如果s[i] = 'D'，那么最大的元素可以放在p[i]上。dp[i][j] += dp[i + 1][j]
+                dp[i][j] = (dp[i][j] + dp[i+1][j]) % mod;
+            if (s[j-1] == 'I') // 如果s[j - 1] = 'I'，那么最大的元素可以放在p[j]上。dp[i][j] += dp[i][j - 1]
+                dp[i][j] = (dp[i][j] + dp[i][j-1]) % mod;
+            for (int k = i+1; k <= j-1; k++)
+                if (s[k-1] == 'I' && s[k] == 'D')
+                    dp[i][j] = (dp[i][j] + (1l * c[len-1][k-i]) * dp[i][k-1] % mod * dp[k+1][j] % mod) % mod;
+        }
+    return (int)dp[0][n];
+}
+     #+END_SRC
+
+*** 233. Number of Digit One - Hard
+Given an integer n, count the total number of digit 1 appearing in all non-negative integers less than or equal to n.
+**** 解题思路与分析: 递归
+#+BEGIN_SRC java
+[1--9]--> 1
+[10--19] --> 11
+[20--29] --> 1
+[30--39] --> 1
+....
+[90--99] --> 1
+[100--199] --> 100 + count(99) 
+[200-299] ---> count(99) 
+....
+[900-999] ---> count(99)
+[1000-1999]  -> 1000 + count(999) // 首先千位数上一直都是1， 所以这里有1000个1， 然后在个位，十位和百位上的1就是count(999)
+[2000-2999] --> count(999) 
+[3000-3999] --> count(999) 
+... 
+[9000-9999] --> count(999)
+#+END_SRC
+上面的数看上去已经有点规律了， 那么我们如果要求解符合题目要求的n总共有多少个1，
+
+a. 假设n=2345,
+
+那么f(2345) = 1000 + f(345) + f(999) * 2
+
+相当于[0–999]之间的1会需要计数两次， 然后呢， 加上千位数的1会计数1000次。 最后， 还有345需要计数
+
+b. 假设n=3568,
+
+那么f(3568) = 1000 + f(568) + f(999) * 3
+
+同理， [1000-1999]在千位数上的1有1000个， 然后， [0–999]需要计数三次，就是千位数分别数0，1，2的时候总共有三次，
+
+最后， 千位数是3的时候，568的时候需要计数。
+
+c. 假设n=1729,
+
+那么f(1729) = 729+1 + f(999) + f(729)
+
+考虑千位数的时候， 千位数数1的情况和前面两个情况不太一样， 这时候， 千位数是1的数是[1000-1729], 所以总共有729+1个，
+
+然后， 千位数数0的时候， [0–999]就是f(999), 千位数是1的时候， 还有f(729)需要计数
+
+     #+BEGIN_SRC java
+public int countDigitOne(int n) {
+    if (n <= 0) return 0;
+    if (n < 10) return 1;
+    int base = (int)Math.pow(10, String.valueOf(n).length()-1);
+    int fst = n / base, residual = n % base;
+    if (fst == 1)
+        return residual + 1 + countDigitOne(residual) + countDigitOne(base - 1);
+    else
+        return base + countDigitOne(residual) + fst * countDigitOne(base - 1);
+}
+     #+END_SRC
+**** 解题思路与分析
+
+以算百位上1为例子: 
+
+假设百位上是0, 1, 和 >=2 三种情况:
+
+ case 1: n=3141092, a= 31410, b=92. 计算百位上1的个数应该为 3141 *100 次.
+
+ case 2: n=3141192, a= 31411, b=92. 计算百位上1的个数应该为 3141 *100 + (92+1) 次.
+
+ case 3: n=3141592, a= 31415, b=92. 计算百位上1的个数应该为 (3141+1) *100 次.
+ 
+
+所以可以将每一位归纳成这样一个公式：
+
+(a + 8) / 10 * m + (a % 10 == 1) * (b + 1)
+ 
+
+需要注意的坑，虽然最终结果不会超过int范围，但是因为中间计算涉及乘法，所以会出现溢出，需要用long long存储中间变量。
+
+     #+BEGIN_SRC java
+public int countDigitOne(int n) { // 
+    long digit = 1L;//值为1, 10, 100, ..., 表示当前处理的十进制数位
+    int ans = 0;
+    while (n >= digit) { // 枚举每一数位上1的个数
+        int cnt1 = (int)(n / (digit * 10) * digit); // 由更高数位的值产生的当前数位1的出现次数
+        int cnt2 = Math.min(Math.max((int)(n % (digit * 10) - digit + 1), 0), (int)digit); // 由更低数位的值产生的当前数位1的出现次数
+        ans += cnt1 + cnt2;
+        digit *= 10L; // 十进制数位左移1位
+    }
+    return ans;
+}
+     #+END_SRC
+**** 解题思路与分析: 数每一位上1的个数
+
+     The idea is to calculate occurrence of 1 on every digit. There are 3 scenarios, for example
+
+if n = xyzdabc
+
+and we are considering the occurrence of one on thousand, it should be:
+#+BEGIN_SRC java
+(1) xyz * 1000                     if d == 0
+(2) xyz * 1000 + abc + 1           if d == 1
+(3) xyz * 1000 + 1000              if d > 1
+#+END_SRC
+
+iterate through all digits and sum them all will give the final answer
+
+     #+BEGIN_SRC java
+public int countDigitOne(int n) {
+    if (n <= 0) return 0;
+    int q = n, x = 1, ans = 0;
+    do {
+        int digit = q % 10;
+        q /= 10;
+        ans += q * x;
+        if (digit == 1) ans += n % x + 1;
+        if (digit >  1) ans += x;
+        x *= 10;
+    } while (q > 0); // q > 0
+    return ans;
+}
+public int countDigitOne(int n) {
+    int count = 0;
+    //依次考虑个位、十位、百位...是 1
+    //k = 1000, 对应于上边举的例子
+    for (int k = 1; k <= n; k *= 10) { 
+        // xyzdabc
+        int abc = n % k;
+        int xyzd = n / k;
+        int d = xyzd % 10;
+        int xyz = xyzd / 10;
+        count += xyz * k;
+        if (d > 1) {
+            count += k;
+        }
+        if (d == 1) {
+            count += abc + 1;
+        }
+        //如果不加这句的话，虽然 k 一直乘以 10，但由于溢出的问题
+        //k 本来要大于 n 的时候，却小于了 n 会再次进入循环
+        //此时代表最高位是 1 的情况也考虑完成了
+        if(xyz == 0){
+            break;
+        }
+    }
+    return count;
+}
+public int countDigitOne(int n) {
+    int count = 0;
+    for (long k = 1; k <= n; k *= 10) {
+        long r = n / k, m = n % k;
+        // sum up the count of ones on every place k
+        count += (r + 8) / 10 * k + (r % 10 == 1 ? m + 1 : 0);
+    }
+    return count;
+}
+#+END_SRC
+**** 解题思路与分析
+
+复杂度分析
+
+时间复杂度：O(\log n)O(logn)。nn 包含的数位个数与 nn 呈对数关系。
+
+空间复杂度：O(1)O(1)。
+
+     #+BEGIN_SRC java
+public int countDigitOne(int n) {
+// mulk 表示 10^k
+// 在下面的代码中，可以发现 k 并没有被直接使用到（都是使用 10^k）
+// 但为了让代码看起来更加直观，这里保留了 k
+    long mulk = 1;
+    int ans = 0;
+    for (int k = 0; n >= mulk; ++k) {
+        ans += (n / (mulk * 10)) * mulk + Math.min(Math.max(n % (mulk * 10) - mulk + 1, 0), mulk);
+        mulk *= 10;
+    }
+    return ans;
+}
+#+END_SRC
 
 * binary Search
 ** LeetCode Binary Search Summary 二分搜索法小结

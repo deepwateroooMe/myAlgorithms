@@ -173,60 +173,174 @@ public class strthreeing {
         // }
 
 
-        private boolean isValidTagName(String t) {
+        // public boolean isValid(String t) {
+        //     int n = t.length();
+        //     char [] s = t.toCharArray();
+        //     ArrayDeque<String> st = new ArrayDeque<>();
+        //     for (int i = 0; i < n; i++) {
+        //         if (i > 0 && st.isEmpty()) return false;
+        //         if (t.substring(i, Math.min(n, i+9)).equals("<![CDATA[")) { // parse cdata
+        //             int j = i+9;
+        //             i = t.indexOf("]]>", j);
+        //             if (i == -1) return false;
+        //             i += 2;
+        //         } else if (t.substring(i, Math.min(n, i+2)).equals("</")) { // ending tag
+        //             int j = i + 2;
+        //             i = t.indexOf(">", j);
+        //             String tmp = t.substring(j, i);
+        //             if (st.isEmpty() || !tmp.equals(st.peekLast()))
+        //                 return false;
+        //             st.pollLast();
+        //         } else if (s[i] == '<') { // starting tag
+        //             int j = i + 1;
+        //             i = t.indexOf(">", j);
+        //             if (i < 0 || i == j || i-j > 9)
+        //                 return false;
+        //             for (int k = j; k < i; k++) 
+        //                 if (!Character.isUpperCase(s[k]))
+        //                     return false;
+        //             String tmp = t.substring(j, i);
+        //             st.offerLast(tmp);
+        //         }
+        //     }
+        //     return st.isEmpty();
+        // }
+
+
+        // public boolean isRationalEqual(String s, String t) {
+        //     return Double.compare(stodJava(s), stodJava(t)) == 0;
+        // }
+        // private double stodJava(String t) {
+        //     int n = t.length();
+        //     String s = "";
+        //     if (t.charAt(n-1) == ')') {
+        //         int i = t.indexOf("(");
+        //         s = t.substring(0, i) + t.substring(i+1, n-1).repeat(20);
+        //     } else s = t;
+        //     return Double.parseDouble(s);
+        // }
+        // public boolean isRationalEqual(String S, String T) {
+        //     Fraction f1 = convert(S);
+        //     Fraction f2 = convert(T);
+        //     return f1.n == f2.n && f1.d == f2.d;
+        // }
+        // public Fraction convert(String S) {
+        //     int state = 0; //whole, decimal, repeating
+        //     Fraction ans = new Fraction(0, 1);
+        //     int decimal_size = 0;
+        //     for (String part: S.split("[.()]")) {
+        //         state++;
+        //         if (part.isEmpty()) continue;
+        //         long x = Long.valueOf(part);
+        //         int sz = part.length();
+        //         if (state == 1) { // whole
+        //             ans.iadd(new Fraction(x, 1));
+        //         } else if (state == 2) { // decimal
+        //             ans.iadd(new Fraction(x, (long) Math.pow(10, sz)));
+        //             decimal_size = sz;
+        //         } else { // repeating
+        //             long denom = (long) Math.pow(10, decimal_size);
+        //             denom *= (long) (Math.pow(10, sz) - 1);
+        //             ans.iadd(new Fraction(x, denom));
+        //         }
+        //     }
+        //     return ans;
+        // }
+        // class Fraction {
+        //     long n, d;
+        //     Fraction(long n, long d) {
+        //         long g = gcd(n, d);
+        //         this.n = n / g;
+        //         this.d = d / g;
+        //     }
+        //     public void iadd(Fraction other) {
+        //         long numerator = this.n * other.d + this.d * other.n;
+        //         long denominator = this.d * other.d;
+        //         long g = Fraction.gcd(numerator, denominator);
+        //         this.n = numerator / g;
+        //         this.d = denominator / g;
+        //     }
+        //     static long gcd(long x, long y) {
+        //         return x != 0 ? gcd(y % x, x) : y;
+        //     }
+        // }
+
+
+        // public boolean splitString(String t) {
+        //     n = t.length();
+        //     this.t = t;
+        //     if (n < 2) return false;
+        //     if (n == 2) return t.charAt(0) > t.charAt(1);
+        //     char [] s = t.toCharArray();
+        //     return dfs(0, new ArrayList<>());
+        // }
+        // String t;
+        // char [] s;
+        // int n;
+        // private boolean dfs(int idx, List<Long> l) {
+        //     if (l.size() >= 2) 
+        //         if (l.get(l.size()-2) - l.get(l.size()-1) != 1) return false;
+        //     if (idx == n) {
+        //         if (l.size() >= 2) 
+        //             return true;
+        //         return false;
+        //     }
+        //     for (int i = idx; i < n; i++) {
+        //         String cur = t.substring(idx, i+1);
+        //         if (cur.length() == 20 || cur.length() == 19 && cur.compareTo(String.valueOf(Long.MAX_VALUE)) >= 0) continue;
+        //         long tmp = Long.parseLong(t.substring(idx, i+1));
+        //         l.add(tmp);
+        //         if (dfs(i+1, l)) return true;
+        //         l.remove(l.size()-1);
+        //     }
+        //     return false;
+        // }
+        public boolean splitString(String t) {
+            long start = 0;
+            long INF = (long)1e10; // 子串对应数值的上限
             int n = t.length();
-            if (n == 0 || n > 9) return false;
             char [] s = t.toCharArray();
-            for (int i = 0; i < n; i++) 
-                if (!Character.isUpperCase(s[i]))
-                    return false;
-            return true;
-        }
-        private boolean isValid(int x, int y) {
-            // System.out.println("\n x: " + x);
-            // System.out.println("y: " + y);
-            // System.out.println("t.substring(x, y+1): " + t.substring(x, y+1));
-            int i = x, j = y;
-            if (t.substring(x, y+1).startsWith("<![CDATA[") && t.substring(y-2, y+1).equals("]]>"))
-                return hasTag;
-            while (i <= y && s[i] != '<') i++;
-            // System.out.println("hasTag: " + hasTag);
-            // System.out.println(" (i == y): " +  (i == y));
-            if (i == y+1) return hasTag;
-            while (j >= i && s[j] != '>') j--;
-            i++;
-            if (s[i] != '!') {
-                int k = i + 1;
-                while (k < j && s[k] != '>') k++;
-                if (k == j) return false;
-                String name = t.substring(i, k);
-                if (!isValidTagName(name)) return false;
-                if (!t.endsWith("</"+name+">")) return false;
-                hasTag = true;
-                return isValid(k+1, j - (k-i+3));
+            for (int i = 0; i < n - 1 && start < INF; ++i) { // 枚举第一个子字符串对应的初始值, 第一个子字符串不能包含整个字符串
+                start = start * 10 + (s[i] - '0');
+                long preVal = start; // 循环验证当前的初始值是否符合要求
+                long curVal = 0;
+                int cidx = i + 1;
+                for (int j = i + 1; j < n && curVal < INF; ++j){
+                    if (preVal == 1) { // 如果上一个值为 1，那么剩余字符串对应的数值只能为 0
+                        if (t.substring(j).compareTo(String.valueOf(Long.MAX_VALUE)) >= 0) break;
+                        if (Long.parseLong(t.substring(j)) == 0) return true;
+                        break;
+                    }
+                    curVal = curVal * 10 + (s[j] - '0');
+                    if (curVal > preVal - 1){
+                        // 不符合要求，提前结束
+                        break;
+                    } else if (curVal == preVal - 1){
+                        if (j + 1 == n) // 已经遍历到末尾
+                            return true;
+                        preVal = curVal;
+                        curVal = 0;
+                        cidx = j + 1;
+                    }
+                }
             }
-            return true;
-        }
-        boolean hasTag = false;
-        String t;
-        char [] s;
-        int n;
-        public boolean isValid(String t) {
-            this.t = t;
-            n = t.length();
-            s = t.toCharArray();
-            return isValid(0, n-1);
+            return false;
         }
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        // String a = "<DIV>  div tag is not closed  <DIV>";
-        // String a = "<A>  <B> </A>   </B>";
-        // String a = "<DIV>>>  ![cdata[]] <![CDATA[<div>]>]]>]]>>]</DIV>";
-        String a = "<A><A>/A></A></A>";
+        // String a = "050043";
+        // String a = "10009998";
+        // String a = "1234";
+        // String a = "53520515049";
+        // String a = "94650723337775781477";
+        // String a = "10009998";
+        // String a = "64424509442147483647";
+        // String a = "200100";
+        String a = "19979817075396416247";
 
-        boolean r = s.isValid(a);
+        boolean r = s.splitString(a);
         System.out.println("r: " + r);
     }
 }
