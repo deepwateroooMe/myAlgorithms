@@ -295,52 +295,293 @@ public class strthreeing {
         //     }
         //     return false;
         // }
-        public boolean splitString(String t) {
-            long start = 0;
-            long INF = (long)1e10; // 子串对应数值的上限
-            int n = t.length();
-            char [] s = t.toCharArray();
-            for (int i = 0; i < n - 1 && start < INF; ++i) { // 枚举第一个子字符串对应的初始值, 第一个子字符串不能包含整个字符串
-                start = start * 10 + (s[i] - '0');
-                long preVal = start; // 循环验证当前的初始值是否符合要求
-                long curVal = 0;
-                int cidx = i + 1;
-                for (int j = i + 1; j < n && curVal < INF; ++j){
-                    if (preVal == 1) { // 如果上一个值为 1，那么剩余字符串对应的数值只能为 0
-                        if (t.substring(j).compareTo(String.valueOf(Long.MAX_VALUE)) >= 0) break;
-                        if (Long.parseLong(t.substring(j)) == 0) return true;
-                        break;
-                    }
-                    curVal = curVal * 10 + (s[j] - '0');
-                    if (curVal > preVal - 1){
-                        // 不符合要求，提前结束
-                        break;
-                    } else if (curVal == preVal - 1){
-                        if (j + 1 == n) // 已经遍历到末尾
-                            return true;
-                        preVal = curVal;
-                        curVal = 0;
-                        cidx = j + 1;
-                    }
-                }
-            }
-            return false;
-        }
+        // public boolean splitString(String t) {
+        //     long start = 0;
+        //     long INF = (long)1e10; // 子串对应数值的上限
+        //     int n = t.length();
+        //     char [] s = t.toCharArray();
+        //     for (int i = 0; i < n - 1 && start < INF; ++i) { // 枚举第一个子字符串对应的初始值, 第一个子字符串不能包含整个字符串
+        //         start = start * 10 + (s[i] - '0');
+        //         long preVal = start; // 循环验证当前的初始值是否符合要求
+        //         long curVal = 0;
+        //         int cidx = i + 1;
+        //         for (int j = i + 1; j < n && curVal < INF; ++j){
+        //             if (preVal == 1) { // 如果上一个值为 1，那么剩余字符串对应的数值只能为 0
+        //                 if (t.substring(j).compareTo(String.valueOf(Long.MAX_VALUE)) >= 0) break;
+        //                 if (Long.parseLong(t.substring(j)) == 0) return true;
+        //                 break;
+        //             }
+        //             curVal = curVal * 10 + (s[j] - '0');
+        //             if (curVal > preVal - 1){
+        //                 // 不符合要求，提前结束
+        //                 break;
+        //             } else if (curVal == preVal - 1){
+        //                 if (j + 1 == n) // 已经遍历到末尾
+        //                     return true;
+        //                 preVal = curVal;
+        //                 curVal = 0;
+        //                 cidx = j + 1;
+        //             }
+        //         }
+        //     }
+        //     return false;
+        // }
+
+        // public String fractionAddition(String expression) {
+        //     Scanner sc = new Scanner(expression).useDelimiter("/|(?=[-+])");
+        //     int A = 0, B = 1;
+        //     while (sc.hasNext()) {
+        //         int a = sc.nextInt(), b = sc.nextInt();
+        //         A = A * b + a * B;
+        //         B *= b;
+        //         int g = gcd(A, B);
+        //         A /= g;
+        //         B /= g;
+        //     }
+        //     return A + "/" + B;
+        // }
+        // private int gcd(int a, int b) {
+        //     return a != 0 ? gcd(b % a, a) : Math.abs(b);
+        // }
+        // public String fractionAddition(String t) {
+        //     int n = t.length();
+        //     char [] s = t.toCharArray();
+        //     List<Character> sn = new ArrayList<>(); // sign
+        //     for (int i = 1; i < n; i++) 
+        //         if (s[i] == '+' || s[i] == '-')
+        //             sn.add(s[i]);
+        //     List<Integer> up = new ArrayList<>();
+        //     List<Integer> dn = new ArrayList<>();
+        //     for (String sub : t.split("\\+")) 
+        //         for (String subsub : sub.split("-")) 
+        //             if (subsub.length() > 0) {
+        //                 String [] fra = subsub.split("/");
+        //                 up.add(Integer.parseInt(fra[0]));
+        //                 dn.add(Integer.parseInt(fra[1]));
+        //             }
+        //     if (s[0] == '-')
+        //         up.set(0, -up.get(0));
+        //     int lcm = 1; // 求所有分母的最小公倍数
+        //     for (int x : dn) lcm = lcm_(lcm, x);
+        //     int ans = lcm / dn.get(0) * up.get(0);
+        //     for (int i = 1; i < up.size(); i++) 
+        //         if (sn.get(i-1) == '+')
+        //             ans += lcm / dn.get(i) * up.get(i);
+        //         else ans -= lcm / dn.get(i) * up.get(i);
+        //     int g = gcd(Math.abs(ans), Math.abs(lcm));
+        //     return (ans / g) + "/" + (lcm / g);
+        // }
+        // public int lcm_(int a, int b) { // 求最小公倍数
+        //     return a * b / gcd(a, b);
+        // }
+        // public int gcd(int a, int b) { // 求最大公约数
+        //     while (b != 0) {
+        //         int t = b;
+        //         b = a % b;
+        //         a = t;
+        //     }
+        //     return a;
+        // }
+
+        // public String maximumBinaryString(String t) {
+        //     int n = t.length();
+        //     char [] s = t.toCharArray();
+        //     StringBuilder sb = new StringBuilder(t);
+        //     int cnt = 0, one = 0;
+        //     boolean meetZero = false;
+        //     for (int i = 0; i < n; i++) 
+        //         if (s[i] == '1') {
+        //             cnt++; // cnt: cnt all 1s
+        //             if (!meetZero) one++;
+        //         } else meetZero = true;
+        //     return "1".repeat(one) + (n - cnt > 0 ? "1".repeat(n-cnt-1)+"0" : "") + "1".repeat(cnt-one);
+        // }
+        // public String maximumBinaryString(String t) {
+        //     int l = 0;
+        //     char [] s = t.toCharArray();
+        //     while (l < s.length && s[l] == '1') l++; // 扫过最开始连续是1的片段： s[l] = '0';
+        //     int r = l + 1;
+        //     for (; l < t.length(); l++) {
+        //         if (s[l] == '1')  continue;
+        //         while (r < t.length() && s[r] == '1') r++;
+        //         if (r == t.length()) break;
+        //         s[l] = '1';
+        //         s[r] = '1';
+        //         s[l + 1] = '0'; // for() 逐步地将s[l] = '0'后移至s[l+1] = '0'
+        //         r++;
+        //     }
+        //     return new String(s);
+        // }
+
+        // public String getHint(String ss, String tt) {
+        //     int n = ss.length(), cnt = 0, sum = 0;
+        //     char [] s = ss.toCharArray();
+        //     char [] t = tt.toCharArray();
+        //     Map<Character, Integer> ms = new HashMap<>();
+        //     Map<Character, Integer> mt = new HashMap<>();
+        //     for (int i = 0; i < n; i++) 
+        //         if (s[i] == t[i]) cnt++;
+        //         else {
+        //             ms.put(s[i], ms.getOrDefault(s[i], 0) + 1);
+        //             mt.put(t[i], mt.getOrDefault(t[i], 0) + 1);
+        //         }
+        //     for (Character key : mt.keySet()) 
+        //         if (ms.containsKey(key))
+        //             sum += Math.min(ms.get(key), mt.get(key));
+        //     return cnt + "A" + sum + "B";
+        // }
+        // public String getHint(String ss, String tt) {
+        //     int n = ss.length(), cnt = 0, sum = 0;
+        //     char [] s = ss.toCharArray();
+        //     char [] t = tt.toCharArray();
+        //     Map<Character, Integer> m = new HashMap<>();
+        //     for (int i = 0; i < n; i++) 
+        //         if (s[i] == t[i]) cnt++;
+        //         else {
+        //             if (m.getOrDefault(s[i], 0) < 0) sum++;
+        //             if (m.getOrDefault(t[i], 0) > 0) sum++;
+        //             m.put(s[i], m.getOrDefault(s[i], 0) + 1);
+        //             m.put(t[i], m.getOrDefault(t[i], 0) - 1);
+        //         }
+        //     return cnt + "A" + sum + "B";
+        // }
+
+        // public boolean repeatedSubstringPattern(String t) {
+        //     int n = t.length();
+        //     char [] s = t.toCharArray();
+        //     List<Integer> l = new ArrayList<>();
+        //     for (int i = 0; i < n-1; i++) 
+        //         if (s[i] == s[n-1]) l.add(i);
+        //     for (int i = 0; i < l.size(); i++) {
+        //         int j = l.get(i) + 1;
+        //         String cur = t.substring(0, j);
+        //         if (n % cur.length() == 0 && t.equals(cur.repeat(n / cur.length())))
+        //             return true;
+        //     }
+        //     return false;
+        // }
+
+        // public int numWays(String t) {
+        //     int mod = (int)1e9 + 7;
+        //     int n = t.length(), cnt = 0;
+        //     System.out.println("n: " + n);
+        //     for (char c : s)
+        //         cnt += c-'0';
+        //     if (cnt % 3 != 0) return 0;
+        //     if (cnt == 0) return (int)(((long)n-1l) * ((long)n-2l) / 2 % mod);
+        //     char [] s = t.toCharArray();
+        //     int i = 0, j = n-1, ca = 0, cb = 0, target = cnt / 3;
+        //     while (i < n && ca < target) {
+        //         if (s[i] == '1') ++ca;
+        //         i++;
+        //     }
+        //     while (j >= 0 && cb < target) {
+        //         if (s[j] == '1') ++cb;
+        //         j--;
+        //     }
+        //     int x = i, y = j;
+        //     while (x < j && s[x] == '0') ++x;
+        //     while (y > i && s[y] == '0') --y;
+        //     return (int)(((long)x - i + 1) * ((long)j - y + 1) % mod);
+        // }
+        // public int numWays(String s) {
+        //     final int mod = 1000000007;
+        //     List<Integer> ones = new ArrayList<Integer>();
+        //     int n = s.length();
+        //     for (int i = 0; i < n; i++) 
+        //         if (s.charAt(i) == '1') 
+        //             ones.add(i);
+        //     int m = ones.size();
+        //     if (m % 3 != 0) return 0;
+        //     if (m == 0) {
+        //         long ways = (long) (n - 1) * (n - 2) / 2;
+        //         return (int) (ways % mod);
+        //     } else {
+        //         int index1 = m / 3, index2 = m / 3 * 2;
+        //         int count1 = ones.get(index1) - ones.get(index1 - 1);
+        //         int count2 = ones.get(index2) - ones.get(index2 - 1);
+        //         long ways = (long) count1 * count2;
+        //         return (int) (ways % mod);
+        //     }
+        // }
+
+
+        // public int minCharacters(String a, String b) {
+        //     int m = a.length(), n = b.length();
+        //     char [] s = a.toCharArray();
+        //     char [] t = b.toCharArray();
+        //     char as = 'z', al = 'a', bs = 'z', bl = 'a';
+        //     int [] one = new int [26], two = new int [26];
+        //     for (int i = 0; i < m; i++) {
+        //         one[s[i]-'a']++;
+        //         as = (char)Math.min(as, s[i]);
+        //         al = (char)Math.max(al, s[i]);
+        //     }
+        //     for (int i = 0; i < n; i++)  {
+        //         two[t[i]-'a']++;
+        //         bs = (char)Math.min(bs, t[i]);
+        //         bl = (char)Math.max(bl, t[i]);
+        //     }
+        //     if (al < bs || bl < as || al == as && bl == bs && al == bl) return 0;
+        //     int [] pa = Arrays.copyOf(one, 26);
+        //     int [] pb = Arrays.copyOf(two, 26);
+        //     for (int i = 1; i < 26; i++) 
+        //         pa[i] += pa[i-1];
+        //     for (int i = 1; i < 26; i++) 
+        //         pb[i] += pb[i-1];
+        //     int min = m+n, cur = min;
+        //     for (char c = 'a'; c <= 'z'; c++) {
+        //         cur = min;
+        //         if (c < 'z') {
+        //             cur = Math.min(cur, m - pa[c-'a'] + pb[c-'a']);      // as smallest in a
+        //             cur = Math.min(cur, n - pb[c-'a'] + pa[c-'a']);
+        //         }
+        //         cur = Math.min(cur, m-one[c-'a'] + n - two[c-'a']);
+        //         min = Math.min(min, cur);
+        //     }                
+        //     return min;
+        // }
+
+        // public String solveEquation(String t) {
+        //     int n = t.length();
+        //     char [] s = t.toCharArray();
+        //     int idx = t.indexOf("=");
+        //     helper(t.substring(0, idx), true);
+        //     helper(t.substring(idx+1), false);
+        //     if (a == 0 && a == b) return "Infinite solutions";
+        //     if (a == 0 && a != b) return "No solution";
+        //     return "x=" + String.valueOf(b / a);
+        // }
+        // int a = 0, b = 0;
+        // private void helper(String t, boolean left) {
+        //     int sn = 1, val = -1;
+        //     t += "+";
+        //     char [] s = t.toCharArray();
+        //     for (int i = 0; i < t.length(); i++) {
+        //         if (s[i] == '-' || s[i] == '+') {
+        //             val = (val == -1 ? 0 : val * sn);
+        //             b += left ? -val : val;
+        //             val = -1;
+        //             sn = (s[i] == '+' ? 1 : -1);
+        //         } else if (s[i] >= '0' && s[i] <= '9') {
+        //             if (val == -1) val = 0;
+        //             val = val * 10 + s[i] - '0';
+        //         } else if (s[i] == 'x') {
+        //             val = (val == -1 ? sn : val * sn);
+        //             a += left ? val : -val;
+        //             val = -1;
+        //         }
+        //     }
+        // }
+
+        
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        // String a = "050043";
-        // String a = "10009998";
-        // String a = "1234";
-        // String a = "53520515049";
-        // String a = "94650723337775781477";
-        // String a = "10009998";
-        // String a = "64424509442147483647";
-        // String a = "200100";
-        String a = "19979817075396416247";
+        String a = "x+5-3+x=6+x-2";
 
-        boolean r = s.splitString(a);
+        String r = s.solveEquation(a);
         System.out.println("r: " + r);
     }
 }

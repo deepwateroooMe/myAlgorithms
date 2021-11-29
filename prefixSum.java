@@ -343,53 +343,6 @@ public class prefixSum {
         // }
 
 
-        // public int minCharacters(String a, String b) {
-        //     // System.out.println("a: " + a);
-        //     // System.out.println("b: " + b);
-        //     int m = a.length(), n = b.length();
-        //     char [] s = a.toCharArray();
-        //     char [] t = b.toCharArray();
-        //      char as = 'z', al = 'a', bs = 'z', bl = 'a';
-        //     int [] one = new int [26], two = new int [26];
-        //     for (int i = 0; i < m; i++) {
-        //         one[s[i]-'a']++;
-        //          as = (char)(Math.min(as - 'a', s[i]-'a') + 'a');
-        //          al = (char)(Math.max(al-'a', s[i]-'a') + 'a');
-        //     }
-        //     for (int i = 0; i < n; i++)  {
-        //         two[t[i]-'a']++;
-        //          bs = (char)(Math.min(bs-'a', t[i]-'a') + 'a');
-        //          bl = (char)(Math.max(bl-'a', t[i]-'a') + 'a');
-        //     }
-        //     if (al < bs || bl < as || al == as && bl == bs && al == bl) return 0;
-        //     int [] pa = Arrays.copyOf(one, 26);
-        //     int [] pb = Arrays.copyOf(two, 26);
-        //     for (int i = 1; i < 26; i++) 
-        //         pa[i] += pa[i-1];
-        //     for (int i = 1; i < 26; i++) 
-        //         pb[i] += pb[i-1];
-        //     // System.out.println(Arrays.toString(pa));
-        //     // System.out.println(Arrays.toString(pb));
-        //     int min = Math.max(m, n), cur = min;
-        //     for (char c = 'a'; c <= 'z'; c++) {
-        //         // System.out.println("\n c: " + c);
-        //         cur = min;
-        //         // if (c < bs)
-        //         if (c < 'z')
-        //             cur = Math.min(cur, m - one[c-'a'] + pb[c-'a']);
-        //         // System.out.println("cur: " + cur);
-        //         if (c > 'a')
-        //             cur = Math.min(cur, n - two[c-'a'] + pa[al-'a'-1]);
-        //         // System.out.println("cur: " + cur);
-        //         cur = Math.min(cur, m-one[c-'a'] + n - two[c-'a']);
-        //         // System.out.println("cur: " + cur);
-        //         min = Math.min(min, cur);
-        //         // System.out.println("min: " + min);
-        //     }                
-        //     return min;
-        // }
-
-
         // private boolean isValid(int [][] arr, int i, int j, int x, int y) {
         //     int rval = row[i][y] - (j == 0 ? 0 : row[i][j-1]);
         //     for (int k = i+1; k <= x; k++) 

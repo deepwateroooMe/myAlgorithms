@@ -24,7 +24,12 @@ public class two {
                 else pos += cnt + 1;
                 ++cnt;
                 if (pos == x && n > Integer.MAX_VALUE) {
+
+                    System.out.println("\n x: " + x);
+                    System.out.println("n: " + n);
+                    System.out.println("cnt: " + cnt);
                    long preCnt = cnt;
+                    // cnt += cnt * ((n - cnt) / cnt);
                     n = (n - preCnt) % preCnt;
                     cnt = 0;
                 }

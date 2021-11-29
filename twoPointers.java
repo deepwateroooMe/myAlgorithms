@@ -747,23 +747,61 @@ public class twoPointers {
         //     }
         //     return isPalindrome(ss, i, j) || isPalindrome(tt, i, j);
         // }
-        public boolean checkPalindromeFormation(String s, String t) {
-            return check(s, t) || check(t, s);
-        }
+
+        // public boolean canTransform(String ss, String tt) {
+        //     int n = ss.length(), i = 0, j = 0;
+        //     char [] s = ss.toCharArray();
+        //     char [] t = tt.toCharArray();
+        //     while (i < n && j < n) {
+        //         while (i < n && s[i] == 'X') i++;
+        //         while (j < n && t[j] == 'X') j++;
+        //         if (i == n || j == n) break;
+        //         if (s[i] != t[j]) return false;
+        //         if (s[i] == 'L' && i < j || s[i] == 'R' && i > j) return false;
+        //         i++;
+        //         j++;
+        //     }
+        //     while (i < n) {
+        //         if (s[i] != 'X') return false;
+        //         i++;
+        //     }
+        //     while (j < n) {
+        //         if (t[j] != 'X') return false;
+        //         j++;
+        //     }
+        //     return true;
+        // }
+        // public boolean canTransform(String ss, String tt) { // 这个方法是存在漏洞的
+        //     int n = ss.length(), cntL = 0, cntR = 0;
+        //     char [] s = ss.toCharArray();
+        //     char [] t = tt.toCharArray();
+        //     for (int i = 0; i < n; i++) {
+        //         if (t[i] == 'L') ++cntL;
+        //         if (s[i] == 'R') ++cntR;
+        //         if (s[i] == 'L') --cntL;
+        //         if (t[i] == 'R') --cntR;
+        //         if (cntL < 0 || cntR < 0 || cntL * cntR != 0) return false;
+        //     }
+        //     return cntL == 0 && cntR == 0;
+        // }
+        // // String a = "RLX";
+        // // String b = "XLR";
+
+        
     }   
     public static void main(String[] args) {
         Solution s = new Solution();
+        
+        // String a = "RXXLRXRXL";
+        // String b = "XRLXXRRLX";
+        // String a = "LXXLXRLXXL";
+        // String b = "XLLXRXLXLX";
+        // String "RLX"
+        //     "XLR" = ;
+        String a = "RLX";
+        String b = "XLR";
 
-        // String a = "ulacfd";
-        // String b = "jizalu";
-
-        // String a = "cddbcdbdc";
-        // String b = "cdbccbddc";
-
-        String a = "pvhmupgqeltozftlmfjjde";
-        String b = "yjgpzbezspnnpszebzmhvp";
-
-        boolean r = s.checkPalindromeFormation(a, b);
+        boolean r = s.canTransform(a, b);
         System.out.println("r: " + r);
         
     }

@@ -17,60 +17,70 @@ import static java.util.stream.Collectors.toMap;
 public class six {
     public static class solution {
 
-        public int [] getPos(int m, int n, String t) { // 不知道这个题要怎么想
-            Map<Character, int []> map = new HashMap<>();
-            map.put('L', new int [] {0, -1});
-            map.put('R', new int [] {0, 1});
-            map.put('D', new int [] {1, 0});
-            map.put('U', new int [] {-1, 0});
-            int [] ans = new int [2];
-            // int [][] dirs = {{}, {}, {}, {}} ;
-            Queue<int []> q = new LinkedList<>();
-            for (int i = 0; i < m; i++) 
-                for (int j = 0; j < n; j++) 
-                    q.offer(new int [] {i, j, 0, i, j}); // i, j, idx, oi, oj
-            int cnt = 0, max = 0;
-            while (!q.isEmpty()) {
-                for (int size = q.size()-1; size >= 0; size--) {
-                    int [] cur = q.poll();
-                    if (cur[2] == t.length()) return new int [] {cur[3], cur[4]};
-                    int i = cur[0] + map.get(cur[2])[0], j = cur[1] + map.get(cur[2])[1];
-                    if (i < 0 || i >= m || j < 0 || j >= n) {
-                        max = Math.max(max, cnt);
-                        continue;
-                    }
-                    q.offer(new int [] {i, j, cur[2] + 1, cur[3], cur[4]});
-                }
-                cnt++;
+        public long getSum(int t, int k, int d) {
+            if (t == 0) {
+                for (int i = m-k; i < m; i++)
+                    for (int j = 0; j < n; j++) 
+                        a[i][j] += d * (k - (m-i)+1);
+            } else {
+                for (int j = n-k; j < n; j++)
+                    for (int i = 0; i < m; i++) 
+                        a[i][j] += d * (k - (n-i) + 1);
             }
-            return new int [0];
+            vis = new boolean [m][n];
+            ans = Long.MAX_VALUE;
+            dfs(0, 0, 0);
+            return ans;
+        }
+        int [][] dirs = {{1, 0}, {0, 1}};
+        long ans = Long.MAX_VALUE;
+        public long [][] a;
+        public boolean [][] vis;
+        public int m, n;
+        private void dfs(int i, int j, long sum) {
+            if (i < 0 || i >= m || j < 0 || j >= n || vis[i][j]) return ;
+            if (i == m-1 && j == n-1) {
+                ans = Math.min(ans, sum + a[i][j]);
+                return ;
+            }
+            vis[i][j] = true;
+            for (int [] d : dirs)
+                dfs(i+d[0], j+d[1], sum + a[i][j]);
+            vis[i][j] = false;
         }
     }
     public static void main(String[] args)  throws IOException {
         solution s = new solution();
 
-        Path path = Paths.get("six-sur.txt");
-        Scanner in = new Scanner(path);
-        // Scanner in = new Scanner(System.in);
+        // Path path = Paths.get("six-sur.txt");
+        // Scanner in = new Scanner(path);
+        Scanner in = new Scanner(System.in);
         
-        int n = Integer.parseInt(in.nextLine());
+        // int n = Integer.parseInt(in.nextLine());
         // System.out.println("n: " + n);
 
-        String [] st = new String [n];
-        String [] sur = new String [n];
-        for (int i = 0; i < n; i++) {
-            st[i] =  in.nextLine();
-            sur[i] =  in.nextLine();
-        }
+        String sa = in.nextLine(), sb = in.nextLine(), sc = in.nextLine();
+        String [] ssa = sa.split("\\s+"), ssb = sb.split("\\s+"), ssc = sc.split("\\s+");
+        s.m = Integer.parseInt(ssa[0]);
+        s.n = Integer.parseInt(ssa[1]);
+        int q = Integer.parseInt(ssa[2]);
+        long [] a = new long [ssb.length];
+        for (int i = 0; i < a.length; i++) 
+            a[i] = Long.parseLong(ssb[i]);
+        long [] b = new long [ssc.length];
+        for (int i = 0; i < b.length; i++) 
+            b[i] = Long.parseLong(ssc[i]);
+        s.a = new long [s.m][s.n];
+        for (int i = 0; i < s.m; i++) 
+            for (int j = 0; j < s.n; j++) 
+                s.a[i][j] = a[i] + b[j];
+        for (int i = 0; i < q; i++) {
+            String tmp = in.nextLine();
+            String [] st = tmp.split("\\s+");
+            int t = Integer.parseInt(st[0])-1, k = Integer.parseInt(st[1]), d = Integer.parseInt(st[2]);
+            long sum = s.getSum(t, k, d);
+            System.out.println(sum);
+        }        
         in.close();
-        // System.out.println(Arrays.toString(sur));
-
-        for (int i = 0; i < n; i++) {
-            String [] tp = st[i].split("\\s+");
-            int m = Integer.parseInt(tp[0]), nn = Integer.parseInt(tp[1]);
-        
-            int [] v = s.getPos(m, nn, sur[i]);
-            System.out.println(Arrays.toString(v));
-        }
     }
 }

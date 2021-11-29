@@ -1093,38 +1093,177 @@ public class mixed {
         //     }
         //     return false;
         // }
-        public boolean circularArrayLoop(int[] a) {
-            int n = a.length;
-            for (int i = 0; i < n; i++) {
-                int slow = i, fast = getNext(a, i), val = a[i];
-                while (val * a[fast] > 0 && val * a[getNext(a, fast)] > 0) {
-                    if (slow == fast) {
-                        if (slow == getNext(a, slow)) break;
-                        return true;
-                    }
-                    slow = getNext(a, slow);
-                    fast = getNext(a, getNext(a, fast));
-                }
-                slow = i;
-                while (val * a[slow] > 0) {
-                    int next = getNext(a, slow);
-                    a[slow] = 0;
-                    slow = next;
-                }
-            }
-            return false;
-        }
-        private int getNext(int [] a, int i) {
-            int n = a.length;
-            return (((a[i] + i) % n) + n) % n;
-        }
+        // public boolean circularArrayLoop(int[] a) {
+        //     int n = a.length;
+        //     for (int i = 0; i < n; i++) {
+        //         int slow = i, fast = getNext(a, i), val = a[i];
+        //         while (val * a[fast] > 0 && val * a[getNext(a, fast)] > 0) {
+        //             if (slow == fast) {
+        //                 if (slow == getNext(a, slow)) break;
+        //                 return true;
+        //             }
+        //             slow = getNext(a, slow);
+        //             fast = getNext(a, getNext(a, fast));
+        //         }
+        //         slow = i;
+        //         while (val * a[slow] > 0) {
+        //             int next = getNext(a, slow);
+        //             a[slow] = 0;
+        //             slow = next;
+        //         }
+        //     }
+        //     return false;
+        // }
+        // private int getNext(int [] a, int i) {
+        //     int n = a.length;
+        //     return (((a[i] + i) % n) + n) % n;
+        // }
+
+        // public int superpalindromesInRange(String left, String right) {
+        //     long l = Long.parseLong(left), r = Long.parseLong(right);
+        //     helper("", l, r);
+        //     for (char c = '0'; c <= '9'; c++) 
+        //         helper(""+c, l, r);
+        //     return ans;
+        // }
+        // int ans = 0;
+        // private void helper(String s, long l, long r) {
+        //     if (s.length() > 9) return ;
+        //     if (!s.isEmpty() && s.charAt(0) != '0') {
+        //         long val = Long.parseLong(s);
+        //         val *= val;
+        //         // if (val > r || val < l) return ; // BUG: 这里看似写得逻辑清晰，实则埋着bug。当val < l时，是不应该return的
+        //         if (val > r) return ;               // BUG: 这里看似写得逻辑清晰，实则埋着bug。当val < l时，是不应该return的
+        //         if (val >= l && isPalindrome(String.valueOf(val)))
+        //             ans++;
+        //     }
+        //     for (char i = '0'; i <= '9'; i++) 
+        //         helper(String.valueOf(i) + s + String.valueOf(i), l, r);
+        // }
+        // private boolean isPalindrome(String t) {
+        //     int n = t.length(), i = 0, j = n-1;
+        //     char [] s = t.toCharArray();
+        //     while (i < j) 
+        //         if (s[i++] != s[j--]) return false;
+        //     return true;
+        // }
+        // public int superpalindromesInRange(String sL, String sR) {
+        //     long L = Long.valueOf(sL);
+        //     long R = Long.valueOf(sR);
+        //     int MAGIC = 100000;
+        //     int ans = 0;
+        //     // count odd length;
+        //     for (int k = 1; k < MAGIC; ++k) {
+        //         StringBuilder sb = new StringBuilder(Integer.toString(k));
+        //         for (int i = sb.length() - 2; i >= 0; --i)
+        //             sb.append(sb.charAt(i));
+        //         long v = Long.valueOf(sb.toString());
+        //         v *= v;
+        //         if (v > R) break;
+        //         if (v >= L && isPalindrome(v)) ans++;
+        //     }
+        //     // count even length;
+        //     for (int k = 1; k < MAGIC; ++k) {
+        //         StringBuilder sb = new StringBuilder(Integer.toString(k));
+        //         for (int i = sb.length() - 1; i >= 0; --i)
+        //             sb.append(sb.charAt(i));
+        //         long v = Long.valueOf(sb.toString());
+        //         v *= v;
+        //         if (v > R) break;
+        //         if (v >= L && isPalindrome(v)) ans++;
+        //     }
+        //     return ans;
+        // }
+        // public boolean isPalindrome(long x) {
+        //     return x == reverse(x);
+        // }
+        // public long reverse(long x) {
+        //     long ans = 0;
+        //     while (x > 0) {
+        //         ans = ans * 10 + x % 10;
+        //         x /= 10;
+        //     }
+        //     return ans;
+        // }
+        // 超级回文数的开方每个数字不会超过2(除了数字3).所以减少搜索范围,判断在L和R的开方值之内的所有每一位不超过3的数字的平方是否为回文数,若是,则计数器加一.
+        //     实现很简单,将10进制数转为3进制即可(但还是以10位来计算).
+        // public int superpalindromesInRange(String L, String R) { // todo: 这个没怎么看懂，不知道说的是什么意思
+        //     long lNum = (long)Math.sqrt(Long.parseLong(L));
+        //     long rNum = (long)Math.sqrt(Long.parseLong(R));
+        //     int ans = 0;
+        //     if (lNum <= 3 && rNum >= 3)
+        //         ans++;
+        //     long i = 0;
+        //     while (true){
+        //         i++;
+        //         long temp = changeRadix (i,10,3);
+        //         if (temp>rNum)
+        //             break;
+        //         if (temp> = lNum&&isPalindrome (temp)&&isPalindrome (temp*temp))
+        //             ans++;
+        //     }
+        //     return ans;
+        // }
+        // public long changeRadix (long in, int source, int to){
+        //     long re = 0L;
+        //     long t = 1;
+        //     do {
+        //         re +=  (in % to) * t;
+        //         t *= source;
+        //         in /= to;
+        //     } while  (in>0);
+        //     return re;
+        // }
+        // public boolean isPalindrome (long l) {
+        //     long temp = 0;
+        //     long temp2 = l;
+        //     while  (temp2>0) {
+        //         temp += temp2%10;
+        //         temp2 /= 10;
+        //         if (temp2 > 0)
+        //             temp *=  10;
+        //     }
+        //     if (temp == l)
+        //         return true;
+        //     return false;
+        // }
+
+        // public int[] threeEqualParts(int[] a) {
+        //     int n = a.length, j = n-1, sum = Arrays.stream(a).sum(), cnt = 0, i = 0;
+        //     if (sum == 0) return new int [] {0, n-1} ;
+        //     if (sum % 3 != 0) return new int [] {-1, -1} ;
+        //     while (cnt < sum / 3 && j >= 0) {
+        //         if (a[j] == 1) cnt++;
+        //         j--;
+        //     }
+        //     j += 1; // a[j] == 1, cnt = sum / 3 第三个片段第一个1的位置，前面可以有数个前导0
+        //     int k = j;
+        //     while (i < n && a[i] == 0) i++; // 去除前导0
+        //     while (k < n && a[i] == a[k]) { // 比较第一个片段与第三个片段序列一致
+        //         i++;
+        //         k++;
+        //     }
+        //     if (k < n) return new int [] {-1, -1} ;
+        //     int left = i; // 第二个片段第一个位置，可以是0
+        //     while (i < j && a[i] == 0) i++; // 去除第二个片段前导0
+        //     k = j;
+        //     while (k < n && a[i] == a[k]) { // 比较第二个片段与第三个片段序列一致
+        //         i++;
+        //         k++;
+        //     }
+        //     if (k < n) return new int [] {-1, -1} ;
+        //     return new int [] {left-1, i} ; // 第一个片段尾的位置、第二个片段尾的位置
+        // }
+
+        
     }
-    public static void main(String[] args) {
-        Solution s = new Solution();
+    public static void main (String[] args) {
+        Solution s  =  new Solution ();
 
-        int [] a = new int [] {2,-1,1,2,2};
+        // int [] a = new int [] {1,0,1,0,1};
+        int [] a = new int [] {1,1,0,0,1};
 
-        boolean r = s.circularArrayLoop(a); 
-        System.out.println("r: " + r);
+        int [] r = s.threeEqualParts(a); 
+        System.out.println(Arrays.toString(r));
     }
 }

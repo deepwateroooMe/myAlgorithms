@@ -765,20 +765,138 @@ public class grathreeph {
         //     return true;
         // }
 
-        
+        // public int checkWays(int[][] pairs) { // 自顶向下
+        //     int max = 0; // [1, 500]
+        //     for (int [] p : pairs) // 求出节点的最大值
+        //         max = Math.max(max, Math.max(p[0], p[1]));
+        //     int [] cnt = new int [max+1]; // 记录每个节点的祖先关系数量
+        //     int [][] adj = new int [max+1][max+1]; // 是否存在祖孙关系的图
+        //     for (int [] p : pairs) {
+        //         cnt[p[0]]++;
+        //         cnt[p[1]]++;
+        //         adj[p[0]][p[1]] = 1;
+        //         adj[p[1]][p[0]] = 1;
+        //     }
+        //     Integer [] nodes = new Integer [max+1]; // 创建一个新的数组，可以方便后面的按祖先关系数量大小将节点排序，和将零散的节点集中到前面。
+        //     int idx = 0; // length: idx             // 使用包装整数类型，方便后面调用API排序
+        //     for (int i = 1; i <= max; i++) 
+        //         if (cnt[i] > 0) nodes[idx++] = i;
+        //     Arrays.sort(nodes, 0, idx, (a, b)->cnt[b] - cnt[a]); // 按照祖先关系数量从大到小排序
+        //     if (cnt[nodes[0]] != idx-1) return 0; // 当根节点不满足要求
+        //     int [] par = new int [max+1];
+        //     int [][] allPar = new int [max+1][max+1];
+        //     for (int i = 0; i < idx; i++) 
+        //         for (int j = i-1; j >= 0; j--) 
+        //             if (adj[nodes[i]][nodes[j]] == 1) {
+        //                 par[nodes[i]] = nodes[j]; // 记录父节点
+        //                 for (int f = nodes[j]; f != 0; f = par[f]) // 记录祖先节点，循环遍历直到根节点
+        //                     allPar[nodes[i]][f] = 1;
+        //                 break;
+        //             }
+        //     int ans = 1;
+        //     for (int i = 1; i <= max; i++)
+        //         for (int j = i+1; j <= max; j++) {
+        //             if (adj[i][j] == 1 && cnt[i] == cnt[j]) ans = 2; // 可以调换位置，有多个解
+        //             if (adj[i][j] != (allPar[i][j] | allPar[j][i]))
+        //                 return 0; // 有冲突，无解，出现在已经记录了当前节点和祖先节点的关系，但是pairs中没有该关系
+        //         }
+        //     return ans;
+        // }
+        // Map<Integer, Set<Integer>> adj = new HashMap<>();
+        // public int checkWays(int[][] pairs) { // 这个方法好慢
+        //     for (int [] p : pairs) {
+        //         adj.computeIfAbsent(p[0], z -> new HashSet<>()).add(p[1]);
+        //         adj.computeIfAbsent(p[1], z -> new HashSet<>()).add(p[0]);
+        //     }
+        //     return helper(adj.keySet());
+        // }
+        // private int helper(Set<Integer> nodes) {
+        //     Map<Integer, List<Integer>> lenMap = new HashMap<>();
+        //     for (Integer v : nodes) 
+        //         lenMap.computeIfAbsent(adj.get(v).size(), z -> new ArrayList<>()).add(v);
+        //     if (!lenMap.containsKey(nodes.size()-1)) return 0; // 不存在合法的根节点
+        //     Integer root = lenMap.get(nodes.size()-1).get(0);  // 这个任命为根的节点是否带有随机性
+        //     for (Integer v : adj.get(root)) // 因为需要dfs自顶向下深度遍历，这些东西需要移掉
+        //         adj.get(v).remove(root);
+        //     Set<Integer> vis = new HashSet<>();
+        //     Set<Set<Integer>> group = new HashSet<>(); // 以每个节点作为根节点的子树子节点集合
+        //     for (Integer v : nodes)
+        //         if (!v.equals(root) && !vis.contains(v)) {
+        //             Set<Integer> cur = new HashSet<>();
+        //             dfs(vis, v, cur);
+        //             group.add(cur);
+        //         }
+        //     int ans = lenMap.get(nodes.size()-1).size() > 1 ? 2 : 1; // 如果根节点不止不一个，就可能有并行答案
+        //     for (Set<Integer> g : group) { // 自顶向下：遍历根节点下每个节点的建树是否合法、是否唯一
+        //         int tmp = helper(g);
+        //         if (tmp == 0) return 0; // 不存在合法的根节点
+        //         if (tmp == 2) ans = 2;
+        //     }
+        //     return ans;
+        // }
+        // private void dfs(Set<Integer> vis, int node, Set<Integer> cur) {
+        //     vis.add(node);
+        //     cur.add(node);
+        //     for (int next : adj.get(node)) 
+        //         if (!vis.contains(next))
+        //             dfs(vis, next, cur);
+        // }
+        // public int checkWays(int [][] pairs) {
+        //     Map<Integer, Integer> cnt = new HashMap<>(); // 统计结点对中各个结点出现的次数
+        //     Map<Integer, List<Integer>> adj = new HashMap<>();
+        //     for (int [] pair : pairs) {
+        //         int from = pair[0], to = pair[1];
+        //         cnt.put(from, cnt.getOrDefault(from, 0) + 1);
+        //         cnt.put(to, cnt.getOrDefault(to, 0) + 1);
+        //         adj.computeIfAbsent(from, x -> new ArrayList<>()).add(to);
+        //         adj.computeIfAbsent(to, x -> new ArrayList<>()).add(from);
+        //     }
+        //     List<Integer> list = new ArrayList<>(cnt.keySet()); // list of ori nodes 将结点对中的结点存储在List集合中
+        //     list.sort((a, b) -> cnt.get(b) - cnt.get(a)); // 对list集合进行排序
+        //     // pairs中给出了树中所有具有祖孙关系的结点对，很显然，根节点是其他所有结点的祖先
+        //     // 所以根结点在pairs出现的次数应该为为总结点数-1，找不到符合这个关系的结点，那就不符合题目中构树的要求
+        //     if (cnt.get(list.get(0)) != list.size() - 1) return 0;
+        //     // 判断已排序后的结点集合是否有两个结点具有相同出现次数，
+        //     // 如果存在，那么这两个结点可以互换，即为两颗树
+        //     int ans = 1;
+        //     for (int [] p : pairs) 
+        //         if (cnt.get(p[0]).equals(cnt.get(p[1]))) {
+        //             ans = 2;
+        //             break;
+        //         }
+        //     // 将所有结点的父结点置为出现结点最多的结点，即根结点
+        //     // 在没有确定除根结点之外的其它结点真正父结点之前，根结点就是它们的祖先
+        //     Map<Integer, Integer> farMap = new HashMap<>();
+        //     Set<Integer> set = new HashSet<>(); // 存储所有父结点
+        //     set.add(list.get(0));
+        //     for (Integer i : list) // 
+        //         farMap.put(i, list.get(0));
+        //     // 处理除最大结点数外，按着构树规则处理其它结点
+        //     for (int i = 1; i < list.size(); ++i) {
+        //         for (Integer s : adj.get(list.get(i))) 
+        //             // 判断当前结点是否为父结点
+        //             if (!set.contains(s)){
+        //                 // 如果s不是父结点，那么就是当前list.get(i)结点的子结点
+        //                 // 在没有更新父结点之前，s的父结点和list.get(i)的父结点是相同的(父子在一条链上)
+        //                 // 如果父结点不相同，可以理解为s的父结点list.get(i)有多个父结点，显然是不合理的
+        //                 //  同样也可以把树理解为图，除根结点之外，所有结点的入度都为1，而上边的情况表示存在一个入度为2的结点
+        //                 // 明显与树的构建原理相悖
+        //                 if (farMap.get(s) != farMap.get(list.get(i)))
+        //                     return 0;
+        //                 farMap.put(s, list.get(i));
+        //             }
+        //         set.add(list.get(i));
+        //     }
+        //     return ans;
+        // }
+
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        int [][] a = new int [][] {{1,1,1,1},{1,1,3,3},{1,1,3,4},{5,5,1,4}};
-        // int [][] a = new int [][] {{1,1,1,1},{1,2,2,1},{1,2,2,1},{1,1,1,1}};
-        // int [][] a = new int [][] {{1,1,4,4,1,1,1},{1,1,4,4,1,1,1},{1,1,4,4,1,1,1},{5,1,1,1,1,1,1},{5,3,3,3,3,3,1},{5,3,3,3,3,3,1},{1,3,3,3,3,3,1},{1,3,3,3,3,3,1},{6,3,3,3,3,3,1},{1,1,2,1,1,1,1}};
-
-        System.out.println("a.length: " + a.length);
-        for (int z = 0; z < a.length; ++z) 
-            System.out.println(Arrays.toString(a[z]));
-
-        boolean r = s.isPrintable(a);
+        int [][] a = new int [][] {{1,2},{2,3},{1,3}};
+ 
+        int r = s.checkWays(a);
         System.out.println("r: " + r);
     }
 }
