@@ -14,6 +14,9 @@
 ** 总结题型
 - dynamic programming二刷：308 open questions, 最后几个数字相关的题写得很奔溃，第二遍终于刷完了，感觉自己比较慢知慢觉，对于比赛中的字符串和数字相关的题有种近乎死灰一样的不喜欢。。。。。。
 - 接下来的计划：觉得自己悟性不够，还需要多练习，会用接下来两三个周、一个月左右的时间（新年前）把所有剩下hard的、和medium的题做完，同时开始考虑、准备和着手安卓和unity项目，已经四个月了（从8月算起，8 9 10 11）不能再死刷题了，还是需要一些项目上的练习，再详细的计划会清晰后列出来
+- leetcode最后的几个open problem会抽时间慢慢写，但再写这些琐碎的题目兴趣不大（周赛会保持继续参加）。
+
+- *希望这个周难抽些时间搜索一下、列一个安卓学习、复习、面试准备计划，以后的重点应该就转向按小项目来写和更新了*
 
 - 再这之后，会写一些Android Project，同时大量发简历、找工作，并每天抽部分时间（可能几个小时吧）继续总结和刷完剩下不感兴趣、或觉得不值一写的几个leetcode open problems.
 
@@ -14644,6 +14647,56 @@ public int tallestBillboard(int[] rods) {
     return dp.get(0);
 }
 #+END_SRC
+
+*** 1982. Find Array Given Subset Sums - Hard
+You are given an integer n representing the length of an unknown array that you are trying to recover. You are also given an array sums containing the values of all 2n subset sums of the unknown array (in no particular order).
+
+Return the array ans of length n representing the unknown array. If multiple answers exist, return any of them.
+
+An array sub is a subset of an array arr if sub can be obtained from arr by deleting some (possibly zero or all) elements of arr. The sum of the elements in sub is one possible subset sum of arr. The sum of an empty array is considered to be 0.
+
+Note: Test cases are generated such that there will always be at least one correct answer.
+
+[[./pic/1982.png]]
+
+**** 解题思路与分析
+求子集和可以用二进制状压DP
+
+以i结尾的子集和dp[mask | 1 << i] = dp[mask] + ans[i] , (0 <= mask < 1 << i)
+
+最后找与偏移量相等的子集和的时候还能复用到
+
+     #+BEGIN_SRC java
+public int[] recoverArray(int n, int[] sums) {
+    int offset = Math.min(0, Arrays.stream(sums).min().getAsInt());
+    offset = -offset;
+    TreeMap<Integer, Integer> m = new TreeMap<>(); // java没有multiset，使用TreeMap代替 {子集和: 出现的次数}，次数为0则删除掉
+    for (Integer v : sums) {
+        v += offset;
+        m.put(v, m.getOrDefault(v, 0) + 1);
+    }
+    m.put(0, m.get(0) - 1); // 先（试图）移除空子集0: 后面会统一移除
+    int [] dp = new int [1 << n]; // 状态压缩，存储已移除掉的子集，初始化dp[0]=0可省略
+    int [] ans = new int [n];
+    for (int i = 0; i < n; i++) {
+        // 延迟删除策略，最小值次数为0，则抛弃掉此最小值
+        while (m.firstEntry().getValue() == 0) m.pollFirstEntry(); 
+        ans[i] = m.firstKey();
+        for (int mask = 0; mask < 1 << i; mask++) {
+            dp[mask | 1 << i] = dp[mask] + ans[i];
+            m.put(dp[mask | 1 << i], m.get(dp[mask | 1 << i]) - 1); // 减少cnt，为的是接下来的移除
+        }
+    }
+    for (int mask = 0;; ++mask)
+        if (dp[mask] == offset) {
+            for (int i = 0; i < n; i++)
+                if ((mask & 1 << i) != 0)
+                    ans[i] = -ans[i];
+            return ans;
+        }
+}
+     #+END_SRC
+- 官方题解：可以参考一下 https://leetcode-cn.com/problems/find-array-given-subset-sums/solution/cong-zi-ji-de-he-huan-yuan-shu-zu-by-lee-aj8o/
 
 *** 1815. Maximum Number of Groups Getting Fresh Donuts - Hard
 There is a donuts shop that bakes donuts in batches of batchSize. They have a rule where they must serve all of the donuts of a batch before serving any donuts of the next batch. You are given an integer batchSize and an integer array groups, where groups[i] denotes that there is a group of groups[i] customers that will visit the shop. Each customer will get exactly one donut.

@@ -41,43 +41,6 @@ public class strthreeing {
         //     return ans;
         // }
 
-        // public List<String> removeComments(String[] source) {
-        //     int n = source.length, j = 0;
-        //     List<String> ans = new ArrayList<>();
-        //     boolean inblock = false;
-        //     for (int i = 0; i < n; i++) {
-        //         String s = source[i];
-        //         if (s.length() == 0 || inblock && s.indexOf("*/") == -1) continue;
-        //         if (s.length() == 1) {
-        //             ans.add(s);
-        //             continue;
-        //         }
-        //         if (inblock) {
-        //             int v = s.indexOf("*/");
-        //             if (v != -1 && v != 1 && v <= s.length()-2) {
-        //                 source[i] = s.substring(v+2);
-        //                 --i;
-        //                 inblock = false;
-        //                 continue;
-        //             }
-        //         }
-        //         if (s.indexOf("/*") == -1) {
-        //             int idx = s.indexOf("//");
-        //             if (idx == -1) ans.add(s);
-        //             else ans.add(s.substring(0, idx));
-        //         } else {
-        //             int idx = s.indexOf("*/");
-        //             if (idx != -1 && idx != 1 && idx <= s.length()-2) {
-        //                 source[i] = s.substring(idx + 2);
-        //                 --i;
-        //                 continue;
-        //             } else inblock = true;
-        //         }
-        //     }
-        //     return ans;
-        // }
-
-
         // public int strongPasswordChecker(String password) { // 这个是照抄的，这个细节实现题还是需要改天再好好写一下 top 5 difficult ?
         //     boolean num = false, lower = false, upper = false;
         //     int bgn = 0, end = 0, n = password.length(), mod = 0, cnt [] = new int []{0, 0, 0}, c = 0, len = 0, need = 0, rmv = 0;
@@ -574,14 +537,216 @@ public class strthreeing {
         //     }
         // }
 
+        // public boolean isRobotBounded(String ins) {
+        //     int x = 0, y = 0, i = 0, d [][] = {{0, 1}, {1, 0}, {0, -1}, { -1, 0}};
+        //     for (int j = 0; j < ins.length(); ++j)
+        //         if (ins.charAt(j) == 'R')
+        //             i = (i + 1) % 4;
+        //         else if (ins.charAt(j) == 'L')
+        //             i = (i + 3) % 4;
+        //         else {
+        //             x += d[i][0]; y += d[i][1];
+        //         }
+        //     return x == 0 && y == 0 || i > 0;
+        // }
+        
+        // public int minDeletionSize(String[] ss) {
+        //     int m = ss.length, n = ss[0].length(), cnt = 0, i = 0;
+        //     boolean [] vis = new boolean [m-1];
+        //     for (int j = 0; j < n; j++) {
+        //         for ( i = 0; i < m-1; i++) 
+        //             if (!vis[i] && ss[i].charAt(j) > ss[i+1].charAt(j)) {
+        //                 cnt++;
+        //                 break;
+        //             }
+        //          if (i < m-1) continue;
+        //          for ( i = 0; i < m-1; i++)
+        //              vis[i] |= ss[i].charAt(j) < ss[i+1].charAt(j); // BUG: <=, 若当前位相等,还需要下一位继续比大小，所以还不能设置为true yet
+        //      }   
+        //     return cnt;
+        // }
+
+        // public List<String> removeComments(String[] source) { // bug: 有空行，不想再改这个bug了
+        //     int n = source.length, j = 0;
+        //     List<String> ans = new ArrayList<>();
+        //     boolean inblock = false, half = false;
+        //     for (int i = 0; i < n; i++) {
+        //         String s = source[i];
+        //         if (s.length() == 0 || inblock && s.indexOf("*/") == -1) continue;
+        //         if (inblock) {
+        //             int v = s.indexOf("*/");
+        //             if (v != -1 && v != 1 && v <= s.length()-2) {
+        //                 source[i] = s.substring(v+2);
+        //                 --i;
+        //                 inblock = false;
+        //                 continue;
+        //             }
+        //         }
+        //         if (s.indexOf("/*") == -1) {
+        //             int idx = s.indexOf("//");
+        //             if (idx == -1) {
+        //                 if (half) {
+        //                     ans.set(ans.size()-1, ans.get(ans.size()-1)+s);
+        //                     half = false;
+        //                 } else
+        //                     ans.add(s);
+        //             } else ans.add(s.substring(0, idx));
+        //         } else {
+        //             int idx = s.indexOf("/*");
+        //             if (idx > 0) {
+        //                 String tmp = s.substring(0, idx);
+        //                 if (tmp.trim().length() > 0) {
+        //                     ans.add(s.substring(0, idx));
+        //                     half = true;
+        //                 }
+        //                 inblock = true;
+        //             }
+        //             idx = s.indexOf("*/");
+        //             if (idx != -1 && idx != 1 && idx <= s.length()-2) {
+        //                 source[i] = s.substring(idx + 2);
+        //                 inblock = false;
+        //                 --i;
+        //                 continue;
+        //             } else inblock = true;
+        //         }
+        //     }
+        //     return ans;
+        // }
+        // public List<String> removeComments(String[] s) {
+        //     List<String> ans = new ArrayList<>();
+        //     StringBuilder sb = new StringBuilder();
+        //     int i = 0, j = 0; // i: row, j : col
+        //     boolean comment = false;
+        //     while (i < s.length) {
+        //         if (comment) { // comment如果为true，表明当前行前面有/*
+        //             int idx = s[i].indexOf ("*/", j); // 找到代码中*/的位置，并将该位置放在idx变量中
+        //             if (idx == -1) { // 如果idx = -1说明当前行没有*/，则将行数i+1，将下一行的起始下标置0
+        //                 i ++;
+        //                 j = 0;
+        //             } else { // 如果idx的值不为-1，则说明当前行找到了*/ 则将代码行的有效代码下标置为idx+2。及那个comment置为false
+        //                 comment = false;
+        //                 j = idx + 2;
+        //             }                   
+        //         } else {
+        //             int idx1 = s[i].indexOf ("/*", j); // 获取当前行/*的下标
+        //             int idx2 = s[i].indexOf ("//", j); // 获取当前行// 的下标
+        //             if (idx1 == -1) // 如果idx1 = -1说明，当前行没有/*，则正行都是有效代码，将其长度放在idx1中
+        //                 idx1 = s[i].length();
+        //             if (idx2 == -1) // 如果idx2 = -1说明，当前行没有// ，则正行都是有效代码，将其长度放在idx2中
+        //                 idx2 = s[i].length();
+        //             // 把非评论部分放入
+        //             for (int k = j; k < Math.min(idx1, idx2); k++) 
+        //                 sb.append (s[i].charAt (k));
+        //             // 这里比较// 和/*第一次出现的位置，如果// 在/*前面出现，就说明该行是被// 注释的，否则是被/*注释的
+        //             if (idx2 <= idx1) {
+        //                 if (sb.length() > 0) {
+        //                     ans.add (new String (sb));
+        //                     sb.setLength(0);
+        //                 }
+        //                 i ++;
+        //                 j = 0;
+        //             } else {
+        //                 comment = true;
+        //                 j = idx1 +2;
+        //             }
+        //         }
+        //     }
+        //     return ans;        
+        // }
+        // public List<String> removeComments(String[] ss) {
+        //     List<String> ans = new ArrayList();
+        //     StringBuilder sb = new StringBuilder();
+        //     boolean inBlock = false;
+        //     for (String str : ss) {
+        //         int i = 0;
+        //         char [] s = str.toCharArray();
+        //         if (!inBlock) sb = new StringBuilder();
+        //         while (i < s.length) {
+        //             if (!inBlock && i+1 < s.length && s[i] == '/' && s[i+1] == '*') { // need forward 2 chars
+        //                 inBlock = true;
+        //                 i++;
+        //             } else if (inBlock && i+1 < s.length && s[i] == '*' && s[i+1] == '/') {  // need forward 2 chars
+        //                 inBlock = false;
+        //                 i++;
+        //             } else if (!inBlock && i+1 < s.length && s[i] == '/' && s[i+1] == '/')
+        //                 break;
+        //             else if (!inBlock)
+        //                 sb.append(s[i]);
+        //             i++;
+        //         }
+        //         if (!inBlock && sb.length() > 0) // sb.length() > 0 
+        //             ans.add(new String(sb));
+        //     }
+        //     return ans;
+        // }
+
+        // public String decodeCiphertext(String t, int m) {
+        //     if (m == 1) return t;
+        //     int len = t.length(), n = len / m, i = 0, j = 0;
+        //     char [] s = t.toCharArray();
+        //     char [][] a = new char [m][n];
+        //     int idx = 0;
+        //     while (idx < len) {
+        //         i = idx / n;
+        //         j = idx % n;
+        //         a[i][j] = s[idx++];
+        //     }
+        //     StringBuilder sb = new StringBuilder(); // 这里最后字符串什么地方结尾有点儿没有思路
+        //     for ( j = 0; j <= n-(m-1); j++) 
+        //         for ( i = 0; i < m && j+i < n; i++) 
+        //             if (a[i][j+i] != 'A')
+        //                 sb.append(a[i][j+i]);
+        //     return sb.toString().replaceAll("\\s+$", ""); // 其实只要把字符串尾巴上的空格去掉就可以了
+        // }
+        // public String decodeCiphertext(String t, int m) { // tle ? todo: 找一个官方题解java版的
+        //     if (m == 1) return t;
+        //     int len = t.length(), n = len / m;
+        //     char [] s = t.toCharArray();
+        //     String ans = "";
+        //     for (int i = 0; i < n; i++) {
+        //         int r = 0, c = i;
+        //         while (r < m && c < n) {
+        //             ans += s[r * n + c];
+        //             ++r;
+        //             ++c;
+        //         }
+        //     }
+        //     return ans.replaceAll("\\s+$", ""); // 删去末尾空格
+        // }
+
+        // public int minFlips(String t) {
+        //     String tt = t + t;
+        //     char [] s = tt.toCharArray();
+        //     int n = s.length, len = t.length(), ans = Integer.MAX_VALUE;
+        //     int [] odd = new int [n+1], evn = new int [n+1]; // odd: 010101, evn: 101010
+        //     for (int i = 0; i < n; i++) 
+        //         if ((i & 1) == s[i] - '0') { // 奇数位为1
+        //             odd[i+1] = odd[i];
+        //             evn[i+1] = evn[i] + 1;
+        //         } else {
+        //             evn[i+1] = evn[i];
+        //             odd[i+1] = odd[i] + 1;
+        //         }
+        //     for (int i = len; i <= n; i++) { 
+        //         ans = Math.min(ans, odd[i] - odd[i-len]);
+        //         ans = Math.min(ans, evn[i] - evn[i-len]);
+        //     }
+        //     return ans;
+        // }
+
+
+
+
+
+        
         
     }
-    public static void main(String[] args) {
-        Solution s = new Solution();
+    public static void main (String[] args) {
+        Solution s = new Solution ();
 
-        String a = "x+5-3+x=6+x-2";
+        String a = "111000";
 
-        String r = s.solveEquation(a);
-        System.out.println("r: " + r);
+        int r = s.minFlips(a);
+        System.out.println ("r: " + r);
     }
 }

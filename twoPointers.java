@@ -787,26 +787,69 @@ public class twoPointers {
         // // String a = "RLX";
         // // String b = "XLR";
 
-        
+        // public int [][] flipAndInvertImage(int [][] a) {
+        //     int m = a.length, n = a[0].length;
+        //     for (int i = 0; i < m; i++) {
+        //         int j = 0, k = n-1;
+        //         while (j < k) {
+        //             int tmp = a[i][j];
+        //             a[i][j++] = 1 - a[i][k];
+        //             a[i][k--] = 1 - tmp;
+        //         }
+        //         if (k == j)
+        //             a[i][j] = 1 - a[i][j];
+        //     }
+        //     return a;
+        // }
+
+        //  public String reverseWords(String t) {
+        //     String [] str = t.split("\\s+");
+        //     for (int i = 0; i < str.length; i++) 
+        //         str[i] = new StringBuilder(str[i]).reverse().toString();
+        //     String ans = str[0];
+        //     for (int i = 1; i < str.length; i++) 
+        //         ans += " " + str[i];
+        //     return ans;
+        // }
+
+        // public String mergeAlternately(String ss, String tt) {
+        //     int m = ss.length(), n = tt.length();
+        //     char [] s = ss.toCharArray();
+        //     char [] t = tt.toCharArray();
+        //     int i = 0, j = 0;
+        //     String ans = "";
+        //     while (i < m && j < n) 
+        //         ans += "" + s[i++] + t[j++];
+        //     if (i < m) ans += ss.substring(i);
+        //     if (j < n) ans += tt.substring(j);
+        //     return ans;
+        // }
+
+        // public int[] sortArrayByParityII(int[] a) {
+        //     int n = a.length, i = 0, j = 1;
+        //     while (i < n && j < n) {
+        //         if (a[i] % 2 == 0) i += 2;
+        //         else if (a[j] % 2 == 1) j += 2;
+        //         else {
+        //             int tmp = a[i];
+        //             a[i] = a[j];
+        //             a[j] = tmp;
+        //         }
+        //     }
+        //     return a;
+        // }
     }   
     public static void main(String[] args) {
         Solution s = new Solution();
-        
-        // String a = "RXXLRXRXL";
-        // String b = "XRLXXRRLX";
-        // String a = "LXXLXRLXXL";
-        // String b = "XLLXRXLXLX";
-        // String "RLX"
-        //     "XLR" = ;
-        String a = "RLX";
-        String b = "XLR";
 
-        boolean r = s.canTransform(a, b);
-        System.out.println("r: " + r);
-        
+        int []  a = new int []  {2, 3, 1, 1, 4, 0, 0, 4, 3, 3};
+
+        System.out.println(Arrays.toString(a));
+
+        int [] r = s.sortArrayByParityII(a);
+        System.out.println(Arrays.toString(r));
     }
 }
 
 // "pvhm u pgqel tozftlmfjjde"
 // "yjgpzbezspnnpszeb z mhvp"
-
