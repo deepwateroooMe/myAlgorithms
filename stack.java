@@ -728,15 +728,144 @@ public class stack {
         //     return dp[n];
         // }
 
+        // public int[] nextGreaterElement(int[] a, int[] b) {
+        //     int m = a.length, n = b.length;
+        //     int [] ans = new int [m];
+        //     Arrays.fill(ans, -1);
+        //     Map<Integer, Integer> idx = new HashMap<>(); // k, v: a[i], idx
+        //     for (int i = 0; i < m; i++) 
+        //         idx.put(a[i], i);
+        //     ArrayDeque<Integer> s = new ArrayDeque<>(); // 单调递减， 头大尾小
+        //     for (int i = n-1; i >= 0; i--) {
+        //         while (!s.isEmpty() && s.peekLast() < b[i]) s.pollLast();
+        //         if (!s.isEmpty() && idx.containsKey(b[i]))
+        //             ans[idx.get(b[i])] = s.peekLast();
+        //         s.offerLast(b[i]);
+        //     }
+        //     return ans;
+        // }
+
+        // public int[] finalPrices(int[] a) {
+        //     int n = a.length;
+        //     ArrayDeque<Integer> s = new ArrayDeque<>(); // 单调递减，头大尾小
+        //     int [] ans = new int [n];
+        //     for (int i = n-1; i >= 0; i--) {
+        //         while (!s.isEmpty() && s.peekLast() > a[i]) s.pollLast();
+        //         if (!s.isEmpty()) ans[i] = a[i] - s.peekLast();
+        //         else ans[i] = a[i];
+        //         s.offerLast(a[i]);
+        //     }
+        //     return ans;
+        // }
+
+        //  public int maxDepth(String t) {
+        //     int n = t.length(), l = 0, r = 0, max = 0;
+        //     char [] s = t.toCharArray();
+        //     for (int i = 0; i < n; i++) {
+        //         if (s[i] == '(') l++;
+        //         else if (s[i] == ')') r++;
+        //         max = Math.max(max, l - r);
+        //     }
+        //     return max;
+        // }
+
+        // public String removeOuterParentheses(String t) {
+        //     int n = t.length(), l = 0, r = 0;
+        //     char [] s = t.toCharArray();
+        //     ArrayDeque<Character> st = new ArrayDeque<>();
+        //     StringBuilder sb = new StringBuilder();
+        //     for (int i = 0; i < n; i++) {
+        //         if (s[i] == '(') {
+        //             l++;
+        //             st.offerLast(s[i]);
+        //         } else {
+        //             r++;
+        //             if (l == r) {
+        //                 if (st.size() == 1) {
+        //                     st.pollLast();
+        //                     continue;
+        //                 } else {
+        //                     st.pollFirst();
+        //                     while (!st.isEmpty()) sb.append(st.pollFirst());
+        //                 }
+        //             } else st.offerLast(s[i]);
+        //         }
+        //     }
+        //     return sb.toString();
+        // }
+
+        // public String removeDuplicates(String t) {
+        //     int n = t.length();
+        //     char [] s = t.toCharArray();
+        //     ArrayDeque<Character> st = new ArrayDeque<>();
+        //     for (int i = 0; i < n; i++) {
+        //         if (st.isEmpty() || s[i] != st.peekLast())
+        //             st.offerLast(s[i]);
+        //         else while (!st.isEmpty() && st.peekLast() == s[i]) st.pollLast();
+        //     }
+        //     StringBuilder sb = new StringBuilder();
+        //     while (!st.isEmpty()) sb.append(st.pollFirst());
+        //     return sb.toString();
+        // }
+
+        // public List<String> buildArray(int[] a, int n) {
+        //     List<String> ans = new ArrayList<>();
+        //     int idx = 1;
+        //     for (int i = 0; i < a.length; i++) {
+        //         while (idx != a[i]) {
+        //             ans.add("Push");
+        //             ans.add("Pop");
+        //             idx++;
+        //         }
+        //         if (a[i] == idx) {
+        //             ans.add("Push");
+        //             idx++;
+        //         }
+        //     }
+        //     return ans;
+        // }
+
+        // public int calPoints(String[] a) {
+        //     int n = a.length, sum = 0;
+        //     ArrayDeque<Integer> s = new ArrayDeque<>();
+        //     for (int i = 0; i < n; i++) {
+        //         if (a[i].equals("+")) {
+        //             int last = s.pollLast(), v = s.peekLast() + last;
+        //             s.offerLast(last);
+        //             s.offerLast(v);
+        //         } else if (a[i].equals("D")) {
+        //             s.offerLast(s.peekLast() * 2);
+        //         } else if (a[i].equals("C"))
+        //             s.pollLast();
+        //         else s.offerLast(Integer.parseInt(a[i]));
+        //     }
+        //     while (!s.isEmpty()) sum += s.pollLast();
+        //     return sum;
+        // }
+
+        // public String makeGood(String t) {
+        //     int n = t.length();
+        //     char [] s = t.toCharArray();
+        //     ArrayDeque<Character> st = new ArrayDeque<>();
+        //     for (int i = 0; i < n; i++) {
+        //         if (!st.isEmpty() && (Character.isLowerCase(st.peekLast()) && s[i] == Character.toUpperCase(st.peekLast())
+        //                               || Character.isUpperCase(st.peekLast()) && s[i] == Character.toLowerCase(st.peekLast())))
+        //             st.pollLast();
+        //         else st.offerLast(s[i]);
+        //     }
+        //     StringBuilder sb = new StringBuilder();
+        //     while (!st.isEmpty()) sb.append(st.pollFirst());
+        //     return sb.toString();
+        // }
 
         
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        int [][] a = new int [][] {{1,2},{3,3},{3,1},{3,1},{2,4}};
+        String a = "leEeetcode";
 
-        int r = s.boxDelivering(a, 3, 3, 6);
+        String r = s.makeGood(a);
         System.out.println("r: " + r);
         
     }

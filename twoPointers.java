@@ -838,18 +838,219 @@ public class twoPointers {
         //     }
         //     return a;
         // }
+
+        
+        // public String reverseStr(String s, int k) { // bug
+        //     int n = s.length(), i = k, j = 0, cnt = 0;
+        //     while (n >= 2 * k && i < n) {
+        //         s = (j == 0 ? "" : s.substring(0, j)) + new StringBuilder(s.substring(j, i)).reverse().toString() + s.substring(i);
+        //         i += 2 * k;
+        //         j = i + k;
+        //     }
+        //     if (n % (2 * k) != 0) s = s.substring(0, n-n% (2 * k)) 
+        //                               + new StringBuilder(s.substring(n - n % (2 * k), Math.min(n-n%(2*k)+k, n))).reverse().toString()
+        //                               + (n-n%(2*k)+k <= n ? s.substring(n - n % (2 * k) + k) : "");
+        //     return s;
+        // }
+
+        // public int[] shortestToChar(String t, char c) {
+        //     int n = t.length();
+        //     char [] s = t.toCharArray();
+        //     TreeSet<Integer> ts = new TreeSet<>();
+        //     for (int i = 0; i < n; i++) 
+        //         if (s[i] == c) ts.add(i);
+        //     int [] ans = new int [n];
+        //     for (int i = 0; i < n; i++) {
+        //         if (s[i] == c) continue;
+        //         Integer lower = ts.lower(i);
+        //         Integer higher = ts.higher(i);
+        //         if (lower == null) lower = Integer.MIN_VALUE / 2;
+        //         if (higher == null) higher = Integer.MAX_VALUE / 2;
+        //         ans[i] = Math.min(i-lower, higher - i);
+        //     }
+        //     return ans;
+        // }
+
+        // public int removePalindromeSub(String t) {
+        //     int n = t.length();
+        //     if (isPalindrom(t)) return 1;
+        //     return 2;
+        // }
+        // private boolean isPalindrom(String t) {
+        //     int n = t.length(), i = 0, j = n-1;
+        //     char [] s = t.toCharArray();
+        //     while (i < j) 
+        //         if (s[i++] != s[j--]) return false;
+        //     return true;
+        // }
+
+        // public String reverseOnlyLetters(String t) {
+        //     int n = t.length(), i = 0, j = n-1;
+        //     char [] s = t.toCharArray();
+        //     while (i < j) {
+        //         if (!Character.isLetter(s[i])) {
+        //             i++;
+        //             continue;
+        //         }
+        //         if (!Character.isLetter(s[j])) {
+        //             j--;
+        //             continue;
+        //         }
+        //         char tmp = s[i];
+        //         s[i++] = s[j];
+        //         s[j--] = tmp;
+        //     }
+        //     return new String(s);
+        // }
+
+        // public int countBinarySubstrings(String t) {
+        //     int n = t.length(), cnt = 0, j = 0;
+        //     char [] s = t.toCharArray();
+        //     for (int i = 0; i < n-1; i++) {
+        //         j = i+1;
+        //         if (s[i] == '0' && s[j] == '1' || s[i] == '1' && s[j] == '0') {
+        //             cnt++;
+        //             for (int d = 1; i - d >= 0 && j + d < n; d++) {
+        //                 if (s[i-d] == s[i] && s[j+d] == s[j]) cnt++;
+        //                 else break;
+        //             }
+        //         }
+        //     }
+        //     return cnt;
+        // }
+
+        // public int findTheDistanceValue(int[] a, int[] b, int d) {
+        //     int m = a.length, n = b.length, cnt = 0;
+        //     Arrays.sort(b);
+        //     for (int i = 0; i < m; i++) {
+        //         int v = binarySearch(a[i], b);
+        //         if (Math.abs(a[i] - v) > d) cnt++;
+        //     }
+        //     return cnt;
+        // }
+        // private int binarySearch(int v, int [] a) {
+        //     int n = a.length, ans = 0, l = 0, r = n-1;
+        //     while (l < r-1) {
+        //         int m = l + (r - l)/ 2;
+        //         if (a[m] == v) return v;
+        //         else if (a[m] < v)
+        //             l = m;
+        //         else r = m;
+        //     }
+        //     return Math.abs(a[l] - v) <= Math.abs(a[r] - v) ? a[l] : a[r];
+        // }
+
+        // public void duplicateZeros(int[] a) { // bug: todo
+        //     int n = a.length, cnt = 0, i = 0, j = 0;
+        //     if (Arrays.stream(a).max().getAsInt() == 0) return ;
+        //     while (i < n) {
+        //         if (a[i] == 0) {
+        //             while (i < n && a[i++] == 0) cnt++;
+        //             int k = i;
+        //             if (i + cnt * 2 < n) {
+        //                 System.arraycopy(a, i+cnt, a, i+2 * cnt, n-(i + 2 * cnt + 1)); // BUG: 这里i 会变
+        //             }
+        //             System.out.println("k: " + k); // k 也会变
+        //             Arrays.fill(a, k, Math.min(n, k + cnt * 2), 0);
+        //             // Arrays.fill(a, 3, 8, 0);
+        //             System.out.println(Arrays.toString(a));
+        //             if (k + cnt * 2 >= n) return ;
+        //             i = Math.min(n, k + 2 * cnt);
+        //             System.out.println("i: " + i);
+        //         } else i++;
+        //     }
+        //     System.out.println(Arrays.toString(a));
+        // }
+
+        // public boolean backspaceCompare(String ss, String tt) {
+        //     int m = ss.length(), n = tt.length();
+        //     char [] s = ss.toCharArray();
+        //     char [] t = tt.toCharArray();
+        //     ArrayDeque<Character> sts = new ArrayDeque<>();
+        //     ArrayDeque<Character> stt = new ArrayDeque<>();
+        //     for (int i = 0; i < m; i++) 
+        //         if (s[i] == '#') {
+        //             if (!sts.isEmpty()) 
+        //                 sts.pollLast();
+        //         } else sts.offerLast(s[i]);
+        //     for (int i = 0; i < n; i++) 
+        //         if (t[i] == '#') {
+        //             if (!stt.isEmpty()) stt.pollLast();
+        //         } else stt.offerLast(t[i]);
+        //     while (!sts.isEmpty() && !stt.isEmpty()) 
+        //         if (sts.pollLast() != stt.pollLast()) return false;
+        //     if (!sts.isEmpty() || !stt.isEmpty()) return false;
+        //     return true;
+        // }
+        
+        // public boolean validPalindrome(String t) {
+        //     int n = t.length(), i = 0, j = n-1;
+        //     if (n == 1) return true;
+        //     char [] s = t.toCharArray();
+        //     while (i < j) {
+        //         if (s[i] == s[j]) {
+        //             i++;
+        //             j--;
+        //         } else 
+        //             return isPalindrom(t.substring(i, j)) || isPalindrom(t.substring(i+1, j+1));
+        //     }
+        //     return true;
+        // }
+        // private boolean isPalindrom(String t) {
+        //     int n = t.length(), i = 0, j = n-1;;
+        //     char [] s = t.toCharArray();
+        //     while (i < j) 
+        //         if (s[i++] != s[j--]) return false;
+        //     return true;
+        // }
+
+        // public boolean checkIfExist(int[] a) {
+        //     int n = a.length;
+        //     Set<Integer> vis = new HashSet<>();
+        //     for (int i = 0; i < n; i++) {
+        //         if (a[i] % 2 == 0 && vis.contains(a[i] / 2)
+        //             || vis.contains(a[i] * 2)) return true;
+        //         vis.add(a[i]);
+        //     }
+        //     return false;
+        // }
+
+        // public boolean isLongPressedName(String ss, String tt) {
+        //     int m = ss.length(), n = tt.length(), i = 1, j = 1;
+        //     char [] s = ss.toCharArray();
+        //     char [] t = tt.toCharArray();
+        //     if (s[0] != t[0]) return false;
+        //     while (i < m && j < n) {
+        //         if (s[i] == t[j]) {
+        //             i++;
+        //             j++;
+        //             continue;
+        //         }
+        //         while (j < n && t[j] == t[j-1]) j++;
+        //         if (i < m && j < n && s[i] != t[j]) return false;
+        //     }
+        //     if (i < m) return false;
+        //     while (j < n && t[j] == s[m-1]) j++;
+        //     if (j < n) return false;
+        //     return true;
+        // }
+
     }   
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        int []  a = new int []  {2, 3, 1, 1, 4, 0, 0, 4, 3, 3};
+        // String a = "saeed";
+        // String b = "ssaaedd";
 
-        System.out.println(Arrays.toString(a));
+        // String a = "vtkgn";
+        // String b = "vttkgnn";
+        
+        String a = "alex";
+        String b = "alexxr";
 
-        int [] r = s.sortArrayByParityII(a);
-        System.out.println(Arrays.toString(r));
+        boolean r = s.isLongPressedName(a, b);
+        System.out.println("r: " + r);
     }
-}
-
-// "pvhm u pgqel tozftlmfjjde"
-// "yjgpzbezspnnpszeb z mhvp"
+}                                        //....
+// "jlnnxsetgcpsbhsfymrkhfursyissjnsocgdhgfx ubewllxzqhpasguvlrxt kgatzfybprfmmfithphccxfsogsgqsnvckjvnskk"
+// "jlnnxsetgcpsbhsfymrkhfursyissjnsocgdhgfx txrlvugsaphqzxllwebu kgatzfybprfmmfithphccxfsogsgqsnvckjvnskk"

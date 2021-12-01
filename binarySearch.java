@@ -263,48 +263,6 @@ public class binarySearch {
         // }
 
         
-        // private boolean possible(int [] arr, int m, int v) {
-        //     int i = 1, p = arr[0]; --m;
-        //     while (i < n) {
-        //         while (i < n && arr[i]- p < v) ++i;
-        //         if (i == n && m > 0) return false;
-        //         else if (i == n) return true;
-        //         --m;
-        //         p = arr[i];
-        //         ++i;
-        //     }
-        //     return m <= 0;
-        // }
-        // private int binarySearchinSortedArray(int [] arr, int m, int l, int h) {
-        //     if (l == h) return h;
-        //     if (l == h-1) {
-        //         if (possible(arr, m, h)) return h;
-        //         return l;
-        //     }
-        //     int mid = l + (h-l)/2;
-        //     if (possible(arr, m, mid)) return binarySearchinSortedArray(arr, m, mid, h);
-        //     else return binarySearchinSortedArray(arr, m, l, mid-1);
-        // }
-        // int n;
-        // public int maxDistance(int[] position, int m) {
-        //     n = position.length;
-        //     Arrays.sort(position);
-        //     int min = Integer.MAX_VALUE, max = 0;
-        //     for (int i = 0; i < n; i++) {
-        //         for (int j = i+1; j < n; j++) {
-        //             min = Math.min(min, position[j] - position[i]);
-        //             max = Math.max(max, position[j] - position[i]);
-        //         }
-        //     }
-        //     if (m == n) return min;
-        //     if (m == 2) {
-        //         if (n == 2) return (int)Math.abs(position[0]-position[1]);
-        //         else return max;
-        //     }
-        //     return binarySearchinSortedArray(position, m, min, max);
-        // }
-
-        
         // 怎么才能在这个里面用binarySearch呢？
         // 找子数绒组和为特定值的最大子数组长度 range [0, n] ??? 思路错到了千里之外：我这是在背题么？！！！
         // public int minOperations(int[] arr, int x) {
@@ -1070,14 +1028,49 @@ public class binarySearch {
         //     }
         //     return l;
         // }
+
+        // public boolean isPerfectSquare(int v) {
+        //     long l = 1, r = v;
+        //     while (l <= r) {
+        //         long m = l + (r - l) / 2;
+        //         if (m * m == (long)v) return true;
+        //         else if (m * m > v) r = m-1;
+        //         else l = m + 1;
+        //     }
+        //     return false;
+        // }
+
+
+        public int maxDistance(int [] position, int m) { // BUG: 这个题有点儿没读懂题目
+            int n = position.length;
+            Arrays.sort(position);
+            int l = 1, r = position[n-1] - position[0];
+            while (l + 1 < r) {
+                int mid = (l + r) / 2;
+                if (helper(position, n, mid, m)) l = mid;
+                else r = mid - 1;
+            }
+            return l;
+        }
+        private boolean helper(int [] a, int n, int max, int m) {
+            int ans = 1, sum = 0;
+            for (int i = 1; i < n; i++) {
+                sum += a[i] - a[i-1];
+                if (sum >= max) {
+                    ans++;
+                    sum = 0;
+                }
+                if (ans >= m) return true;
+            }
+            return false;
+        }
    }
     public static void main(String[] args) {
         Solution s = new Solution(); 
 
-        // int [] a = new int [] {1, 3, 1};
-        int []  a = new int []  {1, 6, 1};
+        int [] a = new int [] {1,2,3,4,7};
 
-        int res = s.smallestDistancePair(a, 5);
+        int res = s.maxDistance(a, 3);
         System.out.println("res: " + res);
     }
 }
