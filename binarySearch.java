@@ -1041,36 +1041,117 @@ public class binarySearch {
         // }
 
 
-        public int maxDistance(int [] position, int m) { // BUG: 这个题有点儿没读懂题目
-            int n = position.length;
-            Arrays.sort(position);
-            int l = 1, r = position[n-1] - position[0];
-            while (l + 1 < r) {
-                int mid = (l + r) / 2;
-                if (helper(position, n, mid, m)) l = mid;
-                else r = mid - 1;
-            }
-            return l;
-        }
-        private boolean helper(int [] a, int n, int max, int m) {
-            int ans = 1, sum = 0;
-            for (int i = 1; i < n; i++) {
-                sum += a[i] - a[i-1];
-                if (sum >= max) {
-                    ans++;
-                    sum = 0;
-                }
-                if (ans >= m) return true;
-            }
-            return false;
-        }
-   }
+        // public int countNegatives(int [][] a) {
+        //     int m = a.length, n = a[0].length, j = n-1, cnt = 0;
+        //     for (int i = 0; i < m; i++) {
+        //         if (a[i][j] >= 0) continue;
+        //         while (j >= 0 && a[i][j] < 0) j--;
+        //         cnt += (j >= 0 ? n - j-1 : n);
+        //         if (j < 0) {
+        //             cnt += (m-1 - i) * n;
+        //             break;
+        //         }
+        //         j += 1; // 当前行走到了非负数，下一行还需要从负数开始
+        //     }
+        //     return cnt;
+        // }
+        // public int countNegatives(int [][] arr) { // todo
+        //     int m = arr.length, n = arr[0].length, cnt = 0;
+        //     for (int [] a : arr) {
+        //         int l = 0, r = n-1, idx = -1;
+        //         while (l <= r) {
+        //             int mid = l + ((r - l) >> 1);
+        //             if (a[mid] < 0) {
+        //                 idx = mid;
+        //                 r = mid-1;
+        //             } else l = mid + 1;
+        //         }
+        //         if (idx >= 0) cnt += n - idx; // idx = -1表示这一行全是>=0的数，不能统计
+        //     }
+        //     return cnt;
+        // }
+    // https://leetcode-cn.com/problems/count-negative-numbers-in-a-sorted-matrix/solution/tong-ji-you-xu-ju-zhen-zhong-de-fu-shu-by-leetcode/
+
+        // public long minimumPerimeter(long neededApples) {
+        //     long x = 0, sum = 0;
+        //     while (sum < neededApples) {
+        //         x++;
+        //         sum += 12 * x * x; // 8∗(x/2+x+x∗(x−1)/2+x∗(x−1))=12x^2 
+        //     }
+        //     return x << 3;
+        // }
+
+        // public int[] fairCandySwap(int[] a, int[] b) {
+        //     int m = a.length, n = b.length;
+        //     Arrays.sort(a);
+        //     Arrays.sort(b);
+        //     int sa = Arrays.stream(a).sum(), sb = Arrays.stream(b).sum(), avg = (sa + sb) / 2;
+        //     Set<Integer> ss = new HashSet<>(Arrays.stream(b).boxed().collect(Collectors.toList()));
+        //     for (Integer v : a) {
+        //         if (sa > sb && ss.contains(v - (sa - avg))) return new int [] {v, v - (sa - avg)};
+        //         else if (sa < sb && ss.contains(v + sb - avg)) return new int [] {v, v + sb - avg} ;
+        //     }
+        //     return new int [0];
+        // }
+
+        // public int maxDistance(int [] position, int m) { // BUG: 这个题有点儿没读懂题目
+        //     int n = position.length;
+        //     Arrays.sort(position);
+        //     int l = 1, r = position[n-1] - position[0];
+        //     while (l + 1 < r) {
+        //         int mid = (l + r) / 2;
+        //         if (helper(position, n, mid, m)) l = mid;
+        //         else r = mid - 1;
+        //     }
+        //     return l;
+        // }
+        // private boolean helper(int [] a, int n, int max, int m) {
+        //     int ans = 1, sum = 0;
+        //     for (int i = 1; i < n; i++) {
+        //         sum += a[i] - a[i-1];
+        //         if (sum >= max) {
+        //             ans++;
+        //             sum = 0;
+        //         }
+        //         if (ans >= m) return true;
+        //     }
+        //     return false;
+        // }
+        // int []  a = new int []  {5, 4, 3, 2, 1, 1000000000};
+        // int r = s.maxDistance(a, 2);
+
+        
+    // // public TopVotedCandidate(int[] persons, int[] times) {
+    // public binarySearch(int[] persons, int[] times) {
+    //     int n = persons.length, cur = 0, locMax = 0;
+    //     tt = Arrays.copyOf(times, n);
+    //     cnt = new int [n][n];
+    //     max = new int [n];
+    //     max[0] = persons[0]; locMax = max[0];
+    //     for (int i = 0; i < n; i++) { // 时间点
+    //         cnt[i][persons[i]] = (i == 0 ? 0 : cnt[i-1][persons[i]]) + 1;
+    //         if (i == 0) continue;
+    //         for (int j = 0; j < n; j++) {
+    //             if (j == persons[i]) continue;
+    //             cnt[i][j] = cnt[i-1][j];
+    //         }
+    //     }
+    // }
+    // int [][] cnt;
+    // int [] tt;
+    // int [] max;
+    // public int q(int t) {
+    //     int idx = binarySearch(tt, t);
+    //         }
+
+        
+
+    }
     public static void main(String[] args) {
         Solution s = new Solution(); 
 
-        int [] a = new int [] {1,2,3,4,7};
-
-        int res = s.maxDistance(a, 3);
-        System.out.println("res: " + res);
+        
+        int r = s.maxDistance(a, 2);
+        System.out.println("r: " + r);
     }
 }

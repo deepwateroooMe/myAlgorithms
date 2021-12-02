@@ -858,14 +858,59 @@ public class stack {
         //     return sb.toString();
         // }
 
+        // public int countStudents(int[] std, int[] san) {
+        //     ArrayDeque<Integer> st = new ArrayDeque<>();
+        //     int n = std.length, cnt = 0, j = 0;
+        //     for (int i = 0; i < n; i++) {
+        //         if (std[i] == san[j]) {
+        //             j++;
+        //             continue;
+        //         }
+        //         st.offerLast(i);
+        //     }
+        //     boolean bk = false;
+        //     while (!st.isEmpty()) {
+        //         while (!st.isEmpty() && std[st.peekFirst()] == san[j]) {
+        //             j++;
+        //             st.pollFirst();
+        //         }
+        //         if (st.isEmpty()) return 0;
+        //         bk = false;
+        //         int cur = st.peekFirst();
+        //         while (std[st.peekFirst()] != san[j]) {
+        //             st.offerLast(st.pollFirst());
+        //             if (st.peekFirst() == cur) return st.size();
+        //         }
+        //     }
+        //     return 0;
+        // }
+
+        // public int minOperations(String[] a) {
+        //     int n = a.length;
+        //     ArrayDeque<String> s = new ArrayDeque<>();
+        //     for (String v : a) {
+        //         if (v.equals("./")) continue;
+        //         if (v.equals("../")) {
+        //             if (!s.isEmpty()) s.pollLast();
+        //         } else s.offerLast(v);
+        //     }
+        //     return s.size();
+        // }
+
+
+
+
+
+
         
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        String a = "leEeetcode";
-
-        String r = s.makeGood(a);
+        // String []  a = new String []  {"d1/", "../", "../", "../"};
+        String []  a = new String []  {"d1/", "d2/", "./", "d3/", "../", "d31/"};
+        
+        int r = s.minOperations(a);
         System.out.println("r: " + r);
         
     }
