@@ -1148,7 +1148,7 @@ public class binarySearchinSortedArray {
         //         hash += mod;
         //     return hash;
         // }
-        
+
     }
 
     public static void main(String[] args) {

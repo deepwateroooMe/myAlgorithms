@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.*;
 import java.util.stream.*;
 import java.util.stream.Collectors;
+import java.util.regex.Pattern;
 
 import static java.util.stream.Collectors.toMap;
 
@@ -735,18 +736,618 @@ public class strthreeing {
         // }
 
 
+        // public String[] spellchecker(String[] wordlist, String[] queries) {
+        //     int n = wordlist.length;
+        //     int m = queries.length;
+        //     Set<String> ss = new HashSet<>(); // ori
+        //     Map<String, String> lo = new HashMap<>();
+        //     Map<String, String> se = new HashMap<>();
+        //     Pattern p = Pattern.compile("[aeiou]"); // repeat only the following part:
+        //     for (String v : wordlist) {
+        //         ss.add(v);
+        //         String lower = toLowerCase(v);
+        //         lo.putIfAbsent(lower, v);
+        //         // String spe = toSpeString(v); // String replaceAll()
+        //         // String spe = lower.replaceAll("[aeiou]", "_");
+        //         String spe = p.matcher(lower).replaceAll("_");
+        //         se.putIfAbsent(spe, v);
+        //     }
+        //     String [] ans = new String [m];
+        //     int j = 0;
+        //     for (int i = 0; i < m; i++) {
+        //         if (ss.contains(queries[i])) { // exactly same word
+        //             ans[i] = queries[i];
+        //             continue;
+        //         }
+        //         String lower = toLowerCase(queries[i]);
+        //         if (lo.containsKey(lower)) {
+        //             ans[i] = lo.get(lower);
+        //             continue;
+        //         }
+        //         String toSpe = p.matcher(lower).replaceAll("_");
+        //         // String toSpe = toSpeString(queries[i]);
+        //         if (se.containsKey(toSpe)) {
+        //             ans[i] = se.get(toSpe);
+        //             continue;
+        //         }
+        //         ans[i] = "";
+        //     }
+        //     return ans;
+        // }
+        // private String toLowerCase(String tt) {
+        //     int n = tt.length();
+        //     char [] s = tt.toCharArray();
+        //     StringBuilder sb = new StringBuilder();
+        //     for (int i = 0; i < n; i++) 
+        //         sb.append(Character.toLowerCase(s[i]));
+        //     return sb.toString();
+        // }
+        // // Set<Character> sc = new HashSet<>(List.of('a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U'));
+        // // private String toSpeString(String tt) {
+        // //     int n = tt.length();
+        // //     char [] s = tt.toCharArray();
+        // //     StringBuilder sb = new StringBuilder();
+        // //     for (int i = 0; i < n; i++) 
+        // //         if (sc.contains(s[i])) sb.append('_');
+        // //         else sb.append(Character.toLowerCase(s[i])); // 把其它字母转换成小写
+        // //     return sb.toString();
+        // // }
 
+        // public String largestTimeFromDigits(int[] a) { // bug: 这个题应该是有很多的corner case，改天再写
+        //     // Set<Integer> s = new HashSet<>(Arrays.stream(a).boxed().collect(Collectors.toList()));
+        //     List<Integer> s = Arrays.stream(a).boxed().collect(Collectors.toList());
+        //     StringBuilder sb = new StringBuilder();
+        //     for (int j = 2; j > 0; j--) // >= 
+        //         if (s.contains(j)) {
+        //             sb.append((char)(j + '0'));
+        //             s.remove(new Integer(j));
+        //             break;
+        //         }
+        //     if (sb.length() > 0 sb.charAt(0) == '2') {
+        //         for (int i = 3; i >= 0; i--) 
+        //             if (s.contains(i)) {
+        //                 sb.append((char)(i + '0'));
+        //                 s.remove(new Integer(i));
+        //                 break;
+        //             }
+        //     } else if (sb.length() > 0) {
+        //         for (int i = 9; i >= 0; i--) 
+        //             if (s.contains(i)) {
+        //                 sb.append((char)(i + '0'));
+        //                 s.remove(new Integer(i));
+        //                 break;
+        //             }
+        //     }
+        //     sb.append(':');
+        //     for (int i = 5; i >= 0; i--) 
+        //         if (s.contains(i)) {
+        //             sb.append((char)(i + '0'));
+        //             s.remove(new Integer(i));
+        //             break;
+        //         }
+        //     // sb.append(s.iterator().next());
+        //     sb.append(s.get(0));
+        //     return sb.toString();
+        // }
 
+        // public String strWithout3a3b(int a, int b) {
+        //     if (a == 0 || b == 0) return a == 0 ? "b".repeat(b) : "a".repeat(a);
+        //     String s = "";
+        //     while (a > 0 && b > 0) {
+        //         if (Math.abs(a - b) >= 2) {
+        //             if (a > b) {
+        //                 s += "aab";
+        //                 a -= 2;
+        //                 b --;
+        //             } else {
+        //                 s += "bba";
+        //                 b -= 2;
+        //                 a --;
+        //             }
+        //         } else {
+        //             if (s.length() == 0 || s.charAt(s.length()-1) == 'a') s += "ba";
+        //             else s += "ab";
+        //             a--;
+        //             b--;
+        //         }
+        //     }
+        //     if (a > 0) s += "a".repeat(a);
+        //     if (b > 0) s += "b".repeat(b);
+        //     return s;
+        // }
 
-        
-        
+        // public String predictPartyVictory(String tt) { // bug: 这个前后出场的顺序是有关系的
+        //     int n = tt.length(), r [] = new int [n], d [] = new int [n], cntR = 0, cntD = 0;
+        //     char [] s = tt.toCharArray();
+        //     if (n <= 2) return s[0] == 'R' ? "Radiant" : "Dire";
+        //     for (int i = n-1; i >= 0; i--) 
+        //         if (s[i] == 'R') {
+        //             r[i] = (i == n-1 ? 0 : r[i+1]) + 1;
+        //             d[i] = (i == n-1 ? 0 : d[i+1]);
+        //         } else {
+        //             d[i] = (i == n-1 ? 0 : d[i+1]) + 1;
+        //             r[i] = (i == n-1 ? 0 : r[i+1]);
+        //         }
+        //     for (int i = 0; i < n; i++) {
+        //         if (s[i] == 'R') {
+        //         }
+        //     }
+        //     // for (int i = 0; i < n; i++) 
+        //     //     cnt[s[i] == 'D' ? 0 : 1]++;
+        //     return cnt[0] > cnt[1] ? "Dire" : cnt[0] < cnt[1] ? "Radiant" : s[0] == 'D' ? "Dire" : "Radiant";
+        // }
+
+        // public String[] getFolderNames(String[] s) { // 思路没有理清楚，写的代码就很繁琐
+        //     int n = s.length;
+        //     Map<String, Integer> m = new HashMap<>();
+        //     String [] ans = new String [n];
+        //     for (int i = 0; i < n; i++) {
+        //           if (!m.containsKey(s[i])) {
+        //             ans[i] = s[i];
+        //             m.put(s[i], 1);
+        //             int idx = s[i].indexOf("("), pre = idx;
+        //             String tmp = "";
+        //             if (idx != -1) {
+        //                 tmp = s[i].substring(0, idx);
+        //                 idx = -1;
+        //                 idx = s[i].indexOf("(", pre+1);
+        //             }
+        //             if (!tmp.equals("") && idx == -1 && m.containsKey(tmp)) {
+        //                 int v = Integer.parseInt(s[i].substring(pre+1, s[i].indexOf(")")));
+        //                 if (v == m.get(tmp))
+        //                     m.put(tmp, m.get(tmp) + 1); 
+        //             }
+        //         } else {
+        //             int v = m.get(s[i]), j = v;
+        //             String cur = s[i] + "(" + v + ")";
+        //             while (j < m.size() && m.containsKey(cur)) {
+        //                 cur = s[i] + "(" + j + ")";
+        //                 if (!m.containsKey(cur)) break;
+        //                 j++;
+        //             }
+        //             ans[i] = cur;
+        //             m.put(s[i], j + 1);
+        //             m.put(ans[i], 1);
+        //         }
+        //     }
+        //     return ans;
+        // }
+        // public String[] getFolderNames(String[] s) {
+        //     Map<String, Integer> m = new HashMap<>(); // 记录每种文件名出现的次数
+        //     Set<String> ss = new HashSet<>(); // 记录所有出现过的显示名称
+        //     String [] ans = new String [s.length]; // 返回结果
+        //     for (int i = 0; i < s.length; i++) {
+        //         String cur = s[i]; // 当前文件名
+        //         if (!ss.contains(cur)){ // 当前文件名首次出现
+        //             ans[i] = cur; // 直接使用当前文件名
+        //             ss.add(cur); // 将文件名加入ss
+        //             m.put(cur, 1); // 记录当前文件名出现次数为1
+        //         } else { // 当前文件名已经出现过
+        //             int cnt = m.get(cur); // 查看当前文件名出现过的次数
+        //             String recur = cur + "(" + cnt + ")"; // 组成新的显示名称
+        //             while (ss.contains(recur)){ // 如果新的显示名称仍出现过
+        //                 cnt++; // 出现次数加一
+        //                 recur = cur + "(" + cnt + ")"; // 更新显示名称
+        //             }
+        //             m.put(cur, cnt); // 更新该文件名出现次数
+        //             ss.add(recur); // 将新的显示名称加入ss
+        //             m.put(recur, 1); // 记录新的显示名称出现次数为1
+        //             ans[i] = recur; // 当前返回结果为该新的显示名称
+        //         }
+        //     }
+        //     return ans;
+        // }
+        // public String[] getFolderNames(String[] names) {
+        //     if (names == null || names.length == 0) return null;
+        //     HashMap<String, Integer> map = new HashMap<>();
+        //     String[] res = new String[names.length];
+        //     for (int i = 0; i < names.length; i++) {
+        //         if (!map.containsKey(names[i])) {
+        //             map.put(names[i], 1);
+        //             res[i] = names[i];
+        //         } else {
+        //             int count = map.get(names[i]);
+        //             while (map.containsKey(names[i] + "(" + count + ")")) {
+        //                 count++;
+        //             }
+        //             map.put(names[i] + "(" + count + ")", 1);
+        //             map.put(names[i], map.get(names[i]) + 1);
+        //             res[i] = names[i] + "(" + count + ")";
+        //         }
+        //     }
+        //     return res;
+        // }
+
+        // public String defangIPaddr(String s) {
+        //     Pattern p = Pattern.compile("[.]");
+        //     return p.matcher(s).replaceAll("[.]");
+        // }
+
+        // public String reverseStr(String s, int k) { // bug
+        //     int n = s.length(), i = k, j = 0, cnt = 0;
+        //     while (n >= 2 * k && i < n) {
+        //         s = (j == 0 ? "" : s.substring(0, j)) + new StringBuilder(s.substring(j, i)).reverse().toString() + s.substring(i);
+        //         // System.out.println("s: " + s);
+        //         i += 2 * k;
+        //         j = i;
+        //     }
+        //     if (n % (2 * k) != 0) s = s.substring(0, n-n% (2 * k)) 
+        //                               + new StringBuilder(s.substring(n - n % (2 * k), Math.min(n-n%(2*k)+k, n))).reverse().toString()
+        //                               + (n-n%(2*k)+k <= n ? s.substring(n - n % (2 * k) + k) : "");
+        //     return s;
+        // }
+        // public String reverseStr(String s, int k) { // 
+        //     int n = s.length(), repeat = n / (2*k) + (n % (2*k) == 0 ? 0 : 1);
+        //     if (n == 1) return s;
+        //     String ans = "";
+        //     for (int i = 0; i < repeat; i++) 
+        //         ans += (i < repeat-1 ? new StringBuilder(s.substring(i*2*k, i*2*k+k)).reverse().toString() :
+        //                 new StringBuilder(n <= i*2*k+k ? s.substring(i*2*k) : s.substring(i*2*k, i*2*k+k)).reverse().toString())
+        //             + (i < repeat-1 ? s.substring(i*2*k+k, (i+1)*2*k) : (n <= i*2*k+k ? "" : s.substring(i*2*k+k)));
+        //     return ans;
+        // }
+
+        // public int numJewelsInStones(String j, String s) {
+        //     Set<Character> ss = new HashSet<>();
+        //     for (char c : j.toCharArray()) ss.add(c);
+        //     int cnt = 0;
+        //     for (char c : s.toCharArray()) 
+        //         if (ss.contains(c)) cnt++;
+        //     return cnt;
+        // }
+
+        // public String interpret(String command) {
+        //     int n = command.length();
+        //     char [] s = command.toCharArray();
+        //     StringBuilder sb = new StringBuilder();
+        //     for (int i = 0; i < n; i++) {
+        //         if (s[i] == 'G') {
+        //             sb.append(s[i]);
+        //             continue;
+        //         }
+        //         if (i < n-1 && s[i+1] == ')') {
+        //             sb.append('o');
+        //             i += 1;
+        //             continue;
+        //         } 
+        //         sb.append("al");
+        //         i += 3;
+        //     }
+        //     return sb.toString();
+        // }
+
+        // public int countMatches(List<List<String>> items, String ruleKey, String ruleValue) {
+        //     int cnt = 0;
+        //     for (List<String> ls : items) {
+        //         if (ruleKey.equals("type") && ls.get(0).equals(ruleValue)) cnt++;
+        //         else if (ruleKey.equals("color") && ls.get(1).equals(ruleValue)) cnt++;
+        //         else if (ruleKey.equals("name") && ls.get(2).equals(ruleValue)) cnt++;
+        //     }
+        //     return cnt;
+        // }
+
+        // public int uniqueMorseRepresentations(String[] words) {
+        //     String [] s = new String [] {".-","-...","-.-.","-..",".","..-.","--.","....","..",".---","-.-",".-..","--","-.","---",".--.","--.-",".-.","...","-","..-","...-",".--","-..-","-.--","--.."};
+        //     Set<String> ss = new HashSet<>();
+        //     for (String sw : words) {
+        //         String tmp = "";
+        //         for (char c : sw.toCharArray()) 
+        //             tmp += s[c-'a'];
+        //         ss.add(tmp);
+        //     }
+        //     return ss.size();
+        // }
+
+        // public String replaceDigits(String t) {
+        //     int n = t.length();
+        //     char [] s = t.toCharArray();
+        //     for (int i = 1; i < n; i += 2) 
+        //         s[i] = (char)(s[i-1] + s[i] - '0');
+        //     return new String(s);
+        // }
+
+        //  public String truncateSentence(String t, int k) {
+        //     int n = t.length(), cnt = 0;
+        //     String [] s = t.split("\\s+");
+        //     String ans = "";
+        //     for (int i = 0; i < k; i++) {
+        //         ans += s[i];
+        //         if (i < k-1) ans += " ";
+        //     }
+        //     return ans;
+        // }
+
+        // public String toLowerCase(String t) {
+        //     int n = t.length();
+        //     char [] s = t.toCharArray();
+        //     StringBuilder sb = new StringBuilder();
+        //     for (char c : s) 
+        //         if (c <= 90 && c >= 65) sb.append((char)(c + 32));
+        //         else sb.append(c);
+        //     return sb.toString();
+        // }
+
+        // public boolean checkIfPangram(String t) {
+        //     int n = t.length();
+        //     Set<Character> s = new HashSet<>();
+        //     for (char c : t.toCharArray())
+        //         s.add(c);
+        //     return s.size() == 26;
+        // }
+
+        // public boolean arrayStringsAreEqual(String[] a, String[] b) {
+        //     int m = a.length, n = b.length;
+        //     String sa = "", sb = "";
+        //     for (int i = 0; i < m; i++) 
+        //         sa += a[i];
+        //     for (int i = 0; i < n; i++) 
+        //         sb += b[i];
+        //     return sa.equals(sb);
+        // }
+
+        // public String sortSentence(String s) {
+        //     String [] a = s.split("\\s+");
+        //     Arrays.sort(a, (x, y) -> x.charAt(x.length()-1) - y.charAt(y.length()-1));
+        //     String ans = "";
+        //     for (int i = 0; i < a.length; i++) {
+        //         ans += a[i].substring(0, a[i].length()-1);
+        //         if (i < a.length-1)
+        //             ans += " ";
+        //     }
+        //     return ans;
+        // }
+
+        // public boolean buddyStrings(String ss, String tt) {
+        //     int m = ss.length(), n = tt.length();
+        //     if (m != n) return false;
+        //     if (ss.equals(tt)) return ss.chars().distinct().count() < m;
+        //     char [] s = ss.toCharArray();
+        //     char [] t = tt.toCharArray();
+        //     int i = 0, j = 0, x = m-1, y = n-1;
+        //     while (i < m && s[i] == t[j]) {
+        //         i++;
+        //         j++;
+        //     }
+        //     while (x >= i && s[x] == t[y]) {
+        //         x--;
+        //         y--;
+        //     }
+        //     if (s[i] != t[y] || s[x] != t[j]) return false;
+        //     return ss.substring(i+1, x).equals(tt.substring(j+1, y));
+        // }
+
+        // public int maxRepeating(String s, String t) {
+        //     int n = s.length(), m = t.length(), i = 0, cnt = 0, max = 0;
+        //     for (int j = 0; j < n; j++) {
+        //         i = j;
+        //         while (i+m <= n) {
+        //             while (i+m <= n && s.substring(i, i+m).equals(t)) {
+        //                 cnt++;
+        //                 i += m;
+        //             }
+        //             max = Math.max(cnt, max);
+        //             cnt = 0;
+        //             while (i+m <= n && !s.substring(i, i+m).equals(t)) i++;
+        //         }
+        //     }
+        //     return max;
+        // }
+
+        // public int numDifferentIntegers(String t) {
+        //     int n = t.length(), i = 0, j = 0;
+        //     char [] s = t.toCharArray();
+        //     Set<String> ss = new HashSet<>();
+        //     while (i < n) {
+        //         while (i < n && (!Character.isDigit(s[i]))) i++;
+        //         if (i == n) return ss.size();
+        //         j = i+1;
+        //         while (j < n && Character.isDigit(s[j])) j++;
+        //         // The ^ anchor will make sure that the 0+ being matched is at the beginning of the input.
+        //         // The (?!$) negative lookahead ensures that not the entire string will be matched.
+        //         String cur = t.substring(i, j).replaceFirst("^0+(?!$)", "");
+        //         ss.add(cur);
+        //         i = j;
+        //     }
+        //     return ss.size();
+        // }
+
+        // public String mostCommonWord(String p, String[] b) {
+        //     Pattern pat = Pattern.compile("[!?',;.]");
+        //     String [] s = pat.matcher(p).replaceAll(" ").split("\\s+");
+        //     Map<String, Integer> m = new HashMap<>();
+        //     Set<String> ss = new HashSet<>(Arrays.asList(b));
+        //     int n = s.length, max = 0;
+        //     String ans = "";
+        //     for (int i = 0; i < n; i++) {
+        //         s[i] = s[i].toLowerCase();
+        //         System.out.println("s[i]: " + s[i]);
+        //         if (!ss.contains(s[i])) {
+        //             m.put(s[i], m.getOrDefault(s[i], 0) + 1);
+        //             System.out.println("m.get(s[i]): " + m.get(s[i]));
+        //             if (m.get(s[i]) > max) {
+        //                 max = m.get(s[i]);
+        //                 ans = s[i];
+        //             }
+        //         }
+        //     }
+        //     return ans;
+        // }
+
+        // public boolean areAlmostEqual(String ss, String tt) {
+        //     int n = ss.length();
+        //     char [] s = ss.toCharArray();
+        //     char [] t = tt.toCharArray();
+        //     int i = 0, j = 0, x = n-1, y = n-1;
+        //     while (i < n && s[i] == t[j]) {
+        //         i++;
+        //         j++;
+        //     }
+        //     if (i == n) return true;
+        //     while (x >= 0 && s[x] == t[y]) {
+        //         x--;
+        //         y--;
+        //     }
+        //     if (s[i] != t[y] || s[x] != t[j]) return false;
+        //     return ss.substring(i+1, x).equals(tt.substring(j+1, y));
+        // }
+
+        // public String reorderSpaces(String t) {
+        //     int n = t.length(), sum = 0;
+        //     String [] s = t.trim().split("\\s+");
+        //     String ans = "";
+        //     for (String v : s) sum += v.length();
+        //     if (s.length == 1) return s[0] + (n == sum ? "" : " ".repeat(n-sum));
+        //     String tmp = " ".repeat((n - sum) / (s.length-1));
+        //     for (int i = 0; i < s.length; i++) {
+        //         ans += s[i];
+        //         if (i < s.length-1)
+        //             ans += tmp;
+        //     }           
+        //     if ((n - sum) % (s.length-1) != 0)
+        //         ans += " ".repeat((n - sum) % (s.length-1));
+        //     return ans;
+        // }
+
+        // public String licenseKeyFormatting(String t, int k) {
+        //     int n = t.length(), cnt = 0;
+        //     char [] s = t.toCharArray();
+        //     StringBuilder sb = new StringBuilder();
+        //     for (int i = n-1; i >= 0; i--) {
+        //         if (s[i] == '-') continue;
+        //         if (cnt < k) {
+        //             sb.append(Character.toUpperCase(s[i]));
+        //             cnt++;
+        //             continue;
+        //         } else if (cnt == k) {
+        //             if (i >= 0)
+        //                 sb.append('-');
+        //             sb.append(Character.toUpperCase(s[i]));
+        //             cnt = 1;
+        //         }
+        //     }
+        //     return sb.reverse().toString();
+        // }
+
+        // public boolean checkOnesSegment(String s) {
+        //     String [] sa = s.replaceAll("0", " ").split("\\s+");
+        //     return sa.length == 1;
+        // }
+
+        // public String maximumTime(String t) {
+        //     int n = 5;
+        //     char [] s = t.toCharArray();
+        //     for (int i = 0; i < n; i++) {
+        //         if (s[i] != '?') continue;
+        //         if (i == 0) {
+        //             if (s[i+1] == '?') {
+        //                 s[i] = '2';
+        //                 s[i+1] = '3';
+        //                 i += 2;
+        //                 continue;
+        //             } else if (s[i+1] != '?' && s[i+1] - '0' <= 3)
+        //                 s[i] = '2';
+        //             else s[i] = '1';
+        //         } else if (i == 1) {
+        //             if (s[i-1] == '2') s[i] = '3';
+        //             else s[i] = '9';
+        //         } else if (i == 3) s[i] = '5';
+        //         else if (i == 4) s[i] = '9';
+        //     }
+        //     return new String(s);
+        // }
+
+        // public boolean checkRecord(String s) {
+        //     if (s.indexOf("LLL") != -1) return false;
+        //     boolean ab = false;
+        //     for (char c : s.toCharArray()) {
+        //         if (c == 'A' && !ab) ab = true;
+        //         else if (c == 'A' && ab) return false;
+        //     }
+        //     return true;
+        // }
+
+        // public int secondHighest(String t) {
+        //     int n = t.length(), max = -1, sec = -1;
+        //     char [] s = t.toCharArray();
+        //     for (int i = 0; i < n; i++) {
+        //         if (Character.isDigit(s[i])) {
+        //             if (max == -1 || s[i]-'0' > max) {
+        //                 if (max != -1)
+        //                     sec = max;
+        //                 max = s[i] - '0';
+        //             } else if (sec < s[i] - '0' && max != s[i] - '0')
+        //                 sec = s[i] - '0';
+        //         }
+        //     }
+        //     return sec;
+        // }
+
+        // public String modifyString(String t) {
+        //     if (t.indexOf("?") == -1) return t;
+        //     int n = t.length();
+        //     char [] s = new char [n];
+        //     if (n == 1) return t.charAt(0) == '?' ? "a" : t;
+        //     if (t.chars().distinct().count() == 1 && t.charAt(0) == '?') {
+        //         for (int i = 0; i < n; i++) 
+        //             s[i] = (char)(i % 26 + 'a');
+        //         return new String(s);
+        //     }
+        //     if (n == 1) return s[0] == '?' ? "a" : t;
+        //     while (t.indexOf("?") != -1) {
+        //         s = t.toCharArray();
+        //         for (int i = 0; i < n; i++) {
+        //             if (s[i] != '?') continue;
+        //             if (i == 0 && s[i+1] == '?') continue;
+        //             if (i < n-1 && s[i+1] != '?') {
+        //                 for (char c = 'a'; c < 'z'; c++)
+        //                     if (c != s[i+1] && (i == 0 || s[i-1] != c)) {
+        //                         s[i] = c;
+        //                         break;
+        //                     }
+        //             } else if (i > 0 && s[i-1] != '?')
+        //                 for (char c = 'a'; c < 'z'; c++)
+        //                     if (c != s[i-1] && (i == n-1 || s[i+1] != c)) {
+        //                         s[i] = c;
+        //                         break;
+        //                     }
+        //         }
+        //         t = new String(s);
+        //     }
+        //     return new String (s);
+        // }
+        // public String modifyString(String s) {
+        //     char [] str = s.toCharArray();
+        //     for (int i = 0; i < str.length; i++) 
+        //         if (str[i] == '?') 
+        //             str[i] = helper(str, i);
+        //     return new String(str);
+        // }
+        // private char helper(char[] s, int pos) {
+        //     for (char ch = 'a'; ch <= 'z'; ch++) {
+        //         if (pos > 0 && ch == s[pos - 1]) continue;
+        //         if (pos < s.length - 1 && ch == s[pos + 1]) continue;
+        //         return ch;
+        //     }
+        //     return 0;
+        // }
+
+        // public boolean rotateString(String s, String t) {
+        //     int m = s.length(), n = t.length();
+        //     for (int i = 0; i < m; i++) 
+        //         for (int j = i+1; j <= n; j++) 
+        //             if (t.endsWith(s.substring(i, j)) && s.substring(j).equals(t.substring(0, n-(j-i))))
+        //                 return true;
+        //     return false;
+        // }
+
     }
     public static void main (String[] args) {
         Solution s = new Solution ();
 
-        String a = "111000";
+        String a = "abcde";
+        String b = "cdeab";
 
-        int r = s.minFlips(a);
-        System.out.println ("r: " + r);
+        boolean r = s.rotateString(a, b);
+        System.out.println("r: " + r);
     }
 }

@@ -69,37 +69,6 @@ public class strtwoing {
         // }
 
         
-        // private boolean isMatch(String s, String t) { // 这里元音字母好像是可以换的
-        //     if (s.length() != t.length()) return false;
-        //     for (int i = 0; i < s.length(); i++) 
-        //         if (Character.toLowerCase(s.charAt(i)) != Character.toLowerCase(t.charAt(i)))
-        //             return false;
-        //     return true;
-        // }
-        // public String[] spellchecker(String[] wordlist, String[] queries) {
-        //     int n = wordlist.length;
-        //     int m = queries.length;
-        //     Set<String> ss = new HashSet<>();
-        //     for (String v : wordlist)
-        //         ss.add(v);
-        //     String [] ans = new String [m];
-        //     int j = 0;
-        //     for (int i = 0; i < m; i++) {
-        //         if (ss.contains(queries[i])) {
-        //             ans[i] = queries[i];
-        //             continue;
-        //         }
-        //         for ( j = 0; j < n; j++) 
-        //             if (isMatch(wordlist[j], queries[i])) {
-        //                 ans[i] = wordlist[j];
-        //                 break;
-        //             }
-        //         if (j == n) ans[i] = "";
-        //     }
-        //     return ans;
-        // }
-
- 
         // private void remove(String t) { // tle tle tle tle
         //     int i = 0;
         //     int n = s.length();

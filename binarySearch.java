@@ -1144,14 +1144,54 @@ public class binarySearch {
     //     int idx = binarySearch(tt, t);
     //         }
 
-        
 
+        // public int nthMagicalNumber(int n, int a, int b) {
+        //     int l = a * b / gcd(a, b);
+        //     int m = l / a + l / b - 1;
+        //     int q = n / m, r = n % m;
+        //     long ans = (long)q * l % mod;
+        //     if (r == 0) return (int)ans;
+        //     int [] heads = new int [] {a, b};
+        //     for (int i = 0; i < r-1; i++) {
+        //         if (heads[0] <= heads[1])
+        //             heads[0] += a;
+        //         else heads[1] += b;
+        //     }
+        //     ans += Math.min(heads[0], heads[1]);
+        //     return (int)(ans % mod);
+        // }
+        // static final int mod = (int)1e9 + 7;
+        // public int gcd(int x, int y) {
+        //     if (x == 0) return y;
+        //     return gcd(y % x, x);
+        // }
+        // public int nthMagicalNumber(int n, int a, int b) {
+        //     int l = a * b / gcd(a, b);
+        //     long lo = 0;
+        //     long hi = (long) 1e15;
+        //     while (lo < hi) {
+        //         long mi = lo + (hi - lo) / 2;
+        //         // If there are not enough magic numbers below mi...
+        //         if (mi / a + mi / b - mi / l < n)
+        //             lo = mi + 1;
+        //         else
+        //             hi = mi;
+        //     }
+        //     return (int) (lo % mod);
+        // }
     }
     public static void main(String[] args) {
         Solution s = new Solution(); 
 
         
-        int r = s.maxDistance(a, 2);
+        int r = s.nthMagicalNumber(5, 2, 4);
         System.out.println("r: " + r);
     }
 }
+
+
+
+
+
+
+        

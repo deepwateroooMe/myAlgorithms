@@ -1035,22 +1035,88 @@ public class twoPointers {
         //     return true;
         // }
 
+        // private String getNext(String t) {
+        //     int n = t.length(), j = n-1;
+        //     char [] s = t.toCharArray();
+        //     if (n < 2 || n == 2 && s[0] >= s[1]) return "";
+        //     else if (n == 2) return new StringBuilder(t).reverse().toString();
+        //     while (j > 0 && s[j-1] >= s[j]) j--;
+        //     if (j == 0) return "";
+        //     String ans = t.substring(0, j-1); // char: s[j-1]
+        //     char lk = 'z';
+        //     int idx = -1;
+        //     for (int k = j; k < n; k++) 
+        //         if (s[k] > s[j-1] && s[k] < lk) {
+        //             lk = s[k];
+        //             idx = k;
+        //         }
+        //     ans += lk;
+        //     char [] tmp = (t.substring(j, idx) + s[j-1] + t.substring(idx+1)).toCharArray();
+        //     Arrays.sort(tmp);
+        //     ans += new String(tmp);
+        //     return ans;
+        // }
+        // public int nextGreaterElement(int m) {
+        //     if (m <= 9) return -1;
+        //     String t = String.valueOf(m);
+        //     char [] s = t.toCharArray();
+        //     int n = t.length(), k = 0;
+        //     for (int i = n-1; i >= 0; i--) {
+        //         if (s[i-1] < s[i]) {
+        //             for ( k = n-1; k >= i; k--)  // 从右往左找，最右边第一个比s[i-1]大的数字，交换
+        //                 if (s[k] > s[i-1]) {
+        //                     char tmp = s[i-1];
+        //                     s[i-1] = s[k];
+        //                     s[k] = tmp;
+        //                     break;
+        //                 } // c++的字符串处理比这个简单，还是需要特殊处理
+        //             char [] tmp = (t.substring(i, k) + s[k] + t.substring(k+1)).toCharArray();
+        //             Arrays.sort(tmp);
+        //             String cur = t.substring(0, i-1) + s[i-1] + new String(tmp);
+        //             System.out.println("cur: " + cur);
+                    
+        //             long v = Long.parseLong(cur);
+        //             if (v > Integer.MAX_VALUE) return -1;
+        //             else return (int)v;
+        //         }
+        //     }
+        //     return -1;
+        //     // String next = getNext(t);
+        //     // if (next.equals("")) return -1;
+        //     // long tmp = Long.parseLong(next);
+        //     // if (tmp > Integer.MAX_VALUE) return -1;
+        //     // return (int)tmp;
+        // }
+        // // private String getNext(String t) {
+        // //     int n = t.length(), j = 0;
+        // //     char [] s = t.toCharArray();
+        // //     if (n < 2 || n == 2 && s[0] >= s[1]) return "";
+        // //     else if (n == 2) return new StringBuilder(t).reverse().toString();
+        // //     while (j > 0 && s[j-1] >= s[j]) j--;
+        // //     if (j == 0) return "";
+        // //     System.out.println("j: " + j);
+            
+        // //     String ans = t.substring(0, j-1); // char: s[j-1]
+        // //     char lk = 'z';
+        // //     int idx = -1;
+        // //     for (int k = j; k < n; k++) 
+        // //         if (s[k] > s[j-1] && s[k] < lk) {
+        // //             lk = s[k];
+        // //             idx = k;
+        // //         }
+        // //     ans += lk;
+        // //     char [] tmp = (t.substring(j, idx) + s[j-1] + t.substring(idx+1)).toCharArray();
+        // //     Arrays.sort(tmp);
+        // //     ans += new String(tmp);
+        // //     return ans;
+        // // }
+
+        
     }   
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        // String a = "saeed";
-        // String b = "ssaaedd";
-
-        // String a = "vtkgn";
-        // String b = "vttkgnn";
-        
-        String a = "alex";
-        String b = "alexxr";
-
-        boolean r = s.isLongPressedName(a, b);
+        int r = s.nextGreaterElement(230241);
         System.out.println("r: " + r);
     }
-}                                        //....
-// "jlnnxsetgcpsbhsfymrkhfursyissjnsocgdhgfx ubewllxzqhpasguvlrxt kgatzfybprfmmfithphccxfsogsgqsnvckjvnskk"
-// "jlnnxsetgcpsbhsfymrkhfursyissjnsocgdhgfx txrlvugsaphqzxllwebu kgatzfybprfmmfithphccxfsogsgqsnvckjvnskk"
+}                            
