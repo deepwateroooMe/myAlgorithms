@@ -1,0 +1,26 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+    \PYG{k+kd}{private} \PYG{k+kt}{int} \PYG{o}{[][]} \PYG{n}{p}\PYG{o}{;}
+    \PYG{k+kd}{private} \PYG{k+kt}{int} \PYG{n}{log}\PYG{o}{;}
+    \PYG{k+kd}{public} \PYG{n+nf}{TreeAncestor}\PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{n}\PYG{o}{,} \PYG{k+kt}{int}\PYG{o}{[]} \PYG{n}{parent}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+        \PYG{n}{log} \PYG{o}{=} \PYG{o}{(}\PYG{k+kt}{int}\PYG{o}{)} \PYG{o}{(}\PYG{n}{Math}\PYG{o}{.}\PYG{n+na}{log}\PYG{o}{(}\PYG{n}{n} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{o}{)} \PYG{o}{/} \PYG{n}{Math}\PYG{o}{.}\PYG{n+na}{log}\PYG{o}{(}\PYG{l+m+mi}{2}\PYG{o}{))} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{o}{;}
+        \PYG{n}{p} \PYG{o}{=} \PYG{k}{new} \PYG{k+kt}{int}\PYG{o}{[}\PYG{n}{n}\PYG{o}{][}\PYG{n}{log}\PYG{o}{];}
+        \PYG{k}{for} \PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;} \PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{n}{parent}\PYG{o}{.}\PYG{n+na}{length}\PYG{o}{;} \PYG{n}{i}\PYG{o}{++)} \PYG{c+c1}{// 初始化p数组}
+            \PYG{n}{p}\PYG{o}{[}\PYG{n}{i}\PYG{o}{][}\PYG{l+m+mi}{0}\PYG{o}{]} \PYG{o}{=} \PYG{n}{parent}\PYG{o}{[}\PYG{n}{i}\PYG{o}{];}
+        \PYG{k}{for} \PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{o}{;} \PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{n}{log}\PYG{o}{;} \PYG{n}{i}\PYG{o}{++)} \PYG{c+c1}{// 按公式递推p数组}
+            \PYG{k}{for} \PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{j} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;} \PYG{n}{j} \PYG{o}{\PYGZlt{}} \PYG{n}{n}\PYG{o}{;} \PYG{n}{j}\PYG{o}{++)}
+                \PYG{k}{if} \PYG{o}{(}\PYG{n}{p}\PYG{o}{[}\PYG{n}{j}\PYG{o}{][}\PYG{n}{i}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{o}{]} \PYG{o}{!=} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{o}{)}
+                    \PYG{n}{p}\PYG{o}{[}\PYG{n}{j}\PYG{o}{][}\PYG{n}{i}\PYG{o}{]} \PYG{o}{=} \PYG{n}{p}\PYG{o}{[}\PYG{n}{p}\PYG{o}{[}\PYG{n}{j}\PYG{o}{][}\PYG{n}{i}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{o}{]][}\PYG{n}{i}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{o}{];}
+                \PYG{k}{else} \PYG{n}{p}\PYG{o}{[}\PYG{n}{j}\PYG{o}{][}\PYG{n}{i}\PYG{o}{]} \PYG{o}{=} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{o}{;}
+    \PYG{o}{\PYGZcb{}}
+    \PYG{k+kd}{public} \PYG{k+kt}{int} \PYG{n+nf}{getKthAncestor}\PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{node}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{k}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+        \PYG{k+kt}{int} \PYG{n}{pow} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;}
+        \PYG{k}{while} \PYG{o}{(}\PYG{n}{k} \PYG{o}{\PYGZgt{}} \PYG{l+m+mi}{0}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+            \PYG{k}{if} \PYG{o}{(}\PYG{n}{pow} \PYG{o}{\PYGZgt{}=} \PYG{n}{log} \PYG{o}{||} \PYG{n}{node} \PYG{o}{==} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{o}{)} \PYG{k}{return} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{o}{;}
+            \PYG{k}{if} \PYG{o}{((}\PYG{n}{k} \PYG{o}{\PYGZam{}} \PYG{l+m+mi}{1}\PYG{o}{)} \PYG{o}{==} \PYG{l+m+mi}{1}\PYG{o}{)}
+                \PYG{n}{node} \PYG{o}{=} \PYG{n}{p}\PYG{o}{[}\PYG{n}{node}\PYG{o}{][}\PYG{n}{pow}\PYG{o}{];}
+            \PYG{n}{k} \PYG{o}{\PYGZgt{}\PYGZgt{}=} \PYG{l+m+mi}{1}\PYG{o}{;}
+            \PYG{n}{pow}\PYG{o}{++;}
+        \PYG{o}{\PYGZcb{}}
+        \PYG{k}{return} \PYG{n}{node}\PYG{o}{;}
+    \PYG{o}{\PYGZcb{}}
+\end{Verbatim}

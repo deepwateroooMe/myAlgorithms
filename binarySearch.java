@@ -1179,15 +1179,85 @@ public class binarySearch {
         //     }
         //     return (int) (lo % mod);
         // }
+
+
+        // public static String smallestGoodBase(String n) {
+        //     long s = Long.parseLong(n); //现将字符串解析成long型数据
+        //     //对所有可能的指数n进行遍历
+        //     for (int max_e=(int)(Math.log(s)/Math.log(2)) + 1; max_e>=2; max_e--){
+        //         long low=2, high=s, mid;
+        //         //进行二叉搜索，寻找最小的good base。
+        //         while(low <= high){
+        //             mid = low + (high - low)/2;
+        //             //一开始没有使用BigInteger，会报错
+        //             BigInteger left = BigInteger.valueOf(mid);
+        //             left = left.pow(max_e).subtract(BigInteger.ONE);
+        //             BigInteger right = BigInteger.valueOf(s).multiply(BigInteger.valueOf(mid).subtract(BigInteger.ONE));
+        //             int cmr = left.compareTo(right);
+        //             if(cmr == 0)
+        //                 return String.valueOf(mid);
+        //             else if(cmr > 0)
+        //                 high = mid - 1;
+        //             else
+        //                 low = mid + 1;
+        //         }
+        //     }
+        //     return String.valueOf(s-1);
+        // }
+        // public String smallestGoodBase(String n) {
+        //     long num = 0;
+        //     for (char c : n.toCharArray()) num = num * 10 + c - '0';
+        //     long x = 1;
+        //     for (int p = 64; p >= 1; p--) {
+        //         if ((x << p) < num) {
+        //             long k = helper(num, p);
+        //             if (k != -1) return String.valueOf(k);
+        //         }
+        //     }
+        //     return String.valueOf(num - 1);
+        // }
+        // private long helper(long num, int p) {
+        //     long l = 1, r = (long)(Math.pow(num, 1.0/p) + 1);
+        //     while (l < r) {
+        //         long mid = l + (r - l) / 2;
+        //         long sum = 0, cur = 1;
+        //         for (int i = 0; i <= p; i++) {
+        //             sum += cur;
+        //             cur *= mid;
+        //         }
+        //         if (sum == num) return mid;
+        //         else if (sum > num) r = mid;
+        //         else l = mid + 1;
+        //     }
+        //     return -1;
+        // }
+        // public String smallestGoodBase(String n) {
+        //     long v = Long.parseLong(n);
+        //     for (int i = (int)(Math.log(v+1) / Math.log(2)); i >= 2; i--) { // k最小的时候，m最大为log_2(v+1)
+        //         long left = 2, right = (long)Math.pow(v, 1.0 / (i-1)) + 1;
+        //         while (left < right) {
+        //             long mid = left + (right - left) / 2, sum = 0;
+        //             for (int j = 0; j < i; j++) 
+        //                 sum = sum * mid + 1;
+        //             if (sum == v) return String.valueOf(mid);
+        //             if (sum < v) left = mid + 1;
+        //             else right = mid;
+        //         }
+        //     }
+        //     return String.valueOf(v-1);
+        // }
     }
     public static void main(String[] args) {
         Solution s = new Solution(); 
 
-        
-        int r = s.nthMagicalNumber(5, 2, 4);
+        // String a = "13";
+        String a = "4681";
+
+        String r = s.smallestGoodBase(a);
         System.out.println("r: " + r);
     }
 }
+
 
 
 

@@ -1,0 +1,204 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kd}{private} \PYG{k+kd}{class} \PYG{n+nc}{Node} \PYG{o}{\PYGZob{}}
+    \PYG{k+kd}{private} \PYG{k+kt}{int} \PYG{n}{bgn}\PYG{o}{;}
+    \PYG{k+kd}{private} \PYG{k+kt}{int} \PYG{n}{end}\PYG{o}{;}
+    \PYG{k+kd}{private} \PYG{k+kt}{int} \PYG{n}{val}\PYG{o}{;}
+    \PYG{k+kd}{private} \PYG{k+kt}{int} \PYG{n}{cnt}\PYG{o}{;} \PYG{c+c1}{// sum}
+    \PYG{k+kd}{private} \PYG{n}{Node} \PYG{n}{left}\PYG{o}{;}
+    \PYG{k+kd}{private} \PYG{n}{Node} \PYG{n}{right}\PYG{o}{;}
+    \PYG{k+kd}{public} \PYG{n+nf}{Node}\PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{bgn}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{end}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{val}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{cnt}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+        \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{bgn} \PYG{o}{=} \PYG{n}{bgn}\PYG{o}{;}
+        \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{end} \PYG{o}{=} \PYG{n}{end}\PYG{o}{;}
+        \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{val} \PYG{o}{=} \PYG{n}{val}\PYG{o}{;}
+        \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{cnt} \PYG{o}{=} \PYG{n}{cnt}\PYG{o}{;}
+        \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{left} \PYG{o}{=} \PYG{k+kc}{null}\PYG{o}{;}
+        \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{right} \PYG{o}{=} \PYG{k+kc}{null}\PYG{o}{;}
+    \PYG{o}{\PYGZcb{}}
+    \PYG{k+kd}{public} \PYG{n+nf}{Node}\PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{bgn}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{end}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{val}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{cnt}\PYG{o}{,} \PYG{n}{Node} \PYG{n}{left}\PYG{o}{,} \PYG{n}{Node} \PYG{n}{right}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+        \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{bgn} \PYG{o}{=} \PYG{n}{bgn}\PYG{o}{;}
+        \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{end} \PYG{o}{=} \PYG{n}{end}\PYG{o}{;}
+        \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{val} \PYG{o}{=} \PYG{n}{val}\PYG{o}{;}
+        \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{cnt} \PYG{o}{=} \PYG{n}{cnt}\PYG{o}{;}
+        \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{left} \PYG{o}{=} \PYG{n}{left}\PYG{o}{;}
+        \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{right} \PYG{o}{=} \PYG{n}{right}\PYG{o}{;}
+    \PYG{o}{\PYGZcb{}}
+\PYG{o}{\PYGZcb{}}
+\PYG{k+kd}{public} \PYG{k+kt}{void} \PYG{n+nf}{update}\PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{index}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{val}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+    \PYG{n}{updateTree}\PYG{o}{(}\PYG{n}{root}\PYG{o}{,} \PYG{n}{index}\PYG{o}{,} \PYG{n}{val}\PYG{o}{);}
+\PYG{o}{\PYGZcb{}}
+\PYG{k+kd}{public} \PYG{k+kt}{int} \PYG{n+nf}{cntRange}\PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{left}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{right}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+    \PYG{k}{return} \PYG{n}{cntRangeFromTree}\PYG{o}{(}\PYG{n}{root}\PYG{o}{,} \PYG{n}{left}\PYG{o}{,} \PYG{n}{right}\PYG{o}{);}
+\PYG{o}{\PYGZcb{}}
+\PYG{k+kd}{private} \PYG{k+kt}{int} \PYG{n+nf}{cntRangeFromTree}\PYG{o}{(}\PYG{n}{Node} \PYG{n}{r}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{i}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{j}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+    \PYG{k}{if} \PYG{o}{(}\PYG{n}{r} \PYG{o}{==} \PYG{k+kc}{null} \PYG{o}{||} \PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{n}{r}\PYG{o}{.}\PYG{n+na}{bgn} \PYG{o}{||} \PYG{n}{i} \PYG{o}{\PYGZgt{}} \PYG{n}{r}\PYG{o}{.}\PYG{n+na}{end}\PYG{o}{)} \PYG{k}{return} \PYG{l+m+mi}{0}\PYG{o}{;}
+    \PYG{k}{else} \PYG{k}{if} \PYG{o}{(}\PYG{n}{i} \PYG{o}{\PYGZlt{}=} \PYG{n}{r}\PYG{o}{.}\PYG{n+na}{bgn} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{n}{j} \PYG{o}{\PYGZgt{}=} \PYG{n}{r}\PYG{o}{.}\PYG{n+na}{end}\PYG{o}{)} \PYG{k}{return} \PYG{n}{r}\PYG{o}{.}\PYG{n+na}{cnt}\PYG{o}{;}
+    \PYG{k}{else} \PYG{k}{return} \PYG{n}{cntRangeFromTree}\PYG{o}{(}\PYG{n}{r}\PYG{o}{.}\PYG{n+na}{left}\PYG{o}{,} \PYG{n}{i}\PYG{o}{,} \PYG{n}{j}\PYG{o}{)} \PYG{o}{+} \PYG{n}{cntRangeFromTree}\PYG{o}{(}\PYG{n}{r}\PYG{o}{.}\PYG{n+na}{right}\PYG{o}{,} \PYG{n}{i}\PYG{o}{,} \PYG{n}{j}\PYG{o}{);}
+\PYG{o}{\PYGZcb{}}
+\PYG{k+kd}{private} \PYG{k+kt}{void} \PYG{n+nf}{updateTree}\PYG{o}{(}\PYG{n}{Node} \PYG{n}{r}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{i}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{va}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+    \PYG{k}{if} \PYG{o}{(}\PYG{n}{r} \PYG{o}{==} \PYG{k+kc}{null} \PYG{o}{||} \PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{n}{r}\PYG{o}{.}\PYG{n+na}{bgn} \PYG{o}{||} \PYG{n}{i} \PYG{o}{\PYGZgt{}} \PYG{n}{r}\PYG{o}{.}\PYG{n+na}{end}\PYG{o}{)} \PYG{k}{return}\PYG{o}{;}
+    \PYG{k}{else} \PYG{k}{if} \PYG{o}{(}\PYG{n}{r}\PYG{o}{.}\PYG{n+na}{bgn} \PYG{o}{==} \PYG{n}{r}\PYG{o}{.}\PYG{n+na}{end} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{n}{r}\PYG{o}{.}\PYG{n+na}{bgn} \PYG{o}{==} \PYG{n}{i}\PYG{o}{)} \PYG{n}{r}\PYG{o}{.}\PYG{n+na}{cnt} \PYG{o}{=} \PYG{n}{va}\PYG{o}{;}
+    \PYG{k}{else} \PYG{o}{\PYGZob{}}
+        \PYG{n}{updateTree}\PYG{o}{(}\PYG{n}{r}\PYG{o}{.}\PYG{n+na}{left}\PYG{o}{,} \PYG{n}{i}\PYG{o}{,} \PYG{n}{va}\PYG{o}{);}
+        \PYG{n}{updateTree}\PYG{o}{(}\PYG{n}{r}\PYG{o}{.}\PYG{n+na}{right}\PYG{o}{,} \PYG{n}{i}\PYG{o}{,} \PYG{n}{va}\PYG{o}{);}
+        \PYG{k+kt}{int} \PYG{n}{cnt} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;}
+        \PYG{k}{if} \PYG{o}{(}\PYG{n}{r}\PYG{o}{.}\PYG{n+na}{left} \PYG{o}{!=} \PYG{k+kc}{null}\PYG{o}{)} \PYG{n}{cnt} \PYG{o}{+=} \PYG{n}{r}\PYG{o}{.}\PYG{n+na}{left}\PYG{o}{.}\PYG{n+na}{cnt}\PYG{o}{;}
+        \PYG{k}{if} \PYG{o}{(}\PYG{n}{r}\PYG{o}{.}\PYG{n+na}{right} \PYG{o}{!=} \PYG{k+kc}{null}\PYG{o}{)} \PYG{n}{cnt} \PYG{o}{+=} \PYG{n}{r}\PYG{o}{.}\PYG{n+na}{right}\PYG{o}{.}\PYG{n+na}{cnt}\PYG{o}{;}
+        \PYG{n}{r}\PYG{o}{.}\PYG{n+na}{cnt} \PYG{o}{=} \PYG{n}{cnt}\PYG{o}{;}
+    \PYG{o}{\PYGZcb{}}
+\PYG{o}{\PYGZcb{}}
+\PYG{k+kd}{private} \PYG{n}{Node} \PYG{n+nf}{buildTree}\PYG{o}{(}\PYG{k+kt}{int} \PYG{o}{[]} \PYG{n}{arr}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{i}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{j}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+    \PYG{k}{if} \PYG{o}{(}\PYG{n}{i} \PYG{o}{\PYGZgt{}} \PYG{n}{j}\PYG{o}{)} \PYG{k}{return} \PYG{k+kc}{null}\PYG{o}{;}
+    \PYG{k}{else} \PYG{k}{if} \PYG{o}{(}\PYG{n}{i} \PYG{o}{==} \PYG{n}{j}\PYG{o}{)}
+        \PYG{k}{return} \PYG{k}{new} \PYG{n}{Node}\PYG{o}{(}\PYG{n}{i}\PYG{o}{,} \PYG{n}{i}\PYG{o}{,} \PYG{n}{arr}\PYG{o}{[}\PYG{n}{i}\PYG{o}{],} \PYG{l+m+mi}{1}\PYG{o}{);}
+    \PYG{k}{else} \PYG{o}{\PYGZob{}}
+        \PYG{k+kt}{int} \PYG{n}{mid} \PYG{o}{=} \PYG{n}{i} \PYG{o}{+} \PYG{o}{(}\PYG{n}{j}\PYG{o}{\PYGZhy{}}\PYG{n}{i}\PYG{o}{)/}\PYG{l+m+mi}{2}\PYG{o}{;}
+        \PYG{n}{Node} \PYG{n}{left} \PYG{o}{=} \PYG{n}{buildTree}\PYG{o}{(}\PYG{n}{arr}\PYG{o}{,} \PYG{n}{i}\PYG{o}{,} \PYG{n}{mid}\PYG{o}{);}
+        \PYG{n}{Node} \PYG{n}{right} \PYG{o}{=} \PYG{n}{buildTree}\PYG{o}{(}\PYG{n}{arr}\PYG{o}{,} \PYG{n}{mid}\PYG{o}{+}\PYG{l+m+mi}{1}\PYG{o}{,} \PYG{n}{j}\PYG{o}{);}
+        \PYG{k}{if} \PYG{o}{(}\PYG{n}{left}\PYG{o}{.}\PYG{n+na}{val} \PYG{o}{==} \PYG{n}{right}\PYG{o}{.}\PYG{n+na}{val}\PYG{o}{)}
+            \PYG{k}{return} \PYG{k}{new} \PYG{n}{Node}\PYG{o}{(}\PYG{n}{i}\PYG{o}{,} \PYG{n}{j}\PYG{o}{,} \PYG{n}{left}\PYG{o}{.}\PYG{n+na}{val}\PYG{o}{,} \PYG{n}{left}\PYG{o}{.}\PYG{n+na}{cnt} \PYG{o}{+} \PYG{n}{right}\PYG{o}{.}\PYG{n+na}{cnt}\PYG{o}{,} \PYG{n}{left}\PYG{o}{,} \PYG{n}{right}\PYG{o}{);}
+        \PYG{k}{else} \PYG{o}{\PYGZob{}}
+            \PYG{k}{if} \PYG{o}{(}\PYG{n}{left}\PYG{o}{.}\PYG{n+na}{cnt} \PYG{o}{\PYGZgt{}} \PYG{n}{right}\PYG{o}{.}\PYG{n+na}{cnt}\PYG{o}{)}
+                \PYG{k}{return} \PYG{k}{new} \PYG{n}{Node}\PYG{o}{(}\PYG{n}{i}\PYG{o}{,} \PYG{n}{j}\PYG{o}{,} \PYG{n}{left}\PYG{o}{.}\PYG{n+na}{val}\PYG{o}{,} \PYG{n}{left}\PYG{o}{.}\PYG{n+na}{cnt}\PYG{o}{\PYGZhy{}}\PYG{n}{right}\PYG{o}{.}\PYG{n+na}{cnt}\PYG{o}{,} \PYG{n}{left}\PYG{o}{,} \PYG{n}{right}\PYG{o}{);}
+            \PYG{k}{else} \PYG{k}{return} \PYG{k}{new} \PYG{n}{Node}\PYG{o}{(}\PYG{n}{i}\PYG{o}{,} \PYG{n}{j}\PYG{o}{,} \PYG{n}{right}\PYG{o}{.}\PYG{n+na}{val}\PYG{o}{,} \PYG{n}{right}\PYG{o}{.}\PYG{n+na}{cnt}\PYG{o}{\PYGZhy{}}\PYG{n}{left}\PYG{o}{.}\PYG{n+na}{cnt}\PYG{o}{,} \PYG{n}{left}\PYG{o}{,} \PYG{n}{right}\PYG{o}{);}
+        \PYG{o}{\PYGZcb{}}
+    \PYG{o}{\PYGZcb{}}
+\PYG{o}{\PYGZcb{}}
+\PYG{c+c1}{// 排序数组中 第一个大于tar的下标}
+\PYG{k+kt}{int} \PYG{n+nf}{upper\PYGZus{}bound}\PYG{o}{(}\PYG{n}{List}\PYG{o}{\PYGZlt{}}\PYG{n}{Integer}\PYG{o}{\PYGZgt{}} \PYG{n}{list}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{tar}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+    \PYG{k+kt}{int} \PYG{n}{l} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{,} \PYG{n}{r} \PYG{o}{=} \PYG{n}{list}\PYG{o}{.}\PYG{n+na}{size}\PYG{o}{();}
+    \PYG{k}{while} \PYG{o}{(}\PYG{n}{l} \PYG{o}{\PYGZlt{}} \PYG{n}{r}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+        \PYG{k+kt}{int} \PYG{n}{mid} \PYG{o}{=} \PYG{n}{l} \PYG{o}{+} \PYG{o}{(}\PYG{n}{r}\PYG{o}{\PYGZhy{}}\PYG{n}{l}\PYG{o}{)/}\PYG{l+m+mi}{2}\PYG{o}{;}
+        \PYG{k}{if} \PYG{o}{(}\PYG{n}{list}\PYG{o}{.}\PYG{n+na}{get}\PYG{o}{(}\PYG{n}{mid}\PYG{o}{)} \PYG{o}{\PYGZlt{}=} \PYG{n}{tar}\PYG{o}{)} \PYG{n}{l} \PYG{o}{=} \PYG{n}{mid}\PYG{o}{+}\PYG{l+m+mi}{1}\PYG{o}{;}
+        \PYG{k}{else} \PYG{n}{r} \PYG{o}{=} \PYG{n}{mid}\PYG{o}{;}
+    \PYG{o}{\PYGZcb{}}
+    \PYG{k}{return} \PYG{n}{l}\PYG{o}{;}
+\PYG{o}{\PYGZcb{}}
+\PYG{c+c1}{// 排序数组中 第一个大于等于tar的下标}
+\PYG{k+kt}{int} \PYG{n+nf}{lower\PYGZus{}bound}\PYG{o}{(}\PYG{n}{List}\PYG{o}{\PYGZlt{}}\PYG{n}{Integer}\PYG{o}{\PYGZgt{}} \PYG{n}{list}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{tar}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+    \PYG{k+kt}{int} \PYG{n}{l} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{,} \PYG{n}{r} \PYG{o}{=} \PYG{n}{list}\PYG{o}{.}\PYG{n+na}{size}\PYG{o}{()\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{o}{;}
+    \PYG{k}{while} \PYG{o}{(}\PYG{n}{l} \PYG{o}{\PYGZlt{}} \PYG{n}{r}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+        \PYG{k+kt}{int} \PYG{n}{mid} \PYG{o}{=} \PYG{n}{l} \PYG{o}{+} \PYG{o}{(}\PYG{n}{r}\PYG{o}{\PYGZhy{}}\PYG{n}{l}\PYG{o}{)/}\PYG{l+m+mi}{2}\PYG{o}{;}
+        \PYG{k}{if} \PYG{o}{(}\PYG{n}{list}\PYG{o}{.}\PYG{n+na}{get}\PYG{o}{(}\PYG{n}{mid}\PYG{o}{)} \PYG{o}{\PYGZlt{}} \PYG{n}{tar}\PYG{o}{)} \PYG{n}{l} \PYG{o}{=} \PYG{n}{mid}\PYG{o}{+}\PYG{l+m+mi}{1}\PYG{o}{;}
+        \PYG{k}{else} \PYG{n}{r} \PYG{o}{=} \PYG{n}{mid}\PYG{o}{;}
+    \PYG{o}{\PYGZcb{}}
+    \PYG{k}{return} \PYG{n}{l}\PYG{o}{;}
+\PYG{o}{\PYGZcb{}}
+\PYG{c+cm}{/**}
+\PYG{c+cm}{ * 构建线段树}
+\PYG{c+cm}{ * @param arr 被构建数组}
+\PYG{c+cm}{ * @param l 构建节点的左值 表示查询区域左边界}
+\PYG{c+cm}{ * @param r 构建节点的右值 表示查询区域右边界}
+\PYG{c+cm}{ * @return 以构建完成的线段树节点}
+\PYG{c+cm}{ * */}
+\PYG{k+kd}{private} \PYG{n}{SegTreeNode} \PYG{n+nf}{buildTree}\PYG{o}{(}\PYG{k+kt}{int}\PYG{o}{[]} \PYG{n}{arr}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{l}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{r}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+    \PYG{k}{if} \PYG{o}{(}\PYG{n}{l} \PYG{o}{\PYGZgt{}} \PYG{n}{r}\PYG{o}{)} \PYG{k}{return} \PYG{k+kc}{null}\PYG{o}{;}
+    \PYG{c+c1}{// 初始一个线段树节点}
+    \PYG{n}{SegTreeNode} \PYG{n}{root} \PYG{o}{=} \PYG{k}{new} \PYG{n}{SegTreeNode}\PYG{o}{(}\PYG{n}{l}\PYG{o}{,} \PYG{n}{r}\PYG{o}{);}
+    \PYG{c+c1}{// 叶子节点}
+    \PYG{k}{if} \PYG{o}{(}\PYG{n}{l} \PYG{o}{==} \PYG{n}{r}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+        \PYG{c+c1}{// 众数就是当前值 计数为1}
+        \PYG{n}{root}\PYG{o}{.}\PYG{n+na}{val} \PYG{o}{=} \PYG{n}{arr}\PYG{o}{[}\PYG{n}{l}\PYG{o}{];} \PYG{n}{root}\PYG{o}{.}\PYG{n+na}{count} \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{o}{;}
+        \PYG{k}{return} \PYG{n}{root}\PYG{o}{;}
+    \PYG{o}{\PYGZcb{}}
+
+    \PYG{k+kt}{int} \PYG{n}{mid} \PYG{o}{=} \PYG{o}{(}\PYG{n}{l}\PYG{o}{+}\PYG{n}{r}\PYG{o}{)/}\PYG{l+m+mi}{2}\PYG{o}{;}
+    \PYG{c+c1}{// 构建左子节点}
+    \PYG{n}{root}\PYG{o}{.}\PYG{n+na}{left} \PYG{o}{=} \PYG{n}{buildTree}\PYG{o}{(}\PYG{n}{arr}\PYG{o}{,} \PYG{n}{l}\PYG{o}{,} \PYG{n}{mid}\PYG{o}{);}
+    \PYG{c+c1}{// 构建右子节点}
+    \PYG{n}{root}\PYG{o}{.}\PYG{n+na}{right} \PYG{o}{=} \PYG{n}{buildTree}\PYG{o}{(}\PYG{n}{arr}\PYG{o}{,} \PYG{n}{mid}\PYG{o}{+}\PYG{l+m+mi}{1}\PYG{o}{,} \PYG{n}{r}\PYG{o}{);}
+    \PYG{c+c1}{// 整合父节点}
+    \PYG{n}{makeRoot}\PYG{o}{(}\PYG{n}{root}\PYG{o}{);}
+    \PYG{k}{return} \PYG{n}{root}\PYG{o}{;}
+\PYG{o}{\PYGZcb{}}
+\PYG{c+cm}{/**}
+\PYG{c+cm}{ * 整合一个父节点}
+\PYG{c+cm}{ * @param root 被整合节点}
+\PYG{c+cm}{ * */}
+\PYG{k+kd}{private} \PYG{k+kt}{void} \PYG{n+nf}{makeRoot}\PYG{o}{(}\PYG{n}{SegTreeNode} \PYG{n}{root}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+    \PYG{k}{if} \PYG{o}{(}\PYG{k+kc}{null} \PYG{o}{==} \PYG{n}{root}\PYG{o}{)} \PYG{k}{return}\PYG{o}{;}
+    \PYG{c+c1}{// 如果该节点有左子节点 该节点的值\PYGZdq{}先\PYGZdq{}等于左子节点}
+    \PYG{k}{if} \PYG{o}{(}\PYG{n}{root}\PYG{o}{.}\PYG{n+na}{left} \PYG{o}{!=} \PYG{k+kc}{null}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+        \PYG{n}{root}\PYG{o}{.}\PYG{n+na}{val} \PYG{o}{=} \PYG{n}{root}\PYG{o}{.}\PYG{n+na}{left}\PYG{o}{.}\PYG{n+na}{val}\PYG{o}{;}
+        \PYG{n}{root}\PYG{o}{.}\PYG{n+na}{count} \PYG{o}{=} \PYG{n}{root}\PYG{o}{.}\PYG{n+na}{left}\PYG{o}{.}\PYG{n+na}{count}\PYG{o}{;}
+    \PYG{o}{\PYGZcb{}}
+    \PYG{c+c1}{// 如果该节点还有右子节点 融合父节点和子节点}
+    \PYG{k}{if} \PYG{o}{(}\PYG{n}{root}\PYG{o}{.}\PYG{n+na}{right} \PYG{o}{!=} \PYG{k+kc}{null}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+        \PYG{k}{if} \PYG{o}{(}\PYG{n}{root}\PYG{o}{.}\PYG{n+na}{val} \PYG{o}{==} \PYG{n}{root}\PYG{o}{.}\PYG{n+na}{right}\PYG{o}{.}\PYG{n+na}{val}\PYG{o}{)}
+            \PYG{n}{root}\PYG{o}{.}\PYG{n+na}{count} \PYG{o}{=} \PYG{n}{root}\PYG{o}{.}\PYG{n+na}{count} \PYG{o}{+} \PYG{n}{root}\PYG{o}{.}\PYG{n+na}{right}\PYG{o}{.}\PYG{n+na}{count}\PYG{o}{;}
+        \PYG{k}{else} \PYG{o}{\PYGZob{}}
+            \PYG{k}{if} \PYG{o}{(}\PYG{n}{root}\PYG{o}{.}\PYG{n+na}{count} \PYG{o}{\PYGZgt{}=} \PYG{n}{root}\PYG{o}{.}\PYG{n+na}{right}\PYG{o}{.}\PYG{n+na}{count}\PYG{o}{)}
+                \PYG{n}{root}\PYG{o}{.}\PYG{n+na}{count} \PYG{o}{=} \PYG{n}{root}\PYG{o}{.}\PYG{n+na}{count} \PYG{o}{\PYGZhy{}} \PYG{n}{root}\PYG{o}{.}\PYG{n+na}{right}\PYG{o}{.}\PYG{n+na}{count}\PYG{o}{;}
+            \PYG{k}{else} \PYG{o}{\PYGZob{}}
+                \PYG{n}{root}\PYG{o}{.}\PYG{n+na}{val} \PYG{o}{=} \PYG{n}{root}\PYG{o}{.}\PYG{n+na}{right}\PYG{o}{.}\PYG{n+na}{val}\PYG{o}{;}
+                \PYG{n}{root}\PYG{o}{.}\PYG{n+na}{count} \PYG{o}{=} \PYG{n}{root}\PYG{o}{.}\PYG{n+na}{right}\PYG{o}{.}\PYG{n+na}{count} \PYG{o}{\PYGZhy{}} \PYG{n}{root}\PYG{o}{.}\PYG{n+na}{count}\PYG{o}{;}
+            \PYG{o}{\PYGZcb{}}
+        \PYG{o}{\PYGZcb{}}
+    \PYG{o}{\PYGZcb{}}
+\PYG{o}{\PYGZcb{}}
+\PYG{c+cm}{/**}
+\PYG{c+cm}{ * 查询线段树}
+\PYG{c+cm}{ * @param root 被查询节点}
+\PYG{c+cm}{ * @param l 需要查询的范围左边界}
+\PYG{c+cm}{ * @param r 需要查询的范围右边界}
+\PYG{c+cm}{ * */}
+\PYG{k+kd}{private} \PYG{k+kt}{void} \PYG{n+nf}{searchSegTree}\PYG{o}{(}\PYG{n}{Node} \PYG{n}{root}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{l}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{r}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+    \PYG{k}{if} \PYG{o}{(}\PYG{n}{root} \PYG{o}{==} \PYG{k+kc}{null} \PYG{o}{||} \PYG{n}{l} \PYG{o}{\PYGZgt{}} \PYG{n}{r}\PYG{o}{)} \PYG{k}{return}\PYG{o}{;}
+    \PYG{k}{if} \PYG{o}{(}\PYG{n}{root}\PYG{o}{.}\PYG{n+na}{bgn} \PYG{o}{\PYGZgt{}} \PYG{n}{r} \PYG{o}{||} \PYG{n}{root}\PYG{o}{.}\PYG{n+na}{end} \PYG{o}{\PYGZlt{}} \PYG{n}{l}\PYG{o}{)} \PYG{k}{return}\PYG{o}{;}
+
+    \PYG{c+c1}{// 当查询边界 覆盖 节点边界 该节点就是查询区域}
+    \PYG{k}{if} \PYG{o}{(}\PYG{n}{root}\PYG{o}{.}\PYG{n+na}{bgn} \PYG{o}{\PYGZgt{}=} \PYG{n}{l} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{n}{root}\PYG{o}{.}\PYG{n+na}{end} \PYG{o}{\PYGZlt{}=} \PYG{n}{r}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+        \PYG{k}{if} \PYG{o}{(}\PYG{n}{key} \PYG{o}{==} \PYG{n}{root}\PYG{o}{.}\PYG{n+na}{val}\PYG{o}{)} \PYG{n}{cnt} \PYG{o}{+=} \PYG{n}{root}\PYG{o}{.}\PYG{n+na}{cnt}\PYG{o}{;}
+        \PYG{k}{else} \PYG{k}{if} \PYG{o}{(}\PYG{n}{cnt} \PYG{o}{\PYGZlt{}=} \PYG{n}{root}\PYG{o}{.}\PYG{n+na}{cnt}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+            \PYG{n}{key} \PYG{o}{=} \PYG{n}{root}\PYG{o}{.}\PYG{n+na}{val}\PYG{o}{;}
+            \PYG{n}{cnt} \PYG{o}{=} \PYG{n}{root}\PYG{o}{.}\PYG{n+na}{cnt} \PYG{o}{\PYGZhy{}} \PYG{n}{cnt}\PYG{o}{;}
+        \PYG{o}{\PYGZcb{}} \PYG{k}{else} \PYG{n}{cnt} \PYG{o}{=} \PYG{n}{cnt} \PYG{o}{\PYGZhy{}} \PYG{n}{root}\PYG{o}{.}\PYG{n+na}{cnt}\PYG{o}{;}
+        \PYG{k}{return}\PYG{o}{;}
+    \PYG{o}{\PYGZcb{}}
+
+    \PYG{k+kt}{int} \PYG{n}{mid} \PYG{o}{=} \PYG{o}{(}\PYG{n}{root}\PYG{o}{.}\PYG{n+na}{end} \PYG{o}{+} \PYG{n}{root}\PYG{o}{.}\PYG{n+na}{bgn}\PYG{o}{)/}\PYG{l+m+mi}{2}\PYG{o}{;}
+    \PYG{c+c1}{// root.bgn \PYGZlt{}= l \PYGZlt{}= mid 左节点也可以是查询区域}
+    \PYG{k}{if} \PYG{o}{(}\PYG{n}{l} \PYG{o}{\PYGZlt{}=} \PYG{n}{mid}\PYG{o}{)}  \PYG{c+c1}{// 这两个查询条件再好好想想 ！！！！！！！！！！！！！！！}
+        \PYG{n}{searchSegTree}\PYG{o}{(}\PYG{n}{root}\PYG{o}{.}\PYG{n+na}{left}\PYG{o}{,} \PYG{n}{l}\PYG{o}{,} \PYG{n}{r}\PYG{o}{);}
+    \PYG{c+c1}{// mid+1 \PYGZlt{}= r \PYGZlt{}= root.end 右节点也可以是查询区域}
+    \PYG{k}{if} \PYG{o}{(}\PYG{n}{r} \PYG{o}{\PYGZgt{}=} \PYG{n}{mid}\PYG{o}{+}\PYG{l+m+mi}{1}\PYG{o}{)}
+        \PYG{n}{searchSegTree}\PYG{o}{(}\PYG{n}{root}\PYG{o}{.}\PYG{n+na}{right}\PYG{o}{,} \PYG{n}{l}\PYG{o}{,} \PYG{n}{r}\PYG{o}{);}
+\PYG{o}{\PYGZcb{}}
+\PYG{c+c1}{// https://books.halfrost.com/leetcode/ChapterFour/1100\PYGZti{}1199/1157.Online\PYGZhy{}Majority\PYGZhy{}Element\PYGZhy{}In\PYGZhy{}Subarray/ 也有一个直观图}
+\PYG{c+c1}{// https://www.cnblogs.com/slowbirdoflsh/p/11381565.html 思路比较清晰}
+\PYG{n}{HashMap}\PYG{o}{\PYGZlt{}}\PYG{n}{Integer}\PYG{o}{,} \PYG{n}{List}\PYG{o}{\PYGZlt{}}\PYG{n}{Integer}\PYG{o}{\PYGZgt{}\PYGZgt{}} \PYG{n}{idx} \PYG{o}{=} \PYG{k}{new} \PYG{n}{HashMap}\PYG{o}{\PYGZlt{}\PYGZgt{}();}
+\PYG{k+kd}{private} \PYG{n}{Node} \PYG{n}{root}\PYG{o}{;}
+\PYG{k+kt}{int} \PYG{n}{key} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{,} \PYG{n}{cnt} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;}
+\PYG{k+kd}{public} \PYG{n+nf}{MajorityChecker}\PYG{o}{(}\PYG{k+kt}{int}\PYG{o}{[]} \PYG{n}{arr}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+    \PYG{n}{root} \PYG{o}{=} \PYG{n}{buildTree}\PYG{o}{(}\PYG{n}{arr}\PYG{o}{,} \PYG{l+m+mi}{0}\PYG{o}{,} \PYG{n}{arr}\PYG{o}{.}\PYG{n+na}{length}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{o}{);}
+    \PYG{n}{levelPrintTree}\PYG{o}{(}\PYG{n}{root}\PYG{o}{);}
+    \PYG{n}{idx} \PYG{o}{=} \PYG{k}{new} \PYG{n}{HashMap}\PYG{o}{\PYGZlt{}\PYGZgt{}();}
+    \PYG{k}{for} \PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;} \PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{n}{arr}\PYG{o}{.}\PYG{n+na}{length}\PYG{o}{;} \PYG{n}{i}\PYG{o}{++)} \PYG{o}{\PYGZob{}}
+        \PYG{k}{if} \PYG{o}{(!}\PYG{n}{idx}\PYG{o}{.}\PYG{n+na}{containsKey}\PYG{o}{(}\PYG{n}{arr}\PYG{o}{[}\PYG{n}{i}\PYG{o}{]))}
+            \PYG{n}{idx}\PYG{o}{.}\PYG{n+na}{put}\PYG{o}{(}\PYG{n}{arr}\PYG{o}{[}\PYG{n}{i}\PYG{o}{],} \PYG{k}{new} \PYG{n}{ArrayList}\PYG{o}{\PYGZlt{}\PYGZgt{}());}
+        \PYG{n}{idx}\PYG{o}{.}\PYG{n+na}{get}\PYG{o}{(}\PYG{n}{arr}\PYG{o}{[}\PYG{n}{i}\PYG{o}{]).}\PYG{n+na}{add}\PYG{o}{(}\PYG{n}{i}\PYG{o}{);}
+    \PYG{o}{\PYGZcb{}}
+\PYG{o}{\PYGZcb{}}
+\PYG{k+kd}{public} \PYG{k+kt}{int} \PYG{n+nf}{countRangeSum}\PYG{o}{(}\PYG{k+kt}{int}\PYG{o}{[]} \PYG{n}{nums}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{lower}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{upper}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+    \PYG{n}{MajorityChecker} \PYG{n}{mc} \PYG{o}{=} \PYG{k}{new} \PYG{n}{MajorityChecker}\PYG{o}{(}\PYG{n}{nums}\PYG{o}{);}
+\PYG{o}{\PYGZcb{}}
+\PYG{k+kd}{public} \PYG{k+kt}{int} \PYG{n+nf}{query}\PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{left}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{right}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{threshold}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+    \PYG{c+c1}{// 初始化 所查询众数key 及辅助判断的计数cnt}
+    \PYG{n}{key} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;} \PYG{n}{cnt} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;}
+    \PYG{c+c1}{// 查询线段树}
+    \PYG{n}{searchSegTree}\PYG{o}{(}\PYG{n}{root}\PYG{o}{,} \PYG{n}{left}\PYG{o}{,} \PYG{n}{right}\PYG{o}{);}
+    \PYG{c+c1}{// 如果查询区域没有众数 即key没被更改}
+    \PYG{c+c1}{// 或者}
+    \PYG{c+c1}{// 所查询出来的众数 在原数组中根本没有超出阈值的能力}
+    \PYG{n}{System}\PYG{o}{.}\PYG{n+na}{out}\PYG{o}{.}\PYG{n+na}{println}\PYG{o}{(}\PYG{l+s}{\PYGZdq{}key: \PYGZdq{}} \PYG{o}{+} \PYG{n}{key}\PYG{o}{);}
+    \PYG{n}{System}\PYG{o}{.}\PYG{n+na}{out}\PYG{o}{.}\PYG{n+na}{println}\PYG{o}{(}\PYG{l+s}{\PYGZdq{}(idx.get(key) == null): \PYGZdq{}} \PYG{o}{+} \PYG{o}{(}\PYG{n}{idx}\PYG{o}{.}\PYG{n+na}{get}\PYG{o}{(}\PYG{n}{key}\PYG{o}{)} \PYG{o}{==} \PYG{k+kc}{null}\PYG{o}{));}
+
+    \PYG{k}{if} \PYG{o}{(}\PYG{n}{key} \PYG{o}{==} \PYG{l+m+mi}{0} \PYG{o}{||} \PYG{n}{idx}\PYG{o}{.}\PYG{n+na}{get}\PYG{o}{(}\PYG{n}{key}\PYG{o}{).}\PYG{n+na}{size}\PYG{o}{()} \PYG{o}{\PYGZlt{}} \PYG{n}{threshold}\PYG{o}{)} \PYG{k}{return} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{o}{;}
+
+    \PYG{c+c1}{// 上确界 排序数组中 第一个大于right的下标}
+    \PYG{k+kt}{int} \PYG{n}{r} \PYG{o}{=} \PYG{n}{upper\PYGZus{}bound}\PYG{o}{(}\PYG{n}{idx}\PYG{o}{.}\PYG{n+na}{get}\PYG{o}{(}\PYG{n}{key}\PYG{o}{),} \PYG{n}{right}\PYG{o}{);}
+    \PYG{c+c1}{// 下确界 排序数组中 第一个大于等于left的下标}
+    \PYG{k+kt}{int} \PYG{n}{l} \PYG{o}{=} \PYG{n}{lower\PYGZus{}bound}\PYG{o}{(}\PYG{n}{idx}\PYG{o}{.}\PYG{n+na}{get}\PYG{o}{(}\PYG{n}{key}\PYG{o}{),} \PYG{n}{left}\PYG{o}{);}
+    \PYG{n}{cnt} \PYG{o}{=} \PYG{n}{r} \PYG{o}{\PYGZhy{}} \PYG{n}{l}\PYG{o}{;}
+    \PYG{k}{return} \PYG{n}{cnt} \PYG{o}{\PYGZgt{}=} \PYG{n}{threshold} \PYG{o}{?} \PYG{n}{key} \PYG{o}{:} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{o}{;}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

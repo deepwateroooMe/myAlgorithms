@@ -1,0 +1,88 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{// 可以从根节点开始，对整棵树进行一次深度优先遍历，即：}
+\PYG{c+c1}{// 当我们第一次遍历到某一节点 ii 时，我们将 ii 放入「数据结构」中；}
+\PYG{c+c1}{// 当我们遍历完所有节点 ii 的子节点，即将回溯到 ii 的父节点前，我们将 ii 从「数据结构」中移除。}
+\PYG{c+c1}{// 这样一来，我们就可以通过「离线」的思想将每一个询问在遍历到节点 \PYGZbs{}textit\PYGZob{}val\PYGZcb{}\PYGZus{}ival 时进行求解。这是因为，如果当前正在遍历节点 \PYGZbs{}textit\PYGZob{}val\PYGZcb{}\PYGZus{}ival}
+\PYG{c+c1}{// 那么数据结构中就存放着所有从根节点到节点 \PYGZbs{}textit\PYGZob{}val\PYGZcb{}\PYGZus{}ival 的路径上的所有节点。}
+\PYG{c+c1}{// 此时，我们只需要找出数据结构中使得 p\PYGZus{}i \PYGZbs{}oplus \PYGZbs{}textit\PYGZob{}val\PYGZcb{}\PYGZus{}ip 达到最大值的节点 p\PYGZus{}ip 即可。}
+\PYG{c+c1}{// 而深度优先搜索过程中，当前入队的部分正是该节点及其所有层级的父节点，因此可结合 DFS 方法进行离线搜索。}
+\PYG{c+c1}{// 对最大异或值的计算，可结合字典树方法进行。}
+\PYG{c+c1}{// 本题需涉及对字典树中数值的删除操作，为简化代码，可在字典树的节点中设计一个计数器，记录当前该节点对应的数字个数，从而避免删除实际节点。}
+\PYG{k+kd}{public} \PYG{k+kd}{class} \PYG{n+nc}{Trie} \PYG{o}{\PYGZob{}}
+    \PYG{k+kd}{static} \PYG{k+kd}{final} \PYG{k+kt}{int} \PYG{n}{H} \PYG{o}{=} \PYG{l+m+mi}{18}\PYG{o}{;} \PYG{c+c1}{// 树高度，本题val\PYGZlt{}=2*10\PYGZca{}5\PYGZlt{}2\PYGZca{}18}
+    \PYG{n}{Trie} \PYG{o}{[]} \PYG{n}{next}\PYG{o}{;}
+    \PYG{k+kt}{int} \PYG{n}{cnt}\PYG{o}{;}                 \PYG{c+c1}{// 当前节点对应的数值个数，简化删除操作}
+    \PYG{k+kd}{public} \PYG{n+nf}{Trie}\PYG{o}{()} \PYG{o}{\PYGZob{}}
+        \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{next} \PYG{o}{=} \PYG{k}{new} \PYG{n}{Trie}\PYG{o}{[}\PYG{l+m+mi}{2}\PYG{o}{];}
+        \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{cnt} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;}
+    \PYG{o}{\PYGZcb{}}
+    \PYG{k+kd}{public} \PYG{k+kt}{void} \PYG{n+nf}{insert}\PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{va}\PYG{o}{)} \PYG{o}{\PYGZob{}} \PYG{c+c1}{// 插入数值}
+        \PYG{n}{Trie} \PYG{n}{r} \PYG{o}{=} \PYG{k}{this}\PYG{o}{;}
+        \PYG{k}{for} \PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{i} \PYG{o}{=} \PYG{n}{H}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{o}{;} \PYG{n}{i} \PYG{o}{\PYGZgt{}=} \PYG{l+m+mi}{0}\PYG{o}{;} \PYG{n}{i}\PYG{o}{\PYGZhy{}\PYGZhy{})} \PYG{o}{\PYGZob{}}
+            \PYG{k+kt}{int} \PYG{n}{bit} \PYG{o}{=} \PYG{o}{(}\PYG{n}{va} \PYG{o}{\PYGZgt{}\PYGZgt{}} \PYG{n}{i}\PYG{o}{)} \PYG{o}{\PYGZam{}} \PYG{l+m+mi}{1}\PYG{o}{;}
+            \PYG{k}{if} \PYG{o}{(}\PYG{n}{r}\PYG{o}{.}\PYG{n+na}{next}\PYG{o}{[}\PYG{n}{bit}\PYG{o}{]} \PYG{o}{==} \PYG{k+kc}{null}\PYG{o}{)}
+                \PYG{n}{r}\PYG{o}{.}\PYG{n+na}{next}\PYG{o}{[}\PYG{n}{bit}\PYG{o}{]} \PYG{o}{=} \PYG{k}{new} \PYG{n}{Trie}\PYG{o}{();}
+            \PYG{n}{r} \PYG{o}{=} \PYG{n}{r}\PYG{o}{.}\PYG{n+na}{next}\PYG{o}{[}\PYG{n}{bit}\PYG{o}{];}
+            \PYG{n}{r}\PYG{o}{.}\PYG{n+na}{cnt}\PYG{o}{++;}
+        \PYG{o}{\PYGZcb{}}
+    \PYG{o}{\PYGZcb{}}
+    \PYG{k+kd}{private} \PYG{k+kt}{void} \PYG{n+nf}{removeVal}\PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{v}\PYG{o}{)} \PYG{o}{\PYGZob{}} \PYG{c+c1}{// 删除数值}
+        \PYG{n}{Trie} \PYG{n}{r} \PYG{o}{=} \PYG{k}{this}\PYG{o}{;}
+        \PYG{k}{for} \PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{i} \PYG{o}{=} \PYG{n}{H}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{o}{;} \PYG{n}{i} \PYG{o}{\PYGZgt{}=} \PYG{l+m+mi}{0}\PYG{o}{;} \PYG{n}{i}\PYG{o}{\PYGZhy{}\PYGZhy{})} \PYG{o}{\PYGZob{}}
+            \PYG{k+kt}{int} \PYG{n}{bit} \PYG{o}{=} \PYG{o}{(}\PYG{n}{v} \PYG{o}{\PYGZgt{}\PYGZgt{}} \PYG{n}{i}\PYG{o}{)} \PYG{o}{\PYGZam{}} \PYG{l+m+mi}{1}\PYG{o}{;}
+            \PYG{n}{r} \PYG{o}{=} \PYG{n}{r}\PYG{o}{.}\PYG{n+na}{next}\PYG{o}{[}\PYG{n}{bit}\PYG{o}{];}
+            \PYG{n}{r}\PYG{o}{.}\PYG{n+na}{cnt}\PYG{o}{\PYGZhy{}\PYGZhy{};}
+        \PYG{o}{\PYGZcb{}}
+    \PYG{o}{\PYGZcb{}}
+    \PYG{k+kd}{public} \PYG{k+kt}{int} \PYG{n+nf}{search}\PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{va}\PYG{o}{)} \PYG{o}{\PYGZob{}} \PYG{c+c1}{// 针对数值查询当前字典树对应的最大异或值}
+        \PYG{n}{Trie} \PYG{n}{r} \PYG{o}{=} \PYG{k}{this}\PYG{o}{;}
+        \PYG{k+kt}{int} \PYG{n}{max} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;}
+        \PYG{k}{for} \PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{i} \PYG{o}{=} \PYG{n}{H}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{o}{;} \PYG{n}{i} \PYG{o}{\PYGZgt{}=} \PYG{l+m+mi}{0}\PYG{o}{;} \PYG{n}{i}\PYG{o}{\PYGZhy{}\PYGZhy{})} \PYG{o}{\PYGZob{}}
+            \PYG{k+kt}{int} \PYG{n}{bit} \PYG{o}{=} \PYG{o}{(}\PYG{n}{va} \PYG{o}{\PYGZgt{}\PYGZgt{}} \PYG{n}{i}\PYG{o}{)} \PYG{o}{\PYGZam{}} \PYG{l+m+mi}{1} \PYG{o}{\PYGZca{}} \PYG{l+m+mi}{1}\PYG{o}{;}
+            \PYG{k}{if} \PYG{o}{(}\PYG{n}{r} \PYG{o}{==} \PYG{k+kc}{null}\PYG{o}{)} \PYG{k}{return} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{o}{;}
+            \PYG{k}{if} \PYG{o}{(}\PYG{n}{r}\PYG{o}{.}\PYG{n+na}{next}\PYG{o}{[}\PYG{n}{bit}\PYG{o}{]} \PYG{o}{!=} \PYG{k+kc}{null} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{n}{r}\PYG{o}{.}\PYG{n+na}{next}\PYG{o}{[}\PYG{n}{bit}\PYG{o}{].}\PYG{n+na}{cnt} \PYG{o}{\PYGZgt{}} \PYG{l+m+mi}{0}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+                \PYG{n}{max} \PYG{o}{+=} \PYG{o}{(}\PYG{l+m+mi}{1} \PYG{o}{\PYGZlt{}\PYGZlt{}} \PYG{n}{i}\PYG{o}{);}
+                \PYG{n}{r} \PYG{o}{=} \PYG{n}{r}\PYG{o}{.}\PYG{n+na}{next}\PYG{o}{[}\PYG{n}{bit}\PYG{o}{];}
+            \PYG{o}{\PYGZcb{}} \PYG{k}{else}
+                \PYG{n}{r} \PYG{o}{=} \PYG{n}{r}\PYG{o}{.}\PYG{n+na}{next}\PYG{o}{[}\PYG{n}{bit} \PYG{o}{\PYGZca{}} \PYG{l+m+mi}{1}\PYG{o}{];}
+        \PYG{o}{\PYGZcb{}}
+        \PYG{k}{return} \PYG{n}{max}\PYG{o}{;}
+    \PYG{o}{\PYGZcb{}}
+\PYG{o}{\PYGZcb{}}
+\PYG{k+kd}{private} \PYG{k+kt}{void} \PYG{n+nf}{dfs}\PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{idx}\PYG{o}{)} \PYG{o}{\PYGZob{}} \PYG{c+c1}{// 深度优先搜索}
+    \PYG{n}{trie}\PYG{o}{.}\PYG{n+na}{insert}\PYG{o}{(}\PYG{n}{idx}\PYG{o}{);}       \PYG{c+c1}{// 当前节点加入字典树}
+    \PYG{k}{if} \PYG{o}{(}\PYG{n}{queVal}\PYG{o}{.}\PYG{n+na}{containsKey}\PYG{o}{(}\PYG{n}{idx}\PYG{o}{))} \PYG{c+c1}{// 处理针对当前节点的查询}
+        \PYG{k}{for} \PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;} \PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{n}{queVal}\PYG{o}{.}\PYG{n+na}{get}\PYG{o}{(}\PYG{n}{idx}\PYG{o}{).}\PYG{n+na}{size}\PYG{o}{();} \PYG{n}{i}\PYG{o}{++)}
+            \PYG{n}{ans}\PYG{o}{[}\PYG{n}{queId}\PYG{o}{.}\PYG{n+na}{get}\PYG{o}{(}\PYG{n}{idx}\PYG{o}{).}\PYG{n+na}{get}\PYG{o}{(}\PYG{n}{i}\PYG{o}{)]} \PYG{o}{=} \PYG{n}{trie}\PYG{o}{.}\PYG{n+na}{search}\PYG{o}{(}\PYG{n}{queVal}\PYG{o}{.}\PYG{n+na}{get}\PYG{o}{(}\PYG{n}{idx}\PYG{o}{).}\PYG{n+na}{get}\PYG{o}{(}\PYG{n}{i}\PYG{o}{));}
+    \PYG{k}{if} \PYG{o}{(}\PYG{n}{tree}\PYG{o}{.}\PYG{n+na}{containsKey}\PYG{o}{(}\PYG{n}{idx}\PYG{o}{))}   \PYG{c+c1}{// 当前节点存在子节点}
+        \PYG{k}{for} \PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{n} \PYG{o}{:} \PYG{n}{tree}\PYG{o}{.}\PYG{n+na}{get}\PYG{o}{(}\PYG{n}{idx}\PYG{o}{))}
+            \PYG{n}{dfs}\PYG{o}{(}\PYG{n}{n}\PYG{o}{);}
+    \PYG{n}{trie}\PYG{o}{.}\PYG{n+na}{removeVal}\PYG{o}{(}\PYG{n}{idx}\PYG{o}{);}         \PYG{c+c1}{// 从字典树中删除当前节点}
+\PYG{o}{\PYGZcb{}}
+\PYG{n}{Map}\PYG{o}{\PYGZlt{}}\PYG{n}{Integer}\PYG{o}{,} \PYG{n}{List}\PYG{o}{\PYGZlt{}}\PYG{n}{Integer}\PYG{o}{\PYGZgt{}\PYGZgt{}} \PYG{n}{tree}\PYG{o}{;}  \PYG{c+c1}{// 树中各个节点对应的子节点}
+\PYG{n}{Map}\PYG{o}{\PYGZlt{}}\PYG{n}{Integer}\PYG{o}{,} \PYG{n}{List}\PYG{o}{\PYGZlt{}}\PYG{n}{Integer}\PYG{o}{\PYGZgt{}\PYGZgt{}} \PYG{n}{queVal}\PYG{o}{;}\PYG{c+c1}{// 树中各个节点对应的查询值}
+\PYG{n}{Map}\PYG{o}{\PYGZlt{}}\PYG{n}{Integer}\PYG{o}{,} \PYG{n}{List}\PYG{o}{\PYGZlt{}}\PYG{n}{Integer}\PYG{o}{\PYGZgt{}\PYGZgt{}} \PYG{n}{queId}\PYG{o}{;} \PYG{c+c1}{// 树中各个节点对应的queries下标}
+\PYG{n}{Trie} \PYG{n}{trie}\PYG{o}{;}                         \PYG{c+c1}{// 字典树根节点}
+\PYG{k+kt}{int} \PYG{o}{[]} \PYG{n}{ans}\PYG{o}{;}
+\PYG{k+kd}{public} \PYG{k+kt}{int}\PYG{o}{[]} \PYG{n+nf}{maxGeneticDifference}\PYG{o}{(}\PYG{k+kt}{int}\PYG{o}{[]} \PYG{n}{parents}\PYG{o}{,} \PYG{k+kt}{int}\PYG{o}{[][]} \PYG{n}{queries}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+    \PYG{k+kt}{int} \PYG{n}{n} \PYG{o}{=} \PYG{n}{parents}\PYG{o}{.}\PYG{n+na}{length}\PYG{o}{,} \PYG{n}{m} \PYG{o}{=} \PYG{n}{queries}\PYG{o}{.}\PYG{n+na}{length}\PYG{o}{,} \PYG{n}{root} \PYG{o}{=} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{o}{;}
+    \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{tree} \PYG{o}{=} \PYG{k}{new} \PYG{n}{HashMap}\PYG{o}{\PYGZlt{}\PYGZgt{}();}
+    \PYG{k}{for} \PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;} \PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{n}{n}\PYG{o}{;} \PYG{n}{i}\PYG{o}{++)} \PYG{o}{\PYGZob{}} \PYG{c+c1}{// 记录树中各个节点对应的子节点}
+        \PYG{k}{if} \PYG{o}{(}\PYG{n}{parents}\PYG{o}{[}\PYG{n}{i}\PYG{o}{]} \PYG{o}{!=} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{o}{)} \PYG{o}{\PYGZob{}}   \PYG{c+c1}{// Note: 当作有向树图来处理 !!!}
+            \PYG{n}{tree}\PYG{o}{.}\PYG{n+na}{computeIfAbsent}\PYG{o}{(}\PYG{n}{parents}\PYG{o}{[}\PYG{n}{i}\PYG{o}{],} \PYG{n}{k} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{k}{new} \PYG{n}{ArrayList}\PYG{o}{\PYGZlt{}\PYGZgt{}());}
+            \PYG{n}{tree}\PYG{o}{.}\PYG{n+na}{get}\PYG{o}{(}\PYG{n}{parents}\PYG{o}{[}\PYG{n}{i}\PYG{o}{]).}\PYG{n+na}{add}\PYG{o}{(}\PYG{n}{i}\PYG{o}{);}
+        \PYG{o}{\PYGZcb{}} \PYG{k}{else} \PYG{n}{root} \PYG{o}{=} \PYG{n}{i}\PYG{o}{;}
+    \PYG{o}{\PYGZcb{}}
+    \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{queVal} \PYG{o}{=} \PYG{k}{new} \PYG{n}{HashMap}\PYG{o}{\PYGZlt{}\PYGZgt{}();}
+    \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{queId} \PYG{o}{=} \PYG{k}{new} \PYG{n}{HashMap}\PYG{o}{\PYGZlt{}\PYGZgt{}();}
+    \PYG{k}{for} \PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;} \PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{n}{m}\PYG{o}{;} \PYG{n}{i}\PYG{o}{++)} \PYG{o}{\PYGZob{}}
+        \PYG{k+kt}{int} \PYG{n}{nid} \PYG{o}{=} \PYG{n}{queries}\PYG{o}{[}\PYG{n}{i}\PYG{o}{][}\PYG{l+m+mi}{0}\PYG{o}{],} \PYG{n}{val} \PYG{o}{=} \PYG{n}{queries}\PYG{o}{[}\PYG{n}{i}\PYG{o}{][}\PYG{l+m+mi}{1}\PYG{o}{];}
+        \PYG{n}{queVal}\PYG{o}{.}\PYG{n+na}{computeIfAbsent}\PYG{o}{(}\PYG{n}{nid}\PYG{o}{,} \PYG{n}{k} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{k}{new} \PYG{n}{ArrayList}\PYG{o}{\PYGZlt{}\PYGZgt{}()).}\PYG{n+na}{add}\PYG{o}{(}\PYG{n}{val}\PYG{o}{);}
+        \PYG{n}{queId}\PYG{o}{.}\PYG{n+na}{computeIfAbsent}\PYG{o}{(}\PYG{n}{nid}\PYG{o}{,} \PYG{n}{k} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{k}{new} \PYG{n}{ArrayList}\PYG{o}{\PYGZlt{}\PYGZgt{}()).}\PYG{n+na}{add}\PYG{o}{(}\PYG{n}{i}\PYG{o}{);}
+    \PYG{o}{\PYGZcb{}}
+    \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{ans} \PYG{o}{=} \PYG{k}{new} \PYG{k+kt}{int} \PYG{o}{[}\PYG{n}{m}\PYG{o}{];}
+    \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{trie} \PYG{o}{=} \PYG{k}{new} \PYG{n}{Trie}\PYG{o}{();}
+    \PYG{n}{dfs}\PYG{o}{(}\PYG{n}{root}\PYG{o}{);}
+    \PYG{k}{return} \PYG{n}{ans}\PYG{o}{;}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

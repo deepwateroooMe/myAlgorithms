@@ -1,0 +1,32 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n}{Map}\PYG{o}{\PYGZlt{}}\PYG{n}{Integer}\PYG{o}{,} \PYG{n}{Integer}\PYG{o}{\PYGZgt{}} \PYG{n}{count}\PYG{o}{;}           \PYG{c+c1}{// frequency of each subtree represented in string}
+\PYG{n}{Map}\PYG{o}{\PYGZlt{}}\PYG{n}{List}\PYG{o}{\PYGZlt{}}\PYG{n}{Integer}\PYG{o}{\PYGZgt{},} \PYG{n}{Integer}\PYG{o}{\PYGZgt{}} \PYG{n}{numberMap}\PYG{o}{;} \PYG{c+c1}{// ** not hashset since it cannot reserve element order}
+\PYG{n}{List}\PYG{o}{\PYGZlt{}}\PYG{n}{TreeNode}\PYG{o}{\PYGZgt{}} \PYG{n}{ans}\PYG{o}{;}
+\PYG{k+kt}{int} \PYG{n}{globalNumber} \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{o}{;}
+\PYG{k+kd}{public} \PYG{n}{List}\PYG{o}{\PYGZlt{}}\PYG{n}{TreeNode}\PYG{o}{\PYGZgt{}} \PYG{n+nf}{findDuplicateSubtrees}\PYG{o}{(}\PYG{n}{TreeNode} \PYG{n}{root}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+    \PYG{n}{count} \PYG{o}{=} \PYG{k}{new} \PYG{n}{HashMap}\PYG{o}{();}
+    \PYG{n}{numberMap} \PYG{o}{=} \PYG{k}{new} \PYG{n}{HashMap}\PYG{o}{();}
+    \PYG{n}{ans} \PYG{o}{=} \PYG{k}{new} \PYG{n}{ArrayList}\PYG{o}{();}
+    \PYG{n}{collect}\PYG{o}{(}\PYG{n}{root}\PYG{o}{);}
+    \PYG{k}{return} \PYG{n}{ans}\PYG{o}{;}
+\PYG{o}{\PYGZcb{}}
+\PYG{k+kd}{public} \PYG{k+kt}{int} \PYG{n+nf}{collect}\PYG{o}{(}\PYG{n}{TreeNode} \PYG{n}{node}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+    \PYG{k}{if} \PYG{o}{(}\PYG{n}{node} \PYG{o}{==} \PYG{k+kc}{null}\PYG{o}{)} \PYG{k}{return} \PYG{l+m+mi}{0}\PYG{o}{;}
+    \PYG{k+kt}{int} \PYG{n}{leftNumber} \PYG{o}{=} \PYG{n}{collect}\PYG{o}{(}\PYG{n}{node}\PYG{o}{.}\PYG{n+na}{left}\PYG{o}{);}
+    \PYG{k+kt}{int} \PYG{n}{rightNumber} \PYG{o}{=} \PYG{n}{collect}\PYG{o}{(}\PYG{n}{node}\PYG{o}{.}\PYG{n+na}{right}\PYG{o}{);}
+    \PYG{n}{List}\PYG{o}{\PYGZlt{}}\PYG{n}{Integer}\PYG{o}{\PYGZgt{}} \PYG{n}{numberExp} \PYG{o}{=} \PYG{k}{new} \PYG{n}{ArrayList}\PYG{o}{\PYGZlt{}\PYGZgt{}();} \PYG{c+c1}{// construct expression}
+    \PYG{n}{numberExp}\PYG{o}{.}\PYG{n+na}{add}\PYG{o}{(}\PYG{n}{node}\PYG{o}{.}\PYG{n+na}{val}\PYG{o}{);}
+    \PYG{n}{numberExp}\PYG{o}{.}\PYG{n+na}{add}\PYG{o}{(}\PYG{n}{leftNumber}\PYG{o}{);}
+    \PYG{n}{numberExp}\PYG{o}{.}\PYG{n+na}{add}\PYG{o}{(}\PYG{n}{rightNumber}\PYG{o}{);}
+    \PYG{k}{if} \PYG{o}{(!}\PYG{n}{numberMap}\PYG{o}{.}\PYG{n+na}{containsKey}\PYG{o}{(}\PYG{n}{numberExp}\PYG{o}{))} \PYG{o}{\PYGZob{}} \PYG{c+c1}{// update numberMap}
+        \PYG{n}{numberMap}\PYG{o}{.}\PYG{n+na}{put}\PYG{o}{(}\PYG{n}{numberExp}\PYG{o}{,} \PYG{n}{globalNumber}\PYG{o}{);}
+        \PYG{n}{globalNumber}\PYG{o}{++;}
+    \PYG{o}{\PYGZcb{}}
+    \PYG{c+c1}{// check number frequency. if == 2, meaning duplication then add to result}
+    \PYG{k+kt}{int} \PYG{n}{rootNumber} \PYG{o}{=} \PYG{n}{numberMap}\PYG{o}{.}\PYG{n+na}{get}\PYG{o}{(}\PYG{n}{numberExp}\PYG{o}{).}\PYG{n+na}{intValue}\PYG{o}{();}
+    \PYG{n}{count}\PYG{o}{.}\PYG{n+na}{put}\PYG{o}{(}\PYG{n}{rootNumber}\PYG{o}{,} \PYG{n}{count}\PYG{o}{.}\PYG{n+na}{getOrDefault}\PYG{o}{(}\PYG{n}{rootNumber}\PYG{o}{,} \PYG{l+m+mi}{0}\PYG{o}{)+}\PYG{l+m+mi}{1}\PYG{o}{);}
+    \PYG{k}{if} \PYG{o}{(}\PYG{n}{count}\PYG{o}{.}\PYG{n+na}{get}\PYG{o}{(}\PYG{n}{rootNumber}\PYG{o}{)} \PYG{o}{==} \PYG{l+m+mi}{2}\PYG{o}{)} \PYG{c+c1}{// not \PYGZgt{}=2, otherwise ans will have duplicated nodes}
+        \PYG{n}{ans}\PYG{o}{.}\PYG{n+na}{add}\PYG{o}{(}\PYG{n}{node}\PYG{o}{);}
+    \PYG{k}{return} \PYG{n}{rootNumber}\PYG{o}{;}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

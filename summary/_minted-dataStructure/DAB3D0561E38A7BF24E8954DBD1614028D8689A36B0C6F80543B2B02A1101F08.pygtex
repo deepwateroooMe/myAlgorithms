@@ -1,0 +1,21 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kd}{public} \PYG{k+kt}{int} \PYG{n+nf}{findMaximumXOR}\PYG{o}{(}\PYG{k+kt}{int}\PYG{o}{[]} \PYG{n}{nums}\PYG{o}{)} \PYG{o}{\PYGZob{}} \PYG{c+c1}{// 这种解法没有用到上面的这个trie呀}
+    \PYG{k+kt}{int} \PYG{n}{n} \PYG{o}{=} \PYG{n}{nums}\PYG{o}{.}\PYG{n+na}{length}\PYG{o}{;}
+    \PYG{k+kt}{int} \PYG{n}{mask} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{,} \PYG{n}{max} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;}
+    \PYG{n}{HashSet}\PYG{o}{\PYGZlt{}}\PYG{n}{Integer}\PYG{o}{\PYGZgt{}} \PYG{n}{s} \PYG{o}{=} \PYG{k}{new} \PYG{n}{HashSet}\PYG{o}{\PYGZlt{}\PYGZgt{}();}
+    \PYG{k}{for} \PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{31}\PYG{o}{;} \PYG{n}{i} \PYG{o}{\PYGZgt{}=} \PYG{l+m+mi}{0}\PYG{o}{;} \PYG{o}{\PYGZhy{}\PYGZhy{}}\PYG{n}{i}\PYG{o}{)} \PYG{o}{\PYGZob{}} \PYG{c+c1}{// i == 31时}
+        \PYG{n}{mask} \PYG{o}{=} \PYG{n}{mask} \PYG{o}{|} \PYG{l+m+mi}{1} \PYG{o}{\PYGZlt{}\PYGZlt{}} \PYG{n}{i}\PYG{o}{;}     \PYG{c+c1}{// 为获取前n位的临时变量}
+        \PYG{k}{for} \PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{va} \PYG{o}{:} \PYG{n}{nums}\PYG{o}{)}
+            \PYG{n}{s}\PYG{o}{.}\PYG{n+na}{add}\PYG{o}{(}\PYG{n}{va} \PYG{o}{\PYGZam{}} \PYG{n}{mask}\PYG{o}{);}     \PYG{c+c1}{// 将所有数字的前n位放入set中}
+        \PYG{k+kt}{int} \PYG{n}{tmp} \PYG{o}{=} \PYG{n}{max} \PYG{o}{|} \PYG{o}{(}\PYG{l+m+mi}{1} \PYG{o}{\PYGZlt{}\PYGZlt{}} \PYG{n}{i}\PYG{o}{);} \PYG{c+c1}{// 假定第n位为1,前n\PYGZhy{}1位max为之前迭代求得}
+        \PYG{k}{for} \PYG{o}{(}\PYG{n}{Integer} \PYG{n}{va} \PYG{o}{:} \PYG{n}{s}\PYG{o}{)}
+            \PYG{k}{if} \PYG{o}{(}\PYG{n}{s}\PYG{o}{.}\PYG{n+na}{contains}\PYG{o}{(}\PYG{n}{va} \PYG{o}{\PYGZca{}} \PYG{n}{tmp}\PYG{o}{))} \PYG{o}{\PYGZob{}} \PYG{c+c1}{// 查看`b`是否在 // i == 31, (va\PYGZca{}tmp):  \PYGZhy{}2147483648}
+                \PYG{n}{max} \PYG{o}{=} \PYG{n}{tmp}\PYG{o}{;}              \PYG{c+c1}{// b存在，第n位为1}
+                \PYG{k}{break}\PYG{o}{;}
+            \PYG{o}{\PYGZcb{}}
+        \PYG{n}{s}\PYG{o}{.}\PYG{n+na}{clear}\PYG{o}{();}
+    \PYG{o}{\PYGZcb{}}
+    \PYG{k}{return} \PYG{n}{max}\PYG{o}{;}
+\PYG{o}{\PYGZcb{}}
+\PYG{c+c1}{// 此解法时间复杂度为O(32n)=O(n)，空间复杂度上，我们使用了一个HashSet用于存储所有数字，因此空间复杂度是O(n)}
+\end{Verbatim}

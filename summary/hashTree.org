@@ -2,10 +2,38 @@
 #+author: deepwaterooo
 
 * HashMap
-** 数有多少个数组数不清楚
-** 336. Palindrome Pairs - Hard
+*** 数有多少个数组数不清楚
+*** 1392. Longest Happy Prefix - Hard
+A string is called a happy prefix if is a non-empty prefix which is also a suffix (excluding itself).
+
+Given a string s, return the longest happy prefix of s. Return an empty string "" if no such prefix exists.
+#+BEGIN_SRC java
+// 频繁的字符串操作（substring和equals操作）会大幅消耗执行时间，也会导致TLE时间超时。
+// 因此我们可以使用字符串的hash值方式来比较前后缀是否相同。这里我们需要普及一个知识点，任意一个字符串的Hash值的计算公式为：
+// int hash=s[0]∗31^(n−1)+s[1]∗31^(n−2) +...+s[n−2]∗31^1+s[n−1]∗31^0
+//     对于前缀hash，每次长度加一后hash的变化应该是：
+//     hash = hash*31 + 新添头字符ch
+//     对于后缀hash，每次长度加一后hash的变化应该是：
+//     hash = hash + 新添尾字符*31^t   (t为后缀长度减1)
+//     这样我们每次只需要比较前缀hash与后缀hash是否相同即可。
+public String longestPrefix(String s) {
+    int n = s.length(), hashPre = 0, hashSuf = 0;
+    int left = 0, right = n-1, pow = 1, maxLen = 0;
+    String res = "";
+    while (left < n-1) {
+        hashPre = hashPre * 31 + s.charAt(left);
+        hashSuf = hashSuf + s.charAt(right)*pow;
+        if (hashPre == hashSuf) maxLen = left + 1;
+        left ++;
+        right --;
+        pow *= 31;
+    }
+    return maxLen == 0 ? "" : s.substring(0, maxLen);
+}
+#+END_SRC
+*** 336. Palindrome Pairs - Hard
 Given a list of unique words, return all the pairs of the distinct indices (i, j) in the given list, so that the concatenation of the two words words[i] + words[j] is a palindrome.
-*** 解题思路与分析
+**** 解题思路与分析
 - 利用字典wmap保存单词 -> 下标的键值对
 - 遍历单词列表words，记当前单词为word，下标为idx：
 #+BEGIN_SRC java
@@ -65,34 +93,6 @@ public List<List<Integer>> palindromePairs(String[] words) {
 }
 #+END_SRC
 
-** 1392. Longest Happy Prefix - Hard
-A string is called a happy prefix if is a non-empty prefix which is also a suffix (excluding itself).
-
-Given a string s, return the longest happy prefix of s. Return an empty string "" if no such prefix exists.
-#+BEGIN_SRC java
-// 频繁的字符串操作（substring和equals操作）会大幅消耗执行时间，也会导致TLE时间超时。
-// 因此我们可以使用字符串的hash值方式来比较前后缀是否相同。这里我们需要普及一个知识点，任意一个字符串的Hash值的计算公式为：
-// int hash=s[0]∗31^(n−1)+s[1]∗31^(n−2) +...+s[n−2]∗31^1+s[n−1]∗31^0
-//     对于前缀hash，每次长度加一后hash的变化应该是：
-//     hash = hash*31 + 新添头字符ch
-//     对于后缀hash，每次长度加一后hash的变化应该是：
-//     hash = hash + 新添尾字符*31^t   (t为后缀长度减1)
-//     这样我们每次只需要比较前缀hash与后缀hash是否相同即可。
-public String longestPrefix(String s) {
-    int n = s.length(), hashPre = 0, hashSuf = 0;
-    int left = 0, right = n-1, pow = 1, maxLen = 0;
-    String res = "";
-    while (left < n-1) {
-        hashPre = hashPre * 31 + s.charAt(left);
-        hashSuf = hashSuf + s.charAt(right)*pow;
-        if (hashPre == hashSuf) maxLen = left + 1;
-        left ++;
-        right --;
-        pow *= 31;
-    }
-    return maxLen == 0 ? "" : s.substring(0, maxLen);
-}
-#+END_SRC
 *** KMP 算法
 [[./pic/kmp.png]]
 
@@ -134,7 +134,7 @@ string longestPrefix(string s) {
     return s.substr(0, lps.back());
 }
 #+END_SRC
-** 1172. Dinner Plate Stacks - Hard
+*** 1172. Dinner Plate Stacks - Hard
 You have an infinite number of stacks arranged in a row and numbered (left to right) from 0, each of the stacks has the same maximum capacity.
 
 Implement the DinnerPlates class:
@@ -234,187 +234,131 @@ int popAtStack(int index) Returns the value at the top of the stack with the giv
     }
 #+END_SRC
 
-* Tree
-** 979. Distribute Coins in Binary Tree
-You are given the root of a binary tree with n nodes where each node in the tree has node.val coins. There are n coins in total throughout the whole tree.
+*** 2080. Range Frequency Queries - Medium
+Design a data structure to find the frequency of a given value in a given subarray.
 
-In one move, we may choose two adjacent nodes and move one coin from one node to another. A move may be from parent to child, or from child to parent.
+The frequency of a value in a subarray is the number of occurrences of that value in the subarray.
 
-Return the minimum number of moves required to make every node have exactly one coin.
-#+BEGIN_SRC java
-private int dfs(TreeNode r) { // 统计把自身，左右子树都平衡，需要移动的coins个数
-    if (r == null) return 0;
-    int left = dfs(r.left);      // 左、右子树缺多少
-    int right = dfs(r.right);
-    res += Math.abs(left) + Math.abs(right); // 左，右子树和自身都平衡需要的移动数
-    return left + right + r.val-1;
-}
-int res;
-public int distributeCoins(TreeNode root) {
-    res = 0;
-    return res;
-}
+Implement the RangeFreqQuery class:
+
+RangeFreqQuery(int[] arr) Constructs an instance of the class with the given 0-indexed integer array arr.
+int query(int left, int right, int value) Returns the frequency of value in the subarray arr[left...right].
+A subarray is a contiguous sequence of elements within an array. arr[left...right] denotes the subarray that contains the elements of nums between indices left and right (inclusive).
+**** 解题思路与分析: 最简单粗暴的
+     #+BEGIN_SRC java
+    Map<Integer, TreeMap<Integer, Integer>> m = new HashMap<>();
+    public RangeFreqQuery(int[] arr) {
+        for (int i = 0; i < arr.length; i++) 
+            m.computeIfAbsent(arr[i], z -> new TreeMap<>()).put(i, m.get(arr[i]).size()); // 这里写得好tricky，考试的时候紧张就想不到！！！
+    }
+    public int query(int left, int right, int value) {
+        if (!m.containsKey(value)) return 0;
+        TreeMap<Integer, Integer> map = m.get(value);
+        Integer a = map.ceilingKey(left), b = map.floorKey(right);
+        if (a == null || b == null) return 0;
+        return map.get(b) - map.get(a) + 1;
+    }
+     #+END_SRC
+**** 解题思路与分析: binary Search
+     #+BEGIN_SRC java
+    Map<Integer, List<Integer>> map = new HashMap<>();
+    public RangeFreqQuery(int[] arr) {
+        for (int i = 0; i < arr.length; i++) 
+            map.computeIfAbsent(arr[i], z -> new ArrayList<>()).add(i);
+    }
+    public int query(int left, int right, int value) {
+        if (!map.containsKey(value)) return 0;
+        List<Integer> l = map.get(value);
+        int s = Collections.binarySearch(l, left);
+        int e = Collections.binarySearch(l, right);
+        if (s < 0) s = (s + 1) * (-1);
+        if (e < 0) e = (e + 2) * (-1);
+        return e - s + 1;
+    }
 #+END_SRC
-
-** 687. Longest Univalue Path
-Given the root of a binary tree, return the length of the longest path, where each node in the path has the same value. This path may or may not pass through the root.
-
-The length of the path between two nodes is represented by the number of edges between them.
-- 此题与求二叉树的最长路径边长相似，只是此题要求是节点值相同的路径，也就是说在找最长路径的时候，还需要判断节点值，要是不相同，就重置为0，在此期间，我们使用一个全局变量来存储最长节点值相同路径的边长。
+- 与上面相同的想法，但自己实现函数的
 #+BEGIN_SRC java
-private int topDownTraverse(TreeNode r) { 
-    if (r == null) return 0;
-    int left = topDownTraverse(r.left);
-    int right = topDownTraverse(r.right);
-    if (r.left == null || r.left.val != r.val) left = 0;
-    if (r.right == null || r.right.val != r.val) right = 0;
-    max = Math.max(max, left + right);
-    return Math.max(left, right) + 1;
-}
-int max = 0;
-public int longestUnivaluePath(TreeNode root) {
-    if (root == null) return 0;
-    topDownTraverse(root);
-    return max;
-}
-#+END_SRC
-
-** 652. Find Duplicate Subtrees
-Given the root of a binary tree, return all duplicate subtrees.
-
-For each kind of duplicate subtrees, you only need to return the root node of any one of them.
-
-Two trees are duplicate if they have the same structure with the same node values.
-#+BEGIN_SRC java
-private String duplicate(TreeNode node) {
-    if(node == null) return "X";
-    String l = duplicate(node.left);
-    String r = duplicate(node.right);
-    String s = Integer.toString(node.val) + "-" + l + "-" + r;
-    map.put(s, map.getOrDefault(s, 0)+1);
-    if (map.get(s) == 2)
-        list.add(node);
-    return s;
-}
-HashMap<String,Integer> map = new HashMap<>();
-ArrayList list = new ArrayList<>();
-public List findDuplicateSubtrees(TreeNode root) {
-    duplicate(root);
-    return list;
-}
-#+END_SRC
-- 看一下构造的图的效果图
-#+BEGIN_SRC java
-      1 -> root
-    2, 3,  ->
-4, #| 2, 4,  ->
-#.#| 4, #| #.#|  ->
-#.#|  ->
-
-map.size(): 4
-3-2-4-X-X-X-4-X-X, 1
-1-2-4-X-X-X-3-2-4-X-X-X-4-X-X, 1
-2-4-X-X-X, 2
-4-X-X, 3
-
-res.size(): 2
-TREE Level order traversal:
-      4 -> root
-    #.#|  ->
-
-TREE Level order traversal:
-      2 -> root
-    4, #|  ->
-#.#|  ->
-#+END_SRC
-- 一种dfs的写法
-#+BEGIN_SRC java
-HashSet<String> set, added;
-List<TreeNode> list;
-public List<TreeNode> findDuplicateSubtrees(TreeNode root) {
-    set = new HashSet();
-    added = new HashSet();
-    list = new ArrayList();
-    StringBuilder ret = dfs(root);
-    return list;
-}
-private StringBuilder dfs(TreeNode root){
-    if (root == null) return null;
-    StringBuilder sbL = dfs(root.left), sbR = dfs(root.right);
-    if (sbL == null && sbR == null){
-        sbL = new StringBuilder();
-        sbL.append(root.val);
-    } else if (sbL != null){
-        sbL.append(" " + root.val);
-        if (sbR != null){
-            sbL.append(' ');
-            sbL.append(sbR);
-        } else sbL.append(" n");
-    } else if (sbL == null){
-        if (sbR != null){
-            sbR.insert(0, " n " + root.val);
-            sbL = sbR;
+    Map<Integer, List<Integer>> map = new HashMap();
+    public RangeFreqQuery(int[] arr) {
+        int n = arr.length;
+        for(int i = 0; i < n; i++)
+            map.computeIfAbsent(arr[i], z -> new ArrayList<>()).add(i);
+    }
+    public int query(int left, int right, int value) {
+        List<Integer> A = map.get(value);
+        if (A == null || left > A.get(A.size()-1) || right < A.get(0))
+            return 0;
+        int i = ceil(A, left), j = floor(A, right);        
+        return j-i+1;
+    }
+    public int ceil(List<Integer> A, int x){
+        int left = 0, right = A.size()-1; 
+        if (x < A.get(0))
+            return 0;
+        while (left < right) {
+            int mid = (left+right)/2;
+            if (A.get(mid) < x)
+                left = mid + 1;
+            else 
+                right = mid;
+        }
+        return left;
+    }
+    public int floor(List<Integer> A, int x){
+        int left = 0, right = A.size ()-1; 
+        if (x > A.get (right))
+            return right;
+        while (left < right) {
+            int mid =  (left+right)/2+1;
+            if (A.get (mid) > x)
+                right = mid - 1;
+            else 
+                left = mid;
+        }
+        return left;
+    }
+     #+END_SRC
+**** 解题思路与分析: segment tree
+     #+BEGIN_SRC java
+    Map<Integer, Integer>[] freq;
+    int n;
+    public RangeFreqQuery(int[] arr) {
+        n = arr.length;
+        freq = new HashMap[4 * n];
+        for(int i = 0; i < 4 * n; i++)
+            freq[i] = new HashMap<>();
+        build(1, 0, n - 1, arr);
+    }
+    private void build(int id, int start, int end, int[] arr){
+        if(start == end)
+            freq[id].put(arr[start], 1);
+        else{
+            int mid = (start + end) / 2, left = 2 * id, right = 2 * id + 1;
+            build(left, start, mid, arr);
+            build(right, mid + 1, end, arr);
+            for(int i : freq[left].keySet())
+                freq[id].put(i, freq[id].getOrDefault(i, 0) + freq[left].get(i));
+            for(int i : freq[right].keySet())
+                freq[id].put(i, freq[id].getOrDefault(i, 0) + freq[right].get(i));
         }
     }
-    String temp = sbL.toString();
-    if (set.contains(temp) && !added.contains(temp)){
-        list.add(root);
-        added.add(temp);
-
+    public int query(int left, int right, int value) {
+        return find(1, 0, n - 1, left, right, value);
     }
-    set.add(temp);
-    return sbL;
-}
-#+END_SRC
-- 这个跑起来很高效，可惜我看不懂。。。。。以后再慢慢消化吧
-- https://leetcode.com/problems/find-duplicate-subtrees/discuss/1418487/Java-beats-99.5-in-time
-#+BEGIN_SRC java
-Map<Integer, Integer> count;           // frequency of each subtree represented in string
-Map<List<Integer>, Integer> numberMap; // ** not hashset since it cannot reserve element order
-List<TreeNode> ans;
-int globalNumber = 1;
-public List<TreeNode> findDuplicateSubtrees(TreeNode root) {
-    count = new HashMap();
-    numberMap = new HashMap();
-    ans = new ArrayList();
-    collect(root);
-    return ans;
-}
-public int collect(TreeNode node) {
-    if (node == null) return 0;
-    int leftNumber = collect(node.left);
-    int rightNumber = collect(node.right);
-    List<Integer> numberExp = new ArrayList<>(); // construct expression
-    numberExp.add(node.val);
-    numberExp.add(leftNumber);
-    numberExp.add(rightNumber);
-    if (!numberMap.containsKey(numberExp)) { // update numberMap
-        numberMap.put(numberExp, globalNumber);
-        globalNumber++;
+    private int find(int id, int start, int end, int l, int r, int value){
+        if(r < start || end < l)
+            return 0;
+        else if(start == end)
+            return freq[id].getOrDefault(value, 0);
+        else if(l <= start && end <= r)
+            return freq[id].getOrDefault(value, 0);
+        else{
+            int mid = (start + end) / 2;
+            int left = find(2 * id, start, mid, l, r, value);
+            int right = find(2 * id + 1, mid + 1, end, l, r, value);
+            return left + right;
+        }
     }
-    // check number frequency. if == 2, meaning duplication then add to result
-    int rootNumber = numberMap.get(numberExp).intValue();
-    count.put(rootNumber, count.getOrDefault(rootNumber, 0)+1);
-    if (count.get(rootNumber) == 2) // not >=2, otherwise ans will have duplicated nodes
-        ans.add(node);
-    return rootNumber;
-}
-#+END_SRC
-#+BEGIN_SRC java
-count.size(): 4
-1, 3
-2, 2
-3, 1
-4, 1
-numberMap.size(): 4
-2, 1, 0,
-2
-3, 2, 1,
-3
-1, 2, 3,
-4
-4, 0, 0,
-1
-#+END_SRC
+     #+END_SRC
 
 

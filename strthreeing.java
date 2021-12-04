@@ -1340,14 +1340,92 @@ public class strthreeing {
         //     return false;
         // }
 
+        // public List<List<Integer>> largeGroupPositions(String t) {
+        //     List<List<Integer>> ans = new ArrayList<>();
+        //     int n = t.length(), i = 0, j = 0, k = 0;
+        //     char [] s = t.toCharArray();
+        //     while (i < n) {
+        //         j = i+1;
+        //         while (j < n && s[j] == s[i]) j++;
+        //         if (j - i >= 3) ans.add(List.of(i, j-1));
+        //         i = j;
+        //     }
+        //     return ans;
+        // }
+
+        // public String gcdOfStrings(String ss, String tt) {
+        //     int m = ss.length(), n = tt.length();
+        //     if (m < n) return gcdOfStrings(tt, ss); // m >= n
+        //     if (ss.chars().distinct().count() != tt.chars().distinct().count()) return "";
+        //     if (m % n == 0 && ss.equals(tt.repeat(m / n))) return tt;
+        //     char [] s = ss.toCharArray();
+        //     char [] t = tt.toCharArray();
+        //     List<Integer> idx = new ArrayList<>();
+        //     for (int i = 0; i < n-1; i++) 
+        //         if (t[i] == t[n-1]) idx.add(i);
+        //     for (int i = idx.size()-1; i >= 0; i--) {
+        //         if (n % (idx.get(i) + 1) == 0 && tt.equals(tt.substring(0, idx.get(i)+1).repeat(n / (idx.get(i)+1)))
+        //             && m % (idx.get(i)+1) == 0 && ss.equals(tt.substring(0, idx.get(i)+1).repeat(m / (idx.get(i)+1))))
+        //             return tt.substring(0, idx.get(i)+1);
+        //     }
+        //     return "";
+        // }
+
+        // public boolean isAlienSorted(String[] sa, String order) {
+        //     Map<Character, Integer> m = new HashMap<>();
+        //     char [] s = order.toCharArray();
+        //     for (int i = 0; i < 26; i++) 
+        //         m.put(s[i], i);
+        //     // List<String> l = Arrays.asList(sa); // bug
+        //     List<String> l = new ArrayList<>();
+        //     for (String v : sa) l.add(v);
+        //     Collections.sort(l, new Comparator<String>() {
+        //             @Override public int compare(String s, String t) {
+        //                 for (int i = 0; i < Math.min(s.length(), t.length()); i++) 
+        //                     if (s.charAt(i) != t.charAt(i))
+        //                         return m.get(s.charAt(i)) - m.get(t.charAt(i));
+        //                 return s.length() - t.length();
+        //             }
+        //         });
+        //     for (int i = 0; i < sa.length; i++) 
+        //         if (!sa[i].equals(l.get(i))) return false;
+        //     return true;
+        // }
+
+        // public String[] findRestaurant(String[] s, String[] t) {
+        //     int m = s.length, n = t.length;
+        //     Map<String, Integer> ms = new HashMap<>();
+        //     Map<String, Integer> mt = new HashMap<>();
+        //     for (int i = 0; i < m; i++) 
+        //         ms.put(s[i], i);
+        //     for (int i = 0; i < n; i++) 
+        //         mt.put(t[i], i);
+        //     Set<String> ss = new HashSet<>(Arrays.asList(s));
+        //     Set<String> st = new HashSet<>(Arrays.asList(t));
+        //     ss.retainAll(st);
+        //     int min = Integer.MAX_VALUE;
+        //     for (String v : ss) 
+        //         min = Math.min(min, ms.get(v) + mt.get(v));
+        //     List<String> res = new ArrayList<>();
+        //     for (String v : ss) 
+        //         if (ms.get(v) + mt.get(v) == min)
+        //             res.add(v);
+        //     String [] ans = new String [res.size()];
+        //     for (int i = 0; i < res.size(); i++) 
+        //         ans[i] = res.get(i);
+        //     return ans;
+        // }
     }
     public static void main (String[] args) {
         Solution s = new Solution ();
 
-        String a = "abcde";
-        String b = "cdeab";
+        // String []  a = new String []  {"Shogun", "Tapioca Express", "Burger King", "KFC"};
+        // String []  b = new String []  {"Piatti", "The Grill at Torrey Pines", "Hungry Hunter Steakhouse", "Shogun"};
+        String []  a = new String []  {"Shogun", "Tapioca Express", "Burger King", "KFC"};
+        String []  b = new String []  {"KFC", "Burger King", "Tapioca Express", "Shogun"};
 
-        boolean r = s.rotateString(a, b);
-        System.out.println("r: " + r);
+        String [] r = s.findRestaurant(a, b);
+       System.out.println(Arrays.toString(r));
+       
     }
 }

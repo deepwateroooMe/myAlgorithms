@@ -5,11 +5,11 @@
 ** 总结
 - Rabin-Karp Rolling Hash算法
 ** KMP算法
-** 1392. Longest Happy Prefix  - Hard : Use Longest Prefix Suffix (KMP-table) or String Hashing.
+*** 1392. Longest Happy Prefix  - Hard : Use Longest Prefix Suffix (KMP-table) or String Hashing.
 A string is called a happy prefix if is a non-empty prefix which is also a suffix (excluding itself).
 
 Given a string s, return the longest happy prefix of s. Return an empty string "" if no such prefix exists.
-*** 解题思路与分析: KMP算法
+**** 解题思路与分析: KMP算法
 
     [[./pic/happyString.png]]
 
@@ -27,7 +27,7 @@ public String longestPrefix(String ss) {
     return ss.substring(0, lps[n-1]);
 }
 #+END_SRC
-*** rolling hash
+**** rolling hash
 
 Time complexity: O(n) / worst case: O(n^2)
 
@@ -49,7 +49,7 @@ public String longestPrefix(String s) { // 容易出错，KMP写起来比较简�
     return maxLen == 0 ? "" : s.substring(0, maxLen);
 }
 #+END_SRC
-** 1910. Remove All Occurrences of a Substring - Medium 可用KMP算法
+*** 1910. Remove All Occurrences of a Substring - Medium 可用KMP算法
 Given two strings s and part, perform the following operation on s until all occurrences of the substring part are removed:
 
 Find the leftmost occurrence of the substring part and remove it from s.
@@ -100,7 +100,77 @@ public String removeOccurrences(String s, String part) {
 }
 #+END_SRC
 
-** 467. Unique Substrings in Wraparound String - Medium Rabin-Karp Rolling Hash算法
+*** 1316. Distinct Echo Substrings - Hard
+Return the number of distinct non-empty substrings of text that can be written as the concatenation of some string with itself (i.e. it can be written as a + a where a is some string).
+**** 解题思路与分析: 枚举
+我们在 text 中枚举位置 i 和 j，若字符串 text[i:j] 和 text[j:j*2-i] 相等，那么字符串 text[i:j*2-i] 就是一个满足条件的子串，其中 text[x:y] 表示字符串 text 中以位置 x 开始，位置 y 结束并且不包含位置 y 的子串。
+
+由于题目需要求出不同的子串数目，因此我们还需要使用哈希集合（HashSet）对所有满足条件的子串进行去重操作。
+
+     #+BEGIN_SRC java
+public int distinctEchoSubstrings(String t) { 
+    int n = t.length(), j = 0;
+    Set<String> ss = new HashSet<>();
+    for (int d = 1; d <= n/2; d++) 
+        for (int i = 0; i+d <= n-d; i++) {
+            if (t.substring(i, i+d).equals(t.substring(i+d, i+d+d)))
+                ss.add(t.substring(i, i+d));
+        }
+    return ss.size();
+}
+     #+END_SRC
+
+[[./pic/1316-1.png]]
+**** 解题思路与分析: 滚动哈希 + 前缀和
+
+本方法需要一些关于「滚动哈希」或「Rabin-Karp 算法」的预备知识，其核心是将字符串看成一个 k 进制的整数，其中 k 是字符串中可能出现的字符种类，本题中字符串只包含小写字母，即 k = 26（也可以取比 k 大的整数，一般来说可以取一个质数，例如 29 或 31）。这样做的好处是绕开了字符串操作，将字符串看成整数进行比较，并可以在常数时间内将字符串加入哈希集合中。
+
+关于「滚动哈希」或「Rabin-Karp 算法」的知识，可以参考 1044. 最长重复子串的官方题解 或使用搜索引擎，这里对算法本身的流程不再赘述。
+
+[[./pic/1316-2.png]]
+
+     #+BEGIN_SRC java
+static final int mod = (int)1e9 + 7;
+public int distinctEchoSubstrings(String t) {  
+    int n = t.length(), ans = 0;
+    char [] s = t.toCharArray();
+    int base = 31;
+    int [] pre = new int [n+1], mul = new int [n+1];
+    mul[0] = 1;
+    for (int i = 1; i <= n; i++) {
+        pre[i] = (int)(((long)pre[i-1] * base + s[i-1]) % mod);
+        mul[i] = (int)((long)mul[i-1] * base % mod);
+    }
+    Set<Integer> [] vis = new HashSet[n];
+    for (int i = 0; i < n; i++) vis[i] = new HashSet<>();
+    for (int i = 0; i < n; i++) 
+        for (int j = i+1; j < n; j++) {
+            int l = j - i;
+            if (j + l <= n) {
+                int hash_left = gethash(pre, mul, i, j-1);
+                if (!vis[l-1].contains(hash_left) && hash_left == gethash(pre, mul, j, j+l-1)) {
+                    ++ans;
+                    vis[l-1].add(hash_left);
+                }
+            }
+        }
+    return ans;
+}
+private int gethash(int [] pre, int [] mul, int l, int r) {
+    return (int)((pre[r+1] - (long)pre[l] * mul[r-l+1] % mod + mod) % mod);
+}
+     #+END_SRC
+- 注意事项
+
+由于 Rabin-Karp 算法会将字符串对应的整数值进行取模，那么：
+
+如果字符串 S1 和 S2 对应的整数值 I1 和 I2 不相等，那么 S1 和 S2 一定不相等；
+
+如果字符串 S1 和 S2 对应的整数值 I1 和 I2 相等，并不代表 S1 和 S2 一定相等；
+
+这与实际应用中使用的哈希算法也是一致的，即先判断两个实例的哈希值是否相等，再判断它们本质上是否相等。而在竞赛题目中，由于数据量较少，几乎不会产生哈希冲突，因此我们可以直接用 I1 和 I2 的相等代替 S1 和 S2 的相等，减少时间复杂度。但需要牢记在实际应用中，这样做是不严谨的。
+
+*** 467. Unique Substrings in Wraparound String - Medium Rabin-Karp Rolling Hash算法
 We define the string s to be the infinite wraparound string of "abcdefghijklmnopqrstuvwxyz", so s will look like this:
 
 "...zabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcd....".
@@ -128,7 +198,7 @@ public int findSubstringInWraproundString(String p) {
 }
 #+END_SRC
 
-** 1044. Longest Duplicate Substring - Hard 
+*** 1044. Longest Duplicate Substring - Hard 
 Given a string s, consider all duplicated substrings: (contiguous) substrings of s that occur 2 or more times. The occurrences may overlap.
 
 Return any duplicated substring that has the longest possible length. If s does not have a duplicated substring, the answer is "".
@@ -180,7 +250,7 @@ public String longestDupSubstring(String s) {
 }
 #+END_SRC
 
-** 1156. Swap For Longest Repeated Character Substring - Medium
+*** 1156. Swap For Longest Repeated Character Substring - Medium
 You are given a string text. You can swap two of the characters in the text.
 
 Return the length of the longest substring with repeated characters.
@@ -277,7 +347,7 @@ public int maxRepOpt1(String s) {
 }
 #+END_SRC
 
-** 395. Longest Substring with At Least K Repeating Characters - Medium
+*** 395. Longest Substring with At Least K Repeating Characters - Medium
 Given a string s and an integer k, return the length of the longest substring of s such that the frequency of each character in this substring is greater than or equal to k.
 #+BEGIN_SRC java
 //         由于字母只有 26 个，而整型 mask 有 32 位，足够用了，
@@ -364,8 +434,7 @@ public int longestSubstring(String s, int k) { // 人工手动折分
 }
 #+END_SRC
 
-
-** 1830. Minimum Number of Operations to Make String Sorted - Hard 排列组合费小马快速幂
+*** 1830. Minimum Number of Operations to Make String Sorted - Hard 排列组合费小马快速幂
 You are given a string s (0-indexed)​​​​​​. You are asked to perform the following operation on s​​​​​​ until you get a sorted string:
 
 Find the largest index i such that 1 <= i < s.length and s[i] < s[i - 1].
@@ -373,7 +442,7 @@ Find the largest index j such that i <= j < s.length and s[k] < s[i - 1] for all
 Swap the two characters at indices i - 1​​​​ and j​​​​​.
 Reverse the suffix starting at index i​​​​​​.
 Return the number of operations needed to make the string sorted. Since the answer can be too large, return it modulo 109 + 7.
-*** 解题思路与分析
+**** 解题思路与分析
 题中每次对字符串 s 执行的操作，是将其变为由当前字母组成的前一字典序的字符串。因此求最少操作次数，等价于求解该字符串在由当前字母组成的所有排列中的字典序；
 
 求比当前字符串 s 小的排列个数，可通过排列组合公式计算得到；
@@ -424,7 +493,7 @@ public int makeStringSorted(String t) {
 }
 #+END_SRC
  
-** 1960. Maximum Product of the Length of Two Palindromic Substrings - Hard 马拉车算法 todo
+*** 1960. Maximum Product of the Length of Two Palindromic Substrings - Hard 马拉车算法 todo
 You are given a 0-indexed string s and are tasked with finding two non-intersecting palindromic substrings of odd length such that the product of their lengths is maximized.
 
 More formally, you want to choose four integers i, j, k, l such that 0 <= i <= j < k <= l < s.length and both the substrings s[i...j] and s[k...l] are palindromes and have odd lengths. s[i...j] denotes a substring from index i to index j inclusive.
@@ -432,7 +501,7 @@ More formally, you want to choose four integers i, j, k, l such that 0 <= i <= j
 Return the maximum possible product of the lengths of the two non-intersecting palindromic substrings.
 
 A palindrome is a string that is the same forward and backward. A substring is a contiguous sequence of characters in a string.
-*** 解题思路与分析
+**** 解题思路与分析
 
 这个马拉车，好像还是很半生不熟，要好好理解消化一下
 
@@ -477,6 +546,7 @@ public long maxProduct(String s) { // 这个马拉车，得多写几遍
     return ans;
 }
 #+END_SRC
-*** DP解：要再好好理解消化一下
+**** DP解：要再好好理解消化一下
 #+BEGIN_SRC java
 #+END_SRC
+

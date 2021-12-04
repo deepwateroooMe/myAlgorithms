@@ -1,0 +1,38 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n}{HashSet}\PYG{o}{\PYGZlt{}}\PYG{n}{String}\PYG{o}{\PYGZgt{}} \PYG{n}{set}\PYG{o}{,} \PYG{n}{added}\PYG{o}{;}
+\PYG{n}{List}\PYG{o}{\PYGZlt{}}\PYG{n}{TreeNode}\PYG{o}{\PYGZgt{}} \PYG{n}{list}\PYG{o}{;}
+\PYG{k+kd}{public} \PYG{n}{List}\PYG{o}{\PYGZlt{}}\PYG{n}{TreeNode}\PYG{o}{\PYGZgt{}} \PYG{n+nf}{findDuplicateSubtrees}\PYG{o}{(}\PYG{n}{TreeNode} \PYG{n}{root}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+    \PYG{n}{set} \PYG{o}{=} \PYG{k}{new} \PYG{n}{HashSet}\PYG{o}{();}
+    \PYG{n}{added} \PYG{o}{=} \PYG{k}{new} \PYG{n}{HashSet}\PYG{o}{();}
+    \PYG{n}{list} \PYG{o}{=} \PYG{k}{new} \PYG{n}{ArrayList}\PYG{o}{();}
+    \PYG{n}{StringBuilder} \PYG{n}{ret} \PYG{o}{=} \PYG{n}{dfs}\PYG{o}{(}\PYG{n}{root}\PYG{o}{);}
+    \PYG{k}{return} \PYG{n}{list}\PYG{o}{;}
+\PYG{o}{\PYGZcb{}}
+\PYG{k+kd}{private} \PYG{n}{StringBuilder} \PYG{n+nf}{dfs}\PYG{o}{(}\PYG{n}{TreeNode} \PYG{n}{root}\PYG{o}{)\PYGZob{}}
+    \PYG{k}{if} \PYG{o}{(}\PYG{n}{root} \PYG{o}{==} \PYG{k+kc}{null}\PYG{o}{)} \PYG{k}{return} \PYG{k+kc}{null}\PYG{o}{;}
+    \PYG{n}{StringBuilder} \PYG{n}{sbL} \PYG{o}{=} \PYG{n}{dfs}\PYG{o}{(}\PYG{n}{root}\PYG{o}{.}\PYG{n+na}{left}\PYG{o}{),} \PYG{n}{sbR} \PYG{o}{=} \PYG{n}{dfs}\PYG{o}{(}\PYG{n}{root}\PYG{o}{.}\PYG{n+na}{right}\PYG{o}{);}
+    \PYG{k}{if} \PYG{o}{(}\PYG{n}{sbL} \PYG{o}{==} \PYG{k+kc}{null} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{n}{sbR} \PYG{o}{==} \PYG{k+kc}{null}\PYG{o}{)\PYGZob{}}
+        \PYG{n}{sbL} \PYG{o}{=} \PYG{k}{new} \PYG{n}{StringBuilder}\PYG{o}{();}
+        \PYG{n}{sbL}\PYG{o}{.}\PYG{n+na}{append}\PYG{o}{(}\PYG{n}{root}\PYG{o}{.}\PYG{n+na}{val}\PYG{o}{);}
+    \PYG{o}{\PYGZcb{}} \PYG{k}{else} \PYG{k}{if} \PYG{o}{(}\PYG{n}{sbL} \PYG{o}{!=} \PYG{k+kc}{null}\PYG{o}{)\PYGZob{}}
+        \PYG{n}{sbL}\PYG{o}{.}\PYG{n+na}{append}\PYG{o}{(}\PYG{l+s}{\PYGZdq{} \PYGZdq{}} \PYG{o}{+} \PYG{n}{root}\PYG{o}{.}\PYG{n+na}{val}\PYG{o}{);}
+        \PYG{k}{if} \PYG{o}{(}\PYG{n}{sbR} \PYG{o}{!=} \PYG{k+kc}{null}\PYG{o}{)\PYGZob{}}
+            \PYG{n}{sbL}\PYG{o}{.}\PYG{n+na}{append}\PYG{o}{(}\PYG{l+s+sc}{\PYGZsq{} \PYGZsq{}}\PYG{o}{);}
+            \PYG{n}{sbL}\PYG{o}{.}\PYG{n+na}{append}\PYG{o}{(}\PYG{n}{sbR}\PYG{o}{);}
+        \PYG{o}{\PYGZcb{}} \PYG{k}{else} \PYG{n}{sbL}\PYG{o}{.}\PYG{n+na}{append}\PYG{o}{(}\PYG{l+s}{\PYGZdq{} n\PYGZdq{}}\PYG{o}{);}
+    \PYG{o}{\PYGZcb{}} \PYG{k}{else} \PYG{k}{if} \PYG{o}{(}\PYG{n}{sbL} \PYG{o}{==} \PYG{k+kc}{null}\PYG{o}{)\PYGZob{}}
+        \PYG{k}{if} \PYG{o}{(}\PYG{n}{sbR} \PYG{o}{!=} \PYG{k+kc}{null}\PYG{o}{)\PYGZob{}}
+            \PYG{n}{sbR}\PYG{o}{.}\PYG{n+na}{insert}\PYG{o}{(}\PYG{l+m+mi}{0}\PYG{o}{,} \PYG{l+s}{\PYGZdq{} n \PYGZdq{}} \PYG{o}{+} \PYG{n}{root}\PYG{o}{.}\PYG{n+na}{val}\PYG{o}{);}
+            \PYG{n}{sbL} \PYG{o}{=} \PYG{n}{sbR}\PYG{o}{;}
+        \PYG{o}{\PYGZcb{}}
+    \PYG{o}{\PYGZcb{}}
+    \PYG{n}{String} \PYG{n}{temp} \PYG{o}{=} \PYG{n}{sbL}\PYG{o}{.}\PYG{n+na}{toString}\PYG{o}{();}
+    \PYG{k}{if} \PYG{o}{(}\PYG{n}{set}\PYG{o}{.}\PYG{n+na}{contains}\PYG{o}{(}\PYG{n}{temp}\PYG{o}{)} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{o}{!}\PYG{n}{added}\PYG{o}{.}\PYG{n+na}{contains}\PYG{o}{(}\PYG{n}{temp}\PYG{o}{))\PYGZob{}}
+        \PYG{n}{list}\PYG{o}{.}\PYG{n+na}{add}\PYG{o}{(}\PYG{n}{root}\PYG{o}{);}
+        \PYG{n}{added}\PYG{o}{.}\PYG{n+na}{add}\PYG{o}{(}\PYG{n}{temp}\PYG{o}{);}
+
+    \PYG{o}{\PYGZcb{}}
+    \PYG{n}{set}\PYG{o}{.}\PYG{n+na}{add}\PYG{o}{(}\PYG{n}{temp}\PYG{o}{);}
+    \PYG{k}{return} \PYG{n}{sbL}\PYG{o}{;}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

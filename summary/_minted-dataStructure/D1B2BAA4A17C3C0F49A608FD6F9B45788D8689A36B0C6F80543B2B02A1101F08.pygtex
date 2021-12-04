@@ -1,0 +1,17 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kd}{private} \PYG{k+kt}{int} \PYG{n+nf}{topDownTraverse}\PYG{o}{(}\PYG{n}{TreeNode} \PYG{n}{r}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+    \PYG{k}{if} \PYG{o}{(}\PYG{n}{r} \PYG{o}{==} \PYG{k+kc}{null}\PYG{o}{)} \PYG{k}{return} \PYG{l+m+mi}{0}\PYG{o}{;}
+    \PYG{k+kt}{int} \PYG{n}{left} \PYG{o}{=} \PYG{n}{topDownTraverse}\PYG{o}{(}\PYG{n}{r}\PYG{o}{.}\PYG{n+na}{left}\PYG{o}{);}
+    \PYG{k+kt}{int} \PYG{n}{right} \PYG{o}{=} \PYG{n}{topDownTraverse}\PYG{o}{(}\PYG{n}{r}\PYG{o}{.}\PYG{n+na}{right}\PYG{o}{);}
+    \PYG{k}{if} \PYG{o}{(}\PYG{n}{r}\PYG{o}{.}\PYG{n+na}{left} \PYG{o}{==} \PYG{k+kc}{null} \PYG{o}{||} \PYG{n}{r}\PYG{o}{.}\PYG{n+na}{left}\PYG{o}{.}\PYG{n+na}{val} \PYG{o}{!=} \PYG{n}{r}\PYG{o}{.}\PYG{n+na}{val}\PYG{o}{)} \PYG{n}{left} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;}
+    \PYG{k}{if} \PYG{o}{(}\PYG{n}{r}\PYG{o}{.}\PYG{n+na}{right} \PYG{o}{==} \PYG{k+kc}{null} \PYG{o}{||} \PYG{n}{r}\PYG{o}{.}\PYG{n+na}{right}\PYG{o}{.}\PYG{n+na}{val} \PYG{o}{!=} \PYG{n}{r}\PYG{o}{.}\PYG{n+na}{val}\PYG{o}{)} \PYG{n}{right} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;}
+    \PYG{n}{max} \PYG{o}{=} \PYG{n}{Math}\PYG{o}{.}\PYG{n+na}{max}\PYG{o}{(}\PYG{n}{max}\PYG{o}{,} \PYG{n}{left} \PYG{o}{+} \PYG{n}{right}\PYG{o}{);}
+    \PYG{k}{return} \PYG{n}{Math}\PYG{o}{.}\PYG{n+na}{max}\PYG{o}{(}\PYG{n}{left}\PYG{o}{,} \PYG{n}{right}\PYG{o}{)} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{o}{;}
+\PYG{o}{\PYGZcb{}}
+\PYG{k+kt}{int} \PYG{n}{max} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;}
+\PYG{k+kd}{public} \PYG{k+kt}{int} \PYG{n+nf}{longestUnivaluePath}\PYG{o}{(}\PYG{n}{TreeNode} \PYG{n}{root}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+    \PYG{k}{if} \PYG{o}{(}\PYG{n}{root} \PYG{o}{==} \PYG{k+kc}{null}\PYG{o}{)} \PYG{k}{return} \PYG{l+m+mi}{0}\PYG{o}{;}
+    \PYG{n}{topDownTraverse}\PYG{o}{(}\PYG{n}{root}\PYG{o}{);}
+    \PYG{k}{return} \PYG{n}{max}\PYG{o}{;}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

@@ -1,0 +1,58 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{// 根据题意需要找到前k大的数，又需要求区间和，就自然想到线段树.写起来较不容易出错。}
+\PYG{c+c1}{// 维护2个线段树数组，一个记录数的个数，一个记录区间值，}
+\PYG{c+c1}{// 注意一般线段树中[s，e]指固定的区间，这里类似线段数求第k小的数，所以[s,e]指第s小的值到第e小的值的区间。}
+\PYG{n}{LinkedList}\PYG{o}{\PYGZlt{}}\PYG{n}{Integer}\PYG{o}{\PYGZgt{}} \PYG{n}{q}\PYG{o}{;}
+\PYG{k+kt}{int} \PYG{o}{[]} \PYG{n}{cnt}\PYG{o}{;}
+\PYG{k+kt}{long}\PYG{o}{[]} \PYG{n}{sum}\PYG{o}{;}
+\PYG{k+kt}{int} \PYG{n}{m}\PYG{o}{,}\PYG{n}{k}\PYG{o}{;}
+\PYG{k+kd}{public} \PYG{n+nf}{MKAverage}\PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{m}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{k}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+    \PYG{n}{q} \PYG{o}{=} \PYG{k}{new} \PYG{n}{LinkedList}\PYG{o}{\PYGZlt{}\PYGZgt{}();}
+    \PYG{n}{cnt} \PYG{o}{=} \PYG{k}{new} \PYG{k+kt}{int}\PYG{o}{[}\PYG{l+m+mi}{400001}\PYG{o}{];} \PYG{c+c1}{// space: 4N}
+    \PYG{n}{sum} \PYG{o}{=} \PYG{k}{new} \PYG{k+kt}{long}\PYG{o}{[}\PYG{l+m+mi}{400001}\PYG{o}{];}
+    \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{m} \PYG{o}{=} \PYG{n}{m}\PYG{o}{;}
+    \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{k} \PYG{o}{=} \PYG{n}{k}\PYG{o}{;}
+\PYG{o}{\PYGZcb{}}
+\PYG{k+kd}{public} \PYG{k+kt}{void} \PYG{n+nf}{addElement}\PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{num}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+    \PYG{k}{if} \PYG{o}{(}\PYG{n}{q}\PYG{o}{.}\PYG{n+na}{size}\PYG{o}{()} \PYG{o}{==} \PYG{n}{m}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+        \PYG{k+kt}{int} \PYG{n}{v} \PYG{o}{=} \PYG{n}{q}\PYG{o}{.}\PYG{n+na}{pollFirst}\PYG{o}{();}
+        \PYG{n}{insert}\PYG{o}{(}\PYG{l+m+mi}{1}\PYG{o}{,} \PYG{l+m+mi}{0}\PYG{o}{,} \PYG{l+m+mi}{100000}\PYG{o}{,} \PYG{n}{v}\PYG{o}{,} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{o}{);}
+    \PYG{o}{\PYGZcb{}}
+    \PYG{n}{insert}\PYG{o}{(}\PYG{l+m+mi}{1}\PYG{o}{,} \PYG{l+m+mi}{0}\PYG{o}{,} \PYG{l+m+mi}{100000}\PYG{o}{,} \PYG{n}{num}\PYG{o}{,} \PYG{l+m+mi}{1}\PYG{o}{);}
+    \PYG{n}{q}\PYG{o}{.}\PYG{n+na}{addLast}\PYG{o}{(}\PYG{n}{num}\PYG{o}{);}
+\PYG{o}{\PYGZcb{}}
+\PYG{k+kd}{public} \PYG{k+kt}{int} \PYG{n+nf}{calculateMKAverage}\PYG{o}{()} \PYG{o}{\PYGZob{}}
+    \PYG{k}{if} \PYG{o}{(}\PYG{n}{q}\PYG{o}{.}\PYG{n+na}{size}\PYG{o}{()} \PYG{o}{\PYGZlt{}} \PYG{n}{m}\PYG{o}{)}\PYG{k}{return} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{o}{;}
+    \PYG{k+kt}{int} \PYG{n}{s} \PYG{o}{=} \PYG{n}{k}\PYG{o}{+}\PYG{l+m+mi}{1}\PYG{o}{,} \PYG{n}{e} \PYG{o}{=} \PYG{n}{m}\PYG{o}{\PYGZhy{}}\PYG{n}{k}\PYG{o}{;}
+    \PYG{k}{return} \PYG{o}{(}\PYG{k+kt}{int}\PYG{o}{)(}\PYG{n}{query}\PYG{o}{(}\PYG{l+m+mi}{1}\PYG{o}{,} \PYG{l+m+mi}{0}\PYG{o}{,} \PYG{l+m+mi}{100000}\PYG{o}{,} \PYG{n}{s}\PYG{o}{,} \PYG{n}{e}\PYG{o}{)/(}\PYG{n}{m}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{2}\PYG{o}{*}\PYG{n}{k}\PYG{o}{));}
+\PYG{o}{\PYGZcb{}}
+\PYG{k+kt}{void} \PYG{n+nf}{insert}\PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{idx}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{l}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{r}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{v}\PYG{o}{,} \PYG{k+kt}{long} \PYG{n}{d}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+    \PYG{n}{cnt}\PYG{o}{[}\PYG{n}{idx}\PYG{o}{]} \PYG{o}{+=} \PYG{n}{d}\PYG{o}{;}
+    \PYG{n}{sum}\PYG{o}{[}\PYG{n}{idx}\PYG{o}{]} \PYG{o}{+=} \PYG{n}{d}\PYG{o}{*}\PYG{n}{v}\PYG{o}{;}
+    \PYG{k}{if} \PYG{o}{(}\PYG{n}{l} \PYG{o}{==} \PYG{n}{r}\PYG{o}{)} \PYG{k}{return}\PYG{o}{;}
+    \PYG{k+kt}{int} \PYG{n}{m} \PYG{o}{=} \PYG{n}{l} \PYG{o}{+} \PYG{o}{(}\PYG{n}{r}\PYG{o}{\PYGZhy{}}\PYG{n}{l}\PYG{o}{)/}\PYG{l+m+mi}{2}\PYG{o}{;}
+    \PYG{k}{if} \PYG{o}{(}\PYG{n}{v} \PYG{o}{\PYGZlt{}=} \PYG{n}{m}\PYG{o}{)}
+        \PYG{n}{insert}\PYG{o}{(}\PYG{n}{idx}\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{l+m+mi}{1}\PYG{o}{,} \PYG{n}{l}\PYG{o}{,} \PYG{n}{m}\PYG{o}{,} \PYG{n}{v}\PYG{o}{,} \PYG{n}{d}\PYG{o}{);}    \PYG{c+c1}{// 向左子树查询}
+    \PYG{k}{else}
+        \PYG{n}{insert}\PYG{o}{(}\PYG{n}{idx}\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{l+m+mi}{1}\PYG{o}{|}\PYG{l+m+mi}{1}\PYG{o}{,} \PYG{n}{m}\PYG{o}{+}\PYG{l+m+mi}{1}\PYG{o}{,} \PYG{n}{r}\PYG{o}{,} \PYG{n}{v}\PYG{o}{,} \PYG{n}{d}\PYG{o}{);}\PYG{c+c1}{// 向右子树查询}
+\PYG{o}{\PYGZcb{}}
+\PYG{k+kt}{long} \PYG{n+nf}{query}\PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{idx}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{l}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{r}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{s}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{e}\PYG{o}{)\PYGZob{}}\PYG{c+c1}{//线段中第s个到第e个}
+    \PYG{k}{if} \PYG{o}{(}\PYG{n}{l} \PYG{o}{==} \PYG{n}{r}\PYG{o}{)} \PYG{o}{\PYGZob{}}\PYG{c+c1}{//起始和结束最多出现2次此情况}
+        \PYG{k+kt}{int} \PYG{n}{c} \PYG{o}{=} \PYG{n}{e}\PYG{o}{\PYGZhy{}}\PYG{n}{s}\PYG{o}{+}\PYG{l+m+mi}{1}\PYG{o}{;}
+        \PYG{k}{return} \PYG{o}{(}\PYG{k+kt}{long}\PYG{o}{)}\PYG{n}{c}\PYG{o}{*}\PYG{n}{l}\PYG{o}{;}
+    \PYG{o}{\PYGZcb{}} \PYG{k}{else} \PYG{k}{if} \PYG{o}{(}\PYG{n}{cnt}\PYG{o}{[}\PYG{n}{idx}\PYG{o}{]} \PYG{o}{==} \PYG{n}{e}\PYG{o}{\PYGZhy{}}\PYG{n}{s}\PYG{o}{+}\PYG{l+m+mi}{1}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+        \PYG{k}{return} \PYG{n}{sum}\PYG{o}{[}\PYG{n}{idx}\PYG{o}{];}
+    \PYG{o}{\PYGZcb{}} \PYG{k}{else} \PYG{o}{\PYGZob{}}
+        \PYG{k+kt}{int} \PYG{n}{m} \PYG{o}{=} \PYG{o}{(}\PYG{n}{l}\PYG{o}{+}\PYG{n}{r}\PYG{o}{)/}\PYG{l+m+mi}{2}\PYG{o}{;}
+        \PYG{k+kt}{int} \PYG{n}{c1} \PYG{o}{=} \PYG{n}{cnt}\PYG{o}{[}\PYG{n}{idx}\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{l+m+mi}{1}\PYG{o}{];}
+        \PYG{k+kt}{int} \PYG{n}{c2} \PYG{o}{=} \PYG{n}{cnt}\PYG{o}{[}\PYG{n}{idx}\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{l+m+mi}{1}\PYG{o}{|}\PYG{l+m+mi}{1}\PYG{o}{];}
+        \PYG{k}{if} \PYG{o}{(}\PYG{n}{c1} \PYG{o}{\PYGZgt{}=} \PYG{n}{e}\PYG{o}{)\PYGZob{}}
+            \PYG{k}{return} \PYG{n}{query}\PYG{o}{(}\PYG{n}{idx}\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{l+m+mi}{1}\PYG{o}{,} \PYG{n}{l}\PYG{o}{,} \PYG{n}{m}\PYG{o}{,} \PYG{n}{s}\PYG{o}{,} \PYG{n}{e}\PYG{o}{);}
+        \PYG{o}{\PYGZcb{}} \PYG{k}{else} \PYG{k}{if} \PYG{o}{(}\PYG{n}{c1} \PYG{o}{\PYGZgt{}=} \PYG{n}{s}\PYG{o}{)\PYGZob{}}
+            \PYG{k}{return} \PYG{n}{query}\PYG{o}{(}\PYG{n}{idx}\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{l+m+mi}{1}\PYG{o}{,} \PYG{n}{l}\PYG{o}{,} \PYG{n}{m}\PYG{o}{,} \PYG{n}{s}\PYG{o}{,} \PYG{n}{c1}\PYG{o}{)+}\PYG{n}{query}\PYG{o}{(}\PYG{n}{idx}\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{l+m+mi}{1}\PYG{o}{|}\PYG{l+m+mi}{1}\PYG{o}{,} \PYG{n}{m}\PYG{o}{+}\PYG{l+m+mi}{1}\PYG{o}{,} \PYG{n}{r}\PYG{o}{,} \PYG{l+m+mi}{1}\PYG{o}{,} \PYG{n}{e}\PYG{o}{\PYGZhy{}}\PYG{n}{c1}\PYG{o}{);}
+        \PYG{o}{\PYGZcb{}} \PYG{k}{else} \PYG{o}{\PYGZob{}}\PYG{c+c1}{//c1\PYGZlt{}s}
+            \PYG{k}{return} \PYG{n}{query}\PYG{o}{(}\PYG{n}{idx}\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{l+m+mi}{1}\PYG{o}{|}\PYG{l+m+mi}{1}\PYG{o}{,} \PYG{n}{m}\PYG{o}{+}\PYG{l+m+mi}{1}\PYG{o}{,} \PYG{n}{r}\PYG{o}{,} \PYG{n}{s}\PYG{o}{\PYGZhy{}}\PYG{n}{c1}\PYG{o}{,} \PYG{n}{e}\PYG{o}{\PYGZhy{}}\PYG{n}{c1}\PYG{o}{);}
+        \PYG{o}{\PYGZcb{}}
+    \PYG{o}{\PYGZcb{}}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

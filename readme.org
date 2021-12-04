@@ -16,9 +16,9 @@
 - 接下来的计划：觉得自己悟性不够，还需要多练习，会用接下来两三个周、一个月左右的时间（新年前）把所有剩下hard的、和medium的题做完，同时开始考虑、准备和着手安卓和unity项目，已经四个月了（从8月算起，8 9 10 11）不能再死刷题了，还是需要一些项目上的练习，再详细的计划会清晰后列出来
 - leetcode最后的几个open problem会抽时间慢慢写，但再写这些琐碎的题目兴趣不大（周赛会保持继续参加）。
   - 昨天写这话的时候，我还没能意识到最近一段时间最近两三个周吧，自己的状态很差，主要是睡眠的问题，因为晚上休息不好，第二天的精神很差，头像顶着一团棉花昏昏头脑不够清醒，严重影响了自己的精神状态和做题。今天意识到这个问题，会从网上再多搜索一下分析一下可能的原因，并及时作调整，希望能尽快恢复过来。
-  - 刷题还真是检测睡眠质量的晴雨表，冲着这一点儿，冲着到今天我才真正意识到这段时间睡眠质量是有问题的，题还得刷下去。。。一生中我从不曾像今年像这一两个月如此关注监控自己的健康与睡眠，但也都是好事，意识到问题的存在、警钟长鸣，及时调整、只有一再检测监控这些作息与生活习惯规律，才能发掘出比较高的效率与潜能。希望曾经相对比较好一些的状态能尽快调整回来
+  - 刷题还真是检测睡眠质量的晴雨表，冲着这一点儿，冲着到今天我才真正意识到这段时间睡眠质量是有问题的，题还得刷下去。。。一生中我从不曾像今年像这一两个月如此关注监控自己的健康与睡眠，但也都是好事，意识到问题的存在、警钟长鸣，及时调整、只有一再检测监控这些作息与生活习惯规律，才能发掘出比较高的效率与潜能。希望曾经相对比较好一些的状态能尽快调整回来(找到原因了，天气冷了，大概10号左右加了床被子太热，显著降低了睡眠质量，每天都很头痛，这两天拿走那多的一床被子，感觉好了很多。先前几个月前的7月头的时候也出现过因为门窗过于密闭而大脑缺氧一关好门窗静下来写题目就头痛过)
 
-- *希望这个周难抽些时间搜索一下、列一个安卓学习、复习、面试准备计划，以后的重点应该就转向按小项目来写和更新了* 这个也是实情，有很好的安卓基础，有比较强的学习意愿，只是在自己总结不够、想要边学习边做项目边总结之前，搜索一下它人是如何进阶学习准备的，想要计划出几个学习版块，计划几个小项目写出来,这个月暂时与刷题并行往前走。这几天先看一下自定义视图系列
+- *希望这个周能抽些时间搜索一下、列一个安卓学习、复习、面试准备计划，以后的重点应该就转向按小项目来写和更新了* 这个也是实情，有很好的安卓基础，有比较强的学习意愿，只是在自己总结不够、想要边学习边做项目边总结之前，搜索一下它人是如何进阶学习准备的，想要计划出几个学习版块，计划几个小项目写出来,这个月暂时与刷题并行往前走。这几天先看一下自定义视图系列
 
 - 再这之后，会写一些Android Project，同时大量发简历、找工作，并每天抽部分时间（可能几个小时吧）继续总结和刷完剩下不感兴趣、或觉得不值一写的几个leetcode open problems.
 
@@ -8075,6 +8075,339 @@ public List<List<String>> deleteDuplicateFolder(List<List<String>> paths) {
 }
 #+END_SRC
 
+* Tree树结构：各种新型数据结构
+
+*** 687. Longest Univalue Path
+Given the root of a binary tree, return the length of the longest path, where each node in the path has the same value. This path may or may not pass through the root.
+
+The length of the path between two nodes is represented by the number of edges between them.
+- 此题与求二叉树的最长路径边长相似，只是此题要求是节点值相同的路径，也就是说在找最长路径的时候，还需要判断节点值，要是不相同，就重置为0，在此期间，我们使用一个全局变量来存储最长节点值相同路径的边长。
+#+BEGIN_SRC java
+private int topDownTraverse(TreeNode r) { 
+    if (r == null) return 0;
+    int left = topDownTraverse(r.left);
+    int right = topDownTraverse(r.right);
+    if (r.left == null || r.left.val != r.val) left = 0;
+    if (r.right == null || r.right.val != r.val) right = 0;
+    max = Math.max(max, left + right);
+    return Math.max(left, right) + 1;
+}
+int max = 0;
+public int longestUnivaluePath(TreeNode root) {
+    if (root == null) return 0;
+    topDownTraverse(root);
+    return max;
+}
+#+END_SRC
+
+*** 652. Find Duplicate Subtrees
+Given the root of a binary tree, return all duplicate subtrees.
+
+For each kind of duplicate subtrees, you only need to return the root node of any one of them.
+
+Two trees are duplicate if they have the same structure with the same node values.
+#+BEGIN_SRC java
+private String duplicate(TreeNode node) {
+    if(node == null) return "X";
+    String l = duplicate(node.left);
+    String r = duplicate(node.right);
+    String s = Integer.toString(node.val) + "-" + l + "-" + r;
+    map.put(s, map.getOrDefault(s, 0)+1);
+    if (map.get(s) == 2)
+        list.add(node);
+    return s;
+}
+HashMap<String,Integer> map = new HashMap<>();
+ArrayList list = new ArrayList<>();
+public List findDuplicateSubtrees(TreeNode root) {
+    duplicate(root);
+    return list;
+}
+#+END_SRC
+- 看一下构造的图的效果图
+#+BEGIN_SRC java
+      1 -> root
+    2, 3,  ->
+4, #| 2, 4,  ->
+#.#| 4, #| #.#|  ->
+#.#|  ->
+
+map.size(): 4
+3-2-4-X-X-X-4-X-X, 1
+1-2-4-X-X-X-3-2-4-X-X-X-4-X-X, 1
+2-4-X-X-X, 2
+4-X-X, 3
+
+res.size(): 2
+TREE Level order traversal:
+      4 -> root
+    #.#|  ->
+
+TREE Level order traversal:
+      2 -> root
+    4, #|  ->
+#.#|  ->
+#+END_SRC
+- 一种dfs的写法
+#+BEGIN_SRC java
+HashSet<String> set, added;
+List<TreeNode> list;
+public List<TreeNode> findDuplicateSubtrees(TreeNode root) {
+    set = new HashSet();
+    added = new HashSet();
+    list = new ArrayList();
+    StringBuilder ret = dfs(root);
+    return list;
+}
+private StringBuilder dfs(TreeNode root){
+    if (root == null) return null;
+    StringBuilder sbL = dfs(root.left), sbR = dfs(root.right);
+    if (sbL == null && sbR == null){
+        sbL = new StringBuilder();
+        sbL.append(root.val);
+    } else if (sbL != null){
+        sbL.append(" " + root.val);
+        if (sbR != null){
+            sbL.append(' ');
+            sbL.append(sbR);
+        } else sbL.append(" n");
+    } else if (sbL == null){
+        if (sbR != null){
+            sbR.insert(0, " n " + root.val);
+            sbL = sbR;
+        }
+    }
+    String temp = sbL.toString();
+    if (set.contains(temp) && !added.contains(temp)){
+        list.add(root);
+        added.add(temp);
+
+    }
+    set.add(temp);
+    return sbL;
+}
+#+END_SRC
+- 这个跑起来很高效，可惜我看不懂。。。。。以后再慢慢消化吧
+- https://leetcode.com/problems/find-duplicate-subtrees/discuss/1418487/Java-beats-99.5-in-time
+#+BEGIN_SRC java
+Map<Integer, Integer> count;           // frequency of each subtree represented in string
+Map<List<Integer>, Integer> numberMap; // ** not hashset since it cannot reserve element order
+List<TreeNode> ans;
+int globalNumber = 1;
+public List<TreeNode> findDuplicateSubtrees(TreeNode root) {
+    count = new HashMap();
+    numberMap = new HashMap();
+    ans = new ArrayList();
+    collect(root);
+    return ans;
+}
+public int collect(TreeNode node) {
+    if (node == null) return 0;
+    int leftNumber = collect(node.left);
+    int rightNumber = collect(node.right);
+    List<Integer> numberExp = new ArrayList<>(); // construct expression
+    numberExp.add(node.val);
+    numberExp.add(leftNumber);
+    numberExp.add(rightNumber);
+    if (!numberMap.containsKey(numberExp)) { // update numberMap
+        numberMap.put(numberExp, globalNumber);
+        globalNumber++;
+    }
+    // check number frequency. if == 2, meaning duplication then add to result
+    int rootNumber = numberMap.get(numberExp).intValue();
+    count.put(rootNumber, count.getOrDefault(rootNumber, 0)+1);
+    if (count.get(rootNumber) == 2) // not >=2, otherwise ans will have duplicated nodes
+        ans.add(node);
+    return rootNumber;
+}
+#+END_SRC
+#+BEGIN_SRC java
+count.size(): 4
+1, 3
+2, 2
+3, 1
+4, 1
+numberMap.size(): 4
+2, 1, 0,
+2
+3, 2, 1,
+3
+1, 2, 3,
+4
+4, 0, 0,
+1
+#+END_SRC
+
+*** 979. Distribute Coins in Binary Tree
+You are given the root of a binary tree with n nodes where each node in the tree has node.val coins. There are n coins in total throughout the whole tree.
+
+In one move, we may choose two adjacent nodes and move one coin from one node to another. A move may be from parent to child, or from child to parent.
+
+Return the minimum number of moves required to make every node have exactly one coin.
+#+BEGIN_SRC java
+private int dfs(TreeNode r) { // 统计把自身，左右子树都平衡，需要移动的coins个数
+    if (r == null) return 0;
+    int left = dfs(r.left);      // 左、右子树缺多少
+    int right = dfs(r.right);
+    res += Math.abs(left) + Math.abs(right); // 左，右子树和自身都平衡需要的移动数
+    return left + right + r.val-1;
+}
+int res;
+public int distributeCoins(TreeNode root) {
+    res = 0;
+    return res;
+}
+#+END_SRC
+
+*** 1696. Jump Game VI
+You are given a 0-indexed integer array nums and an integer k.
+You are initially standing at index 0. In one move, you can jump at most k steps forward without going outside the boundaries of the array. That is, you can jump from index i to any index in the range [i + 1, min(n - 1, i + k)] inclusive.
+You want to reach the last index of the array (index n - 1). Your score is the sum of all nums[j] for each index j you visited in the array.
+Return the maximum score you can get.
+#+BEGIN_SRC java
+public int maxResult(int[] nums, int k) { // O(N) DP with double ended queue
+    int n = nums.length;
+    int [] dp = new int[n];
+    ArrayDeque<Integer> q = new ArrayDeque<>();
+    for (int i = 0; i < n; i++) {
+        while (!q.isEmpty() && q.peekFirst() < i-k) // 头大尾小
+            q.removeFirst();
+        dp[i] = nums[i] + (q.isEmpty() ? 0 : dp[q.peekFirst()]);
+        while (q.size() > 0 && dp[q.peekLast()] <= dp[i])
+            q.removeLast();
+        q.addLast(i);
+    }
+    return dp[n-1];
+}
+public int maxResult(int[] nums, int k) { // BigO: O (NlogN)
+    int n = nums.length;
+    int [] dp = new int[n];
+    Queue<int []> q = new PriorityQueue<>(Comparator.comparingInt(e -> -e[0]));
+    for (int i = 0; i < n; i++) {
+        while (!q.isEmpty() && q.peek()[1] + k < i)
+            q.poll();
+        dp[i] = nums[i] + (q.isEmpty() ? 0 : q.peek()[0]);
+        q.add(new int[] {dp[i], i});
+    }
+    return dp[n-1];
+}
+#+END_SRC
+
+*** 1932. Merge BSTs to Create Single BST
+You are given n BST (binary search tree) root nodes for n separate BSTs stored in an array trees (0-indexed). Each BST in trees has at most 3 nodes, and no two roots have the same value. In one operation, you can:
+
+Select two distinct indices i and j such that the value stored at one of the leaves of trees[i] is equal to the root value of trees[j].
+Replace the leaf node in trees[i] with trees[j].
+Remove trees[j] from trees.
+Return the root of the resulting BST if it is possible to form a valid BST after performing n - 1 operations, or null if it is impossible to create a valid BST.
+
+A BST (binary search tree) is a binary tree where each node satisfies the following property:
+
+Every node in the node's left subtree has a value strictly less than the node's value.
+Every node in the node's right subtree has a value strictly greater than the node's value.
+A leaf is a node that has no children.
+#+BEGIN_SRC java
+public TreeNode canMerge(List<TreeNode> trees) {
+    final int size = trees.size();
+    final Map<Integer, TreeNode> roots = new HashMap<>(size);
+    for (final TreeNode node : trees) 
+        roots.put(node.val, node);
+    for (final TreeNode node : trees) {
+        if (roots.containsKey(node.val)) { // 这里判断：是因为接下来buildTree会将可以合并的子树键值对删除并回收利用建大树了
+            final TreeNode root = buildTree(roots, node);
+            roots.put(root.val, root);    // update root node
+        }
+    }
+    if (roots.size() != 1) return null;   // 无法合并所有的子树
+    final TreeNode root = roots.values().iterator().next(); // 只有这一颗树根
+    return isValid(root, Integer.MIN_VALUE, Integer.MAX_VALUE) ? root : null;
+}
+private TreeNode buildTree(Map<Integer, TreeNode> roots, TreeNode node) { // 用recursion把所有需要/可以合并的子树建成一棵完整大树，方法很传神
+    final TreeNode next = roots.remove(node.val); // map.remove()返回值: 如果存在key, 则删除并返回value；如果不存在则返回null
+    if (next != null) {
+        if (next.left != null) node.left = buildTree(roots, next.left);
+        if (next.right != null) node.right = buildTree(roots, next.right);
+    }
+    return node;
+}
+private boolean isValid(TreeNode node, int min, int max) { // 这些个递归写得很传功力，要活学活用到出神入化。。。。。。
+    if (node == null) return true;
+    final int value = node.val;
+    if (value <= min || value >= max) return false;
+    return isValid(node.left, min, value) && isValid(node.right, value, max);
+}
+#+END_SRC
+
+*** 968. Binary Tree Cameras
+You are given the root of a binary tree. We install cameras on the tree nodes where each camera at a node can monitor its parent, itself, and its immediate children.
+Return the minimum number of cameras needed to monitor all nodes of the tree.
+#+BEGIN_SRC java
+// 对于每个节点，有一下三种case：
+// case（1）：如果它有一个孩子，且这个孩子是叶子（状态0），则它需要摄像头，res ++，然后返回1，表示已经给它装上了摄像头。
+// case（2）：如果它有一个孩子，且这个孩子是叶子的父节点（状态1），那么它已经被覆盖，返回2。
+// case（0）：否则，这个节点无孩子，或者说，孩子都是状态2，那么我们将这个节点视为叶子来处理。
+// 由于dfs最终返回后，整棵树的根节点的状态还未处理，因此需要判断，若根节点被视为叶子，需要在其上加一个摄像头。
+private int dfs(TreeNode r) {
+    // 空节点不需要被覆盖，归入情况2
+    if (r == null) return 2; // do not need cover
+    int left = dfs(r.left);  // 递归求左右孩子的状态
+    int right = dfs(r.right);
+    // 获取左右孩子状态之后的处理
+    // 有叶子孩子，加摄像头，归入情况1
+    if (left == 0 || right == 0) {
+        res ++;
+        return 1;
+    }
+    // 孩子上有摄像头，说明此节点已被覆盖，情况2; 
+    if (left == 1 || right == 1) return 2;
+    return 0;
+}
+int res = 0;
+public int minCameraCover(TreeNode root) {
+    // 若根节点被视为叶子，需要在其上加一个摄像头
+    return (dfs(root) == 0 ? 1 : 0) + res;
+}
+#+END_SRC
+*** Create Sorted Array through Instructions
+Given an integer array instructions, you are asked to create a sorted array from the elements in instructions. You start with an empty container nums. For each element from left to right in instructions, insert it into nums. The cost of each insertion is the minimum of the following:
+The number of elements currently in nums that are strictly less than instructions[i].
+The number of elements currently in nums that are strictly greater than instructions[i].
+For example, if inserting element 3 into nums = [1,2,3,5], the cost of insertion is min(2, 1) (elements 1 and 2 are less than 3, element 5 is greater than 3) and nums will become [1,2,3,3,5].
+Return the total cost to insert all elements from instructions into nums. Since the answer may be large, return it modulo 109 + 7
+#+BEGIN_SRC java
+// https://blog.csdn.net/qq_28033719/article/details/112506925
+private static int N = 100001;
+private static int [] tree = new int [N]; // 拿元素值作为 key 对应 tree 的下标值
+public int lowbit(int i) {
+    return i & -i;
+}
+public void update(int i, int v) { // 更新父节点
+    while (i <= N) {
+        tree[i] += v;
+        i += lowbit(i);
+    }
+}
+public int getSum(int i) { // 得到以 i 为下标1-based的所有子、叶子节点的和， 也就是[1, i]的和，1-based
+    int ans = 0;
+    while (i > 0) {
+        ans += tree[i];
+        i -= lowbit(i);
+    }
+    return ans;
+}
+public int createSortedArray(int[] instructions) {
+    int n = instructions.length;
+    long res = 0;
+    Arrays.fill(tree, 0);
+    for (int i = 0; i < n; i++) {
+        //              严格小于此数的个数 严格大于此数的个数： 为总个数（不含自己） - 小于自己的个数
+        res += Math.min(getSum(instructions[i]-1), i-getSum(instructions[i])); 
+        update(instructions[i], 1);
+    }
+    return (int)(res % ((int)Math.pow(10, 9) + 7));
+}
+#+END_SRC
+
 
 * sliding window 
 *** 数subarray个数(满足某些特定要求的子数组个数)问题： 感觉傻傻永远数不清楚！列几个题，牢记一下
@@ -9014,339 +9347,6 @@ public double[] medianSlidingWindow(int[] nums, int k) {
 }
 #+END_SRC
 
-
-* Tree树结构：各种新型数据结构
-
-*** 687. Longest Univalue Path
-Given the root of a binary tree, return the length of the longest path, where each node in the path has the same value. This path may or may not pass through the root.
-
-The length of the path between two nodes is represented by the number of edges between them.
-- 此题与求二叉树的最长路径边长相似，只是此题要求是节点值相同的路径，也就是说在找最长路径的时候，还需要判断节点值，要是不相同，就重置为0，在此期间，我们使用一个全局变量来存储最长节点值相同路径的边长。
-#+BEGIN_SRC java
-private int topDownTraverse(TreeNode r) { 
-    if (r == null) return 0;
-    int left = topDownTraverse(r.left);
-    int right = topDownTraverse(r.right);
-    if (r.left == null || r.left.val != r.val) left = 0;
-    if (r.right == null || r.right.val != r.val) right = 0;
-    max = Math.max(max, left + right);
-    return Math.max(left, right) + 1;
-}
-int max = 0;
-public int longestUnivaluePath(TreeNode root) {
-    if (root == null) return 0;
-    topDownTraverse(root);
-    return max;
-}
-#+END_SRC
-
-*** 652. Find Duplicate Subtrees
-Given the root of a binary tree, return all duplicate subtrees.
-
-For each kind of duplicate subtrees, you only need to return the root node of any one of them.
-
-Two trees are duplicate if they have the same structure with the same node values.
-#+BEGIN_SRC java
-private String duplicate(TreeNode node) {
-    if(node == null) return "X";
-    String l = duplicate(node.left);
-    String r = duplicate(node.right);
-    String s = Integer.toString(node.val) + "-" + l + "-" + r;
-    map.put(s, map.getOrDefault(s, 0)+1);
-    if (map.get(s) == 2)
-        list.add(node);
-    return s;
-}
-HashMap<String,Integer> map = new HashMap<>();
-ArrayList list = new ArrayList<>();
-public List findDuplicateSubtrees(TreeNode root) {
-    duplicate(root);
-    return list;
-}
-#+END_SRC
-- 看一下构造的图的效果图
-#+BEGIN_SRC java
-      1 -> root
-    2, 3,  ->
-4, #| 2, 4,  ->
-#.#| 4, #| #.#|  ->
-#.#|  ->
-
-map.size(): 4
-3-2-4-X-X-X-4-X-X, 1
-1-2-4-X-X-X-3-2-4-X-X-X-4-X-X, 1
-2-4-X-X-X, 2
-4-X-X, 3
-
-res.size(): 2
-TREE Level order traversal:
-      4 -> root
-    #.#|  ->
-
-TREE Level order traversal:
-      2 -> root
-    4, #|  ->
-#.#|  ->
-#+END_SRC
-- 一种dfs的写法
-#+BEGIN_SRC java
-HashSet<String> set, added;
-List<TreeNode> list;
-public List<TreeNode> findDuplicateSubtrees(TreeNode root) {
-    set = new HashSet();
-    added = new HashSet();
-    list = new ArrayList();
-    StringBuilder ret = dfs(root);
-    return list;
-}
-private StringBuilder dfs(TreeNode root){
-    if (root == null) return null;
-    StringBuilder sbL = dfs(root.left), sbR = dfs(root.right);
-    if (sbL == null && sbR == null){
-        sbL = new StringBuilder();
-        sbL.append(root.val);
-    } else if (sbL != null){
-        sbL.append(" " + root.val);
-        if (sbR != null){
-            sbL.append(' ');
-            sbL.append(sbR);
-        } else sbL.append(" n");
-    } else if (sbL == null){
-        if (sbR != null){
-            sbR.insert(0, " n " + root.val);
-            sbL = sbR;
-        }
-    }
-    String temp = sbL.toString();
-    if (set.contains(temp) && !added.contains(temp)){
-        list.add(root);
-        added.add(temp);
-
-    }
-    set.add(temp);
-    return sbL;
-}
-#+END_SRC
-- 这个跑起来很高效，可惜我看不懂。。。。。以后再慢慢消化吧
-- https://leetcode.com/problems/find-duplicate-subtrees/discuss/1418487/Java-beats-99.5-in-time
-#+BEGIN_SRC java
-Map<Integer, Integer> count;           // frequency of each subtree represented in string
-Map<List<Integer>, Integer> numberMap; // ** not hashset since it cannot reserve element order
-List<TreeNode> ans;
-int globalNumber = 1;
-public List<TreeNode> findDuplicateSubtrees(TreeNode root) {
-    count = new HashMap();
-    numberMap = new HashMap();
-    ans = new ArrayList();
-    collect(root);
-    return ans;
-}
-public int collect(TreeNode node) {
-    if (node == null) return 0;
-    int leftNumber = collect(node.left);
-    int rightNumber = collect(node.right);
-    List<Integer> numberExp = new ArrayList<>(); // construct expression
-    numberExp.add(node.val);
-    numberExp.add(leftNumber);
-    numberExp.add(rightNumber);
-    if (!numberMap.containsKey(numberExp)) { // update numberMap
-        numberMap.put(numberExp, globalNumber);
-        globalNumber++;
-    }
-    // check number frequency. if == 2, meaning duplication then add to result
-    int rootNumber = numberMap.get(numberExp).intValue();
-    count.put(rootNumber, count.getOrDefault(rootNumber, 0)+1);
-    if (count.get(rootNumber) == 2) // not >=2, otherwise ans will have duplicated nodes
-        ans.add(node);
-    return rootNumber;
-}
-#+END_SRC
-#+BEGIN_SRC java
-count.size(): 4
-1, 3
-2, 2
-3, 1
-4, 1
-numberMap.size(): 4
-2, 1, 0,
-2
-3, 2, 1,
-3
-1, 2, 3,
-4
-4, 0, 0,
-1
-#+END_SRC
-
-*** 979. Distribute Coins in Binary Tree
-You are given the root of a binary tree with n nodes where each node in the tree has node.val coins. There are n coins in total throughout the whole tree.
-
-In one move, we may choose two adjacent nodes and move one coin from one node to another. A move may be from parent to child, or from child to parent.
-
-Return the minimum number of moves required to make every node have exactly one coin.
-#+BEGIN_SRC java
-private int dfs(TreeNode r) { // 统计把自身，左右子树都平衡，需要移动的coins个数
-    if (r == null) return 0;
-    int left = dfs(r.left);      // 左、右子树缺多少
-    int right = dfs(r.right);
-    res += Math.abs(left) + Math.abs(right); // 左，右子树和自身都平衡需要的移动数
-    return left + right + r.val-1;
-}
-int res;
-public int distributeCoins(TreeNode root) {
-    res = 0;
-    return res;
-}
-#+END_SRC
-
-*** 1696. Jump Game VI
-You are given a 0-indexed integer array nums and an integer k.
-You are initially standing at index 0. In one move, you can jump at most k steps forward without going outside the boundaries of the array. That is, you can jump from index i to any index in the range [i + 1, min(n - 1, i + k)] inclusive.
-You want to reach the last index of the array (index n - 1). Your score is the sum of all nums[j] for each index j you visited in the array.
-Return the maximum score you can get.
-#+BEGIN_SRC java
-public int maxResult(int[] nums, int k) { // O(N) DP with double ended queue
-    int n = nums.length;
-    int [] dp = new int[n];
-    ArrayDeque<Integer> q = new ArrayDeque<>();
-    for (int i = 0; i < n; i++) {
-        while (!q.isEmpty() && q.peekFirst() < i-k) // 头大尾小
-            q.removeFirst();
-        dp[i] = nums[i] + (q.isEmpty() ? 0 : dp[q.peekFirst()]);
-        while (q.size() > 0 && dp[q.peekLast()] <= dp[i])
-            q.removeLast();
-        q.addLast(i);
-    }
-    return dp[n-1];
-}
-public int maxResult(int[] nums, int k) { // BigO: O (NlogN)
-    int n = nums.length;
-    int [] dp = new int[n];
-    Queue<int []> q = new PriorityQueue<>(Comparator.comparingInt(e -> -e[0]));
-    for (int i = 0; i < n; i++) {
-        while (!q.isEmpty() && q.peek()[1] + k < i)
-            q.poll();
-        dp[i] = nums[i] + (q.isEmpty() ? 0 : q.peek()[0]);
-        q.add(new int[] {dp[i], i});
-    }
-    return dp[n-1];
-}
-#+END_SRC
-
-*** 1932. Merge BSTs to Create Single BST
-You are given n BST (binary search tree) root nodes for n separate BSTs stored in an array trees (0-indexed). Each BST in trees has at most 3 nodes, and no two roots have the same value. In one operation, you can:
-
-Select two distinct indices i and j such that the value stored at one of the leaves of trees[i] is equal to the root value of trees[j].
-Replace the leaf node in trees[i] with trees[j].
-Remove trees[j] from trees.
-Return the root of the resulting BST if it is possible to form a valid BST after performing n - 1 operations, or null if it is impossible to create a valid BST.
-
-A BST (binary search tree) is a binary tree where each node satisfies the following property:
-
-Every node in the node's left subtree has a value strictly less than the node's value.
-Every node in the node's right subtree has a value strictly greater than the node's value.
-A leaf is a node that has no children.
-#+BEGIN_SRC java
-public TreeNode canMerge(List<TreeNode> trees) {
-    final int size = trees.size();
-    final Map<Integer, TreeNode> roots = new HashMap<>(size);
-    for (final TreeNode node : trees) 
-        roots.put(node.val, node);
-    for (final TreeNode node : trees) {
-        if (roots.containsKey(node.val)) { // 这里判断：是因为接下来buildTree会将可以合并的子树键值对删除并回收利用建大树了
-            final TreeNode root = buildTree(roots, node);
-            roots.put(root.val, root);    // update root node
-        }
-    }
-    if (roots.size() != 1) return null;   // 无法合并所有的子树
-    final TreeNode root = roots.values().iterator().next(); // 只有这一颗树根
-    return isValid(root, Integer.MIN_VALUE, Integer.MAX_VALUE) ? root : null;
-}
-private TreeNode buildTree(Map<Integer, TreeNode> roots, TreeNode node) { // 用recursion把所有需要/可以合并的子树建成一棵完整大树，方法很传神
-    final TreeNode next = roots.remove(node.val); // map.remove()返回值: 如果存在key, 则删除并返回value；如果不存在则返回null
-    if (next != null) {
-        if (next.left != null) node.left = buildTree(roots, next.left);
-        if (next.right != null) node.right = buildTree(roots, next.right);
-    }
-    return node;
-}
-private boolean isValid(TreeNode node, int min, int max) { // 这些个递归写得很传功力，要活学活用到出神入化。。。。。。
-    if (node == null) return true;
-    final int value = node.val;
-    if (value <= min || value >= max) return false;
-    return isValid(node.left, min, value) && isValid(node.right, value, max);
-}
-#+END_SRC
-
-*** 968. Binary Tree Cameras
-You are given the root of a binary tree. We install cameras on the tree nodes where each camera at a node can monitor its parent, itself, and its immediate children.
-Return the minimum number of cameras needed to monitor all nodes of the tree.
-#+BEGIN_SRC java
-// 对于每个节点，有一下三种case：
-// case（1）：如果它有一个孩子，且这个孩子是叶子（状态0），则它需要摄像头，res ++，然后返回1，表示已经给它装上了摄像头。
-// case（2）：如果它有一个孩子，且这个孩子是叶子的父节点（状态1），那么它已经被覆盖，返回2。
-// case（0）：否则，这个节点无孩子，或者说，孩子都是状态2，那么我们将这个节点视为叶子来处理。
-// 由于dfs最终返回后，整棵树的根节点的状态还未处理，因此需要判断，若根节点被视为叶子，需要在其上加一个摄像头。
-private int dfs(TreeNode r) {
-    // 空节点不需要被覆盖，归入情况2
-    if (r == null) return 2; // do not need cover
-    int left = dfs(r.left);  // 递归求左右孩子的状态
-    int right = dfs(r.right);
-    // 获取左右孩子状态之后的处理
-    // 有叶子孩子，加摄像头，归入情况1
-    if (left == 0 || right == 0) {
-        res ++;
-        return 1;
-    }
-    // 孩子上有摄像头，说明此节点已被覆盖，情况2; 
-    if (left == 1 || right == 1) return 2;
-    return 0;
-}
-int res = 0;
-public int minCameraCover(TreeNode root) {
-    // 若根节点被视为叶子，需要在其上加一个摄像头
-    return (dfs(root) == 0 ? 1 : 0) + res;
-}
-#+END_SRC
-*** Create Sorted Array through Instructions
-Given an integer array instructions, you are asked to create a sorted array from the elements in instructions. You start with an empty container nums. For each element from left to right in instructions, insert it into nums. The cost of each insertion is the minimum of the following:
-The number of elements currently in nums that are strictly less than instructions[i].
-The number of elements currently in nums that are strictly greater than instructions[i].
-For example, if inserting element 3 into nums = [1,2,3,5], the cost of insertion is min(2, 1) (elements 1 and 2 are less than 3, element 5 is greater than 3) and nums will become [1,2,3,3,5].
-Return the total cost to insert all elements from instructions into nums. Since the answer may be large, return it modulo 109 + 7
-#+BEGIN_SRC java
-// https://blog.csdn.net/qq_28033719/article/details/112506925
-private static int N = 100001;
-private static int [] tree = new int [N]; // 拿元素值作为 key 对应 tree 的下标值
-public int lowbit(int i) {
-    return i & -i;
-}
-public void update(int i, int v) { // 更新父节点
-    while (i <= N) {
-        tree[i] += v;
-        i += lowbit(i);
-    }
-}
-public int getSum(int i) { // 得到以 i 为下标1-based的所有子、叶子节点的和， 也就是[1, i]的和，1-based
-    int ans = 0;
-    while (i > 0) {
-        ans += tree[i];
-        i -= lowbit(i);
-    }
-    return ans;
-}
-public int createSortedArray(int[] instructions) {
-    int n = instructions.length;
-    long res = 0;
-    Arrays.fill(tree, 0);
-    for (int i = 0; i < n; i++) {
-        //              严格小于此数的个数 严格大于此数的个数： 为总个数（不含自己） - 小于自己的个数
-        res += Math.min(getSum(instructions[i]-1), i-getSum(instructions[i])); 
-        update(instructions[i], 1);
-    }
-    return (int)(res % ((int)Math.pow(10, 9) + 7));
-}
-#+END_SRC
 
 
 * HashMap
