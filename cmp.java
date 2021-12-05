@@ -1,4 +1,4 @@
-import com.ListNode;
+import com.TreeNode;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,164 +14,191 @@ import static java.util.stream.Collectors.toMap;
 public class cmp {
     public static class Solution {
 
-        public List<Integer> targetIndices(int[] a, int target) {
-            Arrays.sort(a);
-            List<Integer> ans = new ArrayList<>();
-            for (int i = 0; i < a.length; i++) 
-                if (a[i] == target)
-                    ans.add(i);
-            return ans;
-        }
-
-        public int[] getAverages(int[] a, int k) {
-            int n = a.length;
-            long [] sum = new long [n];
-            for (int i = 0; i < n; i++) 
-                sum[i] = (i == 0 ? 0 : sum[i-1]) + a[i];
-            int [] ans = new int [n];
-            Arrays.fill(ans, -1);
-            for (int i = 0; i < n; i++) {
-                if (i-k < 0 || i+k >= n) continue;
-                ans[i] = (int)((sum[i+k] - (i-k == 0 ? 0 : sum[i-k-1])) / (2l * k + 1l));
-            }
-            return ans;
-        }
-
-        public int minimumDeletions(int[] a) {
-            int n = a.length, minIdx = -1, maxIdx = -1;
-            ArrayDeque<Integer> min = new ArrayDeque<>(); // 单调递增
-            ArrayDeque<Integer> max = new ArrayDeque<>(); // 单调递减
-            for (int i = 0; i < n; i++) {
-                while (!max.isEmpty() && a[max.peekLast()] <= a[i]) max.pollLast();
-                max.offerLast(i);
-                while (!min.isEmpty() && a[min.peekLast()] >= a[i]) min.pollLast();
-                min.offerLast(i);
-            }
-            minIdx = min.peekFirst();
-            maxIdx = max.peekFirst();
-            return Math.min(Math.min(Math.max(minIdx+1, maxIdx+1), Math.max(n-minIdx, n-maxIdx)),
-                            Math.min(minIdx+1+n-maxIdx, maxIdx+1+n-minIdx));
-        }
-
-        // class UnionFind {
-        //     public int[] parent;
-        //     public int[] size;
-        //     public int[] root;
-        //     public int n;
-        //     public UnionFind(int n) {
-        //         this.n = n;
-        //         parent = new int[n];
-        //         size = new int[n];
-        //         root = new int[n];
-        //         Arrays.fill(size, 1);
-        //         for (int i = 0; i < n; i++) {
-        //             parent[i] = i;
-        //             root[i] = i;
-        //         }
+        // public int[] findEvenNumbers(int[] a) {
+        //     Map<Integer, Integer> m = new HashMap<>();
+        //     for (Integer v : a) 
+        //         m.put(v, m.getOrDefault(v, 0) + 1);
+        //     boolean bk = false;
+        //     List<Integer> l = new ArrayList<>();
+        //     for (int i = 100; i < 1000; i += 2) {
+        //         String s = "" + i;
+        //         Map<Character, Integer> cur = getCnt(s);
+        //         bk = false;
+        //         for (Character key : cur.keySet()) 
+        //             if (!m.containsKey(key-'0') || m.get(key-'0') < cur.get(key)) {
+        //                 bk = true;
+        //                 break;
+        //             }
+        //         if (bk) continue;
+        //         l.add(i);
         //     }
-        //     public int findset(int x) {
-        //         return parent[x] == x ? x : (parent[x] = findset(parent[x]));
-        //     }
-        //     public int getroot(int x) {
-        //         return root[findset(x)];
-        //     }
-        //     public boolean sameGroup(int x, int y) {
-        //         return findset(x) == findset(y);
-        //     }
-        //     public void unite(int x, int y) {
-        //         root[y] = root[x];
-        //         if (size[x] < size[y]) {
-        //             int temp = x;
-        //             x = y;
-        //             y = temp;
-        //         }
-        //         parent[y] = x;
-        //         size[x] += size[y];
-        //     }
-        //     public boolean findAndUnite(int x, int y) {
-        //         int i = findset(x);
-        //         int j = findset(y);
-        //         if (i != j) {
-        //             unite(i, j);
-        //             return true;
-        //         }
-        //         return false;
-        //     }
+        //     int [] ans = new int [l.size()];
+        //     for (int i = 0; i < l.size(); i++) 
+        //         ans[i] = l.get(i);
+        //     return ans;
         // }
-        // public List<Integer> findAllPeople(int n, int[][] meetings, int firstPerson) { // 这个题像是考脱壳了，完全没有搞明白它在问什么、考什么,脑袋短路了
-        //     Set<Integer> ans = new HashSet<>(); // 就现在的代码量和思路来看，不是很简单吗？可是比赛的时候就是读不懂题目，早上写这种题型写得。。。。。。倒背如流。。。。。。
-        //     Queue<int []> q = new PriorityQueue<>((x, y) -> x[1] - y[1]); // [idx, time]
-        //     q.offer(new int [] {0, 0});
-        //     q.offer(new int [] {firstPerson, 0});
-        //     Map<Integer, List<int []>> adj = new HashMap<>();
-        //     for (int [] meet : meetings) {
-        //         adj.computeIfAbsent(meet[0], z -> new ArrayList<>()).add(new int [] {meet[1], meet[2]});;
-        //         adj.computeIfAbsent(meet[1], z -> new ArrayList<>()).add(new int [] {meet[0], meet[2]});;
-        //     }
-        //     while (!q.isEmpty()) {
-        //         int [] p = q.poll();
-        //         ans.add(p[0]);
-        //         if (!adj.containsKey(p[0])) continue;
-        //         List<int []> l = adj.get(p[0]);
-        //         for (int [] m : l) {
-        //             if (m[1] < p[1]) continue;
-        //             q.offer(new int [] {m[0], m[1]});
-        //         }
-        //         adj.remove(p[0]); // tle without this line
-        //     }
-        //     return new ArrayList<>(ans);
+        // Map<Character, Integer> getCnt(String t) {
+        //     Map<Character, Integer> m = new HashMap<>();
+        //     for (int i = 0; i < 3; i++) 
+        //         m.put(t.charAt(i), m.getOrDefault(t.charAt(i), 0) + 1);
+        //     return m;
         // }
-        public List<Integer> findAllPeople(int n, int[][] meetings, int firstPerson) {
-            ans.add(0);
-            ans.add(firstPerson);
-            Arrays.sort(meetings, Comparator.comparingInt(a -> a[2])); // sort by time
-            for (int i = 0; i < meetings.length; ) {
-                if (ans.size() == n) return new ArrayList<>(ans);
-                HashMap<Integer, List<Integer>> map = new HashMap<>();
-                int j = i;
-                while (j < meetings.length && meetings[j][2] == meetings[i][2]) {
-                    int[] m = meetings[j];
-                    map.computeIfAbsent(m[0], z -> new ArrayList<>()).add(m[1]);
-                    map.computeIfAbsent(m[1], z -> new ArrayList<>()).add(m[0]);
-                    j++;
+        
+        // public ListNode deleteMiddle(ListNode head) {
+        //     ListNode r = head, pre = null, cur = null, next = null;
+        //     int cnt = 0, n = 0;
+        //     while (r != null) {
+        //         n ++;
+        //         r = r.next;
+        //     }
+        //     if (n == 1) return null;
+        //     if (n == 2) {
+        //         head.next = null;
+        //         return head;
+        //     }
+        //     System.out.println("n: " + n);
+        //     r = head;
+        //     while (cnt < n / 2-1) {
+        //         r = r.next;
+        //         cnt++;
+        //     }
+        //     pre = r;
+        //     cur = r.next;
+        //     next = cur.next;
+        //     pre.next = next;
+        //     return head;
+        // }
+
+        // public int[][] validArrangement(int[][] a) { // 接龙型dfs记忆化搜索
+        //     n = a.length;
+        //     for (int [] v : a) ll.add(v);
+        //     Collections.sort(ll, (x, y)-> x[0] != y[0] ? x[0] - y[0] : x[1] - y[1]);
+        //     // System.out.println("ll.size(): " + ll.size());
+        //     // for (int [] v : ll) 
+        //     //     System.out.println(Arrays.toString(v));
+        //     dp = new ArrayList[n];
+        //     for (int i = 0; i < n; i++) {
+        //         List<int []> cur = dfs(i, -1);
+        //         // System.out.println("(cur.size() == n): " + (cur.size() == n));
+        //         if (cur.size() == n) {
+        //             int [][] ans = new int [n][];
+        //             for (int j = 0; j < n; j++) {
+        //                 ans[j] = cur.get(j);
+        //                 return ans;
+        //             }
+        //         }
+        //     }
+        //     return null;
+        // }
+        // Map<Integer, String> idx = new HashMap<>();
+        // List<int []> ll = new ArrayList<>(); //
+        // List<int []>[] dp;
+        // int n;
+        // List<int []> dfs(int idx, int pre) {
+        //     // System.out.println("\n idx: " + idx);
+        //     // System.out.println(Arrays.toString(ll.get(idx)));
+        //     if (dp[idx] != null) return dp[idx];
+        //     int [] cur = ll.get(idx);
+        //     int v = cur[1];
+        //     List<int []> maxList = new ArrayList<>();
+        //     List<Integer> next = binarySearch(v);
+        //     // System.out.println("next.size(): " + next.size());
+        //     // System.out.println(Arrays.toString(next.toArray()));
+        //     for (Integer vv : next) {
+        //         List<int []> tmp = dfs(vv, ll.get(vv)[1]);
+        //         if (tmp.size() > maxList.size()) // 这里可能不是最长长度就能得到结果，而是要能连起来
+        //             maxList = new ArrayList<>(tmp);
+        //     }
+        //     maxList.add(ll.get(idx));
+        //     dp[idx] = maxList;
+        //     return maxList;
+        // }
+        // List<Integer> binarySearch(int v) {
+        //     if (v < ll.get(0)[0] || v > ll.get(n-1)[0]) return new ArrayList<>();
+        //     int l = 0, r = n-1;
+        //     List<Integer> ans = new ArrayList<>();
+        //     while (l <= r) {
+        //         int m = l + (r - l) / 2;
+        //         if (ll.get(m)[0] == v) {
+        //             int i = m, j = m;
+        //             while (i >= 0 && ll.get(i)[0] == v) i--;
+        //             while (j < n && ll.get(j)[0] == v) j++;
+        //             for (int k = i+1; k < j; k++)
+        //                 ans.add(k);
+        //             return ans;
+        //         } else if (ll.get(m)[0] < v) l = m+1;
+        //         else r = m-1;
+        //     }
+        //     return null;
+        // }
+
+        public String getDirections(TreeNode root, int startValue, int destValue) { // 需要再稍微系统化地组织一下思路
+            List<TreeNode> one = new ArrayList<>();
+            List<TreeNode> two = new ArrayList<>();
+            dfs(root, startValue, one, a);
+            dfs(root, destValue, two, b);
+            // System.out.println("one.size(): " + one.size());
+            // System.out.println(Arrays.toString(one.toArray()));
+            // System.out.println("two.size(): " + two.size());
+            // System.out.println(Arrays.toString(two.toArray()));
+            int m = one.size(), n = two.size(), i = 0;
+            TreeNode p = null;
+            for ( i = Math.min(m, n)-1; i >= 0; i--) 
+                if (one.get(i) == two.get(i)) {
+                    p = one.get(i);
+                    break;
                 }
-                Set<Integer> tmp = new HashSet<>(map.keySet());
-                tmp.retainAll(ans); // 
-                for (Integer start : tmp) 
-                    dfs(start, map);
-                i = j;
+            String ans = "";
+            for (int j = m-1; j >= i; j--) 
+                ans += "U";
+            for (; i < n-1; i++) {
+                if (two.get(i+1) == two.get(i).left) ans += "L";
+                else ans += "R";
             }
-            return new ArrayList<>(ans);
+            ans += (b == two.get(i).left ? "L" : "R");
+            return ans;
         }
-        Set<Integer> ans = new HashSet<>();
-        private void dfs(Integer start, HashMap<Integer, List<Integer>> map) {
-            List<Integer> path = map.get(start);
-            for (Integer v : path) {
-                if (ans.contains(v)) continue;
-                ans.add(v);
-                dfs(v, map);
+        TreeNode a = null, b = null;
+        boolean dfs(TreeNode r, int v, List<TreeNode> l, TreeNode tmp) {
+            if (r == null) return false;
+            if (r.val == v) {
+                tmp = r;
+                return true;
             }
+            l.add(r);
+            if (dfs(r.left, v, l, tmp)) return true;
+            return dfs(r.right, v, l, tmp);
+            // l.remove(new Integer(r.val));
         }
+
     }
     public static void main (String[] args) {
         Solution s = new Solution ();
 
-        // int [][] a = new int [][] {{3,4,2},{1,2,1},{2,3,1}};
-        int [][] a = new int [][] {{0,2,1},{1,3,1},{4,5,1}};
+        // int [][] a = new int [][] {{5,1},{4,5},{11,9},{9,4}};
 
-        List<Integer> r = s.findAllPeople(294, a, 27);
+        // int [][] r = s.validArrangement(a);
+        // System.out.println("r.length: " + r.length);
+        // for (int z = 0; z < r.length; ++z) 
+        //     System.out.println(Arrays.toString(r[z]));
+        
 
-        // List<Integer> r = s.findAllPeople(294, a, 27);
-        System.out.println("r.size(): " + r.size());
-        System.out.println(Arrays.toString(r.toArray()));
+        int []  a = new int []  {5, 1, 2, 3, -1, 6, 4};
+
+        TreeNode root = new TreeNode(a[0]);
+        root.buildTree(root, a);
+        root.levelPrintTree(root);
+        
+        String r = s.getDirections(root, 3, 6);
+        System.out.println("r: " + r);
         
     }
 }
 // cmp s = new cmp (a);
 
-// TreeNode root = new TreeNode(a[0]);
-// root.buildTree(root, a);
-// root.levelPrintTree(root);
-        
-// TreeNode res = s.(root );
-// res.levelPrintTree(res);
+// ListNode head = new ListNode(a[0]);
+// head.buildList(head, a);
+// head.printList(head);
+
+// ListNode r = s.deleteMiddle(head);
+// r.printList(r);

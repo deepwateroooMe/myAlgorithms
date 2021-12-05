@@ -10005,6 +10005,144 @@ private boolean isValid(List<Integer> l) {
     return true;
 }
 #+END_SRC
+*** 301. Remove Invalid Parentheses - Hard 对重复的处理
+Given a string s that contains parentheses and letters, remove the minimum number of invalid parentheses to make the input string valid.
+
+Return all the possible results. You may return the answer in any order.
+**** 解题思路与分析: 递归解法
+     #+BEGIN_SRC java
+public List<String> removeInvalidParentheses(String t) { // 递归
+    int l = 0, r = 0;
+    for (char c : t.toCharArray()) { // 这样就把代码写得很简洁
+        l += (c == '(' ? 1 : 0);
+        if (l == 0) r += (c == ')' ? 1 : 0);
+        else l -= (c == ')' ? 1 : 0);
+    }
+    dfs(t, 0, l, r);
+    return new ArrayList<>(ans);
+}
+Set<String> ans = new HashSet<>();
+private void dfs(String s, int idx, int l, int r) {
+    if (l == 0 && r == 0) {
+        if (isValid(s)) ans.add(s);
+        return ;
+    }
+    for (int i = idx; i < s.length(); i++) {
+// 对于多个相同的半括号在一起，只删除第一个，比如 "())"，这里有两个右括号，不管删第一个还是删第二个右括号都会得到 "()"，没有区别，所以只用算一次就行了，
+// 通过和上一个字符比较，如果不相同，说明是第一个右括号，如果相同则直接跳过。
+        if (i > idx && s.charAt(i) == s.charAt(i-1)) continue; // 狠重要： 对重复的处理：和前面的一样，前面已经删除过了，就不用再次这里删除了？？
+        if (l > 0 && s.charAt(i) == '(')
+            dfs(s.substring(0, i) + s.substring(i+1), i, l-1, r);
+        if (r > 0 && s.charAt(i) == ')')
+            dfs(s.substring(0, i) + s.substring(i+1), i, l, r-1);
+    }
+}
+private boolean isValid(String t) {
+    char [] s = t.toCharArray();
+    int cnt = 0;
+    for (int i = 0; i < t.length(); i++) {
+        if (s[i] == '(') cnt++;
+        else if (s[i] == ')' && --cnt < 0) return false;
+    }
+    return cnt == 0;
+}
+     #+END_SRC
+**** 解题思路与分析: BFS 
+     #+BEGIN_SRC java
+public List<String> removeInvalidParentheses(String t) { // 这个思路确实很精炒吧
+    List<String> ans = new ArrayList<>();
+    char [] s = t.toCharArray();
+    Set<String> vis = new HashSet<>(List.of(t));
+    Queue<String> q = new LinkedList<>();
+    q.offer(t);
+    boolean found = false;
+    while (!q.isEmpty()) {
+        String cur = q.poll();
+        if (isValid(cur)) {
+            found = true;
+            ans.add(cur);
+        }
+        if (found) continue; // 如果已经是有效解，就不能再删除字符了
+        for (int i = 0; i < cur.length(); i++) {
+            if (cur.charAt(i) != '(' && cur.charAt(i) != ')') continue;
+            String tmp = cur.substring(0, i) + cur.substring(i+1);
+            if (!vis.contains(tmp)) {
+                q.offer(tmp);
+                vis.add(tmp);
+            }
+        }
+    }
+    return ans;
+}
+private boolean isValid(String t) {
+    int cnt = 0;
+    char [] s = t.toCharArray();
+    for (int i = 0; i < t.length(); i++) 
+        if (s[i] == '(') cnt++;
+        else if (s[i] == ')' && --cnt < 0) return false;
+    return cnt == 0;
+}
+     #+END_SRC
+**** 解题思路与分析： 论坛上的高票解法
+
+思路确实很巧妙。递归函数的参数中，last_i 表示当前遍历到的位置，相当上面解法中的 start，last_j 表示上一个删除的位置，这样可以避免重复计算。然后有个括号字符数组，初始化时放入左括号和右括号，博主认为这个字符数组是此解法最精髓的地方，因为其顺序可以改变，可以变成反向括号，这个就比较叼了，后面再讲它到底有多叼吧。
+
+在递归函数中，从 last_i 开始遍历，在找正向括号的时候，用变量 cnt 表示括号数组中的左括号出现的次数，遇到左括号自增1，遇到右括号自减1。当左括号大于等于右括号的时候，直接跳过。这个循环的目的是要删除多余的右括号，所以当 cnt 小于0的时候，从上一个删除位置 last_j 开始遍历，如果当前是右括号，且是第一个右括号（关于这块可以参见上面解法中的分析），删除当前右括号，并调用递归函数。注意这个 for 循环结束后要直接返回，因为进这个 for 循环的都是右括号多的，删到最后最多是删成和左括号一样多，不需要再去翻转删左括号。
+
+好，最后来说这个最叼的翻转，当字符串的左括号个数大于等于右括号的时候，不会进入第二个 for 循环，自然也不会 return。那么由于左括号的个数可能会要大于右括号，所以还要删除多余的左括号，将字符串反转一下，比如 "(()"，反转变成 ")(("，此时虽然还是要删除多余的左括号，但是反转后就没有合法的括号了，所以变成了找反向括号 ")("，还是可以删除多余的左括号，然后判断此时括号数组的状态，如果是正向括号，说明此时正要删除左括号，就调用递归函数，last_i 和 last_j 均重置为0，括号数组初始化为反向括号。如果此时已经是反向括号了，说明之前的左括号已经删掉了变成了 ")("，然后又反转了一下，变回来了 "()"，就可以直接加入结果 res 了，参见代码如下：
+     #+BEGIN_SRC java
+public List<String> removeInvalidParentheses(String s) { 
+    helper(s, 0, 0, new char [] {'(', ')'});
+    return ans;
+}
+List<String> ans = new ArrayList<>();
+void helper(String s, int last_i, int last_j, char [] p) {
+    int cnt = 0;
+    for (int i = last_i; i < s.length(); i++) {
+        if (s.charAt(i) == p[0]) ++cnt;
+        else if (s.charAt(i) == p[1]) --cnt;
+        if (cnt >= 0) continue; // 右括号没有多余，就不用管它，下一个
+        for (int j = last_j; j <= i; j++) // 寻找i及其之前、自上一次删除位置开始、的第一个右括号
+            if (s.charAt(j) == p[1] && (j == last_j || s.charAt(j) != s.charAt(j-1)))
+                helper(s.substring(0, j) + s.substring(j+1), i, j, p);
+        return ; // 注意这个for循环结束后要直接返回，因为进这个for循环的都是右括号多的，删到最后最多是删成和左括号一样多，不需要再去翻转删左括号
+    }
+    String reverse = new StringBuilder (s).reverse().toString();
+    if (p[0] == '(') helper(reverse, 0, 0, new char [] {')', '('});
+    else ans.add(reverse);
+}
+     #+END_SRC
+**** 解题思路与分析: 暴力搜索
+
+一种暴力搜索的方法，并没有太多的技巧在里面，但是思路直接了当，可以作为为面试中最先提出的解法。思路是先将s放到一个 HashSet 中，然后进行该集合 cur 不为空的 while 循环，此时新建另一个集合 next，遍历之前的集合 cur，若某个字符串是合法的括号，直接加到结果 res 中，并且看若 res 不为空，则直接跳过。跳过的部分实际上是去除括号的操作，由于不知道该去掉哪个半括号，所以只要遇到半括号就都去掉，然后加入另一个集合 next 中，这里实际上保存的是下一层的候选者。当前的 cur 遍历完成后，若 res 不为空，则直接返回，因为这是当前层的合法括号，一定是移除数最少的。若 res 为空，则将 next 赋值给 cur，继续循环，参见代码如下：
+     #+BEGIN_SRC java
+public List<String> removeInvalidParentheses(String s) {
+    List<String> ans = new ArrayList<>();
+    Set<String> cur = new HashSet<>(List.of(s));
+    while (!cur.isEmpty()) {
+        Set<String> next = new HashSet<>();
+        for (String v : cur) {
+            if (isValid(v)) ans.add(v);
+            if (!ans.isEmpty()) continue;
+            for (int i = 0; i < v.length(); i++) {
+                if (v.charAt(i) != '(' && v.charAt(i) != ')') continue;
+                next.add(v.substring(0, i) + v.substring(i+1));
+            }
+        }
+        if (!ans.isEmpty()) return ans;
+        cur = next;
+    }
+    return ans;
+}
+private boolean isValid(String t) {
+    int cnt = 0;
+    char [] s = t.toCharArray();
+    for (int i = 0; i < t.length(); i++) 
+        if (s[i] == '(') cnt++;
+        else if (s[i] == ')' && --cnt < 0) return false;
+    return cnt == 0;
+}
+     #+END_SRC
 *** 491. Increasing Subsequences
 Given an integer array nums, return all the different possible increasing subsequences of the given array with at least two elements. You may return the answer in any order.
 
@@ -11636,15 +11774,48 @@ You may assume all buildings are perfect rectangles grounded on an absolutely fl
 The skyline should be represented as a list of "key points" sorted by their x-coordinate in the form [[x1,y1],[x2,y2],...]. Each key point is the left endpoint of some horizontal segment in the skyline except the last point in the list, which always has a y-coordinate 0 and is used to mark the skyline's termination where the rightmost building ends. Any ground between the leftmost and rightmost buildings should be part of the skyline's contour.
 
 Note: There must be no consecutive horizontal lines of equal height in the output skyline. For instance, [...,[2 3],[4 5],[7 5],[11 5],[12 7],...] is not acceptable; the three lines of height 5 should be merged into one in the final output as such: [...,[2 3],[4 5],[12 7],...]
+**** 解题思路与分析
+- 复杂度分析
 
-使用扫描线，从左至右扫过。如果遇到左端点，将高度入堆，如果遇到右端点，则将高度从堆中删除。使用 last 变量记录上一个转折点。
+时间复杂度：O(nlogn)，其中 nn 为建筑数量。每座建筑至多只需要入队与出队一次，单次时间复杂度为 O(logn)。
+
+空间复杂度：O(n)，其中 nn 为建筑数量。数组boundaries 和优先队列的空间占用均为 O(n)。
+
+     #+BEGIN_SRC java
+public List<List<Integer>> getSkyline(int[][] a) {
+    List<Integer> pos = new ArrayList<>();
+    for (int [] b : a) {
+        pos.add(b[0]);
+        pos.add(b[1]);
+    }
+    Collections.sort(pos);
+    List<List<Integer>> ans = new ArrayList<>();
+    Queue<int []> q = new PriorityQueue<>((x, y) -> y[1] - x[1]);
+    int n = a.length, idx = 0;
+    for (int v : pos) {
+        while (idx < n && a[idx][0] <= v) {
+            q.offer(new int [] {a[idx][1], a[idx][2]});
+            idx++;
+        }
+        while (!q.isEmpty() && q.peek()[0] <= v) q.poll();
+        int maxHiCur = q.isEmpty() ? 0 : q.peek()[1];
+        if (ans.size() == 0 || maxHiCur != ans.get(ans.size()-1).get(1))
+            ans.add(Arrays.asList(v, maxHiCur));
+    }
+    return ans;
+}
+     #+END_SRC
+
+**** 解题思路与分析
+
+使用扫描线，从左至右扫过。如果遇到左端点，将高度入堆，如果遇到右端点，则将高度从堆中删除。使用 last 变量记录上一个转折点。O(NLogN)
 
 [[./pic/sweep.png]]
 
 #+BEGIN_SRC java
 public List<List<Integer>> getSkyline(int[][] buildings) { // 从左向右扫一遍过去
     List<List<Integer>> ans = new ArrayList<>();
-    Map<Integer, List<Integer>> map = new TreeMap<>();
+    Map<Integer, List<Integer>> map = new TreeMap<>(); // TreeMap, 取其根据键的大小自动排序之意,可以得到logN的效率
     for (int [] v : buildings) {
         map.computeIfAbsent(v[0], z -> new ArrayList<>()).add(-v[2]); // 插入左节点: 高度为负
         map.computeIfAbsent(v[1], z -> new ArrayList<>()).add(v[2]);  // 插入右节点：高度为正
@@ -11674,7 +11845,80 @@ public List<List<Integer>> getSkyline(int[][] buildings) { // 从左向右扫一
     return ans;
 }
 #+END_SRC
+**** 解题思路与分析:比较慢
+ 
+思路：类似于meeting room的方法，用hashmap存《start, +1》和《end, -1》。在这里就是先用一个List《int[]》来存储《start, height》和《end, -height》, 然后把这个list按照从小到大排序，最后用一个queue来走一遍每个点，每次遇到正值的height，就offer，遇到负值就pop此值，然后在每一个点，都peek heap中的最大height，如果这个height和之前存在result里的值不同，将此点和值存进result，否则更新pre，继续向后走，直到走完。
 
+     #+BEGIN_SRC java
+public List<List<Integer>> getSkyline(int[][] buildings) {
+    List<List<Integer>> ans = new ArrayList<>();
+    List<int[]> hite = new ArrayList<>();
+    for (int [] v : buildings) {
+        hite.add(new int [] {v[0], v[2]});
+        hite.add(new int [] {v[1], -v[2]});
+    }
+    Collections.sort(hite, (a, b)-> b[0] != a[0] ? a[0] - b[0] : b[1] - a[1]);
+    Queue<Integer> q = new PriorityQueue<>((a, b)-> b - a);
+    q.offer(0);
+    int cur = 0, pre = 0;
+    for (int [] h : hite) {
+        if (h[1] > 0) q.offer(h[1]);
+        else q.remove(-h[1]);
+        cur = q.peek();
+        if (pre != cur) {
+            ans.add(List.of(h[0], cur));
+            pre = cur;
+        }
+    }
+    return ans;
+}
+     #+END_SRC
+**** 解题思路与分析: Java divide and conquer solution beats 96% todo
+
+The basic idea is divide the buildings into two subarrays, calculate their skylines respectively, then merge two skylines together.
+
+- https://leetcode.com/problems/the-skyline-problem/discuss/61281/Java-divide-and-conquer-solution-beats-96
+     #+BEGIN_SRC java
+public List<List<Integer>> getSkyline(int[][] buildings) { // todo; divide and conque代码被我改乱了
+    return merge(buildings, 0, buildings.length-1);        // 今天这个题看累了，改天再补这个
+}
+private List<List<Integer>> merge(int[][] buildings, int lo, int hi) {
+    List<List<Integer>> res = new LinkedList<>();
+    if (lo > hi) {
+        return res;
+    } else if (lo == hi) {
+        res.add(List.of(buildings[lo][0], buildings[lo][2]));
+        res.add(List.of(buildings[lo][1], 0));
+        return res;
+    } 
+    int mid = lo+(hi-lo)/2;
+    List<List<Integer>> left = merge(buildings, lo, mid);
+    List<List<Integer>> right = merge(buildings, mid+1, hi);
+    int leftH = 0, rightH = 0;
+    while(!left.isEmpty() || !right.isEmpty()) {
+        long x1 = left.isEmpty()? Long.MAX_VALUE: left.peekFirst()[0];
+        long x2 = right.isEmpty()? Long.MAX_VALUE: right.peekFirst()[0];
+        int x = 0;
+        if(x1 < x2) {
+            int[] temp = left.pollFirst();
+            x = temp[0];
+            leftH = temp[1];
+        } else if(x1 > x2) {
+            int[] temp = right.pollFirst();
+            x = temp[0];
+            rightH = temp[1];
+        } else {
+            x = left.peekFirst()[0];
+            leftH = left.pollFirst()[1];
+            rightH = right.pollFirst()[1];
+        }
+        int h = Math.max(leftH, rightH);
+        if(res.isEmpty() || h != res.peekLast()[1])
+            res.add(List.of(x, h));
+    }
+    return res;
+}
+     #+END_SRC
 *** 715. Range Module - Hard
 A Range Module is a module that tracks ranges of numbers. Design a data structure to track the ranges represented as half-open intervals and query about them.
 
@@ -13183,25 +13427,53 @@ Return true if all the rectangles together form an exact cover of a rectangular 
     [[./pic/rect.png]]
     
 #+BEGIN_SRC java
-public boolean isRectangleCover(int[][] rectangles) { // 这个还需要好好消化一下
+public boolean isRectangleCover(int[][] arr) {
     Map<String, Integer> m = new HashMap<>();
-    for (int [] a : rectangles) 
-        for (int i = 0; i < 4; i++) { // 分别把每个矩形的四个顶点存了起来，并计算个数
-            String tmp = Integer.toString(a[i/2*2]) + "," + Integer.toString(a[i % 2 * 2 + 1]); // 
-            if ((m.getOrDefault(tmp, 0) & (1 << i)) > 0) return false;
-            m.put(tmp, m.getOrDefault(tmp, 0) | (1 << i));
+    for (int [] a : arr) 
+        for (int i = 0; i < 4; i++) { // [0 1 2 3]四种类型的顶点，第个位置每个类型最多出现一次
+            String cur = a[i / 2 * 2] + "-" + a[i % 2 * 2 + 1];        // 记录从左下角开始逆时针的四个顶点 [0 1 2 3]: 左下，右下，右上，左上
+            if ((m.getOrDefault(cur, 0) & (1 << i)) > 0) return false; // 同一形状、同一个角型出现了重叠
+            m.put(cur, m.getOrDefault(cur, 0) | (1 << i));
         }
-    int cntCorner = 0;
+    int cnt = 0;
     for (Map.Entry<String, Integer> en : m.entrySet()) {
         int v = en.getValue();
-        if ((v & (v -1)) == 0 && cntCorner++ > 4) return false;
-        if ((v & (v-1)) > 0 && !(v == 3 || v == 12 || v == 5 || v == 10 || v ==  15))
+        if ((v & (v-1)) == 0 && cnt++ > 4) return false; // 只出现一次的顶点最多只有四个
+        // if ((v & (v-1)) > 0 && !(v == 15 || v == 10 || v == 12 || v == 5 || v == 3)) // 是test case太弱吗？检测不出来？
+        if ((v & (v-1)) > 0 && !(v == 15 || v == 12 || v == 10 || v == 9 || v == 5 || v == 3)) // 所有合法的子集除外
             return false;
     }
-    return true;
+    return true; // 所有的点都合法了，就不用检测面积了
 }
 #+END_SRC
-**** 解题思路与分析: 这个就当帮上一个方法理解消化
+**** 解题思路与分析
+    
+    [[./pic/rect2.png]]
+#+BEGIN_SRC java
+public boolean isRectangleCover(int[][] arr) {
+    Set<String> s = new HashSet<>();
+    int i = Integer.MAX_VALUE, j = Integer.MAX_VALUE, x = Integer.MIN_VALUE, y = Integer.MIN_VALUE, sum = 0;
+    for (int [] a : arr) {
+        i = Math.min(i, a[0]);
+        j = Math.min(j, a[1]);
+        x = Math.max(x, a[2]);
+        y = Math.max(y, a[3]);
+        sum += (a[2] - a[0]) * (a[3] - a[1]);
+        String bl = a[0] + "-" + a[1], tl = a[2] + "-" + a[1];
+        String br = a[0] + "-" + a[3], tr = a[2] + "-" + a[3];
+        if (!s.contains(bl)) s.add(bl); else s.remove(bl);
+        if (!s.contains(br)) s.add(br); else s.remove(br);
+        if (!s.contains(tl)) s.add(tl); else s.remove(tl);
+        if (!s.contains(tr)) s.add(tr); else s.remove(tr);
+    }
+    String a = i + "-" + j, b = i + "-" + y;
+    String c = x + "-" + j, d = x + "-" + y;
+    if (!s.contains(a) || !s.contains(b) || !s.contains(c) || !s.contains(d) || s.size() != 4)
+        return false;
+    return sum == (x - i) * (y - j);
+}
+#+END_SRC    
+**** 解题思路与分析: 这个就当帮上面第一个方法再理解消化一下c++
     
     [[./pic/rect3.png]]
 #+BEGIN_SRC cpp
@@ -13234,37 +13506,6 @@ bool isValid(unordered_map<string, int>& m, string corner, int type) {
     return true;
 }
 #+END_SRC
-**** 解题思路与分析
-    
-    [[./pic/rect2.png]]
-#+BEGIN_SRC java
-public boolean isRectangleCover(int[][] rectangles) {
-    Set<String> st = new HashSet<>();
-    int i = Integer.MAX_VALUE, j = Integer.MAX_VALUE, x = Integer.MIN_VALUE, y = Integer.MIN_VALUE, sum = 0;
-    for (int [] a : rectangles) {
-        i = Math.min(i, a[0]);
-        j = Math.min(j, a[1]);
-        x = Math.max(x, a[2]);
-        y = Math.max(y, a[3]);
-        sum += (a[2] - a[0]) * (a[3] - a[1]); 
-        String e = a[0] + "_" + a[1]; // bot - left
-        String b = a[0] + "_" + a[3]; // top - left
-        String c = a[2] + "_" + a[3]; // top - right
-        String d = a[2] + "_" + a[1]; // bot - right
-        if (st.contains(e)) st.remove(e); else st.add(e);
-        if (st.contains(b)) st.remove(b); else st.add(b);
-        if (st.contains(c)) st.remove(c); else st.add(c);
-        if (st.contains(d)) st.remove(d); else st.add(d);
-    }
-    String a = i + "_" + j;
-    String b = i + "_" + y;
-    String c = x + "_" + y;
-    String d = x + "_" + j;
-    if (!st.contains(a) || !st.contains(b) || !st.contains(c) || !st.contains(d) || st.size() != 4)
-        return false;
-    return sum == (y - j) * (x - i);
-}
-#+END_SRC    
 
 * Bit Manipulations
 **  基本概念：原码、反码、与补码 （对负数尤其重要）
