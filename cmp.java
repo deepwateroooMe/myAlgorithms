@@ -132,64 +132,78 @@ public class cmp {
         //     return null;
         // }
 
-        public String getDirections(TreeNode root, int startValue, int destValue) { // 需要再稍微系统化地组织一下思路
-            List<TreeNode> one = new ArrayList<>();
-            List<TreeNode> two = new ArrayList<>();
-            dfs(root, startValue, one, a);
-            dfs(root, destValue, two, b);
-            // System.out.println("one.size(): " + one.size());
-            // System.out.println(Arrays.toString(one.toArray()));
-            // System.out.println("two.size(): " + two.size());
-            // System.out.println(Arrays.toString(two.toArray()));
-            int m = one.size(), n = two.size(), i = 0;
-            TreeNode p = null;
-            for ( i = Math.min(m, n)-1; i >= 0; i--) 
-                if (one.get(i) == two.get(i)) {
-                    p = one.get(i);
-                    break;
-                }
+        // public String getDirections(TreeNode root, int startValue, int destValue) { // 需要再稍微系统化地组织一下思路
+        //     // List<TreeNode> one = new ArrayList<>();
+        //     // List<TreeNode> two = new ArrayList<>();
+        //     dfs(root, startValue, one, a);
+        //     dfs(root, destValue, two, b);
+        //     int m = one.size(), n = two.size(), i = 0;
+        //     TreeNode p = null;
+        //     for ( i = Math.min(m, n)-1; i >= 0; i--) 
+        //         if (one.get(i) == two.get(i)) {
+        //             p = one.get(i);
+        //             break;
+        //         }
+        //     String ans = "";
+        //     for (int j = m-1; j >= i; j--) 
+        //         ans += "U";
+        //     for (; i < n-1; i++) {
+        //         if (two.get(i+1) == two.get(i).left) ans += "L";
+        //         else ans += "R";
+        //     }
+        //     ans += (b == two.get(i).left ? "L" : "R");
+        //     return ans;
+        // }
+        // TreeNode a = null, b = null;
+        // boolean dfs(TreeNode r, int v, List<TreeNode> l, TreeNode tmp) {
+        //     if (r == null) return false;
+        //     if (r.val == v) {
+        //         tmp = r;
+        //         return true;
+        //     }
+        //     l.add(r);
+        //     if (dfs(r.left, v, l, tmp)) return true;
+        //     return dfs(r.right, v, l, tmp);
+        //     // l.remove(new Integer(r.val));
+        // }
+        public String getDirections(TreeNode root, int startValue, int destValue) { // memory limit 287/332
+            dfs(root, startValue, "", true);
+            dfs(root, destValue, "", false);
             String ans = "";
-            for (int j = m-1; j >= i; j--) 
-                ans += "U";
-            for (; i < n-1; i++) {
-                if (two.get(i+1) == two.get(i).left) ans += "L";
-                else ans += "R";
-            }
-            ans += (b == two.get(i).left ? "L" : "R");
-            return ans;
+            int m = one.length(), n = two.length(), i = 0;
+            for ( i = 0; i < Math.min(n, m); i++) 
+                if (one.charAt(i) != two.charAt(i)) break;
+            return "U".repeat(m-i) + two.substring(i);
         }
-        TreeNode a = null, b = null;
-        boolean dfs(TreeNode r, int v, List<TreeNode> l, TreeNode tmp) {
+        String one, two;
+        boolean dfs(TreeNode r, int v, String s, boolean isOne) {
             if (r == null) return false;
             if (r.val == v) {
-                tmp = r;
+                if (isOne) one = s;
+                else two = s;
                 return true;
             }
-            l.add(r);
-            if (dfs(r.left, v, l, tmp)) return true;
-            return dfs(r.right, v, l, tmp);
-            // l.remove(new Integer(r.val));
+            if (dfs(r.left, v, s + "L", isOne)) return true;
+            return dfs(r.right, v, s + "R", isOne);
         }
 
     }
     public static void main (String[] args) {
         Solution s = new Solution ();
-
         // int [][] a = new int [][] {{5,1},{4,5},{11,9},{9,4}};
-
         // int [][] r = s.validArrangement(a);
         // System.out.println("r.length: " + r.length);
         // for (int z = 0; z < r.length; ++z) 
         //     System.out.println(Arrays.toString(r[z]));
-        
 
-        int []  a = new int []  {5, 1, 2, 3, -1, 6, 4};
+        // int []  a = new int []  {5, 1, 2, 3, -1, 6, 4};
+        int [] a = new int [] {2, 1};
 
         TreeNode root = new TreeNode(a[0]);
         root.buildTree(root, a);
         root.levelPrintTree(root);
         
-        String r = s.getDirections(root, 3, 6);
+        String r = s.getDirections(root, 2, 1);
         System.out.println("r: " + r);
         
     }
