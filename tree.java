@@ -291,24 +291,307 @@ public class tree {
         //     return res;
         // }
 
+        // public TreeNode recoverFromPreorder(String t) {
+        //     int n = t.length(), i = t.indexOf("-"), j = 0, cnt = 0, pre = 0;
+        //     if (i == -1) return new TreeNode(Integer.parseInt(t));
+        //     char [] s = t.toCharArray();
+        //     TreeNode root = new TreeNode(Integer.parseInt(t.substring(0, i))), r = root;
+        //     ArrayDeque<TreeNode> st = new ArrayDeque<>();
+        //     st.offerLast(r);
+        //     while (i < n) {
+        //         j = i;
+        //         while (j < n && s[j] == '-') j++;
+        //         cnt = j - i;
+        //         i = j;
+        //         while (i < n && Character.isDigit(s[i])) i++; // 1st -
+        //         int v = Integer.parseInt(t.substring(j, i));
+        //         if (cnt == pre + 1) {
+        //             r.left = new TreeNode(v);
+        //             r = r.left;
+        //         } else {
+        //             if (cnt == pre) 
+        //                 st.pollLast(); // 左节点这里已经扔出去了
+        //             else
+        //                 while (!st.isEmpty() && st.size() > cnt) st.pollLast();
+        //             st.peekLast().right = new TreeNode(v);
+        //             r = st.peekLast().right; //
+        //             // r = st.pollLast().right; // 当已经把左节点扔出去后，父节点不可以扔掉
+        //         }
+        //         st.offerLast(r);
+        //         pre = cnt;
+        //         cnt = 0;
+        //     }
+        //     return root;
+        // }
+        // public TreeNode recoverFromPreorder(String t) {
+        //     Deque<TreeNode> st = new LinkedList<TreeNode>();
+        //     char [] s = t.toCharArray();
+        //     int n = t.length();
+        //     int idx = 0;
+        //     while (idx < n) {
+        //         int lvl = 0;
+        //         while (s[idx] == '-') {
+        //             ++lvl;
+        //             ++idx;
+        //         }
+        //         int val = 0;
+        //         while (idx < n && Character.isDigit(s[idx])) {
+        //             val = val * 10 + (s[idx] - '0');
+        //             ++idx;
+        //         }
+        //         TreeNode node = new TreeNode(val);
+        //         if (lvl == st.size()) {
+        //             if (!st.isEmpty()) 
+        //                 st.peekLast().left = node;
+        //         } else {
+        //             while (lvl != st.size()) 
+        //                 st.pollLast();
+        //             st.peekLast().right = node;
+        //         }
+        //         st.offerLast(node);
+        //     }
+        //     while (st.size() > 1) st.pollLast();
+        //     return st.peekLast();
+        // }
+        // private int idx = 0; // 遍历S的全局指针
+        // public TreeNode recoverFromPreorder(String S) {
+        //     if (S.isEmpty()) return null;
+        //     return buildBinaryTree(S.toCharArray(), 0);
+        // }
+        // public TreeNode buildBinaryTree(char[] ss, int depth) {
+        //     // 判定当前节点是否是null
+        //     if (idx + depth >= ss.length || isNullPointer(ss, depth)) return null;
+        //     idx += depth; // idx指针跳过depth个'-'，指向下一个节点的开始位置
+        //     // 左右子树递归
+        //     TreeNode root = new TreeNode(getValue(ss));
+        //     root.left = buildBinaryTree(ss, depth + 1);
+        //     root.right = buildBinaryTree(ss, depth + 1);
+        //     // 返回当前节点
+        //     return root;
+        // }
+        // // 获取当前节点的val值，由于可能有多位，需要遍历一下
+        // public int getValue(char[] ss) {
+        //     int value = 0;
+        //     while (idx < ss.length && ss[idx] != '-') {
+        //         value = value * 10 + (ss[idx] - '0');
+        //         idx ++;
+        //     }
+        //     return value;
+        // }
+        // // 判断当前位置的节点是不是null
+        // public boolean isNullPointer(char[] ss, int depth) {
+        //     for (int i = idx; i < idx + depth; i ++) 
+        //         if (ss[i] != '-') return true;
+        //     return false;
+        // }
+        // public TreeNode recoverFromPreorder(String S) {
+        //     if (S.isEmpty()) return null;
+        //     n = S.length();
+        //     return buildBinaryTree(S.toCharArray(), 0);
+        // }
+        // private int idx = 0, n; // 遍历S的全局指针
+        // TreeNode buildBinaryTree(char [] s, int level) {
+        //     int cnt = 0, val = 0;
+        //     while (idx + cnt < n && s[idx + cnt] == '-') ++cnt;
+        //     if (cnt != level) return null;
+        //     idx += cnt;
+        //     for (; idx < n && s[idx] != '-'; idx++) 
+        //         val = val * 10 + s[idx] - '0';
+        //     TreeNode r =  new TreeNode(val);
+        //     r.left = buildBinaryTree(s, level + 1);
+        //     r.right = buildBinaryTree(s, level + 1);
+        //     return r;
+        // }
 
-        public int checkWays(int[][] pairs) {
-        
-        }        
+        // public int checkWays(int[][] pairs) { // 自顶向下
+        //     int max = 0;
+        //     for (int [] p : pairs)
+        //         max = Math.max(max, Math.max(p[0], p[1]));
+        //     int [] cnt = new int [max+1]; 
+        //     int [][] adj = new int [max+1][max+1];
+        //     for (int [] p : pairs) {
+        //         cnt[p[0]]++;
+        //         cnt[p[1]]++;
+        //         adj[p[0]][p[1]] = 1;
+        //         adj[p[1]][p[0]] = 1;
+        //     }
+        //     Integer [] nodes = new Integer[max+1];
+        //     int n = 0;
+        //     for (int i = 1; i <= max; i++) 
+        //         if (cnt[i] > 0) nodes[n++] = i;
+        //     Arrays.sort(nodes, 0, n, (a, b)->cnt[b] - cnt[a]); // 按照出现的频率倒序排列
+        //     if (cnt[nodes[0]] != n-1) return 0; 
+        //     int [] par = new int [max+1];
+        //     int [][] allPar = new int [max+1][max+1];
+        //     for (int i = 0; i < n; i++) 
+        //         for (int j = i-1; j >= 0; j--) 
+        //             if (adj[nodes[i]][nodes[j]] == 1) {
+        //                 par[nodes[i]] = nodes[j];
+        //                 for (int k = nodes[j]; k != 0; k = par[k]) // 自底向上： 向祖先节点遍历
+        //                     allPar[nodes[i]][k] = 1;
+        //                 break; // 父节点只有一个，已经找到一个合法父节点，并且更新了所有的父节点，就可以不用再遍历了
+        //             }
+        //     int ans = 1;
+        //     for (int i = 1; i <= max; i++) 
+        //         for (int j = i+1; j <= max; j++) {
+        //             if (adj[i][j] == 1 && cnt[i] == cnt[j]) ans = 2;
+        //             if (adj[i][j] != (allPar[i][j] | allPar[j][i])) return 0;
+        //         }
+        //     return ans;
+        // }
+
+        // public int[] getCoprimes(int[] a, int[][] edges) {
+        //     cop = new boolean [51][51];
+        //     for (int i = 1; i < 51; i++) 
+        //         for (int j = 1; j < 51; j++) 
+        //             if (!cop[i][j] && gcd(i, j) == 1) {
+        //                 cop[i][j] = true;
+        //                 cop[j][i] = true;
+        //             }
+        //     int n = a.length;
+        //     tree = new ArrayList[n];
+        //     for (int i = 0; i < n; i++) tree[i] = new ArrayList<>();
+        //     for (int [] e : edges) {
+        //         tree[e[0]].add(e[1]);
+        //         tree[e[1]].add(e[0]);
+        //     }
+        //     ans = new int [n];
+        //     Arrays.fill(ans, -1);
+        //     vis = new boolean [n];
+        //     dfs(0, 0, a);
+        //     return ans;
+        // }
+        // Map<Integer, int []> m = new HashMap<>(); // k, v: value, [depth, ndIndex]
+        // ArrayList<Integer>[] tree;
+        // boolean [][] cop;
+        // boolean [] vis;
+        // int [] ans;
+        // void dfs(int dp, int nd, int [] a) { // dp: depth; nd: node
+        //     if (vis[nd]) return ;
+        //     vis[nd] = true;
+        //     int par = -1, d = Integer.MAX_VALUE; // parent, depth of ancestor
+        //     for (int i = 1; i < 51; i++) 
+        //         if (cop[a[nd]][i] && m.containsKey(i)) 
+        //             if (dp - m.get(i)[0] <= d) { // 
+        //                 d = dp - m.get(i)[0];
+        //                 par = m.get(i)[1];
+        //             }
+        //     ans[nd] = par;
+        //     int [] ext = (m.containsKey(a[nd]) ? m.get(a[nd]) : new int [] {-1, -1});
+        //     m.put(a[nd], new int [] {dp, nd});
+        //     for (Integer next : tree[nd]) {
+        //         if (vis[next]) continue;
+        //         dfs(dp + 1, next, a);
+        //     }
+        //     if (ext[0] != -1) m.put(a[nd], ext);
+        //     else m.remove(a[nd]);
+        // }
+        // int gcd(int x, int y) {
+        //     if (y == 0) return x;
+        //     return gcd(y, x % y);
+        // }
+        // vector<int> getCoprimes(vector<int>& nums, vector<vector<int>>& edges) {
+        //     int n = nums.size();
+        //     G.resize(n);
+        //     for(auto& e : edges) {
+        //         G[e[0]].push_back(e[1]);
+        //         G[e[1]].push_back(e[0]);
+        //     }
+        //     res.resize(n);
+        //     dfs(0, -1, 0, nums);
+        //     return res;
+        // }
+        // vector<vector<int>> G;
+        // stack<pair<int,int>> lasts[55];
+        // vector<int> res;
+        // void dfs(int node, int pre, int level, vector<int>& a) {
+        //     int re = -1, lev = -1;
+        //     for(int i = 1; i <= 50; ++i) {
+        //         if(lasts[i].size() && lasts[i].top().first > lev && __gcd(i, a[node]) == 1) {
+        //             re = lasts[i].top().second;
+        //             lev = lasts[i].top().first;
+        //         }
+        //     }
+        //     res[node] = re;
+        //     for(int ne : G[node]) {
+        //         if(ne != pre) {
+        //             lasts[a[node]].push({level, node});
+        //             dfs(ne, node, level + 1, a);
+        //             lasts[a[node]].pop();
+        //         }
+        //     }
+        // }
+        // public int[] getCoprimes(int[] a, int[][] edges) {
+        //     cop = new boolean [51][51];
+        //     for (int i = 1; i < 51; i++) 
+        //         for (int j = 1; j < 51; j++) 
+        //             if (!cop[i][j] && gcd(i, j) == 1) {
+        //                 cop[i][j] = true;
+        //                 cop[j][i] = true;
+        //             }
+        //     int n = a.length;
+        //     li = new ArrayList[n];
+        //     for (int i = 0; i < n; i++) li[i] = new ArrayList<>();
+        //     for (int [] e : edges) {
+        //         li[e[0]].add(e[1]);
+        //         li[e[1]].add(e[0]);
+        //     }
+        //     ans = new int [n];
+        //     for (int i = 0; i < 51; i++) 
+        //         st[i] = new ArrayDeque<>();
+        //     dfs(0, -1, 0, a);
+        //     return ans;
+        // }
+        // List<Integer>[] li;
+        // ArrayDeque<int []> [] st = new ArrayDeque[51];
+        // boolean [][] cop;
+        // int [] ans;
+        // void dfs(int node, int pre, int level, int [] a) {
+        //     int re = -1, lev = -1;
+        //     for (int i = 1; i < 51; i++) 
+        //         if (st[i].size() > 0 && st[i].peekLast()[0] > lev && cop[i][a[node]]) {
+        //             re = st[i].peekLast()[1];
+        //             lev = st[i].peekLast()[0];
+        //         }
+        //     ans[node] = re;
+        //     for (int next : li[node]) {
+        //         if (next != pre) {
+        //             st[a[node]].offerLast(new int [] {level, node});
+        //             dfs(next, node, level + 1, a);
+        //             st[a[node]].pollLast();
+        //         }
+        //     }
+        // }
+        // int gcd(int x, int y) {
+        //     if (y == 0) return x;
+        //     return gcd(y, x % y);
+        // }
+
+        public TreeNode canMerge(List<TreeNode> trees) {
+            
+        }
     }
         
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        // int []  a = new int []  { 1, 3, 2, 5, 3, -1, 9};
-        int []  a = new int []  {1, 3, 2, 5, -1, -1, 9, 6, -1, -1, 7};
+        // int []  a = new int []  {2, 3, 3, 2};
+        // int [][] b = new int [][] {{0,1},{1,2},{1,3}};
+        int []  a = new int []  {5, 6, 10, 2, 3, 6, 15};
+        int [][] b = new int [][] {{0,1},{0,2},{1,3},{1,4},{2,5},{2,6}};
 
-        TreeNode root = new TreeNode(a[0]);
-        root.buildTree(root, a);
-        root.levelPrintTree(root);
-
-        int r = s.widthOfBinaryTree(root);
-        System.out.println("r: " + r);
-        
+        int [] r = s.getCoprimes(a, b);
+        System.out.println(Arrays.toString(r));
     }
 }
+
+// TreeNd root = new TreeNode(a[0]);
+// root.buildTree(root, a);
+// root.lvlPrintTree(root);
+
+
+
+
+
+
+

@@ -465,19 +465,360 @@ public class hardOne {
         //     return res;
         // }
 
-        public List<String> addOperators(String num, int target) {
-            
+        // public List<String> findItinerary(List<List<String>> tickets) {
+        //     for (List<String> t : tickets) 
+        //         m.computeIfAbsent(t.get(0), z -> new PriorityQueue<>()).offer(t.get(1));
+        //     List<String> ans = new ArrayList<>();
+        //     dfs("JFK", ans);
+        //     Collections.reverse(ans);
+        //     return ans;
+        // }
+        // Map<String, PriorityQueue<String>> m = new HashMap<>(); // PriorityQueue: 这里面有一个自动升序排序功能
+        // void dfs(String s, List<String> l) {
+        //     Queue<String> next = m.get(s);
+        //     while (next != null && next.size() > 0)
+        //         dfs(next.poll(), l);
+        //     l.add(s);
+        // }
+        // public List<String> findItinerary(String[][] tickets) {
+        //     LinkedList<String> ans = new LinkedList<>();
+        //     for (String[] t : tickets)
+        //         map.computeIfAbsent(t.get(0), z -> new ArrayList<>()).offer(t.get(1));
+        //     dfs("JFK", ans);
+        //     return new ArrayList<String>(ans); // LinkedList最后需要转换成ArrayList
+        // }
+        // HashMap<String, PriorityQueue<String>> map = new HashMap<>();
+        // void dfs(String airport, LinkedList<String> list) {
+        //     while (map.containsKey(airport) && !map.get(airport).isEmpty())
+        //         dfs(map.get(airport).poll(), l);
+        //     list.offerFirst(airport); // LinkedList可以这么写
+        // }
+        // public List<String> findItinerary(List<List<String>> tickets) { // todo: 这个算法还比较陌生
+        //     for (List<String> t : tickets) 
+        //         adj.computeIfAbsent(t.get(0), z -> new ArrayList<>()).add(t.get(1));
+        //     for (List<String> values : adj.values()) Collections.sort(values);
+        //     String u = "JFK";
+        //     ans.add(u);
+        //     fleuryProcess(u);
+        //     return ans;
+        // }
+        // Map<String, List<String>> adj = new HashMap<>();
+        // List<String> ans = new ArrayList<>();
+        // private void fleuryProcess(String u) {
+        //     if (!adj.containsKey(u)) return ;
+        //     for (int i = 0; i < adj.get(u).size(); i++) {
+        //         String v = adj.get(u).get(i);
+        //         if (isValidNextEdge(u, v)) {
+        //             ans.add(v);
+        //             adj.get(u).remove(v);
+        //             fleuryProcess(v);
+        //         }
+        //     }
+        // }
+        // private boolean isValidNextEdge(String u, String v) {
+        //     if (adj.get(u).size() == 1) return true;
+        //     Map<String, Boolean> vis = new HashMap<>(); // vis: visited
+        //     int cnt1 = dfs(u, vis);
+        //     adj.get(u).remove(v);
+        //     vis.clear(); 
+        //     int cnt2 = dfs(v, vis);
+        //     adj.get(u).add(0, v);
+        //     return cnt1 <= cnt2; // 这里比较未访问节点个数
+        // }
+        // private int dfs(String u, Map<String, Boolean> vis) {
+        //     vis.put(u, true);
+        //     int cnt = 1;
+        //     if (adj.containsKey(u)) 
+        //         for (String v : adj.get(u)) 
+        //             if (vis.get(v) == null || (vis.get(v) != null && !vis.get(v))) 
+        //                 cnt += dfs(v, vis);
+        //     return cnt;
+        // }
+
+        // public String crackSafe(int n, int k) {
+        //     N = (int)Math.pow(k, n); // 第个位有k种取值,总共有k^n种不同的状态
+        //     s = new StringBuilder ("0".repeat(n));
+        //     Set<String> ss = new HashSet<>(List.of(s.toString()));
+        //     dfs(ss, n, k);
+        //     return s.toString();
+        // }
+        // StringBuilder s;
+        // int N;
+        // boolean dfs(Set<String> ss, int n, int k) { // dfs backtracking 的思路，代码比较繁琐
+        //     if (ss.size() == N) return true; // 如果已经遍历了所有的状态，相当于走完了回路，必定有某种状态可以开锁？
+        //     String pre = s.substring(s.length() - (n-1));
+        //     for (int i = 0; i < k; i++) {
+        //         String cur = pre + i;
+        //         if (ss.contains(cur)) continue;
+        //         s.append(i + "");
+        //         ss.add(cur);
+        //         if (dfs(ss, n, k)) return true;
+        //         s.deleteCharAt(s.length()-1);
+        //         ss.remove(cur);
+        //     }
+        //     return false;
+        // }
+        // public String crackSafe(int n, int k) {
+        //     int N = (int)Math.pow(k, n); // 第个位有k种取值,总共有k^n种不同的状态
+        //     String s = "0".repeat(n);
+        //     Set<String> ss = new HashSet<>(List.of(s.toString()));
+        //     for (int i = 0; i < N; i++) {
+        //         String pre = s.substring(s.length() - (n-1));
+        //         // for (int j = 0; j < k; j++) { // 这里需要倒回来
+        //         for (int j = k-1; j >= 0; j--) { 
+        //             String cur = pre + String.valueOf(j);
+        //             if (!ss.contains(cur)) {
+        //                 ss.add(cur);
+        //                 s += "" + j;
+        //                 break;
+        //             }
+        //         }
+        //     }
+        //     return s;
+        // }
+        // public String crackSafe(int n, int k) {
+        //     N = (int)Math.pow(k, n); // 第个位有k种取值,总共有k^n种不同的状态
+        //     s = "0".repeat(n);
+        //     Set<String> ss = new HashSet<>(List.of(s.toString()));
+        //     dfs(ss, n, k);
+        //     return s;
+        // }
+        // String s;
+        // int N;
+        // void dfs(Set<String> ss, int n, int k) {
+        //     if (ss.size() == N) return; 
+        //     String pre = s.substring(s.length() - (n-1));
+        //     for (int i = k-1; i >= 0; i--) {
+        //         String cur = pre + i;
+        //         if (ss.contains(cur)) continue;
+        //         s += "" + i;
+        //         ss.add(cur);
+        //         dfs(ss, n, k);
+        //     }
+        // }
+        // public String crackSafe(int n, int k) {
+        //     highest = (int) Math.pow(10, n - 1);
+        //     this.k = k;
+        //     dfs(0);
+        //     return ans + "0".repeat(n-1);
+        // }
+        // Set<Integer> vis = new HashSet<Integer>();
+        // StringBuffer ans = new StringBuffer();
+        // int highest;
+        // int k;
+        // public void dfs(int node) {
+        //     for (int i = 0; i < k; i++) {
+        //         int next = node * 10 + i;
+        //         if (!vis.contains(next)) {
+        //             vis.add(next);
+        //             dfs(next % highest);
+        //             ans.append(i); // 这里dfs之后才添加的顺序狠重要
+        //         }
+        //     }
+        // }
+
+        // public int minCost(int[][] g) {
+        //     int [][] dirs = {{0, 0}, {0, 1}, {0, -1}, {1, 0}, {-1, 0}}; 
+        //     int m = g.length, n = g[0].length;
+        //     int [][] d = new int [m][n]; // dist to [0, 0]
+        //     for (int i = 0; i < m; i++) 
+        //         Arrays.fill(d[i], Integer.MAX_VALUE);
+        //     d[0][0] = 0;
+        //     Queue<int []> q = new LinkedList<>();
+        //     q.offer(new int [] {0, 0});
+        //     while (!q.isEmpty()) {
+        //         int [] cur = q.poll();
+        //         int i = cur[0], j = cur[1];
+        //         for (int k = 1; k < 5; k++) {
+        //             int x = i + dirs[k][0], y = j + dirs[k][1];
+        //             if (x < 0 || x >= m || y < 0 || y >= n) continue;
+        //             int newDist = d[i][j] + (k == g[i][j] ? 0 : 1);
+        //             if (newDist < d[x][y]) {
+        //                 d[x][y] = newDist;
+        //                 q.offer(new int [] {x, y});
+        //             }
+        //         }
+        //     }
+        //     return d[m-1][n-1];
+        // }
+        // public int minCost(int[][] g) {
+        //     int [][] dirs = {{0, 0}, {0, 1}, {0, -1}, {1, 0}, {-1, 0}}; 
+        //     int m = g.length, n = g[0].length;
+        //     int [][] d = new int [m][n]; 
+        //     for (int i = 0; i < m; i++) 
+        //         Arrays.fill(d[i], Integer.MAX_VALUE);
+        //     d[0][0] = 0;
+        //     boolean [][] in = new boolean [m][n];
+        //     Queue<int []> q = new LinkedList<>();
+        //     q.offer(new int [] {0, 0});
+        //     in[0][0] = true;
+        //     while (!q.isEmpty()) {
+        //         int [] cur = q.poll();
+        //         int i = cur[0], j = cur[1];
+        //         in[i][j] = false;
+        //         for (int k = 1; k < 5; k++) {
+        //             int x = i + dirs[k][0], y = j + dirs[k][1];
+        //             if (x < 0 || x >= m || y < 0 || y >= n) continue;
+        //             int newDist = d[i][j] + (k == g[i][j] ? 0 : 1);
+        //             if (newDist < d[x][y]) {
+        //                 d[x][y] = newDist;
+        //                 if (!in[x][y]) {
+        //                     q.offer(new int [] {x, y});
+        //                     in[x][y] = true;
+        //                 }
+        //             }
+        //         }
+        //     }
+        //     return d[m-1][n-1];
+        // }
+        // public int minCost(int[][] g) {
+        //     int m = g.length, n = g[0].length;
+        //     int [][] d = new int [m][n]; // dist to [0, 0]
+        //     for (int i = 0; i < m; i++) 
+        //         Arrays.fill(d[i], Integer.MAX_VALUE);
+        //     d[0][0] = 0;
+        //     int [][] dirs = {{0, 0}, {0, 1}, {0, -1}, {1, 0}, {-1, 0}}; // [0, 1, 2, 3, 4]
+        //     boolean [][] vis = new boolean [m][n];
+        //     ArrayDeque<Integer> q = new ArrayDeque<>();
+        //     q.offerFirst(0);
+        //     while (!q.isEmpty()) {
+        //         int idx = q.pollFirst();
+        //         int i = idx / n, j = idx % n;
+        //         if (vis[i][j]) continue;
+        //         if (i == m-1 && j == n-1) return d[i][j]; // 终点第一次出队的时候，dist里存的就是最短路距离
+        //         vis[i][j] = true;
+        //         for (int k = 1; k < 5; k++) {
+        //             int x = i + dirs[k][0], y = j + dirs[k][1];
+        //             if (x < 0 || x >= m || y < 0 || y >= n) continue;
+        //             int cost = k == g[i][j] ? 0 : 1;
+        //             if (!vis[x][y] && d[x][y] > d[i][j] + cost) {
+        //                 d[x][y] = d[i][j] + cost;
+        //                 if (cost == 0) q.offerFirst(x * n + y);
+        //                 else q.offerLast(x * n + y);
+        //             }
+        //         }
+        //     }
+        //     return -1;
+        // }
+
+        // public int minSwapsCouples(int[] a) {
+        //     int n = a.length;
+        //     Map<Integer, Integer> m = new HashMap<>();
+        //     for (int i = 1; i <= n/2; i++) {
+        //         m.put(2 * i - 2, 2 * i - 1);
+        //         m.put(2 * i - 1, 2 * i - 2);
+        //     }
+        //     int cnt = 0, tmp = 0;
+        //     for (int i = 1; i < n; i += 2) 
+        //         if (a[i] != m.get(a[i-1])) {
+        //             for (int j = 0; j < n; j++) 
+        //                 if (a[j] == m.get(a[i-1])) {
+        //                     tmp = a[i];
+        //                     a[i] = a[j];
+        //                     a[j] = tmp;
+        //                     break;
+        //                 }
+        //             cnt++;
+        //         }
+        //     return cnt;
+        // }
+
+        // public boolean isPrintable(int[][] a) { 
+        //     int m = a.length, n = a[0].length, max = Math.max(m, n);
+        //     for (int i = 0; i < m; i++)
+        //         max = Math.max(max, Arrays.stream(a[i]).max().getAsInt());
+        //     int N = max + 1;
+        //     int [] up = new int [N], down = new int [N], left = new int [N], right = new int [N];
+        //     Arrays.fill(up, m);
+        //     Arrays.fill(left, n);
+        //     Arrays.fill(down, -1);
+        //     Arrays.fill(right, -1);
+        //     for (int i = 0; i < m; i++) // 界定每一种着色的上下左右边界，以便接下来排序
+        //         for (int j = 0; j < n; j++) {
+        //             int k = a[i][j];
+        //             up[k] = Math.min(up[k], i);
+        //             down[k] = Math.max(down[k], i);
+        //             left[k] = Math.min(left[k], j);
+        //             right[k] = Math.max(right[k], j);
+        //         }
+        //     // 根据每种着色的界定范围，建立拓扑排序：这后半部分还有点儿不熟练
+        //     // 当前位置颜色 cur 在某个矩阵 k 中但是不为矩阵 k 的颜色时，建立从 k 到 cur 的边，cur 可以存在于多个矩阵中
+        //     boolean [][] nei = new boolean [N][N];  // neighbours
+        //     List<Integer>[] adj = new ArrayList[N]; // 邻接有向图：按照染色的先后顺序
+        //     int [] ins = new int [N];
+        //     for (int i = 0; i < N; i++) adj[i] = new ArrayList<>();
+        //     for (int i = 0; i < m; i++)
+        //         for (int j = 0; j < n; j++) {
+        //             int cur = a[i][j]; // 当前格的最终打印着色
+        //             for (int k = 1; k < N; k++) { // 遍历所有的着色：暴搜当前着色cur是否会在某种着色k之后染色
+        //                 if (k == cur) continue;
+        //                 if (i >= up[k] && i <= down[k] && j >= left[k] && j <= right[k])  // 现着色cur完全处于先前染色k的内部，所以cur是后着色
+        //                     // if (!nei[cur][k]) { // BUG: 是有向图：这里顺序很重要，先染色 是否 与后染色相连/相前后
+        //                     if (!nei[k][cur]) {    // k 先染后， cur 后染色
+        //                         adj[k].add(cur);
+        //                         ins[cur]++;
+        //                         nei[k][cur] = true;
+        //                     }
+        //             }
+        //         }
+        //     List<Integer> l = new ArrayList<>();
+        //     while (true) { // 寻找入度为 0 的颜色点，减小该点连结的点的入度，直到所有点的入度都为 0
+        //         int i;
+        //         for (i = 1; i < N; i++) 
+        //             if (ins[i] == 0) {
+        //                 l.add(i);
+        //                 for (int v : adj[i]) ins[v]--;
+        //                 ins[i] = -1;
+        //                 break;
+        //             }
+        //         if (i == N) break;
+        //     }
+        //     return l.size() == max; // 按照拓扑排序，这所有的染色都可以有序地染出来，那么合法
+        // }
+        public boolean isPrintable(int[][] a) { 
+            int m = a.length, n = a[0].length;
+            Set<Integer> col = new HashSet<>();
+            for (int i = 0; i < m; i++) 
+                for (int j = 0; j < n; j++)
+                    col.add(a[i][j]);
+            for (Integer c : col) {
+                int fi = -1, fj = Integer.MAX_VALUE, li = -1, lj = -1;  // f: first, f row, f col, l: last, l row, l col
+                for (int i = 0; i < m; i++)
+                    for (int j = 0; j < n; j++)
+                        if (a[i][j] == c) {
+                            if (fi == -1) fi = i; // 只记最早出现的第一次
+                            fj = Math.min(fj, j);
+                            li = i;
+                            lj = Math.max(lj, j);
+                        }
+                for (int i = fi; i <= li; i++) 
+                    for (int j = fj; j <= lj; j++) 
+                        if (a[i][j] != c) // a[i][j]是会在当前染色c之后染色的
+                            adj.computeIfAbsent(c, z -> new HashSet<>()).add(a[i][j]);
+            }
+            Set<Integer> vis = new HashSet<>(); // visiting: 只保证先染的着色不会在后染的着色里再次出现
+            for (Integer c : col) 
+                if (!topologicalSort(vis, c)) return false;
+            return true;
+        }
+        Map<Integer, Set<Integer>> adj = new HashMap<>(); // 在key之后染色的着色集合
+        private boolean topologicalSort(Set<Integer> vis, int c) { // 这种写法好陌生
+            if (vis.contains(c)) return false;
+            vis.add(c);
+            for (Integer nei : adj.getOrDefault(c, Collections.emptySet()))
+                if (!topologicalSort(vis, nei)) return false;
+            vis.remove(c);
+            return true;
         }
    }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        int [][] a = new int [][] {{2,9,10},{3,7,15},{5,12,12},{15,20,10},{19,24,8}};
+        // int [][] a = new int [][] {{1,1,1,1},{1,2,2,1},{1,2,2,1},{1,1,1,1}};
+        // int [][] a = new int [][] {{1,2,1},{2,1,2},{1,2,1}};
+        int [][] a = new int [][] {{1,1,1,1},{1,2,2,1},{1,2,2,1},{1,1,1,1}};
 
-        List<List<Integer>> r = s.getSkyline(a);
-        System.out.println("r.size(): " + r.size());
-        for (int z = 0; z < r.size(); ++z) 
-            System.out.println(Arrays.toString(r.get(z).toArray()));
-        
+        boolean r = s.isPrintable(a);
+        System.out.println("r: " + r);
     }
 }

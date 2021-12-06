@@ -7525,7 +7525,7 @@ public class Trie {
 }
 #+END_SRC
 
-*** 另一种位操作法
+**** 另一种位操作法
 
 - 学到了异或操作的一个重要性质：a^b = c, 则有 a^c = b，且 b^c = a;
 
@@ -7577,7 +7577,10 @@ Return an array of size n-1 where the dth element (1-indexed) is the number of s
 
 Notice that the distance between the two cities is the number of edges in the path between them.
 - So apparently the brute-force approach passed this question. I guess for future contests, I should really pay attention to the input size...
-**** 解题思路与分析: 自己凭感觉写的，看别人的代码（尤其写得比较烦琐的前提下）好累，不如自己的代码简炼
+**** 解题思路与分析: 
+
+自己凭感觉写的，看别人的代码（尤其写得比较烦琐的前提下）不如自己的代码简炼
+
      #+BEGIN_SRC java
 public int[] countSubgraphsForEachDiameter(int n, int[][] edges) { 
     int m = n-1, range = 1 << m, root = 0, cnt = 0;
@@ -8075,6 +8078,7 @@ public List<List<String>> deleteDuplicateFolder(List<List<String>> paths) {
 }
 #+END_SRC
 
+
 * Tree树结构：各种新型数据结构
 
 *** 687. Longest Univalue Path
@@ -8259,6 +8263,327 @@ public int distributeCoins(TreeNode root) {
 }
 #+END_SRC
 
+*** 1719. Number Of Ways To Reconstruct A Tree - Hard
+You are given an array pairs, where pairs[i] = [xi, yi], and:
+
+There are no duplicates.
+xi < yi
+Let ways be the number of rooted trees that satisfy the following conditions:
+
+The tree consists of nodes whose values appeared in pairs.
+A pair [xi, yi] exists in pairs if and only if xi is an ancestor of yi or yi is an ancestor of xi.
+Note: the tree does not have to be a binary tree.
+Two ways are considered to be different if there is at least one node that has different parents in both ways.
+
+Return:
+
+0 if ways == 0
+1 if ways == 1
+2 if ways > 1
+A rooted tree is a tree that has a single root node, and all edges are oriented to be outgoing from the root.
+
+An ancestor of a node is any node on the path from the root to that node (excluding the node itself). The root has no ancestors.
+**** 解题思路与分析
+     #+BEGIN_SRC java
+public int checkWays(int[][] pairs) { // 自顶向下
+    int max = 0; // [1, 500]
+    for (int [] p : pairs) // 求出节点的最大值
+        max = Math.max(max, Math.max(p[0], p[1]));
+    int [] cnt = new int [max+1]; // 记录每个节点的祖先关系数量
+    int [][] adj = new int [max+1][max+1]; // 是否存在祖孙关系的图
+    for (int [] p : pairs) {
+        cnt[p[0]]++;
+        cnt[p[1]]++;
+        adj[p[0]][p[1]] = 1;
+        adj[p[1]][p[0]] = 1;
+    }
+    Integer [] nodes = new Integer [max+1]; // 创建一个新的数组，可以方便后面的按祖先关系数量大小将节点排序，和将零散的节点集中到前面。
+    int n = 0; // 使用包装整数类型，方便后面调用API排序
+    for (int i = 1; i <= max; i++) 
+        if (cnt[i] > 0) nodes[n++] = i;
+    Arrays.sort(nodes, 0, n, (a, b)->cnt[b] - cnt[a]); // 按照祖先关系数量从大到小排序
+    if (cnt[nodes[0]] != n-1) return 0; // 当根节点不满足要求
+    int [] par = new int [max+1];
+    int [][] allPar = new int [max+1][max+1];
+    for (int i = 0; i < n; i++) 
+        for (int j = i-1; j >= 0; j--) 
+            if (adj[nodes[i]][nodes[j]] == 1) {
+                par[nodes[i]] = nodes[j]; // 记录父节点
+                for (int f = nodes[j]; f != 0; f = par[f]) // 自底向上： 向祖先节点遍历, 记录祖先节点，循环遍历直到根节点
+                    allPar[nodes[i]][f] = 1;
+                break; // 父节点只有一个，已经找到一个合法父节点，并且更新了所有的父节点，就可以不用再遍历了
+            }
+    int ans = 1;
+    for (int i = 1; i <= max; i++)
+        for (int j = i+1; j <= max; j++) {
+            if (adj[i][j] == 1 && cnt[i] == cnt[j]) ans = 2; // 可以调换位置，有多个解
+            if (adj[i][j] != (allPar[i][j] | allPar[j][i]))
+                return 0; // 有冲突，无解，出现在已经记录了当前节点和祖先节点的关系，但是pairs中没有该关系
+        }
+    return ans;
+}
+     #+END_SRC
+**** 解题思路与分析: dfs: 这个方法好慢
+     #+BEGIN_SRC java
+public int checkWays(int[][] pairs) { // 这个方法好慢
+    for (int [] p : pairs) {
+        adj.computeIfAbsent(p[0], z -> new HashSet<>()).add(p[1]);
+        adj.computeIfAbsent(p[1], z -> new HashSet<>()).add(p[0]);
+    }
+    return helper(adj.keySet());
+}
+Map<Integer, Set<Integer>> adj = new HashMap<>();
+int helper(Set<Integer> nodes) {
+    Map<Integer, List<Integer>> lenMap = new HashMap<>();
+    for (Integer v : nodes) 
+        lenMap.computeIfAbsent(adj.get(v).size(), z -> new ArrayList<>()).add(v);
+    if (!lenMap.containsKey(nodes.size()-1)) return 0; // 不存在合法的根节点
+    Integer root = lenMap.get(nodes.size()-1).get(0);  // 这个任命为根的节点是否带有随机性？：lenMap里key为nodes.size()-1的值应该只有一个
+    for (Integer v : adj.get(root)) // 因为需要dfs自顶向下深度遍历，这些东西需要移掉
+        adj.get(v).remove(root);
+    Set<Integer> vis = new HashSet<>();
+    Set<Set<Integer>> group = new HashSet<>(); // 以每个节点作为根节点的子树子节点集合
+    for (Integer v : nodes)
+        if (!v.equals(root) && !vis.contains(v)) {
+            Set<Integer> cur = new HashSet<>();
+            dfs(vis, v, cur);
+            group.add(cur);
+        }
+    int ans = lenMap.get(nodes.size()-1).size() > 1 ? 2 : 1; // 如果根节点不止不一个，就可能有并行答案
+    for (Set<Integer> g : group) { // 自顶向下：遍历根节点下每个节点的建树是否合法、是否唯一
+        int tmp = helper(g);
+        if (tmp == 0) return 0; // 不存在合法的根节点
+        if (tmp == 2) ans = 2;
+    }
+    return ans;
+}
+private void dfs(Set<Integer> vis, int node, Set<Integer> cur) {
+    vis.add(node);
+    cur.add(node);
+    for (int next : adj.get(node)) 
+        if (!vis.contains(next))
+            dfs(vis, next, cur);
+}
+     #+END_SRC
+**** 解题思路与分析
+     #+BEGIN_SRC java
+public int checkWays(int [][] pairs) {
+    Map<Integer, Integer> cnt = new HashMap<>(); // 统计结点对中各个结点出现的次数
+    Map<Integer, List<Integer>> adj = new HashMap<>();
+    for (int [] pair : pairs) {
+        int from = pair[0], to = pair[1];
+        cnt.put(from, cnt.getOrDefault(from, 0) + 1);
+        cnt.put(to, cnt.getOrDefault(to, 0) + 1);
+        adj.computeIfAbsent(from, x -> new ArrayList<>()).add(to);
+        adj.computeIfAbsent(to, x -> new ArrayList<>()).add(from);
+    }
+    List<Integer> list = new ArrayList<>(cnt.keySet()); // list of ori nodes 将结点对中的结点存储在List集合中
+    list.sort((a, b) -> cnt.get(b) - cnt.get(a)); // 对list集合进行排序
+    // pairs中给出了树中所有具有祖孙关系的结点对，很显然，根节点是其他所有结点的祖先
+    // 所以根结点在pairs出现的次数应该为为总结点数-1，找不到符合这个关系的结点，那就不符合题目中构树的要求
+    if (cnt.get(list.get(0)) != list.size() - 1) return 0;
+    // 判断已排序后的结点集合是否有两个结点具有相同出现次数，如果存在，那么这两个结点可以互换，即为两颗树
+    int ans = 1;
+    for (int [] p : pairs) 
+        if (cnt.get(p[0]).equals(cnt.get(p[1]))) {
+            ans = 2;
+            break;
+        }
+    // 将所有结点的父结点置为出现结点最多的结点，即根结点
+    // 在没有确定除根结点之外的其它结点真正父结点之前，根结点就是它们的祖先
+    Map<Integer, Integer> farMap = new HashMap<>();
+    Set<Integer> set = new HashSet<>(); // 存储所有父结点
+    set.add(list.get(0));
+    for (Integer i : list) // 
+        farMap.put(i, list.get(0));
+    // 处理除最大结点数外，按着构树规则处理其它结点
+    for (int i = 1; i < list.size(); ++i) {
+        for (Integer s : adj.get(list.get(i))) 
+            // 判断当前结点是否为父结点
+            if (!set.contains(s)) {
+                // 如果s不是父结点，那么就是当前list.get(i)结点的子结点
+                // 在没有更新父结点之前，s的父结点和list.get(i)的父结点是相同的(父子在一条链上)
+                // 如果父结点不相同，可以理解为s的父结点list.get(i)有多个父结点，显然是不合理的
+                //  同样也可以把树理解为图，除根结点之外，所有结点的入度都为1，而上边的情况表示存在一个入度为2的结点
+                // 明显与树的构建原理相悖
+                if (farMap.get(s) != farMap.get(list.get(i)))
+                    return 0;
+                farMap.put(s, list.get(i));
+            }
+        set.add(list.get(i));
+    }
+    return ans;
+}
+#+END_SRC
+*** 1766. Tree of Coprimes - Hard
+There is a tree (i.e., a connected, undirected graph that has no cycles) consisting of n nodes numbered from 0 to n - 1 and exactly n - 1 edges. Each node has a value associated with it, and the root of the tree is node 0.
+
+To represent this tree, you are given an integer array nums and a 2D array edges. Each nums[i] represents the ith node's value, and each edges[j] = [uj, vj] represents an edge between nodes uj and vj in the tree.
+
+Two values x and y are coprime if gcd(x, y) == 1 where gcd(x, y) is the greatest common divisor of x and y.
+
+An ancestor of a node i is any other node on the shortest path from node i to the root. A node is not considered an ancestor of itself.
+
+Return an array ans of size n, where ans[i] is the closest ancestor to node i such that nums[i] and nums[ans[i]] are coprime, or -1 if there is no such ancestor.
+**** 解题思路与分析
+
+- 切入点和解题思路
+  - 如果用蛮力检查一个节点的所有的祖先节点，那么，一个节点的祖先节点最多能有 n-1n−1 个，显然会超时的。
+  - 一个重要的切入点是： \text{nums}[i] \leq 50nums[i]≤50。我们不妨换一种思路：从节点的值 xx 出发，枚举满足 1 \leq y \leq 501≤y≤50 且 \gcd(x,y) = 1gcd(x,y)=1 的 yy，并对每个 yy 找出离着节点 ii 最近的点，最后再在这些点中求出离着当前点最近的点即可。这样只需检查 5050 次即可。
+  - 那么，如何对于任一数字 yy，找出离当前节点 ii 最近的祖先节点呢？首先可以想到的是，离着节点 ii 最近的满足条件的祖先节点，也是这些点中 最深 的。我们不妨对每个数字 1 \sim 501∼50 维护一个栈，并采用 dfs 的思路。每当我们要遍历下一个节点时，就把当前节点的编号 （\text{node}node）和节点的深度（\text{level}level）push 到 当前节点的值 （xx） 对应的栈中。这样，栈顶就是数字 xx 的、最深 的节点，也是我们之后需要的关于数字 xx 的 最近 的节点。此外，要记得 dfs 完成后要将之前 push 进去的元素 pop 出来。
+- 解题思路
+  - 1、邻接表建立，表示每个节点关联的节点
+  - 2、准备50个栈，以每个节点的数据值为基准，栈内存储的数据为当前数据值对应的层数及节点i标识
+  - 3、遍历到某个节点时，以当前节点为基准，满足gcd条件并且层数最深的为最优解，也就是最近公共祖先节点
+  - 4、满足gcd条件可能存在多个节点的数据值，遍历可能的数据值里面，离节点i最近的，通过level来识别；这里需要识别数值和level两重条件
+  - 5、为啥取栈顶的元素呢，因为我们压栈的时候，level最大的总是在栈顶的，而这里只需要相同数值里面level最大的即可，因为每轮遍历实际是从根节点到当前节点的，所以计算当前节点时，stack里存储的应该是所有的祖先节点，只需要在所有祖先节点里面取最近的即可
+
+     #+BEGIN_SRC java
+public int[] getCoprimes(int[] a, int[][] edges) {
+    cop = new boolean [51][51];
+    for (int i = 1; i < 51; i++) 
+        for (int j = 1; j < 51; j++) 
+            if (!cop[i][j] && gcd(i, j) == 1) {
+                cop[i][j] = true;
+                cop[j][i] = true;
+            }
+    int n = a.length;
+    li = new ArrayList[n];
+    for (int i = 0; i < n; i++) li[i] = new ArrayList<>();
+    for (int [] e : edges) {
+        li[e[0]].add(e[1]);
+        li[e[1]].add(e[0]);
+    }
+    ans = new int [n];
+    for (int i = 0; i < 51; i++) 
+        st[i] = new ArrayDeque<>();
+    dfs(0, -1, 0, a);
+    return ans;
+}
+List<Integer>[] li;
+ArrayDeque<int []> [] st = new ArrayDeque[51];
+boolean [][] cop;
+int [] ans;
+void dfs(int node, int pre, int level, int [] a) {
+    int re = -1, lev = -1;
+    for (int i = 1; i < 51; i++) 
+        if (st[i].size() > 0 && st[i].peekLast()[0] > lev && cop[i][a[node]]) {
+            re = st[i].peekLast()[1];
+            lev = st[i].peekLast()[0];
+        }
+    ans[node] = re;
+    for (int next : li[node]) {
+        if (next != pre) {
+            st[a[node]].offerLast(new int [] {level, node});
+            dfs(next, node, level + 1, a);
+            st[a[node]].pollLast();
+        }
+    }
+}
+int gcd(int x, int y) {
+    if (y == 0) return x;
+    return gcd(y, x % y);
+}
+     #+END_SRC
+*** 1028. Recover a Tree From Preorder Traversal: 栈 + 迭代，递归 - Hard
+We run a preorder depth-first search (DFS) on the root of a binary tree.
+
+At each node in this traversal, we output D dashes (where D is the depth of this node), then we output the value of this node.  If the depth of a node is D, the depth of its immediate child is D + 1.  The depth of the root node is 0.
+
+If a node has only one child, that child is guaranteed to be the left child.
+
+Given the output traversal of this traversal, recover the tree and return its root.
+**** 解题思路与分析: 栈 + 迭代
+     #+BEGIN_SRC java
+public TreeNode recoverFromPreorder(String t) {
+    Deque<TreeNode> st = new LinkedList<TreeNode>();
+    char [] s = t.toCharArray();
+    int n = t.length();
+    int idx = 0;
+    while (idx < n) {
+        int lvl = 0;
+        while (s[idx] == '-') {
+            ++lvl;
+            ++idx;
+        }
+        int val = 0;
+        while (idx < n && Character.isDigit(s[idx])) {
+            val = val * 10 + (s[idx] - '0');
+            ++idx;
+        }
+        TreeNode node = new TreeNode(val);
+        if (lvl == st.size()) {
+            if (!st.isEmpty()) 
+                st.peekLast().left = node;
+        } else {
+            while (lvl != st.size()) 
+                st.pollLast();
+            st.peekLast().right = node;
+        }
+        st.offerLast(node);
+    }
+    while (st.size() > 1) st.pollLast();
+    return st.peekLast();
+}
+     #+END_SRC
+**** 解题思路与分析: 递归
+
+虽然博主最开始想的递归方法不太容易实现，但其实这道题也是可以用递归来做的，这里我们需要一个全局变量 cur，表示当前遍历字符串S的位置，递归函数还要传递个当前的深度 level。在递归函数中，首先还是要提取短杠的个数，但是这里有个很 tricky 的地方，我们在统计短杠个数的时候，不能更新 cur，因为 cur 是个全局变量，当统计出来的短杠个数跟当前的深度不相同，就不能再继续处理了，如果此时更新了 cur，而没有正确的复原的话，就会出错。博主成功入坑，检查了好久才找出原因。当短杠个数跟当前深度相同时，我们继续提取出结点值，然后新建出结点，对下一层分别调用递归函数赋给新建结点的左右子结点，最后返回该新建结点即可
+
+     #+BEGIN_SRC java
+private int idx = 0; // 遍历S的全局指针
+public TreeNode recoverFromPreorder(String S) {
+    if (S.isEmpty()) return null;
+    return buildBinaryTree(S.toCharArray(), 0);
+}
+public TreeNode buildBinaryTree(char[] ss, int depth) {
+    // 判定当前节点是否是null
+    if (idx + depth >= ss.length || isNullPointer(ss, depth)) return null;
+    idx += depth; // idx指针跳过depth个'-'，指向下一个节点的开始位置
+    // 左右子树递归
+    TreeNode root = new TreeNode(getValue(ss));
+    root.left = buildBinaryTree(ss, depth + 1);
+    root.right = buildBinaryTree(ss, depth + 1);
+    // 返回当前节点
+    return root;
+}
+// 获取当前节点的val值，由于可能有多位，需要遍历一下
+public int getValue(char[] ss) {
+    int value = 0;
+    while (idx < ss.length && ss[idx] != '-') {
+        value = value * 10 + (ss[idx] - '0');
+        idx ++;
+    }
+    return value;
+}
+// 判断当前位置的节点是不是null
+public boolean isNullPointer(char[] ss, int depth) {
+    for (int i = idx; i < idx + depth; i ++) 
+        if (ss[i] != '-') return true;
+    return false;
+}
+     #+END_SRC
+- 下面是一个简洁版的代码 
+#+BEGIN_SRC java
+public TreeNode recoverFromPreorder(String S) {
+    if (S.isEmpty()) return null;
+    n = S.length();
+    return buildBinaryTree(S.toCharArray(), 0);
+}
+private int idx = 0, n; // 遍历S的全局指针
+TreeNode buildBinaryTree(char [] s, int level) {
+    int cnt = 0, val = 0;
+    while (idx + cnt < n && s[idx + cnt] == '-') ++cnt;
+    if (cnt != level) return null;
+    idx += cnt;
+    for (; idx < n && s[idx] != '-'; idx++) 
+        val = val * 10 + s[idx] - '0';
+    TreeNode r =  new TreeNode(val);
+    r.left = buildBinaryTree(s, level + 1);
+    r.right = buildBinaryTree(s, level + 1);
+    return r;
+}
+#+END_SRC
 *** 1696. Jump Game VI
 You are given a 0-indexed integer array nums and an integer k.
 You are initially standing at index 0. In one move, you can jump at most k steps forward without going outside the boundaries of the array. That is, you can jump from index i to any index in the range [i + 1, min(n - 1, i + k)] inclusive.
@@ -11009,6 +11334,7 @@ int main() {
 - 5510. 保证图可完全遍历（并查集）
 - 程序员面试金典 - 面试题 17.07. 婴儿名字（并查集）
 
+
 * Graph
 ** 拓扑排序
 *** 1857. Largest Color Value in a Directed Graph - Hard
@@ -11475,30 +11801,392 @@ public int[] countPairs(int n, int[][] edges, int[] queries) { // 别人家的�
 # // https://leetcode.com/problems/count-pairs-of-nodes/discuss/1096432/Java-or-Two-Steps-or-O(NlgN-%2B-Q(N%2BE))
 # // 这个也可以再参考一下
 
-*** 332. Reconstruct Itinerary - Medium
+** 欧拉回路: Hierholzer 算法, Fleury算法
+- AOV&AOE
+  - AOVAOV网，顶点表示活动，弧表示活动间的优先关系的有向图。 即如果a->b,那么a是b的先决条件。
+  - AOEAOE网，边表示活动，是一个带权的有向无环图， 其中顶点表示事件，弧表示活动，权表示活动持续时间。
+
+求拓扑序列就是AOVAOV，求关键路径就是AOEAOE
+
+入度: 入度(indegree)就是有向图中指向这个点的边的数量，即有向图的某个顶点作为终点的次数和
+
+出度: 出度(outdegree)就是从这个点出去的边的数量，即有向图的某个顶点作为起点的次数和
+
+- 定义
+  - 欧拉回路（Eulerian Circuit）：从图上一个点u出发不重复地经过每一条边后，再次回到点u的一条路径。
+  - 欧拉路径（Eulerian Path）:从图上一个点u出发不重复地经过每一条边的一条路径（不必回到点u）。
+  - 欧拉图即存在欧拉回路的图，半欧拉图即存在欧拉路径的图
+  - 欧拉迹/欧拉通路/一笔画：通过图中每条边且行遍所有顶点的迹（每条边恰一次的途径），称为欧拉迹（Euler trail）
+  - 半欧拉图：具有欧拉通路但不具有欧拉回路的无向图称为半欧拉图，有且仅有两个度数为奇数的结点
+  - 环游：图的环游(tour)是指经过图的每条边至少一次的闭途径
+  - 欧拉环游/回路：经过每条边恰好一次的环游/回路欧拉环游/回路（Eular tour）
+  - 欧拉图：一个图若包含欧拉环游，则称为欧拉图(Euleriangraph)
+  - 欧拉定理：一个非空连通图是欧拉图当且仅当它的每个顶点的度数都是偶数
+  - 通过图中所有边恰好一次且行遍所有顶点的通路称为 *欧拉通路* 。
+  - 通过图中所有边恰好一次且行遍所有顶点的回路称为 *欧拉回路* 。
+  - 具有欧拉回路的无向图称为 *欧拉图* 。
+  - 具有欧拉通路但不具有欧拉回路的无向图称为 *半欧拉图* 。
+
+就像是一笔画，要求每条边只走一次，但每个点可以多次经过，而要求每个点只走一次的模型是哈密顿环注意欧拉回路必须回到起点，欧拉路径则不必，可以说欧拉回路一定是欧拉路径，反之不成立
+|--------+------------------------------+------------------------------------------------------------------------------------------|
+|        | 欧拉回路                     | 欧拉路径                                                                                 |
+|--------+------------------------------+------------------------------------------------------------------------------------------|
+| 无向图 | 每个节点都有偶数的度         | 每个节点都有偶数的度或者只有两个节点有用奇数的度（这个两个奇数度的节点其实是起点和终点） |
+| 有向图 | 每个节点都有相同的入度和出度 | 最多只有一个顶点的入度-出度=1并且最多只有一个顶点的出度-入度=1,其他节点的出度与入度相等  |
+|--------+------------------------------+------------------------------------------------------------------------------------------|
+- 其他结论
+  - 无向图为（半）欧拉图时，只需用1笔画成；无向图为非（半）欧拉图时，即奇点（度为奇数的点）数k>2，需用k/2笔画成。
+  - 可以用加边的方式把一个非欧拉图变成欧拉图。对于无向图来说，每个奇点都需加一个度，加的边为 奇点数/2 ；对于有向图来说，每个点都需加上入度与出度之差，加的边数为每个点入度与出度之差的绝对值之和再除以2。
+
+*** 753. Cracking the Safe - Hard
+There is a safe protected by a password. The password is a sequence of n digits where each digit can be in the range [0, k - 1].
+
+The safe has a peculiar way of checking the password. When you enter in a sequence, it checks the most recent n digits that were entered each time you type a digit.
+     #+BEGIN_SRC java
+For example, the correct password is "345" and you enter in "012345":
+After typing 0, the most recent 3 digits is "0", which is incorrect.
+After typing 1, the most recent 3 digits is "01", which is incorrect.
+After typing 2, the most recent 3 digits is "012", which is incorrect.
+After typing 3, the most recent 3 digits is "123", which is incorrect.
+After typing 4, the most recent 3 digits is "234", which is incorrect.
+After typing 5, the most recent 3 digits is "345", which is correct and the safe unlocks.
+     #+END_SRC
+Return any string of minimum length that will unlock the safe at some point of entering it.
+**** 解题思路与分析: Hierholzer 算法
+
+Hierholzer 算法可以在一个欧拉图中找出欧拉回路。
+
+[[./pic/crackingSafe.png]]
+
+由于这个图的每个节点都有 kk 条入边和出边，因此它一定存在一个欧拉回路，即可以从任意一个节点开始，一次性不重复地走完所有的边且回到该节点。因此，我们可以用 \text{Hierholzer}Hierholzer 算法找出这条欧拉回路：
+​
+我们从节点 uu 开始，任意地经过还未经过的边，直到我们「无路可走」。此时我们一定回到了节点 uu，这是因为所有节点的入度和出度都相等。
+
+回到节点 uu 之后，我们得到了一条从 uu 开始到 uu 结束的回路，这条回路上仍然有些节点有未经过的出边。我么从某个这样的节点 vv 开始，继续得到一条从 vv 开始到 vv 结束的回路，再嵌入之前的回路中，即
+
+u→⋯→v→⋯→u
+
+变为
+
+u→⋯→v→⋯→v→⋯→u
+
+     #+BEGIN_SRC java
+Set<Integer> seen = new HashSet<Integer>();
+StringBuffer ans = new StringBuffer();
+int highest;
+int k;
+public String crackSafe(int n, int k) {
+    highest = (int) Math.pow(10, n - 1);
+    this.k = k;
+    dfs(0);
+    for (int i = 1; i < n; i++) 
+        ans.append('0');
+    return ans.toString();
+}
+public void dfs(int node) {
+    for (int x = 0; x < k; ++x) {
+        int nei = node * 10 + x;
+        if (!seen.contains(nei)) {
+            seen.add(nei);
+            dfs(nei % highest);
+            ans.append(x); // 这里dfs之后才添加的顺序狠重要
+        }
+    }
+}
+     #+END_SRC
+**** 解题思路与分析
+
+密码共有n位，每一个位可以有k个数字，总共不同的密码总数就有k的n次方个。思路是先从n位都是0的密码开始，取出钥匙串的最后 n-1 个数字，然后在后面依次添加其他数字，用一个 HashSet 来记录所有遍历过的密码，这样如果不在集合中，说明是一个新密码，而生成这个新密码也只是多加了一个数字，能保证钥匙串最短，这是一种贪婪的解法，相当的巧妙
+
+     #+BEGIN_SRC java
+public String crackSafe(int n, int k) {
+    int N = (int)Math.pow(k, n); // 第个位有k种取值,总共有k^n种不同的状态
+    String s = "0".repeat(n);
+    Set<String> ss = new HashSet<>(List.of(s.toString()));
+    for (int i = 0; i < N; i++) {
+        String pre = s.substring(s.length() - (n-1));
+        // for (int j = 0; j < k; j++) { // 这里需要倒回来
+        for (int j = k-1; j >= 0; j--) { 
+            String cur = pre + String.valueOf(j);
+            if (!ss.contains(cur)) {
+                ss.add(cur);
+                s += "" + j;
+                break;
+            }
+        }
+    }
+    return s;
+}
+     #+END_SRC
+
+其实在初看Hierholzer算法时，很容易产生一种想法，就是我只需要从一个节点遍历，每次把它经历的边加入到结果字符串中，当回到初始点时就完成一圈，但是这样实现的话有个明显的问题，就是每个节点都有自环，如果你遍历到某个节点时，直接跳过了自环，去了其他节点，那就失去了回来的机会（想想回家的时候虽然你可以绕小路，也可以走大路，但只要你走大路到家了，就不可能再回到学校从小路回家）。实际上不只是自环，还有可能有其他边没循环到，因为回到自身路径过多，很多边都可能没有利用。
+
+而官方题解中的dfs巧妙的解决了这个问题，实际上它不只是沿着边走，而是把每一个边的组合都遍历到，并且在遍历之后才将有用的节点嵌套到字符串中。在dfs中，每次循环时，并不是直接将该边加入到字符串中，而是在循环之后，实际上可以想成是用了一个栈，反序的将合法的序列弹出了（dfs中的每次循环都会探索一个节点能到达的结尾在哪里，并且因为记录了每一条删除的边，所以其并不会走之前走过的路，找到结尾后回溯到还有边可走的点，继续向下走，而在该点所有可行边都已回溯完毕后，才到他自己，所以其实所有边都已经到达，并且顺序是逆序）。所以在主函数中，在得到整个序列后，才将初始的节点放入字符串末尾（如果正序的话，你应该将它放到字符串的开头）。
+
+**** 解题思路与分析: 递归写法
+
+来看同一种解法的递归写法，思路和迭代的写法一模一样，写法略有不同而已
+
+     #+BEGIN_SRC java
+public String crackSafe(int n, int k) {
+    N = (int)Math.pow(k, n); // 第个位有k种取值,总共有k^n种不同的状态
+    s = "0".repeat(n);
+    Set<String> ss = new HashSet<>(List.of(s.toString()));
+    dfs(ss, n, k);
+    return s;
+}
+String s;
+int N;
+void dfs(Set<String> ss, int n, int k) {
+    if (ss.size() == N) return; 
+    String pre = s.substring(s.length() - (n-1));
+    for (int i = k-1; i >= 0; i--) {
+        String cur = pre + i;
+        if (ss.contains(cur)) continue;
+        s += "" + i;
+        ss.add(cur);
+        dfs(ss, n, k);
+    }
+}
+     #+END_SRC
+*** 332. Reconstruct Itinerary - Medium 欧拉回路 Hierholzer 算法
 You are given a list of airline tickets where tickets[i] = [fromi, toi] represent the departure and the arrival airports of one flight. Reconstruct the itinerary in order and return it.
 
 All of the tickets belong to a man who departs from "JFK", thus, the itinerary must begin with "JFK". If there are multiple valid itineraries, you should return the itinerary that has the smallest lexical order when read as a single string.
 
 For example, the itinerary ["JFK", "LGA"] has a smaller lexical order than ["JFK", "LGB"].
 You may assume all tickets form at least one valid itinerary. You must use all the tickets once and only once.
+**** 解题思路与分析
+
+我们化简本题题意：给定一个 nn 个点 mm 条边的图，要求从指定的顶点出发，经过所有的边恰好一次（可以理解为给定起点的「一笔画」问题），使得路径的字典序最小。
+
+- 这种「一笔画」问题与欧拉图或者半欧拉图有着紧密的联系，下面给出定义：
+  - 通过图中所有边恰好一次且行遍所有顶点的通路称为 *欧拉通路* 。
+  - 通过图中所有边恰好一次且行遍所有顶点的回路称为 *欧拉回路* 。
+  - 具有欧拉回路的无向图称为 *欧拉图* 。
+  - 具有欧拉通路但不具有欧拉回路的无向图称为 *半欧拉图* 。
+
+因为本题保证至少存在一种合理的路径，也就告诉了我们，这张图是一个欧拉图或者半欧拉图。我们只需要输出这条欧拉通路的路径即可。
+
+- 如果没有保证至少存在一种合理的路径，我们需要判别这张图是否是欧拉图或者半欧拉图，具体地：
+  - 对于无向图 G，G 是欧拉图当且仅当 G 是连通的且没有奇度顶点。
+  - 对于无向图 G，G 是半欧拉图当且仅当 G 是连通的且 G 中恰有 2 个奇度顶点。
+  - 对于有向图 G，G 是欧拉图当且仅当 G 的所有顶点属于同一个强连通分量且每个顶点的入度和出度相同。
+  - 对于有向图 G，G 是半欧拉图当且仅当 G 的所有顶点属于同一个强连通分量且
+    - 恰有一个顶点的出度与入度差为 1；
+    - 恰有一个顶点的入度与出度差为 1；
+    - 所有其他顶点的入度和出度相同。
+     #+BEGIN_SRC java
+     #+END_SRC
+**** 解题思路与分析: Hierholzer 算法
+- Hierholzer 算法用于在连通图中寻找欧拉路径，其流程如下：
+  - 从起点出发，进行深度优先搜索。
+  - 每次沿着某条边从某个顶点移动到另外一个顶点的时候，都需要删除这条边。
+  - 如果没有可移动的路径，则将所在节点加入到栈中，并返回。
+
+当我们顺序地考虑该问题时，我们也许很难解决该问题，因为我们无法判断当前节点的哪一个分支是「死胡同」分支。
+
+不妨倒过来思考。我们注意到只有那个入度与出度差为 11 的节点会导致死胡同。而该节点必然是最后一个遍历到的节点。我们可以改变入栈的规则，当我们遍历完一个节点所连的所有节点后，我们才将该节点入栈（即逆序入栈）。
+
+对于当前节点而言，从它的每一个非「死胡同」分支出发进行深度优先搜索，都将会搜回到当前节点。而从它的「死胡同」分支出发进行深度优先搜索将不会搜回到当前节点。也就是说当前节点的死胡同分支将会优先于其他非「死胡同」分支入栈。
+
+这样就能保证我们可以「一笔画」地走完所有边，最终的栈中逆序地保存了「一笔画」的结果。我们只要将栈中的内容反转，即可得到答案。
+
 #+BEGIN_SRC java
-private void dfs(String cur, List<String> list) {
-    Queue<String> next = m.get(cur);
-    while (next != null && next.size() > 0) 
-        dfs(next.poll(), list);
-    list.add(cur);
-}
-Map<String, PriorityQueue<String>> m = new HashMap<>();      // TreeSet does not handle repeats, use queue
 public List<String> findItinerary(List<List<String>> tickets) {
-    for (int i = 0; i < tickets.size(); i++) 
-        m.computeIfAbsent(tickets.get(i).get(0), k -> new PriorityQueue<>()).offer(tickets.get(i).get(1));
-    List<String> res = new ArrayList<>();
-    dfs("JFK", res);
-    Collections.reverse(res);
-    return res;
+    for (List<String> t : tickets) 
+        m.computeIfAbsent(t.get(0), z -> new PriorityQueue<>()).offer(t.get(1));
+    List<String> ans = new ArrayList<>();
+    dfs("JFK", ans);
+    Collections.reverse(ans);
+    return ans;
+}
+Map<String, PriorityQueue<String>> m = new HashMap<>(); // PriorityQueue已经默认是最小字典序，免去了排序的操作
+void dfs(String s, List<String> l) {
+    Queue<String> next = m.get(s);
+    while (next != null && next.size() > 0)
+        dfs(next.poll(), l);
+    l.add(s);
 }
 #+END_SRC
+**** 解题思路与分析: Hierholzer 算法,同上，但用LinkedList可以从头插入
+
+Greedy DFS, building the route backwards when retreating.
+
+这题其实和我之前用 DFS 处理 topological sort 的代码非常像，主要区别在于存 graph 的方式不同，这里是一个 String 直接连着对应的 next nodes，而且形式是 min heap:
+
+- 原题给的是 edges，所以图是自己用 hashmap 建的。
+  - min heap 可以自动保证先访问 lexicographical order 较小的；
+  - 同时 poll 出来的 node 自动删除，免去了用 List 的话要先 collections.sort 再 remove 的麻烦。
+  - 这种以 “edge” 为重心的算法多靠 heap，比如 dijkstra.
+
+Hierholzer算法的精髓是当每次访问一条边的时候，删除这条边，当遍历完一个节点所连的所有节点后，才将该节点入栈，最后将栈中的节点反转，即可得到欧拉路径
+
+     #+BEGIN_SRC java
+public List<String> findItinerary(String[][] tickets) {
+    LinkedList<String> ans = new LinkedList<>();
+    for (String[] t : tickets)
+        map.computeIfAbsent(t.get(0), z -> new ArrayList<>()).offer(t.get(1));
+    dfs("JFK", ans);
+    return new ArrayList<String>(ans); // LinkedList最后需要转换成ArrayList
+}
+HashMap<String, PriorityQueue<String>> map = new HashMap<>();
+void dfs(String airport, LinkedList<String> list) {
+    while (map.containsKey(airport) && !map.get(airport).isEmpty())
+        dfs(map.get(airport).poll(), l);
+    list.offerFirst(airport); // LinkedList可以这么写
+}
+     #+END_SRC
+**** 解题思路与分析: Fleury算法: leetcode还有一道割点割边的题，找出来 todo
+- 一些概念：
+  - 割点: 在一个无向图中，如果有一个顶点集合，删除这个顶点集合以及这个集合中所有顶点相关联的边以后，图的连通分量增多，就称这个点集为割点集合，如果某个割点集合只含有一个顶点 X（也即{X}是一个割点集合），那么X称为一个割点
+  - 割边: 在一个无向图中，如果有一个边集合，删除这个边集合以后，图的连通分量增多，就称这个边集为割边集合，如果某个割边集合只含有一条边 X（也即{X}是一个边集合），那么X称为一个割边，也叫做桥
+
+- 步骤
+  - 1.如果要找欧拉回路，可以从任意点开始，如果要找欧拉路径，需要从有着奇数度的两个及顶点中的一个开始，如果有奇数度顶点的话
+  - 2.选择当前点相连的边，确保删除该边，不会将欧拉图分成两个不同的联通分量
+  - 3.将该边加入到路径中，并将该边从欧拉图中删除，如果当前的选择有一个桥与非桥的边时候，优先选非桥的边，不到万不得已，不选桥
+  - 4.持续该过程直到路径收集完成
+
+- 分析: 上面的步骤中，选桥边与非桥边的时候，如何判断当前的边是否是桥，这个过程很关键，大体的思路是：
+  - 从当前节点u出发，计数，哪些顶点可以通过u可达，直接可达和间接可达均可以，记为cnt1
+  - 移除掉u-v这条边
+  - 从当前节点v出发，，哪些顶点可以通过v可达，直接可达和间接可达均可以，记为cnt2
+  - 恢复u-v这条边
+  - 返回cnt1与cnt2的大小，如果cnt2要比cnt1小，说明移除u-v这条边，从v可达的顶点数量减少，产生了额外的联通分量，此时返回falase,说明这条边是桥，反之返回true
+
+     #+BEGIN_SRC java
+public List<String> findItinerary(List<List<String>> tickets) { // 这个算法还比较陌生
+    for (List<String> t : tickets) 
+        adj.computeIfAbsent(t.get(0), z -> new ArrayList<>()).add(t.get(1));
+    for (List<String> values : adj.values()) Collections.sort(values);
+    String u = "JFK";
+    ans.add(u);
+    fleuryProcess(u);
+    return ans;
+}
+Map<String, List<String>> adj = new HashMap<>();
+List<String> ans = new ArrayList<>();
+private void fleuryProcess(String u) {
+    if (!adj.containsKey(u)) return ;
+    for (int i = 0; i < adj.get(u).size(); i++) {
+        String v = adj.get(u).get(i);
+        if (isValidNextEdge(u, v)) {
+            ans.add(v);
+            adj.get(u).remove(v);
+            fleuryProcess(v);
+        }
+    }
+}
+private boolean isValidNextEdge(String u, String v) { // 判断是否是割边：
+    if (adj.get(u).size() == 1) return true;
+    // boolean[] visited = new boolean[adj.get(u).size()];
+    Map<String, Boolean> vis = new HashMap<>(); // vis: visited
+    int cnt1 = dfs(u, vis);
+    adj.get(u).remove(v);
+    vis.clear(); // vis = new HashMap<>();
+    int cnt2 = dfs(v, vis);
+    adj.get(u).add(0, v);
+    return cnt1 <= cnt2; // 如果cnt2要比cnt1小,说明移除u-v这条边，从v可达的顶点数量减少，产生了额外的联通分量，此时返回 falase, 说明这条边是桥; 反之返回 true 
+}
+private int dfs(String u, Map<String, Boolean> vis) {
+    vis.put(u, true);
+    int cnt = 1;
+    if (adj.containsKey(u)) 
+        for (String v : adj.get(u)) 
+            if (vis.get(v) == null || (vis.get(v) != null && !vis.get(v))) 
+                cnt += dfs(v, vis);
+    return cnt;
+}
+     #+END_SRC
+*** 2097. Valid Arrangement of Pairs - Hard 欧拉回路
+You are given a 0-indexed 2D integer array pairs where pairs[i] = [starti, endi]. An arrangement of pairs is valid if for every index i where 1 <= i < pairs.length, we have endi-1 == starti.
+
+Return any valid arrangement of pairs.
+
+Note: The inputs will be generated such that there exists a valid arrangement of pairs.
+**** 解题思路与分析
+     #+BEGIN_SRC java
+// One thing different is that we need to find the start point. it is obvious that if indegree is larger than 0, that is the start point.
+public int[][] validArrangement(int[][] pairs) { 
+    Map<Integer, Integer> ins = new HashMap<>();
+    for (int [] p : pairs) {
+        adj.computeIfAbsent(p[0], z -> new ArrayList<>()).add(p[1]);
+        ins.put(p[0], ins.getOrDefault(p[0], 0) + 1);
+        ins.put(p[1], ins.getOrDefault(p[1], 0) - 1);
+    }
+    int bgn = -1;
+    for (Integer key : ins.keySet()) 
+        if (ins.get(key) > 0) {
+            bgn = key;
+            break;
+        }
+    if (bgn == -1) bgn = pairs[0][0]; // 如果没有，就可以随便从某一个点开始？
+    dfs(bgn);
+    int n = pairs.length;
+    int [][] ans = new int [n][];
+    for (int i = n-1; i >= 0; i--) // 所以这里添加答案，也需要反序回正
+        ans[n-1-i] = ll.get(i);
+    return ans;
+}
+Map<Integer, List<Integer>> adj = new HashMap<>();
+List<int []> ll = new ArrayList<>();
+void dfs(int node) {
+    while (adj.get(node) != null && adj.get(node).size() > 0) {
+        List<Integer> nextNodesCandi = adj.get(node);
+        int next = nextNodesCandi.get(nextNodesCandi.size()-1); // 从后往前遍历，方便从后往前删除已经遍历过的节点
+        adj.get(node).remove(nextNodesCandi.size()-1);
+        dfs(next);
+        ll.add(new int [] {node, next}); // 这里的顺序是倒着加的，dfs完接下来的答案、之后再加的
+    }
+}
+     #+END_SRC
+**** 解题思路与分析: todo: 这个答案没有看懂
+     #+BEGIN_SRC java
+// In a word, this solution is to first determine whether the target is an Euler circuit or an Euler path, then solve it.
+public int[][] validArrangement(int[][] pairs) {
+    int n = pairs.length;
+    Map<Integer, Integer> outdegree = new HashMap<>();
+    Map<Integer, Deque<Integer>> out = new HashMap<>();
+    for (int[] pair : pairs) {
+        outdegree.put(pair[0], outdegree.getOrDefault(pair[0], 0) + 1);
+        outdegree.put(pair[1], outdegree.getOrDefault(pair[1], 0) - 1);
+    }
+    int[][] ans = new int[n][2];
+    for (int i = 0; i < n; i++) 
+        Arrays.fill(ans[i], -1);
+    for (Map.Entry<Integer, Integer> en : map.entrySet()) { // 试图寻找起始和结束的位置
+        if (en.getValue() == 1) ans[0][0] = en.getKey();
+        if (en.getValue() == -1) ans[n-1][1] = en.getKey();
+    }
+    if (ans[0][0] == -1) { // 这里为什么就可以从第一个往后搜、从两边往中间搜呢？
+        ans[0][0] = pairs[0][0];
+        ans[n-1][1] = pairs[0][0];
+    }
+    for (int[] p : pairs) {
+        out.computeIfAbsent(p[0], z -> new ArrayDeque<>()).offerLast(p[1]);
+        // out.computeIfAbsent(p[0], k -> new ArrayDeque<>());
+        out.computeIfAbsent(p[1], k -> new ArrayDeque<>()); // 需要加上
+        // out.get(p[0]).offerLast(p[1]);
+    }
+    int i = 0, j = n-1;
+    while (i < j) { // 没看明白这中间在是做什么？？？
+        int from = ans[i][0];
+        Deque<Integer> toList = out.get(from); // 这里是个栈， 上面如果不加上，这里会是null
+        if (toList.size() == 0) {
+            i--;
+            ans[j][0] = ans[i][0];
+            j--;
+            ans[j][1] = ans[j + 1][0];
+        } else {
+            ans[i++][1] = toList.pollLast();
+            // ans[i++][1] = toList.removeLast();
+            ans[i][0] = ans[i - 1][1];
+        }
+    }
+    return ans;
+}
+     #+END_SRC
 
 *** 1591. Strange Printer II - Hard
 There is a strange printer with the following two special requirements:
@@ -11508,6 +12196,8 @@ Once the printer has used a color for the above operation, the same color cannot
 You are given a m x n matrix targetGrid, where targetGrid[row][col] is the color in the position (row, col) of the grid.
 
 Return true if it is possible to print the matrix targetGrid, otherwise, return false.
+
+**** 解题思路与分析: 邻接有向图 + 拓扑排序
 
 这道题可以认为是在研究：是否有一种颜色序列，按照这个序列进行染色，最终矩阵就会呈现输入的状态。
 
@@ -11526,106 +12216,236 @@ Return true if it is possible to print the matrix targetGrid, otherwise, return 
 按照刚才的方法找出所有的有向边，进行拓扑排序即可判断出结果。
 
 #+BEGIN_SRC java
-public boolean isPrintable(int[][] targetGrid) { // 觉得这个题思路奇特
-    int m = targetGrid.length, n = targetGrid[0].length, max = Math.max(m, n);
-    for (int i = 0; i < m; i++) 
-        max = Math.max(max, Arrays.stream(targetGrid[i]).max().getAsInt());
-    int [] top = new int [max+1], bot = new int [max+1], left = new int [max+1], right = new int [max+1];
-    Arrays.fill(top, max+1);
-    Arrays.fill(left, max+1);
-    Arrays.fill(bot, -1);
+public boolean isPrintable(int[][] a) { 
+    int m = a.length, n = a[0].length, max = Math.max(m, n);
+    for (int i = 0; i < m; i++)
+        max = Math.max(max, Arrays.stream(a[i]).max().getAsInt());
+    int N = max + 1;
+    int [] up = new int [N], down = new int [N], left = new int [N], right = new int [N];
+    Arrays.fill(up, m);
+    Arrays.fill(left, n);
+    Arrays.fill(down, -1);
     Arrays.fill(right, -1);
-    for (int i = 0; i < m; i++) // 建立每个颜色的矩阵边界: 界定每种颜色的上下左右边界，每种颜色最早（上左）最晚（下右）出现的位置
+    for (int i = 0; i < m; i++) // 界定每一种着色的上下左右边界，以便接下来排序
         for (int j = 0; j < n; j++) {
-            int color = targetGrid[i][j];
-            top[color] = Math.min(top[color], i);
-            bot[color] = Math.max(bot[color], i);
-            left[color] = Math.min(left[color], j);
-            right[color] = Math.max(right[color], j);
+            int k = a[i][j];
+            up[k] = Math.min(up[k], i);
+            down[k] = Math.max(down[k], i);
+            left[k] = Math.min(left[k], j);
+            right[k] = Math.max(right[k], j);
         }
-    // 根据矩阵建立有向图，遍历targetGrid，
-    // 当前位置颜色X在某个矩阵A中但是不为矩阵A的颜色时，建立从A到X的边
-    // X可以存在于多个矩阵中
-    // 变量：是否存在边-防止重复建立边；入度，便于后期判断是否拓扑排序；邻接表，从i出发到达的点
-    boolean [][] eg = new boolean [max+1][max+1];
-    int [] ins = new int [max+1];
-    List<List<Integer>> adj = new ArrayList<>();
-    for (int i = 0; i <= max; i++) 
-        adj.add(new ArrayList<>());
-    int cur = 0; // 建立图
-    for (int i = 0; i < m; i++) 
+    // 根据每种着色的界定范围，建立拓扑排序：这后半部分还有点儿不熟练
+    // 当前位置颜色 cur 在某个矩阵 k 中但是不为矩阵 k 的颜色时，建立从 k 到 cur 的边，cur 可以存在于多个矩阵中
+    boolean [][] nei = new boolean [N][N];  // neighbours
+    List<Integer>[] adj = new ArrayList[N]; // 邻接有向图：按照染色的先后顺序
+    int [] ins = new int [N];
+    for (int i = 0; i < N; i++) adj[i] = new ArrayList<>();
+    for (int i = 0; i < m; i++)
         for (int j = 0; j < n; j++) {
-            cur = targetGrid[i][j]; // 当前格子的最终打印顔色
-            for (int color = 1; color <= max; color++) // 遍历所有颜色：暴搜当前格子颜色是否可能后打印
-                if (i >= top[color] && i <= bot[color] && j >= left[color] && j <= right[color])
-                    if (cur != color && !eg[color][cur]) {
-                        adj.get(color).add(cur); // color 先染后，cur后染色
+            int cur = a[i][j]; // 当前格的最终打印着色
+            for (int k = 1; k < N; k++) { // 遍历所有的着色：暴搜当前着色cur是否会在某种着色k之后染色
+                if (k == cur) continue;
+                if (i >= up[k] && i <= down[k] && j >= left[k] && j <= right[k])  // 现着色cur完全处于先前染色k的内部，所以cur是后着色
+                    // if (!nei[cur][k]) { // BUG: 是有向图：这里顺序很重要，先染色 是否 与后染色相连/相前后
+                    if (!nei[k][cur]) {    // k 先染后， cur 后染色
+                        adj[k].add(cur);
                         ins[cur]++;
-                        eg[color][cur] = true;
+                        nei[k][cur] = true;
                     }
+            }
         }
-    // 寻找入度为0的颜色点，减小该点连结的点的入度，直到所有点的入度都为0
     List<Integer> l = new ArrayList<>();
-    while (true) {
+    while (true) { // 寻找入度为 0 的颜色点，减小该点连结的点的入度，直到所有点的入度都为 0
         int i;
-        for (i = 1; i <= max; i++) 
+        for (i = 1; i < N; i++) 
             if (ins[i] == 0) {
                 l.add(i);
-                for (int v : adj.get(i)) ins[v]--;
+                for (int v : adj[i]) ins[v]--;
                 ins[i] = -1;
                 break;
             }
-        if (i == max+1) break;
+        if (i == N) break;
     }
-    return l.size() == max;
+    return l.size() == max; // 按照拓扑排序，这所有的染色都可以有序地染出来，那么合法
 }
 #+END_SRC
-- topological sort
+**** 解题思路与分析: topological sort
 #+BEGIN_SRC java
-private boolean topologicalSort(Set<Integer> visited, Set<Integer> visiting, int c, Map<Integer, Set<Integer>> graph) {
-    if (visited.contains(c)) return true;
-    if (visiting.contains(c)) return false;
-    visiting.add(c);
-    for (Integer nei : graph.getOrDefault(c, Collections.emptySet())) 
-        if (!topologicalSort(visited, visiting, nei, graph)) return  false;
-    visiting.remove(c);
-    visited.add(c);
-    return true;
-}
-// 1. For each color, find left top corner and right bottom corner
-// 2. All colors interfering with given color means they should go after given
-// 3. Create dependencies (1 -> [2,3])
-// 4. TopSort. Loops mean it is not possible
-public boolean isPrintable(int[][] targetGrid) {
-    Map<Integer, Set<Integer>> graph = new HashMap<>();
-    Set<Integer> colors = new HashSet<>();
-    int m = targetGrid.length, n = targetGrid[0].length;
+public boolean isPrintable(int[][] a) { 
+    int m = a.length, n = a[0].length;
+    Set<Integer> col = new HashSet<>();
     for (int i = 0; i < m; i++) 
-        for (int j = 0; j < n; j++) 
-            colors.add(targetGrid[i][j]);
-    for (Integer c : colors) {
-        int fi = -1, fj = Integer.MAX_VALUE, li = -1, lj = -1; // f: first, f row, f col, l: last, l row, l col
-        for (int i = 0; i < m; i++) 
-            for (int j = 0; j < n; j++) 
-                if (targetGrid[i][j] == c) {
-                    if (fi == -1) fi = i;
+        for (int j = 0; j < n; j++)
+            col.add(a[i][j]);
+    for (Integer c : col) {
+        int fi = -1, fj = Integer.MAX_VALUE, li = -1, lj = -1;  // f: first, f row, f col, l: last, l row, l col
+        for (int i = 0; i < m; i++)
+            for (int j = 0; j < n; j++)
+                if (a[i][j] == c) {
+                    if (fi == -1) fi = i; // 只记最早出现的第一次
                     fj = Math.min(fj, j);
                     li = i;
                     lj = Math.max(lj, j);
                 }
         for (int i = fi; i <= li; i++) 
             for (int j = fj; j <= lj; j++) 
-                if (targetGrid[i][j] != c) 
-                    graph.computeIfAbsent(c, z -> new HashSet<>()).add(targetGrid[i][j]);
+                if (a[i][j] != c) // a[i][j]是会在当前染色c之后染色的
+                    adj.computeIfAbsent(c, z -> new HashSet<>()).add(a[i][j]);
     }
-    Set<Integer> visited = new HashSet<>();
-    Set<Integer> visiting = new HashSet<>();
-    for (Integer c : colors) 
-        if (!topologicalSort(visited, visiting, c, graph)) return false;
+    Set<Integer> vis = new HashSet<>(); // visiting: 只保证先染的着色不会在后染的着色里再次出现
+    for (Integer c : col) 
+        if (!topologicalSort(vis, c)) return false;
+    return true;
+}
+Map<Integer, Set<Integer>> adj = new HashMap<>(); // 在key之后染色的着色集合
+private boolean topologicalSort(Set<Integer> vis, int c) { // 这种写法好陌生
+    if (vis.contains(c)) return false;
+    vis.add(c);
+    for (Integer nei : adj.getOrDefault(c, Collections.emptySet()))
+        if (!topologicalSort(vis, nei)) return false;
+    vis.remove(c);
     return true;
 }
 #+END_SRC
 
+** 双端队列BFS
+*** 1368. Minimum Cost to Make at Least One Valid Path in a Grid - Hard
+Given a m x n grid. Each cell of the grid has a sign pointing to the next cell you should visit if you are currently in this cell. The sign of grid[i][j] can be:
+1 which means go to the cell to the right. (i.e go from grid[i][j] to grid[i][j + 1])
+2 which means go to the cell to the left. (i.e go from grid[i][j] to grid[i][j - 1])
+3 which means go to the lower cell. (i.e go from grid[i][j] to grid[i + 1][j])
+4 which means go to the upper cell. (i.e go from grid[i][j] to grid[i - 1][j])
+Notice that there could be some invalid signs on the cells of the grid which points outside the grid.
+
+You will initially start at the upper left cell (0,0). A valid path in the grid is a path which starts from the upper left cell (0,0) and ends at the bottom-right cell (m - 1, n - 1) following the signs on the grid. The valid path doesn't have to be the shortest.
+
+You can modify the sign on a cell with cost = 1. You can modify the sign on a cell one time only.
+
+Return the minimum cost to make the grid have at least one valid path.
+**** 解题思路与分析: 0-1广度优先搜索（最优解法）
+
+这道题其实是个经典的双端队列BFS。将每个格子看成是图的顶点，相邻格子是有边相连接的。如果从顶点(x, y)到（u, v）的实际方向和矩阵在(x, y)所表示的方向相同，则令这条边的边权为0，否则令其边权为1。原题相当于在问，在此图中，从起点到终点的最短路长度是多少。由于边权只有0和1两种，所以可以用双端队列BFS来做。每次拓展的时候，如果是沿着边权0的边走的，则插入队头，否则插入队尾。从队列里取元素的时候永远都从队头取。然后用堆优化的Dijkstra算法模板来写即可。时空复杂度O(mn)。
+
+0-1 广度优先搜索的实现其实与 Dijkstra 算法非常相似。在 Dijkstra 算法中，我们用优先队列保证了距离的单调递增性。而在 0-1 广度优先搜索中，实际上任意时刻队列中的节点与源点的距离均为 dd 或 d + 1d+1（其中 dd 为某一非负整数），并且所有与源点距离为 dd 的节点都出现在队首附近，所有与源点距离为 d + 1d+1 的节点都出现在队尾附近。因此，我们只要使用双端队列，对于边权为 00 和 11 的两种情况分别将对应节点添加至队首和队尾，就保证了距离的单调递增性。
+
+     #+BEGIN_SRC java
+public int minCost(int[][] g) {
+    int m = g.length, n = g[0].length;
+    int [][] d = new int [m][n]; // dist to [0, 0]
+    for (int i = 0; i < m; i++) 
+        Arrays.fill(d[i], Integer.MAX_VALUE);
+    d[0][0] = 0;
+    int [][] dirs = {{0, 0}, {0, 1}, {0, -1}, {1, 0}, {-1, 0}}; // [0, 1, 2, 3, 4]
+    boolean [][] vis = new boolean [m][n];
+    ArrayDeque<Integer> q = new ArrayDeque<>();
+    q.offerFirst(0);
+    while (!q.isEmpty()) {
+        int idx = q.pollFirst();
+        int i = idx / n, j = idx % n;
+        if (vis[i][j]) continue;
+        if (i == m-1 && j == n-1) return d[i][j];
+        vis[i][j] = true;
+        for (int k = 1; k < 5; k++) {
+            int x = i + dirs[k][0], y = j + dirs[k][1];
+            if (x < 0 || x >= m || y < 0 || y >= n) continue;
+            int cost = k == g[i][j] ? 0 : 1;
+            if (!vis[x][y] && d[x][y] > d[i][j] + cost) {
+                d[x][y] = d[i][j] + cost;
+                if (cost == 0) q.offerFirst(x * n + y);
+                else q.offerLast(x * n + y);
+            }
+        }
+    }
+    return -1;
+}
+     #+END_SRC
+**** 解题思路与分析: 最短路径问题总结 BFS
+***** 题目分析
+- 虽然题目的描述中写了有效路径不需要是最短路径，但其实这道题目还是一个最短路径问题，只不过要求的最短距离并不是在网格中行走的距离，而是改变方向的次数。
+- 所谓最短路径问题，就是对于图 G(V,E)G(V,E)，寻找从 u\in Vu∈V 到 v\in Vv∈V 的最短距离。最短路径的算法有很多，包括 Dijkstra，Floyd，Bellman-Ford，SPFA 等。
+  
+[[./pic/1368.png]]
+
+对于 BFS，相信大家一定都很熟悉了。与 DFS 相比，BFS 的特点是按层遍历，从而可以保证首先找到最优解（最少步数、最小深度）。从这个意义上讲，BFS 解决的其实也是最短路径问题。这一问题对应的图 GG 包含的所有顶点即为状态空间，而每一个可能的状态转移都代表了一条边。
+
+比如，在经典的迷宫问题中，每一个状态 (x,y)(x,y) 代表了一个顶点，而一个无障碍格子与其相邻的无障碍格子之间则存在一条无向边。
+
+那么，这个图 GG 和一般的图相比，有什么特点呢？
+
+关键就在于边的权值。在 BFS 问题中，所有边的权值均为 1！因为我们每一次从一个状态转移到一个新的状态，就多走了一步。正因为边权值均为 1，我们用一个队列记录所有状态，前面的状态对应的总权值一定小于后面的状态，所以我们就可以在 O(1)O(1) 的时间内实现找到最小节点并将其移除的操作（只要取队头，然后出队就可以了），从而寻找最短路径的时间复杂度就减小到了 O(V+E)O(V+E)。
+
+但普通的 BFS 算法，在本题中并不适用，因为存在权值为 0 的边！如果从一个格子到另一个格子，不需要修改格子上的标记，那么这一步移动的权值就为 0。如果我们还沿用普通 BFS 的做法，就无法保证队头元素一定是当前具有最小权值的节点。
+
+怎么办呢？简单粗暴的做法是：允许多次扩展同一个点。只要当前边能够更新节点的权值，就将节点再次入队。
+
+     #+BEGIN_SRC java
+public int minCost(int[][] g) {
+    int [][] dirs = {{0, 0}, {0, 1}, {0, -1}, {1, 0}, {-1, 0}}; 
+    int m = g.length, n = g[0].length;
+    int [][] d = new int [m][n]; // dist to [0, 0]
+    for (int i = 0; i < m; i++) 
+        Arrays.fill(d[i], Integer.MAX_VALUE);
+    d[0][0] = 0;
+    Queue<int []> q = new LinkedList<>();
+    q.offer(new int [] {0, 0});
+    while (!q.isEmpty()) {
+        int [] cur = q.poll();
+        int i = cur[0], j = cur[1];
+        for (int k = 1; k < 5; k++) {
+            int x = i + dirs[k][0], y = j + dirs[k][1];
+            if (x < 0 || x >= m || y < 0 || y >= n) continue;
+            int newDist = d[i][j] + (k == g[i][j] ? 0 : 1);
+            if (newDist < d[x][y]) {
+                d[x][y] = newDist;
+                q.offer(new int [] {x, y});
+            }
+        }
+    }
+    return d[m-1][n-1];
+}
+     #+END_SRC
+**** 解题思路与分析: SPFA
+如果一个节点已经在队列中，其实就没有必要将其再次入队了。这是 SPFA 算法的基本思想。可以看到，与上面的BFS 方法相比，就是增加了一个 in 数组来判断当前节点是否已经在队列中。
+
+SPFA 算法是一个十分依赖于数据的算法。在特定的数据下，SPFA 会退化为 Bellman-Ford，时间复杂度为 O(V\cdot E)O(V⋅E)。一般的编程竞赛中，涉及到最短路径的题目，都会有专门卡SPFA的数据，所以一般情况下还是使用 Dijkstra 算法。本题的测试数据相对较弱，BFS 和 SPFA 都可以顺利通过，甚至 SPFA 的运行时间还要长于 BFS（修改 in 数组状态带来了额外的开销）。
+
+SPFA 的好处是可以判断负环。我们可以用一个数组记录每个顶点的入队次数，如果有顶点的入队次数超过了 VV 次，则代表图中存在负环。
+
+     #+BEGIN_SRC java
+public int minCost(int[][] g) {
+    int [][] dirs = {{0, 0}, {0, 1}, {0, -1}, {1, 0}, {-1, 0}}; 
+    int m = g.length, n = g[0].length;
+    int [][] d = new int [m][n]; 
+    for (int i = 0; i < m; i++) 
+        Arrays.fill(d[i], Integer.MAX_VALUE);
+    d[0][0] = 0;
+    boolean [][] in = new boolean [m][n];
+    Queue<int []> q = new LinkedList<>();
+    q.offer(new int [] {0, 0});
+    in[0][0] = true;
+    while (!q.isEmpty()) {
+        int [] cur = q.poll();
+        int i = cur[0], j = cur[1];
+        in[i][j] = false;
+        for (int k = 1; k < 5; k++) {
+            int x = i + dirs[k][0], y = j + dirs[k][1];
+            if (x < 0 || x >= m || y < 0 || y >= n) continue;
+            int newDist = d[i][j] + (k == g[i][j] ? 0 : 1);
+            if (newDist < d[x][y]) {
+                d[x][y] = newDist;
+                if (!in[x][y]) {
+                    q.offer(new int [] {x, y});
+                    in[x][y] = true;
+                }
+            }
+        }
+    }
+    return d[m-1][n-1];
+}
+     #+END_SRC
+**** 解题思路与分析
+     #+BEGIN_SRC java
+     #+END_SRC
 * 扫描线
 *** 435. Non-overlapping Intervals - Medium 动态规划 贪心
 Given an array of intervals intervals where intervals[i] = [starti, endi], return the minimum number of intervals you need to remove to make the rest of the intervals non-overlapping.
