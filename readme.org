@@ -4,6 +4,7 @@
 
 # #+INCLUDE: "./plan.org" :minlevel 1
 # #+INCLUDE: "./dp.org" :minlevel 1
+# #+INCLUDE: "./graph.org" :minlevel 1
 # #+INCLUDE: "./hashTree.org" :minlevel 1
 # #+INCLUDE: "./binarySearch.org" :minlevel 1
 # #+INCLUDE: "./string.org" :minlevel 1
@@ -10700,11 +10701,41 @@ An undirected graph of n nodes is defined by edgeList, where edgeList[i] = [ui, 
 Given an array queries, where queries[j] = [pj, qj, limitj], your task is to determine for each queries[j] whether there is a path between pj and qj such that each edge on the path has a distance strictly less than limitj .
 
 Return a boolean array answer, where answer.length == queries.length and the jth value of answer is true if there is a path for queries[j] is true, and false otherwise.
+**** 解题思路与分析: 离线排序优化
+
+我们可以分别对 edges 和 queries 进行一次升序排序。本题和 1170. 比较字符串最小字母出现频次 类似， 都可以采取 *离线排序优化* 的方式来解。
+
+接下来，遍历 queries。遍历 queries 的同时将权值小于 limitj 的边进行合并。
+
+接下来，我们只需要判断 pj 和 qj 是否已经在同一个联通域即可。
+
+因此如果 pj 和 qj 在同一个联通域，那么其联通的路径上的所有边必定都小于 limitj，其原因就是前面加粗的那句话。
+
+注意到排序打乱了 queries 的索引，因此我们需要记录一下其原始索引。
+
 #+BEGIN_SRC java
-private class DisjointSetUnion {
+public boolean[] distanceLimitedPathsExist(int n, int[][] edgeList, int[][] queries) {
+    DSU dsu = new DSU(n);
+    Arrays.sort(edgeList, (a, b) -> a[2] - b[2]); // 同样按照weight的升序排列
+    int m = queries.length, idx = 0, e = edgeList.length;
+    Query [] qarr = new Query[m];
+    for (int i = 0; i < m; i++) 
+        qarr[i] = new Query(i, queries[i][0], queries[i][1], queries[i][2]);
+    Arrays.sort(qarr);
+    boolean [] ans = new boolean [m];
+    for (int i = 0; i < m; i++) {
+        while (idx < e && edgeList[idx][2] < qarr[i].weight) {
+            dsu.union(edgeList[idx][0], edgeList[idx][1]);
+            ++idx;
+        }
+        ans[qarr[i].idx] = dsu.areConnected(qarr[i].start, qarr[i].end);
+    }            
+    return ans;
+}
+private class DSU {
     private int N;
     private int [] parent, rank;
-    public DisjointSetUnion( int n) {
+    public DSU( int n) {
         this.N = n;
         this.parent = new int [N];
         this.rank = new int [N];
@@ -10731,7 +10762,7 @@ private class DisjointSetUnion {
             }
         }
     }
-    private int find(int v) { // 我记得这里有个同步更新父数组的优化步骤，和rank优化冲突吗？要总结一下 // O(Log(N))
+    private int find(int v) { 
         int x = v;
         while (x != parent[x])
             x = parent[x];
@@ -10747,34 +10778,9 @@ class Query implements Comparable<Query> {
         this.end = end;
         this.weight = weight;
     }
-    @Override public int compareTo(Query query) {
+    @Override public int compareTo(Query query) { // 按照weight的升序排列
         return this.weight - query.weight;
     }
-}
-// 我们可以分别对 edges 和 queries 进行一次升序排序。本题和 1170. 比较字符串最小字母出现频次 类似， 都可以采取 *离线排序优化* 的方式来解。
-// 接下来，遍历 queries。遍历 queries 的同时将权值小于 limitj 的边进行合并。
-// 接下来，我们只需要判断 pj 和 qj 是否已经在同一个联通域即可。
-// 因此如果 pj 和 qj 在同一个联通域，那么其联通的路径上的所有边必定都小于 limitj，其原因就是前面加粗的那句话。
-// 注意到排序打乱了 queries 的索引，因此我们需要记录一下其原始索引。
-public boolean[] distanceLimitedPathsExist(int n, int[][] edgeList, int[][] queries) {
-    DisjointSetUnion set = new DisjointSetUnion(n);
-    Arrays.sort(edgeList, (a, b) -> a[2]-b[2]); // arrange edges in ascending order of weights
-    int m = queries.length, i;
-    int E = edgeList.length;
-    Query [] qarr = new Query[m];
-    for (i = 0; i < m; i++) 
-        qarr[i] = new Query(i, queries[i][0], queries[i][1], queries[i][2]);
-    Arrays.sort(qarr);                // arrange queries in ascending order of threshold weights
-    boolean [] ans = new boolean [m];
-    int idx = 0;
-    for (i = 0; i < m; i++) {
-        while (idx < E && edgeList[idx][2] < qarr[i].weight) {
-            set.union(edgeList[idx][0], edgeList[idx][1]);
-            ++idx;
-        }
-        ans[qarr[i].idx] = set.areConnected(qarr[i].start, qarr[i].end);
-    }
-    return ans;
 }
 // 令 m, q edges 和 queries 的长度。
 //     时间复杂度：$O(mlogm + qlogq)

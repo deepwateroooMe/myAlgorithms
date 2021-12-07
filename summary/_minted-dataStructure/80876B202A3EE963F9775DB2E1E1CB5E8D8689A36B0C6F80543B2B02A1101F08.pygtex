@@ -1,7 +1,0 @@
-\begin{Verbatim}[commandchars=\\\{\}]
-\PYG{n+nl}{Input:} \PYG{n}{words} \PYG{o}{=} \PYG{o}{[}\PYG{l+s}{\PYGZdq{}cat\PYGZdq{}}\PYG{o}{,}\PYG{l+s}{\PYGZdq{}cats\PYGZdq{}}\PYG{o}{,}\PYG{l+s}{\PYGZdq{}catsdogcats\PYGZdq{}}\PYG{o}{,}\PYG{l+s}{\PYGZdq{}dog\PYGZdq{}}\PYG{o}{,}\PYG{l+s}{\PYGZdq{}dogcatsdog\PYGZdq{}}\PYG{o}{,}\PYG{l+s}{\PYGZdq{}hippopotamuses\PYGZdq{}}\PYG{o}{,}\PYG{l+s}{\PYGZdq{}rat\PYGZdq{}}\PYG{o}{,}\PYG{l+s}{\PYGZdq{}ratcatdogcat\PYGZdq{}}\PYG{o}{]}
-\PYG{n+nl}{Output:} \PYG{o}{[}\PYG{l+s}{\PYGZdq{}catsdogcats\PYGZdq{}}\PYG{o}{,}\PYG{l+s}{\PYGZdq{}dogcatsdog\PYGZdq{}}\PYG{o}{,}\PYG{l+s}{\PYGZdq{}ratcatdogcat\PYGZdq{}}\PYG{o}{]}
-\PYG{n+nl}{Explanation:} \PYG{l+s}{\PYGZdq{}catsdogcats\PYGZdq{}} \PYG{n}{can} \PYG{n}{be} \PYG{n}{concatenated} \PYG{n}{by} \PYG{l+s}{\PYGZdq{}cats\PYGZdq{}}\PYG{o}{,} \PYG{l+s}{\PYGZdq{}dog\PYGZdq{}} \PYG{n}{and} \PYG{l+s}{\PYGZdq{}cats\PYGZdq{}}\PYG{o}{;}
-\PYG{l+s}{\PYGZdq{}dogcatsdog\PYGZdq{}} \PYG{n}{can} \PYG{n}{be} \PYG{n}{concatenated} \PYG{n}{by} \PYG{l+s}{\PYGZdq{}dog\PYGZdq{}}\PYG{o}{,} \PYG{l+s}{\PYGZdq{}cats\PYGZdq{}} \PYG{n}{and} \PYG{l+s}{\PYGZdq{}dog\PYGZdq{}}\PYG{o}{;}
-\PYG{l+s}{\PYGZdq{}ratcatdogcat\PYGZdq{}} \PYG{n}{can} \PYG{n}{be} \PYG{n}{concatenated} \PYG{n}{by} \PYG{l+s}{\PYGZdq{}rat\PYGZdq{}}\PYG{o}{,} \PYG{l+s}{\PYGZdq{}cat\PYGZdq{}}\PYG{o}{,} \PYG{l+s}{\PYGZdq{}dog\PYGZdq{}} \PYG{n}{and} \PYG{l+s}{\PYGZdq{}cat\PYGZdq{}}\PYG{o}{.}
-\end{Verbatim}

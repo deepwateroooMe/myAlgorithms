@@ -1,3 +1,5 @@
+// import com.UnionFind;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
@@ -775,50 +777,760 @@ public class hardOne {
         //     }
         //     return l.size() == max; // 按照拓扑排序，这所有的染色都可以有序地染出来，那么合法
         // }
-        public boolean isPrintable(int[][] a) { 
-            int m = a.length, n = a[0].length;
-            Set<Integer> col = new HashSet<>();
+        // public boolean isPrintable(int[][] a) { 
+        //     int m = a.length, n = a[0].length;
+        //     Set<Integer> col = new HashSet<>();
+        //     for (int i = 0; i < m; i++) 
+        //         for (int j = 0; j < n; j++)
+        //             col.add(a[i][j]);
+        //     for (Integer c : col) {
+        //         int fi = -1, fj = Integer.MAX_VALUE, li = -1, lj = -1;  // f: first, f row, f col, l: last, l row, l col
+        //         for (int i = 0; i < m; i++)
+        //             for (int j = 0; j < n; j++)
+        //                 if (a[i][j] == c) {
+        //                     if (fi == -1) fi = i; // 只记最早出现的第一次
+        //                     fj = Math.min(fj, j);
+        //                     li = i;
+        //                     lj = Math.max(lj, j);
+        //                 }
+        //         for (int i = fi; i <= li; i++) 
+        //             for (int j = fj; j <= lj; j++) 
+        //                 if (a[i][j] != c) // a[i][j]是会在当前染色c之后染色的
+        //                     adj.computeIfAbsent(c, z -> new HashSet<>()).add(a[i][j]);
+        //     }
+        //     Set<Integer> vis = new HashSet<>(); // visiting: 只保证先染的着色不会在后染的着色里再次出现
+        //     for (Integer c : col) 
+        //         if (!topologicalSort(vis, c)) return false;
+        //     return true;
+        // }
+        // Map<Integer, Set<Integer>> adj = new HashMap<>(); // 在key之后染色的着色集合
+        // private boolean topologicalSort(Set<Integer> vis, int c) { // 这种写法好陌生
+        //     if (vis.contains(c)) return false;
+        //     vis.add(c);
+        //     for (Integer nei : adj.getOrDefault(c, Collections.emptySet()))
+        //         if (!topologicalSort(vis, nei)) return false;
+        //     vis.remove(c);
+        //     return true;
+        // }
+
+        // public List<List<Integer>> criticalConnections(int n, List<List<Integer>> connections) {
+        //     depth = new int [n];
+        //     Arrays.fill(depth, -1);
+        //     adj = new ArrayList[n]; // 初始化结构图map[i]代表节点i可以连通哪些节点
+        //     for (int i = 0; i < n; i++) adj[i] = new ArrayList<>();
+        //     for (List<Integer> c : connections) {
+        //         adj[c.get(0)].add(c.get(1));
+        //         adj[c.get(1)].add(c.get(0));
+        //     }
+        //     dfs(0, 0, 0);
+        //     return ans;
+        // }
+        // List<List<Integer>> ans = new ArrayList<>();
+        // List<Integer> [] adj;
+        // int [] depth;
+        // int dfs(int cur, int pre, int dep) { // 返回值为当前节点所有dfs路径终点的最小深度
+        //     depth[cur] = dep; // 将当前深度存入深度数组
+        //     int res = Integer.MAX_VALUE;
+        //     for (int v : adj[cur]) {
+        //         if (v == pre) continue;
+        //         int endDepth; // dfs终点深度
+        //         if (depth[v] == -1) {
+        //             endDepth = dfs(v, cur, dep + 1);
+        //             // 如果深度大于当前深度，说明当前点不在闭环上, 当前点与下一节点i之间的连线为答案之一
+        //             if (endDepth > dep)
+        //                 ans.add(List.of(cur, v));
+        //         } else endDepth = depth[v];
+        //         res = Math.min(res, endDepth);
+        //     }
+        //     return res;
+        // }
+        // public List<List<Integer>> criticalConnections(int n, List<List<Integer>> connections) {
+        //     List<List<Integer>> res = new ArrayList<>();
+        //     graph = new ArrayList[n];
+        //     int[] dist = new int[n];
+        //     int[] low = new int[n];
+        //     HashSet<Integer> visited = new HashSet<>();
+        //     for (int i = 0; i < n; i++) graph[i] = new ArrayList<>();
+        //     for (List<Integer> e : connections){
+        //         graph[e.get(0)].add(e.get(1));
+        //         graph[e.get(1)].add(e.get(0));
+        //     }
+        //     dfs(0, -1 , visited, dist, low, res);
+        //     return res;
+        // }
+        // List<Integer>[] graph;
+        // private int time = 0;
+        // public void dfs(int cur, int root, HashSet<Integer> visited, int[] dist, int[] low, List<List<Integer>> res) {
+        //     dist[cur] = time++; 
+        //     low[cur] = dist[cur];
+        //     visited.add(cur);
+        //     for (int nei : graph[cur]) {
+        //         if (nei == root) continue;
+        //         //如果没访问过，继续dfs递归下去
+        //         //cur的child的到达的最小的点，也就是cur所能到达的最小的点
+        //         //一路backward返回
+        //         if (!visited.contains (nei)){
+        //             dfs (nei, cur, visited, dist, low, res);
+        //             low[cur] = Math.min (low[cur], low[nei]);
+        //             if (dist[cur] < low[nei])
+        //                 res.add (Arrays.asList (cur, nei));
+        //         } else { // 如果访问过，那就更新cur的low
+        //             low[cur] = Math.min (low[cur], dist[nei]);
+        //         }
+        //     }
+        // }
+
+        // private class UnionFind {
+        //     int [] id; // parent
+        //     int [] cnt;// size
+        //     public UnionFind (int n) {
+        //         id = new int [n];
+        //         cnt = new int [n];
+        //         for (int i = 0; i < n; i++) {
+        //             id[i] = i;
+        //             cnt[i] = 1;
+        //         }
+        //     }
+        //     public int find(int i) {
+        //         while (id[i] != i) {
+        //             id[i] = id[id[i]];
+        //             i = id[i];
+        //         }
+        //         return i;
+        //     }
+        //     public boolean sameGroup(int i, int j) {
+        //         return find(i) == find(j);
+        //     }
+        //     public void union(int i, int j) {
+        //         int rootI = find(i);
+        //         int rootJ = find(j);
+        //         if (rootI != rootJ) {
+        //             id[rootI] = rootJ;
+        //             cnt[rootJ] += cnt[rootI];
+        //         }
+        //     }
+        //     public Set<Integer> getCompoent(int idx) {
+        //         Set<Integer> si = new HashSet<>();
+        //         int p = find(idx);
+        //         for (int i = 0; i < id.length; i++) find(i);
+        //         for (int i = 0; i < id.length; i++) 
+        //             if (id[i] == p)
+        //                 si.add(i);
+        //         return si;
+        //     }
+        // }
+        // public boolean[] friendRequests(int n, int[][] rs, int[][] req) { // 这里面还有一点逻辑没能理清楚
+        //     UnionFind uf = new UnionFind(n);
+        //     Map<Integer, Set<Integer>> m = new HashMap<>();
+        //     for (int [] v : rs) {
+        //         m.computeIfAbsent(v[0], z -> new HashSet<>()).add(v[1]);
+        //         m.computeIfAbsent(v[1], z -> new HashSet<>()).add(v[0]);
+        //     }
+        //     boolean [] ans = new boolean[req.length];
+        //     for (int i = 0; i < req.length; i++) {
+        //         int [] cur = req[i];
+        //         if (uf.sameGroup(cur[0], cur[1])) {
+        //             ans[i] = true;
+        //             continue;
+        //         }
+        //         if (m.get(cur[0]) != null && m.get(cur[0]).contains(cur[1]) || m.get(cur[1]) != null && m.get(cur[1]).contains(cur[0]))
+        //             ans[i] = false;
+        //         else {
+        //             Set<Integer> one = uf.getCompoent(cur[0]);
+        //             Set<Integer> two = uf.getCompoent(cur[1]);
+        //             boolean flag = false;
+        //             for (Integer a : one) 
+        //                 for (Integer b : two) 
+        //                     if (m.get(a) != null && m.get(a).contains(b) || m.get(b) != null && m.get(b).contains(a)) {
+        //                         ans[i] = false;
+        //                         flag = true;
+        //                         break;
+        //                     }
+        //             if (flag) continue;
+        //             ans[i] = true;
+        //             uf.union(cur[0], cur[1]);
+        //         }
+        //     }
+        //     return ans;
+        // }
+
+        // public int maxNumEdgesToRemove(int n, int[][] edges) { // n: [1, 2, ..., n]
+        //     Map<Integer, int []> map = new HashMap<>();
+        //     for (int i = 0; i < edges.length; i++) map.put(i, edges[i]);
+        //     Comparator<Map.Entry<Integer, int []>> cmp = new Comparator<Map.Entry<Integer, int []>>() {
+        //         @Override 
+        //         public int compare(Map.Entry<Integer, int []> a, Map.Entry<Integer, int []> b) {
+        //             int tmp = b.getValue()[0] - a.getValue()[0]; // type: 3, 2, 1
+        //             if (tmp != 0) return tmp;
+        //             else return a.getKey().compareTo(b.getKey());
+        //         }
+        //     };
+        //     HashMap<Integer, int []> m = map.entrySet().stream().sorted(cmp)
+        //         .collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+        //     HashSet<Integer> s = new HashSet<>();
+        //     HashSet<Integer> sa = new HashSet<>();
+        //     HashSet<Integer> sb = new HashSet<>();
+        //     UnionFind uf = new UnionFind(n+1);
+        //     for (Map.Entry<Integer, int []> en : m.entrySet()) {
+        //         int [] cur = en.getValue();
+        //         if (uf.sameGroup(cur[1], cur[2])) continue;
+        //         uf.merge(cur[1], cur[2]);
+        //         if (cur[0] == 3) s.add(en.getKey()); // 排序的目的是保证先用完所有公共边
+        //         else if (cur[0] == 1) sa.add(en.getKey());
+        //         else sb.add(en.getKey());
+        //     } 
+        //     if (uf.getCnt() > 2 || sa.size() > 0) return -1; // 所有的边都用上了，仍不能强联通，则无解
+        //     if (sb.size() == 0 && uf.getCnt() == 2) return edges.length - s.size(); // 不需要单人走的路，总边数 - 必要边数 ==》多余的边数
+        //     uf = new UnionFind(n+1);
+        //     for (Integer v : s) uf.merge(edges[v][1], edges[v][2]);
+        //     for (Map.Entry<Integer, int []> en : m.entrySet()) {
+        //         int [] cur = en.getValue();
+        //         if (cur[0] == 1) {
+        //             if (uf.sameGroup(cur[1], cur[2])) continue;
+        //             uf.merge(cur[1], cur[2]);
+        //             sa.add(en.getKey());
+        //             if (uf.getCnt() == 2) break; // 这句话好像根本就没有用呀？？？破代码
+        //         }
+        //     }
+        //     return edges.length - s.size() - sa.size() - sb.size();
+        // }
+        // private class UnionFind {
+        //     int [] id; // parent
+        //     int [] cnt;// size
+        //     int cmpCnt;
+        //     public UnionFind (int n) {
+        //         id = new int [n];
+        //         cnt = new int [n];
+        //         for (int i = 0; i < n; i++) {
+        //             id[i] = i;
+        //             cnt[i] = 1;
+        //         }
+        //         cmpCnt = n;
+        //     }
+        //     public int find(int i) {
+        //         while (id[i] != i) {
+        //             id[i] = id[id[i]];
+        //             i = id[i];
+        //         }
+        //         return i;
+        //     }
+        //     public boolean sameGroup(int i, int j) {
+        //         return find(i) == find(j);
+        //     }
+        //     public void merge(int i, int j) {
+        //         int rootI = find(i);
+        //         int rootJ = find(j);
+        //         if (rootI != rootJ) {
+        //             id[rootI] = rootJ;
+        //             cnt[rootJ] += cnt[rootI];
+        //         }
+        //         --cmpCnt;
+        //     }
+        //     public int getCnt() {
+        //         return cmpCnt;
+        //     }
+        // }
+        // public int maxNumEdgesToRemove(int n, int[][] edges) { // 这么写代码就简洁多了呀
+        //     UnionFind ufa = new UnionFind(n);
+        //     UnionFind ufb = new UnionFind(n);
+        //     int ans = 0;
+        //     for (int[] e : edges) { // 节点编号改为从 0 开始
+        //         --e[1];
+        //         --e[2];
+        //     }
+        //     for (int[] e : edges) // 公共边
+        //         if (e[0] == 3) 
+        //             if (!ufa.unite(e[1], e[2])) {
+        //                 ++ans;
+        //             } else
+        //                 ufb.unite(e[1], e[2]);
+        //     for (int[] e : edges) // 独占边
+        //         if (e[0] == 1) {  // Alice 独占边
+        //             if (!ufa.unite(e[1], e[2])) 
+        //                 ++ans;
+        //         } else if (e[0] == 2) 
+        //             if (!ufb.unite(e[1], e[2])) // Bob 独占边
+        //                 ++ans;
+        //     if (ufa.setCount != 1 || ufb.setCount != 1) 
+        //         return -1;
+        //     return ans;
+        // }
+        // public class UnionFind { // 并查集模板
+        //     int[] parent;
+        //     int[] size;
+        //     int n;
+        //     int setCount; // 当前连通分量数目
+        //     public UnionFind(int n) {
+        //         this.n = n;
+        //         this.setCount = n;
+        //         this.parent = new int[n];
+        //         this.size = new int[n];
+        //         Arrays.fill(size, 1);
+        //         for (int i = 0; i < n; ++i) parent[i] = i;
+        //     }
+        //     public int findset(int x) {
+        //         return parent[x] == x ? x : (parent[x] = findset(parent[x]));
+        //     }
+        //     public boolean unite(int x, int y) {
+        //         x = findset(x);
+        //         y = findset(y);
+        //         if (x == y) return false;
+        //         if (size[x] < size[y]) {
+        //             int temp = x;
+        //             x = y;
+        //             y = temp;
+        //         }
+        //         parent[y] = x;
+        //         size[x] += size[y];
+        //         --setCount;
+        //         return true;
+        //     }
+        //     public boolean connected(int x, int y) {
+        //         x = findset(x);
+        //         y = findset(y);
+        //         return x == y;
+        //     }
+        // }
+
+        // public boolean[] distanceLimitedPathsExist(int n, int[][] edgeList, int[][] queries) { // 题目理解错了
+        //     List<int []> que = new ArrayList<>();
+        //     for (int i = 0; i < queries.length; i++)
+        //         que.add(new int [] {i, queries[i][0], queries[i][1], queries[i][2]});
+        //     Collections.sort(que, (a, b) -> a[1] != b[1] ? a[1] - b[1] : a[2] - b[2]);
+        //     adj = new ArrayList[n];
+        //     for (int i = 0; i < n; i++) adj[i] = new ArrayList<>();
+        //     for (int [] e : edgeList) {
+        //         adj[e[0]].add(new int [] {e[1], e[2]});
+        //         adj[e[1]].add(new int [] {e[0], e[2]});
+        //     }
+        //     boolean [] ans = new boolean [que.size()];
+        //     // d = new int [n];
+        //     for (int i = 0; i < que.size(); i++) {
+        //         int u = que.get(i)[1], v = que.get(i)[2];
+        //         dijkstra(u);
+        //         ans[que.get(i)[0]] = (d[v] < que.get(i)[3]);
+        //         int j = i+1;
+        //         while (j < que.size() && que.get(j)[1] == u) j++;
+        //         for (int k = i+1; k < j; k++) 
+        //             ans[que.get(k)[0]] = (d[que.get(k)[2]] < que.get(k)[3]);
+        //         i = j-1;
+        //     }            
+        //     return ans;
+        // }
+        // List<int []> [] adj;
+        // int [] d;
+        // void dijkstra(int u) {
+        //     Arrays.fill(d, Integer.MAX_VALUE);
+        //     d[u] = 0;
+        //     // Set<Integer> vis = new HashSet<>(); // 这里居然又被我画蛇添足了
+        //     Queue<int []> q = new PriorityQueue<>((x, y) -> x[1] - y[1]); // 最小堆
+        //     q.offer(new int [] {u, 0});
+        //     // vis.add(u);
+        //     while (!q.isEmpty()) {
+        //         int [] top = q.poll();
+        //         if (top[1] > d[top[0]]) continue;
+        //         for (int [] e : adj[top[0]]) 
+        //             if (top[1] + e[1] < d[e[0]]) {
+        //                 d[e[0]] = top[1] + e[1];
+        //                 // if (!vis.contains(e[0])) {
+        //                     q.offer(new int [] {e[0], d[e[0]]});
+        //                 //     vis.add(e[0]);
+        //                 // }
+        //             }
+        //     }
+        // }
+        // public boolean[] distanceLimitedPathsExist(int n, int[][] edgeList, int[][] queries) {
+        //     DSU dsu = new DSU(n);
+        //     Arrays.sort(edgeList, (a, b) -> a[2] - b[2]); // 同样按照weight的升序排列
+        //     int m = queries.length, idx = 0, e = edgeList.length;
+        //     Query [] qarr = new Query[m];
+        //     for (int i = 0; i < m; i++) 
+        //         qarr[i] = new Query(i, queries[i][0], queries[i][1], queries[i][2]);
+        //     Arrays.sort(qarr);
+        //     boolean [] ans = new boolean [m];
+        //     for (int i = 0; i < m; i++) {
+        //         while (idx < e && edgeList[idx][2] < qarr[i].weight) {
+        //             dsu.union(edgeList[idx][0], edgeList[idx][1]);
+        //             ++idx;
+        //         }
+        //         ans[qarr[i].idx] = dsu.areConnected(qarr[i].start, qarr[i].end);
+        //     }            
+        //     return ans;
+        // }
+        // private class DSU {
+        //     private int N;
+        //     private int [] parent, rank;
+        //     public DSU( int n) {
+        //         this.N = n;
+        //         this.parent = new int [N];
+        //         this.rank = new int [N];
+        //         for (int i = 0; i < N; i++) {
+        //             this.parent[i] = i;
+        //             this.rank[i] = 1;
+        //         }
+        //     }
+        //     public boolean areConnected(int u, int v) {
+        //         return find(u) == find(v);
+        //     }
+        //     public void union(int u, int v) { // O(Log(N))
+        //         if (u != v) {
+        //             int p = find(u);
+        //             int q = find(v);
+        //             if (p != q) {
+        //                 if (rank[p] > rank[q]) {
+        //                     parent[q] = p;
+        //                     rank[p] += rank[q];
+        //                 } else {
+        //                     parent[p] = q;
+        //                     rank[q] += rank[p];
+        //                 }
+        //             }
+        //         }
+        //     }
+        //     private int find(int v) { 
+        //         int x = v;
+        //         while (x != parent[x])
+        //             x = parent[x];
+        //         parent[v] = x;
+        //         return x;
+        //     }
+        // }
+        // class Query implements Comparable<Query> {
+        //     public int idx, start, end, weight;
+        //     public Query(int idx, int bgn, int end, int weight) {
+        //         this.idx = idx;
+        //         this.start = bgn;
+        //         this.end = end;
+        //         this.weight = weight;
+        //     }
+        //     @Override public int compareTo(Query query) { // 按照weight的升序排列
+        //         return this.weight - query.weight;
+        //     }
+        // }
+
+        // public List<List<String>> findLadders(String bgn, String end, List<String> list) { // tle: 我这里好像还是在暴搜所有可能性
+        //     ss = new HashSet<>(list);
+        //     ss.add(bgn);
+        //     if (!ss.contains(end)) return new ArrayList<>();
+        //     for (String s : ss) 
+        //         for (int i = 0; i < s.length(); i++) 
+        //             for (char c = 'a'; c <= 'z'; c++) {
+        //                 if (s.charAt(i) == c) continue;
+        //                 String tmp = s.substring(0, i) + c + s.substring(i+1);
+        //                 if (ss.contains(tmp))
+        //                     adj.computeIfAbsent(s, z -> new HashSet<>()).add(tmp);
+        //             }
+        //     return dfs(bgn, end);
+        // }
+        // Map<String, Set<String>> adj = new HashMap<>();
+        // Map<String, List<List<String>>> dp = new HashMap<>(); // 修改后的写法不知道哪里原因暴栈了
+        // Set<String> ss;
+        // List<List<String>> dfs(String s, String end) { // 
+        //     List<List<String>> ans = new ArrayList<>();
+        //     if (s.equals(end)) {
+        //         List<String> tmp = new ArrayList<>();
+        //         tmp.add(end);
+        //         ans.add(tmp);
+        //         return ans;
+        //     }
+        //     if (dp.containsKey(s)) return dp.get(s);
+        //     if (adj.get(s) == null) {
+        //         return null;
+        //     }
+        //     for (String next : adj.get(s)) {
+        //         List<List<String>> tmp = dfs(next, end);
+        //         if (tmp == null) continue;
+        //         if (ans.size() == 0 || ans.get(0).size() > tmp.get(0).size())
+        //             ans = tmp;
+        //     }
+        //     if (ans.size() == 0) {
+        //         dp.put(s, null);
+        //         return null;
+        //     }
+        //     for (int i = 0; i < ans.size(); i++) 
+        //         ans.get(i).add(0, s);
+        //     dp.put(s, ans);
+        //     return ans;
+        // }        
+        // public List<List<String>> findLadders(String bgn, String end, List<String> list) { 
+        //     Set<String> ss = new HashSet<>(list);
+        //     if (!ss.contains(end)) return ans;
+        //     ss.remove(bgn);
+        //     // BFS: 第 1 步：广度优先遍历建图
+        //     Map<String, Integer> cnt = new HashMap<>(); // 记录扩展出的单词是在第几次扩展的时候得到的，key：单词，value：在广度优先遍历的第几层
+        //     cnt.put(bgn, 0);
+        //     Map<String, List<String>> from = new HashMap<>(); // 记录了单词是从哪些单词扩展而来，key：单词，value：单词列表，这些单词可以变换到 key ，它们是一对多关系
+        //     int step = 1, n = bgn.length();
+        //     boolean found = false;
+        //     Queue<String> q = new LinkedList<>();
+        //     q.offer(bgn);
+        //     while (!q.isEmpty()) {
+        //         for (int size = q.size()-1; size >= 0; size--) {
+        //             String cur = q.poll();
+        //             char [] s = cur.toCharArray();
+        //             for (int i = 0; i < n; i++) {
+        //                 char ori = s[i];
+        //                 for (char c = 'a'; c <= 'z'; c++) {
+        //                     if (s[i] == c) continue; // 
+        //                     s[i] = c;
+        //                     String next = String.valueOf(s);
+        //                     if (cnt.containsKey(next) && step == cnt.get(next)) //
+        //                         from.get(next).add(cur);                        //
+        //                     if (!ss.contains(next)) continue; // 为什么我把这行写前面会少掉答案呢？ //
+        //                     ss.remove(next); // 如果从一个单词扩展出来的单词以前遍历过，距离一定更远，为了避免搜索到已经遍历到，且距离更远的单词，需要将它从 dict 中删除
+        //                     q.offer(next);   // 这一层扩展出的单词进入队列
+        //                     from.computeIfAbsent(next, z -> new ArrayList<>()).add(cur); // 记录 next Word 从 cur Word 而来
+        //                     cnt.put(next, step);
+        //                     if (next.equals(end)) found = true;
+        //                 }
+        //                 s[i] = ori;
+        //             }
+        //         }
+        //         step++;
+        //         if (found) break;
+        //     }
+        //     // 第 2 步：深度优先遍历找到所有解，从 end 恢复到 bgn ，所以每次尝试操作 path 列表的头部
+        //     if (found) {
+        //         Deque<String> path = new ArrayDeque<>(); 
+        //         path.add(end);
+        //         dfs(from, path, bgn, end);
+        //     }
+        //     return ans;
+        // }
+        // List<List<String>> ans = new ArrayList<>();
+        // void dfs(Map<String, List<String>> from, Deque<String> path, String end, String cur) {
+        //     if (cur.equals(end)) {
+        //         ans.add(new ArrayList<>(path)); // 这个写法学习一下，第一次见
+        //         return ;
+        //     }
+        //     for (String precursor : from.get(cur)) {
+        //         path.offerFirst(precursor);
+        //         dfs(from, path, end, precursor);
+        //         path.pollFirst();
+        //     }
+        // }
+        // public List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
+        //     List<List<String>> ans = new ArrayList<>();
+        //     // 如果不含有结束单词，直接结束，不然后边会造成死循环
+        //     if (!wordList.contains(endWord)) {
+        //         return ans;
+        //     }
+        //     // 利用 BFS 得到所有的邻居节点,以及每个节点的所在层数
+        //     HashMap<String, Integer> distance = new HashMap<>();
+        //     HashMap<String, ArrayList<String>> map = new HashMap<>();
+        //     bfs(beginWord, endWord, wordList, map, distance);
+        //     ArrayList<String> temp = new ArrayList<String>();
+        //     // temp 用来保存当前的路径
+        //     temp.add(beginWord);
+        //     findLaddersHelper(beginWord, endWord, map, distance, temp, ans);
+        //     return ans;
+        // }
+        // private void findLaddersHelper(String beginWord, String endWord, HashMap<String, ArrayList<String>> map,
+        //                                HashMap<String, Integer> distance, ArrayList<String> temp, List<List<String>> ans) {
+        //     if (beginWord.equals(endWord)) {
+        //         ans.add(new ArrayList<String>(temp));
+        //         return;
+        //     }
+        //     // 得到所有的下一个的节点
+        //     //之所以是 map.getOrDefault 而不是 get，就是上边的情况 get 会出错
+        //     ArrayList<String> neighbors = map.getOrDefault(beginWord, new ArrayList<String>());
+        //     for (String neighbor : neighbors) {
+        //         //判断层数是否符合
+        //         if (distance.get(beginWord) + 1 == distance.get(neighbor)) {
+        //             temp.add(neighbor);
+        //             findLaddersHelper(neighbor, endWord, map, distance, temp, ans);
+        //             temp.remove(temp.size() - 1);
+        //         }
+        //     }
+        // }
+        // public void bfs(String beginWord, String endWord, List<String> wordList, HashMap<String, ArrayList<String>> map,
+        //                 HashMap<String, Integer> distance) {
+        //     Queue<String> queue = new LinkedList<>();
+        //     queue.offer(beginWord);
+        //     distance.put(beginWord, 0);
+        //     boolean isFound = false;
+        //     int depth = 0;
+        //     Set<String> dict = new HashSet<>(wordList);
+        //     while (!queue.isEmpty()) {
+        //         int size = queue.size();
+        //         depth++;
+        //         for (int j = 0; j < size; j++) {
+        //             String temp = queue.poll();
+        //             // 一次性得到所有的下一个的节点
+        //             ArrayList<String> neighbors = getNeighbors(temp, dict);
+        //             map.put(temp, neighbors);
+        //             for (String neighbor : neighbors) {
+        //                 if (!distance.containsKey(neighbor)) {
+        //                     distance.put(neighbor, depth);
+        //                     if (neighbor.equals(endWord)) {
+        //                         isFound = true;
+        //                     }
+        //                     queue.offer(neighbor);
+        //                 }
+        //             }
+        //         }
+        //         if (isFound) {
+        //             break;
+        //         }
+        //     }
+        // }
+        // private ArrayList<String> getNeighbors(String node, Set<String> dict) {
+        //     ArrayList<String> res = new ArrayList<String>();
+        //     char chs[] = node.toCharArray();
+        //     for (char ch = 'a'; ch <= 'z'; ch++) {
+        //         for (int i = 0; i < chs.length; i++) {
+        //             if (chs[i] == ch)
+        //                 continue;
+        //             char old_ch = chs[i];
+        //             chs[i] = ch;
+        //             if (dict.contains(String.valueOf(chs))) {
+        //                 res.add(String.valueOf(chs));
+        //             }
+        //             chs[i] = old_ch;
+        //         }
+        //     }
+        //     return res;
+        // }
+//         public List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
+//             List<List<String>> ans = new ArrayList<>();
+//             if (!wordList.contains(endWord)) return ans;
+//             // 利用 BFS 得到所有的邻居节点
+//             HashMap<String, ArrayList<String>> map = new HashMap<>();
+//             bfs(beginWord, endWord, wordList, map);
+//             ArrayList<String> temp = new ArrayList<String>();
+//             // temp 用来保存当前的路径
+//             temp.add(beginWord);
+//             findLaddersHelper(beginWord, endWord, map, temp, ans);
+//             return ans;
+//         }
+//         private void findLaddersHelper(String beginWord, String endWord, HashMap<String, ArrayList<String>> map,
+//                                        ArrayList<String> temp, List<List<String>> ans) {
+//             if (beginWord.equals(endWord)) {
+//                 ans.add(new ArrayList<String>(temp));
+//                 return;
+//             }
+//             // 得到所有的下一个的节点
+//             ArrayList<String> neighbors = map.getOrDefault(beginWord, new ArrayList<String>());
+//             for (String neighbor : neighbors) {
+//                 temp.add(neighbor);
+//                 findLaddersHelper(neighbor, endWord, map, temp, ans);
+//                 temp.remove(temp.size() - 1);
+//             }
+//         }
+// // 利用递归实现了双向搜索
+//         private void bfs(String beginWord, String endWord, List<String> wordList, HashMap<String, ArrayList<String>> map) {
+//             Set<String> set1 = new HashSet<String>();
+//             set1.add(beginWord);
+//             Set<String> set2 = new HashSet<String>();
+//             set2.add(endWord);
+//             Set<String> wordSet = new HashSet<String>(wordList);
+//             bfsHelper(set1, set2, wordSet, true, map);
+//         }
+// // direction 为 true 代表向下扩展，false 代表向上扩展
+//         private boolean bfsHelper(Set<String> set1, Set<String> set2, Set<String> wordSet, boolean direction,
+//                                   HashMap<String, ArrayList<String>> map) {
+//             // set1 为空了，就直接结束
+//             // 比如下边的例子就会造成 set1 为空
+//             /*	"hot"
+//                 "dog"
+//                 ["hot","dog"]*/
+//             if (set1.isEmpty()) return false;
+//             // set1 的数量多，就反向扩展
+//             if (set1.size() > set2.size()) 
+//                 return bfsHelper(set2, set1, wordSet, !direction, map);
+//             // 将已经访问过单词删除
+//             wordSet.removeAll(set1);
+//             wordSet.removeAll(set2);
+//             boolean done = false;
+//             // 保存新扩展得到的节点
+//             Set<String> set = new HashSet<String>();
+//             for (String str : set1) {
+//                 // 遍历每一位
+//                 for (int i = 0; i < str.length(); i++) {
+//                     char[] chars = str.toCharArray();
+//                     // 尝试所有字母
+//                     for (char ch = 'a'; ch <= 'z'; ch++) {
+//                         if(chars[i] == ch) continue;
+//                         chars[i] = ch;
+//                         String word = new String(chars);
+//                         // 根据方向得到 map 的 key 和 val
+//                         String key = direction ? str : word;
+//                         String val = direction ? word : str;
+//                         ArrayList<String> list = map.containsKey(key) ? map.get(key) : new ArrayList<String>();
+//                         // 如果相遇了就保存结果
+//                         if (set2.contains(word)) {
+//                             done = true;
+//                             list.add(val);
+//                             map.put(key, list);
+//                         }
+//                         // 如果还没有相遇，并且新的单词在 word 中，那么就加到 set 中
+//                         if (!done && wordSet.contains(word)) {
+//                             set.add(word);
+//                             list.add(val);
+//                             map.put(key, list);
+//                         }
+//                     }
+//                 }
+//             }
+//             // 一般情况下新扩展的元素会多一些，所以我们下次反方向扩展  set2
+//             return done || bfsHelper(set2, set, wordSet, !direction, map);
+//         }
+
+        public List<String> findWords(char[][] a, String[] sa) {
+            m = a.length;
+            n = a[0].length;
+            Trie t = new Trie();
+            for (String s : sa) t.insert(s);
             for (int i = 0; i < m; i++) 
-                for (int j = 0; j < n; j++)
-                    col.add(a[i][j]);
-            for (Integer c : col) {
-                int fi = -1, fj = Integer.MAX_VALUE, li = -1, lj = -1;  // f: first, f row, f col, l: last, l row, l col
-                for (int i = 0; i < m; i++)
-                    for (int j = 0; j < n; j++)
-                        if (a[i][j] == c) {
-                            if (fi == -1) fi = i; // 只记最早出现的第一次
-                            fj = Math.min(fj, j);
-                            li = i;
-                            lj = Math.max(lj, j);
-                        }
-                for (int i = fi; i <= li; i++) 
-                    for (int j = fj; j <= lj; j++) 
-                        if (a[i][j] != c) // a[i][j]是会在当前染色c之后染色的
-                            adj.computeIfAbsent(c, z -> new HashSet<>()).add(a[i][j]);
+                for (int j = 0; j < n; j++) 
+                    dfs(i, j, t, a);
+            return new ArrayList<>(ans);
+        }
+        int [][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+        Set<String> ans = new HashSet<>();
+        int m, n;
+        void dfs(int i, int j, Trie t, char [][] a) { // 这里加入Trie t变量，相当于每次调用从上一个字母开始，而不需要从树根开始
+            if (a[i][j] == '#' || t.next[a[i][j]-'a'] == null) return ;
+            char ori = a[i][j];
+            t = t.next[a[i][j] - 'a'];
+            if (!t.word.equals("")) ans.add(t.word);
+            a[i][j] = '#';
+            for (int [] d : dirs) {
+                int x = i + d[0], y = j + d[1];
+                if (x < 0 || x >= m || y < 0 || y >= n) continue;
+                dfs(x, y, t, a);
             }
-            Set<Integer> vis = new HashSet<>(); // visiting: 只保证先染的着色不会在后染的着色里再次出现
-            for (Integer c : col) 
-                if (!topologicalSort(vis, c)) return false;
-            return true;
+            a[i][j] = ori;
         }
-        Map<Integer, Set<Integer>> adj = new HashMap<>(); // 在key之后染色的着色集合
-        private boolean topologicalSort(Set<Integer> vis, int c) { // 这种写法好陌生
-            if (vis.contains(c)) return false;
-            vis.add(c);
-            for (Integer nei : adj.getOrDefault(c, Collections.emptySet()))
-                if (!topologicalSort(vis, nei)) return false;
-            vis.remove(c);
-            return true;
+        class Trie {
+            String word;
+            Trie [] next;
+            public Trie() {
+                word = "";
+                next = new Trie [26];
+            }
+            public void insert(String t) {
+                char [] s = t.toCharArray();
+                Trie r = this;
+                for (int i = 0; i < t.length(); i++) {
+                    if (r.next[s[i]-'a'] == null)
+                        r.next[s[i]-'a'] = new Trie();
+                    r = r.next[s[i]-'a'];
+                }
+                r.word = t;
+            }
         }
-   }
-    public static void main(String[] args) {
-        Solution s = new Solution();
-
-        // int [][] a = new int [][] {{1,1,1,1},{1,2,2,1},{1,2,2,1},{1,1,1,1}};
-        // int [][] a = new int [][] {{1,2,1},{2,1,2},{1,2,1}};
-        int [][] a = new int [][] {{1,1,1,1},{1,2,2,1},{1,2,2,1},{1,1,1,1}};
-
-        boolean r = s.isPrintable(a);
-        System.out.println("r: " + r);
     }
+    public static void main (String[] args) {
+        Solution s = new Solution ();
+
+        char [][] a = new char [][] {{'o','a','a','n'},{'e','t','a','e'},{'i','h','k','r'},{'i','f','l','v'}}; 
+        String [] b = new String [] {"oath","pea","eat","rain"};
+// char [][] a = new char [][] {{'a'}}; 
+// String [] b = new String [] {"a"};
+
+        List<String> r = s.findWords(a, b);
+        System.out.println("r.size(): " + r.size());
+        System.out.println(Arrays.toString(r.toArray()));
+   }
 }
