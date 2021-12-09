@@ -49,6 +49,86 @@ public String longestPrefix(String s) { // 容易出错，KMP写起来比较简�
     return maxLen == 0 ? "" : s.substring(0, maxLen);
 }
 #+END_SRC
+*** 214. Shortest Palindrome - Hard KMP算法
+You are given a string s. You can convert s to a palindrome by adding characters in front of it.
+
+Return the shortest palindrome you can find by performing this transformation.
+**** 解题思路与分析
+     #+BEGIN_SRC java
+public String shortestPalindrome(String s) {
+    int n = s.length();
+    int base = 131, mod = 1000000007;
+    int left = 0, right = 0, mul = 1;
+    int best = -1;
+    for (int i = 0; i < n; ++i) {
+        left = (int) (((long) left * base + s.charAt(i)) % mod);
+        right = (int) ((right + (long) mul * s.charAt(i)) % mod);
+        if (left == right) best = i;
+        mul = (int) ((long) mul * base % mod);
+    }
+    String add = (best == n - 1 ? "" : s.substring(best + 1));
+    StringBuffer ans = new StringBuffer(add).reverse();
+    ans.append(s);
+    return ans.toString();
+}
+     #+END_SRC
+**** 解题思路与分析
+     #+BEGIN_SRC java
+public String shortestPalindrome(String t) { 
+    // if (t.chars().distinct().count() == 1) return t;
+    // if (isPalindrome(t)) return t; // 这种提前的判断也会耽误时间
+    int n = t.length(), j = 0;
+    char [] s = t.toCharArray();
+    for (int i = n-1; i >= 0; i--) // 精髓就在这两行
+        if (s[i] == s[j]) j++;     // 
+    if (j == n) return t;
+    String suf = t.substring(j);
+    System.out.println("suf: " + suf);
+    return new StringBuilder (suf).reverse().toString() + shortestPalindrome(t.substring(0, j)) + suf;
+}
+     #+END_SRC
+**** 解题思路与分析: KMP算法
+     #+BEGIN_SRC java
+public String shortestPalindrome(String t) { // 这个方法比上面的一个方法要慢
+    String s = new StringBuilder (t).reverse().toString();
+    s = t + "#" + s; // 原串 + “#” + 反转串
+    int n = t.length(), m = s.length(), j = 0;
+    int [] p = new int [m];
+    for (int i = 1; i < m; i++) {
+        int k = p[i-1];
+        while (k > 0 && s.charAt(k) != s.charAt(i)) k = p[k-1];
+        k += (s.charAt(i) == s.charAt(k) ? 1 : 0);
+        p[i] = k;
+    }
+    return s.substring(n+1, 2 * n + 1 - p[m-1]) + t;
+}
+     #+END_SRC
+- 官方发布的写法
+#+BEGIN_SRC java
+public String shortestPalindrome(String s) {
+    int n = s.length();
+    int[] fail = new int[n];
+    Arrays.fill(fail, -1);
+    for (int i = 1; i < n; ++i) {
+        int j = fail[i - 1];
+        while (j != -1 && s.charAt(j + 1) != s.charAt(i)) 
+            j = fail[j];
+        if (s.charAt(j + 1) == s.charAt(i)) 
+            fail[i] = j + 1;
+    }
+    int best = -1;
+    for (int i = n - 1; i >= 0; --i) {
+        while (best != -1 && s.charAt(best + 1) != s.charAt(i)) 
+            best = fail[best];
+        if (s.charAt(best + 1) == s.charAt(i)) 
+            ++best;
+    }
+    String add = (best == n - 1 ? "" : s.substring(best + 1));
+    StringBuffer ans = new StringBuffer(add).reverse();
+    ans.append(s);
+    return ans.toString();
+}
+#+END_SRC
 *** 1910. Remove All Occurrences of a Substring - Medium 可用KMP算法
 Given two strings s and part, perform the following operation on s until all occurrences of the substring part are removed:
 
@@ -549,4 +629,6 @@ public long maxProduct(String s) { // 这个马拉车，得多写几遍
 **** DP解：要再好好理解消化一下
 #+BEGIN_SRC java
 #+END_SRC
+
+
 

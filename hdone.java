@@ -9,29 +9,8 @@ import java.util.stream.*;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toMap;
 
-public class hardOne {
+public class hdone {
     public static class Solution {
-
-        public String shortestPalindrome(String t) { // tle 
-            if (t.chars().distinct().count() == 1) return t;
-            if (isPalindrome(t)) return t;
-            int n = t.length();
-            int i = n / 2 + (n % 2 == 1 ? 1 : 0) - 1;
-            for (; i >= 0; i--) {
-                if (i + i+1 < n && isPalindrome(t.substring(0, i+i+2)))
-                    return new StringBuilder (t.substring(i+i+2)).reverse().toString() + t;
-                if (isPalindrome(t.substring(0, i+i+1)))
-                    return new StringBuilder (t.substring(i+i+1)).reverse().toString() + t;
-            }
-            return null;
-        }
-        private boolean isPalindrome(String t) {
-            int i = 0, j = t.length() - 1;
-            char [] s = t.toCharArray();
-            while (i < j) 
-                if (s[i++] != s[j--]) return false;
-            return true;
-        }
 
         public int[] maxSlidingWindow(int[] a, int k) { 
             int n = a.length, j = 0, max = Integer.MIN_VALUE, idx = 0;

@@ -9703,11 +9703,9 @@ public double[] medianSlidingWindow(int[] nums, int k) {
 }
 #+END_SRC
 
-
-
 * HashMap
 *** 数有多少个数组数不清楚
-*** 1392. Longest Happy Prefix - Hard
+*** 1392. Longest Happy Prefix - Hard KMP算法 - 这个题需要重写
 A string is called a happy prefix if is a non-empty prefix which is also a suffix (excluding itself).
 
 Given a string s, return the longest happy prefix of s. Return an empty string "" if no such prefix exists.
@@ -9735,8 +9733,6 @@ public String longestPrefix(String s) {
     return maxLen == 0 ? "" : s.substring(0, maxLen);
 }
 #+END_SRC
-*** 336. Palindrome Pairs - Hard
-Given a list of unique words, return all the pairs of the distinct indices (i, j) in the given list, so that the concatenation of the two words words[i] + words[j] is a palindrome.
 **** 解题思路与分析
 - 利用字典wmap保存单词 -> 下标的键值对
 - 遍历单词列表words，记当前单词为word，下标为idx：
@@ -9797,7 +9793,7 @@ public List<List<Integer>> palindromePairs(String[] words) {
 }
 #+END_SRC
 
-*** KMP 算法
+**** KMP 算法
 [[./pic/kmp.png]]
 
 [[./pic/kmp2.png]]
@@ -9838,6 +9834,8 @@ string longestPrefix(string s) {
     return s.substr(0, lps.back());
 }
 #+END_SRC
+*** 336. Palindrome Pairs - Hard
+Given a list of unique words, return all the pairs of the distinct indices (i, j) in the given list, so that the concatenation of the two words words[i] + words[j] is a palindrome.
 *** 1172. Dinner Plate Stacks - Hard
 You have an infinite number of stacks arranged in a row and numbered (left to right) from 0, each of the stacks has the same maximum capacity.
 
@@ -11737,6 +11735,109 @@ public int[] countPairs(int n, int[][] edges, int[] queries) { // 别人家的�
 # // https://leetcode.com/problems/count-pairs-of-nodes/discuss/1096432/Java-or-Two-Steps-or-O(NlgN-%2B-Q(N%2BE))
 # // 这个也可以再参考一下
 
+** Tarjan 算法
+- 图的一些基本概念：
+  - *关联（incident）* : 点为边的端点;
+  - *邻接（adjacent）* : 点与点关联同一条边，或边与边关联同一顶点；
+  - *子图* : 图G'的点和边都是图G的子集，则G'为G的子图;
+  - *道路* : 从点v到点u的路径；
+  - *简单道路* : 没有重复边的道路；
+  - *回路* : 起点与终点相同的道路；
+  - *简单回路* : 没有重复边的回路；
+  - *连通* : 两顶点间有道路；
+  - *强连通* : 有向图u→v与v→u都有道路；
+  - *连通图* : 任意两顶点间都有道路（若有向图除去方向后连通，则称有向图连通）；
+  - *简单图* : 没有重复边和自环的图；
+  - *完全图* : 任意两顶点间有一条边到达的简单图（有向完全图与无向完全图）；
+  - *强连通（strongly connected）* : 在有向图G 中，如果两个顶点间至少存在一条路径，称两个顶点强连通（strongly connected）；
+  - *强连通图* : 如果有向图G 的每两个顶点都强连通，称G 是一个强连通图；
+  - *强连通分量(strongly connected components)* : 非强连通图有向图的极大强连通子图，称为强连通分量(strongly connected components)。
+- 无向图的割点与桥
+  - 什么是无向图？简单来说，若一个图中每条边都是无方向的，则称为无向图。
+  - 割点: 若从图中删除节点 x 以及所有与 x 关联的边之后，图将被分成两个或两个以上的不相连的子图，那么称 x 为图的割点。
+  - 桥: 若从图中删除边 e 之后，图将分裂成两个不相连的子图，那么称 e 为图的桥或割边。
+- 求强连通分量就是我们今天要解决的问题，根据强连通分量定义，用双向遍历取交集的方法求强连通分量，时间复杂度为O（$N^2$+M）. 而Tarjan或Kosaraju算法, 两者的时间复杂度都是O（N+M）。
+*** 算法简介
+
+在了解了 Tarjan 算法的背景以及图的割点与桥的基本概念之后，我们下面所面临的问题就是 —— 如何求解图的割点与桥？
+
+开门见山，我们直接引出 Tarjan 算法在求解无向图的割点与桥的工作原理。
+
+- 时间戳: ​时间戳是用来标记图中每个节点在进行深度优先搜索时被访问的时间顺序，当然，你可以理解成一个序号（这个序号由小到大），用 dfn[x] 来表示。
+- 搜索树: 在无向图中，我们以某一个节点 x 出发进行深度优先搜索，每一个节点只访问一次，所有被访问过的节点与边构成一棵树，我们可以称之为“无向连通图的搜索树”。
+- 追溯值: 追溯值用来表示从当前节点 x 作为搜索树的根节点出发，能够访问到的所有节点中，时间戳最小的值 —— low[x]。那么，我们要限定下什么是“能够访问到的所有节点”？，其需要满足下面的条件之一即可：
+  - 以 x 为根的搜索树的所有节点
+  - 通过一条非搜索树上的边，能够到达搜索树的所有节点
+
+Tarjan 算法是基于对图深度优先搜索的算法，每个强连通分量为搜索树中的一棵子树。搜索时，把当前搜索树中未处理的节点加入一个堆栈，回溯时可以判断栈顶到栈中的节点是否为一个强连通分量。
+
+- 定义:
+  - o DFN(u)为节点u 搜索的次序编号(时间戳);
+  - o LOW(u)为u 或 u的子树能够追溯到的最早的栈中节点的次序号;
+
+由定义可以得出，当 DFN(u)=LOW(u)时，以u为根的搜索子树上所有节点是一个强连通分量。
+
+- 算法：
+  - 当首次搜索到点u时DFN[u]=LOW[u]=time;
+  - 每当搜索到一个点，把该点压入栈顶;
+  - 当u和v有边相连时:
+
+1）如果v不在栈中（树枝边），DFS(v)，并且LOW[u] = min{LOW(u),LOW(v)};
+
+2）如果v在栈中（前向边/后向边），此时LOW[u] = min{LOW[u],DFN[v]}
+    - 当DFN[u]=LOW[u]时，将它以及在它之上的元素弹出栈，此时，弹出栈的结点构成一个强连通分量;
+    - 继续搜索，知道图被遍历完毕。
+
+由于在这个过程中每个点只被访问一次，每条边也只被访问一次，所以Tarjan算法的时间复杂度是O(n+m).
+ 
+- 这个算法需要用到好几个辅助数组, 下面我来详细介绍它们的作用
+  - int dfn[MAXN];// 用来记录一个顶点第一次被访问时的时间戳
+  - int low[MAXN];// 用来记录一个顶点不经过它的父亲顶点最高能访问到它的祖先节点中的最小时间戳, 通俗易懂的来说, 就是与结点i连接的所有点中dfn[]值最小的一个。
+  - int cut[MAXN];// 用来记录该点是否是割点, 因为一个割点可能多次被记录
+
+*** 1192. Critical Connections in a Network- Hard Tarjan 算法 Tarjan's algorithm Kosaraju算法 -- todo: 这个题不太懂
+There are n servers numbered from 0 to n - 1 connected by undirected server-to-server connections forming a network where connections[i] = [ai, bi] represents a connection between servers ai and bi. Any server can reach other servers directly or indirectly through the network.
+
+A critical connection is a connection that, if removed, will make some servers unable to reach some other server.
+
+Return all critical connections in the network in any order.
+**** 解题思路与分析
+- https://www.cnblogs.com/nullzx/p/7968110.html
+
+     #+BEGIN_SRC java
+public List<List<Integer>> criticalConnections(int n, List<List<Integer>> connections) {
+    depth = new int [n];
+    Arrays.fill(depth, -1);
+    adj = new ArrayList[n]; // 初始化结构图map[i]代表节点i可以连通哪些节点
+    for (int i = 0; i < n; i++) adj[i] = new ArrayList<>();
+    for (List<Integer> c : connections) {
+        adj[c.get(0)].add(c.get(1));
+        adj[c.get(1)].add(c.get(0));
+    }
+    dfs(0, 0, 0);
+    return ans;
+}
+List<List<Integer>> ans = new ArrayList<>();
+List<Integer> [] adj;
+int [] depth;
+int dfs(int cur, int pre, int dep) { // 返回值为当前节点所有dfs路径终点的最小深度
+    depth[cur] = dep; // 将当前深度存入深度数组
+    int res = Integer.MAX_VALUE;
+    for (int v : adj[cur]) {
+        if (v == pre) continue;
+        int endDepth; // dfs终点深度
+        if (depth[v] == -1) {
+            endDepth = dfs(v, cur, dep + 1);
+            // 如果深度大于当前深度，说明当前点不在闭环上, 当前点与下一节点i之间的连线为答案之一
+            if (endDepth > dep)
+                ans.add(List.of(cur, v));
+        } else endDepth = depth[v];
+        res = Math.min(res, endDepth);
+    }
+    return res;
+}
+     #+END_SRC
+
 ** 欧拉回路: Hierholzer 算法, Fleury算法
 - AOV&AOE
   - AOVAOV网，顶点表示活动，弧表示活动间的优先关系的有向图。 即如果a->b,那么a是b的先决条件。
@@ -11767,7 +11868,7 @@ public int[] countPairs(int n, int[][] edges, int[] queries) { // 别人家的�
 |--------+------------------------------+------------------------------------------------------------------------------------------|
 |        | 欧拉回路                     | 欧拉路径                                                                                 |
 |--------+------------------------------+------------------------------------------------------------------------------------------|
-| 无向图 | 每个节点都有偶数的度         | 每个节点都有偶数的度或者只有两个节点有用奇数的度（这个两个奇数度的节点其实是起点和终点） |
+| 无向图 | 每个节点都有偶数的度         | 每个节点都有偶数的度或只有两个节点有用奇数的度（这个两个奇数度的节点是起点和终点）    |
 | 有向图 | 每个节点都有相同的入度和出度 | 最多只有一个顶点的入度-出度=1并且最多只有一个顶点的出度-入度=1,其他节点的出度与入度相等  |
 |--------+------------------------------+------------------------------------------------------------------------------------------|
 - 其他结论
@@ -12382,6 +12483,166 @@ public int minCost(int[][] g) {
 **** 解题思路与分析
      #+BEGIN_SRC java
      #+END_SRC
+
+*** 126. Word Ladder II - Hard BFS
+A transformation sequence from word beginWord to word endWord using a dictionary wordList is a sequence of words beginWord -> s1 -> s2 -> ... -> sk such that:
+
+Every adjacent pair of words differs by a single letter.
+Every si for 1 <= i <= k is in wordList. Note that beginWord does not need to be in wordList.
+sk == endWord
+Given two words, beginWord and endWord, and a dictionary wordList, return all the shortest transformation sequences from beginWord to endWord, or an empty list if no such sequence exists. Each sequence should be returned as a list of the words [beginWord, s1, s2, ..., sk].
+**** 解题思路与分析: 广度优先搜索
+- 官方题解：https://leetcode-cn.com/problems/word-ladder-ii/solution/dan-ci-jie-long-ii-by-leetcode-solution/
+
+     #+BEGIN_SRC java
+public List<List<String>> findLadders(String bgn, String end, List<String> list) { 
+    Set<String> ss = new HashSet<>(list);
+    if (!ss.contains(end)) return ans;
+    ss.remove(bgn);
+    // BFS: 第 1 步：广度优先遍历建图
+    Map<String, Integer> cnt = new HashMap<>(); // 记录扩展出的单词是在第几次扩展的时候得到的，key：单词，value：在广度优先遍历的第几层
+    cnt.put(bgn, 0);
+    Map<String, List<String>> from = new HashMap<>(); // 记录了单词是从哪些单词扩展而来，key：单词，value：单词列表，这些单词可以变换到 key ，它们是一对多关系
+    int step = 1, n = bgn.length();
+    boolean found = false;
+    Queue<String> q = new LinkedList<>();
+    q.offer(bgn);
+    while (!q.isEmpty()) {
+        for (int size = q.size()-1; size >= 0; size--) {
+            String cur = q.poll();
+            char [] s = cur.toCharArray();
+            for (int i = 0; i < n; i++) {
+                char ori = s[i];
+                for (char c = 'a'; c <= 'z'; c++) {
+                    if (s[i] == c) continue; // 
+                    s[i] = c;
+                    String next = String.valueOf(s);
+                    if (cnt.containsKey(next) && step == cnt.get(next)) //
+                        from.get(next).add(cur);                        //
+                    if (!ss.contains(next)) continue; // BUG: 还没有想明白，为什么我把这行写前面会少掉答案呢？ 
+                    ss.remove(next); // 如果从一个单词扩展出来的单词以前遍历过，距离一定更远，为了避免搜索到已经遍历到，且距离更远的单词，需要将它从 dict 中删除
+                    q.offer(next);   // 这一层扩展出的单词进入队列
+                    from.computeIfAbsent(next, z -> new ArrayList<>()).add(cur); // 记录 next Word 从 cur Word 而来
+                    cnt.put(next, step);
+                    if (next.equals(end)) found = true;
+                }
+                s[i] = ori;
+            }
+        }
+        step++;
+        if (found) break;
+    }
+    // 第 2 步：深度优先遍历找到所有解，从 end 恢复到 bgn ，所以每次尝试操作 path 列表的头部
+    if (found) {
+        Deque<String> path = new ArrayDeque<>(); 
+        path.add(end);
+        dfs(from, path, bgn, end);
+    }
+    return ans;
+}
+List<List<String>> ans = new ArrayList<>();
+void dfs(Map<String, List<String>> from, Deque<String> path, String end, String cur) {
+    if (cur.equals(end)) {
+        ans.add(new ArrayList<>(path)); // 这个写法学习一下，第一次见
+        return ;
+    }
+    for (String precursor : from.get(cur)) {
+        path.offerFirst(precursor);
+        dfs(from, path, end, precursor);
+        path.pollFirst();
+    }
+}
+     #+END_SRC
+**** 解题思路与分析: 详细通俗的思路分析，多解法： DFS + BFS 双向搜索（two-end BFS）双向BFS搜索
+- https://leetcode-cn.com/problems/word-ladder-ii/solution/xiang-xi-tong-su-de-si-lu-fen-xi-duo-jie-fa-by-3-3/
+
+这个题解和自己最初解法比较接近，需要再好好学习一下
+ #+BEGIN_SRC java
+ public List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
+    List<List<String>> ans = new ArrayList<>();
+    if (!wordList.contains(endWord)) return ans;
+    // 利用 BFS 得到所有的邻居节点
+    HashMap<String, ArrayList<String>> map = new HashMap<>();
+    bfs(beginWord, endWord, wordList, map);
+    ArrayList<String> temp = new ArrayList<String>();
+    // temp 用来保存当前的路径
+    temp.add(beginWord);
+    findLaddersHelper(beginWord, endWord, map, temp, ans);
+    return ans;
+}
+private void findLaddersHelper(String beginWord, String endWord, HashMap<String, ArrayList<String>> map,
+                               ArrayList<String> temp, List<List<String>> ans) {
+    if (beginWord.equals(endWord)) {
+        ans.add(new ArrayList<String>(temp));
+        return;
+    }
+    // 得到所有的下一个的节点
+    ArrayList<String> neighbors = map.getOrDefault(beginWord, new ArrayList<String>());
+    for (String neighbor : neighbors) {
+        temp.add(neighbor);
+        findLaddersHelper(neighbor, endWord, map, temp, ans);
+        temp.remove(temp.size() - 1);
+    }
+}
+// 利用递归实现了双向搜索
+private void bfs(String beginWord, String endWord, List<String> wordList, HashMap<String, ArrayList<String>> map) {
+    Set<String> set1 = new HashSet<String>();
+    set1.add(beginWord);
+    Set<String> set2 = new HashSet<String>();
+    set2.add(endWord);
+    Set<String> wordSet = new HashSet<String>(wordList);
+    bfsHelper(set1, set2, wordSet, true, map);
+}
+// direction 为 true 代表向下扩展，false 代表向上扩展
+private boolean bfsHelper(Set<String> set1, Set<String> set2, Set<String> wordSet, boolean direction,
+                          HashMap<String, ArrayList<String>> map) {
+    // set1 为空了，就直接结束
+    // 比如下边的例子就会造成 set1 为空
+    /*	"hot"
+        "dog"
+        ["hot","dog"]*/
+    if (set1.isEmpty()) return false;
+    // set1 的数量多，就反向扩展
+    if (set1.size() > set2.size()) 
+        return bfsHelper(set2, set1, wordSet, !direction, map);
+    // 将已经访问过单词删除
+    wordSet.removeAll(set1);
+    wordSet.removeAll(set2);
+    boolean done = false;
+    // 保存新扩展得到的节点
+    Set<String> set = new HashSet<String>();
+    for (String str : set1) {
+        // 遍历每一位
+        for (int i = 0; i < str.length(); i++) {
+            char[] chars = str.toCharArray();
+            // 尝试所有字母
+            for (char ch = 'a'; ch <= 'z'; ch++) {
+                if(chars[i] == ch) continue;
+                chars[i] = ch;
+                String word = new String(chars);
+                // 根据方向得到 map 的 key 和 val
+                String key = direction ? str : word;
+                String val = direction ? word : str;
+                ArrayList<String> list = map.containsKey(key) ? map.get(key) : new ArrayList<String>();
+                // 如果相遇了就保存结果
+                if (set2.contains(word)) {
+                    done = true;
+                    list.add(val);
+                    map.put(key, list);
+                }
+                // 如果还没有相遇，并且新的单词在 word 中，那么就加到 set 中
+                if (!done && wordSet.contains(word)) {
+                    set.add(word);
+                    list.add(val);
+                    map.put(key, list);
+                }
+            }
+        }
+    }
+    // 一般情况下新扩展的元素会多一些，所以我们下次反方向扩展  set2
+    return done || bfsHelper(set2, set, wordSet, !direction, map);
+}
+#+END_SRC
 * 扫描线
 *** 435. Non-overlapping Intervals - Medium 动态规划 贪心
 Given an array of intervals intervals where intervals[i] = [starti, endi], return the minimum number of intervals you need to remove to make the rest of the intervals non-overlapping.

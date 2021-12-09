@@ -727,26 +727,618 @@ public class hdtwo {
         // //     return gcd(y, x % y);
         // // }
 
-        public int[] canSeePersonsCount(int[] a) {
-            int n = a.length, ans [] = new int [n];
-            ans[n-2] = 1;
-            if (n == 2) return ans;
-            ArrayDeque<Integer> s = new ArrayDeque<>();
-            s.offerLast(n-1);
-            s.offerLast(n-2);
-            for (int i = n-3; i >= 0; i--) {
-                
-            }
+        // public int numSubmatrixSumTarget(int[][] mat, int target) {
+        //     int m = mat.length, n = mat[0].length, cnt = 0;
+        //     int [][] sum = new int [m+1][n+1];
+        //     for (int i = 1; i <= m; i++) 
+        //         for (int j = 1; j <= n; j++) 
+        //             sum[i][j] = sum[i][j-1] + sum[i-1][j] + mat[i-1][j-1] - sum[i-1][j-1];
+        //     for (int i = 0; i < m; i++) // for循环太多，复杂度太高了
+        //         for (int d = 1; i+d <= m; d++) {
+        //             int r = i + d;
+        //             for (int j = 0; j <=n; j++) 
+        //                 for (int k = 1; j+k <= n; k++) {
+        //                     int c = j + k;
+        //                     int cur = sum[r][c] - sum[r][j] - sum[i][c] + sum[i][j];
+        //                     if (cur == target) cnt++;
+        //                 }
+        //         }
+        //     return cnt;
+        // }
+        // public int numSubmatrixSumTarget(int[][] a, int target) {
+        //     int res = 0, m = a.length, n = a[0].length;
+        //     for (int i = 0; i < m; i++)
+        //         for (int j = 1; j < n; j++)
+        //             a[i][j] += a[i][j - 1]; // 把它变成是每行至列j的和
+        //     Map<Integer, Integer> cnt = new HashMap<>();
+        //     for (int i = 0; i < n; i++) // 固定两个列
+        //         for (int j = i; j < n; j++) {
+        //             cnt.clear();
+        //             cnt.put(0, 1);
+        //             int cur = 0;
+        //             for (int k = 0; k < m; k++) { // 累加行的和
+        //                 cur += a[k][j] - (i > 0 ? a[k][i - 1] : 0);
+        //                 res += cnt.getOrDefault(cur - target, 0);
+        //                 cnt.put(cur, cnt.getOrDefault(cur, 0) + 1);
+        //             }
+        //         }
+        //     return res;
+        // }
+        // public int numSubmatrixSumTarget(int[][] a, int target) {
+        //     int ans = 0, m = a.length, n = a[0].length;
+        //     for (int j = 0; j < n; j++) 
+        //         for (int i = 1; i < m; i++) 
+        //             a[i][j] += a[i-1][j];
+        //     Map<Integer, Integer> cnt = new HashMap<>();
+        //     for (int k = 0; k < m; k++) // 固定两个行
+        //         for (int i = k; i < m; i++) {
+        //             cnt.clear();
+        //             cnt.put(0, 1); // 引子
+        //             int sum = 0;
+        //             for (int j = 0; j < n; j++) { // 累加列的和
+        //                 sum += a[i][j] - (k > 0 ? a[k-1][j] : 0);
+        //                 ans += cnt.getOrDefault(sum - target, 0);
+        //                 cnt.put(sum, cnt.getOrDefault(sum, 0) + 1);
+        //             }
+        //         }
+        //     return ans;
+        // }
 
-            return ans;
-        }
+        // public List<Integer> findNumOfValidWords(String[] w, String[] p) {
+        //     int m = w.length, n = p.length;
+        //     Map<Integer, Integer> map = new HashMap<>();
+        //     for (String s : w) { // 将每个字符串转化成一个mask,字母的前后出现顺序无关，只与26个字母是否出现相关
+        //         int cur = 0;
+        //         for (char c : s.toCharArray()) 
+        //             cur |= (1 << (c - 'a'));
+        //         map.put(cur, map.getOrDefault(cur, 0) + 1);
+        //     }
+        //     List<Integer> ans = new ArrayList<>();
+        //     for (int i = 0; i < n; i++) {
+        //         String cur = p[i];
+        //         int fstMask = (1 << (cur.charAt(0) - 'a')); // 第1个字母必须出现
+        //         int cnt = map.getOrDefault(fstMask, 0);
+        //         List<Integer> maskList = new ArrayList<>();
+        //         for (int j = 1; j < 7; j++) { // 其它字符不是必须，遍历所有可能的子集subset
+        //             List<Integer> l = new ArrayList<>();
+        //             int curMask = 1 << (cur.charAt(j)-'a') | fstMask; // 只出现第一个字符，和当前字符两个字符
+        //             cnt += map.getOrDefault(curMask, 0);
+        //             l.add(curMask);
+        //             for (Integer v : maskList) {
+        //                 int tmpMask = v | curMask; // 可以出现第一个字符，当前字符，以及j之前出现的所有可能字符的所有子集
+        //                 cnt += map.getOrDefault(tmpMask, 0);
+        //                 l.add(tmpMask); // 收集各个子集
+        //             }
+        //             maskList.addAll(l); // 收集各个子集
+        //         }
+        //         ans.add(cnt);
+        //     }
+        //     return ans;
+        // }
+
+        // public int minFlips(int[][] a) {
+        //     m = a.length;
+        //     n = a[0].length;
+        //     if (m == 1 && n == 1) return a[0][0] == 0 ? 0 : 1;
+        //     int r = 1 << (m*n), min = Integer.MAX_VALUE;
+        //     if (isZeroMat(a)) return 0;
+        //     for (int i = 1; i < r; i++) {
+        //         int [][] b = arrCopy(a);
+        //         for (int j = 0; j < m*n; j++) 
+        //             if (((i >> j) & 1) == 1) 
+        //                 flip(b, j);
+        //         if (isZeroMat(b)) min = Math.min(min, Integer.bitCount(i));
+        //     }
+        //     return min == Integer.MAX_VALUE ? -1 : min;
+        // }
+        // int [][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+        // int m, n;
+        // boolean isZeroMat(int [][] a) {
+        //     int max = 0, m = a.length;
+        //     for (int i = 0; i < m; i++) 
+        //         max = Math.max(max, Arrays.stream(a[i]).max().getAsInt());
+        //     return max == 0;
+        // }
+        // void flip(int [][] a, int idx) {
+        //     int x = idx / n, y = idx % n;
+        //     for (int [] d : dirs) {
+        //         int i = x + d[0], j = y + d[1];
+        //         if (i < 0 || i >= m || j < 0 || j >= n) continue;
+        //         a[i][j] = 1 - a[i][j];
+        //     }
+        //     a[x][y] = 1 - a[x][y];
+        // }
+        // int [][] arrCopy(int [][] a) {
+        //     int [][] ans = new int[m][];
+        //     for (int i = 0; i < m; i++) 
+        //         ans[i] = Arrays.copyOf(a[i], n);
+        //     return ans;
+        // }
+
+        // public int minJumps(int[] a) { // tle
+        //     int n = a.length;
+        //     Map<Integer, Set<Integer>> adj = new HashMap<>();
+        //     for (int i = 0; i < n; i++) {
+        //         if (i > 0) {
+        //             adj.computeIfAbsent(i, z -> new HashSet<>()).add(i-1);
+        //             adj.computeIfAbsent(i-1, z -> new HashSet<>()).add(i);
+        //         }
+        //         if (i < n-1) {
+        //             adj.computeIfAbsent(i, z -> new HashSet<>()).add(i+1);
+        //             adj.computeIfAbsent(i+1, z -> new HashSet<>()).add(i);
+        //         }
+        //         for (int j = 0; j < n; j++) {
+        //             if (j == i || a[i] != a[j]) continue;
+        //             adj.computeIfAbsent(i, z -> new HashSet<>()).add(j);
+        //             adj.computeIfAbsent(j, z -> new HashSet<>()).add(i);
+        //         }
+        //     }
+        //     boolean [] vis = new boolean [n];
+        //     Queue<Integer> q = new PriorityQueue<>((x, y)->y-x);
+        //     // Queue<Integer> q = new LinkedList<>();
+        //     q.offer(0);
+        //     vis[0] = true; // 这里vis的状态可能设置得不够好
+        //     int cnt = 0;
+        //     while (!q.isEmpty()) {
+        //         for (int z = q.size()-1; z >= 0; z--) {
+        //             int idx = q.poll();
+        //             if (idx == n-1) return cnt;
+        //             for (Integer next : adj.get(idx)) {
+        //                 if (vis[next]) continue;
+        //                 q.offer(next);
+        //                 vis[next] = true;
+        //             }
+        //         }
+        //         cnt++;
+        //     }
+        //     return -1;
+        // }
+
+        // public class MaxSeg {
+        //     List<Integer> tree = new ArrayList<>();
+        //     int n;
+        //     public MaxSeg (int [] arr) {
+        //         n = arr.length;
+        //         tree = new ArrayList<>(2 * n);
+        //         for (int i = 0; i < n; i++)
+        //             tree.add(0);
+        //         for (int i = 0; i < n; i++)
+        //             tree.add(arr[i]); // same effect as below
+        //         for (int i = n-1; i >= 0; i--) // i >= 0
+        //             tree.set(i, Math.max(tree.get(2 * i), tree.get(2 * i+1)));
+        //     }
+        //     public void update(int idx, int v) {
+        //         idx += n;
+        //         tree.set(idx, v);
+        //         while (idx > 1) {
+        //             idx /= 2;
+        //             tree.set(idx, Math.max(tree.get(2 * idx), tree.get(2 * idx+1)));
+        //         }
+        //     }
+        //     public int getMax(int l, int r) { // [l, r)
+        //         l += n;
+        //         r += n;
+        //         int max = Integer.MIN_VALUE;
+        //         while (l < r) {
+        //             if ((l & 1) == 1) {
+        //                 max = Math.max(max, tree.get(l));
+        //                 l++;
+        //             }
+        //             if ((r & 1) == 1) {
+        //                 r--; // order matters !!!
+        //                 max = Math.max(max, tree.get(r));
+        //             }
+        //             l >>= 1;
+        //             r >>= 1;
+        //         }
+        //         return max;
+        //     }
+        // }
+        // public boolean isPossible(int[] a) { // tle 
+        //     int n = a.length, max = 0;
+        //     if (n== 2 && (a[0] == 1 || a[1] == 1)) return true;
+        //     Map<Integer, Integer> m = new HashMap<>();
+        //     long sum = 0;
+        //     for (int i = 0; i < n; i++) {
+        //         sum += a[i];
+        //         m.put(a[i], i);
+        //     }
+        //     System.out.println("sum: " + sum);
+        //     MaxSeg ms = new MaxSeg(a);
+        //     while (true) {
+        //         max = ms.getMax(0, n);
+        //         if (max == 1) return true;
+        //         if (max <= (int)(sum - max)) return false;
+        //         int i = m.get(max);
+        //         a[i] = (int)(max - (sum - max));
+        //         ms.update(i, a[i]);
+        //         m.remove(max);
+        //         m.put(a[i], i);
+        //         sum -= max - a[i]; // BUG: 重复重复现重复
+        //     }
+        // }
+        // public boolean isPossible(int[] a) {
+        //     int n = a.length;
+        //     if (n == 1) return a[0] == 1;
+        //     long sum = 0;
+        //     Queue<Integer> q = new PriorityQueue<>((x, b)-> b-x); // 最大堆：可以不用一个相对复杂很多的MaxSeg,用个最大堆就可以了
+        //     for (int v : a) {
+        //         q.offer(v);
+        //         sum += v;
+        //     }
+        //     int max = 0;
+        //     while (q.peek() != 1) {
+        //         max = q.poll();
+        //         if (max <= sum - max) return false;
+        //         int pre = (int)(max % (int)(sum - max)); 
+        //         if (pre == 0) return sum - max == 1;
+        //         sum -= (max - pre);
+        //         q.offer(pre);
+        //     }
+        //     return true;
+        // }
+
+        // static final int mod = (int)1e9 + 7;
+        // public int maxPerformance(int n, int[] s, int[] e, int k) {
+        //     List<int []> ll = new ArrayList<>();
+        //     for (int i = 0; i < n; i++) 
+        //         ll.add(new int [] {s[i], e[i]});
+        //     Collections.sort(ll, (a, b) -> b[1] != a[1] ? b[1] - a[1] : b[0] - a[0]);
+        //     for (int [] zz : ll) 
+        //         System.out.println(Arrays.toString(zz));
+        //     Queue<int []> q = new PriorityQueue<>((x, y) -> x[0] != y[0] ? x[0] - y[0] : x[1] - y[1]); // 速度由氏到高，方便晚点儿的时候把差的扔出去
+        //     long sum = 0, max = 0;
+        //     int idx = 0;
+        //     for (int i = 0; i < n; i++) {
+        //         int [] cur = ll.get(i);
+        //         sum += cur[0]; 
+        //         q.offer(cur);
+        //         while (!q.isEmpty() && q.size() > k) sum -= q.poll()[0];
+        //         max = Math.max(max, sum * cur[1]);
+        //     }
+        //     return (int)(max % mod);
+        // }
+
+        // public String longestPrefix(String t) { // 还是不太透，要再看一下  KMP
+        //     int n = t.length(), j = 0;
+        //     char [] s = t.toCharArray();
+        //     int [] lps = new int [n];
+        //     lps[0] = 0;
+        //     for (int i = 1; i < n; i++) {
+        //         j = lps[i-1]; // 前一个字符所指向的位置
+        //         while (s[i] != s[j]) { // 如果两个字符不相同，则j一直向前寻求找上一个出现的相同字符或，回到最开始并break掉
+        //             if (j == 0) {
+        //                 j = -1;
+        //                 break;
+        //             } // else
+        //             j = lps[j-1];
+        //         }
+        //         lps[i] = j + 1;
+        //     }
+        //     return t.substring(0, lps[n-1]);
+        // }
+
+        // public int findMaxValueOfEquation(int[][] a, int k) {
+        //     int n = a.length, max = Integer.MIN_VALUE;
+        //     Queue<int []> q = new PriorityQueue<>((x, y) -> y[0] - x[0]);
+        //     for (int i = 0; i < n; i++) {
+        //         int [] cur = a[i];
+        //         while (!q.isEmpty() && cur[0] - q.peek()[1] > k) q.poll();
+        //         if (!q.isEmpty())
+        //             max = Math.max(max, cur[0] + cur[1] + q.peek()[0]);
+        //         q.offer(new int [] {cur[1]-cur[0], cur[0]});
+        //     }
+        //     return max;
+        // }
+
+        // public int longestAwesome(String t) { // tle: 那就需要换个方法遍历
+        //     int n = t.length(), max = 0, cnt = 0, cur = 0;
+        //     char [] s = t.toCharArray();
+        //     Map<Integer, Integer> m = new HashMap<>(); // [mask, idx]
+        //     for (int i = 0; i < n; i++) {
+        //         cur ^= (1 << (s[i] - '0'));
+        //         cnt = Integer.bitCount(cur);
+        //         if (cnt <= 1) {
+        //             max = i+1; // 如果当前子串满足要求，更新最大值
+        //             if (!m.containsKey(cur))
+        //                 m.put(cur, i);
+        //             continue;
+        //         } // 如果当前不满足条件：需要考虑在前某个前缀的基础上连接了一个可以构成回文的子串, corner case比较多
+        //         for (Integer key : m.keySet()) { // tle 是因为m里面的key 太多了
+        //             int dif = cur ^ key;
+        //             if (dif > 0 && Integer.bitCount(dif) == 1) 
+        //                 max = Math.max(max, i - m.get(key));
+        //         }
+        //         if (!m.containsKey(cur))
+        //             m.put(cur, i);
+        //     }
+        //     return max;
+        // }
+        // public int longestAwesome(String t) { // Expected complexity is O(n*A) where A is the alphabet (10).
+        //     int n = t.length(), max = 0, cnt = 0, cur = 0; // 坑巨多：
+        //     char [] s = t.toCharArray();
+        //     Map<Integer, Integer> m = new HashMap<>(); // [mask, idx]
+        //     for (int i = 0; i < n; i++) {
+        //         cur ^= (1 << (s[i] - '0'));
+        //         cnt = Integer.bitCount(cur);
+        //         if (cnt <= 1) {
+        //             max = i+1; // 如果当前子串满足要求，更新最大值
+        //             if (!m.containsKey(cur)) // 只存第一次出现的mask，即只存同一个不合格mask的最短前缀
+        //                 m.put(cur, i);
+        //             continue;
+        //         } // 如果当前不满足条件：需要考虑在前某个前缀的基础上连接了一个可以构成回文的子串, corner case比较多
+        //         if (m.containsKey(cur)) max = Math.max(max, i - m.get(cur)); // 同一个可能之前出现过
+        //         for (int j = 0; j < 10; j++)
+        //             if (((cur >> j) & 1) == 1) {
+        //                 int tmp = cur ^ (1 << j);
+        //                 if (m.containsKey(tmp)) max = Math.max(max, i - m.get(tmp));
+        //             } else { // ((( i >> j) & 1) == 0) 
+        //                 int tmp = cur | (1 << j);
+        //                 if (m.containsKey(tmp)) max = Math.max(max, i - m.get(tmp));
+        //             }
+        //         if (!m.containsKey(cur))
+        //             m.put(cur, i);
+        //     }
+        //     return max;
+        // }
+
+        // public int minMoves(int[] a, int k) { 
+        //     if (k == 1) return 0;
+        //     int n = a.length;
+        //     List<Integer> g = new ArrayList<>();
+        //     List<Integer> sum = new ArrayList<>();
+        //     sum.add(0);
+        //     int cnt = -1, last = 0;
+        //     for (int i = 0; i < n; i++) {
+        //         if (a[i] == 0) continue;
+        //         ++cnt;
+        //         g.add(i-cnt);
+        //         sum.add(last + i - cnt);
+        //         last += i - cnt;
+        //     }
+        //     int m = g.size();
+        //     int ans = Integer.MAX_VALUE;
+        //     for (int i = 0; i+k <= m; i++) {
+        //         int mid = (i + i + k - 1) / 2;
+        //         int q = g.get(mid);
+        //         ans = Math.min(ans, (2*(mid-i)-k+1) * q + sum.get(i+k) - sum.get(mid+1) - sum.get(mid) + sum.get(i));
+        //     }
+        //     return ans;
+        // }
+
+        // public int minTrioDegree(int n, int[][] edges) { // tle 
+        //     Map<Integer, List<Integer>> adj = new HashMap<>();
+        //     for (int [] e : edges) {
+        //         adj.computeIfAbsent(e[0], z -> new ArrayList<>()).add(e[1]);
+        //         adj.computeIfAbsent(e[1], z -> new ArrayList<>()).add(e[0]);
+        //     }
+        //     boolean [] vis = new boolean [n+1];
+        //     int min = Integer.MAX_VALUE;
+        //     List<Integer> l = new ArrayList<>();
+        //     for (Map.Entry<Integer, List<Integer>> en : adj.entrySet()) {
+        //         int key = en.getKey();
+        //         if (vis[key]) continue;
+        //         vis[key] = true;
+        //         l = adj.get(key);
+        //         if (l.size() < 2) continue;
+        //         for (int i = 0; i < l.size(); i++) 
+        //             for (int j = 1; j < l.size(); j++) {
+        //                 if (i == j || vis[l.get(i)] || vis[l.get(j)]) continue;
+        //                 if (adj.get(l.get(i)).contains(l.get(j)))
+        //                     min = Math.min(min, adj.get(key).size() + adj.get(l.get(i)).size() + adj.get(l.get(j)).size() - 6);
+        //             }
+        //     }
+        //     return min == Integer.MAX_VALUE ? -1 : min;
+        // }
+        // public int minTrioDegree(int n, int[][] edges) {
+        //     int maxSize = 401;
+        //     boolean [][] arr = new boolean[maxSize][maxSize];
+        //     int [] ins = new int[n+1];
+        //     for (int i = 0; i < edges.length; i++) {
+        //         int x = edges[i][0], y = edges[i][1];
+        //         arr[x][y] = true;
+        //         arr[y][x] = true;
+        //         ins[x]++;
+        //         ins[y]++;
+        //     }
+        //     int res = Integer.MAX_VALUE;
+        //     for (int i = 1; i <= n; i++) 
+        //         for (int j = i+1; j <= n; j++) 
+        //             if (arr[i][j]) 
+        //                 for (int k = j+1; k <= n; k++) {
+        //                     if (arr[j][k] && arr[i][k])
+        //                         res = Math.min(res, ins[i] + ins[j] + ins[k] - 6);
+        //                 }
+        //     return res == Integer.MAX_VALUE ? -1 : res;
+        // }
+
+        // public int calculate(String t) {
+        //     int n = t.length(), sign = 1, ans = 0;
+        //     char [] s = t.toCharArray();
+        //     ArrayDeque<Integer> st = new ArrayDeque<>();
+        //     for (int i = 0; i < n; i++) {
+        //         char c = s[i];
+        //         if (c >= '0') {
+        //             int v = 0;
+        //             while (i < n && Character.isDigit(s[i])) 
+        //                 v = v * 10 + (s[i++] - '0');
+        //             ans += sign * v;
+        //             --i;
+        //         } else if (c == '+') sign = 1;
+        //         else if (c == '-') sign = -1;
+        //         else if (c == '(') { // 处理这个的时候：数值和全局变量都重置一下
+        //             st.offerLast(ans);
+        //             st.offerLast(sign);
+        //             ans = 0;
+        //             sign = 1;
+        //         } else if (s[i] == ')') {
+        //             ans *= st.pollLast();
+        //             ans += st.pollLast();
+        //         }
+        //     }
+        //     return ans;
+        // }
+        // public int calculate(String t) {
+        //     int n = t.length(), sign = 1, ans = 0, v = 0;
+        //     char [] s = t.toCharArray();
+        //     for (int i = 0; i < n; i++) {
+        //         char c = s[i];
+        //         if (c >= '0' && c <= '9') {
+        //             v = v * 10 + (c - '0');
+        //         } else if (c == '(') {
+        //             int j = i, cnt = 0;
+        //             for (; i < n; i++) {
+        //                 if (s[i] == '(') ++cnt;
+        //                 else if (s[i] == ')') --cnt;
+        //                 if (cnt == 0) break;
+        //             }
+        //             v = calculate(t.substring(j+1, i));
+        //         }
+        //         if (c == '+' || c == '-' || i == n-1) {
+        //             ans += sign * v;
+        //             v = 0;
+        //             sign = (c == '+') ? 1 : -1;
+        //         }
+        //     }
+        //     return ans;
+        // }
+
+        // Queue<Integer> lit;
+        // Queue<Integer> big;
+        // public MedianFinder() {
+        //     lit = new PriorityQueue<>((a, b)->b-a); // small: 降序排列
+        //     big = new PriorityQueue<>((a, b)->a-b); // big: 升序排列
+        // }
+        // public void addNum(int num) {
+        //     if (lit.size() != big.size()) {
+        //         big.offer(num);
+        //         lit.offer(big.poll());
+        //     } else { // ==
+        //         lit.offer(num);
+        //         big.offer(lit.poll());
+        //     }
+        // }
+        // public double findMedian() {
+        //     if (lit.size() == big.size()) return (lit.peek() + big.peek()) / 2.0;
+        //     else if (lit.size() > big.size())
+        //         return lit.peek();
+        //     else return big.peek();
+        // }
+
+        // public String shortestPalindrome(String t) { 
+        //     // if (t.chars().distinct().count() == 1) return t;
+        //     // if (isPalindrome(t)) return t; // 这种提前的判断也会耽误时间
+        //     int n = t.length(), j = 0;
+        //     char [] s = t.toCharArray();
+        //     for (int i = n-1; i >= 0; i--) // 精髓就在这两行
+        //         if (s[i] == s[j]) j++;     // 
+        //     if (j == n) return t;
+        //     String suf = t.substring(j);
+        //     System.out.println("suf: " + suf);
+        //     return new StringBuilder (suf).reverse().toString() + shortestPalindrome(t.substring(0, j)) + suf;
+        // }
+        // public String shortestPalindrome(String t) { // 这个方法比上面的一个方法要慢
+        //     String s = new StringBuilder (t).reverse().toString();
+        //     s = t + "#" + s; // 原串 + “#” + 反转串
+        //     int n = t.length(), m = s.length(), j = 0;
+        //     int [] p = new int [m];
+        //     for (int i = 1; i < m; i++) {
+        //         int k = p[i-1];
+        //         while (k > 0 && s.charAt(k) != s.charAt(i)) k = p[k-1];
+        //         k += (s.charAt(i) == s.charAt(k) ? 1 : 0);
+        //         p[i] = k;
+        //     }
+        //     return s.substring(n+1, 2 * n + 1 - p[m-1]) + t;
+        // }
+        // public String shortestPalindrome(String s) {
+        //     int n = s.length();
+        //     int base = 131, mod = 1000000007;
+        //     int left = 0, right = 0, mul = 1;
+        //     int best = -1;
+        //     for (int i = 0; i < n; ++i) {
+        //         left = (int) (((long) left * base + s.charAt(i)) % mod);
+        //         right = (int) ((right + (long) mul * s.charAt(i)) % mod);
+        //         if (left == right) best = i;
+        //         mul = (int) ((long) mul * base % mod);
+        //     }
+        //     String add = (best == n - 1 ? "" : s.substring(best + 1));
+        //     StringBuffer ans = new StringBuffer(add).reverse();
+        //     ans.append(s);
+        //     return ans.toString();
+        // }
+        // public String shortestPalindrome(String s) {
+        //     int n = s.length();
+        //     int[] fail = new int[n]; // 
+        //     Arrays.fill(fail, -1);
+        //     for (int i = 1; i < n; ++i) {
+        //         int j = fail[i - 1];
+        //         while (j != -1 && s.charAt(j + 1) != s.charAt(i)) 
+        //             j = fail[j];
+        //         if (s.charAt(j + 1) == s.charAt(i)) 
+        //             fail[i] = j + 1;
+        //     }
+        //     int best = -1;
+        //     for (int i = n - 1; i >= 0; --i) {
+        //         while (best != -1 && s.charAt(best + 1) != s.charAt(i)) 
+        //             best = fail[best];
+        //         if (s.charAt(best + 1) == s.charAt(i)) 
+        //             ++best;
+        //     }
+        //     String add = (best == n - 1 ? "" : s.substring(best + 1));
+        //     StringBuffer ans = new StringBuffer(add).reverse();
+        //     ans.append(s);
+        //     return ans.toString();
+        // }
+
+    // TreeSet<Range> ts;
+    // public SummaryRanges() {
+    //     // ts = new TreeSet<>((a, b)->a.l != b.l ? a.l - b.l : a.r - b.r); // BUG: ?!!!
+    //     ts = new TreeSet<>((a, b)->a.l - b.l); // 居然是这个东西不能写得太详细了？！！！
+    //     // ts = new TreeSet<>();
+    // }
+    // public void addNum(int val) {
+    //     Range cur = new Range(val, val);
+    //     Range lo = ts.floor(cur);
+    //     Range hi = ts.ceiling(cur);
+    //     if (lo != null && lo.r + 1 >= val) {
+    //         cur.l = lo.l;
+    //         cur.r = Math.max(val, lo.r); //
+    //         ts.remove(lo);
+    //     } 
+    //     if (hi != null && val == hi.l - 1) {
+    //         cur.r = hi.r;
+    //         ts.remove(hi);
+    //     }
+    //     ts.add(cur);
+    // }
+    // public int[][] getIntervals() {
+    //     int [][] ans = new int [ts.size()][2];
+    //     int i = 0;
+    //     for (Range r : ts) {
+    //         ans[i][0] = r.l;
+    //         ans[i][1] = r.r;
+    //         i++;
+    //     }
+    //     return ans;
+    // }
+    // class Range {
+    //     // class Range implements Comparable<Range> {
+    //     int l, r;
+    //     public Range(int l, int r) {
+    //         this.l = l;
+    //         this.r = r;
+    //     }
+    //     // @Override public int compareTo(Range o) {
+    //     //     return this.l - o.l;
+    //     // }
+    // }
+
+        
     }
     public static void main(String[] args) {
         Solution s = new Solution();
-
-        int [][] a = new int [][] {{1,3},{2,5},{3,7}};
-
-        List<Boolean> r = s.areConnected(7, 2, a);
+        
+        List<Integer> r = s.countSmaller(a);
         System.out.println("r.size(): " + r.size());
         System.out.println(Arrays.toString(r.toArray()));
     }
@@ -754,12 +1346,3 @@ public class hdtwo {
 // TreeNd root = new TreeNode(a[0]);
 // root.buildTree(root, a);
 // root.lvlPrintTree(root);
-
-
-
-
-
-
-
-
-
