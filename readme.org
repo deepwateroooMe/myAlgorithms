@@ -14164,35 +14164,35 @@ public boolean PredictTheWinner(int[] nums) {
 We are given a list of (axis-aligned) rectangles. Each rectangle[i] = [xi1, yi1, xi2, yi2] , where (xi1, yi1) are the coordinates of the bottom-left corner, and (xi2, yi2) are the coordinates of the top-right corner of the ith rectangle.
 Find the total area covered by all rectangles in the plane. Since the answer may be too large, return it modulo 109 + 7.
 #+BEGIN_SRC java
-private void addRectange(List<int[]> l, int [] arr, int idx) {
-    if (idx >= l.size()) {
-        l.add(arr);
-        return;
-    }
-    int [] r = l.get(idx);
-    // 新增矩形 处在 左 右 上 下 四侧完全不重叠的区域
-    if (arr[2] <= r[0] || arr[0] >= r[2] || arr[1] >= r[3] || arr[3] <= r[1]) { 
-        addRectange(l, arr, idx+1);
-        return;
-    }
-    if (arr[0] < r[0]) // 新增矩形 左侧 有交叠
-        addRectange(l, new int[]{arr[0], arr[1], r[0], arr[3]}, idx+1);
-    if (arr[2] > r[2]) // 新增矩形 右侧 也可以有 交叠
-        addRectange(l, new int[]{r[2], arr[1], arr[2], arr[3]}, idx+1);
-    if (arr[1] < r[1]) // 新增矩形 下侧 也可以有 交叠： 注意左侧、右侧前面已经加进去了，现在只加中间部分，不要重复计算
-        addRectange(l, new int[]{Math.max(arr[0], r[0]), arr[1], Math.min(arr[2], r[2]), r[1]}, idx+1);
-    if (arr[3] > r[3]) // 新增矩形 上侧 也可以有 交叠： 注意左侧、右侧、下侧 前面已经加进去了，现在只加中间部分，不要重复计算
-        addRectange(l, new int[]{Math.max(arr[0], r[0]), r[3], Math.min(arr[2], r[2]), arr[3]}, idx+1);
-}
 public int rectangleArea(int[][] rectangles) {
-    int mod = (int)Math.pow(10, 9)+7;
-    long res = 0;
-    List<int[]> rlist = new ArrayList<>();
-    for (int [] val : rectangles) 
-        addRectange(rlist, val, 0);
-    for (int [] arr : rlist) 
-        res = (res + ((long)(arr[2]-arr[0])*(long)(arr[3]-arr[1]))) % mod;
-    return (int)res % mod;
+    ll = new ArrayList<>();
+    long ans = 0;
+    for (int [] r : rectangles) 
+        addRect(r, 0);
+    for (int [] r : ll) 
+        ans = (ans + (long)(r[2] - r[0]) * (long)(r[3] - r[1])) % mod;
+    return (int)ans;
+}        
+static final int mod = (int)1e9 + 7;
+List<int []> ll;
+void addRect(int [] a, int i) { // i: idx
+    if (i >= ll.size()) {
+        ll.add(a);
+        return ;
+    }
+    int [] r = ll.get(i);
+    if (a[2] <= r[0] || a[0] >= r[2] || a[1] >= r[3] || a[3] <= r[1]) { // 被添加的，与现遍历的矩形，完全没有交集，直接往后遍历
+        addRect(a, i+1);
+        return ;
+    } // 找出所有有交集的、交集部分——与现遍历矩形相比，多出来的部分，的四个顶点，再往后遍历
+    if (a[0] < r[0]) // 左
+        addRect(new int [] {a[0], a[1], r[0], a[3]}, i+1);
+    if (a[2] > r[2]) // 右
+        addRect(new int [] {r[2], a[1], a[2], a[3]}, i+1);
+    if (a[1] < r[1]) // 下: 新增矩形 下侧 也可以有 交叠：注意左侧、右侧前面已经加进去了，现在只加中间部分，不要重复计算
+        addRect(new int [] {Math.max(a[0], r[0]), a[1], Math.min(a[2], r[2]), r[1]}, i+1);
+    if (a[3] > r[3]) // 上: 新增矩形 上侧 也可以有 交叠：注意左侧、右侧、下侧 前面已经加进去了，现在只加中间部分，不要重复计算
+        addRect(new int [] {Math.max(a[0], r[0]), r[3], Math.min(a[2], r[2]), a[3]}, i+1);
 }
 #+END_SRC
 

@@ -40,73 +40,6 @@ public class hdtwo {
             }
         }
 
-        class BIT { // Binary Indexed Tree, Fenwick Tree // 这里有bug,今天晚点儿再回来改这个
-            long [] tree;
-            int [] a; // 从1开始
-            int n;
-            public BIT(int n) {
-                this.n = n;
-                this.tree = new long [n+1];
-            }            
-            public BIT(int [] arr) {
-                this.n = arr.length + 1;
-                this.tree = new long [n];
-                this.a = Arrays.copyOf(arr, arr.length);
-                long tmp = 0;
-                for (int i = 1; i < n; i++) {
-                    tmp = 0;
-                    int lowbit = i & ((i - 1) ^ i);
-                    for (int j = i; j > i - lowbit; j--) 
-                        tmp = tmp + a[j-1];
-                    tree[i] = tmp;
-                }
-                System.out.println(Arrays.toString(a));
-                System.out.println(Arrays.toString(tree));
-            }
-            public int treeRange(int i, int j) { // inclusive: tree of a[i, j], includes a[i] and a[j]
-                return (int)(tree(j) - tree(i-1));
-            }
-            long tree(int i) {
-                long ans = 0;
-                i++;
-                while (i > 0 && i < n) {
-                    ans += tree[i];
-                    i = i - (i & ((i-1) ^ i));
-                    // i -= lowBit(i);
-                }
-                return ans;
-            }
-            void update(int i, int v) { // O(logN)
-                int dif = v - a[i];   // 从1开始
-                a[i] = v;
-                i += 1;
-                for (; i < n; i = i + (i & ((i-1) ^ i)))
-                    tree[i] += dif;
-                // while (i+1 < a.length) {
-                //     tree[i+1] += dif;
-                //     i += lowBit(i);
-                // }
-            }
-            int lowBit(int n) { // ???
-                return n & (-n);
-            }
-        }
-        public int countRangeSum(int[] a, int lower, int upper) {
-            int n = a.length;
-            // if (n == 1) return a[0] <= upper && a[0] >= lower ? 1 : 0;
-            BIT bit = new BIT(a);
-            int cnt = 0;
-            for (int i = 0; i < n; i++) 
-                for (int j = i; j < n; j++) {
-                    System.out.println("\n i: " + i);
-                    System.out.println("j: " + j);
-                    long tree = bit.treeRange(i, j+1);
-                    System.out.println("tree: " + tree);
-                    if (tree >= lower && tree <= upper) ++cnt;
-                }
-            return cnt;
-        }
-
         public boolean isSelfCrossing(int[] d) {
             int n = d.length;
             if (n < 4) return false;
@@ -513,7 +446,8 @@ public class hdtwo {
             while (l <= r) {
                 int m = (l + r) / 2;
                 if (bfs(0, 0, m, n, a)) {
-                    ans = m;        //             r = m-1;
+                    ans = m;        
+                    r = m-1;
                 } else l = m+1;
             }
             return ans;
