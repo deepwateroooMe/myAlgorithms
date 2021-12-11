@@ -134,56 +134,85 @@ public class cmp {
             // return ans;
         // }
 
-        public int maximumDetonation(int[][] a) {
+        //  public int maximumDetonation(int[][] a) { // 总体的大致思路是对的，细节方面细小方面有误：有向图不是无向图
+        //     int n = a.length, maxCnt = 0;          // 早上脑袋还是不够清醒：有一个错的case,就应该赶快去想要改哪些
+        //     for (int i = 0; i < n; i++) 
+        //         for (int j = i+1; j < n; j++) {
+        //             int [] p = a[i], c = a[j];
+        //             if ((long)Math.pow(p[0]-c[0], 2) + (long)Math.pow(p[1]-c[1], 2) < (long)Math.pow(p[2]+c[2], 2)) {
+        //                 m.computeIfAbsent(i, z -> new ArrayList<>()).add(j);
+        //                 m.computeIfAbsent(j, z -> new ArrayList<>()).add(i);
+        //             }
+        //         }
+        //     for (int i = 0; i < n; i++) 
+        //         maxCnt = Math.max(maxCnt, m.getOrDefault(i, new ArrayList<>()).size());
+        //     if (maxCnt == n-1) return n;
+        //     for (int i = 0; i < n; i++) 
+        //         dfs(i, -1, 1);
+        //     return max;
+        // }
+        // Map<Integer, List<Integer>> m = new HashMap<>();
+        // int max = 0;
+        // void dfs(int idx, int p, int cnt) {
+        //     if (!m.containsKey(idx) || m.get(idx).size() == 1 && m.get(idx).get(0) == p) {
+        //         if (cnt > max) max = cnt;
+        //         return ;
+        //     }
+        //     for (Integer next : m.get(idx)) {
+        //         if (next == p) continue;
+        //         dfs(next, idx, cnt+1);
+        //     }
+        // }
+
+        public int maximumDetonation(int[][] a) { 
             int n = a.length, maxCnt = 0;
-            for (int i = 0; i < n; i++) 
-                for (int j = i+1; j < n; j++) {
+            adj = new ArrayList[n];
+            for (int i = 0; i < n; i++) adj[i] = new ArrayList<>();
+            for (int i = 0; i < n; i++)
+                for (int j = 0; j < n; j++) {
+                    if (j == i) continue;
                     int [] p = a[i], c = a[j];
-                    if ((long)Math.pow(p[0]-c[0], 2) + (long)Math.pow(p[1]-c[1], 2) < (long)Math.pow(p[2]+c[2], 2)) {
-                        System.out.println("\n i: " + i);
-                        System.out.println("j: " + j);
-                        System.out.println(Arrays.toString(p));
-                        System.out.println(Arrays.toString(c));
-                        
-
-                        m.computeIfAbsent(i, z -> new ArrayList<>()).add(j);
-                        m.computeIfAbsent(j, z -> new ArrayList<>()).add(i);
-                    }
+                    if ((long)Math.pow(p[0]-c[0], 2) + (long)Math.pow(p[1]-c[1], 2) <= (long)Math.pow(p[2], 2))
+                        adj[i].add(j);
                 }
-            System.out.println("m.size(): " + m.size());
-            for (Map.Entry<Integer, List<Integer>> en : m.entrySet()) {
-                System.out.print(en.getKey() + ": ");
-                System.out.println(Arrays.toString(en.getValue().toArray()));
-            }
-            
             for (int i = 0; i < n; i++) 
-                maxCnt = Math.max(maxCnt, m.getOrDefault(i, new ArrayList<>()).size());
+                maxCnt = Math.max(maxCnt, adj[i].size());
             if (maxCnt == n-1) return n;
-            for (int i = 0; i < n; i++) 
-                dfs(i, -1, 1);
-            return max;
-        }
-        Map<Integer, List<Integer>> m = new HashMap<>();
-        int max = 0;
-        void dfs(int idx, int p, int cnt) {
-            if (!m.containsKey(idx) || m.get(idx).size() == 1 && m.get(idx).get(0) == p) {
-                if (cnt > max) max = cnt;
-                return ;
+            vis = new boolean [n+1];
+            for (int i = 0; i < n; i++) {
+                Arrays.fill(vis, false);
+                cnt = 0;
+                dfs(i);
+                maxCnt = Math.max(maxCnt, cnt);
             }
-            for (Integer next : m.get(idx)) {
-                if (next == p) continue;
-                dfs(next, idx, cnt+1);
-            }
+            return maxCnt;
         }
-
-
+        List<Integer> [] adj;
+        boolean [] vis;
+        int cnt = 0;
+        void dfs(int idx) {
+            vis[idx] = true;
+            cnt++;
+            
+            // if (vis[idx]) return ;
+            // if (adj[idx].size() == 0) {
+            //     if (cnt > max) max = cnt;
+            //     return ;
+            // }
+            // vis[idx] = true;
+            for (Integer next : adj[idx]) 
+                // if (next == p) continue;
+                if (!vis[next])
+                    dfs(next);
+        }
     }
 
     public static void main (String[] args) {
         Solution s = new Solution ();
 
         // int []  a = new int []  {-76, -694, 44, 197, 357, -833, -277, 358, 724, -585, -960, 214, 465, -593, -431, 625, -83, 58, -889, 31, 765, 8, -17, 476, 992, 803, 863, 242, 379, 561, 673, 526, -447};
-        int [][] a = new int [][] {{54,95,4},{99,46,3},{29,21,3},{96,72,8},{49,43,3},{11,20,3},{2,57,1},{69,51,7},{97,1,10},{85,45,2},{38,47,1},{83,75,3},{65,59,3},{33,4,1},{32,10,2},{20,97,8},{35,37,3}};
+        // int [][] a = new int [][] {{54,95,4},{99,46,3},{29,21,3},{96,72,8},{49,43,3},{11,20,3},{2,57,1},{69,51,7},{97,1,10},{85,45,2},{38,47,1},{83,75,3},{65,59,3},{33,4,1},{32,10,2},{20,97,8},{35,37,3}};
+        int [][] a = new int [][] {{1,2,3},{2,3,1},{3,4,2},{4,5,3},{5,6,4}};
 
       int r = s.maximumDetonation(a);
       System.out.println("r: " + r);
