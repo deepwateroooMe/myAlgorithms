@@ -663,7 +663,7 @@ public class hdthree {
         //     return ans;
         // }
 
-        // public int [] gridIllumination(int n, int[][] a, int[][] q) { // 终于独立完整地把它完整地写了一遍。。。。。。
+        // public int [] gridIllumination(int n, int[][] a, int[][] q) { 
         //     int [][] dirs = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 0}, {0, 1}, {1, -1}, {1, 0}, {1, 1}};
         //     int m = q.length;
         //     Map<Integer, Integer> r = new HashMap<>(); // row
@@ -738,20 +738,570 @@ public class hdthree {
         //         if (q.size() > n) return true; // 这个标准不记得了
         //     }
         //     return false;
-        // }        
+        // }
+
+          
+    // StringBuilder sb = new StringBuilder();
+    // Trie t = new Trie();
+    // public StreamChecker(String[] words) { 
+    //     for (String v : words) t.insert(v);
+    // }
+    // public boolean query(char letter) { // 去搜trie: 需要一个数据结构来纪录字符序列
+    //     sb.append(letter);
+    //     return t.search(sb);
+    // }
+    // private static class Trie { 
+    //     private class Node {
+    //         boolean f;
+    //         Node [] next;
+    //         public Node() {
+    //             f = false;
+    //             next = new Node[26];
+    //         }
+    //     }
+    //     Node root;
+    //     public Trie() {
+    //         root = new Node();
+    //     }
+    //     public boolean search(StringBuilder s) {
+    //         Node r = root;
+    //         for (int i = s.length()-1; i >= 0; i--) {
+    //             int idx = s.charAt(i) - 'a';
+    //             if (r.next[idx] == null) return false;
+    //             if (r.next[idx].f) return true;
+    //             r = r.next[idx];
+    //         }
+    //         return r.f;
+    //     }
+    //     public void insert(String t) { // 插入当前单词的倒序
+    //         char [] s = t.toCharArray();
+    //         Node r = root;
+    //         for (int i = s.length-1; i >= 0; i--) {
+    //             int j = s[i] - 'a';
+    //             if (r.next[j] == null)
+    //                 r.next[j] = new Node();
+    //             r = r.next[j];
+    //         }
+    //         r.f = true;
+    //     }            
+    // }
+
+        // interface MountainArray {
+        //     *     public int get(int index) {}
+        //     *     public int length() {}
+        //     * }
+        // public int findInMountainArray(int t, MountainArray ma) { // bug
+        //     int n = ma.length(), idx = binarySearchPeek(ma, n);
+        //     System.out.println("idx: " + idx);
+        //     if (t == ma.get(idx)) return idx;
+        //     int l = binarySearchTarget(ma, 0, idx-1, t, true);
+        //     System.out.println("l: " + l);
+        //     if (l != -1) return l;
+        //     return binarySearchTarget(ma, idx+1, n-1, t, false);
+        // }
+        // int binarySearchTarget(MountainArray a, int l, int r, int v, boolean onLeft) {
+        //     if (onLeft && (v < a.get(l) || v > a.get(r))
+        //         || !onLeft && (v > a.get(l) || v < a.get(r))) return -1;
+        //     while (l <= r) {
+        //         int m = (l + r) / 2;
+        //         if (a.get(m) == v) return m;
+        //         if (onLeft) {
+        //             if (a.get(m) > v) r = m-1;
+        //             else l = m+1;
+        //         } else if (a.get(m) > v) l = m+1;
+        //         else r = m-1;
+        //     }
+        //     return l;
+        // }
+        // int binarySearchPeek(MountainArray a, int n) {
+        //     int l = 0, r = n-1;
+        //     while (l <= r - 2) {
+        //         int m = (l + r) / 2;
+        //         if (a.get(m-1) < a.get(m) && a.get(m) > a.get(m+1)) return m;
+        //         else if (a.get(m-1) < a.get(m) && a.get(m) < a.get(m+1)) l = m;
+        //         else r = m-1;
+        //     }
+        //     return l;
+        // }
+
+        // // Write a function "parse" which calls helper functions "parse_or", "parse_and", "parse_not".
+        // public boolean parseBoolExpr(String s) { // bug, have not finished yet
+        //     int n = s.length();
+        //     char c = s.charAt(0);
+        //     if (n == 1) return c == 't';
+        //     if (c == '!') return parseNot(s.substring(2, n-1));
+        //     if (c == '|') return parseOr(s.substring(2, n-1));
+        //     if (c == '&') return parseAnd(s.substring(2, n-1));
+        // }
+        // boolean parseOr(String t) { // 能不能把三个函数合并成一个函数，都是重复 
+        //     int n = t.length(), j = 0, l = 0, r = 0;
+        //     char [] s = t.toCharArray();
+        //     boolean ans = false;
+        //     for (int i = 0; i < n; i++) {
+        //         char c = s[i];
+        //         if (c == '!' || c == '|' || c == '&') {
+        //             j = i+2; l = 1; r = 0;
+        //             while (j < n && l != r) {
+        //                 if (s[j] == '(') l++;
+        //                 else if (s[j] == ')') {
+        //                     if (l > 0)  l--;
+        //                     else r++;
+        //                     if (l == r) break;
+        //                 }
+        //             }
+        //             if (c == '!') ans |= parseNot(t.substring(i+2, j));
+        //             if (c == '|') ans |= parseor(t.substring(i+2, j));
+        //             if (c == '&') ans |= parseAnd(t.substring(i+2, j));
+        //             i = j;
+        //         } else if (c == 't' || c == 'f') {
+        //             ans |= c == 't';
+        //             i ++;
+        //         }
+        //     }
+        //     return ans;
+        // }
+        // boolean parseAnd(String t) {
+        // }
+        // boolean parseNot(String t) {
+        // }
+
+        // public int[] canSeePersonsCount(int[] a) {
+        //     int n = a.length, ans [] = new int [n];
+        //     ArrayDeque<Integer> s = new ArrayDeque<>(); // 单调递减栈
+        //     s.offerLast(a[n-1]);
+        //     for (int i = n-2; i >= 0; i--) {
+        //         while (!s.isEmpty() && s.peekLast() < a[i]) {
+        //             s.pollLast();
+        //             ans[i]++;
+        //         }
+        //         if (!s.isEmpty()) ans[i]++;
+        //         s.offerLast(a[i]);
+        //     }
+        //     return ans;
+        // }
+
+        // public int[][] matrixRankTransform(int[][] mat) {
+        //     final int row = mat.length;
+        //     final int col = mat[0].length;
+        //     //对每个坐标状态压缩(state = i * col + j)
+        //     Integer[] indexs = new Integer[row * col];
+        //     for (int i = 0; i < indexs.length; i++) 
+        //         indexs[i] = i;
+        //     //对坐标点根据mat的值进行排序。
+        //     Arrays.sort(indexs, new Comparator<Integer>() {
+        //             @Override
+        //                 public int compare(Integer t1, Integer t2) {
+        //                 return mat[t1 / col][t1 % col] - mat[t2 / col][t2 % col];
+        //             }
+        //         });
+        //     int[] minRows = new int[row]; //第i行的秩号序列，第i行下一个秩号需要大于等于此cell([i, minRows[i]])的值
+        //     int[] minCols = new int[col]; //第j列的秩号序列，第j列下一个秩号需要大于等于此cell([minCols[j], j])的值
+        //     Arrays.fill(minRows, -1);
+        //     Arrays.fill(minCols, -1);
+        //     int[] leaders = new int[row * col]; //并查集，表示同行或同列的同样值串起来的一个集合。
+        //     int[] leaderVals = new int[row * col]; //并查集leader的对应的秩号值。
+        //     for (int i = 0; i < leaders.length; i++) 
+        //         leaders[i] = i;
+        //     int pos = 0;
+        //     while (pos < indexs.length) {
+        //         int val = 1;
+        //         int index = indexs[pos];
+        //         //排序后的第pos个单元格
+        //         int i = index / col;
+        //         int j = index % col;
+        //         int tmpIndex;
+        //         int tmpVal;
+        //         //第i行应该分配的下一个秩号
+        //         if (minRows[i] != -1) {
+        //             tmpIndex = i * col + minRows[i];
+        //             int leaderIndex = getLeader(leaders, tmpIndex);
+        //             tmpVal = leaderVals[leaderIndex];
+        //             if (mat[i][j] == mat[i][minRows[i]]) {
+        //                 //如果i行有相同的值，合并并查集
+        //                 mergeLeader(leaders, index, tmpIndex);
+        //                 val = Math.max(val, tmpVal);
+        //             } else {
+        //                 val = Math.max(val, tmpVal + 1);
+        //             }
+        //         }
+        //         //第j列应该分配的下一个秩号
+        //         if (minCols[j] != -1) {
+        //             tmpIndex = minCols[j] * col + j;
+        //             int leaderIndex = getLeader(leaders, tmpIndex);
+        //             tmpVal = leaderVals[leaderIndex];
+        //             if (mat[i][j] == mat[minCols[j]][j]) {
+        //                 //如果j列有相同的值，合并并查集
+        //                 mergeLeader(leaders, index, tmpIndex);
+        //                 val = Math.max(val, tmpVal);
+        //             } else {
+        //                 val = Math.max(val, tmpVal + 1);
+        //             }
+        //         }
+        //         //val = Math.max(val, ...)是取i行下一个秩号 和 j列下一个秩号 的较大值
+        //         //更新i行和j列秩号序列。此时[i, j]为i行和j列的最大秩号
+        //         minRows[i] = j;
+        //         minCols[j] = i;
+        //         //更新并查集的秩号
+        //         int leader = getLeader(leaders, index);
+        //         leaderVals[leader] = val;
+        //         pos++;
+        //     }
+        //     //将秩号结果由并查集导出到数组ans
+        //     int[][] ans = new int[row][col];
+        //     for (int i = 0; i < row; i++) 
+        //         for (int j = 0; j < col; j++) {
+        //             int index = i * col + j;
+        //             ans[i][j] = leaderVals[getLeader(leaders, index)];
+        //         }
+        //     return ans;
+        // }
+        // private void mergeLeader(int[] leaders, int index, int tmpIndex) {
+        //     int leader1 = getLeader(leaders, index);
+        //     int leader2 = getLeader(leaders, tmpIndex);
+        //     if (leader1 != leader2) 
+        //         leaders[leader1] = leader2;
+        // }
+        // private int getLeader(int[] leaders, int tmpIndex) {
+        //     int leader = leaders[tmpIndex];
+        //     if (leader == leaders[leader]) {
+        //         return leader;
+        //     } else {
+        //         return leaders[tmpIndex] = getLeader(leaders, leader);
+        //     }
+        // }
+        // public int[][] matrixRankTransform(int[][] mat) { // 这个题没有思路
+        //     int m = mat.length, n = mat[0].length;
+        // }
+
+        // public int minimumMoves(int[][] g) {
+        //     int [][] dirs = {{1, 0}, {0, 1}};
+        //     int n = g.length, cnt = 0, target [] = {n-1, n-2, n-1, n-1};
+        //     boolean [][][][] vis = new boolean [n][n][n][n]; // 可以写成三维的，但目前四给的比较直观，就暂时先这样吧
+        //     Queue<int []> q = new LinkedList<>();
+        //     q.offer(new int [] {0, 0, 0, 1});;
+        //     vis[0][0][0][1] = true;
+        //     while (!q.isEmpty()) {
+        //         for (int z = q.size()-1; z >= 0; z--) {
+        //             int [] cur = q.poll();
+        //             int i = cur[0], j = cur[1], x = cur[2], y = cur[3];
+        //             if (Arrays.equals(cur, target)) return cnt;
+        //             if (y < n-1) { // 可能 可以向右移
+        //                 if (i == x && g[x][y+1] != 1 && !vis[i][y][i][y+1]) {
+        //                     q.offer(new int [] {i, y, i, y+1});
+        //                     vis[i][y][i][y+1] = true;
+        //                 } else if (j == y && g[i][j+1] != 1 && g[x][y+1] != 1 && !vis[i][j+1][x][y+1]) {
+        //                     q.offer(new int [] {i, j+1, x, y+1});
+        //                     vis[i][j+1][x][y+1] = true;
+        //                 }
+        //             }
+        //             if (x < n-1) { // 可能 可以向下移
+        //                 if (i == x && g[i+1][j] != 1 && g[x+1][y] != 1 && !vis[i+1][j][x+1][y]) { // 小蛇 横躺着
+        //                     q.offer(new int [] {i+1, j, x+1, y});
+        //                     vis[i+1][j][x+1][y] = true;
+        //                 } else if (j == y && g[x+1][y] != 1 && !vis[x][y][x+1][y]) {
+        //                     q.offer(new int [] {x, y, x+1, y});
+        //                     vis[x][y][x+1][y] = true;
+        //                 }
+        //             }
+        //             if (i == x && x < n-1) // 横躺着：顺时针方向旋转
+        //                 if (g[i+1][j] != 1 && g[x+1][y] != 1 && !vis[i][j][i+1][j]) {
+        //                     q.offer(new int [] {i, j, i+1, j});
+        //                     vis[i][j][i+1][j] = true;
+        //                 }
+        //             if (j == y && y < n-1) // 竖躺着：逆时针方向旋转
+        //                 if (g[i][j+1] != 1 && g[x][y+1] != 1 && !vis[i][j][i][j+1]) {
+        //                     q.offer(new int [] {i, j, i, j+1});
+        //                     vis[i][j][i][j+1] = true;
+        //                 }
+        //         }
+        //         cnt++;
+        //     }
+        //     return -1;
+        // }
+
+        // static final int mod = (int)1e9 + 7, N = (int)1e5+1;
+        // public int sumOfFlooredPairs(int [] a) {
+        //     int n = a.length;
+        //     int [] cnt = new int [N];
+        //     for (Integer v : a) cnt[v]++;
+        //     for (int i = 1; i < N; i++) cnt[i] += cnt[i-1]; // 求前缀和
+        //     long ans = 0;
+        //     for (int i = 1; i < N; i++)
+        //         if (cnt[i] > cnt[i-1]) {
+        //             long sum = 0;
+        //             for (int j = 1; j*i < N; j++) {
+        //                 int l = i * j - 1, r = i * (j + 1) - 1; // [l, r]范围内所有数的个数 * 当前倍数
+        //                 sum += (cnt[Math.min(r, N-1)] - cnt[l]) * (long)j;
+        //             }
+        //             ans = (ans + (sum % mod) * (cnt[i] - cnt[i-1])) % mod;
+        //         }
+        //     return (int)ans;
+        // }
+
+        //  public int numPoints(int[][] points, int r) { // bug: 不知道哪里写错了
+        //     int n = points.length, cnt = 0, max = 0;
+        //     for (int i = 0; i < n; i++) 
+        //         for (int j = i+1; j < n; j++) {
+        //             int [] x = points[i], y = points[j];
+        //             long pp = (long)Math.pow(x[0] - y[0], 2) + (long)Math.pow(x[1] - y[1], 2);
+        //             if (pp < (long)r * r) continue;
+        //             if (pp == (long)r * r) {
+        //                 double oi = (x[0] + y[0]) / 2.0, oj = (x[1] + y[1]) / 2.0;
+        //                 cnt = getCnts(points, oi, oj, r);
+        //                 max = Math.max(max, cnt);
+        //             } else {
+        //                 int dx = x[0] - y[0], dy = x[1] - y[1];
+        //                 double oi = (x[0]+y[0])/2.0 + (x[1]-y[1])*Math.sqrt(r*r/((x[0]-y[0])*(x[0]-y[0]) + (x[1]-y[1])*(x[1]-y[1]))-0.25);
+        //                 double oj = (x[1]+y[1])/2.0 + (y[0]-x[0])*Math.sqrt(r*r/((x[0]-y[0])*(x[0]-y[0]) + (x[1]-y[1])*(x[1]-y[1]))-0.25);
+        //                 cnt = getCnts(points, oi, oj, r);
+        //                 max = Math.max(max, cnt);
+        //                 dx = y[0] - x[0];
+        //                 dy = y[1] - x[1];
+        //                 oi = (x[0]+y[0])/2.0 + (x[1]-y[1])*Math.sqrt(r*r/((x[0]-y[0])*(x[0]-y[0]) + (x[1]-y[1])*(x[1]-y[1]))-0.25);
+        //                 oj = (x[1]+y[1])/2.0 + (y[0]-x[0])*Math.sqrt(r*r/((x[0]-y[0])*(x[0]-y[0]) + (x[1]-y[1])*(x[1]-y[1]))-0.25);
+        //                 cnt = getCnts(points, oi, oj, r);
+        //                 max = Math.max(max, cnt);
+        //             }
+        //         }
+        //     return max;
+        // }
+        // // void getCenter(double x1, double y1, double x2, double y2, double R, double &x, double &y) {
+        // //     x = (x1+x2)/2.0 + (y1-y2)*sqrt(R*R/((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2))-0.25);
+        // //     y = (y1+y2)/2.0 + (x2-x1)*sqrt(R*R/((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2))-0.25);
+        // // }
+        // double eps = 0.001;
+        // int getCnts(int [][] a, double i, double j, int r) {
+        //     int cnt = 0;
+        //     for (int [] p : a) {
+        //         if (Math.abs(p[0] - i) - eps > r || Math.abs(p[1] - j) - eps > r) continue;
+        //         if (Math.abs(Math.pow(p[0] - i, 2) + Math.pow(p[1] - j, 2) - r*r) < eps) cnt++;
+        //     }
+        //     return cnt;
+        // }
+
+        // public int minDays(int[][] g) { // bug
+        //     m = g.length;
+        //     n = g[0].length;
+        //     uf = new UnionFind(m*n);
+        //     int cnt = 0;
+        //     boolean hasOne = false;
+        //     for (int i = 0; i < m; i++) 
+        //         for (int j = 0; j < n; j++) 
+        //             if (g[i][j] == 1) {
+        //                 hasOne = true;
+        //                 unionAround(i, j, g);
+        //                 cnt++;
+        //             }
+        //     if (uf.getCnt() == m * n) return hasOne ? 1 : 0; // 
+        //     for (int i = 0; i < m; i++) 
+        //         for (int j = 0; j < n; j++) 
+        //             if (g[i][j] == 1) {
+        //                 g[i][j] = 0;
+        //                 uf = new UnionFind(m*n);
+        //                 for (int x = 0; x < m; x++) 
+        //                     for (int y = 0; y < n; y++) 
+        //                         if (g[x][y] == 1)
+        //                             unionAround(x, y, g);
+        //                 System.out.println("uf.getCnt(): " + uf.getCnt());
+        //                 if (uf.getCnt() > m * n - (cnt-1) + 1) return 1; //  && cnt -1 > 1
+        //                 g[i][j] = 1;
+        //             }
+        //     return 2;
+        // }
+        // int [][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+        // UnionFind uf;
+        // int m, n;
+        // void unionAround(int i, int j, int [][] a) {
+        //     for (int [] d : dirs) {
+        //         int x = i + d[0], y = j + d[1];
+        //         if (x < 0 || x >= m || y < 0 || y >= n || a[x][y] == 0) continue;
+        //         uf.union(i*n+j, x*n+y);
+        //     }
+        // }
+        // class UnionFind {
+        //     int [] id; // parent
+        //     int [] cnt;// size
+        //     public UnionFind (int n) {
+        //         id = new int [n];
+        //         cnt = new int [n];
+        //         for (int i = 0; i < n; i++) {
+        //             id[i] = i;
+        //             cnt[i] = 1;
+        //         }
+        //     }
+        //     public int getCnt() {
+        //         for (int i = 0; i < id.length; i++) 
+        //             find(i);
+        //         Set<Integer> sp = new HashSet<>();
+        //         for (int i = 0; i < id.length; i++) 
+        //             sp.add(id[i]);
+        //         return sp.size();
+        //     }
+        //     public int find(int i) {
+        //         while (id[i] != i) {
+        //             id[i] = id[id[i]];
+        //             i = id[i];
+        //         }
+        //         return i;
+        //     }
+        //     public void union(int i, int j) {
+        //         int rootI = find(i);
+        //         int rootJ = find(j);
+        //         if (rootI != rootJ) {
+        //             id[rootI] = rootJ;
+        //             cnt[rootJ] += cnt[rootI];
+        //         }
+        //     }
+        // }
+
+        // public List<String> maxNumOfSubstrings(String t) { // undone: 今天有点儿头痛，读不懂题目要求返回的是什么
+        //     int n = t.length();
+        //     char [] s = t.toCharArray();
+        //     int [] bgn = new int [26]; // 记每个字母第一次出现的位置
+        //     int [] end = new int [26]; // 记每个字母最后一次出现的位置
+        //     Arrays.fill(bgn, -1);
+        //     Arrays.fill(end, -1);
+        //     for (int i = 0; i < n; i++) {
+        //         int j = s[i] - 'a';
+        //         if (bgn[j] == -1) bgn[j] = i;
+        //         else end[j] = i;
+        //     }
+        //     System.out.println(Arrays.toString(bgn));
+        //     System.out.println(Arrays.toString(end));
+        //     List<String> ans = new ArrayList<>();
+        //     return ans;
+        // }
+
+        // public boolean isTransformable(String ss, String tt) {  // bug: 这里没读懂题目，遍历、建立的方向弄反了：应该是从尾巴向头建立，而不是从头到尾
+        //     int n = ss.length(), i = 0, j = 0;
+        //     char [] s = ss.toCharArray(), tmp = Arrays.copyOf(s, n);
+        //     Arrays.sort(tmp);
+        //     if (new String(tmp).equals(ss)) return false;
+        //     char [] t = tt.toCharArray();
+        //     while (i < n && s[i] == t[i]) i++;
+        //     if (i == n) return true;
+        //     j = i;
+        //     while (j < n && s[j] != t[i]) j++;
+        //     if (j == n) return false;
+        //     tmp = ss.substring(i, j+1).toCharArray();
+        //     Arrays.sort(tmp);
+        //     String sp = ss.substring(0, i) + new String(tmp) + ss.substring(j+1);
+        //     i++;
+        //     s = sp.toCharArray();
+        //     while (i < n && s[i] == t[i]) i++;
+        //     if (i == n) return true;
+        //     return isTransformable(sp.substring(i), tt.substring(i));
+        // }
+
+        // public int maximumRequests(int n, int[][] req) {
+        //     int m = req.length, range = 1 << m, j = 0, max = 0;
+        //     int [] out = new int [n], in = new int [n]; // 不用弄两个，一个就够用了
+        //     for (int i = 1; i < range; i++) {
+        //         int cnt = Integer.bitCount(i);
+        //         Arrays.fill(in, 0);
+        //         Arrays.fill(out, 0);
+        //         for ( j = 0; j < m; j++) 
+        //             if (((i >> j) & 1) == 1) {
+        //                 int [] c = req[j];
+        //                 out[c[0]]++;
+        //                 in[c[1]]++;
+        //             }
+        //         for (j = 0; j < n; j++) 
+        //             if (out[j] != in[j]) break;
+        //         if (j < n) continue;
+        //         max = Math.max(max, cnt);
+        //     }
+        //     return max;
+        // }
+        // public int maximumRequests(int n, int[][] requests) {
+        //     int ans = 0;
+        // outer_loop: for (int m = 0; m < (1 << requests.length); m++) {
+        //         int [] balance = new int[n];
+        //         for (int i = 0; i < requests.length; i++) 
+        //             if (((m >> i)&1) == 1) {
+        //                 balance[requests[i][0]]--;
+        //                 balance[requests[i][1]]++;
+        //             }
+        //         for (int i = 0; i < n; i++)
+        //              if (balance[i] != 0) continue outer_loop;
+        //         ans = Math.max(ans, Integer.bitCount(m));
+        //     }
+        //     return ans;
+        // }
+        // public int maximumRequests(int n, int[][] requests) {
+        //     helper(requests, 0, new int[n], 0);
+        //     return max;
+        // }
+        // int max = 0;
+        // void helper(int [][] a, int idx, int [] cnt, int sum) {
+        //     if (idx == a.length) {
+        //         for (int v : cnt) 
+        //             if (v != 0) return ;
+        //         max = Math.max(max, sum);
+        //         return ;
+        //     }
+        //     cnt[a[idx][0]]++;
+        //     cnt[a[idx][1]]--;
+        //     helper(a, idx+1, cnt, sum+1);
+        //     cnt[a[idx][0]]--;
+        //     cnt[a[idx][1]]++;
+        //     helper(a, idx+1, cnt, sum);
+        // }
+
+
+        public TreeNode canMerge(List<TreeNode> trees) {
+           for (TreeNode r : trees) m.put(r.val, r);
+           for (TreeNode r : trees) 
+               if (m.containsKey(r.val)) {
+                   TreeNode rt = buildTree(r);
+                   m.put(rt.val, rt);
+               }
+           if (m.size() > 1) return null;
+           TreeNode rt = m.values().iterator().next();
+           return isValid(rt, Integer.MIN_VALUE, Integer.MAX_VALUE) ? rt : null;
+        }
+        Map<Integer, TreeNode> m = new HashMap<>(); // rts: roots
+        TreeNode buildTree(TreeNode r) { // 自顶向下：构建以 r 为树根的最大可能的大树 
+            TreeNode next = m.remove(r.val);
+            if (next != null) {
+                if (next.left != null) r.left = buildTree(next.left);
+                if (next.right != null) r.right = buildTree(next.right);
+            }
+            return r;
+        }
+        boolean isValid(TreeNode r, int min, int max) { // 而给出左右范围限定的目的：就具备了传递性，绝对保证递归下去的所有子树都合法,因为限定了他们的合法取值范围
+            if (r == null) return true;
+            int v = r.val;
+            if (v >= max || v <= min) return false; // 
+            // if (r.left != null && r.left.val >= v || r.right != null && r.right.val <= v) return false; // 这一行不具备上下传递性：
+            return isValid(r.left, min, v) && isValid(r.right, v, max);                                    // 就是某个子子左节点的值可能违规，但检查不出来
+        }
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        int [][] a = new int [][] {{0,999991},{0,999993},{0,999996},{1,999996},{1,999997},{1,999998},{1,999999}};
-        int [] b = new int [] {0,999997};
-        int [] c = new int [] {0, 2};
+        int [][] a = new int [][] {{2,1},{3,2,5},{5,4}};
 
-        boolean r = s.isEscapePossible(a, b, c);
-        System.out.println("r: " + r);
+        List<TreeNode> l = new ArrayList<>();
+        for (int [] v : a) {
+            TreeNode root = new TreeNode(v[0]);
+            root.buildTree(root, v);
+            root.levelPrintTree(root);
+            l.add(root);
+        }
+
+        TreeNode r = s.canMerge(l);
+        r.levelPrintTree(r);
     }
 }
-// TreeNd root = new TreeNode(a[0]);
-// root.buildTree(root, a);
-// root.lvlPrintTree(root);
+
+
+
+
+
+
+
+
+
+
 
