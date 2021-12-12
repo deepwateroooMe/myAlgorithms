@@ -462,90 +462,90 @@ public class hdfour {
         //     }
         //     return total;
         // }
-        private class Bit {
-             int size;
-             int [] arr;
-             long [] tree; // sum
-             public Bit(int size) {
-                 this.size = size;
-                 this.tree = new long[size+1];
-             }
-             public Bit(int [] arr) {
-                 this.size = arr.length+1;
-                 this.tree = new long[size];
-                 this.arr = new int[size];
-                 for (int i = 0; i < arr.length; i++) {
-                     update(i, arr[i]);
-                 }
-             }
-             private long sum(int i) {
-                 long res = 0;
-                 while (i > 0 && i < size) {
-                     res += tree[i];
-                     i -= lowBit(i);
-                 }
-                 return res;
-             }
-             private void update(int i, int val) { //logn i - 0 based
-                 int diff = val - arr[i+1];
-                 arr[i+1] = val;
-                 i += 1; // tree中下标从1开始
-                 while(i+1 < arr.length){
-                     tree[i+1] += diff;
-                     i += lowBit(i);
-                 }            
-             }
-             public int sumRange(int i, int j) { // sum [i, j]
-                 return (int)(sum(j+1) - sum(i));
-             }
-             private int lowBit(int n) {
-                 return n & (-n); 
-             }
-             public int find(int rank) {
-                 int lowerRank = 0;
-                 while (rank > 0) {
-                     lowerRank = (int)Math.max(lowerRank, tree[rank]);
-                     rank -= lowBit(rank);
-                 }
-                 // System.out.println("rank: " + rank);
-                 return lowerRank;
-             }
-             public int update(int rank) { // rank: rank of nums[i]
-                 // NOT find(n), due to the requirement of *strictly* increasing sequence
-                 // int l = find(rank - 1) + 1; // 更新所有的父————接下来的节点
-                 // System.out.println("tree.length: " + tree.length);
-                 // for (int z = 0; z < tree.length; ++z) 
-                 //     System.out.print(tree[z] + ", ");
-                 // System.out.println("");
-                 int val = find(rank-1) + 1; // 更新所有的父————接下来的节点
-                 while (rank <= size && tree[rank] < val) {
-                     tree[rank] = val;
-                     rank += lowBit(rank);
-                 }
-                 // System.out.println("tree.length: " + tree.length);
-                 // for (int z = 0; z < tree.length; ++z) 
-                 //     System.out.print(tree[z] + ", ");
-                 // System.out.println("");
-                 return val;
-             }
-        }
-        public int countRangeSum(int[] nums, int lower, int upper) { // bug
-            int n = nums.length;
-            if (n == 1) return nums[0] <= upper && nums[0] >= lower ? 1 : 0;
-            // else if (n == 2)
-            //     return (nums[0] <= upper && nums[0] >= lower ? 1 : 0)
-            //         + (nums[1] <= upper && nums[1] >= lower ? 1 : 0)
-            //         + (nums[0]+nums[1] <= upper && nums[0] + nums[1] >= lower ? 1 : 0);
-            Bit bit = new Bit(nums);
-            int cnt = 0;
-            for (int i = 0; i < n; i++) {
-                for (int j = i+1; j < n; j++) {
-                    long sum = bit.sumRange(i+1, j+1);
-                    if (sum >= lower && sum <= upper) ++cnt;
-                }
-            }
-            return cnt;
-        }
+        // private class Bit {
+        //      int size;
+        //      int [] arr;
+        //      long [] tree; // sum
+        //      public Bit(int size) {
+        //          this.size = size;
+        //          this.tree = new long[size+1];
+        //      }
+        //      public Bit(int [] arr) {
+        //          this.size = arr.length+1;
+        //          this.tree = new long[size];
+        //          this.arr = new int[size];
+        //          for (int i = 0; i < arr.length; i++) {
+        //              update(i, arr[i]);
+        //          }
+        //      }
+        //      private long sum(int i) {
+        //          long res = 0;
+        //          while (i > 0 && i < size) {
+        //              res += tree[i];
+        //              i -= lowBit(i);
+        //          }
+        //          return res;
+        //      }
+        //      private void update(int i, int val) { //logn i - 0 based
+        //          int diff = val - arr[i+1];
+        //          arr[i+1] = val;
+        //          i += 1; // tree中下标从1开始
+        //          while(i+1 < arr.length){
+        //              tree[i+1] += diff;
+        //              i += lowBit(i);
+        //          }            
+        //      }
+        //      public int sumRange(int i, int j) { // sum [i, j]
+        //          return (int)(sum(j+1) - sum(i));
+        //      }
+        //      private int lowBit(int n) {
+        //          return n & (-n); 
+        //      }
+        //      public int find(int rank) {
+        //          int lowerRank = 0;
+        //          while (rank > 0) {
+        //              lowerRank = (int)Math.max(lowerRank, tree[rank]);
+        //              rank -= lowBit(rank);
+        //          }
+        //          // System.out.println("rank: " + rank);
+        //          return lowerRank;
+        //      }
+        //      public int update(int rank) { // rank: rank of nums[i]
+        //          // NOT find(n), due to the requirement of *strictly* increasing sequence
+        //          // int l = find(rank - 1) + 1; // 更新所有的父————接下来的节点
+        //          // System.out.println("tree.length: " + tree.length);
+        //          // for (int z = 0; z < tree.length; ++z) 
+        //          //     System.out.print(tree[z] + ", ");
+        //          // System.out.println("");
+        //          int val = find(rank-1) + 1; // 更新所有的父————接下来的节点
+        //          while (rank <= size && tree[rank] < val) {
+        //              tree[rank] = val;
+        //              rank += lowBit(rank);
+        //          }
+        //          // System.out.println("tree.length: " + tree.length);
+        //          // for (int z = 0; z < tree.length; ++z) 
+        //          //     System.out.print(tree[z] + ", ");
+        //          // System.out.println("");
+        //          return val;
+        //      }
+        // }
+        // public int countRangeSum(int[] nums, int lower, int upper) { // bug
+        //     int n = nums.length;
+        //     if (n == 1) return nums[0] <= upper && nums[0] >= lower ? 1 : 0;
+        //     // else if (n == 2)
+        //     //     return (nums[0] <= upper && nums[0] >= lower ? 1 : 0)
+        //     //         + (nums[1] <= upper && nums[1] >= lower ? 1 : 0)
+        //     //         + (nums[0]+nums[1] <= upper && nums[0] + nums[1] >= lower ? 1 : 0);
+        //     Bit bit = new Bit(nums);
+        //     int cnt = 0;
+        //     for (int i = 0; i < n; i++) {
+        //         for (int j = i+1; j < n; j++) {
+        //             long sum = bit.sumRange(i+1, j+1);
+        //             if (sum >= lower && sum <= upper) ++cnt;
+        //         }
+        //     }
+        //     return cnt;
+        // }
         // public int countRangeSum(int[] a, int lower, int upper) { // 这个merge sort的思维很奇特: 二分，O(NlogN)
         //     int n = a.length;
         //     long [] sum = new long[n+1];
@@ -833,17 +833,95 @@ public class hdfour {
         //     return count;
         // }
 
-        
+        PriorityQueue<Integer> maxHeap = new PriorityQueue<>((Collections.reverseOrder()));
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+        public double[] medianSlidingWindow(int[] nums, int k) {
+            double[] result = new double[nums.length - k + 1];
+            for (int i = 0; i < nums.length; i++) {
+                if (maxHeap.size() == 0 || maxHeap.peek() >= nums[i]) {
+                    maxHeap.add(nums[i]);
+                } else {
+                    minHeap.add(nums[i]);
+                }
+                balanceHeaps();
+                if (i - k + 1 >= 0) { 
+                    if (maxHeap.size() == minHeap.size()) {
+                        result[i - k + 1] = maxHeap.peek() / 2.0 + minHeap.peek() / 2.0;
+                    } else { 
+                        result[i - k + 1] = maxHeap.peek();
+                    }
+                    int elementToBeRemoved = nums[i - k + 1];
+                    if (elementToBeRemoved <= maxHeap.peek()) {
+                        maxHeap.remove(elementToBeRemoved);
+                    } else {
+                        minHeap.remove(elementToBeRemoved);
+                    }
+                    balanceHeaps();
+                }
+            }
+            return result;
+        }
+        private void balanceHeaps() {
+            if (maxHeap.size() > minHeap.size() + 1)
+                minHeap.add(maxHeap.poll());
+            else if (maxHeap.size() < minHeap.size())
+                maxHeap.add(minHeap.poll());
+        }
+        public double [] medianSlidingWindow(int [] a, int k) { // bug: 需要校正，divide and conquer, merge sort的思路可能更即写一点儿
+            int n = a.length, idx = 0;
+            double [] ans = new double[n-k+1];
+            if (k == 1) {
+                for (Integer v : a) 
+                    ans[idx++] = (double)v;
+                return ans;
+            }
+            Queue<Integer> l = new PriorityQueue<>((x, y)->y-x); // 大顶堆
+            Queue<Integer> r = new PriorityQueue<>((x, y)->x-y); // 小顶堆
+            boolean odd = (k % 2 == 1); // 设置r里多一个元素
+            l.offer(a[0]);
+            for (int i = 1; i < k; i++) { // 放置前k个元素:怎么放呢？
+                if (l.size() != r.size()) {
+                    r.offer(a[i]);
+                    l.offer(r.poll());
+                } else { // ==
+                    l.offer(a[i]);
+                    r.offer(l.poll());
+                }
+            }
+            // while (l.size() > k / 2) r.offer(l.poll());
+            balanceQues(l, r, k);
+            if (l.size() == r.size())
+                ans[idx] = (l.peek() + r.peek()) / 2.0;
+            else ans[idx] = r.peek();
+            idx++;
+            for (int i = k; i < n; i++) {
+                int pre = a[i - k];
+                if (pre >= r.peek()) r.remove(pre); // heap这里应该不能直接删除吧，可能需要先转移一部分到min里去，再转回来 下午接着写
+                else l.remove(pre);
+                l.offer(a[i]);
+                balanceQues(l, r, k);
+                // while (l.size() > k / 2) r.offer(l.poll());
+                if (l.size() == r.size())
+                    ans[idx] = (l.peek() + r.peek()) / 2.0;
+                else ans[idx] = r.peek();
+                idx++;
+            }
+            return ans;
+        }
+        void balanceQues(Queue<Integer> l, Queue<Integer> r, int k) { // 这里有点儿问题
+            while (!l.isEmpty() && l.peek() > r.peek()) r.offer(l.poll());
+            while (l.size() < k / 2) l.offer(r.poll());
+            while (l.size() > k / 2) r.offer(l.poll());
+        }
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        int [] a = new int [] {-2,5,-1};
-
+        int [] a = new int [] {1,3,-1,-3,5,3,6,7};
         System.out.println(Arrays.toString(a));
 
-        int r = s.countRangeSum(a, -2, 2);
-        System.out.println("r: " + r);
+        double [] r = s.medianSlidingWindow(a, 3);
+        System.out.println(Arrays.toString(r));
     }
 }
 // TreeNd root = new TreeNode(a[0]);

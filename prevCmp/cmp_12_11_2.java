@@ -54,7 +54,7 @@ public class cmp {
                     min.offer(a[j]);
                     max.offer(a[j]);
                     // if (!min.isEmpty() && !max.isEmpty())
-                    sum += max.peek() - min.peek();
+                        sum += max.peek() - min.peek();
                 }
             }
             return sum;

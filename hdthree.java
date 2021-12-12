@@ -298,42 +298,6 @@ public class hdthree {
             ts.add(pre+1);
         }
 
-        public double [] medianSlidingWindow(int [] a, int k) { // bug: not finished yet divide and conquer, merge sort的思路可能更即写一点儿
-            int n = a.length, idx = 0;
-            double [] ans = new double[n-k+1];
-            if (k == 1) {
-                for (Integer v : a) 
-                    ans[idx++] = (double)v;
-                return ans;
-            }
-            Queue<Integer> l = new PriorityQueue<>((a, b)->b-a);
-            Queue<Integer> r = new PriorityQueue<>((a, b)->a-b);
-            boolean odd = (k % 2 == 1); // 设置r里多一个元素
-            l.offer(a[0]);
-            for (int i = 1; i < k; i++) { // 放置前k个元素:怎么放呢？
-                if (l.size() != r.size()) {
-                    r.offer(num);
-                    l.offer(r.poll());
-                } else { // ==
-                    l.offer(num);
-                    r.offer(l.poll());
-                }
-            }
-            System.out.println("(l.size() >= r.size()-1): " + (l.size() >= r.size()-1));
-            System.out.println("l.peek() <= r.peek(): " + l.peek() <= r.peek());
-            while (l.size() > k / 2) r.offer(l.poll());
-            if (l.size() == r.size())
-                ans[idx] = (l.peek() + r.peek()) / 2.0;
-            // else if (l.size() > r.size()) ans[idx] = l.peek();
-            else ans[idx] = r.peek();
-            idx++;
-            for (int i = k; i < n; i++) {
-                int pre = a[i - k];
-                if (pre >= r.peek()) r.remove() // heap这里应该不能直接删除吧，可能需要先转移一部分到min里去，再转回来
-            }
-            return ans;
-        }
-
         static final int mod = 1337;
         public int largestPalindrome(int n) { // bug: 不知道哪里错了
             if (n == 1) return 9;
@@ -1249,6 +1213,7 @@ public class hdthree {
         }
 
 
+        
         public TreeNode canMerge(List<TreeNode> trees) {
            for (TreeNode r : trees) m.put(r.val, r);
            for (TreeNode r : trees) 
@@ -1294,11 +1259,6 @@ public class hdthree {
         r.levelPrintTree(r);
     }
 }
-
-
-
-
-
 
 
 
