@@ -7181,6 +7181,377 @@ class FenWick {
 }
 #+END_SRC
 
+*** 315. Count of Smaller Numbers After Self - Hard
+You are given an integer array nums and you have to return a new counts array. The counts array has the property where counts[i] is the number of smaller elements to the right of nums[i].
+**** 解题思路与分析: 二分查找的插入排序
+     #+BEGIN_SRC java
+public List<Integer> countSmaller(int[] a) { // O(NlogN) 插入排序
+    int n = a.length;
+    List<Integer> ans = new ArrayList<>();
+    List<Integer> list = new ArrayList<>(); // 新建一个list，用于排序
+    int [] tmp = new int [n]; // 为了提高效率，新建一个数组型的返回结果
+    for (int i = n-1; i >= 0; i--) {
+        int v = a[i];       // 将当前数字插入到新建list中, 使用二分查找找到插入位置
+        int l = 0, r = list.size()-1; // l: left; r: right 从排好序的list中二分查找正确的插入位置
+        while (l <= r) {
+            int m = l + (r - l) / 2;
+            if (v <= list.get(m)) r = m-1;
+            else l = m + 1;
+         }
+        list.add(l, v); // 将当前数字插入到相应位置，保证list升序排列
+        tmp[i] = l; // 当前位置前所有数字均小于当前数字，将个数加入返回结果
+    }
+    for (Integer v : tmp) ans.add(v);
+    return ans;
+}
+     #+END_SRC
+**** 解题思路与分析: 数状数组
+- 官方题解： https://leetcode-cn.com/problems/count-of-smaller-numbers-after-self/solution/ji-suan-you-ce-xiao-yu-dang-qian-yuan-su-de-ge-s-7/
+     #+BEGIN_SRC java
+private int[] c;
+private int[] a; // 离散化、去重复 后的数组
+public List<Integer> countSmaller(int[] nums) {
+    List<Integer> ans = new ArrayList<Integer>(); 
+    discretization(nums);
+    init(nums.length + 5);
+    for (int i = nums.length - 1; i >= 0; --i) {
+        int id = getId(nums[i]);
+        ans.add(query(id - 1));
+        update(id);
+    }
+    Collections.reverse(ans);
+    return ans;
+}
+private void init(int length) {
+    c = new int[length];
+    Arrays.fill(c, 0);
+}
+private int lowBit(int x) {
+    return x & (-x);
+}
+private void update(int pos) {
+    while (pos < c.length) {
+        c[pos] += 1;
+        pos += lowBit(pos);
+    }
+}
+private int query(int pos) {
+    int ret = 0;
+    while (pos > 0) {
+        ret += c[pos];
+        pos -= lowBit(pos);
+    }
+    return ret;
+}
+private void discretization(int[] nums) { // 离散化、去重复 ？
+    Set<Integer> set = new HashSet<Integer>(Arrays.stream(nums).boxed().collect(Collectors.toList()));
+    int size = set.size();
+    a = new int[size];
+    int index = 0;
+    for (int num : set) a[index++] = num;
+    Arrays.sort(a);
+}
+private int getId(int x) {
+    return Arrays.binarySearch(a, x) + 1; // 
+}
+     #+END_SRC
+**** 解题思路与分析: 归并排序 todo 补上
+
+*** 327. Count of Range Sum - Hard *重点* 这几个题要好好再理解消化几遍
+Given an integer array nums and two integers lower and upper, return the number of range sums that lie in [lower, upper] inclusive.
+
+Range sum S(i, j) is defined as the sum of the elements in nums between indices i and j inclusive, where i <= j.
+**** 解题思路与分析: 分治法
+
+在累积和的基础上，我们计算有多少个区间的大小落在[lower, upper]之间，一个朴素的算法就是枚举各个区间，其时间复杂度是O(n^2)。一个更好的方法是利用分治法来处理，即利用归并排序算法将数组分成左右两边，在合并左右数组之前，对于左边数组中的每一个元素，在右边数组找到一个范围，使得在这个范围中的元素与左边元素构成的区间和落在[lower, upper]之间，即在右边数组中找到两个边界，设为m，n，其中m是在右边数组中第一个使得sum[m] - sum[i] >= lower的位置，而n是第一个使得sum[n] - sum[i] > upper的位置，这样n-m就是与左边元素i所构成的位于[lower, upper]范围的区间个数。因为左右两边都是已经有序的，这样就可以避免不必要的比较（这也是为什么我们能将时间复杂度从O(n^2)降低到O(nlogn)的秘诀所在）。
+
+     #+BEGIN_SRC java
+public int countRangeSum(int[] a, int lower, int upper) { // 这个merge sort的思维很奇特: 二分，O(NlogN)
+    int n = a.length;
+    long [] sum = new long[n+1];
+    for (int i = 1; i <= n; i++) 
+        sum[i] = sum[i-1] + a[i-1];
+    return mergeAnalyse(sum, 0, n+1, lower, upper);
+}
+int mergeAnalyse(long [] a, int l, int r, int lo, int hi) { // l, r: 寻找[l, r)范围内和为[lower, upper]的片段的个数
+    if (r - l <= 1) return 0;
+    int mid = l + (r - l) / 2;
+    int m = mid, n = mid, ans = 0;
+    ans = mergeAnalyse(a, l, mid, lo, hi) + mergeAnalyse(a, mid, r, lo, hi);
+    for (int i = l; i < mid; i++) { // 遍历[l, r)的半段长度： pivot 右移，滑动窗口，寻找合法窗口 // 通过遍历寻找当前范围中符合要求的个数，
+        while (m < r && a[m] - a[i] < lo) m++; // 左端点右移，直到找到合法（sum >= lo）的解：m合法
+        while (n < r && a[n] - a[i] <= hi) n++; // 右端点右移，直到右端点右移至不再合法（sum > hi）, n 不合法 
+        ans += n - m; // 对于[l, r)范围内的当前i来说，满足要求的总个数为 n - m
+    }
+    Arrays.sort(a, l, r); // 将[l, r)片段排序
+    return ans;
+}
+     #+END_SRC
+**** 解题思路与分析: 线段树
+- 官方题解：https://leetcode-cn.com/problems/count-of-range-sum/solution/qu-jian-he-de-ge-shu-by-leetcode-solution/ 
+     #+BEGIN_SRC java
+public int countRangeSum(int[] a, int lo, int hi) {
+    int n = a.length;
+    long [] preSum = new long[n + 1];
+    for (int i = 1; i <= n; i++) 
+        preSum[i] = preSum[i-1] + a[i-1];
+    Set<Long> allNumbers = new TreeSet<Long>();
+    for (long x : preSum) {
+        allNumbers.add(x);
+        allNumbers.add(x - lo); //
+        allNumbers.add(x - hi); // 
+    }
+    // 利用哈希表进行离散化
+    Map<Long, Integer> values = new HashMap<Long, Integer>();
+    int idx = 0;
+    for (long x : allNumbers) {
+        values.put(x, idx);
+        idx++;
+    }
+    SegNode root = build(0, values.size() - 1);
+    int ret = 0;
+    for (long x : preSum) {
+        int left = values.get(x - hi), right = values.get(x - lo);
+        ret += count(root, left, right);
+        insert(root, values.get(x));
+    }
+    return ret;
+}
+public SegNode build(int left, int right) {
+    SegNode node = new SegNode(left, right);
+    if (left == right) {
+        return node;
+    }
+    int mid = (left + right) / 2;
+    node.lchild = build(left, mid);
+    node.rchild = build(mid + 1, right);
+    return node;
+}
+public int count(SegNode root, int left, int right) {
+    if (left > root.hi || right < root.lo) 
+        return 0;
+    if (left <= root.lo && root.hi <= right) 
+        return root.add;
+    return count(root.lchild, left, right) + count(root.rchild, left, right);
+}
+public void insert(SegNode root, int val) {
+    root.add++;
+    if (root.lo == root.hi) 
+        return;
+    int mid = (root.lo + root.hi) / 2;
+    if (val <= mid) 
+        insert(root.lchild, val);
+    else insert(root.rchild, val);
+}
+class SegNode {
+    int lo, hi, add;
+    SegNode lchild, rchild;
+    public SegNode(int left, int right) {
+        lo = left;
+        hi = right;
+        add = 0;
+        lchild = null;
+        rchild = null;
+    }
+}
+     #+END_SRC
+**** 解题思路与分析: 动态增加节点的线段树 todo
+     #+BEGIN_SRC java
+     #+END_SRC
+**** 解题思路与分析: 树状数组
+     #+BEGIN_SRC java
+public int countRangeSum(int[] a, int lower, int upper) { // 树状数组
+    int n = a.length;
+    long[] preSum = new long[a.length + 1];
+    for (int i = 1; i <= n; i++) 
+        preSum[i] = preSum[i-1] + a[i-1];
+    Set<Long> allNumbers = new TreeSet<Long>();
+    for (long x : preSum) {
+        allNumbers.add(x);
+        allNumbers.add(x - lower);
+        allNumbers.add(x - upper);
+    }
+    // 利用哈希表进行离散化
+    Map<Long, Integer> values = new HashMap<Long, Integer>();
+    int idx = 0;
+    for (long x: allNumbers) {
+        values.put(x, idx);
+        idx++;
+    }
+    int ret = 0;
+    BIT bit = new BIT(values.size());
+    for (int i = 0; i < preSum.length; i++) {
+        int left = values.get(preSum[i] - upper), right = values.get(preSum[i] - lower);
+        ret += bit.query(right + 1) - bit.query(left);
+        bit.update(values.get(preSum[i]) + 1, 1);
+    }
+    return ret;
+}
+class BIT {
+    int [] tree;
+    int n;
+    public BIT(int n) {
+        this.n = n;
+        this.tree = new int[n + 1];
+    }
+    public int lowbit(int x) {
+        return x & (-x);
+    }
+    public void update(int x, int d) {
+        while (x <= n) {
+            tree[x] += d;
+            x += lowbit(x);
+        }
+    }
+    public int query(int x) {
+        int ans = 0;
+        while (x != 0) {
+            ans += tree[x];
+            x -= lowbit(x);
+        }
+        return ans;
+    }
+}
+     #+END_SRC
+**** 解题思路与分析: 平衡二叉搜索树
+思路与算法
+
+考虑一棵平衡二叉搜索树。若其节点数量为 NN，则深度为 O(\log N)O(logN)。二叉搜索树能够在 O(\log N)O(logN) 的时间内，对任意给定的值 \textit{val}val，查询树中所有小于或等于该值的数量。
+
+因此，我们可以从左到右扫描前缀和数组。对于 \textit{preSum}[j]preSum[j] 而言，首先进行两次查询，得到区间 [\textit{preSum}[j]-\textit{upper}, \textit{preSum}[j]-\textit{lower}][preSum[j]−upper,preSum[j]−lower] 内的整数数量；随后再将 \textit{preSum}[j]preSum[j] 插入到平衡树中。
+
+平衡二叉搜索树有多种不同的实现，最经典的为 AVL 树与红黑树。此外，在算法竞赛中，还包括 Treap、SBT 等数据结构。
+
+下面给出基于 Treap 的实现。
+
+     #+BEGIN_SRC java
+public int countRangeSum(int[] nums, int lower, int upper) {
+    long sum = 0;
+    long[] preSum = new long[nums.length + 1];
+    for (int i = 0; i < nums.length; ++i) {
+        sum += nums[i];
+        preSum[i + 1] = sum;
+    }
+    BalancedTree treap = new BalancedTree();
+    int ret = 0;
+    for (long x : preSum) {
+        long numLeft = treap.lowerBound(x - upper);
+        int rankLeft = (numLeft == Long.MAX_VALUE ? (int) (treap.getSize() + 1) : treap.rank(numLeft)[0]);
+        long numRight = treap.upperBound(x - lower);
+        int rankRight = (numRight == Long.MAX_VALUE ? (int) treap.getSize() : treap.rank(numRight)[0] - 1);
+        ret += rankRight - rankLeft + 1;
+        treap.insert(x);
+    }
+    return ret;
+}
+class BalancedTree {
+    private class BalancedNode {
+        long val;
+        long seed;
+        int count;
+        int size;
+        BalancedNode left;
+        BalancedNode right;
+        BalancedNode(long val, long seed) {
+            this.val = val;
+            this.seed = seed;
+            this.count = 1;
+            this.size = 1;
+            this.left = null;
+            this.right = null;
+        }
+        BalancedNode leftRotate() {
+            int prevSize = size;
+            int currSize = (left != null ? left.size : 0) + (right.left != null ? right.left.size : 0) + count;
+            BalancedNode root = right;
+            right = root.left;
+            root.left = this;
+            root.size = prevSize;
+            size = currSize;
+            return root;
+        }
+        BalancedNode rightRotate() {
+            int prevSize = size;
+            int currSize = (right != null ? right.size : 0) + (left.right != null ? left.right.size : 0) + count;
+            BalancedNode root = left;
+            left = root.right;
+            root.right = this;
+            root.size = prevSize;
+            size = currSize;
+            return root;
+        }
+    }
+    private BalancedNode root;
+    private int size;
+    private Random rand;
+    public BalancedTree() {
+        this.root = null;
+        this.size = 0;
+        this.rand = new Random();
+    }
+    public long getSize() {
+        return size;
+    }
+    public void insert(long x) {
+        ++size;
+        root = insert(root, x);
+    }
+    public long lowerBound(long x) {
+        BalancedNode node = root;
+        long ans = Long.MAX_VALUE;
+        while (node != null) {
+            if (x == node.val) return x;
+            if (x < node.val) {
+                ans = node.val;
+                node = node.left;
+            } else node = node.right;
+        }
+        return ans;
+    }
+    public long upperBound(long x) {
+        BalancedNode node = root;
+        long ans = Long.MAX_VALUE;
+        while (node != null) {
+            if (x < node.val) {
+                ans = node.val;
+                node = node.left;
+            } else node = node.right;
+        }
+        return ans;
+    }
+    public int[] rank(long x) {
+        BalancedNode node = root;
+        int ans = 0;
+        while (node != null) {
+            if (x < node.val) {
+                node = node.left;
+            } else {
+                ans += (node.left != null ? node.left.size : 0) + node.count;
+                if (x == node.val) {
+                    return new int[]{ans - node.count + 1, ans};
+                }
+                node = node.right;
+            }
+        }
+        return new int[]{Integer.MIN_VALUE, Integer.MAX_VALUE};
+    }
+    private BalancedNode insert(BalancedNode node, long x) {
+        if (node == null) 
+            return new BalancedNode(x, rand.nextInt());
+        ++node.size;
+        if (x < node.val) {
+            node.left = insert(node.left, x);
+            if (node.left.seed > node.seed) 
+                node = node.rightRotate();
+        } else if (x > node.val) {
+            node.right = insert(node.right, x);
+            if (node.right.seed > node.seed) 
+                node = node.leftRotate();
+        } else ++node.count;
+        return node;
+    }
+}
+     #+END_SRC
 *** 699. Falling Squares - Hard
 There are several squares being dropped onto the X-axis of a 2D plane.
 
@@ -17416,6 +17787,7 @@ public int countDigitOne(int n) {
     return ans;
 }
 #+END_SRC
+
 
 * binary Search
 ** LeetCode Binary Search Summary 二分搜索法小结
