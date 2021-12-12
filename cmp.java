@@ -60,25 +60,13 @@ public class cmp {
         //     return sum;
         // }
 
-        // public int minimumRefill(int[] p, int ca, int cb) { // 不知道哪里写错了
+        // public int minimumRefill(int[] p, int ca, int cb) { // 这应该就是睡眠受干扰表现出来的症状吧：明明思路很对，在一个细节上硬死
         //     int n = p.length;
         //     if (n == 1) return 0;
         //     long v = ca, vb = cb;
         //     int ans = -1, i, j;
         //     int [] a = new int [n];
         //     int [] b = new int [n];
-        //     // long [] sum = new long [n];
-        //     // // for ( i = 0; i < n; i++) 
-        //     // //     sum[i] = (i == 0 ? 0 : sum[i-1]) + p[i];
-        //     // for ( i = n-1; i >= 0; i--) {
-        //     //     sum[i] = (i == n-1 ? 0 : sum[i+1]) + p[i];
-        //     // }
-        //     // // System.out.println(Arrays.toString(sum));
-        //     // // for ( i = 0; i < n; i++)
-        //     //     // System.out.println("sum[i] / ca: " + sum[i] / ca);
-        //     // for ( i = n-1; i >= 0; i--) {
-        //     //     System.out.println("sum[i] / ca: " + sum[i] / ca);
-        //     // }
         //     for ( i = 0, j = n-1; i <= j; i++, j--) {
         //         if (i < j) {
         //             if ((int)v >= p[i]) {
@@ -86,14 +74,16 @@ public class cmp {
         //                 v -= p[i];
         //             } else {
         //                 a[i] = (i == 0 ? 0 : a[i-1]) + 1;
-        //                 v = v + ca - p[i];
+        //                 // v = v + ca - p[i]; // 这应该就是睡眠受干扰表现出来的症状吧：明明思路很对，在一个细节上硬死
+        //                 v = ca - p[i];
         //             }
         //             if (vb >= p[j]) {
         //                 b[j] = (j == n-1 ? 0 : b[j+1]);
         //                 vb -= p[j];
         //             } else {
         //                 b[j] = (j == n-1 ? 0 : b[j+1]) + 1;
-        //                 vb = vb + cb - p[j];
+        //                 // vb = vb + cb - p[j]; // 这应该就是睡眠受干扰表现出来的症状吧：明明思路很对，在一个细节上硬死
+        //                 vb = cb - p[j];
         //             } 
         //         } else if (i == j) {
         //             if (v >= vb) ans = (v >= p[i] ? a[i-1] + b[j+1] : a[i-1] + b[j+1] + 1);
@@ -128,8 +118,6 @@ public class cmp {
                     if (c[0] - p[0] <= k) {
                         adj.computeIfAbsent(p[0], z -> new ArrayList<>()).add(new int [] {c[0], c[1]});;
                         adj.computeIfAbsent(c[0], z -> new ArrayList<>()).add(new int [] {p[0], p[1]});;
-                        // adj.computeIfAbsent(i, z -> new ArrayList<>()).add(new int [] {j, c[1]});;
-                        // adj.computeIfAbsent(j, z -> new ArrayList<>()).add(new int [] {i, p[1]});;
                     }
                 }
             }
@@ -168,32 +156,32 @@ public class cmp {
                 // vis[next[0]] = false;
             }
         }
-}
+    }
     public static void main (String[] args) {
         Solution s = new Solution ();
 
-        // int [][] a = new int [][] {{2,8},{6,3},{8,6}};
-        int [][] a = new int [][] {{0,9},{4,1},{5,7},{6,2},{7,4},{10,9}};
-        // int [][] a = new int [][] {{0,3},{6,4},{8,5}};
-        // int [][] a = new int [][] {{200000,10000}};
-        // int [][] a = new int [][] {{0,7},{7,4},{9,10},{12,6},{14,8},{16,5},{17,8},{19,4},{20,1},{21,3},{24,3},{25,3},{26,1},{28,10},{30,9},{31,6},{32,1},{37,5},{40,9}};
+        // // int [][] a = new int [][] {{2,8},{6,3},{8,6}};
+        // int [][] a = new int [][] {{0,9},{4,1},{5,7},{6,2},{7,4},{10,9}};
+        // // int [][] a = new int [][] {{0,3},{6,4},{8,5}};
+        // // int [][] a = new int [][] {{200000,10000}};
+        // // int [][] a = new int [][] {{0,7},{7,4},{9,10},{12,6},{14,8},{16,5},{17,8},{19,4},{20,1},{21,3},{24,3},{25,3},{26,1},{28,10},{30,9},{31,6},{32,1},{37,5},{40,9}};
 
-        int r = s.maxTotalFruits(a, 5, 4);
-        System.out.println("r: " + r);
-
-        // int []  a = new int []  {726, 739, 934, 116, 643,
-        //     648, 473, 984, 482, 85,
-        //     850, 806, 146, 764, 156,
-        //     66, 186, 339, 985, 237,
-        //     662, 552, 800, 78, 617, 933, 481, 652,
-        //     796, 594, 151, 82, 183,
-        //     241, 525, 221, 951, 732,
-        //     799, 483, 368, 354, 776,
-        //     175, 974, 187, 913, 842};
-        // System.out.println(Arrays.toString(a));
-
-        // int r = s.minimumRefill(a, 1439, 1207);
+        // int r = s.maxTotalFruits(a, 5, 4);
         // System.out.println("r: " + r);
+
+        int []  a = new int []  {726, 739, 934, 116, 643,
+            648, 473, 984, 482, 85,
+            850, 806, 146, 764, 156,
+            66, 186, 339, 985, 237,
+            662, 552, 800, 78, 617, 933, 481, 652,
+            796, 594, 151, 82, 183,
+            241, 525, 221, 951, 732,
+            799, 483, 368, 354, 776,
+            175, 974, 187, 913, 842};
+        System.out.println(Arrays.toString(a));
+
+        int r = s.minimumRefill(a, 1439, 1207);
+        System.out.println("r: " + r);
     }
 }
 
