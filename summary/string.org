@@ -632,3 +632,71 @@ public long maxProduct(String s) { // 这个马拉车，得多写几遍
 
 
 
+*** 854. K-Similar Strings - Hard
+Strings s1 and s2 are k-similar (for some non-negative integer k) if we can swap the positions of two letters in s1 exactly k times so that the resulting string equals s2.
+
+Given two anagrams s1 and s2, return the smallest k for which s1 and s2 are k-similar.
+**** 解题思路与分析
+     #+BEGIN_SRC java
+public int kSimilarity(String s, String t) {
+    if (s.equals(t)) return 0;
+    ArrayDeque<String> q = new ArrayDeque<>();
+    Set<String> vis = new HashSet<>();
+    q.offerLast(s);
+    vis.add(s);
+    int cnt = 0;
+    while (!q.isEmpty()) {
+        for (int z = q.size()-1; z >= 0; z--) {
+            String cur = q.pollFirst();
+            // if (cur.equals(t)) return cnt;
+            for (String next : getAllNeighbour(cur, t)) {
+                if (vis.contains(next)) continue;
+                if (next.equals(t)) return cnt + 1;
+                q.offerLast(next);
+                vis.add(next);
+            }
+        }
+        cnt++;
+    }
+    return -1;
+}
+List<String> getAllNeighbour(String ss, String tt) {
+    int n = ss.length(), i = 0;
+    char [] s = ss.toCharArray();
+    char [] t = tt.toCharArray();
+    List<String> ans = new ArrayList<>();
+    while (i < n && s[i] == t[i]) i++;
+    for (int j = i+1; j < n; j++) 
+        if (s[j] == t[i]) {
+            swap(i, j, s);
+            ans.add(new String(s));
+            swap(i, j, s);
+        }
+    return ans;
+}
+void swap(int i, int j, char [] s) {
+    char c = s[i];
+    s[i] = s[j];
+    s[j] = c;
+}
+     #+END_SRC
+*** Queue ArrayDeque LinkedList 效率比较
+**** 为什么 ArrayDeque 比 LinkedList 快
+
+了解完数据结构特点之后，接下来我们从两个方面分析为什么 ArrayDeque 作为队列使用时可能比 LinkedList 快。
+
+- 从速度的角度：ArrayDeque 基于数组实现双端队列，而 LinkedList 基于双向链表实现双端队列，数组采用连续的内存地址空间，通过下标索引访问，链表是非连续的内存地址空间，通过指针访问，所以在寻址方面数组的效率高于链表。
+- 从内存的角度：虽然 LinkedList 没有扩容的问题，但是插入元素的时候，需要创建一个 Node 对象, 换句话说每次都要执行 new 操作，当执行 new 操作的时候，其过程是非常慢的，会经历两个过程：类加载过程 、对象创建过程。
+  - 类加载过程
+    - 会先判断这个类是否已经初始化，如果没有初始化，会执行类的加载过程
+    - 类的加载过程：加载、验证、准备、解析、初始化等等阶段，之后会执行 <clinit>() 方法，初始化静态变量，执行静态代码块等等
+  - 对象创建过程
+    - 如果类已经初始化了，直接执行对象的创建过程
+    - 对象的创建过程：在堆内存中开辟一块空间，给开辟空间分配一个地址，之后执行初始化，会执行 <init>() 方法，初始化普通变量，调用普通代码块
+|------------+----------+-----------------------+---------------------+----------------+----------------|
+| 集合类型   | 数据结构 | 初始化及扩容          | 插入/删除时间复杂度 | 查询时间复杂度 | 是否是线程安全 |
+|------------+----------+-----------------------+---------------------+----------------+----------------|
+| ArrqyDeque | 循环数组 | 初始化：16 扩容：2 倍 | 0(n)                | 0(1)           | 否             |
+| LinkedList | 双向链表 | 无                    | 0(1)                | 0(n)           | 否             |
+|------------+----------+-----------------------+---------------------+----------------+----------------|
+- 最好的做法是自己用arrayDeque封装一个一端进出的stack

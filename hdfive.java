@@ -340,39 +340,246 @@ public class hdfive {
     // int r3 = s.pop();   // return 4, as 4, 5 and 7 is the most frequent, but 4 is closest to the top. The stack becomes [5,7].
     // System.out.println("r3: " + r3);
 
-        static final long mod = (int)1e9 + 7;
-        public int sumSubseqWidths(int[] a) {
-            int n = a.length;
-            Arrays.sort(a);
-            long sum = 0, c = 1;
-            for (int i = 0; i < n; i++) {
-                // sum = (sum + (long)a[i] * (long)quickMul(2, i) % mod) % mod;  // bug
-                // sum = (sum - (long)a[i] * (long)quickMul(2, n-(i+1)) % mod + mod) % mod; // bug
-                // 由于这种机制下的 2 i 和 2 (n−1−i) 不方便同时计算，这里又用了一个 trick ，就是将 A[i] x (2 (n−1−i) ) 转换为了 A[n-1-i] x 2^i
-                sum = (sum + (long)a[i] * c - (long)a[n-1-i] * c) % mod;
-                c = (c << 1) % mod;
-            }
-            return (int)sum;
-        }
-        long quickMul(int base, int exp) {
-            long ans = 1;
-            while (exp > 0) {
-                if (exp % 2 == 1)
-                    ans = (ans * (long)base) % mod;
-                base = (int)((base * base) % mod);
-                exp >>= 1;
-            }
+        // static final long mod = (int)1e9 + 7;
+        // public int sumSubseqWidths(int[] a) {
+        //     int n = a.length;
+        //     Arrays.sort(a);
+        //     long sum = 0, c = 1;
+        //     for (int i = 0; i < n; i++) {
+        //         // sum = (sum + (long)a[i] * (long)quickMul(2, i) % mod) % mod;  // bug
+        //         // sum = (sum - (long)a[i] * (long)quickMul(2, n-(i+1)) % mod + mod) % mod; // bug
+        //         // 由于这种机制下的 2 i 和 2 (n−1−i) 不方便同时计算，这里又用了一个 trick ，就是将 A[i] x (2 (n−1−i) ) 转换为了 A[n-1-i] x 2^i
+        //         sum = (sum + (long)a[i] * c - (long)a[n-1-i] * c) % mod;
+        //         c = (c << 1) % mod;
+        //     }
+        //     return (int)sum;
+        // }
+        // // long quickMul(int base, int exp) {
+        // //     long ans = 1;
+        // //     while (exp > 0) {
+        // //         if (exp % 2 == 1)
+        // //             ans = (ans * (long)base) % mod;
+        // //         base = (int)((base * base) % mod);
+        // //         exp >>= 1;
+        // //     }
+        // //     return ans;
+        // // }
+
+        // public double mincostToHireWorkers(int [] qua, int[] w, int k) {
+        //     int n = qua.length;
+        //     List<int []> l = new ArrayList<>();
+        //     for (int i = 0; i < n; i++) 
+        //         l.add(new int [] {qua[i], w[i]});
+        //     Collections.sort(l, (a, b)-> Double.compare((double)a[1] / a[0], (double)b[1] / b[0]));
+        //     Queue<Integer> q = new PriorityQueue<>((a, b)->b-a);
+        //     double sum = 0, ans = 1e9;
+        //     for (int i = 0; i < n; i++) {
+        //         int [] cur = l.get(i);
+        //         sum += cur[0];
+        //         q.offer(cur[0]); // quality
+        //         if (q.size() > k) sum -= q.poll();
+        //         if (q.size() == k) // 需要保证队列里有要求的人数
+        //             ans = Math.min(ans, sum * (double)cur[1] / (double)cur[0]);
+        //     }
+        //     return ans;
+        // }
+
+        // public boolean xorGame(int[] a) {
+        //     n = a.length;
+        //     int xor = 0;
+        //     for (Integer v : a) xor ^= v;
+        //     dp = new Boolean [n];
+        //     return dfs(0, xor, a);
+        // }
+        // Boolean [] dp;
+        // int n;
+        // boolean dfs(int idx, int xor, int [] a) {
+        //     // if (idx == n) return n % 2 == 1; // bug
+        //     if (idx == n) return idx % 2 == 0;
+        //     if (dp[idx] != null) return dp[idx];
+        //     if (xor == 0) return idx % 2 == 0;
+        //     if (idx % 2 == 0) { // alice turn
+        //         for (int i = 0; i < n; i++) {
+        //             if (a[i] == -1) continue;
+        //             if ((xor ^ a[i]) == 0) continue;
+        //             int tmp = a[i];
+        //             a[i] = -1;
+        //             if (dfs(idx+1, xor ^ tmp, a)) // idx
+        //                 return dp[idx] = true;
+        //             a[i] = tmp;
+        //         }
+        //         return dp[idx] = false;
+        //     } else {
+        //         for (int i = 0; i < n; i++) {
+        //             if (a[i] == -1) continue;
+        //             if ((xor ^ a[i]) == 0) continue;
+        //             int tmp = a[i];
+        //             a[i] = -1;
+        //             if (!dfs(idx+1, xor ^ tmp, a)) // idx
+        //                 return dp[idx] = false;
+        //             a[i] = tmp;
+        //         }
+        //         return dp[idx] = true;
+        //     }
+        // }
+
+        // public int kSimilarity(String s, String t) { // 这个思路简洁明了，代码也比较好写
+        //     if (s.equals(t)) return 0;
+        //     ArrayDeque<String> q = new ArrayDeque<>();
+        //     Set<String> vis = new HashSet<>();
+        //     q.offerLast(s);
+        //     vis.add(s);
+        //     int cnt = 0;
+        //     while (!q.isEmpty()) {
+        //         for (int z = q.size()-1; z >= 0; z--) {
+        //             String cur = q.pollFirst();
+        //             // if (cur.equals(t)) return cnt;
+        //             for (String next : getAllNeighbour(cur, t)) {
+        //                 if (vis.contains(next)) continue;
+        //                 if (next.equals(t)) return cnt + 1;
+        //                 q.offerLast(next);
+        //                 vis.add(next);
+        //             }
+        //         }
+        //         cnt++;
+        //     }
+        //     return -1;
+        // }
+        // List<String> getAllNeighbour(String ss, String tt) {
+        //     int n = ss.length(), i = 0;
+        //     char [] s = ss.toCharArray();
+        //     char [] t = tt.toCharArray();
+        //     List<String> ans = new ArrayList<>();
+        //     while (i < n && s[i] == t[i]) i++;
+        //     for (int j = i+1; j < n; j++) 
+        //         if (s[j] == t[i]) {
+        //             swap(i, j, s);
+        //             ans.add(new String(s));
+        //             swap(i, j, s);
+        //         }
+        //     return ans;
+        // }
+        // void swap(int i, int j, char [] s) {
+        //     char c = s[i];
+        //     s[i] = s[j];
+        //     s[j] = c;
+        // }
+        // // 对于一个环, 我们可以用一个 01 数组表示每条边是否出现，例如对于环 a -> b -> d -> e -> a，它有 4 条边 a -> b，b -> d，d -> e 和 e -> a，那么它对应的数组中，有 4 个位置（这 4 条边对应的位置）的值为 1，其它值为 0。同样地，基础图 GG 也可以用这种方式来表示。
+        // // 因此我们可以使用动态规划来解决这个问题，令 numCycles(G) 表示基础图 GG 最多拆分的环的数目。我们枚举环 CC，检查 CC 是否包含于 GG。状态转移方程为 numCycles(G) = max{1 + numcycles(G - C)}
+        // public int kSimilarity(String s, String t) { // 这个思路还是没有继续看下去， todo
+        //     if (s.equals(t)) return 0;
+        //     n = s.length();
+        //     memo = new HashMap<>();
+        //     int ans = 0, m = alphabet.length;
+        //     int [] cnt = new int[m * m];
+        //     for (int i = 0; i < n; i++) 
+        //         if (s.charAt(i) != t.charAt(i)) {
+        //             cnt[m * (s.charAt(i)-'a') + t.charAt(i)-'a']++;
+        //             ans++;
+        //         }
+        //     List<int []> possibles = new ArrayList<>();
+        //     for (int size = 2; size <= m; size++)   // Enumerate over every cycle
+        //     search: for (String cycle: permutations(alphabet, 0, size)) {
+        //             for (int i = 1; i < size; i++) 
+        //                 if (cycle.charAt(i) < cycle.charAt(0))
+        //                     continue search;
+        //             int [] row = new int [cnt.length];
+        //             for (int i = 0; i < size; i++) {
+        //                 int u = cycle.charAt(i) - 'a';
+        //                 int v = cycle.charAt((i+1) % size) - 'a';
+        //                 row[m*u + v]++;
+        //             }
+        //             possibles.add(row);
+        //         }
+        //     int [] ZERO = new int [cnt.length];
+        //     memo.put(Arrays.toString(ZERO), 0);
+        //     return ans - numCycles(possibles, cnt);
+        // }
+        // String [] alphabet = new String [] {"a", "b", "c", "d", "e", "f"};
+        // Map<String, Integer> memo = new HashMap<>();
+        // int n;
+        // public int numCycles(List<int[]> possibles, int[] count) {
+        //     String countS = Arrays.toString(count);
+        //     if (memo.containsKey(countS)) return memo.get(countS);
+        //     int ans = Integer.MIN_VALUE;
+        // search: for (int[] row: possibles) {
+        //         int[] count2 = count.clone();
+        //         for (int i = 0; i < row.length; ++i) {
+        //             if (count2[i] >= row[i])
+        //                 count2[i] -= row[i];
+        //             else continue search;
+        //         }
+        //         ans = Math.max(ans, 1 + numCycles(possibles, count2));
+        //     }
+        //     memo.put(countS, ans);
+        //     return ans;
+        // }
+        // public List<String> permutations(String[] alphabet, int used, int size) {
+        //     List<String> ans = new ArrayList();
+        //     if (size == 0) {
+        //         ans.add(new String(""));
+        //         return ans;
+        //     }
+        //     for (int b = 0; b < m; ++b)
+        //         if (((used >> b) & 1) == 0)
+        //             for (String rest: permutations(alphabet, used | (1 << b), size - 1))
+        //                 ans.add(alphabet[b] + rest);
+        //     return ans;
+        // }
+
+        // public String orderlyQueue(String s, int k) {
+        //     if (k > 1) {
+        //         char [] t = s.toCharArray();
+        //         Arrays.sort(t);
+        //         return new String(t);
+        //     }
+        //     int n = s.length();
+        //     String ans = "";
+        //     for (int i = 0; i < n; i++) {
+        //         String cur = s.substring(i) + s.substring(0, i);
+        //         if (ans.length() == 0 || ans.compareTo(cur) > 0)
+        //             ans = new String(cur);
+        //     }
+        //     return ans;
+        // }
+
+        public int[] threeEqualParts(int [] a) {
+            int n = a.length, cnt = Arrays.stream(a).sum(), cur = 0, i = 0, j = n-1;
+            int [] ans = {-1, -1};
+            if (cnt % 3 != 0) return ans;
+            while (i < n && a[i] == 0) i++;
+            while (j >= 0 && cur < cnt / 3) 
+                cur += a[j--]; // a[j] = 0 when ended
+            // System.out.println("i: " + i);
+            // System.out.println("j: " + j);
+            if (!sameSequence(i, j+1, a)) return ans;
+            
+            i += n-(j+1);
+            ans[0] = i-1;
+            while (i < n && a[i] == 0) i++;
+            if (sameSequence(i, j+1, a)) {
+                i += n - (j+1);
+                ans[1] = i; // bug: 这里 j是可以左移的 0 0 0 0 0 0 0 
+            } else ans[0] = -1;
             return ans;
+        }
+        boolean sameSequence(int i, int j, int [] a) {
+            int n = a.length, k = j;
+            while (k < n && a[i] == a[k]) {
+                i++;
+                k++;
+            }
+            return k == n && i < j;
         }
     }
     public static void main(String[] args) {
         Solution s  =  new Solution();
 
-        // int [] a = new int [] {2,1,3};
-        int []  a = new int []  {5, 69, 89, 92, 31, 16, 25, 45, 63, 40, 16, 56, 24, 40, 75, 82, 40, 12, 50, 62, 92, 44, 67, 38, 92, 22, 91, 24, 26, 21, 100, 42, 23, 56, 64, 43, 95, 76, 84, 79, 89, 4, 16, 94, 16, 77, 92, 9, 30, 13};
+        // int [] a = new int [] {1,0,1,0,1};
+        int []  a = new int []  {1, 1, 0, 0, 1};
 
-        int r = s.sumSubseqWidths(a);
-        System.out.println("r: " + r);
+        int [] r = s.threeEqualParts(a);
+        System.out.println(Arrays.toString(r));
     }
 }
 // treeNd root  =  new treeNode(a[0]);
