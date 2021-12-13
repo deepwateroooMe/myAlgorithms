@@ -1,4 +1,3 @@
 *.class
 *.tex
-*.pdf
 ./_minted-readme/**
