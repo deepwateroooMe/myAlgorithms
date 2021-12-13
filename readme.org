@@ -7565,23 +7565,21 @@ Return an integer array ans where ans[i] represents the height described above a
 **** 解题思路与分析: O(N^2) 本能土办法
 方块的大小不是固定的，有可能很大，但是不管方块再大，只要有一点点部分搭在其他方块上面，整个方块都会在上面，并不会掉下来，让我们求每落下一个方块后的最大高度。我们知道返回的是每落下一个方块后当前场景中的最大高度，那么返回的数组的长度就应该和落下方块的个数相同。所以我们可以建立一个heights数组，其中heights[i]表示第i块方块落下后所在的高度，那么第i块方块落下后场景的最大高度就是[0, i]区间内的最大值。那么我们在求出heights数组后，只要不停返回[0, i]区间内的最大值即可。继续来看，这道题的难点就是方块重叠的情况，我们先来想，如果各个方块不重叠，那么heights[i]的高度就是每个方块自身的高度。一旦重叠了，就得在已有的基础上再加上自身的高度。那么我们可以采用brute force的思想，对于每个一个下落的方块，我们都去看和后面将要落下的方块有没有重叠，有的话，和后面将要落下的方块的位置相比较，取二者中较大值为后面要落下的方块位置高度heights[j]。判读两个方块是否重叠的方法是如果方块2的左边界小于方块1的右边界，并且方块2点右边界大于方块1点左边界。就拿题目中的例子1来举例吧，第一个下落的方块的范围是[1, 3]，长度为2，则heights[0]=2，然后我们看其和第二个方块[2, 5]是否重叠，发现是重叠的，则heights[1]更新为2，再看第三个方块[6, 7]，不重叠，不更新。然后第二个方块落下，此时累加高度，则heights[1]=5，再看第三个方块，不重叠，不更新。然后第三个方块落下, heights[2]=1。此时我们heights数组更新好了，然后我们开始从头遍历，维护一个当前最大值curMax，每次将[0, i]中最大值加入结果res即可，
 #+BEGIN_SRC java
-public List<Integer> fallingSquares(int[][] p) {
+public List<Integer> fallingSquares(int[][] a) {
     List<Integer> ans = new ArrayList<>();
-    int n = p.length, cur = 0;
-    int [] hi = new int [n];
+    int n = a.length, max = 0;
+    int [] hi = new int [n]; // 表示第 i 块方块落下后所在的高度
     for (int i = 0; i < n; i++) {
-        int len = p[i][1], l = p[i][0], r = l + len;
-        hi[i] += len;
-        for (int j = i+1; j < n; j++) { // 采用brute force的思想，对于每个一个下落的方块，我们都去看和后面将要落下的方块有没有重叠
-            int ll = p[j][0], rr = ll + p[j][1]; // 有的话，和后面将要落下的方块的位置相比较，取二者中较大值为后面要落下的方块位置高度heights[j]
+        int h = a[i][1], l = a[i][0], r = a[i][0] + h;
+        hi[i] += h;
+        for (int j = i+1; j < n; j++) {
+            int ll = a[j][0], rr = ll + a[j][1];
             // [[6,1],[9,2],[2,4]] 因为不能保证是从左往下延x轴顺序掉落，所以加上l < rr 也狠重要 确保不管左右边有交叠
-            if (ll < r && l < rr) // 判读两个方块是否重叠的方法是如果方块2的左边界小于方块1的右边界，并且方块2点右边界大于方块1点左边界
-                hi[j] = Math.max(hi[j], hi[i]); // 这里提前检查是否重叠，是为后来的更新打下base,再接下来遍历i时直接累加就可以了
+            if (ll < r && rr > l) // 保证j在i的右边，并且有重叠区域
+                hi[j] = Math.max(hi[j], hi[i]);
         }
-    }
-    for (int v : hi) {
-        cur = Math.max(cur, v);
-        ans.add(cur);
+        max = Math.max(max, hi[i]);
+        ans.add(max);
     }
     return ans;
 }
@@ -7591,108 +7589,157 @@ public List<Integer> fallingSquares(int[][] p) {
 想象x xx轴是地面，如果某个方块掉落的过程中遇到了之前的某个方块（擦边而过不算），则该方块会叠到上面。现在给定一个长n nn数组A AA，A [ i ] A[i]A[i]存了第i ii个掉落的方块的信息，其中A [ i ] [ 0 ] A[i][0]A[i][0]表示它的左下角的x xx坐标，A [ i ] [ 1 ] A[i][1]A[i][1]表示它的边长。要求返回一个长n nn数组B BB，使得B [ i ] B[i]B[i]表示在A [ i ] A[i]A[i]掉落之后，当前所有方块的最高点的y yy坐标。
 
 思路是线段树 + 离散化。可以将x xx坐标离散化，这样可以节省存储空间（离散化的过程其实就是将一个数组d dd排序后去重，然后将每个数映射到它的下标。这样在线段树建树的时候，就只需维护[ 0 , l d − 1 ] [0,l_d-1][0,l_d−1]这个区间的信息就行了，这会极大减少线段树的空间消耗，也从而会减少要做的操作的时间消耗）。具体来说，给定一个将要下落的方块，比如该方块的左端点的x xx坐标和右端点的x xx坐标分别是a aa和b bb，边长是c cc，那么我们需要实现两个操作，第一是查询( a , b ) (a,b)(a,b)里的最大值M MM（注意这里查询的是开区间( a , b ) (a,b)(a,b)的最大值，因为下落的方块擦着另一个方块的边的话，是不会叠上去的），另一个是将[ a , b ] [a,b][a,b]里所有值都变成M + c M+cM+c。本质上是要求一个数据结构可以查询区间最大值，以及将区间修改为某一值，这可以用线段树 + 懒标记来做到。在离散化之后，为了使得区间( a , b ) (a,b)(a,b)非空（注意这里a aa和b bb都是离散化之后的值，此时( a , b ) = [ a + 1 , b − 1 ] (a,b)=[a+1,b-1](a,b)=[a+1,b−1]），我们可以在离散化的时候将方块的中点也加入一起做离散化，但是这会导致中点变成非整数，这里将原坐标乘以2 22就行了。
+
+[[./pic/699.png]]
+
 #+BEGIN_SRC java
-class SegTree {  // 实现一下带懒标记的线段树: 这棵树好强大
-    class Node { // v是[l, r]区间的最大值，lazy是懒标记
+public List<Integer> fallingSquares(int[][] a) { // 需要对数据进行离散化处理，离散化的目的是为了线段树处理起来方便；离散的是x轴的横坐标
+    List<Integer> x = new ArrayList<>();
+    for (int [] v : a) {
+        int i = v[0], j = i + v[1];
+        x.add(i * 2);
+        x.add(j * 2);
+        x.add(i + j);
+    }
+    x = getUniques(x);
+    MaxSeg maxSeg = new MaxSeg(x.size());
+    List<Integer> ans = new ArrayList<>();
+    for (int [] v : a) {
+        int i = v[0], j = i + v[1];
+        i = getIdxInList(i * 2, x);
+        j = getIdxInList(j * 2, x);
+        int h = maxSeg.query(1, i+1, j-1);
+        maxSeg.update(1, i, j, h + v[1]);
+        ans.add(maxSeg.query());
+    }
+    return ans;
+}
+int getIdxInList(int v, List<Integer> list) { // 找到 x 在离散化之后的值是多少，其实就是求 xs 里 x 的下标，可以二分来找到
+    int l = 0, r = list.size()-1;
+    while (l < r) {
+        int m = l + (r - l) / 2;
+        if (list.get(m) >= v) r = m;
+        else l = m + 1;
+    }
+    return l;
+}
+List<Integer> getUniques(List<Integer> l) {
+    l.sort(Integer::compareTo);
+    int j = 0; // 返回结果链表的下标 idx
+    for (int i = 0; i < l.size(); i++) {
+        if (i == 0 || l.get(j-1) != l.get(i))
+            l.set(j++, l.get(i));
+    }
+    return l.subList(0, j);
+}
+class MaxSeg {   // 实现一下带懒标记的线段树 : 这棵树好强大
+    class Node { // v 是 [l, r] 区间的最大值， lazy 是懒标记
         int l, r, v, lazy;
         public Node(int l, int r) {
             this.l = l;
             this.r = r;
         }
     }
-    private Node [] tr;
-    public SegTree(int size) {
-        tr = new Node[size << 2]; // * 4
-        build(1, 0, size - 1);
+    Node [] tree;
+    public MaxSeg(int n) {
+        tree = new Node[n << 2]; // n * 2 * 2
+        buildTree(1, 0, n-1);    // 下标从 1 开始 自顶向下
     }
-    public void build(int u, int l, int r) { // 下标从1开始 自顶向下
-        tr[u] = new Node(l, r);
+    void buildTree(int i, int l, int r) {
+        tree[i] = new Node(l, r);
         if (l == r) return;
-        int mid = l + r >> 1; // / 2
-        build(u << 1, l, mid);         // 分别构建左右子树
-        build(u << 1 | 1, mid + 1, r);
+        int m = l + r >> 1; // (l + r) / 2
+        buildTree(i << 1, l, m);
+        buildTree(i << 1 | 1, m+1, r);
     }
-    private void pushup(int u) { // 最大树： 当前节点的值为左右子节点的最大值
-        tr[u].v = Math.max(tr[u << 1].v, tr[u << 1 | 1].v);
+    void pushUp(int i) { // 自底向上：自左、右叶子节点向顶更新最大值，取左右节点的最大值
+        tree[i].v = Math.max(tree[i << 1].v, tree[i << 1 | 1].v);
     }
-    private void pushdown(int u) { // 下传懒标记 
-        int c = tr[u].lazy;
-        if (c != 0) {
-            tr[u].lazy = 0;
-            tr[u << 1].v = tr[u << 1 | 1].v = c; // 根据父节点的值，懒标记下传一层，更新左右子树的值，并更新下传而来的标记
-            tr[u << 1].lazy = tr[u << 1 | 1].lazy = c;
+    void pushDown(int i) { // 懒标记向底、叶子方向推进一层
+        int c = tree[i].lazy;
+        if (c != 0) { // 打有懒标记
+            tree[i].lazy = 0;
+            tree[i << 1].v = tree[i << 1 | 1].v = c;
+            tree[i << 1].lazy = tree[i << 1 | 1].lazy = c;
         }
     }
-    public void update(int u, int l, int r, int c) {
-        // for (int i = 1; i < tr.length; i++)
-        //     if (tr[i] != null)
-        //         System.out.println("[" + tr[i].l + "," + tr[i].r + "], v: " + tr[i].v + ", lazy: " + tr[i].lazy);
-
-        if (l <= tr[u].l && tr[u].r <= r) { // 任务不需要下发，可以用懒标记懒住
-            tr[u].v = tr[u].lazy = c;       // 整棵树落在左右区间内，可以发懒，暂不下传
-            // System.out.println("[" + tr[u].l + "," + tr[u].r + "], v: " + tr[u].v + ", lazy: " + tr[u].lazy);
-            return;
+    void update(int i, int l, int r, int c) {   // 自顶向下传递懒标记，再自底向上更新父节点的值：取左右子节点的最大值
+        if (l <= tree[i].l && tree[i].r <= r) { // 任务不需要下发，可以用懒标记懒住
+            tree[i].v = tree[i].lazy = c; // 这里 tree[i].v = tree[i].lazy = c : c 是想要更新到的新值v, 用它来更新懒标记和v值
+            return ;
         }
-        pushdown(u); // 任务不得不下发，则先下发给两个孩子
-        int mid = tr[u].l + tr[u].r >> 1;
-        if (l <= mid) update(u << 1, l, r, c); // 回归调用，下传更新至左右子节点
-        if (mid + 1 <= r) update(u << 1 | 1, l, r, c);
-        pushup(u); // 孩子完成了任务，再修改自己的值
+        pushDown(i);  // 任务不得不下发，则先下发给两个孩子
+        int m = tree[i].l + tree[i].r >> 1;
+        if (l <= m) update(i << 1, l, r, c);  // 回归调用，下传更新至左右子节点
+        if (m + 1 <= r) update(i << 1 | 1, l, r, c);
+        pushUp(i);  // 孩子完成了任务，再修改自己的值
     }
-    public int query(int u, int l, int r) {
-        if (l <= tr[u].l && tr[u].r <= r) return tr[u].v;
-        pushdown(u);
-        int res = 0, mid = tr[u].l + tr[u].r >> 1;
-        if (l <= mid) res = Math.max(res, query(u << 1, l, r));
-        if (mid + 1 <= r) res = Math.max(res, query(u << 1 | 1, l, r));
-        return res;
+    int query(int i, int l, int r) {
+        if (l <= tree[i].l && r >= tree[i].r) return tree[i].v;
+        pushDown(i);
+        int ans = 0, m = tree[i].l + tree[i].r >> 1;
+        if (l <= m) ans = Math.max(ans, query(i << 1, l, r));
+        if (m + 1 <= r) ans = Math.max(ans, query(i << 1 | 1, l, r));
+        return ans;
     }
-    public int query() {
-        return tr[1].v;
+    int query() {
+        return tree[1].v;
+    }
+}
+#+END_SRC
+**** 解题思路与分析: 超简洁版的线段树，效率奇高
+- http://www.noobyard.com/article/p-sxwzvpgp-nz.html
+- 去找一下原文件中的优化步骤
+     #+BEGIN_SRC java
+private class Node { // 描述方块以及高度
+    int l, r, h, maxR;
+    Node left, right;
+    public Node(int l, int r, int h, int maxR) {
+        this.l = l;
+        this.r = r;
+        this.h = h;
+        this.maxR = maxR;
+        this.left = null;
+        this.right = null;
     }
 }
 public List<Integer> fallingSquares(int[][] positions) {
-    List<Integer> xs = new ArrayList<>();
-    for (int[] p : positions) {
-        int a = p[0], b = a + p[1];
-        xs.add(a * 2);
-        xs.add(b * 2);
-        xs.add(a + b);
-    }
-    xs = unique(xs); // 排序并去重
-    SegTree segTree = new SegTree(xs.size());
-    List<Integer> res = new ArrayList<>();
-    for (int [] p : positions) {
-        int a = p[0], b = a + p[1];
-        a = get(a * 2, xs);
-        b = get(b * 2, xs);
-        int h = segTree.query(1, a + 1, b - 1);
-        segTree.update(1, a, b, h + p[1]);
-        res.add(segTree.query());
+    List<Integer> res = new ArrayList<>(); // 建立返回值
+    Node root = null; // 根节点，默认为零
+    int maxH = 0; // 目前最高的高度
+    for (int[] position : positions) {
+        int l = position[0]; // 左横坐标
+        int r = position[0] + position[1]; // 右横坐标
+        int e = position[1]; // 边长
+        int curH = query(root, l, r); // 目前区间的最高的高度
+        root = insert(root, l, r, curH + e);
+        maxH = Math.max(maxH, curH + e);
+        res.add(maxH);
     }
     return res;
 }
-private int get(int x, List<Integer> xs) { // 找到x在离散化之后的值是多少，其实就是求xs里x的下标，可以二分来找到
-    int l = 0, r = xs.size() - 1;
-    while (l < r) {
-        int m = l + r >> 1;
-        if (xs.get(m) >= x) 
-            r = m;
-        else 
-            l = m + 1;
-    }
-    return l;
+private Node insert(Node root, int l, int r, int h) {
+    if (root == null) return new Node(l, r, h, r);
+    if (l <= root.l)
+        root.left = insert(root.left, l, r, h);
+    else
+        root.right = insert(root.right, l, r, h);
+    root.maxR = Math.max(r, root.maxR); // 最终目标是仅仅须要根节点更新 maxR
+    return root; // 返回根节点
 }
-private List<Integer> unique(List<Integer> list) { // 将list排序后去重
-    list.sort(Integer::compareTo);
-    int j = 0;
-    for (int i = 0; i < list.size(); i++) 
-        if (i == 0 || list.get(j - 1) != list.get(i)) 
-            list.set(j++, list.get(i));
-    return list.subList(0, j); // subList()
+private int query(Node root, int l, int r) {
+    // 新节点的左边界大于等于目前的maxR的话，直接获得0，不须要遍历了
+    if (root == null || l >= root.maxR) return 0; 
+    int curH = 0; // 高度
+    if (!(r <= root.l || root.r <= l)) // 是否跟这个节点相交
+        curH = root.h;
+    // 剪枝
+    curH = Math.max(curH, query(root.left, l, r));
+    if (r > root.l)
+        curH = Math.max(curH, query(root.right, l, r));
+    return curH;
 }
-#+END_SRC
-
+     #+END_SRC
 *** 1483. Kth Ancestor of a Tree Node - Hard 倍增法 binary lifting
  You are given a tree with n nodes numbered from 0 to n - 1 in the form of a parent array parent where parent[i] is the parent of ith node. The root of the tree is node 0. Find the kth ancestor of a given node.
 
