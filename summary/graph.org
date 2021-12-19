@@ -1376,3 +1376,79 @@ private boolean bfsHelper(Set<String> set1, Set<String> set2, Set<String> wordSe
     return done || bfsHelper(set2, set, wordSet, !direction, map);
 }
 #+END_SRC
+** 环与入度等
+*** 685. Redundant Connection II - Hard
+In this problem, a rooted tree is a directed graph such that, there is exactly one node (the root) for which all other nodes are descendants of this node, plus every node has exactly one parent, except for the root node which has no parents.
+
+The given input is a directed graph that started as a rooted tree with n nodes (with distinct values from 1 to n), with one additional directed edge added. The added edge has two different vertices chosen from 1 to n, and was not an edge that already existed.
+
+The resulting graph is given as a 2D-array of edges. Each element of edges is a pair [ui, vi] that represents a directed edge connecting nodes ui and vi, where ui is a parent of child vi.
+
+Return an edge that can be removed so that the resulting graph is a rooted tree of n nodes. If there are multiple answers, return the answer that occurs last in the given 2D-array.
+**** 解题思路与分析
+     #+BEGIN_SRC java
+// 对于有向图中，如果存在indegree(v) == 2的点，那么要删除的一定是这个点的某条有向边(u -> v)
+//    因为题目最后保证是一个rooted tree（every node has exactly one parent），具体看第一段定义；
+// 如果不存在indegree(v) == 2的点，那么直接删去最后一个造成环存在的有向边即可。
+// 现在存在三种情况：
+// （1）有向图中只有环。这种情况就简单将两个节点具有共同根节点的边删去就好。
+// （2）有向图中没有环，但有个节点有两个父节点。这种情况就将第二次出现不同父节点的边删去就好。
+// （3）有向图中既有环，而且有个节点还有两个父节点。这时就检测当除去第二次出现父节点的边后，剩余边是不是合法的，如果不合法证明应该删掉的是另一个父节点的边。
+public int [] findRedundantDirectedConnection(int [][] egs) {
+    Set<Integer> p = new HashSet<>();
+    Map<Integer, Integer> par = new HashMap<>(); // k,v: v <-- u
+    List<int []> candi = new ArrayList<>();
+    for (int [] e : egs) {
+        int u = e[0], v = e[1];
+        p.add(u);
+        p.add(v);
+        if (!par.containsKey(v)) { // 对于入度为1的右端点边，记在字典里
+            par.put(v, u);
+            continue;
+        }
+        candi.add(new int [] {par.get(v), v}); // 第一次出现的边
+        candi.add(new int [] {u, v});          // 第二次出现的边，答案是这两者之一
+        e[1] = -1; // 先将后出现的第二条边废掉，验证答案
+    }
+    UnionFind uf = new UnionFind(p.size()); // 总顶点的个数
+    for (int [] e : egs) {
+        if (e[1] == -1) continue;   // 跳过正在验证是否为的答案后出现的第二条边
+        int u = e[0]-1, v = e[1]-1; // uf 0-based
+        if (!uf.union(u, v)) { // 在已经废除后出现的第二条边之后，还是出现了环，那么后出现的第二条边不是答案，第一条才是
+            if (candi.isEmpty()) return e; // 不存在入度为 2 的点，直接删去最后一条造成环存在的有向边， 即当前边即可
+            return candi.get(0);
+        }
+    }
+    return candi.get(1); // 删除第二条边后，所有的存在都合法，那么就返回第二条边
+}
+class UnionFind {
+    int[] parent;
+    int[] rank;
+    int size;
+    public UnionFind(int size) {
+        this.size = size;
+        parent = new int[size];
+        rank = new int[size];
+        for (int i = 0; i < size; i++) parent[i] = i;
+    }
+    public int find(int x) {
+        if (parent[x] != x) 
+            parent[x] = find(parent[x]);
+        return parent[x];
+    }
+    public boolean union(int x, int y) { 
+        int xp = find(x);
+        int yp = find(y);
+        if (xp == yp) return false; // 已经在同一个强连通分量中
+        if (rank[xp] > rank[yp]) 
+            parent[yp] = xp;
+        else if (rank[xp] < rank[yp]) 
+            parent[xp] = yp;
+        else {
+            parent[yp] = xp;
+            rank[xp]++;
+        }
+        return true;
+    }
+}
+     #+END_SRC

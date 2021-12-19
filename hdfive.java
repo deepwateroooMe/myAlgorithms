@@ -543,45 +543,277 @@ public class hdfive {
         //     return ans;
         // }
 
-        public int[] threeEqualParts(int [] a) {
-            int n = a.length, cnt = Arrays.stream(a).sum(), cur = 0, i = 0, j = n-1;
-            int [] ans = {-1, -1};
-            if (cnt % 3 != 0) return ans;
-            while (i < n && a[i] == 0) i++;
-            while (j >= 0 && cur < cnt / 3) 
-                cur += a[j--]; // a[j] = 0 when ended
-            // System.out.println("i: " + i);
-            // System.out.println("j: " + j);
-            if (!sameSequence(i, j+1, a)) return ans;
-            
-            i += n-(j+1);
-            ans[0] = i-1;
-            while (i < n && a[i] == 0) i++;
-            if (sameSequence(i, j+1, a)) {
-                i += n - (j+1);
-                ans[1] = i; // bug: 这里 j是可以左移的 0 0 0 0 0 0 0 
-            } else ans[0] = -1;
-            return ans;
-        }
-        boolean sameSequence(int i, int j, int [] a) {
-            int n = a.length, k = j;
-            while (k < n && a[i] == a[k]) {
-                i++;
-                k++;
-            }
-            return k == n && i < j;
-        }
+        // public int[] threeEqualParts(int [] a) {
+        //     int n = a.length, cnt = Arrays.stream(a).sum(), cur = 0, i = 0, j = n-1;
+        //     if (cnt == 0) return new int [] {0, n-1} ;
+        //     int [] ans = {-1, -1};
+        //     if (cnt % 3 != 0) return ans;
+        //     while (i < n && a[i] == 0) i++;
+        //     while (j >= 0 && cur < cnt / 3) 
+        //         cur += a[j--]; // a[j] = 0 when ended
+        //     if (!sameSequence(i, j+1, a)) return ans;
+        //     i += n-(j+1);
+        //     ans[0] = i-1;
+        //     while (i < n && a[i] == 0) i++;
+        //     if (sameSequence(i, j+1, a)) {
+        //         i += n - (j+1);
+        //         ans[1] = i; // bug: 这里 j是可以左移的 0 0 0 0 0 0 0 
+        //     } else ans[0] = -1;
+        //     return ans;
+        // }
+        // boolean sameSequence(int i, int j, int [] a) {
+        //     int n = a.length, k = j;
+        //     while (k < n && a[i] == a[k]) {
+        //         i++;
+        //         k++;
+        //     }
+        //     return k == n && i <= j;
+        // }
+
+        // public int findMaximizedCapital(int k, int w, int [] p, int [] c) {
+        //     List<int []> l = new ArrayList<>();
+        //     int n = p.length, ans = w, i = 0;
+        //     for ( i = 0; i < n; i++) 
+        //         l.add(new int [] {p[i], c[i]}); // profit[i], capital[i]
+        //     Collections.sort(l, (a, b) -> a[1] - b[1]); // 按启动资金排序，升序
+        //     Queue<int []> q = new PriorityQueue<>((x, y) -> y[0] != x[0] ? y[0] - x[0] : x[1] - y[1]); // priorityQueue是基于排序的完全二叉树
+        //     i = 0;
+        //     while (i < n && k > 0) {
+        //         if (l.get(i)[1] > ans && q.isEmpty()) return ans;
+        //         while (i < n && l.get(i)[1] <= ans) { // 按照手上的资金，把所有可以做的全部加进去
+        //             q.offer(l.get(i));
+        //             i++;
+        //         }
+        //         if (k > 0 && !q.isEmpty()) {
+        //             ans += q.poll()[0];
+        //             k--;
+        //         }
+        //     }
+        //     while (k > 0 && !q.isEmpty()) {
+        //         ans += q.poll()[0];
+        //         k--;
+        //     }
+        //     return ans;
+        // }
+
+        // public int findMinMoves(int [] a) {
+        //     int n = a.length;
+        //     int [] sum = new int [n+1];
+        //     for (int i = 1; i <= n; i++) 
+        //         sum[i] = sum[i-1] + a[i-1];
+        //     if (sum[n] % n != 0) return -1;
+        //     int avg = sum[n] / n, ans = 0;
+        //     for (int i = 0; i < n; i++) {
+        //         int l = i * avg - sum[i];  // 左边机器移动的总次数
+        //         int r = (n - (i+1)) * avg - (sum[n] - sum[i+1]); // 右边机器移动的总次数
+        //         if (l > 0 && r > 0)
+        //             ans = Math.max(ans, l + r);
+        //         else ans = Math.max(ans, Math.max(l, r));
+        //     }                
+        //     return ans;
+        // }
+
+        // // 对于有向图中，如果存在indegree(v) == 2的点，那么要删除的一定是这个点的某条有向边(u -> v)
+        // //    因为题目最后保证是一个rooted tree（every node has exactly one parent），具体看第一段定义；
+        // // 如果不存在indegree(v) == 2的点，那么直接删去最后一个造成环存在的有向边即可。
+        // // 现在存在三种情况：
+        // // （1）有向图中只有环。这种情况就简单将两个节点具有共同根节点的边删去就好。
+        // // （2）有向图中没有环，但有个节点有两个父节点。这种情况就将第二次出现不同父节点的边删去就好。
+        // // （3）有向图中既有环，而且有个节点还有两个父节点。这时就检测当除去第二次出现父节点的边后，剩余边是不是合法的，如果不合法证明应该删掉的是另一个父节点的边。
+        // public int [] findRedundantDirectedConnection(int [][] egs) {
+        //     Set<Integer> p = new HashSet<>();
+        //     Map<Integer, Integer> par = new HashMap<>(); // k,v: v <-- u
+        //     List<int []> candi = new ArrayList<>();
+        //     for (int [] e : egs) {
+        //         int u = e[0], v = e[1];
+        //         p.add(u);
+        //         p.add(v);
+        //         if (!par.containsKey(v)) { // 对于入度为1的右端点边，记在字典里
+        //             par.put(v, u);
+        //             continue;
+        //         }
+        //         candi.add(new int [] {par.get(v), v}); // 第一次出现的边
+        //         candi.add(new int [] {u, v});          // 第二次出现的边，答案是这两者之一
+        //         e[1] = -1; // 先将后出现的第二条边废掉，验证答案
+        //     }
+        //     UnionFind uf = new UnionFind(p.size()); // 总顶点的个数
+        //     for (int [] e : egs) {
+        //         if (e[1] == -1) continue;   // 跳过正在验证是否为的答案后出现的第二条边
+        //         int u = e[0]-1, v = e[1]-1; // uf 0-based
+        //         if (!uf.union(u, v)) { // 在已经废除后出现的第二条边之后，还是出现了环，那么后出现的第二条边不是答案，第一条才是
+        //             if (candi.isEmpty()) return e; // 不存在入度为 2 的点，直接删去最后一条造成环存在的有向边， 即当前边即可
+        //             return candi.get(0);
+        //         }
+        //     }
+        //     return candi.get(1); // 删除第二条边后，所有的存在都合法，那么就返回第二条边
+        // }
+        // class UnionFind {
+        //     int[] parent;
+        //     int[] rank;
+        //     int size;
+        //     public UnionFind(int size) {
+        //         this.size = size;
+        //         parent = new int[size];
+        //         rank = new int[size];
+        //         for (int i = 0; i < size; i++) parent[i] = i;
+        //     }
+        //     public int find(int x) {
+        //         if (parent[x] != x) 
+        //             parent[x] = find(parent[x]);
+        //         return parent[x];
+        //     }
+        //     public boolean union(int x, int y) { 
+        //         int xp = find(x);
+        //         int yp = find(y);
+        //         if (xp == yp) return false; // 已经在同一个强连通分量中
+        //         if (rank[xp] > rank[yp]) 
+        //             parent[yp] = xp;
+        //         else if (rank[xp] < rank[yp]) 
+        //             parent[xp] = yp;
+        //         else {
+        //             parent[yp] = xp;
+        //             rank[xp]++;
+        //         }
+        //         return true;
+        //     }
+        // }
+
+   //  Trie t;
+   //  public WordFilter(String[] sa) {
+   //      t = new Trie();
+   //      Set<String> ss = new HashSet<>();
+   //      for (int i = 0; i < sa.length; i++) {
+   //          ss.clear();
+   //          ss.addAll(getAlllSufPreString(sa[i]));
+   //          for (String v : ss) 
+   //              t.insert(v, i);
+   //      }
+   //  }
+   //  public int f(String prefix, String suffix) {
+   //      String s = suffix + "{" + prefix;
+   //      return t.search(s);
+   //  }
+   //  Set<String> getAlllSufPreString(String s) {
+   //      Set<String> ss = new HashSet<>();
+   //      int n = s.length();
+   //      ss.add(s);
+   //      for (int i = n-1; i >= 0; i--) {
+   //          String cur = s.substring(i) + "{" + s;
+   //          ss.add(cur);
+   //      }
+   //      return ss;
+   //  }
+   // class Trie {
+   //     Node root;
+   //     public Trie() {
+   //         root = new Node();
+   //     }
+   //     public int search(String t) {
+   //         int n = t.length();
+   //         char [] s = t.toCharArray();
+   //         Node r = root;
+   //         for (int i = 0; i < n; i++) {
+   //             int idx = s[i] - 'a';
+   //             if (r.next[idx] == null) return -1;
+   //             r = r.next[idx];
+   //         }
+   //         return r.i;
+   //     }
+   //     public void insert(String t, int v) {
+   //         int n = t.length(), idx = 0;
+   //         char [] s = t.toCharArray();
+   //         Node r = root;
+   //         for (int i = 0; i < n; i++) {
+   //             idx = s[i] - 'a';
+   //             if (r.next[idx] == null) {
+   //                 r.next[idx] = new Node();
+   //                 r.i = v;
+   //             } else if (v > r.i) r.i = v;
+   //             r = r.next[idx];
+   //         }
+   //         r.i = v; // BUG: 这一步不能写丢了
+   //     }
+   //     class Node {
+   //         int i; // idx 
+   //         Node [] next;
+   //         public Node() {
+   //             i = -1;
+   //             next = new Node [27]; // next[26] = '{' which is right after 'z'
+   //         }
+   //     }
+   // }
+
+        // public boolean reachingPoints(int x, int y, int i, int j) { // bug
+        //     if (x == i && y == j) return true;
+        //     Deque<int []> q = new ArrayDeque<>();
+        //     Set<String> vis = new HashSet<>();
+        //     q.offerLast(new int [] {x, y});
+        //     vis.add(x+"-"+y);
+        //     while (!q.isEmpty()) {
+        //         int [] cur = q.pollLast();
+        //         if (cur[0] == i && cur[1] == j) return true;
+        //         int ij = cur[0] + cur[1]; // % 这里需要某种快进效果，否则应该一定会超时的
+        //         if (ij > i && ij > j) continue;
+        //         String ta = ij + "-" + cur[1], tb = cur[0] + "-" + ij;
+        //         if (ij <= i && !vis.contains(ta)) {
+        //             vis.add(ta);
+        //             q.offerLast(new int [] {ij, cur[1]});
+        //         }
+        //         if (ij <= j && !vis.contains(tb)) {
+        //             vis.add(tb);
+        //             q.offerLast(new int [] {cur[0], ij});
+        //         }
+        //     }
+        //     return false;
+        // }
+        // // 35
+        // // 13
+        // // 455955547
+        // // 420098884
+
+        // public int shortestSubarray(int[] a, int k) { 
+        //     int n = a.length, ans = Integer.MAX_VALUE, j = 0;
+        //     long [] sum = new long [n+1];
+        //     for (int i = 1; i <= n; i++) 
+        //         sum[i] = sum[i-1] + a[i-1];
+        //     ArrayDeque<Integer> s = new ArrayDeque<>(); // 单调递增
+        //     for (int i = 0; i <= n; i++) {
+        //         while (!s.isEmpty() && sum[i] - sum[s.peekFirst()] >= k)
+        //             ans = Math.min(ans, i - s.pollFirst());
+        //         while (!s.isEmpty() && sum[s.peekLast()] >= sum[i])
+        //             s.pollLast();
+        //         s.offerLast(i);
+        //     }
+        //     return ans == Integer.MAX_VALUE ? -1 : ans;
+        // }        
+        // public int shortestSubarray(int[] a, int k) { // BUG
+        //     int n = a.length, ans = Integer.MAX_VALUE, j = 0;
+        //     // long sum = 0;
+        //     // ArrayDeque<Integer> s = new ArrayDeque<>();
+        //     // for (int i = 0; i < n; i++) {
+        //     //     sum += a[i];
+        //     //     if (sum >= k) ans = Math.min(ans, i+1);
+        //     //     while (!s.isEmpty() && (sum >= k && a[s.peekFirst()] >= 0
+        //     //                             || sum < k && a[s.peekFirst()] < 0)) {
+        //     //         sum -= a[s.pollFirst()];
+        //     //         if (sum >= k && !s.isEmpty()) ans = Math.min(ans, i - s.peekFirst() + 1);
+        //     //     }
+        //     //     s.offerLast(i);
+        //     // }
+        //     // return ans == Integer.MAX_VALUE ? -1 : ans;
+        // }        
     }
     public static void main(String[] args) {
         Solution s  =  new Solution();
 
-        // int [] a = new int [] {1,0,1,0,1};
-        int []  a = new int []  {1, 1, 0, 0, 1};
+        // int []  a = new int []  {56, -21, 56, 35, -9};
+        // int []  a = new int []  {77, 19, 35, 10, -14};
+        int []  a = new int []  {84, -37, 32, 40, 95};
 
-        int [] r = s.threeEqualParts(a);
-        System.out.println(Arrays.toString(r));
+        int r = s.shortestSubarray(a, 167);
+        System.out.println("r: " + r);
     }
 }
-// treeNd root  =  new treeNode(a[0]);
-// root.buildtree(root, a);
-// root.lvlPrinttree(root);
+// TreeNode root  =  new TreeNode(a[0]);
+// root.buildTree(root, a);
+// root.levelPrintTree(root);
