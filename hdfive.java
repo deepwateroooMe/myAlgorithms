@@ -771,21 +771,6 @@ public class hdfive {
         // // 455955547
         // // 420098884
 
-        // public int shortestSubarray(int[] a, int k) { 
-        //     int n = a.length, ans = Integer.MAX_VALUE, j = 0;
-        //     long [] sum = new long [n+1];
-        //     for (int i = 1; i <= n; i++) 
-        //         sum[i] = sum[i-1] + a[i-1];
-        //     ArrayDeque<Integer> s = new ArrayDeque<>(); // 单调递增
-        //     for (int i = 0; i <= n; i++) {
-        //         while (!s.isEmpty() && sum[i] - sum[s.peekFirst()] >= k)
-        //             ans = Math.min(ans, i - s.pollFirst());
-        //         while (!s.isEmpty() && sum[s.peekLast()] >= sum[i])
-        //             s.pollLast();
-        //         s.offerLast(i);
-        //     }
-        //     return ans == Integer.MAX_VALUE ? -1 : ans;
-        // }        
         // public int shortestSubarray(int[] a, int k) { // BUG
         //     int n = a.length, ans = Integer.MAX_VALUE, j = 0;
         //     // long sum = 0;
@@ -801,19 +786,222 @@ public class hdfive {
         //     //     s.offerLast(i);
         //     // }
         //     // return ans == Integer.MAX_VALUE ? -1 : ans;
+        // }
+        // public int shortestSubarray(int[] a, int k) { 
+        //     int n = a.length, ans = Integer.MAX_VALUE, j = 0;
+        //     long [] sum = new long [n+1];
+        //     for (int i = 1; i <= n; i++) 
+        //         sum[i] = sum[i-1] + a[i-1];
+        //     ArrayDeque<Integer> s = new ArrayDeque<>(); // 单调递增
+        //     for (int i = 0; i <= n; i++) {
+        //         while (!s.isEmpty() && sum[i] - sum[s.peekFirst()] >= k)
+        //             ans = Math.min(ans, i - s.pollFirst());
+        //         while (!s.isEmpty() && sum[s.peekLast()] >= sum[i])
+        //             s.pollLast();
+        //         s.offerLast(i);
+        //     }
+        //     return ans == Integer.MAX_VALUE ? -1 : ans;
         // }        
+
+        // public int reachableNodes(int[][] edges, int maxMoves, int n) {
+        //     int [][] adj = new int [n][n];
+        //     for (int i = 0; i < n; i++) 
+        //         Arrays.fill(adj[i], -1);
+        //     for (int [] v : edges) {
+        //         adj[v[0]][v[1]] = v[2];
+        //         adj[v[1]][v[0]] = v[2];
+        //     }
+        //     Queue<int []> q = new PriorityQueue<>((x, y) -> y[0] - x[0]);
+        //     boolean [] vis = new boolean [n];
+        //     q.offer(new int [] {maxMoves, 0});
+        //     int ans = 0;
+        //     while (!q.isEmpty()) {
+        //         int [] cur = q.poll();
+        //         int cnt = cur[0], u = cur[1];
+        //         if (vis[u]) continue;
+        //         vis[u] = true;
+        //         ans++;
+        //         for (int i = 0; i < n; i++) {
+        //             if (adj[u][i] == -1) continue;
+        //             if (cnt > adj[u][i] && !vis[i])
+        //                 q.offer(new int [] {cnt - adj[u][i] - 1, i});
+        //             adj[i][u] -= Math.min(cnt, adj[u][i]);
+        //             ans += Math.min(cnt, adj[u][i]);
+        //         }
+        //     }
+        //     return ans;
+        // }
+        
+        // Map<Integer, Integer> cnt;     // k, v: val, cnt
+        // Map<Integer, List<Integer>> m; // cnt, val list
+        // int maxCnt, lastVal;
+        // public FreqStack() {
+        //     cnt = new HashMap<>();
+        //     m = new HashMap<>();
+        //     maxCnt = 0;
+        //     lastVal = -1;
+        // }
+        // public void push(int val) { 
+        //     cnt.put(val, cnt.getOrDefault(val, 0) + 1);
+        //     m.computeIfAbsent(cnt.get(val), z -> new ArrayList<>()).add(val); // m里存有之间统计过的出现次数： 1 2 3 4 5 6 7
+        //     lastVal = val;
+        //     if (cnt.get(val) > maxCnt) maxCnt = cnt.get(val);
+        // }
+        // public int pop() {
+        //     List<Integer> l = cnt.get(maxCnt);
+        //     int ans = l.remove(l.size()-1);
+        //     if (l.size() == 0) maxCnt--;    // 只从出现过的最高的次数往下减
+        //     if (maxCnt > 0) {
+        //         cnt.put(ans, cnt.get(ans) - 1);
+        //     }
+        //     return ans;
+        // }
+
+        //  public int largestComponentSize(int[] a) { // tle
+        //     int n = a.length;
+        //     UnionFind uf = new UnionFind(n);
+        //     for (int i = 0; i < n; i++) 
+        //         for (int j = i+1; j < n; j++) {
+        //             if (uf.sameGroup(i, j) || gcd(a[i], a[j]) == 1) continue;
+        //             uf.union(i, j);
+        //         }
+        //     return uf.getLargetComponent();
+        // }
+        // int gcd(int x, int y) {
+        //     if (y == 0) return x;
+        //     return gcd(y, x % y);
+        // }
+        // class UnionFind {
+        //     private int [] p;
+        //     public UnionFind(int size) {
+        //         p = new int[size];
+        //         for (int i = 0; i < size; i++)
+        //             p[i] = i;
+        //     }
+        //     public boolean sameGroup(int i, int j) {
+        //         return find(i) == find(j);
+        //     }
+        //     public int getLargetComponent() {
+        //         int [] cnt = new int [p.length];
+        //         int max = 0;
+        //         for (int i = 0; i < p.length; i++) {
+        //             find(i);
+        //             ++cnt[p[i]];
+        //             max = Math.max(max, cnt[p[i]]);
+        //         }
+        //         return max;
+        //     }
+        //     public int find(int x) {
+        //         if (p[x] != x)
+        //             p[x] = find(p[x]);
+        //         return p[x];
+        //     }
+        //     public void union(int x, int y) {
+        //         int px = find(x), py = find(y);
+        //         if (px != py)
+        //             p[px] = py;
+        //     }
+        // }
+        // public int largestComponentSize(int[] a) { 
+        //     int n = a.length;
+        //     UnionFind uf = new UnionFind();
+        //     for (int v : a) { // 通过两个值是否有 > 1 的质因子，决定了两个数是否连通
+        //         if (v == 1) continue;
+        //         List<Integer> l = getPrimeFactors(v); 
+        //         uf.addToParent(l.get(0));
+        //         for (int i = 1; i < l.size(); i++) 
+        //             uf.merge(l.get(0), l.get(i)); // 对于同一个数来说，其所有的质因子之间是连通的，以便借助这些质因子可以与其它拥有某个某些质因子的数相连通 
+        //     }
+        //     return uf.getLargestComponentCnt();
+        // }
+        // private List<Integer> getPrimeFactors(int val) {
+        //     List<Integer> l = new ArrayList<>();
+        //     if (val % 2 == 0) {
+        //         l.add(2);
+        //         while (val % 2 == 0) val /= 2;
+        //     }
+        //     for (int i = 3; i*i <= val; i += 2) 
+        //         if (val % i == 0) {
+        //             l.add(i);
+        //             while (val % i == 0) val /= i;
+        //         }
+        //     if (val > 2) l.add(val);
+        //     return l;
+        // }
+        // private class UnionFind {
+        //     HashMap<Integer, Integer> par;
+        //     HashMap<Integer, Integer> cnt; // 以各个数的最小（>1）质因子为键的、最大（原数组元素个数）强连通分量的数组元素个数，为值 
+        //     public UnionFind() {
+        //         par = new HashMap<>();
+        //         cnt = new HashMap<>();
+        //     }
+        //     public int find(int val) {
+        //         if (!par.containsKey(val)) {
+        //             par.put(val, val);
+        //             cnt.put(val, 0);
+        //             return val;
+        //         }
+        //         if (par.get(val) != val) par.put(val, find(par.get(val)));
+        //         return par.get(val);
+        //     }
+        //     public void merge(int p, int q) {
+        //         int rp = find(p);
+        //         int rq = find(q);
+        //         if (rp == rq) return;
+        //         par.put(rq, rp);
+        //         cnt.put(rp, cnt.get(rp) + cnt.get(rq));
+        //     }
+        //     public void addToParent(int val) {
+        //         int x = this.find(val);
+        //         cnt.put(x, cnt.get(x) + 1);
+        //     }
+        //     private int getLargestComponentCnt() { 
+        //         return Collections.max(cnt.values());
+        //     }
+        // }
+
+        // public List<List<Integer>> verticalTraversal(TreeNode root) {
+        //     dfs(root, 0, 0);
+        //     List<List<Integer>> ll = new ArrayList<>();
+        //     for (Integer c : m.keySet()) { // c: col
+        //         List<Integer> l = new ArrayList<>();
+        //         for (List<Integer> li : m.get(c).values()) {
+        //             if (li.size() == 1) l.add(li.get(0));
+        //             else {
+        //                 Collections.sort(li);
+        //                 for (Integer val : li)
+        //                     l.add(val);
+        //             }
+        //         }
+        //         ll.add(l);
+        //     }
+        //     return ll;
+        // }
+        // TreeMap<Integer, TreeMap<Integer, List<Integer>>> m = new TreeMap<>(); // k, v: col, <k, v: row, r.vals>
+        // void dfs(TreeNode r, int i, int j) {
+        //     if (r == null) return ;
+        //     m.computeIfAbsent(j, z -> new TreeMap<>()).computeIfAbsent(i, z -> new ArrayList<>()).add(r.val);
+        //     dfs(r.left, i+1, j-1);
+        //     dfs(r.right, i+1, j+1);
+        // }
+        
     }
     public static void main(String[] args) {
         Solution s  =  new Solution();
 
-        // int []  a = new int []  {56, -21, 56, 35, -9};
-        // int []  a = new int []  {77, 19, 35, 10, -14};
-        int []  a = new int []  {84, -37, 32, 40, 95};
+        // int []  a = new int []  {3, 9, 20, -1, -1, 15, 7};
+        // int [] a = new int [] {1,2,3,4,5,6,7};
+        // int [] a = new int [] {1,2,3,4,6,5,7};
+        int []  a = new int []  {3, 1, 4, 0, 2, 2};
+        
+        TreeNode root  =  new TreeNode(a[0]);
+        root.buildTree(root, a);
+        root.levelPrintTree(root);
 
-        int r = s.shortestSubarray(a, 167);
-        System.out.println("r: " + r);
+        List<List<Integer>> r = s.verticalTraversal(root);
+        System.out.println("r.size(): " + r.size());
+        for (int z = 0; z < r.size(); ++z) 
+            System.out.println(Arrays.toString(r.get(z).toArray()));
+        
     }
 }
-// TreeNode root  =  new TreeNode(a[0]);
-// root.buildTree(root, a);
-// root.levelPrintTree(root);
