@@ -788,47 +788,6 @@ public class hdthree {
             return l;
         }
 
-        // Write a function "parse" which calls helper functions "parse_or", "parse_and", "parse_not".
-        public boolean parseBoolExpr(String s) { // bug, have not finished yet
-            int n = s.length();
-            char c = s.charAt(0);
-            if (n == 1) return c == 't';
-            if (c == '!') return parseNot(s.substring(2, n-1));
-            if (c == '|') return parseOr(s.substring(2, n-1));
-            if (c == '&') return parseAnd(s.substring(2, n-1));
-        }
-        boolean parseOr(String t) { // 能不能把三个函数合并成一个函数，都是重复 
-            int n = t.length(), j = 0, l = 0, r = 0;
-            char [] s = t.toCharArray();
-            boolean ans = false;
-            for (int i = 0; i < n; i++) {
-                char c = s[i];
-                if (c == '!' || c == '|' || c == '&') {
-                    j = i+2; l = 1; r = 0;
-                    while (j < n && l != r) {
-                        if (s[j] == '(') l++;
-                        else if (s[j] == ')') {
-                            if (l > 0)  l--;
-                            else r++;
-                            if (l == r) break;
-                        }
-                    }
-                    if (c == '!') ans |= parseNot(t.substring(i+2, j));
-                    if (c == '|') ans |= parseor(t.substring(i+2, j));
-                    if (c == '&') ans |= parseAnd(t.substring(i+2, j));
-                    i = j;
-                } else if (c == 't' || c == 'f') {
-                    ans |= c == 't';
-                    i ++;
-                }
-            }
-            return ans;
-        }
-        boolean parseAnd(String t) {
-        }
-        boolean parseNot(String t) {
-        }
-
         public int[] canSeePersonsCount(int[] a) {
             int n = a.length, ans [] = new int [n];
             ArrayDeque<Integer> s = new ArrayDeque<>(); // 单调递减栈

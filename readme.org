@@ -1223,6 +1223,48 @@ public long maxTaxiEarnings(int n, int[][] rides) {
 }
      #+END_SRC
 
+*** 1713. Minimum Operations to Make a Subsequence - Hard LIS 经曲题型，需要吃透
+You are given an array target that consists of distinct integers and another integer array arr that can have duplicates.
+
+In one operation, you can insert any integer at any position in arr. For example, if arr = [1,4,1,2], you can add 3 in the middle and make it [1,4,3,1,2]. Note that you can insert the integer at the very beginning or end of the array.
+
+Return the minimum number of operations needed to make target a subsequence of arr.
+
+A subsequence of an array is a new array generated from the original array by deleting some elements (possibly none) without changing the remaining elements' relative order. For example, [2,7,4] is a subsequence of [4,2,3,7,2,1,4] (the underlined elements), while [2,4,2] is not.
+**** 解题思路与分析
+     #+BEGIN_SRC java
+public int minOperations(int[] t, int[] a) {
+    int n = t.length;
+    Map<Integer, Integer> m = new HashMap<Integer, Integer>();
+    for (int i = 0; i < n; ++i) 
+        m.put(t[i], i);
+    List<Integer> d = new AayList<Integer>();
+    for (int val : a) 
+        if (m.containsKey(val)) {
+            int idx = m.get(val);
+            int it = binarySearch(d, idx);
+            if (it != d.size()) 
+                d.set(it, idx);
+            else 
+                d.add(idx);
+        }
+    return n - d.size();
+}
+public int binarySearch(List<Integer> li, int t) {
+    int size = li.size();
+    if (size == 0 || li.get(size - 1) < t) 
+        return size;
+    int low = 0, high = size - 1;
+    while (low < high) {
+        int mid = (high - low) / 2 + low;
+        if (li.get(mid) < t) 
+            low = mid + 1;
+        else 
+            high = mid;
+    }
+    return low;
+}
+     #+END_SRC
 *** 1879. Minimum XOR Sum of Two Arrays - Hard
 You are given two integer arrays nums1 and nums2 of length n.
 
@@ -7816,7 +7858,66 @@ int getKthAncestor(int node, int k) return the kth ancestor of the given node no
      #+END_SRC
 *** 236 二叉树的最近公共祖先
 
+*** 1505. Minimum Possible Integer After at Most K Adjacent Swaps On Digits - Hard BIT树状数组 
+You are given a string num representing the digits of a very large integer and an integer k. You are allowed to swap any two adjacent digits of the integer at most k times.
 
+Return the minimum integer you can obtain also as a string.
+**** 解题思路与分析
+     #+BEGIN_SRC java
+public String minInteger(String t, int k) {
+    int n = t.length();
+    t = " " + t;
+    char [] s = t.toCharArray();
+    ArrayDeque<Integer> [] q = new ArrayDeque [10];
+    for (int i = 1; i <= n; i++) {
+        int j = s[i] - '0';
+        if (q[j] == null) q[j] = new ArrayDeque<>();
+        q[j].offerLast(i);
+    }
+    BIT bit = new BIT(n);
+    StringBuilder sb = new StringBuilder();
+    for (int i = 1; i <= n; i++) {
+        for (int j = 0; j < 10; j++) { // 从小数值往大数值遍历
+            if (q[j] == null || q[j].isEmpty()) continue;
+            int top = q[j].peekFirst(), pos = top + bit.sum(top); // pos是最优解的位置，最优解的位置是原来的位置加上偏移量
+            if (pos - i <= k) {
+                k -= pos - i;
+                sb.append(j);
+                q[j].pollFirst();
+                bit.add(1, 1); // 更新[1, t)这段的值每个加1，即向右偏移1位.为什么要 从1开始更新：假装每次都移动到最前端，方便计算 ?
+                bit.add(top, -1);
+                break;
+            }
+        }
+    }
+    return sb.toString();
+}
+class BIT { // 开一个树状数组类，维护每个位置的字符的向右的偏移量 ? 向左偏移量
+    private int n;
+    private int [] a;
+    public BIT(int n) {
+        this.n = n;
+        this.a = new int [n+1];
+    }
+    public void add(int idx, int v) { // 只有发生偏移，才移动某段区间的值
+        while (idx <= n) {
+            a[idx] += v;
+            idx += lowbit(idx);
+        }
+    }
+    public int sum(int idx) { // 得到以 i 为下标1-based的所有子、叶子节点的和， 也就是[1, idx]的和，1-based
+        int ans = 0;
+        while (idx > 0) {
+            ans += a[idx];
+            idx -= lowbit(idx);
+        }
+        return ans;
+    }
+    int lowbit(int x) {
+        return x & -x;
+    }
+}
+     #+END_SRC
 * Trie
 应用
 Trie树最直观的定义就是LinkedList of HashMap。所以Trie和HashMap都可以用来查询某个单词是否在字典当中。我们需要知道他们的优缺点。
@@ -13641,6 +13742,82 @@ public int oddEvenJumps(int [] a) {
         odd[i] = evn[odIdx[i]];
         evn[i] = odd[enIdx[i]];
         if (odd[i]) ans++;
+    }
+    return ans;
+}
+     #+END_SRC
+
+*** 1793. Maximum Score of a Good Subarray - Hard
+You are given an array of integers nums (0-indexed) and an integer k.
+
+The score of a subarray (i, j) is defined as min(nums[i], nums[i+1], ..., nums[j]) * (j - i + 1). A good subarray is a subarray where i <= k <= j.
+
+Return the maximum possible score of a good subarray.
+**** 解题思路与分析: 左右两个单调栈
+     #+BEGIN_SRC java
+public int maximumScore(int[] a, int k) {
+    int n = a.length, ans = 0;
+    List<Integer> li = new ArrayList<>();
+    List<Integer> ri = new ArrayList<>();
+    li.add(k);
+    ri.add(k);
+    for (int i = k-1; i >= 0; i--) 
+        if (a[i] < a[li.get(li.size()-1)]) li.add(i);
+    for (int i = k+1; i < n; i++) 
+        if (a[i] < a[ri.get(ri.size()-1)]) ri.add(i);
+    int i = 0, j = 0, nl = li.size(), nr = ri.size();
+    while (i < nl || j < nr) {
+        int l = (i == nl - 1) ? -1 : li.get(i+1);
+        int r = (j == nr - 1) ? n : ri.get(j+1);
+        ans = Math.max(ans, Math.min(a[li.get(i)], a[ri.get(j)]) * (r - l - 1));
+        if (i == nl - 1 && j == nr - 1) break;
+        else if (i == nl - 1) j++;
+        else if (j == nr - 1) i++;
+        else if (a[l] <= a[r]) j++;
+        else i++;
+    }
+    return ans;
+}
+     #+END_SRC
+**** 解题思路与分析:用真实的栈
+- 上面的解法是用数组来代替栈以提高效率，真正用栈的实现如下：
+     #+BEGIN_SRC java
+public int maximumScore(int[] a, int k) { // 这个方法速度很慢， 上面一个比较快
+    ArrayDeque<Integer> s = new ArrayDeque<>();
+    int ans = 0;
+    for (int i = 0; i < a.length; i++) {
+        while (!s.isEmpty() && a[s.peekLast()] > a[i]) {
+            int idx = s.pollLast();
+            int l = -1;
+            if (!s.isEmpty()) l = s.peekLast();
+            int cur = (i - l - 1) * a[idx];
+            if (l + 1 <= k && i-1 >= k) ans = Math.max(ans, cur);
+        }
+        s.offerLast(i);
+    }
+    while (!s.isEmpty()) {
+        int idx = s.pollLast();
+        int l = -1;
+        if (!s.isEmpty()) l = s.peekLast();
+        int cur = (a.length - l - 1) * a[idx];
+        if (l <= k) ans = Math.max(ans, cur);
+    }
+    return ans;
+}
+     #+END_SRC
+**** 解题思路与分析: two pointers
+     #+BEGIN_SRC java
+public int maximumScore(int[] a, int k) {  // O(N) Two Pointers
+    int n = a.length, ans = a[k];
+    int l = k, r = k, min = a[k];
+    while (true) {
+        while (r+1 < n && a[r+1] >= min) r++;
+        while (l-1 >= 0 && a[l-1] >= min) l--;
+        ans = Math.max(ans, min*(r - l + 1));
+        if (l == 0 && r == n-1) break;
+        if (l == 0) min = a[r+1];
+        else if (r == n-1) min = a[l-1];
+        else min = Math.max(a[r+1], a[l-1]);
     }
     return ans;
 }
