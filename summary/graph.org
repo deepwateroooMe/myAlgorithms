@@ -1524,3 +1524,86 @@ class UnionFind {
     }
 }
      #+END_SRC
+** 普通BFS,但state状态狠重要
+*** 1293. Shortest Path in a Grid with Obstacles Elimination - Hard
+You are given an m x n integer matrix grid where each cell is either 0 (empty) or 1 (obstacle). You can move up, down, left, or right from and to an empty cell in one step.
+
+Return the minimum number of steps to walk from the upper left corner (0, 0) to the lower right corner (m - 1, n - 1) given that you can eliminate at most k obstacles. If it is not possible to find such walk return -1.
+**** 解题思路与分析
+- 在普通的bfs中，为了避免走重复的路径，我们一般采用visited数组来记录下走过的格子，当路径遇到一个已走过的格子时，便不能再通过该点。但本题略有不同，上面说过，本题存在两种路径，因此visited数组中的状态应该包含3中状态：
+  - 0：该位置没有走过
+  - 1：该位置被普通路径走过
+  - 2：该路径被穿越路径走过
+- 对于以上三种状态，
+  - 当前格子为非障碍物时，普通路径可以走访问状态为0的格子，走过后，访问状态更新为1
+  - 当前格子为非障碍物时，穿越路径可以走访问状态为0的格子，走过后，访问状态更新为2
+  - 当前格子为非障碍物时，普通路径可以走访问状态为2的格子，走过后，访问状态更新为1
+  - 当前格子为障碍物时，如果还保有穿越次数，并且该格子的访问状态为0时，所有路径可以通过此处，通过后，该路径变为穿越路径，并且当前格子访问状态更新为1（更新为2也无所谓）
+     #+BEGIN_SRC java
+public int shortestPath(int[][] a, int k) {
+    int [][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+    int m = a.length, n = a[0].length;
+    int [][] vis = new int [m][n]; 
+    Deque<int []> q = new ArrayDeque<>();
+    q.offerLast(new int [] {0, 0, k});
+    int cnt = 0;
+    while (!q.isEmpty()) {
+        for (int z = q.size()-1; z >= 0; z--) {
+            int [] cur = q.pollFirst();
+            if (cur[0] == m-1 && cur[1] == n-1) return cnt;
+            for (int [] d : dirs) {
+                int i = cur[0] + d[0], j = cur[1] + d[1];
+                if (i >= 0 && i < m && j >= 0 && j < n) {
+// 1.当前格子为非障碍物时，普通路径可以走访问状态为 0 的格子，走过后，访问状态更新为1
+// 3.当前格子为非障碍物时，普通路径可以走访问状态为 2 的格子，走过后，访问状态更新为1
+                    if (a[i][j] == 0 && (vis[i][j] == 0 || vis[i][j] == 2 && cur[2] == k)) { // 当前格为非障碍物
+                        if (vis[i][j] == 0) // 普通路径：可以走状态为0的格子，走过后变为1 or 2
+                            // 2.当前格子为非障碍物时，穿越路径可以走访问状态为0的格子，走过后，访问状态更新为2 
+                            vis[i][j] = (cur[2] == k ? 1 : 2);
+                        else vis[i][j] = 1;
+                        q.offerLast(new int [] {i, j, cur[2]});
+                        // 4.当前格子为障碍物时，如果还保有穿越次数，并且该格子的访问状态为0时，所有路径可以通过此处，
+                        //     通过后，该路径变为穿越路径，并且当前格子访问状态更新为1（更新为2也无所谓）                                
+                    } else if (a[i][j] == 1 && vis[i][j] == 0 && cur[2] > 0) {
+                        vis[i][j] = 2;
+                        q.offerLast(new int [] {i, j, cur[2]-1});
+                    }
+                }
+            }
+        }
+        cnt++;
+    }
+    return -1;
+}
+     #+END_SRC
+**** 解题思路与分析
+- 思路是BFS。将已经移除了多少个障碍物加进状态，然后做隐式图搜索即可。代码如下：
+     #+BEGIN_SRC java
+public int shortestPath(int[][] a, int k) { // 这个思路极为简洁，但速度跟上一个方法比，会慢很多
+    if (a.length <= 1 && a[0].length <= 1) return 0;
+    int [][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+    int m = a.length, n = a[0].length;
+    boolean [][][] vis = new boolean [m][n][k+1];
+    Deque<int []> q = new ArrayDeque<>();
+    q.offerLast(new int [] {0, 0, 0}); // 前两个数代表坐标，最后一个数代表已经移除了多少个障碍物
+    vis[0][0][0] = true;
+    int cnt = 0;
+    while (!q.isEmpty()) {
+        for (int z = q.size()-1; z >= 0; z--) {
+            int [] cur = q.pollFirst();
+            for (int [] d : dirs) {
+                int i = cur[0] + d[0], j = cur[1] + d[1], x = -1;
+                if (i < 0 || i >= m || j < 0 || j >= n) continue;
+                x = cur[2] + a[i][j];
+                if (k >= x && !vis[i][j][x]) {
+                    if (i == a.length-1 && j == a[0].length-1) return cnt+1;
+                    q.offerLast(new int [] {i, j, x});
+                    vis[i][j][x] = true;
+                }
+            }
+        }
+        cnt++;
+    }
+    return -1;
+}
+     #+END_SRC

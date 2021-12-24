@@ -1303,77 +1303,6 @@ public class hdfive {
             return min;
         }
 
-        public int[] maximizeXor(int [] a, int [][] q) { // bug
-            int n = a.length, m = q.length, j = 0;
-            int [] ans = new int [m];
-            Arrays.fill(ans, -1);
-            Arrays.sort(a);
-            List<int []> li = new ArrayList<>();
-            for (int i = 0; i < m; i++) 
-                li.add(new int [] {i, q[i][0], q[i][1]}); // i, xi, mi, needs a[j] <= mi
-            Collections.sort(li, (x, y)->x[2] - y[2]);
-            Trie t = new Trie();
-            for (int i = 0; i < m; i++) {
-                int [] cur = li.get(i);
-                if (j == 0 && cur[2] < a[j]) continue;
-                while (j < n && a[j] <= cur[2]) t.insert(a[j++]);
-                ans[cur[0]] = t.getMaxXORWithVal(cur[1]);
-            }
-            return ans;
-        }
-        class Trie {
-            Node root;
-            public Trie() {
-                root = new Node();
-            }
-            public int getMaxXORWithVal(int v) {
-                Node r = root;
-                return getMaxXORWithValRecursive(v, r, 31);
-            }
-            int getMaxXORWithValRecursive(int v, Node r, int i) {
-                if (i < 0) return 0;
-                int j = -1, ans = 0;
-                if (r == null || r.next == null) return 0;
-                // if (r == null) return 0;
-                // for (int i = idx; i >= 0; i--) {
-                int curV = ((1 << i) & v) > 0 ? 1 : 0; // v 在当前位上的取值： 1 or 0
-                if (r.next == null) return curV;
-                if (curV == 1) { // 感觉这里的逻辑还是写得迷迷糊糊。。。。。。感觉大致思路到位，细节有待改进，改天再回来写这个
-                    if (r.next[0] != null)
-                        ans = (1 << i) | getMaxXORWithValRecursive(v, r.next[0], i-1);
-                    else if (r.next[1] != null)
-                        ans = getMaxXORWithValRecursive(v, r.next[1], i-1);
-                } else { // curV = 0
-                    if (r.next[1] != null)
-                        ans = (1 << i) | getMaxXORWithValRecursive(v, r.next[0], i-1);
-                    else if (r.next[0] != null)
-                        ans = getMaxXORWithValRecursive(v, r.next[0], i-1);
-                }
-                // }
-                return ans;
-            }
-            public void insert(int v) {
-                Node r = root;
-                int idx = -1;
-                for (int i = 31; i >= 0; i--) {
-                    if (((1 << i) & v) > 0) idx = 1;
-                    else idx = 0;
-                    if (r.next[idx] == null)
-                        r.next[idx] = new Node();
-                    r = r.next[idx];
-                }
-                r.v = v;
-            }
-            class Node {
-                int v;
-                Node [] next;
-                public Node() {
-                    v = -1;
-                    next = new Node[2];
-                }
-            }
-        }
-
         public int minOperations(int [] t, int [] a) {
             int m = t.length, n = a.length;
             Map<Integer, Integer> map = new HashMap<>();
@@ -1541,9 +1470,30 @@ public class hdfive {
         System.out.println("r: " + r);
     }
 }
+
 //  TreeNode root  =  new TreeNode(a[0]);
 //  root.buildTree(root, a);
 //  root.levelPrintTree(root);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

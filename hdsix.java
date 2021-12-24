@@ -329,21 +329,929 @@ public class hdsix {
         //     return set;
         // }
 
+        // public TreeNode deserialize(String d) { // 因为是层级遍历，实现起来相地容易
+        //     if (d == null || d.length() == 0) return null;
+        //     int n = d.length(), i = 0;
+        //     List<Integer> l = deserializeToList(d);
+        //     TreeNode root = new TreeNode (l.get(0));
+        //     Deque<TreeNode> q = new ArrayDeque<>();
+        //     TreeNode r = root;
+        //     q.offerLast(r);
+        //     while (!q.isEmpty() && i < l.size()) {
+        //         r = q.pollFirst(); // 先进先出
+        //         ++i;
+        //         if (i % 2 == 1) {
+        //             if (l.get(i) == 1001) r.left = null;
+        //             else {
+        //                 r.left = new TreeNode (l.get(i));
+        //                 q.offerLast(r.left);
+        //             }
+        //         }
+        //         ++i;
+        //         if (i % 2 == 0) {
+        //             if (l.get(i) == 1001) r.right = null;
+        //             else {
+        //                 r.right = new TreeNode(l.get(i));
+        //                 q.offerLast(r.right);
+        //             }
+        //         }
+        //     }
+        //     return root;
+        // }
+        // public String serialize(TreeNode r) {
+        //     StringBuilder s = new StringBuilder();
+        //     if (r == null) return s.toString();
+        //     Deque<TreeNode> q = new ArrayDeque<>();
+        //     q.offerLast(r);
+        //     s.append(r.val + ",");
+        //     while (!q.isEmpty()) {
+        //         TreeNode p = q.pollFirst(); // 先进先出
+        //         if (p.left != null) {
+        //             q.offerLast(p.left);
+        //             s.append(p.left.val + ",");
+        //         } else s.append("#,");
+        //         if (p.right != null) {
+        //             q.offerLast(p.right);
+        //             s.append(p.right.val + ",");
+        //         } else s.append("#,");
+        //     }
+        //     return s.toString();
+        // } 
+        // List<Integer> deserializeToList(String t) {
+        //     List<Integer> l = new ArrayList<>();
+        //     char [] s = t.toCharArray();
+        //     int n = t.length(), i = 0, j = s[0] == '-' ? 1 : 0;
+        //     while (j < n) {
+        //         while (j < n && (Character.isDigit(s[j]) || s[j] == '-')) j++;
+        //         if (j > i && j < n) {
+        //             l.add(Integer.parseInt(t.substring(i, j)));
+        //             if (j == n) return l;
+        //         }
+        //         if (s[j] == '#') {
+        //             l.add(1001);
+        //             ++j;
+        //         }
+        //         if (j < n && s[j] == ',') j++;
+        //         if (j == n) return l;
+        //         i = j;
+        //     }
+        //     return l;
+        // }
+        // public String serialize(TreeNode root) { // 思路也对，实现起来相对复杂一点儿：这个改天再补一下
+        //     if (root == null) return "#";
+        //     return serializeRecursive(root);
+        // } 
+        // public TreeNode deserialize(String d) { // 用iterative的方法，parse出来
+        //     if (data.equals("#")) return null;
+        //     ArrayDeque<TreeNode> s = new ArrayDeque<>(); // 借助一个stack
+        //     int n = d.length(), i = 0, pre = -1;
+        //     while (i < n && Character.isDigit(d.charAt(i))) i++;
+        //     TreeNode r = new TreeNode(Integer.parseInt(d.substring(0, i)));
+        //     s.offerLast(r);
+        //     i += 1;
+        //     return null;
+        // }
+        // public TreeNode deserializeRecursive(TreeNode r, String s) {
+        //     return null;
+        // }
+        // private String serializeRecursive(TreeNode r) {
+        //     if (r == null) return "";
+        //     String ans = "" + r.val + " ";
+        //     String left = serializeRecursive(r.left);
+        //     String right = serializeRecursive(r.right);
+        //     return ans + (left.equals("") ? "#" : left) + (right.equals("") ? "#" : right);
+        // }
+
+        // public int reversePairs(int[] a) { // O(NlogN)
+        //     return mergeSortCnt(Arrays.stream(a).mapToLong(i->i).toArray(), 0, a.length-1);
+        // }
+        // int mergeSortCnt(long [] a, int bgn, int end) {
+        //     if (bgn >= end) return 0;
+        //     int mid = bgn + (end - bgn) / 2;
+        //     int cnt = mergeSortCnt(a, bgn, mid) + mergeSortCnt(a, mid+1, end); // 递归处理左右两边的子问题；完后左边两段片段分别已经排好序
+        //     for (int i = bgn, j = mid+1; i <= mid; i++) { // 处理子问题中不曾处理的case：去数 i在左半段，j在右半段，并且a[i] > 2*a[j]的个数
+        //         while (j <= end && a[i] > 2 * a[j]) j++;  // 对于每个当前的i来说，j可以右移到的最大边界，便是当前i分布两片段、合法解的个数
+        //         cnt += j - (mid + 1); // 右半段从下标mid+1开始，合法解不包括j当前位置
+        //     }
+        //     Arrays.sort(a, bgn, end+1);
+        //     return cnt;
+        // }
+
+        // public int[][] outerTrees(int[][] a) {
+        //     if (a.length <= 1) return a;
+        //     int [] bgn = getBottomLeft(a);
+        //     Arrays.sort(a, (x, y) -> { // 将给定点集按照相对初始点的极角坐标排序（也就是从点 0 出发的一条直线）
+        //             double dif = getRelativeDir(bgn, x, y) - getRelativeDir(bgn, y, x); // 使用过的函数 orientation 。极角顺序更小的点排在数组的前面。
+        //             if (dif == 0) return getDist(bgn, x) - getDist(bgn, y);     // 如果有两个点相对于点 0 在同一方向上，我们将它们按照与点 0 的距离排序
+        //             return dif > 0 ? 1 : -1; 
+        //         });
+        //     int i = a.length-1;
+        //     while (i >= 0 && getRelativeDir(bgn, a[a.length-1], a[i]) == 0) i--;
+        //     for (int l = i+1, h = a.length-1; l < h; l++, h--) {
+        //         int [] tmp = a[l];
+        //         a[l] = a[h];
+        //         a[h] = tmp;
+        //     }
+        //     Deque<int []> s = new ArrayDeque<>();
+        //     s.offerLast(a[0]);
+        //     s.offerLast(a[1]);
+        //     for (int j = 2; j < a.length; j++) {
+        //         int [] top = s.pollLast();
+        //         while (!s.isEmpty() && getRelativeDir(s.peekLast(), top, a[j]) > 0)
+        //             top = s.pollLast();
+        //         s.offerLast(top);
+        //         s.offerLast(a[j]);
+        //     }
+        //     int [][] ans = new int [s.size()][2];
+        //     i = 0;
+        //     for (int [] v : s) 
+        //         ans[i++] = v;
+        //     return ans;
+        // }
+        // int getDist(int [] s, int [] r) {
+        //     return (int)Math.pow(s[0] - r[0], 2) + (int)Math.pow(s[1] - r[1], 2);
+        // }
+        // int getRelativeDir(int [] s, int [] p, int [] q) {                        // 观察到点 s, p, q 形成的向量相应地都是逆时针方向，
+        //     return (p[1] - s[1]) * (q[0] - p[0]) - (p[0] - s[0]) * (q[1] - p[1]); // 向量sp和向量pq的方向都朝平面向外，也就是是个正值
+        // }
+        // int [] getBottomLeft(int [][] a) { // 选择 y 坐标最小的点为起始点，如果有相同的最小 y 坐标，我们选择 x 坐标最小的，这个点被记为动图中的点 0
+        //     int [] ans = a[0];
+        //     for (int [] v : a) 
+        //         if (v[1] < ans[1])
+        //             ans =v;
+        //     return ans;
+        // }
+
+        // public String longestDupSubstring(String t) {
+        //     int n = t.length(), l = 0, r = n; // r = n-1 bug
+        //     String ans = "";
+        //     while (l <= r) {
+        //         int m = l + (r - l) / 2;
+        //         String tmp = exist(m, t);
+        //         if (tmp == null) r = m-1;
+        //         else {
+        //             if (tmp.length() > ans.length())
+        //                 ans = tmp;
+        //             l = m + 1;
+        //         }
+        //     }
+        //     return ans;
+        // }
+        // static final int mod = (1 << 31)-1, base = 26;
+        // String exist(int m, String t) {
+        //     int n = t.length();
+        //     char [] s = t.toCharArray();
+        //     Map<Long, List<Integer>> map = new HashMap<>();
+        //     long h = 0, p = 1;
+        //     for (int i = 0; i < m; i++) {
+        //         h = (h * base + s[i]) % mod;
+        //         if (i >= 1) p = p * base % mod;
+        //     }
+        //     map.computeIfAbsent(h, z -> new ArrayList<>()).add(0);
+        //     for (int i = 1; i+m <= n; i++) { // 换一种遍历方法的目的是，方便接下来collision检测的时候回调原始字符串
+        //         h = ((h - s[i-1] * p % mod + mod) % mod * base % mod + s[i+m-1]) % mod;
+        //         if (map.containsKey(h)) {
+        //             for (int idx : map.get(h)) 
+        //                 if (isMatch(t.substring(i, i+m), t.substring(idx, idx+m))) 
+        //                     return t.substring(i, i+m);
+        //         }
+        //         map.computeIfAbsent(h, z -> new ArrayList<>()).add(i);
+        //     }
+        //     return null;
+        // }
+        // boolean isMatch(String ss, String tt) {
+        //     if (ss.length() != tt.length()) return false;
+        //     char [] s = ss.toCharArray();
+        //     char [] t = tt.toCharArray();
+        //     int i = 0;
+        //     while (i < ss.length()) {
+        //         if (s[i] != t[i]) return false;
+        //         i++;
+        //     }
+        //     return true;
+        // }
+
+        // public List<String> braceExpansionII(String s) {
+        //     return expr(s).stream().sorted().collect(Collectors.toList()); // set to list
+        // }
+        // Set<String> expr(String t) {
+        //     int n = t.length();
+        //     char [] s = t.toCharArray();
+        //     Set<String> ans = new HashSet<>();
+        //     if (t.equals("")) return ans;  // 空串就返回空
+        //     // 最快的就是indexOf方法，其次是contains方法，二者应该没有实际区别，contains是调用indexOf来实现的。
+        //     // Apache的StringUtils为第三方库，相对慢一些。最慢的是使用了正则的Pattern的方法，这不难理解，正则引擎的匹配是比较耗性能的。
+        //     else if (t.indexOf("{") == -1) // 不包含{}，则直接以,为分隔，组成set
+        //         return Arrays.stream(t.split(",")).collect(Collectors.toSet());
+        //     int cnt = 0, bgn = -1, end = -1; // 统计与计数：{ } 出现的位置或个数
+        //     for (int i = 0; i < n; i++) {
+        //         if (s[i] == '{') {
+        //             if (bgn == -1) bgn = i;
+        //             cnt++;
+        //         } else if (s[i] == '}') 
+        //             cnt--;
+        //         if (cnt == 0) {
+        //             if (bgn != -1 && end == -1) end = i; // }
+        //             if (s[i] == ',') { // cnt = 0, & s[i] = ','说明，并没有出现在任何一对{}之间，因此可以就此，将t分为左右两个片段，并返回答案
+        //                 ans.addAll(expr(t.substring(0, i)));
+        //                 ans.addAll(expr(t.substring(i+1)));
+        //                 return ans;
+        //             }
+        //         }
+        //     }
+        //     String pre = (bgn == 0 ? "" : t.substring(0, bgn));
+        //     Set<String> l = expr(t.substring(bgn+1, end));
+        //     Set<String> r = expr(t.substring(end+1)); // {},{} : , ???
+        //     if (l.isEmpty()) l.add("");
+        //     if (r.isEmpty()) r.add("");
+        //     for (String one : l) 
+        //         for (String two : r) {
+        //             String tmp = pre + one + two;
+        //             ans.add(tmp);
+        //         }
+        //     return ans;
+        // }
+        // public List<String> braceExpansionII(String t) {
+        //     int n = t.length();
+        //     if (t.indexOf("{") == -1)
+        //         return Arrays.stream(t.split(",")).collect(Collectors.toList());
+        //     char [] s = t.toCharArray();
+        //     List<String> ans = new ArrayList<>();
+        //     Deque<Character> st = new ArrayDeque<>();
+        //     for (int i = 0, j = 0; i < n; i++) {
+        //         if (s[i] == '{') st.offerLast(s[i]);
+        //         else if (s[i] == '}') {
+        //             st.pollLast();
+        //             if (st.isEmpty() && (i < n-1 && s[i+1] == ',' || i == n-1)) {
+        //                 ans.addAll(helper(t.substring(j, i+1)));
+        //                 j = i+2;
+        //             }
+        //         } else if (st.isEmpty() && i == n-1)
+        //             ans.addAll(helper(t.substring(j, i+1)));
+        //     }
+        //     return ans;
+        // }
+        // List<String> helper(String t) {
+        //     Deque<String> q = new ArrayDeque<>();
+        //     q.offerLast(t);
+        //     Set<String> ans = new HashSet<>();
+        //     StringBuilder s = new StringBuilder();
+        //     while (!q.isEmpty()) {
+        //         String cur = q.pollLast();
+        //         if (cur.indexOf("{") == -1) {
+        //             ans.add(cur);
+        //             continue;
+        //         }
+        //         int i = 0, l = 0, r = 0;
+        //         while (cur.charAt(i) != '}') {
+        //             if (cur.charAt(i) == '{') l = i;
+        //             i++;
+        //         }
+        //         r = i;
+        //         String bef = cur.substring(0, l);
+        //         String aft = cur.substring(r+1);
+        //         String [] str = cur.substring(l+1, r).split(",");
+        //         for (String v : str) {
+        //             s.setLength(0);
+        //             q.offerLast(s.append(bef).append(v).append(aft).toString());
+        //         }
+        //     }
+        //     List<String> res = new ArrayList<>(ans);
+        //     Collections.sort(res);
+        //     return res;
+        // }
+
+        // public int maxValueAfterReverse(int[] a) {
+        //     int n = a.length, ans = 0, sum = 0;
+        //     if (n == 1) return 0;
+        //     for (int i = 0; i < n-1; i++) // 不发生交换情况下的解
+        //         sum += Math.abs(a[i] - a[i+1]);
+        //     for (int i = 0; i < n-1; i++) // 发生交换、但交换的左端点为数组头的case, 交换的区间左端点是数组的左边界
+        //         ans = Math.max(ans, sum + Math.abs(a[i+1]-a[0]) - Math.abs(a[i+1]-a[i]));
+        //     for (int i = n-1; i > 0; i--) // 发生交换、但交换的左端点为数组尾的case, 交换的区间右端点是数组的右边界
+        //         ans = Math.max(ans, sum + Math.abs(a[n-1] - a[i-1]) - Math.abs(a[i] - a[i-1]));
+        //     // 交换区间左右端点在数组内部
+        //     int l = 1; // 1.找出左端点b：每两个相邻的，选最大的那一个数；在所有相邻对中，选最小的
+        //     for (int i = 2; i < n; i++) 
+        //         if (Math.max(a[i], a[i-1]) < Math.max(a[l], a[l-1])) l = i;
+        //     int r = 0; // 2.找出右端点c：每两个相邻的，先最小的那一个数；在所有相邻对中，选最大的
+        //     for (int i = 1; i < n-1; i++) 
+        //         if (Math.min(a[i], a[i+1]) > Math.min(a[r], a[r+1])) r = i;
+        //     ans = Math.max(ans, sum + 2 * (Math.min(a[r], a[r+1]) - Math.max(a[l], a[l-1])));
+        //     return ans;
+        // }
+
+        // int [][] rowRank;
+        // int [][] colRank;
+        // int [][] arr;
+        // int [] f;
+        // int [] v;
+        // int [] row;
+        // int [] col;
+        // int [][] tag;
+        // int m, n, mn;
+        // Node[] a;
+        // Node[] b;
+        // Node [] c;
+        // public int[][] matrixRankTransform(int [][] ma) {
+        //     m = ma.length;
+        //     n = ma[0].length; mn = m * n;
+        //     rowRank = new int [m][n];
+        //     colRank = new int [m][n];
+        //     arr = new int [m][n];
+        //     f = new int [mn];
+        //     v = new int [mn];
+        //     row = new int [m];
+        //     col = new int [n];
+        //     tag = new int [m][n];
+        //     a = new Node[mn];
+        //     b = new Node[n];
+        //     c = new Node[m];
+        //     int p = 0, pp = 0;
+        //     for (int i = 0; i < m; i++) 
+        //         for (int j = 0; j < n; j++)
+        //             a[p++] = new Node(i, j, ma[i][j]);
+        //     Arrays.sort(a, (x, y)->x.v - y.v); // 按值升序排列
+        //     for (int i = 0; i < p; i++) {
+        //         tag[a[i].i][a[i].j] = i;    // 新的rank数组
+        //         f[i] = i;
+        //     }
+        //     for (int i = 0; i < m; i++) {   // 遍历行
+        //         pp = 0;
+        //         for (int j = 0; j < n; j++) // 遍历列
+        //             b[pp++] = new Node(i, j, ma[i][j]);
+        //         Arrays.sort(b, (x, y)->x.v - y.v);
+        //         for (int j = 1; j < pp; j++) {
+        //             if (b[j].v != b[j-1].v) continue;
+        //             else {
+        //                 int rx = find(tag[i][b[j-1].j]);
+        //                 int ry = find(tag[i][b[j].j]);
+        //                 f[rx] = ry;
+        //             }
+        //         }
+        //     }
+        //     for (int i = 0; i < n; i++) { // 遍历列
+        //         pp = 0;
+        //         for (int j = 0; j < m; j++) // 遍历行
+        //             c[pp++] = new Node(j, i, ma[j][i]);
+        //         Arrays.sort(c, (x,y)->x.v - y.v);
+        //         for (int j = 1; j < pp; j++) {
+        //             if (c[j].v != c[j-1].v) continue;
+        //             else {
+        //                 int rx = find(tag[c[j-1].i][i]);
+        //                 int ry = find(tag[c[j].i][i]);
+        //                 f[rx] = ry;
+        //             }
+        //         }
+        //     }
+        //     int bgn = 0;
+        //     for (int i = 0; i < p; i++) {
+        //         int rank = Math.max(row[a[i].i], col[a[i].j]) + 1;
+        //         int ff = find(i);
+        //         if (v[ff] < rank) v[ff] = rank;
+        //         if (i == p-1 || a[i+1].v != a[i].v) {
+        //             for (int j = bgn; j <= i; j++) {
+        //                 int xx = v[find(j)];
+        //                 rowRank[a[j].i][a[j].j] = xx;
+        //                 row[a[j].i] = xx;
+        //                 col[a[j].j] = xx;
+        //             }
+        //             bgn = i + 1;
+        //         }
+        //     }
+        //     int [][] ans = new int [m][n];
+        //     for (int i = 0; i < m; i++) 
+        //         for (int j = 0; j < n; j++) 
+        //             ans[i][j] = rowRank[i][j];
+        //     return ans;
+        // }
+        // int find(int x) {
+        //     if (f[x] != x)
+        //         f[x] = find(f[x]);
+        //     return f[x];
+        // }
+        // void merge(int x, int y) {
+        //     int fx = find(x);
+        //     int fy = find(y);
+        //     f[fy] = fx;
+        // }
+        // public class Node {
+        //     int i;
+        //     int j;
+        //     int v;
+        //     Node() {}
+        //     Node(int x, int y, int val) {
+        //         this.i = x;
+        //         this.j = y;
+        //         this.v = val;
+        //     }
+        // }
+        // public class UnionFind {
+        //     int [] par;
+        //     int [] rank;
+        //     int n;
+        //     int cnt;
+        //     public UnionFind(int x) {
+        //         n = x;
+        //         cnt = n;
+        //         par = new int[n];
+        //         rank = new int[n];
+        //         for (int i = 0; i < n; i++) 
+        //             par[i] = i;
+        //     }
+        //     public int find(int val) {
+        //         while (val != par[val]) {
+        //             par[val] = par[par[val]];
+        //             val = par[val];
+        //         }
+        //         return val;
+        //     }
+        //     public void merge(int p, int q) {
+        //         int rp = find(p);
+        //         int rq = find(q);
+        //         if (rank[rp] < rank[rq]) 
+        //             swap(rp, rq);
+        //         par[rq] = rp;
+        //         rank[rp] += rank[rq];
+        //         --cnt;
+        //     }
+        //     public boolean sameGroup(int x, int y) {
+        //         return find(x) == find(y);
+        //     }
+        //     public int getCnt() {
+        //         return cnt;
+        //     }
+        //     private void swap(int x, int y) {
+        //         int tmp = x;
+        //         x = y;
+        //         y = tmp;
+        //     }
+        // }
+
+        // Map<Integer, List<Integer>> idx; // idx 存储数组出现元素种类 以及该元素下标索引
+        // Node root; // 线段树的根节点
+        // int key = 0, cnt = 0; // key 所查找的区域众数; count 所查找的区域众数出现次数, 
+        // public MajorityChecker(int[] a) {
+        //     idx = new HashMap<>(); // idx 存储数组出现元素种类 以及该元素下标索引
+        //     for (int i = 0; i < a.length; i++)
+        //         idx.computeIfAbsent(a[i], z -> new ArrayList<>()).add(i);
+        //     root = buildTree(a, 0, a.length-1);
+        // }
+        // public int query(int left, int right, int threshold) {
+        //     key = 0; cnt = 0; // 初始化 所查询众数key 及辅助判断的计数cnt
+        //     searchTree(root, left, right); // 查询线段树
+        //     // 如果查询区域没有众数 即key没被更改; 或者,
+        //     // 所查询出来的众数 在原数组中根本没有超出阈值的能力
+        //     if (key == 0 || idx.get(key).size() < threshold) return -1;
+        //     // 上确界 排序数组中 第一个大于right的下标
+        //     int r = upper_bound(idx.get(key), right);
+        //     // 下确界 排序数组中 第一个大于等于left的下标
+        //     int l = lower_bound(idx.get(key), left);
+        //     cnt = r - l;
+        //     return cnt >= threshold ? key : -1;
+        // }
+        // int upper_bound(List<Integer> list, int v) { // 排序数组中 第一个大于tar的下标
+        //     int l = 0, r = list.size();
+        //     while (l < r) {
+        //         int mid = l + (r - l) / 2;
+        //         if (list.get(mid) <= v) l = mid + 1;
+        //         else r = mid;
+        //     }
+        //     return l;
+        // }
+        // int lower_bound(List<Integer> list, int v) { // 排序数组中 第一个大于等于tar的下标
+        //     int l = 0, r = list.size();
+        //     while (l < r) {
+        //         int mid = l + (r - l) / 2;
+        //         if (list.get(mid) < v) l = mid+1;
+        //         else r = mid;
+        //     }
+        //     return l;
+        // }
+        // void searchTree(Node root, int l, int r) {
+        //     if (root == null || l > r) return ;
+        //     if (root.l > r || root.r < l) return ;
+        //     if (root.l >= l && root.r <= r) { // 当查询边界被节点边界覆盖，该节点就是查询区域
+        //         if (key == root.v) cnt += root.cnt;
+        //         else if (cnt <= root.cnt) {
+        //             key = root.v;
+        //             cnt = root.cnt - cnt;
+        //         } else cnt = cnt - root.cnt;
+        //         return ;
+        //     }
+        //     int mid = (root.l + root.r) / 2; // 这两个查询条件再好好想想 ！！！！！！！！！！！！！！！
+        //     if (l <= mid)   // root.l <= l <= mid 左节点也可以是查询区域
+        //         searchTree(root.left, l, r);
+        //     if (r >= mid+1) // mid+1 <= r <= root.r 右节点也可以是查询区域
+        //         searchTree(root.right, l, r);
+        // }
+        // Node buildTree(int [] a, int l, int r) {
+        //     if (l > r) return null;
+        //     Node root = new Node(l, r); // 初始一个线段树的根节点
+        //     if (l == r) { // 叶子节点  
+        //         root.v = a[l];
+        //         root.cnt = 1;
+        //         return root;
+        //     }
+        //     int mid = (l + r) / 2;
+        //     root.left = buildTree(a, l, mid);
+        //     root.right = buildTree(a, mid+1, r);
+        //     makeRoot(root); // 整合父节点
+        //     return root;
+        // }
+        // void makeRoot(Node r) { // 整合父节点
+        //     if (r == null) return ;
+        //     if (r.left != null) { // 如果该节点有左子节点 该节点的值"先"等于左子节点
+        //         r.v = r.left.v;
+        //         r.cnt = r.left.cnt;
+        //     }
+        //     if (r.right != null) { // 如果该节点还有右子节点 融合父节点和子节点
+        //         if (r.v == r.right.v)
+        //             r.cnt = r.cnt + r.right.cnt;
+        //         else {
+        //             if (r.cnt >= r.right.cnt)
+        //                 r.cnt = r.cnt - r.right.cnt;
+        //             else {
+        //                 r.v = r.right.v;
+        //                 r.cnt = r.right.cnt - r.cnt;
+        //             }
+        //         }
+        //     }
+        // }
+        // class Node {
+        //     int l, r, v, cnt;
+        //     Node left, right;
+        //     public Node(int l, int r) {
+        //         this.l = l; this.r = r;
+        //         v = 0; cnt = 0;
+        //         left = null; right = null;
+        //     }
+        // }
         
-    }
+        // Stack<ArrayDeque<Integer>> ss; // BUG: 不知道哪里写错了，改天再回来看这个
+        // TreeSet<Integer> si = new TreeSet<>(); // 这里记的是除了最后一个外，所有不满的deque下标编号
+        // int capacity;
+        // public DinnerPlates(int capacity) {
+        //     // public hdsix(int capacity) {
+        //     this.capacity = capacity;
+        //     ss = new Stack<>();
+        // }
+        // public void push(int val) {
+        //     if (si.size() != 0) {
+        //         int idx = si.iterator().next();
+        //         ss.get(idx).offerLast(val);
+        //         if (ss.get(idx).size() == capacity)
+        //             si.remove(idx);
+        //     } else {
+        //         if (ss.isEmpty() || ss.peek().size() == capacity) {
+        //             ss.add(new ArrayDeque<>());
+        //             ss.peek().offerLast(val);
+        //         } else ss.peek().offerLast(val);
+        //     }
+        // }
+        // public int pop() {
+        //     if (!ss.isEmpty()) {
+        //         // while (!ss.isEmpty() && ss.peek().isEmpty()) {
+        //         //     si.remove(ss.size()-1);
+        //         //     ss.pop();
+        //         // }
+        //         int top = ss.peek().pollLast();
+        //         while (!ss.isEmpty() && ss.peek().isEmpty()) {
+        //             si.remove(ss.size()-1);
+        //             ss.pop();
+        //         }
+        //         return top;
+        //     }
+        //     return -1;
+        // }
+        // public int popAtStack(int idx) {
+        //     if (idx >= ss.size() || ss.get(idx).size() == 0) return -1;
+        //     if (idx == ss.size()-1)
+        //         return ss.peek().pollLast();
+        //         // return ss.get(idx).pollLast();
+        //     si.add(idx); // ?
+        //     return ss.get(idx).pollLast();
+        // }
+
+        // public int minPushBox(char [][] g) { // BUG: TLE 这次写，思路变简洁了，但解这个题应该还需要再简化一下思路
+        //     m = g.length;
+        //     n = g[0].length;
+        //     tar = new int [2];
+        //     int bi = -1, bj = -1, pi = -1, pj = -1; // box player
+        //     for (int i = 0; i < m; i++) 
+        //         for (int j = 0; j < n; j++) 
+        //             if (g[i][j] == 'B') { // B
+        //                 bi = i; bj = j;
+        //                 g[i][j] = '.';
+        //             } else if (g[i][j] == 'S') { // S
+        //                 pi = i; pj = j;
+        //                 g[i][j] = '.';
+        //             } else if (g[i][j] == 'T') {
+        //                 tar[0] = i; tar[1] = j;
+        //             }
+        //     boolean [][][][] vis = new boolean [m][n][m][n];
+        //     boolean [][] vd = new boolean [m][n];
+        //     Deque<int []> q = new ArrayDeque<>();
+        //     for (int [] d : dirs) {
+        //         int i = bi + d[0], j = bj + d[1];
+        //         if (i < 0 || i >= m || j < 0 || j >= n || g[i][j] == '#') continue;
+        //         if (dfs(pi, pj, i, j, bi, bj, vd, g)) {
+        //             q.offerLast(new int [] {bi, bj, i, j});
+        //             vis[bi][bj][i][j] = true;
+        //         }
+        //     }
+        //     int cnt = 0;
+        //     while (!q.isEmpty()) {
+        //         for (int z = q.size()-1; z >= 0; z--) {
+        //             int [] cur = q.pollFirst();
+        //             int i = cur[0], j = cur[1], x = cur[2], y = cur[3];
+        //             for (int [] d : dirs) { // 这里面可能会有大量的重复计算，导致速度变慢
+        //                 int a = i + d[0], b = j + d[1]; // 箱子 现状态下的 目标位置
+        //                 if (a < 0 || a >= m || b < 0 || b >= n || g[a][b] == '#') continue;
+        //                 int c = i - d[0], e = j - d[1]; // 人 现状态下 随箱子的目标位置
+        //                 if (c < 0 || c >= m || e < 0 || e >= n || g[c][e] == '#') continue;
+        //                 if (vis[a][b][c][e]) continue; 
+        //                 if (dfs(x, y, c, e, i, j, vd, g)) { // 如果每一个方向上都需要dfs来计算某个位置是否可达，也是速度变慢的主要原因之一
+        //                     if (a == tar[0] && b == tar[1]) return cnt + 1;
+        //                     q.offerLast(new int [] {a, b, c, e});
+        //                     vis[a][b][c][e] = true;
+        //                 }
+        //             }
+        //         }
+        //         cnt++;
+        //     }
+        //     return -1;
+        // }
+        // int [][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+        // int m, n;
+        // int [] tar;
+        // boolean dfs(int i, int j, int ti, int tj, int bi, int bj, boolean [][] vis, char [][] a) {
+        //     if (i < 0 || i >= m || j < 0 || j >= n || a[i][j] == '#' || vis[i][j]) return false;
+        //     if (i == bi && j == bj) return false; // 不能从箱子上过
+        //     if (i == ti && j == tj) return true;
+        //     vis[i][j] = true;
+        //     for (int [] d : dirs) 
+        //         if (dfs(i+d[0], j +d[1], ti, tj, bi, bj, vis, a)) {
+        //             vis[i][j] = false;
+        //             return true;
+        //         }
+        //     vis[i][j] = false;
+        //     return false;
+        // }
+
+//         public int shortestPath(int[][] a, int k) {
+//             int [][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+//             int m = a.length, n = a[0].length;
+//             int [][] vis = new int [m][n]; 
+//             Deque<int []> q = new ArrayDeque<>();
+//             q.offerLast(new int [] {0, 0, k});
+//             int cnt = 0;
+//             while (!q.isEmpty()) {
+//                 for (int z = q.size()-1; z >= 0; z--) {
+//                     int [] cur = q.pollFirst();
+//                     if (cur[0] == m-1 && cur[1] == n-1) return cnt;
+//                     for (int [] d : dirs) {
+//                         int i = cur[0] + d[0], j = cur[1] + d[1];
+//                         if (i >= 0 && i < m && j >= 0 && j < n) {
+// // 1.当前格子为非障碍物时，普通路径可以走访问状态为0的格子，走过后，访问状态更新为1
+// // 3.当前格子为非障碍物时，普通路径可以走访问状态为2的格子，走过后，访问状态更新为1
+//                             if (a[i][j] == 0 && (vis[i][j] == 0 || vis[i][j] == 2 && cur[2] == k)) { // 当前格为非障碍物
+//                                 if (vis[i][j] == 0) // 普通路径：可以走状态为0的格子，走过后变为1 or 2
+//                                     // 2.当前格子为非障碍物时，穿越路径可以走访问状态为0的格子，走过后，访问状态更新为2 
+//                                     vis[i][j] = (cur[2] == k ? 1 : 2);
+//                                 else vis[i][j] = 1;
+//                                 q.offerLast(new int [] {i, j, cur[2]});
+//                                 // 4.当前格子为障碍物时，如果还保有穿越次数，并且该格子的访问状态为0时，所有路径可以通过此处，
+//                                 //     通过后，该路径变为穿越路径，并且当前格子访问状态更新为1（更新为2也无所谓）                                
+//                             } else if (a[i][j] == 1 && vis[i][j] == 0 && cur[2] > 0) {
+//                                 vis[i][j] = 2;
+//                                 q.offerLast(new int [] {i, j, cur[2]-1});
+//                             }
+//                         }
+//                     }
+//                 }
+//                 cnt++;
+//             }
+//             return -1;
+//         }
+        // public int shortestPath(int[][] a, int k) { // 这个思路极为简洁，但速度跟上一个方法比，会慢很多
+        //     if (a.length <= 1 && a[0].length <= 1) return 0;
+        //     int [][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+        //     int m = a.length, n = a[0].length;
+        //     boolean [][][] vis = new boolean [m][n][k+1];
+        //     Deque<int []> q = new ArrayDeque<>();
+        //     q.offerLast(new int [] {0, 0, 0}); // 前两个数代表坐标，最后一个数代表已经移除了多少个障碍物
+        //     vis[0][0][0] = true;
+        //     int cnt = 0;
+        //     while (!q.isEmpty()) {
+        //         for (int z = q.size()-1; z >= 0; z--) {
+        //             int [] cur = q.pollFirst();
+        //             for (int [] d : dirs) {
+        //                 int i = cur[0] + d[0], j = cur[1] + d[1], x = -1;
+        //                 if (i < 0 || i >= m || j < 0 || j >= n) continue;
+        //                 x = cur[2] + a[i][j];
+        //                 if (k >= x && !vis[i][j][x]) {
+        //                     if (i == a.length-1 && j == a[0].length-1) return cnt+1;
+        //                     q.offerLast(new int [] {i, j, x});
+        //                     vis[i][j][x] = true;
+        //                 }
+        //             }
+        //         }
+        //         cnt++;
+        //     }
+        //     return -1;
+        // }
+
+        // public int maxCandies(int[] status, int[] candies, int[][] keys, int[][] containedBoxes, int[] initialBoxes) {
+        //     boolean [] hasKey = new boolean[status.length];
+        //     Queue<Integer> q = new LinkedList<>();
+        //     for (int box : initialBoxes) q.add(box);
+        //     int res = 0;
+        //     while (q.size() > 0) {
+        //         int size = q.size();
+        //         boolean isValid = false;
+        //         int cur = 0; // cur box
+        //         while (size-- > 0) {
+        //             cur = q.poll();
+        //             if (status[cur] == 1 || hasKey[cur]) {
+        //                 res += candies[cur];
+        //                 for (int k : keys[cur]) 
+        //                     hasKey[k] = true;
+        //                 for (int box : containedBoxes[cur]) 
+        //                     q.add(box);
+        //                 isValid = true;
+        //             } else {
+        //                 q.add(cur); // 当前盒子打不开时，将盒子重新加回到Queue中
+        //             }
+        //         }
+        //         if (!isValid) break;
+        //     }
+        //     return res;
+        // }
+        // // public int maxCandies(int[] status, int[] candies, int[][] keys, int[][] containedBoxes, int[] initialBoxes) {
+        // public int maxCandies(int[] s, int[] c, int[][] key, int[][] box, int[] ini) { // bfs
+        //     int n = s.length, ans = 0;
+        //     boolean [] hasKey = new boolean [n];
+        //     ArrayDeque<Integer> q = new ArrayDeque<>();
+        //     for (int v : ini) q.offerLast(v);
+        //     while (!q.isEmpty()) {
+        //         boolean valid = false;
+        //         for (int z = q.size()-1; z >= 0; z--) {
+        //             int cur = q.pollFirst();
+        //             if (s[cur] == 1 || hasKey[cur]) {
+        //                 ans += c[cur];
+        //                 for (int k : key[cur]) hasKey[k] = true;
+        //                 for (int b : box[cur]) q.offerLast(b);
+        //                 valid = true;
+        //             } else q.add(cur); // 盒子打不开，再把它放回去重新轮巡
+        //         }
+        //         if (!valid) break;
+        //     }
+        //     return ans;
+        // }
+
+        // public boolean isTransformable(String ss, String t) { 
+        //     char [] s = ss.toCharArray();
+        //     ArrayDeque<Integer> [] q = new ArrayDeque[10];
+        //     for (int i = 0; i < 10; i++)
+        //         q[i] = new ArrayDeque<>();
+        //     for (int i = 0; i < ss.length(); i++) 
+        //         q[s[i]-'0'].offerLast(i);
+        //     for (char c : t.toCharArray()) {
+        //         int i = c - '0';
+        //         if (q[i].isEmpty()) return false;
+        //         for (int j = 0; j < i; j++) 
+        //             if (!q[j].isEmpty() && q[j].peekFirst() < q[i].peekFirst())
+        //                 return false;
+        //         q[i].pollFirst();
+        //     }
+        //     return true;
+        // }
+
+        // public int[] maximizeXor(int [] a, int [][] q) {
+        //     int n = a.length, m = q.length, j = 0;
+        //     Arrays.sort(a);
+        //     List<int []> li = new ArrayList<>();
+        //     for (int i = 0; i < m; i++) 
+        //         li.add(new int [] {i, q[i][0], q[i][1]}); // i, xi, mi, needs a[j] <= mi
+        //     Collections.sort(li, (x, y)->x[2] - y[2]);
+        //     int [] ans = new int [m];
+        //     // Arrays.fill(ans, -1); //
+        //     Trie t = new Trie();
+        //     for (int i = 0; i < m; i++) {
+        //         int [] cur = li.get(i);
+        //         if (j == 0 && cur[2] < a[j]) continue;
+        //         while (j < n && a[j] <= cur[2]) t.insert(a[j++]);
+        //         ans[cur[0]] = t.search(cur[1]);
+        //     }
+        //     return ans;
+        // }
+        // class Trie {
+        //     Node root;
+        //     public Trie() {
+        //         root = new Node();
+        //     }
+        //     // public int getMaxXORWithVal(int v) { // bug bug
+        //     //     Node r = root;
+        //     //     return getMaxXORWithValRecursive(v, r, 31);
+        //     // }
+        //     // int getMaxXORWithValRecursive(int v, Node r, int i) {
+        //     //     if (i < 0) return 0;
+        //     //     int j = -1, ans = 0;
+        //     //     if (r == null || r.next == null) return 0;
+        //     //     int curV = ((1 << i) & v) > 0 ? 1 : 0; // v 在当前位上的取值： 1 or 0
+        //     //     if (r.next == null) return curV;
+        //     //     if (curV == 1) { 
+        //     //         if (r.next[0] != null)
+        //     //             ans = (1 << i) | getMaxXORWithValRecursive(v, r.next[0], i-1);
+        //     //         else if (r.next[1] != null)
+        //     //             ans = getMaxXORWithValRecursive(v, r.next[1], i-1);
+        //     //     } else { // curV = 0
+        //     //         if (r.next[1] != null)
+        //     //             ans = (1 << i) | getMaxXORWithValRecursive(v, r.next[0], i-1);
+        //     //         else if (r.next[0] != null)
+        //     //             ans = getMaxXORWithValRecursive(v, r.next[0], i-1);
+        //     //     }
+        //     //     return ans;
+        //     // }
+        //     public int search(int v) {
+        //         int ans = 0;
+        //         Node r = root;
+        //         for (int i = 31; i >= 0; i--) {
+        //             int j = (v >> i) & 1;
+        //             if (r == null) return -1;
+        //             if (r.next[j ^ 1] != null) {
+        //                 ans |= 1 << i;
+        //                 r = r.next[j ^ 1];
+        //             } else r = r.next[j & 1];
+        //         }
+        //         return ans;
+        //     }
+        //     public void insert(int v) {
+        //         Node r = root;
+        //         for (int i = 31; i >= 0; i--) {
+        //             int j = (v >> i) & 1;
+        //             if (r.next[j] == null)
+        //                 r.next[j] = new Node();
+        //             r = r.next[j];
+        //         }
+        //     }
+        //     class Node {
+        //         Node [] next;
+        //         public Node() {
+        //             next = new Node[2];
+        //         }
+        //     }
+        // }
+
+        public int makeStringSorted(String s) {
+        
+        }
+     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        // int [][] a = new int [][] {{0,1,2,3,4},{2,3,4},{4,0,1,2,3}};
-        int [][] a = new int [][] {{913,510,506,730,880,145,269,976,636,667,355,406,46,309,149,986,314,173,35,786,677,389,825,897,80,569,596,268,523,941,187,444,411,55,613,974,457,179,464,533,503,51,313,804,494,122,608,85,654,393,727,86,448,380,848,227,430,331,948,681,864,695,386,354,716,971,83,528,751,54,944,441,77,573,38,190,863,904,215,423,106,397,223,211,858,443,544,466,541,338,244,365,41,747,992,781,479,567,866,32,292,801,472,560,694,851,196,831,325,779,737,926,283,318,20,350,361,512,977,720,333,509,228,330,208,290,336,604,384,488,165,240,501,591,920,576,332,507,890,931,329,61,154,912,427,714,561,59,584,140,353,914,713,270,731,692,828,829,929,28,812,440,186,638,889,185,241,998,750,219,649,137,853,738,982,666,505,151,19,793,597,34,490,985,193,775,956,838,249,961,669,857,709,264,937,255,133,777,822,99,867,693,275,847,625,679,495,536,823,155,454,673,575,653,66,141,722,342,598,31,92,621,928,390,585,3,792,946,826,983,617,873,980,565,47,610,180,230,144,698,462,13,242,453,374,73,930,373,9,237,633,364,127,650,687,459,538,918,312,485,903,159,908,212,60,174,404,949,978,407,644,113,748,950,136,524,774,477,586,123,433,258,33,845,429,899,753,434,383,274,840,267,532,834,696,958,830,370,21,87,712,301,239,2,813,463,114,859,339,819,514,537,924,628,735,672,766,319,251,547,306,745,282,778,743,566,357,218,199,780,755,17,942,960,648,795,426,917,726,993,82,376,742,233,439,68,221,932,238,191,194,758,571,701,540,981,65,381,486,839,662,497,768,962,172,594,200,849,344,952,142,799,26,95,916,367,202,682,243,11,707,771,217,741,422,770,181,45,349,216,892,634,483,587,169,896,62,518,939,475,415,401,44,277,88,105,345,590,531,733,307,431,554,878,476,321,935,25,762,48,496,498,936,854,868,671,728,678,419,821,808,539,220,579,652,715,189,317,656,645,451,188,405,158,417,925,740,81,222,129,911,388,250,639,706,470,265,534,456,806,520,347,248,206,446,861,400,907,796,157,247,413,736,279,299,303,789,623,308,837,79,395,615,311,810,131,968,824,461,964,261,609,152,117,63,209,870,548,542,375},{375,542,548,870,209,63,117,152,609,261,964,461,824,968,131,810,311,615,395,79,837,308,623,789,303,299,279,736,413,247,157,796,907,400,861,446,206,248,347,520,806,456,534,265,470,706,639,250,388,911,129,222,81,740,925,417,158,405,188,451,645,656,317,189,715,652,579,220,539,808,821,419,678,728,671,868,854,936,498,496,48,762,25,935,321,476,878,554,431,307,733,531,590,345,105,88,277,44,401,415,475,939,518,62,896,169,587,483,634,892,216,349,45,181,770,422,741,217,771,707,11,243,682,202,367,916,95,26,799,142,952,344,849,200,594,172,962,768,497,662,839,486,381,65,981,540,701,571,758,194,191,238,932,221,68,439,233,742,376,82,993,726,917,426,795,648,960,942,17,755,780,199,218,357,566,743,778,282,745,306,547,251,319,766,672,735,628,924,537,514,819,339,859,114,463,813,2,239,301,712,87,21,370,830,958,696,834,532,267,840,274,383,434,753,899,429,845,33,258,433,123,586,477,774,524,136,950,748,113,644,407,978,949,404,174,60,212,908,159,903,485,312,918,538,459,687,650,127,364,633,237,9,373,930,73,374,453,242,13,462,698,144,230,180,610,47,565,980,873,617,983,826,946,792,3,585,390,928,621,92,31,598,342,722,141,66,653,575,673,454,155,823,536,495,679,625,847,275,693,867,99,822,777,133,255,937,264,709,857,669,961,249,838,956,775,193,985,490,34,597,793,19,151,505,666,982,738,853,137,649,219,750,998,241,185,889,638,186,440,812,28,929,829,828,692,731,270,713,914,353,140,584,59,561,714,427,912,154,61,329,931,890,507,332,576,920,591,501,240,165,488,384,604,336,290,208,330,228,509,333,720,977,512,361,350,20,318,283,926,737,779,325,831,196,851,694,560,472,801,292,32,866,567,479,781,992,747,41,365,244,338,541,466,544,443,858,211,223,397,106,423,215,904,863,190,38,573,77,441,944,54,751,528,83,971,716,354,386,695,864,681,948,331,430,227,848,380,448,86,727,393,654,85,608,122,494,804,313,51,503,533,464,179,457,974,613,55,411,444,187,941,523,268,596,569,80,897,825,389,677,786,35,173,314,986,149,309,46,406,355,667,636,976,269,145,880,730,506,510,913}};
+        int []  a = new int []  {5, 2, 4, 6, 6, 3};
+        int [][] b = new int [][] {{12,4},{8,1},{6,3}};
 
-        int r = s.longestCommonSubpath(1000, a);
-        System.out.println("r: " + r);
+        int [] r = s.maximizeXor(a, b);
+        System.out.println(Arrays.toString(r));
     }
 }
 
-
-
-
-
-
+// char [][] a = new char [][] {{'.','.','#','.','.','.','.','#'},{'.','B','.','.','.','.','.','#'},{'.','.','S','.','.','.','.','.'},{'.','#','.','.','.','.','.','.'},{'.','.','.','.','.','.','.','.'},{'.','.','.','T','.','.','.','.'},{'.','.','.','.','.','.','.','#'},{'.','#','.','.','.','.','.','.'}}// hdsix s = new hdsix(2);
+// s.push(373);
+// s.push(86);
+// s.push(395);
+// s.push(306);
+// s.push(370);
+// s.push(94);
+// s.push(41);
+// s.push(17);
+// s.push(387);
+// s.push(403);
+// s.push(66);
+// s.push(82);
+// s.push(27);
+// s.push(335);
+// s.push(252);
+// s.push(6);
+// s.push(269);
+// s.push(231);
+// s.push(35);
+// s.push(346);
+// // s.push(1);
+// // s.push(2);
+// // s.push(3);
+// // s.push(4);
+// // s.push(7);
+// int r = s.popAtStack(4);
+// int r1 = s.popAtStack(6);
+// int r2 = s.popAtStack(2);
+// int r3 = s.popAtStack(5);
+// int r4 = s.popAtStack(2);
+// int r5 = s.popAtStack(2);
+// int r6 = s.popAtStack(7);
+// int r7 = s.popAtStack(9);
+// int r8 = s.popAtStack(8);
+// int r9 = s.popAtStack(1);
