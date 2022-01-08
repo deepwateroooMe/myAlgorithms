@@ -126,42 +126,27 @@ public class cmp {
         //         ans[idx++] = l.get(i);
         //     return ans;
         // }
-        public boolean possibleToStamp(int[][] a, int r, int c) { // r: stampHeight c: stampWidth 
+        public boolean possibleToStamp(int[][] a, int r, int c) { // r: stampHeight c: stampWidth  tle
             m = a.length;
             n = a[0].length;
-            // System.out.println("m: " + m);
-            // System.out.println("n: " + n);
-            int cnt = 0, i = 0, j = 0;
+            int cnt = 0, i = 0, j = 0, sum = 0;
+            for (int [] v : a) 
+                sum += Arrays.stream(v).sum();
             boolean [][] vis = new boolean [m][n];
-            // while (cnt < m * n && i+r <= m && j+c <= n) {
-            // while (cnt < m * n) {
-            //     boolean done = false;
-                for ( i = 0; i+r <= m && cnt < m*n; i++) {
-                    for ( j = 0; j+c <= n && cnt < m*n; j++) {
+            while (cnt < m * n-sum) {
+                boolean done = false;
+                for ( i = 0; i+r <= m && cnt < m*n-sum; i++) {
+                    for ( j = 0; j+c <= n && cnt < m*n-sum; j++) {
                         if (a[i][j] == 1 || vis[i][j]) continue;
-                        boolean done = false;
-                        System.out.println("\n i: " + i);
-                        System.out.println("j: " + j);
                         if (!vis[i][j] && canReplace(i, j, a, r, c)) {
                             done = true;
                             vis[i][j] = true;
                             cnt += getCnt(i, j, a, r, c);
-                            System.out.println("cnt: " + cnt);
                         }
-                        if (!done) return false;
                     }
                 }
-                // if (!done) return false;
-                // if (i+r > m || j+c > n) {
-                //     for (int x = i; x < m; x++) 
-                //         for (int y = j; y < n; y++) 
-                //             if (a[i][j] == 0) return false;
-                //     return true;
-                // }
-            // }
-            // for (int i = 0; i < m; i++) 
-            //     for (int j = 0; j < n; j++) 
-            //         if (a[i][j] == 0) return false;
+                if (!done) return false;
+            }
             return true;
         }
         int m, n;
@@ -195,7 +180,7 @@ public class cmp {
         for (int z = 0; z < a.length; ++z) 
             System.out.println(Arrays.toString(a[z]));
 
-        boolean r = s.possibleToStamp(a, 2, 2);
+        boolean r = s.possibleToStamp(a, 4, 3);
         System.out.println("r: " + r);
     }
 }
