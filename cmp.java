@@ -1,4 +1,4 @@
-import com.TreeNode;
+import com.ListNode;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,12 +14,72 @@ import static java.util.stream.Collectors.toMap;
 public class cmp {
     public static class Solution {
 
-        // public String firstPalindrome(String[] sa) {
-        //     for (String v : sa) 
-        //         if (isPal(v)) return v;
-        //     return "";
+        // public String capitalizeTitle(String title) {
+        //     String [] tmp = title.split(" ");
+        //     char [] ans =  new char [title.length()];
+        //     int idx = 0;
+        //     for (int i = 0; i < tmp.length; i++) {
+        //         String s = tmp[i];
+        //         if (s.length() < 3)
+        //             for (char c : s.toCharArray()) 
+        //                 ans[idx++] = Character.toLowerCase(c);
+        //         else {
+        //             ans[idx++] = Character.toUpperCase(s.charAt(0));
+        //             for (int j = 1; j < s.length(); j++) 
+        //                 ans[idx++] = Character.toLowerCase(s.charAt(j));
+        //         }
+        //         if (i < tmp.length-1) ans[idx++] = ' ';
+        //     }
+        //     return new String(ans);
         // }
-        // boolean isPal(String t) {
+
+        // public int pairSum(ListNode head) {
+        //     int n = 0, idx = 0, max = 0, i = 0, j;
+        //     ListNode r = head;
+        //     while (r != null) {
+        //         n++;
+        //         r = r.next;
+        //     }
+        //     int [] a = new int [n];
+        //     r = head;
+        //     while (r != null) {
+        //         a[idx++] = r.val;
+        //         r = r.next;
+        //     }
+        //     j = n-1;
+        //     while (i < j) {
+        //         max = Math.max(a[i] + a[j], max);
+        //         i++;
+        //         j--;
+        //     }
+        //     return max;
+        // }
+
+        // public int longestPalindrome(String[] sa) { // 题目没有注明，是需要考虑是否含有重复的: cc cl cc
+        //     Map<String, Integer> m = new HashMap<>();
+        //     Set<String> ss = new HashSet<>();
+        //     for (String s : sa) {
+        //         m.put(s, m.getOrDefault(s, 0) + 1);
+        //         ss.add(s);
+        //     }
+        //     int ans = 0, max = 0;
+        //     for (String k : m.keySet()) {
+        //         if (!ss.contains(k)) continue;
+        //         if (isPalindrome(k)) {
+        //             ans += 4 * (m.get(k) / 2);
+        //             max = Math.max(max, 2 * (m.get(k) % 2));
+        //             continue;
+        //         }
+        //         String re = new StringBuilder (k).reverse().toString();
+        //         if (m.containsKey(re)) {
+        //             ans += 4 * Math.min(m.get(k), m.get(re));
+        //             ss.remove(re);
+        //         }
+        //         ss.remove(k);
+        //     }
+        //     return ans + max;
+        // }
+        // boolean isPalindrome(String t) {
         //     int n = t.length(), i = 0, j = n-1;
         //     char [] s = t.toCharArray();
         //     while (i < j) 
@@ -27,49 +87,122 @@ public class cmp {
         //     return true;
         // }
 
-        // public String addSpaces(String t, int [] a) {
-        //     int n = a.length, m = t.length(), i = 0, j = 0, idx = 0;
-        //     char [] s = t.toCharArray();
-        //     char [] ans = new char [m + n]; // 比赛的时候只有分配固定长度地址这一点儿没想到就不许过tle，太过分了
-        //     while (idx < m + n) {
-        //         while (j < n && i < m && i < a[j] || j == n && i < m) 
-        //             ans[idx++] = s[i++];
-        //         if (i < m && j < n && i == a[j]) {
-        //             ans[idx++] = ' ';
-        //             ans[idx++] = s[i++];
-        //             j++;
+        // int getCnt(char [] s, char [] t, int idx) { // 数这个是干什么用的呢？
+        //     int cnt = 0;
+        //     for (int i = idx; i < idx + s.length; i++) {
+        //         if (t[i] == '*') continue;
+        //         t[i] = '*';
+        //         cnt++;
+        //     }
+        //     return cnt;
+        // }
+        // boolean canReplace(char [] s, char [] t, int idx) { // s[0, m-1] t[idx, idx+m-1]在t[i] !='*'的前提下是否一致
+        //     for (int i = idx; i < s.length + idx; i++) 
+        //         if (t[i] != '*' && t[i] != s[i-idx]) return false; // 这个序列的章不能盖上去
+        //     return true;
+        // }
+
+        // public int[] movesToStamp(String ss, String tt) { // todo: 这里还有一点儿没有想明白
+        //     int m = ss.length(), n = tt.length(), cnt = 0;
+        //     char [] s = ss.toCharArray();
+        //     char [] t = tt.toCharArray();
+        //     List<Integer> l = new ArrayList<>();
+        //     boolean [] vis = new boolean [n];
+        //     while (cnt < n) { // 对于序列 t 来说，最多只能更改n次？
+        //         boolean done = false;
+        //         for (int i = 0; i <= n-m && cnt < n; i++) { // 从前往后、从头向尾遍历
+        //             if (!vis[i] && canReplace(s, t, i)) {
+        //                 done = true;
+        //                 vis[i] = true;
+        //                 cnt += getCnt(s, t, i);
+        //                 l.add(i);
+        //             }
         //         }
+        //         if (!done) return new int [0];
         //     }
-        //     return new String(ans);
+        //     int [] ans = new int [l.size()];
+        //     int idx = 0;
+        //     for (int i = l.size()-1; i >= 0; i--) // 真正答案的顺序要从尾向头开始盖章
+        //         ans[idx++] = l.get(i);
+        //     return ans;
         // }
-
-        // public long getDescentPeriods(int[] a) {
-        //     int n = a.length, j = 0;
-        //     long ans = 0;
-        //     for (int i = 0; i < n-1; i++) {
-        //         j = i + 1;
-        //         if (a[j] != a[i]-1) continue;
-        //         while (j < n && a[j] == a[j-1]-1) j++;
-        //         ans += (long)(j-i) * (j-i-1) / 2;
-        //         i = j-1;
-        //     }
-        //     return ans + n;
-        // }
-
+        public boolean possibleToStamp(int[][] a, int r, int c) { // r: stampHeight c: stampWidth 
+            m = a.length;
+            n = a[0].length;
+            // System.out.println("m: " + m);
+            // System.out.println("n: " + n);
+            int cnt = 0, i = 0, j = 0;
+            boolean [][] vis = new boolean [m][n];
+            // while (cnt < m * n && i+r <= m && j+c <= n) {
+            // while (cnt < m * n) {
+            //     boolean done = false;
+                for ( i = 0; i+r <= m && cnt < m*n; i++) {
+                    for ( j = 0; j+c <= n && cnt < m*n; j++) {
+                        if (a[i][j] == 1 || vis[i][j]) continue;
+                        boolean done = false;
+                        System.out.println("\n i: " + i);
+                        System.out.println("j: " + j);
+                        if (!vis[i][j] && canReplace(i, j, a, r, c)) {
+                            done = true;
+                            vis[i][j] = true;
+                            cnt += getCnt(i, j, a, r, c);
+                            System.out.println("cnt: " + cnt);
+                        }
+                        if (!done) return false;
+                    }
+                }
+                // if (!done) return false;
+                // if (i+r > m || j+c > n) {
+                //     for (int x = i; x < m; x++) 
+                //         for (int y = j; y < n; y++) 
+                //             if (a[i][j] == 0) return false;
+                //     return true;
+                // }
+            // }
+            // for (int i = 0; i < m; i++) 
+            //     for (int j = 0; j < n; j++) 
+            //         if (a[i][j] == 0) return false;
+            return true;
+        }
+        int m, n;
+        int getCnt(int ii, int jj, int [][] a, int r, int c) {
+            int cnt = 0;
+            for (int i = ii; i < ii+r; i++) 
+                for (int j = jj; j < jj+c; j++) {
+                    if (a[i][j] == -1) continue;
+                    a[i][j] = -1;
+                    cnt++;
+                }
+            return cnt;
+        }
+        boolean canReplace(int ii, int jj, int [][] a, int r, int c) {
+            if (ii + r > m || jj + c > n) return false;
+            for (int i = ii; i < ii+r; i++) 
+                for (int j = jj; j < jj+c; j++) 
+                    if (a[i][j] == 1) return false;
+            return true;
+        }
     }
     public static void main (String[] args) {
         Solution s = new Solution ();
 
-        int [] a = new int [] {3, 2, 1, 7};
+        // int [][] a = new int [][] {{1,0,0,0},{0,1,0,0},{0,0,1,0},{0,0,0,1}};
+        int [][] a = new int [][] {{1,0,0,0},{1,0,0,0},{1,0,0,0},{1,0,0,0},{1,0,0,0}};
+        // int [][] a = new int [][] {{1,1,1,0},{0,0,0,1},{1,1,1,0},{1,1,0,0},{0,0,0,0},{0,1,0,1},{0,1,0,1},{1,1,1,0},{1,0,1,1},{0,0,0,1}};
+        // int [][] a = new int [][] {{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},{1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1}};
 
-        long r = s.getDescentPeriods(a);
+        System.out.println("a.length: " + a.length);
+        for (int z = 0; z < a.length; ++z) 
+            System.out.println(Arrays.toString(a[z]));
+
+        boolean r = s.possibleToStamp(a, 2, 2);
         System.out.println("r: " + r);
     }
 }
 
- // ListNode head = new ListNode(a[0]);
- // head.buildList(head, a);
- // head.printList(head);
+// ListNode head = new ListNode(a[0]);
+// head.buildList(head, a);
+// head.printList(head);
 
  // ListNode r = s.deleteMiddle(head);
  // r.printList(r);
