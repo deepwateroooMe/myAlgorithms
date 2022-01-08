@@ -1255,15 +1255,303 @@ public class mixed {
         //     return new int [] {left-1, i} ; // 第一个片段尾的位置、第二个片段尾的位置
         // }
 
+        // public int mostWordsFound(String[] sa) {
+        //     int ans = 0, cnt = 0;
+        //     for (String s : sa) {
+        //         if (s.length() == 0) continue;
+        //         int i = 0;
+        //         cnt = 0;
+        //         while (i < s.length()) {
+        //             while (i < s.length() && s.charAt(i) != ' ') i++;
+        //             if (i < s.length() && s.charAt(i) == ' ') {
+        //                 cnt++;
+        //                 i++;
+        //             }
+        //         }
+        //         ans = Math.max(ans, cnt + 1);
+        //     }
+        //     return ans;
+        // }
+
+        // public boolean canBeValid(String t, String ll) {
+        //     int n = t.length(), lcnt = 0, cnt = 0;
+        //     char [] s = t.toCharArray();
+        //     char [] l = ll.toCharArray();
+        //     if (n % 2 == 1) return false;
+        //     for (int i = 0; i < n; i++) {
+        //         if (l[i] == 1 && s[i] == ')') {
+        //             if (lcnt > 0) lcnt--; // locked '(' cnt
+        //             else if (cnt > 0) cnt--;
+        //             else return false;
+        //         } else if (l[i] == 0) cnt++;
+        //         else if (l[i] == 1 && s[i] == '(') lcnt++;
+        //     }
+        //     if (lcnt > 0 && lcnt > cnt) return false;
+        //     return true;
+        // }
+        // String a = "())(()(()(())()())(())((())(()())((())))))(((((((())(()))))(";
+        // String b ="100011110110011011010111100111011101111110000101001101001111";
+
+        // public boolean isSameAfterReversals(int v) {
+        //     if (v >= 10 && v % 10 == 0) return false;
+        //     return true;
+        // }
+
+        // public int[] executeInstructions(int n, int[] startPos, String s) {
+        //     int m = s.length();
+        //     this.n = n;
+        //     int [] ans = new int [m];
+        //     dir.put('U', new int [] {-1, 0});
+        //     dir.put('D', new int [] {1, 0});
+        //     dir.put('L', new int [] {0, -1});
+        //     dir.put('R', new int [] {0, 1});
+        //     for (int i = 0; i < m; i++) 
+        //         ans[i] = getCnt(startPos[0], startPos[1], s.substring(i));
+        //     return ans;
+        // }
+        // Map<Character, int []> dir = new HashMap<>();
+        // int n;
+        // int getCnt(int x, int y, String t) {
+        //     int m = t.length(), cnt = 0;
+        //     char [] s = t.toCharArray();
+        //     for (int i = 0; i < m; i++) {
+        //         int [] d = dir.get(s[i]);
+        //         x += d[0];
+        //         y += d[1];
+        //         if (x < 0 || x >= n || y < 0 || y >= n) return cnt;
+        //         cnt++;
+        //     }
+        //     return cnt;
+        // }
+
+        // public long[] getDistances(int[] a) { // tle 
+        //     int n = a.length;
+        //     long tmp = 0;
+        //     Map<Integer, List<Integer>> m = new HashMap<>();
+        //     for (int i = 0; i < n; i++) 
+        //         m.computeIfAbsent(a[i], z -> new ArrayList<>()).add(i);
+        //     long [] ans = new long [n];
+        //     for (int i = 0; i < n; i++) {
+        //         if (m.get(a[i]).size() == 1) continue;
+        //         List<Integer> idx = m.get(a[i]);
+        //         for (int j = 0; j < idx.size(); j++) { // O(N^2) tle
+        //             tmp = 0;
+        //             for (int k = 0; k < idx.size(); k++) {
+        //                 if (j == k) continue;
+        //                 tmp += Math.abs(idx.get(j) - idx.get(k));
+        //             }
+        //             ans[idx.get(j)] = tmp;
+        //         }
+        //     }
+        //     return ans;
+        // }
+
+        // public boolean checkString(String t) {
+        //     int n = t.length(), i = 0;
+        //     char [] s = t.toCharArray();
+        //     while (i < n && s[i] == 'a') i++;
+        //     if (i == n) return true;
+        //     while (i < n && s[i] == 'b') i++;
+        //     if (i == n) return true;
+        //     return false;
+        // }
+
+        // public int numberOfBeams(String[] sa) {
+        //     int m = sa.length, n = sa[0].length(), idx = -1, cnt = 0;
+        //     Map<Integer, List<Integer>> map = new HashMap<>();
+        //     boolean added = false;
+        //     for (int i = 0; i < m; i++) {
+        //         added = false;
+        //         for (int j = 0; j < sa[i].length(); j++) 
+        //             if (sa[i].charAt(j) == '1') {
+        //                 if (!added) {
+        //                     idx++;
+        //                     added = true;  
+        //                 } 
+        //                 map.computeIfAbsent(idx, z -> new ArrayList<>()).add(j);
+        //             }
+        //     }
+        //     if (map.size() == 1) return cnt;
+        //     for (int i = 0; i < map.size()-1; i++) 
+        //         cnt += map.get(i).size() * map.get(i+1).size();
+        //     return cnt;
+        // }
+
+        // public boolean asteroidsDestroyed(int mass, int[] a) {
+        //     int n = a.length;
+        //     Arrays.sort(a);
+        //     long sum = mass;
+        //     for (int i = 0; i < n; i++) {
+        //         if (sum < (long)a[i]) return false;
+        //         sum += (long)a[i];
+        //     }
+        //     return true;
+        // }
+
+        // public List<String> findAllRecipes(String[] rec, List<List<String>> ing, String[] sup) {
+        //     int n = res.length, j = 0;
+        //     Trie t = new Trie();
+        //     for (String s : sup) // 应该加的是原材料才对 
+        //         t.insert(s);
+        //     Map<String, Integer> idx = new HashMap<>();
+        //     for (int i = 0; i < n; i++) 
+        //         idx.put(rec[i], i);
+        //     // Map<String, Set<String>> adj = new HashMap<>();
+        //     Map<Integer, List<Integer>> adj = new HashMap<>();
+        //     Set<String> ss = new HashSet<>(Arrays.asList(rec));
+        //     for (int i = 0; i < ing.size(); i++) {
+        //         List<Integer> res = ing.get(i);
+        //         for (String v : res) 
+        //             if (ss.contains(v))
+        //                 // adj.computeIfAbsent(v, z -> new HashSet<>()).add(rec[i]);
+        //                 adj.computeIfAbsent(idx.get(v), z -> new HashSet<>()).add(i);
+        //     }
+        //     ss.clear();
+        //     for (int i = 0; i < ing.size(); i++) {
+        //         List<Integer> res = ing.get(i);
+        //         for (j = 0; j < ls.size(); j++) 
+        //             if (!t.search(ls.get(j))) break;
+        //         if (j == ls.size()) {
+        //             ss.add(rec[i]);
+        //             t.insert(rec[i]);
+        //             List<Integer> tmp = adj.get(i);
+        //             for (int k : tmp) { // 这里还是把自己绕昏了。。。。。。
+        //                 int x = 0;
+        //                 for (x = 0; x < ing.get(k).size(); x++) 
+        //                     if (!t.search(ing.get(k).get(x))) break;
+        //             }
+        //         }
+        //     }
+        //     Set<Integer> mis = new HashSet<>();
+        //     for (int i = 0; i < ing.size(); i++) {
+        //         List<String> ls = ing.get(i);
+        //         for (j = 0; j < ls.size(); j++) 
+        //             if (!t.search(ls.get(j))) break;
+        //         if (j == ls.size()) {
+        //             ss.add(rec[i]);
+        //             t.insert(rec[i]);
+        //         } else mis.add(i);
+        //     }
+        //     for (int i : mis) { // 这里的逻辑没有想清楚，不是重复一遍的问题，而是是否应该深度优先搜索的问题，几个周没写算法题，手好生 
+        //         List<String> ls = ing.get(i);
+        //         for (j = 0; j < ls.size(); j++) 
+        //             if (!t.search(ls.get(j))) break;
+        //         if (j == ls.size()) {
+        //             ss.add(rec[i]);
+        //             t.insert(rec[i]);
+        //         } else mis.add(i);
+                
+        //     }
+        // }
+        // class Trie {
+        //     public boolean search(String t) {
+        //         int n = t.length();
+        //         char [] s = t.toCharArray();
+        //         Node r = root;
+        //         for (int i = 0; i < n; i++) {
+        //             int j = s[i] - 'a';
+        //             if (r.next[j] == null) return false;
+        //             r = r.next[j];
+        //         }
+        //         return r.f;
+        //     }
+        //     public void insert(String t) {
+        //         int n = t.length();
+        //         char [] s = t.toCharArray();
+        //         Node r = root;
+        //         for (int i = 0; i < n; i++) {
+        //             int j = s[i] - 'a';
+        //             if (r.next[j] == null)
+        //                 r.next[j] = new Node();
+        //             r = r.next[j];
+        //         }
+        //         r.f = true;
+        //     }
+        //     Node root;
+        //     public Trie() {
+        //         root = new Node();
+        //     }
+        //     class Node {
+        //         boolean f;
+        //         Node [] next;
+        //         public Node() {
+        //             f = false;
+        //             next = new Node[26];
+        //         }
+        //     }
+        // }
+
+        // class Trie { // 想错了，解题的思路不对
+        //     public boolean search(String t) {
+        //         int n = t.length();
+        //         char [] s = t.toCharArray();
+        //         Node r = root;
+        //         for (int i = 0; i < n; i++) {
+        //             int j = s[i] - 'a';
+        //             if (r.next[j] == null) return false;
+        //             r = r.next[j];
+        //         }
+        //         return r.f;
+        //     }
+        //     public void insert(String t) {
+        //         int n = t.length();
+        //         char [] s = t.toCharArray();
+        //         Node r = root;
+        //         for (int i = 0; i < n; i++) {
+        //             int j = s[i] - 'a';
+        //             if (r.next[j] == null)
+        //                 r.next[j] = new Node();
+        //             r = r.next[j];
+        //         }
+        //         r.f = true;
+        //     }
+        //     Node root;
+        //     public Trie() {
+        //         root = new Node();
+        //     }
+        //     class Node {
+        //         boolean f;
+        //         Node [] next;
+        //         public Node() {
+        //             f = false;
+        //             next = new Node[26];
+        //         }
+        //     }
+        // }
+        // // https://leetcode-cn.com/problems/find-all-possible-recipes-from-given-supplies/solution/cong-gei-ding-yuan-cai-liao-zhong-zhao-d-d02i/
+        // // 大方向的思路有了，还得再想一想
+        // public List<String> findAllRecipes(String[] re, List<List<String>> ing, String[] sup) { // 菜谱 菜谱原材料 食材 BUG BUG BUG
+        //     // int n = re.length, j = 0;
+        //     Set<String> ss = new HashSet<>(Arrays.asList(sup));
+        //     Set<String> sr = new HashSet<>(Arrays.asList(re)); // receipes
+        //     Map<String, Integer> ins = new HashMap<>();        // 每种材料或是菜谱的 入度
+        //     Map<String, Set<String>> adj = new HashMap<>();    // 每种材料可以做成的菜的 清单
+        //     for (int i = 0; i < re.length; i++) {
+        //         List<String> one = ing.get(i);
+        //         for (String it : one) { // materials in one receipes
+        //             adj.computeIfAbsent(it, z -> new HashSet<>()).add(re[i]);
+        //             ins.put(re[i], ins.getOrDefault(re[i], 0) + 1); // 每种食谱的入度 随 原材料 增加
+        //         }
+        //     }
+        //     List<String> ans = new ArrayList<>();
+        //     Deque<String> q = new ArrayDeque<>();
+        //     for (String s : sup) { // 遍历 原材料
+        //         if (adj.get(s) == null) continue;
+        //         for (String mk : adj.get(s)) { // 遍历每种材料可能生成的 菜谱
+        //             ins.put(mk, ins.get(mk)-1);
+        //             if (ins.get(mk) == 0) q.offerLast(mk);
+        //         }
+        //     }
+        // }
         
     }
     public static void main (String[] args) {
         Solution s  =  new Solution ();
 
-        // int [] a = new int [] {1,0,1,0,1};
-        int [] a = new int [] {1,1,0,0,1};
+        String [] a = new String [] {"011017","000000","010100","001020"};
 
-        int [] r = s.threeEqualParts(a); 
-        System.out.println(Arrays.toString(r));
+        int r = s.numberOfBeams(a); 
+        System.out.println("r: " + r);
+        
     }
 }

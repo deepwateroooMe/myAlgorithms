@@ -68,40 +68,40 @@ public class hdsix {
         //     }
         // }
 
-    // private long add, mul;
-    // private List<Integer> l;
-    // static final int mod = (int)1e9 + 7;
-    // public Fancy() {
-    //     add = 0;
-    //     mul = 1;
-    //     l = new ArrayList<>();
-    // }
-    // public void append(int val) {
-    //     val = (int)((val - add + mod) % mod);
-    //     val = (int)((long)val * quickMul(mul, mod - 2) % mod);
-    //     l.add(val);
-    // }
-    // public void addAll(int inc) {
-    //     add = (add + inc) % mod;
-    // }
-    // public void multAll(int m) {
-    //     add = add * m % mod;
-    //     mul = mul * m % mod;
-    // }
-    // public int getIndex(int idx) {
-    //     if (idx >= l.size()) return -1;
-    //     return (int)((l.get(idx) * mul + add) % mod);
-    // }
-    // long quickMul(long base, int exp) {
-    //     long ans = 1;
-    //     while (exp > 0) {
-    //         if (exp % 2 == 1)
-    //             ans = ans * base % mod;
-    //         base = base * base % mod;
-    //         exp >>= 1;
-    //     }
-    //     return ans;
-    // }
+        // private long add, mul;
+        // private List<Integer> l;
+        // static final int mod = (int)1e9 + 7;
+        // public Fancy() {
+        //     add = 0;
+        //     mul = 1;
+        //     l = new ArrayList<>();
+        // }
+        // public void append(int val) {
+        //     val = (int)((val - add + mod) % mod);
+        //     val = (int)((long)val * quickMul(mul, mod - 2) % mod);
+        //     l.add(val);
+        // }
+        // public void addAll(int inc) {
+        //     add = (add + inc) % mod;
+        // }
+        // public void multAll(int m) {
+        //     add = add * m % mod;
+        //     mul = mul * m % mod;
+        // }
+        // public int getIndex(int idx) {
+        //     if (idx >= l.size()) return -1;
+        //     return (int)((l.get(idx) * mul + add) % mod);
+        // }
+        // long quickMul(long base, int exp) {
+        //     long ans = 1;
+        //     while (exp > 0) {
+        //         if (exp % 2 == 1)
+        //             ans = ans * base % mod;
+        //         base = base * base % mod;
+        //         exp >>= 1;
+        //     }
+        //     return ans;
+        // }
 
         // public int minimumEffort(int[][] a) {
         //     int n = a.length, ans = 0;
@@ -999,41 +999,41 @@ public class hdsix {
         //     return false;
         // }
 
-//         public int shortestPath(int[][] a, int k) {
-//             int [][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
-//             int m = a.length, n = a[0].length;
-//             int [][] vis = new int [m][n]; 
-//             Deque<int []> q = new ArrayDeque<>();
-//             q.offerLast(new int [] {0, 0, k});
-//             int cnt = 0;
-//             while (!q.isEmpty()) {
-//                 for (int z = q.size()-1; z >= 0; z--) {
-//                     int [] cur = q.pollFirst();
-//                     if (cur[0] == m-1 && cur[1] == n-1) return cnt;
-//                     for (int [] d : dirs) {
-//                         int i = cur[0] + d[0], j = cur[1] + d[1];
-//                         if (i >= 0 && i < m && j >= 0 && j < n) {
-// // 1.当前格子为非障碍物时，普通路径可以走访问状态为0的格子，走过后，访问状态更新为1
-// // 3.当前格子为非障碍物时，普通路径可以走访问状态为2的格子，走过后，访问状态更新为1
-//                             if (a[i][j] == 0 && (vis[i][j] == 0 || vis[i][j] == 2 && cur[2] == k)) { // 当前格为非障碍物
-//                                 if (vis[i][j] == 0) // 普通路径：可以走状态为0的格子，走过后变为1 or 2
-//                                     // 2.当前格子为非障碍物时，穿越路径可以走访问状态为0的格子，走过后，访问状态更新为2 
-//                                     vis[i][j] = (cur[2] == k ? 1 : 2);
-//                                 else vis[i][j] = 1;
-//                                 q.offerLast(new int [] {i, j, cur[2]});
-//                                 // 4.当前格子为障碍物时，如果还保有穿越次数，并且该格子的访问状态为0时，所有路径可以通过此处，
-//                                 //     通过后，该路径变为穿越路径，并且当前格子访问状态更新为1（更新为2也无所谓）                                
-//                             } else if (a[i][j] == 1 && vis[i][j] == 0 && cur[2] > 0) {
-//                                 vis[i][j] = 2;
-//                                 q.offerLast(new int [] {i, j, cur[2]-1});
-//                             }
-//                         }
-//                     }
-//                 }
-//                 cnt++;
-//             }
-//             return -1;
-//         }
+        //         public int shortestPath(int[][] a, int k) {
+        //             int [][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+        //             int m = a.length, n = a[0].length;
+        //             int [][] vis = new int [m][n]; 
+        //             Deque<int []> q = new ArrayDeque<>();
+        //             q.offerLast(new int [] {0, 0, k});
+        //             int cnt = 0;
+        //             while (!q.isEmpty()) {
+        //                 for (int z = q.size()-1; z >= 0; z--) {
+        //                     int [] cur = q.pollFirst();
+        //                     if (cur[0] == m-1 && cur[1] == n-1) return cnt;
+        //                     for (int [] d : dirs) {
+        //                         int i = cur[0] + d[0], j = cur[1] + d[1];
+        //                         if (i >= 0 && i < m && j >= 0 && j < n) {
+        // // 1.当前格子为非障碍物时，普通路径可以走访问状态为0的格子，走过后，访问状态更新为1
+        // // 3.当前格子为非障碍物时，普通路径可以走访问状态为2的格子，走过后，访问状态更新为1
+        //                             if (a[i][j] == 0 && (vis[i][j] == 0 || vis[i][j] == 2 && cur[2] == k)) { // 当前格为非障碍物
+        //                                 if (vis[i][j] == 0) // 普通路径：可以走状态为0的格子，走过后变为1 or 2
+        //                                     // 2.当前格子为非障碍物时，穿越路径可以走访问状态为0的格子，走过后，访问状态更新为2 
+        //                                     vis[i][j] = (cur[2] == k ? 1 : 2);
+        //                                 else vis[i][j] = 1;
+        //                                 q.offerLast(new int [] {i, j, cur[2]});
+        //                                 // 4.当前格子为障碍物时，如果还保有穿越次数，并且该格子的访问状态为0时，所有路径可以通过此处，
+        //                                 //     通过后，该路径变为穿越路径，并且当前格子访问状态更新为1（更新为2也无所谓）                                
+        //                             } else if (a[i][j] == 1 && vis[i][j] == 0 && cur[2] > 0) {
+        //                                 vis[i][j] = 2;
+        //                                 q.offerLast(new int [] {i, j, cur[2]-1});
+        //                             }
+        //                         }
+        //                     }
+        //                 }
+        //                 cnt++;
+        //             }
+        //             return -1;
+        //         }
         // public int shortestPath(int[][] a, int k) { // 这个思路极为简洁，但速度跟上一个方法比，会慢很多
         //     if (a.length <= 1 && a[0].length <= 1) return 0;
         //     int [][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
@@ -1204,54 +1204,381 @@ public class hdsix {
         //     }
         // }
 
-        public int makeStringSorted(String s) {
+        // public class SnakeGame { // 贪吃蛇设计 leetcode
+        //     private Set<String> board = new HashSet<>();
+        //     private int[][] food;
+        //     private LinkedList<Position> snake = new LinkedList<>();
+        //     private int width, height;
+        //     private int eat = 0;
+
+        //     private boolean eat(int y, int x) {
+        //         if (eat >= food.length) return false;
+        //         if (food[eat][0] < 0 || food[eat][0] >= height || food[eat][1] < 0 || food[eat][1] >= width) return false;
+        //         if (y == food[eat][0] && x == food[eat][1]) return true;
+        //         return false;
+        //     }
+        //      /** Initialize your data structure here.
+        //         @param width - screen width
+        //         @param height - screen height 
+        //         @param food - A list of food positions
+        //         E.g food = [[1,1], [1,0]] means the first food is positioned at [1,1], the second is at [1,0]. */
+        //     public SnakeGame(int width, int height, int[][] food) {
+        //         this.food = food;
+        //         Position head = new Position(0,0);
+        //         this.snake.add(head);
+        //         board.add(head.toString());
+        //         this.height = height;
+        //         this.width = width;
+        //     }
+        //     /** Moves the snake.
+        //         @param direction - 'U' = Up, 'L' = Left, 'R' = Right, 'D' = Down 
+        //         @return The game's score after the move. Return -1 if game over. 
+        //         Game over when snake crosses the screen boundary or bites its body. */
+        //     public int move(String direction) {
+        //         Position head = snake.getFirst();
+        //         Position next = new Position(head.y, head.x);
+        //         if ("U".equals(direction)) {
+        //             next.y --;
+        //         } else if ("D".equals(direction)) {
+        //             next.y ++;
+        //         } else if ("L".equals(direction)) {
+        //             next.x --;
+        //         } else if ("R".equals(direction)) {
+        //             next.x ++;
+        //         } else {
+        //             return -1;
+        //         }
+        //         if (next.y < 0 || next.y >= height || next.x < 0 || next.x >= width) return -1;
+        //         String ns = next.toString();
+        //         if (eat(next.y, next.x)) {
+        //             snake.addFirst(next);
+        //             board.add(ns);
+        //             return ++ eat;
+        //         }
+        //         Position tail = snake.getLast();
+        //         board.remove(tail.toString());
+        //         snake.removeLast();
+        //         if (board.contains(ns)) return -1;
+        //         snake.addFirst(next);
+        //         board.add(ns);
+        //         return eat;
+        //     }
+        // }
+        // class Position {
+        //     int y, x;
+        //     Position(int y, int x) {
+        //         this.y = y;
+        //         this.x = x;
+        //     }
+        //     public String toString() {
+        //         return y + "," + x;
+        //     }
+        // }
+        // public class SnakeGame {
+        //     int[][] food;
+        //     int index;
+        //     int row, col;
+        //     int x, y;
+        //     int len;
+        //     LinkedList<int[]> queue;
+        //     /** Initialize your data structure here.
+        //         @param width - screen width
+        //         @param height - screen height 
+        //         @param food - A list of food positions
+        //         E.g food = [[1,1], [1,0]] means the first food is positioned at [1,1], the second is at [1,0]. */
+        //     public SnakeGame(int width, int height, int[][] food) {
+        //         this.food=food;
+        //         this.index=0;
+        //         this.x=0;
+        //         this.y=0;
+        //         this.row=height;
+        //         this.col=width;
+        //         this.queue= new LinkedList<int[]>();
+        //         this.queue.offer(new int[]{0, 0});
+        //     }
+        //     /** Moves the snake.
+        //         @param direction - 'U' = Up, 'L' = Left, 'R' = Right, 'D' = Down 
+        //         @return The game's score after the move. Return -1 if game over. 
+        //         Game over when snake crosses the screen boundary or bites its body. */
+        //     public int move(String direction) {
+        //         switch(direction){
+        //             case "U": x--; break;
+        //             case "L": y--; break;
+        //             case "R": y++; break;
+        //             case "D": x++; break;
+        //         }
+        //         if(!isValid(x,y))
+        //             return -1;
+        //         return process(x, y);
+        //     }
+        //     public boolean isValid(int x, int y){
+        //         if(x<0 || x>=row || y<0 || y>=col)
+        //             return false;
+        //         return true;    
+        //     }
+        //     public int process(int x, int y){
+        //         if(index==food.length){
+        //             queue.poll();
+        //         }else if(food[index][0]==x && food[index][1]==y){
+        //             len++;
+        //             index++;
+        //         }else{
+        //             queue.poll();
+        //         }
+        //         for(int[] p: queue){   
+        //             if(p[0]==x&&p[1]==y)
+        //                 return -1;
+        //         }
+        //         queue.offer(new int[]{x,y});
+        //         return len;
+        //     }
+
+        // Map<Integer, Node> m = new HashMap<>();
+        // Queue<Node> q;
+        // int capacity;
+        // int idx = 0; 
+        // public LFUCache(int capacity) {
+        //     this.capacity = capacity;
+        //     if (this.capacity > 0) {
+        //         q = new PriorityQueue<>(this.capacity, new Comparator<Node>() { // 升序排列：最小堆，最少使用次数的在顶上
+        //                 public int compare(Node x, Node y) {
+        //                     int res = x.f - y.f;
+        //                     return res == 0 ? x.idx - y.idx : res;
+        //                 }
+        //             });
+        //     }
+        // }
+        // public int get(int key) {
+        //     Node node = m.get(key);
+        //     if (node == null) return -1; // node不存在，则返回 -1
+        //     node.f++; // 每访问一次，频次和全局index都自增 1
+        //     node.idx = this.idx++;
+        //     // 每次都重新remove，再offer是为了让优先队列能够对当前Node重排序
+        //     // 不然的话，比较的 freq 和 idx 就是不准确的
+        //     q.remove(node);
+        //     q.offer(node);
+        //     return node.v;
+        // }
+        // public void put(int key, int value) {
+        //     if (capacity == 0) return;
+        //     Node node = m.get(key);
+        //     if (node != null) {
+        //         node.v = value;
+        //         node.f++;
+        //         node.idx = this.idx++;
+        //         q.remove(node);
+        //         q.offer(node);
+        //     } else {
+        //         if (m.size() == capacity) 
+        //             m.remove(q.poll().k); // 只在这一种情况下移除,可以完全用m.size()代替O(1)
+        //         node = new Node(key, value, idx++);
+        //         q.offer(node);
+        //         m.put(key, node);
+        //     }
+        // }
+        // static class Node {
+        //     int k, v, f, idx;
+        //     public Node(int key, int val, int idx) {
+        //         k = key;
+        //         v = val;
+        //         this.idx = idx;
+        //     }
+        // }
+        // // 这个题改天再写吧，快一个月没写算法题了，都快想不起来这个题究竟是要做什么了
+        // TreeSet<Integer> ts = new TreeSet<>();       // different cnters for key 纯操作次数 升序
+        // Map<Integer, Integer> m = new HashMap<>();   // map: [key, value] 图：键值对
+        // Map<Integer, Integer> cnt = new HashMap<>(); // cnt: [key, keyCnt] 操作次数 计数器
+        // Map<Integer, Set<Integer>> idx = new HashMap<>(); // idx: [cnt, keys] 操作次数
+        // int n;
+        // // public LFUCache(int capacity) { // BUG BUG BUG
+        // public hdthree(int capacity) {
+        //     this.n = capacity;
+        // }
+        // public int get(int key) {
+        //     if (!m.containsKey(key)) return -1;
+        //     updateOperations(key);
+        //     return m.get(key);
+        // }
+        // public void put(int key, int value) {
+        //     if (m.containsKey(key)) { // 存在 
+        //         m.put(key, value);
+        //         cnt.put(key, cnt.getOrDefault(key, 0) + 1);
+        //         updateOperations(key);
+        //         // } else if (m.size() < n) { // 可以补在后面简化代码
+        //         //     m.put(key, value);
+        //         //     cnt.put(key, 1); // 第一次放入
+        //         //     updateOperations(key);
+        //     } else if (m.size() == n) { // 需要先删除
+        //         int key = -1, leastCnt = ts.first();
+        //         if (idx.get(leastCnt).size() == 1) {
+        //             key = idx.get(leastCnt).iterator().next();
+        //             idx.remove(leastCnt);
+        //             cnt.remove(key);
+        //             m.remove(key);
+        //             ts.pollFirst();
+        //         } else {
+        //             for (Integer ks : idx.get(leastCnt)) { // 还需要一个 least recently used， 改天再写这个
+        //             }
+        //         }
+        //     }
+        // }
+        // void updateOperations(int k) {
+        //     int pre = cnt.get(k);
+        //     idx.get(pre).remove(k); // 操作次数总表
+        //     if (idx.get(pre).size() == 0) {
+        //         idx.remove(pre);
+        //         ts.remove(pre);
+        //     }            
+        //     cnt.put(k, cnt.get(k) + 1); // 计数器
+        //     idx.computeIfAbsent(pre+1, z -> new HashSet<>()).add(k);
+        //     ts.add(pre+1);
+        // }
+
+        // static final int mod = (int)1e9 + 7;
+        // public int nthMagicalNumber(int n, int a, int b) {
+        //     int cnt = a * b / gcd(a, b);
+        //     long l = 0, h = (long)1e15;
+        //     while (l < h) {
+        //         long m = l + (h - l) / 2;
+        //         // if (m / a + m / b - cnt / gcd(a, b) < n) // bug
+        //         if (m / a + m / b - m / cnt < n)
+        //             l = m + 1;
+        //         else h = m;
+        //     }
+        //     return (int)(l % mod);
+        // }
+        // int gcd(int a, int b) {
+        //     if (a == 0) return b;
+        //     return gcd(b % a, a);
+        // }
+
+        // public int[] movesToStamp(String ss, String tt) { // todo: 这里还有一点儿没有想明白
+        //     int m = ss.length(), n = tt.length(), cnt = 0;
+        //     char [] s = ss.toCharArray();
+        //     char [] t = tt.toCharArray();
+        //     List<Integer> l = new ArrayList<>();
+        //     boolean [] vis = new boolean [n];
+        //     while (cnt < n) { // 对于序列 t 来说，最多只能更改n次？
+        //         boolean done = false;
+        //         for (int i = 0; i <= n-m && cnt < n; i++) { // 从前往后、从头向尾遍历
+        //             if (!vis[i] && canReplace(s, t, i)) {
+        //                 done = true;
+        //                 vis[i] = true;
+        //                 cnt += getCnt(s, t, i);
+        //                 l.add(i);
+        //             }
+        //         }
+        //         if (!done) return new int [0];
+        //     }
+        //     int [] ans = new int [l.size()];
+        //     int idx = 0;
+        //     for (int i = l.size()-1; i >= 0; i--) // 真正答案的顺序要从尾向头开始盖章
+        //         ans[idx++] = l.get(i);
+        //     return ans;
+        // }
+        // int getCnt(char [] s, char [] t, int idx) { // 数这个是干什么用的呢？
+        //     int cnt = 0;
+        //     for (int i = idx; i < idx + s.length; i++) {
+        //         if (t[i] == '*') continue;
+        //         t[i] = '*';
+        //         cnt++;
+        //     }
+        //     return cnt;
+        // }
+        // boolean canReplace(char [] s, char [] t, int idx) { // s[0, m-1] t[idx, idx+m-1]在t[i] !='*'的前提下是否一致
+        //     for (int i = idx; i < s.length + idx; i++) 
+        //         if (t[i] != '*' && t[i] != s[i-idx]) return false; // 这个序列的章不能盖上去
+        //     return true;
+        // }
+
+        // public boolean parseBoolExpr(String s) {
+        //     char c = s.charAt(0);
+        //     if (s.length() == 1) return c == 't';
+        //     if (c == '!') return parseNot(s.substring(0));
+        //     if (c == '|') return parseOr(s.substring(0));
+        //     return parseAnd(s.substring(0));
+        // }
+        // Set<String> helper(String s) {
+        //     int n = s.length(), i = 0;
+        //     char c = s.charAt(i);
+        //     while (i < n && c != '!' && c != '&' && c != '|' && c != '(' && c != ')') {
+        //         i++;
+        //         if (i < n) c = s.charAt(i);
+        //     }
+        //     Set<String> ss = new HashSet<>(); // , t f
+        //     if (i > 0) ss = Stream.of(s.substring(0, i).trim().split("\\s*,\\s*")).collect(Collectors.toSet());
+        //     if (i == n) return ss;
+        //     int j = i + 1; // s.charAt(j): ! & | ( ) , t f
+        //     while (j < n) {
+        //         c = s.charAt(j);
+        //         if (c == '&' || c == '|' || c == '!') { 
+        //             j = i + 1;
+        //             c = s.charAt(j);
+        //         }
+        //         while (j < n && c != '&' && c != '|' && c != '!' && c != '(' && c != ')') {
+        //             if (c == ',') {
+        //                 ++j;
+        //                 i = j; // i: 子串第一个字符的下标
+        //                 c = s.charAt(j);
+        //                 continue;
+        //             }
+        //             ss.add(s.substring(i, j+1)); // 存一个子串
+        //             ++j;
+        //             if (j == n) return ss;
+        //             c = s.charAt(j);
+        //         }
+        //         if (c == '(') {
+        //             int k = getRightIdx(s, j);
+        //             ss.add(s.substring(i, k+1)); // 包括）,因为可能是 ！（t & f）之类的
+        //             i = k + 1;
+        //             if (i == n) return ss;
+        //             c = s.charAt(i);
+        //         }
+        //         if (s.charAt(i) == ',') i++;
+        //         j = i;
+        //     }
+        //     return ss;
+        // }
+        // int getRightIdx(String t, int idx) { // 找到匹配的右括号的下标
+        //     char [] s = t.toCharArray();
+        //     int l = 0, r = 0, i = idx;
+        //     for (i = idx; i < s.length; i++) {
+        //         if (s[i] == '(') l++;
+        //         else if (s[i] == ')') {
+        //             if (l > 0) l--;
+        //             else r++;
+        //         }
+        //         if (l == r) break;
+        //     }
+        //     return i;
+        // }
+        // boolean parseNot(String s) {
+        //     return !parseBoolExpr(s.substring(2, s.length()-1));
+        // }
+        // boolean parseAnd(String s) {
+        //     Set<String> ss = helper(s.substring(2, s.length()-1));
+        //     boolean ans = true;
+        //     for (String v : ss) 
+        //         ans = ans && parseBoolExpr(v);
+        //     return ans;
+        // }
+        // boolean parseOr(String s) {
+        //     Set<String> ss = helper(s.substring(2, s.length()-1));
+        //     boolean ans = false;
+        //     for (String v : ss) 
+        //         ans = ans || parseBoolExpr(v);
+        //     return ans;
+        // }
+
         
-        }
-     }
+    }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        int []  a = new int []  {5, 2, 4, 6, 6, 3};
-        int [][] b = new int [][] {{12,4},{8,1},{6,3}};
+        // String a = "&(t,f)";
+        String a = "|(&(t,f,t),!(t))";
 
-        int [] r = s.maximizeXor(a, b);
-        System.out.println(Arrays.toString(r));
+        boolean r = s.parseBoolExpr(a);
+        System.out.println("r: " + r);
     }
 }
-
-// char [][] a = new char [][] {{'.','.','#','.','.','.','.','#'},{'.','B','.','.','.','.','.','#'},{'.','.','S','.','.','.','.','.'},{'.','#','.','.','.','.','.','.'},{'.','.','.','.','.','.','.','.'},{'.','.','.','T','.','.','.','.'},{'.','.','.','.','.','.','.','#'},{'.','#','.','.','.','.','.','.'}}// hdsix s = new hdsix(2);
-// s.push(373);
-// s.push(86);
-// s.push(395);
-// s.push(306);
-// s.push(370);
-// s.push(94);
-// s.push(41);
-// s.push(17);
-// s.push(387);
-// s.push(403);
-// s.push(66);
-// s.push(82);
-// s.push(27);
-// s.push(335);
-// s.push(252);
-// s.push(6);
-// s.push(269);
-// s.push(231);
-// s.push(35);
-// s.push(346);
-// // s.push(1);
-// // s.push(2);
-// // s.push(3);
-// // s.push(4);
-// // s.push(7);
-// int r = s.popAtStack(4);
-// int r1 = s.popAtStack(6);
-// int r2 = s.popAtStack(2);
-// int r3 = s.popAtStack(5);
-// int r4 = s.popAtStack(2);
-// int r5 = s.popAtStack(2);
-// int r6 = s.popAtStack(7);
-// int r7 = s.popAtStack(9);
-// int r8 = s.popAtStack(8);
-// int r9 = s.popAtStack(1);

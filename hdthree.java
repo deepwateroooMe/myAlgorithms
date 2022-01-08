@@ -249,55 +249,6 @@ public class hdthree {
             return idx.get(ts.first()).iterator().next();
         }
 
-        TreeSet<Integer> ts = new TreeSet<>();       // different cnters for key 纯操作次数 升序
-        Map<Integer, Integer> m = new HashMap<>();   // map: [key, value] 图：键值对
-        Map<Integer, Integer> cnt = new HashMap<>(); // cnt: [key, keyCnt] 操作次数 计数器
-        Map<Integer, Set<Integer>> idx = new HashMap<>(); // idx: [cnt, keys] 操作次数
-        int n;
-        // public LFUCache(int capacity) {
-        public hdthree(int capacity) {
-            this.n = capacity;
-        }
-        public int get(int key) {
-            if (!m.containsKey(key)) return -1;
-            updateOperations(key);
-            return m.get(key);
-        }
-        public void put(int key, int value) {
-            if (m.containsKey(key)) { // 存在 
-                m.put(key, value);
-                cnt.put(key, cnt.getOrDefault(key, 0) + 1);
-                updateOperations(key);
-            // } else if (m.size() < n) { // 可以补在后面简化代码
-            //     m.put(key, value);
-            //     cnt.put(key, 1); // 第一次放入
-            //     updateOperations(key);
-            } else if (m.size() == n) { // 需要先删除
-                int key = -1, leastCnt = ts.first();
-                if (idx.get(leastCnt).size() == 1) {
-                    key = idx.get(leastCnt).iterator().next();
-                    idx.remove(leastCnt);
-                    cnt.remove(key);
-                    m.remove(key);
-                    ts.pollFirst();
-                } else {
-                    for (Integer ks : idx.get(leastCnt)) { // 还需要一个 least recently used， 改天再写这个
-                    }
-                }
-            }
-        }
-        void updateOperations(int k) {
-            int pre = cnt.get(k);
-            idx.get(pre).remove(k); // 操作次数总表
-            if (idx.get(pre).size() == 0) {
-                idx.remove(pre);
-                ts.remove(pre);
-            }            
-            cnt.put(k, cnt.get(k) + 1); // 计数器
-            idx.computeIfAbsent(pre+1, z -> new HashSet<>()).add(k);
-            ts.add(pre+1);
-        }
-
         static final int mod = 1337;
         public int largestPalindrome(int n) { // bug: 不知道哪里错了
             if (n == 1) return 9;

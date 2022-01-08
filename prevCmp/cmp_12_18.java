@@ -60,7 +60,7 @@ public class cmp {
     public static void main (String[] args) {
         Solution s = new Solution ();
 
-        int [] a = new int [] {3, 2, 1, 7};
+        int [] a = new int [] {3, 2, 1, 4};
 
         long r = s.getDescentPeriods(a);
         System.out.println("r: " + r);
