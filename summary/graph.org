@@ -1607,3 +1607,195 @@ public int shortestPath(int[][] a, int k) { // 这个思路极为简洁，但速
     return -1;
 }
      #+END_SRC
+
+** 最小生成树
+*** 1489. Find Critical and Pseudo-Critical Edges in Minimum Spanning Tree - Hard
+Given a weighted undirected connected graph with n vertices numbered from 0 to n - 1, and an array edges where edges[i] = [ai, bi, weighti] represents a bidirectional and weighted edge between nodes ai and bi. A minimum spanning tree (MST) is a subset of the graph's edges that connects all vertices without cycles and with the minimum possible total edge weight.
+
+Find all the critical and pseudo-critical edges in the given graph's minimum spanning tree (MST). An MST edge whose deletion from the graph would cause the MST weight to increase is called a critical edge. On the other hand, a pseudo-critical edge is that which can appear in some MSTs but not all.
+
+Note that you can return the indices of the edges in any order.
+**** 解题思路与分析
+     #+BEGIN_SRC java
+public List<List<Integer>> findCriticalAndPseudoCriticalEdges(int n, int[][] edges) {
+    List<int []> lia = new ArrayList<>();
+    for (int [] e : edges) lia.add(e);
+    Collections.sort(lia, (x, y) -> x[2] - y[2]);
+    List<Integer> critical = new ArrayList<>();
+    List<Integer> pseudo = new ArrayList<>();
+    int minCost = getCostOfMST(n, lia, null, null);
+    for (int i = 0; i < edges.length; i++) {
+        int [] e = edges[i];
+        if (getCostOfMST(n, lia, null, e) > minCost) // 优先条件：如果已经是critical,就不用考虑后面的了
+            critical.add(i);
+        else if (getCostOfMST(n, lia, e, null) == minCost)
+            pseudo.add(i);
+    }
+    return Arrays.asList(critical, pseudo);
+}
+int getCostOfMST(int n, List<int []> adj, int [] req, int [] avd) { // avoid 
+    int ans = 0;
+    DSU dsu = new DSU(n);
+    if (req != null) {
+        dsu.union(req[0], req[1]);
+        ans += req[2];
+    }
+    for (int [] e : adj) {
+        if (e != avd && dsu.union(e[0], e[1])) // 可以合并
+            ans += e[2];
+        if (dsu.getCnt() == 1)
+            return ans;
+    }
+    return Integer.MAX_VALUE; // 无法生成合法的最小生成树
+}
+static class DSU {
+    int [] par;
+    int [] rank; // 关于rank和size的部分
+    int size;
+    public boolean union(int x, int y) {
+        int px = find(x), py = find(y);
+        if (px == py) return false;
+        // if (rank[x] >= rank[y]) { // BUG
+        if (rank[px] >= rank[py]) {
+            par[py] = px;
+            if (rank[px] == rank[py])
+                ++rank[px];
+            // rank[x] += rank[y]; // BUG: 这里自己写错了
+        } else {
+            par[px] = py;
+            // rank[y] += rank[x];
+        }
+        --size;
+        return true;
+    }
+    public int getCnt() {
+        return size;
+    }
+    int find(int x) {
+        // if (par[x] != x) par[x] = find(par[x]); // BUG
+        while (par[x] != x) {
+            par[x] = par[par[x]];
+            x = par[x];
+        }
+        return par[x];
+    }
+    public DSU(int n) {
+        size = n;
+        par = new int [n];
+        rank = new int [n];
+        for (int i = 0; i < n; i++) 
+            par[i] = i;
+    }
+}
+#+END_SRC
+**** 解题思路与分析
+- 这是自己慢慢掰出来的，掰还第二遍的时候掰错了。。。最好是能够参考一下别人的最优解法
+#+BEGIN_SRC java
+HashMap<Integer, int []> m = new HashMap<>(); // 这是参考以前写的
+HashSet<Integer> s = new HashSet<>();
+List<List<Integer>> ll = new ArrayList<>();
+List<Integer> l = new ArrayList<>();
+int minw = 0;
+UnionFind uf;
+public List<List<Integer>> findCriticalAndPseudoCriticalEdges(int n, int[][] edges) {
+  HashMap<Integer, int []> map = new HashMap<>();
+    for (int i = 0; i < edges.length; i++) 
+        map.put(i, edges[i]);
+    Comparator<Map.Entry<Integer, int []>> c = new Comparator<Map.Entry<Integer, int []>>() {
+        @Override 
+        public int compare(Map.Entry<Integer, int []> a, Map.Entry<Integer, int []> b) {
+            int cmp1 = (a.getValue())[2] - (b.getValue())[2];
+            if (cmp1 != 0) 
+                return cmp1;
+            else return a.getKey().compareTo(b.getKey());
+        }
+    };
+    m = map.entrySet().stream().sorted(c)
+        .collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+    uf = new UnionFind(n);
+    kruskal(n, s, -1, true);
+    int minG = minw;
+    l = new ArrayList<>();
+    uf = new UnionFind(n);
+    for (Integer val : s) {
+        minw = 0;
+        uf.reset();
+        kruskal(n, new HashSet<>(), val, true);
+        if (minw > minG || uf.getCnt() > 1) l.add(val);
+    }
+    ll.add(l);
+    l = new ArrayList<>();
+    for (Integer i : m.keySet()) {
+        if (ll.get(0).contains(i)) continue;
+        minw = 0;
+        uf.reset();
+        kruskal(n, new HashSet<>(), i, false);
+        if (minw == minG) l.add(i);
+    }
+    ll.add(l);
+    return ll;
+}
+private void kruskal(int n, HashSet<Integer> s, int i, boolean vis) {
+    if (!vis) {
+        uf.merge((m.get(i))[0], (m.get(i))[1]); 
+        s.add(i);
+        minw += (m.get(i))[2];
+    }
+    for (Map.Entry<Integer, int []> entry : m.entrySet()) {
+        int [] cur = entry.getValue();
+        if (uf.sameGroup(cur[0], cur[1]) || (entry.getKey() == i && vis)) continue;
+        if (s.size() < n-1) {
+            uf.merge(cur[0], cur[1]);
+            s.add(entry.getKey());
+            minw += cur[2];
+        }
+    }            
+}
+public class UnionFind {
+    int [] pare;
+    // int [] rank;
+    int cnt;
+    int n;
+    public UnionFind(int x) {
+        this.n = x;
+        cnt = n;
+        pare = new int[n];
+        // rank = new int[n];
+        for (int i = 0; i < n; i++) 
+            pare[i] = i;
+    }
+    public void reset() {
+        for (int i = 0; i < n; i++) 
+            pare[i] = i;
+        cnt = n;
+        // rank = new int [n];
+    }
+    public int find(int val) {
+        while (val != pare[val]) {
+            pare[val] = pare[pare[val]];
+            val = pare[val];
+        }
+        return val;
+    }
+    public void merge(int p, int q) {
+        int rp = find(p);
+        int rq = find(q);
+        // if (rank[rp] < rank[rq]) 
+        //     swap(rp, rq);
+        pare[rq] = rp;
+        // rank[rp] += rank[rq];
+        --cnt; //
+    }
+    public boolean sameGroup(int x, int y) {
+        return find(x) == find(y);
+    }
+    public int getCnt() {
+        return cnt;
+    }
+    // private void swap(int x, int y) {
+    //     int tmp = x;
+    //     x = y;
+    //     y = tmp;
+    // }
+}
+#+END_SRC

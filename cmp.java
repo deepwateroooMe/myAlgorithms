@@ -14,173 +14,150 @@ import static java.util.stream.Collectors.toMap;
 public class cmp {
     public static class Solution {
 
-        // public String capitalizeTitle(String title) {
-        //     String [] tmp = title.split(" ");
-        //     char [] ans =  new char [title.length()];
-        //     int idx = 0;
-        //     for (int i = 0; i < tmp.length; i++) {
-        //         String s = tmp[i];
-        //         if (s.length() < 3)
-        //             for (char c : s.toCharArray()) 
-        //                 ans[idx++] = Character.toLowerCase(c);
-        //         else {
-        //             ans[idx++] = Character.toUpperCase(s.charAt(0));
-        //             for (int j = 1; j < s.length(); j++) 
-        //                 ans[idx++] = Character.toLowerCase(s.charAt(j));
+        // public boolean checkValid(int[][] a) {
+        //     n = a.length;
+        //     for (int i = 0; i < n; i++) { // rows
+        //         autoFil();
+        //         for (int j = 0; j < n; j++) {
+        //             if (s.contains(a[i][j]))
+        //                 s.remove(a[i][j]);
         //         }
-        //         if (i < tmp.length-1) ans[idx++] = ' ';
+        //         if (s.size() > 0) return false;
         //     }
-        //     return new String(ans);
-        // }
-
-        // public int pairSum(ListNode head) {
-        //     int n = 0, idx = 0, max = 0, i = 0, j;
-        //     ListNode r = head;
-        //     while (r != null) {
-        //         n++;
-        //         r = r.next;
-        //     }
-        //     int [] a = new int [n];
-        //     r = head;
-        //     while (r != null) {
-        //         a[idx++] = r.val;
-        //         r = r.next;
-        //     }
-        //     j = n-1;
-        //     while (i < j) {
-        //         max = Math.max(a[i] + a[j], max);
-        //         i++;
-        //         j--;
-        //     }
-        //     return max;
-        // }
-
-        // public int longestPalindrome(String[] sa) { // 题目没有注明，是需要考虑是否含有重复的: cc cl cc
-        //     Map<String, Integer> m = new HashMap<>();
-        //     Set<String> ss = new HashSet<>();
-        //     for (String s : sa) {
-        //         m.put(s, m.getOrDefault(s, 0) + 1);
-        //         ss.add(s);
-        //     }
-        //     int ans = 0, max = 0;
-        //     for (String k : m.keySet()) {
-        //         if (!ss.contains(k)) continue;
-        //         if (isPalindrome(k)) {
-        //             ans += 4 * (m.get(k) / 2);
-        //             max = Math.max(max, 2 * (m.get(k) % 2));
-        //             continue;
+        //     for (int j = 0; j < n; j++) {
+        //         autoFil();
+        //         for (int i = 0; i < n; i++) {
+        //             if (s.contains(a[i][j]))
+        //                 s.remove(a[i][j]);
         //         }
-        //         String re = new StringBuilder (k).reverse().toString();
-        //         if (m.containsKey(re)) {
-        //             ans += 4 * Math.min(m.get(k), m.get(re));
-        //             ss.remove(re);
-        //         }
-        //         ss.remove(k);
+        //         if (s.size() > 0) return false;
         //     }
-        //     return ans + max;
-        // }
-        // boolean isPalindrome(String t) {
-        //     int n = t.length(), i = 0, j = n-1;
-        //     char [] s = t.toCharArray();
-        //     while (i < j) 
-        //         if (s[i++] != s[j--]) return false;
         //     return true;
         // }
-
-        // int getCnt(char [] s, char [] t, int idx) { // 数这个是干什么用的呢？
-        //     int cnt = 0;
-        //     for (int i = idx; i < idx + s.length; i++) {
-        //         if (t[i] == '*') continue;
-        //         t[i] = '*';
-        //         cnt++;
-        //     }
-        //     return cnt;
-        // }
-        // boolean canReplace(char [] s, char [] t, int idx) { // s[0, m-1] t[idx, idx+m-1]在t[i] !='*'的前提下是否一致
-        //     for (int i = idx; i < s.length + idx; i++) 
-        //         if (t[i] != '*' && t[i] != s[i-idx]) return false; // 这个序列的章不能盖上去
-        //     return true;
+        // int n;
+        // Set<Integer> s = new HashSet<>();
+        // void autoFil() {
+        //     s.clear();
+        //     for (int i = 1; i <= n; i++) 
+        //         s.add(i);
         // }
 
-        // public int[] movesToStamp(String ss, String tt) { // todo: 这里还有一点儿没有想明白
-        //     int m = ss.length(), n = tt.length(), cnt = 0;
-        //     char [] s = ss.toCharArray();
-        //     char [] t = tt.toCharArray();
-        //     List<Integer> l = new ArrayList<>();
-        //     boolean [] vis = new boolean [n];
-        //     while (cnt < n) { // 对于序列 t 来说，最多只能更改n次？
-        //         boolean done = false;
-        //         for (int i = 0; i <= n-m && cnt < n; i++) { // 从前往后、从头向尾遍历
-        //             if (!vis[i] && canReplace(s, t, i)) {
-        //                 done = true;
-        //                 vis[i] = true;
-        //                 cnt += getCnt(s, t, i);
-        //                 l.add(i);
-        //             }
-        //         }
-        //         if (!done) return new int [0];
+        // public int minSwaps(int[] a) {
+        //     int n = a.length, sum = Arrays.stream(a).sum();
+        //     int i = 0, j = n-1;
+        //     while (i < n && a[i] == 0) i++;
+        //     while (j >= 0 & a[j] == 0) j--;
+        //     int befAft = i + n-1-j;
+        //     int mid = n - (n-1-j+i) - sum; // 中间的
+        //     if (mid <= befAft) return mid;
+        //     // 首尾两个=1 or a[0] = 1 a[n-1] = 0 or a[0] = 0 a[n-1] = 1 ....
+        //     return Math.min(n-(i+n-1-j)-sum, 0);
+        //     // 首尾相连起来的情况再想一下
+        // }
+        // public int minSwaps(int[] a) {
+        //     int n = a.length, cnt = 0, sum = Arrays.stream(a).sum();
+        //     int [] bef = new int [n];
+        //     int [] aft = new int [n];
+        //     for (int i = 0; i < n; i++) 
+        //         if (a[i] == 0) bef[i] = ++cnt;
+        //     cnt = 0;
+        //     for (int i = n-1; i >= 0; i--) 
+        //         if (a[i] == 0) aft[i] = ++cnt;
+        //     int i = 0, j = n-1;
+        //     while (i < n && a[i] == 0) i++;
+        //     while (j >= 0 & a[j] == 0) j--;
+        //     int befAft = i + n-1-j;
+        //     int mid = n - (n-1-j+i) - sum; // 中间的
+        //     int ans = Math.min(befAft, mid), ones = 0, before = 0, after = 0;
+        //     for (int k = i; k <= j; k++) {
+        //         ones += a[i];
+        //         before = ones;
+        //         after = ones;
+        //         int x = j;
+        //         while (x >= 0 && after < sum) {
+        //             after += a[x];
+        //             x--;
+        //         } 
+        //         ans = Math.min(ans, Math.min(x-k, k+1-ones+(n-1-x-(sum-ones))));
         //     }
-        //     int [] ans = new int [l.size()];
-        //     int idx = 0;
-        //     for (int i = l.size()-1; i >= 0; i--) // 真正答案的顺序要从尾向头开始盖章
-        //         ans[idx++] = l.get(i);
+        //     // if (mid <= befAft) return mid;
+        //     // // 首尾两个=1 or a[0] = 1 a[n-1] = 0 or a[0] = 0 a[n-1] = 1 ....
+        //     //     return Math.min(n-(i+n-1-j)-sum, 0);
         //     return ans;
         // }
-        public boolean possibleToStamp(int[][] a, int r, int c) { // r: stampHeight c: stampWidth  tle
-            m = a.length;
-            n = a[0].length;
-            int cnt = 0, i = 0, j = 0, sum = 0;
-            for (int [] v : a) 
-                sum += Arrays.stream(v).sum();
-            boolean [][] vis = new boolean [m][n];
-            while (cnt < m * n-sum) {
-                boolean done = false;
-                for ( i = 0; i+r <= m && cnt < m*n-sum; i++) {
-                    for ( j = 0; j+c <= n && cnt < m*n-sum; j++) {
-                        if (a[i][j] == 1 || vis[i][j]) continue;
-                        if (!vis[i][j] && canReplace(i, j, a, r, c)) {
-                            done = true;
-                            vis[i][j] = true;
-                            cnt += getCnt(i, j, a, r, c);
-                        }
-                    }
-                }
-                if (!done) return false;
-            }
-            return true;
-        }
-        int m, n;
-        int getCnt(int ii, int jj, int [][] a, int r, int c) {
-            int cnt = 0;
-            for (int i = ii; i < ii+r; i++) 
-                for (int j = jj; j < jj+c; j++) {
-                    if (a[i][j] == -1) continue;
-                    a[i][j] = -1;
-                    cnt++;
-                }
-            return cnt;
-        }
-        boolean canReplace(int ii, int jj, int [][] a, int r, int c) {
-            if (ii + r > m || jj + c > n) return false;
-            for (int i = ii; i < ii+r; i++) 
-                for (int j = jj; j < jj+c; j++) 
-                    if (a[i][j] == 1) return false;
-            return true;
+        // public int minSwaps(int[] a) {
+        //     int n = a.length, sum = Arrays.stream(a).sum(), i = 0, j = 0;
+        //     while (i < n && a[i] == 0) i++;
+        //     while (j >= 0 && a[j] == 0) j--;
+        //     int befAft = i + n-1-j;
+        //     int mid = n - (n-1-j+i) - sum; // 中间的
+        //     int ans = Math.min(befAft, mid), pre = 0;
+        //     for ( ; i <= j; i++) { // 扫一遍中间的，还是有bug, 这里
+        //         // pre = i;
+        //         while (i < n && a[i] == 1) i++;
+        //         pre = i;
+        //         while (i < n && a[i] == 0) i++;
+        //         ans = Math.min(ans, Math.min(i-pre-1, n-sum-(i-pre-1)));
+        //     }
+        //     return ans;
+        // }
+
+        // public int wordCount(String[] bgn, String[] end) { // tle
+        //     int m = bgn.length, n = end.length, ans = 0;
+        //     Set<Integer> si = new HashSet<>();
+        //     TreeMap<Integer, Set<Integer>> map = new TreeMap<>();
+        //     for (String s : bgn) 
+        //         map.computeIfAbsent(s.length(), z -> new HashSet<>()).add(getMask(s));
+        //     Arrays.sort(end, (a, b)->Integer.compare(a.length(), b.length()));
+        //     // boolean bk = false;
+        //     for (String s : end) {
+        //         // bk = false;
+        //         int len = s.length();
+        //         Integer lower = map.lowerKey(len);
+        //         if (lower == null || lower < len-1) continue;
+        //         int cur = getMask(s);
+        //         for (Integer mask : map.get(lower)) {
+        //             int tmp = cur ^ mask;
+        //             if (Integer.bitCount(tmp) == 1) {
+        //                 ans++;
+        //                 // bk = true;
+        //                 break;
+        //             }
+        //         }
+        //         // if (bk) continue;
+        //     }
+        //     return ans;
+        // }
+        // int getMask(String t) {
+        //     int n = t.length();
+        //     int mask = 0;
+        //     for (char c : t.toCharArray()) 
+        //         mask |= 1 << (c - 'a');
+        //     return mask;
+        // }
+
+        public int earliestFullBloom(int[] pt, int[] gt) {
+            int n = pt.length, t = 0, d = 0;
+            Queue<int []> q = new PriorityQueue<>((x, y) -> y[2]-x[2]);
+            for (int i = 0; i < n; i++) 
+                q.offer(new int [] {pt[i], gt[i], pt[i]+gt[i]});
+            while (!q.isEmpty()) {
+                int [] cur = q.poll();
+                t += cur[0]; // 对于生长等待期，也需要记录一下是否所有的都开花了，最长剩余生长期天数
+                
+                t = Math.max(t, cur[0])
+            }            
+            
+
         }
     }
     public static void main (String[] args) {
         Solution s = new Solution ();
 
-        // int [][] a = new int [][] {{1,0,0,0},{0,1,0,0},{0,0,1,0},{0,0,0,1}};
-        int [][] a = new int [][] {{1,0,0,0},{1,0,0,0},{1,0,0,0},{1,0,0,0},{1,0,0,0}};
-        // int [][] a = new int [][] {{1,1,1,0},{0,0,0,1},{1,1,1,0},{1,1,0,0},{0,0,0,0},{0,1,0,1},{0,1,0,1},{1,1,1,0},{1,0,1,1},{0,0,0,1}};
-        // int [][] a = new int [][] {{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},{1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1}};
+        // int [] a = new int [] {1,1,0,0,1};
+        int [] a = new int [] {0,1,1,1,0,0,1,1,0};
 
-        System.out.println("a.length: " + a.length);
-        for (int z = 0; z < a.length; ++z) 
-            System.out.println(Arrays.toString(a[z]));
-
-        boolean r = s.possibleToStamp(a, 4, 3);
+        int r = s.minSwaps(a);
         System.out.println("r: " + r);
     }
 }
