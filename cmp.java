@@ -42,6 +42,52 @@ public class cmp {
         //         s.add(i);
         // }
 
+        // public int wordCount(String[] bgn, String[] end) { // tle: 91 / 93 test cases passed.
+        //     int m = bgn.length, n = end.length, ans = 0;
+        //     Set<Integer> si = new HashSet<>();
+        //     TreeMap<Integer, Set<Integer>> map = new TreeMap<>();
+        //     for (String s : bgn) 
+        //         map.computeIfAbsent(s.length(), z -> new HashSet<>()).add(getMask(s));
+        //     Arrays.sort(end, (a, b)->Integer.compare(a.length(), b.length()));
+        //     // boolean bk = false;
+        //     for (String s : end) {
+        //         // bk = false;
+        //         int len = s.length();
+        //         Integer lower = map.lowerKey(len);
+        //         if (lower == null || lower < len-1) continue;
+        //         int cur = getMask(s);
+        //         for (Integer mask : map.get(lower)) {
+        //             int tmp = cur ^ mask;
+        //             if (Integer.bitCount(tmp) == 1) {
+        //                 ans++;
+        //                 // bk = true;
+        //                 break;
+        //             }
+        //         }
+        //         // if (bk) continue;
+        //     }
+        //     return ans;
+        // }
+        // int getMask(String t) {
+        //     int n = t.length();
+        //     int mask = 0;
+        //     for (char c : t.toCharArray()) 
+        //         mask |= 1 << (c - 'a');
+        //     return mask;
+        // }
+
+        // public int earliestFullBloom(int[] pt, int[] gt) {
+        //     int n = pt.length, t = 0, d = 0;
+        //     Queue<int []> q = new PriorityQueue<>((x, y) -> y[2]-x[2]);
+        //     for (int i = 0; i < n; i++) 
+        //         q.offer(new int [] {pt[i], gt[i], pt[i]+gt[i]});
+        //     while (!q.isEmpty()) {
+        //         int [] cur = q.poll();
+        //         t += cur[0]; // 对于生长等待期，也需要记录一下是否所有的都开花了，最长剩余生长期天数
+        //         t = Math.max(t, cur[0])
+        //     }            
+        // }
+
         // public int minSwaps(int[] a) {
         //     int n = a.length, sum = Arrays.stream(a).sum();
         //     int i = 0, j = n-1;
@@ -85,77 +131,32 @@ public class cmp {
         //     //     return Math.min(n-(i+n-1-j)-sum, 0);
         //     return ans;
         // }
-        // public int minSwaps(int[] a) {
-        //     int n = a.length, sum = Arrays.stream(a).sum(), i = 0, j = 0;
-        //     while (i < n && a[i] == 0) i++;
-        //     while (j >= 0 && a[j] == 0) j--;
-        //     int befAft = i + n-1-j;
-        //     int mid = n - (n-1-j+i) - sum; // 中间的
-        //     int ans = Math.min(befAft, mid), pre = 0;
-        //     for ( ; i <= j; i++) { // 扫一遍中间的，还是有bug, 这里
-        //         // pre = i;
-        //         while (i < n && a[i] == 1) i++;
-        //         pre = i;
-        //         while (i < n && a[i] == 0) i++;
-        //         ans = Math.min(ans, Math.min(i-pre-1, n-sum-(i-pre-1)));
-        //     }
-        //     return ans;
-        // }
-
-        // public int wordCount(String[] bgn, String[] end) { // tle: 91 / 93 test cases passed.
-        //     int m = bgn.length, n = end.length, ans = 0;
-        //     Set<Integer> si = new HashSet<>();
-        //     TreeMap<Integer, Set<Integer>> map = new TreeMap<>();
-        //     for (String s : bgn) 
-        //         map.computeIfAbsent(s.length(), z -> new HashSet<>()).add(getMask(s));
-        //     Arrays.sort(end, (a, b)->Integer.compare(a.length(), b.length()));
-        //     // boolean bk = false;
-        //     for (String s : end) {
-        //         // bk = false;
-        //         int len = s.length();
-        //         Integer lower = map.lowerKey(len);
-        //         if (lower == null || lower < len-1) continue;
-        //         int cur = getMask(s);
-        //         for (Integer mask : map.get(lower)) {
-        //             int tmp = cur ^ mask;
-        //             if (Integer.bitCount(tmp) == 1) {
-        //                 ans++;
-        //                 // bk = true;
-        //                 break;
-        //             }
-        //         }
-        //         // if (bk) continue;
-        //     }
-        //     return ans;
-        // }
-        // int getMask(String t) {
-        //     int n = t.length();
-        //     int mask = 0;
-        //     for (char c : t.toCharArray()) 
-        //         mask |= 1 << (c - 'a');
-        //     return mask;
-        // }
-
-        public int earliestFullBloom(int[] pt, int[] gt) {
-            int n = pt.length, t = 0, d = 0;
-            Queue<int []> q = new PriorityQueue<>((x, y) -> y[2]-x[2]);
-            for (int i = 0; i < n; i++) 
-                q.offer(new int [] {pt[i], gt[i], pt[i]+gt[i]});
-            while (!q.isEmpty()) {
-                int [] cur = q.poll();
-                t += cur[0]; // 对于生长等待期，也需要记录一下是否所有的都开花了，最长剩余生长期天数
-                
-                t = Math.max(t, cur[0])
-            }            
-            
-
+        public int minSwaps(int[] arr) { // 大致的思路都是有的，只是环形数组，把自己复制一遍贴在后面，考的时候没有想到
+            int n = arr.length * 2, sum = Arrays.stream(arr).sum(), j = 0, ans = n, cnt = 0;
+            int [] a = new int [n];
+            System.arraycopy(arr, 0, a, 0, n/2);
+            System.arraycopy(arr, 0, a, n/2, n/2);
+            System.out.println(Arrays.toString(a));
+            for (int i = 0; i < sum; i++) 
+                cnt += 1-a[i];
+            ans = Math.min(ans, cnt);
+            j = 0;
+            for (int i = sum; i < n; i++) {
+                cnt += 1 - a[i];
+                cnt -= 1 - a[j++];
+                ans = Math.min(ans, cnt);
+            }
+            return ans;
         }
-    }
+
+}
     public static void main (String[] args) {
         Solution s = new Solution ();
 
         // int [] a = new int [] {1,1,0,0,1};
-        int [] a = new int [] {0,1,1,1,0,0,1,1,0};
+        // int [] a = new int [] {0,1,1,1,0,0,1,1,0};
+        // int [] a = new int [] {1,1,0,0,1};
+        int [] a = new int [] {0,1,0,1,1,0,0};
 
         int r = s.minSwaps(a);
         System.out.println("r: " + r);
