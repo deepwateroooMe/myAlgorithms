@@ -1273,25 +1273,6 @@ public class mixed {
         //     return ans;
         // }
 
-        // public boolean canBeValid(String t, String ll) {
-        //     int n = t.length(), lcnt = 0, cnt = 0;
-        //     char [] s = t.toCharArray();
-        //     char [] l = ll.toCharArray();
-        //     if (n % 2 == 1) return false;
-        //     for (int i = 0; i < n; i++) {
-        //         if (l[i] == 1 && s[i] == ')') {
-        //             if (lcnt > 0) lcnt--; // locked '(' cnt
-        //             else if (cnt > 0) cnt--;
-        //             else return false;
-        //         } else if (l[i] == 0) cnt++;
-        //         else if (l[i] == 1 && s[i] == '(') lcnt++;
-        //     }
-        //     if (lcnt > 0 && lcnt > cnt) return false;
-        //     return true;
-        // }
-        // String a = "())(()(()(())()())(())((())(()())((())))))(((((((())(()))))(";
-        // String b ="100011110110011011010111100111011101111110000101001101001111";
-
         // public boolean isSameAfterReversals(int v) {
         //     if (v >= 10 && v % 10 == 0) return false;
         //     return true;
@@ -1613,15 +1594,75 @@ public class mixed {
         //     }
         //     return ans;
         // }
+
+        // public boolean canBeValid(String tt, String ss) {
+        //     int n = tt.length(), cnt = 0;
+        //     char [] s = tt.toCharArray();
+        //     char [] t = ss.toCharArray();
+        //     if (n % 2 == 1) return false;
+        //     for (int i = 0; i < n; i++) {
+        //         if (t[i] == '0' || s[i] == '(') cnt++;
+        //         else cnt--;
+        //         if (cnt < 0) return false; // 这是一个过程检查，过程中任何时候都需要 cnt >= 0
+        //     }
+        //     cnt = 0;
+        //     for (int i = n-1; i >= 0; i--) {
+        //         if (t[i] == '0' || s[i] == ')') cnt++;
+        //         else cnt--;
+        //         if (cnt < 0) return false; // 这是一个过程检查，过程中任何时候都需要 cnt >= 0
+        //     }
+        //     return true;
+        // }
+
+        // public boolean canConvertString(String ss, String tt, int k) {
+        //     if (ss.length() != tt.length()) return false;
+        //     int n = ss.length();
+        //     char [] s = ss.toCharArray(), t = tt.toCharArray();
+        //     int [] cnt = new int [26];
+        //     for (int i = 0; i < n; i++) {
+        //         int dif = t[i] - s[i];
+        //         if (dif < 0) dif += 26;
+        //         cnt[dif] ++;
+        //     }
+        //     for (int i = 1; i < 26; i++) {
+        //         int maxCnt = i + 26 * (cnt[i] - 1);
+        //         if (maxCnt > k) return false;
+        //         // k -= maxCnt; // BUG
+        //     }
+        //     return true;
+        //     // while (i < n && s[i] == t[i]) i++;
+        //     // if (i == n) return true;
+        //     // if (Math.abs(s[i] - t[i]) > k) return false;
+        //     // while (i < n) { // 这里可能也不一定是顺序遍历，应该还需要排序一下
+        //     //     while (i < n && s[i] == t[i]) i++;
+        //     //     if (i == n) return true;
+        //     //     if (s[i] > t[i]) 
+        //     //         v = s[i] - t[i] + 26;
+        //     //     else v = t[i] - s[i];
+        //     //     if (v > k || vis.contains(v) && v + 26 > k) return false;
+        //     //     k -= v;
+        //     //     vis.add(v);
+        //     //     i++;
+        //     // }
+        //     // return true;
+        // }
+
+        
     }
     public static void main (String[] args) {
         Solution s  =  new Solution ();
 
-        int [] a = new int [] {5,4,3,2,1};
+        // String a = "input";
+        // String b = "ouput";
+        // String a = "abc";
+        // String b = "bcd";
+        // String a = "aab";
+        // String b = "bbb";
+        String a = "mpzzwh";
+        String b = "kaeblv";
 
-        int r = s.kIncreasing(a, 1); 
+        boolean r = s.canConvertString(a, b, 24); 
         System.out.println("r: " + r);
-        
     }
 }
 

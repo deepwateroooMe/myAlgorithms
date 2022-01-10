@@ -793,43 +793,6 @@ public class strthreeing {
         // //     return sb.toString();
         // // }
 
-        // public String largestTimeFromDigits(int[] a) { // bug: 这个题应该是有很多的corner case，改天再写
-        //     // Set<Integer> s = new HashSet<>(Arrays.stream(a).boxed().collect(Collectors.toList()));
-        //     List<Integer> s = Arrays.stream(a).boxed().collect(Collectors.toList());
-        //     StringBuilder sb = new StringBuilder();
-        //     for (int j = 2; j > 0; j--) // >= 
-        //         if (s.contains(j)) {
-        //             sb.append((char)(j + '0'));
-        //             s.remove(new Integer(j));
-        //             break;
-        //         }
-        //     if (sb.length() > 0 sb.charAt(0) == '2') {
-        //         for (int i = 3; i >= 0; i--) 
-        //             if (s.contains(i)) {
-        //                 sb.append((char)(i + '0'));
-        //                 s.remove(new Integer(i));
-        //                 break;
-        //             }
-        //     } else if (sb.length() > 0) {
-        //         for (int i = 9; i >= 0; i--) 
-        //             if (s.contains(i)) {
-        //                 sb.append((char)(i + '0'));
-        //                 s.remove(new Integer(i));
-        //                 break;
-        //             }
-        //     }
-        //     sb.append(':');
-        //     for (int i = 5; i >= 0; i--) 
-        //         if (s.contains(i)) {
-        //             sb.append((char)(i + '0'));
-        //             s.remove(new Integer(i));
-        //             break;
-        //         }
-        //     // sb.append(s.iterator().next());
-        //     sb.append(s.get(0));
-        //     return sb.toString();
-        // }
-
         // public String strWithout3a3b(int a, int b) {
         //     if (a == 0 || b == 0) return a == 0 ? "b".repeat(b) : "a".repeat(a);
         //     String s = "";
@@ -1415,17 +1378,160 @@ public class strthreeing {
         //         ans[i] = res.get(i);
         //     return ans;
         // }
+
+        // public String largestTimeFromDigits(int[] a) { // BUG : 最后两个test case 没过，不想再写这个题了。。。
+        //     List<Integer> s = Arrays.stream(a).boxed().collect(Collectors.toList());
+        //     Collections.sort(s);
+        //     if (s.get(0) > 2 || s.get(0) == 2 && s.get(1) >= 4) return "";
+        //     if (s.get(3) == 0) return "00:00";
+        //     StringBuilder sb = new StringBuilder();
+        //     for (int j = 2; j > 0; j--) 
+        //         if (s.contains(j)) {
+        //             sb.append((char)(j + '0'));
+        //             s.remove(new Integer(j));
+        //             break;
+        //         }
+        //     if (sb.length() > 0 && sb.charAt(0) == '2') {
+        //         for (int i = 3; i >= 0; i--) 
+        //             if (s.contains(i)) {
+        //                 sb.append((char)(i + '0'));
+        //                 s.remove(new Integer(i));
+        //                 break;
+        //             }
+        //     } else if (sb.length() > 0) {
+        //         for (int i = 9; i >= 0; i--) 
+        //             if (s.contains(i)) {
+        //                 sb.append((char)(i + '0'));
+        //                 s.remove(new Integer(i));
+        //                 break;
+        //             }
+        //     }
+        //     if (sb.length() == 0) {
+        //         if (s.contains(0)) {
+        //             sb.append('0');
+        //             s.remove(new Integer(0));
+        //         }
+        //         for (int i = 9; i >= 3; i--)
+        //             if (s.contains(i)) {
+        //                 sb.append(i);
+        //                 s.remove(new Integer(i));
+        //                 break;
+        //             }
+        //     }
+        //     sb.append(':');
+        //     if (s.get(0) > 5 && sb.charAt(1) != '0' && sb.charAt(1) >= 2) return "";
+        //     if (s.get(0) > 5) return "0"+s.get(1)+":" + (sb.charAt(0) == '0' ? sb.charAt(1) : sb.charAt(0)) + s.get(0);
+        //     for (int i = 5; i >= 0; i--) 
+        //         if (s.contains(i)) {
+        //             sb.append((char)(i + '0'));
+        //             s.remove(new Integer(i));
+        //             break;
+        //         }
+        //     sb.append(s.get(0));
+        //     return sb.toString();
+        // }
+        // public String largestTimeFromDigits(int[] a) {
+        //     int ans = -1;
+        //     for (int i = 0; i < a.length; i++) 
+        //         for (int j = 0; j < a.length; j++) {
+        //             if (i == j) continue;
+        //             for (int k = 0; k < a.length; k++) {
+        //                 if (k == i || k == j) continue;
+        //                 int l = 6 - i - j - k;
+        //                 int h = 10 * a[i] + a[j];
+        //                 int m = 10 * a[k] + a[l];
+        //                 if (h < 24 && m < 60) 
+        //                     ans = Math.max(ans, h * 60 + m); // 总是数字最大的最优解呀
+        //             }
+        //         }
+        //     return ans >= 0 ? String.format("%02d:%02d", ans / 60, ans % 60) : "";
+        // }
+
+        // public String predictPartyVictory(String tt) { // 前面的有优先权
+        //     int n = tt.length(), cnt [] = new int [2];
+        //     char [] s = tt.toCharArray();
+        //     Deque<Integer> r = new ArrayDeque<>();
+        //     Deque<Integer> d = new ArrayDeque<>();
+        //     for (int i = 0; i < n; i++) 
+        //         if (s[i] == 'R') r.offerLast(i);
+        //         else d.offerLast(i);
+        //     while (!r.isEmpty() && !d.isEmpty()) {
+        //         int ri = r.pollFirst(), di = d.pollFirst();
+        //         if (ri < di) r.offerLast(ri + n); // 圆圈会议，行驶权利之后要排到队尾去
+        //         else d.offerLast(di + n);
+        //     }
+        //     return !r.isEmpty() ? "Radiant" : "Dire";
+        // }
+    // // https://leetcode-cn.com/problems/dota2-senate/solution/java-649dota2can-yi-yuan-chao-9961-by-mu-0dqh/
+    //     public String predictPartyVictory(String senate) {
+    //         int rtt = 0;  // R阵营总人数
+    //         int dtt = 0;  // D阵营总人数
+    //         int curBanR = 0; // 当前被ban
+    //         int curBanD = 0; // 当前被ban
+    //         int ttBanR = 0;  // 被ban总数
+    //         int ttBanD = 0;  // 被ban总数
+    //         char [] s = senate.toCharArray();
+    //         boolean flag = true;
+    //         while (true) {
+    //             for (int i = 0; i < s.length; i++) {
+    //                 if (s[i] == 'R') {
+    //                     if (flag) rtt++;
+    //                     if (curBanR == 0) {
+    //                         curBanD++;
+    //                         ttBanD++;
+    //                         if (ttBanD == dtt && !flag) return "Radiant";
+    //                     } else {
+    //                         curBanR--;
+    //                         s[i] = 'r';
+    //                     }
+    //                 } else if (s[i] == 'D') {
+    //                     if (flag) dtt++;
+    //                     if (curBanD == 0) {
+    //                         curBanR++;
+    //                         ttBanR++;
+    //                         if (ttBanR == rtt && !flag) return "Dire";
+    //                     } else {
+    //                         curBanD--;
+    //                         s[i] = 'd';
+    //                     }
+    //                 }
+    //             }
+    //             flag = false;
+    //             if (ttBanD >= dtt) return "Radiant";
+    //             if (ttBanR >= rtt) return "Dire";
+    //         }
+    //     }
+
+        // // 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
+        // // _ x   x   x   x    x     x     x     x     x     x 2
+        // //     x     _     x        _        x        _       3
+        // //       _       _                                    4 all on;
+        // //         x          _              _              _ 5
+        // //           x              x                 x       6
+        // //             x                  _
+        // //               x
+        // //                 _
+        // public int bulbSwitch(int n) {
+        //     return (int)Math.sqrt(n);
+        // }
+
+        
     }
     public static void main (String[] args) {
         Solution s = new Solution ();
 
-        // String []  a = new String []  {"Shogun", "Tapioca Express", "Burger King", "KFC"};
-        // String []  b = new String []  {"Piatti", "The Grill at Torrey Pines", "Hungry Hunter Steakhouse", "Shogun"};
-        String []  a = new String []  {"Shogun", "Tapioca Express", "Burger King", "KFC"};
-        String []  b = new String []  {"KFC", "Burger King", "Tapioca Express", "Shogun"};
+        String a = "RDD";
 
-        String [] r = s.findRestaurant(a, b);
-       System.out.println(Arrays.toString(r));
-       
+        String r = s.predictPartyVictory(a);
+        System.out.println("r: " + r);
     }
 }
+
+
+
+
+
+
+
+
+ 

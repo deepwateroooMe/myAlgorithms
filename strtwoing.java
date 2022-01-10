@@ -329,35 +329,6 @@ public class strtwoing {
         // }
 
 
-        // public boolean canConvertString(String ss, String tt, int k) { // 这里那个下标处理得有点儿不太对
-        //     if (ss.length() != tt.length()) return false;
-        //     int n = ss.length(), i = 0, v = 0, cnt = 0;
-        //     char [] s = ss.toCharArray(), t = tt.toCharArray();
-        //     Set<Integer> vis = new HashSet<>();
-        //     while (i < n && s[i] == t[i]) i++;
-        //     if (i == n) return true;
-        //     if (i > k) return false;
-        //     if (i > 0) {
-        //         cnt = i-1;
-        //         vis.add(i);
-        //     }
-        //     while (i < n) {
-        //         while (i < n && s[i] == t[i]) i++;
-        //         if (i == n) return true;
-        //         if (s[i] > t[i]) 
-        //             v = s[i] - t[i] + 26;
-        //         else v = t[i] - s[i];
-        //         if (v + i != cnt) return false; //
-        //         vis.add(i);
-        //         // if (i == 0) cnt += i-1;
-        //         cnt += 1;
-        //         if (k < cnt) return false; // 这里理解的不对，呆会儿再写
-        //         i++;
-        //     }
-        //     return true;
-        // }
-
-
         // public int numWays(String t) {
         //     int mod = (int)1e9 + 7;
         //     int n = t.length(), cnt = 0;
