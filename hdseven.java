@@ -211,124 +211,53 @@ public class hdseven {
         //     //     y = tmp;
         //     // }
         // }
-        // private int getCostOfMST(int n, List<int[]> edges, int[] required, int[] avoid) {
-        //     int cost = 0;
-        //     DSU dsu = new DSU(n);
-        //     if (required != null) {
-        //         dsu.union(required[0], required[1]);
-        //         cost += required[2];
-        //     }
-        //     for (int[] edge : edges) {
-        //         if (edge != avoid && dsu.union(edge[0], edge[1])) 
-        //             cost += edge[2];
-        //         if (dsu.getCnt() == 1) 
-        //             return cost;
-        //     }
-        //     return Integer.MAX_VALUE;
-        // }
         // public List<List<Integer>> findCriticalAndPseudoCriticalEdges(int n, int[][] edges) {
-        //     List<int[]> weights = new ArrayList<>();
-        //     for (int[] edge : edges) 
-        //         weights.add(edge);
-        //     Collections.sort(weights, (w1, w2) -> Integer.compare(w1[2], w2[2]));
+        //     List<int []> lia = new ArrayList<>();
+        //     for (int [] e : edges) lia.add(e);
+        //     Collections.sort(lia, (x, y) -> x[2] - y[2]);
         //     List<Integer> critical = new ArrayList<>();
         //     List<Integer> pseudo = new ArrayList<>();
-        //     // Min cost of MST.
-        //     int minCost = getCostOfMST(n, weights, null, null);
-        //     for (int i = 0; i < edges.length; ++i) {
-        //         int [] edge = edges[i];
-        //         if (getCostOfMST(n, weights, null, edge) > minCost) {
-        //             // Without critical edge, cost increases.
+        //     int minCost = getCostOfMST(n, lia, null, null);
+        //     for (int i = 0; i < edges.length; i++) {
+        //         int [] e = edges[i];
+        //         if (getCostOfMST(n, lia, null, e) > minCost) // 优先条件：如果已经是critical,就不用考虑后面的了
         //             critical.add(i);
-        //         } else if (getCostOfMST(n, weights, edge, null) == minCost) {
-        //             // Since edge is not critical, as long as it can be part of MST, it's pseudo.
+        //         else if (getCostOfMST(n, lia, e, null) == minCost)
         //             pseudo.add(i);
-        //         }
         //     }
         //     return Arrays.asList(critical, pseudo);
         // }
-        public List<List<Integer>> findCriticalAndPseudoCriticalEdges(int n, int[][] edges) {
-            List<int []> lia = new ArrayList<>();
-            for (int [] e : edges) lia.add(e);
-            Collections.sort(lia, (x, y) -> x[2] - y[2]);
-            List<Integer> critical = new ArrayList<>();
-            List<Integer> pseudo = new ArrayList<>();
-            int minCost = getCostOfMST(n, lia, null, null);
-            for (int i = 0; i < edges.length; i++) {
-                int [] e = edges[i];
-                if (getCostOfMST(n, lia, null, e) > minCost) // 优先条件：如果已经是critical,就不用考虑后面的了
-                    critical.add(i);
-                else if (getCostOfMST(n, lia, e, null) == minCost)
-                    pseudo.add(i);
-            }
-            return Arrays.asList(critical, pseudo);
-        }
-        int getCostOfMST(int n, List<int []> adj, int [] req, int [] avd) { // avoid 
-            int ans = 0;
-            DSU dsu = new DSU(n);
-            if (req != null) {
-                dsu.union(req[0], req[1]);
-                ans += req[2];
-            }
-            for (int [] e : adj) {
-                if (e != avd && dsu.union(e[0], e[1])) // 可以合并
-                    ans += e[2];
-                if (dsu.getCnt() == 1)
-                    return ans;
-            }
-            return Integer.MAX_VALUE; // 无法生成合法的最小生成树
-        }
-        static class DSU {
-            int [] par;
-            int [] rank; // 关于rank和size的部分
-            int size;
-            public boolean union(int x, int y) {
-                int px = find(x), py = find(y);
-                if (px == py) return false;
-                // if (rank[x] >= rank[y]) { // BUG
-                if (rank[px] >= rank[py]) {
-                    par[py] = px;
-                    if (rank[px] == rank[py])
-                        ++rank[px];
-                    // rank[x] += rank[y]; // BUG: 这里自己写错了
-                } else {
-                    par[px] = py;
-                    // rank[y] += rank[x];
-                }
-                --size;
-                return true;
-            }
-            public int getCnt() {
-                return size;
-            }
-            int find(int x) {
-                // if (par[x] != x) par[x] = find(par[x]); // BUG
-                while (par[x] != x) {
-                    par[x] = par[par[x]];
-                    x = par[x];
-                }
-                return par[x];
-            }
-            public DSU(int n) {
-                size = n;
-                par = new int [n];
-                rank = new int [n];
-                for (int i = 0; i < n; i++) 
-                    par[i] = i;
-            }
-        }
+        // int getCostOfMST(int n, List<int []> adj, int [] req, int [] avd) { // avoid 
+        //     int ans = 0;
+        //     DSU dsu = new DSU(n);
+        //     if (req != null) {
+        //         dsu.union(req[0], req[1]);
+        //         ans += req[2];
+        //     }
+        //     for (int [] e : adj) {
+        //         if (e != avd && dsu.union(e[0], e[1])) // 可以合并
+        //             ans += e[2];
+        //         if (dsu.getCnt() == 1)
+        //             return ans;
+        //     }
+        //     return Integer.MAX_VALUE; // 无法生成合法的最小生成树
+        // }
         // static class DSU {
+        //     int [] par;
+        //     int [] rank; // 关于rank和size的部分
+        //     int size;
         //     public boolean union(int x, int y) {
-        //         int parentX = find(x);
-        //         int parentY = find(y);
-        //         if (parentX == parentY) 
-        //             return false;
-        //         if (rank[parentX] < rank[parentY]) 
-        //             parents[parentX] = parentY;
-        //         else {
-        //             parents[parentY] = parentX;
-        //             if (rank[parentX] == rank[parentY]) 
-        //                 ++rank[parentX];
+        //         int px = find(x), py = find(y);
+        //         if (px == py) return false;
+        //         // if (rank[x] >= rank[y]) { // BUG
+        //         if (rank[px] >= rank[py]) {
+        //             par[py] = px;
+        //             if (rank[px] == rank[py])
+        //                 ++rank[px];
+        //             // rank[x] += rank[y]; // BUG: 这里自己写错了
+        //         } else {
+        //             par[px] = py;
+        //             // rank[y] += rank[x];
         //         }
         //         --size;
         //         return true;
@@ -336,42 +265,256 @@ public class hdseven {
         //     public int getCnt() {
         //         return size;
         //     }
-        //     public int find(int x) {
-        //         while (parents[x] != x) {
-        //             parents[x] = parents[parents[x]];
-        //             x = parents[x];
+        //     int find(int x) {
+        //         // if (par[x] != x) par[x] = find(par[x]); // BUG
+        //         while (par[x] != x) {
+        //             par[x] = par[par[x]];
+        //             x = par[x];
         //         }
-        //         return parents[x];
+        //         return par[x];
         //     }
-        //     private int[] parents;
-        //     private int[] rank;
-        //     private int size;
-        //     public DSU(int size) {
-        //         this.size = size;
-        //         parents = new int[size];
-        //         rank = new int[size];
-        //         for (int i = 0; i < size; ++i) {
-        //             parents[i] = i;
-        //         }
+        //     public DSU(int n) {
+        //         size = n;
+        //         par = new int [n];
+        //         rank = new int [n];
+        //         for (int i = 0; i < n; i++) 
+        //             par[i] = i;
         //     }
         // }
-    }
-    public static void main(String[] args) {
-        Solution s = new Solution();
 
-        // int [][] a = new int [][] {{0,1,1},{1,2,1},{2,3,2},{0,3,2},{0,4,3},{3,4,3},{1,4,6}};
-        int [][] a = new int [][] {{0,1,13},{0,2,6},{2,3,13},{3,4,4},{0,5,11},{4,6,14},{4,7,8},{2,8,6},{4,9,6},{7,10,4},{5,11,3},{6,12,7},{12,13,9},{7,13,2},{5,13,10},{0,6,4},{2,7,3},{0,7,8},{1,12,9},{10,12,11},{1,2,7},{1,3,10},{3,10,6},{6,10,4},{4,8,5},{1,13,4},{11,13,8},{2,12,10},{5,8,1},{3,7,6},{7,12,12},{1,7,9},{5,9,1},{2,13,10},{10,11,4},{3,5,10},{6,11,14},{5,12,3},{0,8,13},{8,9,1},{3,6,8},{0,3,4},{2,9,6},{0,11,4},{2,5,14},{4,11,2},{7,11,11},{1,11,6},{2,10,12},{0,13,4},{3,9,9},{4,12,3},{6,7,10},{6,8,13},{9,11,3},{1,6,2},{2,4,12},{0,10,3},{3,12,1},{3,8,12},{1,8,6},{8,13,2},{10,13,12},{9,13,11},{2,11,14},{5,10,9},{5,6,10},{2,6,9},{4,10,7},{3,13,10},{4,13,3},{3,11,9},{7,9,14},{6,9,5},{1,5,12},{4,5,3},{11,12,3},{0,4,8},{5,7,8},{9,12,13},{8,12,12},{1,10,6},{1,9,9},{7,8,9},{9,10,13},{8,11,3},{6,13,7},{0,12,10},{1,4,8},{8,10,2}};
+        // private Node head;
+        // public Skiplist() {
+        //     Node[] left = new Node[16];  // 左侧向下
+        //     Node[] right = new Node[16]; // 右侧向下
+        //     for(int i = 0; i < 16; i++) {
+        //         left[i] = new Node(-1);     // 左侧哨兵： -1
+        //         right[i] = new Node(20001); // 右侧消兵:  > 20000
+        //     }
+        //     for(int i = 0; i < 15; i++) { 
+        //         left[i].right = right[i];  // 前15层：左右连接起来
+        //         left[i].down = left[i + 1];   // 左 侧消兵：向下连接起来
+        //         right[i].down = right[i + 1]; // 右 侧消兵：向下连接起来
+        //     }
+        //     left[15].right = right[15]; // 最底层： 向右连接起来
+        //     head = left[0]; // 总入口
+        // }
+        // public boolean search(int target) {
+        //     Node r = head;
+        //     while (r != null) {
+        //         if (r.right.val > target)
+        //             r = r.down;
+        //         else if (r.right.val < target)
+        //             r = r.right;
+        //         else return true;
+        //     }
+        //     return false;
+        // }
+        // public void add(int val) {
+        //     Node r = head;
+        //     ArrayDeque<Node> s = new ArrayDeque<>();
+        //     while (r != null) {
+        //         if (r.right.val >= val) {
+        //             s.offerLast(r);
+        //             r = r.down;
+        //         } else r = r.right;
+        //     }
+        //     Node pre = null;
+        //     while (!s.isEmpty()) {
+        //         r = s.pollLast();
+        //         Node cur = new Node(val);
+        //         cur.right = r.right; // 新建节点放入到 r 与 r.right 之间
+        //         r.right = cur;
+        //         if (pre != null) cur.down = pre; // 如果当前层不是最底层，那么设置新层新插入节点的 down 指向下一层新插入同值节点
+        //         pre = cur;  // keep updated
+        //         if (Math.random() < 0.5) break;  // 根据这个概率来决定，新插入节点是否继续向上增加节点
+        //     }
+        // }
+        // public boolean erase(int val) {
+        //     Node r = head;
+        //     boolean ans = false;
+        //     while (r != null) {
+        //         if (r.right.val >= val) {
+        //             if (r.right.val == val) { // 把当前层的这一节点删除
+        //                 ans = true;
+        //                 r.right = r.right.right; // 
+        //             }
+        //             r = r.down; // 向下遍历,寻找并删除当前层之下可能存在的节点
+        //         } else r = r.right;
+        //     }
+        //     return ans;
+        // }
+        // class Node {
+        //     int val;
+        //     Node right, down;
+        //     public Node(int val) {
+        //         this.val = val;
+        //     }
+        // }
+ 
+        // static final int mod = (int)1e9 + 7;
+        // List<Integer> list; // 承受作用力之前的原始数据
+        // long add, mul;      // 记的是所有的加和乘操作的最终累积效果
+        // public Fancy() {
+        //     add = 0;
+        //     mul = 1;
+        //     list = new ArrayList<>();
+        // }
+        // public void append(int val) {
+        //     val = (int)((val - add + mod) % mod);
+        //     val = (int)(((long)val * quickMul(mul, mod - 2)) % mod);
+        //     list.add(val); // 因为新加入，所以对当前累积效果取反操作
+        // }
+        // public void addAll(int inc) {
+        //     add = (add + inc) % mod; // 纪录作用力 加
+        // }
+        // public void multAll(int m) { // 纪录作用力 乘
+        //     add = add * m % mod;
+        //     mul = mul * m % mod;
+        // }
+        // public int getIndex(int idx) {
+        //     if (idx >= list.size()) return -1;
+        //     return (int)((list.get(idx) * mul + add) % mod); // 在原始数据的基础上施加最终的累积效果
+        // }
+        // long quickMul(long x, int y) {
+        //     long ans = 1;
+        //     while (y > 0) {
+        //         if (y % 2 == 1)
+        //             ans = (ans * x) % mod;
+        //         x = x * x % mod;
+        //         y >>=1 ;
+        //     }
+        //     return ans;
+        // }
 
-        List<List<Integer>> r = s.findCriticalAndPseudoCriticalEdges(14, a);
-        System.out.println("r.size(): " + r.size());
-        for (int z = 0; z < r.size(); ++z) 
-            System.out.println(Arrays.toString(r.get(z).toArray()));
-        
-    }
-}
+        // public int maxBuilding(int n, int[][] res) {
+        //     int m = res.length, h [] = new int [m+1]; // 高度限制处建筑的最大高度
+        //     if (m == 0) return n-1; // 没有任何限制，返回可能的最大高度 n-1
+        //     Arrays.sort(res, (x, y) -> x[0] - y[0]);
+        //     h[0] = 0; // 第一栋建筑高度为0
+        //     h[1] = Math.min(res[0][1], res[0][0]-1);
+        //     for (int i = 1; i < m; i++)    // 从左向右高度限制
+        //         h[i+1] = Math.min(res[i][1], h[i] + res[i][0] - res[i-1][0]);
+        //     for (int i = m-2; i >= 0; i--) // 从右向左高度限制
+        //         h[i+1] = Math.min(h[i+1], h[i+2] + res[i+1][0] - res[i][0]);
+        //     // int ans = h[1] + (res[0][0] - h[1]) / 2; // (j − i + h[i] + h[j]) / 2 // bug: 最后两个test case 不过
+        //     int ans = (h[1] + res[0][0] - 1 + h[0]) / 2; // (j − i + h[i] + h[j]) / 2
+        //     System.out.println("ans: " + ans);
+        //     for (int i = 2; i <= m; i++) // 统计各区间最大建筑高度
+        //         ans = Math.max(ans, (res[i-1][0] - res[i-2][0] + h[i] + h[i-1]) / 2);
+        //     ans = Math.max(ans, h[m] + n - res[m-1][0]); // 最后一栋建筑需单独计算
+        //     return ans;
+        // }
+        // public int maxBuilding(int n, int[][] res) {
+        //     int m = res.length+2, r [][] = new int [m][2]; // 高度限制处建筑的最大高度
+        //     r[0] = new int [] {1, 0};
+        //     for (int i = 0; i < m-2; i++) 
+        //         r[i+1] = res[i];
+        //     r[m-1] = new int [] {n, n-1};
+        //     Arrays.sort(r, (x, y) -> x[0] - y[0]);
+        //     for (int i = 1; i < m; i++) 
+        //         r[i][1] = Math.min(r[i][1], r[i-1][1] + r[i][0] - r[i-1][0]);
+        //     for (int i = m-2; i >= 0; i--)
+        //         r[i][1] = Math.min(r[i][1], r[i+1][1] + r[i+1][0] - r[i][0]);
+        //     int ans = 0;
+        //     for (int i = 0; i < m-1; i++) 
+        //         ans = Math.max(ans, (r[i+1][0] - r[i][0] + r[i+1][1] + r[i][1]) / 2);
+        //     return ans;
+        // }
 
+        // public int[] recoverArray(int[] a) {
+        //     n = a.length;
+        //     Arrays.sort(a);
+        //     vis = new boolean [n];
+        //     for (int i = 0; i < n; i++) 
+        //         m.computeIfAbsent(a[i], z -> new ArrayList<>()).add(i);
+        //     for (int i = 1; i < n; i++) { // 遍历所有的可能性
+        //         int k = a[i] - a[0];                  // k是整数，那么2*k肯定是偶数，且，不能为0
+        //         if (k == 0 || (k & 1) == 1) continue; // 为奇数或者0不符合要求没必要再进行下一步,题目要求k为正整数
+        //         Arrays.fill(vis, false);
+        //         ans = isValid(k >> 1, a);
+        //         if (ans != null) return ans;
+        //     }
+        //     return null;
+        // }
+        // Map<Integer, List<Integer>> m = new HashMap<>(); // 存储当前值对应的下标,由于可能存在相等的值,故value用列表表示
+        // boolean [] vis;
+        // int n, ans [];
+        // int [] isValid(int k, int [] a) { // 检查当前 k 值是否合法, k 已经除过 2 了
+        //     int [] ans = new int [n >> 1];
+        //     int idx = 0;
+        //     for (int i = 0; i < n; i++) {
+        //         if (vis[i]) continue; // 被某个 -k 的数配对过了，跳过
+        //         List<Integer> tmp = m.get(a[i] + (k << 1)); // k * 2 ( << ) !!! << 的2优先级很低
+        //         if (tmp == null) return null;
+        //         int j = 0;
+        //         while (j < tmp.size()) {
+        //             if (vis[tmp.get(j)]) j++;
+        //             else break;
+        //         }
+        //         if (j == tmp.size()) return null; // 找不到合理的解，返回
+        //         vis[tmp.get(j)] = true; // 主要是右半部分 a[i]+k，左边（a[i]-k）从左往右遍历，设不设置为 true无所谓
+        //         ans[idx++] = a[i] + k;
+        //     }
+        //     return ans;
+        // }
 
+        // // - https://leetcode.com/problems/abbreviating-the-product-of-a-range/discuss/1646608/C%2B%2BJavaPython-Scientific-Notation-oror-Very-Detailed-Explanation-oror-With-and-Without-Logarithm
+        // public String abbreviateProduct(int left, int right) { // BUG todo: 没读懂这究竟是在干
+        //     long suf = 1; // suffix
+        //     int zoos = 0, dts = 0; // zeroes, digits
+        //     double pd = 1.0; // product
+        //     for (int i = left; i <= right; i++) {
+        //         pd *= i;
+        //         while (pd >= 1.0) { // keep 0.1 <= prod < 1.0, so len(str(int(prod * 100000))) == 5
+        //             pd /= 10.0;
+        //             dts ++;         // add 1 while remove 1 digit
+        //         }
+        //         suf *= i;
+        //         while (suf % 10 == 0) {
+        //             zoos++;
+        //             suf /= 10;
+        //         }
+        //         if (suf > Math.pow(10, 8)) suf %= (long)Math.pow(10, 8);
+        //     }
+        //     if (dts - zoos <= 10)
+        //         return (long)(pd * Math.pow(10, dts - zoos) + 0.5) + "e" + zoos;
+        //     else {
+        //         // you may find that I add 0.5 before cast to int above, but not here.
+        //         // It is because when org_digits - zeros <= 10, int(prod * (10 ** (org_digits - zeros)) + 0.5) is the actual
+        //         // value, we add 0.5 to the last non-zero digits for rounding, 0.5 just means 0.5 over there.
+        //         // However here int(prod * 100000) is the first 5-digit prefix, the 6-th digit is also a valid digit not
+        //         // error.If we add 0.5 to 6-th digit, how do we calculate the first 6-digit or 7-digit prefix?o
+        //         String ssuf = "0000" + Long.toString(suf);
+        //         return (int)(pd * 100000) + "..." + ssuf.substring(ssuf.length() - 5) + 'e' + zoos;
+        //     }
+        // }
 
+        // public boolean reachingPoints(int i, int j, int x, int y) {
+        //     while (x >= i && y >= j) {
+        //         if (x > y) {
+        //             if ((x - i) % y == 0 && y == j) return true; // 恰好能够取得期望整除效果
+        //             x = x - x / y * y; // 不能整除，就减去所有能够整除的部分，保留不能整除的剩余慢慢折腾去吧。。。。。。
+        //         } else {
+        //             if ((y - j) % x == 0 && x == i) return true;
+        //             y = y - y / x * x;
+        //         }
+        //     }
+        //     return false;
+        //     // while (!(x == i && y == j)) {
+        //     //     int min = Math.min(x, y), max = Math.max(x, y);
+        //     //     if (max == x) x -= y; // 这是分步极慢做法
+        //     //     else y -= x;
+        //     //     if (x < i || y < j) break;
+        //     // }
+        //     // if (x == i && y == j) return true;
+        //     // return false;
+        // }
 
+    } 
+    public static void main (String[] args) {
+        Solution s = new Solution ();
 
-
+        boolean r = s.reachingPoints(1, 1, 3, 5);
+        System.out.println("r: " + r);
+    } 
+} 

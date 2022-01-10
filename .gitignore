@@ -1,3 +1,5 @@
 *.class
 *.tex
-./_minted-readme/**
+*.pdf
+tmp.*
+./_minted*

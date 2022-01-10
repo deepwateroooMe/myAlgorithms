@@ -540,12 +540,138 @@ public int[] countPairs(int n, int[][] edges, int[] queries) { // 别人家的�
 # // https://leetcode.com/problems/count-pairs-of-nodes/discuss/1096432/Java-or-Two-Steps-or-O(NlgN-%2B-Q(N%2BE))
 # // 这个也可以再参考一下
 
+*** 2115. Find All Possible Recipes from Given Supplies
+You have information about n different recipes. You are given a string array recipes and a 2D string array ingredients. The ith recipe has the name recipes[i], and you can create it if you have all the needed ingredients from ingredients[i]. Ingredients to a recipe may need to be created from other recipes, i.e., ingredients[i] may contain a string that is in recipes.
+
+You are also given a string array supplies containing all the ingredients that you initially have, and you have an infinite supply of all of them.
+
+Return a list of all the recipes that you can create. You may return the answer in any order.
+
+Note that two recipes may contain each other in their ingredients.
+**** 解题思路与分析
+     #+BEGIN_SRC java
+public List<String> findAllRecipes(String[] re, List<List<String>> ing, String[] sup) { // 菜谱 菜谱原材料 食材 BUG BUG BUG
+    Map<String, Set<String>> adj = new HashMap<>();    // 每种材料可以做成的菜的 清单
+    Map<String, Integer> ins = new HashMap<>();        // 每种材料或是菜谱的 入度
+    for (int i = 0; i < re.length; i++) 
+        for (String it : ing.get(i)) {
+            adj.computeIfAbsent(it, z -> new HashSet<>()).add(re[i]);
+            ins.put(re[i], ins.getOrDefault(re[i], 0) + 1);
+        }
+    List<String> ans = new ArrayList<>();
+    Deque<String> q = new ArrayDeque<>();
+    for (String s : sup) q.offerLast(s); // 把初始的原材料放入队列
+    while (!q.isEmpty()) { // 拓扑排序
+        String cur = q.pollFirst();
+        if (adj.containsKey(cur)) 
+            for (String one : adj.get(cur)) { // 遍历某种原材料可以做成的所有的菜，其入度是否为0
+                ins.put(one, ins.get(one)-1); // 入度 ins--
+                if (ins.get(one) == 0) {
+                    ans.add(one);
+                    q.offerLast(one);
+                }
+            }
+    }
+    return ans;
+}
+ #+END_SRC
+** 基环内向树
+*** 2127. Maximum Employees to Be Invited to a Meeting - Hard 基环内向树
+A company is organizing a meeting and has a list of n employees, waiting to be invited. They have arranged for a large circular table, capable of seating any number of employees.
+
+The employees are numbered from 0 to n - 1. Each employee has a favorite person and they will attend the meeting only if they can sit next to their favorite person at the table. The favorite person of an employee is not themself.
+
+Given a 0-indexed integer array favorite, where favorite[i] denotes the favorite person of the ith employee, return the maximum number of employees that can be invited to the meeting.
+**** 解题思路与分析
+如果我们把每个员工看成图上的一个节点，如果员工 xx 喜欢员工 yy，就在从 xx 对应的节点到 yy 对应的节点连一条边，那么形成的图是什么结构的？形成的图会由若干颗「基环内向树」组成。所谓「基环内向树」，就是形如下图所示的结构：
+
+[[./pic/2277tree-1.png]]
+
+
+我们从任意一个节点 xx 开始在图上进行「游走」，由于每个员工只有一位喜欢的员工，因此每个节点在图上只会有一条出边，即「游走」的过程是唯一的。由于图上有 nn 个节点，因此在 n+1n+1 步以内，一定会走到一个重复的节点，那么在第一次经过该节点之后，到第二次经过该节点之前的所有节点，以及该节点本身，就组成了一个环，如上图的蓝色节点所示。
+
+对于不在环上的节点，我们已经说明了从它们开始「游走」也一定会进入到环中。在到达环上的节点之前，它们不会重复经过节点（否则就有两个环了，我们可以证明一个连通分量中是不可能有两个环的：因为每个节点只有一条出边，因此如果有两个环并且它们连通，那么必然某个环上有一个点有两条出边，一条出边指向同一个环上的节点，另一条出边可以使得它到达另一个环，这就产生了矛盾），那么它们就形成了类似树的结构，如上图的绿色节点所示。
+
+需要注意的是，一个单独的环也是「基环内向树」，它是一种特殊情况，即没有绿色的节点。
+
+思路与算法
+
+既然我们知道了图由若干颗「基环内向树」组成，那么我们就可以想一想，每一颗「基环内向树」的哪一部分可以被安排参加会议。
+
+我们首先讨论特殊的情况，即一个单独的环（或若干个环），并且所有环的大小都 \geq 3≥3。可以发现，我们按照环上的顺序给对应的员工安排座位是满足要求的，因为对于每一个环上的员工，它喜欢的员工就在它的旁边。并且，我们必须安排环上的所有员工，因为如果有缺失，那么喜欢那位缺失了的员工的员工就无法满足要求了。
+
+但如果我们已经安排了某一个环上的所有员工，剩余的环就没有办法安排了。这是因为已经安排的那个环是没有办法被「断开」的：断开的本质就是相邻位置员工的缺失。因此，我们可以得出一个重要的结论：
+
+如果我们想安排大小 \geq 3≥3 的环，我们最多只能安排一个，并且环需要是完整的。
+
+那么如果是环大小 \geq 3≥3 的「基环内向树」呢？如果我们安排了不在环上的节点，那么从该节点开始，我们需要不断安排当前节点喜欢的员工，这实际上就是「游走」的过程。而当我们游走到环上并到达环上最后一个未经过的节点时，该节点的下一个节点（即喜欢的员工）已经被安排过，所以最后一个未经过的节点就无法被安排，不满足要求。因此，我们不能安排任何不在环上的节点，只能安排在环上的节点，就得出了另一个的结论：
+
+所有环大小 \geq 3≥3 的「基环内向树」与一个大小相同（指环的部分）的环是等价的。
+
+那么最后我们只需要考虑大小 =2=2 的环或者「基环内向树」了。这里的特殊之处在于，大小 =2=2 的环可以安排多个：因为环上的两个点是互相喜欢的，因此只需要它们相邻即可，而没有其它的要求。而对于环大小 =2=2 的「基环内向树」，如果我们安排了不在环上的节点，那么游走完环上两个节点之后，同样是满足要求的，并且我们甚至可以继续延伸（反向「游走」），到另一个不在环上的节点为止。如下图所示，包含 \texttt{X}X 的节点就是可以安排参加会议的节点。
+
+[[./pic/2277tree-2.png]]
+
+并且同样地，对于每一棵环大小 =2=2 的「基环内向树」，我们都可以取出这样一条「双向游走」路径进行安排，它们之间不会影响。综上所述，原问题的答案即为下面二者中的最大值：
+
+最大的环的大小；
+
+所有环大小 =2=2 的「基环内向树」上的最长的「双向游走」路径之和。
+
+为了求解「基环内向树」上的最长的「双向游走」路径，我们可以使用拓扑排序 + 动态规划的方法。记 f[i]f[i] 表示到节点 ii 为止的最长「游走」路径经过的节点个数，那么状态方程即为：
+
+即我们考虑节点 ii 的上一个节点 jj，在图中必须有从 jj 到 ii 的一条有向边，这样我们就可以从 jj 转移到 ii。如果不存在满足要求的 jj（例如「基环内向树」退化成一个大小 =2=2 的环），那么 f[i] = 1f[i]=1。状态转移可以和拓扑排序同时进行。
+
+在拓扑排序完成后，剩余没有被弹出过队列的节点就是环上的节点。我们可以找出每一个环。如果环的大小 \geq 3≥3，我们就用其来更新最大的环的大小；如果环的大小 =2=2，设环上的两个节点为 xx 和 yy，那么该「基环内向树」上最长的「双向游走」的路径长度就是 f[x] + f[y]f[x]+f[y]。
+
+     #+BEGIN_SRC java
+public int maximumInvitations(int[] a) { // a: favorite
+    // 统计入度，便于进行拓扑排序
+    int n = a.length, ins [] = new int [n];
+    for (int v : a) ins[v]++;
+    boolean vis [] = new boolean [n];
+    int f [] = new int [n];
+    Arrays.fill(f, 1);
+    Deque<Integer> q = new ArrayDeque<>();
+    for (int i = 0; i < n; i++) 
+        if (ins[i] == 0) q.offerLast(i); 
+    while (!q.isEmpty()) {
+        int u = q.pollFirst();
+        vis[u] = true;
+        int v = a[u];
+        f[v] = Math.max(f[v], f[u] + 1); // 动态规划： 能够到达 v 的最长链的长度
+        --ins[v];
+        if (ins[v] == 0) q.offerLast(v);
+    }
+    // ring 表示最大的环的大小
+    // total 表示所有环大小为 2 的「基环内向树」上的最长的「双向游走」路径之和
+    int ring = 0, total = 0;
+    for (int i = 0; i < n; i++) {
+        if (!vis[i]) {
+            int j = a[i];
+            if (a[j] == i) { // 说明环的大小为 2
+                total += f[i] + f[j]; // 局部二元环可以叠加
+                vis[i] = vis[j] = true;
+            } else { // 否则环的大小至少为 3，我们需要找出环
+                int u = i, cnt = 0;
+                do { // 至少执行一次，evaluate after execute
+                    ++cnt;
+                    u = a[u];
+                    vis[u] = true;
+                } while (u != i); // 再达到达这一点，说明转了一圈，又回到了起点
+                ring = Math.max(ring, cnt); // 找出一个节点数目最多的环
+            }
+        }
+    }
+    return Math.max(ring, total);
+}
+ #+END_SRC
 ** Tarjan 算法
 - 图的一些基本概念：
-  - *关联（incident）* : 点为边的端点;
-  - *邻接（adjacent）* : 点与点关联同一条边，或边与边关联同一顶点；
-  - *子图* : 图G'的点和边都是图G的子集，则G'为G的子图;
-  - *道路* : 从点v到点u的路径；
+- *关联（incident）* : 点为边的端点;
+- *邻接（adjacent）* : 点与点关联同一条边，或边与边关联同一顶点；
+- *子图* : 图G'的点和边都是图G的子集，则G'为G的子图;
+- *道路* : 从点v到点u的路径；
   - *简单道路* : 没有重复边的道路；
   - *回路* : 起点与终点相同的道路；
   - *简单回路* : 没有重复边的回路；
@@ -1799,3 +1925,107 @@ public class UnionFind {
     // }
 }
 #+END_SRC
+** 跳表 Skiplist
+*** 1206. Design Skiplist - Hard
+Design a Skiplist without using any built-in libraries.
+
+A skiplist is a data structure that takes O(log(n)) time to add, erase and search. Comparing with treap and red-black tree which has the same function and performance, the code length of Skiplist can be comparatively short and the idea behind Skiplists is just simple linked lists.
+
+For example, we have a Skiplist containing [30,40,50,60,70,90] and we want to add 80 and 45 into it. The Skiplist works this way:
+
+
+Artyom Kalinin [CC BY-SA 3.0], via Wikimedia Commons
+
+You can see there are many layers in the Skiplist. Each layer is a sorted linked list. With the help of the top layers, add, erase and search can be faster than O(n). It can be proven that the average time complexity for each operation is O(log(n)) and space complexity is O(n).
+
+See more about Skiplist: https://en.wikipedia.org/wiki/Skip_list
+
+Implement the Skiplist class:
+
+Skiplist() Initializes the object of the skiplist.
+bool search(int target) Returns true if the integer target exists in the Skiplist or false otherwise.
+void add(int num) Inserts the value num into the SkipList.
+bool erase(int num) Removes the value num from the Skiplist and returns true. If num does not exist in the Skiplist, do nothing and return false. If there exist multiple num values, removing any one of them is fine.
+Note that duplicates may exist in the Skiplist, your code needs to handle this situation.
+**** 解题思路与分析
+- 1.先创建一个跳表节点Node，需要包含以下三个参数:节点值val, 右边节点right, 下边节点down
+- 2.跳表初始化:
+  - 每一层设置左右两个哨兵节点，左节点的值要比所有值小，右节点的值要比所有值大。因为0 <= num, target <= 20000，因此左节点值设为 -1，右节点值设为20001即可。
+  - 跳表的最大层数为16。因为题目说了最多调用 50000 次 search, add, 以及 erase操作，也就是底层链表长度n最长为50000，而我们随机的选 n/2n/2 个元素做为一级索引，随机选 n/4n/4 个元素作为二级索引，……，随机选 n/2^kn/2 作为顶层索引。而 2 ^ {16} = 65536 > 50000, 2^16 =65536>50000 ，所以16层足够为长度50000的链表建立索引。
+  - 每层的两个哨兵节点中，左节点要指向右节点，并且除了最后一层外左右节点都需要指向下一层节点
+  - 跳表起始节点head即为left[0]，即顶层的左哨兵节点
+- 3.查找(search)方法。从head节点开始查找，如果当前节点cur的右边节点值比target大，应该往下查找；如果cur的右边节点值比target小，应该往右查找；如果相等，那就是找到了，返回True。遍历完了也没找到，返回False。
+- 4.插入(add)方法。相对比较复杂，因为还需要根据概率维护索引。
+  - 查找插入位置。也是从head开始查找插入的位置，每次往下走的节点都需要保存，因为可能在该节点后面插入新的节点作为索引。换句话说，其实查找的是在每一层应该插入的位置并记录在stack中，只是不一定每一层都会插入节点罢了。
+  - 插入节点。首先最后一层肯定是要插入节点的，插入完成后，记录一下该层节点，因为如果该节点要加入到索引中，上一层是要指向这一层的。以1/2的概率生成索引，在上一层插入节点；1/2的概率插入结束，不再继续维护索引；如果前面生成了索引，再以1/2的概率插入节点直到插入到顶层或中途因概率停止插入。
+- 5.删除(erase)方法。删除和查找差不多，只不过是对每一层找到的节点都要进行删除，也就是删除节点的同时要删除由其产生的索引节点。
+     #+BEGIN_SRC java
+private Node head;
+public Skiplist() {
+    Node[] left = new Node[16];  // 左侧向下
+    Node[] right = new Node[16]; // 右侧向下
+    for(int i = 0; i < 16; i++) {
+        left[i] = new Node(-1);     // 左侧哨兵： -1
+        right[i] = new Node(20001); // 右侧消兵:  > 20000
+    }
+    for(int i = 0; i < 15; i++) { 
+        left[i].right = right[i];  // 前15层：左右连接起来
+        left[i].down = left[i + 1];   // 左 侧消兵：向下连接起来
+        right[i].down = right[i + 1]; // 右 侧消兵：向下连接起来
+    }
+    left[15].right = right[15]; // 最底层： 向右连接起来
+    head = left[0]; // 总入口
+}
+public boolean search(int target) {
+    Node r = head;
+    while (r != null) {
+        if (r.right.val > target)
+            r = r.down;
+        else if (r.right.val < target)
+            r = r.right;
+        else return true;
+    }
+    return false;
+}
+public void add(int val) {
+    Node r = head;
+    ArrayDeque<Node> s = new ArrayDeque<>();
+    while (r != null) {
+        if (r.right.val >= val) {
+            s.offerLast(r);
+            r = r.down;
+        } else r = r.right;
+    }
+    Node pre = null;
+    while (!s.isEmpty()) {
+        r = s.pollLast();
+        Node cur = new Node(val);
+        cur.right = r.right; // 新建节点放入到 r 与 r.right 之间
+        r.right = cur;
+        if (pre != null) cur.down = pre; // 如果当前层不是最底层，那么设置新层新插入节点的 down 指向下一层新插入同值节点
+        pre = cur;  // keep updated
+        if (Math.random() < 0.5) break;  // 根据这个概率来决定，新插入节点是否继续向上增加节点
+    }
+}
+public boolean erase(int val) {
+    Node r = head;
+    boolean ans = false;
+    while (r != null) {
+        if (r.right.val >= val) {
+            if (r.right.val == val) { // 把当前层的这一节点删除
+                ans = true;
+                r.right = r.right.right;
+            }
+            r = r.down; // 向下遍历,寻找并删除当前层之下可能存在的节点
+        } else r = r.right;
+    }
+    return ans;
+}
+class Node {
+    int val;
+    Node right, down;
+    public Node(int val) {
+        this.val = val;
+    }
+}
+     #+END_SRC

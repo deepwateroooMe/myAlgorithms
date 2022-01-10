@@ -1521,37 +1521,108 @@ public class mixed {
         // // https://leetcode-cn.com/problems/find-all-possible-recipes-from-given-supplies/solution/cong-gei-ding-yuan-cai-liao-zhong-zhao-d-d02i/
         // // 大方向的思路有了，还得再想一想
         // public List<String> findAllRecipes(String[] re, List<List<String>> ing, String[] sup) { // 菜谱 菜谱原材料 食材 BUG BUG BUG
-        //     // int n = re.length, j = 0;
-        //     Set<String> ss = new HashSet<>(Arrays.asList(sup));
-        //     Set<String> sr = new HashSet<>(Arrays.asList(re)); // receipes
-        //     Map<String, Integer> ins = new HashMap<>();        // 每种材料或是菜谱的 入度
         //     Map<String, Set<String>> adj = new HashMap<>();    // 每种材料可以做成的菜的 清单
-        //     for (int i = 0; i < re.length; i++) {
-        //         List<String> one = ing.get(i);
-        //         for (String it : one) { // materials in one receipes
+        //     Map<String, Integer> ins = new HashMap<>();        // 每种材料或是菜谱的 入度
+        //     for (int i = 0; i < re.length; i++) 
+        //         for (String it : ing.get(i)) {
         //             adj.computeIfAbsent(it, z -> new HashSet<>()).add(re[i]);
-        //             ins.put(re[i], ins.getOrDefault(re[i], 0) + 1); // 每种食谱的入度 随 原材料 增加
+        //             ins.put(re[i], ins.getOrDefault(re[i], 0) + 1);
         //         }
-        //     }
         //     List<String> ans = new ArrayList<>();
         //     Deque<String> q = new ArrayDeque<>();
-        //     for (String s : sup) { // 遍历 原材料
-        //         if (adj.get(s) == null) continue;
-        //         for (String mk : adj.get(s)) { // 遍历每种材料可能生成的 菜谱
-        //             ins.put(mk, ins.get(mk)-1);
-        //             if (ins.get(mk) == 0) q.offerLast(mk);
+        //     for (String s : sup) q.offerLast(s); // 把初始的原材料放入队列
+        //     while (!q.isEmpty()) { // 拓扑排序
+        //         String cur = q.pollFirst();
+        //         if (adj.containsKey(cur)) 
+        //             for (String one : adj.get(cur)) { // 遍历某种原材料可以做成的所有的菜，其入度是否为0
+        //                 ins.put(one, ins.get(one)-1); // 入度 ins--
+        //                 if (ins.get(one) == 0) {
+        //                     ans.add(one);
+        //                     q.offerLast(one);
+        //                 }
+        //             }
+        //     }
+        //     return ans;
+        // }
+
+        // public int maximumInvitations(int[] a) { // a: favorite
+        //     // 统计入度，便于进行拓扑排序
+        //     int n = a.length, ins [] = new int [n];
+        //     for (int v : a) ins[v]++;
+        //     boolean vis [] = new boolean [n];
+        //     int f [] = new int [n];
+        //     Arrays.fill(f, 1);
+        //     Deque<Integer> q = new ArrayDeque<>();
+        //     for (int i = 0; i < n; i++) 
+        //         if (ins[i] == 0) q.offerLast(i); 
+        //     while (!q.isEmpty()) {
+        //         int u = q.pollFirst();
+        //         vis[u] = true;
+        //         int v = a[u];
+        //         f[v] = Math.max(f[v], f[u] + 1); // 动态规划： 能够到达 v 的最长链的长度
+        //         --ins[v];
+        //         if (ins[v] == 0) q.offerLast(v);
+        //     }
+        //     // ring 表示最大的环的大小
+        //     // total 表示所有环大小为 2 的「基环内向树」上的最长的「双向游走」路径之和
+        //     int ring = 0, total = 0;
+        //     for (int i = 0; i < n; i++) {
+        //         if (!vis[i]) {
+        //             int j = a[i];
+        //             if (a[j] == i) { // 说明环的大小为 2
+        //                 total += f[i] + f[j]; // 局部二元环可以叠加
+        //                 vis[i] = vis[j] = true;
+        //             } else { // 否则环的大小至少为 3，我们需要找出环
+        //                 int u = i, cnt = 0;
+        //                 do { // 至少执行一次，evaluate after execute
+        //                     ++cnt;
+        //                     u = a[u];
+        //                     vis[u] = true;
+        //                 } while (u != i); // 再达到达这一点，说明转了一圈，又回到了起点
+        //                 ring = Math.max(ring, cnt); // 找出一个节点数目最多的环
+        //             }
         //         }
         //     }
+        //     return Math.max(ring, total);
         // }
-        
+
+        // public int kIncreasing(int[] a, int k) { // todo
+        //     int n = a.length, ans = 0;
+        //     for (int i = 0; i < k; i++) {
+        //         int size = 1, max = 0; // 最长递增子序列长度......
+        //         // DP 会超时，使用 贪心 + 二分 计算 max
+        //         // 这个数组太大也会超时，长度取 arr.length / k + 1
+        //         int [] d = new int [n / k + 1];
+        //         d[max++] = a[i];
+        //         for (int j = i+k; j < n; j += k) {
+        //             size++;
+        //             if (a[j] >= d[max-1])
+        //                 d[max++] = a[j];
+        //             else {
+        //                 int l = 0, r = max-1;
+        //                 while (l < r) {
+        //                     int m = l + (r - l) / 2;
+        //                     if (d[m] <= a[j])
+        //                         l = m + 1;
+        //                     else r = m;
+        //                 }
+        //                 d[r] = a[j];
+        //             }
+        //         }
+        //         ans += size - max;
+        //     }
+        //     return ans;
+        // }
     }
     public static void main (String[] args) {
         Solution s  =  new Solution ();
 
-        String [] a = new String [] {"011017","000000","010100","001020"};
+        int [] a = new int [] {5,4,3,2,1};
 
-        int r = s.numberOfBeams(a); 
+        int r = s.kIncreasing(a, 1); 
         System.out.println("r: " + r);
         
     }
 }
+
+
