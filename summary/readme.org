@@ -8170,51 +8170,144 @@ More formally, you want to choose four integers i, j, k, l such that 0 <= i <= j
 Return the maximum possible product of the lengths of the two non-intersecting palindromic substrings.
 
 A palindrome is a string that is the same forward and backward. A substring is a contiguous sequence of characters in a string.
-*** 解题思路与分析
-
+**** 解题思路与分析: rolling hash算法
+    #+BEGIN_SRC java
+public long maxProduct(String t) { // rolling hash 算法： Time complexity - O(n), space compelxity - O(n). NO collision detection
+    int n = t.length();
+    char [] s = t.toCharArray();
+    long [] p = new long[n + 1]; // pow[i] = BASE^i
+    p[0] = 1;
+    for (int i = 1; i <= n; i++) p[i] = p[i-1] * base % mod;
+    long [] lh = new long [n+1], rh = new long [n+1]; // 从左向右、从右向左遍历的hash值
+    for (int i = 1; i <= n; i++)   // s[0, i):   从左向右遍历
+        lh[i] = (lh[i-1] * base + s[i-1]-'a') % mod;
+    for (int i = n-1; i >= 0; i--) // s(i, n-1]: 从右向左遍历
+        rh[i] = (rh[i+1] * base + s[i] - 'a') % mod;
+    int left [] = new int [n], right [] = new int [n];
+    for (int i = 0, max = 1; i < n; i++) {    // 以i为 右 端点，回文片段在其左侧的最大回文长度
+        if (max < i && isPalindromic(i-max-1, i+1, lh, rh, p)) max += 2;
+        left[i] = max;
+    }
+    for (int i = n-1, max = 1; i >= 0; i--) { // 以i为 左 端点，回文片段在其右侧的最大回文长度
+        if (i + max + 2 <= n && isPalindromic(i, i+max+2, lh, rh, p)) max += 2;
+        right[i] = max;
+    }
+    long ans = 1;
+    for (int i = 1; i < n; i++)
+        ans = Math.max(ans, (long)left[i-1] * right[i]);
+    return ans;
+}        
+static final long mod = Integer.MAX_VALUE;
+static final long base = 29L;
+static boolean isPalindromic(int l, int r, long [] left, long [] right, long [] p) {
+    return lh(l, r, left, p) == rh(l, r, right, p);
+}
+static long lh(int l, int r, long [] hash, long [] p) {
+    long ans = (hash[r] - hash[l] * p[r-l]) % mod;
+    if (ans < 0) ans += mod;
+    return ans;
+}
+static long rh(int l, int r, long [] hash, long [] p) {
+    long ans = (hash[l] - hash[r] * p[r-l]) % mod;
+    if (ans < 0) ans += mod;
+    return ans;
+}
+#+END_SRC 
+**** 解题思路与分析: 马拉车算法
 这个马拉车，好像还是很半生不熟，要好好理解消化一下
 
 https://leetcode.com/problems/maximum-product-of-the-length-of-two-palindromic-substrings/discuss/1393288/Java-100-O(n)-time-O(n)-space-using-Manacher's-algorithm
 #+BEGIN_SRC java
-private static int[] manacherOdd(String str) {
-    int n = str.length();
-    char[] s = str.toCharArray();
-    int [] ans = new int [n];
+        public long maxProduct(String s) { // 
+            int n = s.length();
+            int d [] = manacher(s); // 以i为中心的，包括当前字符的单侧最大回文长度
+            int l [] = new int [n], r [] = new int [n]; // 转化为：以当前坐标为最右、最左极限的全回文片段最大长度
+            for (int i = 0; i < n; i++) {
+                l[i+d[i]-1] = Math.max(l[i+d[i]-1], 2 * d[i]-1); // 用第一个当前下标，来更新所有右端所能企及、以右端点为结尾的最大片段长度,从左向右
+                r[i-d[i]+1] = 2 * d[i] - 1;                      // 用当前回文片段全长，更新以左端点为起始点的最大长度, 从右向左???
+            }
+            // if maximum palindrome has end at i and its length is L, then there's a palindrome of length L-2 with end at position i-1
+            for (int i = n-2, j = n-1; i >= 0; i--, j--) // 从右向左
+                l[i] = Math.max(l[i], l[j]-2); 
+            for (int i = 1, j = 0; i < n; i++, j++)      // 从左向右
+                r[i] = Math.max(r[i], r[j]-2);
+            // Same fact for beginnings of palindromes
+            for (int i = 1, j = 0; i < n; i++, j++)
+                l[i] = Math.max(l[i], l[j]);
+            for (int i = n-2, j = n-1; i >= 0; i--, j--)
+                r[i] = Math.max(r[i], r[j]);
+            long ans = 1;
+            for (int i = 1; i < n; i++) 
+                ans = Math.max(ans, (long)l[i-1] * r[i]);
+            return ans;
+        }
+        static int [] manacher(String t) { // 这个写法可能并不标准： modifiedOddManacher
+            int n = t.length();
+            char [] s = t.toCharArray();
+            int [] ans = new int [n];
+            for (int i = 0, l = 0, r = -1; i < n; i++) {
+                int len = i > r ? 1 : Math.min(ans[l+r-i], r-i+1); // 起始单侧长度只有1
+                int maxLen = Math.min(i, n-1-i); // 就算两边都能对称延伸至两端点，以现i为中心的回文的 单侧最大长度(包括当前下标的字符计算在内)
+                int x = i - len, y = i + len;
+                while (len <= maxLen && s[x--] == s[y++]) len++; // 向两侧扩散延伸
+                ans[i] = len--;
+                if (i + len > r) {
+                    l = i - len;
+                    r = i + len;
+                }
+            }
+            return ans;
+        }
+#+END_SRC
+**** 解题思路与分析: 根据题意改进版的马拉车算法
+     #+BEGIN_SRC java
+public long maxProduct(String s) { // 这个方法是：目前自己能够理解的解法里最快的
+    int n = s.length();
+    StringBuilder sb = new StringBuilder(s);
+    int [] l = new int [n], r = new int [n];
+    modifiedOddManacher(sb.toString(), l);
+    modifiedOddManacher(sb.reverse().toString(), r);
+    long ans = 1;
+    for (int i = 0; i < n-1; i++) 
+        ans = Math.max(ans, (1 + (l[i]-1) * 2l) * (1 + (r[n-(i+1)-1]-1) * 2l));
+    return ans;
+}
+void modifiedOddManacher(String t, int [] d) { 
+    int n = t.length();
+    char [] s = t.toCharArray();
+    int [] idx = new int [n]; // idx: center
     for (int i = 0, l = 0, r = -1; i < n; i++) {
-        int len = i > r ? 1 : Math.min(ans[l+r-i], r-i+1);
-        int maxLen = Math.min(i, n-1-i);
-        int x = i - len, y = i + len;
-        while (len <= maxLen && s[x--] == s[y++]) len++;
-        ans[i] = len--;
-        if (i + len > r) {
-            l = i - len;
-            r = i + len;
+        int radius = (i > r) ? 1 : Math.min(idx[l+(r-i)], r-i+1);
+        while (i - radius >= 0 && i + radius < n && s[i-radius] == s[i+radius]) { // 因为半径没有限制，所以要检查两边是否会出界
+            d[i+radius] = radius + 1;
+            radius++;
+        }
+        idx[i] = radius--;
+        if (i + radius > r) {
+            l = i - radius;
+            r = i + radius;
         }
     }
-    return ans;
-}
-public long maxProduct(String s) { // 这个马拉车，得多写几遍
-    int n = s.length();
-    int [] d = manacherOdd(s);
-    int [] l = new int [n], r = new int [n];
-    for (int i = 0; i < n; i++) {
-        l[i+d[i]-1] = Math.max(l[i+d[i]-1], 2 * d[i]-1);
-        r[i-d[i]+1] = 2 * d[i] - 1;
+    for (int i = 0, max = 1; i < n; i++) {
+        max = Math.max(max, d[i]);
+        d[i] = max;
     }
-    for (int i = n-2, j = n-1; i >= 0; i--, j--)
-        l[i] = Math.max(l[i], l[j]-2);
-    for (int i = 1, j = 0; i < n; i++, j++)
-        r[i] = Math.max(r[i], r[j]-2);
-    for (int i = 1, j = 0; i < n; i++, j++) 
-        l[i] = Math.max(l[i], l[j]);
-    for (int i = n-2, j = n-1; i >= 0; i--, j--)
-        r[i] = Math.max(r[i], r[j]);
-    long ans = 1;
-    for (int i = 1; i < n; i++) 
-        ans = Math.max(ans, (long)l[i-1] * r[i]);
-    return ans;
 }
-#+END_SRC
+// Just comapare with basic odd Manacher for better understanding.
+void oddManacher(String s) { // 是需要对比理解一下
+    int n = s.length();
+    int [] idx = new int [n];
+    for (int i = 0, l = 0, r = -1; i < n; i++) {
+        int radius = (i > r) ? 1 : Math.min(idx[l+r-i], r-i+1);
+        while (i - radius >= 0 && i + radius < n && s[i-radius] == s[i+radius]) radius++;
+        idx[i] = radius--;
+        if (i + radius > r) {
+            l = i - radius;
+            r = i + radius;
+        }
+    }
+}
+ #+END_SRC
 *** DP解：要再好好理解消化一下
 #+BEGIN_SRC java
 #+END_SRC

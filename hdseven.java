@@ -731,7 +731,7 @@ public class hdseven {
         //     if (ans < 0) ans += mod;
         //     return ans;
         // }
-        // public long maxProduct(String s) { // 这个马拉车: 写第二遍看不懂第一遍参考别人的代码，注解是多么地重要！！！
+        // public long maxProduct(String s) { // 
         //     int n = s.length();
         //     int d [] = manacher(s); // 以i为中心的，包括当前字符的单侧最大回文长度
         //     int l [] = new int [n], r [] = new int [n]; // 转化为：以当前坐标为最右、最左极限的全回文片段最大长度
@@ -754,24 +754,24 @@ public class hdseven {
         //         ans = Math.max(ans, (long)l[i-1] * r[i]);
         //     return ans;
         // }
-        static int [] manacher(String t) { // 这个写法可能并不标准： modifiedOddManacher
-            int n = t.length();
-            char [] s = t.toCharArray();
-            int [] ans = new int [n];
-            for (int i = 0, l = 0, r = -1; i < n; i++) {
-                int len = i > r ? 1 : Math.min(ans[l+r-i], r-i+1); // 起始单侧长度只有1
-                int maxLen = Math.min(i, n-1-i); // 就算两边都能对称延伸至两端点，以现i为中心的回文的 单侧最大长度(包括当前下标的字符计算在内)
-                int x = i - len, y = i + len;
-                while (len <= maxLen && s[x--] == s[y++]) len++; // 向两侧扩散延伸
-                ans[i] = len--;
-                if (i + len > r) {
-                    l = i - len;
-                    r = i + len;
-                }
-            }
-            return ans;
-        }
-        public long maxProduct(String s) {
+        // static int [] manacher(String t) { // 这个写法可能并不标准： modifiedOddManacher
+        //     int n = t.length();
+        //     char [] s = t.toCharArray();
+        //     int [] ans = new int [n];
+        //     for (int i = 0, l = 0, r = -1; i < n; i++) {
+        //         int len = i > r ? 1 : Math.min(ans[l+r-i], r-i+1); // 起始单侧长度只有1
+        //         int maxLen = Math.min(i, n-1-i); // 就算两边都能对称延伸至两端点，以现i为中心的回文的 单侧最大长度(包括当前下标的字符计算在内)
+        //         int x = i - len, y = i + len;
+        //         while (len <= maxLen && s[x--] == s[y++]) len++; // 向两侧扩散延伸
+        //         ans[i] = len--;
+        //         if (i + len > r) {
+        //             l = i - len;
+        //             r = i + len;
+        //         }
+        //     }
+        //     return ans;
+        // }
+        public long maxProduct(String s) { // 这个方法是：目前自己能够理解的解法里最快的
             int n = s.length();
             StringBuilder sb = new StringBuilder(s);
             int [] l = new int [n], r = new int [n];
@@ -809,24 +809,15 @@ public class hdseven {
             int [] idx = new int [n];
             for (int i = 0, l = 0, r = -1; i < n; i++) {
                 int radius = (i > r) ? 1 : Math.min(idx[l+r-i], r-i+1);
-
-                
-            }
-        }
-        private void oddManacher(String str){
-            int len = str.length();
-            int [] center = new int [len];
-            for (int l=0,r=-1,i=0;i<len;i++){
-                int radius = (i > r) ? 1 : Math.min(center[l+(r-i)], r-i+1);
-                while (i-radius>=0 && i+radius<len && str.charAt(i-radius)==str.charAt(i+radius)) 
-                    radius++;
-                center[i] = radius--;
-                if(i+radius > r){
-                    l = i-radius;
-                    r = i+radius;
+                while (i - radius >= 0 && i + radius < n && s[i-radius] == s[i+radius]) radius++;
+                idx[i] = radius--;
+                if (i + radius > r) {
+                    l = i - radius;
+                    r = i + radius;
                 }
             }
         }
+        // 需要改天再回过头，把自己解法里的bug找出来
     } 
     public static void main (String[] args) {
         Solution s = new Solution ();
