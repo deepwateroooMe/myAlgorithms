@@ -11770,6 +11770,78 @@ public int largestPathValue(String colors, int[][] edges) {
     return processed == n ? ans : -1;
 }
      #+END_SRC
+*** 1203. Sort Items by Groups Respecting Dependencies - Hard
+There are n items each belonging to zero or one of m groups where group[i] is the group that the i-th item belongs to and it's equal to -1 if the i-th item belongs to no group. The items and the groups are zero indexed. A group can have no item belonging to it.
+
+Return a sorted list of the items such that:
+
+The items that belong to the same group are next to each other in the sorted list.
+There are some relations between these items where beforeItems[i] is a list containing all the items that should come before the i-th item in the sorted array (to the left of the i-th item).
+Return any solution if there is more than one solution and return an empty list if there is no solution.
+**** 解题思路与分析
+     #+BEGIN_SRC java
+public int[] sortItems(int n, int m, int[] g, List<List<Integer>> bef) {
+    List<List<Integer>> its = new ArrayList<>(); // 下标：元素所属的组编号；组内元素
+    List<List<Integer>> gps = new ArrayList<>(); // 组图： 下标： 组编号；组内元素
+    List<Integer> ids = new ArrayList<>();
+    for (int i = 0; i < m+n; i++) {
+        ids.add(i);
+        its.add(new ArrayList<>());
+        gps.add(new ArrayList<>());
+    }
+    List<List<Integer>> itg = new ArrayList<>(); // itemGraph, n items, 元素先后順序图：每个元素，之后的元素包括（）
+    for (int i = 0; i < n; i++) 
+        itg.add(new ArrayList<>());
+    int [] insIts = new int [n];   // 每个元素各自入度
+    int [] insGps = new int [m+n]; // 每个组的各自入度
+    int resId = m; // 把先前剩余的、不属于任何组的，分别分布到只含其一个元素的编号较大（编号不被其它元素占用[0, m-1]）的组中
+    for (int i = 0; i < n; i++) {
+        if (g[i] == -1)
+            g[i] = resId++;
+        its.get(g[i]).add(i); // 下标：元素所属的组编号；组内元素
+    }
+    for (int i = 0; i < n; i++) {
+        int gid = g[i];
+        for (int it : bef.get(i)) { // 在现元素i之前的元素链表
+            int befGid = g[it];
+            if (befGid == gid) { // 在同一个组内，可以进行组内排序
+                insIts[i]++;
+                itg.get(it).add(i);       // 从之前的元素可以连接到现元素 <== 会进行拓扑排序，所有先发生的在前，后发生的在后
+            } else {             // 属于不同的组，须进行组间排序
+                if (gps.get(gid).contains(befGid)) return new int [0]; // 这里发生了矛盾，需返回
+                insGps[gid]++;
+                gps.get(befGid).add(gid); // 从之前的组可以连接到现组     <== 会进行拓扑排序，所有先发生的在前，后发生的在后
+            }
+        }
+    }
+    List<Integer> gsort = topologicalSort(insGps, gps, ids); // 组间排序
+    if (gsort.size() == 0) return new int [0];
+    int [] ans = new int [n];
+    int i = 0;
+    for (Integer gid : gsort) { // 对排好序的各组，进行组内排序
+        int size = its.get(gid).size();
+        if (size == 0) continue;
+        List<Integer> li = topologicalSort(insIts, itg, its.get(gid)); // 进行组内排序
+        if (li.size() == 0) return new int [0];
+        for (int it : li) 
+            ans[i++] = it;
+    }
+    return ans;
+}
+List<Integer> topologicalSort(int [] ins, List<List<Integer>> adj, List<Integer> li) {
+    Deque<Integer> q = new ArrayDeque<>();
+    for (Integer v : li) 
+        if (ins[v] == 0) q.offerLast(v);
+    List<Integer> ans = new ArrayList<>();
+    while (!q.isEmpty()) {
+        int cur = q.pollFirst();
+        ans.add(cur);
+        for (Integer v : adj.get(cur)) 
+            if (--ins[v] == 0) q.offerLast(v);
+    }
+    return ans;
+}            
+     #+END_SRC
 *** 2045. Second Minimum Time to Reach Destination - Hard
 A city is represented as a bi-directional connected graph with n vertices where each vertex is labeled from 1 to n (inclusive). The edges in the graph are represented as a 2D integer array edges, where each edges[i] = [ui, vi] denotes a bi-directional edge between vertex ui and vertex vi. Every vertex pair is connected by at most one edge, and no vertex has an edge to itself. The time taken to traverse any edge is time minutes.
 
@@ -12156,12 +12228,138 @@ public int[] countPairs(int n, int[][] edges, int[] queries) { // 别人家的�
 # // https://leetcode.com/problems/count-pairs-of-nodes/discuss/1096432/Java-or-Two-Steps-or-O(NlgN-%2B-Q(N%2BE))
 # // 这个也可以再参考一下
 
+*** 2115. Find All Possible Recipes from Given Supplies
+You have information about n different recipes. You are given a string array recipes and a 2D string array ingredients. The ith recipe has the name recipes[i], and you can create it if you have all the needed ingredients from ingredients[i]. Ingredients to a recipe may need to be created from other recipes, i.e., ingredients[i] may contain a string that is in recipes.
+
+You are also given a string array supplies containing all the ingredients that you initially have, and you have an infinite supply of all of them.
+
+Return a list of all the recipes that you can create. You may return the answer in any order.
+
+Note that two recipes may contain each other in their ingredients.
+**** 解题思路与分析
+     #+BEGIN_SRC java
+public List<String> findAllRecipes(String[] re, List<List<String>> ing, String[] sup) { // 菜谱 菜谱原材料 食材 BUG BUG BUG
+    Map<String, Set<String>> adj = new HashMap<>();    // 每种材料可以做成的菜的 清单
+    Map<String, Integer> ins = new HashMap<>();        // 每种材料或是菜谱的 入度
+    for (int i = 0; i < re.length; i++) 
+        for (String it : ing.get(i)) {
+            adj.computeIfAbsent(it, z -> new HashSet<>()).add(re[i]);
+            ins.put(re[i], ins.getOrDefault(re[i], 0) + 1);
+        }
+    List<String> ans = new ArrayList<>();
+    Deque<String> q = new ArrayDeque<>();
+    for (String s : sup) q.offerLast(s); // 把初始的原材料放入队列
+    while (!q.isEmpty()) { // 拓扑排序
+        String cur = q.pollFirst();
+        if (adj.containsKey(cur)) 
+            for (String one : adj.get(cur)) { // 遍历某种原材料可以做成的所有的菜，其入度是否为0
+                ins.put(one, ins.get(one)-1); // 入度 ins--
+                if (ins.get(one) == 0) {
+                    ans.add(one);
+                    q.offerLast(one);
+                }
+            }
+    }
+    return ans;
+}
+ #+END_SRC
+** 基环内向树
+*** 2127. Maximum Employees to Be Invited to a Meeting - Hard 基环内向树
+A company is organizing a meeting and has a list of n employees, waiting to be invited. They have arranged for a large circular table, capable of seating any number of employees.
+
+The employees are numbered from 0 to n - 1. Each employee has a favorite person and they will attend the meeting only if they can sit next to their favorite person at the table. The favorite person of an employee is not themself.
+
+Given a 0-indexed integer array favorite, where favorite[i] denotes the favorite person of the ith employee, return the maximum number of employees that can be invited to the meeting.
+**** 解题思路与分析
+如果我们把每个员工看成图上的一个节点，如果员工 xx 喜欢员工 yy，就在从 xx 对应的节点到 yy 对应的节点连一条边，那么形成的图是什么结构的？形成的图会由若干颗「基环内向树」组成。所谓「基环内向树」，就是形如下图所示的结构：
+
+[[./pic/2277tree-1.png]]
+
+
+我们从任意一个节点 xx 开始在图上进行「游走」，由于每个员工只有一位喜欢的员工，因此每个节点在图上只会有一条出边，即「游走」的过程是唯一的。由于图上有 nn 个节点，因此在 n+1n+1 步以内，一定会走到一个重复的节点，那么在第一次经过该节点之后，到第二次经过该节点之前的所有节点，以及该节点本身，就组成了一个环，如上图的蓝色节点所示。
+
+对于不在环上的节点，我们已经说明了从它们开始「游走」也一定会进入到环中。在到达环上的节点之前，它们不会重复经过节点（否则就有两个环了，我们可以证明一个连通分量中是不可能有两个环的：因为每个节点只有一条出边，因此如果有两个环并且它们连通，那么必然某个环上有一个点有两条出边，一条出边指向同一个环上的节点，另一条出边可以使得它到达另一个环，这就产生了矛盾），那么它们就形成了类似树的结构，如上图的绿色节点所示。
+
+需要注意的是，一个单独的环也是「基环内向树」，它是一种特殊情况，即没有绿色的节点。
+
+思路与算法
+
+既然我们知道了图由若干颗「基环内向树」组成，那么我们就可以想一想，每一颗「基环内向树」的哪一部分可以被安排参加会议。
+
+我们首先讨论特殊的情况，即一个单独的环（或若干个环），并且所有环的大小都 \geq 3≥3。可以发现，我们按照环上的顺序给对应的员工安排座位是满足要求的，因为对于每一个环上的员工，它喜欢的员工就在它的旁边。并且，我们必须安排环上的所有员工，因为如果有缺失，那么喜欢那位缺失了的员工的员工就无法满足要求了。
+
+但如果我们已经安排了某一个环上的所有员工，剩余的环就没有办法安排了。这是因为已经安排的那个环是没有办法被「断开」的：断开的本质就是相邻位置员工的缺失。因此，我们可以得出一个重要的结论：
+
+如果我们想安排大小 \geq 3≥3 的环，我们最多只能安排一个，并且环需要是完整的。
+
+那么如果是环大小 \geq 3≥3 的「基环内向树」呢？如果我们安排了不在环上的节点，那么从该节点开始，我们需要不断安排当前节点喜欢的员工，这实际上就是「游走」的过程。而当我们游走到环上并到达环上最后一个未经过的节点时，该节点的下一个节点（即喜欢的员工）已经被安排过，所以最后一个未经过的节点就无法被安排，不满足要求。因此，我们不能安排任何不在环上的节点，只能安排在环上的节点，就得出了另一个的结论：
+
+所有环大小 \geq 3≥3 的「基环内向树」与一个大小相同（指环的部分）的环是等价的。
+
+那么最后我们只需要考虑大小 =2=2 的环或者「基环内向树」了。这里的特殊之处在于，大小 =2=2 的环可以安排多个：因为环上的两个点是互相喜欢的，因此只需要它们相邻即可，而没有其它的要求。而对于环大小 =2=2 的「基环内向树」，如果我们安排了不在环上的节点，那么游走完环上两个节点之后，同样是满足要求的，并且我们甚至可以继续延伸（反向「游走」），到另一个不在环上的节点为止。如下图所示，包含 \texttt{X}X 的节点就是可以安排参加会议的节点。
+
+[[./pic/2277tree-2.png]]
+
+并且同样地，对于每一棵环大小 =2=2 的「基环内向树」，我们都可以取出这样一条「双向游走」路径进行安排，它们之间不会影响。综上所述，原问题的答案即为下面二者中的最大值：
+
+最大的环的大小；
+
+所有环大小 =2=2 的「基环内向树」上的最长的「双向游走」路径之和。
+
+为了求解「基环内向树」上的最长的「双向游走」路径，我们可以使用拓扑排序 + 动态规划的方法。记 f[i]f[i] 表示到节点 ii 为止的最长「游走」路径经过的节点个数，那么状态方程即为：
+
+即我们考虑节点 ii 的上一个节点 jj，在图中必须有从 jj 到 ii 的一条有向边，这样我们就可以从 jj 转移到 ii。如果不存在满足要求的 jj（例如「基环内向树」退化成一个大小 =2=2 的环），那么 f[i] = 1f[i]=1。状态转移可以和拓扑排序同时进行。
+
+在拓扑排序完成后，剩余没有被弹出过队列的节点就是环上的节点。我们可以找出每一个环。如果环的大小 \geq 3≥3，我们就用其来更新最大的环的大小；如果环的大小 =2=2，设环上的两个节点为 xx 和 yy，那么该「基环内向树」上最长的「双向游走」的路径长度就是 f[x] + f[y]f[x]+f[y]。
+
+     #+BEGIN_SRC java
+public int maximumInvitations(int[] a) { // a: favorite
+    // 统计入度，便于进行拓扑排序
+    int n = a.length, ins [] = new int [n];
+    for (int v : a) ins[v]++;
+    boolean vis [] = new boolean [n];
+    int f [] = new int [n];
+    Arrays.fill(f, 1);
+    Deque<Integer> q = new ArrayDeque<>();
+    for (int i = 0; i < n; i++) 
+        if (ins[i] == 0) q.offerLast(i); 
+    while (!q.isEmpty()) {
+        int u = q.pollFirst();
+        vis[u] = true;
+        int v = a[u];
+        f[v] = Math.max(f[v], f[u] + 1); // 动态规划： 能够到达 v 的最长链的长度
+        --ins[v];
+        if (ins[v] == 0) q.offerLast(v);
+    }
+    // ring 表示最大的环的大小
+    // total 表示所有环大小为 2 的「基环内向树」上的最长的「双向游走」路径之和
+    int ring = 0, total = 0;
+    for (int i = 0; i < n; i++) {
+        if (!vis[i]) {
+            int j = a[i];
+            if (a[j] == i) { // 说明环的大小为 2
+                total += f[i] + f[j]; // 局部二元环可以叠加
+                vis[i] = vis[j] = true;
+            } else { // 否则环的大小至少为 3，我们需要找出环
+                int u = i, cnt = 0;
+                do { // 至少执行一次，evaluate after execute
+                    ++cnt;
+                    u = a[u];
+                    vis[u] = true;
+                } while (u != i); // 再达到达这一点，说明转了一圈，又回到了起点
+                ring = Math.max(ring, cnt); // 找出一个节点数目最多的环
+            }
+        }
+    }
+    return Math.max(ring, total);
+}
+ #+END_SRC
 ** Tarjan 算法
 - 图的一些基本概念：
-  - *关联（incident）* : 点为边的端点;
-  - *邻接（adjacent）* : 点与点关联同一条边，或边与边关联同一顶点；
-  - *子图* : 图G'的点和边都是图G的子集，则G'为G的子图;
-  - *道路* : 从点v到点u的路径；
+- *关联（incident）* : 点为边的端点;
+- *邻接（adjacent）* : 点与点关联同一条边，或边与边关联同一顶点；
+- *子图* : 图G'的点和边都是图G的子集，则G'为G的子图;
+- *道路* : 从点v到点u的路径；
   - *简单道路* : 没有重复边的道路；
   - *回路* : 起点与终点相同的道路；
   - *简单回路* : 没有重复边的回路；
@@ -13064,6 +13262,462 @@ private boolean bfsHelper(Set<String> set1, Set<String> set2, Set<String> wordSe
     return done || bfsHelper(set2, set, wordSet, !direction, map);
 }
 #+END_SRC
+** 环与入度等
+*** 685. Redundant Connection II - Hard
+In this problem, a rooted tree is a directed graph such that, there is exactly one node (the root) for which all other nodes are descendants of this node, plus every node has exactly one parent, except for the root node which has no parents.
+
+The given input is a directed graph that started as a rooted tree with n nodes (with distinct values from 1 to n), with one additional directed edge added. The added edge has two different vertices chosen from 1 to n, and was not an edge that already existed.
+
+The resulting graph is given as a 2D-array of edges. Each element of edges is a pair [ui, vi] that represents a directed edge connecting nodes ui and vi, where ui is a parent of child vi.
+
+Return an edge that can be removed so that the resulting graph is a rooted tree of n nodes. If there are multiple answers, return the answer that occurs last in the given 2D-array.
+**** 解题思路与分析
+     #+BEGIN_SRC java
+// 对于有向图中，如果存在indegree(v) == 2的点，那么要删除的一定是这个点的某条有向边(u -> v)
+//    因为题目最后保证是一个rooted tree（every node has exactly one parent），具体看第一段定义；
+// 如果不存在indegree(v) == 2的点，那么直接删去最后一个造成环存在的有向边即可。
+// 现在存在三种情况：
+// （1）有向图中只有环。这种情况就简单将两个节点具有共同根节点的边删去就好。
+// （2）有向图中没有环，但有个节点有两个父节点。这种情况就将第二次出现不同父节点的边删去就好。
+// （3）有向图中既有环，而且有个节点还有两个父节点。这时就检测当除去第二次出现父节点的边后，剩余边是不是合法的，如果不合法证明应该删掉的是另一个父节点的边。
+public int [] findRedundantDirectedConnection(int [][] egs) {
+    Set<Integer> p = new HashSet<>();
+    Map<Integer, Integer> par = new HashMap<>(); // k,v: v <-- u
+    List<int []> candi = new ArrayList<>();
+    for (int [] e : egs) {
+        int u = e[0], v = e[1];
+        p.add(u);
+        p.add(v);
+        if (!par.containsKey(v)) { // 对于入度为1的右端点边，记在字典里
+            par.put(v, u);
+            continue;
+        }
+        candi.add(new int [] {par.get(v), v}); // 第一次出现的边
+        candi.add(new int [] {u, v});          // 第二次出现的边，答案是这两者之一
+        e[1] = -1; // 先将后出现的第二条边废掉，验证答案
+    }
+    UnionFind uf = new UnionFind(p.size()); // 总顶点的个数
+    for (int [] e : egs) {
+        if (e[1] == -1) continue;   // 跳过正在验证是否为的答案后出现的第二条边
+        int u = e[0]-1, v = e[1]-1; // uf 0-based
+        if (!uf.union(u, v)) { // 在已经废除后出现的第二条边之后，还是出现了环，那么后出现的第二条边不是答案，第一条才是
+            if (candi.isEmpty()) return e; // 不存在入度为 2 的点，直接删去最后一条造成环存在的有向边， 即当前边即可
+            return candi.get(0);
+        }
+    }
+    return candi.get(1); // 删除第二条边后，所有的存在都合法，那么就返回第二条边
+}
+class UnionFind {
+    int[] parent;
+    int[] rank;
+    int size;
+    public UnionFind(int size) {
+        this.size = size;
+        parent = new int[size];
+        rank = new int[size];
+        for (int i = 0; i < size; i++) parent[i] = i;
+    }
+    public int find(int x) {
+        if (parent[x] != x) 
+            parent[x] = find(parent[x]);
+        return parent[x];
+    }
+    public boolean union(int x, int y) { 
+        int xp = find(x);
+        int yp = find(y);
+        if (xp == yp) return false; // 已经在同一个强连通分量中
+        if (rank[xp] > rank[yp]) 
+            parent[yp] = xp;
+        else if (rank[xp] < rank[yp]) 
+            parent[xp] = yp;
+        else {
+            parent[yp] = xp;
+            rank[xp]++;
+        }
+        return true;
+    }
+}
+     #+END_SRC
+** 普通BFS,但state状态狠重要
+*** 1293. Shortest Path in a Grid with Obstacles Elimination - Hard
+You are given an m x n integer matrix grid where each cell is either 0 (empty) or 1 (obstacle). You can move up, down, left, or right from and to an empty cell in one step.
+
+Return the minimum number of steps to walk from the upper left corner (0, 0) to the lower right corner (m - 1, n - 1) given that you can eliminate at most k obstacles. If it is not possible to find such walk return -1.
+**** 解题思路与分析
+- 在普通的bfs中，为了避免走重复的路径，我们一般采用visited数组来记录下走过的格子，当路径遇到一个已走过的格子时，便不能再通过该点。但本题略有不同，上面说过，本题存在两种路径，因此visited数组中的状态应该包含3中状态：
+  - 0：该位置没有走过
+  - 1：该位置被普通路径走过
+  - 2：该路径被穿越路径走过
+- 对于以上三种状态，
+  - 当前格子为非障碍物时，普通路径可以走访问状态为0的格子，走过后，访问状态更新为1
+  - 当前格子为非障碍物时，穿越路径可以走访问状态为0的格子，走过后，访问状态更新为2
+  - 当前格子为非障碍物时，普通路径可以走访问状态为2的格子，走过后，访问状态更新为1
+  - 当前格子为障碍物时，如果还保有穿越次数，并且该格子的访问状态为0时，所有路径可以通过此处，通过后，该路径变为穿越路径，并且当前格子访问状态更新为1（更新为2也无所谓）
+     #+BEGIN_SRC java
+public int shortestPath(int[][] a, int k) {
+    int [][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+    int m = a.length, n = a[0].length;
+    int [][] vis = new int [m][n]; 
+    Deque<int []> q = new ArrayDeque<>();
+    q.offerLast(new int [] {0, 0, k});
+    int cnt = 0;
+    while (!q.isEmpty()) {
+        for (int z = q.size()-1; z >= 0; z--) {
+            int [] cur = q.pollFirst();
+            if (cur[0] == m-1 && cur[1] == n-1) return cnt;
+            for (int [] d : dirs) {
+                int i = cur[0] + d[0], j = cur[1] + d[1];
+                if (i >= 0 && i < m && j >= 0 && j < n) {
+// 1.当前格子为非障碍物时，普通路径可以走访问状态为 0 的格子，走过后，访问状态更新为1
+// 3.当前格子为非障碍物时，普通路径可以走访问状态为 2 的格子，走过后，访问状态更新为1
+                    if (a[i][j] == 0 && (vis[i][j] == 0 || vis[i][j] == 2 && cur[2] == k)) { // 当前格为非障碍物
+                        if (vis[i][j] == 0) // 普通路径：可以走状态为0的格子，走过后变为1 or 2
+                            // 2.当前格子为非障碍物时，穿越路径可以走访问状态为0的格子，走过后，访问状态更新为2 
+                            vis[i][j] = (cur[2] == k ? 1 : 2);
+                        else vis[i][j] = 1;
+                        q.offerLast(new int [] {i, j, cur[2]});
+                        // 4.当前格子为障碍物时，如果还保有穿越次数，并且该格子的访问状态为0时，所有路径可以通过此处，
+                        //     通过后，该路径变为穿越路径，并且当前格子访问状态更新为1（更新为2也无所谓）                                
+                    } else if (a[i][j] == 1 && vis[i][j] == 0 && cur[2] > 0) {
+                        vis[i][j] = 2;
+                        q.offerLast(new int [] {i, j, cur[2]-1});
+                    }
+                }
+            }
+        }
+        cnt++;
+    }
+    return -1;
+}
+     #+END_SRC
+**** 解题思路与分析
+- 思路是BFS。将已经移除了多少个障碍物加进状态，然后做隐式图搜索即可。代码如下：
+     #+BEGIN_SRC java
+public int shortestPath(int[][] a, int k) { // 这个思路极为简洁，但速度跟上一个方法比，会慢很多
+    if (a.length <= 1 && a[0].length <= 1) return 0;
+    int [][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+    int m = a.length, n = a[0].length;
+    boolean [][][] vis = new boolean [m][n][k+1];
+    Deque<int []> q = new ArrayDeque<>();
+    q.offerLast(new int [] {0, 0, 0}); // 前两个数代表坐标，最后一个数代表已经移除了多少个障碍物
+    vis[0][0][0] = true;
+    int cnt = 0;
+    while (!q.isEmpty()) {
+        for (int z = q.size()-1; z >= 0; z--) {
+            int [] cur = q.pollFirst();
+            for (int [] d : dirs) {
+                int i = cur[0] + d[0], j = cur[1] + d[1], x = -1;
+                if (i < 0 || i >= m || j < 0 || j >= n) continue;
+                x = cur[2] + a[i][j];
+                if (k >= x && !vis[i][j][x]) {
+                    if (i == a.length-1 && j == a[0].length-1) return cnt+1;
+                    q.offerLast(new int [] {i, j, x});
+                    vis[i][j][x] = true;
+                }
+            }
+        }
+        cnt++;
+    }
+    return -1;
+}
+     #+END_SRC
+
+** 最小生成树
+*** 1489. Find Critical and Pseudo-Critical Edges in Minimum Spanning Tree - Hard
+Given a weighted undirected connected graph with n vertices numbered from 0 to n - 1, and an array edges where edges[i] = [ai, bi, weighti] represents a bidirectional and weighted edge between nodes ai and bi. A minimum spanning tree (MST) is a subset of the graph's edges that connects all vertices without cycles and with the minimum possible total edge weight.
+
+Find all the critical and pseudo-critical edges in the given graph's minimum spanning tree (MST). An MST edge whose deletion from the graph would cause the MST weight to increase is called a critical edge. On the other hand, a pseudo-critical edge is that which can appear in some MSTs but not all.
+
+Note that you can return the indices of the edges in any order.
+**** 解题思路与分析
+     #+BEGIN_SRC java
+public List<List<Integer>> findCriticalAndPseudoCriticalEdges(int n, int[][] edges) {
+    List<int []> lia = new ArrayList<>();
+    for (int [] e : edges) lia.add(e);
+    Collections.sort(lia, (x, y) -> x[2] - y[2]);
+    List<Integer> critical = new ArrayList<>();
+    List<Integer> pseudo = new ArrayList<>();
+    int minCost = getCostOfMST(n, lia, null, null);
+    for (int i = 0; i < edges.length; i++) {
+        int [] e = edges[i];
+        if (getCostOfMST(n, lia, null, e) > minCost) // 优先条件：如果已经是critical,就不用考虑后面的了
+            critical.add(i);
+        else if (getCostOfMST(n, lia, e, null) == minCost)
+            pseudo.add(i);
+    }
+    return Arrays.asList(critical, pseudo);
+}
+int getCostOfMST(int n, List<int []> adj, int [] req, int [] avd) { // avoid 
+    int ans = 0;
+    DSU dsu = new DSU(n);
+    if (req != null) {
+        dsu.union(req[0], req[1]);
+        ans += req[2];
+    }
+    for (int [] e : adj) {
+        if (e != avd && dsu.union(e[0], e[1])) // 可以合并
+            ans += e[2];
+        if (dsu.getCnt() == 1)
+            return ans;
+    }
+    return Integer.MAX_VALUE; // 无法生成合法的最小生成树
+}
+static class DSU {
+    int [] par;
+    int [] rank; // 关于rank和size的部分
+    int size;
+    public boolean union(int x, int y) {
+        int px = find(x), py = find(y);
+        if (px == py) return false;
+        // if (rank[x] >= rank[y]) { // BUG
+        if (rank[px] >= rank[py]) {
+            par[py] = px;
+            if (rank[px] == rank[py])
+                ++rank[px];
+            // rank[x] += rank[y]; // BUG: 这里自己写错了
+        } else {
+            par[px] = py;
+            // rank[y] += rank[x];
+        }
+        --size;
+        return true;
+    }
+    public int getCnt() {
+        return size;
+    }
+    int find(int x) {
+        // if (par[x] != x) par[x] = find(par[x]); // BUG
+        while (par[x] != x) {
+            par[x] = par[par[x]];
+            x = par[x];
+        }
+        return par[x];
+    }
+    public DSU(int n) {
+        size = n;
+        par = new int [n];
+        rank = new int [n];
+        for (int i = 0; i < n; i++) 
+            par[i] = i;
+    }
+}
+#+END_SRC
+**** 解题思路与分析
+- 这是自己慢慢掰出来的，掰还第二遍的时候掰错了。。。最好是能够参考一下别人的最优解法
+#+BEGIN_SRC java
+HashMap<Integer, int []> m = new HashMap<>(); // 这是参考以前写的
+HashSet<Integer> s = new HashSet<>();
+List<List<Integer>> ll = new ArrayList<>();
+List<Integer> l = new ArrayList<>();
+int minw = 0;
+UnionFind uf;
+public List<List<Integer>> findCriticalAndPseudoCriticalEdges(int n, int[][] edges) {
+  HashMap<Integer, int []> map = new HashMap<>();
+    for (int i = 0; i < edges.length; i++) 
+        map.put(i, edges[i]);
+    Comparator<Map.Entry<Integer, int []>> c = new Comparator<Map.Entry<Integer, int []>>() {
+        @Override 
+        public int compare(Map.Entry<Integer, int []> a, Map.Entry<Integer, int []> b) {
+            int cmp1 = (a.getValue())[2] - (b.getValue())[2];
+            if (cmp1 != 0) 
+                return cmp1;
+            else return a.getKey().compareTo(b.getKey());
+        }
+    };
+    m = map.entrySet().stream().sorted(c)
+        .collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+    uf = new UnionFind(n);
+    kruskal(n, s, -1, true);
+    int minG = minw;
+    l = new ArrayList<>();
+    uf = new UnionFind(n);
+    for (Integer val : s) {
+        minw = 0;
+        uf.reset();
+        kruskal(n, new HashSet<>(), val, true);
+        if (minw > minG || uf.getCnt() > 1) l.add(val);
+    }
+    ll.add(l);
+    l = new ArrayList<>();
+    for (Integer i : m.keySet()) {
+        if (ll.get(0).contains(i)) continue;
+        minw = 0;
+        uf.reset();
+        kruskal(n, new HashSet<>(), i, false);
+        if (minw == minG) l.add(i);
+    }
+    ll.add(l);
+    return ll;
+}
+private void kruskal(int n, HashSet<Integer> s, int i, boolean vis) {
+    if (!vis) {
+        uf.merge((m.get(i))[0], (m.get(i))[1]); 
+        s.add(i);
+        minw += (m.get(i))[2];
+    }
+    for (Map.Entry<Integer, int []> entry : m.entrySet()) {
+        int [] cur = entry.getValue();
+        if (uf.sameGroup(cur[0], cur[1]) || (entry.getKey() == i && vis)) continue;
+        if (s.size() < n-1) {
+            uf.merge(cur[0], cur[1]);
+            s.add(entry.getKey());
+            minw += cur[2];
+        }
+    }            
+}
+public class UnionFind {
+    int [] pare;
+    // int [] rank;
+    int cnt;
+    int n;
+    public UnionFind(int x) {
+        this.n = x;
+        cnt = n;
+        pare = new int[n];
+        // rank = new int[n];
+        for (int i = 0; i < n; i++) 
+            pare[i] = i;
+    }
+    public void reset() {
+        for (int i = 0; i < n; i++) 
+            pare[i] = i;
+        cnt = n;
+        // rank = new int [n];
+    }
+    public int find(int val) {
+        while (val != pare[val]) {
+            pare[val] = pare[pare[val]];
+            val = pare[val];
+        }
+        return val;
+    }
+    public void merge(int p, int q) {
+        int rp = find(p);
+        int rq = find(q);
+        // if (rank[rp] < rank[rq]) 
+        //     swap(rp, rq);
+        pare[rq] = rp;
+        // rank[rp] += rank[rq];
+        --cnt; //
+    }
+    public boolean sameGroup(int x, int y) {
+        return find(x) == find(y);
+    }
+    public int getCnt() {
+        return cnt;
+    }
+    // private void swap(int x, int y) {
+    //     int tmp = x;
+    //     x = y;
+    //     y = tmp;
+    // }
+}
+#+END_SRC
+** 跳表 Skiplist
+*** 1206. Design Skiplist - Hard
+Design a Skiplist without using any built-in libraries.
+
+A skiplist is a data structure that takes O(log(n)) time to add, erase and search. Comparing with treap and red-black tree which has the same function and performance, the code length of Skiplist can be comparatively short and the idea behind Skiplists is just simple linked lists.
+
+For example, we have a Skiplist containing [30,40,50,60,70,90] and we want to add 80 and 45 into it. The Skiplist works this way:
+
+
+Artyom Kalinin [CC BY-SA 3.0], via Wikimedia Commons
+
+You can see there are many layers in the Skiplist. Each layer is a sorted linked list. With the help of the top layers, add, erase and search can be faster than O(n). It can be proven that the average time complexity for each operation is O(log(n)) and space complexity is O(n).
+
+See more about Skiplist: https://en.wikipedia.org/wiki/Skip_list
+
+Implement the Skiplist class:
+
+Skiplist() Initializes the object of the skiplist.
+bool search(int target) Returns true if the integer target exists in the Skiplist or false otherwise.
+void add(int num) Inserts the value num into the SkipList.
+bool erase(int num) Removes the value num from the Skiplist and returns true. If num does not exist in the Skiplist, do nothing and return false. If there exist multiple num values, removing any one of them is fine.
+Note that duplicates may exist in the Skiplist, your code needs to handle this situation.
+**** 解题思路与分析
+- 1.先创建一个跳表节点Node，需要包含以下三个参数:节点值val, 右边节点right, 下边节点down
+- 2.跳表初始化:
+  - 每一层设置左右两个哨兵节点，左节点的值要比所有值小，右节点的值要比所有值大。因为0 <= num, target <= 20000，因此左节点值设为 -1，右节点值设为20001即可。
+  - 跳表的最大层数为16。因为题目说了最多调用 50000 次 search, add, 以及 erase操作，也就是底层链表长度n最长为50000，而我们随机的选 n/2n/2 个元素做为一级索引，随机选 n/4n/4 个元素作为二级索引，……，随机选 n/2^kn/2 作为顶层索引。而 2 ^ {16} = 65536 > 50000, 2^16 =65536>50000 ，所以16层足够为长度50000的链表建立索引。
+  - 每层的两个哨兵节点中，左节点要指向右节点，并且除了最后一层外左右节点都需要指向下一层节点
+  - 跳表起始节点head即为left[0]，即顶层的左哨兵节点
+- 3.查找(search)方法。从head节点开始查找，如果当前节点cur的右边节点值比target大，应该往下查找；如果cur的右边节点值比target小，应该往右查找；如果相等，那就是找到了，返回True。遍历完了也没找到，返回False。
+- 4.插入(add)方法。相对比较复杂，因为还需要根据概率维护索引。
+  - 查找插入位置。也是从head开始查找插入的位置，每次往下走的节点都需要保存，因为可能在该节点后面插入新的节点作为索引。换句话说，其实查找的是在每一层应该插入的位置并记录在stack中，只是不一定每一层都会插入节点罢了。
+  - 插入节点。首先最后一层肯定是要插入节点的，插入完成后，记录一下该层节点，因为如果该节点要加入到索引中，上一层是要指向这一层的。以1/2的概率生成索引，在上一层插入节点；1/2的概率插入结束，不再继续维护索引；如果前面生成了索引，再以1/2的概率插入节点直到插入到顶层或中途因概率停止插入。
+- 5.删除(erase)方法。删除和查找差不多，只不过是对每一层找到的节点都要进行删除，也就是删除节点的同时要删除由其产生的索引节点。
+     #+BEGIN_SRC java
+private Node head;
+public Skiplist() {
+    Node[] left = new Node[16];  // 左侧向下
+    Node[] right = new Node[16]; // 右侧向下
+    for(int i = 0; i < 16; i++) {
+        left[i] = new Node(-1);     // 左侧哨兵： -1
+        right[i] = new Node(20001); // 右侧消兵:  > 20000
+    }
+    for(int i = 0; i < 15; i++) { 
+        left[i].right = right[i];  // 前15层：左右连接起来
+        left[i].down = left[i + 1];   // 左 侧消兵：向下连接起来
+        right[i].down = right[i + 1]; // 右 侧消兵：向下连接起来
+    }
+    left[15].right = right[15]; // 最底层： 向右连接起来
+    head = left[0]; // 总入口
+}
+public boolean search(int target) {
+    Node r = head;
+    while (r != null) {
+        if (r.right.val > target)
+            r = r.down;
+        else if (r.right.val < target)
+            r = r.right;
+        else return true;
+    }
+    return false;
+}
+public void add(int val) {
+    Node r = head;
+    ArrayDeque<Node> s = new ArrayDeque<>();
+    while (r != null) {
+        if (r.right.val >= val) {
+            s.offerLast(r);
+            r = r.down;
+        } else r = r.right;
+    }
+    Node pre = null;
+    while (!s.isEmpty()) {
+        r = s.pollLast();
+        Node cur = new Node(val);
+        cur.right = r.right; // 新建节点放入到 r 与 r.right 之间
+        r.right = cur;
+        if (pre != null) cur.down = pre; // 如果当前层不是最底层，那么设置新层新插入节点的 down 指向下一层新插入同值节点
+        pre = cur;  // keep updated
+        if (Math.random() < 0.5) break;  // 根据这个概率来决定，新插入节点是否继续向上增加节点
+    }
+}
+public boolean erase(int val) {
+    Node r = head;
+    boolean ans = false;
+    while (r != null) {
+        if (r.right.val >= val) {
+            if (r.right.val == val) { // 把当前层的这一节点删除
+                ans = true;
+                r.right = r.right.right;
+            }
+            r = r.down; // 向下遍历,寻找并删除当前层之下可能存在的节点
+        } else r = r.right;
+    }
+    return ans;
+}
+class Node {
+    int val;
+    Node right, down;
+    public Node(int val) {
+        this.val = val;
+    }
+}
+     #+END_SRC
+
 * 扫描线
 *** 435. Non-overlapping Intervals - Medium 动态规划 贪心
 Given an array of intervals intervals where intervals[i] = [starti, endi], return the minimum number of intervals you need to remove to make the rest of the intervals non-overlapping.

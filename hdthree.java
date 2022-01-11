@@ -701,44 +701,6 @@ public class hdthree {
         }            
     }
 
-        interface MountainArray {
-            *     public int get(int index) {}
-            *     public int length() {}
-            * }
-        public int findInMountainArray(int t, MountainArray ma) { // bug
-            int n = ma.length(), idx = binarySearchPeek(ma, n);
-            System.out.println("idx: " + idx);
-            if (t == ma.get(idx)) return idx;
-            int l = binarySearchTarget(ma, 0, idx-1, t, true);
-            System.out.println("l: " + l);
-            if (l != -1) return l;
-            return binarySearchTarget(ma, idx+1, n-1, t, false);
-        }
-        int binarySearchTarget(MountainArray a, int l, int r, int v, boolean onLeft) {
-            if (onLeft && (v < a.get(l) || v > a.get(r))
-                || !onLeft && (v > a.get(l) || v < a.get(r))) return -1;
-            while (l <= r) {
-                int m = (l + r) / 2;
-                if (a.get(m) == v) return m;
-                if (onLeft) {
-                    if (a.get(m) > v) r = m-1;
-                    else l = m+1;
-                } else if (a.get(m) > v) l = m+1;
-                else r = m-1;
-            }
-            return l;
-        }
-        int binarySearchPeek(MountainArray a, int n) {
-            int l = 0, r = n-1;
-            while (l <= r - 2) {
-                int m = (l + r) / 2;
-                if (a.get(m-1) < a.get(m) && a.get(m) > a.get(m+1)) return m;
-                else if (a.get(m-1) < a.get(m) && a.get(m) < a.get(m+1)) l = m;
-                else r = m-1;
-            }
-            return l;
-        }
-
         public int[] canSeePersonsCount(int[] a) {
             int n = a.length, ans [] = new int [n];
             ArrayDeque<Integer> s = new ArrayDeque<>(); // 单调递减栈

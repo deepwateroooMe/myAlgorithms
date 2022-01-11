@@ -510,11 +510,330 @@ public class hdseven {
         //     // return false;
         // }
 
+        // // interface MountainArray {
+        // //     *     public int get(int index) {}
+        // //     *     public int length() {}
+        // //     * }
+        // // int binarySearchPeek(MountainArray a, int l, int r) {
+        // //     if (l == r) return l;
+        // //     if (l == r -1) return a.get(l) > a.get(r) ? l : r;
+        // //     int m = l + (r - l) / 2;
+        // //     // 你好歹也把 ma.get(m) 的值记下来，不用调用两遍吧。。。。。。这个如下8次的调用量太恐怖了
+        // //     if (a.get(m-1) < a.get(m) && a.get(m) > a.get(m+1)) return m; // bug: it says too many get() calls
+        // //     if (a.get(m-1) < a.get(m) && a.get(m) < a.get(m+1))
+        // //         return binarySearchPeek(a, m+1, r);
+        // //     return binarySearchPeek(a, l, m-1);
+        // // }
+        // public int findInMountainArray(int t, MountainArray ma) {
+        //     int n = ma.length(), l = 0, r = n-1, idx = 0;
+        //     while (l < r) { // 
+        //         int m = l + (r - l) / 2;
+        //         if (ma.get(m) < ma.get(m+1)) l = m + 1;
+        //         else r = m; // 
+        //     }
+        //     idx = l;
+        //     if (ma.get(idx) == t) return idx;
+        //     int li = binarySearchTarget(ma, 0, idx-1, t, true);
+        //     if (li != -1) return li;
+        //     return binarySearchTarget(ma, idx+1, n-1, t, false);
+        // }
+        // int binarySearchTarget(MountainArray a, int l, int r, int v, boolean left) {
+        //     while (l < r) {             //
+        //         int m = l + (r - l) / 2;
+        //         if (a.get(m) == v) return m;
+        //         if (a.get(m) < v) {
+        //             if (left) l = m + 1;
+        //             else r = m;         // 
+        //         } else if (left) r = m; //
+        //         else l = m + 1;
+        //     }
+        //     return a.get(r) == v ? r : -1;
+        // }
+        // public int findInMountainArray(int t, MountainArray ma) { // 还是下面这个速度比较快一点儿
+        //     int n = ma.length(), l = 0, r = n-1, idx, v;
+        //     while (l <= r) { 
+        //         int m = l + (r - l) / 2;
+        //         if (ma.get(m) < ma.get(m+1)) l = m + 1;
+        //         else r = m-1; 
+        //     }
+        //     idx = l;
+        //     int li = binarySearchTarget(ma, 0, idx, t, true);
+        //     if (li != -1) return li;
+        //     return binarySearchTarget(ma, idx+1, n-1, t, false);
+        // }
+        // int binarySearchTarget(MountainArray a, int l, int r, int v, boolean left) { // left: increasing
+        //     if (!left) v *= -1; // 这种乘法。。。。。。
+        //     while (l <= r) {
+        //         int m = (l + r) / 2;
+        //         // int val = a.get(m);
+        //         int val = a.get(m) * (left ? 1 : -1);
+        //         if (val == v) return m;
+        //         if (val > v) r = m-1;
+        //         else l = m + 1;
+        //         // if (left) {
+        //         //     if (val > v) r = m-1;
+        //         //     else l = m+1;
+        //         // } else if (val > v) l = m+1;
+        //         // else r = m-1;
+        //     }
+        //     return -1;
+        // }
+
+
+        // public long maxProduct(String ss) { // BUG: 半头三桩（第二次自己起头写的）
+        //     String t = preprocess(ss);
+        //     System.out.println("t: " + t); // right: 用来记录最右回文字符串的最右位置
+        //     int n = t.length(), sum = 0, right = 0, id = -1 // id: 用来记录最右回文字符串的中心位置
+        //         char [] s = t.toCharArray();
+        //     int [] p = new int [n]; // 用来记录每个位置的最大回文半径
+        //     for (int i = 0; i < n; i++) { // 从左向右依次遍历
+        //         if (i <= right) // 从回文半径数获取计算过的回文半径，减少计算
+        //             p[i] = Math.min(right-i+id, p[2 * id - i]);
+        //         else p[i] = 1; // 初始化每一位置最小半径至少为1
+        //         while (i - p[i] >= 0 && i + p[i] < t.length()
+        //                && s[i - p[i]] == s[i + p[i]]) // 只有相等的情况才有可能找到最大的回文半径。
+        //             p[i]++; // 以 i 为中心，最大限度地向两边扩展
+        //         if (p[i] + i -1 > right) { // 当right相同是，取最左边的中心位置效率最高，所以不用更新。
+        //             right = p[i] + i - 1;
+        //             // id = i;
+        //             id = p[i]; //
+        //             // sum = Math.right(sum, p[i]);
+        //         }
+        //     }
+        //     return p;
+        // }
+        // String preprocess(String t) {
+        //     if (t.length() == 0) return "";
+        //     for (int i = 0; i < t.length(); i++) // 插入字符，统一奇偶性便于计算。
+        //         s += "#" + t.charAt(i);
+        //     s += "#";
+        //     return s.toString();
+        // }
+        // private String processInput(String t) {
+        //     char [] s = t.toCharArray();
+        //     // 由于第一个和最后一个字符都是#号，且也需要搜索回文，为了防止越界，我们还需要在首尾再加上非#号字符，实际操作时我们还需给开头加上个非#号字符'$'，结尾加一个'@'
+        //     String ans = "$#"; // 不论原字符串是奇数还是偶数个，处理之后得到的字符串的个数都是奇数个，这样就不用分情况讨论了
+        //     for (int i = 0; i < t.length(); i++) 
+        //         ans += s[i] + "#";
+        //     ans += "@";
+        //     return ans;
+        // }
+        // public long maxProduct(String t) {
+        //     int m = t.length();
+        //     t = processInput(t);
+        //     char [] s = t.toCharArray();
+        //     int n = s.length;
+        //     // 如何求 len 数组，需要新增两个辅助变量 r 和 idx，其中 idx 为最大回文子串中心的位置，r 是回文串能延伸到的最右端的位置
+        //     int r = 0, idx = 0; // 最大右边界、最大回文串的中心位置
+        //     int [] len = new int [n];
+        //     for (int i = 1; i < n-1; i++) {
+        //         len[i] = r > i ? Math.min(len[2*idx-i], r-i) : 1;
+        //         while (i + len[i] < n-1 && i - len[i] >= 0 && s[i+len[i]] == s[i-len[i]])
+        //             ++len[i];
+        //         if (r < len[i]+i) {
+        //             r = len[i] + i;
+        //             idx = i;
+        //         }
+        //     }
+        //     int [] arr = new int [m];
+        //     idx = 0;
+        //     for (int i = 2; i < n-1; i++) 
+        //         if (s[i] != '#' && s[i] != '@') arr[idx++] = len[i] - len[i-1];
+        //     int [] pre = new int [m]; 
+        //     int [] suf = new int [m];
+        //     return 0;
+        // }
+        // private int expand(int l, int r, String s) {
+        //     while (l >= 0 && r < s.length() && s.charAt(l) == s.charAt(r)) {
+        //         l--;
+        //         r++;
+        //     }
+        //     return (r - l - 2) / 2;
+        // }
+        // private int [] manacher(String s) {
+        //     int [] ans = new int [s.length()];
+        //     int idx = -1, r = -1;
+        //     for (int i = 0; i < s.length(); i++) {
+        //         int cur = (i <= r ? Math.min(r-i, ans[2 * idx - i]) + 1 : 1);
+        //         ans[i] = expand(i-cur, i+cur, s);
+        //         if (ans[i] + i > r) {
+        //             idx = i;
+        //             r = ans[i] + i;
+        //         }
+        //     }
+        //     return ans;
+        // }
+        // public long maxProduct(String t) { // bug bug bug 不知道哪里错掉了
+        //     int n = t.length();
+        //     int [] len = manacher(t);
+        //     int [] pre = new int [n], suf = new int [n];
+        //     for (int i = 0; i < n; i++) {
+        //         pre[i] = i;
+        //         suf[i] = i;
+        //     }
+        //     for (int i = 0; i < n; i++) {
+        //         suf[i - len[i]] = Math.max(i, suf[i - len[i]]);
+        //         pre[i + len[i]] = Math.min(i, pre[i + len[i]]);
+        //     }
+        //     for (int i = 1; i < n; i++)
+        //         suf[i] = Math.max(suf[i], suf[i-1]);
+        //     for (int i = n-2; i >= 0; i--) 
+        //         pre[i] = Math.min(pre[i], pre[i+1]);
+        //     int [] pp = new int [n], ss = new int [n];
+        //     pp[0] = 2 * pre[0] + 1;
+        //     for (int i = 1; i < n; i++) 
+        //         pp[i] = Math.max(pp[i-1], 2 * (i - pre[i]) + 1);
+        //     ss[n-1] = 2 * (n-1 - suf[n-1]) + 1;
+        //     for (int i = n-2; i >= 0; i--) 
+        //         ss[i] = Math.max(suf[i+1], 2 * (suf[i] - i) + 1);
+        //     long ans = 1;
+        //     for (int i = 0; i < n-1; i++)
+        //         ans = Math.max(ans, (long)pp[i] * ss[i+1]);
+        //     return ans;
+        // }
+        // public long maxProduct(String t) { // rolling hash 算法： Time complexity - O(n), space compelxity - O(n). NO collision detection
+        //     int n = t.length();
+        //     char [] s = t.toCharArray();
+        //     long [] p = new long[n + 1]; // pow[i] = BASE^i
+        //     p[0] = 1;
+        //     for (int i = 1; i <= n; i++) p[i] = p[i-1] * base % mod;
+        //     long [] lh = new long [n+1], rh = new long [n+1]; // 从左向右、从右向左遍历的hash值
+        //     for (int i = 1; i <= n; i++)   // s[0, i):   从左向右遍历
+        //         lh[i] = (lh[i-1] * base + s[i-1]-'a') % mod;
+        //     for (int i = n-1; i >= 0; i--) // s(i, n-1]: 从右向左遍历
+        //         rh[i] = (rh[i+1] * base + s[i] - 'a') % mod;
+        //     int left [] = new int [n], right [] = new int [n];
+        //     for (int i = 0, max = 1; i < n; i++) {    // 以i为 右 端点，回文片段在其左侧的最大回文长度
+        //         if (max < i && isPalindromic(i-max-1, i+1, lh, rh, p)) max += 2;
+        //         left[i] = max;
+        //     }
+        //     for (int i = n-1, max = 1; i >= 0; i--) { // 以i为 左 端点，回文片段在其右侧的最大回文长度
+        //         if (i + max + 2 <= n && isPalindromic(i, i+max+2, lh, rh, p)) max += 2;
+        //         right[i] = max;
+        //     }
+        //     long ans = 1;
+        //     for (int i = 1; i < n; i++)
+        //         ans = Math.max(ans, (long)left[i-1] * right[i]);
+        //     return ans;
+        // }        
+        // static final long mod = Integer.MAX_VALUE;
+        // static final long base = 29L;
+        // static boolean isPalindromic(int l, int r, long [] left, long [] right, long [] p) {
+        //     return lh(l, r, left, p) == rh(l, r, right, p);
+        // }
+        // static long lh(int l, int r, long [] hash, long [] p) {
+        //     long ans = (hash[r] - hash[l] * p[r-l]) % mod;
+        //     if (ans < 0) ans += mod;
+        //     return ans;
+        // }
+        // static long rh(int l, int r, long [] hash, long [] p) {
+        //     long ans = (hash[l] - hash[r] * p[r-l]) % mod;
+        //     if (ans < 0) ans += mod;
+        //     return ans;
+        // }
+        // public long maxProduct(String s) { // 这个马拉车: 写第二遍看不懂第一遍参考别人的代码，注解是多么地重要！！！
+        //     int n = s.length();
+        //     int d [] = manacher(s); // 以i为中心的，包括当前字符的单侧最大回文长度
+        //     int l [] = new int [n], r [] = new int [n]; // 转化为：以当前坐标为最右、最左极限的全回文片段最大长度
+        //     for (int i = 0; i < n; i++) {
+        //         l[i+d[i]-1] = Math.max(l[i+d[i]-1], 2 * d[i]-1); // 用第一个当前下标，来更新所有右端所能企及、以右端点为结尾的最大片段长度,从左向右
+        //         r[i-d[i]+1] = 2 * d[i] - 1;                      // 用当前回文片段全长，更新以左端点为起始点的最大长度, 从右向左???
+        //     }
+        //     // if maximum palindrome has end at i and its length is L, then there's a palindrome of length L-2 with end at position i-1
+        //     for (int i = n-2, j = n-1; i >= 0; i--, j--) // 从右向左
+        //         l[i] = Math.max(l[i], l[j]-2); 
+        //     for (int i = 1, j = 0; i < n; i++, j++)      // 从左向右
+        //         r[i] = Math.max(r[i], r[j]-2);
+        //     // Same fact for beginnings of palindromes
+        //     for (int i = 1, j = 0; i < n; i++, j++)
+        //         l[i] = Math.max(l[i], l[j]);
+        //     for (int i = n-2, j = n-1; i >= 0; i--, j--)
+        //         r[i] = Math.max(r[i], r[j]);
+        //     long ans = 1;
+        //     for (int i = 1; i < n; i++) 
+        //         ans = Math.max(ans, (long)l[i-1] * r[i]);
+        //     return ans;
+        // }
+        static int [] manacher(String t) { // 这个写法可能并不标准： modifiedOddManacher
+            int n = t.length();
+            char [] s = t.toCharArray();
+            int [] ans = new int [n];
+            for (int i = 0, l = 0, r = -1; i < n; i++) {
+                int len = i > r ? 1 : Math.min(ans[l+r-i], r-i+1); // 起始单侧长度只有1
+                int maxLen = Math.min(i, n-1-i); // 就算两边都能对称延伸至两端点，以现i为中心的回文的 单侧最大长度(包括当前下标的字符计算在内)
+                int x = i - len, y = i + len;
+                while (len <= maxLen && s[x--] == s[y++]) len++; // 向两侧扩散延伸
+                ans[i] = len--;
+                if (i + len > r) {
+                    l = i - len;
+                    r = i + len;
+                }
+            }
+            return ans;
+        }
+        public long maxProduct(String s) {
+            int n = s.length();
+            StringBuilder sb = new StringBuilder(s);
+            int [] l = new int [n], r = new int [n];
+            modifiedOddManacher(sb.toString(), l);
+            modifiedOddManacher(sb.reverse().toString(), r);
+            long ans = 1;
+            for (int i = 0; i < n-1; i++) 
+                ans = Math.max(ans, (1 + (l[i]-1) * 2l) * (1 + (r[n-(i+1)-1]-1) * 2l));
+            return ans;
+        }
+        void modifiedOddManacher(String t, int [] d) { 
+            int n = t.length();
+            char [] s = t.toCharArray();
+            int [] idx = new int [n]; // idx: center
+            for (int i = 0, l = 0, r = -1; i < n; i++) {
+                int radius = (i > r) ? 1 : Math.min(idx[l+(r-i)], r-i+1);
+                while (i - radius >= 0 && i + radius < n && s[i-radius] == s[i+radius]) { // 因为半径没有限制，所以要检查两边是否会出界
+                    d[i+radius] = radius + 1;
+                    radius++;
+                }
+                idx[i] = radius--;
+                if (i + radius > r) {
+                    l = i - radius;
+                    r = i + radius;
+                }
+            }
+            for (int i = 0, max = 1; i < n; i++) {
+                max = Math.max(max, d[i]);
+                d[i] = max;
+            }
+        }
+        // Just comapare with basic odd Manacher for better understanding.
+        void oddManacher(String s) { // 是需要对比理解一下
+            int n = s.length();
+            int [] idx = new int [n];
+            for (int i = 0, l = 0, r = -1; i < n; i++) {
+                int radius = (i > r) ? 1 : Math.min(idx[l+r-i], r-i+1);
+
+                
+            }
+        }
+        private void oddManacher(String str){
+            int len = str.length();
+            int [] center = new int [len];
+            for (int l=0,r=-1,i=0;i<len;i++){
+                int radius = (i > r) ? 1 : Math.min(center[l+(r-i)], r-i+1);
+                while (i-radius>=0 && i+radius<len && str.charAt(i-radius)==str.charAt(i+radius)) 
+                    radius++;
+                center[i] = radius--;
+                if(i+radius > r){
+                    l = i-radius;
+                    r = i+radius;
+                }
+            }
+        }
     } 
     public static void main (String[] args) {
         Solution s = new Solution ();
 
-        boolean r = s.reachingPoints(1, 1, 3, 5);
+        String a = "ababbb";
+
+        long r = s.maxProduct(a);
         System.out.println("r: " + r);
     } 
 } 
