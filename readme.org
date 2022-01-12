@@ -8503,167 +8503,6 @@ public List<List<String>> deleteDuplicateFolder(List<List<String>> paths) {
 
 * Tree树结构：各种新型数据结构
 
-*** 687. Longest Univalue Path
-Given the root of a binary tree, return the length of the longest path, where each node in the path has the same value. This path may or may not pass through the root.
-
-The length of the path between two nodes is represented by the number of edges between them.
-- 此题与求二叉树的最长路径边长相似，只是此题要求是节点值相同的路径，也就是说在找最长路径的时候，还需要判断节点值，要是不相同，就重置为0，在此期间，我们使用一个全局变量来存储最长节点值相同路径的边长。
-#+BEGIN_SRC java
-private int topDownTraverse(TreeNode r) { 
-    if (r == null) return 0;
-    int left = topDownTraverse(r.left);
-    int right = topDownTraverse(r.right);
-    if (r.left == null || r.left.val != r.val) left = 0;
-    if (r.right == null || r.right.val != r.val) right = 0;
-    max = Math.max(max, left + right);
-    return Math.max(left, right) + 1;
-}
-int max = 0;
-public int longestUnivaluePath(TreeNode root) {
-    if (root == null) return 0;
-    topDownTraverse(root);
-    return max;
-}
-#+END_SRC
-
-*** 652. Find Duplicate Subtrees
-Given the root of a binary tree, return all duplicate subtrees.
-
-For each kind of duplicate subtrees, you only need to return the root node of any one of them.
-
-Two trees are duplicate if they have the same structure with the same node values.
-#+BEGIN_SRC java
-private String duplicate(TreeNode node) {
-    if(node == null) return "X";
-    String l = duplicate(node.left);
-    String r = duplicate(node.right);
-    String s = Integer.toString(node.val) + "-" + l + "-" + r;
-    map.put(s, map.getOrDefault(s, 0)+1);
-    if (map.get(s) == 2)
-        list.add(node);
-    return s;
-}
-HashMap<String,Integer> map = new HashMap<>();
-ArrayList list = new ArrayList<>();
-public List findDuplicateSubtrees(TreeNode root) {
-    duplicate(root);
-    return list;
-}
-#+END_SRC
-- 看一下构造的图的效果图
-#+BEGIN_SRC java
-      1 -> root
-    2, 3,  ->
-4, #| 2, 4,  ->
-#.#| 4, #| #.#|  ->
-#.#|  ->
-
-map.size(): 4
-3-2-4-X-X-X-4-X-X, 1
-1-2-4-X-X-X-3-2-4-X-X-X-4-X-X, 1
-2-4-X-X-X, 2
-4-X-X, 3
-
-res.size(): 2
-TREE Level order traversal:
-      4 -> root
-    #.#|  ->
-
-TREE Level order traversal:
-      2 -> root
-    4, #|  ->
-#.#|  ->
-#+END_SRC
-- 一种dfs的写法
-#+BEGIN_SRC java
-HashSet<String> set, added;
-List<TreeNode> list;
-public List<TreeNode> findDuplicateSubtrees(TreeNode root) {
-    set = new HashSet();
-    added = new HashSet();
-    list = new ArrayList();
-    StringBuilder ret = dfs(root);
-    return list;
-}
-private StringBuilder dfs(TreeNode root){
-    if (root == null) return null;
-    StringBuilder sbL = dfs(root.left), sbR = dfs(root.right);
-    if (sbL == null && sbR == null){
-        sbL = new StringBuilder();
-        sbL.append(root.val);
-    } else if (sbL != null){
-        sbL.append(" " + root.val);
-        if (sbR != null){
-            sbL.append(' ');
-            sbL.append(sbR);
-        } else sbL.append(" n");
-    } else if (sbL == null){
-        if (sbR != null){
-            sbR.insert(0, " n " + root.val);
-            sbL = sbR;
-        }
-    }
-    String temp = sbL.toString();
-    if (set.contains(temp) && !added.contains(temp)){
-        list.add(root);
-        added.add(temp);
-
-    }
-    set.add(temp);
-    return sbL;
-}
-#+END_SRC
-- 这个跑起来很高效，可惜我看不懂。。。。。以后再慢慢消化吧
-- https://leetcode.com/problems/find-duplicate-subtrees/discuss/1418487/Java-beats-99.5-in-time
-#+BEGIN_SRC java
-Map<Integer, Integer> count;           // frequency of each subtree represented in string
-Map<List<Integer>, Integer> numberMap; // ** not hashset since it cannot reserve element order
-List<TreeNode> ans;
-int globalNumber = 1;
-public List<TreeNode> findDuplicateSubtrees(TreeNode root) {
-    count = new HashMap();
-    numberMap = new HashMap();
-    ans = new ArrayList();
-    collect(root);
-    return ans;
-}
-public int collect(TreeNode node) {
-    if (node == null) return 0;
-    int leftNumber = collect(node.left);
-    int rightNumber = collect(node.right);
-    List<Integer> numberExp = new ArrayList<>(); // construct expression
-    numberExp.add(node.val);
-    numberExp.add(leftNumber);
-    numberExp.add(rightNumber);
-    if (!numberMap.containsKey(numberExp)) { // update numberMap
-        numberMap.put(numberExp, globalNumber);
-        globalNumber++;
-    }
-    // check number frequency. if == 2, meaning duplication then add to result
-    int rootNumber = numberMap.get(numberExp).intValue();
-    count.put(rootNumber, count.getOrDefault(rootNumber, 0)+1);
-    if (count.get(rootNumber) == 2) // not >=2, otherwise ans will have duplicated nodes
-        ans.add(node);
-    return rootNumber;
-}
-#+END_SRC
-#+BEGIN_SRC java
-count.size(): 4
-1, 3
-2, 2
-3, 1
-4, 1
-numberMap.size(): 4
-2, 1, 0,
-2
-3, 2, 1,
-3
-1, 2, 3,
-4
-4, 0, 0,
-1
-#+END_SRC
-
 *** 979. Distribute Coins in Binary Tree
 You are given the root of a binary tree with n nodes where each node in the tree has node.val coins. There are n coins in total throughout the whole tree.
 
@@ -9006,40 +8845,6 @@ TreeNode buildBinaryTree(char [] s, int level) {
     return r;
 }
 #+END_SRC
-*** 1696. Jump Game VI
-You are given a 0-indexed integer array nums and an integer k.
-You are initially standing at index 0. In one move, you can jump at most k steps forward without going outside the boundaries of the array. That is, you can jump from index i to any index in the range [i + 1, min(n - 1, i + k)] inclusive.
-You want to reach the last index of the array (index n - 1). Your score is the sum of all nums[j] for each index j you visited in the array.
-Return the maximum score you can get.
-#+BEGIN_SRC java
-public int maxResult(int[] nums, int k) { // O(N) DP with double ended queue
-    int n = nums.length;
-    int [] dp = new int[n];
-    ArrayDeque<Integer> q = new ArrayDeque<>();
-    for (int i = 0; i < n; i++) {
-        while (!q.isEmpty() && q.peekFirst() < i-k) // 头大尾小
-            q.removeFirst();
-        dp[i] = nums[i] + (q.isEmpty() ? 0 : dp[q.peekFirst()]);
-        while (q.size() > 0 && dp[q.peekLast()] <= dp[i])
-            q.removeLast();
-        q.addLast(i);
-    }
-    return dp[n-1];
-}
-public int maxResult(int[] nums, int k) { // BigO: O (NlogN)
-    int n = nums.length;
-    int [] dp = new int[n];
-    Queue<int []> q = new PriorityQueue<>(Comparator.comparingInt(e -> -e[0]));
-    for (int i = 0; i < n; i++) {
-        while (!q.isEmpty() && q.peek()[1] + k < i)
-            q.poll();
-        dp[i] = nums[i] + (q.isEmpty() ? 0 : q.peek()[0]);
-        q.add(new int[] {dp[i], i});
-    }
-    return dp[n-1];
-}
-#+END_SRC
-
 *** 1932. Merge BSTs to Create Single BST
 You are given n BST (binary search tree) root nodes for n separate BSTs stored in an array trees (0-indexed). Each BST in trees has at most 3 nodes, and no two roots have the same value. In one operation, you can:
 
@@ -9085,36 +8890,167 @@ private boolean isValid(TreeNode node, int min, int max) { // 这些个递归写
 }
 #+END_SRC
 
-*** 968. Binary Tree Cameras
-You are given the root of a binary tree. We install cameras on the tree nodes where each camera at a node can monitor its parent, itself, and its immediate children.
-Return the minimum number of cameras needed to monitor all nodes of the tree.
+*** 687. Longest Univalue Path
+Given the root of a binary tree, return the length of the longest path, where each node in the path has the same value. This path may or may not pass through the root.
+
+The length of the path between two nodes is represented by the number of edges between them.
+- 此题与求二叉树的最长路径边长相似，只是此题要求是节点值相同的路径，也就是说在找最长路径的时候，还需要判断节点值，要是不相同，就重置为0，在此期间，我们使用一个全局变量来存储最长节点值相同路径的边长。
 #+BEGIN_SRC java
-// 对于每个节点，有一下三种case：
-// case（1）：如果它有一个孩子，且这个孩子是叶子（状态0），则它需要摄像头，res ++，然后返回1，表示已经给它装上了摄像头。
-// case（2）：如果它有一个孩子，且这个孩子是叶子的父节点（状态1），那么它已经被覆盖，返回2。
-// case（0）：否则，这个节点无孩子，或者说，孩子都是状态2，那么我们将这个节点视为叶子来处理。
-// 由于dfs最终返回后，整棵树的根节点的状态还未处理，因此需要判断，若根节点被视为叶子，需要在其上加一个摄像头。
-private int dfs(TreeNode r) {
-    // 空节点不需要被覆盖，归入情况2
-    if (r == null) return 2; // do not need cover
-    int left = dfs(r.left);  // 递归求左右孩子的状态
-    int right = dfs(r.right);
-    // 获取左右孩子状态之后的处理
-    // 有叶子孩子，加摄像头，归入情况1
-    if (left == 0 || right == 0) {
-        res ++;
-        return 1;
-    }
-    // 孩子上有摄像头，说明此节点已被覆盖，情况2; 
-    if (left == 1 || right == 1) return 2;
-    return 0;
+private int topDownTraverse(TreeNode r) { 
+    if (r == null) return 0;
+    int left = topDownTraverse(r.left);
+    int right = topDownTraverse(r.right);
+    if (r.left == null || r.left.val != r.val) left = 0;
+    if (r.right == null || r.right.val != r.val) right = 0;
+    max = Math.max(max, left + right);
+    return Math.max(left, right) + 1;
 }
-int res = 0;
-public int minCameraCover(TreeNode root) {
-    // 若根节点被视为叶子，需要在其上加一个摄像头
-    return (dfs(root) == 0 ? 1 : 0) + res;
+int max = 0;
+public int longestUnivaluePath(TreeNode root) {
+    if (root == null) return 0;
+    topDownTraverse(root);
+    return max;
 }
 #+END_SRC
+
+*** 652. Find Duplicate Subtrees
+Given the root of a binary tree, return all duplicate subtrees.
+
+For each kind of duplicate subtrees, you only need to return the root node of any one of them.
+
+Two trees are duplicate if they have the same structure with the same node values.
+#+BEGIN_SRC java
+private String duplicate(TreeNode node) {
+    if(node == null) return "X";
+    String l = duplicate(node.left);
+    String r = duplicate(node.right);
+    String s = Integer.toString(node.val) + "-" + l + "-" + r;
+    map.put(s, map.getOrDefault(s, 0)+1);
+    if (map.get(s) == 2)
+        list.add(node);
+    return s;
+}
+HashMap<String,Integer> map = new HashMap<>();
+ArrayList list = new ArrayList<>();
+public List findDuplicateSubtrees(TreeNode root) {
+    duplicate(root);
+    return list;
+}
+#+END_SRC
+- 看一下构造的图的效果图
+#+BEGIN_SRC java
+      1 -> root
+    2, 3,  ->
+4, #| 2, 4,  ->
+#.#| 4, #| #.#|  ->
+#.#|  ->
+
+map.size(): 4
+3-2-4-X-X-X-4-X-X, 1
+1-2-4-X-X-X-3-2-4-X-X-X-4-X-X, 1
+2-4-X-X-X, 2
+4-X-X, 3
+
+res.size(): 2
+TREE Level order traversal:
+      4 -> root
+    #.#|  ->
+
+TREE Level order traversal:
+      2 -> root
+    4, #|  ->
+#.#|  ->
+#+END_SRC
+- 一种dfs的写法
+#+BEGIN_SRC java
+HashSet<String> set, added;
+List<TreeNode> list;
+public List<TreeNode> findDuplicateSubtrees(TreeNode root) {
+    set = new HashSet();
+    added = new HashSet();
+    list = new ArrayList();
+    StringBuilder ret = dfs(root);
+    return list;
+}
+private StringBuilder dfs(TreeNode root){
+    if (root == null) return null;
+    StringBuilder sbL = dfs(root.left), sbR = dfs(root.right);
+    if (sbL == null && sbR == null){
+        sbL = new StringBuilder();
+        sbL.append(root.val);
+    } else if (sbL != null){
+        sbL.append(" " + root.val);
+        if (sbR != null){
+            sbL.append(' ');
+            sbL.append(sbR);
+        } else sbL.append(" n");
+    } else if (sbL == null){
+        if (sbR != null){
+            sbR.insert(0, " n " + root.val);
+            sbL = sbR;
+        }
+    }
+    String temp = sbL.toString();
+    if (set.contains(temp) && !added.contains(temp)){
+        list.add(root);
+        added.add(temp);
+
+    }
+    set.add(temp);
+    return sbL;
+}
+#+END_SRC
+- 这个跑起来很高效，可惜我看不懂。。。。。以后再慢慢消化吧
+- https://leetcode.com/problems/find-duplicate-subtrees/discuss/1418487/Java-beats-99.5-in-time
+#+BEGIN_SRC java
+Map<Integer, Integer> count;           // frequency of each subtree represented in string
+Map<List<Integer>, Integer> numberMap; // ** not hashset since it cannot reserve element order
+List<TreeNode> ans;
+int globalNumber = 1;
+public List<TreeNode> findDuplicateSubtrees(TreeNode root) {
+    count = new HashMap();
+    numberMap = new HashMap();
+    ans = new ArrayList();
+    collect(root);
+    return ans;
+}
+public int collect(TreeNode node) {
+    if (node == null) return 0;
+    int leftNumber = collect(node.left);
+    int rightNumber = collect(node.right);
+    List<Integer> numberExp = new ArrayList<>(); // construct expression
+    numberExp.add(node.val);
+    numberExp.add(leftNumber);
+    numberExp.add(rightNumber);
+    if (!numberMap.containsKey(numberExp)) { // update numberMap
+        numberMap.put(numberExp, globalNumber);
+        globalNumber++;
+    }
+    // check number frequency. if == 2, meaning duplication then add to result
+    int rootNumber = numberMap.get(numberExp).intValue();
+    count.put(rootNumber, count.getOrDefault(rootNumber, 0)+1);
+    if (count.get(rootNumber) == 2) // not >=2, otherwise ans will have duplicated nodes
+        ans.add(node);
+    return rootNumber;
+}
+#+END_SRC
+#+BEGIN_SRC java
+count.size(): 4
+1, 3
+2, 2
+3, 1
+4, 1
+numberMap.size(): 4
+2, 1, 0,
+2
+3, 2, 1,
+3
+1, 2, 3,
+4
+4, 0, 0,
+1
+#+END_SRC
+
 *** Create Sorted Array through Instructions
 Given an integer array instructions, you are asked to create a sorted array from the elements in instructions. You start with an empty container nums. For each element from left to right in instructions, insert it into nums. The cost of each insertion is the minimum of the following:
 The number of elements currently in nums that are strictly less than instructions[i].
@@ -9152,6 +9088,171 @@ public int createSortedArray(int[] instructions) {
         update(instructions[i], 1);
     }
     return (int)(res % ((int)Math.pow(10, 9) + 7));
+}
+#+END_SRC
+
+*** 1696. Jump Game VI
+You are given a 0-indexed integer array nums and an integer k.
+You are initially standing at index 0. In one move, you can jump at most k steps forward without going outside the boundaries of the array. That is, you can jump from index i to any index in the range [i + 1, min(n - 1, i + k)] inclusive.
+You want to reach the last index of the array (index n - 1). Your score is the sum of all nums[j] for each index j you visited in the array.
+Return the maximum score you can get.
+#+BEGIN_SRC java
+public int maxResult(int[] nums, int k) { // O(N) DP with double ended queue
+    int n = nums.length;
+    int [] dp = new int[n];
+    ArrayDeque<Integer> q = new ArrayDeque<>();
+    for (int i = 0; i < n; i++) {
+        while (!q.isEmpty() && q.peekFirst() < i-k) // 头大尾小
+            q.removeFirst();
+        dp[i] = nums[i] + (q.isEmpty() ? 0 : dp[q.peekFirst()]);
+        while (q.size() > 0 && dp[q.peekLast()] <= dp[i])
+            q.removeLast();
+        q.addLast(i);
+    }
+    return dp[n-1];
+}
+public int maxResult(int[] nums, int k) { // BigO: O (NlogN)
+    int n = nums.length;
+    int [] dp = new int[n];
+    Queue<int []> q = new PriorityQueue<>(Comparator.comparingInt(e -> -e[0]));
+    for (int i = 0; i < n; i++) {
+        while (!q.isEmpty() && q.peek()[1] + k < i)
+            q.poll();
+        dp[i] = nums[i] + (q.isEmpty() ? 0 : q.peek()[0]);
+        q.add(new int[] {dp[i], i});
+    }
+    return dp[n-1];
+}
+#+END_SRC
+
+*** 1345. Jump Game IV - Hard
+Given an array of integers arr, you are initially positioned at the first index of the array.
+
+In one step you can jump from index i to index:
+#+BEGIN_SRC kotlin
+i + 1 where: i + 1 < arr.length.
+i - 1 where: i - 1 >= 0.
+#+END_SRC
+j where: arr[i] == arr[j] and i != j.
+
+Return the minimum number of steps to reach the last index of the array.
+
+Notice that you can not jump outside of the array at any time.
+**** 解题思路与分析
+- 首先题目给出了起点和终点，分别是数组的头部和尾部，另外，每次跳跃我们可以跳向相邻的左右2点以及与当前数值相同的所有点。描述到这里，题目的图形结构已经非常清晰，这实际上是一道，在已知起点和终点的情况下，求图中最短路径的问题。如果你经常看我的博客，你会马上想到，求最短路径的首选应该是bfs，某些情况下dfs也是可行的。
+- 接下来看解题步骤，既然是图型题，我们需要先将图构建出来，比较重要的部分应该是数组中值相同的部分，我们定义一个Map，key是数值，value是具有该数值的数组下标集合。另外这里有一处可以优化的地方，比如数组中有一连串的相同数字：
+#+BEGIN_SRC kotlin
+arr = [11,22,7,7,7,7,7,7,7,22,13]
+#+END_SRC
+- 对于数组中连续的数字7，实际上起作用的只有首尾两个，其他7无论如何跳都不会优于两边的两个7的。因此，当遇上连续相同数字时，我们只在map中保存首尾2个即可。图形结构构建好之后，就是标准的bfs解题逻辑
+- 这就是个BFS的题，唯一注意的是：如果left, current, right 都是同一个数，那么HashMap<Integer, List<Integer>> 又要重新访问一遍，那么解决办法就是访问过当前node的所有index之后，立刻清零；这样每个index只访问一遍；O(N)
+- 自已写的臭长的代码
+     #+BEGIN_SRC java
+public int minJumps(int [] a) {
+    int n = a.length;
+    if (n == 1) return 0;
+    boolean [] vis = new boolean [n];
+    Map<Integer, List<Integer>> m = new HashMap<>();
+    for (int i = 0; i < n; i++) {
+        if (i-1 >= 0 && a[i-1] == a[i] && i+1 < n && a[i+1] == a[i]) { // 任何一端的相等元素都可以cover当前元素，直接跳过
+            vis[i] = true;
+            continue;
+        }
+        m.computeIfAbsent(a[i], z -> new ArrayList<>()).add(i);
+    }
+    Deque<Integer> q = new ArrayDeque<>();
+    Set<Integer> sc = new HashSet<>(); // set of current
+    Set<Integer> sn = new HashSet<>(); // set of next
+    sc.add(0);
+    int cnt = 0;
+    while (sc.size() > 0) {
+        for (int v : sc) q.offerLast(v);
+        while (!q.isEmpty()) {
+            int cur = q.pollFirst();
+            if (cur == n-1) return cnt;
+            vis[cur] = true;
+            if (cur < n-1 && !vis[cur+1]) sn.add(cur+1);
+            if (cur > 0 && !vis[cur-1]) sn.add(cur-1);
+            for (int idx : m.get(a[cur])) {
+                if (vis[idx] || idx == cur) continue;
+                if (idx == n-1) return cnt + 1;
+                sn.add(idx);
+            }
+            m.put(a[cur], new ArrayList<>()); // 每个相同数值只处理一次进队列操作
+        }
+        sc.clear();
+        sc.addAll(sn);
+        sn.clear();
+        cnt++;
+    }
+    return -1;
+}
+ #+END_SRC
+- 再看一下别人逻辑清晰的代码
+#+BEGIN_SRC java
+public int minJumps(int [] a) { // 思路简洁：比上面的方法快了很多
+    int n = a.length;
+    Map<Integer, List<Integer>> m = new HashMap<>();
+    for (int i = 0; i < n; i++) 
+        m.computeIfAbsent(a[i], z -> new ArrayList<>()).add(i);
+    int cnt = 0;
+    boolean [] vis = new boolean [n];
+    Deque<Integer> q = new ArrayDeque<>();
+    q.offerLast(0);
+    vis[0] = true;
+    while (!q.isEmpty()) {
+        for (int z = q.size()-1; z >= 0; z--) {
+            int cur = q.pollFirst();
+            if (cur == n-1) return cnt;
+            for (int idx : m.get(a[cur])) 
+                if (idx != cur && !vis[idx]) {
+                    q.offerLast(idx);
+                    vis[idx] = true;
+                }
+            if (cur-1 >= 0 && !vis[cur-1]) {
+                q.offerLast(cur-1);
+                vis[cur-1] = true;
+            }
+            if (cur+1 < n && !vis[cur+1]) {
+                q.offerLast(cur+1);
+                vis[cur+1] = true;
+            }
+            m.put(a[cur], new ArrayList<>()); // 清零操作：每个相同数值只做入队列操作一次
+        }
+        cnt++;
+    }
+    return -1;
+}
+#+END_SRC 
+
+*** 968. Binary Tree Cameras
+You are given the root of a binary tree. We install cameras on the tree nodes where each camera at a node can monitor its parent, itself, and its immediate children.
+Return the minimum number of cameras needed to monitor all nodes of the tree.
+#+BEGIN_SRC java
+// 对于每个节点，有一下三种case：
+// case（1）：如果它有一个孩子，且这个孩子是叶子（状态0），则它需要摄像头，res ++，然后返回1，表示已经给它装上了摄像头。
+// case（2）：如果它有一个孩子，且这个孩子是叶子的父节点（状态1），那么它已经被覆盖，返回2。
+// case（0）：否则，这个节点无孩子，或者说，孩子都是状态2，那么我们将这个节点视为叶子来处理。
+// 由于dfs最终返回后，整棵树的根节点的状态还未处理，因此需要判断，若根节点被视为叶子，需要在其上加一个摄像头。
+private int dfs(TreeNode r) {
+    // 空节点不需要被覆盖，归入情况2
+    if (r == null) return 2; // do not need cover
+    int left = dfs(r.left);  // 递归求左右孩子的状态
+    int right = dfs(r.right);
+    // 获取左右孩子状态之后的处理
+    // 有叶子孩子，加摄像头，归入情况1
+    if (left == 0 || right == 0) {
+        res ++;
+        return 1;
+    }
+    // 孩子上有摄像头，说明此节点已被覆盖，情况2; 
+    if (left == 1 || right == 1) return 2;
+    return 0;
+}
+int res = 0;
+public int minCameraCover(TreeNode root) {
+    // 若根节点被视为叶子，需要在其上加一个摄像头
+    return (dfs(root) == 0 ? 1 : 0) + res;
 }
 #+END_SRC
 
@@ -10484,6 +10585,7 @@ A subarray is a contiguous sequence of elements within an array. arr[left...righ
     }
      #+END_SRC
 
+
 * backTracking 回溯
 *** 1681. Minimum Incompatibility 再写一遍
 You are given an integer array nums​​​ and an integer k. You are asked to distribute this array into k subsets of equal size such that there are no two equal elements in the same subset.
@@ -10650,6 +10752,273 @@ public int minSessions(int[] tasks, int sessionTime) {
 }
 #+END_SRC
 
+*** 1307. Verbal Arithmetic Puzzle - Hard
+Given an equation, represented by words on the left side and the result on the right side.
+
+You need to check if the equation is solvable under the following rules:
+
+Each character is decoded as one digit (0 - 9).
+Every pair of different characters must map to different digits.
+Each words[i] and result are decoded as one number without leading zeros.
+Sum of numbers on the left side (words) will equal to the number on the right side (result).
+Return true if the equation is solvable, otherwise return false.
+**** 解题思路与分析: 权值合并(无裁枝优化)
+     #+BEGIN_SRC java
+// 哪些字符不能为0
+boolean [] notZero = new boolean[26];
+// 每一种字符出现的权重
+int [] wei = new int[26];
+public boolean isSolvable(String[] sa, String res) {
+    // 标记字符是否出现过
+    int [] vis = new int [26];
+    for (String s : sa) {
+        int w = 1, idx;
+        for (int i = s.length()-1; i >= 0; i--) {
+            idx = s.charAt(i) - 'A';
+            vis[idx] = 1;  // 权重的奇招是简化这道题解法的灵魂
+            wei[idx] += w; // 字符是可以重复出现，并且出现在不同的idx位置上，但计算的是 +/- 各位上权重的累加效应
+            w *= 10;       // 但缺点也在这里：没法裁枝，不方便优化效率 
+        }
+        if (s.length() > 1)
+            notZero[s.charAt(0) - 'A'] = true;
+    }
+    int w = 1, idx = 0;
+    for (int i = res.length()-1; i >= 0; i--) {
+        idx = res.charAt(i) - 'A';
+        vis[idx] = 1;
+        wei[idx] -= w;  // 字符是可以重复出现，并且出现在不同的idx位置上，但计算的是 +/- 各位上权重的累加效应
+        w *= 10;
+    }
+    if (res.length() > 1)
+        notZero[res.charAt(0) - 'A'] = true;
+    Integer a [] = new int [Arrays.stream(vis).sum()]; // Integer []: 方便接下来的 排序 和 裁枝优化
+    idx = 0;
+    for (int i = 0; i < 26; i++) 
+        if (vis[i] > 0) a[idx++] = i;
+    Arrays.sort(a, (x, y) -> Math.abs(wei[y]) - Math.abs(wei[x])); // 这个从权重最大的回塑可以达到75%优先级别，但没有裁枝
+    return dfs(0, 0, new boolean [10], a);
+}
+boolean dfs(int idx, int sum, boolean [] vis, Integer [] a) {
+    if (idx == a.length) return sum == 0; // 终止条件
+    for (int i = 0; i < 10; i++) { // 遍历每个可以match到的数字
+        if (notZero[a[idx]] && i == 0 || vis[i]) continue; // 注意这里的match: a[idx] == s.charAt(i)-'A'
+        vis[i] = true;
+        if (dfs(idx+1, sum + i * wei[a[idx]], vis, a))     // 遍历每个出现过的字符
+            return true;
+        vis[i] = false;
+    }
+    return false;
+}
+     #+END_SRC
+**** 解题思路与分析: 权值合并( 裁枝优化 )
+- 官方题解： https://leetcode-cn.com/problems/verbal-arithmetic-puzzle/solution/suan-nan-ti-by-leetcode-solution/
+那么具体应该怎么做呢？我们可以将每一个字符串拆分成十进制表示的形式，例如：
+#+BEGIN_SRC kotlin
+SEND  =             S * 1000 + E * 100 + N * 10 + D
+MORE  =             M * 1000 + O * 100 + R * 10 + E
+MONEY = M * 10000 + O * 1000 + N * 100 + E * 10 + Y
+S * 1000 + E * 91 - N * 90 + D - M * 9000 - O * 900 + R * 10 - Y = 0
+#+END_SRC
+我们将所有字母移到等式的左侧，这样只需要依次对每个字母进行搜索。在搜索结束后，如果等式左侧的值为 0，那么我们就找到了一组答案。但这种方法的运行时间会非常长，因为我们没有使用任何的搜索剪枝，在等式无解时，它需要枚举所有可能的字母与数字映射的情况。那么有哪些可以剪枝的方法呢？
+
+观察上面等式中 -M * 9000 这一项，我们可以断定 M 的值不能非常大。这是因为当 M 的值很大（例如 M = 9）时，剩下的那些字母因为权值都较小，所以无论怎么取值，等式的左侧都会是一个负数，无法得到 0。也就是说，我们应当优先搜索 M 的值，并且在指定了 M 对应的数字映射之后，需要估计出剩余的项可以凑出的最大值 max 和最小值 min 分别是多少，如果 -M * 9000 不在 [-max, -min] 的范围内，那么剩余的项就无法和 -M * 9000 累计得到 0，也就说明当前搜索的 M 值是无解的。
+
+有了这样一个模糊的剪枝概念之后，我们开始考虑如何设计算法。我们先将等式左侧所有的项按照系数的绝对值大小进行降序排序，系数的绝对值越大，搜索的优先级越高，即：
+#+BEGIN_SRC kotlin
+M * (-9000) + S * 1000 + O * (-900) + E * 91 + N * (-90) + R * 10 + D + Y * (-1) = 0 
+#+END_SRC
+
+随后我们开始进行搜索。首先搜索的是 M，我们需要估计剩余项
+#+BEGIN_SRC kotlin
+S * 1000 + O * (-900) + E * 91 + N * (-90) + R * 10 + D + Y * (-1)
+#+END_SRC
+的最大值 max 和最小值 min。做这个估计的目的是进行搜索剪枝，减少搜索空间，而不是精确地计算出答案。因此我们只需要进行一个粗略的估计即可，即估计出 max' 和 min'，其中 max' 大于等于真正的最大值 max，min' 小于等于真正的最小值 min，这样就不会把正确答案剪枝掉。在大部分情况下，粗略的估计就已经足够了。
+
+那么如何进行一个粗略的估计呢？我们将剩余的项根据系数的正负分为两类，且每一类中按照系数的绝对值大小进行降序排序：
+#+BEGIN_SRC kotlin
+系数为正：S * 1000 + E * 91 + R * 10 + D
+系数为负：-(O * 900 + N * 90 + Y)
+#+END_SRC
+
+我们可以依次考虑这两类，从而估计出最大值和最小值：
+
+最大值：对于系数为正的项，我们将 S 映射为 9，E 映射为 8，以此类推；对于系数为负的项，我们将 O 映射为 0，N 映射为 1，以此类推。这样我们可以估计出最大值 max' = 9712；
+
+最小值：对于系数为正的项，我们将 S 映射为 0，E 映射为 1，以此类推；对于系数为负的项，我们将 O 映射为 9，N 映射为 8，以此类推。这样我们可以估计出最小值 min' = -8713。
+
+得到 M * (-9000) 的取值范围为 [-max', -min'] = [-9712, 8713]，而 M 又是 MORE 和 MONEY 的最高位，因此 M 只有唯一可能的取值 1。这样一个粗略的估计，就帮助我们唯一确定了 M 的值。
+
+随后，我们可以开始搜索 S 的值，使用同样的方法估计出剩余项可以凑出的最大值和最小值（注意，这里还需要加上第一项 M * (-9000) 的值，这个值已经确定，所以就不需要对 M 进行新的映射了），确定 S 的范围，并进行后续的搜索。
+     #+BEGIN_SRC java
+public boolean isSolvable(String[] sa, String res) {
+    for (String s : sa) {
+        int w = 1, idx;
+        for (int i = s.length()-1; i >= 0; i--) {
+            idx = s.charAt(i) - 'A';
+            swei.put(idx, swei.getOrDefault(idx, 0) + w); // 字符是可以重复出现，并且出现在不同的idx位置上，但计算的是 +/- 各位上权重的累加效应
+            w *= 10; // 但缺点也在这里：没法裁枝，不方便优化效率 : 还是可以优化的
+        }
+        if (s.length() > 1)
+            notZero.add(s.charAt(0) - 'A');
+    }
+    int w = 1, idx;
+    for (int i = res.length()-1; i >= 0; i--) {
+        idx = res.charAt(i) - 'A';
+        swei.put(idx, swei.getOrDefault(idx, 0) - w); // 字符是可以重复出现，并且出现在不同的idx位置上，但计算的是 +/- 各位上权重的累加效应
+        w *= 10;
+    }
+    if (res.length() > 1)
+        notZero.add(res.charAt(0) - 'A');
+    wei = (new ArrayList<Map.Entry<Integer, Integer>>(swei.entrySet())).toArray(); // 把map的entry先转化为ArrayList<Map.Entry<Integer, Integer>>()，再转化为数组
+    Arrays.sort(wei, (x, y) -> Math.abs(((Map.Entry<Integer, Integer>)y).getValue()) - Math.abs(((Map.Entry<Integer, Integer>)x).getValue())); // 排序
+    int n = swei.size(); 
+    min = new int [n];
+    max = new int [n];
+    for (int i = 0; i < n; i++) {
+        List<Integer> pos = new ArrayList<>(), neg = new ArrayList<>();
+        for (int j = i; j < n; j++) {
+            int v = ((Map.Entry<Integer, Integer>)wei[j]).getValue();
+            if (v > 0) pos.add(v);
+            else if (v < 0) neg.add(v);
+            Collections.sort(pos);
+            Collections.sort(neg);
+        }
+        for (int j = 0; j < pos.size(); j++) {
+            min[i] += (pos.size()-1-j) * pos.get(j);
+            max[i] += (10 - pos.size() + j) * pos.get(j);
+        }
+        for (int j = 0; j < neg.size(); j++) {
+            min[i] += (9 - j) * neg.get(j);
+            max[i] += j * neg.get(j);
+       }
+    }
+    zoos = new int [n];
+    for (int i = 0; i < n; i++) 
+        zoos[i] = notZero.contains(((Map.Entry<Integer, Integer>)wei[i]).getKey()) ? 1 : 0;
+    vis = new boolean [10];
+    return dfs(0, 0);
+}
+List<Integer> notZero = new ArrayList<>();
+Map<Integer, Integer> swei = new HashMap<>();
+int [] min, max, zoos;
+Object [] wei;
+boolean vis [];
+boolean dfs(int idx, int sum) {
+    if (idx == wei.length) return sum == 0;
+    if (!(sum + min[idx] <= 0 && sum + max[idx] >= 0)) // 剪枝优化
+        return false;
+    for (int i = zoos[idx]; i < 10; i++) {
+        if (!vis[i]) {
+            vis[i] = true;
+            boolean check = dfs(idx+1, sum + ((Map.Entry<Integer, Integer>)wei[idx]).getValue() * i);
+            vis[i] = false;
+            if (check) return true;
+        }
+    }
+    return false;
+}
+     #+END_SRC
+**** 解题思路与分析: 方法一：低位优先
+从直觉上来看，我们首先能想到的搜索方法是优先搜索等式的低位，这是因为在计算加法时，我们也是从低位向高位进行运算。在例子中，我们的搜索顺序为：DEYNREEONSMOM。
+
+那么我们如何具体地从低位向高位进行搜索呢？我们可以使用哈希映射（HashMap）来存储字母和数字之间的映射关系：当我们搜索到一个没有出现在哈希映射中的字母时，我们遍历当前所有有效的数字，枚举该字母的映射，并继续搜索；当我们搜索到一个出现在哈希映射中的字母时，我们可以跳过该字母，并继续搜索。当搜索完所有的字母后，我们检查等式是否成立。
+
+这是一种没有使用任何剪枝的搜索方法，它需要枚举所有可能的字母与数字映射的情况。那么我们如何进行剪枝呢？可以发现，当我们从低位向高位搜索完前两个字母 DE 之后，下一个字母 M 实际上并不需要进行搜索了，我们可以直接通过 D + E 对 10 取模的值得到 M。同理，当我们继续搜索完后续的字母 NR 后，可以直接通过 N + R + carry(D + E) 对 10 取模的值得到 E，其中 carry(D + E) 表示 D + E 对 10 整除的值，即低位向高位的进位。到这一步时，我们发现 E 在之前已经被搜索过，那么如果 N + R + carry(D + E) 对 10 取模的值与之前将 E 映射的值不相等，我们就得出了矛盾，也就不用继续搜索了，而是需要回溯到之前的状态，重新枚举字母的映射。
+
+根据这个剪枝方法，我们可以将搜索过程归纳为如下的步骤：
+
+- 我们从低位向高位进行搜索；
+  - 如果我们当前搜索字母的位置在等式的左侧（即例子中的 SEND 和 MORE），那么：
+    - 如果当前字母在之前已经被搜索过，我们就可以跳过该字母；
+    - 如果当前字母在之前未被搜索过，我们枚举所有有效的数字（「有效的数字」为之前没有被映射到，且不会有前导零出现的数字），作为该字母的映射，并搜索下一个字母；
+  - 如果我们当前搜索字母的位置在等式的右侧（即例子中的 MONEY），那么：
+    - 我们首先需要计算出等式左侧对应数位的数字之和，并加上低位的进位值，记为 x；
+    - 如果当前字母在之前已经被搜索过，我们需要判断 x % 10 与该字母的映射值是否相等。若相等，我们就可以跳过该字母；若不相等，我们得出了矛盾，跳出当前的搜索并进行回溯；
+    - 如果当前字母在之前未被搜索过，我们可以确定该字母必须被映射到 x % 10。如果 x % 10 是有效的数字，我们就将其作为该字母的映射，并搜索下一个字母；如果不是，我们得出了矛盾，跳出当前的搜索并进行回溯。
+     #+BEGIN_SRC c++
+class Solution {
+private:
+    unordered_map<char, int> rep;
+    unordered_map<char, int> lead_zero;
+    bool used[10];
+    int carry[10];
+public:
+    bool dfs(const vector<string>& words, const string& result, int pos, int id, int len) {
+        if (pos == len) {
+            return carry[pos] == 0;
+        }
+        else if (id < words.size()) {
+            int sz = words[id].size();
+            if (sz < pos || rep[words[id][sz - pos - 1]] != -1) {
+                return dfs(words, result, pos, id + 1, len);
+            } else {
+                char ch = words[id][sz - pos - 1];
+                for (int i = lead_zero[ch]; i < 10; ++i) {
+                    if (!used[i]) {
+                        used[i] = true;
+                        rep[ch] = i;
+                        bool check = dfs(words, result, pos, id + 1, len);
+                        used[i] = false;
+                        rep[ch] = -1;
+                        if (check) {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        } else {
+            int left = carry[pos];
+            for (const string& word: words) {
+                if (word.size() > pos) {
+                    left += rep[word[word.size() - pos - 1]];
+                }
+            }
+            carry[pos + 1] = left / 10;
+            left %= 10;
+            char ch = result[result.size() - pos - 1];
+            if (rep[ch] == left) {
+                return dfs(words, result, pos + 1, 0, len);
+            }
+            else if (rep[ch] == -1 && !used[left] && !(lead_zero[ch] == 1 && left == 0)) {
+                used[left] = true;
+                rep[ch] = left;
+                bool check = dfs(words, result, pos + 1, 0, len);
+                used[left] = false;
+                rep[ch] = -1;
+                return check;
+            }
+            else {
+                return false;
+            }
+        }
+    }
+    bool isSolvable(vector<string>& words, string result) {
+        memset(used, false, sizeof(used));
+        memset(carry, 0, sizeof(carry));
+        for (string& word: words) {
+            if (word.size() > result.size()) {
+                return false;
+            }
+            for (char& ch: word) {
+                rep[ch] = -1;
+                lead_zero[ch] = max(lead_zero[ch], 0);
+            }
+            if (word.size() > 1) {
+                lead_zero[word[0]] = 1;
+            }
+        }
+        for (char& ch: result) {
+            rep[ch] = -1;
+            lead_zero[ch] = max(lead_zero[ch], 0);
+        }
+        if (result.size() > 1) {
+            lead_zero[result[0]] = 1;
+        }
+        return dfs(words, result, 0, 0, result.size());
+    }
+};
+     #+END_SRC
 *** 1723 Find Minimum Time to Finish All Jobs
 You are given an integer array jobs, where jobs[i] is the amount of time it takes to complete the ith job.
 
@@ -13648,24 +14017,25 @@ Note that duplicates may exist in the Skiplist, your code needs to handle this s
   - 插入节点。首先最后一层肯定是要插入节点的，插入完成后，记录一下该层节点，因为如果该节点要加入到索引中，上一层是要指向这一层的。以1/2的概率生成索引，在上一层插入节点；1/2的概率插入结束，不再继续维护索引；如果前面生成了索引，再以1/2的概率插入节点直到插入到顶层或中途因概率停止插入。
 - 5.删除(erase)方法。删除和查找差不多，只不过是对每一层找到的节点都要进行删除，也就是删除节点的同时要删除由其产生的索引节点。
      #+BEGIN_SRC java
-private Node head;
+Node head;
 public Skiplist() {
-    Node[] left = new Node[16];  // 左侧向下
-    Node[] right = new Node[16]; // 右侧向下
-    for(int i = 0; i < 16; i++) {
+    int N = 16;
+    Node [] left = new Node[N];  // 左侧向下
+    Node [] right = new Node[N]; // 右侧向下
+    for (int i = 0; i < N; i++) {
         left[i] = new Node(-1);     // 左侧哨兵： -1
-        right[i] = new Node(20001); // 右侧消兵:  > 20000
+        right[i] = new Node(20007); // 右侧消兵:  > 20000
+        lift[i].right = right[i];   // 左右 连接起来
     }
-    for(int i = 0; i < 15; i++) { 
-        left[i].right = right[i];  // 前15层：左右连接起来
+    for (int i = 0; i < N-1; i++) { 
         left[i].down = left[i + 1];   // 左 侧消兵：向下连接起来
         right[i].down = right[i + 1]; // 右 侧消兵：向下连接起来
     }
-    left[15].right = right[15]; // 最底层： 向右连接起来
     head = left[0]; // 总入口
 }
 public boolean search(int target) {
     Node r = head;
+    // while (r.dn != null) { // BUG: 这里现在有点儿想不清楚了。。。。。。
     while (r != null) {
         if (r.right.val > target)
             r = r.down;
@@ -13675,23 +14045,22 @@ public boolean search(int target) {
     }
     return false;
 }
-public void add(int val) {
-    Node r = head;
-    ArrayDeque<Node> s = new ArrayDeque<>();
-    while (r != null) {
+public void add(int val) { // 会加上重复的（Skiplist里面已经存在的）值吗？ 会，但是还是会加进去
+    Node r = head, pre = null;
+    ArrayDeque<Node> s = new ArrayDeque<>(); // visited path looking for r.v == num
+    while (r != null) { // 寻找正确的插入位置 [r, r.rt]
         if (r.right.val >= val) {
             s.offerLast(r);
             r = r.down;
         } else r = r.right;
     }
-    Node pre = null;
     while (!s.isEmpty()) {
         r = s.pollLast();
         Node cur = new Node(val);
         cur.right = r.right; // 新建节点放入到 r 与 r.right 之间
         r.right = cur;
         if (pre != null) cur.down = pre; // 如果当前层不是最底层，那么设置新层新插入节点的 down 指向下一层新插入同值节点
-        pre = cur;  // keep updated
+        pre = cur; 
         if (Math.random() < 0.5) break;  // 根据这个概率来决定，新插入节点是否继续向上增加节点
     }
 }
@@ -13701,8 +14070,9 @@ public boolean erase(int val) {
     while (r != null) {
         if (r.right.val >= val) {
             if (r.right.val == val) { // 把当前层的这一节点删除
+                r.right = r.right.right; // 
                 ans = true;
-                r.right = r.right.right;
+                // return true; // BUG: 这里只删除了这一层的，不是没有删除彻底吗？
             }
             r = r.down; // 向下遍历,寻找并删除当前层之下可能存在的节点
         } else r = r.right;
@@ -13716,7 +14086,7 @@ class Node {
         this.val = val;
     }
 }
-     #+END_SRC
+ #+END_SRC
 
 * 扫描线
 *** 435. Non-overlapping Intervals - Medium 动态规划 贪心
@@ -14879,42 +15249,68 @@ More formally, you want to choose four integers i, j, k, l such that 0 <= i <= j
 Return the maximum possible product of the lengths of the two non-intersecting palindromic substrings.
 
 A palindrome is a string that is the same forward and backward. A substring is a contiguous sequence of characters in a string.
-**** 解题思路与分析
-
-这个马拉车，好像还是很半生不熟，要好好理解消化一下
+**** 解题思路与分析: rolling hash算法
+     #+BEGIN_SRC java
+public long maxProduct(String t) { // rolling hash 算法： Time complexity - O(n), space compelxity - O(n). NO collision detection
+    int n = t.length();
+    char [] s = t.toCharArray();
+    long [] p = new long[n + 1]; // pow[i] = BASE^i
+    p[0] = 1;
+    for (int i = 1; i <= n; i++) p[i] = p[i-1] * base % mod;
+    long [] lh = new long [n+1], rh = new long [n+1]; // 从左向右、从右向左遍历的hash值
+    for (int i = 1; i <= n; i++)   // s[0, i):   从左向右遍历
+        lh[i] = (lh[i-1] * base + s[i-1]-'a') % mod;
+    for (int i = n-1; i >= 0; i--) // s(i, n-1]: 从右向左遍历
+        rh[i] = (rh[i+1] * base + s[i] - 'a') % mod;
+    int left [] = new int [n], right [] = new int [n];
+    for (int i = 0, max = 1; i < n; i++) {    // 以i为 右 端点，回文片段在其左侧的最大回文长度
+        if (max < i && isPalindromic(i-max-1, i+1, lh, rh, p)) max += 2;
+        left[i] = max;
+    }
+    for (int i = n-1, max = 1; i >= 0; i--) { // 以i为 左 端点，回文片段在其右侧的最大回文长度
+        if (i + max + 2 <= n && isPalindromic(i, i+max+2, lh, rh, p)) max += 2;
+        right[i] = max;
+    }
+    long ans = 1;
+    for (int i = 1; i < n; i++)
+        ans = Math.max(ans, (long)left[i-1] * right[i]);
+    return ans;
+}        
+static final long mod = Integer.MAX_VALUE;
+static final long base = 29L;
+static boolean isPalindromic(int l, int r, long [] left, long [] right, long [] p) {
+    return lh(l, r, left, p) == rh(l, r, right, p);
+}
+static long lh(int l, int r, long [] hash, long [] p) {
+    long ans = (hash[r] - hash[l] * p[r-l]) % mod;
+    if (ans < 0) ans += mod;
+    return ans;
+}
+static long rh(int l, int r, long [] hash, long [] p) {
+    long ans = (hash[l] - hash[r] * p[r-l]) % mod;
+    if (ans < 0) ans += mod;
+    return ans;
+}
+ #+END_SRC
+**** 解题思路与分析： 马拉车
 
 https://leetcode.com/problems/maximum-product-of-the-length-of-two-palindromic-substrings/discuss/1393288/Java-100-O(n)-time-O(n)-space-using-Manacher's-algorithm
 #+BEGIN_SRC java
-private static int[] manacherOdd(String str) {
-    int n = str.length();
-    char[] s = str.toCharArray();
-    int [] ans = new int [n];
-    for (int i = 0, l = 0, r = -1; i < n; i++) {
-        int len = i > r ? 1 : Math.min(ans[l+r-i], r-i+1);
-        int maxLen = Math.min(i, n-1-i);
-        int x = i - len, y = i + len;
-        while (len <= maxLen && s[x--] == s[y++]) len++;
-        ans[i] = len--;
-        if (i + len > r) {
-            l = i - len;
-            r = i + len;
-        }
-    }
-    return ans;
-}
-public long maxProduct(String s) { // 这个马拉车，得多写几遍
+public long maxProduct(String s) { // 
     int n = s.length();
-    int [] d = manacherOdd(s);
-    int [] l = new int [n], r = new int [n];
+    int d [] = manacher(s); // 以i为中心的，包括当前字符的单侧最大回文长度
+    int l [] = new int [n], r [] = new int [n]; // 转化为：以当前坐标为最右、最左极限的全回文片段最大长度
     for (int i = 0; i < n; i++) {
-        l[i+d[i]-1] = Math.max(l[i+d[i]-1], 2 * d[i]-1);
-        r[i-d[i]+1] = 2 * d[i] - 1;
+        l[i+d[i]-1] = Math.max(l[i+d[i]-1], 2 * d[i]-1); // 用第一个当前下标，来更新所有右端所能企及、以右端点为结尾的最大片段长度,从左向右
+        r[i-d[i]+1] = 2 * d[i] - 1;                      // 用当前回文片段全长，更新以左端点为起始点的最大长度, 从右向左???
     }
-    for (int i = n-2, j = n-1; i >= 0; i--, j--)
-        l[i] = Math.max(l[i], l[j]-2);
-    for (int i = 1, j = 0; i < n; i++, j++)
+    // if maximum palindrome has end at i and its length is L, then there's a palindrome of length L-2 with end at position i-1
+    for (int i = n-2, j = n-1; i >= 0; i--, j--) // 从右向左
+        l[i] = Math.max(l[i], l[j]-2); 
+    for (int i = 1, j = 0; i < n; i++, j++)      // 从左向右
         r[i] = Math.max(r[i], r[j]-2);
-    for (int i = 1, j = 0; i < n; i++, j++) 
+    // Same fact for beginnings of palindromes
+    for (int i = 1, j = 0; i < n; i++, j++)
         l[i] = Math.max(l[i], l[j]);
     for (int i = n-2, j = n-1; i >= 0; i--, j--)
         r[i] = Math.max(r[i], r[j]);
@@ -14923,9 +15319,117 @@ public long maxProduct(String s) { // 这个马拉车，得多写几遍
         ans = Math.max(ans, (long)l[i-1] * r[i]);
     return ans;
 }
+static int [] manacher(String t) { // 这个写法可能并不标准： modifiedOddManacher
+    int n = t.length();
+    char [] s = t.toCharArray();
+    int [] ans = new int [n];
+    for (int i = 0, l = 0, r = -1; i < n; i++) {
+        int len = i > r ? 1 : Math.min(ans[l+r-i], r-i+1); // 起始单侧长度只有1
+        int maxLen = Math.min(i, n-1-i); // 就算两边都能对称延伸至两端点，以现i为中心的回文的 单侧最大长度(包括当前下标的字符计算在内)
+        int x = i - len, y = i + len;
+        while (len <= maxLen && s[x--] == s[y++]) len++; // 向两侧扩散延伸
+        ans[i] = len--;
+        if (i + len > r) {
+            l = i - len;
+            r = i + len;
+        }
+    }
+    return ans;
+}
 #+END_SRC
+**** 解题思路与分析: 根据题意提速版的马拉车算法
+     #+BEGIN_SRC java
+        public long maxProduct(String s) { // 这个方法是：目前自己能够理解的解法里最快的
+            int n = s.length();
+            StringBuilder sb = new StringBuilder(s);
+            int [] l = new int [n], r = new int [n];
+            modifiedOddManacher(sb.toString(), l);
+            modifiedOddManacher(sb.reverse().toString(), r);
+            long ans = 1;
+            for (int i = 0; i < n-1; i++) 
+                ans = Math.max(ans, (1 + (l[i]-1) * 2l) * (1 + (r[n-(i+1)-1]-1) * 2l));
+            return ans;
+        }
+        void modifiedOddManacher(String t, int [] d) { 
+            int n = t.length();
+            char [] s = t.toCharArray();
+            int [] idx = new int [n]; // idx: center
+            for (int i = 0, l = 0, r = -1; i < n; i++) {
+                int radius = (i > r) ? 1 : Math.min(idx[l+(r-i)], r-i+1);
+                while (i - radius >= 0 && i + radius < n && s[i-radius] == s[i+radius]) { // 因为半径没有限制，所以要检查两边是否会出界
+                    d[i+radius] = radius + 1;
+                    radius++;
+                }
+                idx[i] = radius--;
+                if (i + radius > r) {
+                    l = i - radius;
+                    r = i + radius;
+                }
+            }
+            for (int i = 0, max = 1; i < n; i++) {
+                max = Math.max(max, d[i]);
+                d[i] = max;
+            }
+        }
+        // Just comapare with basic odd Manacher for better understanding.
+        void oddManacher(String s) { // 是需要对比理解一下
+            int n = s.length();
+            int [] idx = new int [n];
+            for (int i = 0, l = 0, r = -1; i < n; i++) {
+                int radius = (i > r) ? 1 : Math.min(idx[l+r-i], r-i+1);
+                while (i - radius >= 0 && i + radius < n && s[i-radius] == s[i+radius]) radius++;
+                idx[i] = radius--;
+                if (i + radius > r) {
+                    l = i - radius;
+                    r = i + radius;
+                }
+            }
+        }
+     #+END_SRC
 **** DP解：要再好好理解消化一下
 #+BEGIN_SRC java
+public long maxProduct(String s) { // 这个方法稍慢，但思路相对简洁
+    final int n = s.length();
+    long ans = 1;
+    // l[i] := max length of palindromes in s[0..i)
+    int[] l = manacher(s, n);
+    // r[i] := max length of palindromes in s[i..n)
+    int[] r = manacher(new StringBuilder(s).reverse().toString(), n);
+    reverse(r, 0, n - 1);
+    for (int i = 0; i + 1 < n; ++i)
+        ans = Math.max(ans, (long) l[i] * r[i + 1]);
+    return ans;
+}
+private int[] manacher(final String s, int n) {
+    int[] maxExtends = new int[n];
+    int[] l2r = new int[n];
+    Arrays.fill(l2r, 1);
+    int center = 0;
+    for (int i = 0; i < n; ++i) {
+        final int r = center + maxExtends[center] - 1;
+        final int mirrorIndex = center - (i - center);
+        int extend = i > r ? 1 : Math.min(maxExtends[mirrorIndex], r - i + 1);
+        while (i - extend >= 0 && i + extend < n && s.charAt(i - extend) == s.charAt(i + extend)) {
+            l2r[i + extend] = 2 * extend + 1;
+            ++extend;
+        }
+        maxExtends[i] = extend;
+        if (i + maxExtends[i] >= r)
+            center = i;
+    }
+    for (int i = 1; i < n; ++i)
+        l2r[i] = Math.max(l2r[i], l2r[i - 1]);
+    return l2r;
+}
+private void reverse(int[] A, int l, int r) {
+    while (l < r)
+        swap(A, l++, r--);
+}
+private void swap(int[] A, int i, int j) {
+    final int temp = A[i];
+    A[i] = A[j];
+    A[j] = temp;
+}
 #+END_SRC
 
 * PreSum 差分数组 

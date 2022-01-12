@@ -282,24 +282,25 @@ public class hdseven {
         //     }
         // }
 
-        // private Node head;
+        // Node head;
         // public Skiplist() {
-        //     Node[] left = new Node[16];  // 左侧向下
-        //     Node[] right = new Node[16]; // 右侧向下
-        //     for(int i = 0; i < 16; i++) {
+        //     int N = 16;
+        //     Node [] left = new Node[N];  // 左侧向下
+        //     Node [] right = new Node[N]; // 右侧向下
+        //     for (int i = 0; i < N; i++) {
         //         left[i] = new Node(-1);     // 左侧哨兵： -1
-        //         right[i] = new Node(20001); // 右侧消兵:  > 20000
+        //         right[i] = new Node(20007); // 右侧消兵:  > 20000
+        //         lift[i].right = right[i];   // 左右 连接起来
         //     }
-        //     for(int i = 0; i < 15; i++) { 
-        //         left[i].right = right[i];  // 前15层：左右连接起来
+        //     for (int i = 0; i < N-1; i++) { 
         //         left[i].down = left[i + 1];   // 左 侧消兵：向下连接起来
         //         right[i].down = right[i + 1]; // 右 侧消兵：向下连接起来
         //     }
-        //     left[15].right = right[15]; // 最底层： 向右连接起来
         //     head = left[0]; // 总入口
         // }
         // public boolean search(int target) {
         //     Node r = head;
+        //     // while (r.dn != null) { // BUG: 这里现在有点儿想不清楚了。。。。。。
         //     while (r != null) {
         //         if (r.right.val > target)
         //             r = r.down;
@@ -309,23 +310,22 @@ public class hdseven {
         //     }
         //     return false;
         // }
-        // public void add(int val) {
-        //     Node r = head;
-        //     ArrayDeque<Node> s = new ArrayDeque<>();
-        //     while (r != null) {
+        // public void add(int val) { // 会加上重复的（Skiplist里面已经存在的）值吗？
+        //     Node r = head, pre = null;
+        //     ArrayDeque<Node> s = new ArrayDeque<>(); // visited path looking for r.v == num
+        //     while (r != null) { // 寻找正确的插入位置 [r, r.rt]
         //         if (r.right.val >= val) {
         //             s.offerLast(r);
         //             r = r.down;
         //         } else r = r.right;
         //     }
-        //     Node pre = null;
         //     while (!s.isEmpty()) {
         //         r = s.pollLast();
         //         Node cur = new Node(val);
         //         cur.right = r.right; // 新建节点放入到 r 与 r.right 之间
         //         r.right = cur;
         //         if (pre != null) cur.down = pre; // 如果当前层不是最底层，那么设置新层新插入节点的 down 指向下一层新插入同值节点
-        //         pre = cur;  // keep updated
+        //         pre = cur; 
         //         if (Math.random() < 0.5) break;  // 根据这个概率来决定，新插入节点是否继续向上增加节点
         //     }
         // }
@@ -335,8 +335,9 @@ public class hdseven {
         //     while (r != null) {
         //         if (r.right.val >= val) {
         //             if (r.right.val == val) { // 把当前层的这一节点删除
-        //                 ans = true;
         //                 r.right = r.right.right; // 
+        //                 ans = true;
+        //                 // return true; // BUG: 这里只删除了这一层的，不是没有删除彻底吗？
         //             }
         //             r = r.down; // 向下遍历,寻找并删除当前层之下可能存在的节点
         //         } else r = r.right;
@@ -771,60 +772,397 @@ public class hdseven {
         //     }
         //     return ans;
         // }
-        public long maxProduct(String s) { // 这个方法是：目前自己能够理解的解法里最快的
-            int n = s.length();
-            StringBuilder sb = new StringBuilder(s);
-            int [] l = new int [n], r = new int [n];
-            modifiedOddManacher(sb.toString(), l);
-            modifiedOddManacher(sb.reverse().toString(), r);
-            long ans = 1;
-            for (int i = 0; i < n-1; i++) 
-                ans = Math.max(ans, (1 + (l[i]-1) * 2l) * (1 + (r[n-(i+1)-1]-1) * 2l));
-            return ans;
-        }
-        void modifiedOddManacher(String t, int [] d) { 
-            int n = t.length();
-            char [] s = t.toCharArray();
-            int [] idx = new int [n]; // idx: center
-            for (int i = 0, l = 0, r = -1; i < n; i++) {
-                int radius = (i > r) ? 1 : Math.min(idx[l+(r-i)], r-i+1);
-                while (i - radius >= 0 && i + radius < n && s[i-radius] == s[i+radius]) { // 因为半径没有限制，所以要检查两边是否会出界
-                    d[i+radius] = radius + 1;
-                    radius++;
-                }
-                idx[i] = radius--;
-                if (i + radius > r) {
-                    l = i - radius;
-                    r = i + radius;
-                }
-            }
-            for (int i = 0, max = 1; i < n; i++) {
-                max = Math.max(max, d[i]);
-                d[i] = max;
-            }
-        }
-        // Just comapare with basic odd Manacher for better understanding.
-        void oddManacher(String s) { // 是需要对比理解一下
-            int n = s.length();
-            int [] idx = new int [n];
-            for (int i = 0, l = 0, r = -1; i < n; i++) {
-                int radius = (i > r) ? 1 : Math.min(idx[l+r-i], r-i+1);
-                while (i - radius >= 0 && i + radius < n && s[i-radius] == s[i+radius]) radius++;
-                idx[i] = radius--;
-                if (i + radius > r) {
-                    l = i - radius;
-                    r = i + radius;
-                }
-            }
-        }
-        // 需要改天再回过头，把自己解法里的bug找出来
-    } 
+        // public long maxProduct(String s) { // 这个方法是：目前自己能够理解的解法里最快的
+        //     int n = s.length();
+        //     StringBuilder sb = new StringBuilder(s);
+        //     int [] l = new int [n], r = new int [n];
+        //     modifiedOddManacher(sb.toString(), l);
+        //     modifiedOddManacher(sb.reverse().toString(), r);
+        //     long ans = 1;
+        //     for (int i = 0; i < n-1; i++) 
+        //         ans = Math.max(ans, (1 + (l[i]-1) * 2l) * (1 + (r[n-(i+1)-1]-1) * 2l));
+        //     return ans;
+        // }
+        // void modifiedOddManacher(String t, int [] d) { 
+        //     int n = t.length();
+        //     char [] s = t.toCharArray();
+        //     int [] idx = new int [n]; // idx: center
+        //     for (int i = 0, l = 0, r = -1; i < n; i++) {
+        //         int radius = (i > r) ? 1 : Math.min(idx[l+(r-i)], r-i+1);
+        //         while (i - radius >= 0 && i + radius < n && s[i-radius] == s[i+radius]) { // 因为半径没有限制，所以要检查两边是否会出界
+        //             d[i+radius] = radius + 1;
+        //             radius++;
+        //         }
+        //         idx[i] = radius--;
+        //         if (i + radius > r) {
+        //             l = i - radius;
+        //             r = i + radius;
+        //         }
+        //     }
+        //     for (int i = 0, max = 1; i < n; i++) {
+        //         max = Math.max(max, d[i]);
+        //         d[i] = max;
+        //     }
+        // }
+        // // Just comapare with basic odd Manacher for better understanding.
+        // void oddManacher(String s) { // 是需要对比理解一下
+        //     int n = s.length();
+        //     int [] idx = new int [n];
+        //     for (int i = 0, l = 0, r = -1; i < n; i++) {
+        //         int radius = (i > r) ? 1 : Math.min(idx[l+r-i], r-i+1);
+        //         while (i - radius >= 0 && i + radius < n && s[i-radius] == s[i+radius]) radius++;
+        //         idx[i] = radius--;
+        //         if (i + radius > r) {
+        //             l = i - radius;
+        //             r = i + radius;
+        //         }
+        //     }
+        // }
+        // // 需要改天再回过头，把自己解法里的bug找出来
+        // public long maxProduct(String s) { // 这个方法稍慢，但思路相对简洁
+        //     final int n = s.length();
+        //     long ans = 1;
+        //     // l[i] := max length of palindromes in s[0..i)
+        //     int[] l = manacher(s, n);
+        //     // r[i] := max length of palindromes in s[i..n)
+        //     int[] r = manacher(new StringBuilder(s).reverse().toString(), n);
+        //     reverse(r, 0, n - 1);
+        //     for (int i = 0; i + 1 < n; ++i)
+        //         ans = Math.max(ans, (long) l[i] * r[i + 1]);
+        //     return ans;
+        // }
+        // private int[] manacher(final String s, int n) {
+        //     int[] maxExtends = new int[n];
+        //     int[] l2r = new int[n];
+        //     Arrays.fill(l2r, 1);
+        //     int center = 0;
+        //     for (int i = 0; i < n; ++i) {
+        //         final int r = center + maxExtends[center] - 1;
+        //         final int mirrorIndex = center - (i - center);
+        //         int extend = i > r ? 1 : Math.min(maxExtends[mirrorIndex], r - i + 1);
+        //         while (i - extend >= 0 && i + extend < n && s.charAt(i - extend) == s.charAt(i + extend)) {
+        //             l2r[i + extend] = 2 * extend + 1;
+        //             ++extend;
+        //         }
+        //         maxExtends[i] = extend;
+        //         if (i + maxExtends[i] >= r)
+        //             center = i;
+        //     }
+        //     for (int i = 1; i < n; ++i)
+        //         l2r[i] = Math.max(l2r[i], l2r[i - 1]);
+        //     return l2r;
+        // }
+        // private void reverse(int[] A, int l, int r) {
+        //     while (l < r)
+        //         swap(A, l++, r--);
+        // }
+        // private void swap(int[] A, int i, int j) {
+        //     final int temp = A[i];
+        //     A[i] = A[j];
+        //     A[j] = temp;
+        // }
+
+        // public int minJumps(int [] a) {
+        //     int n = a.length;
+        //     if (n == 1) return 0;
+        //     boolean [] vis = new boolean [n];
+        //     Map<Integer, List<Integer>> m = new HashMap<>();
+        //     for (int i = 0; i < n; i++) {
+        //         if (i-1 >= 0 && a[i-1] == a[i] && i+1 < n && a[i+1] == a[i]) { // 任何一端的相等元素都可以cover当前元素，直接跳过
+        //             vis[i] = true;
+        //             continue;
+        //         }
+        //         m.computeIfAbsent(a[i], z -> new ArrayList<>()).add(i);
+        //     }
+        //     Deque<Integer> q = new ArrayDeque<>();
+        //     Set<Integer> sc = new HashSet<>(); // set of current
+        //     Set<Integer> sn = new HashSet<>(); // set of next
+        //     sc.add(0);
+        //     int cnt = 0;
+        //     while (sc.size() > 0) {
+        //         for (int v : sc) q.offerLast(v);
+        //         while (!q.isEmpty()) {
+        //             int cur = q.pollFirst();
+        //             if (cur == n-1) return cnt;
+        //             vis[cur] = true;
+        //             if (cur < n-1 && !vis[cur+1]) sn.add(cur+1);
+        //             if (cur > 0 && !vis[cur-1]) sn.add(cur-1);
+        //             for (int idx : m.get(a[cur])) {
+        //                 if (vis[idx] || idx == cur) continue;
+        //                 if (idx == n-1) return cnt + 1;
+        //                 sn.add(idx);
+        //             }
+        //             m.put(a[cur], new ArrayList<>()); // 每个相同数值只处理一次进队列操作
+        //         }
+        //         sc.clear();
+        //         sc.addAll(sn);
+        //         sn.clear();
+        //         cnt++;
+        //     }
+        //     return -1;
+        // }
+        // public int minJumps(int [] a) { // 比上面的方法快了很多
+        //     int n = a.length;
+        //     Map<Integer, List<Integer>> m = new HashMap<>();
+        //     for (int i = 0; i < n; i++) 
+        //         m.computeIfAbsent(a[i], z -> new ArrayList<>()).add(i);
+        //     int cnt = 0;
+        //     boolean [] vis = new boolean [n];
+        //     Deque<Integer> q = new ArrayDeque<>();
+        //     q.offerLast(0);
+        //     vis[0] = true;
+        //     while (!q.isEmpty()) {
+        //         for (int z = q.size()-1; z >= 0; z--) {
+        //             int cur = q.pollFirst();
+        //             if (cur == n-1) return cnt;
+        //             for (int idx : m.get(a[cur])) 
+        //                 if (idx != cur && !vis[idx]) {
+        //                     q.offerLast(idx);
+        //                     vis[idx] = true;
+        //                 }
+        //             if (cur-1 >= 0 && !vis[cur-1]) {
+        //                 q.offerLast(cur-1);
+        //                 vis[cur-1] = true;
+        //             }
+        //             if (cur+1 < n && !vis[cur+1]) {
+        //                 q.offerLast(cur+1);
+        //                 vis[cur+1] = true;
+        //             }
+        //             m.put(a[cur], new ArrayList<>()); // 清零操作：每个相同数值只做入队列操作一次
+        //         }
+        //         cnt++;
+        //     }
+        //     return -1;
+        // }
+
+        // public double frogPosition(int n, int[][] edges, int t, int target) { // dfs记忆化搜索: 这里记忆化是用不上的，这相当于是暴力！！！
+        //     ll = new ArrayList [n+1];
+        //     for (int i = 0; i <= n; i++) 
+        //         ll[i] = new ArrayList<>();
+        //     for (int [] e : edges) {
+        //         ll[e[0]].add(e[1]);
+                // ll[e[1]].add(e[0]);
+        //     }
+        //     vis = new boolean [n+1];
+        //     dp = new Double [n+1][t+1];
+        //     dfs(1, t, target, n);
+        //     return dp[1][t];
+        // }
+        // List<Integer> [] ll;
+        // boolean [] vis;
+        // Double [][] dp;
+        // double dfs(int u, int t, int target, int n) {
+        //     if (t < 0 || u < 1 || u > n) return 0;
+        //     // if (u == target) return 1.0; // BUG: if t > 0 它还会跳走的
+        //     if (u == target && t == 0) return 1.0;
+        //     if (dp[u][t] != null) return dp[u][t];
+        //     vis[u] = true;
+        //     double ans = 0;
+        //     int cnt = 0; // valid path cnts
+        //     for (int v : ll[u]) {
+        //         if (vis[v]) continue;
+        //         ans += dfs(v, t-1, target, n);
+        //         cnt++;
+        //     }
+        //     if (cnt == 0 && u == target) return dp[u][t] = 1.0;
+        //     return dp[u][t] = cnt == 0 ? 0 : (double)(ans / cnt);
+        // }
+        // public double frogPosition(int n, int[][] edges, int t, int target) { // BFS
+        //     List<Integer> [] ll = new ArrayList [n+1]; // 生成图
+        //     for (int i = 0; i <= n; i++) 
+        //         ll[i] = new ArrayList<>();
+        //     for (int [] e : edges) {
+        //         ll[e[0]].add(e[1]);
+        //         ll[e[1]].add(e[0]);
+        //     }
+        //     // BFS处理
+        //     boolean [] vis = new boolean [n+1];
+        //     double [] dp = new double [n+1];
+        //     Deque<Integer> q = new ArrayDeque<>();
+        //     q.offerLast(1);
+        //     vis[1] = true;
+        //     dp[1] = 1;
+        //     while (!q.isEmpty() && t-- > 0) { // t--: 压缩代码长度
+        //         for (int w = q.size()-1; w >= 0; w--) {
+        //             int u = q.pollFirst(), cnt = 0;
+        //             for (int v : ll[u])
+        //                 if (!vis[v]) cnt++;
+        //             for (int v : ll[u]) {
+        //                 if (vis[v]) continue;
+        //                 vis[v] = true;
+        //                 q.offerLast(v);
+        //                 dp[v] = dp[u] / cnt; 
+        //             }
+        //             if (cnt > 0) dp[u] = 0; // 还需继续跳且存在可以跳的结点时，一定不会停留在当前结点
+        //         }
+        //     }
+        //     return dp[target];
+        // }
+        // public double frogPosition(int n, int[][] edges, int t, int target) { // dfs: 记里记忆化是用不上的！！！这个方法相对会快一点儿
+        //     ll = new ArrayList [n+1]; // 生成图
+        //     for (int i = 0; i <= n; i++) 
+        //         ll[i] = new ArrayList<>();
+        //     for (int [] e : edges) {
+        //         ll[e[0]].add(e[1]);
+        //         ll[e[1]].add(e[0]);
+        //     }
+        //     // dfs处理
+        //     vis = new boolean [n+1];
+        //     pre = new int [n+1];
+        //     vis[1] = true;
+        //     int dep = dfs(1, target);
+        //     // 存在以下情况可以判断无法停在target:
+        //     // 1. 跳跃的次数 小于 1到target的长度
+        //     // 2. 跳跃的次数 大于 1到target的长度 且 还存在可以跳的结点（不管是起点可以跳，还是终点可以跳）
+        //     if (t < dep || t > dep && (target == 1 && ll[1].size() > 0 || ll[target].size() > 1))
+        //         return 0;
+        //     // 累乘得到从结点1走到target的概率的分母
+        //     int denominator = 1;
+        //     while (pre[target] != 0) {
+        //         target = pre[target];
+        //         denominator *= target == 1 ? ll[1].size() : ll[target].size()-1;
+        //     }            
+        //     return 1.0 / denominator;
+        // }
+        // List<Integer> [] ll;
+        // boolean [] vis;
+        // int [] pre;
+        // int dfs(int u, int target) { // 返回从u到target的长度，无法到达则返回-1
+        //     if (u == target) return 0;
+        //     for (int v : ll[u]) {
+        //         if (vis[v]) continue;
+        //         vis[v] = true;
+        //         pre[v] = u;
+        //         int dep = dfs(v, target);
+        //         if (dep >= 0) return 1 + dep;
+        //     }
+        //     return -1;
+        // }
+
+        // // 哪些字符不能为0
+        // boolean [] notZero = new boolean[26];
+        // // 每一种字符出现的权重
+        // int [] wei = new int[26];
+        // public boolean isSolvable(String[] sa, String res) {
+        //     // 标记字符是否出现过
+        //     int [] vis = new int [26];
+        //     for (String s : sa) {
+        //         int w = 1, idx;
+        //         for (int i = s.length()-1; i >= 0; i--) {
+        //             idx = s.charAt(i) - 'A';
+        //             vis[idx] = 1;  // 权重的奇招是简化这道题解法的灵魂
+        //             wei[idx] += w; // 字符是可以重复出现，并且出现在不同的idx位置上，但计算的是 +/- 各位上权重的累加效应
+        //             w *= 10;       // 但缺点也在这里：没法裁枝，不方便优化效率 
+        //         }
+        //         if (s.length() > 1)
+        //             notZero[s.charAt(0) - 'A'] = true;
+        //     }
+        //     int w = 1, idx = 0;
+        //     for (int i = res.length()-1; i >= 0; i--) {
+        //         idx = res.charAt(i) - 'A';
+        //         vis[idx] = 1;
+        //         wei[idx] -= w;  // 字符是可以重复出现，并且出现在不同的idx位置上，但计算的是 +/- 各位上权重的累加效应
+        //         w *= 10;
+        //     }
+        //     if (res.length() > 1)
+        //         notZero[res.charAt(0) - 'A'] = true;
+        //     Integer a [] = new int [Arrays.stream(vis).sum()]; // Integer []: 方便接下来的 排序 和 裁枝优化
+        //     idx = 0;
+        //     for (int i = 0; i < 26; i++) 
+        //         if (vis[i] > 0) a[idx++] = i;
+        //     Arrays.sort(a, (x, y) -> Math.abs(wei[y]) - Math.abs(wei[x]));
+        //     return dfs(0, 0, new boolean [10], a);
+        // }
+        // boolean dfs(int idx, int sum, boolean [] vis, Integer [] a) {
+        //     if (idx == a.length) return sum == 0; // 终止条件
+        //     for (int i = 0; i < 10; i++) { // 遍历每个可以match到的数字
+        //         if (notZero[a[idx]] && i == 0 || vis[i]) continue; // 注意这里的match: a[idx] == s.charAt(i)-'A'
+        //         vis[i] = true;
+        //         if (dfs(idx+1, sum + i * wei[a[idx]], vis, a))     // 遍历每个出现过的字符
+        //             return true;
+        //         vis[i] = false;
+        //     }
+        //     return false;
+        // }
+        // public boolean isSolvable(String[] sa, String res) {
+        //     for (String s : sa) {
+        //         int w = 1, idx;
+        //         for (int i = s.length()-1; i >= 0; i--) {
+        //             idx = s.charAt(i) - 'A';
+        //             swei.put(idx, swei.getOrDefault(idx, 0) + w); // 字符是可以重复出现，并且出现在不同的idx位置上，但计算的是 +/- 各位上权重的累加效应
+        //             w *= 10; // 但缺点也在这里：没法裁枝，不方便优化效率 : 还是可以优化的
+        //         }
+        //         if (s.length() > 1)
+        //             notZero.add(s.charAt(0) - 'A');
+        //     }
+        //     int w = 1, idx;
+        //     for (int i = res.length()-1; i >= 0; i--) {
+        //         idx = res.charAt(i) - 'A';
+        //         swei.put(idx, swei.getOrDefault(idx, 0) - w); // 字符是可以重复出现，并且出现在不同的idx位置上，但计算的是 +/- 各位上权重的累加效应
+        //         w *= 10;
+        //     }
+        //     if (res.length() > 1)
+        //         notZero.add(res.charAt(0) - 'A');
+        //     wei = (new ArrayList<Map.Entry<Integer, Integer>>(swei.entrySet())).toArray();
+        //     Arrays.sort(wei, (x, y) -> Math.abs(((Map.Entry<Integer, Integer>)y).getValue()) - Math.abs(((Map.Entry<Integer, Integer>)x).getValue()));
+        //     int n = swei.size(); 
+        //     min = new int [n];
+        //     max = new int [n];
+        //     for (int i = 0; i < n; i++) {
+        //         List<Integer> pos = new ArrayList<>(), neg = new ArrayList<>();
+        //         for (int j = i; j < n; j++) {
+        //             int v = ((Map.Entry<Integer, Integer>)wei[j]).getValue();
+        //             if (v > 0) pos.add(v);
+        //             else if (v < 0) neg.add(v);
+        //             Collections.sort(pos);
+        //             Collections.sort(neg);
+        //         }
+        //         for (int j = 0; j < pos.size(); j++) {
+        //             min[i] += (pos.size()-1-j) * pos.get(j);
+        //             max[i] += (10 - pos.size() + j) * pos.get(j);
+        //         }
+        //         for (int j = 0; j < neg.size(); j++) {
+        //             min[i] += (9 - j) * neg.get(j);
+        //             max[i] += j * neg.get(j);
+        //        }
+        //     }
+        //     zoos = new int [n];
+        //     for (int i = 0; i < n; i++) 
+        //         zoos[i] = notZero.contains(((Map.Entry<Integer, Integer>)wei[i]).getKey()) ? 1 : 0;
+        //     vis = new boolean [10];
+        //     return dfs(0, 0);
+        // }
+        // List<Integer> notZero = new ArrayList<>();
+        // Map<Integer, Integer> swei = new HashMap<>();
+        // int [] min, max, zoos;
+        // Object [] wei;
+        // boolean vis [];
+        // boolean dfs(int idx, int sum) {
+        //     if (idx == wei.length) return sum == 0;
+        //     if (!(sum + min[idx] <= 0 && sum + max[idx] >= 0)) // 剪枝优化
+        //         return false;
+        //     for (int i = zoos[idx]; i < 10; i++) {
+        //         if (!vis[i]) {
+        //             vis[i] = true;
+        //             boolean check = dfs(idx+1, sum + ((Map.Entry<Integer, Integer>)wei[idx]).getValue() * i);
+        //             vis[i] = false;
+        //             if (check) return true;
+        //         }
+        //     }
+        //     return false;
+        // }
+
+        
+    }
     public static void main (String[] args) {
         Solution s = new Solution ();
 
-        String a = "ababbb";
+        String []  a = new String []  {"SEND", "MORE"};
+        String b = "MONEY";
+    //     String []  a = new String []  {"A", "B"};
+    // String b = "A";
 
-        long r = s.maxProduct(a);
+        boolean r = s.isSolvable(a, b);
         System.out.println("r: " + r);
     } 
 } 
