@@ -6972,60 +6972,152 @@ int calculateMKAverage() Calculates and returns the MKAverage for the current st
 // 根据题意需要找到前k大的数，又需要求区间和，就自然想到线段树.写起来较不容易出错。
 // 维护2个线段树数组，一个记录数的个数，一个记录区间值，
 // 注意一般线段树中[s，e]指固定的区间，这里类似线段数求第k小的数，所以[s,e]指第s小的值到第e小的值的区间。
-LinkedList<Integer> q;
-int [] cnt;
-long[] sum;
-int m,k;
-public MKAverage(int m, int k) {
-    q = new LinkedList<>();
-    cnt = new int[400001]; // space: 4N
-    sum = new long[400001];
-    this.m = m;
-    this.k = k;
-}
-public void addElement(int num) {
-    if (q.size() == m) {
-        int v = q.pollFirst();
-        insert(1, 0, 100000, v, -1);
+    Deque<Integer> q = new ArrayDeque<>(); // 始终维护m个数
+    int [] cnt;  // 每个元素出现的次数
+    long [] sum; // 累积和
+    int m, k, n = 100000, N = n * 4 + 1; // 线段树所占用的空间为数组的四倍大小
+    public MKAverage(int m, int k) {
+        cnt = new int [N];
+        sum = new long [N];
+        this.m = m;
+        this.k = k;
     }
-    insert(1, 0, 100000, num, 1);
-    q.addLast(num);
-}
-public int calculateMKAverage() {
-    if (q.size() < m)return -1;
-    int s = k+1, e = m-k;
-    return (int)(query(1, 0, 100000, s, e)/(m-2*k));
-}
-void insert(int idx, int l, int r, int v, long d) {
-    cnt[idx] += d;
-    sum[idx] += d*v;
-    if (l == r) return;
-    int m = l + (r-l)/2;
-    if (v <= m)
-        insert(idx<<1, l, m, v, d);    // 向左子树查询
-    else
-        insert(idx<<1|1, m+1, r, v, d);// 向右子树查询
-}
-long query(int idx, int l, int r, int s, int e){//线段中第s个到第e个
-    if (l == r) {//起始和结束最多出现2次此情况
-        int c = e-s+1;
-        return (long)c*l;
-    } else if (cnt[idx] == e-s+1) {
-        return sum[idx];
-    } else {
-        int m = (l+r)/2;
-        int c1 = cnt[idx<<1];
-        int c2 = cnt[idx<<1|1];
-        if (c1 >= e){
-            return query(idx<<1, l, m, s, e);
-        } else if (c1 >= s){
-            return query(idx<<1, l, m, s, c1)+query(idx<<1|1, m+1, r, 1, e-c1);
-        } else {//c1<s
-            return query(idx<<1|1, m+1, r, s-c1, e-c1);
+    public void addElement(int num) {
+        if (q.size() == m) {
+            int v = q.pollFirst();
+            insert(1, 0, n, v, -1); // 当删除掉一个元素的时候，需要更新线段树中的和
+        }
+        insert(1, 0, n, num, 1);
+        q.offerLast(num);
+    }
+    public int calculateMKAverage() {
+        if (q.size() < m) return -1;
+        int bgn = k + 1, end = m - k; // idx: 1 - based
+        return (int)(query(1, 0, n, bgn, end) / (m - 2 * k));
+    }
+    void insert(int idx, int l, int r, int v, long d) { // d: 
+        cnt[idx] += d;
+        sum[idx] += d * v;
+        if (l == r) return ;
+        int m = l + (r - l) / 2;
+        if (v <= m)
+            insert(idx << 1, l, m, v, d);       // 向左子树查询
+        else insert(idx << 1 | 1, m+1, r, v, d);// 向右子树查询
+    }
+    long query(int idx, int l, int r, int bgn, int end) { // 线段中第 bgn 个到第 end 个
+        if (l == r) { // 起始和结束最多出现2次此情况 ?
+            int c = end - bgn + 1;
+            return (long)c * l; //
+        } else if (cnt[idx] == end - bgn + 1)
+            return sum[idx];
+        else {
+            int m = l + (r - l) / 2;
+            int cl = cnt[idx << 1];     // left child cnt
+            // int cr = cnt[idx << 1 | 1];     // left child cnt
+            if (cl >= end) // 搜索 左 子树
+                return query(idx << 1, l, m, bgn, end); 
+            else if (cl >= bgn) // 搜索 左 右 子树
+                return query(idx << 1, l, m, bgn, cl) + query(idx << 1 | 1, m+1, r, 1, end - cl);
+            else // cl < bgn, 搜索 右 子树
+                return query(idx << 1 | 1, m+1, r, bgn - cl, end - cl);
         }
     }
-}
 #+END_SRC
+**** 解题思路与分析: 三个TreeMap, 自定义TreeMap
+     #+BEGIN_SRC java
+    CusTreeMap [] ms;
+    Deque<Integer> q;
+    int m, k, n;
+    public MKAverage(int m, int k) {
+        this.m = m;
+        this.k = k;
+        q = new ArrayDeque<>();
+        if (m - 2 * k > 0) {
+            n = 3;
+            ms = new CusTreeMap[n];
+            ms[1] = new CusTreeMap(m - 2 * k);
+        } else {
+            n = 2;
+            ms = new CusTreeMap[n];
+        }
+        ms[0] = new CusTreeMap(k);
+        ms[n-1] = new CusTreeMap(k);
+    }
+    // 删除num，结果总是使mapList的小、中、大三个treemap依次填充。（先保证最小的treeMap填充、再保证中间的treeMap填充、最后是最大的填充）
+    private void removeElement(int num) {
+        boolean removed = false;
+        for (int i = 0; i < n; i++) {
+            if (!removed)
+                removed = ms[i].remove(num);
+            else { // 将后现一两个图中的最小元素向前一个图中挪动一个数值
+                Integer minK = ms[i].pollFirst();
+                if (minK == null) break;
+                ms[i-1].add(minK);
+            }
+        }
+    }
+    public void addElement(int num) {
+        if (q.size() == m) {
+            int v = q.pollFirst();
+            removeElement(v);
+        }
+        q.offerLast(num);
+        Integer vtoAdd = num;
+        for (int i = 0; i < n && vtoAdd != null; i++) 
+            vtoAdd = ms[i].add(vtoAdd); // 记得这里返回的是： 如果图中已有k个元素，扔出来的最大键
+    }
+    public int calculateMKAverage() {
+        if (q.size() < m || n < 3) return -1;
+        return ms[1].avg();
+    }
+    class CusTreeMap {
+        TreeMap<Integer, Integer> m;
+        final int capacity;
+        int size, sum;
+        public CusTreeMap(int capacity) {
+            m = new TreeMap<>();
+            this.capacity = capacity;
+        }
+        public boolean remove(int key) {
+            if (m.containsKey(key)) {
+                m.put(key, m.get(key)-1);
+                if (m.get(key) == 0) m.remove(key);
+                sum -= key;
+                size--;
+                return true;
+            }
+            return false;
+        }
+        public Integer pollFirst() { // return key
+            if (m.size() > 0) {
+                int k = m.firstKey();
+                // m.remove(k); // BUG: 你也不能用原始的TreeMap.remove()，因为它会移走所有的重复（如果这个元素存在重复的话）
+                remove(k); // !!!
+                return k;  // 这里没有自动更新 和 
+                // return m.firstKey(); // BUG: 这里并没有真正移走这个元素，只是返回了第个元素的键
+            }
+            return null;
+        }
+        public Integer add(int key) { // 返回的是删除掉元素的键
+            m.put(key, m.getOrDefault(key, 0) + 1); // 这里新填入的元素是否是最后一个元素，关系不大
+            size++;
+            sum += key;
+            if (size > capacity) {
+                int last = m.lastKey();
+                m.put(last, m.get(last)-1);
+                if (m.get(last) == 0) m.remove(last);
+                sum -= last;
+                size--;
+                return last;
+            }
+            return null;
+        }
+        public int avg() {
+            return sum / size;
+        }
+    }
+     #+END_SRC
+**** 解题思路与分析: 树状数组
 - 数状数组的解法: 另外第一次看到别人 二分+树状数组也能求前k大的值。
 #+BEGIN_SRC java
 // We can have a queue to maintain m elements
@@ -7124,7 +7216,7 @@ class FenWick {
     }
 }
 #+END_SRC
-
+- 其它比较有兴趣以的BST二叉树的解法，改天补起来
 *** 315. Count of Smaller Numbers After Self - Hard
 You are given an integer array nums and you have to return a new counts array. The counts array has the property where counts[i] is the number of smaller elements to the right of nums[i].
 **** 解题思路与分析: 二分查找的插入排序
