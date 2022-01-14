@@ -292,13 +292,43 @@ public class mtwoixed {
     //     }
     // }
 
+        // static final int mod = 1337;
+        // public int largestPalindrome(int n) {
+        //     if (n == 1) return 9;
+        //     int l = (int)Math.pow(10, n-1), r = (int)Math.pow(10, n)-1;
+        //     for (int i = r; i >= l; i--) {
+        //         long cur = generatePalindrome(i);
+        //         for (long j = r; j * j >= cur; j--) {
+        //             if (cur % j == 0)
+        //                 return (int)(cur % mod);
+        //         }
+        //     }
+        //     return -1;
+        // }
+        // long generatePalindrome(int v) {
+        //     String s = "" + v, t = new StringBuilder(s).reverse().toString();
+        //     return Long.parseLong(s + t);
+        // }
+
+        public int superEggDrop(int k, int n) {
+            if (k < 1 || n < 1) return 0;
+            int [] pre = new int [n+1], cur = new int [n+1]; // 上一层和当前层的备忘录
+            for (int i = 1; i <= n; i++) 
+                cur[i] = i; // 初始化成最大的尝试次数
+            for (int i = 2; i <= k; i++) {
+                pre = cur.clone();
+                for (int j = 1; j <= n; j++) cur[j] = j;
+                for (int j = 1; j <= n; j++) // 这里可能还需要更优的时间复杂度
+                    for (int x = 1; x < j; x++) 
+                        cur[j] = Math.min(cur[j], 1 + Math.max(pre[x-1], cur[j-x]));
+            }
+            return cur[n];
+        }
     }
     public static void main (String[] args) {
         Solution s  =  new Solution ();
 
-        String a = "4681";
-
-        String r = s.smallestGoodBase(a); 
+        int r = s.largestPalindrome(2); 
         System.out.println("r: " + r);
     }
 }

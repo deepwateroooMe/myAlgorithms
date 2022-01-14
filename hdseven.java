@@ -1172,14 +1172,14 @@ public class hdseven {
         }
 
     int m, k, n; // 很慢 5%
-    Queue<Integer> que = new LinkedList<>();//数据流中的最后m个元素
-    PriorityQueue<Integer> minHeap, minHeapNums;//最大的k个数、除最小的k个数之外的数
-    PriorityQueue<Integer> maxHeap, maxHeapNums;//最小的k个数、除最大的k个数之外的数
-    Map<Integer, Integer> maxNums = new HashMap<>();//最大的k个数
-    Map<Integer, Integer> minNums = new HashMap<>();//最小的k个数
-    int minN = 0, maxN = 0;//当前最小、最大的数个数
-    long sum = 0L;//中间数据的和
-    int index = 0;//数据总个数
+    Queue<Integer> que = new LinkedList<>();// 数据流中的最后m个元素
+    PriorityQueue<Integer> minHeap, minHeapNums;// 最大的k个数、除最小的k个数之外的数
+    PriorityQueue<Integer> maxHeap, maxHeapNums;// 最小的k个数、除最大的k个数之外的数
+    Map<Integer, Integer> maxNums = new HashMap<>();// 最大的k个数
+    Map<Integer, Integer> minNums = new HashMap<>();// 最小的k个数
+    int minN = 0, maxN = 0;// 当前最小、最大的数个数
+    long sum = 0L;// 中间数据的和
+    int index = 0;// 数据总个数
     public MKAverage(int m, int k) {
         Comparator<Integer> comp = new Comparator<Integer>() {
             public int compare(Integer a, Integer b) {
@@ -1189,31 +1189,31 @@ public class hdseven {
         this.m = m;
         this.k = k;
         this.n = m - k * 2;
-        this.minHeap = new PriorityQueue<>(m);//最大的k个数
-        this.minHeapNums = new PriorityQueue<>(m);//除最小的k个数之外的数
-        this.maxHeap = new PriorityQueue<>(m, comp);//最小的k个数
-        this.maxHeapNums = new PriorityQueue<>(m, comp);//除最大的k个数之外的数
+        this.minHeap = new PriorityQueue<>(m);// 最大的k个数
+        this.minHeapNums = new PriorityQueue<>(m);// 除最小的k个数之外的数
+        this.maxHeap = new PriorityQueue<>(m, comp);// 最小的k个数
+        this.maxHeapNums = new PriorityQueue<>(m, comp);// 除最大的k个数之外的数
     }
     public void addElement(int num) {
         sum += num;
         que.offer(num);
-        if (++index > m) {//数据个数超过m，删除之前m个位置的数
-            int del = que.poll();//从队列中取出待删除数据
-            if (maxNums.containsKey(del)) {//在最大的k个数中
+        if (++index > m) {// 数据个数超过m，删除之前m个位置的数
+            int del = que.poll();// 从队列中取出待删除数据
+            if (maxNums.containsKey(del)) {// 在最大的k个数中
                 if (maxNums.get(del) == 1)
                     maxNums.remove(del);
                 else
                     maxNums.put(del, maxNums.get(del) - 1);
                 minHeap.remove(del);
                 minHeapNums.remove(del);
-            } else if (minNums.containsKey(del)) {//在最小的k个数中
+            } else if (minNums.containsKey(del)) {// 在最小的k个数中
                 if (minNums.get(del) == 1)
                     minNums.remove(del);
                 else
                     minNums.put(del, minNums.get(del) - 1);
                 maxHeap.remove(del);
                 maxHeapNums.remove(del);
-            } else {//在中间数据
+            } else {// 在中间数据
                 sum -= del;
                 maxHeapNums.remove(del);
                 minHeapNums.remove(del);
@@ -1223,15 +1223,15 @@ public class hdseven {
         maxHeapNums.offer(num);
     }
     public int calculateMKAverage() {
-        if (index < m)//数据个数小于m
+        if (index < m)// 数据个数小于m
             return -1;
-        while (minHeap.size() < k) {//补齐最大的k个数
+        while (minHeap.size() < k) {// 补齐最大的k个数
             Integer num = maxHeapNums.poll();
             minHeap.offer(num);
             sum -= num;
             maxNums.put(num, maxNums.getOrDefault(num, 0) + 1);
         }
-        while (maxHeapNums.peek() > minHeap.peek()) {//调整最大的k个数
+        while (maxHeapNums.peek() > minHeap.peek()) {// 调整最大的k个数
             sum = sum + minHeap.peek() - maxHeapNums.peek();
             maxNums.put(maxHeapNums.peek(), maxNums.getOrDefault(maxHeapNums.peek(), 0) + 1);
             if (maxNums.get(minHeap.peek()) == 1)
@@ -1241,13 +1241,13 @@ public class hdseven {
             minHeap.offer(maxHeapNums.poll());
             maxHeapNums.offer(minHeap.poll());
         }
-        while (maxHeap.size() < k) {//补齐最小的k个数
+        while (maxHeap.size() < k) {// 补齐最小的k个数
             Integer num = minHeapNums.poll();
             maxHeap.offer(num);
             sum -= num;
             minNums.put(num, minNums.getOrDefault(num, 0) + 1);
         }
-        while (minHeapNums.peek() < maxHeap.peek()) {//调整最小的k个数
+        while (minHeapNums.peek() < maxHeap.peek()) {// 调整最小的k个数
             sum = sum + maxHeap.peek() - minHeapNums.peek();
             minNums.put(minHeapNums.peek(), minNums.getOrDefault(minHeapNums.peek(), 0) + 1);
             if (minNums.get(maxHeap.peek()) == 1)

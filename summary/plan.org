@@ -2,6 +2,26 @@
 #+author: deepwaterooo
 
 * Weekly Plan
+** configure new desktop environment
+- disk partitions are well done now. HDD partitions can be done later when there is a need. 
+  
+[[./pic/disk.png]]
+
+- win 10 java 11 and ubuntu java 11 no problem, android studio default to java 11 too. 
+- main configuration to be done include: 
+  - win 10 wsl 2 or 1, potentially 2 for an entire kernal. wsl 1 configured yesterday, and java development environment, emacs, and zsh, that was the third time during my life installing wsl 1, 1st time know nothing, 2nd time relocated the system in a different locaiton. Yesterdasy into a separate SSD disk, and username matches windows', but did not expect this morning powershell was NOT able to find ubuntu wsl system......So today i will have to start over for wsl again......
+ - wsl 1 terminal is ready, from yesterday noon to this evening, I have not worked on real problems yets except these configurations, starting to use it for my study.
+  - yesterday new win system left windows key and left alt key switch registration wasted some time, due to having not realized restarting system needed, which also resulted in the above wsl1 path cannot be found this morning. 
+** todo
+- wsl *zsh powerline10k* theme, plugins to be done, and potentially and linux ubuntu wsl 2 with android studio installed in ubuntu as well
+- win 10 *texlive / emacs / fonts / org mode* configuration to be done
+  - wasted about 3 hours searching sr-speedbar, but later in the evening when I can not bare the ugly looking fonts in my editor(被windows系统下emacs的编程界面丑哭了。。。), I found that it was only a font setting probem, but wasted a few hours on it ....... emacs somehow set the default font to be powerlingsymbols.......
+    
+[[./pic/speedbar.png]]
+- wsl win10 copy/paste termail emacs still needs some work too.
+- will return back to android study once the environments gets readsy later this evening or tomorrow. All the rest of tiny issues are tidious and needs time, and I can not work on these bugs for too long. Will resume Android study and leetcode problems tomorrow. And spend let's say 1 - 2 hours daily to finish the rest configurations.
+- expect this desktop environment to be best ever, cause whenever I am configuring some new environmen or reinstall wsl, I can realize which parts I could do better on. 
+
 ** 总结题型
 - 等dynamic programming专题的几道题目写完后，会试图再注册一个账号，将这个专题的题目重新再写一遍。这将会是第一个着力重新写的专题，也是因为它有难度，值得挑战。
 - 这个周第二次回去刷了一些dynamic programming的题目，真的是感觉似曾相识，这次再回去做的过程中，可以清楚地感觉到以前不会的、或是想得不透彻的地方现在能够想得相对深远一些了，说明好好刷一遍、重要的话说三遍，典型题型多刷几遍是有效用的，认识深刻，二刷的感觉完全不一样

@@ -249,24 +249,6 @@ public class hdthree {
             return idx.get(ts.first()).iterator().next();
         }
 
-        static final int mod = 1337;
-        public int largestPalindrome(int n) { // bug: 不知道哪里错了
-            if (n == 1) return 9;
-            int l = (int)Math.pow(10, n-1), r = (int)Math.pow(10, n)-1;
-            // long ll = (int)Math.pow(10, 2*n-1), rr = (int)Math.pow(10, 2*n); // 遍历含有太多杂数，复杂度太高
-            for (int i = r; i >= l; i--) {
-                long cur = buildPalindrome(i); // 生成回文串反而来得更快
-                for (long j = r; j * j >= cur; j--) // cur / j 的最大值是 sqrt(cur)
-                    if (cur % j == 0)
-                        return (int)(cur % mod);
-            }
-            return -1;
-        }
-        long buildPalindrome(int n) {
-            String s = ""+n, t = new StringBuilder(s).reverse().toString();
-            return Long.parseLong(s + t);
-        }
-
         public int reversePairs(int[] a) { // bug
             int n = a.length, cnt = 0;
             TreeMap<Integer, Integer> m = new TreeMap<>();
