@@ -310,25 +310,293 @@ public class mtwoixed {
         //     return Long.parseLong(s + t);
         // }
 
-        public int superEggDrop(int k, int n) {
-            if (k < 1 || n < 1) return 0;
-            int [] pre = new int [n+1], cur = new int [n+1]; // 上一层和当前层的备忘录
-            for (int i = 1; i <= n; i++) 
-                cur[i] = i; // 初始化成最大的尝试次数
-            for (int i = 2; i <= k; i++) {
-                pre = cur.clone();
-                for (int j = 1; j <= n; j++) cur[j] = j;
-                for (int j = 1; j <= n; j++) // 这里可能还需要更优的时间复杂度
-                    for (int x = 1; x < j; x++) 
-                        cur[j] = Math.min(cur[j], 1 + Math.max(pre[x-1], cur[j-x]));
+        // public int superEggDrop(int k, int n) { // TLE 这个还需要优化一下
+        //     if (k < 1 || n < 1) return 0;
+        //     int [] pre = new int [n+1], cur = new int [n+1]; // 上一层和当前层的备忘录
+        //     for (int i = 1; i <= n; i++) 
+        //         cur[i] = i; // 初始化成最大的尝试次数
+        //     for (int i = 2; i <= k; i++) {
+        //         pre = cur.clone();
+        //         for (int j = 1; j <= n; j++) cur[j] = j;
+        //         for (int j = 1; j <= n; j++) // 这里可能还需要更优的时间复杂度
+        //             for (int x = 1; x < j; x++) 
+        //                 cur[j] = Math.min(cur[j], 1 + Math.max(pre[x-1], cur[j-x]));
+        //     }
+        //     return cur[n];
+        // }
+
+    // int [] ori; // BUG: some problem , half done
+    // public Solution(int[] a) {
+    // public mtwoixed(int[] a) {
+    //     ori = new int [a.length];
+    //     System.arraycopy(a, 0, ori, 0, a.length);
+    // }
+    // public int[] reset() {
+    //     return ori;
+    // }
+    // public int[] shuffle() {
+    //     int [] a = new int [ori.length];
+    //     shuffle(a, 0, new boolean [ori.length], ori);
+    //     return a;
+    // }
+    // void shuffle(int [] a, int idx, boolean [] vis, int [] o) {
+    //     if (idx == o.length) return ;
+    //     for (int i = 0; i < o.length; i++) {
+    //         if (vis[i]) continue;
+    //         vis[i] = true;
+    //         a[idx] = o[i];
+    //         shuffle(a, idx+1, vis, o);
+    //         vis[i] = false;
+    //     }
+    // }
+
+        // public boolean checkPerfectNumber(int v) { // tle
+        //     long sum = 0;
+        //     for (int i = 1; i <= v/2; i++) 
+        //         if (v % i == 0)
+        //             sum += i;
+        //     return (int)sum == v;
+        // }
+
+        // public int[][] matrixReshape(int[][] a, int r, int c) { // BUG: 题目理解错了。。。
+        //     int m = a.length, n = a[0].length, idx = 0;
+        //     // if (r < m || c < n || r == m && c == n) return a;
+        //     if (r * c < m * n || r == m && c == n) return a;
+        //     int [] b = new int [m * n];
+        //     for (int i = 0; i < m; i++) 
+        //         for (int j = 0; j < n; j++) 
+        //             b[idx++] = a[i][j];
+        //     System.out.println(Arrays.toString(b));
+        //     if (r == 1) {
+        //         int [][] ans = new int [1][];
+        //         ans[0] = b;
+        //         return ans;
+        //      }
+        //     // idx = 0;
+        //     // int [][] ans = new int [r][c];
+        //     // for (int i = 0; i < r && idx < m * n; i++) 
+        //     //     for (int j = 0; j < c && idx < m * n; j++) 
+        //     //         ans[i][j] = b[idx++];
+        //     // System.out.println("ans.length: " + ans.length);
+        //     // for (int z = 0; z < ans.length; ++z) 
+        //     //     System.out.println(Arrays.toString(ans[z]));
+        //     return a;
+        // }
+
+        // public boolean validSquare(int[] a, int[] b, int[] c, int[] d) {
+        //     List<int []> ps = new ArrayList<>();
+        //     ps.add(a);
+        //     ps.add(b);
+        //     ps.add(c);
+        //     ps.add(d);
+        //     TreeSet<Integer> di= new TreeSet<>();
+        //     for (int [] va : ps) {
+        //         di.clear();
+        //         for (int [] vb : ps) {
+        //             if (va == vb) continue;
+        //             di.add(getDistPowTwo(va, vb));
+        //         }
+        //         if (di.size() != 2) return false;
+        //         if (di.last() != di.first() * 2) return false;
+        //     }
+        //     return true;
+        // }
+        // int getDistPowTwo(int [] a, int [] b) {
+        //     return (int)(Math.pow(a[0]-b[0], 2) + Math.pow(a[1] - b[1], 2));
+        // }
+
+        // public int lastRemaining(int n) {
+        //     int fst = 1, dif = 1; // 第一个元素、相邻两个数与数之间的差值
+        //     boolean left = true;  // 不是否从左侧开始删起
+        //     while (n > 1) {
+        //         if (left || n % 2 == 1)
+        //             fst += dif;
+        //         n /= 2;
+        //         dif *= 2;
+        //         left = !left;
+        //     }
+        //     return fst;
+        // }
+
+        // public int[] findDiagonalOrder(int[][] a) { // BUG: half done
+        //     int m = a.length, n = a[0].length;
+        //     if (m == 1) return a[0];
+        //     int [] ans = new int [m * n];
+        //     if (n == 1) {
+        //         int idx = 0;
+        //         for (int i = 0; i < m; i++) 
+        //             ans[idx++] = a[i][0];
+        //         return ans;
+        //     }
+        // }
+
+        // public boolean checkPossibility(int[] a) { // BUG: 301/335 PASSED
+        //     int n = a.length;
+        //     if (n == 1) return true;
+        //     boolean vis = false;
+        //     ArrayDeque<Integer> s = new ArrayDeque<>();
+        //     for (int i = 0; i < n-1; i++) {
+        //         // System.out.println("\n i: " + i);
+        //         if (a[i] > a[i+1]) {
+        //             if (vis) return false;
+        //             if (!s.isEmpty()) {
+        //                 int top = s.peekLast();
+        //                 if (a[i+1] < top) s.offerLast(a[i]);
+        //                 else s.offerLast(a[i+1]);
+        //             } else s.offerLast(a[i+1]);
+        //             i++;
+        //             vis = true;
+        //         } else s.offerLast(a[i]);
+        //     }
+        //     // System.out.println("s.size(): " + s.size());
+        //     // System.out.println(Arrays.toString(new ArrayList<>(s).toArray()));
+        //     System.out.println("vis: " + vis);
+        //     if (!s.isEmpty() && a[n-1] < s.peekLast() && vis) return false;
+        //     return true;
+        // }
+        // int [] a = new int [] {3, 4, 2, 3};
+        // // int [] a = new int [] {1, 2, 4, 5, 3};
+
+        // public int partitionDisjoint(int[] a) {
+        //     int n = a.length;
+        //     int [] min = new int [n+1], max = new int [n+1];
+        //     min[n] = Integer.MAX_VALUE;
+        //     for (int i = n-1; i >= 0; i--) 
+        //         min[i] = Math.min(a[i], min[i+1]);
+        //     max[0] = -1;
+        //     for (int i = 0; i < n; i++) {
+        //         max[i+1] = Math.max(max[i], a[i]);
+        //         if (min[i+1] >= max[i+1]) return i+1;
+        //     }
+        //     return -1;
+        // }
+
+        // public boolean canReorderDoubled(int[] a) { // BUG: 想的是使用滚动map，但这里还有一点儿什么没有想通
+        //     int n = a.length;
+        //     if (n % 2 == 1) return false;
+        //     // List<Integer> l = new ArrayList<>();
+        //     TreeMap<Integer, Integer> m = new TreeMap<>(); // 用一个treemap从小到大遍历一遍应该是可以的。。。改天再写这个题吧
+        //     for (int v : a) {
+        //         m.put(v, m.getOrDefault(v, 0) + 1);
+        //         // l.add(v);
+        //     }
+        //     TreeMap<Integer, Integer> tmp = new TreeMap<>(m);
+        //     // Collections.sort(l, (x, y) -> Math.abs(x) != Math.abs(y) ? Math.abs(x) - Math.abs(y) : x - y);
+        //     Iterator<Map.Entry<Integer, Integer>> it = m.entrySet().iterator();
+        //     while (m.size() > 0) {
+        //         Map.Entry<Integer, Integer> en = it.next();
+        //         int k = en.getKey(), v = en.getValue();
+        //         if (!tmp.containsKey(k) || k != 0 && !m.containsKey(2 * k)) return false;
+        //         tmp.put(k, tmp.get(k) - 1);
+        //         if (tmp.get(k) == 0) tmp.remove(k);
+        //         tmp.put(2*k, tmp.get(2*k) - 1);
+        //         if (tmp.get(2*k) == 0) tmp.remove(2*k);
+        //     }
+        //     return true;
+        // }
+
+        // public int[] sumEvenAfterQueries(int[] a, int[][] q) {
+        //     int n = a.length, idx = 0, sum = 0, pre = 0;
+        //     for (int v : a) 
+        //         if (v % 2 == 0) sum += v;
+        //     int [] ans = new int [q.length];
+        //     for (int i = 0; i < q.length; i++) {
+        //         idx = q[i][1];
+        //         pre = a[idx];
+        //         a[idx] += q[i][0];
+        //         if (a[idx] % 2 == 0) sum += pre % 2 == 0 ? a[idx] - pre : a[idx];
+        //         else sum -= pre % 2 == 0 ? pre : 0;
+        //         ans[i] = sum;
+        //     }
+        //     return ans;
+        // }
+ 
+        // public int numPairsDivisibleBy60(int[] t) { // BUG: 今天状态很差，也因为一个星期没有刷题了，今天晚上和明天需要练一下手
+        //     int n = t.length, ans = 0, idx = 0;     // 没有写难题，题目也都不难，但状态不够，就有些想不下去了，改天再回来写这些
+        //     int [] m = new int [60];
+        //     Set<Integer> si = new HashSet<>();
+        //     for (int v : t) {
+        //         m[v % 60]++;
+        //         if (v % 60 == 30) si.add(idx);
+        //         idx++;
+        //     }
+        //     // System.out.println(Arrays.toString(m));
+        //     // System.out.println("si.size(): " + si.size());
+        //     // System.out.println(Arrays.toString(new ArrayList<>(si).toArray()));
+        //     for (int i = 0; i < 60; i++) {
+        //         if (i == 0) {
+        //             ans += m[0];
+        //             continue;
+        //         }
+        //         if (m[i] == 0) continue;
+        //         int min = Math.min(m[i], m[60-i]);
+        //         if (min > 0) {
+        //             if (i == 30 && si.size() == 1) continue;
+        //             else if (i == 30) ans += m[i] / 2;
+        //             // System.out.println("i: " + i);
+        //             else ans += min;
+        //             m[i] -= min;
+        //             if (60-i != i)
+        //                 m[60-i] -= min;
+        //         }
+        //     }
+        //     return ans;
+        // }
+        // // int [] a = new int [] {30,20,150,100,40};
+        // // // int []  a = new int []  {439, 407, 197, 191, 291, 486, 30, 307, 11};
+
+        // public int maxAbsValExpr(int[] a, int[] b) { // tle tle 
+        //     int n = a.length, ans = 0;
+        //     for (int i = 0; i < n; i++) {
+        //         for (int j = i+1; j < n; j++) {
+        //             int ii = Math.abs(a[i] - a[j]), jj = Math.abs(b[i] - b[j]);
+        //             int c = ii + jj, d = ii - jj;
+        //             int x = -ii + jj, y = -ii - jj;
+        //             c = Math.max(c, d);
+        //             x = Math.max(x, y);
+        //             ans = Math.max(ans, Math.max(c, x) + j - i);
+        //         }
+        //     }
+        //     return ans;
+        // }
+
+        public ListNode removeZeroSumSublists(ListNode head) { // half done
+            int n = 0, idx = 0;
+            ListNode r = head;
+            while (r != null) {
+                n++;
+                r = r.next;
             }
-            return cur[n];
+            System.out.println("n: " + n);
+            int [] a = new int [n];
+            r = head;
+            while (r != null) {
+                a[idx++] = r.val;
+                r = r.next;
+            }
+        }
+        int [] removeZeroSums(int [] a) {
+            int n = a.length, sum = 0, j = 0;
+            Map<Integer, Integer> m = new HashMap<>();
+            m.put(0, -1); //
+            for (int i = 0; i < n; i++) {
+                sum += a[i];
+                if (sum == 0 || m.containsKey(sum)) { // 这里把那个片段擦除
+
+                }
+            }
         }
     }
     public static void main (String[] args) {
         Solution s  =  new Solution ();
 
-        int r = s.largestPalindrome(2); 
-        System.out.println("r: " + r);
+        int [] a = new int [] {1,2,-3,3,1};
+        
+        ListNode head = new ListNode(a[0]);
+        head.buildList(head, a);
+        head.printList(head);
+
+        ListNode r = s.removeZeroSumSublists(a);
+        r.printList(r);
     }
 }

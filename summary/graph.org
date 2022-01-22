@@ -1,4 +1,4 @@
-#+latex_class: book
+#+latex_class: cn-article
 #+title: LeetCode Online Coding Interview Questions -- 错题集
 #+author: deepwaterooo
 

@@ -1239,10 +1239,29 @@ public class strtwoing {
         // }
 
 
-        
+        public String reverseString(String s) {
+            String reversedString = new StringBuilder (s).reverse().toString();
+            char [] rs = reversedString.toCharArray();
+            int i = 0, idx = 0;
+            while (i < s.length()) {
+                while (Character.isDigit(rs[i])) i++;
+                if (i == s.length()) break;
+                if (idx != i)
+                    rs[idx++] = rs[i];
+                i++;
+            }
+            StringBuilder sb = new StringBuilder();
+            for ( i = 0; i < idx; i++) 
+                sb.append(rs[i]);
+            return sb.toString();
+        }
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
+        String a = "dkjfh 1 23 kdlfjdk ";
+
+        String r = s.reverseString(a);
+        System.out.println("r: " + r);
     }
 }
