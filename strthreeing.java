@@ -1514,17 +1514,148 @@ public class strthreeing {
         // public int bulbSwitch(int n) {
         //     return (int)Math.sqrt(n);
         // }
-        
+
+        // public int numOfStrings(String[] sa, String s) {
+        //     int n = sa.length, ans = 0;
+        //     for (String v : sa) 
+        //         if (s.indexOf(v) != -1) ans++;
+        //     return ans;
+        // }
+
+        // public boolean halvesAreAlike(String t) {
+        //     Set<Character> sc = new HashSet<>(List.of('a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U'));
+        //     int n = t.length(), l = 0;
+        //     char [] s = t.toCharArray();
+        //     for (int i = 0; i < n/2; i++) 
+        //         if (sc.contains(s[i])) l++;
+        //     for (int i = n/2; i < n; i++) 
+        //         if (sc.contains(s[i])) l--;
+        //     return l == 0;
+        // }
+
+        // public String sortString(String t) {
+        //     int n = t.length();
+        //     char [] s = t.toCharArray();
+        //     int [] cnt = new int [26];
+        //     for (char v : s) 
+        //         cnt[v-'a']++;
+        //     String ans = "";
+        //     while (Arrays.stream(cnt).sum() > 0) {
+        //         for (char c = 'a'; c <= 'z'; c++) 
+        //             if (cnt[c-'a'] > 0) {
+        //                 ans += c;
+        //                 cnt[c-'a']--;
+        //             }
+        //         for (char c = 'z'; c >= 'a'; c--) {
+        //             if (cnt[c-'a'] > 0) {
+        //                 ans += c;
+        //                 cnt[c-'a']--;
+        //             }
+        //         }
+        //     }
+        //     return ans;
+        // }
+
+        // public String destCity(List<List<String>> paths) {
+        //     Map<String, Integer> out = new HashMap<>();
+        //     Map<String, Integer> ins = new HashMap<>();
+        //     for (List<String> l : paths) {
+        //         String u = l.get(0), v = l.get(1);
+        //         out.put(u, out.getOrDefault(u, 0) + 1);
+        //         ins.put(v, ins.getOrDefault(v, 0) + 1);
+        //     }
+        //     for (String key : ins.keySet()) {
+        //         if (!out.containsKey(key)) return key;
+        //     }
+        //     return "";
+        // }
+
+        // public boolean squareIsWhite(String s) {
+        //     int r = s.charAt(1)-'1', c = s.charAt(0)-'a';
+        //     return r % 2 != c % 2;
+        // }
+
+        // public String generateTheString(int n) {
+        //     if (n % 2 == 1) return "a".repeat(n);
+        //     else return "a".repeat(n-1) + "b";
+        // }
+
+        // public boolean areOccurrencesEqual(String t) {
+        //     char [] s = t.toCharArray();
+        //     Map<Character, Integer> m = new HashMap<>();
+        //     for (char c : s) 
+        //         m.put(c, m.getOrDefault(c, 0) + 1);
+        //     return m.values().stream().distinct().count() == 1;
+        // }
+
+        // public boolean judgeCircle(String t) { // 'U', 'D', 'L' and 'R'.
+        //     char [] s = t.toCharArray();
+        //     int n = t.length();
+        //     Map<Character, Integer> m = new HashMap<>();
+        //     for (char v : s) 
+        //         m.put(v, m.getOrDefault(v, 0) + 1);
+        //     return m.getOrDefault('U', 0).equals(m.getOrDefault('D', 0)) && m.getOrDefault('L', 0).equals(m.getOrDefault('R', 0));
+        // }
+
+        // public boolean isSumEqual(String a, String b, String c) {
+        //     String i = "", j = "", k = "";
+        //     for (char v : a.toCharArray())
+        //         i = i + (v-'a');
+        //     for (char v : b.toCharArray())
+        //         j = j + (v-'a');
+        //     for (char v : c.toCharArray())
+        //         k = k + (v-'a');
+        //     return Integer.parseInt(i) + Integer.parseInt(j) == Integer.parseInt(k);
+        // }
+
+        // public int minTimeToType(String t) { // 没写完
+        //     int n = t.length(), ans = 0, v = 0;
+        //     char [] s = t.toCharArray();
+        //     for (int i = 0; i < n; i++) {
+        //         if (i == 0) ans += Math.min(s[i] - 'a', 'z' - s[i] + 1);
+        //         else ans += Math.min(Math.abs(s[i] - s[i-1]), ) //
+        //     }
+        //     return ans;
+        // }
+
+        // public int canBeTypedWords(String t, String ban) {
+        //     String [] sa = t.split(" ");
+        //     Set<Character> sc = new HashSet<>();
+        //     for (char c : ban.toCharArray()) sc.add(c);
+        //     boolean valid = false;
+        //     int cnt = 0;
+        //     for (String s : sa) {
+        //         valid = true;
+        //         for (char c : s.toCharArray()) {
+        //             if (sc.contains(c)) {
+        //                 valid = false;
+        //                 break;
+        //             }
+        //         }
+        //         if (valid) cnt++;
+        //     }
+        //     return cnt;
+        // }
+
     }
     public static void main (String[] args) {
         Solution s = new Solution ();
 
-        String a = "RDD";
+        String a = "hello world";
+        String b = "ad";
 
-        String r = s.predictPartyVictory(a);
+        int r = s.canBeTypedWords(a, b);
         System.out.println("r: " + r);
     }
 }
+
+
+
+
+
+
+
+
 
 
 

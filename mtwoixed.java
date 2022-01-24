@@ -310,21 +310,6 @@ public class mtwoixed {
         //     return Long.parseLong(s + t);
         // }
 
-        // public int superEggDrop(int k, int n) { // TLE 这个还需要优化一下
-        //     if (k < 1 || n < 1) return 0;
-        //     int [] pre = new int [n+1], cur = new int [n+1]; // 上一层和当前层的备忘录
-        //     for (int i = 1; i <= n; i++) 
-        //         cur[i] = i; // 初始化成最大的尝试次数
-        //     for (int i = 2; i <= k; i++) {
-        //         pre = cur.clone();
-        //         for (int j = 1; j <= n; j++) cur[j] = j;
-        //         for (int j = 1; j <= n; j++) // 这里可能还需要更优的时间复杂度
-        //             for (int x = 1; x < j; x++) 
-        //                 cur[j] = Math.min(cur[j], 1 + Math.max(pre[x-1], cur[j-x]));
-        //     }
-        //     return cur[n];
-        // }
-
     // int [] ori; // BUG: some problem , half done
     // public Solution(int[] a) {
     // public mtwoixed(int[] a) {
@@ -560,43 +545,124 @@ public class mtwoixed {
         //     return ans;
         // }
 
-        public ListNode removeZeroSumSublists(ListNode head) { // half done
-            int n = 0, idx = 0;
-            ListNode r = head;
-            while (r != null) {
-                n++;
-                r = r.next;
-            }
-            System.out.println("n: " + n);
-            int [] a = new int [n];
-            r = head;
-            while (r != null) {
-                a[idx++] = r.val;
-                r = r.next;
-            }
-        }
-        int [] removeZeroSums(int [] a) {
-            int n = a.length, sum = 0, j = 0;
-            Map<Integer, Integer> m = new HashMap<>();
-            m.put(0, -1); //
-            for (int i = 0; i < n; i++) {
-                sum += a[i];
-                if (sum == 0 || m.containsKey(sum)) { // 这里把那个片段擦除
+        // public ListNode removeZeroSumSublists(ListNode head) { // half done
+        //     int n = 0, idx = 0;
+        //     ListNode r = head;
+        //     while (r != null) {
+        //         n++;
+        //         r = r.next;
+        //     }
+        //     System.out.println("n: " + n);
+        //     int [] a = new int [n];
+        //     r = head;
+        //     while (r != null) {
+        //         a[idx++] = r.val;
+        //         r = r.next;
+        //     }
+        // }
+        // int [] removeZeroSums(int [] a) {
+        //     int n = a.length, sum = 0, j = 0;
+        //     Map<Integer, Integer> m = new HashMap<>();
+        //     m.put(0, -1); //
+        //     for (int i = 0; i < n; i++) {
+        //         sum += a[i];
+        //         if (sum == 0 || m.containsKey(sum)) { // 这里把那个片段擦除
+        //         }
+        //     }
+        // }
 
-                }
-            }
-        }
+        // public int superEggDrop(int k, int n) { // TLE: O(KN^2) 还需要优化一下
+        //     if (k < 1 || n < 1) return 0;
+        //     int [] pre = new int [n+1], cur = new int [n+1]; // 上一层和当前层的备忘录
+        //     for (int i = 1; i <= n; i++) 
+        //         cur[i] = i; // 初始化成最大的尝试次数
+        //     for (int i = 2; i <= k; i++) {
+        //         pre = cur.clone();
+        //         for (int j = 1; j <= n; j++) cur[j] = j;
+        //         for (int j = 1; j <= n; j++) // 这里可能还需要更优的时间复杂度
+        //             for (int x = 1; x < j; x++) 
+        //                 cur[j] = Math.min(cur[j], 1 + Math.max(pre[x-1], cur[j-x]));
+        //     }
+        //     return cur[n];
+        // }
+        // public int superEggDrop(int k, int n) { // O(KNlgN)
+        //     int [][] dp = new int [k+1][n+1];
+        //     for (int i = 1; i <= n; i++) dp[1][i] = i; // 把只有一个鸡蛋的情况初始化为最大值
+        //     for (int i = 2; i <= k; i++) {
+        //         for (int j = 1; j <= n; j++) {
+        //             dp[i][j] = j;
+        //             int l = 1, r = j, m = 0;
+        //             while (l < r) {
+        //                 m = (l + r) / 2;
+        //                 if (dp[i-1][m-1] < dp[i][j-m]) l = m + 1; // < 左边随m递增，< 右边随m递减，这个性质在这里很重要，所以可以二分查找
+        //                 else r = m;
+        //             } // 这里查找的右边界也注意一下
+        //             dp[i][j] = Math.min(dp[i][j], Math.max(dp[i-1][r-1], dp[i][j-r]) + 1); // 用这个鸡蛋测试了一次了
+        //         }
+        //     }
+        //     return dp[k][n];
+        // }
+        // public int superEggDrop(int k, int n) { // O(KN)
+        //     int [][] dp = new int [k+1][n+1];
+        //     for (int i = 1; i <= n; i++) dp[1][i] = i; // 把只有一个鸡蛋的情况初始化为最大值
+        //     for (int i = 2; i <= k; i++) {
+        //         int s = 1; // k
+        //         for (int j = 1; j <= n; j++) { // n
+        //             dp[i][j] = j;
+        //             while (s < j && dp[i-1][s-1] < dp[i][j-s]) s++; // 因为单调性，s一直向右滑动，总共执行n次
+        //             dp[i][j] = Math.min(dp[i][j], Math.max(dp[i-1][s-1], dp[i][j-s]) + 1);
+        //         }
+        //     }
+        //     return dp[k][n];
+        // }
+        // public int superEggDrop(int k, int n) { // O(KlgN): 为什么说这里就是 O(klgN)呢？因为dp[m][k]的增长呈指数级的？
+        //     int [][] dp = new int [n+1][k+1]; // 在第 i 次移动且使用第 j 个鸡蛋测试第 dp[i-1][j-1]+1 层
+        //     int m = 0; // 最小测试次数
+        //     while (dp[m][k] < n) { // 当dp[m][k] == n，退出循环的时候，m就是要求的最小操作次数了
+        //         ++m;
+        //         for (int j = 1; j <= k; j++) 
+        //             dp[m][j] = dp[m-1][j-1] + dp[m-1][j] + 1; // 分上一次测的 第j-1个鸡蛋 碎了 和 没有碎 两种情况来更新当前值
+        //     }
+        //     return m;
+        // }
+        // public int superEggDrop(int k, int n) { // O(KlgN): 空间压缩
+        //     int [] dp = new int [k+1]; // dp[i] 表示当前次数下使用 i 个鸡蛋可以测出的最高楼层
+        //     int ans = 0;
+        //     for (; dp[k] < n; ans++) // 压缩代码到一行
+        //         for (int i = k; i >= 1; i--) // 压缩空间后，因为是想要根据上一行[ans-1]时的i-1/i来更新当前结果，需要倒序遍历以免产生脏数据
+        //             dp[i] = dp[i] + dp[i-1] + 1;
+        //     return ans;
+        // }
+        // public int superEggDrop(int k, int n) { // O(KlgN)：数学推导找出了推理公式，速度最快
+        //     int l = 1, r = n;
+        //     while (l < r) { // 寻找右边界
+        //         int m = l + (r - l) / 2;
+        //         if (helper(m, k, n) < n) l = m + 1;
+        //         else r = m;
+        //     }
+        //     return r;
+        // }
+        // int helper(int m, int k, int n) { // 能查找到的最大楼层数
+        //     int ans = 0, r = 1;
+        //     for (int i = 1; i <= k; i++) {
+        //         r *= m - i + 1;
+        //         r /= i;
+        //         ans += r;
+        //         if (ans >= n) break;
+        //     }
+        //     return ans;
+        // }
+
+        
     }
     public static void main (String[] args) {
         Solution s  =  new Solution ();
 
-        int [] a = new int [] {1,2,-3,3,1};
-        
-        ListNode head = new ListNode(a[0]);
-        head.buildList(head, a);
-        head.printList(head);
-
-        ListNode r = s.removeZeroSumSublists(a);
-        r.printList(r);
+        int r = s.superEggDrop(3, 14);
+        System.out.println("r: " + r);
     }
 }
+
+// ListNode head = new ListNode(a[0]);
+// head.buildList(head, a);
+// head.printList(head);
