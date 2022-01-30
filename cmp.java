@@ -63,6 +63,7 @@ public class cmp {
         //     return new StringBuilder(ls.get(ls.size()-1)).reverse().toString();
         // }
 
+        // 这里现在使用的方法仍然比较本能与朴素，即使解决了bug, 有可能会超时，应该用O(26N)的解法，遍历每一位，我觉得，刚想到这里
         public int[] groupStrings(String[] sa) { // 71/97 passed
             int n = sa.length, cur = 0; 
             DSU uf = new DSU(n);
@@ -70,39 +71,34 @@ public class cmp {
             boolean connected = false;
             for (int i = 0; i < n; i++) {
                 cur = getMask(sa[i]);
-                if (i == 0) {
+                if (i == 0) { // 特殊情况：完全相等
                     cnt.computeIfAbsent(cur, z -> new HashSet<>()).add(i);
-                    // cnt.put(cur, i);
                     continue;
                 }
-                // if (cnt.keySet().contains(cur)) { // 特殊情况：完全相等
-                //     uf.union(i, cnt.get(cur));
-                //     continue;
-                // }
                 connected = false;
                 for (Integer key : cnt.keySet()) {
                     int v = key ^ cur;
-                    // if (v == 0) {
-                    //     uf.union(i, (int)((Integer)cnt.get(key).iterator().next()));
-                    //     break;
-                    // }
+                    if (v == 0) {
+                        uf.union(i, (int)((Integer)cnt.get(key).iterator().next()));
+                        break;
+                    }
                     // if (v == 0 || Integer.bitCount(v) == 1 && Math.abs(sa[i].length() - sa[cnt.get(key)].length()) == 1
                     // || Integer.bitCount(v) == 2 && Math.abs(sa[i].length() - sa[cnt.get(key)].length()) == 0) {
                     for (int idx : cnt.get(key)) {
                         if (Integer.bitCount(v) == 1 && Math.abs(sa[i].length() - sa[idx].length()) == 1
-                            || (Integer.bitCount(v) == 2 || Integer.bitCount(v) == 0) && Math.abs(sa[i].length() - sa[idx].length()) == 0) {
+                            || Integer.bitCount(v) == 2 && Math.abs(sa[i].length() - sa[idx].length()) == 0) {
+                            // || (Integer.bitCount(v) == 2 || Integer.bitCount(v) == 0) && Math.abs(sa[i].length() - sa[idx].length()) == 0) {
                             System.out.println("\n i: " + i);
                             System.out.println("cnt.get(key): " + cnt.get(key));
                             uf.union(i, idx);
                             // connected = true;
                             break;
                         }
-                        if (connected) break;
+                        // if (connected) break;
                     }
-                    if (connected) break;
+                    // if (connected) break;
                 }
                 cnt.computeIfAbsent(cur, z -> new HashSet<>()).add(i);
-                // cnt.put(cur, i);
             }
             return new int [] {uf.getCnt(), uf.getLargestComponnetCnt()};
         }
