@@ -496,40 +496,6 @@ public class mtwoixed {
         //     return ans;
         // }
  
-        // public int numPairsDivisibleBy60(int[] t) { // BUG: 今天状态很差，也因为一个星期没有刷题了，今天晚上和明天需要练一下手
-        //     int n = t.length, ans = 0, idx = 0;     // 没有写难题，题目也都不难，但状态不够，就有些想不下去了，改天再回来写这些
-        //     int [] m = new int [60];
-        //     Set<Integer> si = new HashSet<>();
-        //     for (int v : t) {
-        //         m[v % 60]++;
-        //         if (v % 60 == 30) si.add(idx);
-        //         idx++;
-        //     }
-        //     // System.out.println(Arrays.toString(m));
-        //     // System.out.println("si.size(): " + si.size());
-        //     // System.out.println(Arrays.toString(new ArrayList<>(si).toArray()));
-        //     for (int i = 0; i < 60; i++) {
-        //         if (i == 0) {
-        //             ans += m[0];
-        //             continue;
-        //         }
-        //         if (m[i] == 0) continue;
-        //         int min = Math.min(m[i], m[60-i]);
-        //         if (min > 0) {
-        //             if (i == 30 && si.size() == 1) continue;
-        //             else if (i == 30) ans += m[i] / 2;
-        //             // System.out.println("i: " + i);
-        //             else ans += min;
-        //             m[i] -= min;
-        //             if (60-i != i)
-        //                 m[60-i] -= min;
-        //         }
-        //     }
-        //     return ans;
-        // }
-        // // int [] a = new int [] {30,20,150,100,40};
-        // // // int []  a = new int []  {439, 407, 197, 191, 291, 486, 30, 307, 11};
-
         // public int maxAbsValExpr(int[] a, int[] b) { // tle tle 
         //     int n = a.length, ans = 0;
         //     for (int i = 0; i < n; i++) {
