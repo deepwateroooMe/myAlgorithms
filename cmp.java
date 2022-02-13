@@ -155,13 +155,13 @@ public class cmp {
             Arrays.sort(a);
             long [] sum = new long [n];
             for (int i = 0; i < n; i++) 
-                sum[i] = (i == 0 ? 0 : sum[i-1]) + a[i];
+                sum[i] = (i == 0 ? 0 : sum[i-1]) + (long)a[i];
 
             System.out.println(Arrays.toString(a));
             System.out.println(Arrays.toString(sum));
             
             for (int i = 0; i < n; i++) {
-                long cur = sum[n-1] - a[i] * (n-i);
+                long cur = sum[n-1] - (long)a[i] * (n-i);
                 // if (cur > min) break;
                 min = Math.min(min, cur);
             }
