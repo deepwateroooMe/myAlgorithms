@@ -69,19 +69,75 @@ public class cmp {
         //     }
         // }
         
+        // // public long minimumRemoval(int[] a) { // tle tle tle 
+        // //     int n = a.length, min = Integer.MAX_VALUE, max = 0, ans = Integer.MAX_VALUE;
+        // //     long sum = 0;
+        // //     TreeMap<Integer, Integer> cnt = new TreeMap<>();
+        // //     for (int v : a) {
+        // //         sum += v;
+        // //         min = Math.min(min, v);
+        // //         max = Math.max(max, v);
+        // //         cnt.put(v, cnt.getOrDefault(v, 0) + 1);
+        // //     }
+        // //     // System.out.println("sum: " + sum);
+        // //     // System.out.println("min: " + min);
+        // //     // System.out.println("max: " + max);
+        // //     if (min == max) return 0;
+        // //     int l = min, r = max, lv = getVal(l, cnt), rv = getVal(r, cnt);
+        // //     while (l < r) {
+        // //         // System.out.println("\n l: " + l);
+        // //         // System.out.println("r: " + r);
+        // //         int m = l + (r - l) / 2;
+        // //         System.out.println("m: " + m);
+        // //         if (getVal(m, cnt) > getVal(m+1, cnt)) // 这里的逻辑还是有点儿不太对：并不是严格的单调递减，再单调递增
+        // //             l = m + 1;
+        // //         else r = m;
+        // //     }
+        // //     return getVal(l, cnt);
+        // //     // System.out.println("cnt.size(): " + cnt.size());
+        // //     // for (Map.Entry<Integer, Integer> en : cnt.entrySet()) 
+        // //     //     System.out.print(en.getKey() + ", " + en.getValue() + "\n");
+        // //     // for (Integer key : cnt.keySet()) {
+        // //     //     ans = Math.min(ans, getVal(key, cnt));
+        // //     //     System.out.println("ans: " + ans);
+        // //     // }
+        // //     // return ans;
+        // // }
+        // // int getVal(int v, TreeMap<Integer, Integer> m) { // 每个袋都留这么多
+        // //     int cnt = 0;
+        // //     for (Integer key : m.keySet()) {
+        // //         if (key < v) cnt += key * m.get(key);
+        // //         else if (key > v) cnt += (key - v) * m.get(key);
+        // //     }
+        // //     return cnt;
+        // // }
+        // public long minimumRemoval(int[] a) {
+        //     int n = a.length;
+        //     long min = Long.MAX_VALUE;
+        //     Arrays.sort(a);
+        //     long [] sum = new long [n];
+        //     for (int i = 0; i < n; i++) 
+        //         sum[i] = (i == 0 ? 0 : sum[i-1]) + (long)a[i];
+        //     for (int i = 0; i < n; i++) {
+        //         long cur = sum[n-1] - (long)a[i] * (n-i);
+        //         // if (cur > min) break; // BUG: 把这个遍历完
+        //         min = Math.min(min, cur);
+        //     }
+        //     return min;
+        // }
+
+        // // 考场上当时的自己，就只能想出一个遍历所有可能性的回塑的解
         // public int maximumANDSum(int[] a, int N) { // TLE: bitwise 1111 遍历，应该会好一点儿，被他们吵闹没休息好，总是想不透彻，休息好的时候状态会好很多
-        //     n = a.length;
+        //     n = a.length; 
         //     this.N = N;
         //     cnt = new ArrayList[N+1];
         //     for (int i = 0; i <= N; i++) 
         //         cnt[i] = new ArrayList<>();
         //     Arrays.sort(a);
-        //     // vis = new boolean[n];
         //     helper(n-1, N, 0, a);
         //     return max;
         // }
         // int n, N, max = 0;
-        // // boolean [] vis;
         // List<Integer>[] cnt;
         // void helper(int idx, int j, int sum, int [] a) {
         //     if (idx == -1) {
@@ -106,75 +162,34 @@ public class cmp {
         //         }
         //     }
         // }
-
-        // public long minimumRemoval(int[] a) {
-        //     int n = a.length, min = Integer.MAX_VALUE, max = 0, ans = Integer.MAX_VALUE;
-        //     long sum = 0;
-        //     TreeMap<Integer, Integer> cnt = new TreeMap<>();
-        //     for (int v : a) {
-        //         sum += v;
-        //         min = Math.min(min, v);
-        //         max = Math.max(max, v);
-        //         cnt.put(v, cnt.getOrDefault(v, 0) + 1);
-        //     }
-        //     // System.out.println("sum: " + sum);
-        //     // System.out.println("min: " + min);
-        //     // System.out.println("max: " + max);
-        //     if (min == max) return 0;
-        //     int l = min, r = max, lv = getVal(l, cnt), rv = getVal(r, cnt);
-        //     while (l < r) {
-        //         // System.out.println("\n l: " + l);
-        //         // System.out.println("r: " + r);
-        //         int m = l + (r - l) / 2;
-        //         System.out.println("m: " + m);
-        //         if (getVal(m, cnt) > getVal(m+1, cnt)) // 这里的逻辑还是有点儿不太对：并不是严格的单调递减，再单调递增
-        //             l = m + 1;
-        //         else r = m;
-        //     }
-        //     return getVal(l, cnt);
-        //     // System.out.println("cnt.size(): " + cnt.size());
-        //     // for (Map.Entry<Integer, Integer> en : cnt.entrySet()) 
-        //     //     System.out.print(en.getKey() + ", " + en.getValue() + "\n");
-        //     // for (Integer key : cnt.keySet()) {
-        //     //     ans = Math.min(ans, getVal(key, cnt));
-        //     //     System.out.println("ans: " + ans);
-        //     // }
-        //     // return ans;
-        // }
-        // int getVal(int v, TreeMap<Integer, Integer> m) { // 每个袋都留这么多
-        //     int cnt = 0;
-        //     for (Integer key : m.keySet()) {
-        //         if (key < v) cnt += key * m.get(key);
-        //         else if (key > v) cnt += (key - v) * m.get(key);
-        //     }
-        //     return cnt;
-        // }
-        public long minimumRemoval(int[] a) { // 57 / 64 tes
-            int n = a.length;
-            long min = Long.MAX_VALUE;
-            Arrays.sort(a);
-            long [] sum = new long [n];
-            for (int i = 0; i < n; i++) 
-                sum[i] = (i == 0 ? 0 : sum[i-1]) + (long)a[i];
-
-            System.out.println(Arrays.toString(a));
-            System.out.println(Arrays.toString(sum));
-            
-            for (int i = 0; i < n; i++) {
-                long cur = sum[n-1] - (long)a[i] * (n-i);
-                // if (cur > min) break;
-                min = Math.min(min, cur);
+        public int maximumANDSum(int[] a, int N) {
+            int n = a.length, idx = 0, m = N * 2, max = 0;
+            int [] cnt = new int [m]; // slots的编号取值
+            for (int i = 1; i <= N; i++) {
+                cnt[idx++] = i;
+                cnt[idx++] = i;
             }
-            return min;
+            int [][] dp = new int [n+1][1 << m]; // 前i个数的情况下，所以分分布可能的遍历中的最优解
+            for (int i = 1; i <= n; i++) // 遍历数组中的每个元素 a[i]
+                for (int j = 0; j < (1 << m); j++)  // 遍历了所有可能子状态下的最优解
+                    if (Integer.bitCount(j) == i-1) // 如果当前bitmask代表一个有效子状态（由前 i 个数组成的有效分布子状态）
+                        for (int k = 0; k < m; k++) {
+                            if ((j & (1 << k)) == 0) // 如果slot的这个位置还空着，那么就可以试着把当前遍历的数组元素a[i-1]放在这里，遍历所有可能性，试取最优解
+                                dp[i][j | (1 << k)] = Math.max(dp[i][j | (1 <<k)], dp[i-1][j] + (cnt[k] & a[i-1]));
+                        }
+            for (int j = 0; j < (1 << m); j++) 
+                max = Math.max(max, dp[n][j]);
+            return max;
         }
     }
 
     public static void main(String args[]) {
         Solution s = new Solution();
 
-        int [] a = new int [] {2,10,3,2};
-        
-        long r = s.minimumRemoval(a);
+        // int [] a = new int [] {2,10,3,2};
+        int [] a = new int [] {1,3,10,4,7,1};
+
+        int r = s.maximumANDSum(a, 9);
         System.out.println("r: " + r);
     }
 }
