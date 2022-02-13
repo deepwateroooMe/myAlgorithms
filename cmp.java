@@ -10,342 +10,174 @@ import static java.util.stream.Collectors.toMap;
 
 public class cmp {
     public static class Solution {
-// public int[] sortEvenOdd(int[] a) {
-//     int n = a.length;
-//     List<Integer> od = new ArrayList<>();
-//     List<Integer> en = new ArrayList<>();
-//     for (int i = 0; i < n; i++) 
-//         if (i % 2 == 0)
-//             en.add(a[i]);
-//         else od.add(a[i]);
-//     Collections.sort(od, (x, y)->y-x);
-//     Collections.sort(en, (x, y)->x-y);
-//     int i = 0, j = 0, m = en.size(), o = od.size(), idx = 0;
-//     while (i < m || j < o) {
-//         while (i < m && j < o) {
-//             a[idx++] = en.get(i++);
-//             a[idx++] = od.get(j++);
-//         }
-//         if (i < m)
-//             a[idx++] = en.get(i++);
-//         else if (j < o)
-//             a[idx++] = od.get(j++);
-//     }
-//     return a;
-// }
-// public long smallestNumber(long num) {
-//     if (num == 0) return 0;
-//     if (num > 0) return getLow(String.valueOf(num));
-//     return -getHi(String.valueOf(-num));
-// }
-// long getLow(String t) {
-//     int n = t.length(), i = 0;
-//     char [] s = t.toCharArray();
-//     Arrays.sort(s);
-//     while (i < n && s[i] == '0') i++;
-//     swap(i, 0, s);
-//     return Long.parseLong(new String(s));
-// }
-// long getHi(String t) {
-//     int n = t.length();
-//     char [] s = t.toCharArray();
-//     Arrays.sort(s);
-//     StringBuilder sb = new StringBuilder();
-//     for (int i = n-1; i >= 0; i--) 
-//         sb.append(s[i]);
-//     return Long.parseLong(new String(sb));
-// }
-// void swap(int i, int j, char [] s) {
-//     char c = s[i];
-//     s[i] = s[j];
-//     s[j] = c;
-// }
 
-// class cmp { // tle
-        // int n, sum = 0;
-        // char [] a;
-        // public Bitset(int size) { // tle
-        //     // public cmp(int size) {
-        //     n = size;
-        //     a = new char [n];
-        //     Arrays.fill(a, '0');
-        // }
-        // public void fix(int idx) {
-        //     if (a[idx] == '0') {
-        //         sum += 1;
-        //         a[idx] = '1';
+        // public int countOperations(int a, int b) {
+        //     int cnt = 0;
+        //     while (a > 0 && b > 0) {
+        //         if (a >= b) {
+        //             a -= b;
+        //             cnt++;
+        //         } else {
+        //             b -= a;
+        //             cnt++;
+        //         }
         //     }
-        //     System.out.println(Arrays.toString(a));
+        //     return cnt;
         // }
-        // public void unfix(int idx) {
-        //     if (a[idx] == '1') {
-        //         sum -= 1;
-        //         a[idx] = '0';
-        //     }
-        //     System.out.println(Arrays.toString(a));
-        // }
-        // public void flip() {  这里的操作比较慢，需要线段树懒更新的方式
-        //         sum = n - sum;
+
+        // public int minimumOperations(int[] a) {
+        //     int n = a.length;
+        //     Map<Integer, Integer> odd = new HashMap<>();
+        //     Map<Integer, Integer> evn = new HashMap<>();
         //     for (int i = 0; i < n; i++) 
-        //         if (a[i] == '0') a[i]= '1';
-        //         else a[i] = '0';
-        //     System.out.println(Arrays.toString(a));
-        // }
-        // public boolean all() {
-        //     return sum == n;
-        // }
-        // public boolean one() {
-        //     return sum > 0;
-        // }
-        // public int count() {
-        //     return sum;
-        // }
-        // public String toString() {
-        //     return new String(a);
-        // }
-        public SegNode build(int left, int right) {
-            SegNode node = new SegNode(left, right);
-            if (left == right) {
-                return node;
-            }
-            int mid = (left + right) / 2;
-            node.lchild = build(left, mid);
-            node.rchild = build(mid + 1, right);
-            return node;
-        }
-        public int count(SegNode root, int left, int right) {
-            if (left > root.hi || right < root.lo)
-                return 0;
-            if (left <= root.lo && root.hi <= right)
-                return root.add;
-            return count(root.lchild, left, right) + count(root.rchild, left, right);
-        }
-        public void insert(SegNode root, int val) {
-            root.add++;
-            if (root.lo == root.hi)
-                return;
-            int mid = (root.lo + root.hi) / 2;
-            if (val <= mid)
-                insert(root.lchild, val);
-            else insert(root.rchild, val);
-        }
-        class SegNode {
-            int lo, hi, add;
-            SegNode lchild, rchild;
-            public SegNode(int left, int right) {
-                lo = left;
-                hi = right;
-                add = 0;
-                lchild = null;
-                rchild = null;
-            }
-        }
-
-        // public int minimumTime(String t) {
-        //     int n = t.length(), i = 0, j = n-1, ans = 0;
-        //     char [] s = t.toCharArray();
-        //     while (i < n && s[i] == '1') i++;
-        //     if (i == n) return i;
-        //     while (j >= i && s[j] == '1') j--;
-        //     ans = i + (n-1-j);
-        //     // System.out.println("i: " + i);
-        //     // System.out.println("j: " + j);
-        //     if (i == j) return ans;
-        //     while (i < j) {
-        //         while (i < j && s[i] == '0') i++;
-        //         while (j > i && s[j] == '0') j--;
-        //         System.out.println("i: " + i);
-        //         System.out.println("j: " + j);
-        //         while (i <= j && s[i] == '1') {
-        //             i++;
-        //             ans += 2;
-        //         } 
+        //         if (i % 2 == 0) evn.put(a[i], evn.getOrDefault(a[i], 0) + 1);
+        //         else odd.put(a[i], odd.getOrDefault(a[i], 0) + 1);
+        //     Queue<Node> od = new PriorityQueue<>((x, y) -> y.f - x.f);
+        //     Queue<Node> en = new PriorityQueue<>((x, y) -> y.f - x.f);
+        //     for (Map.Entry<Integer, Integer> ent : odd.entrySet()) 
+        //         od.offer(new Node(ent.getKey(), ent.getValue()));
+        //     for (Map.Entry<Integer, Integer> ent : evn.entrySet()) 
+        //         en.offer(new Node(ent.getKey(), ent.getValue()));
+        //     while (!od.isEmpty() && !en.isEmpty() && od.peek().v == en.peek().v) {
+        //         if (od.peek().f < en.peek().f)
+        //             od.poll();
+        //         else en.poll();
         //     }
-        //     return ans;
+        //     if (n % 2 == 0) return (od.isEmpty() ? n / 2 : n/2 - od.poll().f) + (en.isEmpty() ? n/2 : n/2 - en.poll().f);
+        //     else return (od.isEmpty() ? n/2+1 : n/2+1 - od.poll().f) + (en.isEmpty() ? n/2 : n/2 - en.poll().f);
+        //     // int vOdd = odd.get(odd.lastKey());
+        //     // Integer hi = evn.higherKey(odd.lastKey());
+        //     // if (hi != null) max = Math.max(max, vOdd + evn.get(hi));
+        //     // else {
+        //     //     hi = evn.lowerKey(odd.lastKey());
+        //     //     if (hi != null)  max = Math.max(max, vOdd + evn.get(hi));
+        //     // }
+        //     // int vEvn = evn.get(evn.lastKey());
+        //     // hi = odd.higherKey(evn.lastKey());
+        //     // if (hi != null) max = Math.max(max, vEvn + odd.get(hi));
+        //     // else {
+        //     //     hi = odd.lowerKey(evn.lastKey());
+        //     //     if (hi != null) max = Math.max(max, vEvn + odd.get(hi));
+        //     // }
+        //     // return n - max;
+        // }
+        // class Node {
+        //     int f, v;
+        //     public Node(int v, int f) {
+        //         this.v = v;
+        //         this.f = f;
+        //     }
+        // }
+        
+        // public int maximumANDSum(int[] a, int N) { // TLE: bitwise 1111 遍历，应该会好一点儿，被他们吵闹没休息好，总是想不透彻，休息好的时候状态会好很多
+        //     n = a.length;
+        //     this.N = N;
+        //     cnt = new ArrayList[N+1];
+        //     for (int i = 0; i <= N; i++) 
+        //         cnt[i] = new ArrayList<>();
+        //     Arrays.sort(a);
+        //     // vis = new boolean[n];
+        //     helper(n-1, N, 0, a);
+        //     return max;
+        // }
+        // int n, N, max = 0;
+        // // boolean [] vis;
+        // List<Integer>[] cnt;
+        // void helper(int idx, int j, int sum, int [] a) {
+        //     if (idx == -1) {
+        //         if (sum > max) max = sum;
+        //         return ;
+        //     }
+        //     int max = 0, maxI = -1;
+        //     // for (int i = 1; i <= N; i++) {
+        //     for (int i = j; i >= 0; i--) {
+        //         int k = i;
+        //         while (k >= 0) { // 这个应该是整个只遍历一遍
+        //             int cur = a[idx] & k;
+        //             if (cur > max) {
+        //                 max = cur;
+        //                 maxI = k;
+        //             } else if (max > 0 && cur < max) break;
+        //         }
+        //         if (cnt[i].size() < 2) {
+        //             cnt[i].add(a[idx]);
+        //             helper(idx-1, sum + (a[idx] & i), a);
+        //             cnt[i].remove(cnt[i].size()-1);
+        //         }
+        //     }
         // }
 
-//         class SegmentTree {
-//             int st[];  
-//             SegmentTree(int arr[], int n) {
-//                 int x = (int) (Math.ceil(Math.log(n) / Math.log(2)));
-//                 int max_size = 2 * (int) Math.pow(2, x) - 1;
-//                 st = new int[max_size]; // Memory allocation
-//                 constructSTUtil(arr, 0, n - 1, 0);
-//             }
-//             int getMid(int s, int e) {
-//                 return s + (e - s) / 2;
-//             }
-//             int getSumUtil(int ss, int se, int qs, int qe, int si) {
-//                 if (qs <= ss && qe >= se)
-//                     return st[si];
-//                 if (se < qs || ss > qe)
-//                     return 0;
-//                 int mid = getMid(ss, se);
-//                 return getSumUtil(ss, mid, qs, qe, 2 * si + 1) +
-//                     getSumUtil(mid + 1, se, qs, qe, 2 * si + 2);
-//             }
-//             void updateValueUtil(int ss, int se, int i, int diff, int si) {
-//                 if (i < ss || i > se)
-//                     return;
-//                 st[si] = st[si] + diff;
-//                 if (se != ss) {
-//                     int mid = getMid(ss, se);
-//                     updateValueUtil(ss, mid, i, diff, 2 * si + 1);
-//                     updateValueUtil(mid + 1, se, i, diff, 2 * si + 2);
-//                 }
-//             }
-//             void updateValue(int arr[], int n, int i, int new_val) {
-//                 if (i < 0 || i > n - 1) {
-//                     System.out.println("Invalid Input");
-//                     return;
-//                 }
-//                 int diff = new_val - arr[i];
-//                 arr[i] = new_val;
-//                 updateValueUtil(0, n - 1, i, diff, 0);
-//             }
-//             int getSum(int n, int qs, int qe) {
-//                 if (qs < 0 || qe > n - 1 || qs > qe) {
-//                     System.out.println("Invalid Input");
-//                     return -1;
-//                 }
-//                 return getSumUtil(0, n - 1, qs, qe, 0);
-//             }
-//             int constructSTUtil(int arr[], int ss, int se, int si) {
-//                 if (ss == se) {
-//                     st[si] = arr[ss];
-//                     return arr[ss];
-//                 }
-//                 int mid = getMid(ss, se);
-//                 st[si] = constructSTUtil(arr, ss, mid, si * 2 + 1) +
-//                     constructSTUtil(arr, mid + 1, se, si * 2 + 2);
-//                 return st[si];
-//             }
-//         }
-//         int n, sum;
-//         int [] a; // flip cnts
-//     SegmentTree st;
-//         public Bitset(int size) {
-//         // public cmp(int size) {
-//             n = size;
-//             a = new int [n];
-//             st = new SegmentTree(a, n);
-//         }
-//         public void fix(int idx) {
-//             if (a[idx] == 0)
-// // a[idx] = 1;
-//                 st.updateValue(a, n, idx, 1);
-//         }
-//         public void unfix(int idx) {
-//             if (a[idx] == 1)
-// // a[idx] = 1;
-//                 st.updateValue(a, n, idx, 0);
-//         }
-//         public void flip() {
-//             for (int i = 0; i < n; i++) 
-//                 if (a[i] == 0)
-//                     st.updateValue(a, n, i, 1);
-//                 else 
-//                     st.updateValue(a, n, i, 0);
-//         }
-//         public boolean all() {
-//             return st.getSum(n, 0, n-1) == n;
-//         }
-//         public boolean one() {
-//             return st.getSum(n, 0, n-1) > 0;
-//         }
-//         public int count() {
-//             return st.getSum(n, 0, n-1);
-//         }
-//         public String toString() {
-//             StringBuilder s = new StringBuilder();
-//             for (int v : a) 
-//                 s.append((char)(v-0 + '0'));
-//             return s.toString();
-//         }
-    
-        int n;
-        Set<Integer> one = new HashSet<>();
-        Set<Integer> zoo = new HashSet<>();
-        public Bitset(int size) { // 这个题最开始的思路被自己想偏了。。。。。。
-            // public cmp(int size) {
-            n = size;
+        // public long minimumRemoval(int[] a) {
+        //     int n = a.length, min = Integer.MAX_VALUE, max = 0, ans = Integer.MAX_VALUE;
+        //     long sum = 0;
+        //     TreeMap<Integer, Integer> cnt = new TreeMap<>();
+        //     for (int v : a) {
+        //         sum += v;
+        //         min = Math.min(min, v);
+        //         max = Math.max(max, v);
+        //         cnt.put(v, cnt.getOrDefault(v, 0) + 1);
+        //     }
+        //     // System.out.println("sum: " + sum);
+        //     // System.out.println("min: " + min);
+        //     // System.out.println("max: " + max);
+        //     if (min == max) return 0;
+        //     int l = min, r = max, lv = getVal(l, cnt), rv = getVal(r, cnt);
+        //     while (l < r) {
+        //         // System.out.println("\n l: " + l);
+        //         // System.out.println("r: " + r);
+        //         int m = l + (r - l) / 2;
+        //         System.out.println("m: " + m);
+        //         if (getVal(m, cnt) > getVal(m+1, cnt)) // 这里的逻辑还是有点儿不太对：并不是严格的单调递减，再单调递增
+        //             l = m + 1;
+        //         else r = m;
+        //     }
+        //     return getVal(l, cnt);
+        //     // System.out.println("cnt.size(): " + cnt.size());
+        //     // for (Map.Entry<Integer, Integer> en : cnt.entrySet()) 
+        //     //     System.out.print(en.getKey() + ", " + en.getValue() + "\n");
+        //     // for (Integer key : cnt.keySet()) {
+        //     //     ans = Math.min(ans, getVal(key, cnt));
+        //     //     System.out.println("ans: " + ans);
+        //     // }
+        //     // return ans;
+        // }
+        // int getVal(int v, TreeMap<Integer, Integer> m) { // 每个袋都留这么多
+        //     int cnt = 0;
+        //     for (Integer key : m.keySet()) {
+        //         if (key < v) cnt += key * m.get(key);
+        //         else if (key > v) cnt += (key - v) * m.get(key);
+        //     }
+        //     return cnt;
+        // }
+        public long minimumRemoval(int[] a) { // 57 / 64 tes
+            int n = a.length;
+            long min = Long.MAX_VALUE;
+            Arrays.sort(a);
+            long [] sum = new long [n];
             for (int i = 0; i < n; i++) 
-                zoo.add(i);
-        }
-        public void fix(int idx) {
-            one.add(idx);
-            zoo.remove(idx);
-        }
-        public void unfix(int idx) {
-            one.remove(idx);
-            zoo.add(idx);
-        }
-        public void flip() {
-            Set<Integer> tmp = one;
-            one = zoo;
-            zoo = tmp;
-        }
-        public boolean all() {
-            return one.size() == n;
-        }
-        public boolean one() {
-            return one.size() > 0;
-        }
-        public int count() {
-            return one.size();
-        }
-        public String toString() {
-            StringBuilder s = new StringBuilder();
-            for (int i = 0; i < n; i++) 
-                if (one.contains(i)) s.append('1');
-                else s.append('0');
-        
-            return s.toString();
-        }
+                sum[i] = (i == 0 ? 0 : sum[i-1]) + a[i];
 
+            System.out.println(Arrays.toString(a));
+            System.out.println(Arrays.toString(sum));
+            
+            for (int i = 0; i < n; i++) {
+                long cur = sum[n-1] - a[i] * (n-i);
+                // if (cur > min) break;
+                min = Math.min(min, cur);
+            }
+            return min;
+        }
     }
-    public static void main (String[] args) {
-        // Solution s = new Solution ();
-        // String a = "1100101";
-        // int r = s.minimumTime(a);
-        // System.out.println("r: " + r);
-        cmp s = new cmp(5); // bitset = "00000".
-        s.fix(3);     // the value at idx = 3 is updated to 1, so bitset = "00010".
-        s.fix(1);     // the value at idx = 1 is updated to 1, so bitset = "01010". 
-        s.flip();     // the value of each bit is flipped, so bitset = "10101". 
-        boolean r = s.all();      // return False, as not all values of the bitset are 1.
+
+    public static void main(String args[]) {
+        Solution s = new Solution();
+
+        int [] a = new int [] {2,10,3,2};
+        
+        long r = s.minimumRemoval(a);
         System.out.println("r: " + r);
-        
-        s.unfix(0);   // the value at idx = 0 is updated to 0, so bitset = "00101".
-        s.flip();     // the value of each bit is flipped, so bitset = "11010". 
-        boolean r1 = s.one();      // return True, as there is at least 1 index with value 1.
-        System.out.println("r1: " + r1);
-        
-        s.unfix(0);   // the value at idx = 0 is updated to 0, so bitset = "01010".
-        int r2 = s.count();    // return 2, as there are 2 bits with value 1.
-        System.out.println("r2: " + r2);
-        
-        String r3 =  s.toString(); // return "01010", which is the composition of bitset.
-        System.out.println("r3: " + r3);
     }
 }
-
-// public static void main(String args[]) {
-//     int arr[] = {1, 3, 5, 7, 9, 11};
-//     int n = arr.length;
-//     SegmentTree  tree = new SegmentTree(arr, n);
-//     // Build segment tree from given array
-//     // Print sum of values in array from index 1 to 3
-//     System.out.println("Sum of values in given range = " +
-//                        tree.getSum(n, 1, 3));
-//     // Update: set arr[1] = 10 and update corresponding segment
-//     // tree nodes
-//     tree.updateValue(arr, n, 1, 10);
-//     // Find sum after the value is updated
-//     System.out.println("Updated sum of values in given range = " +
-//                        tree.getSum(n, 1, 3));
-// }
-
 // ListNode head = new ListNode(a[0]);
 // head.buildList(head, a);
 // head.printList(head);
