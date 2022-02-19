@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toMap;
 
 public class mtwoixed {
-    // public static class Solution {
+    public static class Solution {
 
         // public int superPow(int a, int [] b) {
         //     a %= mod;
@@ -693,31 +693,33 @@ public class mtwoixed {
         //     }
         // }
 
-    Map<Integer, Integer> m;
-    final int a = 1001; // i * a + j
-    public DetectSquares() { // on the way to be fixed
-    // public mtwoixed() { 
-        m = new HashMap<>();
-    }
-    public void add(int[] p) {
-        int v = p[0] * a + p[1];
-        m.put(v, m.getOrDefault(v, 0) + 1);
-    }
-    public int count(int[] p) {
-        int ans = 0, tmp = 0;
-        for (Integer key : m.keySet()) {
-            int i = key / a, j = key % a;
-            if (j == p[1]) {
-                if (i == p[0]) continue;
-                if (i > p[0]) {
-                    ans += m.get(key) * m.getOrDefault(p[0]*a + j + i-p[0], 0) * m.getOrDefault(i*a + j+i-p[0], 0);
-                } else 
-                    ans += m.get(key) * m.getOrDefault(p[0]*a + j + p[0]-i, 0) * m.getOrDefault(i*a + j+p[0]-i, 0);
-            }
-        }
-        return ans;
-    }
+    // Map<Integer, Integer> m;
+    // final int a = 1001; // i * a + j
+    // public DetectSquares() { // on the way to be fixed
+    // // public mtwoixed() { 
+    //     m = new HashMap<>();
     // }
+    // public void add(int[] p) {
+    //     int v = p[0] * a + p[1];
+    //     m.put(v, m.getOrDefault(v, 0) + 1);
+    // }
+    // public int count(int[] p) {
+    //     int ans = 0, tmp = 0;
+    //     for (Integer key : m.keySet()) {
+    //         int i = key / a, j = key % a;
+    //         if (j == p[1]) {
+    //             if (i == p[0]) continue;
+    //             if (i > p[0]) {
+    //                 ans += m.get(key) * m.getOrDefault(p[0]*a + j + i-p[0], 0) * m.getOrDefault(i*a + j+i-p[0], 0);
+    //             } else 
+    //                 ans += m.get(key) * m.getOrDefault(p[0]*a + j + p[0]-i, 0) * m.getOrDefault(i*a + j+p[0]-i, 0);
+    //         }
+    //     }
+    //     return ans;
+    // }
+
+
+    }
     public static void main (String[] args) {
         // Solution s  =  new Solution ();
 
