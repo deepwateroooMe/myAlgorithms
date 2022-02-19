@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toMap;
 
 public class mtwoixed {
-    public static class Solution {
+    // public static class Solution {
 
         // public int superPow(int a, int [] b) {
         //     a %= mod;
@@ -619,13 +619,128 @@ public class mtwoixed {
         //     return ans;
         // }
 
-        
-    }
-    public static void main (String[] args) {
-        Solution s  =  new Solution ();
+        // public long minimumDifference(int[] a) {
+        //     int m = a.length, n = m / 3, idx = 0;
+        //     long sum = 0, ans = Long.MAX_VALUE;
+        //     long [] pre = new long [n+1], suf = new long [n+1];
+        //     Queue<Integer> min = new PriorityQueue<>((x, y)->y-x);
+        //     for (int i = 0; i < n; i++) {
+        //         min.offer(a[i]);
+        //         sum += a[i];
+        //     }
+        //     pre[idx++] = sum;
+        //     for (int i = n; i < 2 * n; i++) {
+        //         if (a[i] < min.peek()) {
+        //             sum -= min.poll();
+        //             min.offer(a[i]);
+        //             sum += a[i];
+        //         }
+        //         pre[idx++] = sum;
+        //     }
+        //     idx = n;
+        //     sum = 0;
+        //     Queue<Integer> max = new PriorityQueue<>();
+        //     for (int i = m-1; i > m-1-n; i--) {
+        //         sum += a[i];
+        //         max.offer(a[i]);
+        //     }
+        //     suf[idx--] = sum;
+        //     for (int i = m-1-n; i >= n; i--) {
+        //         if (a[i] >= max.peek()) {
+        //             sum -= max.poll();
+        //             max.offer(a[i]);
+        //             sum += a[i];
+        //         }
+        //         suf[idx--] = sum;
+        //     }
+        //     for (int i = 0; i <= n; i++) {
+        //         long dif = pre[i] - suf[i];
+        //         ans = Math.min(ans, dif);
+        //     }
+        //     return ans;
+        // }
 
-        int r = s.superEggDrop(3, 14);
+        // public String abbreviateProduct(int left, int right) {
+        //     long suf = 1;       // 末五位
+        //     int zoo = 0, orgDigits = 0;
+        //     double prod =  1.0; // 首五位
+        //     for (int n = left; n <= right; n++) {
+        //         prod *= n;
+        //         while (prod >= 1.0) {
+        //             prod /= 10.0;
+        //             orgDigits++;
+        //         }
+        //         suf *= n;
+        //         while (suf % 10 == 0) {
+        //             zoo ++;
+        //             suf /= 10;
+        //         }
+        //         // 有种特殊情况就是：尾数的最后既没有0，也超过了14位，那么对它取模化小
+        //         if (suf > Math.pow(10, 14)) suf %= (long)Math.pow(10, 14);
+        //     }
+        //     if (orgDigits - zoo <= 10)
+        //         // String r = s.abbreviateProduct(621, 625);
+        //         // return (long)(prod * Math.pow(10, orgDigits - zoo)) + "e" + zoo; // 290/291 passed
+        //         return (long)(prod * Math.pow(10, orgDigits - zoo) + 0.5) + "e" + zoo;
+        //     else {
+        //         // you may find that I add 0.5 before cast to int above, but not here.
+        //         // It is because when org_digits - zeros <= 10, int(prod * (10 ** (org_digits - zeros)) + 0.5) is the actual
+        //         // value, we add 0.5 to the last non-zero digits for rounding, 0.5 just means 0.5 over there.
+        //         // However here int(prod * 100000) is the first 5-digit prefix, the 6-th digit is also a valid digit not
+        //         // error.If we add 0.5 to 6-th digit, how do we calculate the first 6-digit or 7-digit prefix?
+        //         String sufStr = "0000" + Long.toString(suf);
+        //         return (int)(prod * 100000) + "..." + sufStr.substring(sufStr.length() - 5) + "e" + zoo;
+        //     }
+        // }
+
+    Map<Integer, Integer> m;
+    final int a = 1001; // i * a + j
+    public DetectSquares() { // on the way to be fixed
+    // public mtwoixed() { 
+        m = new HashMap<>();
+    }
+    public void add(int[] p) {
+        int v = p[0] * a + p[1];
+        m.put(v, m.getOrDefault(v, 0) + 1);
+    }
+    public int count(int[] p) {
+        int ans = 0, tmp = 0;
+        for (Integer key : m.keySet()) {
+            int i = key / a, j = key % a;
+            if (j == p[1]) {
+                if (i == p[0]) continue;
+                if (i > p[0]) {
+                    ans += m.get(key) * m.getOrDefault(p[0]*a + j + i-p[0], 0) * m.getOrDefault(i*a + j+i-p[0], 0);
+                } else 
+                    ans += m.get(key) * m.getOrDefault(p[0]*a + j + p[0]-i, 0) * m.getOrDefault(i*a + j+p[0]-i, 0);
+            }
+        }
+        return ans;
+    }
+    // }
+    public static void main (String[] args) {
+        // Solution s  =  new Solution ();
+
+        mtwoixed s = new mtwoixed();
+        s.add([3, 10]);
+        s.add([11, 2]);
+        s.add([3, 2]);
+        int r = s.count([11, 10]); // return 1. You can choose:
         System.out.println("r: " + r);
+        
+        //   - The first, second, and third points
+        int r1 = s.count([14, 8]);  // return 0. The query point cannot form a square with any points in the data structure.
+        System.out.println("r1: " + r1);
+
+        s.add([11, 2]);    // Adding duplicate points is allowed.
+
+        int r2 = s.count([11, 10]); // return 2. You can choose:
+        System.out.println("r2: " + r2);
+        //   - The first, second, and third points
+        //   - The first, third, and fourth points
+        
+        // String r = s.abbreviateProduct(621, 625);
+        // System.out.println("r: " + r);
     }
 }
 
