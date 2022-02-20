@@ -9,7 +9,6 @@ public class ListNode {
     // }
     public ListNode pp;
 
-
     public int val;
     public ListNode prev;
     public ListNode next;
