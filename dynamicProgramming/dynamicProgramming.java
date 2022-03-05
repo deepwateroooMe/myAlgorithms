@@ -1,5 +1,5 @@
 import com.TreeNode;
-// import com.MapUtil;
+import com.MapUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -343,6 +343,108 @@ public class dynamicProgramming {
         //     return minSum;
         // }
 
+    //     public void findBallDFS(int[][] arr, int i, int j, int val) {
+    //         int m = arr.length;
+    //         int n = arr[0].length;
+    //         if (i < 0 || j < 0 || j <= n) return;
+            
+    //         if (arr[i][j] == 1 && (j == n-1 || arr[i][j+1] == -1)) {
+    //             res[val] = -1;
+    //             return;
+    //         }
+    //         if (arr[i][j] == -1 && (j == 0 || arr[i][j-1] == 1)) {
+    //             res[val] = -1;
+    //             return;
+    //         }
+
+    //         System.out.println("(arr[i][j] == 1 && j < n-1 && arr[i][j+1] == 1 && i < m-1): " + (arr[i][j] == 1 && j < n-1 && arr[i][j+1] == 1 && i < m-1));
+    //         if (arr[i][j] == 1 && j < n-1 && arr[i][j+1] == 1 && i < m-1) {
+    //             findBallDFS(arr, i+1, j+1, val);
+    //         }
+
+    //         System.out.println("(arr[i][j] == -1 && j > 0 && arr[i][j-1] == -1 && i < m-1): " + (arr[i][j] == -1 && j > 0 && arr[i][j-1] == -1 && i < m-1));
+    //         if (arr[i][j] == -1 && j > 0 && arr[i][j-1] == -1 && i < m-1) {
+    //             findBallDFS(arr, i+1, j-1, val);
+    //         }
+    //         if (i == m-1) res[val] = j;
+    //     }
+    //     private int [] res;
+    //     private int idx;
+    //     public int[] findBall(int[][] grid) {
+    //         int m = grid.length;
+    //         int n = grid[0].length;
+    //         int [][] arr = new int [m][n];
+    //         int tmp = 0;
+    //         res = new int [n];
+    //         boolean mem = false;
+    //         for (int j = 0; j < n; j++) {
+    //             arr[0][j] = j+1;
+    //         }
+
+    //         for (int i = 0; i < m; i++) {
+    //             for (int j = 0; j < n; j++) {
+    //                 if (j == 0 && grid[i][j] == -1 && arr[i][j] > 0) arr[i][j] = -1;
+    //                 if (j == n-1 && grid[i][j] == 1&& arr[i][j] > 0) arr[i][j] = -1;
+    //                 if (grid[i][j] == 1 && j < n-1 && grid[i][j+1] == -1) {
+    //                     arr[i][j] = -1;
+    //                     arr[i][j+1] = -1;
+    //                 }
+    //             }
+    //             printArray(arr);
+    //             if (i > 0) {
+    //                 tmp = 0;
+    //                 mem = false;
+    //                 for (int j = 0; j < n; j++) {
+    //                     if (j == 0 && (grid[i-1][j] == 1 || (grid[i-1][j] == -1 && grid[i][j] == 1))) arr[i][j] = 0;
+    //                     if (j == n-1 && (grid[i-1][j] == -1 || (grid[i-1][j] == 1 && grid[i][j] == -1))) arr[i][j] = 0;
+
+    //                     if (grid[i][j] == 1 && grid[i-1][j] == 1) arr[i][j] = arr[i-1][j-1];
+    //                     if (grid[i][j] == -1 && grid[i-1][j] == -1) arr[i][j] = arr[i-1][j+1];
+                        
+    //                     // if (grid[i][j] == 1 && grid[i-1][j] == 1 && grid[i-1][j-1] == 1) arr[i][j] = arr[i-1][j-1];
+                        
+    //                     // if (grid[i][j] == 1 && j < n-1 && grid[i][j+1] == 1 && arr[i][j] > 0) {
+    //                     //     tmp = arr[i][j+1];
+    //                     //     arr[i][j+1] = arr[i][j];
+    //                     //     arr[i][j] = 0;
+    //                     //     mem = true;
+    //                     // }
+    //                     // if (grid[i][j] == -1 && j > 0 && grid[i][j-1] == -1 && arr[i][j] > 0) {
+    //                     //     tmp = arr[i][j-1];
+    //                     //     arr[i][j-1] = tmp == 0 ? arr[i][j] : tmp;
+    //                     //     arr[i][j] = 0;
+    //                     // }
+    //                 }
+    //             }
+    //         }
+    //         printArray(arr);
+    //         // res = new int[n];
+    //         // idx = 0;
+    //         // for (int j = 0; j < n; j++) {
+    //         //     System.out.println("\nj: " + j);
+                
+    //         //     findBallDFS(grid, 0, j, idx);
+    //         //     ++idx;
+    //         // }
+    //         return res;
+    //     }
+    // private static void printArray (int [][] arr) {
+    //     System.out.println("");
+    //     System.out.println("arr.length: " + arr.length);
+    //     for (int x = 0; x < arr.length; ++x) {
+    //         for (int j = 0; j < arr[x].length; j++) {
+    //             if (arr[x][j] == 1)
+    //             System.out.print(" \\ ");
+    //             else if (arr[x][j] == -1)
+    //             System.out.print( " / ");
+    //             else 
+    //             System.out.print(" " + arr[x][j]+ " ");
+    //         }
+    //         System.out.print("\n");
+    //     }
+    //     System.out.println("");
+
+    // }
 
         // public int waysToMakeFair(int[] nums) {
         //     if (nums.length == 1) return 1;
@@ -443,6 +545,30 @@ public class dynamicProgramming {
         //     }
         //     System.out.println("");
         //     return res;
+        // }
+
+        // public int longestCommonSubsequence(String text1, String text2) {
+        //     if (text1.length() == 1 && text2.length() == 1) return text1.charAt(0) == text2.charAt(0) ? 1 : 0;
+        //     int m = text1.length();
+        //     int n = text2.length();
+        //     int [] [] arr = new int [m][n];
+        //     for (int i = 0; i < n; i++) {
+        //         arr[0][i] = text1.charAt(0) == text2.charAt(i) ? 1 : 0;
+        //         if (i > 0 && arr[0][i-1] == 1) arr[0][i] = 1;
+        //     }
+        //     for (int i = 0; i < m; i++) {
+        //         arr[i][0] = text1.charAt(i) == text2.charAt(0) ? 1 : 0;
+        //         if (i > 0 && arr[i-1][0] == 1) arr[i][0] = 1;
+        //     }
+        //     for (int i = 1; i < m; i++) {
+        //         for (int j = 1; j < n; j++) {
+        //             if (text1.charAt(i) == text2.charAt(j)) arr[i][j] = arr[i-1][j-1] + 1;
+        //             else {
+        //                 arr[i][j] = Math.max(arr[i-1][j], arr[i][j-1]);
+        //             }
+        //         }
+        //     }
+        //     return arr[m-1][n-1];
         // }
 
         // public int longestSubarray(int[] nums) {
@@ -751,141 +877,66 @@ public class dynamicProgramming {
         //     return res;
         // }
 
-        
-        // HashMap<Character, Integer> ma = new HashMap<>();
-        // HashMap<Character, Integer> mb = new HashMap<>();
-        // int n;
-        // public int numSplits(String s) {
-        //     n = s.length();
-        //     int res = 0;
-        //     // int i = 0, j = n-1;
-        //     // ma.put(s.charAt(i), ma.getOrDefault(s.charAt(i), 0) + 1);
-        //     // mb.put(s.charAt(j), mb.getOrDefault(s.charAt(j), 0) + 1);
-        //     int mid = n / 2;
-        //     int tmp = 0;
-        //     while ( mid < n && Math.abs(ma.size() - mb.size()) <= tmp) {
-        //         for (int i = 0; i <= mid; i++) 
-        //             ma.put(s.charAt(i), ma.getOrDefault(s.charAt(i), 0) + 1);
-        //         for (int i = mid+1; i < n; i++) 
-        //             mb.put(s.charAt(i), mb.getOrDefault(s.charAt(i), 0) + 1);
-        //         if (ma.size() == mb.size()) {
-        //             ++res;
-        //             ++mid;
-        //         }
-        //         else if (ma.size() > mb.size()) --mid;
-        //         else ++mid;
-        //         tmp = Math.abs(ma.size() - mb.size());
-        //     }
-        // }
-        // private int distinctDiff(int mid) {
-        //     for (int i = 0; i <= mid; i++) 
-        //         ma.put(s.charAt(i), ma.getOrDefault(s.charAt(i), 0) + 1);
-        //     for (int i = mid+1; i < n; i++) 
-        //         mb.put(s.charAt(i), mb.getOrDefault(s.charAt(i), 0) + 1);
-        //     return 
-        // }
-
-        // public int maxSumAfterPartitioning(int[] arr, int k) {
-        //     int n = arr.length;
-        //     int res = 0;
-        //     int [] dp = new int[n];
-        //     dp[0] = arr[0];
-        //     int max = arr[0];
-        //     for (int i = 0; i < n; i++) {
-        //         if (i - k >= 0) {
-        //             max = arr[i];
-        //             for (int j = i-1; j >= i-k; --j) {
-        //                 dp[i] = Math.max(dp[i], dp[j] + (i-j)*max);
-        //                 max = Math.max(max, arr[j]);
-        //             }
-        //         } else {
-        //             max = Math.max(max, arr[i]);
-        //             dp[i] = max * (i+1);
-        //         }
-        //     }
-        //     return dp[n-1];
-        // }
-
-        // public int maxSubArray(int[] nums) {
-        //     int res = nums[0], sum = 0;
-        //     for (int i = 0; i < nums.length; i++) {
-        //         sum = Math.max(sum + nums[i], nums[i]);
-        //         res = Math.max(res, sum);
-        //     }
-        //     return res;
-        // }
-        // public int maxProfit(int[] prices) {
-        //     int min = Integer.MAX_VALUE;
-        //     int max = Integer.MIN_VALUE;
-        //     for (int i = 0; i < prices.length; i++) {
-        //         if (prices[i] < min) min = prices[i];
-        //         max = Math.max(max, prices[i] - min);
-        //     }
-        //     return max;
-        // }
-        // public int maxProfit(int[] prices) {
-        //     int start = prices[0];
-        //     int res = 0;
-        //     for (int i = 1; i < prices.length; i++) {
-        //         if (prices[i] >= prices[i-1]) continue;
-        //         res += prices[i-1] - start;
-        //         start = prices[i];
-        //     }
-        //     res += prices[prices.length-1] - start;
-        //     return res;
-        // }
-
-        // public int maxProfit(int[] prices) {
-        //     if (prices.length < 2) return 0; 
-        //     int [] past = new int[prices.length];
-        //     int [] futu = new int[prices.length];
-        //     int result = 0;
-        //     for (int i = 1, valley = prices[0]; i < prices.length; i++) {
-        //         valley = Math.min(valley, prices[i]);
-        //         past[i] = Math.max(past[i - 1], prices[i]-valley);
-        //     }
-        //     for (int i = prices.length-2, peak = prices[prices.length-1]; i >= 0 ; i--) {
-        //         peak = Math.max(peak, prices[i]);
-        //         futu[i] = Math.max(futu[i+1], peak-prices[i]);
-        //         result = Math.max(result, past[i] + futu[i]);
-        //     }
-        //     return result;
-        // }
-
-        // public int maxProfit(int[] prices, int fee) {
-        //     int start = prices[0];
-        //     int min = Integer.MAX_VALUE;
-        //     int res = 0;
-        //     for (int i = 1; i < prices.length; i++) {
-        //         if (prices[i] < min) min = prices[i];
-        //         if (prices[i] >= prices[i-1]) continue;
-        //         res = Math.max(res, prices[i-1] - min - fee);
-        //         start = prices[i];
-        //     }
-        //     res += prices[prices.length-1] - start > fee ? prices[prices.length-1] - start - fee : 0;
-        //     return res;
-        // }
-
-
-        public int longestCommonSubsequence(String S, String T) {
-            int m = S.length();
-            int n = T.length();
-            int [][] dp = new int [m+1][n+1];
-            for (int i = 1; i <= m; i++) 
-                for (int j = 1; j <= n; j++) 
-                    if (S.charAt(i-1) == T.charAt(j-1)) dp[i][j] = dp[i-1][j-1] + 1;
-                    else dp[i][j] = Math.max(dp[i-1][j], dp[i][j-1]);
-            return dp[m][n];
+        private boolean 
+        private int getPalindromeCnts(String s) {
+            if (s.length() == 2) return 3;
+            int n = s.length();
+            int res = n;
+            int i = 1;
+            while (i < n && s.charAt(i) == s.charAt(i-1)) {
+                ++res;
+                ++i;
+            }
+            if (i == n) {
+                return n*(n+1)/2;
+            }
+            // HashMap<Character, Integer> m = new HashMap<>();
+            // i = 0;
+            // while (i < n && !m.containsKey(s.charAt(i))) {
+            //     m.put(s.charAt(i), i);
+            //     ++i;  
+            // } 
+            
+            if (n % 2 == 0) return n + n/2;
+            else return n + (n-1)/2;
         }
-   }
+        public int countSubstrings(String s) {
+            if (s.length() == 1) return 1;
+            int n = s.length();
+            HashMap<Character, Integer> m = new HashMap<>();
+            int i = 0, j = 0, res = 0;
+            while (i < n) {
+                while (i < n && !m.containsKey(s.charAt(i))) {
+                    m.put(s.charAt(i), i);
+                    ++i;  
+                } 
+                if (i == n) return n;
+                if (m.containsKey(s.charAt(i))) {
+                    j = m.get(s.charAt(i));
+                    if (i - j <= 2) {
+                        while (i < n-1 && j > 0 && s.charAt(i+1) == s.charAt(j-1)) {
+                            ++i;
+                            --j;
+                        }
+                        if (i == n) {
+                            res = j + getPalindromeCnts(s.substring(j, i-j+1));
+                        } else {
+                            res = j + getPalindromeCnts(s.substring(j, i-j+1)) + countSubstrings(s.substring(i+1));
+                        }
+                        return res;
+                    }
+                }
+            }
+            return -1;
+        }
+    }
     
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        // int []  a = new int []  { -2, 1, -3, 4, -1, 2, 1, -5, 4}; 
-        int []  a = new int []  {5, 4, -1, 7, 8}; 
-
-        int res = s.maxSubArray(a);
+        String a = "aaa";
+        
+        int res = s.countSubstrings(a);
         System.out.println("res: " + res);
     }
 }

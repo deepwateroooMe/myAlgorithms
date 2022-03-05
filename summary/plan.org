@@ -2,59 +2,45 @@
 #+author: deepwaterooo
 
 * Weekly Plan
-** configure new desktop environment
-- disk partitions are well done now. HDD partitions can be done later when there is a need. 
-  
-[[./pic/disk.png]]
-
-- win 10 java 11 and ubuntu java 11 no problem, android studio default to java 11 too. 
-- main configuration to be done include: 
-  - win 10 wsl 2 or 1, potentially 2 for an entire kernal. wsl 1 configured yesterday, and java development environment, emacs, and zsh, that was the third time during my life installing wsl 1, 1st time know nothing, 2nd time relocated the system in a different locaiton. Yesterdasy into a separate SSD disk, and username matches windows', but did not expect this morning powershell was NOT able to find ubuntu wsl system......So today i will have to start over for wsl again......
- - wsl 1 terminal is ready, from yesterday noon to this evening, I have not worked on real problems yets except these configurations, starting to use it for my study.
-  - yesterday new win system left windows key and left alt key switch registration wasted some time, due to having not realized restarting system needed, which also resulted in the above wsl1 path cannot be found this morning. 
-** todo
-- wsl *zsh powerline10k* theme, plugins to be done, and potentially and linux ubuntu wsl 2 with android studio installed in ubuntu as well
-- win 10 *texlive / emacs / fonts / org mode* configuration to be done
-  - wasted about 3 hours searching sr-speedbar, but later in the evening when I can not bare the ugly looking fonts in my editor(被windows系统下emacs的编程界面丑哭了。。。), I found that it was only a font setting probem, but wasted a few hours on it ....... emacs somehow set the default font to be powerlingsymbols.......
-    
-[[./pic/speedbar.png]]
-- wsl win10 copy/paste termail emacs still needs some work too.
-- will return back to android study once the environments gets readsy later this evening or tomorrow. All the rest of tiny issues are tidious and needs time, and I can not work on these bugs for too long. Will resume Android study and leetcode problems tomorrow. And spend let's say 1 - 2 hours daily to finish the rest configurations.
-- expect this desktop environment to be best ever, cause whenever I am configuring some new environmen or reinstall wsl, I can realize which parts I could do better on. 
-
 ** 总结题型
-- 等dynamic programming专题的几道题目写完后，会试图再注册一个账号，将这个专题的题目重新再写一遍。这将会是第一个着力重新写的专题，也是因为它有难度，值得挑战。
-- 这个周第二次回去刷了一些dynamic programming的题目，真的是感觉似曾相识，这次再回去做的过程中，可以清楚地感觉到以前不会的、或是想得不透彻的地方现在能够想得相对深远一些了，说明好好刷一遍、重要的话说三遍，典型题型多刷几遍是有效用的，认识深刻，二刷的感觉完全不一样
+- 昨天晚上两次车发动机车呜声把人从睡梦中吵醒，很过分，两次！声音的来源
+  是车库前一个室友的车；另一个是午夜回归的人厚重的前门开关门声，这些都
+  成了周五晚上他们的必使手段，只是越来越过分了。。。。。。
+- dynamic programming二刷：308 open questions, 最后几个数字相关的题写得很奔溃，第二遍终于刷完了，感觉自己比较慢知慢觉，对于比赛中的字符串和数字相关的题有种近乎死灰一样的不喜欢。。。。。。
+- 接下来的计划：觉得自己悟性不够，还需要多练习，会用接下来两三个周、一个月左右的时间（新年前）把所有剩下hard的、和medium的题做完，同时开始考虑、准备和着手安卓和unity项目，已经四个月了（从8月算起，8 9 10 11）不能再死刷题了，还是需要一些项目上的练习，再详细的计划会清晰后列出来
+- leetcode最后的几个open problem会抽时间慢慢写，但再写这些琐碎的题目兴趣不大（周赛会保持继续参加）。
+  - 昨天写这话的时候，我还没能意识到最近一段时间最近两三个周吧，自己的状态很差，主要是睡眠的问题，因为晚上休息不好，第二天的精神很差，头像顶着一团棉花昏昏头脑不够清醒，严重影响了自己的精神状态和做题。今天意识到这个问题，会从网上再多搜索一下分析一下可能的原因，并及时作调整，希望能尽快恢复过来。
+  - 刷题还真是检测睡眠质量的晴雨表，冲着这一点儿，冲着到今天我才真正意识到这段时间睡眠质量是有问题的，题还得刷下去。。。一生中我从不曾像今年像这一两个月如此关注监控自己的健康与睡眠，但也都是好事，意识到问题的存在、警钟长鸣，及时调整、只有一再检测监控这些作息与生活习惯规律，才能发掘出比较高的效率与潜能。希望曾经相对比较好一些的状态能尽快调整回来(找到原因了，天气冷了，大概10号左右加了床被子太热，显著降低了睡眠质量，每天都很头痛，这两天拿走那多的一床被子，感觉好了很多。先前几个月前的7月头的时候也出现过因为门窗过于密闭而大脑缺氧一关好门窗静下来写题目就头痛过)
 
-- 等把这第二次的dynamic programming专题的题目刷完，我会边刷题，一边准备android projects.算法题目中关于数组的部分，我觉得不重要，可刷可不刷。（这两天，今天傍晚、明天和后天我需要搬房间到另一个空出来的，所以这两天周一和周二可能做题会少一点儿）
-- I will keep his repository alive for quite a while. And from this week, I will try daily udpates later this week after I have finished moving. 
+- *希望这个周能抽些时间搜索一下、列一个安卓学习、复习、面试准备计划，以后的重点应该就转向按小项目来写和更新了* 这个也是实情，有很好的安卓基础，有比较强的学习意愿，只是在自己总结不够、想要边学习边做项目边总结之前，搜索一下它人是如何进阶学习准备的，想要计划出几个学习版块，计划几个小项目写出来,这个月暂时与刷题并行往前走。这几天先看一下自定义视图系列
 
-- 这周刷得跟上一周差不多。计划接下来几周，每天刷10个题左右，一周60-70个题目，边刷边记错题进小本，到接下来的周六刷到1250左右，多作总结，希望比赛的成绩能更稳定一些；
+- 再这之后，会写一些Android Project，同时大量发简历、找工作，并每天抽部分时间（可能几个小时吧）继续总结和刷完剩下不感兴趣、或觉得不值一写的几个leetcode open problems.
 
-- 这个周主要复习了基础的部分，hashing, hashtable string two pointers, 以前很讨厌字符串，这个周写字符串看来，感觉基础的只要自己能够想得清楚的，都能很快实现出来，写得还比较得心应手。TreeMap, TreeSet也用得比较顺一点儿了
-- 写树的题目，dfs, bfs graph各种node,现在也是写得很顺心了，只是通过不断地测试加强巩固
+- 但不管接下来自己的项目是集中在安桌上，还是向unity game偏，leetcode和codeforce的周赛、比赛等都还是会尽量参加、在精神状态允许下，争取把题目都写出来
 
 - 完成打基础的部分： hashing, hashmap, string, two pointer, sliding window,这些基础部分的题目，希望扫完
 - 如果某天头脑比较清醒、精力比较好的时候，会试图去慢速解决自己平时困难的地方：动态规划/ hashmap/hashing中数数组的个数，不常用的算法等
 
 - 数组相关的 segemnt tree, binary index tree等的基础，希望能够理解得再彻底一些，到能活学活用的程度
 - Deque双端队列O（n）解法的概念在建立，还需要很多的练习和熟悉
-- 最讨厌扫描线，几个双数怎么也数不清楚 heap等。。。。。。这个周扫几个出去
+- 最讨厌扫描线和数字相关的，几个双数怎么也数不清楚 heap等。。。。。。这个周扫几个出去
 
 - 如果说以前是迷迷糊糊刷题求AC,现在基本的概念在建立，希望从以前代码和题目的算法效率向代码优化中等偏优，寻求高效、最优解法的提升
 - bit manipulation, bitmasks基础知识基本掌握，还剩几道难题take my time慢慢解（感觉现在对bit操作，相对自信得心应手得多了！） 
 - union find 的几个题，基本算是基本扫完吧，剩下的几下慢慢写。。。。。。
- 
-- 很喜欢现在自己搭建出来的window刷题环境：WSL system, Zsh power shell, emacs configurations, locally everything, except Leetcode server is too slow, have to tolerant its latency......
 
-- 至昨天晚上我终于意识到确定右侧单耳耳鸣，搬到现居住处后发病的（感觉现居住处到处都是电磁波干扰、洗衣烘衣的车床，厨房的冰箱，曾整小时整小时开过的洗手间风扇等），已经有几个周了。对于自2013年秋天野鸡大学的住宿环境以来，备受各种居住环境的困扰，尤其是2019年9月10月以来，我自小的听力受损，现在单侧耳鸣，可能的原因有家族遗传性高血压、遗传性脑血管肿瘤（外公舅舅和妈妈都受此脑溢血困扰过，大我五岁的亲姐姐前几个月也刚发此重病一次）等等。今天在网上稍搜索了一下相关信息，回想这几年的居住环境噪音和人为打扰与睡眠干扰、心里戚戚很不是滋味，希望我不至于会失去听力。 
-- But my suffering is still only my/a personal suffering. Unless I could find an appropriate job, nobody cares if you are sick or not.因此，自信是本能，向往强大也是一种本能的向往。Anything happens, 我还是必须努力努力刷题，直到找到合适的工作.所以会近几周把剩下的一点儿题目刷完（hard and medium only, keep easy untouched dont care）不喜欢数字，也数字无缘，不打算写数组题目，如果一定要写，可能也只会把难题写一写吧
+- 经过一段时间的饮食调理，现在右耳单耳电磁波一样的叫声已经小了很多，希望通过再多一段时间的饮食调理它会自动消失掉。前天和昨天连续两天晚上都没能消息好(前天晚上可能是因为在它们炒作的枪口上写出了自己一直以来的愿望吧，昨天一天、到晚上明明已经很累了，晚上还出去稍微运动了一下希望晚上能早点儿入睡能休息好，却偏偏还是没能安时入眠)，直接导致今天早上起床稍微有点儿困难，我比较喜欢现在这个自9月来养成的早上6点起床的极少失眠的作息（这两三个月来也没再喝咖啡），希望赶快把作息再次调整恢复正常（现在还不想换成浪费早上时候，午休90分钟深睡眠的作息）。
 
 ** 比赛
 - 会尽量多参加一些比赛，比赛时的效率还是相对好一点儿，所以leetcode上以后每周一次、每半月一次，以及以后codeforces上的比赛，希望都能够尽量地多参加一些。
 - codeforces 的刷题界面还不是很熟悉，对于暴内存之类的问题尚没有思考，需要再熟悉一下，希望也能尽量多参加他们家的比赛，希望参加他们家的比赛能够自己写得出答案
 
-** 数据规模与算法
+- 今天的两场，早上的题目不难，但比较坑人，考得偏，越是怕数个数什么的，越是几个题三四个题都故意挑你的刺（我觉得早上他们是想要找茬来着。。。想抓我再冷嘲热讽一番，可惜抓不住了。。）。晚上的前三个题都简单，半个小时全做出来了，可是最后一题读不懂题目，不知道它在说什么，上次的union find 第四题难题做出来了，今天说的是同样考点却没能认出来。
+- 简单的题慢慢地已经不再是重点，希望以后能尽量地把难题做出来，像做今天早上比赛的最后一题一样，因为晚上休息不好（鬼窝里的恶鬼惯性地周五晚上都会故意洗手间弄很久故意吵人，像今天两场比赛的也会在我午休等休息时间故意吵你休息，今天中午我平时做饭时间有人做了大半个小时，我等不及没办法自己泡了袋面吃，下午4:30一杯热水喝下去，感觉人都快饿虚脱了。。。），早上起来拿鸡蛋掉到了地上，走路撞到桌子角，但脑袋再昏，写早上的那个不算难的数数的第四题，还是写得思路极为清晰，像蓝天白云一样清澈见底。其它偏一点儿、脑袋急转弯一样的题，希望以后也能慢慢学会处理。
+- 早上抓人没抓着，晚上应该是给糖吃吧，可惜最后一题读不懂题目，其它三题好简单
+- 每周周六周日节假日对我来说是最难过的，因为恶鬼都在家，他们有白天休息时间，晚上你要休息时他们有的是办法故意扰你休息，周一到周五反而相对较好，毕竟他们还得出去工作
+
+* 数据规模与算法
 |------------+------------|
 | Input Size | Complexity |
 |------------+------------|

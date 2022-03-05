@@ -718,31 +718,123 @@ public class mtwoixed {
     //     return ans;
     // }
 
+        // public boolean placeWordInCrossword(char[][] a, String t) { // 这代码写得太奇葩了吧：用dfs的思路再写一遍
+        //     m = a.length;
+        //     n = a[0].length;
+        //     o = t.length();
+        //     s = t.toCharArray();
+        //     if (checkUpDown(a)) return true;
+        //     char [][] tmp = new char[m][n];
+        //     for (int i = m-1; i >= 0; i--) 
+        //         System.arraycopy(a[i], 0, tmp[m-1-i], 0, n);
+        //     if (checkUpDown(tmp)) return true;
+        //     if (checkLeftRight(a)) return true;
+        //     for (int i = 0; i < m; i++) 
+        //         for (int j = 0; j < n/2 + (n%2); j++) {
+        //             char x = a[i][j];
+        //             a[i][j] = a[i][n-1-j];
+        //             a[i][n-1-j] = x;
+        //         }                    
+        //     return checkLeftRight(a);
+        // }
+        // int m, n, o, i = 0, j = 0, k = 0;
+        // char [] s ;
+        // boolean checkLeftRight(char [][] a) { // 从左到右, 从右到左
+        //     for ( i = 0; i < m; i++) {
+        //         j = 0;
+        //         while (j+o <= n && (a[i][j] == '#' || a[i][j] != ' ' && a[i][j] != s[0])) j++;
+        //         if (j+o > n) continue;
+        //         if (j+o <= n && j > 0 && a[i][j-1] != '#')
+        //             j++;
+        //             // continue; // BUG
+        //         for (int jj = j; jj+o <= n; jj++) {
+        //             k = 0;
+        //             if (jj > 0 && a[i][jj-1] != '#') continue;
+        //             System.out.println("jj: " + jj);
+        //             while (jj < n && k < o) {
+        //                 if (a[i][jj] == s[k] || a[i][jj] == ' ') {
+        //                     jj++;
+        //                     k++;
+        //                 } else if (a[i][jj] == '#' || a[i][jj] != ' ' && a[i][jj] != s[k])
+        //                     break;
+        //             }
+        //             if (k == o && (jj == n || jj < n && a[i][jj] == '#')) return true;
+        //         }
+        //     }
+        //     return false;
+        // }
+        // boolean checkUpDown(char [][] a) { // 从上到下, 从下到上
+        //     if (m < o) return false;
+        //     for ( j = 0; j < n; j++) {
+        //         i = 0;
+        //         while (i+o <= m && (a[i][j] == '#' || a[i][j] != ' ' && a[i][j] != s[0])) i++;
+        //         if (i + o > m) continue; // 剩余格的长度不够
+        //         if (i + o <= m && i > 0 && a[i-1][j] != '#')
+        //             i++;
+        //             // continue; // BUG
+        //         System.out.println("i: " + i);
+        //         for (int ii = i; ii+o <= m; ii++) {
+        //             k = 0;
+        //             if (ii > 0 && a[ii-1][j] != '#') continue;
+        //             while (ii < m && k < o) {
+        //                 if (a[ii][j] == s[k] || a[ii][j] == ' ') {
+        //                     ii++;
+        //                     k++;
+        //                 } else if (a[ii][j] == '#' || a[ii][j] != ' ' && a[ii][j] != s[k])
+        //                     break;
+        //             }
+        //             if (k == o && (ii == m || ii < m && a[ii][j] == '#')) return true;
+        //         }
+        //     }
+        //     return false;
+        // }
 
+           
+        // // 先考虑一下一个被另一个彻底被包围的情况，再分四种情况将交叠的上下左右拆成小块，再累积和？
+        // public int computeArea(int x, int y, int xx, int yy, int i, int j, int ii, int jj) { // BUG: 这个题目还没有写完
+        //     int sum = (xx - x) * (yy - y) + (ii - i) * (jj - j);
+        //     // 分上下 与 左右 不交叠的情况
+        //     if (xx <= i || ii <= x || y >= jj || j >= yy) return sum;
+        //     // 有重叠的情况这么考虑还是比较繁琐，改天再写这种题吧
+        //     List<int []> l = new ArrayList<>();
+        //     l.add(new int [] {x, y});
+        //     l.add(new int [] {xx, yy});
+        //     l.add(new int [] {i, j});
+        //     l.add(new int [] {ii, jj});
+        //     Collections.sort(l, (a, b)->a[0] != b[0] ? a[0] - b[0] : a[1] - b[1]);
+        // }
+
+    // int [] ori;
+    // int [] a;
+    // Random r = new Random();
+    // public Solution(int[] nums) {
+    //     ori = nums;
+    //     a = Arrays.copyOf(ori, ori.length);
+    // }
+    // public int[] reset() {
+    //     a = Arrays.copyOf(ori, ori.length);
+    //     return a;
+    // }
+    // public int[] shuffle() {
+    //     for (int i = a.length-1; i >= 0; i--) {
+    //         int cur = a[i];
+    //         // 随机生成一个小于数组长度的下标
+    //         int idx = r.nextInt(a.length);
+    //         a[i] = a[idx];
+    //         a[idx] = cur;
+    //     }
+    //     return a;
+    // }
+
+        
     }
     public static void main (String[] args) {
-        // Solution s  =  new Solution ();
+        Solution s  =  new Solution ();
 
-        mtwoixed s = new mtwoixed();
-        s.add([3, 10]);
-        s.add([11, 2]);
-        s.add([3, 2]);
-        int r = s.count([11, 10]); // return 1. You can choose:
+        char [][] a = new char [][] {{'i',' ','#',' ',' ','o','c',' '}}; 
+
+        boolean r = s.placeWordInCrossword(a, "jbocg"); // return 2. You can choose:
         System.out.println("r: " + r);
-        
-        //   - The first, second, and third points
-        int r1 = s.count([14, 8]);  // return 0. The query point cannot form a square with any points in the data structure.
-        System.out.println("r1: " + r1);
-
-        s.add([11, 2]);    // Adding duplicate points is allowed.
-
-        int r2 = s.count([11, 10]); // return 2. You can choose:
-        System.out.println("r2: " + r2);
-        //   - The first, second, and third points
-        //   - The first, third, and fourth points
-        
-        // String r = s.abbreviateProduct(621, 625);
-        // System.out.println("r: " + r);
     }
 }
 

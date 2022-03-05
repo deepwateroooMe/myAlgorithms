@@ -34,131 +34,55 @@ public class NestedIterator implements Iterator<Integer> {
         public List<NestedInteger> getList();
     }
 
-    public static class Solution {
-        public NestedInteger deserialize(String s) {
-            int n = s.length();
-            if (s.charAt(0) != '[') return new NestedInteger(Integer.parseInt(s.substring(0, n)));
-            NestedInteger ans = new NestedInteger();
-            int cnt = 0;
-            int i = 1, j = i;
-            while (i < n) {
-                j = i;
-                while (j < n && Character.isDigit(s.charAt(j))) j++; // [345, []]
-                if (j > i) {
-                    ans.add(new NestedInteger(Integer.parseInt(s.substring(i, j))));
-                    if (j == n) return ans;
-                    i = j + 1; // sca(i): [ or 0-9 digits
-                    continue;
-                }
-                if (s.charAt(i) == '[') {
-                    int l = 1, r = 0;
-                    j = i+1;
-                    while (j < n) {
-                        if (s.charAt(j) == '[') ++l;
-                        else if (s.charAt(j) == ']') {
-                            if (l > 0) --l;
-                            else ++r;
-                        }
-                        if (l == r) break;
-                        j++;
-                    }
-                    ans.add(deserialize(s.substring(i+1, j)));
-                    if (j == n-1) return ans; // j: ]
-                    i = j + 2; // i: ], [ or 0-9
+    List<Integer> l;
+    int idx;
+    NestedInteger tmp;
+    public NestedIterator(List<NestedInteger> nestedList) {
+        if ( nestedList == null || nestedList.size() == 0 ) return;
+        l = flattenNestedInteger(nestedList);
+        idx = 0;
+    }
+
+    private List<Integer> flattenNestedInteger(List<NestedInteger> nestedList) {
+        List<Integer> l = new ArrayList<>();
+        if ( nestedList == null || nestedList.size() == 0) return l;
+        for (int i = 0; i < nestedList.size(); i++) {
+            if (nestedList.get(i).isInteger()) {
+                l.add(nestedList.get(i).getInteger());
+            } else {
+                List<NestedInteger> ntmp = nestedList.get(i).getList();
+                List<Integer> ll = flattenNestedInteger(ntmp);
+                for (int j = 0; j < ll.size(); j++) {
+                    l.add(ll.get(j));
                 }
             }
-            return new NestedInteger();
         }
-
-        // private int getMatedRIdx(String s, int idx) {
-        //     int n = s.length();
-        //     int i = 0, l = 0, r = 0;
-        //     while (i < n) {
-        //         if (s.charAt(i) == '[') ++l;
-        //         else if (s.charAt(i) == ']') {
-        //             if (l > 0) --l;
-        //             else ++r;
-        //         }
-        //         if (l == r) break;
-        //     }
-        //     return i;
-        // }
-        // public NestedInteger deserialize(String s) {
-        //     int n = s.length();
-        //     if (n == 1) return null;
-        //     int i = 0, j = 0;
-        //     if (Character.isDigit(s.charAt(i)) || s.charAt(i) == '-') 
-        //         return new NestedInteger(Integer.parseInt(s.substring(i, n)));
-        //     NestedInteger res = new NestedInteger(); // s.charAt(1) == '['
-        //     ++i;
-        //     while (i < n) {
-        //         while (Character.isDigit(s.charAt(i)) || s.charAt(i) == '-') {
-        //             j = i;
-        //             while (j < n && Character.isDigit(s.charAt(j))) ++j; // j: , or n
-        //             res.add(new NestedInteger(Integer.parseInt(s.substring(i, j))));
-        //             if (j == n) return res;
-        //             i = j+1;
-        //         }
-        //         if (s.charAt(i) == '[') {
-        //             j = getMatedRIdx(s, i);
-        //             NestedInteger nt = deserialize(s.substring(i+1, j));
-        //             res.add(nt);
-        //             if (j == n-1) return res;
-        //             i = j+2;
-        //         }
-        //     }
-        //     return null;
-        // }
-    
-        // List<Integer> l;
-        // int idx;
-        // NestedInteger tmp;
-        // public NestedIterator(List<NestedInteger> nestedList) {
-        //     if ( nestedList == null || nestedList.size() == 0 ) return;
-        //     l = flattenNestedInteger(nestedList);
-        //     idx = 0;
-        // }
-
-        // private List<Integer> flattenNestedInteger(List<NestedInteger> nestedList) {
-        //     List<Integer> l = new ArrayList<>();
-        //     if ( nestedList == null || nestedList.size() == 0) return l;
-        //     for (int i = 0; i < nestedList.size(); i++) {
-        //         if (nestedList.get(i).isInteger()) {
-        //             l.add(nestedList.get(i).getInteger());
-        //         } else {
-        //             List<NestedInteger> ntmp = nestedList.get(i).getList();
-        //             List<Integer> ll = flattenNestedInteger(ntmp);
-        //             for (int j = 0; j < ll.size(); j++) {
-        //                 l.add(ll.get(j));
-        //             }
-        //         }
-        //     }
-        //     return l;
-        // }
+        return l;
+    }
         
-        // @Override
-        // public Integer next() {
-        //     Integer tmp = l.get(idx);
-        //     ++idx;
-        //     return tmp;
-        // }
+    @Override
+    public Integer next() {
+        Integer tmp = l.get(idx);
+        ++idx;
+        return tmp;
+    }
 
-        // @Override
-        // public boolean hasNext() {
-        //     return idx < l.size();
-        // }
-    }    
+    @Override
+    public boolean hasNext() {
+        return idx < l.size();
+    }
+    
     public static void main(String[] args) {
-        String a = "[123,[456,[789]]]";
+        NestedIterator s = new NestedIterator();
 
-        NestedInteger res = deserialize(a);
-        System.out.println("res.size(): " + res.size());
-        for (int z = 0; z < res.size(); ++z) 
-            System.out.print(res.get(z) + ", ");
-        System.out.print("\n");
+        // int [] a = new int [] {};
+        NestedList nl = new NestedList {};
+        
+        TreeNode root = new TreeNode(a[0]);
+        root.buildTree(root, a);
+        root.levelPrintTree(root);
 
-        // NestedIterator s = new NestedIterator();
-        // NestedList nl = new NestedList {};
-
+        TreeNode res = s.(root4);
+        res.levelPrintTree(res);
     }
 }

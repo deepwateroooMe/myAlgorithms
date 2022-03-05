@@ -1,4 +1,4 @@
-import com.TreeNode;
+// import com.TreeNode;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -138,55 +138,120 @@ public class hdeight {
         //     }
         // }
 
-        public int maximalPathQuality(int[] val, int[][] edges, int maxTime) {
-            int n = val.length;
-            for (int [] e : edges) {
-                adj.computeIfAbsent(e[0], z -> new ArrayList<>()).add(new int [] {e[1], e[2]});
-                adj.computeIfAbsent(e[1], z -> new ArrayList<>()).add(new int [] {e[0], e[2]});
-            }
-            dp = new Integer [n][maxTime + 1];
-            Map<Integer, Integer> map = new HashMap<>();
-            map.put(0, 1);
-            return dfs(0, maxTime, map, val);
-        }
-        Map<Integer, List<int []>> adj = new HashMap<>();
-        Integer [][] dp;
-        int dfs(int u, int t, Map<Integer, Integer> m, int [] a) {
-            if (t < 0) return 0;
-            if (t == 0) {
-                if (u == 0) 
-                    return dp[u][t] = a[u];
-                // m.put(u, m.get(u)-1);
-                if (m.get(u) == 0) m.remove(u);
-                return dp[u][t] = Integer.MIN_VALUE;
-            }
-            if (dp[u][t] != null) return dp[u][t];
-            int ans = 0;
-            for (int [] v : adj.get(u)) {
-                m.put(v[0], m.getOrDefault(v[0], 0) + 1);
-                int cur = dfs(v[0], t-v[1], m, a);
-                if (cur != Integer.MIN_VALUE) {
-                    int sum = 0;
-                    for (Integer key : m.keySet()) 
-                        sum += a[key];
-                    ans = Math.max(ans, sum);
-                }
-                m.put(v[0], m.get(v[0])-1);
-                if (m.get(v[0]) == 0) m.remove(v[0]);
-            }
-            return dp[u][t] = ans;
-        }
+        // public int maximalPathQuality(int[] val, int[][] edges, int maxTime) {
+        //     int n = val.length;
+        //     for (int [] e : edges) {
+        //         adj.computeIfAbsent(e[0], z -> new ArrayList<>()).add(new int [] {e[1], e[2]});
+        //         adj.computeIfAbsent(e[1], z -> new ArrayList<>()).add(new int [] {e[0], e[2]});
+        //     }
+        //     dp = new Integer [n][maxTime + 1];
+        //     Map<Integer, Integer> map = new HashMap<>();
+        //     map.put(0, 1);
+        //     return dfs(0, maxTime, map, val);
+        // }
+        // Map<Integer, List<int []>> adj = new HashMap<>();
+        // Integer [][] dp;
+        // int dfs(int u, int t, Map<Integer, Integer> m, int [] a) {
+        //     if (t < 0) return 0;
+        //     if (t == 0) {
+        //         if (u == 0) 
+        //             return dp[u][t] = a[u];
+        //         // m.put(u, m.get(u)-1);
+        //         if (m.get(u) == 0) m.remove(u);
+        //         return dp[u][t] = Integer.MIN_VALUE;
+        //     }
+        //     if (dp[u][t] != null) return dp[u][t];
+        //     int ans = 0;
+        //     for (int [] v : adj.get(u)) {
+        //         m.put(v[0], m.getOrDefault(v[0], 0) + 1);
+        //         int cur = dfs(v[0], t-v[1], m, a);
+        //         if (cur != Integer.MIN_VALUE) {
+        //             int sum = 0;
+        //             for (Integer key : m.keySet()) 
+        //                 sum += a[key];
+        //             ans = Math.max(ans, sum);
+        //         }
+        //         m.put(v[0], m.get(v[0])-1);
+        //         if (m.get(v[0]) == 0) m.remove(v[0]);
+        //     }
+        //     return dp[u][t] = ans;
+        // }
+
+        // public int consecutiveNumbersSum(int n) {
+        //     int cnt = 1;
+        //     for (int i = 2; i < Math.sqrt(2 * n); i++)
+        //         if ((n - i * (i - 1)/2) % i == 0) cnt++;
+        //     return cnt;
+        // }
+
+        // public boolean isGoodArray(int[] a) {
+        //     int x = a[0];
+        //     for (int v : a) {
+        //         x = gcd(x, v);
+        //         if (x == 1) return true;
+        //     }
+        //     return false;
+        // }
+        // int gcd(int x, int y) {
+        //     if (x < y) return gcd(y, x);
+        //     if (y == 0) return x;
+        //     return gcd(y, x % y);
+        // }
+
+        // static final long mod = (int)1e9 + 7;
+        // public int numberOfWays(String t) { 
+        //     int n = t.length(), sum = 0, cnt = 0;
+        //     long ans = 1;
+        //     char [] s = t.toCharArray();
+        //     for (char v : s) 
+        //         sum += v == 'S' ? 1 : 0;
+        //     if (sum < 2 || sum % 2 != 0) return 0;
+        //     if (sum == 2) return 1;
+        //     int i = 0, j = 0;
+        //     while (i < n) {
+        //         while (i < n && cnt < 2) {
+        //             if (s[i] == 'S') cnt++;
+        //             i++;
+        //         } 
+        //         if (i == n) return (int)ans;
+        //         j = i; 
+        //         while (i < n && s[i] != 'S') i++;
+        //         if (i == n) return (int)ans;
+        //         ans *= (long)(i - j + 1);
+        //         ans %= mod;
+        //         cnt = 0;
+        //     }
+        //     return (int)ans;
+        // }
+        // static final long mod = (int)1e9 + 7;
+        // public int numberOfWays(String s) {
+        //     long ans = 1, j = 0, k = 0;
+        //     for (int i = 0; i < s.length(); i++) {
+        //         if (s.charAt(i) == 'S') {
+        //             if (++k > 2 && k % 2 == 1)
+        //                 ans = ans * (i - j) % mod;
+        //             j = i;
+        //         }
+        //     }
+        //     return k % 2 == 0 && k > 0 ? (int)ans : 0;
+        // }
     }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        int []  a = new int []  {1, 2, 3, 4};
-        int [][] b = new int [][] {{0,1,10},{1,2,11},{2,3,12},{1,3,13}};
+        // String a = "SSPPSPS";
+        // String a = "SSSPPPSPPSPSSSSSSPPPSPP";
+        // String a = "PPPPPSPPSPPSPPPSPPPPSPPPPSPPPPSPPSPPPSPSPPPSPSPPPSPSPPPSPSPPPPSPPPPSPPPSPPSPPPPSPSPPPPSPSPPPPSPSPPPSPPSPPPPSPSPSS";
+        String a = "PPPPPPPSPPPSPPPPSPPPSPPPPPSPPPSPPSPPSPPPPPSPSPPPPPSPPSPPPPPSPPSPPSPPPSPPPPSPPPPSPPPPPSPSPPPPSPSPPPSPPPPSPPPPPSPSPPSPPPPSPPSPPSPPSPPPSPPSPSPPSSSS";
+        System.out.println("a: " + a);
 
-        int r = s.maximalPathQuality(a, b, 50);
+        int r = s.numberOfWays(a);
         System.out.println("r: " + r);
     }
 }
 // TreeNd root = new TreeNode(a[0]);
 // root.buildTree(root, a);
 // root.lvlPrintTree(root);
+
+// 1920000000
+//  919999993
