@@ -1,4 +1,4 @@
-import com.ListNode;
+import com.TreeNode;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,138 +13,123 @@ import static java.util.stream.Collectors.toMap;
 public class cmp {
     public static class Solution {
 
-        // public int prefixCount(String[] words, String pref) {
-        //     int cnt = 0;
-        //     for (String s : words) 
-        //         if (s.startsWith(pref)) cnt++;
-        //     return cnt;
-        // }
+        public List<String> cellsInRange(String t) {
+            List<String> l = new ArrayList<>();
+            char [] s = t.toCharArray();
+            for (char i = s[0]; i <= s[3]; i++) 
+                for (char j = s[1]; j <= s[4]; j++) 
+                    l.add(new String("" + i + j));
+            return l;
+        }
 
-        // public int minSteps(String ss, String tt) {
-        //     int [] cs = new int [26], ct = new int [26];
-        //     char [] s = ss.toCharArray();
-        //     char [] t = tt.toCharArray();
-        //     for (char c : s) 
-        //         cs[c-'a']++;
-        //     for (char c : t) 
-        //         ct[c-'a']++;
-        //     int ans = 0;
-        //     for (int i = 0; i < 26; i++) {
-        //         if (cs[i] == ct[i]) continue;
-        //         ans += Math.abs(cs[i] - ct[i]);
-        //     }
-        //     return ans;
-        // }
+        public TreeNode createBinaryTree(int[][] descriptions) {
+            int n = 100001;
+            Map<Integer, TreeNode> roots = new HashMap<>(); // roots
+            List<TreeNode> trees = new ArrayList<>();
+            for (int [] v : descriptions) {
+                TreeNode cur = roots.getOrDefault(v[0], new TreeNode(v[0]));
+                if (v[2] == 1) 
+                    cur.left = new TreeNode(v[1]);
+                else cur.right = new TreeNode(v[1]);
+                if (!roots.containsKey(v[0])) {
+                    roots.put(v[0], cur);
+                    trees.add(cur);
+                }
+            }
+            for (final TreeNode node : trees) {
+                if (roots.containsKey(node.val)) { // 这里判断：是因为接下来 buildTree 会将可以合并的子树键值对删除并回收利用建大树了
+                    final TreeNode root = buildTree(roots, node);
+                    roots.put(root.val, root);
+                }
+            }
+            final TreeNode root = roots.values().iterator().next(); // 只有这一颗树根
+            return root;
+        }
+        private TreeNode buildTree(Map<Integer, TreeNode> roots, TreeNode node) { // 用 recursion 把所有需要/可以合并的子树建成一棵完整大树，方法很传神
+            final TreeNode next = roots.remove(node.val); // map.remove() 返回值: 如果存在 key, 则删除并返回 value；如果不存在则返回 null
+            if (next != null) {
+                if (next.left != null) node.left = buildTree(roots, next.left);
+                if (next.right != null) node.right = buildTree(roots, next.right);
+            }
+            return node;
+        }
 
-        // public long minimumTime(int[] time, int totalTrips) {
-        //     int n = time.length;
-        //     Arrays.sort(time);
-        //     long l = 1, r = (long)totalTrips * time[n-1];
-        //     while (l < r) {
-        //         long m = l + (r - l) / 2;
-        //         if (getCnt(time, m) >= (long)totalTrips) {
-        //             // ans = m;
-        //             // System.out.println("ans: " + ans);
-        //             // r = m - 1;
-        //             r = m;
-        //         } else l = m + 1;
-        //     }
-        //     return l;
-        //     // return ans;
-        // }
-        // long getCnt(int [] time, long val) {
-        //     long cnt = 0;
-        //     for (int v : time) {
-        //         // if (v > val) continue;
-        //         cnt += val / (long)v;
-        //     }
-        //     return cnt;
-        // }
+        public long minimalKSum(int[] a, int k) { // tle
+            int n = a.length, i = 1, idx = 0;
+            long sum = 0;
+            Arrays.sort(a);
+            while (k > 0 && idx < n) {
+                System.out.println("\n k: " + k);
+                if (a[idx] > i) {
+                    while (k > 0 && i < a[idx]) {
+                        sum += i;
+                        i++;
+                        k--;
+                    }
+                    if (k == 0) return sum;
+                    while (idx < n && i == a[idx]) {
+                        i++;
+                        idx++;
+                    }
+                } else if (i == a[idx]) {
+                    i++;
+                    idx++;
+                } else if (i > a[idx]) idx++;
+            }
+            while (k > 0) {
+                sum += i++;
+                k--;
+            }
+            return sum;
+        }
 
-        // public int mostFrequent(int[] a, int key) {
-        //     int max = 0, maxVal = 0;
-        //     Map<Integer, Integer> m = new HashMap<>();
-        //     for (int i = 0; i < a.length-1; i++) {
-        //         if (a[i] == key) {
-        //             m.put(a[i+1], m.getOrDefault(a[i+1], 0) + 1);
-        //             if (m.get(a[i+1]) >= max) {
-        //                 maxVal = a[i+1];
-        //                 max = m.get(a[i+1]);
-        //             }
-        //         }
-        //     }
-        //     return maxVal;
-        // }
-
-        // public int[] sortJumbled(int[] m, int[] a) {
-        //     int n = a.length;
-        //     List<int []> l = new ArrayList<>();
-        //     for (int v : a) 
-        //         l.add(new int [] {v, getMappedVal(v, m)});
-        //     Collections.sort(l, (x, y)->x[1] - y[1]);
-        //     for (int i = 0; i < a.length; i++)
-        //         a[i] = l.get(i)[0];
-        //     return a;
-        // }
-        // int getMappedVal(int v, int [] m) {
-        //     int ans = 0, cur = 1;
-        //     if (v == 0) return m[v];
-        //     while (v > 0) {
-        //         ans += m[v % 10] * cur;
-        //         cur *= 10;
-        //         v /= 10;
-        //     }
-        //     return ans;
-        // }
-
-        // public List<List<Integer>> getAncestors(int n, int[][] edges) {
-        //     Map<Integer, Set<Integer>> adj = new HashMap<>(); // 每个Node的直接父结点链表
-        //     Map<Integer, List<Integer>> m = new HashMap<>();
-        //     int [] ins = new int [n];
-        //     for (int [] e : edges) {
-        //         adj.computeIfAbsent(e[0], z -> new HashSet<>()).add(e[1]);
-        //         m.computeIfAbsent(e[1], z -> new ArrayList<>()).add(e[0]);
-        //         ins[e[1]]++;
-        //     }
-        //     Deque<Integer> q = new ArrayDeque<>();
-        //     for (int i = 0; i < n; i++) 
-        //         if (ins[i] == 0) q.offerLast(i);
-        //     List<List<Integer>> ans = new ArrayList<>(n);
-        //     for (int i = 0; i < n; i++) 
-        //         ans.add(new ArrayList<>());
-        //     while (!q.isEmpty()) {
-        //         int cur = q.pollLast();
-        //         if (adj.get(cur) != null) {
-        //             for (int v : adj.get(cur)) {
-        //                 if (--ins[v] == 0)
-        //                     q.offerLast(v);
-        //             }
-        //         }
-        //         Set<Integer> s = new HashSet<>();
-        //         if (m.get(cur) == null) continue;
-        //         for (int v : m.get(cur)) 
-        //             s.addAll(ans.get(v));
-        //         s.addAll(m.get(cur));
-        //         ans.get(cur).addAll(s);
-        //         Collections.sort(ans.get(cur));
-        //     }
-        //     return ans;
-        // }
-
-        public int minMovesToMakePalindrome(String s) {
-            
+        public List<Integer> replaceNonCoprimes(int[] a) { // 这么debug得太烦琐了。。。。。。
+            int n = a.length, idx = 0;
+            List<Integer> l = new ArrayList<>();
+            l.add(a[0]);
+            for (int i = 1; i < n; i++) {
+                 System.out.println("\n i: " + i);
+                 if (a[i] == l.get(l.size()-1) && a[i] > 1) continue;
+                int v = gcd(l.get(l.size()-1), a[i]);
+                 System.out.println("v: " + v);
+                if (v > 1) {
+                    int cur = l.get(l.size()-1) * a[i] / v;
+                    System.out.println("cur: " + cur);
+                    if (cur != l.get(l.size()-1)) {
+                        if (cur > l.get(l.size()-1))
+                            l.set(l.size()-1, cur);
+                        else if (i > 1)
+                            l.add(cur);
+                        // else if (i > 1 && cur )
+                        else if (i == 1) l.set(0, cur);
+                    }
+                } else l.add(a[i]);
+                 System.out.println("l.size(): " + l.size());
+                 System.out.println(Arrays.toString(l.toArray()));
+            }
+            return l;
+        }
+        int gcd(int x, int y) {
+            if (x < y) return gcd(y, x);
+            if (y == 0) return x;
+            return gcd(y, x % y);
         }
     }
     public static void main(String args[]) {
         Solution s = new Solution();
+        // long r = s.minimalKSum(a, 6);
 
-        int [][] a = new int [][] {{0,3},{0,4},{1,3},{2,4},{2,7},{3,5},{3,6},{3,7},{4,6}};
+        // int [] a = new int [] {6,4,3,2,7,6,2};
+        // int [] a = new int [] {2,2,1,1,3,3,3};
+        // int []  a = new int []  {31, 97561, 97561, 97561, 97561, 97561, 97561, 97561, 97561};
+        // int []  a = new int []  {517, 11, 121, 517, 3, 51, 3, 1887, 5};
+        int []  a = new int []  {287, 41, 49, 287, 899, 23, 23, 20677, 5, 825};
 
-        List<List<Integer>> r = s.getAncestors(8, a);
+        System.out.println(Arrays.toString(a));
+
+        List<Integer> r = s.replaceNonCoprimes(a);
         System.out.println("r.size(): " + r.size());
-        for (int z = 0; z < r.size(); ++z) 
-            System.out.println(Arrays.toString(r.get(z).toArray()));
-        
+        System.out.println(Arrays.toString(r.toArray()));
     }
 }
 

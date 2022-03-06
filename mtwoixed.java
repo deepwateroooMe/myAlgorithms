@@ -826,14 +826,91 @@ public class mtwoixed {
     //     return a;
     // }
 
+        // public int[] findDiagonalOrder(int[][] mat) {
+        //     int m = mat.length, n = mat[0].length, idx = 0;
+        //     int [] ans = new int [m * n];
+        //     List<Integer> l = new ArrayList<>();
+        //     for (int i = 0; i < m+n-1; i++) { // -1
+        //         l.clear();
+        //         int r = i < n ? 0 : i - n + 1;
+        //         int c = i < n ? i : n-1;
+        //         while (r < m && c >= 0) {
+        //             l.add(mat[r][c]); // 右上角往左下角遍历
+        //             ++r;
+        //             --c;
+        //         }
+        //         if (i % 2 == 0)
+        //             Collections.reverse(l);
+        //         for (int j = 0; j < l.size(); j++) 
+        //             ans[idx++] = l.get(j);
+        //     }
+        //     return ans;
+        // }
+        // public int[] findDiagonalOrder(int[][] mat) {
+        //     int m = mat.length, n = mat[0].length, idx = 0;
+        //     int [] ans = new int [m * n];
+        //     int r = 0, c = 0, d = 1; // d = 1: 向右上角方向
+        //     while (r < m && c < n) {
+        //         ans[idx++] = mat[r][c];
+        //         int i = r + (d == 1 ? -1 : 1);
+        //         int j = c + (d == 1 ? 1 : -1);
+        //         if (i < 0 || i == m || j < 0 || j == n) {
+        //             if (d == 1) { // 向右 或 向下移动一格
+        //                 r += (c == n-1 ? 1 : 0);
+        //                 c += (c < n-1 ? 1 : 0);
+        //             } else {
+        //                 c += (r == m-1 ? 1 : 0);
+        //                 r += (r < m-1 ? 1 : 0);
+        //             }
+        //             d = 1 - d;
+        //         } else {
+        //             r = i;
+        //             c = j;
+        //         }
+        //     }
+        //     return ans;
+        // }
+
+        // public boolean checkPossibility(int[] a) { // 这个题写得太烦了，很多corner case
+        //     int n = a.length, i = 0;
+        //     if (n == 1) return true;
+        //     boolean vis = false;
+        //     ArrayDeque<Integer> s = new ArrayDeque<>();
+        //     for ( i = 0; i < n-1; i++) {
+        //         if (a[i] > a[i+1]) {
+        //             if (vis) return false;
+        //             if (!s.isEmpty()) {
+        //                 int top = s.peekLast();
+        //                 if (a[i+1] < top) s.offerLast(a[i]);
+        //                 else s.offerLast(a[i+1]);
+        //             } else s.offerLast(a[i+1]);
+        //             i++;
+        //             if (i == n-1) return true;
+        //             vis = true;
+        //         } else {
+        //             if (s.isEmpty() || a[i] >= s.peekLast())
+        //                 s.offerLast(a[i]);
+        //             else if (vis) return false;
+        //             else {
+        //                 vis = true;
+        //                 s.pollLast();
+        //                 if (!s.isEmpty() && a[i] < s.peekLast()) return false;
+        //                 s.offerLast(a[i]);
+        //             }
+        //         }
+        //     }
+        //     if (i < n-1) return false;
+        //     if (!s.isEmpty() && a[n-1] < s.peekLast() && vis) return false;
+        //     return true;
+        // }
+
         
     }
     public static void main (String[] args) {
         Solution s  =  new Solution ();
 
-        char [][] a = new char [][] {{'i',' ','#',' ',' ','o','c',' '}}; 
 
-        boolean r = s.placeWordInCrossword(a, "jbocg"); // return 2. You can choose:
+        boolean r = s.checkPossibility(a); // return 2. You can choose:
         System.out.println("r: " + r);
     }
 }
@@ -841,3 +918,10 @@ public class mtwoixed {
 // ListNode head = new ListNode(a[0]);
 // head.buildList(head, a);
 // head.printList(head);
+
+
+
+
+
+
+
