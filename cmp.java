@@ -55,30 +55,37 @@ public class cmp {
         //     return ans;
         // }
 
-        // public int maximumTop(int[] a, int k) { // BUG: Hidden for this testcase during contest.
-        //     int n = a.length;
-        //     if (n == 1 && k  % 2 == 1) return -1;
-        //     if (k >= n) return Arrays.stream(a).max().getAsInt();
-        //     int max = -1;
-        //     for (int i = 0; i < k-1; i++) 
-        //         max = Math.max(max, a[i]);
-        //     if (n == k) max = Math.max(max, a[k-1]);
-        //     else if (a[k] < max) return max;
-        //     return a[k];
-        //     // return max >= a[k] ? max : a[k];
-        // }
+        public int maximumTop(int[] a, int k) { // BUG: Hidden for this testcase during contest. 194/195 passed
+            int n = a.length;
+            if (n == 1 && k  % 2 == 1) return -1;
+            if (k >= n) return Arrays.stream(a).max().getAsInt();
+            int max = -1;
+            for (int i = 0; i < k-1; i++) 
+                max = Math.max(max, a[i]);
+            if (n == k) max = Math.max(max, a[k-1]);
+            else if (a[k] < max) return max;
+            return a[k];
+            // return max >= a[k] ? max : a[k];
+        }
 
         public long minimumWeight(int n, int[][] edges, int sa, int sb, int dest) {
+            Arrays.sort(edges, (x, y)->x[0] != y[0] ? x[0] - y[0] : x[1] - y[1]);
             adj = new ArrayList [n];
             for (int i = 0; i < n; i++) adj[i] = new ArrayList<>();
-            for (int [] e : edges) 
+            int [] pre = null; // 把相同两个节点间同向重边去掉不用考虑
+            for (int [] e : edges) {
+                if (pre != null && e[0] == pre[0] && e[1] == pre[1]) continue;
                 adj[e[0]].add(new int [] {e[1], e[2]});
+                pre = e;
+            }
+            // 剔除掉无法到达的情况
             if (!dfs(sa, dest) || !dfs(sb, dest)) return -1;
+            // 主要剩余部分的处理：以前有增加一条边、减少一条边的最小生成树问题，思路还是想不太清楚
             
-            // return -1;
+            return -1;
         }        
         List<int []>[] adj;
-        boolean dfs(int u, int t) {
+        boolean dfs(int u, int t) { // 这里面需要考虑是否形成一个环，如果有环，会无限循环需要vis标记
             if (u == t) return true;
             for (int [] v : adj[u]) 
                 if (dfs(v[0], t)) return true;
@@ -88,9 +95,9 @@ public class cmp {
     public static void main(String args[]) {
         Solution s = new Solution();
 
-        int [][] a = new int [][] {{0,1,1},{2,1,1}};
+        int [][] a = new int [][] {{0,2,2},{0,5,6},{1,0,3},{1,4,5},{2,1,1},{2,3,3},{2,3,4},{3,4,2},{4,5,1}};
 
-        long r = s.minimumWeight(3, a, 0, 1, 2);
+        long r = s.minimumWeight(6, a, 0, 1, 5);
         System.out.println("r: " + r);
 
         // int [] a = new int [] {5,2,2,4,0,6};
