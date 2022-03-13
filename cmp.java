@@ -1,5 +1,4 @@
 import com.TreeNode;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
@@ -13,126 +12,95 @@ import static java.util.stream.Collectors.toMap;
 public class cmp {
     public static class Solution {
 
-        public List<String> cellsInRange(String t) {
-            List<String> l = new ArrayList<>();
-            char [] s = t.toCharArray();
-            for (char i = s[0]; i <= s[3]; i++) 
-                for (char j = s[1]; j <= s[4]; j++) 
-                    l.add(new String("" + i + j));
-            return l;
-        }
+        // public List<Integer> findKDistantIndices(int[] a, int key, int k) {
+        //     int n = a.length;
+        //     TreeSet<Integer> s = new TreeSet<>();
+        //     for (int i = 0; i < n; i++) 
+        //         if (a[i] == key) s.add(i);
+        //     List<Integer> ans = new ArrayList<>();
+        //     for (int i = 0; i < n; i++) {
+        //         if (i == 0 && Math.abs(s.first()) <= k) {
+        //             ans.add(0);
+        //             continue;
+        //         }
+        //         Integer lo = s.floor(i);
+        //         Integer hi = s.ceiling(i);
+        //         if (lo != null && Math.abs(lo - i) <= k || hi != null && Math.abs(hi - i) <= k)
+        //             ans.add(i);
+        //     }
+        //     return ans;
+        // }
 
-        public TreeNode createBinaryTree(int[][] descriptions) {
-            int n = 100001;
-            Map<Integer, TreeNode> roots = new HashMap<>(); // roots
-            List<TreeNode> trees = new ArrayList<>();
-            for (int [] v : descriptions) {
-                TreeNode cur = roots.getOrDefault(v[0], new TreeNode(v[0]));
-                if (v[2] == 1) 
-                    cur.left = new TreeNode(v[1]);
-                else cur.right = new TreeNode(v[1]);
-                if (!roots.containsKey(v[0])) {
-                    roots.put(v[0], cur);
-                    trees.add(cur);
-                }
-            }
-            for (final TreeNode node : trees) {
-                if (roots.containsKey(node.val)) { // 这里判断：是因为接下来 buildTree 会将可以合并的子树键值对删除并回收利用建大树了
-                    final TreeNode root = buildTree(roots, node);
-                    roots.put(root.val, root);
-                }
-            }
-            final TreeNode root = roots.values().iterator().next(); // 只有这一颗树根
-            return root;
-        }
-        private TreeNode buildTree(Map<Integer, TreeNode> roots, TreeNode node) { // 用 recursion 把所有需要/可以合并的子树建成一棵完整大树，方法很传神
-            final TreeNode next = roots.remove(node.val); // map.remove() 返回值: 如果存在 key, 则删除并返回 value；如果不存在则返回 null
-            if (next != null) {
-                if (next.left != null) node.left = buildTree(roots, next.left);
-                if (next.right != null) node.right = buildTree(roots, next.right);
-            }
-            return node;
-        }
+        // public int digArtifacts(int n, int[][] a, int[][] d) { // artifacts dig
+        //     int m = a.length;
+        //     Arrays.sort(a, (x, y)->x[0] != y[0] ? x[0] - y[0] : x[1] - y[1]);
+        //     Arrays.sort(d, (x, y)->x[0] != y[0] ? x[0] - y[0] : x[1] - y[1]);
+        //     boolean [][] vis = new boolean [n][n];
+        //     int ans = 0; // a
+        //     for (int [] v : d) 
+        //         vis[v[0]][v[1]] = true;
+        //     boolean valid = true;
+        //     for (int [] v : a) {
+        //         valid = true;
+        //         for (int i = v[0]; i <= v[2]; i++) {
+        //             for (int j = v[1]; j <= v[3]; j++)
+        //                 if (!vis[i][j]) {
+        //                     valid = false;
+        //                     break;
+        //                 }
+        //             if (!valid) break;
+        //         }
+        //         if (valid) ans++;
+        //     }
+        //     return ans;
+        // }
 
-        public long minimalKSum(int[] a, int k) { // tle
-            int n = a.length, i = 1, idx = 0;
-            long sum = 0;
-            Arrays.sort(a);
-            while (k > 0 && idx < n) {
-                System.out.println("\n k: " + k);
-                if (a[idx] > i) {
-                    while (k > 0 && i < a[idx]) {
-                        sum += i;
-                        i++;
-                        k--;
-                    }
-                    if (k == 0) return sum;
-                    while (idx < n && i == a[idx]) {
-                        i++;
-                        idx++;
-                    }
-                } else if (i == a[idx]) {
-                    i++;
-                    idx++;
-                } else if (i > a[idx]) idx++;
-            }
-            while (k > 0) {
-                sum += i++;
-                k--;
-            }
-            return sum;
-        }
+        // public int maximumTop(int[] a, int k) { // BUG: Hidden for this testcase during contest.
+        //     int n = a.length;
+        //     if (n == 1 && k  % 2 == 1) return -1;
+        //     if (k >= n) return Arrays.stream(a).max().getAsInt();
+        //     int max = -1;
+        //     for (int i = 0; i < k-1; i++) 
+        //         max = Math.max(max, a[i]);
+        //     if (n == k) max = Math.max(max, a[k-1]);
+        //     else if (a[k] < max) return max;
+        //     return a[k];
+        //     // return max >= a[k] ? max : a[k];
+        // }
 
-        public List<Integer> replaceNonCoprimes(int[] a) { // 这么debug得太烦琐了。。。。。。
-            int n = a.length, idx = 0;
-            List<Integer> l = new ArrayList<>();
-            l.add(a[0]);
-            for (int i = 1; i < n; i++) {
-                 System.out.println("\n i: " + i);
-                 if (a[i] == l.get(l.size()-1) && a[i] > 1) continue;
-                int v = gcd(l.get(l.size()-1), a[i]);
-                 System.out.println("v: " + v);
-                if (v > 1) {
-                    int cur = l.get(l.size()-1) * a[i] / v;
-                    System.out.println("cur: " + cur);
-                    if (cur != l.get(l.size()-1)) {
-                        if (cur > l.get(l.size()-1))
-                            l.set(l.size()-1, cur);
-                        else if (i > 1)
-                            l.add(cur);
-                        // else if (i > 1 && cur )
-                        else if (i == 1) l.set(0, cur);
-                    }
-                } else l.add(a[i]);
-                 System.out.println("l.size(): " + l.size());
-                 System.out.println(Arrays.toString(l.toArray()));
-            }
-            return l;
-        }
-        int gcd(int x, int y) {
-            if (x < y) return gcd(y, x);
-            if (y == 0) return x;
-            return gcd(y, x % y);
+        public long minimumWeight(int n, int[][] edges, int sa, int sb, int dest) {
+            adj = new ArrayList [n];
+            for (int i = 0; i < n; i++) adj[i] = new ArrayList<>();
+            for (int [] e : edges) 
+                adj[e[0]].add(new int [] {e[1], e[2]});
+            if (!dfs(sa, dest) || !dfs(sb, dest)) return -1;
+            
+            // return -1;
+        }        
+        List<int []>[] adj;
+        boolean dfs(int u, int t) {
+            if (u == t) return true;
+            for (int [] v : adj[u]) 
+                if (dfs(v[0], t)) return true;
+            return false;
         }
     }
     public static void main(String args[]) {
         Solution s = new Solution();
-        // long r = s.minimalKSum(a, 6);
 
-        // int [] a = new int [] {6,4,3,2,7,6,2};
-        // int [] a = new int [] {2,2,1,1,3,3,3};
-        // int []  a = new int []  {31, 97561, 97561, 97561, 97561, 97561, 97561, 97561, 97561};
-        // int []  a = new int []  {517, 11, 121, 517, 3, 51, 3, 1887, 5};
-        int []  a = new int []  {287, 41, 49, 287, 899, 23, 23, 20677, 5, 825};
+        int [][] a = new int [][] {{0,1,1},{2,1,1}};
 
-        System.out.println(Arrays.toString(a));
+        long r = s.minimumWeight(3, a, 0, 1, 2);
+        System.out.println("r: " + r);
 
-        List<Integer> r = s.replaceNonCoprimes(a);
-        System.out.println("r.size(): " + r.size());
-        System.out.println(Arrays.toString(r.toArray()));
+        // int [] a = new int [] {5,2,2,4,0,6};
+        // int []  a = new int []  {35, 43, 23, 86, 23, 45, 84, 2, 18, 83, 79, 28, 54, 81, 12, 94, 14, 0, 0, 29, 94, 12, 13, 1, 48, 85, 22, 95, 24, 5, 73, 10, 96, 97, 72, 41, 52, 1, 91, 3, 20, 22, 41, 98, 70, 20, 52, 48, 91, 84, 16, 30, 27, 35, 69, 33, 67, 18, 4, 53, 86, 78, 26, 83, 13, 96, 29, 15, 34, 80, 16, 49};
+
+        // int []  a = new int []  {91, 98, 17, 79, 15, 55, 47, 86, 4, 5, 17, 79, 68, 60, 60, 31, 72, 85, 25, 77, 8, 78, 40, 96, 76, 69, 95, 2, 42, 87, 48, 72, 45, 25, 40, 60, 21, 91, 32, 79, 2, 87, 80, 97, 82, 94, 69, 43, 18, 19, 21, 36, 44, 81, 99};
+        // int r = s.maximumTop(a, 2);
+        // System.out.println("r: " + r);
     }
 }
-
 // ListNode head = new ListNode(a[0]);
 // head.buildList(head, a);
 // head.printList(head);
@@ -140,5 +108,3 @@ public class cmp {
 // TreeNode root = new TreeNode(a[0]);
 // root.buildTree(root, a);
 // root.levelPrintTree(root);
-
-

@@ -903,14 +903,96 @@ public class mtwoixed {
         //     if (!s.isEmpty() && a[n-1] < s.peekLast() && vis) return false;
         //     return true;
         // }
+ 
+        // public int minimumFinishTime(int[][] tires, int changeTime, int numLaps) {
+        //     int [] best = new int [18];
+        //     Arrays.fill(best, Integer.MAX_VALUE);
+        //     // 记录真正的最大连续使用的圈数，17 只是我们估计出的上界
+        //     int maxDiff = 0;
+        //     for (int [] v : tires) {
+        //         long lap = v[0], cur = v[0];
+        //         for (int i = 1; lap < changeTime + v[0]; i++) {
+        //             best[i] = Math.min(best[i], (int)cur);
+        //             lap *= v[1];
+        //             cur += lap;
+        //             maxDiff = Math.max(maxDiff, i);
+        //         }
+        //     }
+        //     int [] f = new int [numLaps+1];
+        //     Arrays.fill(f, Integer.MAX_VALUE);
+        //     f[0] = 0;
+        //     for (int i = 1; i <= numLaps; i++) 
+        //         for (int j = i-1; j >= 0 && i-j <= maxDiff; j--) 
+        //             f[i] = Math.min(f[i], f[j] + best[i-j] + changeTime);
+        //     return f[numLaps] - changeTime;
+        // }
 
+        // public int[] constructArray(int n, int k) { // O(k*n)
+        //     // 初始化为1到n，此时差值为1种
+        //     int [] ans = new int [n];
+        //     for (int i = 0; i < n; i++) 
+        //         ans[i] = i+1;
+        //     // 然后从第二位到末位开始不停翻转，每翻转一次增加一种差值
+        //     for (int i = 1; i < k; i++) 
+        //         swap(ans, i, n-1);
+        //     return ans;
+        // }
+        // void swap(int [] a, int l, int r) {
+        //     for (int i = 0; i <= (r-l) / 2; i++) {
+        //         int tmp = a[l+i];
+        //         a[l+i] = a[r-i];
+        //         a[r-i] = tmp;
+        //     }
+        // }
+        // public int[] constructArray(int n, int k) { // O(N)
+        //     int l = 1, r = k + 1, idx = 0;
+        //     int [] ans = new int [n];
+        //     while (l <= r) {
+        //         ans[idx++] = l++;
+        //         if (l <= r)
+        //             ans[idx++] = r--;
+        //     }
+        //     for (int i = k+2; i <= n; i++)
+        //         ans[idx++] = i;
+        //     return ans;
+        // }
+
+        // public int monotoneIncreasingDigits(int val) {
+        //     t = String.valueOf(val);
+        //     n = t.length();
+        //     s = t.toCharArray();
+        //     return Integer.parseInt(getMID(0));
+        // }
+        // String t;
+        // char [] s;
+        // int n;
+        // String getMID(int idx) {
+        //     if (idx == n-1) return "" + s[idx];
+        //     if ((""+s[idx]).repeat(n-idx).compareTo(t.substring(idx)) <= 0)
+        //         return "" + s[idx] + getMID(idx+1);
+        //     else return (s[idx] == '1' ? "" : (char)('0'+(s[idx]-'1'))) + "9".repeat(n-idx-1);
+        // }
+
+        // public boolean isIdealPermutation(int[] a) {
+        //     int n = a.length;
+        //     if (n <= 2) return true;
+        //     int max = a[0];
+        //     for (int i = 2; i < n; i++) {
+        //         max = Math.max(max, a[i-2]);
+        //         if (a[i] < max) return false;
+        //     }
+        //     return true;
+        // }
+
+        
         
     }
     public static void main (String[] args) {
         Solution s  =  new Solution ();
 
+        int []  a = new int []  {0, 1, 3, 2};
 
-        boolean r = s.checkPossibility(a); // return 2. You can choose:
+        boolean r = s.isIdealPermutation(a); // return 2. You can choose:
         System.out.println("r: " + r);
     }
 }
@@ -918,8 +1000,6 @@ public class mtwoixed {
 // ListNode head = new ListNode(a[0]);
 // head.buildList(head, a);
 // head.printList(head);
-
-
 
 
 
