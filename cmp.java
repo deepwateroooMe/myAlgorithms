@@ -55,19 +55,6 @@ public class cmp {
         //     return ans;
         // }
 
-        public int maximumTop(int[] a, int k) { // BUG: Hidden for this testcase during contest. 194/195 passed
-            int n = a.length;
-            if (n == 1 && k  % 2 == 1) return -1;
-            if (k >= n) return Arrays.stream(a).max().getAsInt();
-            int max = -1;
-            for (int i = 0; i < k-1; i++) 
-                max = Math.max(max, a[i]);
-            if (n == k) max = Math.max(max, a[k-1]);
-            else if (a[k] < max) return max;
-            return a[k];
-            // return max >= a[k] ? max : a[k];
-        }
-
         public long minimumWeight(int n, int[][] edges, int sa, int sb, int dest) {
             Arrays.sort(edges, (x, y)->x[0] != y[0] ? x[0] - y[0] : x[1] - y[1]);
             adj = new ArrayList [n];
@@ -91,21 +78,37 @@ public class cmp {
                 if (dfs(v[0], t)) return true;
             return false;
         }
+
+        public int maximumTop(int[] a, int k) { // BUG: Hidden for this testcase during contest. 194/195 passed
+            int n = a.length;
+            if (n == 1 && k  % 2 == 1) return -1;
+            if (k > n) return Arrays.stream(a).max().getAsInt();
+            int max = -1;
+            for (int i = 0; i < k-1; i++) 
+            // for (int i = 0; i < (k == n ? k-1 : k); i++) 
+                max = Math.max(max, a[i]);
+            // return max;
+            if (n == k) return max; // = Math.max(max, a[k-1]);
+            else if (a[k] < max) return max;
+            return a[k];
+        }
     }
     public static void main(String args[]) {
         Solution s = new Solution();
 
-        int [][] a = new int [][] {{0,2,2},{0,5,6},{1,0,3},{1,4,5},{2,1,1},{2,3,3},{2,3,4},{3,4,2},{4,5,1}};
-
-        long r = s.minimumWeight(6, a, 0, 1, 5);
-        System.out.println("r: " + r);
+        // int [][] a = new int [][] {{0,2,2},{0,5,6},{1,0,3},{1,4,5},{2,1,1},{2,3,3},{2,3,4},{3,4,2},{4,5,1}};
+        // long r = s.minimumWeight(6, a, 0, 1, 5);
+        // System.out.println("r: " + r);
 
         // int [] a = new int [] {5,2,2,4,0,6};
-        // int []  a = new int []  {35, 43, 23, 86, 23, 45, 84, 2, 18, 83, 79, 28, 54, 81, 12, 94, 14, 0, 0, 29, 94, 12, 13, 1, 48, 85, 22, 95, 24, 5, 73, 10, 96, 97, 72, 41, 52, 1, 91, 3, 20, 22, 41, 98, 70, 20, 52, 48, 91, 84, 16, 30, 27, 35, 69, 33, 67, 18, 4, 53, 86, 78, 26, 83, 13, 96, 29, 15, 34, 80, 16, 49};
+        // int []  a = new int []  {35, 43, 23, 86, 23, 45, 84, 2, 18, 83, 79, 28, 54, 81, 12, 94, 14, 0, 0, 29, 94, 12, 13, 1, 48, 85, 22, 95, 24, 5, 73, 10, 96, 97, 72, 41, 52, 1, 91, 3, 20, 22, 41, 98, 70, 20, 52, 48, 91, 84, 16, 30, 27, 35, 69, 33, 67, 18, 4, 53, 86, 78, 26, 83, 13, 96, 29, 15, 34, 80, 16, 49}     ;
 
         // int []  a = new int []  {91, 98, 17, 79, 15, 55, 47, 86, 4, 5, 17, 79, 68, 60, 60, 31, 72, 85, 25, 77, 8, 78, 40, 96, 76, 69, 95, 2, 42, 87, 48, 72, 45, 25, 40, 60, 21, 91, 32, 79, 2, 87, 80, 97, 82, 94, 69, 43, 18, 19, 21, 36, 44, 81, 99};
-        // int r = s.maximumTop(a, 2);
-        // System.out.println("r: " + r);
+        int [] a = new int [] {0, 1, 2};
+        // int []  a = new int []  {100, 9, 6, 8, 7};
+
+        int r = s.maximumTop(a, 3);
+        System.out.println("r: " + r);
     }
 }
 // ListNode head = new ListNode(a[0]);
