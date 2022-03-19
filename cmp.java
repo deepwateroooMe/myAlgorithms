@@ -12,102 +12,126 @@ import static java.util.stream.Collectors.toMap;
 public class cmp {
     public static class Solution {
 
-        // public List<Integer> findKDistantIndices(int[] a, int key, int k) {
-        //     int n = a.length;
-        //     TreeSet<Integer> s = new TreeSet<>();
-        //     for (int i = 0; i < n; i++) 
-        //         if (a[i] == key) s.add(i);
-        //     List<Integer> ans = new ArrayList<>();
-        //     for (int i = 0; i < n; i++) {
-        //         if (i == 0 && Math.abs(s.first()) <= k) {
-        //             ans.add(0);
-        //             continue;
-        //         }
-        //         Integer lo = s.floor(i);
-        //         Integer hi = s.ceiling(i);
-        //         if (lo != null && Math.abs(lo - i) <= k || hi != null && Math.abs(hi - i) <= k)
-        //             ans.add(i);
-        //     }
-        //     return ans;
+        // public boolean divideArray(int[] a) {
+        //     int n = 501;
+        //     int [] cnt = new int [n];
+        //     for (int v : a) 
+        //         cnt[v]++;
+        //     for (int i = 1; i < n; i++) 
+        //         if (cnt[i] % 2 != 0) return false;
+        //     return true;
         // }
 
-        // public int digArtifacts(int n, int[][] a, int[][] d) { // artifacts dig
-        //     int m = a.length;
-        //     Arrays.sort(a, (x, y)->x[0] != y[0] ? x[0] - y[0] : x[1] - y[1]);
-        //     Arrays.sort(d, (x, y)->x[0] != y[0] ? x[0] - y[0] : x[1] - y[1]);
-        //     boolean [][] vis = new boolean [n][n];
-        //     int ans = 0; // a
-        //     for (int [] v : d) 
-        //         vis[v[0]][v[1]] = true;
-        //     boolean valid = true;
-        //     for (int [] v : a) {
-        //         valid = true;
-        //         for (int i = v[0]; i <= v[2]; i++) {
-        //             for (int j = v[1]; j <= v[3]; j++)
-        //                 if (!vis[i][j]) {
-        //                     valid = false;
-        //                     break;
-        //                 }
-        //             if (!valid) break;
-        //         }
-        //         if (valid) ans++;
+        // public int halveArray(int[] a) {
+        //     int n = a.length, cnt = 0;
+        //     Arrays.sort(a);
+        //     long sum = 0;
+        //     Queue<Double> q = new PriorityQueue<>((x, y)->Double.compare(y, x));
+        //     for (int v : a) {
+        //         sum += v;
+        //         q.offer((double)v);
         //     }
-        //     return ans;
+        //     double cur = (double)sum;
+        //     System.out.println("sum: " + sum);
+        //     while (cur > (double)sum / 2.0) {
+        //         double top = q.poll();
+        //         cur -= top / 2.0;
+        //         q.offer(top / 2.0);
+        //         cnt++;
+        //     }
+        //     return cnt;
         // }
 
-        public long minimumWeight(int n, int[][] edges, int sa, int sb, int dest) {
-            Arrays.sort(edges, (x, y)->x[0] != y[0] ? x[0] - y[0] : x[1] - y[1]);
-            adj = new ArrayList [n];
-            for (int i = 0; i < n; i++) adj[i] = new ArrayList<>();
-            int [] pre = null; // 把相同两个节点间同向重边去掉不用考虑
-            for (int [] e : edges) {
-                if (pre != null && e[0] == pre[0] && e[1] == pre[1]) continue;
-                adj[e[0]].add(new int [] {e[1], e[2]});
-                pre = e;
+        public long maximumSubsequenceCount(String text, String t) { // tle ? O(N)怎么会tle呢？想不通
+            text = " " + text + " ";
+            int n = text.length();
+            char [] s = t.toCharArray();
+            char [] ti = text.toCharArray();
+            int [] ca = new int [n], cb = new int [n];
+            for (int i = 0; i < n; i++) {    // 从前往后数第一个字母出现的次数
+                if (ti[i] == s[0]) ca[i] = (i == 0 ? 1 : ca[i-1] + 1);
+                else ca[i] = (i == 0 ? 0 : ca[i-1]);
             }
-            // 剔除掉无法到达的情况
-            if (!dfs(sa, dest) || !dfs(sb, dest)) return -1;
-            // 主要剩余部分的处理：以前有增加一条边、减少一条边的最小生成树问题，思路还是想不太清楚
-            
-            return -1;
-        }        
-        List<int []>[] adj;
-        boolean dfs(int u, int t) { // 这里面需要考虑是否形成一个环，如果有环，会无限循环需要vis标记
-            if (u == t) return true;
-            for (int [] v : adj[u]) 
-                if (dfs(v[0], t)) return true;
-            return false;
+            for (int i = n-1; i >= 0; i--) { // 从后往前数第二个字母出现的次数
+                if (ti[i] == s[1]) cb[i] = (i == n-1 ? 1 : cb[i+1] + 1);
+                else cb[i] = (i == n-1 ? 0 : cb[i+1]);
+            }
+            // System.out.println(Arrays.toString(ca));
+            // System.out.println(Arrays.toString(cb));
+            long ans = 0, cur = 0;
+            for (int i = 0; i < n; i++) 
+                // if (ti[i] == s[0] && (s[0] != s[1] || cb[i] > 1)) cur += s[0] != s[1] ? (long)cb[i] : (long)cb[i]-1;
+                if (ti[i] == s[0]) cur += s[0] != s[1] ? (long)cb[i] : (long)cb[i]-1;
+            ans = cur;
+            // System.out.println("ans: " + ans);
+            long [] sa = new long [n], sb = new long [n];
+            sa[0] = ca[0];
+            for (int i = 1; i < n; i++) sa[i] = sa[i-1] + ca[i];
+            sb[n-1] = cb[n-1];
+            for (int i = n-2; i >= 0; i--) sb[i] = sb[i+1] + cb[i];
+            for (int i = 0; i < n-1; i++) { // 在当前字母的后面加一个字母： //这里面的改变量好像计算得不对：需要累加?应该是对的
+                // 添加a：填加cb[i]个；添加b：填加ca[i]个；
+                long v = Math.max(cb[i], ca[i]);
+                ans = Math.max(ans, cur + v);
+                // if (ti[i] != s[0] && ti[i] != s[1]) {
+                //     long v = Math.max(cb[i], ca[i]);
+                //     ans = Math.max(ans, cur + v);
+                // }
+            }
+            return ans;
         }
 
-        public int maximumTop(int[] a, int k) { // BUG: Hidden for this testcase during contest. 194/195 passed
-            int n = a.length;
-            if (n == 1 && k  % 2 == 1) return -1;
-            if (k > n) return Arrays.stream(a).max().getAsInt();
-            int max = -1;
-            for (int i = 0; i < k-1; i++) 
-            // for (int i = 0; i < (k == n ? k-1 : k); i++) 
-                max = Math.max(max, a[i]);
-            // return max;
-            if (n == k) return max; // = Math.max(max, a[k-1]);
-            else if (a[k] < max) return max;
-            return a[k];
+        public int minimumWhiteTiles(String floor, int numCarpets, int carpetLen) { 
+            int n = floor.length();
+            List<List<Integer>> [] len = new List[n];
+            for (int i = 0; i < n; i++) 
+                len.add(new ArrayList<>());
+            // Queue<List<Integer>> q = new PriorityQueue<>((x, y) -> );
+            char [] s = floor.toCharArray();
+            int [] cnt = new int [n];
+            for (int i = n-1; i >= 0; i--) {
+                if (s[i] == '0') {
+                    cnt[i] = (i == n-1 ? 0 : cnt[i+1]);
+                    if (i < n-1)
+                        len[i].addAll(len[i+1]);
+                } else {
+                    cnt[i] = (i == n-1 ? 1 : cnt[i+1] + 1);
+                    if (i < n-1)
+                        len[i].addAll(len[i+1]);
+                    len[i].add(0, i);
+                }
+            }
+            if (numCarpets * carpetLen >= n) return 0; // 关于重复的部分：想不透
+            System.out.println(Arrays.toString(cnt));
+            // int [][] ct = new int [n][n];
+            int max = 0, maxIdx = -1, ct = 0;
+            boolean [] vis = new boolean [n];
+            while (ct < numCarpets) {
+                for (int v : cnt) {
+                    if (v <= carpetLen) {
+                        if (v >)
+                    }
+                }
+            }
+            return 0;
         }
+
     }
     public static void main(String args[]) {
         Solution s = new Solution();
 
-        // int [][] a = new int [][] {{0,2,2},{0,5,6},{1,0,3},{1,4,5},{2,1,1},{2,3,3},{2,3,4},{3,4,2},{4,5,1}};
-        // long r = s.minimumWeight(6, a, 0, 1, 5);
-        // System.out.println("r: " + r);
+        // String a = "abdcdbc";
+        // String b = "ac";
+        // String a = "aabb";
+        // String b = "ab";
+        // String a = "fwymvreuftzgrcrxczjacqovduqaiig";
+        // String b = "yy";
+        String a = "vnedkpkkyxelxqptfwuzcjhqmwagvrglkeivowvbjdoyydnjrqrqejoyptzoklaxcjxbrrfmpdxckfjzahparhpanwqfjrpbslsyiwbldnpjqishlsuagevjmiyktgofvnyncizswldwnngnkifmaxbmospdeslxirofgqouaapfgltgqxdhurxljcepdpndqqgfwkfiqrwuwxfamciyweehktaegynfumwnhrgrhcluenpnoieqdivznrjljcotysnlylyswvdlkgsvrotavnkifwmnvgagjykxgwaimavqsxuitknmbxppgzfwtjdvegapcplreokicxcsbdrsyfpustpxxssnouifkypwqrywprjlyddrggkcglbgcrbihgpxxosmejchmzkydhquevpschkpyulqxgduqkqgwnsowxrmgqbmltrltzqmmpjilpfxocflpkwithsjlljxdygfvstvwqsyxlkknmgpppupgjvfgmxnwmvrfuwcrsadomyddazlonjyjdeswwznkaeaasyvurpgyvjsiltiykwquesfjmuswjlrphsdthmuqkrhynmqnfqdlwnwesdmiiqvcpingbcgcsvqmsmskesrajqwmgtdoktreqssutpudfykriqhblntfabspbeddpdkownehqszbmddizdgtqmobirwbopmoqzwydnpqnvkwadajbecmajilzkfwjnpfyamudpppuxhlcngkign";
+        String b = "rr";
+        System.out.println("a: " + a);
+        System.out.println("b: " + b);
 
-        // int [] a = new int [] {5,2,2,4,0,6};
-        // int []  a = new int []  {35, 43, 23, 86, 23, 45, 84, 2, 18, 83, 79, 28, 54, 81, 12, 94, 14, 0, 0, 29, 94, 12, 13, 1, 48, 85, 22, 95, 24, 5, 73, 10, 96, 97, 72, 41, 52, 1, 91, 3, 20, 22, 41, 98, 70, 20, 52, 48, 91, 84, 16, 30, 27, 35, 69, 33, 67, 18, 4, 53, 86, 78, 26, 83, 13, 96, 29, 15, 34, 80, 16, 49}     ;
-
-        // int []  a = new int []  {91, 98, 17, 79, 15, 55, 47, 86, 4, 5, 17, 79, 68, 60, 60, 31, 72, 85, 25, 77, 8, 78, 40, 96, 76, 69, 95, 2, 42, 87, 48, 72, 45, 25, 40, 60, 21, 91, 32, 79, 2, 87, 80, 97, 82, 94, 69, 43, 18, 19, 21, 36, 44, 81, 99};
-        int [] a = new int [] {0, 1, 2};
-        // int []  a = new int []  {100, 9, 6, 8, 7};
-
-        int r = s.maximumTop(a, 3);
+        long r = s.maximumSubsequenceCount(a, b);
         System.out.println("r: " + r);
     }
 }
