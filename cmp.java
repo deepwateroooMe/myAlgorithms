@@ -169,72 +169,117 @@ public class cmp {
         // Store the span of each letter in a TreeMap
         // Also use a second TreeMap to record the frequency of each span length
         // On each query, update both TreeMaps
-        public int[] longestRepeating(String s, String queryCharacters, int[] queryIndices) {
-            char[] arr = s.toCharArray();
-            int m = arr.length, n = queryIndices.length;
-            int[] output = new int[n];
-            TreeMap<Integer, Integer> lengths = new TreeMap<>(), spans = new TreeMap<>();
-            // Stores spans of each letter in the TreeMap
-            for (int i = 0, j = 1; j <= m; j++) if (j == m || arr[i] != arr[j]) {
-                    lengths.put(j - i, lengths.getOrDefault(j - i, 0) + 1);
-                    spans.put(i, j - 1);
+        public int[] longestRepeating(String t, String qchar, int[] idx) { 
+            int n = t.length(), k = qchar.length();
+            char [] s = t.toCharArray();
+            char [] q = qchar.toCharArray();
+            int [] ans = new int [k];
+            TreeMap<Integer, Integer> len = new TreeMap<>(), span = new TreeMap<>(); // 两个升序排列的字典：单一字符序列首尾下标对
+            // Stores span of each letter in the TreeMap
+            for (int i = 0, j = 1; j <= n; j++)
+                if (j == n || s[i] != s[j]) {
+                    len.put(j-i, len.getOrDefault(j-i, 0) + 1);
+                    span.put(i, j-1);
                     i = j;
                 }
-            // Update spans on each query and find the max length
-            for (int i = 0; i < queryIndices.length; i++) {
-                int j = queryIndices[i];
-                if (arr[j] != queryCharacters.charAt(i)) {
-                    // Remove the spans that has the character to be updated
-                    int l = spans.floorKey(j), r = spans.remove(l), length = r - l + 1;
-                    if (lengths.get(length) == 1) lengths.remove(length);
-                    else lengths.put(length, lengths.get(length) - 1);
-                    // if the character is going to be different from its neighbors, break the span
-                    if (l < j) {
-                        spans.put(l, j - 1);
-                        lengths.put(j - l, lengths.getOrDefault(j - l, 0) + 1);
+            // Update span on each query and find the max length
+            for (int i = 0; i < k; i++) {
+                int j = idx[i];
+                if (s[j] != q[i]) {
+                    // Remove the span that has the character to be updated
+                    int l = span.floorKey(j), r = span.remove(l), length = r - l + 1;
+                    if (len.get(length) == 1) len.remove(length);
+                    else len.put(length, len.get(length)-1);
+                    // if the character is going to be different from its neighbors, break the span 当前的不同字符将原序列折成了几段: 需要左右更新
+                    if (l < j) { 
+                        span.put(l, j-1);
+                        len.put(j-l, len.getOrDefault(j-l, 0) + 1);
                     }
                     if (r > j) {
-                        spans.put(j + 1, r);
-                        lengths.put(r - j, lengths.getOrDefault(r - j, 0) + 1);
+                        span.put(j+1, r);
+                        len.put(r-j, len.getOrDefault(r-j, 0) + 1);
                     }
-                    arr[j] = queryCharacters.charAt(i);
+                    s[j] = q[i];
                     l = j;
                     r = j;
-                    // if the character is going to be same as its neighbors, merge the spans
-                    if (j > 0 && arr[j] == arr[j - 1]) {
-                        l = spans.floorKey(j);
-                        length = spans.remove(l) - l + 1;
-                        if (lengths.get(length) == 1) lengths.remove(length);
-                        else lengths.put(length, lengths.get(length) - 1);
+                    // if the character is going to be same as its neighbors, merge the span
+                    if (j > 0 && s[j] == s[j-1]) {
+                        l = span.floorKey(j);
+                        length = span.remove(l) - l + 1;
+                        if (len.get(length) == 1) len.remove(length);
+                        else len.put(length, len.get(length)-1);
                     }
-                    if (j < m - 1 && arr[j] == arr[j + 1]) {
-                        int key = spans.ceilingKey(j);
-                        r = spans.remove(key);
+                    if (j < n-1 && s[j] == s[j+1]) {
+                        int key = span.ceilingKey(j);
+                        r = span.remove(key);
                         length = r - key + 1;
-                        if (lengths.get(length) == 1) lengths.remove(length);
-                        else lengths.put(length, lengths.get(length) - 1);
+                        if (len.get(length) == 1) len.remove(length);
+                        else len.put(length, len.get(length)-1);
                     }
-                    spans.put(l, r);
-                    lengths.put(r - l + 1, lengths.getOrDefault(r - l + 1, 0) + 1);
+                    span.put(l, r);
+                    len.put(r-l+1, len.getOrDefault(r-l+1, 0) + 1);
                 }
-                output[i] = lengths.lastKey();
+                ans[i] = len.lastKey();
             }
-            return output;
+            return ans;
         }
-        public int[] longestRepeating(String t, String queryCharacters, int[] idx) { // 感觉思路想得是清淅的，可能想得还不是很彻底吧
-            int n = t.length(), k = queryCharacters.length();
-            char [] s = t.toCharArray();
-            char [] q = queryCharacters.toCharArray();
-            
-        }
+        // public int[] longestRepeating(String s, String queryCharacters, int[] queryIndices) {
+        //     char[] arr = s.toCharArray();
+        //     int m = arr.length, n = queryIndices.length;
+        //     int[] output = new int[n];
+        //     TreeMap<Integer, Integer> lengths = new TreeMap<>(), span = new TreeMap<>();
+        //     for (int i = 0, j = 1; j <= m; j++) if (j == m || arr[i] != arr[j]) {
+        //             lengths.put(j - i, lengths.getOrDefault(j - i, 0) + 1);
+        //             span.put(i, j - 1);
+        //             i = j;
+        //         }
+        //     for (int i = 0; i < queryIndices.length; i++) {
+        //         int j = queryIndices[i];
+        //         if (arr[j] != queryCharacters.charAt(i)) {
+        //             int l = span.floorKey(j), r = span.remove(l), length = r - l + 1;
+        //             if (lengths.get(length) == 1) lengths.remove(length);
+        //             else lengths.put(length, lengths.get(length) - 1);
+        //             if (l < j) {
+        //                 span.put(l, j - 1);
+        //                 lengths.put(j - l, lengths.getOrDefault(j - l, 0) + 1);
+        //             }
+        //             if (r > j) {
+        //                 span.put(j + 1, r);
+        //                 lengths.put(r - j, lengths.getOrDefault(r - j, 0) + 1);
+        //             }
+        //             arr[j] = queryCharacters.charAt(i);
+        //             l = j;
+        //             r = j;
+        //             if (j > 0 && arr[j] == arr[j - 1]) {
+        //                 l = span.floorKey(j);
+        //                 length = span.remove(l) - l + 1;
+        //                 if (lengths.get(length) == 1) lengths.remove(length);
+        //                 else lengths.put(length, lengths.get(length) - 1);
+        //             }
+        //             if (j < m - 1 && arr[j] == arr[j + 1]) {
+        //                 int key = span.ceilingKey(j);
+        //                 r = span.remove(key);
+        //                 length = r - key + 1;
+        //                 if (lengths.get(length) == 1) lengths.remove(length);
+        //                 else lengths.put(length, lengths.get(length) - 1);
+        //             }
+        //             span.put(l, r);
+        //             lengths.put(r - l + 1, lengths.getOrDefault(r - l + 1, 0) + 1);
+        //         }
+        //         output[i] = lengths.lastKey();
+        //     }
+        //     return output;
+        // }
     }
     public static void main(String args[]) {
         Solution s = new Solution();
 
-        String a = "RLRSLL";
+        String a = "babacc";
+        String b = "bcb";
+        int [] c = new int [] {1, 3, 3};
 
-        int r = s.countCollisions(a);
-        System.out.println("r: " + r);
+        int [] r = s.longestRepeating(a, b, c);
+        System.out.println(Arrays.toString(r));
     }
 }
 // ListNode head = new ListNode(a[0]);
