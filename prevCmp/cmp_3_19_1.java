@@ -102,6 +102,22 @@ public class cmp {
         //     }
         //     return 0;
         // }
+        public int minimumWhiteTiles(String floor, int num, int le) {
+            int n = floor.length();
+            char [] s = floor.toCharArray();
+            int [][] f = new int [num+1][n];
+            f[0][0] = s[0] % 2; // (s[0]-'0') % 2 ??? 
+            for (int i = 1; i < n; i++) // 初始化不用任何毯子的时候的最大值
+                f[0][i] = f[0][i-1] + s[i] % 2;
+            for (int i = 1; i <= num; i++) { // 遍历使用地毯的数量
+                // j < carpetLen （le） 的 f[i][j] 均为 0
+                for (int j = le; j < n; j++) {
+                    // 分用第i块地毯，并盖至j-1的情况，以及用第i块地毯，i-1盖至j-len的情况，两种情况取最小值
+                    f[i][j] = Math.min(f[i][j-1] + s[j] % 2, f[i-1][j-le]);
+                }
+            }
+            return f[num][n-1];
+        }
 
     }
     public static void main(String args[]) {

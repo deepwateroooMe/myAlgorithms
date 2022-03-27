@@ -12,273 +12,123 @@ import static java.util.stream.Collectors.toMap;
 public class cmp {
     public static class Solution {
 
-        // public int countHillValley(int[] a) {
-        //     int n = a.length, cnt = 0;
-        //     for (int i = 1; i < n; i++) {
-        //         if (a[i] == a[i-1]) continue;
-        //         if (a[i] > a[i-1]) {
-        //             int j = i+1;
-        //             while (j < n && a[j] == a[i]) j++;
-        //             if (j == n) return cnt;
-        //             if (a[j] < a[i]) cnt++;
-        //             i = j-1;
-        //         } else { // a[i] < a[i-1]
-        //             int j = i+1;
-        //             while (j < n && a[j] == a[i]) j++;
-        //             if (j == n) return cnt;
-        //             if (a[j] > a[i]) cnt++;
-        //             i = j-1;
-        //         }
-        //     }
-        //     return cnt;
-        // }
-
-        // // 很久没有写算法题，居然连bitmask也会忘记了。。。。。。
-        // public int[] maximumBobPoints(int numArrows, int[] a) { // 这个应该是动态规划的题吧：现在对动态规划的题有点儿陌生了。。。。。。
-        //     int n = a.length;
-        //     int [] b = new int [n];
-        //     for (int i = 0; i < n; i++) 
-        //         b[i] = a[i] + 1;
-        //     int max = 0, mmask = 0, sum = 0, cur = 0;
-        //     for (int i = 1; i < (1 << n); i++) {
-        //         sum = 0;
-        //         cur = 0; // maxScore
-        //         for (int j = 1; j < n; j++) { // 遍历b[j]: 这里下标0不得分，所以暂时就不用考虑
-        //             if (((i >> j) & 1) == 1) {
-        //                 sum += b[j];
-        //                 cur += j;
-        //             }
-        //         }
-        //         if (sum > numArrows) continue;
-        //         if (cur > max) {
-        //             max = cur;
-        //             mmask = i;
-        //         }
-        //     }
-        //     int [] ans = new int [n];
-        //     for (int i = 0; i < n; i++) 
-        //         if (((mmask >> i) & 1) == 0) 
-        //             b[i] = 0;
-        //     b[0] = numArrows - Arrays.stream(b).sum();
-        //     return b;
-        // }
-
-        // public int countCollisions(String t) {
-        //     int n = t.length(), ans = 0;
-        //     char [] s = t.toCharArray();
-        //     Deque<Character> st = new ArrayDeque<>();
-        //     st.offerLast(s[0]);
-        //     for (int i = 1; i < n; i++) {
-        //         char c = s[i];
-        //         if (!st.isEmpty() && st.peekLast() == 'R' && c == 'L') {
-        //             ans += 2;
-        //             st.pollLast();
-        //             c = 'S'; // 相撞了之后会变成这个样子的
-        //         } else if (!st.isEmpty() && st.peekLast() == 'S' && c == 'L') {
-        //             ans += 1;
-        //             c = 'S'; // 相撞了之后会变成这个样子的
-        //         }
-        //         while (!st.isEmpty() && st.peekLast() == 'R' && c == 'S') {
-        //             ans += 1;
-        //             st.pollLast();
-        //         }
-        //         st.offerLast(c); // 最终的最新状态入栈
-        //     }
-        //     return ans;
-        // }
-
-        // public int[] longestRepeating(String t, String queryCharacters, int[] idx) { // 感觉思路想得是清淅的，可能想得还不是很彻底吧
-        //     int n = t.length(), k = queryCharacters.length();
-        //     char [] s = t.toCharArray();
-        //     char [] q = queryCharacters.toCharArray();
-        //     int [][] l = new int [n][26], r = new int [n][26];
-        //     int [] ml = new int [n], mr = new int [n];
-        //     l[0][s[0]-'a']++;
-        //     ml[0] = 1;
-        //     for (int i = 1; i < n; i++) {
-        //         l[i][s[i]-'a'] = l[i-1][s[i]-'a'] + 1;
-        //         ml[i] = Math.max(ml[i-1], l[i][s[i]-'a']);
-        //     }
-        //     r[n-1][s[n-1]-'a']++;
-        //     mr[n-1] = 1;
-        //     for (int i = n-2; i >= 0; i--) {
-        //         r[i][s[i]-'a'] = 1 + r[i+1][s[i]-'a'];
-        //         mr[i] = Math.max(mr[i+1], r[i][s[i]-'a']);
-        //     }
-        //     int [] ans = new int [k];
-        //     for (int i = 0; i < k; i++) {
-        //         System.out.println("\n i: " + i);
-        //         char c = s[idx[i]];
-        //         if (q[i] == c) { // 完全相同，没有变化
-        //             ans[i] = Math.max(ml[i], mr[i]);
-        //             continue;
-        //         } // 接下来处理替换字母不同的情况：先 首尾两端
-        //         if (idx[i] == 0 || idx[i] == n-1) { // 与前后不同 与前后相同的情况处理
-        //             if (idx[i] == 0 && q[i] != s[idx[i]+1]) {
-        //                 ans[i] = mr[0];
-        //             } else if (idx[i] == 0 && q[i] == s[idx[i]+1]) {
-        //                 ans[i] = Math.max(mr[0], ++r[0][q[i]-'a']);
-        //                 if (r[0][q[i]-'a'] > mr[0]) mr[0] = r[0][q[i]-'a'];
-        //             }
-        //             else if (idx[i] == n-1 && q[i] != s[idx[i]-1]) ans[i] = ml[n-1];
-        //             else {
-        //                 ans[i] = Math.max(ml[n-1], ++l[n-1][q[i]-'a']);
-        //                 if (l[n-1][q[i]-'a'] > ml[n-1]) ml[n-1] = l[n-1][q[i]-'a'];
-        //             }
-        //             s[idx[i]] = q[i]; // 仍然需要更新
-        //             continue;
-        //         }
-        //         int j = idx[i];
-        //         if (q[i] != s[j-1] && q[i] != s[j+1]) { // 两边都不等
-        //             s[j] = q[i]; // 仍然需要更新
-        //             l[j][s[j]-'a'] = 1; //l[j-1][s[j]-'a'] + 1;
-        //             r[j][s[j]-'a'] = 1; //r[j+1][s[j]-'a'] + 1;
-        //             ans[i] = Math.max(ml[j], mr[j]);
-        //         } else if (q[i] == s[j-1] && q[i] == s[j+1]) { // 两边都等
-        //             if (ml[j] == l[j][s[j]-'a']) ml[j] = ml[j-1];
-        //             l[j][s[j]-'a'] = 0;
-        //             s[j] = q[i];
-        //             l[j][s[j]-'a'] = l[j-1][s[j]-'a'] + 1;
-        //             int x = j+1;
-        //             while (x < n && s[x] == s[j]) {
-        //                 ++l[x][s[j]-'a'];
-        //                 ml[x] = Math.max(ml[x-1], l[x][s[j]-'a']);
-        //                 x++;
-        //             }
-        //             // while (x < n &&) // 这里仍然要对右边的ml最大值进行更新，这样就可能会超时：到这里就终于知道这个题目仍然是思路不通了。。。。。。
-        //             r[j][s[j]-'a'] = r[j+1][s[j]-'a'] + 1;
-        //             ml[j] = Math.max(ml[j-1], l[j][s[j]-'a']);
-        //             mr[j] = Math.max(mr[j+1], r[j][s[j]-'a']);
-        //             ans[i] = Math.max(Math.max(ml[j], mr[j]), l[j][s[j]-'a'] + r[j][s[j]-'a'] - 1);
-        //         } else if (q[i] == s[j-1]) {
-        //             s[j] = q[i]; // 仍然需要更新
-        //             l[j][s[j]-'a'] = l[j-1][s[j]-'a'] + 1;
-        //             r[j][s[j]-'a'] = 1; //r[j+1][s[j]-'a'] + 1;
-        //             ml[j] = Math.max(ml[j-1], l[j][s[j]-'a']);
-        //             ans[i] = Math.max(ml[j], mr[j]);
-        //         } else {
-        //             s[j] = q[i];
-        //             l[j][s[j]-'a'] = 1;
-        //             r[j][s[j]-'a'] = r[j+1][s[j]-'a'] + 1;
-        //             mr[j] = Math.max(mr[j+1], r[j][s[j]-'a']);
-        //             ans[i] = Math.max(mr[j], ml[j]);
-        //         }
-        //     }
-        //     return ans;
-        // }
-        // Store the span of each letter in a TreeMap
-        // Also use a second TreeMap to record the frequency of each span length
-        // On each query, update both TreeMaps
-        public int[] longestRepeating(String t, String qchar, int[] idx) { 
-            int n = t.length(), k = qchar.length();
-            char [] s = t.toCharArray();
-            char [] q = qchar.toCharArray();
-            int [] ans = new int [k];
-            TreeMap<Integer, Integer> len = new TreeMap<>(), span = new TreeMap<>(); // 两个升序排列的字典：单一字符序列首尾下标对
-            // Stores span of each letter in the TreeMap
-            for (int i = 0, j = 1; j <= n; j++)
-                if (j == n || s[i] != s[j]) {
-                    len.put(j-i, len.getOrDefault(j-i, 0) + 1);
-                    span.put(i, j-1);
-                    i = j;
-                }
-            // Update span on each query and find the max length
-            for (int i = 0; i < k; i++) {
-                int j = idx[i];
-                if (s[j] != q[i]) {
-                    // Remove the span that has the character to be updated
-                    int l = span.floorKey(j), r = span.remove(l), length = r - l + 1;
-                    if (len.get(length) == 1) len.remove(length);
-                    else len.put(length, len.get(length)-1);
-                    // if the character is going to be different from its neighbors, break the span 当前的不同字符将原序列折成了几段: 需要左右更新
-                    if (l < j) { 
-                        span.put(l, j-1);
-                        len.put(j-l, len.getOrDefault(j-l, 0) + 1);
-                    }
-                    if (r > j) {
-                        span.put(j+1, r);
-                        len.put(r-j, len.getOrDefault(r-j, 0) + 1);
-                    }
-                    s[j] = q[i];
-                    l = j;
-                    r = j;
-                    // if the character is going to be same as its neighbors, merge the span
-                    if (j > 0 && s[j] == s[j-1]) {
-                        l = span.floorKey(j);
-                        length = span.remove(l) - l + 1;
-                        if (len.get(length) == 1) len.remove(length);
-                        else len.put(length, len.get(length)-1);
-                    }
-                    if (j < n-1 && s[j] == s[j+1]) {
-                        int key = span.ceilingKey(j);
-                        r = span.remove(key);
-                        length = r - key + 1;
-                        if (len.get(length) == 1) len.remove(length);
-                        else len.put(length, len.get(length)-1);
-                    }
-                    span.put(l, r);
-                    len.put(r-l+1, len.getOrDefault(r-l+1, 0) + 1);
-                }
-                ans[i] = len.lastKey();
-            }
+        public List<List<Integer>> findDifference(int[] a, int[] b) {
+            Set<Integer> sa = new HashSet<>();
+            Set<Integer> sb = new HashSet<>();
+            for (int v : a) sa.add(v);
+            for (int v : b) sb.add(v);
+            List<Integer> la = new ArrayList<>();
+            List<Integer> lb = new ArrayList<>();
+            for (int v : sa)
+                if (!sb.contains(v)) la.add(v);
+            for (int v : sb)
+                if (!sa.contains(v)) lb.add(v);
+            List<List<Integer>> ans = new ArrayList<>();
+            ans.add(la);
+            ans.add(lb);
             return ans;
         }
-        // public int[] longestRepeating(String s, String queryCharacters, int[] queryIndices) {
-        //     char[] arr = s.toCharArray();
-        //     int m = arr.length, n = queryIndices.length;
-        //     int[] output = new int[n];
-        //     TreeMap<Integer, Integer> lengths = new TreeMap<>(), span = new TreeMap<>();
-        //     for (int i = 0, j = 1; j <= m; j++) if (j == m || arr[i] != arr[j]) {
-        //             lengths.put(j - i, lengths.getOrDefault(j - i, 0) + 1);
-        //             span.put(i, j - 1);
-        //             i = j;
-        //         }
-        //     for (int i = 0; i < queryIndices.length; i++) {
-        //         int j = queryIndices[i];
-        //         if (arr[j] != queryCharacters.charAt(i)) {
-        //             int l = span.floorKey(j), r = span.remove(l), length = r - l + 1;
-        //             if (lengths.get(length) == 1) lengths.remove(length);
-        //             else lengths.put(length, lengths.get(length) - 1);
-        //             if (l < j) {
-        //                 span.put(l, j - 1);
-        //                 lengths.put(j - l, lengths.getOrDefault(j - l, 0) + 1);
-        //             }
-        //             if (r > j) {
-        //                 span.put(j + 1, r);
-        //                 lengths.put(r - j, lengths.getOrDefault(r - j, 0) + 1);
-        //             }
-        //             arr[j] = queryCharacters.charAt(i);
-        //             l = j;
-        //             r = j;
-        //             if (j > 0 && arr[j] == arr[j - 1]) {
-        //                 l = span.floorKey(j);
-        //                 length = span.remove(l) - l + 1;
-        //                 if (lengths.get(length) == 1) lengths.remove(length);
-        //                 else lengths.put(length, lengths.get(length) - 1);
-        //             }
-        //             if (j < m - 1 && arr[j] == arr[j + 1]) {
-        //                 int key = span.ceilingKey(j);
-        //                 r = span.remove(key);
-        //                 length = r - key + 1;
-        //                 if (lengths.get(length) == 1) lengths.remove(length);
-        //                 else lengths.put(length, lengths.get(length) - 1);
-        //             }
-        //             span.put(l, r);
-        //             lengths.put(r - l + 1, lengths.getOrDefault(r - l + 1, 0) + 1);
-        //         }
-        //         output[i] = lengths.lastKey();
-        //     }
-        //     return output;
-        // }
+
+        public int minDeletion(int [] a) {
+            int n = a.length, cnt = 0;
+            boolean even = true;
+            for (int i = 0; i < n-1; i++) {
+                if (i % 2 == 0 && even) {
+                    if (a[i] != a[i+1]) i++;
+                    else {
+                        cnt++;
+                        
+                    }
+                }
+            }
+            return 0;
+        }
+
+        public long[] kthPalindrome(int[] queries, int intLength) { // 大致的思路方向是对的，但很繁琐
+            int n = queries.length;
+            for (int i = 0; i < n; i++) {
+                s.add(queries[i]); 
+                l.add(new int [] {i, queries[i]}); // 因为对每个排位进行独立生成，一开始的排序已经不是必须的了
+                m.computeIfAbsent(queries[i], z -> new ArrayList<>()).add(i);
+            }
+            Collections.sort(l, (a ,b) -> a[1] != b[1] ? a[1] - b[1] : a[0] - b[0]);
+            ans = new long [n];
+            generatePal(intLength);
+            return ans;
+        }
+        List<int []> l = new ArrayList<>();
+        Map<Integer, List<Integer>> m = new HashMap<>();
+        TreeSet<Integer> s = new TreeSet<>();
+        long [] ans;
+        void generatePal(int n) { 
+            if (s.size() == 0) return ;
+            while (s.size() > 0) {
+                int v = s.pollFirst();
+                long res = getValAtIdx(n, v);
+                for (int i : m.get(v)) 
+                    ans[i] = res;
+            }
+        }
+        long getValAtIdx(int n, int i) {
+            String res = "";
+            System.out.println("i: " + i);
+            if (n == 1) {
+                if (i < 10) return i;
+                return -1;
+            }
+            if (i < 10) { // 这里和while里面的i < 10怎么合并一下简化代码
+                if (n % 2 == 1) {
+                        res = "1"+"0".repeat(n/2-1) + (i-1) + "0".repeat(n/2-1) + "1"; // 这里有点儿问题，分奇偶
+                } else {
+                    if (n == 2)
+                        res = i + "" + i;
+                    else 
+                        res = "1"+ (n/2 >= 2 ? "0".repeat(n/2-2) : "") + (i-1) + (i-1) + (n/2 >= 2 ? "0".repeat(n/2-2) : "") + "1"; // 这里有点儿问题，分奇偶
+                    // return res;
+                }
+            } else
+            if (i > 9 * Math.pow(10, n/2)) return -1;
+            else if (i == 9 * Math.pow(10, n/2))
+                return Long.parseLong("9".repeat(n));
+            else { // 这里好像res只有一半长度
+                long base = 0;
+                while (i > 0) {
+                    if (i < 10) {
+                        System.out.println("res: " + res);
+                        if (n > 2)
+                            res += (i-1);
+                        else res += i;
+                        break;
+                    }
+                    res += i / Math.pow(10, n/2-base);
+                    base++;
+                    i /= 10;
+                }
+                res += new StringBuilder (res).reverse().toString();
+            }
+            System.out.println("res: " + res);
+            return Long.parseLong(res);
+            // if (n % 2 == 0) return Long.parseLong(res + new StringBuilder (res).reverse().toString());
+            // return Long.parseLong(res + new StringBuilder (res).reverse().substring(1).toString());
+        }
+
+        public int maxValueOfCoins(List<List<Integer>> piles, int k) {
+            int n = piles.size();
+            List<List<Integer>> ll = new ArrayList<>();
+            
+
+        }
     }
     public static void main(String args[]) {
         Solution s = new Solution();
 
-        String a = "babacc";
-        String b = "bcb";
-        int [] c = new int [] {1, 3, 3};
+        // int []  a = new int []  {1, 2, 3, 4, 5, 90};
+        // int [] a = new int [] {2, 4, 6};
+        // int []  a = new int []  {2, 201429812, 8, 520498110, 492711727, 339882032, 462074369, 9, 7, 6};
+        // int []  a = new int []  {392015495, 5, 4, 1, 425320571, 565971690, 3, 7, 6, 3, 506222280, 468075092, 5};
+        int []  a = new int []  {928053739, 72, 86059860, 90, 622074924, 831263840, 8, 10, 43, 13, 54, 870906009, 64};
 
-        int [] r = s.longestRepeating(a, b, c);
+        long [] r = s.kthPalindrome(a, 3);
         System.out.println(Arrays.toString(r));
     }
 }
@@ -289,3 +139,6 @@ public class cmp {
 // TreeNode root = new TreeNode(a[0]);
 // root.buildTree(root, a);
 // root.levelPrintTree(root);
+
+// 相比于去年12月底当有一个面试，感觉leetcode的题目故意叼难自己，不得不躲起来藏两三个星期不敢参赛
+// 现在最大的勇气在于：不管它现在是不是现在还在故意为难我，都试图去理自己的思路解题，也当是自己的一点儿进步吧
