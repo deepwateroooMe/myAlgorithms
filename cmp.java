@@ -72,7 +72,7 @@ public class cmp {
      Map<Character, String> map = new HashMap<>();
     // Map<String, List<Integer>> idx = new HashMap<>();
     Map<String, List<Character>> inv = new HashMap<>();
-    Set<String> ss = new HashSet<>();
+    Set<String> ss = new HashSet<>(), sd = new HashSet<>();
     Trie trie;
     public Encrypter(char[] keys, String[] values, String[] dic) {
     // public cmp(char[] keys, String[] values, String[] dic) {
@@ -84,8 +84,10 @@ public class cmp {
             inv.computeIfAbsent(values[i], z -> new ArrayList<>()).add(keys[i]);
         }
         trie = new Trie();
-        for (String s : dic) 
+        for (String s : dic)  {
             trie.insert(s);
+            sd.addAll(Arrays.asList(dic));
+        }
     }
     
     public String encrypt(String word1) {
@@ -95,7 +97,7 @@ public class cmp {
         return ans;
     }
     
-    public int decrypt(String t) { // 这里关于下标的处理还有点儿没有做完: 185/203 爱表哥，爱生活~~
+    public int decrypt(String t) { // 这里关于下标的处理还有点儿没有做完: 189/203 爱表哥，爱生活~~
         int n = t.length();
         char [] s = t.toCharArray();
         ans = new HashSet<>();
@@ -113,7 +115,7 @@ public class cmp {
         }
         System.out.println("ans.size(): " + ans.size());
         System.out.println(Arrays.toString(new ArrayList<>(ans).toArray()));
-
+        ans.retainAll(sd);
         return ans.size();
     }
     Set<String> ans;
@@ -129,7 +131,7 @@ public class cmp {
                 for (char c : inv.get(cur)) {
                     tmp += c;
                     if (!trie.startWith(tmp)) continue;
-                    decrypt(t, i+2, tmp);
+                    decrypt(t, idx+2, tmp);
                 }
             } else return;
         // }
