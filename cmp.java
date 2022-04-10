@@ -93,12 +93,12 @@ public class cmp {
                 }
                 return ans;
             }
-            for (int i = 0; i < idx-1; i++) {
+            for (int i = 0; i < idx; i++) {
                 for (int j = idx+1; j < n; j++) {
-                    int cur = Integer.parseInt(t.substring(0, i+1)) * (j == n-1 ? 1 : Integer.parseInt(t.substring(j+1))) * (Integer.parseInt(t.substring(i+1, idx)) + Integer.parseInt(t.substring(idx+1, j+1)));
+                    int cur = (i == 0 ? 1 : Integer.parseInt(t.substring(0, i))) * (j == n-1 ? 1 : Integer.parseInt(t.substring(j+1))) * (Integer.parseInt(t.substring(i, idx)) + Integer.parseInt(t.substring(idx+1, j+1)));
                     if (cur < min) {
                         min = cur;
-                        ans = t.substring(0, i+1) + "(" + t.substring(i+1, j+1) + ")" + (j == n-1 ? "" : t.substring(j+1));
+                        ans = (i == 0 ? "" : t.substring(0, i)) + "(" + t.substring(i, j+1) + ")" + (j == n-1 ? "" : t.substring(j+1));
                     }
                 }
             }
