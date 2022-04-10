@@ -67,7 +67,7 @@ public class cmp {
         //     return (int)ans;
         // }
 
-        public String minimizeResult(String t) { // dfs: 记忆化搜索吗？感觉还是有点儿昏头昏脑的。。。。。。 112/125 passed
+        public String minimizeResult(String t) { // dfs: 记忆化搜索吗？100%.......
             n = t.length();
             s = t.toCharArray();
             ans = "(" + t + ")";
