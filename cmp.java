@@ -12,124 +12,129 @@ import static java.util.stream.Collectors.toMap;
 public class cmp {
     public static class Solution {
 
-        // public int largestInteger(int v) { // 把偶数及其下标存在一起，把寄数及其下标存在一起： 昨晚没休息好，这次比赛会比较差一点儿
-        //     String t = String.valueOf(v);
-        //     int n = t.length(), max = v;
+        // public String digitSum(String s, int k) {
+        //     int n = s.length(), cur = 0;
+        //     if (n <= k) return s;
+        //     String ns = "";
+        //     for (int i = 0; i < n; i += k) {
+        //         cur = 0;
+        //         for (int j = i; j < i+k && j < n; j++) 
+        //             cur += s.charAt(j) - '0';
+        //         ns += String.valueOf(cur);
+        //     }
+        //     if (ns.length() <= k) return ns;
+        //     return digitSum(ns, k);
+        // }
+        // int getSum(String t) {
+        //     int n = t.length(), ans = 0;
         //     char [] s = t.toCharArray();
-        //     Set<Integer> so = new HashSet<>();// idx odd
-        //     Set<Integer> se = new HashSet<>();// even
-        //     HashMap<Character, Integer> mo = new HashMap<>();
-        //     HashMap<Character, Integer> me = new HashMap<>();
-        //     for (int i = 0; i < n; i++) {
-        //         if ((s[i]-'0') % 2 == 0) {
-        //             se.add(i);
-        //             me.put(s[i], me.getOrDefault(s[i], 0) + 1);
-        //         } else {
-        //             so.add(i);
-        //             mo.put(s[i], mo.getOrDefault(s[i], 0) + 1);
-        //         }
-        //     }
-        //     TreeMap<Character, Integer> rmo = new TreeMap<>(Collections.reverseOrder());
-        //     TreeMap<Character, Integer> rme = new TreeMap<>(Collections.reverseOrder());
-        //     rmo.putAll(mo);
-        //     rme.putAll(me);
-        //     for (int i = 0; i < n; i++) {
-        //         if (se.contains(i)) {
-        //             s[i] = rme.firstKey();
-        //             if (rme.firstEntry().getValue() == 1) rme.pollFirstEntry();
-        //             else rme.put(rme.firstKey(), rme.firstEntry().getValue()-1);
-        //         } else {
-        //             s[i] = rmo.firstKey();
-        //             if (rmo.firstEntry().getValue() == 1) rmo.pollFirstEntry();
-        //             else rmo.put(rmo.firstKey(), rmo.firstEntry().getValue()-1);
-        //         }
-        //     }                
-        //     return Integer.parseInt(new String(s));
+        //     for (char c : s) 
+        //         ans += c - '0';
+        //     return ans;
         // }
 
-        // static final int mod = (int)1e9 + 7;
-        // public int maximumProduct(int[] a, int k) {
-        //     int n = a.length, idx = 0;
-        //     Arrays.sort(a);
-        //     Queue<Integer> q = new PriorityQueue<>();
-        //     for (int v : a) 
-        //         q.offer(v);
-        //     while (k > 0) {
-        //         int v = q.poll();
-        //         q.offer(++v);
-        //         --k;
+        // public int minimumRounds(int[] t) {
+        //     int n = t.length, cnt = 0;
+        //     Map<Integer, Integer> m = new HashMap<>();
+        //     for (int v : t) 
+        //         m.put(v, m.getOrDefault(v, 0) + 1);
+        //     for (Integer v : m.values()) {// 这样的先行遍历一遍排查会浪费时间吗？
+        //         System.out.println("\n v: " + v);
+        //         // if (v % 3 != 0 && v % 3 % 2 != 0 && v % 2 != 0) return -1; // 这条件不对呀
+        //         if (v == 1) return -1;
+        //         if (v % 3 == 0) cnt += v / 3;
+        //         else if (v % 3 != 0)
+        //             cnt += v / 3 + 1;
+        //         else cnt += v / 2;
+        //         System.out.println("cnt: " + cnt);
         //     }
-        //     long ans = 1;
-        //     while (!q.isEmpty()) {
-        //         ans *= q.poll();
-        //         ans %= mod;
-        //     }
-        //     return (int)ans;
+        //     return cnt;
         // }
 
-        public String minimizeResult(String t) { // dfs: 记忆化搜索吗？100%.......
-            n = t.length();
-            s = t.toCharArray();
-            ans = "(" + t + ")";
-            int idx = t.indexOf('+');
-            System.out.println("idx: " + idx);
-            min = Integer.parseInt(t.substring(0, idx)) + Integer.parseInt(t.substring(idx+1));
-            if (idx == 1) {
-                for (int j = idx+1; j < n-1; j++) {
-                    int cur = Integer.parseInt(t.substring(j+1)) * (Integer.parseInt(t.substring(0, 1)) + Integer.parseInt(t.substring(idx+1, j+1)));
-                    if (cur < min) {
-                        min = cur;
-                        ans = "(" + t.substring(0, j+1) + ")" + t.substring(j+1);
-                    }
-                }
-                return ans;
-            } else if (idx == n-2) {
-                for (int i = 0; i < idx-1; i++) {
-                    int cur = Integer.parseInt(t.substring(0, i+1)) * (Integer.parseInt(t.substring(i+1, idx)) + Integer.parseInt(t.substring(idx+1)));
-                    if (cur < min) {
-                        min = cur;
-                        ans = t.substring(0, i+1) + "(" + t.substring(i+1) + ")";
-                    }
-                }
-                return ans;
-            }
-            for (int i = 0; i < idx; i++) {
-                for (int j = idx+1; j < n; j++) {
-                    int cur = (i == 0 ? 1 : Integer.parseInt(t.substring(0, i))) * (j == n-1 ? 1 : Integer.parseInt(t.substring(j+1))) * (Integer.parseInt(t.substring(i, idx)) + Integer.parseInt(t.substring(idx+1, j+1)));
-                    if (cur < min) {
-                        min = cur;
-                        ans = (i == 0 ? "" : t.substring(0, i)) + "(" + t.substring(i, j+1) + ")" + (j == n-1 ? "" : t.substring(j+1));
-                    }
-                }
-            }
-            return ans;
+        // public int longestPath(int[] p, String t) { // tle tle tle ???
+        //     int n = t.length();
+        //     if (n == 1) return 1;
+        //     s = t.toCharArray();
+        //     adj = new ArrayList [n];
+        //     for (int i = 0; i < n; i++) adj[i] = new ArrayList<>();
+        //     for (int i = 0; i < n; i++) {
+        //         if (p[i] != -1) {
+        //             adj[p[i]].add(i); // 如果它有父节点，那么父节点的孩子链表加上当前的孩子
+        //             adj[i].add(p[i]);
+        //         }
+        //     }
+        //     // for (int i = 0; i < n; i++) // 这里面有大量的重复计算, 这里这种方法就tle了
+        //     //     dfs(i, -1, 1);
+        //     // dist = new int [n];
+        //     return max;
+        // }
+        // List<Integer> [] adj;
+        // char [] s;
+        // // int [] dist;
+        // int max = 0;
+        // void dijkstra(int u) {
+        //     Queue<int []> q = new PriorityQueue<>((x, y) -> x[1] - y[1]);
+        //     q.offer(new int [] {u, 1});
+        //     while (!q.isEmpty()) { // 这里有点儿并不起来了：当求的是最长距离的时候，是不是应该用dfs记忆化搜索？？？
+        //         int [] u = q.poll();
+        //         // if (dist[u[0]] >= u[1]) continue; // 这里的剪枝忘记了。。。。。。
+        //     }
+        // }
+        // void dfs(int u, int p, int cnt) {
+        //     if (adj[u].size() == 1 && adj[u].get(0) == p) { // 叶子节点，可以返回
+        //         if (cnt > max) max = cnt;
+        //         return ;
+        //     }
+        //     for (int v : adj[u]) {
+        //         if (s[v] == s[u] || v == p) continue; // 是父节点已经访问过了，或者相邻的字符是一样的，路过
+        //         dfs(v, u, cnt+1);
+        //     }
+        // }
+
+        public int maxTrailingZeros(int[][] a) { // 读不懂题目说的是什么意思
+            int m = a.length, n = a[0].length;
+            int [][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}}; // 这个，对于题目所要求的方向该如何处理，想得不是很清楚。。。。。。前缀和？？？
+            // 需要对每个格里的2与5质因子的个数分别作统计
+            int [][][] cnt = new int [m][n][2]; // 0: 2, 1: 5的统计个数
+            for (int i = 0; i < m; i++) 
+                for (int j = 0; j < n; j++) 
+                    if (a[i][j] % 2 == 0)
+                        cnt[i][j][0] = getCnt(a[i][j], 2);
+                    else if (a[i][j] % 5 == 0)
+                        cnt[i][j][1] = getCnt(a[i][j], 5);
+            int [][] u = new int [m+1][n+1], d = new int [m+1][n+1], l = new int [m+1][n+1], r = new int [m+1][n+1]; // up, down, left, right:
+            for (int i = 1; i <= m; i++) 
+                for (int j = 1; j <= n; j++) 
+                    u[i][j] = getCnt(a[i][j]) + u[i-1][j] + // 这里还要分别统计2和5的个数，感觉这个题的思路没有想对，稍微想复杂了点
+                        // 昨天晚上最后一晚大街边的房间休息，没有休息好，今天感觉整个的状态不对，希望下个周的情况能够好点儿
         }
-        int n, min;
-        char [] s;
-        String ans;
-        
-        public long maximumBeauty(int[] a, long avl, int t, int f, int p) {
-            Arrays.sort(a);
-            int n = a.length, j = n-1, cnt = 0;
-            while (j >= 0 && a[j] >= t) {
+        int getCnt(int v) {
+            String t = String.valueOf(v);
+            char [] s = t.toCharArray();
+            int n = t.length(), i = n-1, cnt = 0;
+            while (i >= 0 && s[i] == '0') {
                 cnt++;
-                j--;
+                i--;
             }
-            if (j < 0) return (long)n*f;
-            
-            return 0;
+            return cnt;
         }
-
+        int getCnt(int v, int m) {
+            int cnt = 0;
+            if (v % m == 0) {
+                while (v % m == 0) {
+                    cnt++;
+                    v /= m;
+                }
+            }
+            return cnt;
+        }
     }
     public static void main(String args[]) {
         Solution s = new Solution();
 
-        // String a = "247+38";
-        // String a = "12+34";
-        // String a = "5+22";
-        String a = "236+1841";
+        int [][] a = new int [][] {{23,17,15,3,20},{8,1,20,27,11},{9,4,6,2,21},{40,9,1,10,6},{22,7,4,5,3}};
 
-        String r = s.minimizeResult(a);
+        int r = s.maxTrailingZeros(a);
         System.out.println("r: " + r);
     }
 }
