@@ -84,7 +84,7 @@ public class cmp {
         //     return cnt;
         // }
 
-        public int maximumMinutes(int[][] a) { // bug： 什么地方错了一点儿？
+        public int maximumMinutes(int[][] a) { // bug： 以为自己想的已经是比较近了，可是还是有一个地方想得不对，思路上差了那么一丁点儿！！！
             m = a.length;
             n = a[0].length;
             if (a[0][1] == 1 || a[1][0] == 1 || a[1][1] == 1) return -1; // 这是最狭窄的不可能的情况
