@@ -32,71 +32,71 @@ public class mergeTrees {
             return root2;
         }
 
-        // private TreeNode head, prev, tail;
-        // private boolean fromR, fromL;
-        // private void increasingBSTRecursive(TreeNode r) {
-        //     fromR = false;
-        //     fromL = false;
-        //     // System.out.println("r.val: " + r.val);
-        //     // System.out.println("(r != tail): " + (r != tail));
-        //     if (r.left == null && r.right == null && r != tail) { // leaf
-        //         if (tail != null)
-        //         // System.out.println("tail.val: " + tail.val);
-        //         // System.out.println("prev.val: " + prev.val);
-        //         // System.out.println("r.val: " + r.val);
+        private TreeNode head, prev, tail;
+        private boolean fromR, fromL;
+        private void increasingBSTRecursive(TreeNode r) {
+            fromR = false;
+            fromL = false;
+            // System.out.println("r.val: " + r.val);
+            // System.out.println("(r != tail): " + (r != tail));
+            if (r.left == null && r.right == null && r != tail) { // leaf
+                if (tail != null)
+                // System.out.println("tail.val: " + tail.val);
+                // System.out.println("prev.val: " + prev.val);
+                // System.out.println("r.val: " + r.val);
                 
-        //         if (r != prev.right) {
-        //             r.right = prev;
-        //             prev.left = null;
-        //             if (head == null) head = r;
+                if (r != prev.right) {
+                    r.right = prev;
+                    prev.left = null;
+                    if (head == null) head = r;
                     
-        //             if (tail == null) tail = r.right;
-        //             else {
-        //                 tail.right = r;
-        //                 tail = r;
-        //             }
-        //             fromL = true;
-        //         }
-        //         // System.out.println("head.val: " + head.val);
-        //         return;
-        //     }
+                    if (tail == null) tail = r.right;
+                    else {
+                        tail.right = r;
+                        tail = r;
+                    }
+                    fromL = true;
+                }
+                // System.out.println("head.val: " + head.val);
+                return;
+            }
             
-        //     if (r.left != null) {
-        //         prev = r;
-        //         increasingBSTRecursive(r.left);
-        //     }
+            if (r.left != null) {
+                prev = r;
+                increasingBSTRecursive(r.left);
+            }
 
-        //     // System.out.println("\n Middle node: ");
-        //     // System.out.println("prev.val: " + prev.val);
-        //     // System.out.println("r.val M: " + r.val);
-        //     // System.out.println("fromR: " + fromR);
+            // System.out.println("\n Middle node: ");
+            // System.out.println("prev.val: " + prev.val);
+            // System.out.println("r.val M: " + r.val);
+            // System.out.println("fromR: " + fromR);
 
-        //     if (fromR) {
-        //         prev.right = r;
-        //         r.left = null;
-        //         prev = r;
-        //         tail = r;
-        //         fromR = false;
-        //     } else if (fromL && r != tail) {
-        //         prev.right = r;
-        //         r.left = null;
-        //         prev = r;
-        //         tail = r;
-        //         fromL = false;
-        //     }
-        //     else if (r.left == null){  // left == null
-        //         prev = r;
-        //     }
-        //     tail = r;
+            if (fromR) {
+                prev.right = r;
+                r.left = null;
+                prev = r;
+                tail = r;
+                fromR = false;
+            } else if (fromL && r != tail) {
+                prev.right = r;
+                r.left = null;
+                prev = r;
+                tail = r;
+                fromL = false;
+            }
+            else if (r.left == null){  // left == null
+                prev = r;
+            }
+            tail = r;
             
-        //     // System.out.println("(r.right != null): " + (r.right != null));
-        //     if (r.right != null) {
-        //         // System.out.println("r.val R: " + r.val);
-        //         r = r.right;
-        //         tail = r;
-        //         increasingBSTRecursive(r);
-        //     }
-        // }
+            // System.out.println("(r.right != null): " + (r.right != null));
+            if (r.right != null) {
+                // System.out.println("r.val R: " + r.val);
+                r = r.right;
+                tail = r;
+                increasingBSTRecursive(r);
+            }
+        }
 
         private Stack<Integer> s;
         private TreeNode tmp;
