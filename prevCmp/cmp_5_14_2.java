@@ -256,7 +256,7 @@ public class cmp { // will attend coming weekend, will NOT attend next next long
                 int leftHeight = r.left == null ? 0 : r.left.height;
                 int rightHeight = r.right == null ? 0 : r.right.height;
                 r.height = 1 + Math.max(leftHeight, rightHeight);
-                r.balanceFactor = rightHeight - leftHeight; // 不知道这里是在做什么呀？？？要把它们弄成比较平衡，平衡的情况下效率最高
+                r.balanceFactor = rightHeight - leftHeight; // 不知道这里是在做什么呀？？？
                 int lss = r.left == null ? 0 : r.left.subtreeSize;
                 int rss = r.right == null ? 0 : r.right.subtreeSize;
                 r.subtreeSize = r.rangeSize + lss + rss;
