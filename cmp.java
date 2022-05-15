@@ -143,45 +143,76 @@ public class cmp { // will attend coming weekend, will NOT attend next next long
     //     }
     // }
 
-    class Interval {
-        int l, r;
-        public Interval(int l, int r) {
-            this.l = l;
-            this.r = r;
-        }
-        public int getLength() {
-            return r - l + 1;
-        }
-        public String toString() {
-            return "Interval(" + l + "," + r + ")";
-        }
-    } 
-    class CountIntervals { // tle ? nOO
-        TreeSet<Interval> ts;
-        public CountIntervals() {
-            // public cmp() {
-            ts = new TreeSet<>((x, y) -> x.l != y.l ? x.l - y.l : x.r - y.r);
-        }
-        public void add(int left, int right) {
-            int nl = left, nr = right;
-            Interval hi = new Interval(right, Integer.MAX_VALUE);
-            while (true) {
-                Interval r = ts.lower(hi);
-                if (r == null || r.r < left) break;
-                if (r.r > right) nr = r.r;
-                if (r.l < left) nl = r.l;
-                ts.remove(r);
-            }
-            ts.add(new Interval(nl, nr)); // 这里题目根本就没有提任何overlap的情况呀，要如何处理呢？不重复是最高效的
-        }
-        public int count() {
-            int cnt = 0;
-            for (Interval v : ts) 
-                cnt += v.getLength();
-            return cnt;
-        }
-    }
-// }
+    // class Interval {
+    //     int l, r;
+    //     public Interval(int l, int r) {
+    //         this.l = l;
+    //         this.r = r;
+    //     }
+    //     public int getLength() {
+    //         return r - l + 1;
+    //     }
+    //     public String toString() {
+    //         return "Interval(" + l + "," + r + ")";
+    //     }
+    // } 
+    // class CountIntervals { // tle ? nOO // 因为这道题的测试，每调用一次，你都要数一遍，这是不可以的，你需要一个可以动态随时准备好的数据存储 TLE TLE TLE
+    //     TreeSet<Interval> ts;
+    //     public CountIntervals() {
+    //         // public cmp() {
+    //         ts = new TreeSet<>((x, y) -> x.l != y.l ? x.l - y.l : x.r - y.r);
+    //     }
+    //     public void add(int left, int right) {
+    //         int nl = left, nr = right;
+    //         Interval hi = new Interval(right, Integer.MAX_VALUE);
+    //         while (true) {
+    //             Interval r = ts.lower(hi);
+    //             if (r == null || r.r < left) break;
+    //             if (r.r > right) nr = r.r;
+    //             if (r.l < left) nl = r.l;
+    //             ts.remove(r);
+    //         }
+    //         ts.add(new Interval(nl, nr)); // 这里题目根本就没有提任何overlap的情况呀，要如何处理呢？不重复是最高效的
+    //     }
+    //     public int count() { // 因为这道题的测试，每调用一次，你都要数一遍，这是不可以的，你需要一个可以动态随时准备好的数据存储 TLE TLE TLE
+    //         int cnt = 0;
+    //         for (Interval v : ts) 
+    //             cnt += v.getLength();
+    //         return cnt;
+    //     }
+    // }
+    // class CountIntervals { // 也还是需要去想一下 BST 的写法，要不然 BST 会被我忘完了，上个周的惨痛教训还不够么？
+    //     TreeMap<Integer, Integer> m;
+    //     int cnt = 0;
+    //     public CountIntervals() {
+    //         m = new TreeMap<>();
+    //     }
+    //     public void add(int left, int right) {
+    //         if (m.floorKey(right) == null || m.get(m.floorKey(right)) < left) { // 想要加进去的与现有的，没有任何交集
+    //             m.put(left, right);
+    //             cnt += right - left + 1;
+    //         } else { // 与某个有交集
+    //             int bgn = left, end = right;
+    //             while (true) {
+    //                 // int l = (m.floorKey(end) != null ? m.floorKey(end) : Integer.MAX_VALUE); // 写出这些就说明没有真正理解，非空
+    //                 // int r = (l != 0 ? m.get(l) : 0);
+    //                 int l = m.floorKey(end), r = m.get(l);
+    //                 bgn = Math.min(bgn, l);
+    //                 end = Math.max(end, r);
+    //                 m.remove(l);
+    //                 cnt -= r - l + 1;
+    //                 if (m.floorKey(end) == null || m.get(m.floorKey(end)) < bgn) break;
+    //             }
+    //             m.put(bgn, end);
+    //             cnt += end - bgn + 1;
+    //         }
+    //     }
+    //     public int count() {
+    //         return cnt;
+    //     }
+    // }
+
+}
 public static void main(String args[]) {
     // Solution s = new Solution();
 
