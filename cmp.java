@@ -10,84 +10,134 @@ import java.util.HashSet;
 import java.util.Set;
 import static java.util.stream.Collectors.toMap;
 
-public class cmp { // 不喜欢今天的题目，去做自己的项目吧；will NOT attend next next long weekend due to long trip driving during long weekend.........
+public class cmp { 
     public static class Solution {
 
-        // public int percentageLetter(String s, char letter) {
-        //     int n = s.length(), cnt = 0;
-        //     for (char c : s.toCharArray()) 
-        //         if (c == letter) cnt++;
-        //     return (int)Math.floor((float) 100.0 * cnt / n);
-        // }
-
-        // public int maximumBags(int[] max, int[] cur, int more) {
-        //     int cnt = 0;
-        //     int n = max.length;
-        //     Integer [] dif = new Integer [n];
-        //     for (int i = 0; i < n; i++) {
-        //         if (cur[i] == max[i]) cnt++;
-        //         dif[i] = (Integer)(max[i] - cur[i]);
-        //     }
-        //     if (cnt == n) return n;
-        //     Arrays.sort(dif);
-        //     int i = 0;
-        //     while (i < n && dif[i] == 0) i++;
-        //     while (i < n && more >= 0) {
-        //         if (dif[i] > 0 && more < dif[i]) return cnt;
-        //         more -= dif[i];
-        //         cnt++;
-        //         i++;
-        //     }
-        //     return cnt;
-        // }
-
-        // public int minimumLines(int[][] a) { // 这里面好像是有个精度问题，暂时不写这个题了。。。。。
-        //     int n = a.length, cnt = 1;
-        //     if (n == 1) return 0;
-        //     Arrays.sort(a, (x, y)-> x[0] - y[0]); // 时间上的升序排列
-        //     double pre = Integer.MAX_VALUE, cur = Integer.MAX_VALUE;
-        //     for (int i = 1; i < n; i++) {
-        //         if (i >= 2) pre = cur;
-        //         cur = getAngle(a[i-1], a[i]);
-        //         if (i >= 2 && cur != pre) cnt++;
-        //         // if (i == 1) cnt = 1;
-        //     }
-        //     return cnt;
-        // }
-        // float getAngle(int [] a, int [] b) {
-        //     return (b[1] - a[1]) / (b[0] - a[0]);
-        // }
-        // int getAngle(int [] a, int [] b) {
-        //     int dx = Math.abs(a[0] - b[0]);
-        //     int dy = Math.abs(a[1] - b[1]);
-        //     double dz = Math.sqrt(dx * dx + dy * dy);
-        //     int angle = Math.round((float)(Math.asin(dy / dz) / Math.PI * 180));
-        //     return angle;
-        // }
-
-        static final int mod = (int)1e9 + 7;
-        public int totalStrength(int[] a) {
-            int n = a.length, ans = 0; // [1, 100,000]
-            for (int v : a) // subLength = 1; [2, n] tle tle tle
-                ans = (ans + getPPAftMod(v)) % mod;
-            long [] s = new long [n]; // prefix sum
-            s[0] = a[0];
-            for (int i = 1; i < n; i++) 
-                s[i] = s[i-1] + a[i];
-            // N = 100000, 只能用 O(NlogN) 的解法，应该是需要用一个 Stack or ArrayDeque 之类的数据结构来简化，可是这里还是有点儿没想透，需要再总结一下
-            // 午休睡着过后的黄金时间，我还是去看自己的项目比较好，对今天的题目木有兴趣。。。。。。
+        public int minMaxGame(int[] a) {
+            int n = a.length;
+            while (n > 1) {
+                for (int i = 0; i < n/2; i++) {
+                    if (i % 2 == 0)
+                        a[i] = Math.min(a[2 * i], a[2 * i + 1]);
+                    else 
+                        a[i] = Math.max(a[2 * i], a[2 * i + 1]);
+                }
+                n /= 2;
+            }
+            return a[0];
         }
-        int getPPAftMod(int v) {
-            return (long)(v * v) % mod;
+
+        public int partitionArray(int[] a, int k) {
+            int n = a.length, cnt = 1;
+            Arrays.sort(a);
+            int min = a[0], max = a[0], i = 0;
+            while (i < n) {
+                max = Math.max(max, a[i]);
+                if (max - min > k) {
+                    cnt++;
+                    min = max = a[i];
+                }
+                i++;
+            }
+            return cnt;
+        }
+
+        public int[] arrayChange(int[] a, int[][] b) {
+            Map<Integer, Integer> m = new HashMap<>();
+            int n = a.length;
+            for (int i = 0; i < n; i++) 
+                m.put(a[i], i);
+            for (int [] c : b) {
+                int u = c[0], v = c[1];
+                m.put(v, m.get(u));
+                m.remove(u);
+            }
+            for (Map.Entry<Integer, Integer> en : m.entrySet()) {
+                int v = en.getKey(), i = en.getValue();
+                a[i] = v;
+            }
+            return a;
+        }
+
+        class TextEditor {
+            StringBuilder s;
+            int i; 
+            public TextEditor() {
+                s = new StringBuilder();
+                i = 0;
+            }
+            public void addText(String text) {
+                s.insert(i, text); 
+                i += text.length();
+            }
+            public int deleteText(int k) {
+                int cnt = 0;
+                for (int j = i-1; j >= 0 && k > 0; j--, k--, i--) {
+                    s.deleteCharAt(j);
+                    cnt++;
+                }
+                return cnt;
+            }
+            public String cursorLeft(int k) {
+                while (k > 0 && i > 0) {
+                    i--;
+                    k--;
+                }
+                return s.substring((i >= 10 ? i-10 : 0), i).toString();
+            }
+            public String cursorRight(int k) {
+                while (k > 0 && i < s.length()) {
+                    k--;
+                    i++;
+                }
+                return s.substring((i >= 10 ? i-10 : 0), i).toString();
+            }
         }
     }
     public static void main(String args[]) {
-        Solution s = new Solution();
+        // Solution s = new Solution();
+        cmp s = new cmp(); // The current text is "|". (The '|' character represents the cursor)
 
-        int [][] a = new int [][] {{83,35},{79,51},{61,48},{54,87},{44,93},{22,5},{87,28},{64,8},{89,78},{62,83},{58,72},{48,7},{97,16},{27,100},{65,48},{11,31},{29,76},{93,29},{72,59},{73,74},{9,90},{66,81},{12,8},{86,80},{84,43},{36,63},{80,45},{81,88},{95,5},{40,59}};
-        
-        int r = s.minimumLines(a);
+        s.addText("leetcode"); // The current text is "leetcode|".
+
+        int r = s.deleteText(4); // return 4
         System.out.println("r: " + r);
+        // The current text is "leet|". 
+        // 4 characters were deleted.
+
+        s.addText("practice"); // The current text is "leetpractice|". 
+
+        String r1 = s.cursorRight(3); // return "etpractice"
+        System.out.println("r1: " + r1);
+        // The current text is "leetpractice|". 
+        // The cursor cannot be moved beyond the actual text and thus did not move.
+        // "etpractice" is the last 10 characters to the left of the cursor.
+
+        String r3 = s.cursorLeft(8); // return "leet"
+        System.out.println("r3: " + r3);
+        // The current text is "leet|practice".
+        // "leet" is the last min(10, 4) = 4 characters to the left of the cursor.
+
+        int r2 = s.deleteText(10); // return 4
+        System.out.println("r2: " + r2);
+        
+        // The current text is "|practice".
+        // Only 4 characters were deleted.
+        String r4 = s.cursorLeft(2); // return ""
+        System.out.println("r4: " + r4);
+        // The current text is "|practice".
+        // The cursor cannot be moved beyond the actual text and thus did not move. 
+        // "" is the last min(10, 0) = 0 characters to the left of the cursor.
+
+        String r5 = s.cursorRight(6); // return "practi"
+        System.out.println("r5: " + r5);
+        // The current text is "practi|ce".
+        // "practi" is the last min(10, 6) = 6 characters to the left of the cursor.
+
+        // int [] a = new int [] {1,3,5,2,4,8,2,2};
+
+        // int r = s.minMaxGame(a);
+        // System.out.println("r: " + r);
     }
 }
 // ListNode head = new ListNode(a[0]);

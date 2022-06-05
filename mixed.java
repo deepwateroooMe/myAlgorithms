@@ -11,7 +11,7 @@ import static java.util.stream.Collectors.toMap;
 
 public class mixed {
     public static class Solution {
-            
+
         Iterator<Integer> it;
         Integer next;
         public PeekingIterator(Iterator<Integer> iterator) {
