@@ -13,131 +13,133 @@ import static java.util.stream.Collectors.toMap;
 public class cmp { 
     public static class Solution {
 
-        public int minMaxGame(int[] a) {
+        // public double calculateTax(int[][] a, int v) {
+        //     int n = a.length;
+        //     double ans = 0;
+        //     for (int i = 0; i < n && v > 0; i++) {
+        //         if (i == 0) {
+        //             if (v >= a[i][0]) {
+        //                 ans += a[i][0] * a[i][1] / 100.0;
+        //                 v -= a[i][0];
+        //             } else {
+        //                 ans += v * a[i][1] / 100.0;
+        //                 v = 0;
+        //             }
+        //         } else {
+        //             if (v >= a[i][0] - a[i-1][0]) {
+        //                 ans += (a[i][0] - a[i-1][0]) * a[i][1] / 100.0;
+        //                 v -= a[i][0] - a[i-1][0];
+        //             } else {
+        //                 ans += v * a[i][1] / 100.0;
+        //                 v = 0;
+        //             }
+        //         }
+        //     }
+        //     return ans;
+        // }
+
+        // public int minPathCost(int[][] a, int[][] c) {
+        //     int m = a.length, n = a[0].length;
+        //     Map<Integer, Integer> idx = new HashMap<>();
+        //     for (int i = 0; i < m-1; i++) 
+        //         for (int j = 0; j < n; j++)
+        //             idx.put(i*n+j, a[i][j]);
+        //     // bottom up approach
+        //     int [][] dp = new int [m][n];
+        //     int min = Integer.MAX_VALUE, cur = Integer.MAX_VALUE;
+        //     for (int j = 0; j < n; j++) 
+        //         dp[m-1][j] = a[m-1][j];
+        //     for (int i = m-2; i >= 0; i--) {
+        //         for (int j = 0; j < n; j++) {
+        //             min = Integer.MAX_VALUE;
+        //             for (int k = 0; k < n; k++) {
+        //                 cur = c[idx.get(i*n+j)][k] + dp[i+1][k];
+        //                 min = Math.min(min, cur);
+        //             }
+        //             dp[i][j] = min + a[i][j];
+        //         }
+        //     }
+        //     min = Integer.MAX_VALUE;
+        //     for (int j = 0; j < n; j++) 
+        //         min = Math.min(min, dp[0][j]);
+        //     return min;
+        // }
+
+        // public int distributeCookies(int[] a, int k) {
+        //     n = a.length;
+        //     if (k == n) return Arrays.stream(a).max().getAsInt();
+        //     l = new ArrayList[k];
+        //     for (int i = 0; i < k; i++) 
+        //         l[i] = new ArrayList<>();
+        //     dfsBackTracking(0, l, k, a);
+        //     return min;
+        // }
+        // int n;
+        // int min = Integer.MAX_VALUE;
+        // List<Integer> [] l;
+        // void dfsBackTracking(int idx, List<Integer> [] l, int k, int [] a) {
+        //     if (idx == n) {
+        //         int cur = 0, max = 0;
+        //         for (int i = 0; i < k; i++) {
+        //             cur = 0;
+        //             for (int j = 0; j < l[i].size(); j++) 
+        //                 cur += l[i].get(j);
+        //             if (cur > min) return ;
+        //             max = Math.max(max, cur);
+        //         }
+        //         min = Math.min(min, max);
+        //         return ;
+        //     }
+        //     for (int i = 0; i < k; i++) {
+        //         l[i].add(a[idx]);
+        //         dfsBackTracking(idx+1, l, k, a);
+        //         l[i].remove(l[i].size()-1);
+        //     }
+        // }
+
+        public long distinctNames(String[] a) { // 25/89 tle .....
             int n = a.length;
-            while (n > 1) {
-                for (int i = 0; i < n/2; i++) {
-                    if (i % 2 == 0)
-                        a[i] = Math.min(a[2 * i], a[2 * i + 1]);
-                    else 
-                        a[i] = Math.max(a[2 * i], a[2 * i + 1]);
+            List<String> [] l = new ArrayList [26];
+            for (int i = 0; i < 26; i++) 
+                l[i] = new ArrayList<>();
+            Set<String> so = new HashSet<>();
+            for (String s : a) {
+                char c = s.charAt(0);
+                l[c-'a'].add(s);
+                so.add(s);
+            }
+            long ans = 0;
+            Set<String> ss = new HashSet<>();
+            String cur = "";
+            for (int i = 0; i < 26; i++) {
+                if (l[i].size() == 0) continue;
+                for (int j = 0; j < 26 && j != i; j++) {
+                    if (l[j].size() == 0) continue;
+                    char c = (char)('a' + j);
+                    for (int ii = 0; ii < l[i].size(); ii++) {
+                        String pre = l[i].get(ii);
+                        String ta = c + pre.substring(1);
+                        if (so.contains(ta)) continue;
+                        c = (char)('a' + i);
+                        for (int jj = 0; jj < l[j].size(); jj++) {
+                            String next = l[j].get(jj);
+                            String tb = c + next.substring(1);
+                            if (!so.contains(tb)) 
+                                ans += 2;
+                        }
+                    }
                 }
-                n /= 2;
             }
-            return a[0];
-        }
-
-        public int partitionArray(int[] a, int k) {
-            int n = a.length, cnt = 1;
-            Arrays.sort(a);
-            int min = a[0], max = a[0], i = 0;
-            while (i < n) {
-                max = Math.max(max, a[i]);
-                if (max - min > k) {
-                    cnt++;
-                    min = max = a[i];
-                }
-                i++;
-            }
-            return cnt;
-        }
-
-        public int[] arrayChange(int[] a, int[][] b) {
-            Map<Integer, Integer> m = new HashMap<>();
-            int n = a.length;
-            for (int i = 0; i < n; i++) 
-                m.put(a[i], i);
-            for (int [] c : b) {
-                int u = c[0], v = c[1];
-                m.put(v, m.get(u));
-                m.remove(u);
-            }
-            for (Map.Entry<Integer, Integer> en : m.entrySet()) {
-                int v = en.getKey(), i = en.getValue();
-                a[i] = v;
-            }
-            return a;
-        }
-
-        class TextEditor {
-            StringBuilder s;
-            int i; 
-            public TextEditor() {
-                s = new StringBuilder();
-                i = 0;
-            }
-            public void addText(String text) {
-                s.insert(i, text); 
-                i += text.length();
-            }
-            public int deleteText(int k) {
-                int cnt = 0;
-                for (int j = i-1; j >= 0 && k > 0; j--, k--, i--) {
-                    s.deleteCharAt(j);
-                    cnt++;
-                }
-                return cnt;
-            }
-            public String cursorLeft(int k) {
-                while (k > 0 && i > 0) {
-                    i--;
-                    k--;
-                }
-                return s.substring((i >= 10 ? i-10 : 0), i).toString();
-            }
-            public String cursorRight(int k) {
-                while (k > 0 && i < s.length()) {
-                    k--;
-                    i++;
-                }
-                return s.substring((i >= 10 ? i-10 : 0), i).toString();
-            }
+            return ans;
         }
     }
-    public static void main(String args[]) {
-        // Solution s = new Solution();
-        cmp s = new cmp(); // The current text is "|". (The '|' character represents the cursor)
+    public static void main(String args[]) { 
+        Solution s = new Solution();
 
-        s.addText("leetcode"); // The current text is "leetcode|".
+        String [] a = new String [] {"phhrrjjcm", "zjfkpps", "pm", "fnpduelfe", "mxtvjnq"};
 
-        int r = s.deleteText(4); // return 4
+        long r = s.distinctNames(a);
         System.out.println("r: " + r);
-        // The current text is "leet|". 
-        // 4 characters were deleted.
-
-        s.addText("practice"); // The current text is "leetpractice|". 
-
-        String r1 = s.cursorRight(3); // return "etpractice"
-        System.out.println("r1: " + r1);
-        // The current text is "leetpractice|". 
-        // The cursor cannot be moved beyond the actual text and thus did not move.
-        // "etpractice" is the last 10 characters to the left of the cursor.
-
-        String r3 = s.cursorLeft(8); // return "leet"
-        System.out.println("r3: " + r3);
-        // The current text is "leet|practice".
-        // "leet" is the last min(10, 4) = 4 characters to the left of the cursor.
-
-        int r2 = s.deleteText(10); // return 4
-        System.out.println("r2: " + r2);
-        
-        // The current text is "|practice".
-        // Only 4 characters were deleted.
-        String r4 = s.cursorLeft(2); // return ""
-        System.out.println("r4: " + r4);
-        // The current text is "|practice".
-        // The cursor cannot be moved beyond the actual text and thus did not move. 
-        // "" is the last min(10, 0) = 0 characters to the left of the cursor.
-
-        String r5 = s.cursorRight(6); // return "practi"
-        System.out.println("r5: " + r5);
-        // The current text is "practi|ce".
-        // "practi" is the last min(10, 6) = 6 characters to the left of the cursor.
-
-        // int [] a = new int [] {1,3,5,2,4,8,2,2};
-
-        // int r = s.minMaxGame(a);
-        // System.out.println("r: " + r);
     }
 }
 // ListNode head = new ListNode(a[0]);
