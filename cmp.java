@@ -13,132 +13,50 @@ import static java.util.stream.Collectors.toMap;
 public class cmp { 
     public static class Solution {
 
-        // public double calculateTax(int[][] a, int v) {
+        // public boolean checkXMatrix(int[][] a) {
         //     int n = a.length;
-        //     double ans = 0;
-        //     for (int i = 0; i < n && v > 0; i++) {
-        //         if (i == 0) {
-        //             if (v >= a[i][0]) {
-        //                 ans += a[i][0] * a[i][1] / 100.0;
-        //                 v -= a[i][0];
-        //             } else {
-        //                 ans += v * a[i][1] / 100.0;
-        //                 v = 0;
-        //             }
-        //         } else {
-        //             if (v >= a[i][0] - a[i-1][0]) {
-        //                 ans += (a[i][0] - a[i-1][0]) * a[i][1] / 100.0;
-        //                 v -= a[i][0] - a[i-1][0];
-        //             } else {
-        //                 ans += v * a[i][1] / 100.0;
-        //                 v = 0;
-        //             }
-        //         }
-        //     }
-        //     return ans;
-        // }
-
-        // public int minPathCost(int[][] a, int[][] c) {
-        //     int m = a.length, n = a[0].length;
-        //     Map<Integer, Integer> idx = new HashMap<>();
-        //     for (int i = 0; i < m-1; i++) 
-        //         for (int j = 0; j < n; j++)
-        //             idx.put(i*n+j, a[i][j]);
-        //     // bottom up approach
-        //     int [][] dp = new int [m][n];
-        //     int min = Integer.MAX_VALUE, cur = Integer.MAX_VALUE;
-        //     for (int j = 0; j < n; j++) 
-        //         dp[m-1][j] = a[m-1][j];
-        //     for (int i = m-2; i >= 0; i--) {
+        //     boolean ans = true;
+        //     for (int i = 0; i < n; i++) 
         //         for (int j = 0; j < n; j++) {
-        //             min = Integer.MAX_VALUE;
-        //             for (int k = 0; k < n; k++) {
-        //                 cur = c[idx.get(i*n+j)][k] + dp[i+1][k];
-        //                 min = Math.min(min, cur);
-        //             }
-        //             dp[i][j] = min + a[i][j];
+        //             if ((i == j || i+j == n-1) && a[i][j] == 0) return false;
+        //             else if (i != j && i+j != n-1 && a[i][j] != 0) return false;
         //         }
-        //     }
-        //     min = Integer.MAX_VALUE;
-        //     for (int j = 0; j < n; j++) 
-        //         min = Math.min(min, dp[0][j]);
-        //     return min;
+        //     return true;
         // }
 
-        // public int distributeCookies(int[] a, int k) {
-        //     n = a.length;
-        //     if (k == n) return Arrays.stream(a).max().getAsInt();
-        //     l = new ArrayList[k];
-        //     for (int i = 0; i < k; i++) 
-        //         l[i] = new ArrayList<>();
-        //     dfsBackTracking(0, l, k, a);
-        //     return min;
-        // }
-        // int n;
-        // int min = Integer.MAX_VALUE;
-        // List<Integer> [] l;
-        // void dfsBackTracking(int idx, List<Integer> [] l, int k, int [] a) {
-        //     if (idx == n) {
-        //         int cur = 0, max = 0;
-        //         for (int i = 0; i < k; i++) {
-        //             cur = 0;
-        //             for (int j = 0; j < l[i].size(); j++) 
-        //                 cur += l[i].get(j);
-        //             if (cur > min) return ;
-        //             max = Math.max(max, cur);
-        //         }
-        //         min = Math.min(min, max);
-        //         return ;
+        // static final int mod = (int)1e9 + 7;
+        // public int countHousePlacements(int n) {
+        //     long a = 1, b = 2;
+        //     for (int i = 2; i <= n; i++) {
+        //         long c = (a + b) % mod;
+        //         a = b;
+        //         b = c;
         //     }
-        //     for (int i = 0; i < k; i++) {
-        //         l[i].add(a[idx]);
-        //         dfsBackTracking(idx+1, l, k, a);
-        //         l[i].remove(l[i].size()-1);
-        //     }
+        //     return (int)((b * b) % mod);
         // }
 
-        public long distinctNames(String[] a) { // 25/89 tle .....
-            int n = a.length;
-            List<String> [] l = new ArrayList [26];
-            for (int i = 0; i < 26; i++) 
-                l[i] = new ArrayList<>();
-            Set<String> so = new HashSet<>();
-            for (String s : a) {
-                char c = s.charAt(0);
-                l[c-'a'].add(s);
-                so.add(s);
+        public int maximumsSplicedArray(int[] a, int[] b) { 
+            int n = a.length, max = 0;
+            int [] sa = Arrays.copyOf(a, n);
+            int [] sb = Arrays.copyOf(b, n);
+            for (int i = 1; i < n; i++) {
+                sa[i] = sa[i-1] + a[i];
+                sb[i] = sb[i-1] + b[i];
             }
-            long ans = 0;
-            Set<String> ss = new HashSet<>();
-            String cur = "";
-            for (int i = 0; i < 26; i++) {
-                if (l[i].size() == 0) continue;
-                for (int j = 0; j < 26 && j != i; j++) {
-                    if (l[j].size() == 0) continue;
-                    char c = (char)('a' + j);
-                    for (int ii = 0; ii < l[i].size(); ii++) {
-                        String pre = l[i].get(ii);
-                        String ta = c + pre.substring(1);
-                        if (so.contains(ta)) continue;
-                        c = (char)('a' + i);
-                        for (int jj = 0; jj < l[j].size(); jj++) {
-                            String next = l[j].get(jj);
-                            String tb = c + next.substring(1);
-                            if (!so.contains(tb)) 
-                                ans += 2;
-                        }
-                    }
-                }
-            }
-            return ans;
+            max = Math.max(sa[n-1], sb[n-1]);
         }
+
+        public abstract int minimumScore(int[] nums, int[][] edges) {
+            return 0;
+        }
+
     }
     public static void main(String args[]) { 
         Solution s = new Solution();
 
-        String [] a = new String [] {"phhrrjjcm", "zjfkpps", "pm", "fnpduelfe", "mxtvjnq"};
+        int [][] a = new int [][] {{2,0,0,1},{0,3,1,0},{0,5,2,0},{4,0,0,2}};
 
-        long r = s.distinctNames(a);
+        int r = s.countHousePlacements(2);
         System.out.println("r: " + r);
     }
 }
