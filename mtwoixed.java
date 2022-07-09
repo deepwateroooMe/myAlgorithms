@@ -984,48 +984,49 @@ public class mtwoixed {
         //     return true;
         // }
 
-        int [][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
-        public boolean escapeGhosts(int [][] g, int [] t) {
-            Set<int []> sc = new HashSet<>(), sn = new HashSet<>();
-            for (int [] c : g) sc.add(c);
-            System.out.println("sc.size(): " + sc.size());
-            for (int [] zz : sc) 
-                System.out.println(Arrays.toString(zz));
+        // int [][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+        // public boolean escapeGhosts(int [][] g, int [] t) {
+        //     Set<int []> sc = new HashSet<>(), sn = new HashSet<>();
+        //     for (int [] c : g) sc.add(c);
+        //     System.out.println("sc.size(): " + sc.size());
+        //     for (int [] zz : sc) 
+        //         System.out.println(Arrays.toString(zz));
 
-            int l = -10001, r = 10001;
-            Deque<int []> q = new ArrayDeque<>();
-            q.offerLast(new int [] {0, 0});
-            int k = 0;
-            while (!q.isEmpty()) {
-                System.out.println("\nk: " + k++);
-                for (int z = q.size()-1; z >= 0; z--) {
-                    int [] cur = q.pollFirst();
-                    System.out.println("\n" + Arrays.toString(cur));
-                    if (sc.contains(cur)) return false; // set里是否包含int[]，这样是不对的。。。。。。
-                    if (cur[0] == t[0] && cur[1] == t[1]) return true;
-                    for (int [] v : sc) {
-                        for (int [] d : dirs) {
-                            int i = v[0] + d[0], j = v[1] + d[1];
-                            if (i <= l || i >= r || j <= l || j >= r) continue;
-                            sn.add(new int [] {i, j}); // 感觉这里好像还有点儿不太对 
-                        }
-                    }
-                    for (int [] d : dirs) {
-                        int i = cur[0] + d[0], j = cur[1] + d[1];
-                        if (i <= l || i >= r || j <= l || j >= r) continue;
-                        q.offer(new int [] {i, j});
-                    }
-                    
-                }
-                sc.clear();
-                sc.addAll(sn);
-                System.out.println("sc.size(): " + sc.size());
-for (int [] zz : sc) 
-    System.out.println(Arrays.toString(zz));
-                sn.clear();
-            }
-            return false;
-        }
+        //     int l = -10001, r = 10001;
+        //     Deque<int []> q = new ArrayDeque<>();
+        //     q.offerLast(new int [] {0, 0});
+        //     int k = 0;
+        //     while (!q.isEmpty()) {
+        //         System.out.println("\nk: " + k++);
+        //         for (int z = q.size()-1; z >= 0; z--) {
+        //             int [] cur = q.pollFirst();
+        //             System.out.println("\n" + Arrays.toString(cur));
+        //             if (sc.contains(cur)) return false; // set里是否包含int[]，这样是不对的。。。。。。
+        //             if (cur[0] == t[0] && cur[1] == t[1]) return true;
+        //             for (int [] v : sc) {
+        //                 for (int [] d : dirs) {
+        //                     int i = v[0] + d[0], j = v[1] + d[1];
+        //                     if (i <= l || i >= r || j <= l || j >= r) continue;
+        //                     sn.add(new int [] {i, j}); // 感觉这里好像还有点儿不太对 
+        //                 }
+        //             }
+        //             for (int [] d : dirs) {
+        //                 int i = cur[0] + d[0], j = cur[1] + d[1];
+        //                 if (i <= l || i >= r || j <= l || j >= r) continue;
+        //                 q.offer(new int [] {i, j});
+        //             }
+        //         }
+        //         sc.clear();
+        //         sc.addAll(sn);
+        //         System.out.println("sc.size(): " + sc.size());
+        //         for (int [] zz : sc) 
+        //             System.out.println(Arrays.toString(zz));
+        //         sn.clear();
+        //     }
+        //     return false;
+        // }
+
+        
     }
     public static void main (String[] args) {
         Solution s  =  new Solution ();

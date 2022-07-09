@@ -2,8 +2,8 @@
 #+author: deepwaterooo
 
 * HashMap
-*** 数有多少个数组数不清楚
-*** 1392. Longest Happy Prefix - Hard
+** 数有多少个数组数不清楚
+** 1392. Longest Happy Prefix - Hard
 A string is called a happy prefix if is a non-empty prefix which is also a suffix (excluding itself).
 
 Given a string s, return the longest happy prefix of s. Return an empty string "" if no such prefix exists.
@@ -31,9 +31,9 @@ public String longestPrefix(String s) {
     return maxLen == 0 ? "" : s.substring(0, maxLen);
 }
 #+END_SRC
-*** 336. Palindrome Pairs - Hard
+** 336. Palindrome Pairs - Hard
 Given a list of unique words, return all the pairs of the distinct indices (i, j) in the given list, so that the concatenation of the two words words[i] + words[j] is a palindrome.
-**** 解题思路与分析
+*** 解题思路与分析
 - 利用字典wmap保存单词 -> 下标的键值对
 - 遍历单词列表words，记当前单词为word，下标为idx：
 #+BEGIN_SRC java
@@ -93,7 +93,7 @@ public List<List<Integer>> palindromePairs(String[] words) {
 }
 #+END_SRC
 
-*** KMP 算法
+** KMP 算法
 [[./pic/kmp.png]]
 
 [[./pic/kmp2.png]]
@@ -134,7 +134,7 @@ string longestPrefix(string s) {
     return s.substr(0, lps.back());
 }
 #+END_SRC
-*** 1172. Dinner Plate Stacks - Hard
+** 1172. Dinner Plate Stacks - Hard
 You have an infinite number of stacks arranged in a row and numbered (left to right) from 0, each of the stacks has the same maximum capacity.
 
 Implement the DinnerPlates class:
@@ -234,7 +234,7 @@ int popAtStack(int index) Returns the value at the top of the stack with the giv
     }
 #+END_SRC
 
-*** 2080. Range Frequency Queries - Medium
+** 2080. Range Frequency Queries - Medium
 Design a data structure to find the frequency of a given value in a given subarray.
 
 The frequency of a value in a subarray is the number of occurrences of that value in the subarray.
@@ -244,7 +244,7 @@ Implement the RangeFreqQuery class:
 RangeFreqQuery(int[] arr) Constructs an instance of the class with the given 0-indexed integer array arr.
 int query(int left, int right, int value) Returns the frequency of value in the subarray arr[left...right].
 A subarray is a contiguous sequence of elements within an array. arr[left...right] denotes the subarray that contains the elements of nums between indices left and right (inclusive).
-**** 解题思路与分析: 最简单粗暴的
+*** 解题思路与分析: 最简单粗暴的
      #+BEGIN_SRC java
     Map<Integer, TreeMap<Integer, Integer>> m = new HashMap<>();
     public RangeFreqQuery(int[] arr) {
@@ -259,7 +259,7 @@ A subarray is a contiguous sequence of elements within an array. arr[left...righ
         return map.get(b) - map.get(a) + 1;
     }
      #+END_SRC
-**** 解题思路与分析: binary Search
+*** 解题思路与分析: binary Search
      #+BEGIN_SRC java
     Map<Integer, List<Integer>> map = new HashMap<>();
     public RangeFreqQuery(int[] arr) {
@@ -318,7 +318,7 @@ A subarray is a contiguous sequence of elements within an array. arr[left...righ
         return left;
     }
      #+END_SRC
-**** 解题思路与分析: segment tree
+*** 解题思路与分析: segment tree
      #+BEGIN_SRC java
     Map<Integer, Integer>[] freq;
     int n;
