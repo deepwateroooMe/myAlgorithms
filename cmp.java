@@ -13,77 +13,67 @@ import static java.util.stream.Collectors.toMap;
 public class cmp { 
     public static class Solution {
 
-        // public boolean evaluateTree(TreeNode r) {
-        //     if (r.left == null && r.right == null) return r.val == 1 ? true : false;
-        //     return r.val == 2 ? evaluateTree(r.left) || evaluateTree(r.right)
-        //         : evaluateTree(r.left) && evaluateTree(r.right);
-        // }
-
-        // // binary search: O(NlogN)
-        // public int latestTimeCatchTheBus(int[] bus, int[] pas, int cap) {
-        //     Arrays.sort(bus);
-        //     Arrays.sort(pas);
-        //     n = bus.length;
-        //     m = pas.length;
-        //     Set<Integer> s = new HashSet<>();
-        //     for (int v : pas) s.add(v);
-        //     int v = binarySearch(bus[0], bus[n-1], bus, pas, cap);
-        //     while (s.contains(v)) {
-        //         v = v-1;
+        // public int fillCups(int[] a) {
+        //     int n = a.length, cnt = 0;
+        //     Queue<Integer> q = new PriorityQueue<>((x, y) -> y-x);
+        //     for (int v : a) {
+        //         if (v > 0)
+        //             q.offer(v);
         //     }
-        //     return v;
-        // }
-        // int n, m;
-        // int binarySearch(int l, int r, int [] bus, int [] pas, int cap) {
-        // }
-
-        // public long minSumSquareDiff(int[] a, int[] b, int x, int y) {
-        //     int n = a.length;
-        //     int [] c = new int [n];
-        //     for (int i = 0; i < n; i++) 
-        //         c[i] = a[i] - b[i];
-        //     Arrays.sort(c);
-        //       // |---+----+----+----+----+----+----+----+----|
-        //       // | A | +1 | -1 | +1 | -1 | +1 | -1 |    |    |
-        //       // | B | +1 | -1 | -1 | +1 |    |    | +1 | -1 |
-        //       // |---+----+----+----+----+----+----+----+----|
-        //       // | C |  0 |  0 | +2 | -2 | +1 | -1 | -1 | +1 |
-        //     // 还要弄个queue一类的东西，按照绝对值的相对关系来排序
+        //     if (q.size() == 1) return q.peek();
+        //     while (!q.isEmpty()) {
+        //         int top = q.poll();
+        //         if (top > 0) {
+        //             cnt++;
+        //             if (top >= 1) {
+        //                 if (q.isEmpty()) return cnt + top - 1;
+        //                 int cur = q.poll();
+        //                 if (top > 1)
+        //                     q.offer(top - 1);
+        //                 if (cur > 1)
+        //                     q.offer(cur - 1);
+        //             }
+        //         }
+        //     }
+        //     return cnt;
         // }
 
-//         public int validSubarraySize(int[] a, int t) { // tle tle tle 
-//             int n = a.length, min = Arrays.stream(a).min().getAsInt(), max = Arrays.stream(a).max().getAsInt();
-//             if (min > t / n) return n;
-//             if (t/1 <= min) return -1;
-//             Queue<int []> q = new PriorityQueue<>((x, y) -> x[0] != y[0] ? y[0] - x[0] : y[1] - x[1]); // 值，长度
-// // 这里复杂度太高了，好像是用栈可以做到O（N）的处理时间？对栈消化不良            。。。。。
-//             int j = 0, k = 0;
-//             for (int i = 0; i < n; i++) {
-//                 int v = a[i];
-//                 j = i+1;
-//                 while (j < n && a[j] >= v) j++;
-//                 k = i-1;
-//                 while (k >= 0 && a[k] >= v) k--;
-//                 q.offer(new int [] {a[i], j-k-1});
-//             }
-//             while (!q.isEmpty()) {
-//                 int [] tp = q.peek();
-//                 for (int i = 1; i <= n; i++) {
-//                     int v = t / i;
-//                     if (tp[0] > v && tp[1] >= i) return i;
-//                 }
-//                 q.poll();
-//             }
-//             return -1;
-//         }
+    // class SmallestInfiniteSet {
+    //     TreeSet<Integer> s; // record the missing numbers <= 1000 elements
+    //     public SmallestInfiniteSet() {
+    //         s = new TreeSet<>();
+    //     }
+    //     public int popSmallest() {
+    //         int v = 1;
+    //         while (s.contains(v)) v++;
+    //         s.add(v);
+    //         return v;
+    //     }
+    //     public void addBack(int num) {
+    //         if (s.contains(num)) 
+    //             s.remove(num);
+    //     }
+    // }
 
+// 动态规划，看着还是头比较大
+        // public int idealArrays(int n, int maxValue) {
+        // }
+
+        // public boolean canChange(String ss, String tt) {
+        //     int n = ss.length(), l = 0, r = 0, m = 0;
+        //     char [] s = ss.toCharArray();
+        //     char [] t = tt.toCharArray();
+        //     for (int i = 0; i < n; i++) {
+        //         if (s[i] == t[i]) continue;
+        //     }
+        // }
     }
     public static void main(String args[]) { 
         Solution s = new Solution();
 
-        int [] a = new int [] {1, 3, 4, 3, 1};
+        int [] a = new int [] {5,4,4};
 
-        int r = s.validSubarraySize(a, 6);
+        int r = s.fillCups(a);
         System.out.println("r: " + r);
     }
 }
