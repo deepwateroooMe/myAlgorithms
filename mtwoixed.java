@@ -1026,16 +1026,51 @@ public class mtwoixed {
         //     return false;
         // }
 
+        // public int maxValueOfCoins(List<List<Integer>> ll, int k) {
+        //     int n = ll.size();
+        //     dp = new Integer [n][k+1];
+        //     return backpack(n-1, k, ll);
+        // }
+        // Integer [][] dp;
+        // int backpack(int i, int k, List<List<Integer>> ll) {
+        //     if (i < 0  || k == 0) return 0;
+        //     if (dp[i][k] != null) return dp[i][k];
+        //     int n = Math.min(ll.get(i).size(), k);
+        //     int exclude = backpack(i-1, k, ll);
+        //     int include = 0;
+        //     for (int j = 0, sum = 0; j < n; j++) {
+        //         sum += ll.get(i).get(j);
+        //         include = Math.max(sum + backpack(i-1, k-j-1, ll), include);
+        //     }
+        //     return dp[i][k] = Math.max(exclude, include);
+        // }
+        // public int maxValueOfCoins(List<List<Integer>> ll, int k) {
+        //     int [] dp = new int [k+1];
+        //     int cnt = 0;
+        //     for (List<Integer> l : ll) {
+        //         for (int i = 1; i < l.size(); i++)
+        //             l.set(i, l.get(i) + l.get(i-1)); // pile 前缀和
+        //         cnt = Math.min(cnt + l.size(), k);   // 优化：j 从前 i 个栈的大小之和开始枚举（不超过 k）
+        //         for (int i = cnt; i > 0; i--) {
+        //             for (int j = 0; j < Math.min(l.size(), i); j++) // j 从下标 idx = 0 开始遍历，硬币的个数为 j+1 个
+        //                 dp[i] = Math.max(dp[i], dp[i - (j+1)] + l.get(j));
+        //         }
+        //     }
+        //     return dp[k];
+        // }
+
         
     }
     public static void main (String[] args) {
         Solution s  =  new Solution ();
-
-        // int [][] a = new int [][] {{1,0},{0,3}};
-        int [][] a = new int [][] {{1,0}};
-        int [] b = new int [] {2, 0};
-
-        boolean r = s.escapeGhosts(a, b); // return 2. You can choose:
+        
+        // int [][] a = new int [][] {{100},{100},{100},{100},{100},{100},{1,1,1,1,1,1,700}};
+        int [][] a = new int [][] {{1,100,3},{7,8,9}};
+        
+        List<List<Integer>> ll = new ArrayList<>();
+        for (int [] v : a)
+            ll.add(Arrays.stream(v).boxed().collect(Collectors.toList()));
+        int r = s.maxValueOfCoins(ll, 2);
         System.out.println("r: " + r);
     }
 }
