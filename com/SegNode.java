@@ -1,9 +1,5 @@
 package com;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.*;
 
 public class SegNode {
@@ -25,7 +21,8 @@ public class SegNode {
         
     public SegNode(SegNode r, int[] nums) {
         root = r;
-        buildTree(r, nums, 0, nums.length-1);
+//        buildTree(r, nums, 0, nums.length-1);
+        buildTree(nums, 0, nums.length - 1);
         levelPrintTree(root); 
     }
     
@@ -104,6 +101,7 @@ public class SegNode {
             recnt = 0;
         }
         System.out.println("");
+    }
 }
          
 // public static void main(String[] args) {

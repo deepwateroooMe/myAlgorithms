@@ -55,14 +55,14 @@ public class one {
         int tests = Integer.parseInt(line);
         String [] sur = new String [tests];
         int cnt = 0, idx = 0;
-            while(scanner.hasNextLine()) 
-                sur[idx++] = scanner.nextLine();
-            scanner.close();
-            System.out.println(Arrays.toString(sur));
-            for (int i = 0; i < tests; i++) {
-                String sb = s.getMin(sur[i]);
-                System.out.println("sb: " + sb);
-            }
+        while(scanner.hasNextLine()) 
+            sur[idx++] = scanner.nextLine();
+        scanner.close();
+        System.out.println(Arrays.toString(sur));
+        for (int i = 0; i < tests; i++) {
+            String sb = s.getMin(sur[i]);
+            System.out.println("sb: " + sb);
+        }
     }
 
 /*
