@@ -301,22 +301,129 @@ public class cmp {
 //             }
 //         }
 
-        
+//         public String shiftingLetters(String t, int[][] a) { // TLE TLE TLE
+//             int n = t.length(), m = a.length;
+//             char [] s = t.toCharArray();
+//             int [] dif = new int [n+1];
+//             for (int i = 0; i < m; i++) {
+//                 if (a[i][2] == 1) {
+//                     dif[a[i][0]] += 1;
+//                     dif[a[i][1]+1] -= 1;
+//                 } else {
+//                     dif[a[i][0]] -= 1;
+//                     dif[a[i][1]+1] += 1;
+//                 }
+// // 这里不能真的这么一个一个地来，使用差分数组                
+//                 // for (int j = a[i][0]; j <= a[i][1]; j++) {
+//                 //     if (a[i][2] == 1) dif[j]++;
+//                 //     else dif[j]--;
+//                 // }
+//             }
+// // change dif [] to be sum []
+//             for (int i = 1; i < n; i++) 
+//                 dif[i] += dif[i-1];
+//             for (int i = 0; i < n; i++) 
+//                 s[i] = (char)('a' + (s[i]-'a' + 26 + dif[i] % 26) % 26);
+//             return new String(s);
+//         }
 
+// // 这么想起来，整个思路还是很清晰的        
+//         public long[] maximumSegmentSum(int[] a, int[] qr) {
+//             int n = a.length;
+//             Queue<long []> q = new PriorityQueue<>((x, y) -> x[2] <= y[2] ? 1 : -1); // 转化成int值
+//             TreeSet<Integer> s = new TreeSet<>();
+//             long [] sum = new long [n], ans = new long [n];
+//             s.add(-1); // qr[i] in range [0, n)
+//             s.add(n);
+//             for (int i = 0; i < n; i++) {
+//                 sum[i] = a[i];
+//                 if (i > 0) sum[i] += sum[i-1];
+//             }
+//             q.offer(new long [] {0, n-1, sum[n-1]}); // [ bgn, end ], sum of segment
+//             for (int i = 0; i < n; i++) {
+//                 int v = qr[i];
+//                 s.add(v);
+// // 先添加可能会产生的分割点左右的两个新片段；再从QUEUE里移除含有当前分割点的一个片段，或是直接读最大有效值                
+//                 // l, r: left, right, 比当前分割点小的最大值，和比当前分割点大的最小值
+//                 int l = s.lower(v), r = s.higher(v); 
+//                 if (l + 1 < v) // 比当前分割点小的可以产生段新的片段
+//                     q.offer(new long [] {(long)l + 1, (long)v - 1, sum[v-1] - (long)(l == -1 ? 0 : sum[l])}); // - sum[l]
+//                 if (v + 1 < r) // 比当前分割点大的也可以产生一段新的片段
+//                     q.offer(new long [] {(long)v+1, (long)r-1, sum[r-1] - sum[v]}); // - sum[v]
+//                 while (!q.isEmpty()) {
+//                     long [] cur = q.peek();
+//                     int bgn = (int)cur[0], end = (int)cur[1];
+//                     // 根据当前片段的两个端点值来确认：当前片段是有效片段，取第一个有效片段读值
+//                     if (s.higher(bgn-1) > end) {
+//                         ans[i] = q.peek()[2];
+//                         break;
+//                     } else q.poll(); // 如果是无效片段，就把它扔掉
+//                 }
+//             }
+//             return ans;
+//         }
+        // public long[] maximumSegmentSum(int[] a, int[] q) {
+        //     int n = a.length;
+        //     long [] sum = new long [n+1], ans = new long [n];
+        //     for (int i = 0; i < n; i++) // calc preSum
+        //         sum[i+1] = sum[i] + a[i];
+        //     TreeMap<int [], Long> m = new TreeMap<>((x, y)->x[0] - y[0]); // 这里定义了一个相对独特的比较方式  ranges
+        //     // TreeMap to store all the possible sums of range we encounter while solving queries, we are storing frequencies because 
+        //     // multiple range can have same sum.            
+        //     TreeMap<Long, Integer> sums = new TreeMap<>(); 
+        //     m.put(new int [] {0, n-1}, sum[n]);
+        //     sums.put(sum[n], 1);
+        //     for (int i = 0; i < n; i++) {
+        //         int v = q[i];
+        //         // finding range which will split when node index is removed or set 0.                
+        //         int [] rangeToBeRemoved = m.floorKey(new int [] {v}); // 所以数组的长短都没有关系
+        //         Long sumv =m.get(rangeToBeRemoved);
+        //         // removing/ reducing sum from sums Map because we are splitting that range, so it is no longer valid
+        //         int freq = sums.get(sumv);
+        //         if (freq == 1) sums.remove(sumv);
+        //         else sums.put(sumv, freq-1);
+        //         m.remove(rangeToBeRemoved); // removing that range
+        //         int l = rangeToBeRemoved[0], r = rangeToBeRemoved[1];
+        //         long curSum = 0;
+        //         // Splitting range and store back new ranges form along with its sum.
+        //         if (l == v && r != v) { // 更新当前分割点右边的片段
+        //             curSum = sum[r+1] - sum[v+1];
+        //             m.put(new int [] {v+1, r}, curSum);
+        //             sums.put(curSum, sums.getOrDefault(curSum, 0) + 1);
+        //         } else if (l != v && r == v) { // 更新当前分割点左边的片段
+        //             curSum = sum[v] - sum[l];
+        //             m.put(new int [] {l, v-1}, curSum);
+        //             sums.put(curSum, sums.getOrDefault(curSum, 0) + 1);
+        //         } else if (l < v && r > v) {
+        //             // 左边
+        //             curSum = sum[v] - sum[l];
+        //             m.put(new int [] {l, v-1}, curSum);
+        //             sums.put(curSum, sums.getOrDefault(curSum, 0) + 1);
+        //             // 右边
+        //             curSum = sum[r+1] - sum[v+1];
+        //             m.put(new int [] {v+1, r}, curSum);
+        //             sums.put(curSum, sums.getOrDefault(curSum, 0) + 1);
+        //         }
+        //         if (sums.size() !=  0)
+        //             ans[i] = sums.lastKey();
+        //     }
+        //     return ans;
+        // }
     }
     public static void main(String args[]) {
         Solution s = new Solution();
 
-        int []  a = new int []  {1, 5, 3, -1, 4, 10, 6, 9, 2};
+        int [] a = new int []  {1, 2, 5, 6, 1};
+        int [] b = new int [] {0,3,2,4,1};
 
-        TreeNode root = new TreeNode(a[0]);
-        root.buildTree(root, a);
-        root.levelPrintTree(root);
-        
-        int r = s.amountOfTime(root, 3);
-        System.out.println("r: " + r);
+        long [] r = s.maximumSegmentSum(a, b);
+        System.out.println(Arrays.toString(r));
     }
 }
+
+// TreeNode root = new TreeNode(a[0]);
+// root.buildTree(root, a);
+// root.levelPrintTree(root);
 
 // ListNode head = new ListNode(a[0]);
 // head.buildList(head, a);

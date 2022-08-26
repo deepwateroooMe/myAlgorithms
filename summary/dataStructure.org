@@ -3485,6 +3485,106 @@ public double[] medianSlidingWindow(int[] nums, int k) {
 }
 #+END_SRC
 
+* TreeMap
+** 2382. Maximum Segment Sum After Removals - Hard
+You are given two 0-indexed integer arrays nums and removeQueries, both of length n. For the ith query, the element in nums at the index removeQueries[i] is removed, splitting nums into different segments.
+
+A segment is a contiguous sequence of positive integers in nums. A segment sum is the sum of every element in a segment.
+
+Return an integer array answer, of length n, where answer[i] is the maximum segment sum after applying the ith removal.
+
+Note: The same index will not be removed more than once.
+*** 思路分析
+- Using simple logic of storing the ranges and splitting them as solving the query.
+- Intially, we will be having whole array as are range (0, n-1). Now as we solve queries, say remove index x or set index x value as 0, we will split our range into (0, x -1) and (x + 1, n). Also, we will remove our previous range as it is of no use.
+- There can be cases in that, suppose we need to remove x and there is range (x, x), then we will simple remove it and not adding anything back (refer code below)
+- Now, to get the maximum sum of all the possible ranges, we will use another treemap, which will store sum to its frequency (frequency because multiple ranges can have same sum). And we can fetch maximum sum at any point in O(1) by simple getting last element of treemap.
+#+BEGIN_SRC csharp
+public long[] maximumSegmentSum(int[] a, int[] q) {
+    int n = a.length;
+    long [] sum = new long [n+1], ans = new long [n];
+    for (int i = 0; i < n; i++) // calc preSum
+        sum[i+1] = sum[i] + a[i];
+    TreeMap<int [], Long> m = new TreeMap<>((x, y)->x[0] - y[0]); // 这里定义了一个相对独特的比较方式  ranges
+    // TreeMap to store all the possible sums of range we encounter while solving queries, we are storing frequencies because 
+    // multiple range can have same sum.            
+    TreeMap<Long, Integer> sums = new TreeMap<>(); 
+    m.put(new int [] {0, n-1}, sum[n]);
+    sums.put(sum[n], 1);
+    for (int i = 0; i < n; i++) {
+        int v = q[i];
+        // finding range which will split when node index is removed or set 0.                
+        int [] rangeToBeRemoved = m.floorKey(new int [] {v}); // 所以数组的长短都没有关系
+        Long sumv =m.get(rangeToBeRemoved);
+        // removing/ reducing sum from sums Map because we are splitting that range, so it is no longer valid
+        int freq = sums.get(sumv);
+        if (freq == 1) sums.remove(sumv);
+        else sums.put(sumv, freq-1);
+        m.remove(rangeToBeRemoved); // removing that range
+        int l = rangeToBeRemoved[0], r = rangeToBeRemoved[1];
+        long curSum = 0;
+        // Splitting range and store back new ranges form along with its sum.
+        if (l == v && r != v) { // 更新当前分割点右边的片段
+            curSum = sum[r+1] - sum[v+1];
+            m.put(new int [] {v+1, r}, curSum);
+            sums.put(curSum, sums.getOrDefault(curSum, 0) + 1);
+        } else if (l != v && r == v) { // 更新当前分割点左边的片段
+            curSum = sum[v] - sum[l];
+            m.put(new int [] {l, v-1}, curSum);
+            sums.put(curSum, sums.getOrDefault(curSum, 0) + 1);
+        } else if (l < v && r > v) {
+            // 左边
+            curSum = sum[v] - sum[l];
+            m.put(new int [] {l, v-1}, curSum);
+            sums.put(curSum, sums.getOrDefault(curSum, 0) + 1);
+            // 右边
+            curSum = sum[r+1] - sum[v+1];
+            m.put(new int [] {v+1, r}, curSum);
+            sums.put(curSum, sums.getOrDefault(curSum, 0) + 1);
+        }
+        if (sums.size() !=  0)
+            ans[i] = sums.lastKey();
+    }
+    return ans;
+}
+#+END_SRC 
+- 另外一个想起来相对简单的思路
+  #+BEGIN_SRC csharp
+public long[] maximumSegmentSum(int[] a, int[] qr) {
+    int n = a.length;
+    Queue<long []> q = new PriorityQueue<>((x, y) -> x[2] <= y[2] ? 1 : -1); // 转化成int值
+    TreeSet<Integer> s = new TreeSet<>();
+    long [] sum = new long [n], ans = new long [n];
+    s.add(-1); // qr[i] in range [0, n)
+    s.add(n);
+    for (int i = 0; i < n; i++) {
+        sum[i] = a[i];
+        if (i > 0) sum[i] += sum[i-1];
+    }
+    q.offer(new long [] {0, n-1, sum[n-1]}); // [ bgn, end ], sum of segment
+    for (int i = 0; i < n; i++) {
+        int v = qr[i];
+        s.add(v);
+// 先添加可能会产生的分割点左右的两个新片段；再从QUEUE里移除含有当前分割点的一个片段，或是直接读最大有效值                
+        // l, r: left, right, 比当前分割点小的最大值，和比当前分割点大的最小值
+        int l = s.lower(v), r = s.higher(v); 
+        if (l + 1 < v) // 比当前分割点小的可以产生段新的片段
+            q.offer(new long [] {(long)l + 1, (long)v - 1, sum[v-1] - (long)(l == -1 ? 0 : sum[l])}); // - sum[l]
+        if (v + 1 < r) // 比当前分割点大的也可以产生一段新的片段
+            q.offer(new long [] {(long)v+1, (long)r-1, sum[r-1] - sum[v]}); // - sum[v]
+        while (!q.isEmpty()) {
+            long [] cur = q.peek();
+            int bgn = (int)cur[0], end = (int)cur[1];
+            // 根据当前片段的两个端点值来确认：当前片段是有效片段，取第一个有效片段读值
+            if (s.higher(bgn-1) > end) {
+                ans[i] = q.peek()[2];
+                break;
+            } else q.poll(); // 如果是无效片段，就把它扔掉
+        }
+    }
+    return ans;
+}
+  #+END_SRC 
 * HashMap
 *** 数有多少个数组数不清楚
 *** 1392. Longest Happy Prefix - Hard KMP算法 - 这个题需要重写
