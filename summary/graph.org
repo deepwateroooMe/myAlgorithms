@@ -13,7 +13,7 @@ A valid path in the graph is a sequence of nodes x1 -> x2 -> x3 -> ... -> xk suc
 Return the largest color value of any valid path in the given graph,
 or -1 if the graph contains a cycle.
 **** 解题思路与分析
-     #+BEGIN_SRC java
+     #+BEGIN_SRC csharp
 public int largestPathValue(String colors, int[][] edges) {
     List<List<Integer>> adj = new ArrayList<>();
     int n = colors.length(), cnt = 0; 
@@ -52,7 +52,7 @@ public int largestPathValue(String colors, int[][] edges) {
 }
 #+END_SRC
 - 另一种更为简洁的写法
-#+BEGIN_SRC java
+#+BEGIN_SRC csharp
 public int largestPathValue(String colors, int[][] edges) {
     int n = colors.length(), ans = 0, processed = 0;
     int[] ins = new int[n];
@@ -91,7 +91,7 @@ The items that belong to the same group are next to each other in the sorted lis
 There are some relations between these items where beforeItems[i] is a list containing all the items that should come before the i-th item in the sorted array (to the left of the i-th item).
 Return any solution if there is more than one solution and return an empty list if there is no solution.
 **** 解题思路与分析
-     #+BEGIN_SRC java
+     #+BEGIN_SRC csharp
 public int[] sortItems(int n, int m, int[] g, List<List<Integer>> bef) {
     List<List<Integer>> its = new ArrayList<>(); // 下标：元素所属的组编号；组内元素
     List<List<Integer>> gps = new ArrayList<>(); // 组图： 下标： 组编号；组内元素
@@ -171,7 +171,7 @@ You can assume that when the journey starts, all signals have just turned green.
 
 [[./pic/redGreen.png]]
 
-#+BEGIN_SRC java
+#+BEGIN_SRC csharp
 public int secondMinimum(int n, int[][] edges, int time, int change) {
     Map<Integer, List<Integer>> adj = new HashMap<>();
     for (int [] e : edges) {
@@ -212,7 +212,7 @@ public int secondMinimum(int n, int[][] edges, int time, int change) {
 }
 #+END_SRC
 - 另一个也是写得直接了当的
-#+BEGIN_SRC java
+#+BEGIN_SRC csharp
 public int secondMinimum(int n, int [][] edges, int time, int change) {
     Map<Integer, Set<Integer>> map = new HashMap<>();
     for (int [] e : edges) {
@@ -250,7 +250,7 @@ There are n cities numbered from 0 to n-1. Given the array edges where edges[i] 
 Return the city with the smallest number of cities that are reachable through some path and whose distance is at most distanceThreshold, If there are multiple such cities, return the city with the greatest number.
 
 Notice that the distance of a path connecting cities i and j is equal to the sum of the edges' weights along that path.
-#+BEGIN_SRC java
+#+BEGIN_SRC csharp
 public int findTheCity(int n, int[][] edges, int distanceThreshold) {
     // 1.创建邻接矩阵
     int [][] graph = new int [n][n]; // 相比于我只会用HashMap来建邻接关系，邻接链表与数组都可能，看哪个用起来方便
@@ -285,7 +285,7 @@ public int findTheCity(int n, int[][] edges, int distanceThreshold) {
 }
 #+END_SRC
 - 另一种解法
-#+BEGIN_SRC java
+#+BEGIN_SRC csharp
 // 之前用原创想法也写了很多图的题，但缺乏归纳总结，原创想法更多的是解决了题目，但解法与效率、与优化算法间的距离还需要很多比较归纳与总结，才能把图这一块吃透
 // https://leetcode.jp/leetcode-1334-find-the-city-with-the-smallest-number-of-neighbors-at-a-threshold-distance-%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF%E5%88%86%E6%9E%90/  这个题需要重新写
 // map：图结构
@@ -337,7 +337,7 @@ Consider a directed graph, with nodes labelled 0, 1, ..., n-1.  In this graph, e
 Each [i, j] in red_edges denotes a red directed edge from node i to node j.  Similarly, each [i, j] in blue_edges denotes a blue directed edge from node i to node j.
 
 Return an array answer of length n, where each answer[X] is the length of the shortest path from node 0 to node X such that the edge colors alternate along the path (or -1 if such a path doesn't exist).
-#+BEGIN_SRC java
+#+BEGIN_SRC csharp
 // 找最短路径应该用queue来做，入队列的时候需要标记红边或是蓝边以便找交替路径
 public int[] shortestAlternatingPaths(int n, int[][] red_edges, int[][] blue_edges) {
     HashMap<Integer, List<Integer>> [] maps = new HashMap [2]; // 0 : red; 1: blue
@@ -376,7 +376,7 @@ public int[] shortestAlternatingPaths(int n, int[][] red_edges, int[][] blue_edg
 }
 #+END_SRC
 - 不是总喜欢省掉大括号吗，试试省掉下面的。。。。。。
-#+BEGIN_SRC java
+#+BEGIN_SRC csharp
 public int[] shortestAlternatingPaths(int n, int[][] red_edges, int[][] blue_edges) {
     int [][] red = new int[n][2]; // 红 0 蓝 1
     int [][] blue = new int[n][2];
@@ -430,7 +430,7 @@ Given the original graph and maxMoves, return the number of nodes that are reach
 
 再进一步来分析，其实上对于每个结点来说（不论有没有编号），若我们能算出该结点离起始结点的最短距离，且该距离小于等于M的话，那这个结点就一定可以到达。这样来说，其实本质就是求单源点的最短距离，此时就要祭出神器迪杰斯特拉算法 Dijkstra Algorithm 了，LeetCode 中使用了该算法的题目还有 Network Delay Time 和 The Maze II。该算法的一般形式是用一个最小堆来保存到源点的最小距离，这里我们直接统计到源点的最小距离不是很方便，可以使用一个小 trick，即用一个最大堆来统计当前结点所剩的最大步数，因为剩的步数越多，说明距离源点距离越小。由于 Dijkstra 算法是以起点为中心，向外层层扩展，直到扩展到终点为止。根据这特性，用 BFS 来实现时再好不过了，首先来建立邻接链表，这里可以使用一个 NxN 的二维数组 graph，其中 graph[i][j] 表示从大结点i往大结点j方向会经过的小结点个数，建立邻接链表的时候对于每个 edge，要把两个方向都赋值，前面解释过了这里要当作有向图来做。然后使用一个最大堆，里面放剩余步数和结点编号组成的数对儿，把剩余步数放前面就可以默认按步数从大到小排序了，初始化时把 {M,0} 存入最大堆。还需要一个一维数组 visited 来记录某个结点是否访问过。
 
-#+BEGIN_SRC java
+#+BEGIN_SRC csharp
 public int reachableNodes(int[][] edges, int maxMoves, int n) {
     int [][] graph = new int  [n][n];
     for (int i = 0; i < n; i++) 
@@ -461,7 +461,7 @@ public int reachableNodes(int[][] edges, int maxMoves, int n) {
 }
 #+END_SRC
 - 我们也可以使用 HashMap 来建立邻接链表，最后的运行速度果然要比二维数组形式的邻接链表要快一些，其他的地方都不变，参见代码如下：
-#+BEGIN_SRC java
+#+BEGIN_SRC csharp
 public int reachableNodes(int[][] edges, int maxMoves, int n) {
     int res = 0;
     Map<Integer, Map<Integer, Integer>> graph = new HashMap<>();
@@ -502,7 +502,7 @@ incident(a, b) > queries[j]
 Return an array answers such that answers.length == queries.length and answers[j] is the answer of the jth query.
 
 Note that there can be multiple edges between the same two nodes.
-#+BEGIN_SRC java
+#+BEGIN_SRC csharp
 // https://leetcode.com/problems/count-pairs-of-nodes/discuss/1096740/C%2B%2BJavaPython3-Two-Problems-O(q-*-(n-%2B-e))
 public int[] countPairs(int n, int[][] edges, int[] queries) { // 别人家的思路好清晰
     int [] cnt = new int [n+1], sortedCnt = new int [n+1], ans = new int [queries.length];
@@ -544,7 +544,7 @@ Return a list of all the recipes that you can create. You may return the answer 
 
 Note that two recipes may contain each other in their ingredients.
 **** 解题思路与分析
-     #+BEGIN_SRC java
+     #+BEGIN_SRC csharp
 public List<String> findAllRecipes(String[] re, List<List<String>> ing, String[] sup) { // 菜谱 菜谱原材料 食材 BUG BUG BUG
     Map<String, Set<String>> adj = new HashMap<>();    // 每种材料可以做成的菜的 清单
     Map<String, Integer> ins = new HashMap<>();        // 每种材料或是菜谱的 入度
@@ -570,6 +570,7 @@ public List<String> findAllRecipes(String[] re, List<List<String>> ing, String[]
     return ans;
 }
  #+END_SRC
+
 ** 基环内向树
 *** 2127. Maximum Employees to Be Invited to a Meeting - Hard 基环内向树
 A company is organizing a meeting and has a list of n employees, waiting to be invited. They have arranged for a large circular table, capable of seating any number of employees.
@@ -619,7 +620,7 @@ Given a 0-indexed integer array favorite, where favorite[i] denotes the favorite
 
 在拓扑排序完成后，剩余没有被弹出过队列的节点就是环上的节点。我们可以找出每一个环。如果环的大小 \geq 3≥3，我们就用其来更新最大的环的大小；如果环的大小 =2=2，设环上的两个节点为 xx 和 yy，那么该「基环内向树」上最长的「双向游走」的路径长度就是 f[x] + f[y]f[x]+f[y]。
 
-     #+BEGIN_SRC java
+     #+BEGIN_SRC csharp
 public int maximumInvitations(int[] a) { // a: favorite
     // 统计入度，便于进行拓扑排序
     int n = a.length, ins [] = new int [n];
@@ -730,7 +731,7 @@ Return all critical connections in the network in any order.
 **** 解题思路与分析
 - https://www.cnblogs.com/nullzx/p/7968110.html
 
-     #+BEGIN_SRC java
+     #+BEGIN_SRC csharp
 public List<List<Integer>> criticalConnections(int n, List<List<Integer>> connections) {
     depth = new int [n];
     Arrays.fill(depth, -1);
@@ -763,6 +764,7 @@ int dfs(int cur, int pre, int dep) { // 返回值为当前节点所有dfs路径�
     return res;
 }
      #+END_SRC
+
 
 ** 欧拉回路: Hierholzer 算法, Fleury算法
 - AOV&AOE
@@ -805,7 +807,7 @@ int dfs(int cur, int pre, int dep) { // 返回值为当前节点所有dfs路径�
 There is a safe protected by a password. The password is a sequence of n digits where each digit can be in the range [0, k - 1].
 
 The safe has a peculiar way of checking the password. When you enter in a sequence, it checks the most recent n digits that were entered each time you type a digit.
-     #+BEGIN_SRC java
+     #+BEGIN_SRC csharp
 For example, the correct password is "345" and you enter in "012345":
 After typing 0, the most recent 3 digits is "0", which is incorrect.
 After typing 1, the most recent 3 digits is "01", which is incorrect.
@@ -833,7 +835,7 @@ u→⋯→v→⋯→u
 
 u→⋯→v→⋯→v→⋯→u
 
-     #+BEGIN_SRC java
+     #+BEGIN_SRC csharp
 Set<Integer> seen = new HashSet<Integer>();
 StringBuffer ans = new StringBuffer();
 int highest;
@@ -861,7 +863,7 @@ public void dfs(int node) {
 
 密码共有n位，每一个位可以有k个数字，总共不同的密码总数就有k的n次方个。思路是先从n位都是0的密码开始，取出钥匙串的最后 n-1 个数字，然后在后面依次添加其他数字，用一个 HashSet 来记录所有遍历过的密码，这样如果不在集合中，说明是一个新密码，而生成这个新密码也只是多加了一个数字，能保证钥匙串最短，这是一种贪婪的解法，相当的巧妙
 
-     #+BEGIN_SRC java
+     #+BEGIN_SRC csharp
 public String crackSafe(int n, int k) {
     int N = (int)Math.pow(k, n); // 第个位有k种取值,总共有k^n种不同的状态
     String s = "0".repeat(n);
@@ -890,7 +892,7 @@ public String crackSafe(int n, int k) {
 
 来看同一种解法的递归写法，思路和迭代的写法一模一样，写法略有不同而已
 
-     #+BEGIN_SRC java
+     #+BEGIN_SRC csharp
 public String crackSafe(int n, int k) {
     N = (int)Math.pow(k, n); // 第个位有k种取值,总共有k^n种不同的状态
     s = "0".repeat(n);
@@ -939,7 +941,7 @@ You may assume all tickets form at least one valid itinerary. You must use all t
     - 恰有一个顶点的出度与入度差为 1；
     - 恰有一个顶点的入度与出度差为 1；
     - 所有其他顶点的入度和出度相同。
-     #+BEGIN_SRC java
+     #+BEGIN_SRC csharp
      #+END_SRC
 **** 解题思路与分析: Hierholzer 算法
 - Hierholzer 算法用于在连通图中寻找欧拉路径，其流程如下：
@@ -955,7 +957,7 @@ You may assume all tickets form at least one valid itinerary. You must use all t
 
 这样就能保证我们可以「一笔画」地走完所有边，最终的栈中逆序地保存了「一笔画」的结果。我们只要将栈中的内容反转，即可得到答案。
 
-#+BEGIN_SRC java
+#+BEGIN_SRC csharp
 public List<String> findItinerary(List<List<String>> tickets) {
     for (List<String> t : tickets) 
         m.computeIfAbsent(t.get(0), z -> new PriorityQueue<>()).offer(t.get(1));
@@ -985,7 +987,7 @@ Greedy DFS, building the route backwards when retreating.
 
 Hierholzer算法的精髓是当每次访问一条边的时候，删除这条边，当遍历完一个节点所连的所有节点后，才将该节点入栈，最后将栈中的节点反转，即可得到欧拉路径
 
-     #+BEGIN_SRC java
+     #+BEGIN_SRC csharp
 public List<String> findItinerary(String[][] tickets) {
     LinkedList<String> ans = new LinkedList<>();
     for (String[] t : tickets)
@@ -1018,7 +1020,7 @@ void dfs(String airport, LinkedList<String> list) {
   - 恢复u-v这条边
   - 返回cnt1与cnt2的大小，如果cnt2要比cnt1小，说明移除u-v这条边，从v可达的顶点数量减少，产生了额外的联通分量，此时返回falase,说明这条边是桥，反之返回true
 
-     #+BEGIN_SRC java
+     #+BEGIN_SRC csharp
 public List<String> findItinerary(List<List<String>> tickets) { // 这个算法还比较陌生
     for (List<String> t : tickets) 
         adj.computeIfAbsent(t.get(0), z -> new ArrayList<>()).add(t.get(1));
@@ -1069,7 +1071,7 @@ Return any valid arrangement of pairs.
 
 Note: The inputs will be generated such that there exists a valid arrangement of pairs.
 **** 解题思路与分析
-     #+BEGIN_SRC java
+     #+BEGIN_SRC csharp
 // One thing different is that we need to find the start point. it is obvious that if indegree is larger than 0, that is the start point.
 public int[][] validArrangement(int[][] pairs) { 
     Map<Integer, Integer> ins = new HashMap<>();
@@ -1105,7 +1107,7 @@ void dfs(int node) {
 }
      #+END_SRC
 **** 解题思路与分析: todo: 这个答案没有看懂
-     #+BEGIN_SRC java
+     #+BEGIN_SRC csharp
 // In a word, this solution is to first determine whether the target is an Euler circuit or an Euler path, then solve it.
 public int[][] validArrangement(int[][] pairs) {
     int n = pairs.length;
@@ -1178,7 +1180,7 @@ Return true if it is possible to print the matrix targetGrid, otherwise, return 
 
 按照刚才的方法找出所有的有向边，进行拓扑排序即可判断出结果。
 
-#+BEGIN_SRC java
+#+BEGIN_SRC csharp
 public boolean isPrintable(int[][] a) { 
     int m = a.length, n = a[0].length, max = Math.max(m, n);
     for (int i = 0; i < m; i++)
@@ -1233,7 +1235,7 @@ public boolean isPrintable(int[][] a) {
 }
 #+END_SRC
 **** 解题思路与分析: topological sort
-#+BEGIN_SRC java
+#+BEGIN_SRC csharp
 public boolean isPrintable(int[][] a) { 
     int m = a.length, n = a[0].length;
     Set<Integer> col = new HashSet<>();
@@ -1271,6 +1273,7 @@ private boolean topologicalSort(Set<Integer> vis, int c) { // 这种写法好陌
 }
 #+END_SRC
 
+
 ** 双端队列BFS
 *** 1368. Minimum Cost to Make at Least One Valid Path in a Grid - Hard
 Given a m x n grid. Each cell of the grid has a sign pointing to the next cell you should visit if you are currently in this cell. The sign of grid[i][j] can be:
@@ -1291,7 +1294,7 @@ Return the minimum cost to make the grid have at least one valid path.
 
 0-1 广度优先搜索的实现其实与 Dijkstra 算法非常相似。在 Dijkstra 算法中，我们用优先队列保证了距离的单调递增性。而在 0-1 广度优先搜索中，实际上任意时刻队列中的节点与源点的距离均为 dd 或 d + 1d+1（其中 dd 为某一非负整数），并且所有与源点距离为 dd 的节点都出现在队首附近，所有与源点距离为 d + 1d+1 的节点都出现在队尾附近。因此，我们只要使用双端队列，对于边权为 00 和 11 的两种情况分别将对应节点添加至队首和队尾，就保证了距离的单调递增性。
 
-     #+BEGIN_SRC java
+     #+BEGIN_SRC csharp
 public int minCost(int[][] g) {
     int m = g.length, n = g[0].length;
     int [][] d = new int [m][n]; // dist to [0, 0]
@@ -1341,7 +1344,7 @@ public int minCost(int[][] g) {
 
 怎么办呢？简单粗暴的做法是：允许多次扩展同一个点。只要当前边能够更新节点的权值，就将节点再次入队。
 
-     #+BEGIN_SRC java
+     #+BEGIN_SRC csharp
 public int minCost(int[][] g) {
     int [][] dirs = {{0, 0}, {0, 1}, {0, -1}, {1, 0}, {-1, 0}}; 
     int m = g.length, n = g[0].length;
@@ -1374,7 +1377,7 @@ SPFA 算法是一个十分依赖于数据的算法。在特定的数据下，SPF
 
 SPFA 的好处是可以判断负环。我们可以用一个数组记录每个顶点的入队次数，如果有顶点的入队次数超过了 VV 次，则代表图中存在负环。
 
-     #+BEGIN_SRC java
+     #+BEGIN_SRC csharp
 public int minCost(int[][] g) {
     int [][] dirs = {{0, 0}, {0, 1}, {0, -1}, {1, 0}, {-1, 0}}; 
     int m = g.length, n = g[0].length;
@@ -1407,7 +1410,7 @@ public int minCost(int[][] g) {
 }
      #+END_SRC
 **** 解题思路与分析
-     #+BEGIN_SRC java
+     #+BEGIN_SRC csharp
      #+END_SRC
 
 *** 126. Word Ladder II - Hard BFS
@@ -1420,7 +1423,7 @@ Given two words, beginWord and endWord, and a dictionary wordList, return all th
 **** 解题思路与分析: 广度优先搜索
 - 官方题解：https://leetcode-cn.com/problems/word-ladder-ii/solution/dan-ci-jie-long-ii-by-leetcode-solution/
 
-     #+BEGIN_SRC java
+     #+BEGIN_SRC csharp
 public List<List<String>> findLadders(String bgn, String end, List<String> list) { 
     Set<String> ss = new HashSet<>(list);
     if (!ss.contains(end)) return ans;
@@ -1483,7 +1486,7 @@ void dfs(Map<String, List<String>> from, Deque<String> path, String end, String 
 - https://leetcode-cn.com/problems/word-ladder-ii/solution/xiang-xi-tong-su-de-si-lu-fen-xi-duo-jie-fa-by-3-3/
 
 这个题解和自己最初解法比较接近，需要再好好学习一下
- #+BEGIN_SRC java
+ #+BEGIN_SRC csharp
  public List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
     List<List<String>> ans = new ArrayList<>();
     if (!wordList.contains(endWord)) return ans;
@@ -1569,6 +1572,7 @@ private boolean bfsHelper(Set<String> set1, Set<String> set2, Set<String> wordSe
     return done || bfsHelper(set2, set, wordSet, !direction, map);
 }
 #+END_SRC
+
 ** 环与入度等
 *** 685. Redundant Connection II - Hard
 In this problem, a rooted tree is a directed graph such that, there is exactly one node (the root) for which all other nodes are descendants of this node, plus every node has exactly one parent, except for the root node which has no parents.
@@ -1579,7 +1583,7 @@ The resulting graph is given as a 2D-array of edges. Each element of edges is a 
 
 Return an edge that can be removed so that the resulting graph is a rooted tree of n nodes. If there are multiple answers, return the answer that occurs last in the given 2D-array.
 **** 解题思路与分析
-     #+BEGIN_SRC java
+     #+BEGIN_SRC csharp
 // 对于有向图中，如果存在indegree(v) == 2的点，那么要删除的一定是这个点的某条有向边(u -> v)
 //    因为题目最后保证是一个rooted tree（every node has exactly one parent），具体看第一段定义；
 // 如果不存在indegree(v) == 2的点，那么直接删去最后一个造成环存在的有向边即可。
@@ -1663,7 +1667,7 @@ return -1.
   - 当前格子为非障碍物时，穿越路径可以走访问状态为0的格子，走过后，访问状态更新为2
   - 当前格子为非障碍物时，普通路径可以走访问状态为2的格子，走过后，访问状态更新为1
   - 当前格子为障碍物时，如果还保有穿越次数，并且该格子的访问状态为0时，所有路径可以通过此处，通过后，该路径变为穿越路径，并且当前格子访问状态更新为1（更新为2也无所谓）
-     #+BEGIN_SRC java
+     #+BEGIN_SRC csharp
 public int shortestPath(int[][] a, int k) {
     int [][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
     int m = a.length, n = a[0].length;
@@ -1702,7 +1706,7 @@ public int shortestPath(int[][] a, int k) {
      #+END_SRC
 **** 解题思路与分析
 - 思路是BFS。将已经移除了多少个障碍物加进状态，然后做隐式图搜索即可。代码如下：
-     #+BEGIN_SRC java
+     #+BEGIN_SRC csharp
 public int shortestPath(int[][] a, int k) { // 这个思路极为简洁，但速度跟上一个方法比，会慢很多
     if (a.length <= 1 && a[0].length <= 1) return 0;
     int [][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
@@ -1732,6 +1736,7 @@ public int shortestPath(int[][] a, int k) { // 这个思路极为简洁，但速
 }
      #+END_SRC
 
+
 ** 最小生成树
 *** 1489. Find Critical and Pseudo-Critical Edges in Minimum Spanning Tree - Hard
 Given a weighted undirected connected graph with n vertices numbered from 0 to n - 1, and an array edges where edges[i] = [ai, bi, weighti] represents a bidirectional and weighted edge between nodes ai and bi. A minimum spanning tree (MST) is a subset of the graph's edges that connects all vertices without cycles and with the minimum possible total edge weight.
@@ -1740,7 +1745,7 @@ Find all the critical and pseudo-critical edges in the given graph's minimum spa
 
 Note that you can return the indices of the edges in any order.
 **** 解题思路与分析
-     #+BEGIN_SRC java
+     #+BEGIN_SRC csharp
 public List<List<Integer>> findCriticalAndPseudoCriticalEdges(int n, int[][] edges) {
     List<int []> lia = new ArrayList<>();
     for (int [] e : edges) lia.add(e);
@@ -1814,7 +1819,7 @@ static class DSU {
 #+END_SRC
 **** 解题思路与分析
 - 这是自己慢慢掰出来的，掰还第二遍的时候掰错了。。。最好是能够参考一下别人的最优解法
-#+BEGIN_SRC java
+#+BEGIN_SRC csharp
 HashMap<Integer, int []> m = new HashMap<>(); // 这是参考以前写的
 HashSet<Integer> s = new HashSet<>();
 List<List<Integer>> ll = new ArrayList<>();
@@ -1957,7 +1962,7 @@ Note that duplicates may exist in the Skiplist, your code needs to handle this s
   - 查找插入位置。也是从head开始查找插入的位置，每次往下走的节点都需要保存，因为可能在该节点后面插入新的节点作为索引。换句话说，其实查找的是在每一层应该插入的位置并记录在stack中，只是不一定每一层都会插入节点罢了。
   - 插入节点。首先最后一层肯定是要插入节点的，插入完成后，记录一下该层节点，因为如果该节点要加入到索引中，上一层是要指向这一层的。以1/2的概率生成索引，在上一层插入节点；1/2的概率插入结束，不再继续维护索引；如果前面生成了索引，再以1/2的概率插入节点直到插入到顶层或中途因概率停止插入。
 - 5.删除(erase)方法。删除和查找差不多，只不过是对每一层找到的节点都要进行删除，也就是删除节点的同时要删除由其产生的索引节点。
-     #+BEGIN_SRC java
+     #+BEGIN_SRC csharp
 private Node head;
 public Skiplist() {
     Node[] left = new Node[16];  // 左侧向下
@@ -2027,3 +2032,67 @@ class Node {
     }
 }
      #+END_SRC
+
+** 不知道归纳到哪里，又很巧妙的题
+*** 2322. Minimum Score After Removals on a Tree - Hard
+- There is an undirected connected tree with n nodes labeled from 0 to n - 1 and n - 1 edges.
+- You are given a 0-indexed integer array nums of length n where nums[i] represents the value of the ith node. You are also given a 2D integer array edges of length n - 1 where edges[i] = [ai, bi] indicates that there is an edge between nodes ai and bi in the tree.
+- Remove two distinct edges of the tree to form three connected components. For a pair of removed edges, the following steps are defined:
+- Get the XOR of all the values of the nodes for each of the three components respectively.
+- The difference between the largest XOR value and the smallest XOR value is the score of the pair.
+- For example, say the three components have the node values: [4,5,7], [1,9], and [3,3,3]. The three XOR values are 4 ^ 5 ^ 7 = 6, 1 ^ 9 = 8, and 3 ^ 3 ^ 3 = 3. The largest XOR value is 8 and the smallest XOR value is 3. The score is then 8 - 3 = 5.
+- Return the minimum score of any possible pair of edge removals on the given tree.
+- 这里有个详细的分析链接 https://leetcode.cn/problems/minimum-score-after-removals-on-a-tree/solution/dfs-shi-jian-chuo-chu-li-shu-shang-wen-t-x1kk/
+
+[[./pic/2322.png]]
+#+BEGIN_SRC csharp
+public int minimumScore(int[] a, int[][] eg) {
+    int n = a.length;
+    g = new ArrayList [n];
+    Arrays.setAll(g, z -> new ArrayList<>());
+    for (var e : eg) {
+        int u = e[0], v = e[1];
+        g[u].add(v);
+        g[v].add(u);
+    }
+    this.a = a;
+    xor = new int [n];
+    in = new int [n];
+    out = new int [n];
+    dfs(0, -1);
+    var ans = Integer.MAX_VALUE;
+    for (int i = 2, x, y, z ; i < n; i++) // 就直接把0号当作根节点(任何节点作为根节点都无所谓)
+        for (int j = 1; j < i; ++j) {
+            if (in[i] < in[j] && in[j] <= out[i]) { // i 是 j 的祖先节点
+                x = xor[j];
+                y = xor[i] ^ x;
+                z = xor[0] ^ xor[i];
+            } else if (in[j] < in[i] && in[i] <= out[j]) { // j 是 i 的祖先节点
+                x = xor[i];
+                y = xor[j] ^ x;
+                z = xor[0] ^ xor[j];
+            } else { // 删除的两条边分别属于两颗不相交的子树
+                x = xor[i];
+                y = xor[j];
+                z = xor[0] ^ x ^ y;
+            }
+            ans = Math.min(ans, Math.max(Math.max(x, y), z) - Math.min(Math.min(x, y), z));
+            if (ans == 0) return 0; // 提前退出: 这是最小值，不可能再有更小的了，大可不必再作无用功
+        }
+    return ans;
+}       
+List<Integer> [] g;
+// xor【i】: 以当前节点为根节点的所有子节点(包括当前根结点)的累积异或结果(所有节点值相异或)
+int [] a, xor, in, out; 
+int t;
+void dfs(int u, int p) { // 参数：当前节点，与父节点
+    in[u] = ++t; 
+    xor[u] = a[u];
+    for (var v : g[u]) { // 遍历与当前节点连通的所有节点
+        if (v == p) continue; // 若是父节点，可以跳过，因为已经做过了
+        dfs(v, u); // 深度优先遍历子节点
+        xor[u] ^= xor[v]; // 这里用了极巧妙的递归来求所以子树节点的异或值
+    }
+    out[u] = t;
+}
+#+END_SRC 

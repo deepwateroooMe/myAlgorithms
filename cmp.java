@@ -1,4 +1,5 @@
-import com.TreeNode;
+import com.ListNode;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
@@ -409,23 +410,253 @@ public class cmp {
         //     }
         //     return ans;
         // }
+
+        // public String greatestLetter(String t) {
+        //     int n = t.length();
+        //     char [] s = t.toCharArray();
+        //     int [][] cnt = new int [2][26]; // 0:lower; 1: upper
+        //     for (char c : s) {
+        //         if (Character.isUpperCase(c)) cnt[1][c-'A']++;
+        //         else cnt[0][c-'a']++;
+        //     }
+        //     for (int i = 25; i >= 0; i--) 
+        //         if (cnt[0][i] > 0 && cnt[1][i] > 0) return (char)('A' + i) + "";
+        //     return "";
+        // }
+
+// 这里我是想明白了每个数位上只要出现过的，都可以构成有效结果的那一位；可是方便不是最简便的
+        // 此题重点在于上下左右边界的移动。
+        // 先从左至右，填充完之后，上边界下移
+        // 再从上至下，填充完之后，右边界左移
+        // 再从右至左，填充完之后，下边界上移
+        // 再从下至上，填充完之后，左边界右移
+        // 最后注意三种特殊情况的边界判定：
+        // m = 1 时，只有横向左至右移动，注意不要让他死循环
+        //     n = 1 时，只有纵向上至下移动
+        //     m = 1 且 n = 1 时
+        // public int maximumXOR(int[] a) {
+        //     int [] cnt = new int [27];
+        //     for (int v : a) {
+        //         String t = Integer.toBinaryString(v);
+        //         char [] s = t.toCharArray();
+        //         int n = s.length;
+        //         for (int i = n-1; i >= 0; i--) 
+        //             if (s[i] == '1') cnt[n-1-i] |= 1;
+        //     }
+        //     int [] p = new int [27];
+        //     p[0] = 1;
+        //     for (int i = 1; i < 27; i++) 
+        //         p[i] = 2 * p[i-1];
+        //     int ans = 0;
+        //     for (int i = 0; i < 27; i++) 
+        //         if (cnt[i] == 1) ans += p[i];
+        //     return ans;
+        // }
+// 不需要每一位上都去异或，只要异或这些数就可以了        
+        // public int maximumXOR(int[] a) {
+        //     int ans = 0;
+        //     for (int v : a) ans |= v;
+        //     return ans;
+        // }
+
+        // public String decodeMessage(String k, String t) {
+        //     Map<Character, Character> m = new HashMap<>();
+        //     Set<Character> s = new HashSet<>();
+        //     int idx = 0;
+        //     m.put(' ', ' ');
+        //     s.add(' ');
+        //     for (char c : k.toCharArray()) {
+        //         if (s.contains(c)) continue;
+        //         m.put(c, (char)('a'+idx));
+        //         s.add(c);
+        //         idx++;
+        //     }
+        //     StringBuilder r = new StringBuilder();
+        //     for (char c : t.toCharArray()) 
+        //         r.append(m.get(c));
+        //     return r.toString();
+        // }
+
+// // 矩阵每格的遍历顺序旋转方向：你看别人写，也是这么一步一步一行一列地转回来的，还是要不怕困难地去老老实实地写。。。。。
+//         public int[][] spiralMatrix(int m, int n, ListNode h) {
+//             int [][] ans = new int [m][n]; // 1. 创建新数组，默认全部填充 -1
+//             for (int i = 0; i < m; i++) 
+//                 Arrays.fill(ans[i], -1);
+//             // 2. 定义边界 left top right bottom
+//             int l = 0, t = 0, r = n-1, b = m-1; 
+//             // 3. 遍历链表，填充数据(结束条件: 左边界大于右边界 或者上边界大于下边界)
+//             while (!(r < l || b < t)) {
+//                 // 3.1 → 向右移动, 遍历一行
+//                 if (l <= r && t <= b) {
+//                     // 如果top大于bottom，则说明最后一个横行已经填充完成，结束，如果不结束会又反着 ← 回来
+//                     for (int i = l; i <= r; i++) {
+//                         if (h == null) return ans;
+//                         ans[t][i] = h.val;
+//                         h = h.next;
+//                     }
+//                     t++; // 上边界下移
+//                 }
+//                 // 3.2 ↓ 向下移动，遍历一列
+//                 if (t <= b && l <= r) {
+//                     for (int i = t; i <= b; i++) {
+//                         if (h == null) return ans;
+//                         ans[i][r] = h.val;
+//                         h = h.next;
+//                     }
+//                     r--; // 右边界左移
+//                 }
+//                 // 3.3 ← 向左移动，遍历一行
+//                 if (t <= b && l <= r) {
+//                     for (int i = r; i >= l; i--) {
+//                         if (h == null) return ans;
+//                         ans[b][i] = h.val;
+//                         h = h.next;
+//                     }
+//                     b--; // 下边界上移
+//                 }
+//                 // 3.4 ↑ 向上移动，遍历一列
+//                 if (t <= b && l <= r) {
+//                     for (int i = b; i >= t; i--) {
+//                         if (h == null) return ans;
+//                         ans[i][l] = h.val;
+//                         h = h.next;
+//                     }
+//                     l++; // 左边界右移
+//                 }
+//             }
+//             return ans;
+//         }
+
+        // public int countPaths(int[][] a) {
+        //     m = a.length;
+        //     n = a[0].length;
+        //     dp = new Integer [m][n];
+        //     long r = 0l;
+        //     for (int i = 0; i < m; i++) 
+        //         for (int j = 0; j < n; j++) {
+        //             dfsWithMemorization(i, j, a);
+        //             r = (r + dp[i][j]) % mod;
+        //         }
+        //     return (int)r;
+        // }
+        // static final int mod = (int)1e9 + 7;
+        // Integer [][] dp;
+        // int [][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+        // int m, n;
+        // int dfsWithMemorization(int i, int j, int [][] a) {
+        //     if (dp[i][j] != null) return dp[i][j];
+        //     long r = 1l;
+        //     for (int [] d : dirs) {
+        //         int x = i + d[0], y = j + d[1];
+        //         if (x < 0 || x >= m || y < 0 || y >= n || a[i][j] >= a[x][y]) continue;
+        //         r = (r + dfsWithMemorization(x, y, a)) % mod;
+        //     }
+        //     return dp[i][j] = (int) r;
+        // }
+
+        // "_L__R__R_"
+        // "L______RR"
+        //  public boolean canChange(String ss, String ee) { // 不喜欢这个题目，改天再回来写
+        //     int n = ss.length(), j = 0;
+        //     char [] s = ss.toCharArray();
+        //     char [] t = ee.toCharArray();
+        //     for (int i = 0; i < n; i++) {
+        //         if (j == n) {
+        //             while (i < n && s[i] == '_') i++;
+        //             return i == n;
+        //         }
+        //         if (s[i] == t[j]) { // 同时移动
+        //             j++;
+        //             continue;
+        //         }
+        //         if (s[i] == '_' && t[j] != '_') continue; // 只移动 i
+        //         if (s[i] == 'R' && t[j] == '_') { // 只移动j
+        //             while (j < n && t[j] == '_') j++;
+        //             if (j == n || s[i] != t[j]) return false;
+        //             j++;
+        //         }
+        //         // return false;
+        //     }
+        //     return true;
+        // }
+
+        // public long countBadPairs(int[] a) {
+        //     int n = a.length;
+        //     long r = 0l;
+        //     Map<Integer, Integer> m = new HashMap<>();
+        //     for (int i = 0; i < n; i++) {
+        //         int v = a[i] - i;
+        //         r += m.getOrDefault(v, 0); // 这个，居然也会忘记
+        //         m.put(v, m.getOrDefault(v, 0) + 1);
+        //     }
+        //     return (long)n * (n-1) / 2 - r;
+        // }
+ 
+        public int minimumScore(int[] a, int[][] eg) {
+            int n = a.length;
+            g = new ArrayList [n];
+            Arrays.setAll(g, z -> new ArrayList<>());
+            for (var e : eg) {
+                int u = e[0], v = e[1];
+                g[u].add(v);
+                g[v].add(u);
+            }
+            this.a = a;
+            xor = new int [n];
+            in = new int [n];
+            out = new int [n];
+            dfs(0, -1);
+            var ans = Integer.MAX_VALUE;
+            for (int i = 2, x, y, z ; i < n; i++) // 就直接把0号当作根节点(任何节点作为根节点都无所谓)
+                for (int j = 1; j < i; ++j) {
+                    if (in[i] < in[j] && in[j] <= out[i]) { // i 是 j 的祖先节点
+                        x = xor[j];
+                        y = xor[i] ^ x;
+                        z = xor[0] ^ xor[i];
+                    } else if (in[j] < in[i] && in[i] <= out[j]) { // j 是 i 的祖先节点
+                        x = xor[i];
+                        y = xor[j] ^ x;
+                        z = xor[0] ^ xor[j];
+                    } else { // 删除的两条边分别属于两颗不相交的子树
+                        x = xor[i];
+                        y = xor[j];
+                        z = xor[0] ^ x ^ y;
+                    }
+                    ans = Math.min(ans, Math.max(Math.max(x, y), z) - Math.min(Math.min(x, y), z));
+                    if (ans == 0) return 0; // 提前退出: 这是最小值，不可能再有更小的了，大可不必再作无用功
+                }
+            return ans;
+        }       
+        List<Integer> [] g;
+// xor【i】: 以当前节点为根节点的所有子节点(包括当前根结点)的累积异或结果(所有节点值相异或)
+        int [] a, xor, in, out; 
+        int t;
+        void dfs(int u, int p) { // 参数：当前节点，与父节点
+            in[u] = ++t; 
+            xor[u] = a[u];
+            for (var v : g[u]) { // 遍历与当前节点连通的所有节点
+                if (v == p) continue; // 若是父节点，可以跳过，因为已经做过了
+                dfs(v, u); // 深度优先遍历子节点
+                xor[u] ^= xor[v]; // 这里用了极巧妙的递归来求所以子树节点的异或值
+            }
+            out[u] = t;
+        }
     }
     public static void main(String args[]) {
         Solution s = new Solution();
 
-        int [] a = new int []  {1, 2, 5, 6, 1};
-        int [] b = new int [] {0,3,2,4,1};
-
-        long [] r = s.maximumSegmentSum(a, b);
-        System.out.println(Arrays.toString(r));
+        String a = "_R";
+        String b = "R_";
+        
+        boolean r = s.canChange(a, b);
+        System.out.println("r: " + r);
     }
 }
-
-// TreeNode root = new TreeNode(a[0]);
-// root.buildTree(root, a);
-// root.levelPrintTree(root);
 
 // ListNode head = new ListNode(a[0]);
 // head.buildList(head, a);
 // head.printList(head);
 
+// TreeNode root = new TreeNode(a[0]);
+// root.buildTree(root, a);
+// root.levelPrintTree(root);
