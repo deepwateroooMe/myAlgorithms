@@ -13,24 +13,6 @@ import static java.util.stream.Collectors.toMap;
 public class gratwoph {
     public static class Solution {
 
-        // public int[] sortItems(int n, int m, int[] group, List<List<Integer>> beforeItems) {
-        //     HashMap<Integer, List<Integer>> m = new HashMap<>();
-        //     List<Integer> l = new ArrayList<>();
-        //     for (int i = -1; i < m; i++) {
-        //         l = new ArrayList<>();
-        //         m.put(i, l);
-        //     }
-        //     for (int i = 0; i < group.size(); i++) 
-        //         m.get(group[i]).add(i);
-        //     List<List<Integer>> ll = new ArrayList<>();
-        //     for (int i = 0; i < beforeItems.size(); i++) {
-        //         if (beforeItems.get(i).size() == 0) continue;
-        //         l = new ArrayList<>();
-        //         for (int j = 0; j < beforeItems.get(i).size(); j++) {
-        //         }
-        //     }
-        // }
-
         // public int waysToBuildRooms(int[] prevRoom) {
         //     int n = prevRoom.length;
         //     int [] dp = new int [n];

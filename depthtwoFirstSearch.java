@@ -148,56 +148,56 @@ public class depthtwoFirstSearch {
         //     }
         //     return res;
         // }
-        // public int [] sortItems(int n, int m, int[] group, List<List<Integer>> beforeItems) {
-        //     // 组间组内信赖图
-        //     List<List<Integer>> groupItem = new ArrayList<>();
-        //     List<List<Integer>> groupGraph = new ArrayList<>();
-        //     List<Integer> id = new ArrayList<>();        // m+n .....
-        //     for (int i = 0; i < m+n; i++) {
-        //         id.add(i);
-        //         groupItem.add(new ArrayList<Integer>()); // m+n
-        //         groupGraph.add(new ArrayList<Integer>());// m+n
-        //     }
-        //     List<List<Integer>> itemGraph = new ArrayList<>();
-        //     for (int i = 0; i < n; i++)                // n items only
-        //         itemGraph.add(new ArrayList<Integer>());
-        //     int [] insGroup = new int[n+m];     // 组间组内依敕入度级数
-        //     int [] insItem = new int[n];
-        //     int leftoverId = m;                 // reassign -1 groupped items to be groupped from [m, m+1, m+n)
-        //     for (int i = 0; i < n; i++) {
-        //         if (group[i] == -1)
-        //             group[i] = leftoverId++;    // update group[] data
-        //         groupItem.get(group[i]).add(i); // leftoverId i befores to new assigned group[i]
-        //     }
-        //     for (int i = 0; i < n; i++) {
-        //         int curGroupId = group[i];
-        //         for (int item : beforeItems.get(i)) {
-        //             int befGroupId = group[item];   // ids bef item i belong to which group ?
-        //             if (befGroupId == curGroupId) { // 属于同一个组，进行组内排序
-        //                 insItem[i] ++;
-        //                 itemGraph.get(item).add(i);
-        //             } else { // 不属于同一个组：构建组间依赖关系
-        //                 if (groupGraph.get(curGroupId).contains(befGroupId)) return new int [0]; // 4 1  {-1, 0, 0, -1}; {{},{0},{1,3},{2}};
-        //                 insGroup[curGroupId]++;
-        //                 groupGraph.get(befGroupId).add(curGroupId); // group befGroupId goes before group curGroupId
-        //             }
-        //         }
-        //     }
-        //     List<Integer> groupTopSort = topSort(insGroup, groupGraph, id);
-        //     if (groupTopSort.size() == 0) return new int [0];
-        //     int [] ans = new int[n];
-        //     int idx = 0;
-        //     for (int curGroupId : groupTopSort) {
-        //         int size = groupItem.get(curGroupId).size();
-        //         if (size == 0) continue;
-        //         List<Integer> res = topSort(insItem, itemGraph, groupItem.get(curGroupId));
-        //         if (res.size() == 0) return new int [0];
-        //         for (int item : res) {
-        //             ans[idx++] = item;
-        //         }
-        //     }
-        //     return ans;
-        // }
+        public int [] sortItems(int n, int m, int[] group, List<List<Integer>> beforeItems) {
+            // 组间组内信赖图
+            List<List<Integer>> groupItem = new ArrayList<>();
+            List<List<Integer>> groupGraph = new ArrayList<>();
+            List<Integer> id = new ArrayList<>();        // m+n .....
+            for (int i = 0; i < m+n; i++) {
+                id.add(i);
+                groupItem.add(new ArrayList<Integer>()); // m+n
+                groupGraph.add(new ArrayList<Integer>());// m+n
+            }
+            List<List<Integer>> itemGraph = new ArrayList<>();
+            for (int i = 0; i < n; i++)                // n items only
+                itemGraph.add(new ArrayList<Integer>());
+            int [] insGroup = new int[n+m];     // 组间组内依敕入度级数
+            int [] insItem = new int[n];
+            int leftoverId = m;                 // reassign -1 groupped items to be groupped from [m, m+1, m+n)
+            for (int i = 0; i < n; i++) {
+                if (group[i] == -1)
+                    group[i] = leftoverId++;    // update group[] data
+                groupItem.get(group[i]).add(i); // leftoverId i befores to new assigned group[i]
+            }
+            for (int i = 0; i < n; i++) {
+                int curGroupId = group[i];
+                for (int item : beforeItems.get(i)) {
+                    int befGroupId = group[item];   // ids bef item i belong to which group ?
+                    if (befGroupId == curGroupId) { // 属于同一个组，进行组内排序
+                        insItem[i] ++;
+                        itemGraph.get(item).add(i);
+                    } else { // 不属于同一个组：构建组间依赖关系
+                        if (groupGraph.get(curGroupId).contains(befGroupId)) return new int [0]; // 4 1  {-1, 0, 0, -1}; {{},{0},{1,3},{2}};
+                        insGroup[curGroupId]++;
+                        groupGraph.get(befGroupId).add(curGroupId); // group befGroupId goes before group curGroupId
+                    }
+                }
+            }
+            List<Integer> groupTopSort = topSort(insGroup, groupGraph, id);
+            if (groupTopSort.size() == 0) return new int [0];
+            int [] ans = new int[n];
+            int idx = 0;
+            for (int curGroupId : groupTopSort) {
+                int size = groupItem.get(curGroupId).size();
+                if (size == 0) continue;
+                List<Integer> res = topSort(insItem, itemGraph, groupItem.get(curGroupId));
+                if (res.size() == 0) return new int [0];
+                for (int item : res) {
+                    ans[idx++] = item;
+                }
+            }
+            return ans;
+        }
 
 
 
