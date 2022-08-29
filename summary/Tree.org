@@ -899,5 +899,37 @@ public int minCameraCover(TreeNode root) {
     return (dfs(root) == 0 ? 1 : 0) + res;
 }
 #+END_SRC
+*** 112. Path Sum
+Given the root of a binary tree and an integer targetSum, return true if the tree has a root-to-leaf path such that adding up all the values along the path equals targetSum.
 
-
+A leaf is a node with no children.
+#+BEGIN_SRC csharp
+int cnt = 0; // 用一个全局变量 
+public boolean hasPathSum(TreeNode r, int t) {
+    if (r == null) return false;
+    cnt += r.val;
+    if (r.left == null && r.right == null) // {
+        if (cnt == t) return true;
+        // return false; // 这一句可以不要，是因为还可以再往下遍历一层，会自动返回false
+    // }
+    boolean left = hasPathSum(r.left, t);
+    boolean right = hasPathSum(r.right, t);
+    cnt -= r.val;
+    return left || right;
+}
+// 下面是太习惯用两个方法来写，以至于用一个方法写，不太适应        
+public boolean hasPathSum(TreeNode r, int t) {
+    traversal(r, 0, t);
+    return vis;
+}
+boolean vis = false;
+void traversal(TreeNode r, int v, int t) {
+    if (r == null) return ;
+    if (r.left == null && r.right == null) {
+        if (v + r.val == t) vis = true;
+        return ;
+    }
+    traversal(r.left, v + r.val, t);
+    traversal(r.right, v + r.val, t);
+}
+#+END_SRC 

@@ -127,53 +127,108 @@ public class cmp {
         //     }
         //     return ans;
         // }
-        public int[][] buildMatrix(int k, int[][] row, int[][] col) {
-            int m = row.length, n = col.length;
-            int [] r = new int [k+1], c = new int [k+1]; // ins
-            List<Integer> [] rg = new ArrayList [k+1], cg = new ArrayList [k+1];
-            Arrays.setAll(rg, z -> new ArrayList<>()); 
-            Arrays.setAll(cg, z -> new ArrayList<>());
-            Set<Integer> ri = new HashSet<>();
-            Set<Integer> ci = new HashSet<>();
-            for (var a : row) {
-                int u = a[0], v = a[1];
-                r[v]++;
-                rg[u].add(v);
-                ri.add(u);
-                ri.add(v);
-            }
-            for (var a : col) {
-                int u = a[0], v = a[1];
-                c[v]++;
-                cg[u].add(v);
-                ci.add(u);
-                ci.add(v);
-            }
-            List<Integer> rr = topologicalSort(r, rg, ri); // 排得不准，只列出了一种情况，不是所有情况
-            List<Integer> cc = topologicalSort(c, cg, ci);
-            // System.out.println("rr.size(): " + rr.size());
-            // System.out.println(Arrays.toString(rr.toArray()));
-            // System.out.println("cc.size(): " + cc.size());
-            // System.out.println(Arrays.toString(cc.toArray()));
-            int [][] ans = new int [k][k];
-// 接下来应该是用gready算法一个一个往里面塞，可是感觉还是没想透，暂时不做了
-            return ans;
-        }
-        List<Integer> topologicalSort(int [] ins, List<Integer> [] g, Set<Integer> vals) {
-            ArrayDeque<Integer> q = new ArrayDeque<>();
-            for (var v : vals) 
-                if (ins[v] == 0) q.offerLast(v);
-            List<Integer> r = new ArrayList<>();
-            while (!q.isEmpty()) {
-                int cur = q.pollFirst();
-                r.add(cur);
-                for (var v : g[cur]) 
-                    if (--ins[v] == 0) q.offerLast(v);
-            }
-            return r;
-        }
-        
+// // 这个题目没有写完        
+//         public int[][] buildMatrix(int k, int[][] row, int[][] col) {
+//             int m = row.length, n = col.length;
+//             int [] r = new int [k+1], c = new int [k+1]; // ins
+//             List<Integer> [] rg = new ArrayList [k+1], cg = new ArrayList [k+1];
+//             Arrays.setAll(rg, z -> new ArrayList<>()); 
+//             Arrays.setAll(cg, z -> new ArrayList<>());
+//             Set<Integer> ri = new HashSet<>();
+//             Set<Integer> ci = new HashSet<>();
+//             for (var a : row) {
+//                 int u = a[0], v = a[1];
+//                 r[v]++;
+//                 rg[u].add(v);
+//                 ri.add(u);
+//                 ri.add(v);
+//             }
+//             for (var a : col) {
+//                 int u = a[0], v = a[1];
+//                 c[v]++;
+//                 cg[u].add(v);
+//                 ci.add(u);
+//                 ci.add(v);
+//             }
+//             List<Integer> rr = topologicalSort(r, rg, ri); // 排得不准，只列出了一种情况，不是所有情况
+//             List<Integer> cc = topologicalSort(c, cg, ci);
+//             // System.out.println("rr.size(): " + rr.size());
+//             // System.out.println(Arrays.toString(rr.toArray()));
+//             // System.out.println("cc.size(): " + cc.size());
+//             // System.out.println(Arrays.toString(cc.toArray()));
+//             int [][] ans = new int [k][k];
+// // 接下来应该是用gready算法一个一个往里面塞，可是感觉还是没想透，暂时不做了
+//             return ans;
+//         }
+//         List<Integer> topologicalSort(int [] ins, List<Integer> [] g, Set<Integer> vals) {
+//             ArrayDeque<Integer> q = new ArrayDeque<>();
+//             for (var v : vals) 
+//                 if (ins[v] == 0) q.offerLast(v);
+//             List<Integer> r = new ArrayList<>();
+//             while (!q.isEmpty()) {
+//                 int cur = q.pollFirst();
+//                 r.add(cur);
+//                 for (var v : g[cur]) 
+//                     if (--ins[v] == 0) q.offerLast(v);
+//             }
+//             return r;
+//         }
 
+//         public long distinctNames(String[] a) {
+//             int n = a.length, N = 26;
+//             Set<String> s = new HashSet<>(Arrays.asList(a));
+//             List<String> [] ls = new ArrayList [N];
+//             Arrays.setAll(ls, z -> new ArrayList<>()); 
+//             for (var v : a) {
+//                 char c = v.charAt(0);
+//                 ls[c-'a'].add(v);
+//             }
+//             long r = 0;
+// // 这几层嵌套的循环下来，big O ?            
+//             for (int i = 0; i < N-1; i++) { // 26
+//                 if (ls[i].size() == 0) continue;
+//                 char ca = ls[i].get(0).charAt(0);
+//                 for (var sa : ls[i]) { // 
+//                     for (int j = i+1; j < N; j++) { // 26
+//                         if (ls[j].size() == 0) continue;
+//                         char cb = ls[j].get(0).charAt(0);
+//                         for (var sb : ls[j]) { // 
+//                             if (!s.contains(cb + sa.substring(1)) && !s.contains(ca + sb.substring(1)))
+//                                 r++;
+//                         }
+//                     }
+//                 }
+//             }
+//             return r * 2;
+//         }
+        // https://ssg.leetcode-cn.com/problems/naming-a-company/solution/by-endlesscheng-ruz8/
+        // 上面还有几种方法也需要看一下
+        // 定义cnt[i][j] 表示组中首字母不包含 ii 但包含 jj 的组的个数。
+        // 枚举每个组，统计cnt，同时枚举该组的首字母 ii 和不在该组的首字母 jj，答案即为 cnt[i][j] 的累加值。
+        // 简单来说就是「有 ii 无 jj」可以和「无 ii 有 jj」的字符串互换。
+        // 由于我们是一次遍历所有组，没有考虑两个字符串的顺序，最后需要把答案乘 22，表示 A+B 和 B+A 两种字符串的组合。
+        public long distinctNames(String[] a) {
+            // [k, v]: [ a[i].substring(1), mask of all contained a[i].charAt(0) ]
+            Map<String, Integer> m = new HashMap<>();
+            for (var v : a) {
+                String k = v.substring(1);
+                m.put(k, m.getOrDefault(k, 0) | 1 << (v.charAt(0) - 'a'));
+            }
+            int [][] cnt = new int [26][26]; // cnt[i][j] 表示组中首字母不包含 ii 但包含 jj 的组的个数
+            long r = 0l;
+            for (var mask : m.values())  // 遍历所有的分组的mask首字母集合
+                for (int i = 0; i < 26; i++) 
+                    if ((mask >> i & 1) == 0) { // 当前mask不包含 i首字母
+                        for (int j = 0; j < 26; j++) 
+                            if ((mask >> j & 1) > 0) // 当前mask包含j首字母
+                                ++cnt[i][j];
+                    } else { // 当前mask包含 i首字母
+                        for (int j = 0; j < 26; j++) 
+                            if ((mask >> j & 1) == 0) // 当前mask包含j首字母
+                                r += cnt[i][j];
+                    }
+            return r * 2;
+        }
     }
     public static void main(String args[]) {
         Solution s = new Solution();
