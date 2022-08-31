@@ -205,42 +205,124 @@ public class cmp {
         // 上面还有几种方法也需要看一下
         // 定义cnt[i][j] 表示组中首字母不包含 ii 但包含 jj 的组的个数。
         // 枚举每个组，统计cnt，同时枚举该组的首字母 ii 和不在该组的首字母 jj，答案即为 cnt[i][j] 的累加值。
-        // 简单来说就是「有 ii 无 jj」可以和「无 ii 有 jj」的字符串互换。
+        // 简单来说就是「有 ii 无 jj」可以和「无 ii 有 jj」的字符串互换。// <<<<<<<<<< // <<<<<<<<<<<<<<<<<<<< 
         // 由于我们是一次遍历所有组，没有考虑两个字符串的顺序，最后需要把答案乘 22，表示 A+B 和 B+A 两种字符串的组合。
-        public long distinctNames(String[] a) {
-            // [k, v]: [ a[i].substring(1), mask of all contained a[i].charAt(0) ]
-            Map<String, Integer> m = new HashMap<>();
-            for (var v : a) {
-                String k = v.substring(1);
-                m.put(k, m.getOrDefault(k, 0) | 1 << (v.charAt(0) - 'a'));
-            }
-            int [][] cnt = new int [26][26]; // cnt[i][j] 表示组中首字母不包含 ii 但包含 jj 的组的个数
-            long r = 0l;
-            for (var mask : m.values())  // 遍历所有的分组的mask首字母集合
-                for (int i = 0; i < 26; i++) 
-                    if ((mask >> i & 1) == 0) { // 当前mask不包含 i首字母
-                        for (int j = 0; j < 26; j++) 
-                            if ((mask >> j & 1) > 0) // 当前mask包含j首字母
-                                ++cnt[i][j];
-                    } else { // 当前mask包含 i首字母
-                        for (int j = 0; j < 26; j++) 
-                            if ((mask >> j & 1) == 0) // 当前mask包含j首字母
-                                r += cnt[i][j];
-                    }
-            return r * 2;
-        }
+        // public long distinctNames(String[] a) {
+        //     // [k, v]: [ a[i].substring(1), mask of all contained a[i].charAt(0) ]
+        //     Map<String, Integer> m = new HashMap<>();
+        //     for (var v : a) {
+        //         String k = v.substring(1);
+        //         m.put(k, m.getOrDefault(k, 0) | 1 << (v.charAt(0) - 'a'));
+        //     }
+        //     int [][] cnt = new int [26][26]; // cnt[i][j] 表示组中首字母不包含 ii 但包含 jj 的组的个数
+        //     long r = 0l;
+        //     for (var mask : m.values())  // 遍历所有的分组的mask首字母集合
+        //         for (int i = 0; i < 26; i++) 
+        //             if ((mask >> i & 1) == 0) { // 当前mask不包含 i首字母
+        //                 for (int j = 0; j < 26; j++) 
+        //                     if ((mask >> j & 1) > 0) // 当前mask包含j首字母
+        //                         ++cnt[i][j];
+        //             } else { // 当前mask包含 i首字母
+        //                 for (int j = 0; j < 26; j++) 
+        //                     if ((mask >> j & 1) == 0) // 当前mask包含j首字母
+        //                         r += cnt[i][j];
+        //             }
+        //     return r * 2;
+        // }
+
+        // // 这个题目感觉很简单，可是里面可能还是有很多死角吧，暂时不想写了: 为什么好好的题目就被自己写出这么多的死角来了呢。。。哈哈哈
+        // public boolean matchReplacement(String s, String sub, char[][] a) {
+        //     int n = s.length();
+        //     Map<Character, List<Character>> m = new HashMap<>();
+        //     for (var v : a) // 其实这里不用遍历完，只遍历有效值(这里因为没有第一时间精简，给后面造成麻烦)
+        //         m.computeIfAbsent(v[0], z -> new ArrayList<>()).add(v[1]);
+        //     if (sub.length() == 1 && (m.containsKey(sub.charAt(0)) || s.indexOf(""+sub.charAt(0)) != -1)) return true;
+        //     List<Integer> l = new ArrayList<>();
+        //     for (int i = 0; i < s.length(); i++)
+        //         if (s.charAt(i) == sub.charAt(0) || m.containsKey(sub.charAt(0)) && m.get(sub.charAt(0)).contains(s.charAt(0))) l.add(i);
+        //     return isSub(s, sub, l, m);
+        // }
+        // boolean isSub(String ss, String tt, List<Integer> l, Map<Character, List<Character>> m) {
+        //     char [] s = ss.toCharArray();
+        //     char [] t = tt.toCharArray();
+        //     int i = 0;
+        //     for (var v : l) {
+        //         if (v + tt.length() > ss.length()) return false;
+        //         for (i = v+1; i < v + tt.length(); i++) {
+        //             if (s[i] == t[i-v]) continue;
+        //             boolean matched = false;
+        //             if (s[i] != t[i-v] && !m.containsKey(t[i-v])) break;
+        //             if (s[i] != t[i-v] && m.containsKey(t[i-v])) {
+        //                 for (var c : m.get(t[i-v])) 
+        //                     if (s[i] == c) {
+        //                         matched = true;
+        //                         break;
+        //                     }
+        //             }
+        //             if (s[i] != t[i-v] && !matched) break;
+        //         }
+        //         if (i == v + tt.length()) return true;
+        //     }
+        //     return false;
+        // } 
+        // public boolean matchReplacement(String ss, String st, char[][] a) { // 正确答案
+        //     n = ss.length();
+        //     m = st.length();
+        //     if (n < m) return false;
+        //     for (var v : a) {
+        //         Set<Character> set = map.get(v[0]);
+        //         if (set == null) {
+        //             set = new HashSet<>();
+        //             map.put(v[0], set);
+        //         }
+        //         set.add(v[1]);
+        //     }
+        //     char [] s = ss.toCharArray();
+        //     char [] t = st.toCharArray();
+        //     Set<Character> bgn = map.getOrDefault(t[0], new HashSet<>()); // <<<<<<<<<<<<<<<<<<<< 
+        //     for (int i = 0; i+m <= n; i++) {
+        //         // if (s[i] != st.charAt(0) && (!map.containsKey(t[0]) || !map.get(t[0]).contains(s[i]))) continue;
+        //         // if (s[i] != st.charAt(0) && !bgn.contains(s[i])) continue;
+        //         if ((s[i] == t[0] || bgn.contains(s[i])) && isMatch(i, ss, st)) return true;
+        //     }
+        //     return false;
+        // }
+        // Map<Character, Set<Character>> map = new HashMap<>();
+        // int m, n;
+        // boolean isMatch(int idx, String ss, String tt) {
+        //     char [] s = ss.toCharArray();
+        //     char [] t = tt.toCharArray();
+        //     for (int i = idx+1; i < idx+m && i < n; i++) 
+        //         if (s[i] != t[i-idx] && (!map.containsKey(t[i-idx]) || !map.get(t[i-idx]).contains(s[i]))) return false;
+        //     return true;
+        // }
     }
     public static void main(String args[]) {
         Solution s = new Solution();
 
-        int [][] a = new int [][] {{1,2},{3,2}};
-        int [][] b = new int [][] {{2,1},{3,2}};
+        // String a = "eeeegeeeegeeeegeeeegeeeegeeeegeeeeg";
+        // String b = "eeeee";
+        // char [][] c = new char [][] {{'e','a'},{'e','b'},{'e','c'},{'e','d'},{'e','f'},{'e','h'},{'e','i'},{'e','j'},{'e','k'},{'e','l'},{'e','m'},{'e','n'},{'e','o'},{'e','p'},{'e','q'},{'e','r'},{'e','s'},{'e','t'},{'e','u'},{'e','v'},{'e','w'},{'e','x'},{'e','y'},{'e','z'},{'e','0'},{'e','1'},{'e','2'},{'e','3'},{'e','4'},{'e','5'},{'e','6'},{'e','7'},{'e','8'},{'e','9'},{'g','a'},{'g','b'},{'g','c'},{'g','d'},{'g','f'},{'g','h'},{'g','i'},{'g','j'},{'g','k'},{'g','l'},{'g','m'},{'g','n'},{'g','o'},{'g','p'},{'g','q'},{'g','r'},{'g','s'},{'g','t'},{'g','u'},{'g','v'},{'g','w'},{'g','x'},{'g','y'},{'g','z'},{'g','0'},{'g','1'},{'g','2'},{'g','3'},{'g','4'},{'g','5'},{'g','6'},{'g','7'},{'g','8'},{'g','9'}}; 
         
-        int [][] r = s.buildMatrix(3, a, b);
+        // String a = "9314o85hn6gc0amwqxipx4lgqokxlobgbhkcp6oyamuols1f2w65il0mm4i28omxq2occg7trfm6sx7o5zkoq4po5uzmuet";
+        // String b = "kcp6oyamuols1f2w65il0mm4i28omx";
+        // char [][] c = new char [][] {{'a','4'}}; 
 
-        System.out.println("r.length: " + r.length);
-        for (int z = 0; z < r.length; ++z) 
-            System.out.println(Arrays.toString(r[z]));    }
+        // String a = "hfk28rigw1mwpjc5nea9ilae79kwszbdfab2n33tdzb1i9f11x95j16h0c1os4gnbh2yopgdwjx81dph66e2azkbshex2xg9gnwt13nfxmzbilicjkpodvs85q89bf3m06qxfx351zxi7t2yr7zy558q4do4xpkkw5cht23yjtfavehuhooqt6nq3dote4cl0d8";                      
+        // String b = "yhbaxrc5x1cqba2j2pvn6t8s9hqq05ed6sisib2rypq8rzx0ghro4u4dfwhzxvo";
+        // char [][] c = new char [][] {{'h','u'},{'r','2'},{'8','l'},{'e','r'},{'8','i'},{'h','w'},{'a','j'},{'h','o'},{'p','d'}}; 
+
+        // String a = "27awmey8ooynp9usl9q2gg2co2eclhw3wk2uwje4m4tp71qr5s9xrieroj12hy4l6jfx01oxekipt96vqpjbfl4v686mdppgo722y1r6jk0iaeq1nd7tq1s8hr4pk0z906ntxyjtqgyzfbxmkp63x970sbjezlnvwj37bdkrrxth2x7z30oazq8dnq103ntswp2nzeef8rj89kd0it9mlj3pyw5qpggcdmsg49nz55gik6yavx2nrqt8m23i5r3p3b7nb6h46z2xbq2qrp9xo60uqioz02d54roqka2fzhk0kh4pnaofvbz";
+        // String b = "ibhqq947tqqsdur0pk9r906ngxyjtqgyzzyxm6pf3l9k9nylhzl9q2l37ydkrrlthcl7z39obzqd4nqq939gnwpc9zhefdrldfkd0itfmxj3py29qpygl4msy";
+        // char [][] c = new char [][] {{'c','2'},{'a','h'},{'j','h'},{'q','1'},{'l','5'},{'f','9'},{'x','l'},{'r','z'},{'b','0'},{'b','c'},{'1','5'},{'e','6'},{'v','8'},{'h','u'},{'n','i'},{'a','7'},{'g','j'},{'c','b'},{'n','e'},{'f','u'},{'j','5'},{'9','n'},{'q','w'},{'x','k'},{'e','j'},{'5','t'},{'2','w'},{'v','0'},{'m','a'},{'3','e'},{'k','7'},{'j','e'},{'y','g'},{'8','o'},{'w','v'},{'5','m'},{'5','8'},{'0','x'},{'y','b'},{'q','v'},{'h','e'},{'8','c'},{'f','6'},{'b','a'},{'d','8'},{'u','f'},{'l','x'},{'l','c'},{'u','i'},{'6','k'},{'n','s'},{'9','5'},{'z','f'},{'g','t'},{'4','d'},{'0','4'},{'l','j'},{'u','h'},{'9','0'}}; 
+
+        String a = "f178d2vdlwpycfmqgzd55fvfyamxx3owptoik8q52uy5ssteeboauki5x3zcl4gax53lurcpvs2jdju14a9115dk9q8adb7j31a07leiy4af57szw4xqwdnpcq8qj5nrkeb30lasl80kewhn987fvorke2rwg98bntfu2cxwkte509h8iweq85s3l47ayywf8dgesoy23e4qpjmrosmh0za6heoxd6fp8onv2dgumk6vkxy72cjwzkq139qecvnvihczb29uhsv0be7ftuxtzjetgfej0ijmnoej627z0vad5ghu22hnzhpyfasuy5l9kub2bmye2qxa4k4lnt15l7i916rilgbhbcifpjn3";
+        String b = "iu14at1j5dk9a8a3bzj3jb07leiycb0qzszw4xqr35omawaj5nzkjv3flb6l8fuerhnt8z0v1zkj2zwgt8vno0u2c1wuoj5f9hwireq8qs3ac7ay9wfw3sj61y23e4aojpz1";
+        char [][] c = new char [][] {{'r','4'},{'z','r'},{'5','c'},{'t','y'},{'f','0'},{'3','8'},{'7','1'},{'j','1'},{'s','u'},{'o','e'},{'f','l'},{'7','g'},{'5','x'},{'o','d'},{'k','u'},{'x','w'},{'z','c'},{'8','j'},{'s','x'},{'j','p'},{'9','8'},{'h','k'},{'o','p'},{'w','8'},{'i','j'},{'c','s'},{'r','5'},{'1','x'},{'i','k'},{'u','s'},{'q','m'},{'j','l'},{'k','e'},{'i','4'},{'a','q'},{'1','3'},{'d','i'},{'w','a'},{'0','3'},{'4','v'},{'p','m'},{'s','c'},{'c','i'},{'e','w'},{'m','f'},{'0','f'},{'6','w'},{'i','v'},{'z','7'},{'8','a'},{'o','c'},{'a','l'},{'s','g'},{'r','b'},{'o','t'},{'n','a'},{'v','c'},{'5','n'},{'i','c'},{'p','d'},{'9','y'},{'u','k'},{'j','e'},{'3','d'},{'q','5'},{'m','c'},{'1','o'},{'r','w'},{'u','6'},{'b','a'},{'t','9'},{'6','s'},{'v','b'},{'1','i'},{'c','4'}}; 
+
+        boolean r = s.matchReplacement(a, b, c);
+        System.out.println("r: " + r);
+    }
 }
 
 // ListNode head = new ListNode(a[0]);
@@ -250,3 +332,6 @@ public class cmp {
 // TreeNode root = new TreeNode(a[0]);
 // root.buildTree(root, a);
 // root.levelPrintTree(root);
+
+
+// long weekend long trip plan, not attending this weekend's two contests. will join the next weekend's.
