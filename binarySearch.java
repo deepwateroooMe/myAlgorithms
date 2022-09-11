@@ -141,26 +141,26 @@ public class binarySearch {
         // }
 
 
-        // private int binarySearch(int [] arr, int n, int v) {
-        //     int l = 0, r = n-1;
-        //     while (l <= r) {         
-        //         int m = l + (r-l)/2;
-        //         if (arr[m] < v) l = m+1;
-        //         else r = m-1;
-        //     }
-        //     return l;
-        // }
-        // private int lengthOfLIS(int [] arr) { 
-        //     int n = arr.length, size = 0, j = 0;
-        //     int [] dp = new int [n];
-        //     for (int i = 0; i < n; i++) {
-        //         if (arr[i] == -1) continue;
-        //         j = binarySearch(dp, size, arr[i]);
-        //         dp[j] = arr[i];
-        //         if (j == size) size++;
-        //     }
-        //     return size;
-        // }
+        private int binarySearch(int [] arr, int n, int v) {
+            int l = 0, r = n-1;
+            while (l <= r) {         
+                int m = l + (r-l)/2;
+                if (arr[m] < v) l = m+1;
+                else r = m-1;
+            }
+            return l;
+        }
+        private int lengthOfLIS(int [] arr) { 
+            int n = arr.length, size = 0, j = 0;
+            int [] dp = new int [n];
+            for (int i = 0; i < n; i++) {
+                if (arr[i] == -1) continue;
+                j = binarySearch(dp, size, arr[i]);
+                dp[j] = arr[i];
+                if (j == size) size++;
+            }
+            return size;
+        }
         // public int minOperations(int[] target, int[] arr) {
         //     int n = arr.length;
         //     int m = target.length;
