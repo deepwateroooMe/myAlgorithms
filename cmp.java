@@ -115,7 +115,7 @@ public class cmp {
         //         max = Math.max(max, v);
         //     return max;
         // }
-        
+
         // public int findMaximumSustainableClusterSize(List<Integer> pl, List<Integer> bl, long pmax) {
         //     p = pl.stream().mapToInt(Integer::intValue).toArray();
         //     b = bl.stream().mapToInt(Integer::intValue).toArray();
@@ -221,42 +221,6 @@ public class cmp {
         //         ts.remove(lower);
         //     }
         // }
-        // // 不知道哪里写错了
-        // class Range implements Comparable<Range> {
-        //     int l, r;
-        //     public Range(int l, int r) {
-        //         this.l = l;
-        //         this.r = r;
-        //     }
-        //     @Override public int compareTo(Range other) {
-        //         return this.l - other.l;
-        //     }
-        // }
-        // boolean vis = false;
-        // public int minGroups(int[][] a) {
-        //     int n = a.length;
-        //     List<TreeSet<Range>> l = new ArrayList<>();
-        //     for (var i : a) {
-        //         Range r = new Range(i[0], i[1]);
-        //         vis = false;
-        //         for (var ts : l) {
-        //             Range lower = ts.floor(r);
-        //             Range higher = ts.ceiling(r);
-        //             if ((lower == null || lower.r < r.l) && (higher == null || higher.l > r.r)) {
-        //                 ts.add(r);
-        //                 vis = true;
-        //                 break;
-        //             }
-        //         }
-        //         if (!vis) {
-        //             TreeSet<Range> s = new TreeSet<>(); // 升序排列
-        //             s.add(r);
-        //             l.add(s);
-        //         }
-        //     }
-        //     return l.size();
-        // }
-        // int [][] a = new int [][] {{229966,812955},{308778,948377},{893612,952735},{395781,574123},{478514,875165},{766513,953839},{460683,491583},{133951,212694},{376149,838265},{541380,686845},{461394,568742},{804546,904032},{422466,467909},{557048,758709},{680460,899053},{110928,267321},{470258,650065},{534607,921875},{292993,994721},{645020,692560},{898840,947977},{33584,330630},{903142,970252},{17375,626775},{804313,972796},{582079,757160},{785002,987823},{599263,997719},{486500,527956},{566481,813653},{211239,863969},{808577,883125},{21880,516436},{264747,412144},{327175,772333},{984807,988224},{758172,916673},{23583,406006},{954674,956043},{379202,544291},{688869,785368},{841735,983869},{99836,916620},{332504,740696},{740840,793924},{896607,920924},{868540,922727},{125849,550941},{433284,685766}};
 
         // public int lengthOfLIS(int[] a, int k) { // N: [1, 10^5] 有个贪心的O(NlogN)算法，但是一时半会儿想不起来了
         //     int n = a.length, max = 1;
@@ -273,56 +237,131 @@ public class cmp {
         //         }
         //     return max;
         // }
-        public int lengthOfLIS(int[] a, int k) { // N: [1, 10^5] 有个贪心的O(NlogN)算法，但是一时半会儿想不起来了
-            int n = a.length, max = 1, N = Arrays.stream(a).max().getAsInt() + 1;
-            // List<Integer>[] ll = new ArrayList[N];
-            // Arrays.setAll(ll, z -> new ArrayList<>());
-            // ll[a[0]].add(a[0]);
-            int [][] f = new int [N][2];
-            for (var v : a) {
-                f[v][0] = v; // 队尾的值 
-                f[v][1] = 1; // 初始化，以当前值为头的最大长度
-            }
-            // System.out.println("f.length: " + f.length);
-            // for (int z = 0; z < f.length; ++z) 
-            //     System.out.println(Arrays.toString(f[z]));
+        // public int lengthOfLIS(int[] a, int k) { // N: [1, 10^5] 有个贪心的O(NlogN)算法，但是一时半会儿想不起来了
+        //     int n = a.length, max = 1, N = Arrays.stream(a).max().getAsInt() + 1;
+        //     // List<Integer>[] ll = new ArrayList[N];
+        //     // Arrays.setAll(ll, z -> new ArrayList<>());
+        //     // ll[a[0]].add(a[0]);
+        //     int [][] f = new int [N][2];
+        //     for (var v : a) {
+        //         f[v][0] = v; // 队尾的值 
+        //         f[v][1] = 1; // 初始化，以当前值为头的最大长度
+        //     }
+        //     // System.out.println("f.length: " + f.length);
+        //     // for (int z = 0; z < f.length; ++z) 
+        //     //     System.out.println(Arrays.toString(f[z]));
 
-            for (int i = 1; i < n; i++) {
-                System.out.println("\n i: " + i);
-                for (int j = a[i]-1; j >= Math.max(1, a[i]-k); j--) {
-                    System.out.println("j: " + j); 
-                    if (f[j][1] > 0 && f[j][0] >= a[i] - k && f[j][1] + 1 >= f[i][1]) {
-                        if (f[j][1] + 1 > f[i][1]) {
-                            f[i][1] = f[j][1] + 1;
-                            max = Math.max(max, f[i][1]);
-                            System.out.println("max: " + max); 
-                        } // 没想明白其它情况下要如何再优化一下
-                    }
-                }
-                // if (a[i] > l.get(l.size()-1) && a[i] - l.get(l.size()-1) <= k) {
-                //     l.add(a[i]);
-                //     max = l.size();
-                // } else {
-                //     int bgn = 0, end = l.size()-1, m = -1;
-                //     while (bgn <= end) {
-                //         int mid = bgn + (end - bgn) / 2;
-                //         if (a[i] <= l.get(mid)) {
-                //             m = mid;
-                //             end = mid - 1;
-                //         } else bgn =  mid + 1;
-                //     }
-                //     if (m != -1 && l.get(m) > a[i]) // 贪心法：总是填最小可能的值在一个位置上
-                //         l.set(m, a[i]);
-                // }
-                System.out.println("max: " + max); 
-            }
-            return max;
+        //     for (int i = 1; i < n; i++) {
+        //         System.out.println("\n i: " + i);
+        //         for (int j = a[i]-1; j >= Math.max(1, a[i]-k); j--) {
+        //             System.out.println("j: " + j); 
+        //             if (f[j][1] > 0 && f[j][0] >= a[i] - k && f[j][1] + 1 >= f[i][1]) {
+        //                 if (f[j][1] + 1 > f[i][1]) {
+        //                     f[i][1] = f[j][1] + 1;
+        //                     max = Math.max(max, f[i][1]);
+        //                     System.out.println("max: " + max); 
+        //                 } // 没想明白其它情况下要如何再优化一下
+        //             }
+        //         }
+        //         // if (a[i] > l.get(l.size()-1) && a[i] - l.get(l.size()-1) <= k) {
+        //         //     l.add(a[i]);
+        //         //     max = l.size();
+        //         // } else {
+        //         //     int bgn = 0, end = l.size()-1, m = -1;
+        //         //     while (bgn <= end) {
+        //         //         int mid = bgn + (end - bgn) / 2;
+        //         //         if (a[i] <= l.get(mid)) {
+        //         //             m = mid;
+        //         //             end = mid - 1;
+        //         //         } else bgn =  mid + 1;
+        //         //     }
+        //         //     if (m != -1 && l.get(m) > a[i]) // 贪心法：总是填最小可能的值在一个位置上
+        //         //         l.set(m, a[i]);
+        //         // }
+        //         System.out.println("max: " + max); 
+        //     }
+        //     return max;
+        // }
+
+        // public long sellingWood(int m, int n, int[][] prices) {
+        //     long[][] dp = new long[m+1][n+1];
+        //     for(int [] price:prices){
+        //         int x = price[0];
+        //         int y = price[1];
+        //         int p = price[2];
+        //         dp[x][y] = Math.max(dp[x][y],p);
+        //         for(int i = x; i <= m; i++){
+        //             for(int j = y; j <= n; j++){
+        //                 dp[i][j] = Math.max(dp[i][j],Math.max(dp[i-x][j]+dp[x][j],dp[i][j-y]+dp[i][y]));
+        //             }
+        //         }
+        //     }
+        //     return dp[m][n];
+        // }
+        // public long sellingWood(int m, int n, int[][] a) { // PASS
+        //     long [][] f = new long [m+1][n+1];
+        //     for (var v : a) 
+        //         f[v[0]][v[1]] = v[2];
+        //     for (int i = 1; i <= m; i++) 
+        //         for (int j = 1; j <= n; j++) {
+        //             for (int h = 1; h <= i / 2; h++) // 再多横切一刀的情况下，最优化的解
+        //                 f[i][j] = Math.max(f[i][j], f[h][j] + f[i-h][j]);
+        //             for (int w = 1; w <= j / 2; w++)  // 再多竖切一刀的情况下，最优化的解
+        //                 f[i][j] = Math.max(f[i][j], f[i][w] + f[i][j-w]);
+        //         }
+        //     return f[m][n];
+        // }
+        // // 下面的这个解法里感觉可能还有死角，我也还没能够想得很透彻，等过段时间网上的解法比较多的时候再搜索好好想一下
+        // public long sellingWood(int m, int n, int[][] a) { // FAILED
+        //     long [][] f = new long [m+1][n+1];
+        //     for (var v : a) {
+        //         int x = v[0], y = v[1];
+        //         f[x][y] = Math.max(f[x][y], v[2]);
+        //         for (int i = x; i <= m; i++) 
+        //             for (int j = y; j <= n; j++) 
+        //                 f[i][j] = Math.max(f[i][j], Math.max(f[i-x][j] + f[x][j], f[i][j-y] + f[i][y]));
+        //     }
+        //     return f[m][n];
+        // }
+
+        // public long minSumSquareDiff(int[] a, int[] b, int k1, int k2) {
+        //     int n = a.length;
+        //     long k = k1 + k2, sum = 0, ans = 0l;
+        //     long [] d = new long [n];
+        //     for (int i = 0; i < n; i++) {
+        //         d[i] = Math.abs(a[i] - b[i]);
+        //         sum += d[i];
+        //         ans += d[i] * d[i];
+        //     }
+        //     if (sum <= k) return 0;
+        //     Arrays.sort(d);
+        //     for (int i = n-1; i >= 0; i--) {
+        //         int m = n - i; // 从 i开始到后共有 n-i个数
+        //         long v = d[i], c = m * (v - (i > 0 ? d[i-1] : 0));
+        //         ans -= v * v; // <<<<<<<<<< 
+        //         if (c < k) { // 能把当前数以及之后的所有数都减少到 a[i-1]和程度，结束退出
+        //             k -= c;
+        //             continue;
+        //         }
+        //         // 所有的m个数都能够减少 k / m;
+        //         // k % m个数可能再多减少1； m - k % m
+        //         v -= k / m; // 不够减少到a[i-1], 但是仍然能够减少几个值
+        //         return ans + k % m * (v-1) * (v-1) + (m - k % m) * v * v;
+        //     }
+        //     return 0l;
+        // }
+
+        // 回家再写这个题
+        public int validSubarraySize(int[] nums, int threshold) {
         }
     }
     public static void main (String[] args) {
         Solution s = new Solution ();
 
-        int r = s.wordCount(a, b);
+        // int [][] a = new int [][] {{1,4,2},{2,2,7},{2,1,3}};
+        int [][] a = new int [][] {{3,2,10},{1,4,2},{4,1,3}};
+        
+        long r = s.sellingWood(4, 6, a);
         System.out.println("r: " + r);
     }
 }
@@ -331,13 +370,6 @@ public class cmp {
 // head.buildList(head, a);
 // head.printList(head);
 
- // ListNode r = s.deleteMiddle(head);
- // r.printList(r);
-
- // TreeNode root = new TreeNode(a[0]);
- // root.buildTree(root, a);
- // root.levelPrintTree(root);
-        
- // String r = s.getDirections(root, 2, 1);
- // System.out.println("r: " + r);
-
+// TreeNode root = new TreeNode(a[0]);
+// root.buildTree(root, a);
+// root.levelPrintTree(root);
