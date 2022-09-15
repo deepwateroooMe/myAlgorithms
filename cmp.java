@@ -189,6 +189,67 @@ public class cmp {
         //     return cnt + 1;
         // }
 
+        // public int lengthOfLIS(int[] a, int k) { // N: [1, 10^5] 有个贪心的O(NlogN)算法，但是一时半会儿想不起来了
+        //     int n = a.length, max = 1;
+        //     int [] f = new int [n];
+        //     Arrays.fill(f, 1); // 初始化
+        //     for (int i = 0; i < n; i++) 
+        //         for (int j = i+1; j < n; j++) {
+        //             if (a[j] > a[i] && a[j] - a[i] <= k) {
+        //                 if (f[i] + 1 > f[j]) {
+        //                     f[j] = f[i] + 1;
+        //                     max = Math.max(max, f[j]);
+        //                 }
+        //             }
+        //         }
+        //     return max;
+        // }
+        // public int lengthOfLIS(int[] a, int k) { // N: [1, 10^5] 有个贪心的O(NlogN)算法，但是一时半会儿想不起来了
+        //     int n = a.length, max = 1, N = Arrays.stream(a).max().getAsInt() + 1;
+        //     // List<Integer>[] ll = new ArrayList[N];
+        //     // Arrays.setAll(ll, z -> new ArrayList<>());
+        //     // ll[a[0]].add(a[0]);
+        //     int [][] f = new int [N][2];
+        //     for (var v : a) {
+        //         f[v][0] = v; // 队尾的值 
+        //         f[v][1] = 1; // 初始化，以当前值为头的最大长度
+        //     }
+        //     // System.out.println("f.length: " + f.length);
+        //     // for (int z = 0; z < f.length; ++z) 
+        //     //     System.out.println(Arrays.toString(f[z]));
+
+        //     for (int i = 1; i < n; i++) {
+        //         System.out.println("\n i: " + i);
+        //         for (int j = a[i]-1; j >= Math.max(1, a[i]-k); j--) {
+        //             System.out.println("j: " + j); 
+        //             if (f[j][1] > 0 && f[j][0] >= a[i] - k && f[j][1] + 1 >= f[i][1]) {
+        //                 if (f[j][1] + 1 > f[i][1]) {
+        //                     f[i][1] = f[j][1] + 1;
+        //                     max = Math.max(max, f[i][1]);
+        //                     System.out.println("max: " + max); 
+        //                 } // 没想明白其它情况下要如何再优化一下
+        //             }
+        //         }
+        //         // if (a[i] > l.get(l.size()-1) && a[i] - l.get(l.size()-1) <= k) {
+        //         //     l.add(a[i]);
+        //         //     max = l.size();
+        //         // } else {
+        //         //     int bgn = 0, end = l.size()-1, m = -1;
+        //         //     while (bgn <= end) {
+        //         //         int mid = bgn + (end - bgn) / 2;
+        //         //         if (a[i] <= l.get(mid)) {
+        //         //             m = mid;
+        //         //             end = mid - 1;
+        //         //         } else bgn =  mid + 1;
+        //         //     }
+        //         //     if (m != -1 && l.get(m) > a[i]) // 贪心法：总是填最小可能的值在一个位置上
+        //         //         l.set(m, a[i]);
+        //         // }
+        //         System.out.println("max: " + max); 
+        //     }
+        //     return max;
+        // }
+
         // TreeSet<Range> ts;
         // public RangeModule() {
         //     ts = new TreeSet<>((a, b) -> a.l != b.l ? a.l - b.l : a.r - b.r);
@@ -221,20 +282,103 @@ public class cmp {
         //         ts.remove(lower);
         //     }
         // }
-
-        // public int lengthOfLIS(int[] a, int k) { // N: [1, 10^5] 有个贪心的O(NlogN)算法，但是一时半会儿想不起来了
-        //     int n = a.length, max = 1;
-        //     int [] f = new int [n];
-        //     Arrays.fill(f, 1); // 初始化
-        //     for (int i = 0; i < n; i++) 
-        //         for (int j = i+1; j < n; j++) {
-        //             if (a[j] > a[i] && a[j] - a[i] <= k) {
-        //                 if (f[i] + 1 > f[j]) {
-        //                     f[j] = f[i] + 1;
-        //                     max = Math.max(max, f[j]);
-        //                 }
+        // // 不知道哪里写错了: 好像这里思路不对呀；如果能从错误例子里把这个问题弄明白，倒是还有点儿帮助，现在看没有
+        // class Range implements Comparable<Range> {
+        //     int l, r;
+        //     public Range(int l, int r) {
+        //         this.l = l;
+        //         this.r = r;
+        //     }
+        //     @Override public int compareTo(Range other) {
+        //         return this.l - other.l;
+        //     }
+        // }
+        // boolean vis = false;
+        // public int minGroups(int[][] a) {
+        //     int n = a.length;
+        //     List<TreeSet<Range>> l = new ArrayList<>();
+        //     for (var i : a) {
+        //         Range r = new Range(i[0], i[1]);
+        //         vis = false;
+        //         for (var ts : l) {
+        //             Range lower = ts.floor(r);
+        //             Range higher = ts.ceiling(r);
+        //             if ((lower == null || lower.r < r.l) && (higher == null || higher.l > r.r)) {
+        //                 ts.add(r);
+        //                 vis = true;
+        //                 break;
         //             }
         //         }
+        //         if (!vis) {
+        //             TreeSet<Range> s = new TreeSet<>(); // 升序排列
+        //             s.add(r);
+        //             l.add(s);
+        //         }
+        //     }
+        //     return l.size();
+        // }
+// // 这里是数会议室问题：用一个主计数器来数任何时间点，最多的会议室的使用个数        
+//         public int minGroups(int[][] a) { // 计数器的思路，但本质仍然是等差数列
+//             int n = a.length, m = n * 2;
+//             int [] cnt = new int [m][2];
+//             for (int i = 0; i < n; i++) {
+//                 cnt[i*2][0] = a[i][0];
+//                 cnt[i*2][1] = 1;
+//                 cnt[i*2+1][0] = a[i][1] + 1;
+//                 cnt[i*2+1][1] = -1;
+//             }
+//             Arrays.sort(cnt, Comparator.comparingInt(o -> o[0] * 3 + o[1])); // 这个比较方法没有看懂
+//             int max = 0, cur = 0;
+//             for (var v : cnt) {
+//                 max = Math.max(max, cur += v[1]);
+//             }
+//             return max;
+//         }
+//         public int minGroups(int[][] a) { // 等差数列的思路
+//             int n = a.length, N = 1000002, max = 0;
+//             int [] cnt = new int [N];
+//             for (var v : a) {
+//                 cnt[v[0]]++;
+//                 cnt[v[1]+1]--; // 1000002
+//             }
+//             for (int i = 1; i < N; i++) 
+//                 max = Math.max(max, cnt[i] += cnt[i-1]);
+//             return max;
+//         }
+//         public int minGroups(int[][] a) { // 
+//             Queue<Integer> q = new PriorityQueue<>();
+//             Arrays.sort(a, (x, y) -> x[0] != y[0] ? x[0] - y[0] : x[1] - y[1]);
+//             for (var v : a) {
+//                 int l = v[0], r = v[1];
+// // 完全没有交差，就把前一个扔掉(贪心思路，保留的都是最有可能与接下来的可能会发生交差的值)                
+//                 if (!q.isEmpty() && l > q.peek())
+//                     q.poll();
+//                 q.offer(r);
+//             }
+//             return q.size();
+//         }
+
+        // public int maximumRows(int[][] a, int cnt) {
+        //     m = a.length;
+        //     n = a[0].length;
+        //     N = (1 << n);
+        //     int cur = 0, k = 0, max = 0;
+        //     for (int i = 1; i < N; i++) {
+        //         if (getCnt(i) == cnt) {
+        //             cur = 0;
+        //             for (int j = 0; j < m; j++) {
+        //                 int sum = Arrays.stream(a[j]).sum();
+        //                 if (sum == 0) {
+        //                     cur ++;
+        //                     continue;
+        //                 } else if (sum > cnt) continue;
+        //                 for ( k = 0; k < n; k++) 
+        //                     if (((i >> k) & 1) == 0 && a[j][k] == 1) break;
+        //                 if (k == n) cur++;
+        //             }
+        //             max = Math.max(max, cur);
+        //         }
+        //     }
         //     return max;
         // }
         // public int lengthOfLIS(int[] a, int k) { // N: [1, 10^5] 有个贪心的O(NlogN)算法，但是一时半会儿想不起来了
@@ -351,19 +495,80 @@ public class cmp {
         //     return 0l;
         // }
 
-        // 回家再写这个题
-        public int validSubarraySize(int[] nums, int threshold) {
+        // int m, n, N;
+        // int getCnt(int v) {
+        //     int cnt = 0;
+        //     for (int i = 0; i < n; i++) 
+        //         if (((v >> i) & 1) == 1) cnt++;
+        //     return cnt;
+        // }
+
+        // public boolean findSubarrays(int[] a) {
+        //     int n = a.length, cur = 0;
+        //     Set<Integer> s = new HashSet<>();
+        //     for (int i = 0; i < n-1; i++) {
+        //         cur = a[i] + a[i+1];
+        //         if (s.contains(cur)) return true;
+        //         s.add(cur);
+        //     }
+        //     return false;
+        // }
+
+        // 并查集和单调本的解法，今天晚上只会写单调栈的; 并查集的解法读不懂解释，也看不懂代码
+        public int validSubarraySize(int[] a, int k) {
+            int n = a.length;
+            ArrayDeque<Integer> s = new ArrayDeque<>(); 
+            int [] l = new int [n], r = new int [n];
+            for (int i = 0; i < n; i++) { // 从左往右遍历，找左边小于当前元素的下标
+                while (!s.isEmpty() && a[s.peekLast()] >= a[i]) s.pollLast();
+                l[i] = s.isEmpty() ? -1 : s.peekLast();
+                s.offerLast(i);
+            }
+            s.clear();
+            for (int i = n-1; i >= 0; i--) { // 从右往左遍历，找右边小于当前元素的下标
+                while (!s.isEmpty() && a[s.peekLast()] >= a[i]) s.pollLast();
+                r[i] = s.isEmpty() ? n : s.peekLast();
+                s.offerLast(i);
+            }
+            for (int i = 0; i < n; i++) {
+                int len = r[i] - l[i] -1 ;
+                if (a[i] > k / len) return len;
+            }
+            return -1;
         }
+        // 看不懂： https://ssg.leetcode-cn.com/problems/subarray-with-elements-greater-than-varying-threshold/solution/by-endlesscheng-j6pp/
+        // 用并查集，遍历到 nums[i] 时，用并查集合并 i 和 i+1，这样可以把连续访问过的位置串起来；怎么来确保访问过的从大到小遍历过的元素都是连续分布的呢？没想明白。。。。。
+        // 同时维护链的长度。(这一步没有问题)
+        public int validSubarraySize(int[] a, int k) {
+            int n = a.length;
+            p = new int [n+1];
+            int [] size = new int [n+1]; // component count
+            for (int i = 0; i <= n; i++) p[i] = i;
+            Integer [] ids = IntStream.range(0, n).boxed().toArray(Integer[]::new); 
+            Arrays.sort(ids, (i, j) -> a[j] - a[i]); // 数值降序排列，数组元素的值是各idx
+            for (var i : ids) { // 当从最大元素往最小元素遍历
+                int j = find(i+1);
+                p[i] = j; // 合并 i 和 i+1
+                size[j] += size[i] + 1;
+                if (a[i] > k / size[j]) return size[j];
+            }
+            return -1;
+        } 
+        int [] p; // 并查集里的parent数组
+
+        int find(int v) { // 并查集里这里的原理忘得好干净呀。。。
+            if (p[v] != v) p[v] = find(p[v]);
+            return p[v];
+        }        
     }
     public static void main (String[] args) {
         Solution s = new Solution ();
 
-        // int [][] a = new int [][] {{1,4,2},{2,2,7},{2,1,3}};
-        int [][] a = new int [][] {{3,2,10},{1,4,2},{4,1,3}};
-        
-        long r = s.sellingWood(4, 6, a);
-        System.out.println("r: " + r);
-    }
+        int []  a = new int []  {1, 3, 4, 3, 1};
+
+        int r = s.validSubarraySize(a, 6);
+        System.out.println("r: " + r); 
+   }
 }
 
 // ListNode head = new ListNode(a[0]);
