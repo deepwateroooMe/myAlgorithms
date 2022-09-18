@@ -12,7 +12,7 @@ import java.util.Set;
 import static java.util.stream.Collectors.toMap;
 
 public class cmp {
-    public static class Solution {
+    // public static class Solution {
         
         // public static List<Integer> minimalHeaviestSetA(List<Integer> a) { // N: [1, 10^5] 降序排列
         //     int n = a.size();
@@ -536,37 +536,88 @@ public class cmp {
             }
             return -1;
         }
-        // 看不懂： https://ssg.leetcode-cn.com/problems/subarray-with-elements-greater-than-varying-threshold/solution/by-endlesscheng-j6pp/
-        // 用并查集，遍历到 nums[i] 时，用并查集合并 i 和 i+1，这样可以把连续访问过的位置串起来；怎么来确保访问过的从大到小遍历过的元素都是连续分布的呢？没想明白。。。。。
-        // 同时维护链的长度。(这一步没有问题)
-        public int validSubarraySize(int[] a, int k) {
-            int n = a.length;
-            p = new int [n+1];
-            int [] size = new int [n+1]; // component count
-            for (int i = 0; i <= n; i++) p[i] = i;
-            Integer [] ids = IntStream.range(0, n).boxed().toArray(Integer[]::new); 
-            Arrays.sort(ids, (i, j) -> a[j] - a[i]); // 数值降序排列，数组元素的值是各idx
-            for (var i : ids) { // 当从最大元素往最小元素遍历
-                int j = find(i+1);
-                p[i] = j; // 合并 i 和 i+1
-                size[j] += size[i] + 1;
-                if (a[i] > k / size[j]) return size[j];
-            }
-            return -1;
-        } 
-        int [] p; // 并查集里的parent数组
+        // // 看不懂： https://ssg.leetcode-cn.com/problems/subarray-with-elements-greater-than-varying-threshold/solution/by-endlesscheng-j6pp/
+        // // 用并查集，遍历到 nums[i] 时，用并查集合并 i 和 i+1，这样可以把连续访问过的位置串起来；怎么来确保访问过的从大到小遍历过的元素都是连续分布的呢？没想明白。。。。。
+        // // 同时维护链的长度。(这一步没有问题)
+        // public int validSubarraySize(int[] a, int k) {
+        //     int n = a.length;
+        //     p = new int [n+1];
+        //     int [] size = new int [n+1]; // component count
+        //     for (int i = 0; i <= n; i++) p[i] = i;
+        //     Integer [] ids = IntStream.range(0, n).boxed().toArray(Integer[]::new); 
+        //     Arrays.sort(ids, (i, j) -> a[j] - a[i]); // 数值降序排列，数组元素的值是各idx
+        //     for (var i : ids) { // 当从最大元素往最小元素遍历
+        //         int j = find(i+1);
+        //         p[i] = j; // 合并 i 和 i+1
+        //         size[j] += size[i] + 1;
+        //         if (a[i] > k / size[j]) return size[j];
+        //     }
+        //     return -1;
+        // } 
+        // int [] p; // 并查集里的parent数组
+        // int find(int v) { // 并查集里这里的原理忘得好干净呀。。。
+        //     if (p[v] != v) p[v] = find(p[v]);
+        //     return p[v];
+        // }
 
-        int find(int v) { // 并查集里这里的原理忘得好干净呀。。。
-            if (p[v] != v) p[v] = find(p[v]);
-            return p[v];
-        }        
+        // public boolean canChange(String ss, String tt) {
+        //     if (!ss.replaceAll("_", "").equals(tt.replaceAll("_", ""))) return false;
+        //     char [] s = ss.toCharArray();
+        //     char [] t = tt.toCharArray();
+        //     for (int i = 0, j = 0; i < ss.length(); i++) {
+        //         if (s[i] == '_') continue;
+        //         while (j < tt.length() && t[j] == '_') j++;
+        //         // 然后用双指针遍历 \textit{start}[i]start[i] 和 \textit{target}[j]target[j]，分类讨论：
+        //             // 如果当前字符为 L 且 i<ji<j，那么这个 L 由于无法向右移动，返回 false；
+        //             // 如果当前字符为 R 且 i>ji>j，那么这个 R 由于无法向左移动，返回 false。
+        //         if (i != j && (s[i] == 'L') == (i < j)) return false; // 这句话执行了上面的两条逻辑
+        //         ++j;
+        //     }
+        //     return true;
+        // }
+
+        // public long zeroFilledSubarray(int[] a) {
+        //     int n = a.length, j = 0;
+        //     long cnt = 0;
+        //     for (int i = 0; i < n; i++) { // j: left
+        //         if (a[i] != 0) continue;
+        //         while (i < n && a[i] == 0) i++;
+        //         while (j < n && a[j] != 0) j++;
+        //         cnt += (long)(i-j) * (i -j + 1 ) / 2l;
+        //         j = i;
+        //     }
+        //     return cnt;
+        // }
+
+    Map<Integer, Integer> m;
+    Map<Integer, Queue<Integer>> idx;
+    int max = Integer.MAX_VALUE;
+    public NumberContainers() {
+    // public cmp() {
+        m = new HashMap<>();
+        idx = new HashMap<>();
     }
+    public void change(int index, int number) {
+        if (m.containsKey(index))
+            idx.get(m.get(index)).remove((Integer)number);
+        m.put(index, number);
+        idx.computeIfAbsent(number, z -> new PriorityQueue<>());
+        idx.get(number).add(index);
+    }
+    
+    public int find(int number) {
+        return idx.containsKey(number) ? idx.get(number).peek() : -1;
+    }
+    // }
     public static void main (String[] args) {
         Solution s = new Solution ();
 
-        int []  a = new int []  {1, 3, 4, 3, 1};
+        // int []  a = new int []  {0, 0, 0, 2, 0, 0};
+        // int []  a = new int []  {1, 3, 0, 0, 2, 0, 0, 4};
+        int [] a = new int [] {};
+        
 
-        int r = s.validSubarraySize(a, 6);
+        long r = s.zeroFilledSubarray(a);
         System.out.println("r: " + r); 
    }
 }
