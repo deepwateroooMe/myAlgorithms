@@ -85,38 +85,102 @@ public class cmp {
         //     return root;
         // }
 
-        public int[] sumPrefixScores(String[] a) { // TLE: failed on a too big test case that emacs is NOT able to handle, will solve this problem later
-            int n = a.length, ccnt = 0;
-            Map<String, List<Integer>> idx = new HashMap<>();
-            for (int i = 0; i < n; i++)
-                idx.computeIfAbsent(a[i], z -> new ArrayList<>()).add(i);
-            Arrays.sort(a, (x, y)-> x.length() != y.length() ? x.length() - y.length() : x.compareTo(y));
-            // System.out.println(Arrays.toString(a));
-            Map<String, Integer> cnt = new HashMap<>();
-            for (var v : a) cnt.put(v, cnt.getOrDefault(v, 0) + 1); // 没有说有没有重复，所以需要考虑重复的情况
-            Map<String, Integer> m = new HashMap<>();
-            int [] f = new int [n];
-            for (int i = 0; i < n; i++) {
-                String v = a[i];
-                ccnt = 0;
-                for (int j = 1; j <= v.length(); j++) {
-                    String cur = v.substring(0, j);
-                    if (m.containsKey(cur)) {
-                        ccnt += m.get(cur);
-                        continue;
-                    }
-                    int cnter = 0;
-                    for (String k : cnt.keySet()) 
-                        if (k.startsWith(cur)) cnter += cnt.get(k);
-                    m.put(cur, cnter);
-                    ccnt += cnter;
-                    if (cnter == 0) break;
-                }
-                for (var z : idx.get (a[i])) 
-                    f[z] = ccnt;
-            }
-            return f;
-        }
+        // class Trie {
+        //     Trie[] ch = new Trie[26];
+        //     int visited = 0;
+        // }
+        // class Solution {
+        //     public int[] sumPrefixScores(String[] words) {
+        //         Trie trie = new Trie();
+        //         int[] ans = new int[words.length];
+        //         int k = 0;
+        //         for (String x: words) {
+        //             Trie t = trie;
+        //             for (int i = 0; i < x.length(); i++) {
+        //                 int c = x.charAt(i) - 'a';
+        //                 if (t.ch[c] == null) t.ch[c] = new Trie();
+        //                 t.ch[c].visited++;
+        //                 t = t.ch[c];
+        //             }
+        //         }
+        //         for (String x: words) {
+        //             Trie t = trie; int curr = 0;
+        //             for (int i = 0; i < x.length(); i++) {
+        //                 int c = x.charAt(i) - 'a';
+        //                 curr += t.ch[c].visited;
+        //                 t = t.ch[c];
+        //             }
+        //             ans[k++] = curr;
+        //         }
+        //         return ans;
+        //     }
+        // }
+        // public int[] sumPrefixScores(String[] a) { // TLE: 再想想是为什么？
+        //     int n = a.length, cnt = 0;
+        //     Trie t = new Trie();
+        //     for (var v : a) t.insert(v);
+        //     // populate map to remember all the possible counts： 这里遍历一遍可能做多了？
+        //     // 这里先遍历一遍，再记住记在字典里，反而不如直接用时遍历一遍来得快？真是想不透呀。。。。。
+        //     // t.inOrderTraversal(t, new StringBuilder());
+        //     // System.out.println("m.size(): " + m.size());
+        //     // for (Map.Entry<String, Integer> en : m.entrySet()) 
+        //     //     System.out.print(en.getKey() + ", " + en.getValue() + "\n");
+        //     int [] f = new int [n];
+        //     for (int i = 0; i < n; i++) {
+        //         String v = a[i];
+        //         Trie tc = t;
+        //         cnt = 0;
+        //         // for (int j = 1; j <= v.length(); j++) 
+        //         //     cnt += m.get(v.substring(0, j));
+        //         for (int j = 0; j < v.length(); j++) {
+        //             int k = v.charAt(j) - 'a';
+        //             cnt += tc.n[k].v;
+        //             tc = tc.n[k];
+        //         }
+        //         f[i] = cnt;
+        //     }
+        //     return f;
+        // }
+        // Map<String, Integer> m = new HashMap<>();
+        // public class Trie {
+        //     int v;
+        //     Trie [] n;
+        //     public Trie() {
+        //         v = 0; 
+        //         n = new Trie [26];
+        //     }
+        //     // public void inOrderTraversal(Trie r, StringBuilder s) {
+        //     //     for (int i = 0; i < 26; i++) {
+        //     //         if (r.n[i] != null) {
+        //     //             s.append((char)('a'+i));
+        //     //             // System.out.println("s.toString(): " + s.toString() + ": cnt = " + r.v); 
+        //     //             m.put(s.toString(), r.n[i].v);
+        //     //             inOrderTraversal(r.n[i], s);
+        //     //             s.deleteCharAt(s.length()-1);
+        //     //         }
+        //     //     }
+        //     // }
+        //     public void insert(String t) {
+        //         char [] s = t.toCharArray();
+        //         Trie r = this;
+        //         for (int i = 0; i < t.length(); i++) {
+        //             int j = s[i] - 'a';
+        //             if (r.n[j] == null) r.n[j] = new Trie();
+        //             r = r.n[j];
+        //             r.v++;
+        //         }
+        //     }
+        //     public int getCntStartsWith(String t) {
+        //         char [] s = t.toCharArray();
+        //         Trie r = this;
+        //         for (int i = 0; i < t.length(); i++) {
+        //             int j = s[i] - 'a';
+        //             if (r.n[j] == null) return 0;
+        //             r = r.n[j];
+        //         }
+        //         return r.v;
+        //     }
+        // }
     }
     public static void main (String[] args) {
         Solution s = new Solution ();
