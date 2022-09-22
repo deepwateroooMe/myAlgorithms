@@ -185,6 +185,7 @@ public class cmp {
     public static void main (String[] args) {
         Solution s = new Solution ();
 
+        // will skis this Saturday evening's contest, but will try to attend morning's contest on Saturday
         // String [] a = new String [] {"abc","ab","bc","b"};
         String [] a = new String [] {"qtcqcmwcin","vkjotbrbzn","eoorlyfche","eoorlyhn","eoorlyfcxk","qfnmjilcom","eoorlyfche","qtcqcmwcnl","qtcqcrpjr"};
 
@@ -192,6 +193,10 @@ public class cmp {
         System.out.println(Arrays.toString(r));
     }
 }
+
+
+
+
 
 // ListNode head = new ListNode(a[0]);
 // head.buildList(head, a);
