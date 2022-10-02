@@ -14,118 +14,108 @@ import static java.util.stream.Collectors.toMap;
 public class cmp {
     public static class Solution {
 
-        // Set<Integer> v; 
-        // int cur = 0, max = 0;
-        //     public LUPrefix(int n) {
-        //         v = new HashSet<>();
+        // public int commonFactors(int a, int b) {
+        //     Set<Integer> sa = getFactors(a);
+        //     Set<Integer> sb = getFactors(b);
+        //     sa.retainAll(sb);
+        //     return sa.size() + 1;
         // }
-        // public void upload(int video) {
-        //     v.add(video);
-        //     if (video > max) max = video;
-        //     int i = cur+1;
-        //     for (; i <= max; i++) 
-        //         if (!v.contains(i)) {
-        //             if (i > 1) cur = i-1;
-        //             break;
-        //         }
-        //     if (i == max+1) cur = max;
-        // }
-        // public int longest() {
-        //     int i = cur+1;
-        //     for (; i <= max; i++) 
-        //         if (!v.contains(i)) {
-        //             if (i > 1) cur = i-1;
-        //             break;
-        //         }
-        //     if (i == max+1) cur = max;
-        //     return cur;
-        // }
-        
-        // // 要找个规律是说: NN
-        // // a00 a01 a02 ..... a0n-1
-        // // a10 a11 a12 ..... a1n-1
-        // // ...
-        // // an-10 an-11 ..... an-1n-1
-        // public int xorAllNums(int[] a, int[] b) { 
-        //     int m = a.length, n = b.length;
-        //     int va = 0, vb = 0;
-        //     for (var v : a) va ^= v;
-        //     for (var v : b) vb ^= v;
-        //     return (m % 2 == 1 ? vb : 0) ^ (n % 2 == 1 ? va : 0);
+        // Set<Integer> getFactors(int v) {
+        //     Set<Integer> s = new HashSet<>();
+        //     for (int i = 2; i <= v; i++) 
+        //         if (v % i == 0)
+        //             s.add(i);
+        //     return s;
         // }
 
-        // public long numberOfPairs(int[] a, int[] b, int d) {
-        //     int n = a.length;
-        //     int [] f = new int [n];
-        //     for (int i = 0; i < n; i++) 
-        //         f[i] = a[i] - b[i];
-        //     // 分情况来找:如果d >= 0的情况,和d < 0的情况
-        //     // i, j, i < j && f[i] - f[j] <= d 可能再涉及到单调栈的使用,这样才能是O(N)数量级的遍历解决
-        //     // if (d >= 0) : 使用单调栈,从右往左遍历,数个数
-        //     ArrayDeque<Integer> s = new ArrayDeque<>(); // 这里有点儿没想透
-        //     int [] cnt = new int [n+1];
-        //     for (int i = n-1; i > 0; i--) {
+        // public int maxSum(int[][] a) {
+        //     int m = a.length, n = a[0].length;
+        //     int [][] s = new int[m+1][n+1];
+        //     for (int i = 1; i <= m; i++) 
+        //         for (int j = 1; j <= n; j++) 
+        //             s[i][j] = s[i-1][j] + s[i][j-1] - s[i-1][j-1] + a[i-1][j-1];
+        //     int max = 0, cur = 0;
+        //     for (int i = 1; i < m-1; i++) 
+        //         for (int j = 1; j < n-1; j++) {
+        //             cur = s[i+2][j+2] - a[i][j-1] - a[i][j+1] - s[i-1][j+2] - s[i+2][j-1] + s[i-1][j-1];
+        //             if (cur > max) max = cur;
+        //         }
+        //     return max;
+        // }
+
+        // public int minimizeXor(int a, int b) {
+        //     int m = Integer.bitCount(a);
+        //     int n = Integer.bitCount(b);
+        //     int cnt = 0, v = 0;
+        //     for (int i = 31; i >= 0 && cnt < n; i--) {
+        //         if (((a >> i) & 1) == 1) {
+        //             cnt++;
+        //             v |= (1 << i);
+        //         }
         //     }
+        //     if (cnt == n) return v;
+        //     for (int i = 0; i <= 31 && cnt < n; i++) 
+        //         if (((a >>> i) & 1) == 0) {
+        //             cnt++;
+        //             v |= (1 << i);
+        //         }
+        //     return v;
         // }
 
-        public boolean equalFrequency(String word) { 
-            int [] f = new int [26];
-            for (var c : word.toCharArray()) 
-                f[c-'a']++;
+        // public int deleteString(String s) { // TLE TLE TLE:超时是因为没有记忆
+        //     int n = s.length(), max = 1;
+        //     if (n == 1 || n == 2 && s.charAt(0) != s.charAt(1)) return 1;
+        //     if (n == 2 && s.charAt(0) == s.charAt(1)) return 2;
+        //     char [] t = s.toCharArray();
+        //     if (n == 3 && t[0] == t[1]) return t[1] == t[2] ? 3 : 2;
+        //     else if (n == 3) return 1;
+        //     for (int i = 1; i <= n/2; i++) {
+        //         if (s.substring(i).startsWith(s.substring(0, i))) {
+        //             int cur = 1 + deleteString(s.substring(i));
+        //             if (cur > max) max = cur;
+        //         }
+        //     }
+        //     return max;
+        // }
+        public int deleteString(String t) { // 超时是因为没有记忆, 用dfs记忆化搜索
+            n = t.length();
+            if (t.chars().distinct().count() == 1) return n;
+            this.t = t;
+            s = t.toCharArray();
+            if (n == 1 || n == 2 && s[0] != s[1]) return 1;
+            if (n == 2 && s[0] == s[1]) return 2;
+            if (n == 3 && s[0] == s[1]) return s[1] == s[2] ? 3 : 2;
+            else if (n == 3) return 1;
+            f = new Integer [n];
+            dfsSearchWithMemory(0);
             System.out.println(Arrays.toString(f));
-            
-            Map<Integer, Integer> m = new HashMap<>();
-            for (var v : f)
-                if (v != 0)
-                    m.put(v, m.getOrDefault(v, 0) + 1);
-            System.out.println("m.size(): " + m.size());
-            for (Map.Entry<Integer, Integer> en : m.entrySet()) 
-                System.out.print(en.getKey() + ", " + en.getValue() + "\n");
-
-            if (m.size() == 1) {
-                Map.Entry<Integer, Integer> en = m.entrySet().iterator().next();
-                if (en.getKey() == 1 || en.getValue() == 1) return true;
-                return false;
-            } 
-            // if (!m.values().contains(1) 
-            //     || m.containsKey(1) && m.get(1) > 1 && (!m.containsKey(2) || m.get(2) != 1)
-            if (m.containsKey(1) && m.get(1) > 1 && (!m.containsKey(2) || m.get(2) != 1)
-                || m.size() > 2)
-                return false;
-
-            Map<Integer, Set<Integer>> n = new HashMap<>();
-            for (Map.Entry<Integer, Integer> en : m.entrySet()) 
-                n.computeIfAbsent(en.getValue(), z -> new HashSet<>()).add(en.getKey());
-
-            System.out.println("n.size(): " + n.size());
-            for (Map.Entry<Integer, Set<Integer>> en : n.entrySet()) 
-                System.out.print(en.getKey() + ", " + en.getValue().size() + "\n");
-            // return n.size() <= 2 && m.containsKey(1) || n.size() == 1 && n.get(1).size() > 1;
-            if (n.size() <= 2 && (m.containsKey(1) || n.containsKey(1))) return true;
-            if (n.size() == 1 && n.get(1).size() > 1) {
-                if (n.get(1).size() > 2) return false;
-                Iterator it = n.get(1).iterator();
-                int va = (int)it.next(), vb = (int)it.next();
-                if (Math.abs(va - vb) == 1) return true;
-            }
-            return false;
+            return f[0];
         }
+        Integer [] f;
+        char [] s;
+        String t;
+        int n;
+        int dfsSearchWithMemory(int i) {
+            if (i >= n) return 0;
+            if (f[i] != null) return f[i];
+            if (i == n-1) return f[i] = 1;
+            int max = 0, cur = 0, j = i+1;
+            for (j = i+1; j <= (n-i)/2 + i; j++) {
+                if (t.substring(j).startsWith(t.substring(i, j))) {
+                    cur = 1 + dfsSearchWithMemory(j);
+                    if (cur > max) max = cur;
+                }
+            }
+            if (j > (n-i)/2 + i && max == 0) return f[i] = 1;
+            return f[i] = max;
+        }        
     }
     public static void main (String[] args) {
         Solution s = new Solution ();
 
-        // String a = "aazz";
-        // String a = "bac";
-        // String a = "adbc";
-        // String a = "cbccca";
-        // String a = "abcc";
-        // String a = "babbdd";
-        // String a = "ccccaa";
-        // failed for Hidden for this testcase during contest. .....
-        // String a = "zz";
-        String a = "abcdefghijklmnopqrstuvwxyznabcdefghijklmnopqrstuvwxyz";
+        String a = "aaabaab";
 
-        boolean r = s.equalFrequency(a);
+        int r = s.deleteString(a);
         System.out.println("r: " + r); 
     }
 }
