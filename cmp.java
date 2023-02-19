@@ -364,7 +364,55 @@ public class cmp {
         //     return r;
         // }
 
-        // // 这个题目就成为分解质因子，因为数比较小 [1, 30], 所以只需要考虑2 3 5 三个质因子就可以了，然后就是选元素：2 3 5 三个质因子都不能含有，多于一个
+        // // 我会被它一行代码的解决方法气死的。。。。。看不懂
+        // public int minOperations(int n) {
+        //     return Integer.bitCount(n ^ (3 * n));
+        // }
+        // public int minOperations(int n) {
+        //         int l = log2(n);
+        //         int num =(int)Math.pow(2, l);
+        //         if (num == n) return 1;
+        //         int op = 0;
+        //         while (n != 0) {
+        //             l = log2(n);
+        //             int left = (int) Math.pow(2, l); 
+        //             int right = (int) Math.pow(2, l+1); 
+        //             if ((n-left) < (right-n)) n = n - left;  // 转换为左边，或是右边数的操作 
+        //             else n = right - n;
+        //             op++;
+        //         }
+        //         return op;
+        //     }
+        // public static int log2(int N) { // 把以 10 为底的数，求2 的指数次数
+        //         int result = (int)(Math.log(N) / Math.log(2));
+        //         return result;
+        //     }
+
+// 这里，自己像是画了只五脏俱全的麻雀，可是还是差了那么一点儿：没写完的
+        // 这个题目就成为分解质因子，因为数比较小 [1, 30], 所以只需要考虑2 3 5 三个质因子就可以了，然后就是选元素：2 3 5 三个质因子都不能含有，多于一个
+        // int [] getCnts(int v) { // 得到当前数所含的： 2 3 5 质因子的个数
+        //     int [] r = new int [3];
+        //     int cnt = 0, a = v;
+        //     while (a >= 2) {
+        //         a /= 2;
+        //         cnt++;
+        //     }
+        //     r[0] = cnt;
+        //     a = v;
+        //     cnt = 0;
+        //     while (a >= 3) {
+        //         a /= 3;
+        //         cnt++;
+        //     }
+        //     r[1] = cnt;
+        //     cnt = 0;
+        //     while (v >= 5) {
+        //         v /= 5;
+        //         cnt++;
+        //     }
+        //     r[2] = cnt; 
+        //     return r;
+        // }
         // public int squareFreeSubsets(int[] a) {
         //     int n = a.length, cnt = 0;
         //     int [][] r = new int [31][3]; // [3]: 2 3 5
@@ -401,64 +449,78 @@ public class cmp {
         //     }
         //     // 1 1 1 
         // }
-        // int [] getCnts(int v) { // 得到当前数所含的： 2 3 5 质因子的个数
-        //     int [] r = new int [3];
-        //     int cnt = 0, a = v;
-        //     while (a >= 2) {
-        //         a /= 2;
-        //         cnt++;
-        //     }
-        //     r[0] = cnt;
-        //     a = v;
-        //     cnt = 0;
-        //     while (a >= 3) {
-        //         a /= 3;
-        //         cnt++;
-        //     }
-        //     r[1] = cnt;
-        //     cnt = 0;
-        //     while (v >= 5) {
-        //         v /= 5;
-        //         cnt++;
-        //     }
-        //     r[2] = cnt;
-        //     return r;
-        // }
-
-//         // 这个题没什么思路：除了一个一个试，可是当它的长度长达 1000, 感觉自己没有想到关键的地方, 怎么能够从分析这个数组开始，得出什么相关比较重要的信息才有帮助
-//         public String findTheString(int[][] a) {
-//             int n = a.length;
-//             char [] s = new char [n];
-// // 好久没有写算法题，感觉很生疏。
+// // 下面是正确的解法：记忆可真好呀
+//         public int squareFreeSubsets(int[] a) {
+//             Arrays.stream(dp).forEach(x -> Arrays.fill(x, -1));  // 流式处理法
+//             p = new ArrayList<>(Arrays.asList(2, 3, 5, 7, 11, 13, 17, 19, 23, 29));
+//             return (int)dfs(0, 1, a) - 1; // 减去的，应该是空数组
+//         }
+//         long [][] dp = new long [1001][1 << 11];
+//         static final long mod = (long)1e9 + 7;
+//         List<Integer> p = new ArrayList<>(); // primes
+//         long dfs(int idx, int prodmask, int [] a) {
+//             if (idx >= a.length) return 1;
+//             if (dp[idx][prodmask] != -1) return dp[idx][prodmask];  // 计算过，保存过，直接返回结果
+//             int mask = getMask(a[idx]);  // 拿到当前数，质因子的分布情况
+//             long ans = dfs(idx+1, prodmask, a); // 不包含当前数，可能有的角法
+//             if ((mask & prodmask) == 0) // 不含有公共质因子：当前数也可以包含进去
+//                 ans += dfs(idx+1, mask | prodmask, a);
+//             return dp[idx][prodmask] = ans % mod;
+//         } 
+//         int getMask(int v) {
+//             int r = 0;
+//             for (int i = 0; i < 10; i++) {
+//                 int cnt = 0;
+//                 while (v % p.get(i) == 0) {
+//                     cnt++;
+//                     v /= p.get(i);
+//                 }
+//                 if (cnt > 1) return -1;  // 这是一步优化过滤筛选，直接过滤掉不合格的
+//                 if (cnt == 1) // 存在，且仅有一个当前质因子的情况下
+//                     r |= (1 << (i + 1));
+//             }
+//             return r;
 //         }
 
-// 大致思路：当前数 v, 除非它就是2 的整数次方（返回1），找一个离它最近 < 它的数，找一个离它最近 > 它的数，分别算最小次数，取小。可以是 recursion
-        public int minOperations(int v) { // 不喜欢这个题目
-            // int r = (int)Math.pow(2, 10);
-            // System.out.println("r: " + r);
-            // r = (int)Math.pow(2, 16);
-            // System.out.println("r: " + r);
-            // r = (int)Math.pow(2, 17);
-            // System.out.println("r: " + r);
-            int [] p = new int [18]; p[0] = 1;
-            for (int i = 1; i < 18; i++) 
-                p[i] = 2 * p[i-1];
-            System.out.println(Arrays.toString(p));
-            int l = 1, r = 17;
-            // 二分查找当前数所在的位置，也可以算出当前数前后的距离。就定义为二分查找左下标, 不对，应该定义为距离最近的下标
-            while (l < r-1) { // 因为算的是可左可右，【0,1】之类的下标不能无限循环
-                int m = (l + r) / 2;
-                if (p[m] == v) return 1;
-                if (p[m] > v)
-            }
-
-            return 0;
-        }
+        // public String findTheString(int[][] a) {
+        //     int n = a.length;
+        //     char [] s = new char [n];
+        //     s[0] = 'a';
+        //     boolean found = false;
+        //     // char prev = 'a';// 不知道这里可不可以优化，改天可以再试一下
+        //     for (int i = 1; i < n; i++) {
+        //         char cur = 'a'; // 总是从最小的开始取值
+        //         found = false;
+        //         for (int j = 0; j < i; j++) { // 我想要到上面的，但是没有想这个往前遍历的方法，和下面再计算一遍，比较的方法 
+        //             cur = (char)Math.max(s[j], cur); // 纪录用到的最大值，好像这个比较麻烦了一点儿
+        //             if (a[i][j] > 0) {
+        //                 found = true;
+        //                 s[i] = s[j];
+        //                 break;
+        //             }                    
+        //         }
+        //         if (found) continue;
+        //         if (cur == 'z') return "";
+        //         ++cur;
+        //         s[i] = (char)cur;
+        //     }
+        //     int [][] cnt = new int [n+1][n+1];
+        //     for (int i = n-1; i >= 0; i--) {
+        //         for (int j = n-1; j >= 0; j--) {
+        //             if (s[i] == s[j]) cnt[i][j] = cnt[i+1][j+1] + 1;
+        //             else cnt[i][j] = 0;
+        //             if (cnt[i][j] != a[i][j]) return "";
+        //         }
+        //     }
+        //     return String.valueOf(s);
+        // }
     }
     public static void main (String[] args) {
         Solution s = new Solution ();
 
-        int r = s.minOperations(5);
+        int [][] a = new int [][] {{4,0,2,0},{0,3,0,1},{2,0,2,0},{0,1,0,1}};
+
+        String r = s.findTheString(a);
         System.out.println("r: " + r);
     }
 }
@@ -469,4 +531,7 @@ public class cmp {
 // TreeNode root = new TreeNode(a[0]);
 // root.buildTree(root, a);
 // root.levelPrintTree(root);
- 
+
+
+
+
