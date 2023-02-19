@@ -274,38 +274,191 @@ public class cmp {
             return false;
         }
 
-// 区间型动态规划
-       Long [][] dp;
-       long minCost(int [] a, int x, int y, int k) {
-            if (dp[x][y] != null) return dp[x][y];
-            if (x == y) return dp[x][y] = (long)k; // 长度为1个元素
-            // 不划分，作为一个整体
-            Map<Integer, Integer> m = new HashMap<>();
-            for (int i = x; i <= y; i++) 
-                m.put(a[i], m.getOrDefault(a[i], 0) + 1);
-            long base = k, min = Long.MAX_VALUE;
-            for (Integer val : m.values()) 
-                if (val > 1) base += val; // 不划分，作为一个整体
-            min = base;
-            // 从不同的地方划分，取最优解
-            for (int i = x; i < y; i++) { // 在它后面划分
-               long cur = minCost(a, x, i, k) + minCost(a, i+1, y, k);
-                min = Math.min(min, cur);
+// // 区间型动态规划
+//        Long [][] dp;
+//        long minCost(int [] a, int x, int y, int k) {
+//             if (dp[x][y] != null) return dp[x][y];
+//             if (x == y) return dp[x][y] = (long)k; // 长度为1个元素
+//             // 不划分，作为一个整体
+//             Map<Integer, Integer> m = new HashMap<>();
+//             for (int i = x; i <= y; i++) 
+//                 m.put(a[i], m.getOrDefault(a[i], 0) + 1);
+//             long base = k, min = Long.MAX_VALUE;
+//             for (Integer val : m.values()) 
+//                 if (val > 1) base += val; // 不划分，作为一个整体
+//             min = base;
+//             // 从不同的地方划分，取最优解
+//             for (int i = x; i < y; i++) { // 在它后面划分
+//                long cur = minCost(a, x, i, k) + minCost(a, i+1, y, k);
+//                 min = Math.min(min, cur);
+//             }
+//             return dp[x][y] = min;
+//         } 
+//         public int minCost(int[] a, int k) { // TLE: 什么地方没有优化好？
+//             int n = a.length; // [1, 1000]
+//             dp = new Long [n][n];
+//             return (int)minCost(a, 0, n-1, k);
+//         }
+
+        // public long pickGifts(int[] a, int k) {
+        //     int n = a.length;
+        //     Deque<Integer> q = new ArrayDeque<>((x, y) -> y - x);
+        //     for (int v : a) 
+        //         q.offerFirst(v);
+        //     while (k > 0 && !q.isEmpty()) {
+        //         int v = Math.sqrt(q.pollLast());
+        //         q.offerFirst(v);
+        //     }
+        //     long r = 0;
+        //     while (!q.isEmpty()) r += q.pollLast();
+        //     return r;
+        // }
+
+        // public int[][] mergeArrays(int[][] a, int[][] b) {
+        //     int m = a.length, n = b.length;
+        //     Set<Integer> s = new HashSet<>();
+        //     for (int i = 0; i < m; i++) 
+        //         s.add(a[i][0]);
+        //     for (int i = 0; i < n; i++) 
+        //         s.add(b[i][0]);
+        //     int [][] r = new int [s.size()][2];
+        //     int i = 0, j = 0, k = 0, p = 0;
+        //     while (i < m || j < n) {
+        //         if (i < m && j < n) {
+        //             int min = Math.min(a[i][0], b[j][0]);
+        //             if (p != 0 && min > p) k++;
+        //             if (min > p)
+        //                 r[k][0] = a[i][0];
+        //             if (a[i][0] == b[j][0]) {
+        //                 r[k][1] = a[i][1] + b[j][1];
+        //                 i++;
+        //                 j++;
+        //             } else {
+        //                 if (min == a[i][0]) {
+        //                     r[k][1] = a[i][1];
+        //                     i++;
+        //                 } else {
+        //                     r[k][0] = b[j][0];
+        //                     r[k][1] = b[j][1];
+        //                     j++;
+        //                 }                   
+        //             }
+        //             p = min;
+        //         } else {
+        //             while (i < m) {
+        //                 if (a[i][0] > p) {
+        //                     k++;
+        //                     r[k][0] = p = a[i][0];
+        //                 } 
+        //                 r[k][1] += a[i++][1];
+        //             }
+        //             while (j < n) {
+        //                 if (b[j][0] > p) {
+        //                     k++;
+        //                     r[k][0] = p = b[j][0];
+        //                 } 
+        //                 r[k][1] += b[j++][1];
+        //             } 
+        //         }
+        //     }
+        //     return r;
+        // }
+
+        // // 这个题目就成为分解质因子，因为数比较小 [1, 30], 所以只需要考虑2 3 5 三个质因子就可以了，然后就是选元素：2 3 5 三个质因子都不能含有，多于一个
+        // public int squareFreeSubsets(int[] a) {
+        //     int n = a.length, cnt = 0;
+        //     int [][] r = new int [31][3]; // [3]: 2 3 5
+        //     for (int i = 1; i < 31; i++) 
+        //         r[i] = getCnts(i);
+        //     List<Integer> l = new ArrayList<>(); // 加链表里因为它是可能会存在重复的，后可以把它转换成数组成操作
+        //     for (int v : a) 
+        //         if (r[v][0] < 2 && r[v][1] < 2 && r[v][2] < 2) {
+        //             cnt++;
+        //             l.add(v);
+        //         }
+        //     int [] cur = l.toArray(new int [0]); // 不知道这么用对不对
+        //     // 然后接下来应该就是动态规划：链表里的数，每个都有可选和不可选两种可能，然后动态规划这部分，不太会做了
+        //     // 2 3 5
+        //     // 0 0 0
+        //     // 1
+        //     //   1
+        //     //     1
+        //     // 1 1
+        //     //   1 1
+        //     // 1   1
+        //     // 1 1 1
+        //     // 它只存在以上8 种可能性，笨办法就是每种可能性计算一遍，把结果相加. 先假定可以为空数组，最后减掉空数组这种可能性
+        //     // 这里动态规划的部分，还是不会，动态规划的基础不够，也快被自己忘光了
+        //     static final int mod = (int)1e9 + 7;
+        //     long ans = 1, rnd = 1;
+        //     // 0 0 0
+        //     for (int i = 0; i < l.size(); i++) {
+        //         int c = cur[i];
+        //         if (r[c][0] == 0 && r[c][1] == 0 && r[c][2] == 0) {
+        //             ans *= 2;
+        //             ans %= mod;
+        //         }
+        //     }
+        //     // 1 1 1 
+        // }
+        // int [] getCnts(int v) { // 得到当前数所含的： 2 3 5 质因子的个数
+        //     int [] r = new int [3];
+        //     int cnt = 0, a = v;
+        //     while (a >= 2) {
+        //         a /= 2;
+        //         cnt++;
+        //     }
+        //     r[0] = cnt;
+        //     a = v;
+        //     cnt = 0;
+        //     while (a >= 3) {
+        //         a /= 3;
+        //         cnt++;
+        //     }
+        //     r[1] = cnt;
+        //     cnt = 0;
+        //     while (v >= 5) {
+        //         v /= 5;
+        //         cnt++;
+        //     }
+        //     r[2] = cnt;
+        //     return r;
+        // }
+
+//         // 这个题没什么思路：除了一个一个试，可是当它的长度长达 1000, 感觉自己没有想到关键的地方, 怎么能够从分析这个数组开始，得出什么相关比较重要的信息才有帮助
+//         public String findTheString(int[][] a) {
+//             int n = a.length;
+//             char [] s = new char [n];
+// // 好久没有写算法题，感觉很生疏。
+//         }
+
+// 大致思路：当前数 v, 除非它就是2 的整数次方（返回1），找一个离它最近 < 它的数，找一个离它最近 > 它的数，分别算最小次数，取小。可以是 recursion
+        public int minOperations(int v) { // 不喜欢这个题目
+            // int r = (int)Math.pow(2, 10);
+            // System.out.println("r: " + r);
+            // r = (int)Math.pow(2, 16);
+            // System.out.println("r: " + r);
+            // r = (int)Math.pow(2, 17);
+            // System.out.println("r: " + r);
+            int [] p = new int [18]; p[0] = 1;
+            for (int i = 1; i < 18; i++) 
+                p[i] = 2 * p[i-1];
+            System.out.println(Arrays.toString(p));
+            int l = 1, r = 17;
+            // 二分查找当前数所在的位置，也可以算出当前数前后的距离。就定义为二分查找左下标, 不对，应该定义为距离最近的下标
+            while (l < r-1) { // 因为算的是可左可右，【0,1】之类的下标不能无限循环
+                int m = (l + r) / 2;
+                if (p[m] == v) return 1;
+                if (p[m] > v)
             }
-            return dp[x][y] = min;
-        } 
-        public int minCost(int[] a, int k) { // TLE: 什么地方没有优化好？
-            int n = a.length; // [1, 1000]
-            dp = new Long [n][n];
-            return (int)minCost(a, 0, n-1, k);
+
+            return 0;
         }
     }
     public static void main (String[] args) {
         Solution s = new Solution ();
 
-        int [] a = new int [] {1,2,1,2,1,3,3};
-        
-        int r = s.minCost(a, 2);
+        int r = s.minOperations(5);
         System.out.println("r: " + r);
     }
 }
@@ -316,3 +469,4 @@ public class cmp {
 // TreeNode root = new TreeNode(a[0]);
 // root.buildTree(root, a);
 // root.levelPrintTree(root);
+ 
