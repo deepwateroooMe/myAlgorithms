@@ -514,14 +514,136 @@ public class cmp {
         //     }
         //     return String.valueOf(s);
         // }
+
+        // public int[] leftRigthDifference(int[] a) {
+        //     int n = a.length;
+        //     int [] l = new int [n+1], r = new int [n+1];
+        //     for (int i = 1; i <= n; i++) 
+        //         l[i] = l[i-1] + a[i-1];
+        //     for (int i = n-1; i >= 0; i--) 
+        //         r[i] = r[i+1] + a[i]; // r[i+1]
+        //     int [] ans = new int [n];
+        //     for (int i = 0; i < n; i++) 
+        //         ans[i] = Math.abs(l[i] - r[i+1]);
+        //     return ans;
+        // }
+
+// // 把题目转化一下，这个方法很容易懂        
+//         public int minimumTime(int[][] a) {
+//             if (a[0][1] > 1 && a[1][0] > 1) return -1; // 永远无法到达
+//             m = a.length;
+//             n = a[0].length;
+//             dp = new int [m][n];
+//             for (int i = 0; i < m; i++) 
+//                 Arrays.fill(dp[i], Integer.MAX_VALUE);
+//             return bfs(0, 0, 0, a);
+//         }
+//         int [][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+//         int [][] dp; // 定义 dp[i][j] 为到达（i, j）的最小时间，那么dp[0][0] = 0, 答案为dp[m-1][n-1]
+//         int m, n;
+//         int bfs(int xx, int yy, int dd, int [][] a) {
+//             Queue<int []> q = new PriorityQueue<>((x, y) -> x[2] - y[2]); // 优先队列
+//             q.offer(new int [] {xx, yy, dd});
+//             while (!q.isEmpty()) {
+//                 int [] cur = q.poll();
+//                 int x = cur[0], y = cur[1], t = cur[2];
+//                 if (x == m-1 && y == n-1) return t; // 最短路径：永远是第一次走到的就是最短的
+//                 for (int [] d : dirs) { // 枚举周围四个格子
+//                     int i = x + d[0], j = y + d[1];
+//                     if (i < 0 || i >= m || j < 0 || j >= n) continue;
+//                     int nd = Math.max(t+1, a[i][j]);
+//                     nd += (nd - i - j) % 2; // nd 必须和 x+y 同奇偶, 就是说 nd ％ 2 ＝＝ (x+y) ％ 2
+//                     if (nd < dp[i][j]) {
+//                         dp[i][j] = nd; // 更新最短路
+//                         q.offer(new int [] {i, j, nd});
+//                     }
+//                 }
+//             }
+//             return -1;
+//         }
+// // 换另一种方法写一下：
+//         public int minimumTime(int[][] a) {
+//             if (a[0][1] > 1 && a[1][0] > 1) return -1; // 永远无法到达
+//             m = a.length;
+//             n = a[0].length;
+//             vis = new int [m][n];
+//             int left = Math.max(a[m-1][n-1], m+n-2)-1;
+//             int right = (int)1e5 + m + n;
+//             while (left + 1 < right) {
+//                 int mid = (left + right) >>> 1;
+//                 if (check(mid, a)) right = mid;
+//                 else left = mid;
+//             }
+//             return right + (right + m + n) % 2;
+//         }
+//         int [][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+//         int [][] vis;
+//         int m, n;
+//         boolean check(int t, int [][] a) { // 给一个固定的时间，判断，能否在这个时间之内，从尾巴走到头？
+//             vis[m-1][n-1] = t; // 这里是，想要从尾巴上走
+//             var q = new ArrayList<int []>();
+//             q.add(new int [] {m-1, n-1});
+//             for (int ii = t-1; !q.isEmpty(); ii--) { // 遍历时间点【对应时间点所在的格子】，队列里要有元素
+//                 var tmp = q;
+//                 q = new ArrayList<>();
+//                 for (var p : tmp) {
+//                     int x = p[0], y = p[1];
+//                     for (int [] d : dirs) {
+//                         int i = x + d[0], j = y + d[1];
+//                         if (i >= 0 && i < m && j >= 0 && j < n && vis[i][j] != t && a[i][j] <= ii) { // 如果当前的格、方向是可以走的
+//                             if (i == 0 && j == 0) return true;
+//                             vis[i][j] = t; // 用二分的值来标记，避免重复创建 vis 数组
+//                             q.add(new int [] {i, j});
+//                         }
+//                     }
+//                 }
+//             }
+//             return false;
+//         }
+
+        // public int[] divisibilityArray(String s, int m) {
+        //     int n = s.length(); // 这里的问题是，这个数字可以很大 [1, 100000], 感觉很容易就溢出了，不喜欢这个题目
+        //     int [] r = new int [n], ans = new int [n];  // 这里标记余数
+        //     // if (s.charAt(0) == '0') return r; // 它说是，不要这个限制条件的。因为把0 也看成是整除
+        //     r[0] = Integer.valueOf(s.substring(0, 1)) % m;
+        //     if (r[0] == 0) ans[0] = 1;
+        //     for (int i = 1; i < n; i++) {  // 往后遍历：把每个答案算出来
+        //         r[i] = (int)(((long)r[i-1] * 10l + (long)Integer.valueOf(s.substring(i, i+1))) % m);
+        //         if (r[i] == 0) ans[i] = 1;
+        //     }
+        //     return ans;
+        // }
+
+        // 活宝妹就是还一定要嫁给亲爱的表哥～～！！！【爱表哥，爱生活！！！】
+        public int maxNumOfMarkedIndices(int[] a) {
+            int n = a.length, ans = 0;
+            int l = 0, r = n / 2;
+            Arrays.sort(a);
+            System.out.println(Arrays.toString(a));
+            while (l <= r) { // 二分查找：查找到一个最大可能的操作次数，注意边界
+                int m = (l + r) / 2;
+                System.out.println("m: " + m);
+                if (possible(m, a)) {
+                    ans = Math.max(ans, m);
+                    System.out.println("ans: " + ans);
+                    l = m+1;
+                } else r = m-1;
+            }
+            return ans;
+        }
+        boolean possible(int k, int [] a) {
+            for (int i = 0; i < k; i++) // 遍历最小的K 个数，与最大的 k-i+1 个数组对
+                if (2 * a[i] > a[a.length - k + i]) return false; // n-1 - (k-i): 这里写得有点儿错，今天暂时不写了。。。
+            return true;
+        }
     }
     public static void main (String[] args) {
         Solution s = new Solution ();
 
-        int [][] a = new int [][] {{4,0,2,0},{0,3,0,1},{2,0,2,0},{0,1,0,1}};
+        int [] a = new int [] {3,5,2,4};
 
-        String r = s.findTheString(a);
-        System.out.println("r: " + r);
+         int r = s.maxNumOfMarkedIndices(a);
+         System.out.println("r: " + r);
     }
 }
 // ListNode head = new ListNode(a[0]);
@@ -531,7 +653,5 @@ public class cmp {
 // TreeNode root = new TreeNode(a[0]);
 // root.buildTree(root, a);
 // root.levelPrintTree(root);
-
-
 
 
