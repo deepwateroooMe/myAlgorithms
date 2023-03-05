@@ -614,38 +614,145 @@ public class cmp {
         //     return ans;
         // }
 
-        // 活宝妹就是还一定要嫁给亲爱的表哥～～！！！【爱表哥，爱生活！！！】
-        public int maxNumOfMarkedIndices(int[] a) {
-            int n = a.length, ans = 0;
-            int l = 0, r = n / 2;
-            Arrays.sort(a);
-            System.out.println(Arrays.toString(a));
-            while (l <= r) { // 二分查找：查找到一个最大可能的操作次数，注意边界
-                int m = (l + r) / 2;
-                System.out.println("m: " + m);
-                if (possible(m, a)) {
-                    ans = Math.max(ans, m);
-                    System.out.println("ans: " + ans);
-                    l = m+1;
-                } else r = m-1;
-            }
-            return ans;
+        // // 活宝妹就是还一定要嫁给亲爱的表哥～～！！！【爱表哥，爱生活！！！】
+        // public int maxNumOfMarkedIndices(int[] a) {
+        //     int n = a.length, ans = 0;
+        //     int l = 0, r = n / 2;
+        //     Arrays.sort(a);
+        //     System.out.println(Arrays.toString(a));
+        //     while (l <= r) { // 二分查找：查找到一个最大可能的操作次数，注意边界
+        //         int m = (l + r) / 2;
+        //         System.out.println("m: " + m);
+        //         if (possible(m, a)) {
+        //             ans = Math.max(ans, m);
+        //             System.out.println("ans: " + ans);
+        //             l = m+1;
+        //         } else r = m-1;
+        //     }
+        //     return ans;
+        // }
+        // boolean possible(int k, int [] a) {
+        //     for (int i = 0; i < k; i++) // 遍历最小的K 个数，与最大的 k-i+1 个数组对
+        //         if (2 * a[i] > a[a.length - k + i]) return false; // n-1 - (k-i): 这里写得有点儿错，今天暂时不写了。。。
+        //     return true;
+        // }
+
+        // public int passThePillow(int n, int t) {
+        //     int idx = 1, d = 1;
+        //     while (t > 0) {
+        //         if (d > 0) {
+        //             for (int i = 1; i < n && t > 0; i++) {
+        //                 idx++;
+        //                 t--;
+        //             }
+        //             d *= -1;
+        //         } else {
+        //             for (int i = n; i > 1 && t > 0; i--) {
+        //                 idx--;
+        //                 t--;
+        //             }
+        //             d *= -1;
+        //         }
+        //     }
+        //     return idx;
+        // }
+
+        // public long kthLargestLevelSum(TreeNode root, int k) {
+        //     levelTraverTree(root);
+        //     long r = -1l;
+        //     while (k > 0 && !pq.isEmpty()) {
+        //         r = pq.poll();
+        //         k--;
+        //     }
+        //     return k == 0 ? r : -1l;
+        // }
+        // Queue<Long> pq = new PriorityQueue<Long>((x, y) -> Long.compare(y, x)); // 降序排列
+        // void levelTraverTree(TreeNode root) {
+        //     Deque<TreeNode> q = new ArrayDeque<>();
+        //     q.addFirst(root);
+        //     long sum = 0;
+        //     while (!q.isEmpty()) {
+        //         int cnt = q.size();
+        //         for (; cnt > 0; cnt--) {
+        //             TreeNode r = q.pollLast();
+        //             sum += r.val;
+        //             if (r.left != null) q.addFirst(r.left);
+        //             if (r.right != null) q.addFirst(r.right);
+        //         }
+        //         pq.add(sum);
+        //         sum = 0l;
+        //     }
+        // }
+        
+// // n [1, 10000];
+//         // a[i]: [1, 1e6]
+//         // 应该是不能去数所有的质数了，因为数大；去数所有包括最开始数的因子
+//         public int findValidSplit(int[] a) {
+//             int n = a.length;
+
+//         }
+//         int gcd(int x, int y) { // 这个方法要理解透彻，现在就成抄的这个方法了
+//             if (x < y) return gcd(y, x);
+//             return gcd(y, x % y);
+//         }
+
+        // 不知道哪里写错了，数多了
+        public int waysToReachTarget(int t, int[][] a) {
+            Arrays.sort(a, (x, y)-> y[1] - x[1]); // 降序排列
+
+            System.out.println("a.length: " + a.length);
+            for (int z = 0; z < a.length; ++z) 
+                System.out.println(Arrays.toString(a[z]));
+            
+            n = a.length;
+            dp = new Integer [1001][n]; // [t][cnt][val]
+            return dfs(t, 0, a);
         }
-        boolean possible(int k, int [] a) {
-            for (int i = 0; i < k; i++) // 遍历最小的K 个数，与最大的 k-i+1 个数组对
-                if (2 * a[i] > a[a.length - k + i]) return false; // n-1 - (k-i): 这里写得有点儿错，今天暂时不写了。。。
-            return true;
+        static final int mod = (int)1e9 + 7;
+        Integer [][] dp;
+        int n;
+// 爱亲爱的表哥，活宝妹一定要嫁的亲爱的表哥！！！活宝妹就是一定要嫁给亲爱的表哥，爱表哥，爱生活！！！
+        int dfs(int t, int ii, int [][] a) { 
+            if (t < 1 || ii >= n) return 0;
+            if (dp[t][ii] != null) return dp[t][ii];
+            int idx = ii;
+            while (a[idx][1] > t) ++idx; // 至少要先找到那个 <= 的行
+            int ans = 0; // 对当前行的处理：
+            if (a[idx][1] == t) {
+                ans += 1;
+                for (int i = idx+1; i < n; i++) 
+                    ans = (ans + dfs(t, idx+1, a)) % mod;
+                return dp[t][ii] = ans;
+                // return dp[t][idx] = 1 + dfs(t, idx+1, a); // 这里不对
+            }
+            // 不相等的情况下，数个数
+            int cnt = a[idx][0], del = 0;
+            // if (cnt * a[idx][1] < t) return dp[t][idx] = 0; // 这里不对
+            while (cnt * a[idx][1] > t) cnt--;
+            if (cnt * a[idx][1] == t) ans += 1;
+            System.out.println("ans: " + ans);
+            // System.out.println("cnt: " + cnt);
+            for (; cnt > 0; cnt--) {
+                del += a[idx][1];
+                System.out.println("cnt: " + cnt);
+                System.out.println("del: " + del);
+                ans = (ans + dfs(t-del, idx+1, a)) % mod;
+            }
+            for (int i = idx+1; i < n; i++) 
+                ans = (ans + dfs(t, idx+1, a)) % mod;
+            return dp[t][ii] = ans;
         }
     }
     public static void main (String[] args) {
         Solution s = new Solution ();
 
-        int [] a = new int [] {3,5,2,4};
+        int [][] a = new int [][] {{6,1},{3,2},{2,3}};
 
-         int r = s.maxNumOfMarkedIndices(a);
-         System.out.println("r: " + r);
+        int r = s.waysToReachTarget(6, a);
+        System.out.println("r: " + r);
     }
 }
+
 // ListNode head = new ListNode(a[0]);
 // head.buildList(head, a);
 // head.printList(head);
@@ -653,5 +760,12 @@ public class cmp {
 // TreeNode root = new TreeNode(a[0]);
 // root.buildTree(root, a);
 // root.levelPrintTree(root);
+
+
+
+
+
+
+
 
 
