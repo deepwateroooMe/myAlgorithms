@@ -721,38 +721,6 @@ public class cmp {
         //     return n;
         // }
 
-        // 这个题目没有思路，不知道怎么组织，不像是会议室问题，没有思路
-        // class Range { 
-        //     int l, r, t;
-        //     public Range(int l, int r, int t) {
-        //         this.l = l;
-        //         this.r = r;
-        //         this.t = t;
-        //     }
-        //     public String toString() {
-        //         return "Range(" + left + "," + right + ")";
-        //     }
-        // }
-        // class RangeManager {
-        //     TreeSet<Range> ts;
-        //     public RangeManager() {
-        //         ts = new TreeSet<>((a, b)->(a.l != b.l ? a.l - b.l : a.r - b.r));
-        //     }
-        //     public void AddR(Range r) {
-        //         if (ts.Size() == 0) ts.add(r);
-        //     }
-        // }
-        // TreeSet<Range> ts, tt; // ans 
-        // public int findMinimumTime(int[][] a) {
-        //     int n = a.length;
-        //     ts = new TreeSet<>((a, b)->(a.l != b.l ? a.l - b.l : a.r - b.r));
-        //     tt = new TreeSet<>((a, b)->(a.l != b.l ? a.l - b.l : a.r - b.r));
-        //     for (int [] v : a) {
-        //         if (v[2] == v[1] - v[0] + 1) ts.add(new Range(v[0], v[1], v[2]));
-        //         else tt.add(new Range(v[0], v[1], v[2]));
-        //     }
-        // }
-
         //         // 不知道哪里写错了，数多了：这些都是自己最最原始的想法，狠天真，呵呵
 //         public int waysToReachTarget(int t, int[][] a) {
 //             Arrays.sort(a, (x, y)-> y[1] - x[1]); // 降序排列
@@ -819,27 +787,70 @@ public class cmp {
         //     return dp[n][t];
         // }
 
-        // 不喜欢数数，但是仍被它逼去数，狠烦人。滑动窗口，里面异或操作
-        // 不喜欢这个题目： 0 片段需要特殊处理，还要桥接前后处理，感觉想不透
-        // 感觉是需要以数组中的0 片段为中心，向两边扩展的；0 片段的某侧有异或0 片段的情况也狠复杂，不想写了
-        // 感觉这个题目，给自己的教训是：行百里者，半于九十～～！！！其实就差再多那么一点点儿的努力，就能解决了
-        public long beautifulSubarrays(int[] a) { // [0, 0, 0]
-            int n = a.length;
-            long ans = 0;
-            int [] r = new int [n];
-            r[0] = a[0];
-            // Set<Integer> s = new HashSet<>();// 可能会有得复，所以不能够使用简单的，要用字典, 要数个数的
-            // s.add(r[0]);
-            Map<Integer, Integer> m = new HashMap<>();
-            m.put(r[0], 1);
-            if (r[0] == 0) ans++;
-            for (int i = 1; i < n; i++) { // 这里，是的，可以把它只遍历一遍
-                r[i] = r[i-1] ^ a[i];
-                ans += (!m.containsKey(r[i]) ? 0 : (long)m.get(r[i]));
-                if (r[i] == 0) ans++;// ＝＝ 0 的情况特殊处理了
-                m.put(r[i], m.getOrDefault(r[i], 0) + 1);
+        // // 不喜欢数数，但是仍被它逼去数，狠烦人。滑动窗口，里面异或操作
+        // // 不喜欢这个题目： 0 片段需要特殊处理，还要桥接前后处理，感觉想不透
+        // // 感觉是需要以数组中的0 片段为中心，向两边扩展的；0 片段的某侧有异或0 片段的情况也狠复杂，不想写了
+        // // 感觉这个题目，给自己的教训是：行百里者，半于九十～～！！！其实就差再多那么一点点儿的努力，就能解决了
+        // public long beautifulSubarrays(int[] a) { // [0, 0, 0]
+        //     int n = a.length;
+        //     long ans = 0;
+        //     int [] r = new int [n];
+        //     r[0] = a[0];
+        //     // Set<Integer> s = new HashSet<>();// 可能会有得复，所以不能够使用简单的，要用字典, 要数个数的
+        //     // s.add(r[0]);
+        //     Map<Integer, Integer> m = new HashMap<>();
+        //     m.put(r[0], 1);
+        //     if (r[0] == 0) ans++;
+        //     for (int i = 1; i < n; i++) { // 这里，是的，可以把它只遍历一遍
+        //         r[i] = r[i-1] ^ a[i];
+        //         ans += (!m.containsKey(r[i]) ? 0 : (long)m.get(r[i]));
+        //         if (r[i] == 0) ans++;// ＝＝ 0 的情况特殊处理了
+        //         m.put(r[i], m.getOrDefault(r[i], 0) + 1);
+        //     }
+        //     return ans;
+        // }
+
+        // class Range { 
+        //     int l, r, t;
+        //     public Range(int l, int r, int t) {
+        //         this.l = l;
+        //         this.r = r;
+        //         this.t = t;
+        //     }
+        //     public String toString() {
+        //         return "Range(" + left + "," + right + ")";
+        //     }
+        // }
+        // class RangeManager {
+        //     TreeSet<Range> ts;
+        //     public RangeManager() {
+        //         ts = new TreeSet<>((a, b)->(a.l != b.l ? a.l - b.l : a.r - b.r));
+        //     }
+        //     public void AddR(Range r) {
+        //         if (ts.Size() == 0) ts.add(r);
+        //     }
+        // }
+        // TreeSet<Range> ts, tt; // ans 
+// 看来，亲爱的表哥的活宝妹是做人太地道，以至一永远学不会贪心算法。。。爱表哥，爱生活！！！活宝妹就是一定要嫁给亲爱的表哥！！！
+        public int findMinimumTime(int[][] a) { 
+            Arrays.sort(a, (x, y) -> x[1] - y[1]); // 截止时间的，升序排列【这里制造了一个势：后面的都在前一个后面结束】
+            int n = a.length, r = 0;
+            boolean [] vis = new boolean [2007];
+            for (int i = 0; i < n; i++) {
+                int cnt = 0;
+                for (int j = a[i][0]; j <= a[i][1]; j++) // 数一数，这个任务，有几秒是已经完成了的呢？
+                    if (vis[j]) cnt++;
+                int j = a[i][1];// 贪心的思路体现在这里：从最后一秒往前数
+                while (cnt < a[i][2]) {
+                    if (!vis[j]) { // 这相标准不能丢：是因为，如果之前已经统计过的不算，
+                        r++; // 计入结果 
+                        cnt++;// 当前计数
+                        vis[j] = true;// 打标记
+                    }
+                    j--;
+                }
             }
-            return ans;
+            return r;
         }
     }
     public static void main (String[] args) {
@@ -860,6 +871,4 @@ public class cmp {
 // root.levelPrintTree(root);
 
 
-
- 
 
