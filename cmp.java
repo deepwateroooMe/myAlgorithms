@@ -696,57 +696,6 @@ public class cmp {
 //             return gcd(y, x % y);
 //         }
 
-//         // 不知道哪里写错了，数多了
-//         public int waysToReachTarget(int t, int[][] a) {
-//             Arrays.sort(a, (x, y)-> y[1] - x[1]); // 降序排列
-
-//             System.out.println("a.length: " + a.length);
-//             for (int z = 0; z < a.length; ++z) 
-//                 System.out.println(Arrays.toString(a[z]));
-            
-//             n = a.length;
-//             dp = new Integer [1001][n]; // [t][cnt][val]
-//             return dfs(t, 0, a);
-//         }
-//         static final int mod = (int)1e9 + 7;
-//         Integer [][] dp;
-//         int n;
-// // 爱亲爱的表哥，活宝妹一定要嫁的亲爱的表哥！！！活宝妹就是一定要嫁给亲爱的表哥，爱表哥，爱生活！！！
-//         int dfs(int t, int ii, int [][] a) { 
-//             if (t < 1 || ii >= n) return 0;
-//             if (dp[t][ii] != null) return dp[t][ii];
-//             int idx = ii;
-//             while (a[idx][1] > t) ++idx; // 至少要先找到那个 <= 的行
-//             int ans = 0; // 对当前行的处理：
-//             if (a[idx][1] == t) {
-//                 ans += 1;
-//                 for (int i = idx+1; i < n; i++) 
-//                     ans = (ans + dfs(t, idx+1, a)) % mod;
-//                 return dp[t][ii] = ans;
-//                 // return dp[t][idx] = 1 + dfs(t, idx+1, a); // 这里不对
-//             }
-//             // 不相等的情况下，数个数
-//             int cnt = a[idx][0], del = 0;
-//             // if (cnt * a[idx][1] < t) return dp[t][idx] = 0; // 这里不对
-//             while (cnt * a[idx][1] > t) cnt--;
-//             if (cnt * a[idx][1] == t) ans += 1;
-//             System.out.println("ans: " + ans);
-//             // System.out.println("cnt: " + cnt);
-//             for (; cnt > 0; cnt--) {
-//                 del += a[idx][1];
-//                 System.out.println("cnt: " + cnt);
-//                 System.out.println("del: " + del);
-//                 ans = (ans + dfs(t-del, idx+1, a)) % mod;
-//             }
-//             for (int i = idx+1; i < n; i++) 
-//                 ans = (ans + dfs(t, idx+1, a)) % mod;
-//             return dp[t][ii] = ans;
-//         }
-
-
-
-
-
         // public int vowelStrings(String[] a, int l, int r) {
         //     int n = a.length, ans = 0;
         //     for (int i = l; i <= r; i++) 
@@ -804,41 +753,91 @@ public class cmp {
         //     }
         // }
 
-        // 不喜欢数数，但是仍被它逼去数，狠烦人。滑动窗口，里面异或操作
-        // public long beautifulSubarrays(int[] a) { // 感觉这个思路好像有点儿不太对
-        //     int n = a.length, r = 0;
-        //     int j = 0, val = a[0]; // 左边界
-        //     for (int i = 1; i < n; i++) {
-        //         if (i == 1 && val == 0) {
-        //             r = 1;
-        //             val ^= a[i];
-        //             continue;
-        //         }
-        //         if (val == 0) { // 满足条件：计个数，右移左边界 
-        //             r++;
-        //             val |= a[j];
-        //             j++;
-        //             // if (val == 0)
-        //             while (val != 0 && j < i) {
-        //                 val |= a[j];
-        //                 j++;
+        //         // 不知道哪里写错了，数多了：这些都是自己最最原始的想法，狠天真，呵呵
+//         public int waysToReachTarget(int t, int[][] a) {
+//             Arrays.sort(a, (x, y)-> y[1] - x[1]); // 降序排列
+
+//             System.out.println("a.length: " + a.length);
+//             for (int z = 0; z < a.length; ++z) 
+//                 System.out.println(Arrays.toString(a[z]));
+            
+//             n = a.length;
+//             dp = new Integer [1001][n]; // [t][cnt][val]
+//             return dfs(t, 0, a);
+//         }
+//         static final int mod = (int)1e9 + 7;
+//         Integer [][] dp;
+//         int n;
+// // 爱亲爱的表哥，活宝妹一定要嫁的亲爱的表哥！！！活宝妹就是一定要嫁给亲爱的表哥，爱表哥，爱生活！！！
+//         int dfs(int t, int ii, int [][] a) { 
+//             if (t < 1 || ii >= n) return 0;
+//             if (dp[t][ii] != null) return dp[t][ii];
+//             int idx = ii;
+//             while (a[idx][1] > t) ++idx; // 至少要先找到那个 <= 的行
+//             int ans = 0; // 对当前行的处理：
+//             if (a[idx][1] == t) {
+//                 ans += 1;
+//                 for (int i = idx+1; i < n; i++) 
+//                     ans = (ans + dfs(t, idx+1, a)) % mod;
+//                 return dp[t][ii] = ans;
+//                 // return dp[t][idx] = 1 + dfs(t, idx+1, a); // 这里不对
+//             }
+//             // 不相等的情况下，数个数
+//             int cnt = a[idx][0], del = 0;
+//             // if (cnt * a[idx][1] < t) return dp[t][idx] = 0; // 这里不对
+//             while (cnt * a[idx][1] > t) cnt--;
+//             if (cnt * a[idx][1] == t) ans += 1;
+//             System.out.println("ans: " + ans);
+//             // System.out.println("cnt: " + cnt);
+//             for (; cnt > 0; cnt--) {
+//                 del += a[idx][1];
+//                 System.out.println("cnt: " + cnt);
+//                 System.out.println("del: " + del);
+//                 ans = (ans + dfs(t-del, idx+1, a)) % mod;
+//             }
+//             for (int i = idx+1; i < n; i++) 
+//                 ans = (ans + dfs(t, idx+1, a)) % mod;
+//             return dp[t][ii] = ans;
+//         }
+        // // 应该是用动态规划来写的: 很久没写了，全忘记了。记得动态规划总是可以改写为 dfs 记忆化搜索，想找一个那种解法来加深理解
+        // static final int mod = (int)1e9 + 7;
+        // public int waysToReachTarget(int t, int[][] a) {
+        //     int n = a.length;
+        //     int [][] dp = new int [n+1][t+1]; // dp[i][j] := # of ways to earn j points with first i types.
+        //     dp[0][0] = 1;
+        //     for (int i = 1; i <= n; i++) {
+        //         final int cnt = a[i-1][0], mark = a[i-1][1];
+        //         for (int j = 0; j <= t; j++) {
+        //             for (int solved = 0; solved <= cnt; solved++) {
+        //                 if (j - solved * mark >= 0) {
+        //                     dp[i][j] += dp[i-1][j - solved * mark];
+        //                     dp[i][j] %= mod;
+        //                 }
         //             }
         //         }
         //     }
+        //     return dp[n][t];
         // }
+
+        // 不喜欢数数，但是仍被它逼去数，狠烦人。滑动窗口，里面异或操作
         // 不喜欢这个题目： 0 片段需要特殊处理，还要桥接前后处理，感觉想不透
         // 感觉是需要以数组中的0 片段为中心，向两边扩展的；0 片段的某侧有异或0 片段的情况也狠复杂，不想写了
+        // 感觉这个题目，给自己的教训是：行百里者，半于九十～～！！！其实就差再多那么一点点儿的努力，就能解决了
         public long beautifulSubarrays(int[] a) { // [0, 0, 0]
-            int n = a.length, ans = 0;
+            int n = a.length;
+            long ans = 0;
             int [] r = new int [n];
             r[0] = a[0];
-            Set<Integer> s = new HashSet<>();
-            s.add(r[0]);
+            // Set<Integer> s = new HashSet<>();// 可能会有得复，所以不能够使用简单的，要用字典, 要数个数的
+            // s.add(r[0]);
+            Map<Integer, Integer> m = new HashMap<>();
+            m.put(r[0], 1);
             if (r[0] == 0) ans++;
-            for (int i = 1; i < n; i++) {
-                r[i] = a[i] ^ r[i-1];
-                if (r[i] == 0 || s.contains(r[i])) ans ++;
-                if (!s.contains(r[i])) s.add(r[i]);
+            for (int i = 1; i < n; i++) { // 这里，是的，可以把它只遍历一遍
+                r[i] = r[i-1] ^ a[i];
+                ans += (!m.containsKey(r[i]) ? 0 : (long)m.get(r[i]));
+                if (r[i] == 0) ans++;// ＝＝ 0 的情况特殊处理了
+                m.put(r[i], m.getOrDefault(r[i], 0) + 1);
             }
             return ans;
         }
