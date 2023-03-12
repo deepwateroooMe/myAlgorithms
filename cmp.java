@@ -696,59 +696,158 @@ public class cmp {
 //             return gcd(y, x % y);
 //         }
 
-        // 不知道哪里写错了，数多了
-        public int waysToReachTarget(int t, int[][] a) {
-            Arrays.sort(a, (x, y)-> y[1] - x[1]); // 降序排列
+//         // 不知道哪里写错了，数多了
+//         public int waysToReachTarget(int t, int[][] a) {
+//             Arrays.sort(a, (x, y)-> y[1] - x[1]); // 降序排列
 
-            System.out.println("a.length: " + a.length);
-            for (int z = 0; z < a.length; ++z) 
-                System.out.println(Arrays.toString(a[z]));
+//             System.out.println("a.length: " + a.length);
+//             for (int z = 0; z < a.length; ++z) 
+//                 System.out.println(Arrays.toString(a[z]));
             
-            n = a.length;
-            dp = new Integer [1001][n]; // [t][cnt][val]
-            return dfs(t, 0, a);
-        }
-        static final int mod = (int)1e9 + 7;
-        Integer [][] dp;
-        int n;
-// 爱亲爱的表哥，活宝妹一定要嫁的亲爱的表哥！！！活宝妹就是一定要嫁给亲爱的表哥，爱表哥，爱生活！！！
-        int dfs(int t, int ii, int [][] a) { 
-            if (t < 1 || ii >= n) return 0;
-            if (dp[t][ii] != null) return dp[t][ii];
-            int idx = ii;
-            while (a[idx][1] > t) ++idx; // 至少要先找到那个 <= 的行
-            int ans = 0; // 对当前行的处理：
-            if (a[idx][1] == t) {
-                ans += 1;
-                for (int i = idx+1; i < n; i++) 
-                    ans = (ans + dfs(t, idx+1, a)) % mod;
-                return dp[t][ii] = ans;
-                // return dp[t][idx] = 1 + dfs(t, idx+1, a); // 这里不对
+//             n = a.length;
+//             dp = new Integer [1001][n]; // [t][cnt][val]
+//             return dfs(t, 0, a);
+//         }
+//         static final int mod = (int)1e9 + 7;
+//         Integer [][] dp;
+//         int n;
+// // 爱亲爱的表哥，活宝妹一定要嫁的亲爱的表哥！！！活宝妹就是一定要嫁给亲爱的表哥，爱表哥，爱生活！！！
+//         int dfs(int t, int ii, int [][] a) { 
+//             if (t < 1 || ii >= n) return 0;
+//             if (dp[t][ii] != null) return dp[t][ii];
+//             int idx = ii;
+//             while (a[idx][1] > t) ++idx; // 至少要先找到那个 <= 的行
+//             int ans = 0; // 对当前行的处理：
+//             if (a[idx][1] == t) {
+//                 ans += 1;
+//                 for (int i = idx+1; i < n; i++) 
+//                     ans = (ans + dfs(t, idx+1, a)) % mod;
+//                 return dp[t][ii] = ans;
+//                 // return dp[t][idx] = 1 + dfs(t, idx+1, a); // 这里不对
+//             }
+//             // 不相等的情况下，数个数
+//             int cnt = a[idx][0], del = 0;
+//             // if (cnt * a[idx][1] < t) return dp[t][idx] = 0; // 这里不对
+//             while (cnt * a[idx][1] > t) cnt--;
+//             if (cnt * a[idx][1] == t) ans += 1;
+//             System.out.println("ans: " + ans);
+//             // System.out.println("cnt: " + cnt);
+//             for (; cnt > 0; cnt--) {
+//                 del += a[idx][1];
+//                 System.out.println("cnt: " + cnt);
+//                 System.out.println("del: " + del);
+//                 ans = (ans + dfs(t-del, idx+1, a)) % mod;
+//             }
+//             for (int i = idx+1; i < n; i++) 
+//                 ans = (ans + dfs(t, idx+1, a)) % mod;
+//             return dp[t][ii] = ans;
+//         }
+
+
+
+
+
+        // public int vowelStrings(String[] a, int l, int r) {
+        //     int n = a.length, ans = 0;
+        //     for (int i = l; i <= r; i++) 
+        //         if (isVowelString(a[i])) ans++;
+        //     return ans;
+        // }
+        // boolean isVowelString(String t) {
+        //     int n = t.length();
+        //     char [] s = t.toCharArray();
+        //     List<Character> l = new ArrayList<>(List.of('a', 'e', 'i', 'o', 'u'));
+        //     Set<Character> sc = new HashSet<>(l);
+        //     return sc.contains(s[0]) && sc.contains(s[n-1]);
+        // }
+
+        // public int maxScore(int[] a) {
+        //     int n = a.length;
+        //     Arrays.sort(a); 
+        //     long [] r = new long [n+1];
+        //     for (int i = n-1; i >= 0; i--) {
+        //         r[i] = r[i+1] + a[i];
+        //         if (r[i] <= 0) return (n-1)-i;
+        //     }
+        //     return n;
+        // }
+
+        // 这个题目没有思路，不知道怎么组织，不像是会议室问题，没有思路
+        // class Range { 
+        //     int l, r, t;
+        //     public Range(int l, int r, int t) {
+        //         this.l = l;
+        //         this.r = r;
+        //         this.t = t;
+        //     }
+        //     public String toString() {
+        //         return "Range(" + left + "," + right + ")";
+        //     }
+        // }
+        // class RangeManager {
+        //     TreeSet<Range> ts;
+        //     public RangeManager() {
+        //         ts = new TreeSet<>((a, b)->(a.l != b.l ? a.l - b.l : a.r - b.r));
+        //     }
+        //     public void AddR(Range r) {
+        //         if (ts.Size() == 0) ts.add(r);
+        //     }
+        // }
+        // TreeSet<Range> ts, tt; // ans 
+        // public int findMinimumTime(int[][] a) {
+        //     int n = a.length;
+        //     ts = new TreeSet<>((a, b)->(a.l != b.l ? a.l - b.l : a.r - b.r));
+        //     tt = new TreeSet<>((a, b)->(a.l != b.l ? a.l - b.l : a.r - b.r));
+        //     for (int [] v : a) {
+        //         if (v[2] == v[1] - v[0] + 1) ts.add(new Range(v[0], v[1], v[2]));
+        //         else tt.add(new Range(v[0], v[1], v[2]));
+        //     }
+        // }
+
+        // 不喜欢数数，但是仍被它逼去数，狠烦人。滑动窗口，里面异或操作
+        // public long beautifulSubarrays(int[] a) { // 感觉这个思路好像有点儿不太对
+        //     int n = a.length, r = 0;
+        //     int j = 0, val = a[0]; // 左边界
+        //     for (int i = 1; i < n; i++) {
+        //         if (i == 1 && val == 0) {
+        //             r = 1;
+        //             val ^= a[i];
+        //             continue;
+        //         }
+        //         if (val == 0) { // 满足条件：计个数，右移左边界 
+        //             r++;
+        //             val |= a[j];
+        //             j++;
+        //             // if (val == 0)
+        //             while (val != 0 && j < i) {
+        //                 val |= a[j];
+        //                 j++;
+        //             }
+        //         }
+        //     }
+        // }
+        // 不喜欢这个题目： 0 片段需要特殊处理，还要桥接前后处理，感觉想不透
+        // 感觉是需要以数组中的0 片段为中心，向两边扩展的；0 片段的某侧有异或0 片段的情况也狠复杂，不想写了
+        public long beautifulSubarrays(int[] a) { // [0, 0, 0]
+            int n = a.length, ans = 0;
+            int [] r = new int [n];
+            r[0] = a[0];
+            Set<Integer> s = new HashSet<>();
+            s.add(r[0]);
+            if (r[0] == 0) ans++;
+            for (int i = 1; i < n; i++) {
+                r[i] = a[i] ^ r[i-1];
+                if (r[i] == 0 || s.contains(r[i])) ans ++;
+                if (!s.contains(r[i])) s.add(r[i]);
             }
-            // 不相等的情况下，数个数
-            int cnt = a[idx][0], del = 0;
-            // if (cnt * a[idx][1] < t) return dp[t][idx] = 0; // 这里不对
-            while (cnt * a[idx][1] > t) cnt--;
-            if (cnt * a[idx][1] == t) ans += 1;
-            System.out.println("ans: " + ans);
-            // System.out.println("cnt: " + cnt);
-            for (; cnt > 0; cnt--) {
-                del += a[idx][1];
-                System.out.println("cnt: " + cnt);
-                System.out.println("del: " + del);
-                ans = (ans + dfs(t-del, idx+1, a)) % mod;
-            }
-            for (int i = idx+1; i < n; i++) 
-                ans = (ans + dfs(t, idx+1, a)) % mod;
-            return dp[t][ii] = ans;
+            return ans;
         }
     }
     public static void main (String[] args) {
         Solution s = new Solution ();
+        String [] a = new String [] {"are","amy","u"};
 
-        int [][] a = new int [][] {{6,1},{3,2},{2,3}};
-
-        int r = s.waysToReachTarget(6, a);
+        int r = s.vowelStrings(a, 0, 2);
         System.out.println("r: " + r);
     }
 }
@@ -763,9 +862,5 @@ public class cmp {
 
 
 
-
-
-
-
-
+ 
 
