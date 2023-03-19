@@ -1,5 +1,4 @@
 import com.TreeNode;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
@@ -8,12 +7,9 @@ import java.util.stream.*;
 import java.util.stream.Collectors;
 import java.util.HashSet;
 import java.util.Set;
-
 import static java.util.stream.Collectors.toMap;
-
 public class cmp {
     public static class Solution {
-
         // public boolean haveConflict(String[] s, String[] t) {
         //     int a = getVal(s[0]), b = getVal(s[1]);
         //     int c = getVal(t[0]), d = getVal(t[1]);
@@ -892,7 +888,7 @@ public class cmp {
         // public long repairCars(int[] a, int n) {
         //     long ans = Long.MAX_VALUE;
         //     Arrays.sort(a);
-        //     long l = 0l, r = Long.MAX_VALUE; //n * a[0] * n;
+        //     long l = 0l, r = Long.MAX_VALUE;
         //     while (l <= r) {
         //         long m = (r + l) / 2;
         //         if (possible(m, a, n)) {
@@ -942,24 +938,154 @@ public class cmp {
         //     }
         //     return r;
         // }
+
+        // public int[] evenOddBit(int n) {
+        //     int [] r = new int [2]; // answer = [even, odd].
+        //     int i = 0;
+        //     while (n > 0) {
+        //         if ((n & 1) == 1) {
+        //             if (i % 2 == 0) r[0]++;
+        //             else r[1]++;
+        //         }
+        //         i++;
+        //         n >>= 1;
+        //     }
+        //     return r;
+        // }
+        
+        // int [][] dirs = {{-2, -1}, {-2, 1}, {2, -1}, {2, 1}, {-1, -2}, {-1, 2}, {1, -2}, {1, 2}};
+        // public boolean checkValidGrid(int[][] a) {
+        //     int n = a.length;
+        //     TreeMap<Integer, int []> m = new TreeMap<>();
+        //     int [] p = new int [2]; // prev
+        //     for (int i = 0; i < n; i++) 
+        //         for (int j = 0; j < n; j++) 
+        //             m.put(a[i][j], new int [] {i, j});
+        //     int i = 0;
+        //     for (; i < n*n; i++) {
+        //         int [] v = m.get(i);
+        //         if (i == 0 && (v[0] != 0 || v[1] != 0)) return false;
+        //         if (i == 0) {
+        //             p = v;
+        //             continue;
+        //         }
+        //         boolean valid = false;
+        //         for (int [] d : dirs) {
+        //             int x = p[0] + d[0], y = p[1] + d[1];
+        //             if (x < 0 || x >= n || y < 0 || y >= n) continue;
+        //             if (x == v[0] && y == v[1]) {
+        //                 valid = true;
+        //                 p = v;
+        //                 break;
+        //             }
+        //         }
+        //         if (!valid) return false;
+        //     }
+        //     return i == n*n ? true : false;
+        // }
+
+        // public int findSmallestInteger(int[] a, int k) {
+        //     int n = a.length, j = 0;
+        //     Arrays.sort(a); // 升序排列
+        //     TreeMap<Integer, Integer> m = new TreeMap<>();
+        //     for (int i = 0; i < n; i++) {
+        //         int v =  ((a[i] + k) % k + k) % k; // 保证它是非负数
+        //         m.put(v, m.getOrDefault(v, 0) + 1);
+        //     }
+        //     if (!m.containsKey(0)) return 0;
+        //     while (m.containsKey(j % k)) {
+        //         if (m.get(j % k) > 1)
+        //             m.put(j % k, m.getOrDefault(j % k, 1)-1);
+        //         else m.remove(j % k);
+        //         j++;
+        //     }
+        //     return j;
+        // }
+
+        // // 这个题之前写过，有点儿印象，但感觉消化不透：
+        // // 超时了再来想这个：数据规模小，感觉能瓣出来一样。。。。。脑袋有点儿糊，想得不透
+        // // 思路：1<= N<= 20, 怎么把这个数组分成两半，一折为二，变成两个 10 个长度的，就不会超时，把最后一个写了再来写这个
+        // public int beautifulSubsets(int[] a, int k) { // 它说，这个方法超时了 TLE TLE TLE 
+        //     n = a.length;
+        //     int r = (1 << n), ans = 0;
+        //     for (int i = 1; i < r; i++)             
+        //         if (isValidSubsets(i, a, k)) ans++;
+        //     return ans;
+        // }
+        // int n;
+        // boolean isValidSubsets(int v, int [] a, int k) {
+        //     Set<Integer> s = new HashSet<>();
+        //     for (int i = 0; i < n; i++) {
+        //         if (((v >> i) & 1) == 1) { // 这一个位是 1
+        //             if (s.contains(a[i] + k) || s.contains(a[i] - k)) return false;
+        //             s.add(a[i]);
+        //         }
+        //     }
+        //     return true;
+        // }
+        public int beautifulSubsets(int[] a, int k) { 
+            int nn = a.length;
+            m = nn / 2;
+            n = nn - m;
+            int ll = (1 << m), rr = (1 << n);
+            int [] l = new int [m], r = new int [n];
+            int ans = 0;
+            l = Arrays.copyOfRange(a, 0, m);
+            r = Arrays.copyOfRange(a, m, nn);
+            for (int i = 0; i < ll; i++) 
+                for (int j = 0; j < rr; j++) 
+                    if (isValidSubsets(i, j, a, k)) ans++;
+            return ans;
+        }
+        int m, n;
+        boolean isValidSubsets(int l, int r, int [] a, int k) {
+            int cur = ((l << n) | r);
+            for (int v : masks) 
+                if ((cur & v) >= v) return false;
+            return true;
+        }
+        Set<Integer> masks = new HashSet<>();
+        void buildMasks(int [] a, int k) {
+            int n = a.length;
+            Map<Integer, List<Integer>> m = new HashMap<>();
+            for (int i = 0; i < n; i++)
+                m.computeIfAbsent(a[i], z -> new ArrayList<>()).add(i);
+            for (int i = 0; i < n; i++) {
+                int v = a[i];
+                int cur = (1 << i);
+                if (m.containsKey(v + k)) {
+                    for (int idx : m.get(v+k)) 
+                        masks.add(cur | (1 << idx));
+                }
+                if (m.containsKey(v - k)) {
+                    for (int idx : m.get(v-k)) 
+                        masks.add(cur | (1 << idx));
+                }
+            }
+        }
     }
-    
-// 【爱表哥，爱生活！！！活宝妹就是一定要嫁给亲爱的表哥！！！】
     public static void main (String[] args) { 
         Solution s = new Solution ();
 
-        int r = s.distMoney(11, 3);
+        int [] a = new int [] {2,4,6};
+
+        int r = s.beautifulSubsets(a, 2);
         System.out.println("r: " + r);
     }
 }
 
-// ListNode head = new ListNode(a[0]);
+// 【爱表哥，爱生活！！！活宝妹就是一定要嫁给亲爱的表哥！！！】
+// ListNode head = new ListNode(a[0]); 
 // head.buildList(head, a);
 // head.printList(head);
 
 // TreeNode root = new TreeNode(a[0]);
 // root.buildTree(root, a);
 // root.levelPrintTree(root);
+
+
+
+
 
 
 
