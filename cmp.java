@@ -1004,7 +1004,7 @@ public class cmp {
             Set<Integer> s = new HashSet<>(); 
             for (int i = 0; i < n; i++) 
                 if (a[i] > 0) s.add(i);
-// 构建无向图：
+// 构建无向图：【看了一下题目上的提示，它是从构建无向图的时候就精简到最小无向图，这些思路还是需要练习的。。。】
             g = new List [n];
             for (int i = 0; i < n; i++) 
                 g[i] = new ArrayList<>();
@@ -1025,6 +1025,7 @@ public class cmp {
                 System.out.println(Arrays.toString(en.getValue()));
             }
             // 然后遍历所有可能的离有钱节点S: 最远 2 个距离的节点，动态更新找最小值
+            // 感觉这里还是有些没想清楚：需要记住每个节点下，可以取到哪些节点的钱？打算参考别人的解法来写这个题了。。。
             return 0;
         }
         List<Integer> [] g;
@@ -1048,19 +1049,14 @@ public class cmp {
                         if (vis[v]) continue;
                         if (cnt >= 2 && cnt-2 <= d[v]) d[v] = cnt - 2;
                         q.offerFirst(new int [] {v, cnt+1});
-                        // updateDist(v, cnt+1);
                     }
-                }
+                } 
             }
         }
     }
     public static void main (String[] args) { 
         Solution s = new Solution ();
 
-        // int [] a = new int [] {3,1,6,8};
-        // int [] b = new int [] {1, 5};
-        int [] a = new int [] {47,50,97,58,87,72,41,63,41,51,17,21,7,100,69,66,79,92,84,9,57,26,26,28,83,38};
-        int [] b = new int [] {50,84,76,41,64,82,20,22,64,7,38,92,39,28,22,3,41,46,47,50,88,51,9,49,38,67,26,65,89,27,71,25,77,72,65,41,84,68,51,26,84,24,79,41,96,83,92,9,93,84,35,70,74,79,37,38,26,26,41,26};
         
         List<Long> r = s.minOperations(a, b);
         System.out.println("r.size(): " + r.size());
@@ -1076,17 +1072,6 @@ public class cmp {
 // TreeNode root = new TreeNode(a[0]);
 // root.buildTree(root, a);
 // root.levelPrintTree(root);
-
-
-
-
-
-
-
-
-
-
-
 
 
 
