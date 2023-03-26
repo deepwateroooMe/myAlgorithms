@@ -1,5 +1,4 @@
 import com.TreeNode;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
@@ -8,12 +7,9 @@ import java.util.stream.*;
 import java.util.stream.Collectors;
 import java.util.HashSet;
 import java.util.Set;
-
 import static java.util.stream.Collectors.toMap;
-
 public class cmp {
     public static class Solution {
-
         // public boolean haveConflict(String[] s, String[] t) {
         //     int a = getVal(s[0]), b = getVal(s[1]);
         //     int c = getVal(t[0]), d = getVal(t[1]);
@@ -942,14 +938,135 @@ public class cmp {
         //     }
         //     return r;
         // }
+
+        // public int kItemsWithMaximumSum(int p, int z, int n, int k) {
+        //     if (k <= p + z) return k >= p ? p : k;
+        //     return p - (k - p - z);
+        // }
+
+        // public boolean primeSubOperation(int[] a) {
+        //     int n = a.length;
+        //     if (n == 1) return true;
+        //     // 如果使用贪心算法，思路仍然不是狠清楚，比较麻烦一点儿。那么就是说，从头遍历，把从头开始的数尽可能地减少到最小，但保持升续排列
+        //     // 数据规模比较小，可以不用考虑其它优化
+        //     for (int i = 0; i < n; i++) {
+        //         System.out.println("\n i: " + i);
+        //         if (i == 0 && a[i] == 1 || i > 0 && a[i] == a[i-1]+1 || i == n-1 && a[i] > a[i-1]) continue;
+        //         int cur = getMin(a[i], i == 0 ? 0 : a[i-1]);
+        //         if (cur != -1)
+        //             a[i] = cur;
+        //         // }
+        //         if (i > 0 && a[i] <= a[i-1]) return false;
+        //         System.out.println("a[i]: " + a[i]);
+        //     }
+        //     return true;
+        // }
+        // List<Integer> l = new ArrayList<>(List.of(2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257, 263, 269, 271, 277, 281, 283, 293, 307, 311, 313, 317, 331, 337, 347, 349, 353, 359, 367, 373, 379, 383, 389, 397, 401, 409, 419, 421, 431, 433, 439, 443, 449, 457, 461, 463, 467, 479, 487, 491, 499, 503, 509, 521, 523, 541, 547, 557, 563, 569, 571, 577, 587, 593, 599, 601, 607, 613, 617, 619, 631, 641, 643, 647, 653, 659, 661, 673, 677, 683, 691, 701, 709, 719, 727, 733, 739, 743, 751, 757, 761, 769, 773, 787, 797, 809, 811, 821, 823, 827, 829, 839, 853, 857, 859, 863, 877, 881, 883, 887, 907, 911, 919, 929, 937, 941, 947, 953, 967, 971, 977, 983, 991, 997));
+        // TreeSet<Integer> s = new TreeSet<>(l); // 把 [1, 1000] 里的质数存里面
+        // int getMin(int v, int r) { // v > r
+        //     Integer l = s.floor(v - r - 1);
+        //     if (l == null) return -1;
+        //     return v - l;
+        // }
+
+        // public List<Long> minOperations(int[] a, int[] q) {
+        //     int m = q.length, n = a.length;
+        //     long sum = 0;
+        //     Arrays.sort(a); // 按升序排列
+        //     System.out.println(Arrays.toString(a));
+        //     long [] r = new long [n+1];
+        //     for (int i = 1; i <= n; i++) 
+        //         r[i] = r[i-1] + (long)a[i-1];
+        //     System.out.println(Arrays.toString(r));
+                
+        //     List<Long> l = new ArrayList<>();
+        //     for (int v : q) {
+        //         if (v <= a[0] || v >= a[n-1])
+        //             l.add(Math.abs(v * (long)n - r[n])); // 这里想得不对
+        //         else { // 需要一步中转: 二分查找下标
+        //             int idx = Arrays.binarySearch(a, v);
+        //             System.out.println("idx: " + idx);
+        //             if (idx >= 0)
+        //                 l.add(Math.abs(v * (long)(idx) - r[idx] +  r[n] - r[idx+1] - v * (long)(n - idx - 1)));
+        //             else {
+        //                 idx = idx * (-1) - 1;
+        //                 l.add(Math.abs(v * (long)idx - r[idx] +  r[n] - r[idx] - v * (long)(n - idx)));
+        //             }
+        //         }
+        //     }
+        //     return l;
+        // }
+
+        // 这个题不是很有思路，但是求最小什么的，应该都是一个最小什么相关的算法，边写边想
+        public int collectTheCoins(int[] a, int[][] e) {
+ n = a.length;
+// 存有钱的节点索引
+            Set<Integer> s = new HashSet<>(); 
+            for (int i = 0; i < n; i++) 
+                if (a[i] > 0) s.add(i);
+// 构建无向图：
+            g = new List [n];
+            for (int i = 0; i < n; i++) 
+                g[i] = new ArrayList<>();
+            for (int [] eg : e) {
+                int u = eg[0], v = eg[1];
+                g[u].add(v);
+                g[v].add(u);
+            }
+// 为了省时间，需要一次性算出和记住：每个其它节点到有钱节点所需要的单程步数【这个是固定不变的】
+            vis = new boolean [n];
+            for (int v : s) {
+                m.put(v, new int [n]);
+                updateDist(v, 0);
+            }
+            System.out.println("m.size(): " + m.size());
+            for (Map.Entry<Integer, int []> en : m.entrySet()) {
+                System.out.print(en.getKey() + ": ");
+                System.out.println(Arrays.toString(en.getValue()));
+            }
+            // 然后遍历所有可能的离有钱节点S: 最远 2 个距离的节点，动态更新找最小值
+            return 0;
+        }
+        List<Integer> [] g;
+        Map<Integer, int []> m = new HashMap<>(); // dist [] to coined nodes
+        int n;
+        boolean [] vis;
+        void updateDist(int uv, int cnt) { // 算，到每个有钱节点的最小步数，2 步以内计 0
+            int [] d = m.get(uv);
+            Arrays.fill(d, Integer.MAX_VALUE);
+            d[uv] = 0;
+            Deque<int []> q = new ArrayDeque<>();
+            q.offerFirst(new int [] {uv, cnt}); 
+            Arrays.fill(vis, false);
+            while (!q.isEmpty()) {
+                int size = q.size();
+                for (; size > 0; size--) {
+                    int [] cur = q.pollLast();
+                    int u = cur[0], dist = cur[1];
+                    vis[u] = true;
+                    for (int v : g[u]) { // 遍历当前有钱节点的相邻节点
+                        if (vis[v]) continue;
+                        if (cnt >= 2 && cnt-2 <= d[v]) d[v] = cnt - 2;
+                        q.offerFirst(new int [] {v, cnt+1});
+                        // updateDist(v, cnt+1);
+                    }
+                }
+            }
+        }
     }
     
 // 【爱表哥，爱生活！！！活宝妹就是一定要嫁给亲爱的表哥！！！】
     public static void main (String[] args) { 
         Solution s = new Solution ();
 
-        int r = s.distMoney(11, 3);
-        System.out.println("r: " + r);
+        // int [] a = new int [] {3,1,6,8};
+        // int [] b = new int [] {1, 5};
+        int [] a = new int [] {47,50,97,58,87,72,41,63,41,51,17,21,7,100,69,66,79,92,84,9,57,26,26,28,83,38};
+        int [] b = new int [] {50,84,76,41,64,82,20,22,64,7,38,92,39,28,22,3,41,46,47,50,88,51,9,49,38,67,26,65,89,27,71,25,77,72,65,41,84,68,51,26,84,24,79,41,96,83,92,9,93,84,35,70,74,79,37,38,26,26,41,26};
+        
+        List<Long> r = s.minOperations(a, b);
+        System.out.println("r.size(): " + r.size());
+        System.out.println(Arrays.toString(r.toArray()));
     }
 }
 
