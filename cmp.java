@@ -888,7 +888,7 @@ public class cmp {
         // public long repairCars(int[] a, int n) {
         //     long ans = Long.MAX_VALUE;
         //     Arrays.sort(a);
-        //     long l = 0l, r = Long.MAX_VALUE; //n * a[0] * n;
+        //     long l = 0l, r = Long.MAX_VALUE;
         //     while (l <= r) {
         //         long m = (r + l) / 2;
         //         if (possible(m, a, n)) {
@@ -1054,8 +1054,6 @@ public class cmp {
             }
         }
     }
-    
-// 【爱表哥，爱生活！！！活宝妹就是一定要嫁给亲爱的表哥！！！】
     public static void main (String[] args) { 
         Solution s = new Solution ();
 
@@ -1070,13 +1068,19 @@ public class cmp {
     }
 }
 
-// ListNode head = new ListNode(a[0]);
+// 【爱表哥，爱生活！！！活宝妹就是一定要嫁给亲爱的表哥！！！】
+// ListNode head = new ListNode(a[0]); 
 // head.buildList(head, a);
 // head.printList(head);
 
 // TreeNode root = new TreeNode(a[0]);
 // root.buildTree(root, a);
 // root.levelPrintTree(root);
+
+
+
+
+
 
 
 

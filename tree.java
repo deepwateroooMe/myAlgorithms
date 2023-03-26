@@ -703,20 +703,45 @@ public class tree {
         //     return Math.max(getDepth(r.left), getDepth(r.right)) + 1;
         // }
 
-        public List<Integer> pathInZigZagTree(int label) {
-            
-        }
+        
+        // // distance(a, b) = depth(a) + depth(b) - 2 * LCA(a, b).
+        // // Where depth(a) denotes depth from root to node “a” and LCA(a, b) denotes the lowest common ancestor of nodes “a” and “b”.
+        // public int[] cycleLengthQueries(int n, int[][] a) {
+        //     int m = a.length, idx = 0, nn = (int)Math.pow(2, n);
+        //     int [] r = new int [m];
+        //     int [] d = new int [nn + 1]; // 这里把问题想简单了，想当然地以为一定过根节点，但很多情况下就数多了，因为不过根节点
+        //     Deque<Integer> q = new ArrayDeque<>();
+        //     q.offerFirst(1);
+        //     int depth = 0;
+        //     while (!q.isEmpty()) {
+        //         int size = q.size();
+        //         for (; size > 0; size--) {
+        //             int u = q.pollLast();
+        //             d[u] = depth;
+        //             if (2 * u <= nn)
+        //                 q.offerFirst(2 * u);
+        //             if (2 * u + 1 <= nn)
+        //                 q.offerFirst(2 * u + 1);
+        //         }
+        //         depth++;
+        //     }
+        //     System.out.println(Arrays.toString(d));
+        //     for (int [] v : a) 
+        //         r[idx++] = d[v[0]] + d[v[1]] + 1;
+        //     return r;
+        // }
     }
         
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        int []  a = new int []  {3, 5, 1, 6, 2, 0, 8, -1, -1, 7, 4};
-        TreeNode r1 = new TreeNode(a[0]);
-        r1.buildTree(r1, a);
-        r1.levelPrintTree(r1);
-        
-        int r = s.lowestCommonAncestor(r1, 5, 1);
-        System.out.println("r: " + r);
+        int [][] a = new int [][] {{5,3},{4,7},{2,3}};
+        // TreeNode r1 = new TreeNode(a[0]);
+        // r1.buildTree(r1, a);
+        // r1.levelPrintTree(r1);
+
+        int [] r = s.cycleLengthQueries(3, a);
+        System.out.println(Arrays.toString(r));
     }
 }
+
