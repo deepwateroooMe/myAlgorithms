@@ -22,7 +22,6 @@ public class cmp {
         //     char [] s = t.toCharArray();
         //     return Integer.parseInt(t.substring(0, 2)) * 60 + Integer.parseInt(t.substring(3));
         // }
-
         // class Item implements Comparable<Item> {
         //     int v, f;
         //     public Item(int v, int f) {
@@ -997,70 +996,218 @@ public class cmp {
         //     return l;
         // }
 
-        // 这个题不是很有思路，但是求最小什么的，应该都是一个最小什么相关的算法，边写边想
-        public int collectTheCoins(int[] a, int[][] e) {
- n = a.length;
-// 存有钱的节点索引
-            Set<Integer> s = new HashSet<>(); 
-            for (int i = 0; i < n; i++) 
-                if (a[i] > 0) s.add(i);
-// 构建无向图：【看了一下题目上的提示，它是从构建无向图的时候就精简到最小无向图，这些思路还是需要练习的。。。】
-            g = new List [n];
-            for (int i = 0; i < n; i++) 
-                g[i] = new ArrayList<>();
-            for (int [] eg : e) {
-                int u = eg[0], v = eg[1];
-                g[u].add(v);
-                g[v].add(u);
-            }
-// 为了省时间，需要一次性算出和记住：每个其它节点到有钱节点所需要的单程步数【这个是固定不变的】
-            vis = new boolean [n];
-            for (int v : s) {
-                m.put(v, new int [n]);
-                updateDist(v, 0);
-            }
-            System.out.println("m.size(): " + m.size());
-            for (Map.Entry<Integer, int []> en : m.entrySet()) {
-                System.out.print(en.getKey() + ": ");
-                System.out.println(Arrays.toString(en.getValue()));
-            }
-            // 然后遍历所有可能的离有钱节点S: 最远 2 个距离的节点，动态更新找最小值
-            // 感觉这里还是有些没想清楚：需要记住每个节点下，可以取到哪些节点的钱？打算参考别人的解法来写这个题了。。。
-            return 0;
-        }
-        List<Integer> [] g;
-        Map<Integer, int []> m = new HashMap<>(); // dist [] to coined nodes
-        int n;
-        boolean [] vis;
-        void updateDist(int uv, int cnt) { // 算，到每个有钱节点的最小步数，2 步以内计 0
-            int [] d = m.get(uv);
-            Arrays.fill(d, Integer.MAX_VALUE);
-            d[uv] = 0;
-            Deque<int []> q = new ArrayDeque<>();
-            q.offerFirst(new int [] {uv, cnt}); 
-            Arrays.fill(vis, false);
-            while (!q.isEmpty()) {
-                int size = q.size();
-                for (; size > 0; size--) {
-                    int [] cur = q.pollLast();
-                    int u = cur[0], dist = cur[1];
-                    vis[u] = true;
-                    for (int v : g[u]) { // 遍历当前有钱节点的相邻节点
-                        if (vis[v]) continue;
-                        if (cnt >= 2 && cnt-2 <= d[v]) d[v] = cnt - 2;
-                        q.offerFirst(new int [] {v, cnt+1});
-                    }
-                } 
-            }
+//         // 这个题不是很有思路，但是求最小什么的，应该都是一个最小什么相关的算法，边写边想
+//         public int collectTheCoins(int[] a, int[][] e) {
+//  n = a.length;
+// // 存有钱的节点索引
+//             Set<Integer> s = new HashSet<>(); 
+//             for (int i = 0; i < n; i++) 
+//                 if (a[i] > 0) s.add(i);
+// // 构建无向图：【看了一下题目上的提示，它是从构建无向图的时候就精简到最小无向图，这些思路还是需要练习的。。。】
+//             g = new List [n];
+//             for (int i = 0; i < n; i++) 
+//                 g[i] = new ArrayList<>();
+//             for (int [] eg : e) {
+//                 int u = eg[0], v = eg[1];
+//                 g[u].add(v);
+//                 g[v].add(u);
+//             }
+// // 为了省时间，需要一次性算出和记住：每个其它节点到有钱节点所需要的单程步数【这个是固定不变的】
+//             vis = new boolean [n];
+//             for (int v : s) {
+//                 m.put(v, new int [n]);
+//                 updateDist(v, 0);
+//             }
+//             System.out.println("m.size(): " + m.size());
+//             for (Map.Entry<Integer, int []> en : m.entrySet()) {
+//                 System.out.print(en.getKey() + ": ");
+//                 System.out.println(Arrays.toString(en.getValue()));
+//             }
+//             // 然后遍历所有可能的离有钱节点S: 最远 2 个距离的节点，动态更新找最小值
+//             // 感觉这里还是有些没想清楚：需要记住每个节点下，可以取到哪些节点的钱？打算参考别人的解法来写这个题了。。。
+//             return 0;
+//         }
+//         List<Integer> [] g;
+//         Map<Integer, int []> m = new HashMap<>(); // dist [] to coined nodes
+//         int n;
+//         boolean [] vis;
+//         void updateDist(int uv, int cnt) { // 算，到每个有钱节点的最小步数，2 步以内计 0
+//             int [] d = m.get(uv);
+//             Arrays.fill(d, Integer.MAX_VALUE);
+//             d[uv] = 0;
+//             Deque<int []> q = new ArrayDeque<>();
+//             q.offerFirst(new int [] {uv, cnt}); 
+//             Arrays.fill(vis, false);
+//             while (!q.isEmpty()) {
+//                 int size = q.size();
+//                 for (; size > 0; size--) {
+//                     int [] cur = q.pollLast();
+//                     int u = cur[0], dist = cur[1];
+//                     vis[u] = true;
+//                     for (int v : g[u]) { // 遍历当前有钱节点的相邻节点
+//                         if (vis[v]) continue;
+//                         if (cnt >= 2 && cnt-2 <= d[v]) d[v] = cnt - 2;
+//                         q.offerFirst(new int [] {v, cnt+1});
+//                     }
+//                 } 
+//             }
+//         }
+
+        // public int minNumber(int[] a, int[] b) {
+        //     int m = a.length, n = b.length;
+        //     boolean [][] vis = new boolean [2][10];
+        //     for (int v : a) vis[0][v] = true;
+        //     for (int v : b) vis[1][v] = true;
+        //     for (int i = 1; i < 10; i++)
+        //         if (vis[0][i] && vis[1][i]) return i;
+        //     int r = 0;
+        //     boolean visA = false, visB = false;
+        //     for (int i = 1; i < 10; i++) {
+        //         if (vis[0][i] || vis[1][i]) {
+        //             if (!visA && vis[0][i] || !visB && vis[1][i]) {
+        //                 if (vis[0][i]) visA = true;
+        //                 if (vis[1][i]) visB = true;
+        //                 r += i;
+        //                 if (visA && visB) return r;
+        //                 r *= 10;
+        //             }
+        //         }
+        //     }
+        //     return -1;
+        // }
+
+        // // 数组里面会存在负数，并不是只要有个负数，就一定去掉，因为左右两边如果和》 0, 仍然是能够增加的
+        // public int maximumCostSubstring(String s, String chars, int[] vals) {
+        //     Map<Character, Integer> m = new HashMap<>();
+        //     int n = chars.length();
+        //     for (int i = 0; i < n; i++) 
+        //         m.put(chars.charAt(i), vals[i]);
+        //     int [] r = new int [s.length()];
+        //     // r[0] = m.containsKey(chars.charAt(0)) ? m.get(chars.charAt(0)) : chars.charAt(0) - 'a' + 1;
+        //     for (int i = 0; i < s.length(); i++) 
+        //         r[i] = m.containsKey(s.charAt(i)) ? m.get(s.charAt(i)) : s.charAt(i) - 'a' + 1;                
+        //     // 然后，这里就是求最大片段和：滑动窗口? 这里好像还有点儿什么没想透？
+        //     System.out.println(Arrays.toString(r));
+        //     int v = maxsequence3(r, r.length);
+        //     System.out.println("vi: " + v);
+        //     return v > 0 ? v : 0;
+        // }
+        // int maxsequence3(int a[], int len) { // 这个算法好像哪里不对
+        //     int maxsum, maxhere;
+        //     maxsum = maxhere = a[0];   //初始化最大和为a【0】
+        //     for (int i=1; i<len; i++) {
+        //         if (maxhere <= 0)
+        //             maxhere = a[i];  //如果前面位置最大连续子序列和小于等于0，则以当前位置i结尾的最大连续子序列和为a[i]
+        //         else
+        //             maxhere += a[i]; //如果前面位置最大连续子序列和大于0，则以当前位置i结尾的最大连续子序列和为它们两者之和
+        //         if (maxhere > maxsum) {
+        //             maxsum = maxhere;  //更新最大连续子序列和
+        //         }
+        //     }
+        //     return maxsum;
+        // }
+
+        // 下面，是被自己在超时后改昏了头的：        
+        //        public int findShortestCycle(int n, int[][] eg) { // 求一个最小环的大小，检测有没有环: 超时，需要找一个优化方法
+        //            g = new HashSet [n];
+        //            for (int i = 0; i < n; i++) g[i] = new HashSet<>();
+        //            for (int [] e : eg) {
+        //                int u = e[0], v = e[1];
+        //                g[u].add(v);
+        //                g[v].add(u);
+        //            }
+        //            for (int i = 0; i < n; i++) 
+        //                traverase(i, -1, 0, new HashSet<>());
+        //            return min == Integer.MAX_VALUE ? -1 : min;
+        //        }
+        //        Set<Integer> [] g;
+        //        int min = Integer.MAX_VALUE;
+        //        // class Node {
+        //        //     int [] r;
+        //        //     HashSet<Integer> v;
+        //        //     public Node(int [] a, HashSet<Integer> vv) {
+        //        //         r = a;
+        //        //         v = vv;
+        //        //     }
+        //        // }
+        //        void traverase(int uu, int p, int cnt, Set<Integer> vis) {
+        //            System.out.println("\n uu: " + uu);
+        //            System.out.println("cnt: " + cnt);
+        //            Deque<int []> q = new ArrayDeque<>();
+        // // if (vis.contains(uu)) {
+        //            //     if (cnt < min) min = cnt;
+        //            //     System.out.println("min: " + min);
+        //            //     return ;
+        //            // }
+        //            // q.offerFirst(new Node(new int [] {uu, p, cnt}, new HashSet<>()));
+        //            q.offerFirst(new int [] {uu, p, cnt});
+        //            while (!q.isEmpty()) {
+        //                // Node tmp = q.pollLast();
+        //                // int [] cur = tmp.r;
+        //                int [] cur = q.pollLast();
+        //                System.out.println(Arrays.toString(cur));
+        //                int u = cur[0], pr = cur[1];
+        //                if (vis.contains(u)) {
+        //                    if (cnt < min) min = cnt;
+        //                    System.out.println("u: " + u);
+        //                    System.out.println("min: " + min);
+        //                    return ;
+        //                }
+        //                // tmp.v.add(u);
+        //                vis.add(u);
+        //                for (int v : g[u]) { 
+        //                    if (v == pr) continue;
+        //                    // traverase(v, uu, cnt+1, vis);
+        //                    // q.offerFirst(new Node(new int [] {v, u, cur[2]+1}, tmp.v));
+        //                    q.offerFirst(new int [] {v, u, cur[2]+1});
+        //                }
+        //                // tmp.v.remove(u);
+        //            }
+        //        }
+        // public int findShortestCycle(int n, int[][] eg) { // 求一个最小环的大小，检测有没有环: 超时，需要找一个优化方法 // // TLE TLE TLE: 
+        //     g = new HashSet [n];
+        //     for (int i = 0; i < n; i++) g[i] = new HashSet<>();
+        //     for (int [] e : eg) {
+        //         int u = e[0], v = e[1];
+        //         g[u].add(v);
+        //         g[v].add(u);
+        //     }
+        //     for (int i = 0; i < n; i++) 
+        //         traverase(i, -1, 0, new HashSet<>());
+        //     return min == Integer.MAX_VALUE ? -1 : min;
+        // }
+        // Set<Integer> [] g;
+        // int min = Integer.MAX_VALUE;
+        // void traverase(int uu, int p, int cnt, Set<Integer> vis) {
+        //     System.out.println("\n uu: " + uu);
+        //     System.out.println("cnt: " + cnt);
+        //     if (vis.contains(uu)) {
+        //         if (cnt < min) min = cnt;
+        //         System.out.println("min: " + min);
+        //         return ;
+        //     }
+        //     vis.add(uu);
+        //     for (int v : g[uu]) {
+        //         if (v == p) continue;
+        //         traverase(v, uu, cnt+1, vis);
+        //     }
+        //     vis.remove(uu);
+        // }
+
+        // 没有思路: 知道环形如何处理，不知道怎么让它们全相等？
+        public long makeSubKSumEqual(int[] a, int k) {
+            int n = a.length;
         }
     }
     public static void main (String[] args) { 
         Solution s = new Solution ();
 
-        
-        List<Long> r = s.minOperations(a, b);
-        System.out.println("r.size(): " + r.size());
-        System.out.println(Arrays.toString(r.toArray()));
+        // int [][] a = new int [][] {{0,1},{1,2},{2,0},{3,4},{4,5},{5,6},{6,3}};
+        // int [][] a = new int [][] {{0,1},{0,2}};
+        int [][] a = new int [][] {{4,1},{5,1},{3,2},{5,0},{4,0},{3,0},{2,1}};
+
+        int r = s.findShortestCycle(6, a);
+        System.out.println("r: " + r);
     }
 }
 
@@ -1072,6 +1219,8 @@ public class cmp {
 // TreeNode root = new TreeNode(a[0]);
 // root.buildTree(root, a);
 // root.levelPrintTree(root);
+
+
 
 
 
