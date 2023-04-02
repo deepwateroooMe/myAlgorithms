@@ -1194,23 +1194,95 @@ public class cmp {
         //     vis.remove(uu);
         // }
 
-        // 没有思路: 知道环形如何处理，不知道怎么让它们全相等？
-        public long makeSubKSumEqual(int[] a, int k) {
-            int n = a.length;
+        // // 没有思路: 知道环形如何处理，不知道怎么让它们全相等？
+        // public long makeSubKSumEqual(int[] a, int k) {
+        //     int n = a.length;
+        // }
+                
+        // public int findTheLongestBalancedSubstring(String t) {
+        //     int n = t.length(), max = 0;
+        //     char [] s = t.toCharArray();
+        //     int i = 0, j = 0, cntA = 0, cntB = 0;
+        //     while (i < n && s[i] == '1') i++;
+        //     if (i == n) return max;
+        //     System.out.println("\n i: " + i);
+        //     while (i < n) {
+        //         while (i < n && s[i] == '0') {
+        //             cntA++;
+        //             i++;
+        //         }
+        //         if (i == n) return max;
+        //         while (i < n && s[i] == '1') {
+        //             cntB++;
+        //             i++;
+        //         }
+        //         max = Math.max(max, Math.min(cntA, cntB) * 2);
+        //         cntA = 0;
+        //         cntB = 0;
+        //         if (i == n) return max;
+        //     }
+        //     max = Math.max(max, Math.min(cntA, cntB) * 2);
+        //     return max;
+        // }
+
+        // public List<List<Integer>> findMatrix(int[] a) {
+        //     Map<Integer, Integer> m = new HashMap<>();
+        //     for (int v : a)
+        //         m.put(v, m.getOrDefault(v, 0) + 1);
+        //     int n = Collections.max(m.values());
+        //     List<List<Integer>> r = new ArrayList<>(n);
+        //     for (int i = 0; i < n; i++)
+        //         r.add(new ArrayList<>());
+        //     for (Map.Entry<Integer, Integer> en : m.entrySet()) {
+        //         for (int i = 0; i < en.getValue(); i++)
+        //             r.get(i).add(en.getKey());
+        //     }
+        //     return r;
+        // }
+
+        // public int miceAndCheese(int[] a, int[] b, int k) {
+        //     int n = a.length;
+        //     int [][] d = new int [n][2]; // a[i] - b[i]
+        //     for (int i = 0; i < n; i++) {
+        //         d[i][0] = i;
+        //         d[i][1] = a[i] - b[i];
+        //     }
+        //     Arrays.sort(d, (x, y) -> y[1] - x[1]);
+        //     boolean [] vis = new boolean [n];
+        //     for (int i = 0; i < k; i++) // 第一只老鼠吃的 K 块
+        //         vis[d[i][0]] = true;
+        //     int r = 0;
+        //     for (int i = 0; i < n; i++) {
+        //         if (vis[i]) r += a[i];
+        //         else r += b[i];
+        //     }
+        //     return r;
+        // }
+
+        // 不知道这个P 题目说的是什么意思
+        public int[] minReverseOperations(int n, int p, int[] b, int k) {
+            int m = b.length;
+            Set<Integer> s = new HashSet<>(Arrays.stream(b).boxed().collect(Collectors.toList()));
+            int [] r = new int [n];
+            Arrays.fill(r, -1);
+            r[p] = 0;
+            for (int i = 0; i < n; i++) {
+                if (s.contains(i) || i == p) continue; // -1 0
+            }
+        }
+        int getCnt(int idx, int n, int p, Set<Integer> s, int k) { // 这个巅倒片段，不知道说的是什么意思 
         }
     }
     public static void main (String[] args) { 
         Solution s = new Solution ();
 
-        // int [][] a = new int [][] {{0,1},{1,2},{2,0},{3,4},{4,5},{5,6},{6,3}};
-        // int [][] a = new int [][] {{0,1},{0,2}};
-        int [][] a = new int [][] {{4,1},{5,1},{3,2},{5,0},{4,0},{3,0},{2,1}};
+        int [] a = new int [] {1, 1, 3, 4};
+        int [] b = new int [] {4, 4, 1, 1};
 
-        int r = s.findShortestCycle(6, a);
+        int r = s.miceAndCheese(a, b, 2);
         System.out.println("r: " + r);
     }
 }
-
 // 【爱表哥，爱生活！！！活宝妹就是一定要嫁给亲爱的表哥！！！】
 // ListNode head = new ListNode(a[0]); 
 // head.buildList(head, a);
@@ -1219,6 +1291,7 @@ public class cmp {
 // TreeNode root = new TreeNode(a[0]);
 // root.buildTree(root, a);
 // root.levelPrintTree(root);
+
 
 
 
