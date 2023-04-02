@@ -1259,19 +1259,237 @@ public class cmp {
         //     return r;
         // }
 
-        // 不知道这个P 题目说的是什么意思
-        public int[] minReverseOperations(int n, int p, int[] b, int k) {
-            int m = b.length;
-            Set<Integer> s = new HashSet<>(Arrays.stream(b).boxed().collect(Collectors.toList()));
-            int [] r = new int [n];
-            Arrays.fill(r, -1);
-            r[p] = 0;
-            for (int i = 0; i < n; i++) {
-                if (s.contains(i) || i == p) continue; // -1 0
+        // // 不知道这个P 题目说的是什么意思
+        // public int[] minReverseOperations(int n, int p, int[] b, int k) {
+        //     int m = b.length;
+        //     Set<Integer> s = new HashSet<>(Arrays.stream(b).boxed().collect(Collectors.toList()));
+        //     int [] r = new int [n];
+        //     Arrays.fill(r, -1);
+        //     r[p] = 0;
+        //     for (int i = 0; i < n; i++) {
+        //         if (s.contains(i) || i == p) continue; // -1 0
+        //     }
+        // }
+        // int getCnt(int idx, int n, int p, Set<Integer> s, int k) { // 这个巅倒片段，不知道说的是什么意思 
+        // public int findSmallestInteger(int[] a, int k) {
+        //     int n = a.length, j = 0;
+        //     Arrays.sort(a); // 升序排列
+        //     TreeMap<Integer, Integer> m = new TreeMap<>();
+        //     for (int i = 0; i < n; i++) {
+        //         int v =  ((a[i] + k) % k + k) % k; // 保证它是非负数
+        //         m.put(v, m.getOrDefault(v, 0) + 1);
+        //     }
+        //     if (!m.containsKey(0)) return 0;
+        //     while (m.containsKey(j % k)) {
+        //         if (m.get(j % k) > 1)
+        //             m.put(j % k, m.getOrDefault(j % k, 1)-1);
+        //         else m.remove(j % k);
+        //         j++;
+        //     }
+        //     return j;
+        // }
+
+        // // 这个题之前写过，有点儿印象，但感觉消化不透：
+        // // 超时了再来想这个：数据规模小，感觉能瓣出来一样。。。。。脑袋有点儿糊，想得不透
+        // // 思路：1<= N<= 20, 怎么把这个数组分成两半，一折为二，变成两个 10 个长度的，就不会超时
+        // public int beautifulSubsets(int[] a, int k) { // 它说，这个方法超时了 TLE TLE TLE 
+        //     n = a.length;
+        //     int r = (1 << n), ans = 0;
+        //     for (int i = 1; i < r; i++)             
+        //         if (isValidSubsets(i, a, k)) ans++;
+        //     return ans;
+        // }
+        // int n;
+        // boolean isValidSubsets(int v, int [] a, int k) {
+        //     Set<Integer> s = new HashSet<>();
+        //     for (int i = 0; i < n; i++) {
+        //         if (((v >> i) & 1) == 1) { // 这一个位是 1
+        //             if (s.contains(a[i] + k) || s.contains(a[i] - k)) return false;
+        //             s.add(a[i]);
+        //         }
+        //     }
+        //     return true;
+        // }
+        // public int beautifulSubsets(int[] a, int k) { // 越写越糊。。。。。
+        //     nn = a.length;
+        //     m = nn / 2;
+        //     n = nn - m;
+        //     int ll = (1 << m), rr = (1 << n);
+        //     int [] l = new int [m], r = new int [n];
+        //     int ans = 0;
+        //     l = Arrays.copyOfRange(a, 0, m);
+        //     r = Arrays.copyOfRange(a, m, nn);
+        //     for (int i = 0; i < ll; i++) 
+        //         for (int j = 0; j < rr; j++) 
+        //             if (isValidSubsets(i, j, a, k)) ans++;
+        //     return ans;
+        // }
+        // int m, n, nn;
+        // boolean isValidSubsets(int l, int r, int [] a, int k) {
+        //     int cur = ((l << n) | r);
+        //     for (int v : masks) 
+        //         if ((cur & v) >= v) return false;
+        //     return true;
+        // }
+        // Set<Integer> masks = new HashSet<>();
+        // void buildMasks(int [] a, int k) {
+        //     int n = a.length;
+        //     Map<Integer, List<Integer>> m = new HashMap<>();
+        //     for (int i = 0; i < nn; i++)
+        //         m.computeIfAbsent(a[i], z -> new ArrayList<>()).add(i);
+        //     for (int i = 0; i < nn; i++) {
+        //         int v = a[i];
+        //         int cur = (1 << i);
+        //         if (m.containsKey(v + k)) {
+        //             for (int idx : m.get(v+k)) 
+        //                 masks.add(cur | (1 << idx));
+        //         }
+        //         if (m.containsKey(v - k)) {
+        //             for (int idx : m.get(v-k)) 
+        //                 masks.add(cur | (1 << idx));
+        //         }
+        //     }
+        // }
+        // // 现在是，把回塑方法，给忘得一干二净了。。。。。
+        // public int beautifulSubsets(int[] a, int k) { // 【亲爱的表哥，活宝妹一定要嫁的亲爱的表哥！！！活宝妹就是一定要嫁给亲爱的表哥！！！】
+        //     Arrays.sort(a);// 把它按照升序排列
+        //     Map<Integer, Integer> m = new HashMap<>();// 已经包含了的数
+        //     int n = a.length;
+        //     return dfs(0, a, k, m, n) - 1;
+        // }
+        // int dfs(int idx, int [] a, int k, Map<Integer, Integer> m, int n) {
+        //     if (idx == n) return 1;
+        //     int r = 0;
+        //     if (m.getOrDefault(a[idx]-k, 0) == 0) {
+        //         m.put(a[idx], m.getOrDefault(a[idx], 0) + 1);
+        //         r += dfs(idx+1, a, k, m, n);
+        //         m.put(a[idx], m.getOrDefault(a[idx], 0)-1);
+        //     }
+        //     r += dfs(idx+1, a, k, m, n);
+        //     return r;
+        // }
+
+        // public int minMaxDifference(int v) {
+        //     int max = getMax(v);
+        //     int min = getMin(v);
+        //     return max - min;
+        // }
+        // int getMin(int v) {
+        //     String t = String.valueOf(v);
+        //     char [] s = t.toCharArray();
+        //     int idx = 0, n = t.length();
+        //     char a = s[0];
+        //     for (char c : s) {
+        //         if (c == a) s[idx] = '0';
+        //         idx++;
+        //     }
+        //     return Integer.parseInt(new String(s));
+        // }
+        // int getMax(int v) {
+        //     String t = String.valueOf(v);
+        //     char [] s = t.toCharArray();
+        //     int idx = 0, n = t.length();
+        //     while (idx < n && s[idx] == '9') idx++;
+        //     if (idx == n) return v;
+        //     char a = s[idx]; // 不一定是第一个，因为第一个是 9 的时候，就要往后数
+        //     for (int i = idx; i < n; i++) {
+        //         if (s[i] == a) s[idx] = '9';
+        //         idx++;
+        //     }
+        //     return Integer.parseInt(new String(s));
+        // }
+
+        // public int diagonalPrime(int[][] a) {
+        //     int n = a.length;
+        //     List<int []> l = new ArrayList<>();
+        //     for (int i = 0; i < n; i++)
+        //         for (int j = 0; j < n; j++)
+        //             l.add(new int [] {a[i][j], i, j});
+        //     Collections.sort(l, (x, y)-> x[0] != y[0] ? y[0] - x[0] : x[1] - y[1]); // 降序排列
+        //     for (int [] v : l)
+        //         if ((v[1] == v[2] || v[2] == n-1 - v[1]) && isPrime(v[0])) return v[0];
+        //     return 0;
+        // }
+        // public static boolean isPrime(int n) {
+        //     if (n < 3) {
+        //         if (n == 2) 
+        //             return true;
+        //         else
+        //             return false;
+        //     }
+        //     for (int i = 2; i < n; i++) 
+        //         if (n % i == 0) 
+        //             return false;
+        //     return true;
+        // }
+
+        // public long [] distance(int[] a) { // TLE TLE TLE: 就是想不到平时这类没要求的题目怎么会超时的？
+        //     int n = a.length;
+        //     Map<Integer, List<Integer>> m = new HashMap<>();
+        //     for (int i = 0; i < n; i++) 
+        //         m.computeIfAbsent(a[i], z -> new ArrayList<>()).add(i);
+        //     long [] r = new long [n];
+        //     for (Map.Entry<Integer, List<Integer>> en : m.entrySet()) {
+        //         List<Integer> l = en.getValue();
+        //         // int j = 0;
+        //         // for (int i : l) {
+        //         //     r[i] = getSum(l) - l.get(0) * l.size();
+        //         //     // r[i] = Math.abs(getSum(l) - l.get(j) * l.size());
+        //         //     j++;
+        //         // }
+        //         for (int j = 0; j < l.size(); j++) 
+        //             r[l.get(j)] = l.get(j) * (j+1) - getSum(l, 0, j)  + getSum(l, j, l.size()-1) - l.get(j) * (l.size()-j);
+        //     }
+        //     return r;
+        // }
+        // long getSum(List<Integer> l) {
+        //     long r = 0l;
+        //     for (int v : l)
+        //     // for (int k = i; k <= j; k++) 
+        //         r += (long)v;
+        //     return r;
+        // }
+
+        // // 这里好像还有一个贪心的思想，这个题目知道自己想错后，就没再写了。。。
+        // public int minimizeMax(int[] a, int p) {
+        //     int n = a.length;
+        //     Arrays.sort(a);
+        //     return a[2*(p-1)+1] - a[2*(p-1)];
+        // }
+
+        public int minimumVisitedCells(int[][] a) { // 动态规划，可是怎么实现不超时？ TLE TLE TLE 感觉已经是记忆化搜索了呀？！！！
+            m = a.length;
+            n = a[0].length;
+            // 还是说，这里先检查一遍，是否可到达 ? 可是先检查一遍不是也要花时间吗？
+            f = new Integer [m][n];  // 自己认准某一个方向来遍历
+            for (int i = 0; i < m; i++) 
+                Arrays.fill(f[i], Integer.MAX_VALUE / 2);
+            int r = dfs(0, 0, a);
+            System.out.println("f.length: " + f.length);
+            for (int z = 0; z < f.length; ++z) 
+                System.out.println(Arrays.toString(f[z]));
+            return r == Integer.MAX_VALUE / 2 ? -1 : r;
+        }
+        Integer [][] f;
+        int m, n;
+        int dfs(int ii, int jj, int [][] a) { // 记忆化揵从当前坐标到终点的最小步数
+            // if (ii >= m || jj >= n) return Integer.MAX_VALUE / 2; // 主要是免得溢出
+            if (ii == m-1 && jj == n-1) return f[ii][jj] = 1;
+            if (f[ii][jj] < Integer.MAX_VALUE / 2) return f[ii][jj];
+            int r = Integer.MAX_VALUE / 2;
+            // for (int j = Math.min(a[ii][jj] + jj, n-1); j > jj; j--) {
+            int max = Math.min(a[ii][jj] + jj, n-1);
+            for (int j = max; j > jj; j--) {
+                int cur = 1 + dfs(ii, j, a);
+                r = Math.min(r, cur);
             }
-        }
-        int getCnt(int idx, int n, int p, Set<Integer> s, int k) { // 这个巅倒片段，不知道说的是什么意思 
-        }
+            max = Math.min(a[ii][jj] + ii, m-1);
+            for (int i = max; i > ii; i--) {
+                int cur = 1 + dfs(i, jj, a);
+                r = Math.min(r, cur);
+            }
+            return f[ii][jj] = r;
+        }        
     }
     public static void main (String[] args) { 
         Solution s = new Solution ();
@@ -1296,5 +1514,11 @@ public class cmp {
 
 
 
+<<<<<<< HEAD
 
 
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 466336c (LOVE MY DEAR COUSIN. TLE TLE bugsss... MUST MARRY HIM AS SOON AS POSSIBLE~~)
+>>>>>>> d87a112 (LOVE MY DEAR COUSIN. LOVE MY DEAR COUSIN - MUST MARRY HIM AS SOON AS POSSIBLE)
