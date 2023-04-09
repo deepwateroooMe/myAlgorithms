@@ -1423,6 +1423,13 @@ public class cmp {
         //     return true;
         // }
 
+        // // 这里好像还有一个贪心的思想，这个题目知道自己想错后，就没再写了。。。
+        // public int minimizeMax(int[] a, int p) {
+        //     int n = a.length;
+        //     Arrays.sort(a);
+        //     return a[2*(p-1)+1] - a[2*(p-1)];
+        // }
+
         // public long [] distance(int[] a) { // TLE TLE TLE: 就是想不到平时这类没要求的题目怎么会超时的？
         //     int n = a.length;
         //     Map<Integer, List<Integer>> m = new HashMap<>();
@@ -1431,74 +1438,74 @@ public class cmp {
         //     long [] r = new long [n];
         //     for (Map.Entry<Integer, List<Integer>> en : m.entrySet()) {
         //         List<Integer> l = en.getValue();
-        //         // int j = 0;
-        //         // for (int i : l) {
-        //         //     r[i] = getSum(l) - l.get(0) * l.size();
-        //         //     // r[i] = Math.abs(getSum(l) - l.get(j) * l.size());
-        //         //     j++;
-        //         // }
-        //         for (int j = 0; j < l.size(); j++) 
-        //             r[l.get(j)] = l.get(j) * (j+1) - getSum(l, 0, j)  + getSum(l, j, l.size()-1) - l.get(j) * (l.size()-j);
+        //         if (l.size() == 1) {
+        //             r[l.get(0)] = 0;
+        //             continue;
+        //         }
+        //         // for (int j = 0; j < l.size(); j++) 
+        //         //     r[l.get(j)] = l.get(j) * (j+1) - getSum(l, 0, j)  + getSum(l, j, l.size()-1) - l.get(j) * (l.size()-j);
+        //         // 它说这里用 prefix 算。妈的。。。
+        //         long [] s = new long [l.size()];
+        //         s[0] = l.get(0);
+        //         for (int i = 1; i < l.size(); i++) 
+        //             s[i] = s[i-1] + l.get(i);
+        //         for (int i = 0; i < l.size(); i++) 
+        //             r[l.get(i)] = l.get(i) * (i+1) - s[i] + (s[l.size()-1] - (i == 0 ? 0 : s[i-1])) - l.get(i) * (l.size()-i);
         //     }
         //     return r;
         // }
-        // long getSum(List<Integer> l) {
-        //     long r = 0l;
-        //     for (int v : l)
-        //     // for (int k = i; k <= j; k++) 
-        //         r += (long)v;
-        //     return r;
-        // }
+        // // long getSum(List<Integer> l) {
+        // //     long r = 0l;
+        // //     for (int v : l)
+        // //     // for (int k = i; k <= j; k++) 
+        // //         r += (long)v;
+        // //     return r;
+        // // }
 
-        // // 这里好像还有一个贪心的思想，这个题目知道自己想错后，就没再写了。。。
-        // public int minimizeMax(int[] a, int p) {
-        //     int n = a.length;
-        //     Arrays.sort(a);
-        //     return a[2*(p-1)+1] - a[2*(p-1)];
+        // 感觉这里，我记忆化搜索的方向，与它动态规划的方向是反的。可是两个本来就是反着的。。。改天再写，今天不想写了。。。
+        // Queue<Integer> q = new PriorityQueue<>(); 感觉确实能再快一点儿
+        // public int minimumVisitedCells(int[][] a) { // 动态规划，可是怎么实现不超时？ TLE TLE TLE 感觉已经是记忆化搜索了呀？！！！
+        //     m = a.length;
+        //     n = a[0].length;
+        //     // 还是说，这里先检查一遍，是否可到达 ? 可是先检查一遍不是也要花时间吗？
+        //     f = new Integer [m][n];  // 自己认准某一个方向来遍历
+        //     for (int i = 0; i < m; i++) 
+        //         Arrays.fill(f[i], Integer.MAX_VALUE / 2);
+        //     int r = dfs(0, 0, a);
+        //     System.out.println("f.length: " + f.length);
+        //     for (int z = 0; z < f.length; ++z) 
+        //         System.out.println(Arrays.toString(f[z]));
+        //     return r == Integer.MAX_VALUE / 2 ? -1 : r;
         // }
-
-        public int minimumVisitedCells(int[][] a) { // 动态规划，可是怎么实现不超时？ TLE TLE TLE 感觉已经是记忆化搜索了呀？！！！
-            m = a.length;
-            n = a[0].length;
-            // 还是说，这里先检查一遍，是否可到达 ? 可是先检查一遍不是也要花时间吗？
-            f = new Integer [m][n];  // 自己认准某一个方向来遍历
-            for (int i = 0; i < m; i++) 
-                Arrays.fill(f[i], Integer.MAX_VALUE / 2);
-            int r = dfs(0, 0, a);
-            System.out.println("f.length: " + f.length);
-            for (int z = 0; z < f.length; ++z) 
-                System.out.println(Arrays.toString(f[z]));
-            return r == Integer.MAX_VALUE / 2 ? -1 : r;
-        }
-        Integer [][] f;
-        int m, n;
-        int dfs(int ii, int jj, int [][] a) { // 记忆化揵从当前坐标到终点的最小步数
-            // if (ii >= m || jj >= n) return Integer.MAX_VALUE / 2; // 主要是免得溢出
-            if (ii == m-1 && jj == n-1) return f[ii][jj] = 1;
-            if (f[ii][jj] < Integer.MAX_VALUE / 2) return f[ii][jj];
-            int r = Integer.MAX_VALUE / 2;
-            // for (int j = Math.min(a[ii][jj] + jj, n-1); j > jj; j--) {
-            int max = Math.min(a[ii][jj] + jj, n-1);
-            for (int j = max; j > jj; j--) {
-                int cur = 1 + dfs(ii, j, a);
-                r = Math.min(r, cur);
-            }
-            max = Math.min(a[ii][jj] + ii, m-1);
-            for (int i = max; i > ii; i--) {
-                int cur = 1 + dfs(i, jj, a);
-                r = Math.min(r, cur);
-            }
-            return f[ii][jj] = r;
-        }        
+        // Integer [][] f;
+        // int m, n;
+        // int dfs(int ii, int jj, int [][] a) { // 记忆化揵从当前坐标到终点的最小步数
+        //     // if (ii >= m || jj >= n) return Integer.MAX_VALUE / 2; // 主要是免得溢出
+        //     if (ii == m-1 && jj == n-1) return f[ii][jj] = 1;
+        //     if (f[ii][jj] < Integer.MAX_VALUE / 2) return f[ii][jj];
+        //     int r = Integer.MAX_VALUE / 2;
+        //     // for (int j = Math.min(a[ii][jj] + jj, n-1); j > jj; j--) {
+        //     int max = Math.min(a[ii][jj] + jj, n-1);
+        //     for (int j = max; j > jj; j--) {
+        //         int cur = 1 + dfs(ii, j, a);
+        //         r = Math.min(r, cur);
+        //     }
+        //     max = Math.min(a[ii][jj] + ii, m-1);
+        //     for (int i = max; i > ii; i--) {
+        //         int cur = 1 + dfs(i, jj, a);
+        //         r = Math.min(r, cur);
+        //     }
+        //     return f[ii][jj] = r;
+        // }        
     }
     public static void main (String[] args) { 
         Solution s = new Solution ();
 
-        int [] a = new int [] {1, 1, 3, 4};
-        int [] b = new int [] {4, 4, 1, 1};
+        // int [] a = new int [] {1,3,1,1,2};
+        int [] a = new int [] {0,5,3,1,2,8,6,6,6};
 
-        int r = s.miceAndCheese(a, b, 2);
-        System.out.println("r: " + r);
+        long [] r = s.distance(a);
+        System.out.println(Arrays.toString(r));
     }
 }
 // 【爱表哥，爱生活！！！活宝妹就是一定要嫁给亲爱的表哥！！！】
@@ -1509,13 +1516,6 @@ public class cmp {
 // TreeNode root = new TreeNode(a[0]);
 // root.buildTree(root, a);
 // root.levelPrintTree(root);
-
-
-
-
-
-
-
 
 
 
