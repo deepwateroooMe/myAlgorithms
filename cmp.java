@@ -1514,11 +1514,14 @@ public class cmp {
 
 
 
-<<<<<<< HEAD
 
 
-<<<<<<< HEAD
-=======
-=======
->>>>>>> 466336c (LOVE MY DEAR COUSIN. TLE TLE bugsss... MUST MARRY HIM AS SOON AS POSSIBLE~~)
->>>>>>> d87a112 (LOVE MY DEAR COUSIN. LOVE MY DEAR COUSIN - MUST MARRY HIM AS SOON AS POSSIBLE)
+
+
+
+
+
+
+
+
+
