@@ -1,4 +1,4 @@
-mport com.TreeNode;
+import com.TreeNode;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -1380,23 +1380,243 @@ public class bitManipulation {
         //     return -1;
         // }
 
+        // public int bitwiseComplement(int n) {
+        //     if (n == 0) return 1;
+        //     int r = 0, i = 0;
+        //     while (n > 0) {
+        //         if ((n & 1) == 0) 
+        //             r |= (1 << i);
+        //         i++;
+        //         n /= 2;
+        //     }
+        //     return r;
+        // }
 
-        public int[] findErrorNums(int[] arr) {
-            int max = Arrays.stream(arr).max().getAsInt();
-            int sum = Arrays.stream(arr).sum();
-            
+        // public int[] findErrorNums(int[] a) { // 最笨的办法：跟位操作有什么关系呢？
+        //     boolean [] vis = new boolean [10001];
+        //     int [] r = new int [2];
+        //     for (int v : a) {
+        //         if (!vis[v]) vis[v] = true;
+        //         else r[0] = v;
+        //     }
+        //     for (int i = 1; i < 10001; i++) 
+        //         if (!vis[i]) {
+        //             r[1] = i;
+        //             break;
+        //         }
+        //     return r;
+        // }
+
+        // public int largestCombination(int[] candidates) {
+        //     int n = 25; // [ 爱表哥，一定要嫁给偶亲爱的表哥！！！ ]
+        //     int [] r = new int [n];
+        //     int i = 0;
+        //     for (int v : candidates) {
+        //         i = 0;
+        //         while (v > 0) {
+        //             if ((v & 1) == 1) 
+        //                 r[i]++;
+        //             v /= 2;
+        //             i++;
+        //         }
+        //     }
+        //     return Arrays.stream(r).max().getAsInt();
+        // }
+
+        // // TLE TLE TLE : 不想再写这个题目了。。。53/65
+        // public int longestNiceSubarray(int[] a) { // 滑动窗口：找一个最长的数组片段，里面的每个元素位上不重样
+        //     int n = a.length, m = 30, j = 0, idx = 0, max = 1, mv = 0, i = 0; // j : left
+        //     int [] r = new int [m];
+        //     boolean valid = true;
+        //     for (i = 0; i < n; i++) { // i: right
+        //         // System.out.println("\n i: " + i);
+        //         List<Integer> l = getBitList(a[i]);
+        //         valid = true;
+        //         for (int v : l) {
+        //             if (r[v] > 0)
+        //                 valid = false; // 当前数的位没有录进去
+        //             r[v]++;
+        //             idx++;
+        //         }
+        //         System.out.println(Arrays.toString(r));
+        //         if (!valid) {
+        //             max = Math.max(max, i - j);
+        //             while (j < i) {
+        //                 mv = 0;
+        //                 List<Integer> lj = getBitList(a[j]);
+        //                 for (int v : lj) {
+        //                     r[v]--;
+        //                     mv = Math.max(mv, r[v]);
+        //                 }
+        //                 System.out.println(Arrays.toString(r));
+        //                 System.out.println("mv: " + mv);
+        //                 if (mv == 1 && Arrays.stream(r).max().getAsInt() == 1) { // 不知道这里算是个什么神逻辑 ....TLE TLE TLE......
+        //                     // if (mv == 1) { // 不知道这里算是个什么神逻辑 ....
+        //                     max = Math.max(max, i - j);
+        //                     // System.out.println("max: " + max);
+        //                     j++;
+        //                     break;
+        //                 }
+        //                 j++;
+        //             }                    
+        //         }
+        //         // System.out.println(Arrays.toString(r));
+        //         // System.out.println("max: " + max);
+        //         // System.out.println("j: " + j);
+        //     }
+        //     // System.out.println("(i-j): " + (i-j));
+        //     // System.out.println("valid: " + valid);
+        //     return Math.max(max, (valid ? i-j : 0));
+        // }
+        // List<Integer> getBitList(int v) {
+        //     List<Integer> l = new ArrayList<>();
+        //     int i = 0;
+        //     while (v > 0) {
+        //         if ((v & 1) == 1)
+        //             l.add(i);
+        //         i++;
+        //         v /= 2;
+        //     }
+        //     return l;
+        // }
+
+        // public int longestSubarray(int[] a) { // 不知道这里是错到哪里去了???。。。【同一个数组里最大值不止出现在一个片段中，可以出现在几个不同的片段】
+        //     int n = a.length, max = Arrays.stream(a).max().getAsInt(), idx = 0;
+        //     int i = 0;
+        //     for (i = 0; i < n; i++) {
+        //         if (a[i] == max) {
+        //             idx = i;
+        //             while (i < n && a[i] == max) i++;
+        //             break;// 这里不对：舍弃掉了可能正确答案 .【同一个数组里最大值不止出现在一个片段中，可以出现在几个不同的片段】
+        //         }
+        //     }
+        //     while (idx >= 0 && a[idx] == max) idx--;
+        //     return i - idx - 1;
+        //  }
+        // public int longestSubarray(int[] a) {
+        //     int n = a.length, max = Arrays.stream(a).max().getAsInt(), r = 0;
+        //     for (int i = 0; i < n; i++) {
+        //         if (a[i] == max) {
+        //             int j = i+1;
+        //             while (j < n && a[j] == max) j++;
+        //             r = Math.max(r, j - i);
+        //             i = j-1;
+        //         }
+        //     }
+        //     return r;
+        // }
+
+        // public int[] smallestSubarrays(int[] a) {/// TODO TODO TODO
+        //     int n = a.length;
+        //     int [] r = new int [n], s = new int [n], b = new int [n]; // 糊糊脑袋。。。
+        //     for (int i = 0; i < n; i++) // XOR 数组
+        //         s[i] = (i == 0 ? 0 : s[i-1]) | a[i];
+        //     for (int i = n-1; i >= 0; i--) 
+        //         b[i] = (i == n-1 ? 0 : b[i+1]) | a[i];
+        //     for (int i = 0; i < n; i++) {
+        //         if (i > 0)
+        //             for (int j = i; j < n; j++) 
+        //                 s[j] = (s[i-1] & d[j]);
+        //         r[i] = getMaxLen(s, i);
+        //     }
+        //     return r;
+        // }
+        // int getMaxLen(int [] r, int idx) {
+        //     int max = r[idx], ml = 1;
+        //     for (int i = idx+1; i < r.length; i++) 
+        //         if (r[i] > max) {
+        //             max = r[i];
+        //             ml = i - idx+1;
+        //         }
+        //     return ml;
+        // }
+
+        // int getBitsCnts(int v) { // 有个函数 Integer.bitCount(int v) 是专门做这事的。。。
+        //     int r = 0;
+        //     while (v > 0) {
+        //         if ((v & 1) == 1)
+        //             r++;
+        //         v /= 2;
+        //     }
+        //     return r;
+        // }
+
+// // The important point to realize is that the sum of OR and AND is just the sum of bits of two numbers.
+// // We dedup the input array, and count numbers containing n bits (where n is [1..29]);
+// // Then, we pick any combination of bits i and j, such that i + j >= k.
+// // If i != j, the number of pairs is cnt[i] * cnt[j] * 2; numbers for i and j are different, so they form two pairs.
+// // If i == j, the number of pairs is cnt[i] * cnt[i]. This is different from above, so that pairs with the same number are counted once.
+//         public long countExcellentPairs(int[] a, int k) {
+//             int n = a.length;
+//             // 找数对：两个值 [x, y] ==> getBitsCnts(x) + getBitsCnts(y) >= k 但是对这里数数没兴趣了。。。。。
+//             long ans = 0l, r [] = new long [30];
+//             for (int v : Arrays.stream(a).distinct().toArray())
+//                 ++r[Integer.bitCount(v)];
+//             // for (int v : a) // 看不懂：上面的是为什么要多一步？
+//             //     ++r[Integer.bitCount(v)];
+//             for (int i = 1; i < 30; i++) 
+//                 for (int j = Math.max(i, k-i); j < 30; j++) 
+//                     ans += r[i] * r[j] * (i == j ? 1 : 2);
+//             return ans;
+//         }
+
+        // public long sumScores(String s) {// 这个题目没有看懂
+        //     final int n = s.length();
+        //     int[] z = new int[n];
+        //     // [l, r] := indices of the rightmost segment match
+        //     int l = 0;
+        //     int r = 0;
+        //     for (int i = 1; i < n; ++i) {
+        //         if (i <= r)
+        //             z[i] = Math.min(r - i + 1, z[i - l]);
+        //         while (i + z[i] < n && s.charAt(z[i]) == s.charAt(i + z[i]))
+        //             ++z[i];
+        //         if (i + z[i] - 1 > r) {
+        //             l = i;
+        //             r = i + z[i] - 1;
+        //         }
+        //     }
+        //     return Arrays.stream(z).sum().getAsInt() + n;
+        // }
+
+        // public int findClosestNumber(int[] a) {
+        //     int n = a.length;
+        //     Arrays.sort(a);
+        //     if (a[0] >= 0) return a[0];
+        //     int i = 0;
+        //     for ( i = 0; i < n-1; i++) {
+        //         if (a[i] < 0 && a[i+1] <= 0) continue;
+        //         if (a[i] == 0) return 0;
+        //         if (a[i] < 0) {
+        //             if (Math.abs(a[i]) < a[i+1]) return a[i];
+        //             else return a[i+1];
+        //         } 
+        //     }
+        //     return a[i] <= 0 ? a[i] : -1;
+        // }
+
+        // public long waysToBuyPensPencils(int t, int x, int y) { // t x y
+        //     long r = 0l;
+        //     int n = t / x;
+        //     for (int i = 0; i <= n; i++) 
+        //         r += (long)((t - x * i) / y + 1l);
+        //     return r;
+        // }
+
+        // public int minImpossibleOR(int[] a) { 
+        //     Set<Integer> s = new HashSet<>(Arrays.stream(a).boxed().collect(Collectors.toList()));
+        //     int r = 1;
+        //     while (s.contains(r)) r *= 2;
+        //     return r;
+        // }
         }
-    }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        // String []  a = new String []  {"@.a.#", "###.#", "b.A.B"};
-        // String []  a = new String []  {"@..aA", "..B#.", "....b"};
-        // String []  a = new String []  {"@fedcbBCDEFaA"};
-        String []  a = new String []  {"@...a", ".###A", "b.BCc"};
-        // String []  a = new String []  {"@fedcbBCDEFaA"};
+        // int [] a = new int [] {2,3,3,2,2};
+        int [] a = new int [] {1,2,3,4};
 
-        int res = s.shortestPathAllKeys(a);
-        System.out.println("res: " + res);
+        int r = s.countDistinct(a, 4, 1);
+        System.out.println("r: " + r);
     }
 }

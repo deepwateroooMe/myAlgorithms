@@ -1059,18 +1059,435 @@ public class mtwoixed {
         //     return dp[k];
         // }
 
+//         // 【这个题目比较好玩儿：任何时候，活宝妹就是一定要嫁给亲爱的表哥！！！】
+//         public int maximumMinutes(int[][] a) { // 9/55 没有过，不知道是什么原因，改天再写这个
+//             m = a.length;
+//             n = a[0].length; // mn: kMax
+//             r = new int [m * n]; // 火烧到每个方格所需要的最短时间 
+//             Arrays.fill(r, Integer.MAX_VALUE);
+//             buildFireGrid(a); // 把这个方法提出去，就可能让代码各个功能模块更加独立  // <<<<<<<<<<<<<<<<<<<< 
+
+//             int l = 0, h = m*n, ans = -1; // 接下来，再用二分查找法找一个最大的等待时间
+//             while (l <= h) { // 判断条件： l 《＝ r 等号狠重要
+//                 int m = l + (h - l) / 2;
+//                 if (isSuccesible(m, r, a)) {
+//                     ans = Math.max(ans, m);
+//                     l = m + 1;
+//                 } else h = m-1;
+//             }
+// // 再判断一遍，可以永远等吗？【这里，自己最初的想法：是需要再遍历一遍，但是参考别人的，只要答案 ans ＝ m*n 就可以认定，可以永远等！！！一定要嫁给亲爱的表哥！！！】
+// // 【去掉这个多余步骤之后： 】 51 / 55 testcases passed
+//             //     if (ans == -1) return ans; // 再判断一遍，可以永远等吗？
+//             //     Deque<int []> qq = new ArrayDeque<>();
+//             //     qq.offerFirst(new int [] {0, 0});
+//             //     Arrays.stream(vis).forEach(x -> Arrays.fill(x, false));
+//             //     while (!qq.isEmpty()) {
+//             //         for (int size = qq.size()-1; size >= 0; size--) {
+//             //             int [] cur = qq.pollLast();
+//             //             int i = cur[0], j = cur[1];
+//             //             if (i == m-1 && j == n-1) return 1000000000;
+//             //             for (int [] d : dirs) {
+//             //                 int x = i + d[0], y = j + d[1];
+//             //                 if (x < 0 || x >= m || y < 0 || y >= n || vis[x][y] || a[x][y] != 0 || r[x*n+y] != Integer.MAX_VALUE) continue;
+//             //                 vis[x][y] = true;
+//             //                 qq.offerFirst(new int [] {x, y});
+//             //             }
+//             //         }
+//             //     }
+//             //     return ans;
+//             return ans == m*n ? (int)1e9 : ans;
+//         }
+//         int [][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+//         int [] r;
+//         int m, n;
+//         boolean isSuccesible(int v, int [] r, int [][] a) {
+//             Deque<int []> q = new ArrayDeque<>();
+//             boolean [][] vis = new boolean [m][n];
+//             q.offerFirst(new int [] {0, 0});
+//             vis[0][0] = true;
+//             while (!q.isEmpty()) {
+//                 v++; // 提到前面来
+//                 for (int size = q.size()-1; size >= 0; size--) {
+//                     int [] cur = q.pollLast();
+//                     int i = cur[0], j = cur[1];
+//                     // // 【不一定：即便最后一个格，也是可能有火烧身的。。。也需要先行判断：因为特权主义，亲爱的表哥在活宝妹这里永远拥有特权！！！】
+//                     // if (i == m-1 && j == n-1) {
+//                     //     if (r[i*n+j] < v) continue; // 【不合法解：火及时烧到了终点。。。】
+//                     //     return true;
+//                     // }
+//                     for (int [] d : dirs) {
+//                         int x = i + d[0], y = j + d[1];
+// // 这里下面判断用 v+1, 也可以把后面 v++ 提前面、循环的前面去
+// // 【看似简洁，漏洞无数：折三段：来判断】: 最主要的，当 r[x*n+y]==v-Continue 时，会过滤掉一个可能存在的正确答案！！！它给了最后一个终点格特权。。。
+//                         // if (x < 0 || x >= m || y < 0 || y >= n || vis[x][y] || a[x][y] != 0 || r[x*n+y] <= v+1) continue; // 【折三段：来判断】
+//                         if (x < 0 || x >= m || y < 0 || y >= n || a[x][y] != 0 || vis[x][y] || r[x*n+y] < v) continue;
+//                         // 【把终止条件结果，放在这里判断】
+//                         if (x == m-1 && y == n-1) { // 【不一定：即便最后一个格，也是可能有火烧身的。。。】
+//                             if (r[x*n+y] < v) continue;
+//                             return true;
+//                         }
+//                         if (r[x*n+y] == v) continue;
+                        
+//                         vis[x][y] = true;
+//                         q.offerFirst(new int [] {x, y});
+//                     }
+//                 }
+//                 // v++;
+//             }
+//             return false;
+//         }
+//         void buildFireGrid(int [][] a) {
+//             int time = 0;
+//             boolean [][] vis = new boolean [m][n];
+//             Deque<int []> q = new ArrayDeque<>();
+//             for (int i = 0; i < m; i++) 
+//                 for (int j = 0; j < n; j++) 
+//                     if (a[i][j] == 1) {
+//                         q.offerFirst(new int [] {i, j});
+//                         vis[i][j] = true;
+//                     }
+//             while (!q.isEmpty()) {
+//                 for (int size = q.size()-1; size >= 0; size--) {
+//                     int [] cur = q.pollLast();
+//                     int i = cur[0], j = cur[1];
+//                     r[i*n+j] = time; // 更新纪录：烧到某个方格的最短时间
+//                     for (int [] d : dirs) {
+//                         int x = i + d[0], y = j + d[1];
+//                         if (x < 0 || x >= m || y < 0 || y >= n || vis[x][y] || a[x][y] == 2) continue; // 遍历过了，或是不能穿墙
+//                         vis[x][y] = true;
+//                         q.offerFirst(new int [] {x, y});
+//                     }
+//                 }
+//                 time++;
+//             }
+//         }
+
+        // // 【方法不通：滑动窗口无法解决去重的问题！！！】乍一看可以用变长的滑动窗口来解决，但是这里需要对子数组去重，所以必须要另想办法
+        // public int countDistinct(int[] a, int k, int p) { // TODO TODO TODO: 12/152 【数呀数呀数，可怜的不识数、数不清数的弱弱。。。】
+        //     int n = a.length, r = 0, j = 0, cnt = 0;
+        //     for (int i = 0; i < n; i++) {
+        //         if (a[i] % p == 0) cnt++;
+        //         if (cnt <= k) r++;
+        //         else {
+        //             while (j < i && cnt > k) {
+        //                 if (a[j] % p == 0) 
+        //                     cnt--;
+        //                 j++;
+        //             }
+        //             r += i-j+ 1;
+        //         }
+        //     }
+        //     return r + n-1-j;
+        // }
+        // class Node {
+        //     public Map<Integer, Node> cld = new HashMap<>(); // cld: children
+        //     public int cnt = 0;
+        // }
+        // public int countDistinct(int[] a, int k, int p) {
+        //     for (int i = 0; i < a.length; i++) // 从数组中的每个下标为起始点，数每个下标为起始点的合法子数组个数，的和，进行累加 
+        //         insert(root, a, i, k, p);
+        //     return ans;
+        // }
+        // Node root = new Node();
+        // int ans = 0;
+        // void insert(Node r, int [] a, int idx, int k, int p) {
+        //     // 【终止条件：】下标越界，或是片段内可整除个数超过了 k 个
+        //     if (idx == a.length || k - (a[idx] % p == 0 ? 1 : 0) < 0) return;
+        //     if (!r.cld.containsKey(a[idx])) {
+        //         r.cld.put(a[idx], new Node());
+        //         ++ans;
+        //     }
+        //     insert(r.cld.get(a[idx]), a, idx+1, k - (a[idx] % p == 0 ? 1 : 0), p);
+        // }
+
+        // // 【思路不对：原始、单纯、简单、粗暴！！！】
+        // static boolean [] vis = new boolean [1000000001]; // TODO TODO TODO 【爷：这里直接内存溢出，好吧！！！】
+        // public int maximumWhiteTiles(int[][] a, int k) {
+        //     int n = a.length, max = 1, cnt = 0;
+        //     Arrays.fill(vis, false);
+        //     for (int [] v : a) { // 感觉这一步，做得极其低效
+        //         if (v[1] - v[0] >= k) return k;
+        //         for (int i = v[0]; i <= v[1]; i++) 
+        //             vis[i] = true;
+        //     }
+        //     for (int i = 0; i+k <= n; i++) {
+        //         if (i == 0) {
+        //             for (int j = 0; j < k; j++) {
+        //                 if (vis[j]) cnt++;
+        //                 max = Math.max(max, cnt);
+        //             }
+        //             continue;
+        //         }
+        //         cnt += (vis[i+k] ? 1 : 0);
+        //         cnt -= (vis[i-1] ? 1 : 0);
+        //         max = Math.max(max, cnt);
+        //     }
+        //     return max;
+        // }
+
+        // public int maximumWhiteTiles(int[][] a, int k) {
+        //     // 【先扫一遍：】有没有可能直接返回的最大长度
+        //     if (Arrays.stream(a).anyMatch(t -> t[1] - t[0] + 1 >= k)) return k;
+        //     int n = a.length, ans = 0;
+        //     Arrays.sort(a, (x, y) -> x[0] - y[0]); // 【确保按照： 起点升序排列】
+        //     List<Integer> starts = new ArrayList<>();
+        //     int [] p = new int [n+1]; // p: prefix 长度累加和
+        //     for (int [] t : a) 
+        //         starts.add(t[0]);
+        //     for (int i = 0; i < n; i++) {
+        //         int len = a[i][1] - a[i][0] + 1;
+        //         p[i+1] = p[i] + len;
+        //     }
+        //     for (int i = 0; i < n; i++) {
+        //         int bgn = a[i][0], end = bgn + k - 1;
+        //         int endIdx = firstGreater(starts, end) - 1; // 查找一个长度为 k 的片段最远能够延伸到的片段的下标
+        //         int notCovered = Math.max(0, a[endIdx][1] - end); // 最无的那个片段中，可能还没能盖住的长度
+        //         ans = Math.max(ans, p[endIdx + 1] - p[i] - notCovered); // damit emacs C-j pyim bug.....
+        //     }
+        //     return ans;
+        // }
+        // int firstGreater(List<Integer> li, int t) {
+        //     int l = 0, r = l.size();
+        //     while (l < r) {
+        //         int m = l + (r - l) / 2;
+        //         if (li.get(m) > t) r = m;
+        //         else l = m+1;
+        //     }
+        //     return l;
+        // }
+
+        // public int maxSubArray(int[] a) { // 【写得狠不科学，有点儿糊糊，让它。。。】
+        //     int n = a.length, max = Integer.MIN_VALUE, sum = Integer.MIN_VALUE;
+        //     for (int i = 0; i < n; i++) {
+        //         if (sum <= 0) {
+        //             if (sum != Integer.MIN_VALUE)
+        //                 max = Math.max(max, sum);
+        //             sum = a[i];
+        //         } else sum += a[i];
+        //         max = Math.max(max, sum);
+        //     }
+        //     return max;
+        // }
+        // public int largestVariance(String t) {
+        //     int n = t.length();
+        //     if (n == 1) return 0;
+        //     char [] s = t.toCharArray();
+        //     int r = 0;
+        //     for (char i = 'a'; i <= 'z'; i++)
+        //         for (char j = 'a'; j <= 'z'; j++) {
+        //             if (i == j) continue; // 需要两个不同的字母，两个都得出现
+        //             int diff = 0, diffWithB = -n; // diffWithB: 记录包含了 a 和b 的子串中 cntA － cntB 的最大差值 
+        //             for (int k = 0; k < n; k++) {
+        //                 if (s[k] == i) {
+        //                     ++diff;// 【假定：永远是 cntA 》＝ cntB】
+        //                     ++diffWithB;
+        //                 } else if (s[k] == j) {
+        //                     diffWithB = --diff;// 只有在遇到B 时，才是真正有效值 
+        //                     diff = Math.max(diff, 0);// 所以当 cntA-cntB=diff 《 0 时直接重置为 0
+        //                 }
+        //                 r = Math.max(r, diffWithB);
+        //             }
+        //         }
+        //     return r;
+        // }
+
+// // TODO TODO TODO : 只写了一半，没有写完【动态规划：不习惯的前提下，仍写 dfs 记忆化搜索，只是自顶向下，与自底向上的区别】
+//         public int countTexts(String t) {// 【2-6:】三种可能；【7-9】：四种可能 
+//             n = t.length();
+//             s = t.toCharArray();
+//             f = new Long [n];
+//             dfs(0);
+//             return (int)f[0].intValue();
+//         }
+//         static final int mod = (int)1e9 + 7;
+//         Set<Character> sc = new HashSet<>(List.of('a', 'd', 'g', 'j', 'm', 'p', 't', 'w'));
+//         // Set<Character> ss = new HashSet<>(List.of('b', 'e', 'h', 'k', 'n, 'q', 'u', 'x'));
+//         // Set<Character> sss = new HashSet<>(List.of('c', 'f', 'i', 'l', 'o', 'r', 'v', 'y'));
+//         // Set<Character> ssss = new HashSet<>(List.of('s', 'z'));
+//         Long [] f;
+//         char [] s;
+//         int n;
+//         long dfs(int idx) {
+//             System.out.println("\n idx: " + idx);
+//             if (idx >= n) return 0;// 越边界：返回 0
+//             // 【终止条件：】判断相对复杂一点儿, 这里考虑的情况不够 ?
+//             if (idx == n-1 && sc.contains(s[idx])) {
+//                 System.out.println("f[idx]: 1l");
+//                 return f[idx] = 1l;
+//             }
+//             if (f[idx] != null) return f[idx];// 记忆化，不重复计算
+//             long r = 0;
+//             int i = idx + 1;
+//             int maxCnt = (s[idx]-'0' < 7 ? 3 : 4);
+//             while (i < n && i < idx + maxCnt && s[i] == s[idx]) i++;
+//             // for (int j = idx+1; j < Math.min(i, idx+maxCnt); j++) {
+//             for (int j = idx+1; j <= i; j++) {// 这里的情况考虑得过于简单了？只当作了一个字母，可是可以是第一个字母的重复？？？
+//                 System.out.println("j: " + j);
+//                 long cur = dfs(j);
+//                 r = (r + cur) % mod;
+//                 System.out.println("r: " + r);
+//             }
+//             System.out.println("r: " + r);
+//             return f[idx] = r;
+//         }
         
+        // static final int mod = (int)1e9 + 7;
+        // public int sumSubarrayMins(int[] a) { // 【遍历两遍的解法：】直观，比较容易懂
+        //     int n = a.length, l [] = new int [n], r [] = new int [n];
+        //     Deque<Integer> s = new ArrayDeque<>();
+        //     for (int i = 0; i < n; i++) { // 遍历一遍：录下左边界
+        //         while (!s.isEmpty() && a[s.peek()] > a[i]) s.pollFirst();
+        //         if (s.isEmpty()) l[i] = -1;
+        //         else l[i] = s.peek();
+        //         s.offerFirst(i);
+        //     }
+        //     s.clear();
+        //     for (int i = n-1; i >= 0; i--) { // 遍历一遍：录下右边界
+        //         while (!s.isEmpty() && a[s.peek()] >= a[i]) s.pop();// 是说，某一边可以、需要取等号的 ?
+        //         if (s.isEmpty()) r[i] = n;
+        //         else r[i] = s.peek();
+        //         s.offerFirst(i);
+        //     }
+        //     long ans = 0;
+        //     for (int i = 0; i < n; i++) 
+        //         ans = (ans + (long)(i - l[i]) * (r[i] - i) * a[i]) % mod;
+        //     return (int)ans;
+        // }
+        // static final int mod = (int)1e9 + 7;
+        // public int sumSubarrayMins(int[] a) { // 【遍历一遍的解法：】就不直观！！！
+        //     int n = a.length, j, k;
+        //     long ans = 0;
+        //     Deque<Integer> s = new ArrayDeque<>();
+        //     for (int i = 0; i <= n; i++) {
+        //         int cur = i == n ? Integer.MIN_VALUE : a[i];
+        //         while (!s.isEmpty() && cur < a[s.peek()]) {
+        //             j = s.pollFirst();
+        //             k = s.isEmpty() ? -1 : s.peek();
+        //             ans += (long)a[j] * (i - j) * (j - k);// 【处理的是当前下标 i 之前的栈中各个元素！！！】再多想一想
+        //         }
+        //         s.offerFirst(i);
+        //     }
+        //     return (int)(ans % (long)mod);
+        // }
+        // public long subArrayRanges(int[] a) {
+        //     int n = a.length, j, k;
+        //     long r = 0;
+        //     Deque<Integer> s = new ArrayDeque<>();
+        //     // 跟前一题不同的地方在于：遍历当前下标，并不计算要的以当前下标为最小或最大值，而是以当前坐标前一个坐标为基【最小最大值】的累积和
+        //     for (int i = 0; i <= n; i++) { // 【遍历第一遍：】减去所有可能的最小值，的和 
+        //         int cur = i == n ? Integer.MIN_VALUE : a[i];
+        //         while (!s.isEmpty() && cur < a[s.peek()]) {
+        //             j = s.pollFirst();
+        //             k = s.isEmpty() ? -1 : s.peek();
+        //             r -= (long)a[j] * (i - j) * (j - k);
+        //         }
+        //         s.offerFirst(i);
+        //     }
+        //     s.clear();
+        //     for (int i = 0; i <= n; i++) { // 【遍历第二遍：】加上所有可能的最大值，的和 
+        //         int cur = i == n ? Integer.MAX_VALUE : a[i];
+        //         while (!s.isEmpty() && a[s.peek()] < cur) {
+        //             j = s.pollFirst();
+        //             k = s.isEmpty() ? -1 : s.peek();
+        //             r += (long)a[j] * (i - j) * (j - k);
+        //         }
+        //         s.offerFirst(i);
+        //     }
+        //     return r;
+        // }
+        // // 这里能够想到的思路是说： prefix Sum 用来计算子数组片段的和；【但是感觉，还缺少什么，把思路组织不起来】
+        // // 当去找一个数组中最小元素的时候，是一个从左到右O(N) 的遍历，在遍历的每一个元素上，来计算最左最右，当前元素作为可能的子数组中最小值的可能存在的最大次数，栈！！！
+        // static final int mod = (int)1e9 + 7;
+        // public int totalStrength(int[] a) {// 【错误思路】
+        //     int n = a.length, l [] = new int [n], r [] = new int [n];
+        //     long [] p = new long [n];// prefix sum: 用来求，子数组片段的和，的时修，比较方便
+        //     for (int i = 0; i < n; i++) 
+        //         p[i] = (i == 0 ? 0 : p[i-1]) + (long)a[i];
+        //     // Init a Monotonic Stack -
+        //     // Used ArrayDeque for Stack instead of Stack as ArrayDeque does not require acquiring & releasing thread locks, which is costly in time
+        //     Deque<Integer> s = new ArrayDeque<>();
+        //     for (int i = 0; i < n; i++) { // 【遍历第一遍：】去找所有的左边界
+        //         while (!s.isEmpty() && a[s.peek()] > a[i]) s.pollFirst();
+        //         if (s.isEmpty()) l[i] = -1;
+        //         else l[i] = s.peek();
+        //         s.offerFirst(i);
+        //     }
+        //     s.clear();
+        //     for (int i = n-1; i >= 0; i--) { // 【遍历第二遍：】去找所有的右边界
+        //         while (!s.isEmpty() && a[s.peek()] >= a[i]) s.pollFirst();
+        //         if (s.isEmpty()) r[i] = n;
+        //         else r[i] = s.peek();
+        //         s.offerFirst(i);
+        //     }
+        //     long ans = 0;
+        //     for (int i = 0; i < n; i++) // 【出错：】虽然找到了左右边界，但思路不对，左右边界是所有情况，这所有情况中每一种的左右边界又各自不同，所以想错了。。。 
+        //         ans = (ans + (long)a[i] * (p[r[i] == n ? n-1 : r[i]] - p[l[i] == -1 ? 0 : l[i]])% mod) % mod;
+        //     return (int)ans;
+        // }
+        // // 【栈栈栈：单调栈： bugglyCoding: 】需要再想一下，是怎么回事？因为是所有子数组的片段处理和，所以是对 prefixSum 前缀和数组的，再次取前缀和，也因此长度为 n+2
+        // public int totalStrength(int[] a) {
+        //     final int mod = (int)1e9 + 7;
+        //     int n = a.length;
+        //     int sum = 0, ans = 0, p [] = new int [n+2];
+        //     Deque<Integer> s = new ArrayDeque<>();
+        //     for (int i = 0; i <= n; i++) {
+        //         int cur = i < n ? a[i] : 0;
+        //         sum = (sum + cur) % mod;    // 【看不懂：】这里不是已经是累加和了吗？
+        //         p[i+1] = (sum + p[i]) % mod;// 【看不懂：】上面 sum 已经是累加和了，为什么这里会再累加一遍？就是这样滴～～！！！
+        //         while (!s.isEmpty() && cur < a[s.peek()]) {
+        //             int j = s.pollFirst();
+        //             int left = s.isEmpty() ? -1 : s.peek();
+        //             long leftAcc = left < 0 ? p[j] : p[j] - p[left];
+        //             long rightAcc = p[i] - p[j];
+        //             int leftLength = j - left;
+        //             int rightLength = i - j;
+        //             ans = (int)(ans + (rightAcc * leftLength - leftAcc * rightLength) % mod * a[j] % mod) % mod;
+        //         }
+        //         s.offerFirst(i);
+        //     }
+        //     return (ans + mod) % mod;
+        // }
+        // public int totalStrength(int[] a) {// 【打不死的小强：换个方法再来一遍，不信不懂了，哈哈哈。。。就是一定要嫁给偶亲爱的表哥！！！】
+        //     final int mod = (int)1e9 + 7;
+        //     int n = a.length;
+        //     long [] p = new long [n], pp = new long [n+1];
+        //     for (int i = 0; i < n; i++) // prefixSum p[]
+        //         p[i] = ((i == 0 ? 0 : p[i-1]) + a[i]) % mod;
+        //     for (int i = 0; i < n; i++) // prefixSum pp[] of the previous prefixSum p[]
+        //         pp[i+1] = (pp[i] + p[i]) % mod;
+        //     Deque<Integer> s = new ArrayDeque<>();
+        //     int left [] = new int [n]; // left: 说的是 left, 但记录的是左边第一个比它小的数的下标，因为它是从右向左反着遍历的
+        //     Arrays.fill(left, -1);
+        //     for (int i = n-1; i >= 0; i--) {
+        //         while (!s.isEmpty() && a[s.peek()] >= a[i])
+        //             left[s.pollFirst()] = i;
+        //         s.offerFirst(i);
+        //     }
+        //     int right [] = new int [n]; // right: 说的是 right, 但记录的是右边第一个比它小的数的下标，
+        //     Arrays.fill(right, n);
+        //     s.clear();
+        //     for (int i = 0; i < n; i++) {
+        //         while (!s.isEmpty() && a[s.peek()] > a[i])
+        //             right[s.pollFirst()] = i;
+        //         s.offerFirst(i);
+        //     }
+        //     long ans = 0;
+        //     for (int i = 0; i < n; i++) {
+        //         int l = left[i], r = right[i];
+        //         long leftSum = pp[i] - pp[Math.max(0, l)], rightSum = pp[r] - pp[i];
+        //         int leftLen = i - l, rightLen = r - i;
+        //         ans += a[i] * (rightSum * leftLen % mod - leftSum * rightLen % mod ＋ mod) % mod;
+        //         ans %= mod;
+        //     }
+        //     return (int)ans;
+        // }
     }
     public static void main (String[] args) {
         Solution s  =  new Solution ();
-        
-        // int [][] a = new int [][] {{100},{100},{100},{100},{100},{100},{1,1,1,1,1,1,700}};
-        int [][] a = new int [][] {{1,100,3},{7,8,9}};
-        
-        List<List<Integer>> ll = new ArrayList<>();
-        for (int [] v : a)
-            ll.add(Arrays.stream(v).boxed().collect(Collectors.toList()));
-        int r = s.maxValueOfCoins(ll, 2);
+
+        int [] a = new int [] {1,3,1,2};
+
+        int r = s.totalStrength(a);
         System.out.println("r: " + r);
     }
 }
@@ -1078,6 +1495,31 @@ public class mtwoixed {
 // ListNode head = new ListNode(a[0]);
 // head.buildList(head, a);
 // head.printList(head);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
