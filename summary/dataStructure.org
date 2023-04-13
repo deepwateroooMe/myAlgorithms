@@ -2516,6 +2516,39 @@ public int minCameraCover(TreeNode root) {
 }
 #+END_SRC
 
+* 最大最小堆 
+*** 2542. Maximum Subsequence Score 【1383 Maximum Performance of a Team】
+e given two 0-indexed integer arrays nums1 and nums2 of equal length n and a positive integer k. You must choose a subsequence of indices from nums1 of length k.
+
+For chosen indices i0, i1, ..., ik - 1, your score is defined as:
+
+The sum of the selected elements from nums1 multiplied with the minimum of the selected elements from nums2.
+It can defined simply as: (nums1[i0] + nums1[i1] +...+ nums1[ik - 1]) * min(nums2[i0] , nums2[i1], ... ,nums2[ik - 1]).
+Return the maximum possible score.
+
+A subsequence of indices of an array is a set that can be derived from the set {0, 1, ..., n-1} by deleting some or no elements. 
+#+BEGIN_SRC java
+public long maxScore(int[] a, int[] b, int k) {
+    int n = a.length;
+    long r = 0, sum = 0;
+    // (nums2[i], nums1[i]) sorted by nums2[i] in descending order.
+    List<int []> l = new ArrayList<>();
+    for (int i = 0; i < n; i++) // 【保证两个数组下标一致】
+        l.add(new int [] {b[i], a[i]});
+    Collections.sort(l, (x, y) -> y[0] - x[0]); // 降序排序
+    Queue<Integer> q = new PriorityQueue<>();   // 升序排列
+    for (int [] v : l) {
+        int y = v[0], x = v[1];
+        q.offer(x);
+        sum += x;
+        if (q.size() > k) sum -= q.poll();
+// 【有点儿奇怪：下面一行，没想透的是，怎么保证，当扔去一个最小堆中最小值的时候，扔的就一定不是当前最小值 y 所对应的下标？】
+        if (q.size() == k) r = Math.max(r, sum * y);
+    }            
+    return r;
+}
+// Same as 1383. Maximum Performance of a Team
+#+END_SRC
 
 * sliding window 
 *** 数subarray个数(满足某些特定要求的子数组个数)问题： 感觉傻傻永远数不清楚！列几个题，牢记一下

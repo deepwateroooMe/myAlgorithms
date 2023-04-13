@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import java.math.BigInteger;
 import java.util.stream.*;
 import java.util.stream.Collectors;
+// import javafx.util.Pair; // 这个库还是没有设置对，暂时不用
 import static java.util.stream.Collectors.toMap;
 public class mthreeixed {
     public static class Solution {
@@ -105,19 +106,907 @@ public class mthreeixed {
         // int gcd(int a, int b) {
         //     return b == 0 ? a : gcd(b, a % b);
         // }
+
+        // public int shortestSequence(int[] rolls, int k) { // TODO TODO TODO: 【读不懂这个题目说的是什么意思 】
+        //     int r = 1;// ans: r
+        //     Set<Integer> vis = new HashSet<>();
+        //     for (int v : rolls) {
+        //         vis.add(v);
+        //         if (vis.size() == k) {
+        //             // Have all combinations that form `ans` length, and we are going to
+        //             // Extend the sequence to `ans + 1` length
+        //             ++r;
+        //             vis.clear();
+        //         }
+        //     }
+        //     return r;
+        // }
+
+        // public long minimumReplacement(int[] a) {// TODO TODO 
+        //     int n = a.length;
+        //     long r = 0;
+        //     for (int i = n-2; i >= 0; i--) {
+        //         if (a[i] <= a[i+1]) continue;
+        //         r += (long)a[i] / a[i+1] - 1;
+        //         a[i] = (a[i] % a[i+1] == 0 ? a[i+1] : a[i] % a[i+1]);
+        //     }
+        //     return r;
+        // }
+
+        // public int longestIdealString(String t, int k) { // 感觉这是动态规划
+        //     int n = t.length(), f [] = new int [26], max = 0;
+        //     char [] s = t.toCharArray();
+        //     for (int i = 0; i < n; i++) {
+        //         int idx = s[i] - 'a';
+        //         int l = Math.max(0, idx - k);
+        //         int r = Math.min(25, idx + k);
+        //         int cur = 0;
+        //         for (int j = l; j <= r; j++) 
+        //             cur = Math.max(cur, f[j] + 1);
+        //         f[idx] = cur;
+        //         max = Math.max(max, f[idx]);
+        //     }
+        //     return max;
+        // }
+
+        // public long kSum(int[] a, int k) {// TODO TODO TODO
+        //     int n = a.length, r [] = getAbsNums(a);
+        //     long maxSum = getMaxSum(a), ans = maxSum;
+        //     // Queue<Pair<Long, Integer>> q = new PriorityQueue<>((x, y)-> Long.compare(b.getKey(), a.getKey()));
+        //     // q.offer(new Pair(maxSum - r[0], 0));
+        //     Queue<long []> q = new PriorityQueue<>((x, y) -> Long.compare(y[0], x[0]));
+        //     q.offer(new long [] {maxSum - r[0], 0l}); // (nextMaxSum, next index i)
+        //     for (int i = 0; i < k-1; i++) { // 遍历去找第 k 大的返回值
+        //         long [] cur = q.poll();
+        //         // Pair cur = q.poll();
+        //         // long nextMaxSum = cur.getKey();
+        //         // int idx = cur.getValue();
+        //         long nextMaxSum = cur[0];
+        //         int idx = (int)cur[1];
+        //         ans = nextMaxSum;
+        //         if (idx + 1 < n) {
+        //             // Keep branching and don't include absNums[i] back
+        //             q.offer(new long [] {nextMaxSum - r[idx+1], (long)idx + 1l});
+        //             // Keep branching and include absNums[i] back
+        //             q.offer(new long [] {nextMaxSum - r[idx+1] + r[idx], (long)idx + 1l});
+        //         }
+        //     }
+        //     return ans;
+        // }
+        // int [] getAbsNums(int [] a) {
+        //     for (int i = 0; i < a.length; i++) 
+        //         a[i] = Math.abs(a[i]);
+        //     Arrays.sort(a);
+        //     return a;
+        // }
+        // long getMaxSum(int [] a) {
+        //     long r = 0;
+        //     for (int v : a)
+        //         if (v > 0)
+        //             r += v;
+        //     return r;
+        // }
+
+//         // 这个题简单，感觉思路狠清楚 TODO TODO TODO: 不知道哪里写错了。。。。。
+//         public int maximumRobots(int[] a, int[] b, long v) {
+//             n = a.length;
+//             int ans = 0;
+//             p = new long [n];// prefixSum for cost b[]
+//             for (int i = 0; i < n; i++) 
+//                 p[i] = (i == 0 ? 0 : p[i-1]) + b[i];
+//             System.out.println(Arrays.toString(b));
+//             System.out.println(Arrays.toString(p));
+//             // 二分查找：找一个存在的最大可能片段的最大长度
+//             int l = 1, r = n;
+//             while (l <= r) {
+//                 int m = (l + r) / 2;
+//                 System.out.println("m: " + m);
+//                 if (exist(m, a, v)) {
+//                     ans = Math.max(ans, m);
+//                     l = m+1;
+//                 } else r = m-1;
+//             }
+//             return ans;
+//         }
+//         long [] p;
+//         int n;// deque 【 offerFirst--> pollLast-->】
+//         boolean exist(int v, int [] a, long t) { // 用滑动窗口遍历，来找长度为 v 的片段是否存在
+//             System.out.println("v: " + v);
+//             ArrayDeque<Integer> q = new ArrayDeque<>();   // 单调递增？双向队列？【目的是做到：O(N) 遍历O(1) 取最值？】
+//             for (int i = 0; i < v-1; i++) {
+//                 while (!q.isEmpty() && a[q.peekFirst()] <= a[i]) q.pollFirst(); // 入队列时，为维护单调递增，把所有《＝的元素扔出去。。。
+//                 q.offerFirst(i); // 入队列
+//             }
+//             for (int i = v-1; i < n; i++) {
+//                 while (!q.isEmpty() && a[q.peekFirst()] <= a[i]) q.pollFirst(); // 入队列时，为维护单调递增，把所有《＝的元素扔出去。。。
+//                 q.offerFirst(i); // 入队列
+// // 【取解】片段长度，达标，检测结果是否合法
+//                 if (Long.compare((long)a[q.peekLast()] + (long)v * (p[i] - (i == v-1 ? 0 : p[i-v])), t) <= 0) return true;
+//                 if (q.peekLast() == i-v) q.pollLast();
+//             }
+//             return false;
+//         }
+        // int [] a = new int [] {74,46,19,34,7,87,7,40,28,81,53,39,3,46,21,40,76,44,88,93,44,50,22,59,46,60,36,24,50,40,56,5,39,9,24,74,7,14,95,45,36,17,22,12,53,41,2,33,100,73,20,70,81,91,28,98,47,88,79,100,78,38,44,74,48,76,73,92,28,30,95,87};
+        // int [] b = new int [] {11,33,15,40,8,28,97,89,51,42,17,57,45,5,63,53,23,43,76,64,86,86,89,53,94,91,78,12,90,29,79,48,35,6,88,79,82,76,44,93,83,55,65,96,86,24,54,65,94,4,26,73,51,85,47,99,17,14,76,2,39,52,58,5,15,35,79,16,94,16,59,50};
+        // int r = s.maximumRobots(a, b, 447);
+
+        // public boolean checkDistances(String s, int[] a) {
+        //     int n = a.length, i = 0;
+        //     Map<Character, List<Integer>> m = new HashMap<>();
+        //     for (char c : s.toCharArray()) {
+        //         m.computeIfAbsent(c, z -> new ArrayList<>()).add(i);
+        //         if (m.get(c).size() == 2) {
+        //             List<Integer> l = m.get(c);
+        //             if (l.get(1) - l.get(0)-1 != a[c-'a']) return false;
+        //         }
+        //         i++;
+        //     }
+        //     return true;
+        // }
+
+        // int [][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+        // int [] fa, size;
+        // public int[] maxPoints(int[][] aa, int[] q) {// 【参考模板：】把并查集的知识点捡起来
+        //     int m = aa.length, n = aa[0].length, mn = m * n;
+        //     // 【并查集】: 初始化 
+        //     fa = new int [mn];
+        //     for (int i = 0; i < mn; i++) fa[i] = i;
+        //     size = new int [mn];
+        //     Arrays.fill(size, 1);
+        //     // 【矩阵元素：从小到大排列，方便离线】
+        //     var a = new int [mn][3];
+        //     for (int i = 0; i < m; i++) 
+        //         for (int j = 0; j < n; j++) 
+        //             a[i*n+j] = new int [] {aa[i][j], i, j};
+        //     Arrays.sort(a, (x, y) -> x[0] - y[0]);// 升序排列
+        //     // 【查询的下标按照查询值从小到大排序，方便离线】
+        //     var k = q.length;
+        //     var id = IntStream.range(0, k).boxed().toArray(Integer[]::new);
+        //     Arrays.sort(id, (i, j) -> q[i] - q[j]);// 这里就，很方便的排序了查询遍历顺序！！！
+        //     // 【构建答案】
+        //     int [] r = new int [k];
+        //     int j = 0;
+        //     for (int i : id) {// 这里就是按查询升序来遍历了。。。【通过使用并查集，也可以后续遍历，不用重新构建先前已经完成的结果】
+        //         int v = q[i];
+        //         for (; j < mn && a[j][0] < v; j++) {
+        //             int x = a[j][1], y = a[j][2];
+        //             for (int [] d : dirs) { // 枚举周围四个格子，值小于 q 才可以合并
+        //                 int ii = x + d[0], jj = y + d[1];
+        //                 if (ii >= 0 && ii < m && jj >= 0 && jj < n && aa[ii][jj] < v)
+        //                     merge(x*n+y, ii*n+jj); // 把坐标压缩成一维的编号
+        //             }
+        //         }
+        //         if (aa[0][0] < v)
+        //             r[i] = size[find(0)];
+        //     }
+        //     return r;
+        // }
+        // // 【并查集模板】
+        // void merge(int from, int to) {
+        //     from = find(from);
+        //     to = find(to);
+        //     if (from != to) {
+        //         fa[from] = to;
+        //         size[to] += size[from];
+        //     }
+        // }
+        // int find(int v) {
+        //     if (fa[v] != v)
+        //         fa[v] = find(fa[v]);
+        //     return fa[v];
+        // }
+        // static final int [][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+        // public int[] maxPoints(int[][] a, int[] q) {// 【参考模板：】使用优先队列
+        //     int m = a.length, n = a[0].length, cnt = 0, k = q.length;
+        //     // 查询的下标按照查询值从小到大排序，方便离线
+        //     var id = IntStream.range(0, k).boxed().toArray(Integer[]::new);
+        //     Arrays.sort(id, (i, j) -> q[i] - q[j]);
+        //     int [] r = new int [k];
+        //     Queue<int []> p = new PriorityQueue<>((x, y) -> x[0] - y[0]);
+        //     p.offer(new int [] {a[0][0], 0, 0});
+        //     a[0][0] = 0; // 充当 vis 数组的作用
+        //     for (int i : id) {
+        //         int v = q[i];
+        //         while (!p.isEmpty() && p.peek()[0] < v) {
+        //             ++cnt;
+        //             int [] cur = p.poll();
+        //             for (int [] d : dirs) { // 枚举周围四个格子
+        //                 int x = cur[1] + d[0], y = cur[2] + d[1];
+        //                 if (x >= 0 && x < m && y >= 0 && y < n && a[x][y] > 0) {
+        //                     p.offer(new int [] {a[x][y], x, y});
+        //                     a[x][y] = 0; // 充当 vis 数组的作用
+        //                 }
+        //             }
+        //         }
+        //         r[i] = cnt;
+        //     }
+        //     return r;
+        // }
+
+        // public int similarPairs(String[] ss) {
+        //     int n = ss.length, idx = 0, r = 0;
+        //     Set<Character> [] s = new HashSet [n];
+        //     for (String i : ss) 
+        //         s[idx++] = new HashSet<Character>(i.chars().mapToObj(e->(char)e).collect(Collectors.toList()));
+        //     for (int i = 0; i < n; i++) 
+        //         for (int j = i+1; j < n; j++) 
+        //             if (contains(s[i], s[j])) ++r;
+        //     return r;
+        // }
+        // boolean contains(Set<Character> s, Set<Character> t) {
+        //     if (s.size() != t.size()) return false;
+        //     for (Character c : s) 
+        //         if (!t.contains(c)) return false;
+        //     return true;
+        // }
+
+        // public int smallestValue(int n) {
+        //     int v = getPrimeSum(n);
+        //     while (n != v) { // 只要有变化，就一直循环 
+        //         n = v;
+        //         v = getPrimeSum(n);
+        //     }
+        //     return v;
+        // }
+        // int getPrimeSum(int v) {
+        //     int r = 0;
+        //     for (int i = 2; i <= v; i++) 
+        //         while (v % i == 0) {
+        //             v /= i;
+        //             r += i;
+        //         }
+        //     return r;
+        // }
+
+        // public boolean isPossible(int n, List<List<Integer>> edges) {
+        //     // 【建图】
+        //     var g = new Set [n+1];
+        //     Arrays.setAll(g, e -> new HashSet<Integer>()); // 初始化
+        //     for (var e : edges) {
+        //         int u = e.get(0), v = e.get(1);
+        //         g[u].add(v);
+        //         g[v].add(u);
+        //     }
+        //     // 【数与列举：度数为奇数的节点】
+        //     var odd = new ArrayList<Integer>();
+        //     for (int i = 1; i <= n; i++) 
+        //         if (g[i].size() % 2 > 0) odd.add(i);
+        //     var m = odd.size();
+        //     // 【对度数为奇数的节点，结果，进行分析】
+        //     if (m == 0) return true;
+        //     if (m == 2) {
+        //         int x = odd.get(0), y = odd.get(1);
+        //         if (!g[x].contains(y)) return true;
+        //         for (int i = 1; i <= n; i++) 
+        //             if (i != x && i != y && !g[x].contains(i) && !g[y].contains(i)) return true;
+        //         return false;
+        //     }
+        //     if (m == 4) {
+        //         int x = odd.get(0), y = odd.get(1), i = odd.get(2), j = odd.get(3);
+        //         return !g[x].contains(y) && !g[i].contains(j) // [a, b], [c, d]
+        //             || !g[x].contains(i) && !g[y].contains(j) // [a, c], [b, d]
+        //             || !g[x].contains(j) && !g[y].contains(i);// [a, d], [b, c]
+        //     }
+        //     return false;
+        // }
+
+        // public List<Integer> topStudents(String[] pf, String[] nf, String[] r, int[] id, int k) {
+        //     Set<String> sp = new HashSet<>(Arrays.asList(pf));
+        //     Set<String> sn = new HashSet<>(Arrays.asList(nf));
+        //     List<int []> l = new ArrayList<>();
+        //     for (int i = 0; i < r.length; i++) {
+        //         String [] si = r[i].split(" ");
+        //         int cur = 0;
+        //         for (String v : si) {
+        //             if (sp.contains(v)) cur += 3;
+        //             else if (sn.contains(v)) cur -= 1;
+        //         }
+        //         l.add(new int [] {id[i], cur});
+        //     }
+        //     Collections.sort(l, (x, y) -> x[1] != y[1] ? y[1] - x[1] : x[0] - y[0]);
+        //     List<Integer> ans = new ArrayList<>();
+        //     for (int i = 0; i < k; i++) 
+        //         ans.add(l.get(i)[0]);
+        //     return ans;
+        // }
+
+        // public int minimizeSet(int d, int dd, int cnt, int ctt) { // 【不喜欢这类题，那些个数字会让人发昏。。。】
+        //     long divisorLcm = lcm(d, dd); // 这里算是：最小公倍数
+        //     // 【二分查找法：】去找一个可能存在的最小的最大值
+        //     long l = 0, r = Integer.MAX_VALUE;
+        //     while (l < r) {
+        //         long m = l + (r - l) / 2;
+        //         if (isPossible(m, divisorLcm, d, dd, cnt, ctt))
+        //             r = m;
+        //         else l = m + 1;
+        //     }
+        //     return (int)l;
+        // }
+        // // Returns true if we can take uniqueCnt1 integers from [1..m] to arr1 and
+        // // take uniqueCnt2 integers from [1..m] to arr2.
+        // boolean isPossible(long v, long divisorLcm, int d, int dd, int cnt, int ctt) {
+        //     long one = v - v / d;
+        //     long two = v - v / dd;
+        //     long totalCnt = v - v / divisorLcm;
+        //     return one >= cnt && two >= ctt && totalCnt >= cnt + ctt;
+        // }
+        // long lcm(int a, int b) {
+        //     return a * (b / gcd(a, b));
+        // }
+        // long gcd(int x, int y) {
+        //     return y == 0 ? x : gcd(y, x % y);
+        // }
+
+        // static final int mod = (int)1e9 + 7;
+        // public int countAnagrams(String t) {
+        //     int n = t.length();
+        //     char [] s = t.toCharArray();
+        //     long r = 1l, mul = 1l;
+        //     var cnt = new int [26];
+        //     for (int i = 0, j = 0; i < n; i++) {
+        //         if (s[i] == ' ') { // 下一个单词的开始，重置计数等
+        //             Arrays.fill(cnt, 0);
+        //             j = 0;
+        //         } else {
+        //             mul = mul * ++cnt[s[i] - 'a'] % mod;// 因为是算阶层，任何一次的累加都要相乘【这里是算分母，相同字母需要除的部分】
+        //             r = r * ++j % mod;
+        //         }
+        //     }
+        //     return (int)(r * pow(mul, mod - 2) % mod); // 这里没看明白：【其实是除以分母：重复字符可能存在的排列组合数】
+        // }
+        // long pow(long x, int n) { // 【快速幂： x^n】
+        //     var r = 1l;
+        //     for (; n > 0; n /= 2) {
+        //         if (n % 2 > 0) r = r * x % mod;
+        //         x = x * x % mod;
+        //     }
+        //     return r;
+        // }
+
+        // public int takeCharacters(String t, int k) { // TODO TODO TODO 2516：它说要，abc 每个字符至少各取走 k 个，最少要多久？
+        //     if (k == 0) return 0;
+        //     int n = t.length(), ans = n, cnt [] = new int [3];
+        //     char [] s = t.toCharArray();
+        //     for (char c : s) ++cnt[c-'a'];
+        //     if (cnt[0] < k || cnt[1] < k || cnt[2] < k) return -1;
+        //     for (int l = 0, r = 0; r < n; r++) {
+        //         --cnt[s[r]-'a'];
+        //         while (cnt[s[r]-'a'] < k) // 【这里是什么意思，没有看懂！！！】
+        //             ++cnt[s[l++]-'a'];    // 【这里是什么意思，没有看懂！！！】
+        //         ans = Math.min(ans, n - (r - l + 1));
+        //     }
+        //     return ans;
+        // }
+
+//         // 把问题转化为了给定 nums 求总和小于 k 的选取方式数目
+//         // 可以通过动态规划求出（dp[i] 表示总和为 i 的方案数。最后计算 dp[0...k−1] 的和）
+//         public int countPartitions(int[] a, int k) {
+//             int n = a.length;
+//             long sum = Arrays.stream(a).asLongStream().sum();
+//             if (sum < 2l * (long)k) return 0;
+//             long r = (long)quickPow(2, n); // 2^n % kMod
+//             long [] f = new long [k];
+//             // Arrays.sort(a);
+//             // f[a[0]] = 1; // 初始化【这里好像自己初始化得不对！！！】
+//             // for (int i = 1; i < n; i++) {
+//             //     int v = a[i];
+//             //     for (int j = i-1; j >= 0; j--) {
+//             //         int vj = a[j];
+//             //         if (vj + v < k)
+//             //             f[vj+v] = f[vj] + 1;
+//             //     }
+//             // }
+//             // long r = 0l;
+//             // for (long v : f) 
+//             //     r = (r + v) % mod;
+//             // return (int)(quickPow(2, n) - r);
+//             f[0] = 1;
+//             for (int v : a) 
+//                 for (int i = k-1; i >= v; i--) {
+//                     f[i] += f[i-v];
+//                     f[i] %= mod;
+//                 }
+//             // Minus cases that're not satisfied.
+//             for (int i = 0; i < k; i++) // 【这里仍然是看得不明白】：什么时候减一遍，什么时候减两遍？？？
+//                 if (sum - i < k) // Both group1 and group2 < k
+//                     r -= f[i];
+//                 else r -= f[i] * 2;
+//             return (int)((r % mod + mod) % mod);
+//         }
+//         static final int mod = (int)1e9 + 7;
+// // Returns base^k % kMod.
+//         int quickPow(int base, int k) {
+//             int res = 1;
+//             for (int i = 0; i < k; ++i)
+//                 res = res * base % mod;
+//             return res;
+//         }
+//         // long quickPow(int v, int n) {// 【快速幂：为什么这里不能用？？？】
+//         //     long r = 1l;
+//         //     while (n > 0) {
+//         //         if (n % 2 > 0) 
+//         //             r = r * v % mod;
+//         //         v = v * v % mod;
+//         //         n /= 2;
+//         //     }
+//         //     return r;
+//         // }
+
+        // public int minimumPartition(String s, int k) {
+        //     int n = s.length(), i = 0, j = 1, r = 1;
+        //     long cur = 0l;
+        //     for (char c : s.toCharArray()) {
+        //         cur = cur * 10 + c - '0';
+        //         if (cur > k) {
+        //             cur = c - '0';
+        //             ++r;
+        //         }
+        //         if (cur > k) return -1;
+        //     }
+        //     return r;
+        //     // for (j = 1; j <= n; j++) {
+        //     //     if (Integer.parseInt(s.substring(i, j)) <= k) continue;// 这里不一定是整形了，可能是长整形的！！！
+        //     //     r++;
+        //     //     i = j-1;
+        //     //     if (Integer.parseInt(s.substring(i, j)) > k) return -1;
+        //     // }
+        //     // return (i < n && Integer.parseInt(s.substring(i, j-1)) <= k ? 1 : 0) + r;
+        // }
+
+        // public long maxPower(int[] a, int r, int k) {
+        //     int n = a.length;
+        //     long [] sum = new long [n+1]; // 前缀和
+        //     for (int i = 0; i < n; i++)
+        //         sum[i+1] = sum[i] + a[i];
+        //     long mn = Long.MAX_VALUE, power [] = new long [n]; // 电量
+        //     for (int i = 0; i < n; i++) {
+        //         power[i] = sum[Math.min(i+r+1, n)] - sum[Math.max(i-r, 0)];
+        //         mn = Math.min(mn, power[i]);
+        //     }
+        //     // 【二分查找法：】
+        //     long left = mn, right = mn + k + 1; // 开区间写法
+        //     while (left + 1 < right) {
+        //         long mid = left + (right - left) / 2;
+        //         if (check(mid, power, n, r, k)) left = mid;
+        //         else right = mid;
+        //     }
+        //     return left;
+        // }
+        // // 二分答案 minPower: 从左到右遍历 stations.stations[i] 电量不足 minPower，那么需要建供电站来补足。
+        // // 由于 i 左侧的不需要补足，所以贪心地在 min(i+r,n−1) 处建是最合适的，恰好让 i 在覆盖范围的边界上。
+        // // 设需要建 m 个供电站，那么需要把 min[i,min(i+2r,n−1)] 范围内的电量都增加 m。
+        // // 方法很多，用差分数组来更新是最简单的。
+        // // 最后判断修建的供电站是否超过 k，如果超过说明 minPower 偏大，否则说明偏小。
+        // // 注：其实前缀和也不需要，可以改为长为 2r+1 的滑动窗口，但这样写有点麻烦，感兴趣的读者可以实现下。
+        // boolean check(long minPower, long [] p, int n, int r, int k) {
+        //     long [] d = new long [n+1]; // diff: 【差分数组】：感觉这个题型还弄得不明不白。。。
+        //     long sumD = 0, need = 0;
+        //     for (int i = 0; i < n; i++) {
+        //         sumD += d[i]; // 累加差分值
+        //         long m = minPower - p[i] - sumD;
+        //         if (m > 0) {  // 需要 m 个供电站
+        //             need += m;
+        //             if (need > k) return false;
+        //             sumD += m; // 差分更新
+        //             if (i + r * 2 + 1 < n) d[i+r*2+1] -= m; // 差分更新
+        //         }
+        //     }
+        //     return true;
+        // }
+
+        // public long maxKelements(int[] a, int k) {
+        //     int n = a.length;
+        //     Arrays.sort(a);
+        //     Queue<Integer> q = new PriorityQueue<>((x, y) -> y - x);
+        //     for (int v : a) q.offer(v);
+        //     long r = 0l;
+        //     while (k > 0) {
+        //         int cur = q.poll();
+        //         r += cur;
+        //         q.offer((cur % 3 > 0 ? 1 : 0) + cur / 3);
+        //         k--;
+        //     }
+        //     return r;
+        // }
+
+        // public int[][] rangeAddQueries(int n, int[][] a) {
+        //     int [][] r = new int [n][n];
+        //     for (int [] e : a) {
+        //         int i = e[0], j = e[1], x = e[2], y = e[3];
+        //         for (int ii = i; ii <= x; ii++) 
+        //             for (int jj = j; jj <= y; jj++) 
+        //                 r[ii][jj]++;
+        //     }
+        //     return r;
+        // }
+
+        // public long maxOutput(int n, int[][] edges, int[] price) {
+        //     g = new ArrayList [n];
+        //     Arrays.setAll(g, x -> new ArrayList<>());
+        //     for (int [] e : edges) {
+        //         int x = e[0], y = e[1];
+        //         g[x].add(y);
+        //         g[y].add(x);
+        //     }
+        //     dfs(0, -1, price);
+        //     return ans;
+        // }
+        // List<Integer> [] g;
+        // long ans;
+        // // 返回【带叶子的最大路径和，不带叶子的最大路径和】
+        // long [] dfs(int x, int fa, int [] price) {
+        //     long p = price[x], maxSone = p, maxStwo = 0;
+        //     for (int v : g[x]) 
+        //         if (v != fa) {
+        //             var res = dfs(v, x, price);
+        //             long s = res[0], ss = res[1];
+        //             // 前面最大  带叶子的路径和 + 当前不带叶子的路径和【  带 + 不带】
+        //             // 前面最大不带叶子的路径和 + 当前  带叶子的路径和【不带 +   带】
+        //             ans = Math.max(ans, Math.max(maxSone + ss, maxStwo + s));
+        //             maxSone = Math.max(maxSone, s + p);
+        //             maxStwo = Math.max(maxStwo, ss + p); // 这里加上 p 是因为 x 必然不是叶子【什么情况下是叶了的情况，我没想清楚】
+        //         }
+        //     return new long [] {maxSone, maxStwo};
+        // }
+
+        // public long countGood(int[] a, int k) {
+        //     int n = a.length, j = 0, tmp = 0;
+        //     Map<Integer, Integer> m = new HashMap<>();
+        //     long r = 0;
+        //     for (int i = 0; i < n; i++) {
+        //         if (!m.containsKey(a[i])) m.put(a[i], 1);// 如果第一次出现，map添加该元素
+        //         else {
+        //             tmp += m.get(a[i]);// 如果之前map里面有，那么与之前所有相同元素配对
+        //             m.put(a[i], m.getOrDefault(a[i], 0) + 1);
+        //         }
+        //         while (tmp >= k) {
+        //             r += n - i;// 配对数达到k，剩余i之后的所有终点均满足条件【从当前元素 i 起，后面所有的都可以成为一个合法子数组， n-i 个】
+        //             int res = m.get(a[j]);// 起始位置j右侧滑动
+        //             if (res > 1) {
+        //                 tmp -= res - 1; // j对应的配对全部减少
+        //                 m.put(a[j], m.getOrDefault(a[j], 0) - 1);// j位置元素滑出
+        //             } else m.remove(a[j]);
+        //             j++;
+        //         }
+        //     }
+        //     return r;
+        // }
+
+        // public long minOperations(int[] a, int[] b, int k) {
+        //     if (k == 0)
+        //         return Arrays.equals(a, b) ? 0 : -1;
+        //     int n = a.length;
+        //     long r = 0, cnt = 0; // cnt: # of increments - # of decrements
+        //     for (int i = 0; i < n; i++) {
+        //         int dif = a[i] - b[i];
+        //         if (dif == 0) continue;
+        //         if (dif % k != 0) return -1;
+        //         int ops = dif / k;
+        //         cnt += ops;
+        //         r += (long)Math.abs(ops);
+        //     }
+        //     return cnt == 0 ? r / 2 : -1;
+        // }
+
+//         public long maxScore(int[] a, int[] b, int k) {
+//             int n = a.length;
+//             long r = 0, sum = 0;
+//             // (nums2[i], nums1[i]) sorted by nums2[i] in descending order.
+//             List<int []> l = new ArrayList<>();
+//             for (int i = 0; i < n; i++) // 【保证两个数组下标一致】
+//                 l.add(new int [] {b[i], a[i]});
+//             Collections.sort(l, (x, y) -> y[0] - x[0]); // 降序排序
+//             Queue<Integer> q = new PriorityQueue<>();   // 升序排列
+//             for (int [] v : l) {
+//                 int y = v[0], x = v[1];
+//                 q.offer(x);
+//                 sum += x;
+//                 if (q.size() > k) sum -= q.poll();
+// // 【有点儿奇怪：下面一行，没想透的是，怎么保证，当扔去一个最小堆中最小值的时候，扔的就一定不是当前最小值 y 所对应的下标？】
+//                 if (q.size() == k) r = Math.max(r, sum * y);
+//             }            
+//             return r;
+//         }
+//         // Same as 1383. Maximum Performance of a Team
+//         static final int mod = (int)1e9 + 7;
+//         public int maxPerformance(int n, int [] a, int [] e, int k) {
+//             // (nums2[i], nums1[i]) sorted by nums2[i] in descending order.
+//             List<int []> l = new ArrayList<>();
+//             for (int i = 0; i < n; i++) 
+//                 l.add(new int [] {e[i], a[i]});
+//             Collections.sort(l, (x, y) -> y[0] - x[0]);
+//             Queue<Integer> q = new PriorityQueue<>();
+//             long r = 0, sum = 0;
+//             for (int [] v : l) {
+//                 int y = v[0], x = v[1];
+//                 q.offer(x);
+//                 sum += x;
+//                 if (q.size() > k) sum -= q.poll();
+//                 if (q.size() <= k) r = Math.max(r, sum * y);
+//             }
+//             return (int)(r % mod);
+//         }
+
+        // // 【不喜欢这种题：狠烦人！！！】
+        // public boolean isReachable(int x, int y) {
+        //     int g = gcd(x, y);
+        //     return (g & (g-1)) == 0;
+        // }
+        // int gcd(int x, int y) {
+        //     while (x != 0) {
+        //         int tmp = x;
+        //         x = y % x;
+        //         y = tmp;
+        //     }
+        //     return y;
+        // }
+
+        // public boolean makeStringsEqual(String s, String t) {
+        //     boolean one = s.chars().distinct().count() == 1 && s.charAt(0) == '0',
+        //         two = t.chars().distinct().count() == 1 && t.charAt(0) == '0';
+        //     return !((one || two) && one != two);
+        // }
+
+//         public int minCost(int[] a, int k) {
+//             int n = a.length;
+//             int [] f = new int [n+1];
+//             // dp[0] means optimal importance value for empty subarray,
+//             // dp[1] means optimal importance value for array ending at[0, 1) i.e.[0, 0],
+//             // dp[i] means optimal importance for array ending at i-1: [0, i) / [0, i-1]
+//             Map<Integer, Integer> m = new HashMap<>(); // count map, a new one for each i
+//             for (int i = 1; i <= n; i++) { // calc result for dp[1] to dp[n]
+//                 f[i] = Integer.MAX_VALUE;
+//                 m.clear();
+//                 int cur = k; // importance score always start with k for each subarray
+// // since we know the optimal value in dp[j] for j : [0, i-1], where to put j will we yield best score for dp[i]? (Note: j = 0 means two sub arrays: [0, 0) + [0, i) which means there's only one subarray which is the whole thing
+//                 for (int j = i-1; j >= 0; j--) { 
+//                     int cnt = m.getOrDefault(a[j], 0);
+//                     m.put(a[j], ++cnt);
+//                     if (cnt == 2) cur += 2; // only when we need a numnber for the second time, we start to add importance score, and it's going to be count as 2
+//                     else if (cnt > 2) cur++;// for 3rd time and more, each time we count one more importance score
+//                     f[i] = Math.min(f[i], f[j] + cur);
+//                 }
+//             }
+//             return f[n];
+//         }
+        // public int minCost(int[] a, int k) { // 【不喜欢这个思路：不大众化】
+        //     n = a.length;
+        //     Map<Integer, Integer> m = new HashMap<>();
+        //     idx = 0;
+        //     for (int i = 0; i < n; i++) {
+        //         int j = m.getOrDefault(a[i], -1);
+        //         if (j == -1) {
+        //             m.put(a[i], idx);
+        //             a[i] = idx++; // 感觉这里的改装有点儿奇怪，不喜欢这个思路
+        //         } else a[i] = j;
+        //     }
+        //     f = new int [n];
+        //     Arrays.fill(f, Integer.MAX_VALUE);
+        //     return dfs(0, k, a);
+        // }
+        // int [] f;
+        // int idx, n;
+        // int dfs(int ij, int k, int [] a) {
+        //     if (ij == n) return 0;
+        //     if (f[ij] != Integer.MAX_VALUE) return f[ij];
+        //     int [] m = new int [idx];
+        //     int cur = k; // 计算当前值 
+        //     for (int i = ij; i < n; i++) {
+        //         if (++m[a[i]] == 2) cur += 2;
+        //         else if (m[a[i]] > 2) cur++;
+        //         f[ij] = Math.min(f[ij], dfs(i+1, k, a) + cur);
+        //     }
+        //     return f[ij];
+        // }
+
+        // // 把所有 n−1 个 weights[i]+weights[i+1] 算出来，排序，那么最大的 k−1 个数和最小的 k−1 个数相减，即为答案。
+        // public long putMarbles(int[] a, int k) { // 这个是自己用了很多数据结构空间算的，可以直接改动原数组，节省空间。。。
+        //     int n = a.length;
+        //     Queue<Integer> qm = new PriorityQueue<>((x, y) -> y - x); // 最大堆
+        //     Queue<Integer> qn = new PriorityQueue<>(); // 最小堆
+        //     for (int i = 0; i < n-1; i++) {
+        //         int cur = a[i] + a[i+1];
+        //         qm.offer(cur);
+        //         qn.offer(cur);
+        //     }
+        //     long max = 0, min = 0;
+        //     n = k-1;
+        //     while (n > 0) {
+        //         max += (long)qm.poll();
+        //         n--;
+        //     }
+        //     while (k > 1) {
+        //         min += (long)qn.poll();
+        //         k--;
+        //     }
+        //     return max - min;
+        // }
+        // public long putMarbles(int[] a, int k) { // 这个是自己用了很多数据结构空间算的，可以直接改动原数组，节省空间。。。
+        //     int n = a.length;
+        //     long r = 0;
+        //     for (int i = 0; i < n-1; i++) 
+        //         a[i] += a[i+1];
+        //     Arrays.sort(a, 0, n-1); // 【排序：最后一个数不参与排序】相当于去掉最后一个数
+        //     for (int i = 0; i < k - 1; ++i)
+        //         r += a[n - 2 - i] - a[i];
+        //     return r;
+        // }
+
+        // public long countQuadruplets(int[] a) {// TODO TODO TODO 【优化空间：】还有一种压缩掉 less 数组的解法，看不下去了，改天再看
+        //     int n = a.length;
+        //     int [][] g = new int [n][n+1]; // g : greater 两个数组的作用，就是用来数个数的 
+        //     for (int k = n-2; k >= 2; k--) {
+        //         g[k] = g[k+1].clone();
+        //         for (int x = a[k+1]-1; x > 0; x--) 
+        //             g[k][x]++; // x < nums[k+1]，对于 x，大于它的数的个数 +1
+        //     }
+        //     long r = 0;
+        //     int [] l = new int [n+1]; // l: less
+        //     for (int j = 1; j < n-2; j++) {// 遍历 J 【遍历JK】O(N^2)
+        //         for (int x = a[j-1]+1; x <= n; x++) 
+        //             l[x]++; // x > nums[j-1]，对于 x，小于它的数的个数 +1
+        //         for (int k = j+1; k < n-1; k++)// 遍历 K 
+        //             if (a[j] > a[k])// 在遍历的【J, K】每一种有效组合下，累积 cnt[i]*cnt[l] 的可能个数
+        //                 r += l[a[k]] * g[k][a[j]];
+        //     }
+        //     return r;
+        // }
+
+        // // 既然要数的个数多，那就永远贪心地尽量选择尽可能小的数来填充。。。。。
+        // public int maxCount(int[] a, int n, int maxSum) {
+        //     Set<Integer> s = new HashSet<>();
+        //     for (int v : a) if (v <= n) s.add(v);
+        //     int r = 0, sum = 0;
+        //     for (int i = 1; i <= n && sum < maxSum; i++) {
+        //         if (!s.contains(i)) {
+        //             sum += i;
+        //             if (sum > maxSum) return r;
+        //             r++;
+        //         }
+        //     }
+        // }
+
+        //  public int[] vowelStrings(String[] s, int[][] q) {
+        //     int n = s.length, cnt = 0;
+        //     int [] r = new int [n];
+        //     for (int i = 0; i < n; i++) {
+        //         if (isVol(s[i])) cnt++;
+        //         r[i] = cnt;
+        //     }
+        //     int [] ans = new int [q.length];
+        //     for (int i = 0; i < q.length; i++) {
+        //         int x = q[i][0], y = q[i][1];
+        //         ans[i] = r[y] - (x == 0 ? 0 : r[x-1]);
+        //     }
+        //     return ans;
+        // }
+        // boolean isVol(String s) {
+        //     Set<Character> sc = new HashSet<>(List.of('a', 'e', 'i', 'o', 'u'));
+        //     return s.length() > 0 && sc.contains(s.charAt(0)) && sc.contains(s.charAt(s.length()-1));
+        // }
+
+// // 把限制条件看丢了，窃有窃道，不偷相邻的人家。。。TODO TODO TODO: 没有写完
+//         public int minCapability(int[] a, int k) {
+//             int l = Arrays.stream(a).min().getAsInt(), r = Arrays.stream(a).max().getAsInt(), ans = r;
+//             n = a.length;
+//             while (l <= r) {
+//                 int m = (l + r) / 2;
+//                 if (check(m, k, a)) {
+//                     ans = Math.min(ans, m);
+//                     r = m;
+//                 } else l = m + 1;
+//             }
+//             return ans;
+//         }
+//         int n;
+//         boolean check(int v, int k, int [] a) {// 这种写法不对。。。漏掉了太多结果。。。
+//             int r = 0, p = -1;
+//             // List<Integer> l = new ArrayList<>();
+//             for (int i = 0; i < n; i++) {
+//                 if (a[i] <= v) {
+//                     if (p == -1 || i > 0 && p < i-1) {
+//                         r++;
+//                         p = i;
+//                     }
+//                 }
+//             }
+//         }
+
+        // // 下面是我，看了提示一知半解下写的，并没能真正理解题目的意思。。。
+        // boolean myContains(List<List<Integer>> ll, List<Integer> l) {
+        //     for (List<Integer> li : ll) {
+        //         if (li.size() != l.size()) continue;
+        //         // if (li.get(0) == l.get(0)) return true; // 【不知道这个题目考察的犄角是在哪里。。。。。】
+        //         boolean same = true;
+        //         for (int i = 0; i < l.size(); i++) 
+        //             if (li.get(i) != l.get(i)) {
+        //                 same = false;
+        //                 break;
+        //             }
+        //         if (same) return true;
+        //     }
+        //     return false;
+        // }
+        // boolean dfs(int x, int y, List<Integer> p, int [][] a) {
+        //     if (x < 0 || x >= m || y < 0 || y >= n || vis[x][y] || a[x][y] == 0) return false;
+        //     if (x == m-1 && y == n-1) {
+        //         List<Integer> l = new ArrayList<>(p);
+        //         if (!myContains(ll, l))
+        //             ll.add(new ArrayList<>(p));
+        //         return true;
+        //     }
+        //     vis[x][y] = true;
+        //     p.add(x*n+y);
+        //     for (int [] d : dirs) {
+        //         int i = x + d[0], j = y + d[1];
+        //         if (dfs(i, j, p, a) && ll.size() == 2) 
+        //             return true; // 我忘记了，这里会藏一个 bug 吗？
+        //     }
+        //     p.remove(p.size()-1);
+        //     vis[x][y] = false;
+        //     return false;
+        // }
+        // public boolean isPossibleToCutPath(int[][] a) {
+        //     m = a.length;
+        //     n = a[0].length;
+        //     if (!hasPath(0, 0, a)) return true;
+        //     // Reassign (0, 0) as 1.
+        //     a[0][0] = 1;
+        //     return !hasPath(0, 0, a);
+        // }
+        // boolean [][] vis;
+        // int m, n;
+        // // Returns true is there's a path from (0, 0) to (m - 1, n - 1).
+        // // Also mark the visited path as 0 except (m - 1, n - 1).
+        // // 那么上面有个极其有效的独特路径的区分：就是第一遍走过，把路销毁；那么第二次再走的，就无论如何也不会与第一次的重复，而非自己写的同时找两条路径，总或多或少存在交叉。。。
+        // boolean hasPath(int i, int j, int [][] a) {
+        //     if (i == m || j == n) return false;
+        //     if (i == m-1 && j == n-1) return true;
+        //     if (a[i][j] == 0) return false;
+        //     a[i][j] = 0;
+        //     // Go down first. Since we use OR logic, we'll only mark one path.
+        //     return hasPath(i+1, j, a) || hasPath(i, j+1, a);
+        // }
+
+        // public long minCost(int[] a, int[] b) {
+        //     int n = a.length;
+        //     long r = 0;
+        //     List<Integer> swapped = new ArrayList<>();
+        //     Map<Integer, Integer> m = new HashMap<>(); // m: cnt map
+        //     for (int v : a)
+        //         m.put(v, m.getOrDefault(v, 0) + 1);
+        //      // m.merge(v, 1, Integer::sum); // 这些是一个道理，只是写得 fancy 一点儿。。。
+        //     for (int v : b) 
+        //         m.put(v, m.getOrDefault(v, 0) - 1);
+        //      // m.merge(v, -1, Integer::sum);
+        //     for (Map.Entry<Integer, Integer> en : m.entrySet()) {
+        //         Integer val = en.getKey(), freq = en.getValue();
+        //         if (freq % 2 != 0) return -1;
+        //         for (int i = 0; i < Math.abs(freq) / 2; i++) 
+        //             swapped.add(val);
+        //     } // 下面找出的是全局的最小值 
+        //     int minVal = Math.min(Arrays.stream(a).min().getAsInt(), Arrays.stream(b).min().getAsInt());
+        //     Collections.sort(swapped);
+        //     for (int i = 0; i < swapped.size() / 2; i++)// 下面的意思就是说，任何时候，想要交换，怎么交换代价最小？永远拿一个最小的值来交换！！！ 
+        //         r += Math.min(minVal * 2, swapped.get(i));
+        //     return r;
+        // }
+
+        
     }
     public static void main (String[] args) {
         Solution s  =  new Solution ();
 
-        String a = "IloveLe3tcode!";
+        int [] a = new int [] {4,2,2,2};
+        int [] b = new int [] {1, 4, 1, 2};
 
-        boolean r = s.strongPasswordCheckerII(a);
+        long r = s.minCost(a, b);
         System.out.println("r: " + r);
     }
 }
 
-// ListNode head = new ListNode(a[0]);
-// head.buildList(head, a);
+    // ListNode head = new ListNode(a[0]);
+    // head.buildList(head, a);
 // head.printList(head);
 
 
