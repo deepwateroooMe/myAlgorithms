@@ -991,23 +991,224 @@ public class mthreeixed {
         //         r += Math.min(minVal * 2, swapped.get(i));
         //     return r;
         // }
-
         
+        // // 数对：数对就是说，固定其中的一个【或是遍历其中的一个】，来累积另一个的所有可能性
+        // // lower <= nums[i] + nums[j] <= upper
+        // // 把上面的变成一下，可以得到 lower - a[i] <= a[j] <= upper - a[i]
+        // // 再把上面转换成开区间的话，就成为
+        // public long countFairPairs(int[] a, int lo, int hi) {
+        //     long r = 0;
+        //     Arrays.sort(a); // 排序不影响数对的个数，但是排序后，才可以进行二分查找 
+        //     for (int i = 0; i < a.length; i++) {
+        //         int right = lowerBound(a, i, hi - a[i] + 1);
+        //         int left = lowerBound(a, i, lo - a[i]);
+        //         r += right - left;
+        //     }
+        //     return r;
+        // }
+        // int lowerBound(int [] a, int r, int t) { // r: right. t: target
+        //     int l = -1; // 开区间：（left, right） ==> （ l,r）
+        //     while (l + 1 < r) { // 区间不为空
+        //         // 循环不变量：
+        //         // nums[left] < target
+        //         // nums[right] >= target
+        //         int m = (l + r) >>> 1;
+        //         if (a[m] < t) // 【注意下面接下来，同样是开区间】
+        //             l = m; // 范围缩小到 (mid, right)
+        //         else
+        //             r = m; // 范围缩小到 (left, mid)
+        //     }
+        //     return r;
+        // }
+        // // 【比赛时的原则：更相信千百年来的数据结构，如果二分法自己还会时不时地这里那里出错，就使用数据结构来帮助自己，至少在比赛的时候，二分的结果，借由数据结构，可以做到精确无误】
+        // public long countFairPairs(int [] a, int lo, int hi) { // TLE TLE TLE : 48/53 PASSED 【也就是说，上面原始的二分法更快一些。。。】
+        //     TreeMap<Integer, Integer> m = new TreeMap<>();
+        //     long r = 0;
+        //     for (int v : a) {
+        //         // 下面的：借助有序字典，自动筛选出范围内的条款，不是太方便了吗？
+        //         for (Map.Entry<Integer, Integer> en : m.subMap(lo - v, hi - v + 1).entrySet())
+        //             r += en.getValue();
+        //         m.put(v, m.getOrDefault(v, 0) + 1);
+        //     }
+        //     return r;
+        // }
+        // public long countFairPairs(int[] a, int lo, int hi) { // 现在这个二分，该再透彻一点儿了吧？
+        //     int n = a.length;
+        //     long r = 0;
+        //     Arrays.sort(a);
+        //     for (int i = 0; i < n-1; i++) {
+        //         int min = lo - a[i], max = hi - a[i];
+        //         int bgn = binarySearchOne(i+1, n-1, min, a);// 去找，最左边的左边界【若有重复，最最左边】
+        //         int end = binarySearchTwo(i+1, n-1, max, a);// 去找，最右边的右边界【若有重复，最最右边】
+        //         r += end - bgn + 1;
+        //     }
+        //     return r;
+        // }
+        // int binarySearchOne(int l, int r, int v, int [] a) { // 找下界, 左边界 
+        //     while (l <= r) {
+        //         int m = (l + r) / 2;
+        //         if (a[m] < v) l = m+1;
+        //         else r = m-1; // 感觉这里写得不对【与自己先前写的习惯不一样。。。】
+        //     }
+        //     return l;
+        // }
+        // int binarySearchTwo(int l, int r, int v, int [] a ) {  // 找上界, 找右边界
+        //     while (l <= r) {
+        //         int m = (l + r) / 2;
+        //         if (a[m] > v) r = m-1;
+        //         else l = m+1; // 感觉这里写得不对【与自己先前写的习惯不一样。。。】
+        //     }
+        //     return r;
+        // }
+        // // 【TLE: 下面的，过不了，是因为我不曾预处理所有的长度《＝ 30 的子字符串】省时间的办法，永远是先把可能需要的东西数好记下来，备用，用来拿来直接用。。。
+        // public int[][] substringXorQueries(String s, int[][] q) { // TLE TLE TLE : 55/59 
+        //     int n = s.length(), m = q.length, idx = 0;
+        //     int [][] r = new int [m][2];
+        //     for (int [] e : q) {
+        //         int v = e[0] ^ e[1];
+        //         String sv = Integer.toBinaryString(v);
+        //         int i = s.indexOf(sv);
+        //         r[idx][0] = i;
+        //         r[idx++][1] = i == -1 ? -1 : i + sv.length()-1;
+        //     }
+        //     return r;
+        // }
+        // public int[][] substringXorQueries(String t, int[][] q) {
+        //     int n = t.length(), N = q.length, o = 30;
+        //     char [] s = t.toCharArray();
+        //     int [][] ans = new int [N][2];
+        //     // 【预处理：】用个字记住，所有相关值的，第一次出现在的，【左，右】边界的下标，备用！！！
+        //     // {val: (left, right)} := s[left..right]'s decimal value = val
+        //     Map<Integer, int []> m = new HashMap<>();
+        //     for (int i = 0; i < n; i++) {
+        //         int v = 0;
+        //         if (s[i] == '0') {
+        //             // Edge case: save the index of first 0.
+        //             if (!m.containsKey(v)) m.put(v, new int [] {i, i});
+        //             continue;
+        //         }
+        //         int mj = Math.min(n, i + o);// 向右最远可以延伸到的下标 maxRight
+        //         for (int j = i; j < mj; j++) {
+        //             v = v * 2 + s[j] - '0';
+        //             if (!m.containsKey(v)) m.put(v, new int [] {i, j});
+        //         }
+        //     }
+        //     for (int i = 0; i < N; i++) {
+        //         int x = q[i][0], y = q[i][1], v = x ^ y;
+        //         if (!m.containsKey(v)) ans[i] = new int [] {-1, -1};
+        //         else ans[i] = m.get(v);
+        //     }
+        //     return ans;
+        // }
+
+        // // 枚举 i，分别计算能够与 es[:i] 和 s[i:] 匹配的 t 的最长前缀和最长后缀，就知道要删除的子串的最小值了。这个技巧叫做「前后缀分解」。
+        // // 那么删除的子串就是从 pre[i]+1 到 suf[i]−1 这段，答案就是 suf[i]−pre[i]−1 的最小值。
+        // // 代码实现时，可以先计算 suf，然后一边计算 pre，一边更新最小值，所以 pre 可以省略
+        // public int minimumScore(String ss, String tt) {
+        //     int n = ss.length(), m = tt.length();
+        //     char [] s = ss.toCharArray(), t = tt.toCharArray();
+        //     int [] suf = new int [n+1];
+        //     suf[n] = m;
+        //     for (int i = n-1, j = m-1; i >= 0; i--) {
+        //         if (j >= 0 && s[i] == t[j]) --j;
+        //         suf[i] = j+1;
+        //     }
+        //     int r = suf[0]; // 删除 t[:suf[0]]
+        //     if (r == 0) return 0;
+        //     for (int i = 0, j = 0; i < n; i++) {
+        //         if (s[i] == t[j]) // 注意 j 不会等于 m，因为上面 suf[0]>0 表示 t 不是 s 的子序列
+        //             r = Math.min(r, suf[i+1] - ++j); // ++j 后，删除 t[j:suf[i+1]]
+        //     }
+        //     return r;
+        // }
+
+        // public int minimizeSum(int[] a) {
+        //     int n = a.length;
+        //     Arrays.sort(a);
+        //     // Can always change the num to any other num in nums, so `low` becomes 0.
+        //     // So, we can rephrase the problem as finding the min `high`.
+        //     int hiOfChangingTwoMins = a[n-1] - a[2]; // a[0] == a[1]
+        //     int hiOfChangingTwoMaxs = a[n-3] - a[0]; // a[n-1] ==? a[n-2]
+        //     int hiOfChangingMinMax = a[n-2] - a[1];   // a[0] a[n-1]
+        //     return Math.min(Math.min(hiOfChangingTwoMins, hiOfChangingTwoMaxs), hiOfChangingMinMax);
+        // }
+
+        public long[] handleQuery(int[] a, int[] b, int[][] queries) {
+            int n = a.length, m = 0, i = 0;
+            // 【线段树：】创建与初始化
+            cnt = new int [n * 4];
+            flip = new boolean [n * 4];
+            build(a, 1, 1, n);
+            var sum = Arrays.stream(b).asLongStream().sum();
+            for (var q : queries) 
+                if (q[0] == 3) ++m;
+            var ans = new long [m];
+            for (var q : queries) {
+                if (q[0] == 1) update(1, 1, n, q[1]+1, q[2]+1);
+                else if (q[0] == 2) sum += (long)q[1] * cnt[1];
+                else ans[i++] = sum;
+            }
+            return ans;
+        }
+        int [] cnt; // cnt A
+        boolean [] flip;
+        // 初始化线段树   o,l,r=1,1,n
+        void build(int [] a, int o, int l, int r) {
+            if (l == r) {
+                cnt[o] = a[l-1];
+                return ;
+            }
+            int m = (l + r) / 2;
+            build(a, o * 2, l, m);
+            build(a, o * 2 + 1, m + 1, r);
+            maintain(o);
+        }
+        void maintain(int o) {
+// 自底向上回归更新：算的是父节点的值：为两子节点值的和【因为题目要求示和】
+            cnt[o] = cnt[o * 2] + cnt[o * 2 + 1];
+        }
+        // 反转区间 [L,R]   o,l,r=1,1,n
+        void update(int o, int l, int r, int L, int R) {
+            if (L <= l && r <= R) {// 从最顶上最大的一个区间来操作
+                do_(o, l, r);
+                return ;
+            }
+            int m = (l + r) / 2;// 必须得分左右两边来进行的操作
+            if (flip[o]) {
+                do_(o * 2, l, m);
+                do_(o * 2 + 1, m + 1, r);
+                flip[o] = false;
+            }
+            if (m >= L) update(o * 2, l, m, L, R);
+            if (m < R) update(o * 2 + 1, m + 1, r, L, R);
+            maintain(o);// 操作完了，仍然要更新父节点 
+        }
+        void do_(int o, int l, int r) {
+            cnt[o] = r - l + 1 - cnt[o];
+            flip[o] = !flip[o];
+        }
     }
     public static void main (String[] args) {
         Solution s  =  new Solution ();
 
-        int [] a = new int [] {4,2,2,2};
-        int [] b = new int [] {1, 4, 1, 2};
-
-        long r = s.minCost(a, b);
-        System.out.println("r: " + r);
+        String a = "101101";
+        int [][] b = new int [][] {{0,5},{1,2}};
+        
+        int [][] r = s.substringXorQueries(a, b);
+        System.out.println("r.length: " + r.length);
+        for (int z = 0; z < r.length; ++z) 
+            System.out.println(Arrays.toString(r[z]));
     }
 }
 
     // ListNode head = new ListNode(a[0]);
     // head.buildList(head, a);
 // head.printList(head);
+
+
+
+
+
 
 
 
