@@ -1291,46 +1291,6 @@ public class mtwoixed {
             return r;
         }
 
-// TODO TODO TODO : 只写了一半，没有写完【动态规划：不习惯的前提下，仍写 dfs 记忆化搜索，只是自顶向下，与自底向上的区别】
-        public int countTexts(String t) {// 【2-6:】三种可能；【7-9】：四种可能 
-            n = t.length();
-            s = t.toCharArray();
-            f = new Long [n];
-            dfs(0);
-            return (int)f[0].intValue();
-        }
-        static final int mod = (int)1e9 + 7;
-        Set<Character> sc = new HashSet<>(List.of('a', 'd', 'g', 'j', 'm', 'p', 't', 'w'));
-        // Set<Character> ss = new HashSet<>(List.of('b', 'e', 'h', 'k', 'n, 'q', 'u', 'x'));
-        // Set<Character> sss = new HashSet<>(List.of('c', 'f', 'i', 'l', 'o', 'r', 'v', 'y'));
-        // Set<Character> ssss = new HashSet<>(List.of('s', 'z'));
-        Long [] f;
-        char [] s;
-        int n;
-        long dfs(int idx) {
-            System.out.println("\n idx: " + idx);
-            if (idx >= n) return 0;// 越边界：返回 0
-            // 【终止条件：】判断相对复杂一点儿, 这里考虑的情况不够 ?
-            if (idx == n-1 && sc.contains(s[idx])) {
-                System.out.println("f[idx]: 1l");
-                return f[idx] = 1l;
-            }
-            if (f[idx] != null) return f[idx];// 记忆化，不重复计算
-            long r = 0;
-            int i = idx + 1;
-            int maxCnt = (s[idx]-'0' < 7 ? 3 : 4);
-            while (i < n && i < idx + maxCnt && s[i] == s[idx]) i++;
-            // for (int j = idx+1; j < Math.min(i, idx+maxCnt); j++) {
-            for (int j = idx+1; j <= i; j++) {// 这里的情况考虑得过于简单了？只当作了一个字母，可是可以是第一个字母的重复？？？
-                System.out.println("j: " + j);
-                long cur = dfs(j);
-                r = (r + cur) % mod;
-                System.out.println("r: " + r);
-            }
-            System.out.println("r: " + r);
-            return f[idx] = r;
-        }
-        
         static final int mod = (int)1e9 + 7;
         public int sumSubarrayMins(int[] a) { // 【遍历两遍的解法：】直观，比较容易懂
             int n = a.length, l [] = new int [n], r [] = new int [n];
@@ -1504,24 +1464,4 @@ public class mtwoixed {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
