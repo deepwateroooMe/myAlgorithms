@@ -2,11 +2,414 @@
 #+author: deepwaterooo
 
 * Segment Tree与Binary Index Tree 线段树与树状数组 
+- 【要解决的问题：】快速区间查找：O（ logN）线段树主要用于高效解决连续区间的动态查询问题，由于二叉结构的特性，使用线段树可以快速的查找某一个节点在若干条线段中出现的次数，时间复杂度为O(logN）。
+- 【其它操作效率】对应于树状数组，线段树进行更新（update）的操作为O(logn)，进行区间查询（range query）的操作也为O(logn)。
+- 【缺点：空间占用大】而未优化的空间复杂度为2N，因此有时需要离散化让空间压缩。
+- 【与树状数组的区别：】与树状数组不同的是，线段树不止可以适用于【区间求和的查询】，也可以进行【区间最大值，区间最小值（Range Minimum/Maximum Query problem）或者区间异或值的查询】。
+- 【分类】：就目前的理解，暂分为两类，一类求和的，一类求最大最小值、或是位操作值（|^&）等等。权值线段树是属于哪里的？
+** 求和Sum的线段树
+*** 327. Count of Range Sum - Hard *重点* 这几个题要好好再理解消化几遍
+Given an integer array nums and two integers lower and upper, return the number of range sums that lie in [lower, upper] inclusive.
 
-线段树（segment tree），顾名思义， 是用来存放给定区间（segment, or interval）内对应信息的一种数据结构。与树状数组（binary indexed tree）相似，线段树也用来处理数组相应的区间查询（range query）和元素更新（update）操作。与树状数组不同的是，线段树不止可以适用于区间求和的查询，也可以进行区间最大值，区间最小值（Range Minimum/Maximum Query problem）或者区间异或值的查询。
+Range sum S(i, j) is defined as the sum of the elements in nums between indices i and j inclusive, where i <= j.
+**** 解题思路与分析: 分治法，自底向上的解决问题
+     
+[[./pic/segmentTree_20230414_095339.png]]
+- 下面是最原始的归并排序的解法与写法
+     #+BEGIN_SRC java
+// 【最基本的数据结构的解法】：归并排序。整个过程是一个自底向上，不断求值与归并的过程
+public int countRangeSum(int[] a, int lo, int hi) {
+    int n = a.length;
+    long [] s = new long [n+1]; // 用来求和 prefixSum
+    for (int i = 0; i < n; i++) s[i+1] = s[i] + a[i]; // 不一定是：升序排列 
+    return countRangeSumRecursive(s, lo, hi, 0, n);
+}
+int countRangeSumRecursive(long [] sum, int lo, int hi, int l, int r) { // l: 左下标， r: 右下标
+    if (l == r) return 0;
+    int m = (l + r) / 2;
+    // 【首先，递归，分别解决左右半部分的问题】：分别解决了左右部分之后，左右部分分别是有序排列的片段
+    int n1 = countRangeSumRecursive(sum, lo, hi, l, m);
+    int n2 = countRangeSumRecursive(sum, lo, hi, m+1, r);
+    int ans = n1 + n2;
+    // 【再来解决归并相关】
+    // 首先统计下标对的数量
+    int i = l, left = m+1, right = m+1;
+    while (i <= m) {
+        while (left <= r && sum[left] - sum[i] < lo) left++; // 左边界右移，直到达标【 lo, 。。。
+        right = left; // 可要可不要，要了可以少遍历上面的过程。。。
+        while (right <= r && sum[right] - sum[i] <= hi) right++; // 右边界右移，直到不达标越界。。。 hi-1 】 hi...
+        ans += right - left;
+        i++;
+    }
+    // 随后合并两个排序数组
+    long [] sorted = new long [r - l + 1];
+    int x = l, y = m+1, z = 0; //x,y,z: 分别为左右两个片段的遍历下标，以及合并数组的遍历下标
+    while (x <= m || y <= r) 
+        if (x > m) sorted[z++] = sum[y++];
+        else if (y > r) sorted[z++] = sum[x++];
+        else if (sum[x] < sum[y]) sorted[z++] = sum[x++];
+        else sorted[z++] = sum[y++];
+    // 再把这个排序好的数组，更新同步到累积和数组里去
+    for (int j = 0; j < sorted.length; j++) 
+        sum[l+j] = sorted[j];
+    return ans;
+}
+#+END_SRC
+- 复杂度分析为： 
+  
+[[./pic/segmentTree_20230414_095227.png]]
+- 下面是一个代码更为简洁的写法，排序的步骤本地用语言自带的排序法
+#+BEGIN_SRC java
+public int countRangeSum(int[] a, int lower, int upper) { // 这个merge sort的思维很奇特: 二分，O(NlogN)
+    long [] sum = new long[a.length+1];
+    for (int i = 0; i < a.length; i++)
+        sum[i+1] = sum[i] + a[i];
+    return mergeAnalyse(sum, 0, a.length+1, lower, upper);
+}
+int mergeAnalyse(long [] a, int l, int r, int lo, int hi) { // l, r: 寻找【l, r）范围内和为【lower, upper】的片段的个数
+    if (r - l <= 1) return 0;
+    int m = l + (r - l) / 2;
+    // int mid = l + (r - l) / 2;
+    // int m = mid, n = mid, ans = 0;
+    int ans = mergeAnalyse(a, l, m, lo, hi) + mergeAnalyse(a, m, r, lo, hi);
+    int x = m, y = m;
+    for (int i = l; i < m; i++) { // 遍历[l, r)的半段长度： pivot 右移，滑动窗口，寻找合法窗口 // 通过遍历寻找当前范围中符合要求的个数，
+        while (x < r && a[x] - a[i] < lo) x++; // 左端点右移，直到找到合法（sum >= lo）的解：m合法
+        y = x; // 可要可不要。。。
+        while (y < r && a[y] - a[i] <= hi) y++; // 右端点右移，直到右端点右移至不再合法（sum > hi）, n 不合法 
+        ans += y - x; // 对于[l, r)范围内的当前i来说，满足要求的总个数为 n - m
+    }
+    Arrays.sort(a, l, r); // 将 【l, r）片段排序，本地排序
+    return ans;
+}
+#+END_SRC
+**** 解题思路与分析: 求和 sum 线段树 + 离散化数据的连续化处理 
+     
+[[./pic/segmentTree_20230414_110820.png]]
+ #+BEGIN_SRC java
+// 最基本的【求和 sum 线段树】：将前缀和数值中的取值范围，分布到Bit 的数组上来，可能需要必要的取值偏移【不是偏移，用个策略！！！】，以保证 bit 每个元素取值 >= 1
+// 这里还是来参考别人更为精典的解决办法 
+public int countRangeSum(int[] a, int lo, int hi) {
+    int n = a.length;
+    long [] s = new long [n+1];
+    for (int i = 0; i < n; i++) s[i+1] = s[i] + a[i];
+    // Set<Long> allNumbers = new HashSet<>(); // 考量：去重作用【BUGGLY CODING:】没有考虑到这里的排序作用。。。
+    Set<Long> allNumbers = new TreeSet<>();    // 考量：去重作用【BUGGLY CODING:】没有考虑到这里的排序作用。。。【狠狠狠重要！否则不成解！！！】
+    for (long v : s) {
+        allNumbers.add(v);
+        allNumbers.add(v - lo);
+        allNumbers.add(v - hi);
+    }
+    // 利用哈希表进行离散化：这里离散化的本质是：将离散的取值，重新序列化为【0,n-1】下标的值序列片段！！！
+    // 注意到整数的范围可能很大，故需要利用哈希表将所有可能出现的整数，映射到连续的整数区间内。
+    // 【前面的离散长整形数据，如果不排列，映射到连续片段的下标计数，没有意义。。。】
+    Map<Long, Integer> values = new HashMap<>();
+    int idx = 0;
+    for (long v : allNumbers) 
+        values.put(v, idx++); // 【只有 allNumbers 排序过】：映射过来的 idx 的取值才能正确反映离散值在线段树中所处的正确位置。。。
+    Node root = build(0, values.size()-1);
+    int ans = 0;
+    for (long v : s) {
+        int l = values.get(v - hi), r = values.get(v - lo);
+        ans += count(root, l, r); // 【理解困难的地方：】第一次的数个数，是什么时候，这个时候调用，会更新哪些？
+        insert(root, values.get(v)); // 这里就添加了【0,n-1】下标范围内的某个下标，把离散的值连续化到一个有效片段，最小区间求和 sum 线段树
+    }
+    return ans;
+}
+// 求和 sum 线段树：三个最基本的方法：构建线段树，更新（插入一个值）线段树，查询区间内的个数
+public Node build(int lo, int hi) { // 【lo,hi】：问题是，创建树的时候，没有，不曾数过、更新过每个区间的元素个数和？？？
+    Node r = new Node(lo, hi);
+    if (lo == hi) return r;
+    int m = (hi + lo) / 2; 
+    r.left = build(lo, m);
+    r.right = build(m+1, hi);
+    // r.s = r.left.s + r.right.s; // 父节点的个数 = 左右子树节点个数的和【为什么它这里没有更新？】
+    return r;
+}
+public int count(Node r, int left, int right) { // 求和线段树：是否与BST 一样，右边节点计数大于左边与根节点呢？
+    // 因为下面这一行的处理：区间外完全不用考虑，返回0
+    if (left > r.r || right < r.l) return 0; // 查询区间，当前区间节点，完全不用考虑
+    if (left <= r.l && r.r <= right) return r.s; // 【我是什么时候，才来更新这个计数 s 的？】
+    // 所以，这里就可以直接调用，递归左右子数，求计数和
+    return count(r.left, left, right) + count(r.right, left, right);
+}
+public void insert(Node r, int v) { // 这里可以理解为：动态更新，过程中随机增加一个元素
+    r.s++; // 这个时候，才知道，计数，计算区间内元素个数，原来是如此精炒地完成的。。。
+    if (r.l == r.r) return ; // 叶子节点 
+    int m = (r.l + r.r) / 2;
+    if (v <= m) insert(r.left, v);
+    else insert(r.right, v);
+}
+class Node {
+    int l, r, s; // 区间值的范围【l, r】
+    Node left, right; 
+    public Node(int left, int right) {
+        l = left;
+        r = right;
+        s = 0;
+        this.left = null;
+        this.right = null;
+    }
+}
+#+END_SRC
+- 线段树：方法的复杂度分析 
+  
+[[./pic/segmentTree_20230414_110931.png]]
+**** 解题思路与分析: 动态增加节点的线段树
+     
+[[./pic/segmentTree_20230414_113119.png]]
+#+BEGIN_SRC java
+class Node {
+    long l, r; // 区间值的范围【l, r】
+    int s;
+    Node left, right; 
+    public Node(long left, long right) {
+        l = left;
+        r = right;
+        s = 0;
+        this.left = null;
+        this.right = null;
+    }
+}
+public int countRangeSum(int[] a, int lo, int hi) {
+    int n = a.length;
+    long [] s = new long [n+1];
+    for (int i = 0; i < n; i++) s[i+1] = s[i] + a[i];
+    // 可以不实用哈希表进行映射，而是只在线段树的插入操作过程中动态地增加树中的节点。
+    // 而当我们进行查询操作时，如果到达一个空节点，那么说明对应的区间中暂时还没有值，就可以直接返回 0
+    long lowrBound = Long.MAX_VALUE, highBound = Long.MIN_VALUE;
+    for (long v : s) {
+        lowrBound = Math.min(Math.min(lowrBound, v), Math.min(v - lo, v - hi));
+        highBound = Math.max(Math.max(highBound, v), Math.max(v - lo, v - hi));
+    }
+    Node root = new Node(lowrBound, highBound);
+    int ans = 0;
+    for (long v : s) {
+        ans += count(root, v - hi, v - lo); // 【理解困难的地方：】第一次的数个数，是什么时候，这个时候调用，会更新哪些？
+        insert(root, v); // 这里就添加了【0,n-1】下标范围内的某个下标，把离散的值连续化到一个有效片段，最小区间求和 sum 线段树
+    }
+    return ans;
+}
+// 求和 sum 线段树：这里精简成了，两个方法。。。因为不曾分步构建过树，所以必要的时候，必须先判断是否为空，添加节点 
+public long count(Node r, long left, long right) { // 求和线段树：是否与BST 一样，右边节点计数大于左边与根节点呢？
+    if (r == null) return 0;
+    // 因为下面这一行的处理：区间外完全不用考虑，返回0
+    if (left > r.r || right < r.l) return 0; // 查询区间，当前区间节点，完全不用考虑
+    if (left <= r.l && r.r <= right) return r.s; // 【我是什么时候，才来更新这个计数 s 的？】
+    // 所以，这里就可以直接调用，递归左右子数，求计数和
+    return count(r.left, left, right) + count(r.right, left, right);
+}
+public void insert(Node r, long v) { // 这里可以理解为：动态更新，过程中随机增加一个元素
+    r.s++; // 这个时候，才知道，计数，计算区间内元素个数，原来是如此精炒地完成的。。。
+    if (r.l == r.r) return ; // 叶子节点 
+    // int m = (r.l + r.r) / 2;
+    long m = (r.l + r.r) >> 1;
+    if (v <= m) {
+        if (r.left == null)
+            r.left = new Node(r.l, m);
+        insert(r.left, v);
+    } else {
+        if (r.right == null)
+            r.right = new Node(m+1, r.r);
+        insert(r.right, v);
+    }
+}
+#+END_SRC
+- 复杂度分析：
+  
+[[./pic/segmentTree_20230414_113141.png]]
+**** 解题思路与分析: 树状数组
+     
+[[./pic/segmentTree_20230414_114943.png]]
+#+BEGIN_SRC java
+// 【方法四：】树状数组。好像我前面没能区分，线段树，与树状数组的区别？
+public int countRangeSum(int[] a, int lo, int hi) {
+    int n = a.length;
+    long [] s = new long [n+1];
+    for (int i = 0; i < n; i++) s[i+1] = s[i] + a[i];
+    Set<Long> allNumbers = new TreeSet<>();
+    for (long v : s) {
+        allNumbers.add(v);
+        allNumbers.add(v - lo);
+        allNumbers.add(v - hi);
+    }            
+    // 利用哈希表进行离散化
+    Map<Long, Integer> values = new HashMap<Long, Integer>();
+    int idx = 0;
+    for (long v : allNumbers)
+        values.put(v, idx++);
+    int ans = 0;
+    BIT bit = new BIT(values.size());
+    for (int i = 0; i < s.length; i++) {
+        int left = values.get(s[i] - hi), right = values.get(s[i] - lo);
+        ans += bit.query(right + 1) - bit.query(left);
+        bit.update(values.get(s[i]) + 1, 1);
+    }
+    return ans;
+}
+class BIT {
+    int [] tree; 
+    int n;
+    public BIT(int n) {
+         this.n = n;
+         this.tree = new int[n+1];
+     }
+    public static int lowbit(int x) {
+        return x & (-x); 
+    }
+    public void update(int idx, int d) {
+        while (idx <= n) {
+            tree[idx] += d;
+            idx += lowbit(idx);
+        }
+    }
+    public int query(int x) {
+        int ans = 0;
+        while (x != 0) {
+            ans += tree[x];
+            x -= lowbit(x);
+        }
+        return ans;
+    }
+}
+#+END_SRC
 
-对应于树状数组，线段树进行更新（update）的操作为O(logn)，进行区间查询（range query）的操作也为O(logn)。
+[[./pic/segmentTree_20230414_115003.png]]
+**** 解题思路与分析: 平衡二叉搜索树
+     
+[[./pic/segmentTree_20230414_142718.png]]
 
+     #+BEGIN_SRC java
+// 【方法五：平衡二叉搜索树】
+public int countRangeSum(int[] a, int lo, int hi) {
+    long [] s = new long [a.length+1];
+    for (int i = 0; i < a.length; i++) s[i+1] = s[i] + a[i];
+    BT tr = new BT();
+    int ans = 0;
+    for (long v : s) {
+        long numLeft = tr.lowerBound(v - hi);
+        int rankLeft = (numLeft == Long.MAX_VALUE ? (int)(tr.getSize()+1) : tr.rank(numLeft)[0]);
+        long numRight = tr.upperBound(v - lo);
+        int rankRight = (numRight == Long.MAX_VALUE ? (int)tr.getSize() : tr.rank(numRight)[0]-1);
+        ans += rankRight - rankLeft + 1;
+        tr.insert(v);
+    }
+    return ans;
+}
+class BT {
+  private class Node {
+        long v, s;
+        int cnt, size;
+        Node l, r;
+        Node(long val, long seed) {
+            v = val;
+            s = seed; // 为什么要这个种子？伪随机数吗？
+            cnt = 1;
+            size = 1;
+            l = null; r = null;
+        }
+        //   this         r <== root
+        //  /    \      /    \
+        // l      r   this   r.r(root.r)
+        //           /    \
+        //          l     r.l(root.l)
+        Node leftRotate() { // 左旋：当前根this 变成左子节点；先前右变成根
+            int prevSize = size;
+            int currSize = (l != null ? l.size : 0) + (r.l != null ? r.l.size : 0) + cnt; // 左右子树的 size ＋当前根节点的 cnt
+            Node root = r; // 这里先把 root 当作 r 的另一个索引指针
+            r = root.l;
+            root.l = this;
+            root.size = prevSize; // 【没看明白：】是怎么变过来的？
+            size = currSize;
+            return root;
+        }
+        //       this         l <== root
+        //      /    \      /    \
+        //     l      r   l.l    this
+        //   /    \             /    \
+        // l.l    l.r         l.r     r
+        Node rightRotate() {
+            int prevSize = size;
+            int currSize = (r != null ? r.size : 0) + (l.r != null ? l.r.size : 0) + cnt;
+            Node root = l;
+            l = root.r;
+            root.r = this;
+            root.size = prevSize; // 【没看明白：】是怎么变过来的？
+            size = currSize;
+            return root;
+        }
+    }
+    private Node root;
+    private int size;
+    private Random rand;
+    public BT() {
+        this.root = null;
+        this.size = 0;
+        this.rand = new Random();
+    }
+    public long getSize() {
+        return size;
+    }
+    public void insert(long v) {
+        ++size;
+        root = insert(root, v);
+    }
+    public long lowerBound(long v) { // 这是找，最小的一个不小于 v 【 >＝ v】的值吗？
+        Node r = root;
+        long ans = Long.MAX_VALUE;
+        while (r != null) {
+            if (v == r.v) return v;
+            if (v < r.v) {
+                ans = r.v;
+                r = r.l;
+            } else r = r.r;
+        }
+        return ans;
+    }
+    public long upperBound(long v) { // 找一个最大的【 <= v】的值
+        Node r = root;
+        long ans = Long.MAX_VALUE;
+        while (r != null) {
+            if (v < r.v) {
+                ans = r.v;
+                r = r.l;
+            } else r = r.r;
+        }
+        return ans;
+    }
+    public int [] rank(long v) {
+        Node r = root;
+        int ans = 0;
+        while (r != null) {
+            if (v < r.v) r = r.l;
+            else { // v >= r.v
+                ans += (r.l != null ? r.l.size : 0) + r.cnt;
+                if (v == r.v)
+                    return new int [] {ans - r.cnt + 1, ans};
+                r = r.r;
+            }
+        }
+        return new int [] {Integer.MIN_VALUE, Integer.MAX_VALUE};
+    }
+    private Node insert(Node r, long v) {
+        if (r == null) return new Node(v, rand.nextInt());
+        ++r.size;
+        if (v < r.v) { // 左子树
+            r.l = insert(r.l, v);
+            if (r.l.s > r.s) // 这里有步检查是否平衡的步骤？
+                r = r.rightRotate();
+        } else if (v > r.v) { // 右子树
+            r.r = insert(r.r, v);
+            if (r.r.s > r.s)
+                r = r.leftRotate();
+        } else ++r.cnt; // 当前根节点
+        return r;
+    }
+}
+#+END_SRC
+- 复杂度分析
+  - 时间复杂度：O(NlogN)。
+  - 空间复杂度：O(N)。
 *** 1157. Online Majority Element In Subarray - Hard
 Design a data structure that efficiently finds the majority element of a given subarray.
 
@@ -16,12 +419,12 @@ Implementing the MajorityChecker class:
 
 MajorityChecker(int[] arr) Initializes the instance of the class with the given array arr.
 int query(int left, int right, int threshold) returns the element in the subarray arr[left...right] that occurs at least threshold times, or -1 if no such element exists.
-**** 解题思路与分析
+
 - https://www.cnblogs.com/slowbirdoflsh/p/11381565.html 思路比较清晰
   
 [[./pic/1157.png]]
 
-#+BEGIN_SRC csharp
+#+BEGIN_SRC java
 Map<Integer, List<Integer>> idx; // idx 存储数组出现元素种类 以及该元素下标索引
 Node root; // 线段树的根节点
 int key = 0, cnt = 0; // key 所查找的区域众数; count 所查找的区域众数出现次数, 
@@ -122,7 +525,6 @@ class Node {
     }
 }
 #+END_SRC
-
 *** 1825. Finding MK Average - Hard
 You are given two integers, m and k, and a stream of integers. You are tasked to implement a data structure that calculates the MKAverage for the stream.
 
@@ -136,7 +538,7 @@ Implement the MKAverage class:
 MKAverage(int m, int k) Initializes the MKAverage object with an empty stream and the two integers m and k.
 void addElement(int num) Inserts a new element num into the stream.
 int calculateMKAverage() Calculates and returns the MKAverage for the current stream rounded down to the nearest integer.
-#+BEGIN_SRC csharp
+#+BEGIN_SRC java
 // 根据题意需要找到前k大的数，又需要求区间和，就自然想到线段树.写起来较不容易出错。
 // 维护2个线段树数组，一个记录数的个数，一个记录区间值，
 // 注意一般线段树中[s，e]指固定的区间，这里类似线段数求第k小的数，所以[s,e]指第s小的值到第e小的值的区间。
@@ -192,7 +594,7 @@ int calculateMKAverage() Calculates and returns the MKAverage for the current st
     }
 #+END_SRC
 **** 解题思路与分析: 三个TreeMap, 自定义TreeMap
-     #+BEGIN_SRC csharp
+     #+BEGIN_SRC java
     CusTreeMap [] ms;
     Deque<Integer> q;
     int m, k, n;
@@ -287,7 +689,7 @@ int calculateMKAverage() Calculates and returns the MKAverage for the current st
      #+END_SRC
 **** 解题思路与分析: 树状数组
 - 数状数组的解法: 另外第一次看到别人 二分+树状数组也能求前k大的值。
-#+BEGIN_SRC csharp
+#+BEGIN_SRC java
 // We can have a queue to maintain m elements
 // Use two Fenwick tree, 1 for count and 1 for prefix sum
 // Do 2 times binary search for the first k elements and the last k elements by using the count from our first fenwick tree
@@ -388,7 +790,7 @@ class FenWick {
 *** 315. Count of Smaller Numbers After Self - Hard
 You are given an integer array nums and you have to return a new counts array. The counts array has the property where counts[i] is the number of smaller elements to the right of nums[i].
 **** 解题思路与分析: 二分查找的插入排序
-     #+BEGIN_SRC csharp
+     #+BEGIN_SRC java
 public List<Integer> countSmaller(int[] a) { // O(NlogN) 插入排序
     int n = a.length;
     List<Integer> ans = new ArrayList<>();
@@ -411,7 +813,7 @@ public List<Integer> countSmaller(int[] a) { // O(NlogN) 插入排序
      #+END_SRC
 **** 解题思路与分析: 数状数组
 - 官方题解： https://leetcode-cn.com/problems/count-of-smaller-numbers-after-self/solution/ji-suan-you-ce-xiao-yu-dang-qian-yuan-su-de-ge-s-7/
-     #+BEGIN_SRC csharp
+     #+BEGIN_SRC java
 private int[] c;
 private int[] a; // 离散化、去重复 后的数组
 public List<Integer> countSmaller(int[] nums) {
@@ -461,301 +863,6 @@ private int getId(int x) {
      #+END_SRC
 **** 解题思路与分析: 归并排序 todo 补上
 
-*** 327. Count of Range Sum - Hard *重点* 这几个题要好好再理解消化几遍
-Given an integer array nums and two integers lower and upper, return the number of range sums that lie in [lower, upper] inclusive.
-
-Range sum S(i, j) is defined as the sum of the elements in nums between indices i and j inclusive, where i <= j.
-**** 解题思路与分析: 分治法
-
-在累积和的基础上，我们计算有多少个区间的大小落在[lower, upper]之间，一个朴素的算法就是枚举各个区间，其时间复杂度是O(n^2)。一个更好的方法是利用分治法来处理，即利用归并排序算法将数组分成左右两边，在合并左右数组之前，对于左边数组中的每一个元素，在右边数组找到一个范围，使得在这个范围中的元素与左边元素构成的区间和落在[lower, upper]之间，即在右边数组中找到两个边界，设为m，n，其中m是在右边数组中第一个使得sum[m] - sum[i] >= lower的位置，而n是第一个使得sum[n] - sum[i] > upper的位置，这样n-m就是与左边元素i所构成的位于[lower, upper]范围的区间个数。因为左右两边都是已经有序的，这样就可以避免不必要的比较（这也是为什么我们能将时间复杂度从O(n^2)降低到O(nlogn)的秘诀所在）。
-
-     #+BEGIN_SRC csharp
-public int countRangeSum(int[] a, int lower, int upper) { // 这个merge sort的思维很奇特: 二分，O(NlogN)
-    int n = a.length;
-    long [] sum = new long[n+1];
-    for (int i = 1; i <= n; i++) 
-        sum[i] = sum[i-1] + a[i-1];
-    return mergeAnalyse(sum, 0, n+1, lower, upper);
-}
-int mergeAnalyse(long [] a, int l, int r, int lo, int hi) { // l, r: 寻找[l, r)范围内和为[lower, upper]的片段的个数
-    if (r - l <= 1) return 0;
-    int mid = l + (r - l) / 2;
-    int m = mid, n = mid, ans = 0;
-    ans = mergeAnalyse(a, l, mid, lo, hi) + mergeAnalyse(a, mid, r, lo, hi);
-    for (int i = l; i < mid; i++) { // 遍历[l, r)的半段长度： pivot 右移，滑动窗口，寻找合法窗口 // 通过遍历寻找当前范围中符合要求的个数，
-        while (m < r && a[m] - a[i] < lo) m++; // 左端点右移，直到找到合法（sum >= lo）的解：m合法
-        while (n < r && a[n] - a[i] <= hi) n++; // 右端点右移，直到右端点右移至不再合法（sum > hi）, n 不合法 
-        ans += n - m; // 对于[l, r)范围内的当前i来说，满足要求的总个数为 n - m
-    }
-    Arrays.sort(a, l, r); // 将[l, r)片段排序
-    return ans;
-}
-     #+END_SRC
-**** 解题思路与分析: 线段树
-- 官方题解：https://leetcode-cn.com/problems/count-of-range-sum/solution/qu-jian-he-de-ge-shu-by-leetcode-solution/ 
-     #+BEGIN_SRC csharp
-public int countRangeSum(int[] a, int lo, int hi) {
-    int n = a.length;
-    long [] preSum = new long[n + 1];
-    for (int i = 1; i <= n; i++) 
-        preSum[i] = preSum[i-1] + a[i-1];
-    Set<Long> allNumbers = new TreeSet<Long>();
-    for (long x : preSum) {
-        allNumbers.add(x);
-        allNumbers.add(x - lo); //
-        allNumbers.add(x - hi); // 
-    }
-    // 利用哈希表进行离散化
-    Map<Long, Integer> values = new HashMap<Long, Integer>();
-    int idx = 0;
-    for (long x : allNumbers) {
-        values.put(x, idx);
-        idx++;
-    }
-    SegNode root = build(0, values.size() - 1);
-    int ret = 0;
-    for (long x : preSum) {
-        int left = values.get(x - hi), right = values.get(x - lo);
-        ret += count(root, left, right);
-        insert(root, values.get(x));
-    }
-    return ret;
-}
-public SegNode build(int left, int right) {
-    SegNode node = new SegNode(left, right);
-    if (left == right) {
-        return node;
-    }
-    int mid = (left + right) / 2;
-    node.lchild = build(left, mid);
-    node.rchild = build(mid + 1, right);
-    return node;
-}
-public int count(SegNode root, int left, int right) {
-    if (left > root.hi || right < root.lo) 
-        return 0;
-    if (left <= root.lo && root.hi <= right) 
-        return root.add;
-    return count(root.lchild, left, right) + count(root.rchild, left, right);
-}
-public void insert(SegNode root, int val) {
-    root.add++;
-    if (root.lo == root.hi) 
-        return;
-    int mid = (root.lo + root.hi) / 2;
-    if (val <= mid) 
-        insert(root.lchild, val);
-    else insert(root.rchild, val);
-}
-class SegNode {
-    int lo, hi, add;
-    SegNode lchild, rchild;
-    public SegNode(int left, int right) {
-        lo = left;
-        hi = right;
-        add = 0;
-        lchild = null;
-        rchild = null;
-    }
-}
-     #+END_SRC
-**** 解题思路与分析: 动态增加节点的线段树 todo
-     #+BEGIN_SRC csharp
-     #+END_SRC
-**** 解题思路与分析: 树状数组
-     #+BEGIN_SRC csharp
-public int countRangeSum(int[] a, int lower, int upper) { // 树状数组
-    int n = a.length;
-    long[] preSum = new long[a.length + 1];
-    for (int i = 1; i <= n; i++) 
-        preSum[i] = preSum[i-1] + a[i-1];
-    Set<Long> allNumbers = new TreeSet<Long>();
-    for (long x : preSum) {
-        allNumbers.add(x);
-        allNumbers.add(x - lower);
-        allNumbers.add(x - upper);
-    }
-    // 利用哈希表进行离散化
-    Map<Long, Integer> values = new HashMap<Long, Integer>();
-    int idx = 0;
-    for (long x: allNumbers) {
-        values.put(x, idx);
-        idx++;
-    }
-    int ret = 0;
-    BIT bit = new BIT(values.size());
-    for (int i = 0; i < preSum.length; i++) {
-        int left = values.get(preSum[i] - upper), right = values.get(preSum[i] - lower);
-        ret += bit.query(right + 1) - bit.query(left);
-        bit.update(values.get(preSum[i]) + 1, 1);
-    }
-    return ret;
-}
-class BIT {
-    int [] tree;
-    int n;
-    public BIT(int n) {
-        this.n = n;
-        this.tree = new int[n + 1];
-    }
-    public int lowbit(int x) {
-        return x & (-x);
-    }
-    public void update(int x, int d) {
-        while (x <= n) {
-            tree[x] += d;
-            x += lowbit(x);
-        }
-    }
-    public int query(int x) {
-        int ans = 0;
-        while (x != 0) {
-            ans += tree[x];
-            x -= lowbit(x);
-        }
-        return ans;
-    }
-}
-     #+END_SRC
-**** 解题思路与分析: 平衡二叉搜索树
-思路与算法
-
-考虑一棵平衡二叉搜索树。若其节点数量为 NN，则深度为 O(\log N)O(logN)。二叉搜索树能够在 O(\log N)O(logN) 的时间内，对任意给定的值 val}val，查询树中所有小于或等于该值的数量。
-
-因此，我们可以从左到右扫描前缀和数组。对于 preSum}[j]preSum[j] 而言，首先进行两次查询，得到区间 [preSum}[j]-upper}, preSum}[j]-lower}][preSum[j]−upper,preSum[j]−lower] 内的整数数量；随后再将 preSum[j] 插入到平衡树中。
-
-平衡二叉搜索树有多种不同的实现，最经典的为 AVL 树与红黑树。此外，在算法竞赛中，还包括 Treap、SBT 等数据结构。
-
-下面给出基于 Treap 的实现。
-
-     #+BEGIN_SRC csharp
-public int countRangeSum(int[] nums, int lower, int upper) {
-    long sum = 0;
-    long[] preSum = new long[nums.length + 1];
-    for (int i = 0; i < nums.length; ++i) {
-        sum += nums[i];
-        preSum[i + 1] = sum;
-    }
-    BalancedTree treap = new BalancedTree();
-    int ret = 0;
-    for (long x : preSum) {
-        long numLeft = treap.lowerBound(x - upper);
-        int rankLeft = (numLeft == Long.MAX_VALUE ? (int) (treap.getSize() + 1) : treap.rank(numLeft)[0]);
-        long numRight = treap.upperBound(x - lower);
-        int rankRight = (numRight == Long.MAX_VALUE ? (int) treap.getSize() : treap.rank(numRight)[0] - 1);
-        ret += rankRight - rankLeft + 1;
-        treap.insert(x);
-    }
-    return ret;
-}
-class BalancedTree {
-    private class BalancedNode {
-        long val;
-        long seed;
-        int count;
-        int size;
-        BalancedNode left;
-        BalancedNode right;
-        BalancedNode(long val, long seed) {
-            this.val = val;
-            this.seed = seed;
-            this.count = 1;
-            this.size = 1;
-            this.left = null;
-            this.right = null;
-        }
-        BalancedNode leftRotate() {
-            int prevSize = size;
-            int currSize = (left != null ? left.size : 0) + (right.left != null ? right.left.size : 0) + count;
-            BalancedNode root = right;
-            right = root.left;
-            root.left = this;
-            root.size = prevSize;
-            size = currSize;
-            return root;
-        }
-        BalancedNode rightRotate() {
-            int prevSize = size;
-            int currSize = (right != null ? right.size : 0) + (left.right != null ? left.right.size : 0) + count;
-            BalancedNode root = left;
-            left = root.right;
-            root.right = this;
-            root.size = prevSize;
-            size = currSize;
-            return root;
-        }
-    }
-    private BalancedNode root;
-    private int size;
-    private Random rand;
-    public BalancedTree() {
-        this.root = null;
-        this.size = 0;
-        this.rand = new Random();
-    }
-    public long getSize() {
-        return size;
-    }
-    public void insert(long x) {
-        ++size;
-        root = insert(root, x);
-    }
-    public long lowerBound(long x) {
-        BalancedNode node = root;
-        long ans = Long.MAX_VALUE;
-        while (node != null) {
-            if (x == node.val) return x;
-            if (x < node.val) {
-                ans = node.val;
-                node = node.left;
-            } else node = node.right;
-        }
-        return ans;
-    }
-    public long upperBound(long x) {
-        BalancedNode node = root;
-        long ans = Long.MAX_VALUE;
-        while (node != null) {
-            if (x < node.val) {
-                ans = node.val;
-                node = node.left;
-            } else node = node.right;
-        }
-        return ans;
-    }
-    public int[] rank(long x) {
-        BalancedNode node = root;
-        int ans = 0;
-        while (node != null) {
-            if (x < node.val) {
-                node = node.left;
-            } else {
-                ans += (node.left != null ? node.left.size : 0) + node.count;
-                if (x == node.val) {
-                    return new int[]{ans - node.count + 1, ans};
-                }
-                node = node.right;
-            }
-        }
-        return new int[]{Integer.MIN_VALUE, Integer.MAX_VALUE};
-    }
-    private BalancedNode insert(BalancedNode node, long x) {
-        if (node == null) 
-            return new BalancedNode(x, rand.nextInt());
-        ++node.size;
-        if (x < node.val) {
-            node.left = insert(node.left, x);
-            if (node.left.seed > node.seed) 
-                node = node.rightRotate();
-        } else if (x > node.val) {
-            node.right = insert(node.right, x);
-            if (node.right.seed > node.seed) 
-                node = node.leftRotate();
-        } else ++node.count;
-        return node;
-    }
-}
-     #+END_SRC
 *** 699. Falling Squares - Hard
 There are several squares being dropped onto the X-axis of a 2D plane.
 
@@ -768,7 +875,7 @@ After each square is dropped, you must record the height of the current tallest 
 Return an integer array ans where ans[i] represents the height described above after dropping the ith square.
 **** 解题思路与分析: O(N^2) 本能土办法
 方块的大小不是固定的，有可能很大，但是不管方块再大，只要有一点点部分搭在其他方块上面，整个方块都会在上面，并不会掉下来，让我们求每落下一个方块后的最大高度。我们知道返回的是每落下一个方块后当前场景中的最大高度，那么返回的数组的长度就应该和落下方块的个数相同。所以我们可以建立一个heights数组，其中heights[i]表示第i块方块落下后所在的高度，那么第i块方块落下后场景的最大高度就是[0, i]区间内的最大值。那么我们在求出heights数组后，只要不停返回[0, i]区间内的最大值即可。继续来看，这道题的难点就是方块重叠的情况，我们先来想，如果各个方块不重叠，那么heights[i]的高度就是每个方块自身的高度。一旦重叠了，就得在已有的基础上再加上自身的高度。那么我们可以采用brute force的思想，对于每个一个下落的方块，我们都去看和后面将要落下的方块有没有重叠，有的话，和后面将要落下的方块的位置相比较，取二者中较大值为后面要落下的方块位置高度heights[j]。判读两个方块是否重叠的方法是如果方块2的左边界小于方块1的右边界，并且方块2点右边界大于方块1点左边界。就拿题目中的例子1来举例吧，第一个下落的方块的范围是[1, 3]，长度为2，则heights[0]=2，然后我们看其和第二个方块[2, 5]是否重叠，发现是重叠的，则heights[1]更新为2，再看第三个方块[6, 7]，不重叠，不更新。然后第二个方块落下，此时累加高度，则heights[1]=5，再看第三个方块，不重叠，不更新。然后第三个方块落下, heights[2]=1。此时我们heights数组更新好了，然后我们开始从头遍历，维护一个当前最大值curMax，每次将[0, i]中最大值加入结果res即可，
-#+BEGIN_SRC csharp
+#+BEGIN_SRC java
 public List<Integer> fallingSquares(int[][] a) {
     List<Integer> ans = new ArrayList<>();
     int n = a.length, max = 0;
@@ -796,7 +903,7 @@ public List<Integer> fallingSquares(int[][] a) {
 
 [[./pic/699.png]]
 
-#+BEGIN_SRC csharp
+#+BEGIN_SRC java
 public List<Integer> fallingSquares(int[][] a) { // 需要对数据进行离散化处理，离散化的目的是为了线段树处理起来方便；离散的是x轴的横坐标
     List<Integer> x = new ArrayList<>();
     for (int [] v : a) {
@@ -894,7 +1001,7 @@ class MaxSeg {   // 实现一下带懒标记的线段树 : 这棵树好强大
 **** 解题思路与分析: 超简洁版的线段树，效率奇高
 - http://www.noobyard.com/article/p-sxwzvpgp-nz.html
 - 去找一下原文件中的优化步骤
-     #+BEGIN_SRC csharp
+     #+BEGIN_SRC java
 private class Node { // 描述方块以及高度
     int l, r, h, maxR;
     Node left, right;
@@ -959,7 +1066,7 @@ int getKthAncestor(int node, int k) return the kth ancestor of the given node no
 
 - 预处理时间复杂度O(nlogn)，每次询问时间O(logn)，空间O(nlogn)。
 
-     #+BEGIN_SRC csharp
+     #+BEGIN_SRC java
     private int [][] p;
     private int log;
     public TreeAncestor(int n, int[] parent) {
@@ -986,7 +1093,7 @@ int getKthAncestor(int node, int k) return the kth ancestor of the given node no
     }
      #+END_SRC
 **** 解题思路与分析
-     #+BEGIN_SRC csharp
+     #+BEGIN_SRC java
     Map<Integer, List<Integer>> adj;
     int [][] par;
     public TreeAncestor(int n, int[] parent) {
@@ -1025,7 +1132,7 @@ You are given a string num representing the digits of a very large integer and a
 
 Return the minimum integer you can obtain also as a string.
 **** 解题思路与分析
-     #+BEGIN_SRC csharp
+     #+BEGIN_SRC java
 public String minInteger(String t, int k) {
     int n = t.length();
     t = " " + t;
@@ -1081,3 +1188,4 @@ class BIT { // 开一个树状数组类，维护每个位置的字符的向右�
 }
      #+END_SRC
 
+** 求最大最小值、位操作值的线段树 

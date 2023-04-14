@@ -1466,30 +1466,6 @@ public class cmp {
         //     return f[ii][jj] = r;
         // }        
 
-        public long [] distance(int[] a) { // TLE TLE TLE: 就是想不到平时这类没要求的题目怎么会超时的？
-            int n = a.length;
-            Map<Integer, List<Integer>> m = new HashMap<>();
-            for (int i = 0; i < n; i++) 
-                m.computeIfAbsent(a[i], z -> new ArrayList<>()).add(i);
-            long [] r = new long [n];
-            for (Map.Entry<Integer, List<Integer>> en : m.entrySet()) {
-                List<Integer> l = en.getValue();
-                if (l.size() == 1) {
-                    r[l.get(0)] = 0;
-                    continue;
-                }
-                // for (int j = 0; j < l.size(); j++) 
-                //     r[l.get(j)] = l.get(j) * (j+1) - getSum(l, 0, j)  + getSum(l, j, l.size()-1) - l.get(j) * (l.size()-j);
-                // 它说这里用 prefix 算。妈的。。。
-                long [] s = new long [l.size()];
-                s[0] = l.get(0);
-                for (int i = 1; i < l.size(); i++) 
-                    s[i] = s[i-1] + l.get(i);
-                for (int i = 0; i < l.size(); i++) 
-                    r[l.get(i)] = l.get(i) * (i+1) - s[i] + (s[l.size()-1] - (i == 0 ? 0 : s[i-1])) - l.get(i) * (l.size()-i);
-            }
-            return r;
-        }
         // long getSum(List<Integer> l) {
         //     long r = 0l;
         //     for (int v : l)
@@ -1516,6 +1492,30 @@ public class cmp {
 // TreeNode root = new TreeNode(a[0]);
 // root.buildTree(root, a);
 // root.levelPrintTree(root);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

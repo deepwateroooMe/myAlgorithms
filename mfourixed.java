@@ -353,13 +353,180 @@ public class mfourixed {
         //     }
         //     return r;
         // }
+
+        // Map<TreeNode, Integer> height = new HashMap<>(); // 每棵子树的高度
+        // int [] res; // 每个节点的答案
+        // public int[] treeQueries(TreeNode root, int[] queries) {
+        //     getHeight(root);
+        //     height.put(null, 0); // 简化 dfs 的代码，这样不用写 getOrDefault
+        //     res = new int [height.size()];
+        //     dfs(root, -1, 0);
+        //     for (int i = 0; i < queries.length; i++) 
+        //         queries[i] = res[queries[i]];
+        //     return queries;
+        // }
+        // int getHeight(TreeNode r) {
+        //     if (r == null) return 0;
+        //     var h = 1 + Math.max(getHeight(r.left), getHeight(r.right));
+        //     height.put(r, h); // 这里，把它存到字典里记住
+        //     return h;
+        // }
+        // void dfs(TreeNode r, int d, int h) { // d: depth 当前节点的深度, h: restH 去掉节点后剩余的最大深度【从根节点往下、自顶向下数的】
+        //     if (r == null) return ;
+        //     ++d;
+        //     res[r.val] = h;
+        //     // 上面提到，这里 r.left=null 或者是 r.right=null 都是有可能的，所以当 height.get(null)=0 就可以不用判断了左右是否为空了。。。
+        //     dfs(r.left, d, Math.max(h, d + height.get(r.right)));
+        //     dfs(r.right, d, Math.max(h, d + height.get(r.left)));
+        // }
+
+        // public int[] minReverseOperations(int n, int p, int[] banned, int k) { // 这个题要再写一遍
+        //     var ban = new boolean [n];
+        //     ban[p] = true;
+        //     for (int i : banned) ban[i] = true;
+        //     TreeSet<Integer> [] ts = new TreeSet [2]; // 这里用两个有序集合来模拟一棵树？。。。
+        //     Arrays.setAll(ts, z -> new TreeSet<>());
+        //     for (int i = 0; i < n; i++)
+        //         if (!ban[i]) ts[i % 2].add(i);
+        //     ts[0].add(n);
+        //     ts[1].add(n); // 哨兵
+        //     var ans = new int [n];
+        //     Arrays.fill(ans, -1);
+        //     var q = new ArrayList<Integer>();
+        //     q.add(p);
+        //     for (int step = 0; !q.isEmpty(); step++) {
+        //         var tmp = q;
+        //         q = new ArrayList<>();
+        //         for (int i : tmp) {
+        //             ans[i] = step;
+        //             // 从 mn 到 mx 的所有位置都可以翻转到
+        //             int mn = Math.max(i - k + 1, k - i -1);
+        //             int mx = Math.min(i + k - 1, n * 2 - k - i - 1);
+        //             var s = ts[mn % 2];
+        //             for (var j = s.ceiling(mn); j <= mx; j = s.ceiling(mn)) {
+        //                 q.add(j);
+        //                 s.remove(j);
+        //             }
+        //         }
+        //     }
+        //     return ans;
+        // }
+
+        // public long [] distance(int[] a) { 
+        //     int n = a.length;
+        //     Map<Integer, List<Integer>> gp = new HashMap<>();
+        //     for (int i = 0; i < n; i++) // 相同元素分到同一组，记录下标 
+        //        gp.computeIfAbsent(a[i], z -> new ArrayList<>()).add(i);
+        //     long [] r = new long [n];
+        //     long [] s = new long [n+1]; // 用来计算 prefixSum 和
+        //     for (Map.Entry<Integer, List<Integer>> en : gp.entrySet()) {
+        //         List<Integer> l = en.getValue();
+        //         int m = l.size();
+        //         for (int i = 0; i < m; i++) 
+        //             s[i+1] = s[i] + l.get(i); // 前缀和【这里没有区分不用链表呀，没有清0 重置过？】【不用重置：因为】s[0] = 0 forever ！！！
+        //         for (int i = 0; i < m; i++) {
+        //             int v = l.get(i);
+        //             long left = (long) v * i - s[i]; // 蓝色面积
+        //             long right = s[m] - s[i] - (long)v * (m - i); // 绿色面积
+        //             r[v] = left + right;
+        //         }
+        //     }
+        //     return r;
+        // }
+        // public long [] distance(int[] a) { 
+        //     int n = a.length;
+        //     Map<Integer, List<Integer>> gp = new HashMap<>();
+        //     for (int i = 0; i < n; i++) // 相同元素分到同一组，记录下标 
+        //        gp.computeIfAbsent(a[i], z -> new ArrayList<>()).add(i);
+        //     long [] r = new long [n];
+        //     for (var l : gp.values()) { // 遍历字典里的值：各个链表 
+        //         int m = l.size();
+        //         long s = 0;
+        //         for (int v : l) s += v - l.get(0); // a[0] 到其它下标的距离之和
+        //         r[l.get(0)] = s;
+        //         for (int i = 1; i < m; i++) 
+        //             // 从计算 a[i-1] 到计算 a[i]，考虑 s 增加了多少
+        //             r[l.get(i)] = s += (long)(i * 2 - m) * (l.get(i) - l.get(i-1));
+        //     }
+        //     return r;
+        // }
+
+        // public int maximumTastiness(int[] a, int k) {
+        //     int n = a.length;
+        //     Arrays.sort(a);
+        //     System.out.println(Arrays.toString(a));
+        //     int l = 0, r = a[n-1] - a[0], ans = 0;
+        //     while (l <= r) {
+        //         int m = l + (r - l) / 2;
+        //         if (check(m, a, k)) {
+        //             ans = Math.max(ans, m);
+        //             l = m+1;
+        //         } else r = m-1;
+        //     }
+        //     return ans;
+        // }
+        // boolean check(int v, int [] a, int k) {
+        //     int n = a.length;
+        //     // for (int i = 0; i+k <= n; i++) { // 永远贪心地去选第一个最小的，再先其它的。。。
+        //     int r = 1, pre = 0;
+        //     // for (int j = i+1; j < n; j++) 
+        //     for (int j = 1; j < n; j++) 
+        //         if (a[j] - a[pre] >= v) {
+        //             pre = j;
+        //             r++;
+        //         }
+        //     if (r >= k) return true;
+        //     // }
+        //     return false;
+        // }
+
+        // public boolean isItPossible(String S, String T) { // 97/99 passed.... who knows why???
+        //     int m = S.length(), n = T.length();
+        //     char [] s = S.toCharArray();
+        //     char [] t = T.toCharArray();
+        //     int [] one = new int [26], two = new int [26];
+        //     for (char c : s) one[c-'a']++;
+        //     for (char c : t) two[c-'a']++;
+        //     int cntOne = 0, cntTwo = 0;
+        //     for (int v : one)
+        //         if (v > 0) cntOne++;
+        //     for (int v : two)
+        //         if (v > 0) cntTwo++;
+        //     for (int i = 0; i < 26; i++) {
+        //         if (one[i] == 0) continue;
+        //         for (int j = 0; j < 26; j++) {
+        //             if (two[j] == 0) continue;
+        //             if (i == j && cntOne == cntTwo) return true;
+        //             int a = (one[j] == 0 ? 1 : 0) - (one[i] > 1 ? 0 : 1);
+        //             int b = (two[i] == 0 ? 1 : 0) - (two[j] > 1 ? 0 : 1);
+        //             if (cntOne + a == cntTwo + b) return true;
+        //         }
+        //     }
+        //     return false;
+        // }
+        // 参考别人题解。。。
+        // public boolean isItPossible(String word1, String word2) {
+        //     Map<Character, Integer> c1 = new HashMap<>(), c2 = new HashMap<>();
+        //     for (char c : word1.toCharArray()) c1.merge(c, 1, Integer::sum);
+        //     for (char c : word2.toCharArray()) c2.merge(c, 1, Integer::sum);
+        //     for (var e : c1.entrySet())
+        //         for (var f : c2.entrySet()) {
+        //             char x = e.getKey(), y = f.getKey();
+        //             if (x == y) {
+        //                 if (c1.size() == c2.size()) return true;
+        //             } else if (c1.size() - (e.getValue() == 1 ? 1 : 0) + (c1.containsKey(y) ? 0 : 1) ==
+        //                        c2.size() - (f.getValue() == 1 ? 1 : 0) + (c2.containsKey(x) ? 0 : 1)) // 基于长度计算变化量
+        //                 return true;
+        //         }
+        //     return false;
+        // }
     }
     public static void main (String[] args) {
         Solution s  =  new Solution ();
-
-        int [][] a = new int [][] {{0,1},{1,2},{2,0},{3,4},{4,5},{5,6},{6,3}};
+        String a = "ac";
+        String b = "b";
         
-        int r = s.findShortestCycle(7, a);
+        boolean r = s.isItPossible(a, b);
         System.out.println("r: " + r);
     }
 }
@@ -367,6 +534,4 @@ public class mfourixed {
 // ListNode head = new ListNode(a[0]);
 // head.buildList(head, a);
 // head.printList(head);
-
-
 
