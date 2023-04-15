@@ -806,134 +806,135 @@ public class binaryIndexedTree {
         //         return ans;
         //     }
         // }
-        // 【方法五：平衡二叉搜索树】
-        class Solution {
-            public int countRangeSum(int[] a, int lo, int hi) {
-                long [] s = new long [a.length+1];
-                for (int i = 0; i < a.length; i++) s[i+1] = s[i] + a[i];
-                BT tr = new BT();
-                int ans = 0;
-                for (long v : s) {
-                    long numLeft = tr.lowerBound(v - hi);
-                    int rankLeft = (numLeft == Long.MAX_VALUE ? (int)(tr.getSize()+1) : tr.rank(numLeft)[0]);
-                    long numRight = tr.upperBound(v - lo);
-                    int rankRight = (numRight == Long.MAX_VALUE ? (int)tr.getSize() : tr.rank(numRight)[0]-1);
-                    ans += rankRight - rankLeft + 1;
-                    tr.insert(v);
-                }
-                return ans;
-            }
-        }
-        class BT {
-            private class Node {
-                long v, s;
-                int cnt, size;
-                Node l, r;
-                Node(long val, long seed) {
-                    v = val;
-                    s = seed; // 为什么要这个种子？伪随机数吗？
-                    cnt = 1;
-                    size = 1;
-                    l = null; r = null;
-                }
-                //   this         r <== root
-                //  /    \      /    \
-                // l      r   this   r.r(root.r)
-                //           /    \
-                //          l     r.l(root.l)
-                Node leftRotate() { // 左旋：当前根this 变成左子节点；先前右变成根
-                    int prevSize = size;
-                    int currSize = (l != null ? l.size : 0) + (r.l != null ? r.l.size : 0) + cnt; // 左右子树的 size ＋当前根节点的 cnt
-                    Node root = r; // 这里先把 root 当作 r 的另一个索引指针
-                    r = root.l;
-                    root.l = this;
-                    root.size = prevSize; // 【没看明白：】是怎么变过来的？
-                    size = currSize;
-                    return root;
-                }
-                //       this         l <== root
-                //      /    \      /    \
-                //     l      r   l.l    this
-                //   /    \             /    \
-                // l.l    l.r         l.r     r
-                Node rightRotate() {
-                    int prevSize = size;
-                    int currSize = (r != null ? r.size : 0) + (l.r != null ? l.r.size : 0) + cnt;
-                    Node root = l;
-                    l = root.r;
-                    root.r = this;
-                    root.size = prevSize; // 【没看明白：】是怎么变过来的？
-                    size = currSize;
-                    return root;
-                }
-            }
-            private Node root;
-            private int size;
-            private Random rand;
-            public BT() {
-                this.root = null;
-                this.size = 0;
-                this.rand = new Random();
-            }
-            public long getSize() {
-                return size;
-            }
-            public void insert(long v) {
-                ++size;
-                root = insert(root, v);
-            }
-            public long lowerBound(long v) { // 这是找，最小的一个不小于 v 【 >＝ v】的值吗？
-                Node r = root;
-                long ans = Long.MAX_VALUE;
-                while (r != null) {
-                    if (v == r.v) return v;
-                    if (v < r.v) {
-                        ans = r.v;
-                        r = r.l;
-                    } else r = r.r;
-                }
-                return ans;
-            }
-            public long upperBound(long v) { // 找一个最大的【 <= v】的值
-                Node r = root;
-                long ans = Long.MAX_VALUE;
-                while (r != null) {
-                    if (v < r.v) {
-                        ans = r.v;
-                        r = r.l;
-                    } else r = r.r;
-                }
-                return ans;
-            }
-            public int [] rank(long v) {
-                Node r = root;
-                int ans = 0;
-                while (r != null) {
-                    if (v < r.v) r = r.l;
-                    else { // v >= r.v
-                        ans += (r.l != null ? r.l.size : 0) + r.cnt;
-                        if (v == r.v)
-                            return new int [] {ans - r.cnt + 1, ans};
-                        r = r.r;
-                    }
-                }
-                return new int [] {Integer.MIN_VALUE, Integer.MAX_VALUE};
-            }
-            private Node insert(Node r, long v) {
-                if (r == null) return new Node(v, rand.nextInt());
-                ++r.size;
-                if (v < r.v) { // 左子树
-                    r.l = insert(r.l, v);
-                    if (r.l.s > r.s) // 这里有步检查是否平衡的步骤？
-                        r = r.rightRotate();
-                } else if (v > r.v) { // 右子树
-                    r.r = insert(r.r, v);
-                    if (r.r.s > r.s)
-                        r = r.leftRotate();
-                } else ++r.cnt; // 当前根节点
-                return r;
-            }
-        }
+        // // 【方法五：平衡二叉搜索树】
+        // class Solution {
+        //     public int countRangeSum(int[] a, int lo, int hi) {
+        //         long [] s = new long [a.length+1];
+        //         for (int i = 0; i < a.length; i++) s[i+1] = s[i] + a[i];
+        //         BT tr = new BT();
+        //         int ans = 0;
+        //         for (long v : s) {
+        //             long numLeft = tr.lowerBound(v - hi);
+        //             int rankLeft = (numLeft == Long.MAX_VALUE ? (int)(tr.getSize()+1) : tr.rank(numLeft)[0]);
+        //             long numRight = tr.upperBound(v - lo);
+        //             int rankRight = (numRight == Long.MAX_VALUE ? (int)tr.getSize() : tr.rank(numRight)[0]-1);
+        //             ans += rankRight - rankLeft + 1;
+        //             tr.insert(v);
+        //         }
+        //         return ans;
+        //     }
+        // }
+        // class BT {
+        //     private class Node {
+        //         long v, s;
+        //         int cnt, size;
+        //         Node l, r;
+        //         Node(long val, long seed) {
+        //             v = val;
+        //             s = seed; // 为什么要这个种子？伪随机数吗？
+        //             cnt = 1;
+        //             size = 1;
+        //             l = null; r = null;
+        //         }
+        //         //   this         r <== root
+        //         //  /    \      /    \
+        //         // l      r   this   r.r(root.r)
+        //         //           /    \
+        //         //          l     r.l(root.l)
+        //         Node leftRotate() { // 左旋：当前根this 变成左子节点；先前右变成根
+        //             int prevSize = size;
+        //             int currSize = (l != null ? l.size : 0) + (r.l != null ? r.l.size : 0) + cnt; // 左右子树的 size ＋当前根节点的 cnt
+        //             Node root = r; // 这里先把 root 当作 r 的另一个索引指针
+        //             r = root.l;
+        //             root.l = this;
+        //             root.size = prevSize; // 【没看明白：】是怎么变过来的？
+        //             size = currSize;
+        //             return root;
+        //         }
+        //         //       this         l <== root
+        //         //      /    \      /    \
+        //         //     l      r   l.l    this
+        //         //   /    \             /    \
+        //         // l.l    l.r         l.r     r
+        //         Node rightRotate() {
+        //             int prevSize = size;
+        //             int currSize = (r != null ? r.size : 0) + (l.r != null ? l.r.size : 0) + cnt;
+        //             Node root = l;
+        //             l = root.r;
+        //             root.r = this;
+        //             root.size = prevSize; // 【没看明白：】是怎么变过来的？
+        //             size = currSize;
+        //             return root;
+        //         }
+        //     }
+        //     private Node root;
+        //     private int size;
+        //     private Random rand;
+        //     public BT() {
+        //         this.root = null;
+        //         this.size = 0;
+        //         this.rand = new Random();
+        //     }
+        //     public long getSize() {
+        //         return size;
+        //     }
+        //     public void insert(long v) {
+        //         ++size;
+        //         root = insert(root, v);
+        //     }
+        //     public long lowerBound(long v) { // 这是找，最小的一个不小于 v 【 >＝ v】的值吗？
+        //         Node r = root;
+        //         long ans = Long.MAX_VALUE;
+        //         while (r != null) {
+        //             if (v == r.v) return v;
+        //             if (v < r.v) {
+        //                 ans = r.v;
+        //                 r = r.l;
+        //             } else r = r.r;
+        //         }
+        //         return ans;
+        //     }
+        //     public long upperBound(long v) { // 找一个最大的【 <= v】的值
+        //         Node r = root;
+        //         long ans = Long.MAX_VALUE;
+        //         while (r != null) {
+        //             if (v < r.v) {
+        //                 ans = r.v;
+        //                 r = r.l;
+        //             } else r = r.r;
+        //         }
+        //         return ans;
+        //     }
+        //     public int [] rank(long v) {
+        //         Node r = root;
+        //         int ans = 0;
+        //         while (r != null) {
+        //             if (v < r.v) r = r.l;
+        //             else { // v >= r.v
+        //                 ans += (r.l != null ? r.l.size : 0) + r.cnt;
+        //                 if (v == r.v)
+        //                     return new int [] {ans - r.cnt + 1, ans};
+        //                 r = r.r;
+        //             }
+        //         }
+        //         return new int [] {Integer.MIN_VALUE, Integer.MAX_VALUE};
+        //     }
+        //     private Node insert(Node r, long v) {
+        //         if (r == null) return new Node(v, rand.nextInt());
+        //         ++r.size;
+        //         if (v < r.v) { // 左子树
+        //             r.l = insert(r.l, v);
+        //             if (r.l.s > r.s) // 这里有步检查是否平衡的步骤？
+        //                 r = r.rightRotate();
+        //         } else if (v > r.v) { // 右子树
+        //             r.r = insert(r.r, v);
+        //             if (r.r.s > r.s)
+        //                 r = r.leftRotate();
+        //         } else ++r.cnt; // 当前根节点
+        //         return r;
+        //     }
+        // }
+
     }
     public static void main(String[] args) {
         Solution s = new Solution();
@@ -943,4 +944,14 @@ public class binaryIndexedTree {
         String res = s.minInteger(a, 23);
         System.out.println("res: " + res);
     }
-}         
+}
+
+
+
+
+
+
+
+
+
+

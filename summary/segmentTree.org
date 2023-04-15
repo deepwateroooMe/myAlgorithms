@@ -296,14 +296,14 @@ public int countRangeSum(int[] a, int lo, int hi) {
     }
     return ans;
 }
-class BT {
+class BT {// Treap ＝ Tree+Heap: 
   private class Node {
         long v, s;
         int cnt, size;
         Node l, r;
         Node(long val, long seed) {
             v = val;
-            s = seed; // 为什么要这个种子？伪随机数吗？
+            s = seed; // 为什么要这个种子？伪随机数吗？【Treap 的修正值】：修正值满足最小堆性质
             cnt = 1;
             size = 1;
             l = null; r = null;
@@ -410,6 +410,12 @@ class BT {
 - 复杂度分析
   - 时间复杂度：O(NlogN)。
   - 空间复杂度：O(N)。
+- 这里简单介绍一下Treap 这个数据结构，因为最易编程，被广泛使用，应该掌握。 
+  
+[[./pic/segmentTree_20230414_145439.png]]
+- 维护平衡的原因：修正值 
+  - 为什么平衡:我们发现，BST 会遇到不平衡的原因是因为有序的数据会使查找的路径退化成链，而随机的数据使 BST 退化的概率是非常小的。在 Treap 中，修正值的引入恰恰是使树的结构不仅仅取决于节点的值，还取决于修正值的值。然而修正值的值是随机生成的，出现有序的随机序列是小概率事件，所以 Treap 的结构是趋向于随机平衡的。 
+
 *** 1157. Online Majority Element In Subarray - Hard
 Design a data structure that efficiently finds the majority element of a given subarray.
 

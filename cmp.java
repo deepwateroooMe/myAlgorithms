@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 import static java.util.stream.Collectors.toMap;
 public class cmp {
-    public static class Solution {
+    // public static class Solution {
         // 这是最气人的一次比较，每个题目的时间被卡得极严，连最简单的题目也不给过。。。
         // public int diagonalPrime(int[][] a) {
         //     int n = a.length;
@@ -234,10 +234,87 @@ public class cmp {
         //     }
         //     return -1;
         // }
+
+        // public int[] findColumnWidth(int[][] a) {
+        //     int m = a.length, n = a[0].length, r [] = new int [n];
+        //     for (int i = 0; i < n; i++) {
+        //         int cur = 0;
+        //         for (int j = 0; j < m; j++) 
+        //             cur = Math.max(cur, String.valueOf(a[j][i]).length());
+        //         r[i] = cur;
+        //     }
+        //     return r;
+        // }
+
+        // public long[] findPrefixScore(int[] a) {
+        //     int n = a.length;
+        //     long [] s = new long [n], r = new long [n];
+        //     ArrayDeque<Integer> q = new ArrayDeque<>(); // 按照升序排列 
+        //     for (int i = 0; i < n; i++) {
+        //         if (i == 0) {
+        //             s[i] = a[i] * 2; // conversion
+        //             r[i] = a[i] * 2; // prefix sum of conversion
+        //             q.offerFirst(a[i]);
+        //             continue;
+        //         }
+        //         while (!q.isEmpty() && q.peekFirst() <= a[i]) q.pollFirst();
+        //         q.offerFirst(a[i]);
+        //         s[i] = a[i] + q.peekLast();
+        //         r[i] = r[i-1] + s[i];
+        //     }
+        //     return r;
+        // }
+
+        // public TreeNode replaceValueInTree(TreeNode root) { // 这个题目：不知道怎么区分表兄妹。。。
+        // }
+
+        // class Graph {
+        // 有向图
+    // Set<int []> [] g; // 两种最简单的写法都会超时
+    List<int []> [] g;
+    int n;
+    public Graph(int n, int[][] edges) {
+    // public cmp(int n, int[][] edges) {
+        this.n = n;
+        // g = new TreeSet[n];
+        // Arrays.setAll(g, z -> new TreeSet<int []>((x, y) -> x[1] - y[1]));
+        g = new ArrayList[n];
+        Arrays.setAll(g, z -> new ArrayList<int []>());
+        for (int [] e : edges) 
+            g[e[0]].add(new int [] {e[1], e[2]});
     }
+    public void addEdge(int[] edge) {
+        g[edge[0]].add(new int [] {edge[1], edge[2]});
+    }
+    // 先用暴力写法：每次都查一遍，可能可以优化，应该可以优化。。。
+    // 要怎么改写成动态更新的：就是每加一条有向边，自动更新所有节点到其它节点的最短距离，就是如下：TODO TODO
+    // int [][] f = new int [n][n]; // 用来记录现有向图：所有点到所有点的最短距离 .....
+    public int shortestPath(int idx, int v) { // TLE TLE TLE 所以，这里是需要优化的，可是暂时没有思路。。。
+        int [] d = new int [n];
+        Arrays.fill(d, Integer.MAX_VALUE);
+        d[idx] = 0;
+        Queue<int []> q = new PriorityQueue<>((x, y) -> x[0] - y[0]);
+        q.offer(new int [] {idx, d[idx]});
+        while (!q.isEmpty()) {
+            int [] cur = q.poll();
+            int u = cur[0], x = cur[1];
+            // if (u == v) return x;  // 这里并不一定是最佳值 
+            if (u == v) continue;
+            for (int [] nt : g[u]) { // nt: next
+                if (x + nt[1] < d[nt[0]]) 
+                    d[nt[0]] = x + nt[1];
+                q.offer(new int [] {nt[0], d[nt[0]]});
+            }
+        }
+        return d[v] == Integer.MAX_VALUE ? -1 : d[v];
+    }
+// }
     public static void main (String[] args) { 
-        Solution s = new Solution ();
-        int r = s.minimumVisitedCells(a);
+        // Solution s = new Solution ();
+        int [][] a = new int [][] {{0, 2, 5}, {0, 1, 2}, {1, 2, 1}, {3, 0, 3}};
+        cmp s = new cmp(4, a);
+
+        int r = s.shortestPath(3, 2);
         System.out.println("r: " + r);
     }
 }

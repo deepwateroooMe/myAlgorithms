@@ -504,7 +504,6 @@ public class mfourixed {
         //     }
         //     return false;
         // }
-        // 参考别人题解。。。
         // public boolean isItPossible(String word1, String word2) {
         //     Map<Character, Integer> c1 = new HashMap<>(), c2 = new HashMap<>();
         //     for (char c : word1.toCharArray()) c1.merge(c, 1, Integer::sum);
@@ -520,13 +519,236 @@ public class mfourixed {
         //         }
         //     return false;
         // }
+
+        // static final int mod = (int)1e9 + 7;
+        // public int peopleAwareOfSecret(int n, int delay, int forget) {
+        //     var f = new int [n];
+        //     f[0] = 1;
+        //     var r = 0;
+        //     for (int i = 0; i < n; i++) {
+        //         // 第 i 天产生了 f[i] 的利息，这些利息又可以在第 [i+delay,i+forget) 天产生新的利息
+        //         if (i + delay >= n) r = (r + f[i]) % mod;
+        //         // 第 i 天产生了 f[i] 的利息，这些利息又可以在第 [i+delay,i+forget) 天产生新的利息
+        //         for (int j = i+delay; j < Math.min(i + forget, n); j++)
+        //             f[j] = (f[j] + f[i]) % mod;
+        //     }
+        //     return (f[n-1] + r) % mod;
+        // }
+
+        // public int minimumNumbers(int v, int k) {
+        //     if (v == 0) return 0;
+        //     for (int i = 1; i <= 10 && v - k * i >= 0; i++) 
+        //         if ((v - k * i) % 10 == 0) return i;
+        //     return -1;
+        // }
+
+        // public int maximumsSplicedArray(int[] a, int[] b) { // 自己的呆笨写法。。。。。
+        //     int n = a.length;
+        //     int [] d = new int [n];
+        //     for (int i = 0; i < n; i++) d[i] = b[i] - a[i];
+        //     int one = 0, cur = 0, neg = 0, two = Integer.MAX_VALUE;
+        //     for (int i = 0; i < n; i++) {
+        //         if (cur < 0) cur = d[i];
+        //         else cur += d[i];
+        //         if (neg > 0) neg = d[i];
+        //         else neg += d[i];
+        //         one = Math.max(one, cur);
+        //         two = Math.min(two, neg);
+        //     }
+        //     int sa = Arrays.stream(a).sum(), sb = Arrays.stream(b).sum();
+        //     int ans = Math.max(sa, sb);
+        //     ans = Math.max(ans, Math.max(one + sa, one * (-1) + sb));
+        //     ans = Math.max(ans, Math.max(two * (-1) + sb, two + sa));
+        //     return ans;
+        // }
+        // public int maximumsSplicedArray(int[] nums1, int[] nums2) { // 同样的方法，执行了两遍
+        //     return Math.max(solve(nums1, nums2), solve(nums2, nums1));
+        // }
+        // int solve(int [] a, int [] b) {
+        //     int n = a.length;
+        //     int sa = 0, maxSum = 0;
+        //     for (int i = 0, s = 0; i < n; i++) {
+        //         sa += a[i];
+        //         s = Math.max(s + b[i] - a[i], 0); // 《 0 时，重置为0. 否则下面总记最大值 
+        //         maxSum = Math.max(maxSum, s);     // 过程中的最大值总被记录下来了
+        //     }
+        //     return sa + maxSum;
+        // }
+
+        // Set<Long> s = new HashSet<>();
+        // List<Integer> [] g;
+        // int k, ans, cnt0;
+        // public int rootCount(int[][] egs, int[][] gss, int k) { // TODO TODO TODO 
+        //     this.k = k;
+        //     // 建图
+        //     g = new ArrayList [egs.length+1];
+        //     Arrays.setAll(g, z -> new ArrayList<>());
+        //     for (int [] e : egs) {
+        //         int u = e[0], v = e[1];
+        //         g[u].add(v);
+        //         g[v].add(u);
+        //     }
+        //     for (var v : gss)  // guesses 转成哈希表
+        //         s.add((long)v[0] << 32 | v[1]); // 两个 4 字节数压缩成一个 8 字节数
+        //     dfs(0, -1); // 数一遍以 0 为节点时，猜对的边数 cnt0
+        //     reroot(0, -1, cnt0); // 【换更动态DP:】这里还有点儿没能理解透彻，要再看一下
+        //     return ans;
+        // }
+        // void dfs(int u, int p) {
+        //     for (var v : g[u]) 
+        //         if (v != p) {
+        //             if (s.contains((long) u << 32 | v)) // 以 0 为根时，猜对了
+        //                 ++cnt0;
+        //             dfs(v, u);
+        //         }
+        // }
+        // void reroot(int u, int p, int cnt) {
+        //     if (cnt >= k) ++ans; // 此时 cnt 就是以 u 为根时的猜对次数
+        //     for (var v : g[u]) 
+        //         if (v != p) {
+        //             int c = cnt;
+        //             if (s.contains((long)u << 32 | v)) --c; // 原来是对的，现在错了
+        //             if (s.contains((long)v << 32 | u)) ++c; // 原来是错的，现在对了
+        //             reroot(v, u, c);
+        //         }
+        // }
+
+        // static final int mod = (int)1e9 + 7;
+        // public int numberOfPaths(int[][] a, int k) { // 【思路完全正确】就是代码还需要一点点优化。。。精减
+        //     int m = a.length, n = a[0].length;
+        //     long [][][] f = new long [m+1][n+1][k];
+        //     for (int i = 1; i <= m; i++)
+        //         for (int j = 1; j <= n; j++) {
+        //             int v = a[i-1][j-1];
+        //             if (i == 1 && j == 1) { // 这么写还是太复杂了。。。
+        //                 f[i][j][v % k] = 1;
+        //                 continue;
+        //             }
+        //             for (int x = 0; x < k; x++) { // 这里面就进行了无数次的重复？显得没有理解透彻，或是说思路不清晰透彻
+        //                 int o = (x + v) % k;
+        //                 f[i][j][o] = (f[i][j][o] + f[i][j-1][x]) % mod;
+        //                 f[i][j][o] = (f[i][j][o] + f[i-1][j][x]) % mod;
+        //             }
+        //         }
+        //     return (int)f[m][n][0];
+        // }
+        // static final int mod = (int)1e9 + 7;
+        // public int numberOfPaths(int[][] a, int k) { // 【思路完全正确】就是代码还需要一点点优化。。。精减
+        //     int m = a.length, n = a[0].length;
+        //     int [][][] f = new int [m+1][n+1][k];
+        //     // 此时可以设初始值 f[0][1][0]=1（或者 f[1][0][0]=1）简化一点点代码
+        //     f[0][1][0] = 1; // f[1][0][0] = 1; // 前后两个哪个都可以的。。。
+        //     for (int i = 0; i < m; i++)
+        //         for (int j = 0; j < n; j++)
+        //             for (int v = 0; v < k; v++) 
+        //                 f[i+1][j+1][(v + a[i][j]) % k] = (f[i+1][j][v] + f[i][j+1][v]) % mod;
+        //     return f[m][n][0];
+        // }
+        
+//         // 第一种方法：原始，相对比较土。。。。。
+//         public boolean splitArraySameAverage(int[] a) {
+//             if (a.length == 1) return false;
+//             int n = a.length, sum = Arrays.stream(a).sum(), m = n / 2;
+//             // 把原数组和变0, 并且不引入任何浮点数
+//             for (int i = 0; i < n; i++) a[i] = a[i] * n - sum;
+//             // // 把原数组分成两个大小最接近的数组【再说一遍：概念上的，并不真的需要物理上的拆分为两个数组。。。】
+//             // int [] l = Arrays.copyOfRange(a, 0, n/2); // 【L-inclusive, r-excluesive）
+//             // int [] r = Arrays.copyOfRange(a, n/2, n);
+//             // 求一个数组可能取得的和 sum 集合
+//             Set<Integer> lsum = new HashSet<>();
+//             for (int i = 1; i < (1 << m); i++) {
+//                 int s = 0;
+//                 for (int j = 0; j < m; j++) // 这里可能会遍历多了
+//                     if (((i >> j) & 1) == 1) s += a[j];
+// // 【快速返回：】这里是可以优化提速的地方。左边非空集合和为0, 那么左边非空补集的和也一定为 0
+//                 if (s == 0) return true; 
+//                 lsum.add(s);
+//             }
+//             // 遍历：求右边数组可能取得的和 s，并一一去找左边是否存在和 -s
+//             int rsum = 0; // 先求右边的和：
+//             for (int i = m; i < n; i++) rsum += a[i];
+//             for (int i = 1; i < (1 << n - m); i++) {
+//                 int s = 0;
+//                 for (int j = m; j < n; j++) // 这里可能会遍历多了
+//                     if (((i >> (j - m)) & 1) == 1) s += a[j];
+//                 // if (s == 0 || lsum.contains(-s)) return true; // 【BUG:】
+//                 if (s == 0 || s != rsum && lsum.contains(-s)) return true; // 【为什么 s ！＝ rsum 重要？】【3, 1】＝＝》【2, －2】
+//             }
+//             return false;
+//         }
+        // public boolean splitArraySameAverage(int[] a) {
+        //     if (a.length == 1) return false;
+        //     int n = a.length, m = n / 2, sum = Arrays.stream(a).sum();
+        //     boolean isPossible = false;
+        //     for (int i = 1; i <= m; i++)
+        //         if (sum * i % n == 0) {
+        //             isPossible = true;
+        //             break;
+        //         }
+        //     if (!isPossible) return false;
+        //     Set<Integer> [] f = new HashSet [m+1];
+        //     Arrays.setAll(f, z -> new HashSet<>());
+        //     f[0].add(0);
+        //     for (int v : a) 
+        //         for (int i = m; i >= 1; i--) 
+        //             for (int x : f[i-1]) {
+        //                 int cur = x + v;
+        //                 if (cur * n == sum * i) return true;
+        //                 f[i].add(cur);
+        //             }
+        //     return false;
+        // }
+        
+        // public int minimumDifference(int[] a) { // 2035 这个题很好，可是今天不想再写这个题目了。。。明天再写。。
+        //     int n = a.length, m = n / 2;
+        //     Set<Integer> [] l = new HashSet [m];
+        //     Arrays.setAll(l, z -> new HashSet<>());
+        //     l[0].add(0);
+        //     for (int i = 1; i < m; i++)     
+        // }
+
+        // public int maxPalindromes(String t, int k) {
+        //     int n = t.length();
+        //     char [] s = t.toCharArray();
+        //     int [] f = new int [n+1];
+        //     for (int i = 0; i < 2 * n - 1; i++) {
+        //         int l = i / 2, r = l + i % 2; // 中心扩展法【这个方法忘记了，或是没有彻底懂，要复习一下】
+        //         f[l+1] = Math.max(f[l+1], f[l]);
+        //         for (; l >= 0 && r < n && s[l] == s[r]; --l, ++r)     
+        //             if (r - l + 1 >= k) {
+        //                 f[r+1] = Math.max(f[r+1], f[l]+1);
+        //                 break;
+        //             }
+        //     }
+        //     return f[n];
+        // }
+
+        // // 活宝妹就是还一定要嫁给亲爱的表哥～～！！！【爱表哥，爱生活！！！】
+        // public int maxNumOfMarkedIndices(int[] a) {
+        //     int n = a.length, ans = 0;
+        //     int l = 0, r = n / 2;
+        //     Arrays.sort(a);
+        //     while (l <= r) { // 二分查找：查找到一个最大可能的操作次数，注意边界
+        //         int m = (l + r) / 2;
+        //         if (possible(m, a)) {
+        //             ans = Math.max(ans, m * 2);
+        //             l = m + 1;
+        //         } else r = m-1;
+        //     } 
+        //     return ans;
+        // }
+        // boolean possible(int k, int [] a) {
+        //     for (int i = 0; i < k; i++) // 遍历最小的K 个数，每个 i，与最大的 n-k+i 个数,组成对
+        //         if (2 * a[i] > a[a.length - k + i]) return false;
+        //     return true;
+        // }
     }
     public static void main (String[] args) {
         Solution s  =  new Solution ();
-        String a = "ac";
-        String b = "b";
-        
-        boolean r = s.isItPossible(a, b);
+
+        int [] a = new int [] {9,2,5,4};
+
+      int r = s.maxNumOfMarkedIndices(a);
         System.out.println("r: " + r);
     }
 }
@@ -534,4 +756,11 @@ public class mfourixed {
 // ListNode head = new ListNode(a[0]);
 // head.buildList(head, a);
 // head.printList(head);
+
+
+
+
+
+
+
 

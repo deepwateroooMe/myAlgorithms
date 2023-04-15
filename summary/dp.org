@@ -23,7 +23,7 @@ A subsequence is a sequence that can be derived from another sequence by deletin
 
 只要把原字符串反过来，两个字符串找最长公共子序列，就是最长回文了
 
-#+BEGIN_SRC csharp
+#+BEGIN_SRC java
 public int longestPalindromeSubseq(String tt) {
     int n = tt.length();
     char [] s = tt.toCharArray(); // ori
@@ -1072,7 +1072,7 @@ public int strangePrinter(String s) { // dp
                     dp[i][j] = Math.min(dp[i][j], dp[i+1][k-1]+dp[k][j]);
         }
     return dp[0][n-1];
-}[
+}
      #+END_SRC
 *** 1591. Strange Printer II - Hard todo
 There is a strange printer with the following two special requirements:
@@ -1090,6 +1090,171 @@ Return true if it is possible to print the matrix targetGrid, otherwise, return 
      #+END_SRC
 
 ** 扫描线类、时间戳、一维线性DP/ 单序列/ 接龙型
+*** 805. Split Array With Same Average 【活宝妹就是一定要嫁给亲爱的表哥！！！】
+You are given an integer array nums.
+You should move each element of nums into one of the two arrays A and B such that A and B are non-empty, and average(A) == average(B).
+Return true if it is possible to achieve that and false otherwise.
+Note that for an array arr, average(arr) is the sum of all the elements of arr over the length of arr.
+**** 折半搜索
+     
+[[./pic/dp_20230414_202227.png]]
+#+BEGIN_SRC csharp 
+// 第一种方法：原始，相对比较土。。。。。
+public boolean splitArraySameAverage(int[] a) {
+    if (a.length == 1) return false;
+    int n = a.length, sum = Arrays.stream(a).sum(), m = n / 2;
+    // 把原数组和变0, 并且不引入任何浮点数
+    for (int i = 0; i < n; i++) a[i] = a[i] * n - sum;
+    // // 把原数组分成两个大小最接近的数组【再说一遍：概念上的，并不真的需要物理上的拆分为两个数组。。。】
+    // int [] l = Arrays.copyOfRange(a, 0, n/2); // 【L-inclusive, r-excluesive）
+    // int [] r = Arrays.copyOfRange(a, n/2, n);
+    // 求一个数组可能取得的和 sum 集合
+    Set<Integer> lsum = new HashSet<>();
+    for (int i = 1; i < (1 << m); i++) {
+        int s = 0;
+        for (int j = 0; j < m; j++) // 这里可能会遍历多了
+            if (((i >> j) & 1) == 1) s += a[j];
+// 【快速返回：】这里是可以优化提速的地方。左边非空集合和为0, 那么左边非空补集的和也一定为 0
+        if (s == 0) return true; 
+        lsum.add(s);
+    }
+    // 遍历：求右边数组可能取得的和 s，并一一去找左边是否存在和 -s
+    int rsum = 0; // 先求右边的和：
+    for (int i = m; i < n; i++) rsum += a[i];
+    for (int i = 1; i < (1 << n - m); i++) {
+        int s = 0;
+        for (int j = m; j < n; j++) // 这里可能会遍历多了
+            if (((i >> (j - m)) & 1) == 1) s += a[j];
+        // if (s == 0 || lsum.contains(-s)) return true; // 【BUG:】
+        if (s == 0 || s != rsum && lsum.contains(-s)) return true; // 【为什么 s ！＝ rsum 重要？】【3, 1】＝＝》【2, －2】
+    }
+    return false;
+}
+#+END_SRC
+- 复杂度分析
+  
+[[./pic/dp_20230414_202315.png]]
+**** 动态规划 
+     
+[[./pic/dp_20230414_202732.png]]
+#+BEGIN_SRC java
+public boolean splitArraySameAverage(int[] a) {
+if (a.length == 1) return false;
+int n = a.length, m = n / 2, sum = Arrays.stream(a).sum();
+  boolean isPossible = false;
+    for (int i = 1; i <= m; i++)
+        if (sum * i % n == 0) {
+            isPossible = true;
+            break;
+        }
+    if (!isPossible) return false;
+    Set<Integer> [] f = new HashSet [m+1];
+    Arrays.setAll(f, z -> new HashSet<>());
+    f[0].add(0);
+    for (int v : a) 
+        for (int i = m; i >= 1; i--) 
+            for (int x : f[i-1]) {
+                int cur = x + v;
+                if (cur * n == sum * i) return true;
+                f[i].add(cur);
+            }
+    return false;
+}
+#+END_SRC
+- 复杂度分析：
+  
+[[./pic/dp_20230414_202518.png]]
+*** 805. Split Array With Same Average 【这里是怎么又重复了一遍？】需要合并一下
+You are given an integer array nums.
+You should move each element of nums into one of the two arrays A and B such that A and B are non-empty, and average(A) == average(B).
+Return true if it is possible to achieve that and false otherwise.
+Note that for an array arr, average(arr) is the sum of all the elements of arr over the length of arr.
+#+BEGIN_SRC csharp
+    //     1）如果一个长度为n的数组可以被划分为A和B两个数组，我们假设A的长度小于B并且A的大小是k，那么：total_sum / n == A_sum / k == B_sum / (n - k)，其中1 <= k <= n / 2。那么可以知道：A_sum = total_sum * k / n。由于A_sum一定是个整数，所以我们可以推导出total_sum * k % n == 0，那就是说，对于特定的total_sum和n而言，符合条件的k不会太多。这样我们在第一步中就首先验证是否存在符合条件的k，如果不存在就可以提前返回false。
+    //     2）如果经过第一步的验证，发现确实有符合条件的k，那么我们在第二步中，就试图产生k个子元素的所有组合，并且计算他们的和。这里的思路就有点类似于背包问题了，vector<unordered_set<int>> sums，其中sums[i][j]表示A[0, i]这个子数组中的任意j个元素的所有可能和。可以得到递推公式是：sums[i][j] = sums[i - 1][j] "join" (sums[i][j - 1] + A[i])，其中等式右边的第一项表示这j个元素中不包含A[i]，而第二项表示这j个元素包含A[i]。这样就可以采用动态规划的思路得到sums[n - 1][k]了（1 <= k <= n / 2）。
+    // 3）有了sums[n - 1][k]，我们就检查sums[n - 1][k]中是否包含(total_sum * k / n)。一旦发现符合条件的k，就返回true，否则就返回false。
+    // 在递推公式中我们发现，sums[i][j]仅仅和sums[i - 1][j]，sums[i][j - 1]有关，所以可以进一步将空间复杂度从O(n^2*M)降低到O(n*M)，其中M是n中的所有元素的组合数（可能高达O(2^n)）。时间复杂度为O(n^3*M)。
+public boolean splitArraySameAverage(int[] nums) {
+    int n = nums.length;
+    int m = n / 2;
+    int sum = Arrays.stream(nums).sum();
+    boolean poss = false;
+    for (int i = 1; i <= m; i++) {
+        if (sum * i % n == 0) {
+            poss = true;
+            break;
+        }
+    }
+    if (!poss) return false;
+    List<Set<Integer>> ls = new ArrayList<>();
+    for (int i = 0; i <= m; i++) 
+        ls.add(new HashSet<Integer>());
+    ls.get(0).add(0);    // 这种构建子序列和的方法，要学习一下
+    for (int v : nums) { // for each element in A, we try to add it to sums[i] by joining sums[i - 1]
+        for (int i = m; i >= 1; i--) {
+            for (int t : ls.get(i-1)) {
+                ls.get(i).add(t + v);
+            }
+        }
+    }
+    // System.out.println("ls.size(): " + ls.size());
+    // for (int z = 0; z < ls.size(); ++z) {
+    //     for (Integer x : ls.get(z))
+    //         System.out.print(x + ", ");
+    //     System.out.print("\n");
+    //     System.out.print("\n ");
+    // }
+    for (int i = 1; i <= m; i++) {
+        if (sum * i % n == 0 && ls.get(i).contains(sum * i / n))
+            return true;
+    }
+    return false;
+}
+private boolean helper(int [] arr, int curSum, int cur, int start) {
+    if (cur == 0) return curSum == 0;
+    if (arr[start] > curSum / cur) return false;
+    for (int i = start; i < arr.length - cur + 1; i++) {
+        if (i > start && arr[i] == arr[i-1]) continue;
+        if (helper(arr, curSum - arr[i], cur-1, i+1)) return true;
+    }
+    return false;
+}
+public boolean splitArraySameAverage(int[] nums) {
+    int n = nums.length;
+    int m = n / 2;
+    int sum = Arrays.stream(nums).sum();
+    boolean poss = false;
+    for (int i = 1; i <= m; i++) {
+        if (sum * i % n == 0) {
+            poss = true;
+            break;
+        }
+    }
+    if (!poss) return false;
+    Arrays.sort(nums);
+    for (int i = 1; i <= m; i++) 
+        if (sum * i % n == 0 && helper(nums, sum * i / n, i, 0)) return true;
+    return false;
+}
+bool splitArraySameAverage(vector<int>& A) {  // https://www.cnblogs.com/grandyang/p/10285531.html
+    int n = A.size(), m = n / 2, sum = accumulate(A.begin(), A.end(), 0);
+    bool possible = false;
+    for (int i = 1; i <= m && !possible; ++i) {
+        if (sum * i % n == 0) possible = true;
+    }
+    if (!possible) return false;
+    bitset<300001> bits[m + 1] = {1};
+    for (int num : A) {
+        for (int i = m; i >= 1; --i) {
+            bits[i] |= bits[i - 1] << num;
+        }
+    }
+    for (int i = 1; i <= m; ++i) {
+        if (sum * i % n == 0 && bits[i][sum * i / n]) return true;
+    }
+    return false;
+}
+#+END_SRC
 *** 1235. Maximum Profit in Job Scheduling - Hard
 We have n jobs, where every job is scheduled to be done from startTime[i] to endTime[i], obtaining a profit of profit[i].
 
@@ -3816,39 +3981,6 @@ public int maxSumSubmatrix(int[][] mat, int k) {
 }
 #+END_SRC
 
-*** 805. Split Array With Same Average
-You are given an integer array nums.
-You should move each element of nums into one of the two arrays A and B such that A and B are non-empty, and average(A) == average(B).
-Return true if it is possible to achieve that and false otherwise.
-Note that for an array arr, average(arr) is the sum of all the elements of arr over the length of arr.
-#+BEGIN_SRC csharp
-public boolean splitArraySameAverage(int[] nums) {
-    int n = nums.length;
-    int m = n / 2;
-    int sum = Arrays.stream(nums).sum();
-    boolean poss = false;
-    for (int i = 1; i <= m; i++) 
-        if (sum * i % n == 0) {
-            poss = true;
-            break;
-        }
-    if (!poss) return false;
-    List<Set<Integer>> ls = new ArrayList<>();
-    for (int i = 0; i <= m; i++) 
-        ls.add(new HashSet<Integer>());
-    ls.get(0).add(0);    // 这种构建子序列和的方法，要学习一下
-    for (int v : nums)  // for each element in A, we try to add it to sums[i] by joining sums[i - 1]
-        for (int i = m; i >= 1; i--) 
-            for (int t : ls.get(i-1)) 
-                ls.get(i).add(t + v);
-    for (int i = 1; i <= m; i++) {
-        if (sum * i % n == 0 && ls.get(i).contains(sum * i / n))
-            return true;
-    }
-    return false;
-}
-#+END_SRC
-
 *** 1884. Egg Drop With 2 Eggs and N Floors - Medium
 You are given two identical eggs and you have access to a building with n floors labeled from 1 to n.
 
@@ -4105,98 +4237,6 @@ public int minimizeTheDifference(int[][] mat, int target) {
     for (int i = 0; i < limit; i++) 
         if (dp[i] > 0) diff = Math.min(diff, Math.abs(i-target));
     return diff;  // min difference
-}
-#+END_SRC
-
-*** 805. Split Array With Same Average
-You are given an integer array nums.
-You should move each element of nums into one of the two arrays A and B such that A and B are non-empty, and average(A) == average(B).
-Return true if it is possible to achieve that and false otherwise.
-Note that for an array arr, average(arr) is the sum of all the elements of arr over the length of arr.
-#+BEGIN_SRC csharp
-    //     1）如果一个长度为n的数组可以被划分为A和B两个数组，我们假设A的长度小于B并且A的大小是k，那么：total_sum / n == A_sum / k == B_sum / (n - k)，其中1 <= k <= n / 2。那么可以知道：A_sum = total_sum * k / n。由于A_sum一定是个整数，所以我们可以推导出total_sum * k % n == 0，那就是说，对于特定的total_sum和n而言，符合条件的k不会太多。这样我们在第一步中就首先验证是否存在符合条件的k，如果不存在就可以提前返回false。
-    //     2）如果经过第一步的验证，发现确实有符合条件的k，那么我们在第二步中，就试图产生k个子元素的所有组合，并且计算他们的和。这里的思路就有点类似于背包问题了，vector<unordered_set<int>> sums，其中sums[i][j]表示A[0, i]这个子数组中的任意j个元素的所有可能和。可以得到递推公式是：sums[i][j] = sums[i - 1][j] "join" (sums[i][j - 1] + A[i])，其中等式右边的第一项表示这j个元素中不包含A[i]，而第二项表示这j个元素包含A[i]。这样就可以采用动态规划的思路得到sums[n - 1][k]了（1 <= k <= n / 2）。
-    // 3）有了sums[n - 1][k]，我们就检查sums[n - 1][k]中是否包含(total_sum * k / n)。一旦发现符合条件的k，就返回true，否则就返回false。
-    // 在递推公式中我们发现，sums[i][j]仅仅和sums[i - 1][j]，sums[i][j - 1]有关，所以可以进一步将空间复杂度从O(n^2*M)降低到O(n*M)，其中M是n中的所有元素的组合数（可能高达O(2^n)）。时间复杂度为O(n^3*M)。
-public boolean splitArraySameAverage(int[] nums) {
-    int n = nums.length;
-    int m = n / 2;
-    int sum = Arrays.stream(nums).sum();
-    boolean poss = false;
-    for (int i = 1; i <= m; i++) {
-        if (sum * i % n == 0) {
-            poss = true;
-            break;
-        }
-    }
-    if (!poss) return false;
-    List<Set<Integer>> ls = new ArrayList<>();
-    for (int i = 0; i <= m; i++) 
-        ls.add(new HashSet<Integer>());
-    ls.get(0).add(0);    // 这种构建子序列和的方法，要学习一下
-    for (int v : nums) { // for each element in A, we try to add it to sums[i] by joining sums[i - 1]
-        for (int i = m; i >= 1; i--) {
-            for (int t : ls.get(i-1)) {
-                ls.get(i).add(t + v);
-            }
-        }
-    }
-    // System.out.println("ls.size(): " + ls.size());
-    // for (int z = 0; z < ls.size(); ++z) {
-    //     for (Integer x : ls.get(z))
-    //         System.out.print(x + ", ");
-    //     System.out.print("\n");
-    //     System.out.print("\n ");
-    // }
-    for (int i = 1; i <= m; i++) {
-        if (sum * i % n == 0 && ls.get(i).contains(sum * i / n))
-            return true;
-    }
-    return false;
-}
-private boolean helper(int [] arr, int curSum, int cur, int start) {
-    if (cur == 0) return curSum == 0;
-    if (arr[start] > curSum / cur) return false;
-    for (int i = start; i < arr.length - cur + 1; i++) {
-        if (i > start && arr[i] == arr[i-1]) continue;
-        if (helper(arr, curSum - arr[i], cur-1, i+1)) return true;
-    }
-    return false;
-}
-public boolean splitArraySameAverage(int[] nums) {
-    int n = nums.length;
-    int m = n / 2;
-    int sum = Arrays.stream(nums).sum();
-    boolean poss = false;
-    for (int i = 1; i <= m; i++) {
-        if (sum * i % n == 0) {
-            poss = true;
-            break;
-        }
-    }
-    if (!poss) return false;
-    Arrays.sort(nums);
-    for (int i = 1; i <= m; i++) 
-        if (sum * i % n == 0 && helper(nums, sum * i / n, i, 0)) return true;
-    return false;
-}
-bool splitArraySameAverage(vector<int>& A) {  // https://www.cnblogs.com/grandyang/p/10285531.html
-    int n = A.size(), m = n / 2, sum = accumulate(A.begin(), A.end(), 0);
-    bool possible = false;
-    for (int i = 1; i <= m && !possible; ++i) {
-        if (sum * i % n == 0) possible = true;
-    }
-    if (!possible) return false;
-    bitset<300001> bits[m + 1] = {1};
-    for (int num : A) {
-        for (int i = m; i >= 1; --i) {
-            bits[i] |= bits[i - 1] << num;
-        }
-    }
-    for (int i = 1; i <= m; ++i) {
-        if (sum * i % n == 0 && bits[i][sum * i / n]) return true;
-    }
-    return false;
 }
 #+END_SRC
 
