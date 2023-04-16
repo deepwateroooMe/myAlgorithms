@@ -345,7 +345,7 @@ public class cmp {
         //     return l.get(0)[0];
         // }
 
-        // public int addMinimum(String t) {
+        // public int addMinimum(String t) { 
         //     int n = t.length(), r = 0, m = 3 * n;
         //     if (t.chars().distinct().count() == 1) return 2 * n;
         //     char [] s = t.toCharArray();
@@ -364,134 +364,135 @@ public class cmp {
         //     }
         //     return r + (s[n-1] == 'a' ? 2 : (s[n-1] == 'b' ? 1 : 0));
         // }
+        // public int addMinimum(String T) { // 【最直观、方便的写法】
+        //     int n = T.length(), r = 0;
+        //     char [] t = T.toCharArray();
+        //     Deque<Character> s = new ArrayDeque<>();
+        //     for (char c : t) s.offerFirst(c);
+        //     while (!s.isEmpty()) {
+        //         if (!s.isEmpty() && s.peekFirst() == 'c') s.pollFirst();
+        //         else r++;
+        //         if (!s.isEmpty() && s.peekFirst() == 'b') s.pollFirst();
+        //         else r++;
+        //         if (!s.isEmpty() && s.peekFirst() == 'a') s.pollFirst();
+        //         else r++;
+        //     }
+        //     return r;
+        // }
+        // public int addMinimum(String S) {
+        //     int n = S.length(), k = 0;
+        //     char [] s = S.toCharArray();
+        //     char p = 'z';
+        //     for (int i = 0; i < n; i++) {
+        //         k += (s[i] <= p ? 1 : 0);
+        //         p = s[i];
+        //     }
+        //     return k * 3 - n;
+        // }
 
-        // void getLightWeightedPath(int u, int v, int [] p) {
-        //     int [] d = new int [n];
-        //     Arrays.fill(d, Integer.MAX_VALUE);
-        //     Queue<int []> q = new PriorityQueue<>((x, y) -> x[1] - y[1]);
-        //     q.offer(new int [] {u, -1, 0});
-        //     d[u] = 0;
-        //     List<Integer> [] l = new ArrayList[n]; // 我想要把走过的最轻路径穿起来，帮助决定哪些最重的节点减半
-        //     Arrays.setAll(l, z -> new ArrayList<>());
+        // List<Integer> [] g; 
+        // Map<Integer, Integer> cnt = new HashMap<>(); // 字典更好：因为只记录必要的节点，不连续省空间，同样方便查询
+        // int n;
+        // public int minimumTotalPrice(int n, int[][] egs, int[] p, int[][] t) {
+        //     this.n = n;
+        //     // 【建图】
+        //     g = new ArrayList [n];
+        //     Arrays.setAll(g, z -> new ArrayList<>());
+        //     for (int [] e : egs) {
+        //         int u = e[0], v = e[1];
+        //         g[u].add(v);
+        //         g[v].add(u);
+        //     }
+        //     // 【BFS 最短路径：统计必经节点的访问频率】: 这里没想明白的是：BFS 是可以求最短边数，但因为这个题目的权重要各个节点，感觉未必呀，没想透。。。
+        //     // 同样，DFS 也是可以求路径的，怎么最短，怎么最轻，得想透了。。。
+        //     // for (int [] v : t) bfs(v[0], v[1]);
+        //     // 【 dfs: 解法，也写一下】
+        //     for (int [] v : t) {
+        //         List<Integer> path = new ArrayList<>();
+        //         dfs(v[0], v[1], -1, path); // 这里找，一条路径，感觉可以是任意一条路径，也就是说，是题目自己得保证答案唯一？！！！
+        //         for (int x : path) cnt.put(x, cnt.getOrDefault(x, 0) + 1);
+        //     }
+        //     // 【动态规划：计算最优结果】
+        //     // int [] currPrice = new int [n]; // 将【节点计数】同步到节点代价里去；同时将其它不需访问的节点代价【清零】
+        //     // for (int i = 0; i < n; i++) currPrice[i] = p[i] * cnt.getOrDefault(i, 0);
+        //     // int [] ans = helper(0, -1, currPrice); // (post-order) depth-first search 【】
+        //     int [] ans = dfs(-1, 0, p);
+        //     return Math.min(ans[0], ans[1]);
+        // }
+        // // 【下面的写法：代码写得更透一点儿】post order dfs
+        // // return int[]{cost1, cost2}, 【cost1: HALVE current node; cost2: it is WHOLE. don't halve current node】
+        // int [] dfs(int p, int src, int [] price) {
+        //     int [] ans = new int [2];
+        //     for (int dst : g[src]) {
+        //         if (dst == p) continue;
+        //         int [] oneChildAns = dfs(src, dst, price);
+        //         // if HALVE the current node, then the child use WHOLE, cann't halve the price, 
+        //         ans[0] += oneChildAns[1];
+        //         // if WHOLE (doesn't halve) CURRENT node: then the child can 【HALVE || WHOLE】 the price or not, we choose the min one.
+        //         ans[1] += Math.min(oneChildAns[0], oneChildAns[1]);
+        //     }
+        //     if (cnt.containsKey(src)) {
+        //         ans[0] += price[src] * cnt.get(src) / 2;
+        //         ans[1] += price[src] * cnt.get(src);
+        //     }
+        //     return ans;
+        // }
+        // // 【可以再参考再下面一种写法，代码写得更透一点儿】
+        // int [] helper(int u, int p, int [] currPrice) { // u: curNode, 【 u ＝＝》 v】【 0:whole, 1:halved】
+        //     List<Integer> neighbors = g[u];
+        //     // When current node is halving, because its adjacent nodes must be whole (not havle), so that whole (not havle) contains neighbors whose values are whole.
+        //     // When current node is whole (not havle), its adjacent nodes can be either whole or halved, so that we take the minimum between whole (not havle) and havle.
+        //     int whole = 0, halved = 0; // 用来计算 u 的相邻节点的整与半
+        //     for (int v : neighbors) {
+        //         if (v == p) continue;
+        //         int [] neiAns = helper(v, u, currPrice);
+        //         whole += neiAns[0];
+        //         halved += Math.min(neiAns[0], neiAns[1]); 
+        //     } // 当前 u 取半，邻居节点就必须取整 whole; 当前 U 取整，邻居节点就可整可半，所以可以选择最小值
+        //     return new int [] {currPrice[u] + halved, currPrice[u] / 2 + whole} ;           
+        // }
+        // boolean dfs(int u, int v, int p, List<Integer> path) { // p: parent
+        //     path.add(u);
+        //     if (u == v) return true; // 找到一条路径。。。
+        //     for (int next : g[u]) {
+        //         if (next == p) continue;
+        //         if (dfs(next, v, u, path)) return true; // 返回：任意一条可通路径。。。任意的
+        //     }
+        //     path.remove(path.size()-1);
+        //     return false;
+        // }
+        // void bfs(int src, int dst) {
+        //     Deque<Integer> q = new ArrayDeque<>();
+        //     boolean [] vis = new boolean [n];
+        //     int [] p = new int [n]; // p: parent
+        //     Arrays.fill(p, -1);
+        //     q.offerFirst(src);
+        //     vis[src] = true;
         //     while (!q.isEmpty()) {
-        //         int [] cur = q.poll();
-        //         int i = cur[0], dist = cur[1];
-        //         if (i == v) {
-        //         }
-        //         for (int j : g[i]) {
-        //             if (p[j] + dist < d[j]) {
-        //                 d[j] = p[j] + dist;
-        //                 q.offer(new int [] {j, d[j]});
+        //         int cur = q.pollLast();
+        //         if (cur == dst) break;
+        //         for (int v : g[cur]) // cur 
+        //             if (!vis[v]) {
+        //                 vis[v] = true;
+        //                 p[v] = cur; // cur
+        //                 q.offerFirst(v);
         //             }
-        //         }
+        //     }
+        //     int cur = dst; // 倒序：根据先前记录过的父节点，把过程节点全部计数一遍
+        //     while (cur != -1) {
+        //         cnt.put(cur, cnt.getOrDefault(cur, 0) + 1);
+        //         cur = p[cur];
         //     }
         // }
-        public int minimumTotalPrice(int n, int[][] edges, int[] price, int[][] t) {
-            this.n = n;
-            g = new HashSet [n];
-            Arrays.setAll(g, z -> new HashSet<Integer>());
-            for (var e : edges) {
-                int u = e[0], v = e[1];
-                g[u].add(v);
-                g[v].add(u);
-            }
-            List<int []> p = new ArrayList<>();
-            cnt = new int [n];
-            for (int i = 0; i < n; i++) p.add(new int [] {i, price[i]});
-            Collections.sort(p, (x, y) -> y[1] - x[1]);
-            // 这里重量减半的时候不知道减哪些？我应该反过来算，先算节点权重，再减重量 也不知道有没有环之类的
-            // 我把所有的最短路径标记下来, 然后减最大权重
-            // DFS: 算路径中节点的频率
-            Arrays.sort(t, (x, y) -> x[0] != y[0] ? x[0] - y[0] : x[1] - y[1]);
-            for (int [] e : t) {
-                int u = e[0], v = e[1];
-                dfs(u, -1, v);
-            }
-            // System.out.println(Arrays.toString(cnt));
-            // [1, 3, 2, 2]  // 这里还是动态规划的时候，感觉有点儿困难
-            // 动态规划，求最优解
-            Integer [] ids = IntStream.range(0, n).boxed().toArray(Integer[]::new);
-            Arrays.sort(ids, (x, y) -> price[y] * cnt[y] - price[x] * cnt[x]);
-            System.out.println(Arrays.toString(ids));
-            // [2, 3, 1, 0]
-            // 接下来，仍然需要根据树的节点相邻与否，来决定：减半最重 ids[0], 还是其它某些节点的累加和？【还需要一点儿思路】树状DP ？
-            // 树状 DP: 意思是说，我可以再 DFS 一遍【想要一遍 BFS 完所有必经节点】可是怎么保证呢？这里忘记了，深入复习一下
-            // boolean [] h = new boolean [n];
-            // h[ids[0]] = true;
-            // int max = 0;
-            // for (int i = 0; i < n; i++) max += price[i] * cnt[i];
-            // int [][] f = new int [max+1][2];
-            // for (int id : ids) {
-            //     int v = price[id];
-            //     f[v][1] = v;
-            //     f[v][0] = v / 2;
-            // }
-            int root = ids[0];
-            vis = new boolean [n];
-            BFS(root, -1, 0, true, price);
-            System.out.println("min: " + min);
-            Arrays.fill(vis, false);
-            BFS(root, -1, 0, false, price);
-            System.out.println("min: " + min);
-            return min;
-        }
-        Set<Integer> [] g;
-        boolean [] vis;
-        int [] cnt; // 【统计频率：】这个想法是对。只是统计并非只能用最短路径，用DFS BFS 都可以，就极简了问题
-        int n, min = Integer.MAX_VALUE;
-        boolean BFS(int idx, int p, int cur, boolean h, int [] pp) {// 这个方法写得有问题，明天再改。。。
-           Deque<Integer> q = new ArrayDeque<>();
-           System.out.println("\n idx: " + idx);
-           q.offer(idx);
-           while (!q.isEmpty() && !done()) { 
-                for (int size = q.size()-1; size >= 0; size--) {
-                    int u = q.poll();
-                    if (h) cur += pp[idx] / 2 * cnt[idx];
-                    else cur += pp[idx] * cnt[idx];
-                    vis[idx] = true;
-                    // System.out.println("cur: " + cur);
-                    for (int v : g[idx]) {
-                        if (cnt[v] == 0 || v == p) continue;
-                        q.offer(v);
-                    }
-                }
-                System.out.println("cur: " + cur);
-                if (done()) {
-                    if (cur < min) min = cur;
-                    System.out.println("min: " + min);
-                    // return cur;
-                    return true;
-                }
-                h = !h;
-            }
-            return false;
-        }
-        boolean done() {
-            for (int i = 0; i < n; i++)
-                if (cnt[i] > 0 && !vis[i]) return false;
-            return true;
-        }
-        void dfs(int idx, int p, int target) {
-            cnt[idx]++;
-            if (idx == target) return ; // 这里也是必要的：因为有这种。。。
-            if (g[idx].contains(target)) {
-                cnt[target]++;
-                return ;
-            }
-            for (int v : g[idx]) {
-                if (v == p) continue;
-                dfs(v, idx, target);
-            }
-        }
+
+        
     }
     public static void main (String[] args) { 
         Solution s = new Solution ();
 
-        int [][] a = new int [][] {{0,1},{1,2},{1,3}};
-        int [] b = new int [] {2,2,10,6};
-        int [][] c = new int [][] {{0,3},{2,1},{2,3}};
+        String a = "aaa";
 
-        int r = s.minimumTotalPrice(4, a, b, c);
+        int r = s.addMinimum(a);
         System.out.println("r: " + r);
     }
 }
@@ -502,80 +503,6 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
