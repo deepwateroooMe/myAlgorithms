@@ -699,14 +699,6 @@ public class mfourixed {
         //     return false;
         // }
         
-        // public int minimumDifference(int[] a) { // 2035 这个题很好，可是今天不想再写这个题目了。。。明天再写。。
-        //     int n = a.length, m = n / 2;
-        //     Set<Integer> [] l = new HashSet [m];
-        //     Arrays.setAll(l, z -> new HashSet<>());
-        //     l[0].add(0);
-        //     for (int i = 1; i < m; i++)     
-        // }
-
         // public int maxPalindromes(String t, int k) {
         //     int n = t.length();
         //     char [] s = t.toCharArray();
@@ -742,13 +734,115 @@ public class mfourixed {
         //         if (2 * a[i] > a[a.length - k + i]) return false;
         //     return true;
         // }
-    }
+
+        // public int minimumDifference(int[] a) { // 还有点儿没有看懂。。。。。 
+        //     int n = a.length, m = n / 2, N = (1 << m), sum [] = new int [N];
+        //     // 设置初始值 sum[0]，全部分配给第一个子数组，全部做减法。
+        //     for (int i = 0; i < m; i++) sum[0] -= a[i];
+        //     TreeSet<Integer> [] l = new TreeSet[m+1];
+        //     Arrays.setAll(l, z -> new TreeSet<Integer>()); // 改为只在必要的情况下才添加
+        //     l[0].add(sum[0]);
+        //     for (int i = 1; i < N; i++) { // 因为使用了前面的预处理数组，就可以一遍O(N) 时间找到左侧所有长度的所有答案。。。
+        //         // 枚举一个先前的状态 prev = i ^ (1 << j)，相当于在 prev 的基础上将第 j 位分配给
+        //         // 了第一个数组，原先 nums[j] 是减法的，现在要改成加法，则递推式为 sum[i] = sum[prev] + nums[j] + nums[j]。
+        //         int bitsCnt = Integer.bitCount(i);
+        //         // 计算后导零个数，1 << j 应该是一个 1，且 i - (1 << j) 是更新过的状态，可以利用该状态更新sums[i]。
+        //         // （也可以枚举一个包含在 i 内的位 j 来更新）
+        //         int j = Integer.numberOfTrailingZeros(i); // 【这里机关】，像是没看懂。。。这里像是从 i 的最高位，往 i 的低位添加新的数组元素。。。
+        //         sum[i] = sum[i ^ (1 << j)] + 2 * a[j];
+        //         // 将当前的和记录到对应的 1 的个数下面。
+        //         l[bitsCnt].add(sum[i]);
+        //         // int cur = 0, cnt = 0;
+        //         // for (int j = 0; j < m; j++)  // 【O(NM)】太慢了。。。
+        //         //     if (((i >> j) & 1) == 1) {
+        //         //         cur += a[j];
+        //         //         cnt++;
+        //         //     }
+        //         // l[cnt].add(cur);
+        //     }     
+        //     // for (int i = 0; i < (1 << n-m); i++) {
+        //     //     int cnt = 0, cur = 0;
+        //     //     for (int j = m; j < n; j++) 
+        //     //         if (((i >> (j-m)) & 1) == 1) {
+        //     //             cnt++;
+        //     //             cur += a[j];
+        //     //         }
+        //     //     r[cnt].add(cur);
+        //     // }
+        //     int min = Integer.MAX_VALUE;
+        //     // 再处理右边的同时直接检查左边部分对应的情况。
+        //     Arrays.fill(sum, 0);
+        //     for (int i = 0; i < m; i++) sum[0] -= a[m+i];
+        //     for (int i = 0; i < N; i++) {
+        //         int bitsCnt = Integer.bitCount(i);
+        //         if (i != 0) {
+        //             int j = Integer.numberOfTrailingZeros(i);
+        //             sum[i] = sum[i ^ (1 << j)] + 2 * a[j+m];
+        //         }
+        //         // 寻找左侧 1 的个数位 n - bits 个的编码中和最接近 -sum[i] 的两个数。
+        //         Integer v = l[m - bitsCnt].ceiling(-sum[i]); // 直接在两个有序集合中二分查找，快狠多（O(NlgN)）
+        //         if (v != null) min = Math.min(min, Math.abs(v + sum[i]));
+        //         v = l[m - bitsCnt].floor(-sum[i]);
+        //         if (v != null) min = Math.min(min, Math.abs(v + sum[i]));
+        //     }
+        //     // for (int i = 0; i <= m; i++) {
+        //     //     for (int x : l[i]) // 这里是顺序遍历，两个集合中所有元素的两两比较，太慢 O(N^2)
+        //     //         for (int v : r[m-i]) 
+        //     //             min = Math.min(min, Math.abs(sum - (x + v) * 2));
+        //     // }
+        //     return min;
+        // }
+
+        // static final int mod = (int)1e9 + 7;
+        // Set<Character> pc = new HashSet<>(List.of('2', '3', '5', '7'));
+        // public int beautifulPartitions(String t, int k, int l) {
+        //     int n = t.length();
+        //     char [] s = t.toCharArray();
+        //     // 【剪枝】: 所有可能出现的无解情况
+        //     if (k * l > n || !pc.contains(s[0]) || pc.contains(s[n-1])) return 0;
+        //     var f = new int [k+1][n+1]; // 这里一维好像不够用，怎么知道最后是有 k 个片段呢》？所以就自己再加一维嘛，你看题解也是这样的。。。
+        //     f[0][0] = 1;
+        //     for (int i = 1; i <= k; i++) {
+        //         int sum = 0;
+        //         // 优化：枚举的起点和终点需要给前后的子串预留出足够的长度. 也就是说，对于当前的第 i 个片段，必须留足给后面至少 (k-i) 个片段的最小长度 (k-i)*l 给它们用
+        //         for (int j = i * l; j + (k - i) * l <= n; j++) { // 对于当前片段，遍历和统计，当前第 i 段所有可能取得的最多划分方法
+        //             if (canPartition(s, j-l)) sum = (sum + f[i-1][j-l]) % mod; // 对前第 i 段备选下标 j 中【 i*l,n-(k-i)*l】，所有先前拆分方法的累加和
+        //             if (canPartition(s, j)) f[i][j] = sum; // 如果【 i*l,n-(k-i)*l】中的某个当前 j 也为有效拆分，更新结果
+        //         }
+        //     }
+        //     return f[k][n];
+        // }
+        // // 判断是否可以在 j-1 和 j 之间分割（开头和末尾也算）
+        // boolean canPartition(char [] s, int j) {
+        //     return j == 0 || j == s.length || !pc.contains(s[j-1]) && pc.contains(s[j]);
+        // }
+
+        // public int longestCycle(int[] edges) {
+        //     int n = edges.length, ans = -1;
+        //     int [] time = new int [n];
+        //     for (int i = 0, clock = 1 ; i < n; i++) { // 从每个节点出发，找自这个节点出发的最大环。。。
+        //         if (time[i] > 0) continue; // 如果这个出发节点，是某个环，或是某个节点出发的过程中节点，可以跳过不用重复
+        //         System.out.println("\n i: " + i);
+        //         System.out.println(Arrays.toString(time));
+        //         for (int x = i, startTime = clock; x >= 0; x = edges[x]) { // 是从 x 节点，有向往后遍历
+        //             if (time[x] > 0) { // 重复访问
+        //                 if (time[x] >= startTime) // 找到了一个新的环
+        //                     ans = Math.max(ans, clock - time[x]);
+        //                 break;
+        //             }
+        //             time[x] = clock++;
+        //         }
+        //         System.out.println(Arrays.toString(time));
+        //     }
+        //     return ans;
+        // }
+    } 
     public static void main (String[] args) {
         Solution s  =  new Solution ();
 
-        int [] a = new int [] {9,2,5,4};
+        int [] a = new int [] {3,3,4,2,3};
 
-      int r = s.maxNumOfMarkedIndices(a);
+        int r = s.longestCycle(a);
         System.out.println("r: " + r);
     }
 }
@@ -756,6 +850,43 @@ public class mfourixed {
 // ListNode head = new ListNode(a[0]);
 // head.buildList(head, a);
 // head.printList(head);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

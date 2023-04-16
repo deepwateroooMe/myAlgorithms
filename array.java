@@ -247,15 +247,331 @@ public class array {
         //     return ans == n ? -1 : ans;
         // }
 
+        // public int[][] onesMinusZeros(int[][] a) {
+        //     int m = a.length, n = a[0].length;
+        //     int [] r = new int [m], c = new int [n];
+        //     int [][] d = new int [m][n];
+        //     for (int i = 0; i < m; i++) r[i] = Arrays.stream(a[i]).sum();
+        //     for (int j = 0; j < n; j++) 
+        //         for (int i = 0; i < m; i++) c[j] += a[i][j];
+        //     for (int i = 0; i < m; i++)
+        //         for (int j = 0; j < n; j++)
+        //             d[i][j] = r[i] + c[j] - (n - r[i]) - (m - c[j]);
+        //     return d;
+        // }
 
+        // public int findTheWinner(int n, int k) {
+        //     boolean [] r = new boolean [n];
+        //     int cnt = n, i = 0, curCnt = 0;
+        //     while (cnt > 1) {
+        //         curCnt = 0;
+        //         while (curCnt < k) {
+        //             while (!r[i] && curCnt < k) {
+        //                 curCnt++;
+        //                 if (curCnt == k) break;
+        //                 i++;
+        //                 if (i == n) i = 0;
+        //             }
+        //             while (r[i]) {
+        //                 i++;
+        //                 if (i == n) i = 0;
+        //             }
+        //         }
+        //         cnt--;
+        //         r[i] = true;
+        //     }
+        //     for (i = 0; i < n; i++) if (!r[i]) return i + 1;
+        //     return -1;
+        // }
+
+        // public int[] deckRevealedIncreasing(int[] a) { // TODO TODO 
+        //     int n = a.length, r [] = new int [n];
+        //     Set<Integer> s = new TreeSet<>(Arrays.stream(a).boxed().collect(Collectors.toList()));
+        //     r[0] = Arrays.stream(a).min().getAsInt();
+        //     s.remove(r[0]);
+        //     for (int i = 2; i < n; i += 2) {
+        //         r[i] = s.first();
+        //         s.remove(r[i]);
+        //     }
+        //     // 后面的几个不知道怎么填了。。。
+        // }
+
+        // public List<List<Integer>> queensAttacktheKing(int[][] a, int[] k) {
+        //     int n = 8, i = k[0], j = k[1];
+        //     int [][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1},
+        //                      {-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
+        //     Set<Integer> s = new HashSet<>();
+        //     for (int [] v : a) 
+        //         s.add(v[0] * n + v[1]);
+        //     List<List<Integer>> r = new ArrayList<>();
+        //     for (int [] d : dirs) {
+        //         int x = i + d[0], y = j + d[1];
+        //         if (x < 0 || x >= n || y < 0 || y >= n) continue;
+        //         while (x >= 0 && x < n && y >= 0 && y < n && !s.contains(x*n+y)) {
+        //             x += d[0];
+        //             y += d[1];
+        //         }
+        //         if (x >= 0 && x < n && y >= 0 && y < n && s.contains(x*n+y)) { // 每个方向上，只有第一个出面的，可以直接攻击 
+        //             r.add(List.of(x, y));
+        //             s.remove(x*n + y);
+        //             continue;
+        //         }
+        //     }
+        //     return r;
+        // }
+
+        // int idx, discnt, m, n;
+        // Map<Integer, Integer> prices = new HashMap<>();
+        // public Cashier(int n, int discount, int[] products, int[] prices) {
+        //     idx = 0;
+        //     m = products.length;
+        //     discnt = discount;
+        //     this.n = n;
+        //     for (int i = 0; i < m; i++) 
+        //         this.prices.put(products[i], prices[i]);
+        // }
+        // public double getBill(int[] product, int[] amount) {
+        //     idx++;
+        //     double ans = 0;
+        //     for (int i = 0; i < product.length; i++) {
+        //         if (idx % n == 0) 
+        //             ans += (double)prices.get(product[i]) * amount[i] * (100 - discnt) / 100;
+        //         else ans += (double)prices.get(product[i]) * amount[i];
+        //     }
+        //     return ans;
+        // }
+
+        // public int numTimesAllBlue(int[] a) {
+        //     int n = a.length, r = 0, s = 0, i = 0, d = 0;
+        //     for (int v : a) {
+        //         s += v;
+        //         ++i;
+        //         d += i;
+        //         if (s == d) r++;
+        //     }
+        //     return r;
+        // }
+
+        // public char[][] rotateTheBox(char[][] a) { // TODO TODO TODO 
+        //     int m = a.length, n = a[0].length;
+        //     char [][] r = new [n][m];
+        //     for (int i = m-1; i >= 0; i--) {
+        //         int j = n-1;
+        //         while (j >= 0) {
+        //             while (j >= 0 && a[])                     
+        //         }
+        //     }
+        // }
+
+        // public int matchPlayersAndTrainers(int[] a, int[] b) {
+        //     int m = a.length, n = b.length, i = 0, j = 0, r = 0;
+        //     Arrays.sort(a);
+        //     Arrays.sort(b);
+        //     while (j < n && b[j] < a[i]) j++;
+        //     if (j == n) return r;
+        //     for (i = 0; i < m; i++) { 
+        //         while (j < n && b[j] < a[i]) j++;
+        //         if (j == n) return r;
+        //         if (a[i] <= b[j]) {
+        //             if (j == n) return r;
+        //             r++;
+        //             j++;
+        //         }
+        //     }
+        //     return r;
+        // }
+
+        // public List<String> twoEditWords(String[] a, String[] b) { // aaaaaaaa 32/33 passed 
+        //     int n = a.length;
+        //     m = a[0].length();
+        //     List<String> r = new ArrayList<>();
+        //     for (var s : a) 
+        //         for (var t : b) 
+        //             if (check(s, t) && (r.size() == 0 || !r.get(r.size()-1).equals(s))) r.add(s);
+        //     return r;
+        // }
+        // int m;
+        // boolean check(String S, String T) {
+        //     char [] s = S.toCharArray();
+        //     char [] t = T.toCharArray();
+        //     int i = 0, r = 0;
+        //     while (i < m) {
+        //         while (i < m && s[i] == t[i]) i++;
+        //         if (i < m) {
+        //             r++;
+        //             i++;
+        //         }
+        //     }
+        //     return r <= 2;
+        // }
+
+        // public long dividePlayers(int[] a) {
+        //     int n = a.length, i = 0, j = n-1, sum = Arrays.stream(a).sum();
+        //     Arrays.sort(a);
+        //     if (sum % (n / 2) != 0) return -1;
+        //     int s = a[i] + a[j];
+        //     long r = a[i++] * a[j--];
+        //     while (i < j) {
+        //         if (a[i] + a[j] == s) 
+        //             r += a[i++] * a[j--];
+        //         else return -1;
+        //     }
+        //     return r;
+        // }
+
+        // public String largestWordCount(String[] a, String[] b) {
+        //     int n = a.length;
+        //     Map<String, Integer> m = new HashMap<>();
+        //     for (int i = 0; i < n; i++) {
+        //         int v = a[i].split(" ").length;
+        //         m.put(b[i], m.getOrDefault(b[i], 0) + v);
+        //     }
+        //     int max = 0;
+        //     String r = "";
+        //     for (Map.Entry<String, Integer> en : m.entrySet()) 
+        //         if (en.getValue() >= max) {
+        //             if (r.equals("") || r.compareTo(en.getKey()) > 0) r = en.getKey(); // 这里不知道大写字母是否是排在前面的
+        //             max = en.getValue();
+        //         }
+        //     return r;
+        // }
+
+        // public int findMinArrowShots(int[][] a) { // 这里好像是要用一个差分数组：或者是感觉线段树更像。。。
+        //     int n = a.length;
+        //     if (n == 0) return 0;
+        //     Arrays.sort(a, new Comparator<int []>() {
+        //             public int compare(int [] x, int [] y) {
+        //                 if (x[1] > y[1]) return 1;
+        //                 else if (x[1] < y[1]) return -1;
+        //                 return 0;
+        //             }
+        //         });
+        //     // Arrays.sort(a, (x, y) -> x[1] - y[1]); // 【这么写不对！！！】
+        //     int pos = a[0][1]; // 当前的箭，最远可以向右偏移的距离
+        //     int r = 1;
+        //     for (int [] v : a) 
+        //         if (v[0] > pos) { // 接上不，必须再发一玫箭！！！
+        //             pos = v[1];
+        //             ++r;
+        //         }
+        //     return r;
+        // }
+
+        // public int maxConsecutive(int l, int r, int[] a) {
+        //     int n = a.length, i = l, max = 0;
+        //     Arrays.sort(a);
+        //     for (int v : a) {
+        //         int cur = v - i;
+        //         max = Math.max(max, cur);
+        //         i = v+1;
+        //     }
+        //     if (r > a[n-1]) max = Math.max(max, r - a[n-1]);
+        //     return max;
+        // }
+
+        // // 先把 b 带下标排序一下，再把 a 排序，把 a 必要的话，向左偏移一下，再把偏移后的 a 按了下标重排回正确的位置【可是感觉不想写】
+        // public int[] advantageCount(int[] a, int[] b) {
+        //     int n = a.length;
+        //     Integer l [] = new Integer [n], r [] = new Integer [n];
+        //     for (int i = 0; i < n; i++) {
+        //         l[i] = i;
+        //         r[i] = i;
+        //     }
+        //     Arrays.sort(l, (x, y) -> a[x] - a[y]); // 这就得到了排序后的两个数组的【从小到大的】下标排序
+        //     Arrays.sort(r, (x, y) -> b[x] - b[y]);
+        //     int [] ans = new int [n];
+        //     int i = 0, j = n-1; // 排序后数组 b 的左右指针
+        //     for (int k = 0; k < n; k++) 
+        //         if (a[l[k]] > b[r[i]]) { // 贪心思想：当前 Ak 可用，用上
+        //             ans[r[i]] = a[l[k]];
+        //             ++i;
+        //         } else { // 当前 Ak 不可用，放后面去配对 Bj 里相对大数的部分
+        //             ans[r[j]] = a[l[k]];
+        //             --j;
+        //         }
+        //     return ans;
+        // }
+
+        // public int largestMagicSquare(int[][] a) {
+        //     m = a.length;
+        //     n = a[0].length;
+        //     r = new int [m][n];
+        //     c = new int [m][n];
+        //     for (int i = 0; i < m; i++) r[i][0] = a[i][0];
+        //     for (int j = 0; j < n; j++) c[0][j] = a[0][j];
+        //     for (int j = 1; j < n; j++)
+        //         for (int i = 0; i < m; i++) 
+        //             r[i][j] = r[i][j-1] + a[i][j];
+        //     for (int i = 1; i < m; i++)
+        //         for (int j = 0; j < n; j++)
+        //             c[i][j] = c[i-1][j] + a[i][j];
+        //     for (int d = Math.min(m, n); d > 0; d--) {// 从最大宽度往小遍历
+        //         for (int i = 0; i + d <= m; i++)
+        //             for (int j = 0; j + d <= n; j++) { // 以【 i,j 】为左上顶点，宽度为 d
+        //                 if (checkIJD(i, j, d, a)) return d;
+        //             }
+        //     }
+        //     return 1;
+        // }
+        // int m, n;
+        // int [][] r, c;
+        // boolean checkIJD(int i, int j, int d, int [][] a) {
+        //     // 检查行、列、对角线的和是否相等
+        //     int sum = r[i][j+d-1] - (j == 0 ? 0 : r[i][j-1]), cur = 0;
+        //     System.out.println("sum: " + sum);
+        //     for (int x = i+1; x < i+d; x++)
+        //         if (r[x][j+d-1] - (j == 0 ? 0 : r[x][j-1]) != sum) return false;
+        //     for (int y = j; y < j+d; y++)
+        //         if (c[i+d-1][y] - (i == 0 ? 0 : c[i-1][y]) != sum) return false;
+        //     for (int x = 0; x < d; x++)
+        //         cur += a[i+x][j+x];
+        //     if (cur != sum) return false;
+        //     cur = 0;
+        //     for (int x = 0; x < d; x++)
+        //         cur += a[i+x][j+d-x-1];
+        //     if (cur != sum) return false;
+        //     return true;
+        // }
+
+        // public int longestNiceSubarray(int[] a) { // 【不知道哪里边边角角的地主错了，改天再写 TODO TODO TODO 】
+        //     n = a.length;
+        //     int l = 1, r = 30, ans = 1;
+        //     while (l <= r) {
+        //         int m = (l + r) >> 1;
+        //         System.out.println("\n m: " + m);
+        //         if (check(m, a)) {
+        //             ans = Math.max(ans, m);
+        //             l = m + 1;
+        //         } else r = m-1;
+        //     }
+        //     return ans;
+        // }
+        // int n;
+        // boolean check(int v, int [] a) {
+        //     int i = 0, j = 0, mask = 0;
+        //     for (i = 0; i < n; i++) {
+        //         if ((mask & a[i]) > 0) {
+        //             if (i - j >= v) return true;
+        //             while (j < i && (a[i] & a[j]) == 0) j++;
+        //             if (j < i && (a[i] & a[j]) > 0) {
+        //                 mask ^= a[j];
+        //                 j++;
+        //             }
+        //             if (j < i && (mask & a[i]) == 0)
+        //                 mask |= a[i];
+        //             else if (j == i) mask = a[i];
+        //         } else
+        //             mask |= a[i];
+        //     }
+        //     if (i == n && i - j >= v) return true;
+        //     return false;
+        // }
+        // int [] a = new int [] {178830999,19325904,844110858,806734874,280746028,64,256,33554432,882197187,104359873,453049214,820924081,624788281,710612132,839991691};
     }
     public static void main(String[] args) {
         Solution s  =  new Solution();
 
-        // int [] a = new int [] {6,3,5,2};
-        int []  a = new int []  {1000000000, 1000000000, 1000000000};
-
-        int r = s.minSubarray(a, 3);
+        int r = s.longestNiceSubarray(a);
         System.out.println("r: " + r);
     }
-}
+} // 不想再写这些数组了，写得太没意思了，看点儿别的。。。

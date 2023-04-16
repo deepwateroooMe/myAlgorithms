@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 import static java.util.stream.Collectors.toMap;
 public class cmp {
-    // public static class Solution {
+    public static class Solution {
         // 这是最气人的一次比较，每个题目的时间被卡得极严，连最简单的题目也不给过。。。
         // public int diagonalPrime(int[][] a) {
         //     int n = a.length;
@@ -265,56 +265,159 @@ public class cmp {
         //     return r;
         // }
 
-        // public TreeNode replaceValueInTree(TreeNode root) { // 这个题目：不知道怎么区分表兄妹。。。
+        // public TreeNode replaceValueInTree(TreeNode r) {
+        //     dfs(r, 0);
+        //     return dfsSecondTime(r, new TreeNode(0), 0);
+        // }
+        // Map<Integer, Integer> m = new HashMap<>(); // 用来记录每层的和
+        // // 这里的问题是，直接在原树上改，可以会存在这样那样同步的冲突问题，最简单的办法就是直接建棵新树。。。
+        // TreeNode dfsSecondTime(TreeNode r, TreeNode root, int d) {
+        //     int nextLevelCousinSum = m.getOrDefault(d+1, 0) - (r.left != null ? r.left.val : 0) - (r.right != null ? r.right.val : 0);
+        //     if (r.left != null) {
+        //         root.left = new TreeNode(nextLevelCousinSum);
+        //         dfsSecondTime(r.left, root.left, d+1);
+        //     }
+        //     if (r.right != null) {
+        //         root.right = new TreeNode(nextLevelCousinSum);
+        //         dfsSecondTime(r.right, root.right, d+1);
+        //     }
+        //     return root;
+        // }
+        // void dfs(TreeNode r, int d) {
+        //     if (r == null) return ;
+        //     m.put(d, m.getOrDefault(d, 0) + r.val);
+        //     dfs(r.left, d+1);
+        //     dfs(r.right, d+1);
+        // }        
+
+    // // class Graph {
+    //         // 有向图: 【偶早上昏昏的脑袋呀。。。】
+    //     List<int []> [] g;
+    //     int n;
+    //     public Graph(int n, int[][] edges) {
+    //         this.n = n;
+    //         g = new ArrayList[n];
+    //         Arrays.setAll(g, z -> new ArrayList<int []>());
+    //         for (int [] e : edges) 
+    //             g[e[0]].add(new int [] {e[1], e[2]});
+    //     }
+    //     public void addEdge(int[] edge) {
+    //         g[edge[0]].add(new int [] {edge[1], edge[2]});
+    //     }
+    //     public int shortestPath(int idx, int v) {
+    //         int [] d = new int [n];
+    //         Arrays.fill(d, Integer.MAX_VALUE);
+    //         d[idx] = 0;
+    //         Queue<int []> q = new PriorityQueue<>((x, y) -> x[0] - y[0]);
+    //         q.offer(new int [] {idx, d[idx]});
+    //         while (!q.isEmpty()) {
+    //             int [] cur = q.poll();
+    //             int u = cur[0], x = cur[1];
+    //             if (u == v) continue;
+    //             // if (u == v) return x;  // 这里并不一定是最佳值 
+    //             for (int [] nt : g[u]) // nt: next
+    //                 if (x + nt[1] < d[nt[0]]) {
+    //                     d[nt[0]] = x + nt[1];
+    //                     q.offer(new int [] {nt[0], d[nt[0]]});
+    //                 }
+    //         }
+    //         return d[v] == Integer.MAX_VALUE ? -1 : d[v];
+    //     }
+
+        // public int[] rowAndMaximumOnes(int[][] a) {
+        //     int m = a.length, n = a[0].length, i = 0;
+        //     List<int []> l = new ArrayList<>();
+        //     for (int [] v : a) 
+        //         l.add(new int [] {i++, Arrays.stream(v).sum()});
+        //     Collections.sort(l, (x, y) -> x[1] != y[1] ? y[1] - x[1] : x[0] - y[0]);
+        //     return l.get(0);
         // }
 
-        // class Graph {
-        // 有向图
-    // Set<int []> [] g; // 两种最简单的写法都会超时
-    List<int []> [] g;
-    int n;
-    public Graph(int n, int[][] edges) {
-    // public cmp(int n, int[][] edges) {
-        this.n = n;
-        // g = new TreeSet[n];
-        // Arrays.setAll(g, z -> new TreeSet<int []>((x, y) -> x[1] - y[1]));
-        g = new ArrayList[n];
-        Arrays.setAll(g, z -> new ArrayList<int []>());
-        for (int [] e : edges) 
-            g[e[0]].add(new int [] {e[1], e[2]});
-    }
-    public void addEdge(int[] edge) {
-        g[edge[0]].add(new int [] {edge[1], edge[2]});
-    }
-    // 先用暴力写法：每次都查一遍，可能可以优化，应该可以优化。。。
-    // 要怎么改写成动态更新的：就是每加一条有向边，自动更新所有节点到其它节点的最短距离，就是如下：TODO TODO
-    // int [][] f = new int [n][n]; // 用来记录现有向图：所有点到所有点的最短距离 .....
-    public int shortestPath(int idx, int v) { // TLE TLE TLE 所以，这里是需要优化的，可是暂时没有思路。。。
-        int [] d = new int [n];
-        Arrays.fill(d, Integer.MAX_VALUE);
-        d[idx] = 0;
-        Queue<int []> q = new PriorityQueue<>((x, y) -> x[0] - y[0]);
-        q.offer(new int [] {idx, d[idx]});
-        while (!q.isEmpty()) {
-            int [] cur = q.poll();
-            int u = cur[0], x = cur[1];
-            // if (u == v) return x;  // 这里并不一定是最佳值 
-            if (u == v) continue;
-            for (int [] nt : g[u]) { // nt: next
-                if (x + nt[1] < d[nt[0]]) 
-                    d[nt[0]] = x + nt[1];
-                q.offer(new int [] {nt[0], d[nt[0]]});
+        // public int maxDivScore(int[] a, int[] b) {
+        //     List<int []> l = new ArrayList<>();
+        //     for (int v : b) {
+        //         int cur = 0;
+        //         for (int x : a) 
+        //             if (x % v == 0) cur++;
+        //         l.add(new int [] {v, cur});
+        //     }
+        //     Collections.sort(l, (x, y) -> x[1] != y[1] ? y[1] - x[1] : x[0] - y[0]);
+        //     return l.get(0)[0];
+        // }
+
+        // public int addMinimum(String t) {
+        //     int n = t.length(), r = 0, m = 3 * n;
+        //     if (t.chars().distinct().count() == 1) return 2 * n;
+        //     char [] s = t.toCharArray();
+        //     Set<String> ss = new HashSet<>(List.of("ab", "bc", "ca"));
+        //     for (int i = 0; i < n-1; i++) {
+        //         String cur = t.substring(i, i+2);
+        //         if (i == 0 && cur.equals("ab") || i > 0 && ss.contains(cur)) continue;
+        //         if (cur.equals("ac")) r += 1;
+        //         else if (cur.equals("aa")) r += 2;
+        //         else if (cur.equals("bc")) r += 1;
+        //         else if (cur.equals("ba")) r += (i == 0 ? 2 : 1);
+        //         else if (cur.equals("bb")) r += (i == 0 ? 3 : 2);
+        //         else if (cur.equals("ca")) r += (i == 0 ? 2 : 0);
+        //         else if (cur.equals("cb")) r += (i == 0 ? 3 : 1);
+        //         else if (cur.equals("cc")) r += (i == 0 ? 4 : 2);
+        //     }
+        //     return r + (s[n-1] == 'a' ? 2 : (s[n-1] == 'b' ? 1 : 0));
+        // }
+
+        public int minimumTotalPrice(int n, int[][] edges, int[] price, int[][] t) {
+            g = new HashSet [n];
+            Arrays.setAll(g, z -> new HashSet<Integer>());
+            for (var e : edges) {
+                int u = e[0], v = e[1];
+                g[u].add(v);
+                g[v].add(u);
+            }
+            List<int []> p = new ArrayList<>();
+            cnt = new int [n];
+            for (int i = 0; i < n; i++) p.add(new int [] {i, price[i]});
+            Collections.sort(l, (x, y) -> y[1] - x[1]);
+            // 这里重量减半的时候不知道减哪些？我应该反过来算，先算节点权重，再减重量  也不知道有没有环之类的
+            // 我把所有的最短路径标记下来, 然后减最大权重
+            Arrays.sort(t, (x, y) -> x[0] != y[0] ? x[0] - y[0] : x[1] - y[1]);
+            for (int [] e : t) {
+                int u = e[0], v = e[1];
+                cnt[u]++;
+                cnt[v]++;
+                
             }
         }
-        return d[v] == Integer.MAX_VALUE ? -1 : d[v];
+        Set<Integer> [] g;
+        int [] cnt;
+        void getLightWeightedPath(int u, int v, int [] p) {
+            int [] d = new int [n];
+            Arrays.fill(d, Integer.MAX_VALUE);
+            Queue<int []> q = new PriorityQueue<>((x, y) -> x[1] - y[1]);
+            q.offer(new int [] {u, -1, 0});
+            d[u] = 0;
+            List<Integer> [] l = new ArrayList[n]; // 我想要把走过的最轻路径穿起来，帮助决定哪些最重的节点减半
+            Arrays.setAll(l, z -> new ArrayList<>());
+            while (!q.isEmpty()) {
+                int [] cur = q.poll();
+                int i = cur[0], dist = cur[1];
+                if (i == v) {
+                    
+                }
+                for (int j : g[i]) {
+                    if (p[j] + dist < d[j]) {
+                        d[j] = p[j] + dist;
+                        q.offer(new int [] {j, d[j]});
+                    }
+                }
+            }
+        }
     }
-// }
     public static void main (String[] args) { 
-        // Solution s = new Solution ();
-        int [][] a = new int [][] {{0, 2, 5}, {0, 1, 2}, {1, 2, 1}, {3, 0, 3}};
-        cmp s = new cmp(4, a);
+        Solution s = new Solution ();
 
-        int r = s.shortestPath(3, 2);
+        String a = "ba";
+
+        int r = s.addMinimum(a);
         System.out.println("r: " + r);
     }
 }
@@ -322,9 +425,99 @@ public class cmp {
 // ListNode head = new ListNode(a[0]); 
 // head.buildList(head, a);
 // head.printList(head);
-// TreeNode root = new TreeNode(a[0]);
-// root.buildTree(root, a);
-// root.levelPrintTree(root);
+// TreeNode rr = new TreeNode(a[0]);
+// rr.buildTree(rr, a);
+// rr.levelPrintTree(rr);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
