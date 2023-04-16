@@ -365,7 +365,29 @@ public class cmp {
         //     return r + (s[n-1] == 'a' ? 2 : (s[n-1] == 'b' ? 1 : 0));
         // }
 
+        // void getLightWeightedPath(int u, int v, int [] p) {
+        //     int [] d = new int [n];
+        //     Arrays.fill(d, Integer.MAX_VALUE);
+        //     Queue<int []> q = new PriorityQueue<>((x, y) -> x[1] - y[1]);
+        //     q.offer(new int [] {u, -1, 0});
+        //     d[u] = 0;
+        //     List<Integer> [] l = new ArrayList[n]; // 我想要把走过的最轻路径穿起来，帮助决定哪些最重的节点减半
+        //     Arrays.setAll(l, z -> new ArrayList<>());
+        //     while (!q.isEmpty()) {
+        //         int [] cur = q.poll();
+        //         int i = cur[0], dist = cur[1];
+        //         if (i == v) {
+        //         }
+        //         for (int j : g[i]) {
+        //             if (p[j] + dist < d[j]) {
+        //                 d[j] = p[j] + dist;
+        //                 q.offer(new int [] {j, d[j]});
+        //             }
+        //         }
+        //     }
+        // }
         public int minimumTotalPrice(int n, int[][] edges, int[] price, int[][] t) {
+            this.n = n;
             g = new HashSet [n];
             Arrays.setAll(g, z -> new HashSet<Integer>());
             for (var e : edges) {
@@ -376,48 +398,100 @@ public class cmp {
             List<int []> p = new ArrayList<>();
             cnt = new int [n];
             for (int i = 0; i < n; i++) p.add(new int [] {i, price[i]});
-            Collections.sort(l, (x, y) -> y[1] - x[1]);
-            // 这里重量减半的时候不知道减哪些？我应该反过来算，先算节点权重，再减重量  也不知道有没有环之类的
+            Collections.sort(p, (x, y) -> y[1] - x[1]);
+            // 这里重量减半的时候不知道减哪些？我应该反过来算，先算节点权重，再减重量 也不知道有没有环之类的
             // 我把所有的最短路径标记下来, 然后减最大权重
+            // DFS: 算路径中节点的频率
             Arrays.sort(t, (x, y) -> x[0] != y[0] ? x[0] - y[0] : x[1] - y[1]);
             for (int [] e : t) {
                 int u = e[0], v = e[1];
-                cnt[u]++;
-                cnt[v]++;
-                
+                dfs(u, -1, v);
             }
+            // System.out.println(Arrays.toString(cnt));
+            // [1, 3, 2, 2]  // 这里还是动态规划的时候，感觉有点儿困难
+            // 动态规划，求最优解
+            Integer [] ids = IntStream.range(0, n).boxed().toArray(Integer[]::new);
+            Arrays.sort(ids, (x, y) -> price[y] * cnt[y] - price[x] * cnt[x]);
+            System.out.println(Arrays.toString(ids));
+            // [2, 3, 1, 0]
+            // 接下来，仍然需要根据树的节点相邻与否，来决定：减半最重 ids[0], 还是其它某些节点的累加和？【还需要一点儿思路】树状DP ？
+            // 树状 DP: 意思是说，我可以再 DFS 一遍【想要一遍 BFS 完所有必经节点】可是怎么保证呢？这里忘记了，深入复习一下
+            // boolean [] h = new boolean [n];
+            // h[ids[0]] = true;
+            // int max = 0;
+            // for (int i = 0; i < n; i++) max += price[i] * cnt[i];
+            // int [][] f = new int [max+1][2];
+            // for (int id : ids) {
+            //     int v = price[id];
+            //     f[v][1] = v;
+            //     f[v][0] = v / 2;
+            // }
+            int root = ids[0];
+            vis = new boolean [n];
+            BFS(root, -1, 0, true, price);
+            System.out.println("min: " + min);
+            Arrays.fill(vis, false);
+            BFS(root, -1, 0, false, price);
+            System.out.println("min: " + min);
+            return min;
         }
         Set<Integer> [] g;
-        int [] cnt;
-        void getLightWeightedPath(int u, int v, int [] p) {
-            int [] d = new int [n];
-            Arrays.fill(d, Integer.MAX_VALUE);
-            Queue<int []> q = new PriorityQueue<>((x, y) -> x[1] - y[1]);
-            q.offer(new int [] {u, -1, 0});
-            d[u] = 0;
-            List<Integer> [] l = new ArrayList[n]; // 我想要把走过的最轻路径穿起来，帮助决定哪些最重的节点减半
-            Arrays.setAll(l, z -> new ArrayList<>());
-            while (!q.isEmpty()) {
-                int [] cur = q.poll();
-                int i = cur[0], dist = cur[1];
-                if (i == v) {
-                    
-                }
-                for (int j : g[i]) {
-                    if (p[j] + dist < d[j]) {
-                        d[j] = p[j] + dist;
-                        q.offer(new int [] {j, d[j]});
+        boolean [] vis;
+        int [] cnt; // 【统计频率：】这个想法是对。只是统计并非只能用最短路径，用DFS BFS 都可以，就极简了问题
+        int n, min = Integer.MAX_VALUE;
+        boolean BFS(int idx, int p, int cur, boolean h, int [] pp) {// 这个方法写得有问题，明天再改。。。
+           Deque<Integer> q = new ArrayDeque<>();
+           System.out.println("\n idx: " + idx);
+           q.offer(idx);
+           while (!q.isEmpty() && !done()) { 
+                for (int size = q.size()-1; size >= 0; size--) {
+                    int u = q.poll();
+                    if (h) cur += pp[idx] / 2 * cnt[idx];
+                    else cur += pp[idx] * cnt[idx];
+                    vis[idx] = true;
+                    // System.out.println("cur: " + cur);
+                    for (int v : g[idx]) {
+                        if (cnt[v] == 0 || v == p) continue;
+                        q.offer(v);
                     }
                 }
+                System.out.println("cur: " + cur);
+                if (done()) {
+                    if (cur < min) min = cur;
+                    System.out.println("min: " + min);
+                    // return cur;
+                    return true;
+                }
+                h = !h;
+            }
+            return false;
+        }
+        boolean done() {
+            for (int i = 0; i < n; i++)
+                if (cnt[i] > 0 && !vis[i]) return false;
+            return true;
+        }
+        void dfs(int idx, int p, int target) {
+            cnt[idx]++;
+            if (idx == target) return ; // 这里也是必要的：因为有这种。。。
+            if (g[idx].contains(target)) {
+                cnt[target]++;
+                return ;
+            }
+            for (int v : g[idx]) {
+                if (v == p) continue;
+                dfs(v, idx, target);
             }
         }
     }
     public static void main (String[] args) { 
         Solution s = new Solution ();
 
-        String a = "ba";
+        int [][] a = new int [][] {{0,1},{1,2},{1,3}};
+        int [] b = new int [] {2,2,10,6};
+        int [][] c = new int [][] {{0,3},{2,1},{2,3}};
 
-        int r = s.addMinimum(a);
+        int r = s.minimumTotalPrice(4, a, b, c);
         System.out.println("r: " + r);
     }
 }
