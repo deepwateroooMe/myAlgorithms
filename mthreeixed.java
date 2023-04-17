@@ -125,17 +125,6 @@ public class mthreeixed {
 //             return r;
 //         }
 
-//         public long minimumReplacement(int[] a) {// TODO TODO 
-//             int n = a.length;
-//             long r = 0;
-//             for (int i = n-2; i >= 0; i--) {
-//                 if (a[i] <= a[i+1]) continue;
-//                 r += (long)a[i] / a[i+1] - 1;
-//                 a[i] = (a[i] % a[i+1] == 0 ? a[i+1] : a[i] % a[i+1]);
-//             }
-//             return r;
-//         }
-
 //         public int longestIdealString(String t, int k) { // 感觉这是动态规划
 //             int n = t.length(), f [] = new int [26], max = 0;
 //             char [] s = t.toCharArray();
@@ -151,87 +140,6 @@ public class mthreeixed {
 //             }
 //             return max;
 //         }
-
-//         public long kSum(int[] a, int k) {// TODO TODO TODO
-//             int n = a.length, r [] = getAbsNums(a);
-//             long maxSum = getMaxSum(a), ans = maxSum;
-//             // Queue<Pair<Long, Integer>> q = new PriorityQueue<>((x, y)-> Long.compare(b.getKey(), a.getKey()));
-//             // q.offer(new Pair(maxSum - r[0], 0));
-//             Queue<long []> q = new PriorityQueue<>((x, y) -> Long.compare(y[0], x[0]));
-//             q.offer(new long [] {maxSum - r[0], 0l}); // (nextMaxSum, next index i)
-//             for (int i = 0; i < k-1; i++) { // 遍历去找第 k 大的返回值
-//                 long [] cur = q.poll();
-//                 // Pair cur = q.poll();
-//                 // long nextMaxSum = cur.getKey();
-//                 // int idx = cur.getValue();
-//                 long nextMaxSum = cur[0];
-//                 int idx = (int)cur[1];
-//                 ans = nextMaxSum;
-//                 if (idx + 1 < n) {
-//                     // Keep branching and don't include absNums[i] back
-//                     q.offer(new long [] {nextMaxSum - r[idx+1], (long)idx + 1l});
-//                     // Keep branching and include absNums[i] back
-//                     q.offer(new long [] {nextMaxSum - r[idx+1] + r[idx], (long)idx + 1l});
-//                 }
-//             }
-//             return ans;
-//         }
-//         int [] getAbsNums(int [] a) {
-//             for (int i = 0; i < a.length; i++) 
-//                 a[i] = Math.abs(a[i]);
-//             Arrays.sort(a);
-//             return a;
-//         }
-//         long getMaxSum(int [] a) {
-//             long r = 0;
-//             for (int v : a)
-//                 if (v > 0)
-//                     r += v;
-//             return r;
-//         }
-
-//         // 这个题简单，感觉思路狠清楚 TODO TODO TODO: 不知道哪里写错了。。。。。
-//         public int maximumRobots(int[] a, int[] b, long v) {
-//             n = a.length;
-//             int ans = 0;
-//             p = new long [n];// prefixSum for cost b[]
-//             for (int i = 0; i < n; i++) 
-//                 p[i] = (i == 0 ? 0 : p[i-1]) + b[i];
-//             System.out.println(Arrays.toString(b));
-//             System.out.println(Arrays.toString(p));
-//             // 二分查找：找一个存在的最大可能片段的最大长度
-//             int l = 1, r = n;
-//             while (l <= r) {
-//                 int m = (l + r) / 2;
-//                 System.out.println("m: " + m);
-//                 if (exist(m, a, v)) {
-//                     ans = Math.max(ans, m);
-//                     l = m+1;
-//                 } else r = m-1;
-//             }
-//             return ans;
-//         }
-//         long [] p;
-//         int n;// deque 【 offerFirst--> pollLast-->】
-//         boolean exist(int v, int [] a, long t) { // 用滑动窗口遍历，来找长度为 v 的片段是否存在
-//             System.out.println("v: " + v);
-//             ArrayDeque<Integer> q = new ArrayDeque<>();   // 单调递增？双向队列？【目的是做到：O(N) 遍历O(1) 取最值？】
-//             for (int i = 0; i < v-1; i++) {
-//                 while (!q.isEmpty() && a[q.peekFirst()] <= a[i]) q.pollFirst(); // 入队列时，为维护单调递增，把所有《＝的元素扔出去。。。
-//                 q.offerFirst(i); // 入队列
-//             }
-//             for (int i = v-1; i < n; i++) {
-//                 while (!q.isEmpty() && a[q.peekFirst()] <= a[i]) q.pollFirst(); // 入队列时，为维护单调递增，把所有《＝的元素扔出去。。。
-//                 q.offerFirst(i); // 入队列
-// // 【取解】片段长度，达标，检测结果是否合法
-//                 if (Long.compare((long)a[q.peekLast()] + (long)v * (p[i] - (i == v-1 ? 0 : p[i-v])), t) <= 0) return true;
-//                 if (q.peekLast() == i-v) q.pollLast();
-//             }
-//             return false;
-//         }
-//         int [] a = new int [] {74,46,19,34,7,87,7,40,28,81,53,39,3,46,21,40,76,44,88,93,44,50,22,59,46,60,36,24,50,40,56,5,39,9,24,74,7,14,95,45,36,17,22,12,53,41,2,33,100,73,20,70,81,91,28,98,47,88,79,100,78,38,44,74,48,76,73,92,28,30,95,87};
-//         int [] b = new int [] {11,33,15,40,8,28,97,89,51,42,17,57,45,5,63,53,23,43,76,64,86,86,89,53,94,91,78,12,90,29,79,48,35,6,88,79,82,76,44,93,83,55,65,96,86,24,54,65,94,4,26,73,51,85,47,99,17,14,76,2,39,52,58,5,15,35,79,16,94,16,59,50};
-//         int r = s.maximumRobots(a, b, 447);
 
 //         public boolean checkDistances(String s, int[] a) {
 //             int n = a.length, i = 0;
@@ -1465,63 +1373,6 @@ public class mthreeixed {
 // ListNode head = new ListNode(a[0]);
 // head.buildList(head, a);
 // head.printList(head);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

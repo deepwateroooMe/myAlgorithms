@@ -609,29 +609,6 @@ public class cmp {
         //     return ans;
         // }
 
-        // // 活宝妹就是还一定要嫁给亲爱的表哥～～！！！【爱表哥，爱生活！！！】
-        // public int maxNumOfMarkedIndices(int[] a) {
-        //     int n = a.length, ans = 0;
-        //     int l = 0, r = n / 2;
-        //     Arrays.sort(a);
-        //     System.out.println(Arrays.toString(a));
-        //     while (l <= r) { // 二分查找：查找到一个最大可能的操作次数，注意边界
-        //         int m = (l + r) / 2;
-        //         System.out.println("m: " + m);
-        //         if (possible(m, a)) {
-        //             ans = Math.max(ans, m);
-        //             System.out.println("ans: " + ans);
-        //             l = m+1;
-        //         } else r = m-1;
-        //     }
-        //     return ans;
-        // }
-        // boolean possible(int k, int [] a) {
-        //     for (int i = 0; i < k; i++) // 遍历最小的K 个数，与最大的 k-i+1 个数组对
-        //         if (2 * a[i] > a[a.length - k + i]) return false; // n-1 - (k-i): 这里写得有点儿错，今天暂时不写了。。。
-        //     return true;
-        // }
-
         // public int passThePillow(int n, int t) {
         //     int idx = 1, d = 1;
         //     while (t > 0) {
@@ -1492,6 +1469,29 @@ public class cmp {
 // TreeNode root = new TreeNode(a[0]);
 // root.buildTree(root, a);
 // root.levelPrintTree(root);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

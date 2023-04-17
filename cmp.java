@@ -265,31 +265,6 @@ public class cmp {
         //     return r;
         // }
 
-        // public TreeNode replaceValueInTree(TreeNode r) {
-        //     dfs(r, 0);
-        //     return dfsSecondTime(r, new TreeNode(0), 0);
-        // }
-        // Map<Integer, Integer> m = new HashMap<>(); // 用来记录每层的和
-        // // 这里的问题是，直接在原树上改，可以会存在这样那样同步的冲突问题，最简单的办法就是直接建棵新树。。。
-        // TreeNode dfsSecondTime(TreeNode r, TreeNode root, int d) {
-        //     int nextLevelCousinSum = m.getOrDefault(d+1, 0) - (r.left != null ? r.left.val : 0) - (r.right != null ? r.right.val : 0);
-        //     if (r.left != null) {
-        //         root.left = new TreeNode(nextLevelCousinSum);
-        //         dfsSecondTime(r.left, root.left, d+1);
-        //     }
-        //     if (r.right != null) {
-        //         root.right = new TreeNode(nextLevelCousinSum);
-        //         dfsSecondTime(r.right, root.right, d+1);
-        //     }
-        //     return root;
-        // }
-        // void dfs(TreeNode r, int d) {
-        //     if (r == null) return ;
-        //     m.put(d, m.getOrDefault(d, 0) + r.val);
-        //     dfs(r.left, d+1);
-        //     dfs(r.right, d+1);
-        // }        
-
     // // class Graph {
     //         // 有向图: 【偶早上昏昏的脑袋呀。。。】
     //     List<int []> [] g;
@@ -485,6 +460,62 @@ public class cmp {
         //     }
         // }
 
+        // // 【方法一：两遍DFS 的解题解题思路】
+        // public TreeNode replaceValueInTree(TreeNode r) {
+        //     dfs(r, 0);
+        //     return dfsSecondTime(r, new TreeNode(0), 0);
+        // }
+        // Map<Integer, Integer> m = new HashMap<>(); // 用来记录每层的和
+        // // 这里的问题是，直接在原树上改，可以会存在这样那样同步的冲突问题，最简单的办法就是直接建棵新树。。。
+        // TreeNode dfsSecondTime(TreeNode r, TreeNode root, int d) {
+        //     int nextLevelCousinSum = m.getOrDefault(d+1, 0) - (r.left != null ? r.left.val : 0) - (r.right != null ? r.right.val : 0);
+        //     if (r.left != null) {
+        //         root.left = new TreeNode(nextLevelCousinSum);
+        //         dfsSecondTime(r.left, root.left, d+1);
+        //     }
+        //     if (r.right != null) {
+        //         root.right = new TreeNode(nextLevelCousinSum);
+        //         dfsSecondTime(r.right, root.right, d+1);
+        //     }
+        //     return root;
+        // }
+        // void dfs(TreeNode r, int d) {
+        //     if (r == null) return ;
+        //     m.put(d, m.getOrDefault(d, 0) + r.val);
+        //     dfs(r.left, d+1);
+        //     dfs(r.right, d+1);
+        // }
+        // // 【方法二：】同样精巧轻巧的写法. 不用两遍DFS, 在原树上改
+        // public TreeNode replaceValueInTree(TreeNode root) {
+        //     List<TreeNode> q = new ArrayList<>();
+        //     q.add(root);
+        //     root.val = 0; // 这里是，手动改的
+        //     while (!q.isEmpty()) {
+        //         int nextLevelSum = 0;
+        //         List<TreeNode> tmp = new ArrayList<>();
+        //         for (int idx = 0; idx < q.size(); idx++) {
+        //             TreeNode r = q.get(idx);
+        //             if (r.left != null) {
+        //                 nextLevelSum += r.left.val;
+        //                 tmp.add(r.left);
+        //             }
+        //             if (r.right != null) {
+        //                 nextLevelSum += r.right.val;
+        //                 tmp.add(r.right);
+        //             }
+        //         }
+        //         for (TreeNode r : q) {
+        //             int sibSum = (r.left != null ? r.left.val : 0) + (r.right != null ? r.right.val : 0);
+        //             if (r.left != null) r.left.val = nextLevelSum - sibSum;
+        //             if (r.right != null) r.right.val = nextLevelSum - sibSum;
+        //         }
+        //         q.clear();
+        //         q = tmp; //q 索引到 tmp
+        //         // tmp.clear(); // 这里就不能再清理掉 tmp, 会把数据清空
+        //     }
+        //     return root;
+        // }
+
         
     }
     public static void main (String[] args) { 
@@ -503,26 +534,5 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

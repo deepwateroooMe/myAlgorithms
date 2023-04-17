@@ -836,13 +836,417 @@ public class mfourixed {
         //     }
         //     return ans;
         // }
+
+        // // 【纯数学题：】这样的题目好恶心，能基本理解透彻就可以了。。。
+        // static final int mod = (int)1e9 + 7, MX = (int)1e4 + 1, MXK = 13; // 至多 13 个质因数
+        // static List[] ks = new List[MX]; // ks[x] 为 x 分解质因数后，每个质因数的个数列表
+        // static int [][] c = new int [MX + MXK][MXK + 1]; // 组合数
+        // static {
+        //     // 预处理：【1, 13) 分解质因子的个数
+        //     for (int i = 1; i < MX; i++) {
+        //         ks[i] = new ArrayList<Integer>();
+        //         int x = i;
+        //         for (int p = 2; p * p <= x; p++) 
+        //             if (x % p == 0) {
+        //                 var k = 1;
+        //                 for (x /= p; x % p == 0; x /= p) ++k;
+        //                 ks[i].add(k);
+        //             }
+        //         if (x > 1) ks[i].add(1);
+        //     }
+        //     // 预处理：组合数组
+        //     c[0][0] = 1;
+        //     for (int i = 1; i < MX + MXK; i++) {
+        //         c[i][0] = 1;
+        //         for (int j = 1; j <= Math.min(i, MXK); j++) 
+        //             c[i][j] = (c[i-1][j] + c[i-1][j-1]) % mod;
+        //     }
+        // }
+        // public int idealArrays(int n, int maxValue) {
+        //     long ans = 0l;
+        //     for (int i = 1; i <= maxValue; i++) {
+        //         var mul = 1l;
+        //         for (var k : ks[i]) mul = mul * c[n+(int)k-1][(int)k] % mod;
+        //         ans += mul;
+        //     }
+        //     return (int)(ans % mod);
+        // }
+
+//         // 长度是5 的数字回文 [__X__] 那么前两位共有 100 种可能性，它说暴力所有可能性
+//         static final int mod = (int)1e9 + 7;
+//         public int countPalindromes(String T) {
+//             int n = T.length(), m = 10;
+//             char [] t = T.toCharArray();
+//             // 想到过用 l[n][0...9] 和 r[n][0...9] 来统计个数【但没能想透】
+//             int [] p = new int [m], s = new int [m]; // 记录：前缀后缀各数字出现的次数
+//             int [][] pr = new int [m][m], su = new int [m][m]; // 记录组合出现的次数
+//             // 从后往前遍历：统计后缀数组，数字出现的次数实时更新，以及组合在后缀中出现的累积次数，时实更新
+//             for (int i = n-1; i >= 0; i--) {
+//                 int k = t[i] - '0';
+//                 for (int j = 0; j < m; j++) // 因为当前数字 k 的存在， k_ 在后缀中的出现次数全部更新 for — in 【0...9】
+//                     su[k][j] += s[j];
+//                 s[k]++;
+//             }
+//             // 从前往后遍历：统计前缀数组，数字出现的次数实时更新，以及组合在前缀中出现的累积次数，时实更新【把这一步的工作，转变成一次遍历，实时同步进行】
+// // 【100 种可能的组合：共多少种可能性 x】—X—【被固定了的100 种组合，共多少种可能性 y】＝ sum 【2,n-3】（x*y）
+//             long r = 0;
+//             for (var d : t) {
+//                 d -= '0';
+//                 --s[d]; // 【撤销：】这些撤销的细节，要注意 
+//                 for (int j = 0; j < m; j++)
+//                     su[d][j] -= s[j]; // 【撤销：】由当前回文中间数字下标 d 所产生的所有后缀相关可能性
+//                 for (int j = 0; j < m; j++) 
+//                     for (int k = 0; k < m; k++)
+//                         // r += (long)pr[j][k] * su[k][j]; // 枚举所有字符组合【这里想不通：后缀不是该乘 su[k][j] 才对吗？】
+//                         r += (long)pr[j][k] * su[j][k]; // 枚举所有字符组合【后缀不是该乘 su[k][j] 才对吗？？ pr 从左往右遍历， su 从右往左遍历】
+//                 for (int j = 0; j < m; j++) // 【动态更新】：从左往右遍历的，变成了同步一遍从左往右遍历
+//                     pr[d][j] += p[j];
+//                 p[d]++;
+//             }
+//             return (int)(r % mod);
+//         }
+
+        // // 【数位DP:】传说中的数位 DP 呀，就被我忘记得这么一干二净的？！！！【爱表哥，爱生活！！！】
+        // public int countSpecialNumbers(int n) { // 【DFS 记忆化搜索】？方法名的不同，这也是回字的四样写法？
+        //     s = Integer.toString(n).toCharArray();
+        //     int m = s.length;
+        //     f = new int [m][1 << 10];
+        //     Arrays.stream(f).forEach(z -> Arrays.fill(z, -1)); // -1 表示没有计算过
+        //     return dfs(0, 0, true, false);
+        // }
+        // int f[][];
+        // char s[];
+        // // 【DFS 记忆化搜索】【数位DP】：带各种状态的，把这个模板理解透彻，记牢了。。。！！！
+        // int dfs(int idx, int mask, boolean isLimit, boolean isNum) {
+        //     if (idx == s.length) return isNum ? 1 : 0; // isNum 为 true 表示得到了一个合法数字
+        //     if (!isLimit && isNum && f[idx][mask] != -1) return f[idx][mask]; // 第二次遍历，直接返回先前算过的结果
+        //     int ans = 0;
+        //     if (!isNum) // 可以跳过当前数位
+        //         ans = dfs(idx+1, mask, false, false);
+        //     // 【当前 idx 位的上界：】最大取值：如果前面填的数字都和 n 的一样，那么这一位至多填数字 s[i]（否则就超过 n 啦）
+        //     int up = isLimit ? s[idx] - '0' : 9;
+        //     for (int d = isNum ? 0 : 1; d <= up; d++) // 枚举要填入当前位 idx 的合法数字 d 。【 isNum: 为真时，表示先前 <idx 位填入过数，所以当前可以填 0】
+        //         if ((mask >> d & 1) == 0) // d 不在 mask 中
+        //             ans += dfs(idx+1, mask | (1 << d), isLimit && d == up, true); // 注意这里 d==up 限制条件的加入
+        //     if (!isLimit && isNum) f[idx][mask] = ans;
+        //     return ans;
+        // }
+
+//         // 【方法一：记忆化搜索】：为什么会感觉这个题跟记忆化搜索对应不起来呢？
+//         public long minimumTotalDistance(List<Integer> ro, int[][] factory) {
+//             Arrays.sort(factory, (x, y) -> x[0] - y[0]); // 升序排列
+//             var r = ro.stream().mapToInt(i -> i).toArray();
+//             Arrays.sort(r); // 升序排列
+//             n = r.length;
+//             m = factory.length;
+//             f = new long [n][m];
+//             Arrays.stream(f).forEach(z -> Arrays.fill(z, (long)1e13));
+//             return dfs(0, 0, r, factory);
+//         }
+//         long [][] f;
+//         int m, n;
+//         long dfs(int u, int v, int [] r, int [][] factory) {
+// // 所有的机器人，都修理完了
+//             if (u == n) return 0;
+// // 记忆化返回            
+//             if (v < m && f[u][v] != (long)1e13) return f[u][v];
+// // 处理最后一个工厂的工作任务
+//             if (v == m-1) { 
+//                 if (factory[v][1] < n - u) return (long)1e13; // 永远无法完成
+//                 // 计算最后一个修配厂：处理最后这些所有剩余待处理机器人的总代价
+//                 long ans = 0;
+//                 for (int i = u; i < n; i++) 
+//                     ans += Math.abs(r[i] - factory[v][0]);
+//                 return f[u][v] = ans;
+//             }
+// // 处理所有过程中状态转移
+//             long ans = dfs(u, v+1, r, factory), cost = 0; // 当前工厂不想做事：本工罢工！！！
+//             for (int i = u; i < Math.min(u + factory[v][1], n); i++) { // 注意这里的取值上限。。。
+//                 cost += Math.abs(factory[v][0] - r[i]);
+//                 ans = Math.min(ans, cost + dfs(i+1, v+1, r, factory));
+//             }
+//             return f[u][v] = ans;
+//         }        
+        // // 【方法二：动规】
+        // public long minimumTotalDistance(List<Integer> ro, int[][] factory) {
+        //     Arrays.sort(factory, (x, y) -> x[0] - y[0]); // 升序排列
+        //     var r = ro.stream().mapToInt(i -> i).toArray();
+        //     Arrays.sort(r); // 升序排列
+        //     int m = factory.length, n = r.length;
+        //     var f = new long [n+1]; // 原本是二维 dp, 第一维被优化掉了。第一维度表示 i 个工厂
+        //     Arrays.fill(f, (long)1e18);
+        //     f[0] = 0;
+        //     // 枚举每个工厂可以修理 k 个在【0,v[1]】范围内的 k 个机器人的最小移动距离
+        //     for (var v : factory) // 第一维度表示 i 个工厂 
+        //         for (int j = n; j > 0; j--) { // 不知道这里为什么 j 会倒序遍历？【它说，可以选 n 台电脑里的任意最多 k 台给第 i 个工厂来修】取全局最小。。【O(NNM)】。
+        //             var cost = 0l;
+        //             for (int k = 1; k <= Math.min(j, v[1]); k++) { // 这里为什么 k 没有取 0 呢？【0, min【 j,v[1]】】
+        //                 cost += Math.abs(r[j-k] - v[0]);
+        //                 f[j] = Math.min(f[j], f[j-k] + cost);
+        //             }
+        //         }
+        //     return f[n];
+        // }
+
+        // public long maximumBeauty(int[] a, long cnt, int target, int full, int partial) {
+        //     long n = a.length;
+        //     Arrays.sort(a);
+        //     if (a[0] >= target) return n * full; // 剪枝，此时所有花园都是完善的
+        //     long leftFlowers = cnt - target * n; // 填充后缀后，剩余可以种植的花
+        //     for (int i = 0; i < n; i++) {
+        //         a[i] = Math.min(a[i], target); // 去掉多余的花
+        //         leftFlowers += a[i]; // 补上已有的花: 在填充后缀之后，剩余 leftFlowers朵花可以种植
+        //     }
+        //     long ans = 0;
+        //     long sumFlowers = 0;
+        //     for (int i = 0, x = 0; i <= n; i++) { // 枚举后缀长度 n-i: 完美花园枚举为 (n-i) 个
+        //         if (leftFlowers >= 0) {
+        //             // 计算最长前缀的长度: x 是右指针，尽可能地右移
+        //             while (x < i && (long)a[x] * x - sumFlowers <= leftFlowers)
+        //                 sumFlowers += a[x++]; // 注意 x 只增不减，二重循环的时间复杂度为 O(n) 【对所有的 i 从【0,n】来说】，共是O(N^2)
+        //             long beauty = (n - i) * full; // 计算总美丽值
+        //             if (x > 0) beauty += Math.min((leftFlowers + sumFlowers) / x, (long)target - 1) * partial;
+        //             ans = Math.max(ans, beauty);
+        //         }
+        //         if (i < n) leftFlowers += target - a[i];
+        //     }
+        //     return ans;
+        // }
+
+//         // 【方法一：】完全按照提示：二分查找窗口宽度 + 滑动窗口
+//         public int maximumRobots(int[] a, int[] b, long v) {
+//             n = a.length;
+//             int ans = 0;
+//             p = new long [n];// prefixSum for cost b[]
+//             for (int i = 0; i < n; i++) 
+//                 p[i] = (i == 0 ? 0 : p[i-1]) + b[i];
+//             // 二分查找：找一个存在的最大可能片段的最大长度
+//             int l = 1, r = n;
+//             while (l <= r) {
+//                 int m = (l + r) / 2;
+//                 if (exist(m, a, v)) {
+//                     ans = Math.max(ans, m);
+//                     l = m+1;
+//                 } else r = m-1;
+//             }
+//             return ans;
+//         }
+//         long [] p;
+//         int n;// deque 【 offerFirst--> pollLast-->】【下面的代码写得还是太繁琐了一点儿】
+//         boolean exist(int v, int [] a, long t) { // 用滑动窗口遍历，来找长度为 v 的片段是否存在
+//             ArrayDeque<Integer> q = new ArrayDeque<>();   // 单调递增？双向队列？【目的是做到：O(N) 遍历O(1) 取最值？】
+//             for (int i = 0; i < v-1; i++) {
+//                 while (!q.isEmpty() && a[q.peekFirst()] <= a[i]) q.pollFirst(); // 入队列时，为维护单调递增，把所有《＝的元素扔出去。。。
+//                 q.offerFirst(i); // 入队列
+//             }
+//             for (int i = v-1; i < n; i++) {
+//                 while (!q.isEmpty() && a[q.peekFirst()] <= a[i]) q.pollFirst(); // 入队列时，为维护单调递增，把所有《＝的元素扔出去。。。
+//                 q.offerFirst(i); // 入队列
+//                 if (q.peekLast() == i-v) q.pollLast();
+// // 【取解】片段长度，达标，检测结果是否合法
+//                 if (t - ((long)a[q.peekLast()] + (long)v * (p[i] - (i == v-1 ? 0 : p[i-v]))) >= 0) return true;
+//             }
+//             return false;
+//         }
+        // // 【方法二：】长度不固定的动态滑动窗口
+        // public int maximumRobots(int[] a, int[] b, long v) {
+        //     int n = a.length;
+        //     int ans = 0;
+        //     long sum = 0;
+        //     ArrayDeque<Integer> q = new ArrayDeque<>(); // 【单调升序；】从左到右上升，First【左右】Last
+        //     for (int i = 0, j = 0; i < n; i++) {
+        //         while (!q.isEmpty() && a[q.peekFirst()] <= a[i]) q.pollFirst(); // 维护队列单调上升
+        //         q.offerFirst(i);
+        //         sum += b[i];
+        //         while (!q.isEmpty() && j < i && (long)a[q.peekLast()] + (i - j + 1) * sum > v) {
+        //             if (!q.isEmpty() && q.peekLast() == j) q.pollLast();
+        //             sum -= b[j++]; // 【BUG:】这里的情况下，当左边往外扔，若有在队列里的，队列里得同步更新
+        //         }
+        //         if (!q.isEmpty() && (long)a[q.peekLast()] + (i - j + 1l) * sum <= v)
+        //             ans = Math.max(ans, i - j + 1);
+        //     }
+        //     return ans;
+        // }
+
+        // // 现在看，不是极其简单吗？为什么之前一直没写呢？这些数据结构都是再简单不过的。。。【爱表哥，爱生活！！！活宝妹就是还一定要嫁给亲爱的表哥～～】
+        // public int mostBooked(int n, int[][] a) {
+        //     Arrays.sort(a, (x, y) -> x[0] - y[0]);
+        //     Queue<Integer> r = new PriorityQueue<>();
+        //     Queue<int []> m = new PriorityQueue<>((x, y) -> x[1] != y[1] ? x[1] - y[1] : x[0] - y[0]);
+        //     int [] cnt = new int [n];
+        //     for (int i = 0; i < n; i++) r.add(i);
+        //     for (int [] e : a) {
+        //         int i = e[0], j = e[1];
+        //         while (!m.isEmpty() && m.peek()[1] <= i) r.add(m.poll()[0]); // 【BUGGLY:】这里要把及时空出来的房间回归再利用
+        //         if (r.size() > 0) {
+        //             int v = r.poll();
+        //             cnt[v]++;
+        //             m.add(new int [] {v, j});
+        //         } else {
+        //             int [] cur = m.poll();
+        //             int v = cur[0];
+        //             m.add(new int [] {v, cur[1] + j - i}); // 【BUGGLY:】注意这里的延迟时间，需要加上
+        //             cnt[v]++;
+        //         } 
+        //     }
+        //     int ans = 0;
+        //     for (int i = 0; i < n; i++)
+        //         if (cnt[i] > cnt[ans]) ans = i;
+        //     return ans;
+        // }
+
+        // public long minCost(int[] a, int[] b) {
+        //     n = a.length;
+        //     if (n == 1 || Arrays.stream(a).distinct().count() == 1) return 0;
+        //     long ans = Long.MAX_VALUE;
+        //     // 这里要演算、推算：从第 i 个元素变到第 i+1 个元素后，和的变化？
+        //     int l = 1, r = (int)1e6 + 1;
+        //     while (l <= r) {
+        //         int m = (l + r) >> 1;
+        // // 每次取mid和mid+1对应的总cost，如果前者总cost小于后者，说明最优解在左边，如果大于，则在右边
+        //         long left = getCost(m, a, b), right = getCost(m+1, a, b);
+        //         if (left <= right) {
+        //             ans = Math.min(ans, left);
+        //             r = m-1;
+        //         } else l = m+1;
+        //     }
+        //     return ans;
+        // }
+        // int n;
+        // long getCost(int v, int [] a, int [] b) {
+        //     long r = 0;
+        //     for (int i = 0; i < n; i++)
+        //         r += (long)Math.abs(a[i] - v) * b[i];
+        //     return r;
+        // }
+
+        // public int maximumScore(int[] a, int[][] egs) {
+        //     int n = a.length;
+        //     List<int []> [] g = new ArrayList [n];
+        //     Arrays.setAll(g, z -> new ArrayList<>());
+        //     for (int [] e : egs) {
+        //         int u = e[0], v = e[1];
+        //         g[u].add(new int [] {v, a[v]});
+        //         g[v].add(new int [] {u, a[u]});
+        //     }
+        //     for (int i = 0; i < n; i++) {
+        //         g[i].sort((x, y) -> y[1] - x[1]);
+        //         if (g[i].size() > 3) g[i] = new ArrayList<>(g[i].subList(0, 3));
+        //     }
+        //     int r = -1;
+        //     for (int [] e : egs) {
+        //         int u = e[0], v = e[1];
+        //         for (var x : g[u]) {
+        //             int c = x[0];
+        //             for (var y : g[v]) {
+        //                 int b = y[0];
+        //                 if (c != v && b != u && c != b)
+        //                     r = Math.max(r, x[1] + y[1] + a[u] + a[v]);
+        //             }
+        //         }
+        //     }
+        //     return r;
+        // }
+
+        // // 真想恋亲爱的表哥呀，今天晚上要去路过一下看看。。。。。【活宝妹就是还一定要嫁给亲爱的表哥～～】
+        // // 用两个栈，用第一个栈，当是搭了个桥。。。
+        // private static int[] s = new int[100000], t = new int[100000]; // 由于有一个整体拷贝的过程，用数组模拟栈
+        // public int[] secondGreaterElement(int[] a) {
+        //     int n = a.length, i = 0, j = 0;
+        //     int [] r = new int [n];
+        //     Arrays.fill(r, -1);
+        //     // ArrayDeque<Integer> s = new ArrayDeque<>(), t = new ArrayDeque<>(); // 【递减单调栈】
+        //     // for (int i = 0; i < n; i++) {
+        //     //     if (!s.isEmpty() && a[s.peekFirst()] < a[i]) // 当 while 循环时
+        //     //         t.offerFirst(s.pollFirst()); // 【想不清楚：】怎么保持原顺序入栈，当元素多于 1 时
+        //     // }
+        //     for (int k = 0; k < n; k++) {
+        //         int v = a[k];
+        //         while (j > 0 && a[t[j-1]] < v)
+        //             r[t[--j]] = v;
+        //         int ii = i;
+        //         while (i > 0 && a[s[i-1]] < v]) --i;
+        //         System.arraycopy(s, i, t, j, ii - i);
+        //         j += ii - i;
+        //         s[i++] = k;
+        //     }
+        //     return r;
+        // }
+
+        // public long kSum(int[] a, int k) {
+        //     int n = a.length;
+        //     long sum = 0;
+        //     for (int i = 0; i < n; i++)
+        //         if (a[i] > 0) sum += a[i];
+        //         else a[i] = -a[i];
+        //     Arrays.sort(a); // 取绝对值后，排序【升序】好的数组
+        //     Queue<long []> q = new PriorityQueue<>((x, y) -> Long.compare(y[0], x[0]));
+        //     q.offer(new long [] {sum, 0});
+        //     while (--k > 0) { // 遍历去找第 k 大的返回值
+        //         long [] cur = q.poll();
+        //         long curSum = cur[0];
+        //         int idx = (int)cur[1];
+        //         if (idx < n) {
+        //             q.offer(new long [] {curSum - a[idx], idx + 1}); // 保留 nums[i-1]
+        //             if (idx > 0) q.offer(new long [] {curSum - a[idx] + a[idx-1], idx + 1}); // 不保留 nums[i-1]，把之前减去的加回来
+        //         }
+        //     }
+        //     return q.peek()[0];
+        // }
+        // // 【方法二：二分搜索法】：感觉还有一点儿不透。。。再多想一想
+        // int [] a;
+        // long limit;
+        // int k, cnt;
+        // void f(int i, long s) {
+        //     if (i == a.length || cnt >= k || s + a[i] > limit) return;
+        //     ++cnt;
+        //     f(i+1, s+a[i]); // 选
+        //     f(i+1, s); // 不选
+        // }
+        // public long kSum(int [] a, int k) {
+        //     int n = a.length;
+        //     long sum = 0, tt = 0;
+        //     for (int i = 0; i < n; i++) {
+        //         if (a[i] > 0) sum += a[i];
+        //         else a[i] = -a[i];
+        //         tt += a[i];
+        //     }
+        //     Arrays.sort(a);
+        //     this.a = a;
+        //     this.k = k - 1;
+        //     long l = 0, r = tt;
+        //     while (l < r) {
+        //         long mid = (l + r) >> 1;
+        //         this.limit = mid;
+        //         cnt = 0;
+        //         f(0, 0l);
+        //         if (cnt >= k-1) r = mid;
+        //         else l = mid + 1;
+        //     }
+        //     return sum - l;
+        // }
+
+        // // 这个题看了半天的题解，也没搞懂说的是什么？！！！
+        // public long minimumReplacement(int[] a) {
+        //     int n = a.length, min = a[n-1];
+        //     long r = 0;
+        //     for (int i = n-2; i >= 0; i--) {
+        //         int v = (a[i] - 1) / min;
+        //         r += v;
+        //         min = a[i] / (v + 1);
+        //     }
+        //     return r;
+        // }
+
+        
     } 
     public static void main (String[] args) {
         Solution s  =  new Solution ();
 
-        int [] a = new int [] {3,3,4,2,3};
+        int [] a = new int [] {1, 3, 5, 2};
+        int [] b = new int [] {2, 3, 1, 14};
 
-        int r = s.longestCycle(a);
+        long r = s.minCost(a, b);
         System.out.println("r: " + r);
     }
 }
@@ -850,37 +1254,6 @@ public class mfourixed {
 // ListNode head = new ListNode(a[0]);
 // head.buildList(head, a);
 // head.printList(head);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
