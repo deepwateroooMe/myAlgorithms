@@ -1,6 +1,5 @@
 *.class
 *.tex
-*.pdf
 tmp.*
 _minted*
 ./summary/_minted*
