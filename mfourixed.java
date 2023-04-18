@@ -1238,15 +1238,301 @@ public class mfourixed {
         //     return r;
         // }
 
-        
+        // public long minimumMoney(int[][] a) {
+        //     int n = a.length;
+        //     if (n == 1) return a[0][0];
+        //     List<int []> l = new ArrayList<>(), r = new ArrayList<>();
+        //     for (int [] x : a) {
+        //         int u = x[0], v = x[1];
+        //         if (v >= u) l.add(x);
+        //         else r.add(x);
+        //     }
+        //     Collections.sort(l, (x, y) -> y[0] != x[0] ? y[0] - x[0] : y[1] - x[1]);
+        //     if (r.size() == 0) return l.get(0)[0]; // 还是需要的
+        //     Collections.sort(r, (x, y) -> x[1] - y[1]);
+        //     int i = 0, j = 0;
+        //     long cur = 0, max = -1;
+        //     while (j < r.size()) {
+        //         int [] x = r.get(j);
+        //         if (cur < x[0]) {
+        //             int tmp =  x[0] - (int)cur;
+        //             cur += tmp;
+        //             if (max == -1) max = cur;
+        //             else max += (long)tmp;
+        //         }
+        //         cur += -x[0] + x[1];
+        //         j++;
+        //     }
+        //     if (l.size() > 0 && cur < l.get(0)[0]) max += l.get(0)[0] - cur;
+        //     return max;
+        // }
+        // // 【这个方法没有看：】不知道它在说什么。。。。。
+        // public long minimumMoney(int[][] transactions) {
+        //     var totalLose = 0L;
+        //     var mx = 0;
+        //     for (var t : transactions) {
+        //         totalLose += Math.max(t[0] - t[1], 0);
+        //         mx = Math.max(mx, Math.min(t[0], t[1]));
+        //     }
+        //     return totalLose + mx;
+        // }
+
+        // public int countSubarrays(int[] a, int k) {
+        //     int n = a.length, idx = -1;
+        //     for (int i = 0; i < n; i++)
+        //         if (a[i] == k) {
+        //             idx = i;
+        //             break;
+        //         } 
+        //     int r = 0, sum = 0;
+        //     Map<Integer, Integer> m = new HashMap<>();
+        //     m.put(0, 1);
+        //     for (int i = 0, j = 0; i < n; i++) {
+        //         sum += (a[i] < k ? -1 : (a[i] == k ? 0 : 1));
+        //         if (i < idx) m.put(sum, m.getOrDefault(sum, 0) + 1);
+        //         else if (i >= idx) r += m.getOrDefault(sum, 0) + m.getOrDefault(sum-1, 0);
+        //     }
+        //     return r;
+        // }
+
+        // //TODO TODO TODO: 不知道这个题目说的是什么意思。。。
+        // public long minimumTotalCost(int[] a, int[] b) {
+        //     long ans = 0;
+        //     int n = a.length, swapCnt = 0, modeCnt = 0, mode = 0;
+        //     int [] cnt = new int [n+1];
+        //     for (int i = 0; i < n; i++) {
+        //         int v = a[i];
+        //         if (v == b[i]) {
+        //             ans += i;
+        //             ++swapCnt;
+        //             ++cnt[v];
+        //             if (cnt[v] > modeCnt) {
+        //                 modeCnt = cnt[v];
+        //                 mode = v;
+        //             }
+        //         }
+        //     }
+        //     for (int i = 0; i < n && modeCnt * 2 > swapCnt; i++) {
+        //         int x = a[i], y = b[i];
+        //         if (x != y && x != mode && y != mode) {
+        //             ans += i;
+        //             ++swapCnt;
+        //         }
+        //     }
+        //     return modeCnt * 2 > swapCnt ? -1 : ans;
+        // }
+
+        // public int componentValue(int[] a, int[][] egs) {
+        //     int n = a.length, sum = Arrays.stream(a).sum(), max = sum / Arrays.stream(a).max().getAsInt();
+        //     // 一，建图
+        //     g = new ArrayList [n];
+        //     Arrays.setAll(g, z -> new ArrayList<>());
+        //     for (int [] e : egs) {
+        //         int u = e[0], v = e[1];
+        //         g[u].add(v);
+        //         g[v].add(u);
+        //     }
+        //     this.a = a;
+        //     // 二、从大到小枚举可能存在的答案
+        //     for (int i = max; i > 0; i--) { // 这里【从大到小】枚举：可以将整棵树拆分成的小树个数
+        //         if (sum % i == 0) {
+        //             target = sum / i;
+        //             // 为什么只遍历了以 0 为树根的一棵【子树、小树、所有的小树？】树，就保证了原本大树，能被分成 i 段，每段都和为 target？
+        //             // 【注意，这里返回 0 是说：】以0 为根节点的小树，也返回了0, 说它的子树和是 target, 而过程中还有（ i-1）棵小树也说，它们自成小树，和为 target!!!
+        //             if (dfs(0, -1) == 0) return i-1; // 返回的断开边数，为小树个数 - 1
+        //         }
+        //     }
+        //     return -1;
+        // }
+        // List<Integer>[] g;
+        // int[] a;
+        // int target, cnt = 0;
+        // int dfs(int idx, int p) { // DFS 这棵树，统计子树的价值
+        //     // 如果这个当前节点 idx, 与某自成小树的子节点子树【子树和为 target】，也要断开，怎么处理呢？
+        //     int r = a[idx]; // 价值
+        //     for (int v : g[idx]) {
+        //         if (v == p) continue;
+        //         int curSubTree = dfs(v, idx);
+        //         if (curSubTree < 0) return -1;
+        //         r += curSubTree;
+        //     }
+        //     return r == target ? 0 : (r > target ? -1 : r);
+        // }
+
+// // 活宝妹的根在亲爱的表哥这里。。。
+//         public int longestPath(int[] p, String t) {
+//             if (p.length == 1) return 1;
+            
+//             s = t.toCharArray();
+//             // 【一，建个有向图】
+// // 【有向图；】这里说是无向图，但只是个幌子，把它当【有向图】来处理。但它返回的路径可以是左右子树之和。。。
+// // 然后还可以不经过根节点。。。【不是，必须经过根节点的】题目是说根在0 节点，但题目没有说，路径一定要过根节点。。。。。
+//             g = new ArrayList[p.length]; 
+//             Arrays.setAll(g, z -> new ArrayList<>());
+//             for (int i = 1; i < p.length; i++) g[p[i]].add(i);
+//             // 【二，DFS 找个合法有效的最长路径】
+//             max = 0; // 全局最大：可以不经过根节点
+//             dfs(0);
+//             // int [] a = new int [] {-1,0};
+//             // String b = "mm";
+//             return max == 0 ? 1 : max;
+//         }
+//         List<Integer> [] g;
+//         char [] s;
+//         int max;
+//         int dfs(int idx) {
+//             var maxLen = 1; // 子树中的最长路径节点数，包括当前根节点。但这里更多是，是否已经存在一条先前的，最长路径的记录
+//             for (int v : g[idx]) {
+// // 【BUGGLY CODING:】这里可能出现了 BUGGLY, 就是会漏掉部分不过根节点的最优解？【可能吗？不可能吗？】是可以的！！！
+//                 // if (s[v] == s[idx]) continue; // 【BUGGLY CODING:】这里可能出现了 BUGGLY, 就是会漏掉部分不过根节点的最优解？【可能吗？不可能吗？】是可以的！！！
+//                 int curLen = dfs(v) + 1; // 子树最长路径的节点数 + 当前节点数 1
+//                 if (s[v] != s[idx]) { // 这里可能产生：全局，无有效合法解的情况
+//                     max = Math.max(max, maxLen + curLen - 1); // 根节点,数了两遍, 所以减去 1 个
+//                     maxLen = Math.max(maxLen, curLen); // 记录：子树最长路径的节点数，包括当前根节点
+//                 }
+//             }
+//             return maxLen; // 对当前节点：最长路径节点数 = 子树中最长路径节点数 + 当前根节点数 1
+//         }
+
+        // // TODO TODO TODO: 感觉这个题还不够透彻，要再看再想一想。。。
+        // public int numberOfGoodPaths(int[] a, int[][] egs) {
+        //     n = a.length;
+        //     g = new ArrayList [n];
+        //     Arrays.setAll(g, z -> new ArrayList<>());
+        //     for (int [] e : egs) {
+        //         int u = e[0], v = e[1];
+        //         g[u].add(v);
+        //         g[v].add(u);
+        //     }
+        //     f = new int [n];
+        //     for (int i = 0; i < n; i++) f[i] = i;
+        //     // size[x] 表示节点值等于 vals[x] 的节点个数，如果按照节点值从小到大合并，size[x] 也是连通块内的等于最大节点值的节点个数
+        //     int [] size = new int [n];
+        //     Arrays.fill(size, 1);
+        //     Integer [] id = IntStream.range(0, n).boxed().toArray(Integer[]::new);
+        //     Arrays.sort(id, (x, y) -> a[x] - a[y]);
+        //     int ans = n;
+        //     for (int idx : id) {
+        //         int vx = a[idx], fx = find(idx);
+        //         for (int y : g[idx]) {
+        //             y = find(y);
+        //             if (y == fx || a[y] > vx) continue; // 只考虑最大节点值比 vx 小的连通块
+        //             if (a[y] == vx) { // 可以构成好路径
+        //                 ans += size[fx] * size[y]; // 乘法原理
+        //                 size[fx] += size[y]; // 统计连通块内节点个数值，等于 vx 的节点个数
+        //             }
+        //             f[y] = fx; // 把小的节点值合并到大的节点值上
+        //         }
+        //     }
+        //     return ans;
+        // }
+        // List<Integer> [] g;
+        // int [] f; // 并查集中的父数组
+        // int n;
+        // int find(int x) {
+        //     if (f[x] != x) f[x] = find(f[x]);
+        //     return f[x];
+        // }
+        //
+        // // 【方法一：】单调递减栈：狠好写，贵在想法想通，提示了还想不通，南墙在哪里，找得到才撞得到。。。。。
+        // public int totalSteps(int[] a) {
+        //     int n = a.length, ans = 0;
+        //     Deque<int []> s = new ArrayDeque<>(); // 【单调递减栈】
+        //     for (int v : a) {
+        //         var maxT = 0;
+        //         while (!s.isEmpty() && s.peek()[0] <= v)
+        //             maxT = Math.max(maxT, s.pollFirst()[1]); // 更新前面《＝元素的最大删除轮数
+        //         maxT = s.isEmpty() ? 0 : maxT + 1;
+        //         ans = Math.max(ans, maxT);
+        //         s.offerFirst(new int [] {v, maxT}); // 当前下标遍历：入栈
+        //     }
+        //     return ans;
+        // }
+        // // 【方法二：单调栈 + 线段树】：想找一个这个解法的思路，写法，但是感觉本题作者写得古灵精怪地诲涩难懂。。。。。
+        // public int totalSteps(int[] a) {
+        //     int n = a.length, ans = 0;
+        //     ArrayDeque<Integer> s = new ArrayDeque<>();
+        //     int [] tr = new int [4 * n]; // 【最大值线段树】：求取区间最大值: 线段树大概需要占用约 4 倍的空间
+        //     for (int i = 0; i < n; i++) {
+        //         while (!s.isEmpty() && a[s.peekFirst()] <= a[i]) s.pollFirst(); //将比它小的元素都弹出栈
+        //         // 如果为空，说明当前元素不需要被弹出，本来在线段树中对应的值就为0，不做处理。
+        //         if (!s.isEmpty()) { //说明有比当前元素大的数。
+        //             //如果栈中还有元素，说明有比它大的元素在
+        //             int idx = s.peekFirst();
+        //             if (i - idx == 1) {//上述的第一种情况: 就是被第一轮立即删除掉的那种 
+        //                 update(tr, 0, 0, n-1, i, 1);
+        //                 ans = Math.max(ans, 1);
+        //             } else { // 上述的第二种情况，通过线段树求解区间的最大值btMax
+        //                 int bitMax = getMax(tr, 0, 0, n-1, idx+1, i-1);
+        //                 update(tr, 0, 0, n-1, i, bitMax+1);
+        //                 ans = Math.max(ans, bitMax + 1);
+        //             }
+        //         }
+        //         s.offerFirst(i);
+        //     }
+        //     return ans;
+        // }
+        // void update(int [] tr, int u, int l, int r, int idx, int v) {
+        //     if (l == r) {
+        //         tr[u] = v;
+        //         return ;
+        //     }
+        //     int m = l + (r - l) / 2;
+        //     // 【线段树的下标：】从 1 开始，爷？！！！
+        //     // if (idx <= m)
+        //     //     update(tr, u << 1, l, m, idx, v);
+        //     // else update(tr, u << 1 | 1, l, m, idx, v);
+        //     // tr[u] = Math.max(tr[u << 1], tr[u << 1 | 1]);
+        //     if (idx <= m)
+        //         update(tr, u << 1 | 1, l, m, idx, v);
+        //     else update(tr, (u << 1) + 2, m+1, r, idx, v);
+        //     // tr[u] = Math.max(tr[u << 1 | 1], tr[u << 1 | 2]); // 更新根节点：取左右节点的最大值 
+        //     tr[u] = Math.max(tr[u << 1 | 1], tr[(u << 1) + 2]); // 更新根节点：取左右节点的最大值 
+        // }
+        // int getMax(int [] tr, int u, int l, int r, int L, int R) { // 【 l,r】：现存的有效区间跨度；【L,R】：查询区间跨度
+        //     // if (R < l || r > L) return 0; // 【BUG:】这里写反了。。。
+        //     if (R < l || r < L) return 0; // 完全没有交集，不存在
+        //     if (L <= l && r <= R) return tr[u]; // 查询区间【L,R】落在，现根节点完全区间，就地取值，返回 
+        //     int m = l + (r - l) / 2;
+        //     // int ll = getMax(tr, u << 1, l, m, L, R);
+        //     // int rr = getMax(tr, u << 1 | 1, m+1, r, L, R);
+        //     // return Math.max(ll, rr);
+        //     int ll = getMax(tr, u << 1 | 1, l, m, L, R);
+        //     // int rr = getMax(tr, u << 1 | 2, m+1, r, L, R);
+        //     int rr = getMax(tr, (u << 1) + 2, m+1, r, L, R);
+        //     return Math.max(ll, rr);
+        // }
+        // // 别人原味的【线段树的】写法：
+        // public void update(int[] tree, int node, int left, int right,int index,int i){
+        //     if(left == right){
+        //         tree[node] = i;
+        //         return;
+        //     }
+        //     int mid = left + (right-left)/2;
+        //     if(index <= mid){
+        //         update(tree,node*2+1,left,mid,index,i);
+        //     }else{
+        //         update(tree,node*2+2,mid+1,right,index,i);
+        //     }
+        //     tree[node] =Math.max(tree[node*2+1],tree[node*2+2]);
+        // }
+        // public int returnMax(int[] tree, int node, int left, int right, int L, int R){
+        //     if(right < L || left > R) return 0;
+        //     else if(L <= left && right <= R) return tree[node];
+        //     node = node*2+1;
+        //     int mid = left + (right-left)/2;
+        //     int ll = returnMax(tree,node,left,mid,L,R);
+        //     int rr = returnMax(tree,node+1,mid+1,right,L,R);
+        //     return Math.max(ll,rr);
+        // }
     } 
     public static void main (String[] args) {
         Solution s  =  new Solution ();
 
-        int [] a = new int [] {1, 3, 5, 2};
-        int [] b = new int [] {2, 3, 1, 14};
+        int [] a = new int [] {-1,0};
+        String b = "mm";
 
-        long r = s.minCost(a, b);
+        int r = s.longestPath(a, b);
         System.out.println("r: " + r);
     }
 }
@@ -1254,6 +1540,8 @@ public class mfourixed {
 // ListNode head = new ListNode(a[0]);
 // head.buildList(head, a);
 // head.printList(head);
+
+
 
 
 

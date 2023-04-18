@@ -516,6 +516,93 @@ public class cmp {
         //     return root;
         // }
 
+    // // 【方法一：逆向思维】先用最简单的方法写一遍
+    // Map<Character, String> m = new HashMap<>(); // 正向加密
+    // Map<String, Integer> inv = new HashMap<>(); // 反向解密 
+    // public Encrypter(char[] k, String[] v, String[] d) {
+    // // public cmp(char[] k, String[] v, String[] d) {
+    //     // 正向加密字典
+    //     for (int i = 0; i < k.length; i++) m.put(k[i], v[i]);
+    //     // 反向解密字典
+    //     for (var s : d) {
+    //         String cur = encrypt(s);
+    //         if (!cur.equals(""))
+    //             inv.put(cur, inv.getOrDefault(cur, 0) + 1);
+    //     }
+    // }
+    // public String encrypt(String s) {
+    //     String r = "";
+    //     for (char c : s.toCharArray()) 
+    //         if (!m.containsKey(c)) return "";
+    //         else r += m.get(c);
+    //     return r;
+    // }
+    // // 而对于 decrypt(word) 操作，如果我们直接按照题目中的要求进行分组、解密、判断是否在字典中，那么必然会使用深度优先搜索或者更高级的数据结构（例如字典树）。
+    // // 一种更简单的方法是「逆向思考」：我们直接把字典中的所有单词进行加密，如果该单词可以被加密，
+    // // 那么我们就将加密的结果存储在另一个哈希映射dec_count 中，键表示加密的结果，值表示该结果出现的次数（因为多个单词可以被加密成相同的结果）。
+    // // 这样一来，我们只需要返回 word 作为键在哈希映射中对应的值即可。
+    // public int decrypt(String t) {
+    //     return inv.getOrDefault(t, 0); // 这里就没想明白，怎么就变成这样了呢》？
+    //     // int n = t.length(); // 这里想当然地以为了，先前字典里的词只有 2 个长度，但实际上它的长度是狠长，可以狠长狠长，所以不用再分段。。。
+    //     // int r = 1;
+    //     // for (int i = 0; i < n-3; i++) 
+    //     //     r *= inv.getOrDefault(t.substring(i, i+4), 0);
+    //     // return r;
+    // }
+    // // 【方法二：字典树 trie】：逻辑也极其简单，不知道为什么先前就没写出来？
+    // Map<Character, String> m = new HashMap<>();
+    // Map<String, List<Integer>> in = new HashMap<>(); 
+    // Set<String> sd = new HashSet<>(); // 可以帮助校验字典树中的遍历是否有效。。。
+    // Node root;
+    // public Encrypter(char[] k, String[] v, String[] d) {
+    //     for (int i = 0; i < k.length; i++) {
+    //         m.put(k[i], v[i]);
+    //         in.computeIfAbsent(v[i], z -> new ArrayList<>()).add(k[i]-'a');
+    //     }
+    //     for (var vi : d) sd.add(vi);
+    //     root = new Node();
+    //     for (String s : d) insert(s);
+    // }
+    // public String encrypt(String t) {
+    //     String r = "";
+    //     for (char c : t.toCharArray())
+    //         if (!m.containsKey(c)) return "";
+    //         else r += m.get(c);
+    //     return r;
+    // }
+    // public int decrypt(String t) {
+    //     return search(0, root, t);
+    // }
+    // int search(int idx, Node r, String t) {
+    //     char [] s = t.toCharArray();
+    //     if (idx == t.length()) // 终止条件: 
+    //         //  at the end of the string and checking if this is present in the dict
+    //         return sd.contains(r.w) ? 1 : 0; // 【 sd:】这里体现出要个字典集合的作用，以及带 w 参数的校验功能 
+    //     String cur = t.substring(idx, idx + 2);
+    //     if (!in.containsKey(cur)) return 0;
+    //     int ans = 0;
+    //     for (int v : in.get(cur))
+    //         if (r.c[v] != null) ans += search(idx+2, r.c[v], t);
+    //     return ans;
+    // }
+    // void insert(String t) {
+    //     char [] s = t.toCharArray();
+    //     Node r = root;
+    //     for (int i = 0; i < t.length(); i++) {
+    //         int j = s[i] - 'a';
+    //         if (r.c[j] == null) r.c[j] = new Node();
+    //         r = r.c[j];
+    //     }
+    //     r.end = true;
+    //     r.w = t;
+    // }
+    // class Node {
+    //     Node [] c = new Node[26];
+    //     boolean end = false;
+    //     String w;
+    //     Node () {}
+    // }
+
         
     }
     public static void main (String[] args) { 
@@ -534,5 +621,8 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+
+
+
 
 
