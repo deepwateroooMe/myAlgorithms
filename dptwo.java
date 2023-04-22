@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toMap;
 public class dptwo {
     public static class Solution {
+
         public int maxProductPath(int[][] a) { // 用记忆化深搜，会狠好写... // TODO TODO TODO: 不知道哪里写错了。。。
             m = a.length;
             n = a[0].length;
@@ -409,40 +410,6 @@ public class dptwo {
             }
             return (int)(Arrays.stream(f[~n & 1]).asLongStream().sum() % mod);
         }
-        
-        static final int mod = (int)1e9 + 7;
-        Set<Integer> s = new HashSet<>(); // 【活宝妹就是一定要嫁给亲爱的表哥！！！】
-        public int numOfWays(int n) { // 刚刚摘桃子写了个多维数组，不想再写多维的。滚动数组。因为当前行结果只与前一行的结果相关
-            Map<Integer, Integer> [] m = new HashMap[2]; // 滚动字典：要真的让它们可以滚动，才可以哟。。。【爱表哥，爱生活！！！】
-            Arrays.setAll(m, z -> new HashMap<Integer, Integer>());
-            // 构建每行的备选方案：12 种, 以及第一行的涂色 
-            for (int i = 0; i < 3; i++) {
-                for (int j = 0; j < 3; j++) {
-                    if (j == i) continue;
-                    for (int k = 0; k < 3; k++) {
-                        if (k == j) continue;
-                        int v = (((1 << i) << 6) | ((1 << j) << 3) | (1 << k));
-                        s.add(v);
-                        m[0].put(v, 1);
-                    }
-                }
-            }
-            for (int i = 1; i < n; i++) { // 构建剩余 n-1 行的涂色以结果 
-                m[i % 2].clear();
-                int j = i % 2; // j: idx
-                for (Map.Entry<Integer, Integer> en : m[1-j].entrySet()) { // 遍历前一行所有可能的涂色方案
-                    int k = en.getKey(), val = en.getValue();
-                    for (int v : s) { // 遍历当前行所有的 12 种涂色方案
-                        if ((k & v) > 0) continue;
-                        m[j].put(v, (int)((m[j].getOrDefault(v, 0) + val) % mod));
-                    }
-                }
-            }
-            long r = 0;
-            for (Integer val : m[(n-1)%2].values()) 
-                r = (r + val) % mod;
-            return (int)r;
-        }
 
         public int maxJumps(int[] a, int d) { // TODO TODO TODO: 这里还有点儿搞不清楚是怎么分析
             int n = a.length, j = 0;
@@ -677,49 +644,6 @@ public class dptwo {
             // return r;
         }
 
-        public int minCost(int[] a, int[][] b, int m, int n, int k) { // k: k neighbourhoods // TODO TODO TODO: 不知道哪里写错了，明天再改这个 
-            this.m = m;
-            this.n = n;
-            f = new Integer [m][n+1][k+1];
-            int v = dfs(0, -1, k, a, b); 
-            return v >= Integer.MAX_VALUE / 2 ? -1 : v;
-        }
-        int m, n;
-       Integer [][][] f;
-        int dfs(int i, int j, int k, int [] a, int [][] b) { // 这里J 是当作前一个房子的涂色吗？
-            // if (k < 0) return Integer.MAX_VALUE / 2;
-            if (i == m) return k == 0 ? 0 : Integer.MAX_VALUE / 2;
-            if (j != -1 && f[i][j][k] != null) return f[i][j][k];
-            if (k == 1 && i < m) { // 最后一个特殊情况要处理一下
-                boolean painted = false;
-                int p = -1;
-                for (int x = i; x < m; x++) 
-                    if (a[x] > 0) {
-                        if (a[x] == j) return Integer.MAX_VALUE / 2; // 无法独立街区
-                        if (!painted) {
-                            painted = true;
-                            p = a[x];
-                        } else if (a[x] != p) return Integer.MAX_VALUE / 2; // 无法成同一涂色
-                    }
-                int r = Integer.MAX_VALUE / 2;
-                for (int x = 1; x <= n; x++) {
-                    if (x == j) continue; // 因为要独立出一个街区来
-                    r = Math.min(r, b[i][x-1]);
-                }
-                return f[i][j][k] = r;
-            }
-            int r = Integer.MAX_VALUE / 2;
-            if (a[i] > 0) r = Math.min(r, dfs(i+1, a[i], k - (j == -1 || a[i] == j ? 0 : 1), a, b));
-            else { // 房子必须涂色
-                for (int x = 1; x <= n; x++) { // 遍历这些种不同的涂色
-                    int v = b[i][x-1] + dfs(i+1, x, k - (j == -1 || x == j ? 0 : 1), a, b);
-                    r = Math.min(r, v);
-                }
-            }
-            if (j == -1) return r;
-            return f[i][j][k] = r;
-        }
-
         static final int mod = (int)1e9 + 7;
         public int countVowelPermutation(int n) {
             Map<Integer, int []> m = new HashMap<>();
@@ -756,7 +680,67 @@ public class dptwo {
             return Arrays.stream(f[n-1]).min().getAsInt();
         }
 
-        // 这个死题目：算出最长公有子序列之后，要用这个东西把最短XX 给还原回来。。。。。
+        public int maxValue(int[][] a, int k) { // 1751: 这个可以写写。。。
+            int n = a.length;
+            Arrays.sort(a, (x, y) -> x[0] - y[0]);
+            int [] f = new int [n];
+            f[n-1] = a[n-1][2];
+            for (int i = n-2; i >= 0; i--) {
+            }
+        }
+
+        public int minDifficulty(int[] a, int d) { // 看见 d 《 10 我就在想回塑。。。【感觉有个限制条件可能没读懂。。。】 // TODO TODO TODO: 
+            n = a.length;
+            this.d = d;
+            backTracking(0, new ArrayList<Integer>(), a);
+            return min == Integer.MAX_VALUE ? -1 : min;
+        }
+        int n, d, min = Integer.MAX_VALUE;
+        void backTracking(int i, List<Integer> l, int [] a) { // 是遍历分配当前下标为 i 的任务到 d 天的某一天，不要写重复了。。。
+            if (i == n) {
+                if (l.size() == d) {
+                    int sum = l.stream().mapToInt(Integer::intValue).sum();
+                    if (sum < min) min = sum;
+                }
+                return ;
+            }
+            for (int j = 0; j < l.size(); j++) {
+                if (j > 0 && l.get(j) == l.get(j-1)) continue; // 我觉得这步还是可以跳过去的，虽然数组不能排序？
+                int prev = l.get(j);
+                l.set(j, Math.max(prev, a[i]));
+                backTracking(i+1, l, a);
+                l.set(j, prev);
+            }
+            // if (l.size() < d || l.size() <= i) { // 同用限制每天至少一件事
+            if (l.size() < d) { // 同用限制每天至少一件事
+                l.add(a[i]);
+                backTracking(i+1, l, a);
+                l.remove(l.size() - 1);
+            }
+        }
+        int [] a = new int [] {7,1,7,1,7,1}; // 9 15, 这个不过。。。
+
+        static final int mod = (int)1e9 + 7; // 【动规：】试着用动规来写, 用动规还是写不到。。。
+        public int waysToReachTarget(int t, int[][] a) { 
+            n = a.length;
+            this.t = t;
+            f = new Integer [n][t+1];
+            return dfs(0, t, a);
+        }
+        int n, t;
+        Integer [][] f;
+        int dfs(int i, int j, int [][] a) { // J: value left
+            if (i == n) return j == 0 ? 1 : 0;
+            if (j == 0) return i < n ? 1 : 0;
+            if (f[i][j] != null) return f[i][j];
+            long r = 0;
+            int cnt = a[i][0], v = a[i][1];
+            for (int k = 0; k <= cnt && k * v <= j; k++) 
+                r = (r + dfs(i + 1, j - k * v, a)) % mod;
+            return f[i][j] = (int)r;
+        }
+        
+        // 这个死题目：算出最长公有子序列之后，要用这个东西把最短XX 给还原回来。。。。。// TODO TODO TODO: 
         public String shortestCommonSupersequence(String S, String T) { // 1092
             int m = S.length(), n = T.length();
             char [] s = S.toCharArray();
@@ -766,45 +750,846 @@ public class dptwo {
                 for (int j = 0; j < n; j++)
                     if (s[i] == t[j]) f[i+1][j+1] = f[i][j] + 1;
                     else f[i+1][j+1] = Math.max(f[i+1][j], f[i][j+1]);
+            System.out.println("f.length: " + f.length);
+            for (int z = 0; z < f.length; ++z) 
+                System.out.println(Arrays.toString(f[z]));
             // 然后根据上面的统计结果，往回倒。。。。。妈的。。。
-            // TODO TODO TODO: 
+            int i = m-1, j = n-1, k = 0;
+            return "";
         }
-
-        // 根下午那个题目相比：不是一模一样的吗？
-        public int colorTheGrid(int m, int n) {// 1931
-            Set<Integer> s = new HashSet<>();
-            Map<Integer, Integer> [] m = new HashMap [2];
-            // 【构建候选与第一行】与先前不同的地方在于，宽度不固定。那么因为选择少《＝5, 那么可以以不变应万变，把2 3 4 5 的候选集合全列出来备用。。。
-            Set<Integer> [] s = new HashSet[5];
-            Arrays.setAll(s, z -> new HashSet<>());
-            s[0].add(List.of()); // ?
-            s[1].add(List.of()); // 
-            s[2].add(List.of());
-            s[3].add(List.of());
-            s[4].add(List.of());
-            // 但还是探索一种新的解法吧【三维数组】
-        }
-
-        public int maxValue(int[][] a, int k) { // 1751: 这个可以写写。。。
-            int n = a.length;
-            Arrays.sort(a, (x, y) -> x[0] - y[0]);
-            int [] f = new int [n];
-            f[n-1] = a[n-1][2];
-            for (int i = n-2; i >= 0; i--) {
+        String a = "abac";
+        String b = "cab";
+        System.out.println("a: " + a);
+        System.out.println("b: " + b);
+        String r = s.shortestCommonSupersequence(a, b);
         
+        static final int mod = (int)1e9 + 7;
+        Set<Integer> s = new HashSet<>(); // 【活宝妹就是一定要嫁给亲爱的表哥！！！】
+        public int numOfWays(int n) { // 刚刚摘桃子写了个多维数组，不想再写多维的。滚动数组。因为当前行结果只与前一行的结果相关
+            Map<Integer, Integer> [] m = new HashMap[2]; // 滚动字典：要真的让它们可以滚动，才可以哟。。。【爱表哥，爱生活！！！】
+            Arrays.setAll(m, z -> new HashMap<Integer, Integer>());
+            // 构建每行的备选方案：12 种, 以及第一行的涂色【3 列】本题目所需要的
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    if (j == i) continue;
+                    for (int k = 0; k < 3; k++) {
+                        if (k == j) continue;
+                        int v = (((1 << i) << 6) | ((1 << j) << 3) | (1 << k));
+                        s.add(v);
+                        m[0].put(v, 1);
+                    }
+                }
+            }
+            // // 构建每行的备选方案：12 种, 以及第一行的涂色 【2,4 -5 列】下面一题借用的
+            // for (int i = 0; i < 3; i++) {
+            //     for (int j = 0; j < 3; j++) {
+            //         if (j == i) continue;
+            //         for (int k = 0; k < 3; k++) {
+            //             if (k == j) continue;
+            //             for (int x = 0; x < 3; x++) {
+            //                 if (x == k) continue;
+            //                 for (int y = 0; y < 3; y++) {
+            //                     if (y == x) continue;
+            //                     // int v = ((1 << i) << 3) | (1 << j);
+            //                     int v = (((1 << i) << 12) | ((1 << j) << 9) | ((1 << k) << 6) | ((1 << x) << 3) | (1 << y));
+            //                     s.add(v);
+            //                     m[0].put(v, 1);
+            //                 }
+            //             }
+            //         }
+            //     }
+            // }
+            for (int i = 1; i < n; i++) { // 构建剩余 n-1 行的涂色以结果 
+                m[i % 2].clear();
+                int j = i % 2; // j: idx
+                for (Map.Entry<Integer, Integer> en : m[1-j].entrySet()) { // 遍历前一行所有可能的涂色方案
+                    int k = en.getKey(), val = en.getValue();
+                    for (int v : s) { // 遍历当前行所有的 12 种涂色方案
+                        if ((k & v) > 0) continue;
+                        m[j].put(v, (int)((m[j].getOrDefault(v, 0) + val) % mod));
+                    }
+                }
+            }
+            long r = 0;
+            for (Integer val : m[(n-1)%2].values()) 
+                r = (r + val) % mod;
+            return (int)r;
+        }
+        
+        static final int mod = (int)1e9 + 7;
+        public int colorTheGrid(int N, int n) {
+            // 【构建候选与第一行】与先前不同的地方在于，宽度不固定。那么因为选择少《＝5, 那么可以以不变应万变，把2 3 4 5 的候选集合全列出来备用。。。
+            Set<Integer> [] s = new HashSet[5]; // 【同一行】：任何相邻不同色
+            // Arrays.setAll(s, z -> new HashSet<>());
+            s[0]= new HashSet<>(List.of((1 << 0), (1 << 1), (1 << 2))); 
+            s[1]= new HashSet<>(List.of(17, 33, 34, 20, 10, 12)); // 6 种
+            s[2]= new HashSet<>(List.of(81, 97, 161, 273, 98, 162, 84, 276, 138, 266, 140, 268)); // 12 种
+            s[3]= new HashSet<>(List.of(673, 1121, 2145, 2209, 674, 1122, 2146, 2210, 650, 778, 1290, 2186, 652, 780, 1292, 2188, 785, 1105, 1297, 2129, 788, 1108, 1300, 2132)); // 24 种 
+            s[4]= new HashSet<>(List.of(5386, 6282, 8842, 8970, 10378, 17034, 17162, 17674, 5388, 6284, 8844, 8972, 10380, 17036, 17164, 17676, 5201, 5393, 6225, 8977, 10321, 17169, 17489, 17681, 5204, 5396, 6228, 8980, 10324, 17172, 17492, 17684, 5217, 6241, 6305, 8865, 10337, 10401, 17057, 17505, 5218, 6242, 6306, 8866, 10338, 10402, 17058, 17506)); // 48 种
+            // 但还是探索一种新的解法吧【三维数组】: 暂时不写这个方法。用滚动数组先把这个题快速滚过去。。。
+            Map<Integer, Integer> [] m = new HashMap[2];
+            Arrays.setAll(m, z -> new HashMap<>());
+            for (int v : s[N-1]) m[0].put(v, 1); // 初始化字典，以及第一行的涂色
+            for (int i = 1; i < n; i++) { // 【2,n-1】行的涂色方案: 遍历每一行
+                int j = i % 2;
+                m[j].clear();
+                for (Map.Entry<Integer, Integer> en : m[1-j].entrySet()) { // 遍历上一行的所有的涂色方案，来更新当前行可行的涂色方案数
+                    int k = en.getKey(), v = en.getValue();
+                    for (int mask : s[N-1]) // 遍历当前行所有的，可行的涂色方案
+                        if ((k & mask) == 0) // 【保证：】上下行之间，任何一列不同色
+                            m[j].put(mask, (int)((long)m[j].getOrDefault(mask, 0) + (long)v) % mod);
+                }
+            }
+            long r = 0;
+            for (Integer val : m[(n-1) % 2].values())
+                r = (r + (long)val) % mod;
+            return (int)r;
+        }
+
+        public int maxCoins(int[] a) { // 【区间型动规：】可是忘记了，是怎么回事？ 312
+            n = a.length;
+        }
+        int n;
+
+        public int minCost(int n, int[] a) { // 不知道这个死题目说的是什么意思，。。。1547
+            Arrays.sort(a);
+            m = a.length;
+            f = new Integer [n+1][n+1][m]; // 每个木头块的首尾下标，被拒木头的长度有关系
+            return dfs(0, n, 0, a); // 【i,j】木头首尾下标， k 当前遍历数组下标【区间型动规】：这个写法可能不对，再想一两天。。。
+        }
+        int m;
+        Integer [][][] f;
+        int dfs(int i, int j, int k, int [] a) {
+        }        
+
+        static final int mod = (int)1e9 + 7;
+        public int countRoutes(int[] a, int l, int r, int v) { // 这个狠简单，机械写作。。。
+            n = a.length;
+            this.v = v;
+            this.r = r;
+            f = new Integer [n][v+1];
+            return dfs(l, v, a);
+        }
+        int n, r, v;
+        Integer [][] f;
+        int dfs(int i, int j, int [] a) {
+            if (j == 0) return f[i][j] = (i == r ? 1 : 0); // 当没有油的时候，是在终点站吗？
+            if (f[i][j] != null) return f[i][j];
+            long ans = 0;
+            // 过程中，只要路过终点，哪怕还有油，也是算的。。。
+            System.out.println("(i == r): " + (i == r));
+            if (i == r) ans = (ans + 1) % mod; // 可是不知道，这步，写对了没有？
+            // for (int k = 0; k < n && Math.abs(a[k] - a[i]) <= v; k++) { // 【BUGGLY CODING:】不能把限制条件这放里，会阻断选择。。。
+            for (int k = 0; k < n; k++) {
+                if (k == i || Math.abs(a[k] - a[i]) > j) continue;
+                ans = (ans + dfs(k, j - Math.abs(a[k] - a[i]), a)) % mod;
+            }
+            return f[i][j] = (int)ans;
+        }
+
+        public long appealSum(String t) {
+            int n = t.length();
+            char [] s = t.toCharArray();
+            int [] r = new int [26]; // last occurance idx
+            long ans = 0;
+            Arrays.fill(r, -1);
+            for (int i = 0; i < n; i++) {
+                int j = s[i] - 'a';
+                r[j] = i;
+                for (int k = 0; k < 26; k++)
+                    // if (r[k] != -1)
+                        ans = ans + 1l + (long)r[k];
+            }
+            return ans;
+        }
+
+        // 【总结：】相对特殊的地方在于，需要根据先前已经涂过色的房子来确定需要涂的街区数【亲爱的表哥的房子也涂色了，希望能够尽快嫁给亲爱的表哥！！！】
+        public int minCost(int[] a, int[][] b, int m, int n, int k) { // k: k neighbourhoods
+            this.m = m;
+            this.n = n;
+            f = new Integer [m][n+1][k+1]; // 【房子数】【涂色数】【街区数】
+            int v = dfs(0, 0, k, a, b); // 这里初始化的 j, 就是点位符，为什么弄个 -1 给自己找不痛快呢？ 
+            return v >= Integer.MAX_VALUE / 2 ? -1 : v;
+        }
+        int m, n;
+       Integer [][][] f;
+        int dfs(int i, int j, int k, int [] a, int [][] b) { // 这里J 是当作前一个房子的涂色吗？
+            if (i == m) return k == 0 ? 0 : Integer.MAX_VALUE / 2;
+            if (k == 0) { // i < m: 把剩余的房子全涂成跟之前一个同一个街区
+                int ans = 0;
+                for (int x = i; x < m; x++) {
+                    if (a[x] > 0 && a[x] != j) return f[i][j][k] = Integer.MAX_VALUE / 2;
+                    if (a[x] == 0)
+                        ans += b[x][j-1];
+                }
+                return f[i][j][k] = ans;
+            }
+            if (f[i][j][k] != null) return f[i][j][k];
+            int r = Integer.MAX_VALUE / 2;
+            // if (a[i] > 0) r = Math.min(r, dfs(i+1, a[i], k - (j == 0 || a[i] == j ? 0 : 1), a, b));
+            if (a[i] > 0) r = Math.min(r, dfs(i+1, a[i], k - (a[i] == j ? 0 : 1), a, b));
+            else { // 房子必须涂色
+                for (int x = 1; x <= n; x++) { // 遍历这些种不同的涂色
+                    // int v = b[i][x-1] + dfs(i+1, x, k - (j == 0 || x == j ? 0 : 1), a, b);
+                    int v = b[i][x-1] + dfs(i+1, x, k - (x == j ? 0 : 1), a, b);
+                    r = Math.min(r, v);
+                }
+            }
+            return f[i][j][k] = r; 
+        }
+
+        public int rearrangeSticks(int n, int k) { // 【动规：】这些都成了需要严格动规的题目。。。// TODO TODO TODO: 
+            int [][] f = new int [n+1][k+1];
+            f[0][0] = 1; // 初始化
+            // 去找状态转移方程： f【i】【j】：前 i 个下标可以看见 j 根竹子，那么就去想，第 i 个下标的第 j 根可见筷子可以如何生成呢？第 i 个下标【可见】或是【不可见】
+            // 这里， n 根筷子，哪些用去了，哪些没用去的关系，还没能想清楚。。【活宝妹就是一定要嫁给亲爱的表哥！！！】
+            for (int i = 1; i <= n; i++)
+                for (int j = 1; j <= k; j++) 
+                    f[i][j] = f[i-1][j] + f[i-1][j-1];
+            return f[n-1][k];
+        }
+
+
+        static final int mod = (int)1e9 + 7; // TODO TODO TODO: 还是不知道哪里错了。。。
+        public int distinctSequences(int n) {
+            int m = 7;
+            List<Integer> [] l = new ArrayList[7];
+            l[0] = new ArrayList<>();
+            l[1] = new ArrayList<>(List.of(2, 3, 4, 5, 6)); // 这么，自顶往下的更新，会当前行似乎理不清来自哪里，换个方向写，以当前更新行的当前下标的眼光来写
+            l[2] = new ArrayList<>(List.of(1, 3, 5));
+            l[3] = new ArrayList<>(List.of(1, 2, 4, 5));
+            l[4] = new ArrayList<>(List.of(1, 3, 5));
+            l[5] = new ArrayList<>(List.of(1, 2, 3, 4, 6));
+            l[6] = new ArrayList<>(List.of(1, 5));
+            long [][] f = new long [n][m];
+            Arrays.fill(f[0], 1);
+            for (int i = 1; i < n; i++) // 用前一行的结果来更新当前行的结果
+                for (int j = 1; j < m; j++) { // 当前行可能会有的结果：【1,2...6】
+                    for (int v : l[j]) // 更新当前行的结果: v 来自于上一行
+                        f[i][j] = (f[i-1][v] + f[i][j]) % mod;
+                    // 减去前两行不该有的结果，加上前三行可能会有的结果
+                    f[i][j] = (f[i][j] - (i != 1 ? f[i-2][j] : 0) + (i > 2 ? f[i-3][j] : 0)) % mod;
+                        // f[i+1][v] = (f[i+1][v]+ f[i][j]) % mod;
+                    // if (i < n-3) // 相同数的出现【间隔】至少是2: 这里可能算重复了狠多。。。【这里要考虑其它方式，来计算。。。】
+                    //     f[i+3][j] = ((f[i+3][j] == -1 ? 0 : f[i+3][j]) + f[i][j]) % mod;
+                    // if (i == 1) // 【BUG:】感觉这里改得还是不对。。。再想一下。。
+                    //     f[i+1][j] = (f[i+1][j] - f[i-1][j] + mod) % mod;
+                    // else if (i > 1)
+                    //     f[i+1][j] = (f[i+1][j] + f[i-2][j] + mod) % mod;
+                }
+            long r = 0;
+            for (int j = 1; j < m; j++)
+                r = (r + f[n-1][j]) % mod;
+            return (int)r;
+        }
+
+        public int minDistance(String S, String T) { // 72: 这个思路好像不太对。。// TODO TODO TODO: 
+            int m = S.length(), n = T.length();
+            char [] s = S.toCharArray();
+            char [] t = T.toCharArray();
+            int [][] f = new int [m+1][n+1];
+            for (int i = 0; i < m; i++)
+                for (int j = 0; j < n; j++)
+                    if (s[i] == t[j]) f[i+1][j+1] = f[i][j] + 1;
+                    else f[i+1][j+1] = Math.max(f[i+1][j], f[i][j+1]);
+            System.out.println("f[m][n]: " + f[m][n]);
+            return Math.max(m - f[m][n], n - f[m][n]);
+        }
+
+        public int numWays(String[] a, String T) { // 【狠简单：】机械地把它写出来。。。脑袋有点儿昏，改天再写，感觉思路是清楚的【二维的。。】
+            n = T.length();
+            m = a.length;
+            o = a[0].length();
+            s = T.toCharArray();
+            r = new int [m][o][26]; // 字符频率表
+            for (int i = 0; i < m; i++) {
+                int j = 0;
+                for (char c : a[i].toCharArray()) 
+                    r[i][j++][c-'a']++;
+            }
+            f = new Integer [n][o];
+            return dfs(0, 0);
+        }
+        static final int mod = (int)1e9 + 7;
+        char [] s;
+        int n, m, o;
+        int [][][] r;
+        Integer [][] f; // 维数太多，容易昏。。。
+        int dfs(int i, int j) {
+            if (i == n && j <= o) return 1;
+            if (i >= n || j >= o) return 0;
+            // if (i == n) return j <= o ? 1 : 0;
+            // if (j > o) return 0;
+            if (f[i][j] != null) return f[i][j];
+            long ans = 0;
+            int k = s[i] - 'a';
+            for (int x = 0; x < m; x++) // 遍历当前位所有字符串的可能性 
+                if (r[x][j][k] > 0)
+                    ans = (ans + dfs(i+1, j+1)) % mod;
+            // if (r[j][k] > 0) // 使用 j 字符串的 k 字符【因为存在】
+            //     ans = (ans + dfs(i+1, 0, k+1)) % mod;
+            // ans = (ans + dfs(i, j+1, k)) % mod; // 不使用 j 字符串的 k 字符
+            // ans = (ans + dfs(i, 0, k+1)) % mod; // 不使用任何字符串的 k 字符，直接右移一个
+            return f[i][j] = (int)ans;
+        }
+        public int numWays(String[] a, String T) { // 【狠简单：】机械地把它写出来。。。还是不会写动规方法。。 // TODO TODO TODO: 
+            n = T.length();
+            m = a.length;
+            o = a[0].length();
+            s = T.toCharArray();
+            r = new int [m][o][26]; // 字符频率表
+            for (int i = 0; i < m; i++) {
+                int j = 0;
+                for (char c : a[i].toCharArray()) {
+                    r[i][j][c-'a']++;
+                    j++;
+                }
+            }
+            f = new Integer [n][m][o];
+            return dfs(0, 0, 0);
+        }
+        static final int mod = (int)1e9 + 7;
+        char [] s;
+        int n, m, o;
+        int [][][] r;
+        Integer [][][] f;
+        int dfs(int i, int j, int k) { // 【就不明白：】为什么会数多了？
+            if (i == n) return k <= o ? 1 : 0;
+            if (j == m || k >= o) return 0;
+            if (f[i][j][k] != null) return f[i][j][k];
+            long ans = 0;
+            int idx = s[i] - 'a';
+            if (r[j][k][idx] > 0) // 使用 j 字符串的 k 字符【因为存在】
+                ans = (ans + dfs(i+1, 0, k+1)) % mod;
+            ans = (ans + dfs(i, j+1, k)) % mod; // 【向下遍历】不使用 j 字符串的 k 字符，使用后面字符串的
+            ans = (ans + dfs(i, 0, k+1)) % mod; // 【向右遍历】不使用任何字符串的 k 字符，直接右移一个，从 k+1 位开始选
+            return f[i][j][k] = (int)ans;
+        }
+
+        // 两个思路：【DFS 记忆化深搜】 || 【二分查找，并验证答案的正确性？】
+        public int splitArray(int[] a, int k) { // 不知道为什么这么慢。过了
+            n = a.length;
+            s = new int [n+1];
+            for (int i = 0; i < n; i++) s[i+1] = s[i] + a[i];
+            f = new Integer [n][k+1];
+            return dfs(0, k, a);
+        }
+        int n, min = Integer.MAX_VALUE;
+        int [] s;
+        Integer [][] f;
+        int dfs(int i, int j, int [] a) {
+            if (f[i][j] != null) return f[i][j];
+            if (j == 1) // 剩下的所有的坐标，为一段子数组
+                return f[i][j] = s[n] - s[i];
+            int r = Integer.MAX_VALUE;
+            for (int k = i; k < n - (j-1); k++) 
+                r = Math.min(r, Math.max(s[k+1] - s[i], dfs(k+1, j-1, a)));
+            return f[i][j] = r;
+        }
+
+        public int jobScheduling(int[] a, int[] b, int[] c) { // 不太喜欢这个二分查找，好像找得还有些问题 1235
+            int n = a.length;
+            List<int []> l = new ArrayList<>();
+            for (int i = 0; i < n; i++) l.add(new int [] {a[i], b[i], c[i]});
+            Collections.sort(l, (x, y) -> x[0] != y[0] ? x[0]- y[0] : y[2] - x[2]); // 开始时间升序
+            int [] f = new int [n];
+            f[n-1] = l.get(n-1)[2];
+            // 这里说，用二分查找的方法，找到排序后，后序事件的下标。【但凡可以二分查找的地方，都可以线段树！！】
+            for (int i = n-2; i >= 0; i--) {
+                System.out.println("\n i: " + i);
+                f[i] += l.get(i)[2];
+                int j = binarySearch(i+1, n-1, l.get(i)[1], l);
+                System.out.println("j: " + j);
+                // if (j < n) f[i] += f[j];
+                int k = j+1;
+                while (k < n && l.get(k)[0] == l.get(j)[0]) {
+                    f[i] = Math.max(f[i], f[j] + l.get(i)[2]);
+                    k++;
+                }
+                System.out.println("f[i]: " + f[i]);
+            }
+            System.out.println(Arrays.toString(f));
+            return f[0];
+        }
+        int binarySearch(int l, int r, int v, List<int []> ll) {
+            while (l <= r) {
+                int m = (l + r) >> 1;
+                int bgn = ll.get(m)[0];
+                if (bgn >= v) r= m;
+                else l = m+1;
+            }
+            return l;
+        }
+
+        public int minDistance(int[] a, int k) { // 【记忆化深搜】: 用一个什么中位数？方法大致知道，具体中位数在这里的实现，忘记了 // TODO TODO TODO: 
+            n = a.length;
+            f = new Integer [n][k+1];
+            return dfs(0, k, a);
+        }
+        Integer [][] f;
+        int n;
+        int dfs(int i, int j, int [] a) { 
+            if (i == n) return j == 0 ? 0 : Integer.MAX_VALUE / 2;
+            if (f[i][j] != null) return f[i][j];
+        }
+
+        public int longestIncreasingPath(int[][] a) {
+            int [][] dirs = {{1, 0}, {0, 1}, {0, -1}, {-1, 0}};
+            int m = a.length, n = a[0].length;
+            int [][] f = new int [m][n];
+            Arrays.stream(f).forEach(z -> Arrays.fill(z, 1));
+            Integer [] r = IntStream.range(0, m*n).boxed().toArray(Integer[]::new);
+            Arrays.sort(r, (x, y)-> a[x/n][x%n] - a[y/n][y%n]);
+            for (int w = 0; w < m*n; w++) {
+                int idx = r[w], i = idx / n, j = idx % n;
+                for (int [] d : dirs) {
+                    int x = i + d[0], y = j + d[1];
+                    if (x < 0 || x >= m || y < 0 || y >= n) continue;
+                    if (a[x][y] > a[i][j])
+                        f[x][y] = Math.max(f[x][y], f[i][j] + 1);
+                }
+            }
+            int max = 1;
+            for (int i = 0; i < m; i++) 
+                for (int j = 0; j < n; j++)
+                    max = Math.max(max, f[i][j]);
+            return max;
+        }
+
+        public int largestPathValue(String t, int[][] egs) { // 【拓朴排序：】这个快要忘记光了。。。1857
+            int n = t.length(), m = egs.length;
+            // 【建图，统计入度】
+            int [] r = new int [n]; // 统计：各节点【入度】
+            List<Integer> [] g = new ArrayList[n];
+            Arrays.setAll(g, z -> new ArrayList<>());
+            for (int [] e : egs) {
+                int u = e[0], v = e[1];
+                r[v]++;
+                g[u].add(v);
+            }
+            // 【判断环的存在与否】：根据入度中【？？】的个数或是奇偶性？来一步判断某计数，决定有环返回？【忘记了。。。】
+            // 【拓朴排序】：是怎么排序的？怎么忘记得一干二净？构建必要的【动规数组等】数据结构，准备统计结果
+            int [][] f = new int [n][26];
+            Deque<Integer> q = new ArrayDeque<>();
+            for (int i = 0; i < n; i++)
+                if (r[i] == 0) {
+                    q.offerFirst(i);
+                    for (int v : g[i]) {
+                        r[v]--;
+                        if (r[v] == 0) q.offerFirst(v);
+                    }
+                }
+            // 【出队列：】同步动态更新结果, 这里有点儿连不起来了，改天再写。。。
+            while (!q.isEmpty()) {
+                int u = q.pollLast();
             }
         }
+
+        static final int mod = (int)1e9 + 7;
+        public int numMusicPlaylists(int n, int g, int k) { // 【动规：】没消化透的动规, 【不知道是初始化，还是状态转移，嘯里写得不对】 // TODO TODO TODO: 920
+            //f[i][j]:f【 n+1,goal+1】：从前 i 首歌里播放第 j 首：分第 i 首是选择【放过的】，和【不曾放过的】构成为第 j 首歌
+            int [][] f = new int [n+1][g+1];
+            f[0][0] = 1; // 空集，只有一种可能性
+            for (int i = 0; i < n; i++) f[i][0] = 1; // 每首放第一遍都是一种可能性
+            for (int i = 1; i <= n; i++) 
+                for (int j = 1; j <= g; j++) // 从（ n-i）首不曾放过的选一首新的， + 从 i 首里先符合标准的
+                    f[i][j] = ((n - i) * f[i-1][j-1] + (j >= k+1 ? f[i][j-(k+1)] : 0)) % mod;
+            return (int)f[n-1][g];
+        }
+
+        public int maxSizeSlices(int[] a) { // 【动规：】不会写动规，写深搜
+            n = a.length;
+            m = n / 3;
+            f = new Integer [n][n][m+1];
+            return Math.max(dfs(0, n-2, m, a), dfs(1, n-1, m, a));
+        }
+        int n, m;
+        Integer [][][] f;
+        int dfs(int i, int j, int k, int [] a) {
+            if (i > j || k <= 0) return 0;
+            if (f[i][j][k] != null) return f[i][j][k];
+            int r = 0;
+            if (i == j && k == 1) return f[i][j][k] = a[i];
+            r = Math.max(r, dfs(i+2, j, k-1, a) + a[i]);
+            r = Math.max(r, dfs(i+1, j, k, a));
+            return f[i][j][k] = r;
+        }
+
+        public int numSquarefulPerms(int[] a) { // TODO TODO TODO: 996
+            Arrays.sort(a);
+            n = a.length;
+            backTracking(0, new ArrayList<Integer>(), a);
+            return r * 2;
+        }
+        int n, r = 0;
+        void backTracking(int u, List<Integer> l, int [] a) {
+            if (l.size() >= 2) 
+                if (!check(l)) return ;
+            if (u == n) {
+                if (l.size() == n) {
+                    r++;
+                }
+                return ;
+            }
+            l.add(a[u]);
+            backTracking(u+1, l, a);
+            l.remove(l.size()-1);
+            backTracking(u+1, l, a);
+        }
+        boolean check(List<Integer> l) {
+            int r = l.get(l.size()-1) + l.get(l.size()-2);
+            return isSquare(r);
+        }
+        boolean isSquare(int v) {
+            int sr = (int)Math.sqrt(v);
+            return sr * sr == v;
+        }
+
+        // 【动规：】用动规先找出三段的和的最大值，仍然一旦扫到最大值就退出。或是说动规找到最大值后，根据住处，再把下标倒出来？？？
+        public int [] maxSumOfThreeSubarrays(int[] a, int l) { // 这是最土的暴力解法，怎么优化呢？ // TLE TLE TLE: 34/43
+            int n = a.length, ans [] = new int [3]; 
+            long [] r = new long [n+1];
+            for (int i = 0; i < n; i++) r[i+1] = r[i] + a[i];
+            long left, mid, rit, max = 0;
+            for (int i = 0; i < n - 2 * l; i++) {
+                left = r[i+l] - r[i];
+                for (int j = i+l; j <= n-2 *l; j++) {
+                    mid = r[j+l] - r[j];
+                    for (int k = j+l; k+l <= n; k++) {
+                        rit = r[k+l] - r[k];
+                        if (left + mid + rit > max) {
+                            max = left + mid + rit;
+                            ans[0] = i;
+                            ans[1] = j;
+                            ans[2] = k;
+                        }
+                    }
+                }
+            }
+            return ans; 
+        }
+
+        public int dieSimulator(int n, int[] a) { // 1223
+            this.n = n;
+            m = 7;
+            k = 15;
+            f = new Integer [n][m][k+1];
+            return dfs(0, 0, 0, a);
+        }
+        int n, m, k;
+        Integer [][][] f;
+        int dfs(int i, int j, int k, int [] a) {
+        }
+
+        public int maximumANDSum(int[] a, int m) { // 需要考虑，对数组中重复数字的处理【可能要换个方法写】 // TODO TODO TODO: 
+            this.m = m;
+            n = a.length;
+            g = new ArrayList [m];
+            Arrays.setAll(g, z -> new ArrayList<Integer>());
+            Arrays.sort(a);
+            System.out.println(Arrays.toString(a));
+            backTracking(n-1, 0, a);
+            return max;
+        }
+        int n, m, max = 0;
+        List<Integer> [] g;
+        void backTracking(int i, int cur, int [] a) {
+            if (i < 0) {
+                if (cur > max) max = cur;
+                return ;
+            }
+            // while (i > 0 && a[i] == a[i-1]) i++;
+            for (int k = 0; k < m; k++) {
+                List<Integer> l = g[k];
+                if (l.size() < 2) {
+                    l.add(a[i]);
+                    backTracking(i-1, cur + (a[i] & (k+1)), a);
+                    l.remove(l.size()-1);
+                }
+            }
+        }
+
+        public int constrainedSubsetSum(int[] a, int k) {
+            int n = a.length, max = a[0];
+            int [] f = new int [n];
+            f[0] = a[0];
+            Queue<Integer> q = new PriorityQueue<>((x, y)-> f[y] - f[x]);
+            q.offer(0);
+            for (int i = 1; i < n; i++) {
+                while (!q.isEmpty() && q.peek() < i-k) q.poll();
+                f[i] = a[i] + Math.max(0, f[q.peek()]);
+                q.offer(i);
+                max = Math.max(max, f[i]);
+            }
+            return max;
+        }
+
+        static final int mod = (int)1e9 + 7;
+        int [][] dirs = {{1, 0}, {0, 1}, {0, -1}, {-1, 0}};
+        public int countPaths(int[][] a) {
+            int m = a.length, n = a[0].length, k = m  * n;
+            long [][] f = new long [m][n];
+            Arrays.stream(f).forEach(z -> Arrays.fill(z, 1));
+            Integer [] r = IntStream.range(0, k).boxed().toArray(Integer[]::new);
+            Arrays.sort(r, (x, y) -> a[x/n][x%n] != a[y/n][y%n] ? a[x/n][x%n] - a[y/n][y%n] : x - y);
+            for (int w = 0; w < k; w++) {
+                int i = r[w] / n, j = r[w] % n;
+                // dfs(i, j, a);
+                for (int [] d : dirs) {
+                    int x = i + d[0], y = j + d[1];
+                    if (x < 0 || x >= m || y < 0 || y >= n || a[x][y] <= a[i][j]) continue;
+                    // f[x][y] = Math.max(f[x][y], f[i][j] + 1);
+                    if (f[x][y] == 1)
+                        f[x][y] = (f[i][j] + 1) % mod;
+                    else f[x][y] =  (f[i][j] + f[x][y]) % mod;
+                }
+            }
+            long ans = 0;
+            for (int i = 0; i < m; i++)
+                for (int j = 0; j < n; j++) 
+                ans = (ans + f[i][j]) % mod;
+            return (int)ans;
+        }
+
+        public int minTaps(int n, int[] a) { // TODO TODO TODO: 暂时不想再写这个题目了
+            int m = a.length;
+            List<int []> l = new ArrayList<>();
+            for (int i = 0; i < m; i++) 
+                l.add(new int [] {i - a[i], i + a[i]});
+            Collections.sort(l, (x, y) -> x[0] != y[0] ? x[0] - y[0] : x[1] - y[1]);
+            int ans = 1, i = 1, r = l.get(0)[1], newRit = 0;
+            while (r < n) {
+                int [] cur = l.get(i);
+                int j = i;
+                while (l.get(j)[0] == cur[0]) {
+                    r = Math.max(r, l.get(j)[1]);
+                    j++;
+                }
+                if (l.get(j)[0] > r) return -1;
+                ans++;
+                newRit = r;
+                while (l.get(j)[0] <= r) {
+                    newRit = Math.max(newRit, l.get(j)[1]);
+                    j++;
+                }                
+                r = newRit;
+                if (r >= n) return ans;
+            }
+            return -1;
+        }
+
+        public long minimumDifference(int[] a) { // TODO TODO TODO: 
+            int m = a.length, n = m / 3;
+            long [] p = new long [m+1], l = new long [m], r = new long [m]; // 算中间一段的左 n 个数的最小和，与右 n 个数的最大和
+            for (int i = 0; i < m; i++) p[i+1] = a[i] + p[i];
+        }
+
+        public int connectTwoGroups(List<List<Integer>> ll) { // 我记得我当初写过这个题目，忘记了
+            m = ll.size();
+            n = ll.get(0).size();
+            f = new int [m][1 << n];
+            return dfs(0, 0, ll);
+        }
+        int m, n;
+        int [][] f;
+        int dfs(int i, int j, List<List<Integer>> ll) {
+        }
+
+        public int maxScore(int[] a) { // TLE TLE TLE: 
+            n = a.length;
+            m = n / 2;
+            g = new ArrayList [m];
+            Arrays.setAll(g, z -> new ArrayList<Integer>());
+            Arrays.sort(a);
+            for (int i = 0; i < n; i++)
+                for (int j = i+1; j < n; j++) {
+                    int x = a[i], y = a[j], g = gcd(x, y);
+                    String k = String.valueOf(x) + String.valueOf(y);
+                    mg.put(k, g);
+                }
+            backTracking(0, 0, a);
+            return max;
+        }
+        int n, m, max = 0;
+        List<Integer> [] g;
+        Map<String, Integer> mg = new HashMap<>();
+        void backTracking(int i, int cur, int [] a) {
+            if (i == n) {
+                if (cur > max) max = cur;
+                return ;
+            }
+            for (int k = 0; k < m; k++) {
+                List<Integer> l = g[k];
+                if (l.size() < 2) {
+                    l.add(a[i]);
+                    // backTracking(i+1, cur + (l.size() == 1 ? 0 : gcd(l.get(0), a[i]) * (k+1)), a);
+                    String key = String.valueOf(Math.min(l.get(0), a[i])) + String.valueOf(Math.max(l.get(0), a[i]));
+                    backTracking(i+1, cur + (l.size() == 1 ? 0 : mg.get(key) * (k+1)), a);
+                    l.remove(l.size()-1);
+                }
+            }
+        }
+        int gcd(int x, int y) {
+            if (y == 0) return x;
+            return gcd(y, x % y);
+        }
+
+        public int numDistinct(String S, String T) {
+            m = S.length();
+            n = T.length();
+            s = S.toCharArray();
+            t = T.toCharArray();
+            f = new Integer [m][n];
+            return dfs(0, 0);
+        }
+        int m, n;
+        char [] s;
+        char [] t;
+        Integer [][] f;
+        int dfs(int i, int j) {
+            if (j == n) return 1;
+            if (i == m) return j == n ? 1 : 0;
+            if (f[i][j] != null) return f[i][j];
+            int r = 0;
+            if (s[i] == t[j])
+                r += dfs(i+1, j+1);
+            r += dfs(i+1, j);
+            return f[i][j] = r;
+        }
+
+        public int numberWays(List<List<Integer>> ll) { // TLE TLE TLE: 帽子太多了就会超时，得用动规。。。
+            n = ll.size();
+            backTracking(0, 0, ll);
+            return ans;
+        }
+        int n, m, ans = 0;
+        void backTracking(int i, int j, List<List<Integer>> ll) { // j: mask
+            if (i == n) {
+                if (Integer.bitCount(j) == n) // 一定要有这么多人顶帽子
+                    ans++;
+                return ;
+            }
+            for (int k = 0; k < ll.get(i).size(); k++) {
+                int id = ll.get(i).get(k);
+                if ((j & (1 << id)) == 0) // 这顶帽子还没人带
+                    backTracking(i+1, j | (1 << id), ll);
+            }
+        }
+
+        public boolean canCross(int[] a) {
+            n = a.length;
+            if (a[1] != 1) return false;
+            f = new Boolean [n][n];
+            return dfs(1, 1, a);
+        }
+        int n;
+        Boolean [][] f;
+        boolean dfs(int i, int j, int [] a) {
+            if (i == n) return false;
+            if (i == n-1) return true;
+            if (f[i][j] != null) return f[i][j];
+            boolean ans = false;
+            for (int k = Math.max(1, j-1); k <= Math.min(n-1, j+1); k++) {
+                int id = binarySearch(i+1, n-1, a[i] + k, a);
+                if (id == -1) continue;
+                if (dfs(id, k, a)) return true;
+            }
+            return f[i][j] = false;
+        }
+        int binarySearch(int l, int r, int v, int [] a) {
+            if (v < a[l] || v > a[r]) return -1;
+            while (l < r) {
+                int m = (l + r) >> 1;
+                if (a[m] >= v) r = m;
+                else l = m+1;
+            }
+            return l <= r && a[l] == v ? l : -1;
+        }
+
+        public int minimumTimeRequired(int[] a, int k) {
+            this.k = k;
+            n = a.length;
+            r = new int [k];
+            Arrays.sort(a);
+            backTracking(n-1, 0, a);
+            return min;
+        }
+        int n, k, min = Integer.MAX_VALUE;
+        int [] r;
+        void backTracking(int i, int curMax, int [] a) {
+            if (i < 0) {
+                if (curMax < min) min = curMax;
+                return ;
+            }
+            for (int j = 0; j < k; j++) {
+                if (j > 0 && r[j] == r[j-1]) continue;
+                r[j] += a[i];
+                backTracking(i-1, Math.max(curMax, r[j]), a);
+                r[j] -= a[i];
+            }
+        }        
+
+        static final int mod = (int)1e9 + 7;
+        int [][] dirs = {{1, 0}, {0, 1}};
+        public int numberOfPaths(int[][] a, int v) { // 【动规：】用动规写了一次，但数多了，换方法写。。。// TODO TODO TODO: 
+            int m = a.length, n = a[0].length;
+            for (int i = 0; i < m; i++) 
+                for (int j = 0; j < n; j++)
+                    a[i][j] = a[i][j] % v;
+            long [][][] f = new long [m][n][v];
+            for (int j = 0; j < n; j++) 
+                f[0][j][a[0][j]] = a[0][j];
+            for (int i = 0; i < m-1; i++) {
+                for (int j = 0; j < n; j++) { // 上一午的某个格
+                    for (int k = 0; k < v; k++) { // 上一行的，某个余数
+                        // 向右
+                        if (j < n-1) {
+                            int x = (k + a[i][j+1]) % v;
+                            f[i][j+1][x] = (f[i][j+1][x] + f[i][j][k]) % mod;
+                        }
+                        // 向下
+                        int x = (k + a[i+1][j]) % v;
+                        f[i+1][j][x] = (f[i+1][j][x] + f[i][j][k]) % mod;
+                    }
+                }
+            }
+            // 最后一行，还有向右的可能性
+            for (int j = 0; j < n-1; j++) // 上一午的某个格
+                for (int k = 0; k < v; k++) { // 上一行的，某个余数
+                    // 向右
+                    int x = (k + a[m-1][j+1]) % v;
+                    f[m-1][j+1][x] = (f[m-1][j+1][x] + f[m-1][j][k]) % mod;
+                }
+            return (int)f[m-1][n-1][0];
+        }
+        static final int mod = (int)1e9 + 7;
+        int [][] dirs = {{1, 0}, {0, 1}};
+        public int numberOfPaths(int[][] a, int v) { // 【记忆化深搜：】这个方法可以写过，动规写不过。。。
+            this.v = v;
+            this.a = a;
+            m = a.length;
+            n = a[0].length;
+            f = new Integer [m][n][v];
+            return dfs(0, 0, 0);
+        }
+        Integer [][][] f;
+        int [][] a;
+        int m, n, v;
+        int dfs(int i, int j, int k) {
+            if (i == m-1 && j == n-1 && (k + a[i][j]) % v == 0) return 1;
+            if (i >= m || j >= n) return 0;
+            if (f[i][j][k % v] != null) return f[i][j][k%v];
+            long ans = dfs(i, j+1, a[i][j] + k);
+            ans = (ans + dfs(i+1, j, a[i][j] + k)) % mod;
+            return f[i][j][k%v] = (int)ans;
+        }
     }
-    public static void main (String[] args) {
+    public static void main (String[] args) { // 【爱表哥，爱生活！！！活宝妹就是一定要嫁给亲爱的表哥！！！】
         Solution s  =  new Solution ();
 
-        // int [] a = new int [] {0, 0, 0, 0, 0};
-        // int [] a = new int [] {0, 2, 1, 2, 0};
-        // int [][] b = new int [][] {{1,10},{10,1},{10,1},{1,10},{5,1}};
-        int [] a = new int [] {3, 1, 2, 3};
-        int [][] b = new int [][] {{1,1,1},{1,1,1},{1,1,1},{1,1,1}};
+        int [][] a = new int [][] {{5,2,4},{3,0,5},{0,7,2}};
 
-        int r = s.minCost(a, b, 4, 3, 3);
+        int r = s.numberOfPaths(a, 3);
         System.out.println("r: " + r);
     }
 }
@@ -814,6 +1599,35 @@ public class dptwo {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
