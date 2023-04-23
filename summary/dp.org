@@ -5665,4 +5665,54 @@ public int numberOfSets(int n, int k) {
 #+END_SRC
 
 ** BitMask掩码相关的
-
+** 【第三次】不会的
+*** 416. Partition Equal Subset Sum 同硬币和问题，感觉总容易忘记，有点儿提示才能回想起来
+Given an integer array nums, return true if you can partition the array into two subsets such that the sum of the elements in both subsets is equal or false otherwise.
+**** 动规：二维
+     
+[[./pic/dp_20230419_141627.png]]
+#+BEGIN_SRC java
+// 【动规：】同拼硬币什么之类的题目是一样的. 所以，有了最基本的提醒之后，我是可以自己把它想出来的。。。
+public boolean canPartition(int[] a) { // 好慢，还没有上面的，自己瓣出来的一维的快
+    int n = a.length;
+    if (n < 2) return false;
+    int sum = Arrays.stream(a).sum(), max = Arrays.stream(a).max().getAsInt(), target = sum / 2;
+    if (sum % 2 != 0 || max > sum / 2) return false;
+    Arrays.sort(a); // 子集：之类的，一般顺序不重要，所以解题时，可以排序，来帮助自己解答问题
+    boolean [][] f = new boolean [n][target + 1];
+    Arrays.stream(f).forEach(z -> Arrays.fill(z, false));
+    for (int i = 0; i < n; i++) f[i][0] = true;
+    f[0][a[0]] = true;
+    for (int i = 1; i < n; i++) {
+        int v = a[i];
+        for (int j = 1; j <= target; j++) {
+            if (j < v) // 因为这些现取得的值 j, 不能通过当前数得到，只能取它们先前只能得到的结果
+                f[i][j] = f[i-1][j]; 
+            else // 这些取值，就可以通过添加一个当前数 a[i] 取得
+                f[i][j] = f[i-1][j] | f[i-1][j-v];
+        }
+    }
+    return f[n-1][target];
+}
+#+END_SRC
+**** 动规：一维，压缩空间
+     #+BEGIN_SRC java
+public boolean canPartition(int[] a) { // 这里至少也得降序排列一下呀。。。先试着分两组，往什么数组和小的一组里去添加之类的。。。
+    int n = a.length;
+    if (n < 2) return false;
+    int sum = Arrays.stream(a).sum(), max = Arrays.stream(a).max().getAsInt(), target = sum / 2;
+    if (sum % 2 != 0 || max > sum / 2) return false;
+    Arrays.sort(a); // 子集：之类的，一般顺序不重要，所以解题时，可以排序，来帮助自己解答问题
+    boolean [] f = new boolean [target + 1];
+    Arrays.fill(f, false);
+    f[0] = true;
+    // f[a[0]] = true; // 一维时，这个初始化也不必要了。。。
+    // for (int i = 1; i < n; i++) {
+    for (int i = 0; i < n; i++) {
+        int v = a[i];
+        for (int j = target; j >= v; j--)
+            f[j] |= f[j-v];
+    }
+    return f[target];
+}
+ #+END_SRC

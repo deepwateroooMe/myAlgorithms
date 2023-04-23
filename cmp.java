@@ -665,9 +665,13 @@ public class cmp {
         // }
 
 
-        public int [] getSubarrayBeauty(int[] a, int k, int v) { // TODO TODO TODO: 632/717
-            int n = a.length;
+// TODO TODO TODO: 703/717 这个题目出得太恶心人了。
+        // 最近的比较狠 EVIL... 出题者居心何在呢？
+        // 【活宝妹就是一定要嫁给亲爱的表哥！！！爱表哥，爱生活！！！】
+        public int [] getSubarrayBeauty(int[] a, int k, int v) { 
+            int n = a.length, min = Arrays.stream(a).min().getAsInt();
             int [] r = new int [n - k + 1];
+            if (min >= 0) return r;
             int idx = 0, cnt = 0, val = 0;
             for (int i = 0; i < n; i++)
                 if (a[i] >= 0) a[i] = 0;
@@ -677,10 +681,9 @@ public class cmp {
             boolean larger = false;
             q = new PriorityQueue<>((x, y)-> a[x] - a[y]); // 按值【升序】排列
             for (int i = 0; i < k-1; i++)
-                // if (a[i] < 0)
-                    q.offer(i);
+                q.offer(i);
             for (int i = k-1; i < n; i++) {
-                System.out.println("\n i: " + i);
+                // System.out.println("\n i: " + i);
                 while (!q.isEmpty() && q.peek() <= i-k) q.poll();  // 这些不合法，扔掉。。。
                 cnt = 0;
                 while (!q.isEmpty() && a[q.peek()] <= a[i]) {
@@ -689,35 +692,44 @@ public class cmp {
                         continue;
                     }
                     if (!q.isEmpty() && a[q.peek()] <= a[i]) {
-                        System.out.println("q.peek(): " + q.peek());
+                        // System.out.println("q.peek(): " + q.peek());
                         val = a[q.peek()];
-                        System.out.println("val: " + val);
+                        // System.out.println("val: " + val);
                         s.offerFirst(q.poll());
                         cnt++;
-                        System.out.println("cnt: " + cnt);
+                        // System.out.println("cnt: " + cnt);
                         if (cnt == v) {
                             r[idx] = val;
-                            System.out.println("0     r[idx]: " + r[idx]);
+                            // System.out.println("0     r[idx]: " + r[idx]);
                         }
                     }
                 }
-                // if (a[i] < 0)
-                    q.offer(i);
-                 System.out.println("cnt: " + cnt);
+                q.offer(i);
+                // System.out.println("cnt: " + cnt);
+                // System.out.println("q.size(): " + q.size());
                 while (cnt < v && !q.isEmpty()) {
-                    val = a[q.peek()];
-                    s.offerFirst(q.poll());
-                    cnt++;
-                     // System.out.println("cnt: " + cnt);
-                     // System.out.println("val: " + val);
-                    if (cnt == v) r[idx] = val;
-                    System.out.println("1     r[idx]: " + r[idx]);
+                    while (!q.isEmpty() && q.peek() <= i-k) {
+                        q.poll();
+                        continue;
+                    }
+                    // if (!q.isEmpty() && a[q.peek()] <= a[i]) {
+                    if (!q.isEmpty()) {
+                        val = a[q.peek()];
+                        s.offerFirst(q.poll());
+                        cnt++;
+                        // System.out.println("cnt: " + cnt);
+                        // System.out.println("val: " + val);
+                        if (cnt == v) {
+                            r[idx] = val;
+                            // System.out.println("1     r[idx]: " + r[idx]);
+                        }
+                    }
                 }
                 idx++;
-                // q.poll();
-                while (!s.isEmpty()) 
-                    q.offer(s.pollFirst());
-                // q.offer(i);
+                while (!s.isEmpty())
+                    if (s.peekFirst() <= i-k) s.pollFirst();
+                    else
+                        q.offer(s.pollFirst());
             }
             return r;
         }
@@ -743,19 +755,6 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
