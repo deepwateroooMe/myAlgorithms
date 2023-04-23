@@ -603,15 +603,137 @@ public class cmp {
     //     Node () {}
     // }
 
-        
+        // 【活宝妹就是一定要嫁给亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int findDelayedArrivalTime(int arrivalTime, int delayedTime) {
+        //     int v = arrivalTime + delayedTime;
+        //     return v == 24 ? 0 : (v > 24 ? v -24 : v);
+        // }
+
+        // public int sumOfMultiples(int n) {
+        //     int r = 0;
+        //     for (int i = 1; i <= n; i++)
+        //         if (i >= 3 && i % 3 == 0 || i >= 5 && i % 5 == 0 || i >= 7 && i % 7 == 0)
+        //             r += i;
+        //     return r;
+        // }
+
+        // public int minOperations(int [] a) {
+        //     n = a.length; this.a = a;
+        //     int min = Arrays.stream(a).min().getAsInt(), max = Arrays.stream(a).max().getAsInt();
+        //     int com = gcd(min, max), r = 0;
+        //     if (com >= 2) {
+        //         boolean hasAns = false;
+        //         for (int i = 0; i < n; i++) {
+        //             if (a[i] % com != 0) hasAns = true;
+        //             if (a[i] > 1) r |= (1 << i);
+        //             if (i < n-1) {
+        //                 int val = gcd(a[i], a[i+1]);
+        //                 g.put(i, val);
+        //             }
+        //         }
+        //         if (!hasAns) return -1;
+        //     }
+        //     return dfs(r);
+        // }
+        // Map<Integer, Integer> f = new HashMap<>();
+        // Map<Integer, Integer> g = new HashMap<>();
+        // int n, m;
+        // int dfs(int i) {
+        //     int v = Integer.bitCount(i);
+        //     if (v == 0) {
+        //         m.put(v, 0);
+        //         return 0;
+        //     } else if (v == 1) {
+        //         m.put(i, 1);
+        //         return 1;
+        //     }
+        //     if (m.containsKey(i)) return m.get(i);
+        //     int ans = Integer.MAX_VALUE;
+        //     for (int j = 0; j < n-1; j++) {
+        //         if ((i & (1 << j)) > 0) {
+        //             int v = g[j]; // gcd
+        //             int one = i ^ (1 << j); // 这里状态不唯一，不能这么写，写深搜写疯了。。。
+        //             ans = Math.min(ans, 1 + dfs(one));
+        //             if ((i && (1 << (j+1))) > 0)
+        //                 ans = Math.min(ans, dfs(i ^ (1 << (j+1))));
+        //         }
+        //     }
+        // }        
+        // int gcd(int x, int y) {
+        //     if (y == 0) return x;
+        //     return gcd(y, x % y);
+        // }
+
+
+        public int [] getSubarrayBeauty(int[] a, int k, int v) { // TODO TODO TODO: 632/717
+            int n = a.length;
+            int [] r = new int [n - k + 1];
+            int idx = 0, cnt = 0, val = 0;
+            for (int i = 0; i < n; i++)
+                if (a[i] >= 0) a[i] = 0;
+            System.out.println(Arrays.toString(a));
+            Queue<Integer> q;
+            ArrayDeque<Integer> s = new ArrayDeque<>();
+            boolean larger = false;
+            q = new PriorityQueue<>((x, y)-> a[x] - a[y]); // 按值【升序】排列
+            for (int i = 0; i < k-1; i++)
+                // if (a[i] < 0)
+                    q.offer(i);
+            for (int i = k-1; i < n; i++) {
+                System.out.println("\n i: " + i);
+                while (!q.isEmpty() && q.peek() <= i-k) q.poll();  // 这些不合法，扔掉。。。
+                cnt = 0;
+                while (!q.isEmpty() && a[q.peek()] <= a[i]) {
+                    while (!q.isEmpty() && q.peek() <= i-k) {
+                        q.poll();
+                        continue;
+                    }
+                    if (!q.isEmpty() && a[q.peek()] <= a[i]) {
+                        System.out.println("q.peek(): " + q.peek());
+                        val = a[q.peek()];
+                        System.out.println("val: " + val);
+                        s.offerFirst(q.poll());
+                        cnt++;
+                        System.out.println("cnt: " + cnt);
+                        if (cnt == v) {
+                            r[idx] = val;
+                            System.out.println("0     r[idx]: " + r[idx]);
+                        }
+                    }
+                }
+                // if (a[i] < 0)
+                    q.offer(i);
+                 System.out.println("cnt: " + cnt);
+                while (cnt < v && !q.isEmpty()) {
+                    val = a[q.peek()];
+                    s.offerFirst(q.poll());
+                    cnt++;
+                     // System.out.println("cnt: " + cnt);
+                     // System.out.println("val: " + val);
+                    if (cnt == v) r[idx] = val;
+                    System.out.println("1     r[idx]: " + r[idx]);
+                }
+                idx++;
+                // q.poll();
+                while (!s.isEmpty()) 
+                    q.offer(s.pollFirst());
+                // q.offer(i);
+            }
+            return r;
+        }
     }
     public static void main (String[] args) { 
         Solution s = new Solution ();
+        // int [] a = new int [] {-29,48,-25,-47,-29,9};
+        int [] a = new int [] {-17,29,-27,-41,-1,-50};
 
-        String a = "aaa";
+        // int [] a = new int [] {-3, 1, 2, -3, 0, -3};
+        // int [] a = new int [] {1,-1,-3,-2,3};
+        // int [] a = new int [] {-21, -24, 50};
+        System.out.println(Arrays.toString(a));
 
-        int r = s.addMinimum(a);
-        System.out.println("r: " + r);
+        int [] r = s.getSubarrayBeauty(a, 5, 5);
+        System.out.println(Arrays.toString(r));
     }
 }
 // 【爱表哥，爱生活！！！活宝妹就是一定要嫁给亲爱的表哥！！！】
@@ -621,6 +743,25 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
