@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toMap;
 public class dpthree {
     public static class Solution {
-
 // // 【 n<= 500, 2^10】【 o<= 50, 2^6】【YN:2^2】【YN:2^2】【可以建一个 20 （10+6+2+2）位的 mask】1397
 //         public int findGoodStrings(int n, String S, String T, String E) { // 【哪里没有写对，上下字符的处理，与受限字符的处理，可能不对】// TODO TODO TODO: 
 //             this.n = n;
@@ -736,19 +735,1061 @@ public class dpthree {
         //     return f[i][j] = (int)r;
         // }
         
-        // public int numDecodings(String s) {
+        // static final int mod = (int)1e9 + 7; // TODO TODO TODO: 没有写完。。。
+        // public int numDecodings(String t) {
+        //     n = t.length();
+        //     s = t.toCharArray();
+        //     f = new Integer [n];
+        //     return dfs(0);
         // }
+        // char [] s;
+        // int n;
+        // Integer [] f;
+        // int dfs(int i) {
+        //     // if (i == n) return 1;
+        //     if (i == n-1) {
+        //         if (s[i] == '*') return f[i] = 9;
+        //         else if (s[i] == '0') return 0;
+        //         else return s[i] - '0';
+        //     }
+        //     if (i == n-2 && (s[n-1] == '*' || s[n-1] == '0')) {
+        //         int j = s[i] - '0';
+        //         if (s[n-1] == '0') {
+        //             if (s[i] == '*') return f[i] = 2;
+        //             else if (s[i] -'0' > 0 && s[i] - '0' <= 2) return f[i] = 1;
+        //             else return f[i] = 0;
+        //         } else { // '*'
+        //             if (j >= 3) return f[i] = dfs(i+1);
+        //             else if (j == 1) return f[i] = dfs(i+1) * 2;
+        //             else if (j == 2) return f[i] = dfs(i+1) + 6;
+        //         }
+        //     }
+        //     if (f[i] != null) return f[i];
+        //     long r = 0;
+        //     int j = s[i] - '0';
+        //     if (s[i+1] == '0') {
+        //         if (s[i] == '*') return f[i] = 2 * dfs(i+2);
+        //         else if (s[i] -'0' > 0 && s[i] - '0' <= 2) return f[i] = dfs(i+2);
+        //         else return f[i] = 0; // 【3456789-0】【00】
+        //     } else if (s[i+1] == '*') { // '*'
+        //         if (j >= 3 && j <= 9) return f[i] = dfs(i+1);
+        //         else if (j == 1) return f[i] = dfs(i+1) * 2;
+        //         else if (j == 2) return f[i] = dfs(i+1) + 6 * dfs(i+2);
+        //     } else { // s[i] [12...9]
+        //         if (j == 2 && s[i+1] - '0' <= 6 && s[i+1] -'0' > 0) {
+        //             r = (r + 2 * dfs(i+2)) % mod;
+        //         } else if (j == 1 && s[i+1] - '0' <= 9 && s[i+1] -'0' >= 0) {
+        //             if (s[i+1] - '0' == 0)
+        //                 r = (r + dfs(i+2)) % mod;
+        //             else r = (r + 2 * dfs(i+2)) % mod;
+        //         }
+        //     }
+        //     return f[i] = (int)r;
+        // }
+
+        // public int minimumDifference(int[] a) {
+        //     m = a.length; n = m / 2; this.a = a;
+        //     l = new TreeSet [n+1]; r = new TreeSet [n+1];
+        //     Arrays.setAll(l, z -> new TreeSet<>());
+        //     Arrays.setAll(r, z -> new TreeSet<>());
+        //     backTracking(0, 0, n, 0, l); // 生成左半边的所有可能的和
+        //     backTracking(n, 0, m, 0, r);
+        //     int min = Integer.MAX_VALUE, sum = Arrays.stream(a).sum(), half = sum / 2;
+        //     for (int i = 0; i <= n; i++) {
+        //         int j = n - i;
+        //         if (i == 0) {
+        //             for (int v : l[j]) 
+        //                 min = Math.min(min, Math.abs(sum - v * 2));
+        //             continue;
+        //         }
+        //         for (int right : r[i]) {
+        //             // for (int left : l[j]) min = Math.min(min, Math.abs(sum - (right + left) * 2)); // TLE TLE TLE: 这里不要暴力查找，二分查找提速
+        //             Integer lo = l[j].floor(half - right), hi = l[j].ceiling(half - right);
+        //             if (lo != null) min = Math.min(min, Math.abs(sum - (lo + right) * 2));
+        //             if (hi != null) min = Math.min(min, Math.abs(sum - (hi + right) * 2));
+        //         }
+        //     }
+        //     return min;
+        // }
+        // int [] a;
+        // int m, n;
+        // TreeSet<Integer> [] l, r;
+        // void backTracking(int i, int cnt, int end, int sum, Set<Integer> [] l) {
+        //     if (i == end) {
+        //         if (cnt == 0) l[cnt].add(sum);
+        //         else l[cnt].add(sum);
+        //         return ;
+        //     }
+        //     backTracking(i+1, cnt+1, end, sum + a[i], l); // 包含当前数 a[i]
+        //     backTracking(i+1, cnt, end, sum, l);          // 不包含当前数 a[i]
+        // }
+        
+        // public int numberOfCombinations(String t) { // TODO TODO TODO: 1977
+        //     n = t.length(); s = t.toCharArray();
+        //     if (n == 1) return s[0] == '0' ? 0 : 1;
+        //     // f = new Integer [n];
+        //     return dfs(0, 0);
+        // }
+        // static final int mod = (int)1e9 + 7;
+        // char [] s;
+        // int n;
+        // // Integer [] f;
+        // Map<Integer, Integer> f = new HashMap<>();
+        // int dfs(int i) { // 【繁琐深搜：】这个记忆化深搜，的难点在， Integer.MAX_VALUE 待特殊数字的处理，狠繁琐，改天再写。。。
+        //     if (i == n) return 0;
+        //     // if (i < n && s[i] == '0') return f[i] = 0; // 不能以 0 打头
+        //     String key = i + "-" + j;
+        //     if (f.containsKey(key)) return f.get(key);
+        //     // if (f[i] != null) return f[i];
+        //     long r = 0;
+        //     for (int j = i; j < n; j++) {
+        //     }
+        // }
+
+//         // 【内存溢出：】Memory Limit Exceeded 71/83 这里的意思就是说， max 取值过大，而实际存在的元素少，就成了为一个数据的离散化处理
+//         // 线段树数据【离散化处理】：意思是说，分布过散的数据，重样集中集合到【0,n-1】下标，不取实际的值了，而用相对集中的下标代替 // TODO TODO TODO: 这里还有点儿没想透彻。。。
+//         public int lengthOfLIS(int[] a, int k) {  // 动规：＋线段树来找前 f【i】【v-k】范围内的最大值，可以试着写一下
+//             int n = a.length, max = Arrays.stream(a).max().getAsInt(), m = max+1, ans = 1;
+//             t = new int [4 * m]; // 不是说，线段树？下标是从 1 开始的吗？保证最大下标可以取取 max
+//             int [][] f = new int [n][m]; // 第二维表达的是以当前数 a[i] 为结尾的最长合法子序列长度，所以取最值
+//             for (int i = 0; i < n; i++) { // 注意【0】下标更新线段树。。。
+//                 int v = a[i];
+//                 f[i][v] = 1;
+//                 // 这里要找：前所有 i 个数【 0,i-1】中，以【v-k,v-1】结尾的最大值，最大长度，
+//                 // 仍然是求和线段树最好用。。。【应该可以参看一个例子】自己试着完成这个题目，快中午的时候
+// // 这里我是在想要遍历，总复杂度为【O(N^2)】，线段树可以做到【O(NlogN)】线段树中的第一维就给消除掉，只累加更新【0,maxVal+1】范围内的最大值
+//                 // for (int j = Math.max(0, v - k); j < v; j++) // 因为线段树区间求最大值：这里就不用遍历，一次【 O(logN)】查询就可以了
+//                     // f[i][v] = Math.max(f[i][v], f[i-1][j] + 1); // 【分不清：哪个 i?】
+//                 f[i][v] = Math.max(f[i][v], getMax(0, 0, m-1, v-k, v-1, t) + 1); // 查询线段树【v-k,v-1】区间最大值：下标1 开始，左闭右闭区间
+//                 // f[i][v] = Math.max(f[i][v], getMax(0, 0, n-1, v-k, v-1, t) + 1); // 查询线段树【v-k,v-1】区间最大值：下标1 开始，左闭右闭区间
+//                 update(0, 0, m-1, v, f[i][v], t); // 更新线段树单点元素： v 下标值为 f[i][v]
+//                 // update(0, 0, n-1, i, f[i][v], t); // 更新线段树单点元素： v 下标值为 f[i][v]
+//                 ans = Math.max(ans, f[i][v]);
+//             }
+//             return ans;
+//         }
+//         int [] t;
+//         void update(int u, int l, int r, int idx, int v, int [] t) {
+//             if (l == r) {
+//                 t[u] = v;
+//                 return ;
+//             }
+//             int m = l + (r - l) / 2;
+//             if (idx <= m) update(u << 1 | 1, l, m, idx, v, t);
+//             else update((u << 1) + 2, m+1, r, idx, v, t);
+//             t[u] = Math.max(t[u << 1 | 1], t[(u << 1) + 2]); // 最大值线段树：根节点最大值，取左右子节点最大值 
+//         }
+//         int getMax(int u, int l, int r, int L, int R, int [] t) { // 【 l,r】：现存线段树的有效区间跨度；【L,R】：查询区间跨度
+//             if (R < l || r < L) return 0;
+//             if (L <= l && r <= R) return t[u];
+//             int m = l + (r - l) / 2;
+//             int ll = getMax(u << 1 | 1, l, m, L, R, t);
+//             int rr = getMax((u << 1) + 2, m+1, r, L, R, t);
+//             return Math.max(ll, rr);
+//         }
+
+        // public boolean splitArraySameAverage(int[] a) { // 805
+        //     this.a = a; sum = Arrays.stream(a).sum();
+        //     n = a.length; m = n / 2 + n % 2; avg = sum / n;
+        //     int max = Arrays.stream(a).max().getAsInt();
+        //     if (n == 2) return a[0] == a[1];
+        //     // if (max > avg) return false;
+        //     // if (n % 2 != 0) return false;
+        //     l = new TreeSet[m+1]; r = new TreeSet[m+1];
+        //     Arrays.setAll(l, z -> new TreeSet<>()); Arrays.setAll(r, z -> new TreeSet<>());
+        //      System.out.println("avg: " + avg);
+        //     if (backTracking(0, m, 0, 0, l)) return true;
+        //     System.out.println("0 avg: " + avg);
+        //     if (backTracking(m, n, 0, 0, r)) return true;
+        //     for (int i = 0; i <= m; i++) { // TODO TODO TODO: 这里的部分不知道错哪时了
+        //         int j = m - i;
+        //         for (int right : r[i]) {
+        //             if (right <= avg * m) {
+        //                  Integer v = l[j].ceiling(avg * m - right);
+        //                  Integer vv = l[j].floor(avg * m - right);
+        //                  // if ((v != null || vv != null) && (i != 0 && j != 0 || (v != null ? v == avg * m : vv == avg * m))){
+        //                  //     return true;
+        //                  // }
+        //             }
+        //         }
+        //     }
+        //     return false; 
+        // }
+        // TreeSet<Integer> [] l, r;
+        // int [] a;
+        // int m, n, avg, sum;
+        // boolean backTracking(int i, int end, int cur, int cnt, TreeSet<Integer> [] l) {
+        //     if (i == end) {
+        //         // if (cnt == m && cnt * avg == cur) return true;
+        //         if (cnt > 0 && cnt * (sum - cur) == cur * (n - cnt)) {
+        //             System.out.println("cnt: " + cnt);
+        //             System.out.println("cur: " + cur);
+        //             return true;
+        //         }
+        //         l[cnt].add(cur);
+        //         return false;
+        //     }
+        //     if (backTracking(i+1, end, cur + a[i], cnt+1, l)) return true;
+        //     return backTracking(i+1, end, cur, cnt, l);
+        // }
+        // public boolean splitArraySameAverage(int[] a) {
+        //     int n = a.length, m = n / 2 + n % 2, N = (1 << m);
+        //     for (int i = 0; i < N; i++) {
+        //         int cnt = Integer.bitCount(i);
+        //     }
+        // }
+
+        // public boolean isMatch(String S, String T) { // 这个题的边边角角狠烦人。。。10 // TODO TODO TODO: 
+        //     m = S.length(); n = T.length();
+        //     s = s.toCharArray(); t = T.toCharArray();
+        //     f = new Boolean [m][n];
+        //     return dfs(0, 0);
+        // }
+        // char [] s, t;
+        // int m, n;
+        // Boolean [][] f;
+        // boolean dfs(int i, int j) {
+        //     if (i == m && j == n) return true;
+        //     if (f[i][j] != null) return f[i][j];
+        //     if (i == m-1 && j == n-1)
+        //         return f[i][j] = (s[i] == t[j] || t[j] == '.' || t[j] == '*');
+        //     if (s[i] == t[j] || t[j] == '.') return f[i][j] = dfs(i+1, j+1);
+        //     if (t[j] == '*')
+        // }
+
+        // // 【记忆化深搜：】深深惊讶，我这两天把记忆化深搜写得像 1+1=2 一样简单。。。。。
+        // // Queue<Integer> q = new PriorityQueue<>(); 感觉确实能再快一点儿
+        // public int minimumVisitedCells(int[][] a) { // 记忆化深搜： TLE 1028/1069 动态规划，应该也会超时
+        //     m = a.length; n = a[0].length; this.a = a;
+        //     f = new Integer [m][n];  // 自己认准某一个方向来遍历
+        //     Arrays.stream(f).forEach(z -> Arrays.fill(z, Integer.MAX_VALUE));
+        //     int r = dfs(0, 0);
+        //     return r == Integer.MAX_VALUE ? -1 : r;
+        // }
+        // Integer [][] f;
+        // int [][] a;
+        // int m, n;
+        // int dfs(int i, int j) { // 记忆化揵从当前坐标到终点的最小步数
+        //     if (i == m-1 && j == n-1) return f[i][j] = 1;
+        //     if (f[i][j] < Integer.MAX_VALUE ) return f[i][j];
+        //     int r = Integer.MAX_VALUE;
+        //     for (int y = Math.min(j + a[i][j], n-1); y > j; y--) 
+        //         r = Math.min(r, 1 + dfs(i, y));
+        //     for (int x = Math.min(m-1, a[i][j] + i); x > i; x--) 
+        //         r = Math.min(r, 1 + dfs(x, j));
+        //     return f[i][j] = r;
+        // }
+        // public int minimumVisitedCells(int[][] a) { // 带两个优先队列的动规写法：不知道哪里写错了，改天再写。。。
+        //     if (a[0][0] == 0) return -1;
+        //     int m = a.length, n = a[0].length;
+        //     int [][] f = new int [m][n];
+        //     Queue<int []> h = new PriorityQueue<>((x, y) -> x[0] - y[0]); // 水平方向
+        //     Queue<int []> v = new PriorityQueue<>((x, y) -> x[0] - y[0]); // 竖直方向 
+        //     for (int i = 0; i < m; i++) {
+        //         // h.clear();
+        //         for (int j = 0; j < n; j++) { // 水平方向上的
+        //             if (i == 0 && j == 0) {
+        //                 // h.offer(new int [] {1, 0, 0});
+        //                 f[i][j] = 1; continue;
+        //             }
+        //             v.clear();
+        //             h.clear();
+        //             for (int k = 0; k < i; k++) {
+        //                 while (!v.isEmpty() && a[v.peek()[1]][v.peek()[2]] + v.peek()[1] < i) v.poll(); // 扔掉所有不合法的, 【包括上一列的答案】
+        //                 if (!v.isEmpty()) f[i][j] = Math.max(f[i][j], f[v.peek()[1]][v.peek()[2]] + 1);
+        //                 v.offer(new int [] {f[i][j], i, j});
+        //             }
+        //             for (int k = 0; k < j; k++) {
+        //                 while (!h.isEmpty() && (a[h.peek()[1]][h.peek()[2]] + h.peek()[2] < j)) h.poll(); // 扔掉所有不合法的, 【包括上一行的答案】
+        //                 if (!h.isEmpty()) f[i][j] = Math.max(f[i][j], f[h.peek()[1]][h.peek()[2]] + 1);
+        //                 h.offer(new int [] {f[i][j], i, j});
+        //             }
+        //         }
+        //         // while (!v.isEmpty() && (v.peek()[2] < j || a[v.peek()[1]][v.peek()[2]] + v.peek()[1] < k)) v.poll(); // 扔掉所有不合法的, 【包括上一列的答案】
+        //         // if (!v.isEmpty()) f[i][j] = Math.max(f[i][j], f[v.peek()[1]][v.peek()[2]] + 1);
+        //         // v.offer(new int [] {f[i][j], i, j});
+        //     }
+        //     // System.out.println("f.length: " + f.length);
+        //     // for (int z = 0; z < f.length; ++z) 
+        //     //     System.out.println(Arrays.toString(f[z]));
+        //     return f[m-1][n-1] == 0 ? -1 : f[m-1][n-1];
+        // }
+
+// // 我居然是忘记了，这个死东西是如何数数的？！！！【方法不对】这个数法应该只适合回文。。。用字典数。。 // TODO TODO TODO: 
+//         public long countQuadruplets(int[] a) { 
+//             int n = a.length, m = Arrays.stream(a).max().getAsInt()+1;
+//             long ans = 0;
+//             int l [] = new int [m], ll [][] = new int [m][m];
+//             int r [] = new int [m], rr [][] = new int [m][m];
+//             for (int i = n-1; i >= 0; i--) {
+//                 int v = a[i];
+//                 for (int j = 0; j < m; j++)
+//                     rr[v][j] += r[j];
+//                 r[v]++;
+//             }
+//             // 从左往右走，一次遍历，边遍历更新结果，边更新从左往右左边计数
+//             for (int j = 0; j < n; j++) {
+//                 int v = a[j];
+// w// 【撤销：】所有由当前下标 i 所引起的计数
+//                 --r[v]; 
+//                 for (int k = 0; k < m; k++)
+//                     rr[v][k] -= r[k];
+//                 // 统计结果：
+//                 for (int i = 0; i < j; i++) 
+//                     if (a[j] < a[i]) {
+//                         for (int x = 0; x < a[j]; x++)
+//                             for (int y = a[i]+1; y < m; y++)
+//                                 ans += (long)ll[a[j]][x] * (long)rr[a[i]][y];
+//                     }
+//                 // 同步从左往右遍历左侧统计结果：
+//                 for (int k = 0; k < m; k++)
+//                     ll[v][k] += l[k];
+//                 l[v]++;
+//             }
+//             return ans;
+//         }
+
+        // public int longestValidParentheses(String t) { // TODO TODO TODO: 
+        //     int n = t.length(), max = 1;
+        //     char [] s = t.toCharArray();
+        //     boolean [][] f = new boolean [m][n];
+        //     for (int i = 0; i < n; i++) f[i][i] = true;
+        //     for (int i = n-2; i >= 0; i--)
+        //         for (int j = i+1; j < n; j++)
+        //             if (s[i] == s[j] && (j - i <=2 || f[i+1][j-1])) { // 这不对，不能套用
+        //                 f[i][j] = true;
+        //                 // max = Math.max(max, j - i + 1);
+        //             }
+        // }
+
+        // public int countPartitions(int[] a, int k) { // 2518 这个题目可能思路不太对
+        //     int n = a.length; this.a = a;
+        //     long sum = Arrays.stream(a).asLongStream().sum();
+        //     if (sum < 2l * k) return 0;
+        //     f = new Integer [n][k+1];
+        //     return quickPow(2, n) - dfs(0, k) + 1;
+        // }
+        // static final int mod = (int)1e9 + 7;
+        // int [] a;
+        // Integer [][] f;
+        // int n;
+        // int dfs(int i, int j) { // sum < j
+        //     if (i == n) return 0;
+        //     if (j == 0) return f[i][j] = 0; // ？
+        //     if (f[i][j] != null) return f[i][j];
+        //     long r = dfs(i+1, j);
+        //     if (a[i] <= j)
+        //         r = (r + dfs(i+1, j - a[i])) % mod;
+        //     return f[i][j] = (int)r;
+        // }
+        // int quickPow(int v, int n) {
+        //     long r = 1;
+        //     while (n > 0) {
+        //         if (n % 2 == 1) {
+        //             r *= v;
+        //             r %= mod;
+        //         }
+        //         v *= v;
+        //         n /= 2;
+        //     }
+        //     return (int)r;
+        // }
+
+        // public int[] countBits(int n) {
+        //     int [] r = new int [n+1];
+        //     for (int i = 0; i <= n; i++) 
+        //         r[i] = Integer.bitCount(i);
+        //     return r;
+        // }
+
+        // public int fib(int n) {
+        //     if (n < 2) return n == 1 ? 1 : 0;
+        //     int [] f = new int [n+1];
+        //     f[1] = 1;
+        //     for (int i = 2; i <= n; i++)
+        //         f[i] = f[i-1] + f[i-2];
+        //     return f[n];
+        // }
+
+        // public int tribonacci(int n) {
+        //     if (n < 3) return n == 0 ? 0 : 1;
+        //     int [] f = new int [n+1];
+        //     f[1] = f[2] = 1;
+        //     for (int i = 3; i <= n; i++)
+        //         f[i] = f[i-3] + f[i-2] + f[i-1];
+        //     return f[n];
+        // }
+
+        // public int minCostClimbingStairs(int[] a) {
+        //     int n = a.length;
+        //     int [] f = new int [n+1];
+        //     f[n-1] = a[n-1];
+        //     for (int i = n-2; i >= 0; i--)
+        //         f[i] = a[i] + Math.min(f[i+1], f[i+2]);
+        //     return Math.min(f[0], f[1]);
+        // }
+
+        //  public List<Integer> getRow(int rowIndex) {
+        //     List<List<Integer>> ll = generate(rowIndex+1);
+        //     return ll.get(rowIndex);
+        // }
+        // public List<List<Integer>> generate(int n) {
+        //     List<List<Integer>> ll = new ArrayList<>();
+        //     for (int i = 0; i < n; i++) ll.add(new ArrayList<>());
+        //     for (int i = 0; i < n; i++) {
+        //         List<Integer> l = ll.get(i);
+        //         for (int j = 0; j <= i; j++) l.add(1);
+        //         if (i == 0) continue;
+        //         for (int j = 1; j < l.size()-1; j++)
+        //             l.set(j, ll.get(i-1).get(j-1) + ll.get(i-1).get(j));
+        //     }
+        //     return ll;
+        // }
+
+        // public int maxProfit(int[] a) {
+        //     int n = a.length, l [] = new int [n], r [] = new int [n], max = 0;
+        //     l[0] = a[0]; r[n-1] = a[n-1];
+        //     for (int i = 1; i < n; i++)
+        //         l[i] = Math.min(l[i-1], a[i]);
+        //     for (int i = n-2; i >= 0; i--)
+        //         r[i] = Math.max(r[i+1], a[i]);
+        //     for (int i = 1; i < n; i++) 
+        //         max = Math.max(max, r[i] - l[i-1]);
+        //     return max;
+        // }
+
+        // public int climbStairs(int n) {
+        //     int [] f = new int [n+1];
+        //     f[0] = f[1] = 1;
+        //     for (int i = 2; i <= n; i++)
+        //         f[i] = f[i-1] + f[i-2];
+        //     return f[n];
+        // }
+
+        // public int getMaximumGenerated(int n) { // damit it ... // TODO TODO TODO: 
+        //     if (n < 2) return n == 1 ? 1 : 0;
+        //     int [] f = new int [n+1];
+        //     f[1] = 1;
+        //     for (int i = 1; i <= n/2; i++) 
+        //         f[2 * i] = f[i];
+        //     for (int i = 1; i <= (n - 1) / 2; i++) 
+        //         f[2 * i + 1] = f[i] + f[i+1];
+        //     return Arrays.stream(f).max().getAsInt();
+        // }
+
+        // public List<TreeNode> allPossibleFBT(int n) { // TODO TODO TODO: 894
+        //     List<TreeNode> l = new ArrayList<>();
+        //     l.add(new TreeNode());
+        //     if (n % 2 == 0) return l;
+        //     if (n == 1) {
+        //         return l;
+        //     }
+        //     g = new ArrayList [n+1];
+        //     Arrays.setAll(g, z -> new ArrayList<>());
+        //     int i = 1;
+        //     g[1] = l
+        //     while (i < n) {
+        //         g[i+2] = allPossibleFBT(g[i]);
+        //         i += 2;
+        //     }
+        //     return g[n];
+        // }
+        // List<TreeNode> [] g;
+        // List<TreeNode> allPossibleFBT(List<TreeNode> ll) { // 3 ==> 5 要复制一遍，还得判断是否是一样的树；可是加两个叶子，怎么知道加哪里才好呢？
+        //     List<TreeNode> rr = new ArrayList<>();
+        //     for (TreeNode r : ll) {
+        //         TreeNode p = 
+        //     }
+        // }
+        // boolean isSame(TreeNode r, TreeNode p) { // 是否一样的树，狠简单
+        //     if (r == null && p == null) return true;
+        //     if (r == null || p == null) return false;
+        //     return isSame(r.left, p.left) && isSame(r.right, p.right);
+        // }
+        
+        // // TLE TLE TLE: 60/63, 大概数的时候，还是不需要改变一个，只数改一个的
+        // public int countSubstrings(String s, String t) {
+        //     Node trie = new Node();
+        //     int m = s.length(), n = t.length();
+        //     for (int i = 0; i < n; i++)
+        //         for (int j = i+1; j <= n; j++) 
+        //             insert(t.substring(i, j), trie);
+        //     Map<String, Integer> ms = new HashMap<>();
+        //     int r = 0;
+        //     for (int i = 0; i < m; i++)
+        //         for (int j = i+1; j <= m; j++) {
+        //             String cur = s.substring(i, j);
+        //             if (ms.containsKey(cur)) {
+        //                 r += ms.get(cur);
+        //                 continue;
+        //             }
+        //             int sum = 0;
+        //             for (int k = 0; k < cur.length(); k++) {
+        //                 int idx = cur.charAt(k) - 'a';
+        //                 for (int x = 0; x < 26; x++) {
+        //                     if (x == idx) continue;
+        //                     char c = (char)(x + 'a');
+        //                     String curMade = (k == 0 ? "" : cur.substring(0, k)) + c + (k == cur.length()-1 ? "" : cur.substring(k+1));
+        //                     int v = search(curMade, trie);
+        //                     if (v > 0) {
+        //                         r += v;
+        //                         sum += v;
+        //                     }
+        //                 }
+        //             }
+        //             ms.put(cur, sum);
+        //         }
+        //     return r;
+        // }
+        // int search(String t, Node r) {
+        //     int n = t.length();
+        //     char [] s = t.toCharArray();
+        //     for (int i = 0; i < n; i++) {
+        //         int j = s[i] - 'a';
+        //         if (r.c[j] == null) return 0;
+        //         r = r.c[j];
+        //     }
+        //     return r.v;
+        // }
+        // void insert(String t, Node r) {
+        //     int n = t.length();
+        //     char [] s = t.toCharArray();
+        //     for (int i = 0; i < n; i++) {
+        //         int j = s[i] - 'a';
+        //         if (r.c[j] == null) r.c[j] = new Node();
+        //         r = r.c[j];
+        //     }
+        //     r.end = true;
+        //     r.w = t;
+        //     r.v++;
+        // }  
+        // class Node {
+        //     Node [] c = new Node [26];
+        //     boolean end;
+        //     String w;
+        //     int v; // cnt 计数个数
+        //     Node() {}
+        // }
+        // public int countSubstrings(String S, String T) { // 【O(MN × min(M,N))】
+        //     int m = S.length(), n = T.length();
+        //     char [] s = S.toCharArray(), t = T.toCharArray();
+        //     int ans = 0;
+        //     for (int i = 0; i < m; i++)
+        //         for (int j = 0; j < n; j++) {
+        //             int dif = 0;
+        //             for (int k = 0; i + k < m && j + k < n; k++) { // 这里还有个循环
+        //                 dif += s[i+k] == t[j+k] ? 0 : 1;
+        //                 if (dif > 1) break;
+        //                 else if (dif == 1) ans++;
+        //             }
+        //         }
+        //     return ans;
+        // }
+        // public int countSubstrings(String S, String T) {
+        //     int m = S.length(), n = T.length();
+        //     char [] s = S.toCharArray(), t = T.toCharArray();
+        //     int ans = 0;
+        //     int [][] l = new int [m+1][n+1], r = new int [m+1][n+1];
+        //     for (int i = 0; i < m; i++)
+        //         for (int j = 0; j < n; j++)
+        //             if (s[i] == t[j]) l[i+1][j+1] = l[i][j] + 1;
+        //     for (int i = m-1; i >= 0; i--) 
+        //         for (int j = n-1; j >= 0; j--) 
+        //             if (s[i] == t[j]) r[i][j] = r[i+1][j+1] + 1;
+        //     for (int i = 0; i < m; i++)
+        //         for (int j = 0; j < n; j++)
+        //             if (s[i] != t[j]) ans += (l[i][j] + 1) * (r[i+1][j+1] + 1);
+        //     return ans;
+        // }
+        
+        // // public int maxSumAfterPartitioning(int[] a, int k) { // TODO TODO TODO: 脑袋昏昏。。。 1043
+        // //     int n = a.length, max = 0;
+        // //     int [] f = new int [n+1];
+        // //     f[1] = a[0];
+        // //     for (int i = 1; i < n; i++) {
+        // //         max = a[i];
+        // //         // max = 0;
+        // //         for (int j = 1; j <= k && i-k >= 0; j++) {
+        // //             max = Math.max(max, a[i-j]);
+        // //             f[i] = Math.max(f[i-j] + max * j, f[i]);
+        // //         }
+        // //     }
+        // //     return f[n-1];
+        // // }
+        // public int maxSumAfterPartitioning(int[] a, int k) { // 记忆化深搜：还是太好用了。。。
+        //     this.a = a; n = a.length; this.k = k;
+        //     f = new Integer [n];
+        //     return dfs(0);
+        // }
+        // int [] a;
+        // int n, k;
+        // Integer []  f;
+        // int dfs(int i) {
+        //     if (i == n) return 0;
+        //     if (f[i] != null) return f[i];
+        //     int r = 0, max = 0;
+        //     for (int j = i; j < i+k && j < n; j++) { // 区间：【 i,j】包括 j
+        //         max = Math.max(max, a[j]);
+        //         r = Math.max(r, max * (j - i + 1) + dfs(j+1));
+        //     }
+        //     return f[i] = r;
+        // }
+
+        // public int twoEggDrop(int n) { // 1884 // TODO TODO TODO: 
+        //     this.n = n; m = 2;
+        //     f = new Integer [m][n+1];
+        //     return dfs(0, 0);
+        // }
+        // int n, m;
+        // Integer [][] f;
+        // int dfs(int i, int j) {
+        //     if (i == m) return Integer.MAX_VALUE / 2;
+        //     if (f[i][j] != null) return f[i][j];
+        //     int r = Integer.MAX_VALUE / 2;
+        // }
+
+        // public int getKth(int l, int h, int k) {
+        //     f = new Integer [ 273227];
+        //     f[2] = 1;
+        //     for (int i = l; i <= h; i++)
+        //         if (f[i] == null) dfsGetPow(i);
+        //     Integer [] ids = IntStream.range(l, h+1).boxed().toArray(Integer[]::new);
+        //     Arrays.sort(ids, (x, y) -> f[x] != f[y] ? f[x] - f[y] : x - y);
+        //     return ids[k - 1];
+        // }
+        // Integer [] f;
+        // int dfsGetPow(int i) {
+        //     if (i == 1) return f[i] = 0;
+        //     if (f[i] != null) return f[i];
+        //     if (i % 2 == 0) return f[i] = 1 + dfsGetPow(i / 2);
+        //     else return f[i] = 1 + dfsGetPow(i * 3 + 1);
+        // }
+
+        // public int mctFromLeafValues(int[] a) {
+        //     n = a.length; this.a = a;
+        //     f = new Integer [n][n];
+        //     return dfs(0, n-1);
+        // }
+        // int [] a;
+        // int n;
+        // Integer [][] f;
+        // int dfs(int i, int j) {
+        //     if (i == j) return f[i][j] = 0;
+        //     if (i + 1 == j) return f[i][j] = a[i] * a[j];
+        //     if (f[i][j] != null) return f[i][j];
+        //     int r = Integer.MAX_VALUE, max = 0, maxx = 0;
+        //     for (int k = i; k < j; k++) {
+        //         max = Math.max(max, a[k]);
+        //         for (int x = k+1; x <= j; x++)
+        //             maxx = Math.max(maxx, a[x]);
+        //         r = Math.min(r, max * maxx + dfs(i, k) + dfs(k+1, j));
+        //     }
+        //     return f[i][j] = r;
+        // }
+
+        // public int countSubstrings(String t) {
+        //     int n = t.length(); char [] s = t.toCharArray();
+        //     boolean [][] f = new boolean [n][n];
+        //     for (int i = 0; i < n; i++) f[i][i] = true;
+        //     int ans = n;
+        //     for (int i = n-2; i >= 0; i--) 
+        //         for (int j = i+1; j < n; j++) 
+        //             if (s[i] == s[j] && (j - i <= 2 || f[i+1][j-1])) {
+        //                 f[i][j] = true;
+        //                 ans++;
+        //             }
+        //     return ans;
+        // }
+
+    //     public int mincostTickets(int[] a, int[] b) {
+    //         int n = a.length;
+    //         int [] f = new int [n];
+    //         f[0] = b[0];
+    //         for (int i = 1; i < n; i++) {
+    //             System.out.println("\n i: " + i);
+    //             System.out.println("a[i]: " + a[i]);
+    // f[i] = f[i-1] + b[0];
+    //             for (int j = i-1; j >= 0; j--) {
+    //                 if (a[i] - a[j] <= 7) f[i] = Math.min(f[i], (j == 0 ? 0 : f[j-1]) + b[1]);
+    //                 if (a[i] - a[j] == 30) f[i] = Math.min(f[i], f[j] + b[2]);
+    //             }
+    //             System.out.println(Arrays.toString(f));
+    //         }
+    //         System.out.println(Arrays.toString(f));
+    //         return f[n-1];
+    //     }
+    //     int [] a = new int [] {1,4,6,7,8,20};
+    //     int [] b = new int [] {7, 2, 15};
+
+        // public int maxProfit(int[] a, int v) { // TODO TODO TODO: 714
+        //     int n = a.length;
+        //     int [] buy = new int [n], sell = new int [n];
+        //     buy[0] = -a[0];
+        //     for (int i = 1; i < n; i++) {
+        //         sell[i] = a[i] + buy[i-1] - v; // 如果卖
+        //         buy[i] = Math.max(a, b)
+        //     }
+        // }
+
+        // public int numberOfArithmeticSlices(int[] a) { // TODO TODO TODO: 
+        //     int n = a.length, i = 1, j = 0, r = 0, d = a[1] - a[0];
+        //     if (n == 1) return 0;
+        //     while (i < n) {
+        //         while (i < n-1 && a[i+1] - a[i] == d) i++;
+        //         r++; // 数得不对。。。413
+        //         ++i;
+        //         if (i == n) return r;
+        //         d = a[i] - a[i-1];
+        //     }
+        //     return r;
+        // }
+
+        // public int stoneGameII(int[] a) { // 不知道这里两个人的顺序是怎么回事。。。1140 // TODO TODO TODO: 
+        //     this.a = a;         n = a.length; 
+        //     f = new Integer [n][n][2];
+        //     return dfs(0, 1, 0);
+        // }
+        // Integer [][][] f;
+        // int [] a;
+        // int n;
+        // int dfs(int i, int j, int k) {
+        //     if (i == n) return 0;
+        //     if (f[i][j][k%2] != null) return f[i][j][k%2];
+        //     int r = 0, sum = 0;
+        //     for (int x = 1; x <= 2 * j && i+x-1 < n; x++) {
+        //         int y = i + x - 1;
+        //         sum += a[y];
+        //         r = Math.max(r, sum - dfs(y+1, Math.max(j, x), k+1));
+        //     }
+        //     return f[i][j][k%2] = r;
+        // }
+
+        // public int countArrangement(int n) {
+        //     this.n = n;
+        //     backTracking(0, new ArrayList<Integer>(), new boolean [n]);
+        //     return ans;
+        // }
+        // int n, ans = 0;
+        // void backTracking(int i, List<Integer> l, boolean [] vis) {
+        //     if (i == n) {
+        //         if (l.size() == n) 
+        //             ans++;
+        //         return ;
+        //     }
+        //     for (int j = 0; j < n; j++) {
+        //         int v = j + 1, s = l.size();
+        //         if (!vis[j] && (v % (s + 1) == 0 || (s+1) % v == 0)) {
+        //             l.add(v);
+        //             vis[j] = true;
+        //             backTracking(i+1, l, vis);
+        //             vis[j] = false;
+        //             l.remove(s);
+        //         }
+        //     }
+        // }
+
+        // public int waysToMakeFair(int[] a) { // 1664 // TODO TODO TODO: 
+        //     int n = a.length;
+        //     int [] l = new int [n], r = new int [n];
+        //     for (int i = 0; i < n; i++)
+        //         if (i % 2 == 0) {
+        //             r[i] = (i == 0 ? 0 : r[i-2]) + a[i];
+        //             if (i > 0)
+        //                 l[i] = l[i-1];
+        //         } else {
+        //             l[i] = (i == 1 ? 0 : l[i-2]) + a[i];
+        //             if (i > 0) r[i] = r[i-1];
+        //         }
+        //     // System.out.println(Arrays.toString(l));
+        //     // System.out.println(Arrays.toString(r));
+        //     int ans = 0, oddSum = (n % 2 == 0 ? l[n-1] : l[n-2]);
+        //     int evnSum = (n % 2 == 0 ? r[n-2] : r[n-1]);
+        //     for (int i = 0; i < n; i++) {
+        //         // System.out.println("\n i: " + i);
+        //         if (i == 0) {
+        //             if (evnSum - r[0] == oddSum) ans++;
+        //             continue;
+        //         } else if (i == n-1) {
+        //             if (i % 2 == 0 && oddSum - l[n-1] == evnSum
+        //                 || i % 2 == 1 && evnSum - r[n-1] == oddSum) ans++;
+        //             continue;
+        //         } else {
+        //             if (i % 2 == 0 && r[i-2] + oddSum - l[i] == l[i] + evnSum - r[i]) ans++;
+        //             else if (i % 2 == 1 && l[i-1] + evnSum - r[i] == r[i] + oddSum - l[i]) ans++;
+        //         }
+        //     }
+        //     return ans;
+        // }
+
+        // public int uniquePaths(int m, int n) { // 不知道写错在哪里，换
+        //     this.m = m; this.n = n;
+        //     dfs(0, 0);
+        //     return r;
+        // }
+        // int [][] dirs = {{1, 0}, {0, 1}};
+        // int m, n;
+        // int r = 0;
+        // void dfs(int x, int y) {
+        //     if (x < 0 || x >= m || y < 0 || y >= n) return ;
+        //     if (x == m-1 && y == n-1) {
+        //         r++;
+        //         return ;
+        //     }
+        //     for (int [] d : dirs)
+        //         dfs(x + d[0], y + d[1]);
+        // }
+        // public int uniquePaths(int m, int n) { // 这不是一下子就过了吗？脑袋怎么在想问题？
+        //     int [][] f = new int [m][n];
+        //     f[0][0] = 1;
+        //     for (int j = 0; j < n; j++) f[0][j] = 1;
+        //     for (int i = 0; i < m; i++) f[i][0] = 1;
+        //     for (int i = 1; i < m; i++)
+        //         for (int j = 1; j < n; j++) 
+        //             f[i][j] = f[i][j-1] + f[i-1][j];
+        //     return f[m-1][n-1];
+        // }
+
+        // public int minFlipsMonoIncr(String t) {
+        //     int n = t.length(), min = n;
+        //     char [] s = t.toCharArray();
+        //     int [] l = new int [n+1], r = new int [n+1];
+        //     for (int i = 1; i <= n; i++)
+        //         if (s[i-1] == '1') l[i] = l[i-1] + 1;
+        //         else l[i] = l[i-1];
+        //     for (int i = n-1; i >= 0; i--) 
+        //         if (s[i] == '0') r[i] = r[i+1] + 1;
+        //         else r[i] = r[i+1];
+        //     for (int i = 1; i < n; i++) // 把片段分三段
+        //         min = Math.min(min, l[i] + r[i+1]);
+        //     return min;
+        // }
+
+        // public int maxCompatibilitySum(int[][] s, int[][] tt) {
+        //     n = s.length; m = s[0].length;
+        //     a = new int [n]; b = new int [n];
+        //     int r = 0, t = 0;
+        //     for (int i = 0; i < n; i++) {
+        //         r = 0; t = 0;
+        //         for (int j = 0; j < m; j++) {
+        //             if (s[i][j] == 1) r |= (1 << j);
+        //             if (tt[i][j] == 1) t |= (1 << j);
+        //         }
+        //         a[i] = r; b[i] = t;
+        //     }
+        //     backTracking(0, 0, new ArrayList<Integer>(), new boolean [n]);
+        //     return max;
+        // }
+        // int [] a, b;
+        // int m, n, max = 0;
+        // void backTracking(int i, int j, List<Integer> l, boolean [] vis) {
+        //     if (i == n) {
+        //         if (j > max && l.size() == n) max = j;
+        //         return ;
+        //     }
+        //     for (int k = 0; k < n; k++) { // n 个学生分给 n 个森头桩, 木头桩遍历过了吗？
+        //         // if (k > 0 && b[k] == b[k-1]) continue; // 【不能加这句：】会过滤掉正确答案。。。
+        //         if (!vis[k]) {
+        //             int v = getSameBitCnt(a[i], b[k]);
+        //             vis[k] = true;
+        //             l.add(v);
+        //             backTracking(i+1, j + v, l, vis);
+        //             l.remove(l.size()-1);
+        //             vis[k] = false;
+        //         }
+        //     }
+        // }
+        // int getSameBitCnt(int i, int j) {
+        //     int r = 0;
+        //     for (int k = 0; k < m; k++) 
+        //         if (((i >> k) & 1) == ((j >> k) & 1)) r++;
+        //     return r;
+        // }
+
+        // public int minDistance(String S, String T) {
+        //     int m = S.length(), n = T.length();
+        //     char [] s = S.toCharArray(), t = T.toCharArray();
+        //     int [][] f = new int [m+1][n+1];
+        //     for (int i = 1; i <= m; i++) 
+        //         for (int j = 1; j <= n; j++) 
+        //             if (s[i-1] == t[j-1]) f[i][j] = f[i-1][j-1] + 1;
+        //             else f[i][j] = Math.max(f[i-1][j], f[i][j-1]);
+        //     return m + n - f[m][n] * 2;
+        // }
+
+        // public int longestStrChain(String[] a) { // TODO: 不知道哪里写错了
+        //     int n = 16, m = a.length, max = 0, min = n;
+        //     int [] f = new int [n];
+        //     Arrays.fill(f, 1);
+        //     Set<String> [] s = new HashSet[n];
+        //     Arrays.setAll(s, z -> new HashSet<>());
+        //     for (String v : a) {
+        //         int i = v.length();
+        //         max = Math.max(max, i);
+        //         min = Math.min(min, i);
+        //         s[i].add(v);
+        //     }
+        //     for (int i = max; i >= min+1; i--) 
+        //         for (String v : s[i]) 
+        //             for (int j = 0; j < i; j++) {
+        //                 String cur = (j == 0 ? "" : v.substring(0, j)) + (j == i-1 ? "" : v.substring(j+1, i));
+        //                 if (s[i-1].contains(cur)) f[i-1] = Math.max(f[i-1], f[i] + 1);
+        //             }
+        //     // System.out.println(Arrays.toString(f));
+        //     return Arrays.stream(f).max().getAsInt();
+        // }
+
+        // public int maxUncrossedLines(int[] a, int[] b ) {
+        //     int m = a.length, n = b.length;
+        //     int [][] f = new int [m+1][n+1];
+        //     for (int i = m-1; i >= 0; i--) 
+        //         for (int j = n-1; j >= 0; j--) 
+        //             if (a[i] == b[j]) f[i][j] = f[i+1][j+1] + 1;
+        //             else f[i][j] = Math.max(f[i+1][j], f[i][j+1]);
+        //     return f[0][0];
+        // }
+
+        // public int minimumDeletions(String t) {
+        //     int n = t.length(); char [] s = t.toCharArray();
+        //     int [] l = new int [n+1], r = new int [n+1];
+        //     for (int i = 0; i < n; i++)
+        //         if (s[i] == 'b') l[i+1] = l[i] + 1;
+        //         else l[i+1] = l[i];
+        //     for (int i = n-1; i >= 0; i--)
+        //         if (s[i] == 'a') r[i] = r[i+1] + 1;
+        //         else r[i] = r[i+1];
+        //     int ans = n;
+        //     for (int i = 0; i < n; i++) 
+        //         ans = Math.min(ans, l[i] + r[i+1]);
+        //     return ans;
+        // }
+
+        // public int stoneGameVII(int[] a) {
+        //     this.a = a; n = a.length;
+        //     f = new Integer [n][n];
+        //     return dfs(0, n-1, Arrays.stream(a).sum());
+        // }
+        // int [] a;
+        // int n;
+        // Integer [][] f;
+        // int dfs(int i, int j, int k) {
+        //     if (i > j) return 0;
+        //     if (f[i][j] != null) return f[i][j];
+        //     int r = 0;
+        //     return f[i][j] = Math.max(k - a[i] - dfs(i+1, j, k-a[i]), k - a[j] - dfs(i, j-1, k - a[j]));
+        // }
+
+        // public int findLongestChain(int[][] a) {
+        //     int n = a.length;
+        //     Arrays.sort(a, (x, y) -> x[0] != y[0] ? x[0] - y[0] : x[1] - y[1]);
+        //     int [] f = new int [n];
+        //     Arrays.fill(f, 1);
+        //     for (int i = n-2; i >= 0; i--) {
+        //         int u = a[i][0], v = a[i][1];
+        //         for (int j = i+1; j < n; j++) {
+        //             int x = a[j][0], y = a[j][1];
+        //             if (x > v) f[i] = Math.max(f[i], f[j] + 1);
+        //         }
+        //     }
+        //     return Arrays.stream(f).max().getAsInt();
+        // }
+
+        // public int minScoreTriangulation(int[] a) { // 完全没能回想起来是怎么回事 // TODO TODO TODO: 
+        //     this.a = a; n = a.length;
+        //     f = new Integer [n][n];
+        //     return dfs(0, n-1);
+        // }
+        // int [] a;
+        // int n;
+        // Integer [][] f;
+        // int dfs(int i, int j) {
+        //     // System.out.println("\n i: " + i);
+        //     // System.out.println("j: " + j);
+        //     if (i > j) return 0;
+        //     // if (j - i < 2) return 0;
+        //     // if (i == j) return f[i][j] = a[i];
+        //     if (i + 2 == j) return f[i][j] = a[i] * a[i+1] * a[j];
+        //     if (i + 3 == j) return f[i][j] = Math.min(a[i] * a[i+1] * a[j] + a[j] * a[i+1] * a[j-1], a[i] * a[i+1] * a[j-1] + a[j-1] * a[j] * a[i]);
+        //     if (f[i][j] != null) return f[i][j];
+        //     int r = Integer.MAX_VALUE;
+        //     for (int k = i; k <= j; k++) {
+        //         // System.out.println("k: " + k);
+        //         // r = Math.min(r, a[i] * a[k] * a[j] + dfs(i+1, k-1) + (k+2 == j ? a[k] * a[k+1] * a[j] : dfs(k+1, j-1)));
+        //         r = Math.min(r, a[i] * a[k] * a[j] + dfs(i+1, k) + dfs(k+1, j));
+        //         // System.out.println("r: " + r);
+        //     }
+        //     // System.out.println("\n i: " + i);
+        //     // System.out.println("j: " + j);
+        //     // System.out.println("r: " + r);
+        //     return f[i][j] = r;
+        // }
+
+        // public List<TreeNode> generateTrees(int n) {
+        //     List<TreeNode> l = generateTrees(1, n);
+        //     return l;
+        // }
+        // List<TreeNode> generateTrees(int bgn, int end) {
+        //     List<TreeNode> l = new ArrayList<>();
+        //     if (bgn > end) {
+        //         l.add(null);
+        //         return l;
+        //     }
+        //     for (int i = bgn; i <= end; i++) { // 遍历根节点
+        //         List<TreeNode> left = generateTrees(bgn, i-1);
+        //         List<TreeNode> right = generateTrees(i+1, end);
+        //         for (TreeNode ll : left)
+        //             for (TreeNode rr : right) {
+        //                 TreeNode r = new TreeNode(i);
+        //                 r.left = ll;
+        //                 r.right = rr;
+        //                 l.add(r);
+        //             }
+        //     }
+        //     return l;
+        // }
+
+        // public int lengthOfLIS(int[] a) {
+        //     int n = a.length;
+        //     int [] f = new int [n];
+        //     Arrays.fill(f, 1);
+        //     for (int i = 1; i < n; i++) 
+        //         for (int j = i-1; j >= 0; j--) 
+        //             if (a[j] < a[i]) f[i] = Math.max(f[i], f[j] + 1);
+        //     return Arrays.stream(f).max().getAsInt();
+        // }
+
+        // public int combinationSum4(int[] a, int t) { // 它有些地方要 * 2.... // TODO TODO TODO: 377
+        //     n = a.length; this.a = a;
+        //     Arrays.sort(a);
+        //     f = new Integer [n][t+1];
+        //     return dfs(n-1, t);
+        // }
+        // Integer [][] f;
+        // int [] a;
+        // int n;
+        // int dfs(int i, int j) {
+        //     if (i < 0) return j == 0 ? 1 : 0;
+        //     if (j == 0) return 1;
+        //     if (f[i][j] != null) return f[i][j];
+        //     int r = dfs(i-1, j);  // 不用当前的数
+        //     if (a[i] > j) return f[i][j] = r;
+        //     while (j - a[i] >= 0) {
+        //         r += dfs(i-1, j - a[i]);
+        //         j -= a[i];
+        //     }
+        //     return f[i][j] = r;
+        // }
+
+        
     }
     public static void main (String[] args) { // 【爱表哥，爱生活！！！活宝妹就是一定要嫁给亲爱的表哥！！！】
         Solution s  =  new Solution ();
+        int [] a = new int [] {1, 2, 3};
 
-        String a = "23542185131";
-
-        int r = s.beautifulPartitions(a, 3, 2);
+        int r = s.combinationSum4(a, 4);
         System.out.println("r: " + r);
     }
 }
-// ListNode head = new ListNode(a[0]);
+// ListNode head = new ListNode(a[0]); 
 // head.buildList(head, a);
 // head.printList(head);
 // TreeNode rr = new TreeNode(a[0]);

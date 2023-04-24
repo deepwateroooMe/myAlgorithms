@@ -100,73 +100,6 @@ public class dpone { // 【动规三刷：】从最简单Middle 到 Hard, 希望
             return -1;
         }
 
-        // TLE TLE TLE: 60/63, 大概数的时候，还是不需要改变一个，只数改一个的 // TODO TODO TODO: 
-        public int countSubstrings(String s, String t) {
-            Node trie = new Node();
-            int m = s.length(), n = t.length();
-            for (int i = 0; i < n; i++)
-                for (int j = i+1; j <= n; j++) 
-                    insert(t.substring(i, j), trie);
-            // Set<String> ss = new HashSet<>();
-            Map<String, Integer> ms = new HashMap<>();
-            int r = 0;
-            for (int i = 0; i < m; i++)
-                for (int j = i+1; j <= m; j++) {
-                    String cur = s.substring(i, j);
-                    // if (ss.contains(cur)) continue;
-                    if (ms.containsKey(cur)) {
-                        r += ms.get(cur);
-                        continue;
-                    }
-                    int sum = 0;
-                    for (int k = 0; k < cur.length(); k++) {
-                        int idx = cur.charAt(k) - 'a';
-                        for (int x = 0; x < 26; x++) {
-                            if (x == idx) continue;
-                            char c = (char)(x + 'a');
-                            String curMade = (k == 0 ? "" : cur.substring(0, k)) + c + (k == cur.length()-1 ? "" : cur.substring(k+1));
-                            int v = search(curMade, trie);
-                            if (v > 0) {
-                                r += v;
-                                sum += v;
-                            }
-                        }
-                    }
-                    // ss.add(cur);
-                    ms.put(cur, sum);
-                }
-            return r;
-        }
-        int search(String t, Node r) {
-            int n = t.length();
-            char [] s = t.toCharArray();
-            for (int i = 0; i < n; i++) {
-                int j = s[i] - 'a';
-                if (r.c[j] == null) return 0;
-                r = r.c[j];
-            }
-            return r.v;
-        }
-        void insert(String t, Node r) {
-            int n = t.length();
-            char [] s = t.toCharArray();
-            for (int i = 0; i < n; i++) {
-                int j = s[i] - 'a';
-                if (r.c[j] == null) r.c[j] = new Node();
-                r = r.c[j];
-            }
-            r.end = true;
-            r.w = t;
-            r.v++;
-        }  
-        class Node {
-            Node [] c = new Node [26];
-            boolean end;
-            String w;
-            int v;
-            Node() {}
-        }
-
         TODO TODO TODO: 
         // 忘记：这个题目是记忆化搜索，还是 min-max 差值题？感觉狠久没有刷动规，还要点儿适应时间。。。。。
         public boolean stoneGame(int[] a) {
@@ -405,29 +338,6 @@ public class dpone { // 【动规三刷：】从最简单Middle 到 Hard, 希望
             return f[idx][v] = r;
         }
 
-        // TLE TLE TLE: 37/63 不知道写错在哪里
-        public int uniquePaths(int m, int n) {
-            this.m = m;
-            this.n = n;
-            dfs(0, 0);
-            return r;
-        }
-        int [][] dirs = {{1, 0}, {0, 1}};
-        int m, n;
-        int r = 0;
-        void dfs(int x, int y) {
-            if (x < 0 || x >= m || y < 0 || y >= n) return ;
-            if (x == m-1 && y == n-1) {
-                r++;
-                return ;
-            }
-            for (int [] d : dirs)
-                dfs(x + d[0], y + d[1]);
-        }
-        public int uniquePaths(int m, int n) {
-            int [][] f = new int [m][n];
-        }
-
         public int minPathSum(int[][] a) {// TLE TLE TLE: 25/61
             m = a.length;
             n = a[0].length;
@@ -500,22 +410,6 @@ public class dpone { // 【动规三刷：】从最简单Middle 到 Hard, 希望
                 backTracking(j+1, k, a);
                 f[i] -= a[j];
             }
-        }
-
-        // TODO TODO TODO: 这个思路好像是不对的。。。。。
-        public int minFlipsMonoIncr(String t) {
-            int n = t.length(), min = n;
-            char [] s = t.toCharArray();
-            int [] l = new int [n+1], r = new int [n+1];
-            for (int i = 1; i <= n; i++)
-                if (s[i-1] == '1') l[i] = l[i-1] + 1;
-                else l[i] = l[i-1];
-            for (int i = n-1; i >= 0; i--) 
-                if (s[i] == '0') r[i] = r[i+1] + 1;
-                else r[i] = r[i+1];
-            for (int i = 0; i < n; i++)
-                min = Math.min(min, l[i+1] + r[i+1]);
-            return min;
         }
 
          // TODO TODO TODO: 

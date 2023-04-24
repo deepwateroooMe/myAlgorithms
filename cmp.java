@@ -683,7 +683,6 @@ public class cmp {
             for (int i = 0; i < k-1; i++)
                 q.offer(i);
             for (int i = k-1; i < n; i++) {
-                // System.out.println("\n i: " + i);
                 while (!q.isEmpty() && q.peek() <= i-k) q.poll();  // 这些不合法，扔掉。。。
                 cnt = 0;
                 while (!q.isEmpty() && a[q.peek()] <= a[i]) {
@@ -692,7 +691,6 @@ public class cmp {
                         continue;
                     }
                     if (!q.isEmpty() && a[q.peek()] <= a[i]) {
-                        // System.out.println("q.peek(): " + q.peek());
                         val = a[q.peek()];
                         // System.out.println("val: " + val);
                         s.offerFirst(q.poll());
@@ -755,6 +753,8 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+
+
 
 
 

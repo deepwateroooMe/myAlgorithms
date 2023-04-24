@@ -1518,21 +1518,3 @@ public class mfourixed {
 // head.buildList(head, a);
 // head.printList(head);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
