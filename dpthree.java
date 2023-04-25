@@ -216,127 +216,6 @@ public class dpthree {
         //     // p.rr = Math.min((p.r.s == 0 ? Integer.MAX_VALUE : p.r.rr), r.val);
         // }
 
-        // public boolean canMouseWin(String[] a, int catLen, int mouseLen) { // 【返回的是：小老鼠赢了吗？】【脑袋写昏了。。。】 // TODO TODO TODO: 
-        //     this.catLen = catLen;
-        //     this.mouseLen = mouseLen;
-        //     m = a.length;
-        //     n = a[0].length();
-        //     s = new char [m][n];
-        //     for (int i = 0; i < m; i++) s[i] = a[i].toCharArray();
-        //     f = new Boolean [m][n][2];
-        //     int mi = 0, mj = 0, ci = 0, cj = 0;
-        //     for (int i = 0; i < m; i++)
-        //         for (int j = 0; j < n; j++)
-        //             if (s[i][j] == 'C') {
-        //                 ci = i; cj = j;
-        //             } else if (s[i][j] == 'M') {
-        //                 mi = i; mj = j;
-        //             }
-        //     return dfs(mi, mj, 0, ci, cj);
-        // }
-        // int [][] dirs = {{1, 0}, {0, 1}, {0, -1}, {-1, 0}};
-        // char [][] s;
-        // Boolean [][][] f;
-        // int m, n, mouseLen, catLen;
-        // boolean dfs(int i, int j, int k, int ci, int cj) {// return TRUE ONLY WHEN MOUSE WINDS 老鼠要赢！！！
-        //     if (k >= 1000) return k % 2 == 0 ? false : true;
-        //     if (f[i][j][k%2] != null) return f[i][j][k%2];
-        //     boolean mouseTurn = k % 2 == 0;
-        //     if (s[i][j] == 'C' && mouseTurn) return f[i][j][k%2] = true;
-        //     if (s[ci][cj] == 'M' && !mouseTurn) return f[ci][cj][k%2] = false;
-        //     if (s[i][j] == 'F' && mouseTurn) return f[i][j][k%2] = true;
-        //     if (s[ci][cj] == 'F' && !mouseTurn) return f[ci][cj][k%2] = false;
-        //     int len = (k % 2 == 0 ? mouseLen : catLen);
-        //     // // 向左
-        //     // for (int x = j-1; x >= Math.max(0, j - len); x--) {
-        //     //     if (s[i][x] == '#') break;
-        //     //     if (s[i][x] == 'C' && mouseTurn) continue; // 这里，老鼠想赢，得找到一种可以赢的方法，【原本这里踩着猫，就输了。。。】
-        //     //     if (s[i][x] == 'M' && !mouseTurn) return f[i][j][k%2] = false;
-        //     //     if (dfs(i, x, k+1, ci, cj)) return f[i][j][k%2] = true; 
-        //     // }
-        //     // // 向右
-        //     // for (int x = j+1; x <= Math.min(n-1, j + len); x++) {
-        //     //     if (s[i][x] == '#') break;
-        //     //     if (s[i][x] == 'C' && mouseTurn) continue; 
-        //     //     if (s[i][x] == 'M' && !mouseTurn) return f[i][j][k%2] = false;
-        //     //     if (dfs(i, x, k+1, ci, cj)) return f[i][j][k%2] = true;
-        //     // }
-        //     // // 向上
-        //     // for (int x = i-1; x >= Math.max(0, i - len); x--) {
-        //     //     if (s[i][x] == '#') break;
-        //     //     if (s[i][x] == 'C' && mouseTurn) continue; 
-        //     //     if (s[i][x] == 'M' && !mouseTurn) return f[i][j][k%2] = false;
-        //     //     if (dfs(x, j, k+1, ci, cj)) return f[i][j][k%2] = true;
-        //     // }
-        //     // // 向下
-        //     // for (int x = i+1; x < Math.min(m-1, i + len); x++) {
-        //     //     if (s[i][x] == '#') break;
-        //     //     if (s[i][x] == 'C' && mouseTurn) continue; 
-        //     //     if (s[i][x] == 'M' && !mouseTurn) return f[i][j][k%2] = false;
-        //     //     if (dfs(x, j, k+1, ci, cj)) return f[i][j][k%2] = true;
-        //     // }
-        //     // return f[i][j][k%2] = false;
-        //     if (k % 2 == 0) { // 小老鼠
-        //         if (s[i][j] == 'F') return f[i][j][k%2] = true; // 先吃到食物
-        //         // 向左
-        //         for (int x = j-1; x >= Math.max(0, j - mouseLen); x--) {
-        //             if (s[i][x] == '#') break;
-        //             if (s[i][x] == 'C') continue; // 这里，老鼠想赢，得找到一种可以赢的方法，【原本这里踩着猫，就输了。。。】
-        //             // if (dfs(i, x, k+1, ci, cj)) return f[i][j][k%2] = true; // 【老鼠想要找一种赢法，哪怕一种。。。】
-        //             if (dfs(i, x, k+1, ci, cj)) return f[i][j][k%2] = true; // 【老鼠想要找一种赢法，哪怕一种。。。】
-        //         }
-        //         // 向右
-        //         for (int x = j+1; x <= Math.min(n-1, j + mouseLen); x++) {
-        //             if (s[i][x] == '#') break;
-        //             if (s[i][x] == 'C') continue; // 这里，老鼠想赢，得找到一种可以赢的方法，【原本这里踩着猫，就输了。。。】
-        //             // if (dfs(i, x, k+1, ci, cj)) return f[i][j][k%2] = true; // 【老鼠想要找一种赢法，哪怕一种。。。】
-        //             if (dfs(i, x, k+1, ci, cj)) return f[i][j][k%2] = true; // 【老鼠想要找一种赢法，哪怕一种。。。】
-        //         }
-        //         // 向上
-        //         for (int x = i-1; x >= Math.max(0, i - mouseLen); x--) {
-        //             if (s[i][x] == '#') break;
-        //             if (s[i][x] == 'C') continue; // 这里，老鼠想赢，得找到一种可以赢的方法，【原本这里踩着猫，就输了。。。】
-        //             // if (dfs(x, j, k+1, ci, cj)) return f[i][j][k%2] = true; // 【老鼠想要找一种赢法，哪怕一种。。。】
-        //             if (dfs(x, j, k+1, ci, cj)) return f[i][j][k%2] = true; // 【老鼠想要找一种赢法，哪怕一种。。。】
-        //         }
-        //         // 向下
-        //         for (int x = i+1; x < Math.min(m-1, i + mouseLen); x++) {
-        //             if (s[i][x] == '#') break;
-        //             if (s[i][x] == 'C') continue; // 这里，老鼠想赢，得找到一种可以赢的方法，【原本这里踩着猫，就输了。。。】
-        //             // if (dfs(x, j, k+1, ci, cj)) return f[i][j][k%2] = true; // 【老鼠想要找一种赢法，哪怕一种。。。】
-        //             if (dfs(x, j, k+1, ci, cj)) return f[i][j][k%2] = true; // 【老鼠想要找一种赢法，哪怕一种。。。】
-        //         }
-        //         return f[i][j][k%2] = false;
-        //     } else { // 猫: 只有老鼠输了，才算是它贏
-        //         if (s[ci][cj] == 'F') return f[ci][cj][k%2] = false; // 先吃到食物
-        //         // 向左
-        //         for (int x = cj-1; x >= Math.max(0, cj - catLen); x--) {
-        //             if (s[ci][x] == '#') break;
-        //             if (s[ci][x] == 'M') return f[ci][cj][k%2] = false;
-        //             if (!dfs(i, j, k, ci, x)) return f[ci][cj][k%2] = false; // 【老鼠想要找一种赢法，哪怕一种。。。】
-        //         }
-        //         // 向右
-        //         for (int x = cj+1; x <= Math.min(n-1, cj + catLen); x++) {
-        //             if (s[ci][x] == '#') break;
-        //             if (s[ci][x] == 'M') return f[ci][cj][k%2] = false;
-        //             if (!dfs(i, j, k, ci, x)) return f[ci][cj][k%2] = false; // 【老鼠想要找一种赢法，哪怕一种。。。】
-        //         }
-        //         // 向上
-        //         for (int x = ci-1; x >= Math.max(0, ci - mouseLen); x--) {
-        //             if (s[ci][x] == '#') break;
-        //             if (s[ci][x] == 'M') return f[ci][cj][k%2] = false;
-        //             if (!dfs(i, j, k, x, cj)) return f[ci][cj][k%2] = false; // 【老鼠想要找一种赢法，哪怕一种。。。】
-        //         }
-        //         // 向下
-        //         for (int x = ci+1; x < Math.min(m-1, ci + catLen); x++) {
-        //             if (s[ci][x] == '#') break;
-        //             if (s[ci][x] == 'M') return f[ci][cj][k%2] = false;
-        //             if (!dfs(i, j, k, x, cj)) return f[ci][cj][k%2] = false; // 【老鼠想要找一种赢法，哪怕一种。。。】
-        //         }
-        //         return f[ci][cj][k%2] = true;
-        //     }
-        // }
-
         // public int maxSum(int[] a, int[] b) { // // TODO TODO TODO: 35/82 1537
         //     int m = a.length, n = b.length, i = 0, j = 0, x = -1, y = -1;
         //     long [] l = new long [m+1], r = new long [n+1];
@@ -735,58 +614,6 @@ public class dpthree {
         //     return f[i][j] = (int)r;
         // }
         
-        // static final int mod = (int)1e9 + 7; // TODO TODO TODO: 没有写完。。。
-        // public int numDecodings(String t) {
-        //     n = t.length();
-        //     s = t.toCharArray();
-        //     f = new Integer [n];
-        //     return dfs(0);
-        // }
-        // char [] s;
-        // int n;
-        // Integer [] f;
-        // int dfs(int i) {
-        //     // if (i == n) return 1;
-        //     if (i == n-1) {
-        //         if (s[i] == '*') return f[i] = 9;
-        //         else if (s[i] == '0') return 0;
-        //         else return s[i] - '0';
-        //     }
-        //     if (i == n-2 && (s[n-1] == '*' || s[n-1] == '0')) {
-        //         int j = s[i] - '0';
-        //         if (s[n-1] == '0') {
-        //             if (s[i] == '*') return f[i] = 2;
-        //             else if (s[i] -'0' > 0 && s[i] - '0' <= 2) return f[i] = 1;
-        //             else return f[i] = 0;
-        //         } else { // '*'
-        //             if (j >= 3) return f[i] = dfs(i+1);
-        //             else if (j == 1) return f[i] = dfs(i+1) * 2;
-        //             else if (j == 2) return f[i] = dfs(i+1) + 6;
-        //         }
-        //     }
-        //     if (f[i] != null) return f[i];
-        //     long r = 0;
-        //     int j = s[i] - '0';
-        //     if (s[i+1] == '0') {
-        //         if (s[i] == '*') return f[i] = 2 * dfs(i+2);
-        //         else if (s[i] -'0' > 0 && s[i] - '0' <= 2) return f[i] = dfs(i+2);
-        //         else return f[i] = 0; // 【3456789-0】【00】
-        //     } else if (s[i+1] == '*') { // '*'
-        //         if (j >= 3 && j <= 9) return f[i] = dfs(i+1);
-        //         else if (j == 1) return f[i] = dfs(i+1) * 2;
-        //         else if (j == 2) return f[i] = dfs(i+1) + 6 * dfs(i+2);
-        //     } else { // s[i] [12...9]
-        //         if (j == 2 && s[i+1] - '0' <= 6 && s[i+1] -'0' > 0) {
-        //             r = (r + 2 * dfs(i+2)) % mod;
-        //         } else if (j == 1 && s[i+1] - '0' <= 9 && s[i+1] -'0' >= 0) {
-        //             if (s[i+1] - '0' == 0)
-        //                 r = (r + dfs(i+2)) % mod;
-        //             else r = (r + 2 * dfs(i+2)) % mod;
-        //         }
-        //     }
-        //     return f[i] = (int)r;
-        // }
-
         // public int minimumDifference(int[] a) {
         //     m = a.length; n = m / 2; this.a = a;
         //     l = new TreeSet [n+1]; r = new TreeSet [n+1];
@@ -823,70 +650,6 @@ public class dpthree {
         //     backTracking(i+1, cnt+1, end, sum + a[i], l); // 包含当前数 a[i]
         //     backTracking(i+1, cnt, end, sum, l);          // 不包含当前数 a[i]
         // }
-        
-        // public int numberOfCombinations(String t) { // TODO TODO TODO: 1977
-        //     n = t.length(); s = t.toCharArray();
-        //     if (n == 1) return s[0] == '0' ? 0 : 1;
-        //     // f = new Integer [n];
-        //     return dfs(0, 0);
-        // }
-        // static final int mod = (int)1e9 + 7;
-        // char [] s;
-        // int n;
-        // // Integer [] f;
-        // Map<Integer, Integer> f = new HashMap<>();
-        // int dfs(int i) { // 【繁琐深搜：】这个记忆化深搜，的难点在， Integer.MAX_VALUE 待特殊数字的处理，狠繁琐，改天再写。。。
-        //     if (i == n) return 0;
-        //     // if (i < n && s[i] == '0') return f[i] = 0; // 不能以 0 打头
-        //     String key = i + "-" + j;
-        //     if (f.containsKey(key)) return f.get(key);
-        //     // if (f[i] != null) return f[i];
-        //     long r = 0;
-        //     for (int j = i; j < n; j++) {
-        //     }
-        // }
-
-//         // 【内存溢出：】Memory Limit Exceeded 71/83 这里的意思就是说， max 取值过大，而实际存在的元素少，就成了为一个数据的离散化处理
-//         // 线段树数据【离散化处理】：意思是说，分布过散的数据，重样集中集合到【0,n-1】下标，不取实际的值了，而用相对集中的下标代替 // TODO TODO TODO: 这里还有点儿没想透彻。。。
-//         public int lengthOfLIS(int[] a, int k) {  // 动规：＋线段树来找前 f【i】【v-k】范围内的最大值，可以试着写一下
-//             int n = a.length, max = Arrays.stream(a).max().getAsInt(), m = max+1, ans = 1;
-//             t = new int [4 * m]; // 不是说，线段树？下标是从 1 开始的吗？保证最大下标可以取取 max
-//             int [][] f = new int [n][m]; // 第二维表达的是以当前数 a[i] 为结尾的最长合法子序列长度，所以取最值
-//             for (int i = 0; i < n; i++) { // 注意【0】下标更新线段树。。。
-//                 int v = a[i];
-//                 f[i][v] = 1;
-//                 // 这里要找：前所有 i 个数【 0,i-1】中，以【v-k,v-1】结尾的最大值，最大长度，
-//                 // 仍然是求和线段树最好用。。。【应该可以参看一个例子】自己试着完成这个题目，快中午的时候
-// // 这里我是在想要遍历，总复杂度为【O(N^2)】，线段树可以做到【O(NlogN)】线段树中的第一维就给消除掉，只累加更新【0,maxVal+1】范围内的最大值
-//                 // for (int j = Math.max(0, v - k); j < v; j++) // 因为线段树区间求最大值：这里就不用遍历，一次【 O(logN)】查询就可以了
-//                     // f[i][v] = Math.max(f[i][v], f[i-1][j] + 1); // 【分不清：哪个 i?】
-//                 f[i][v] = Math.max(f[i][v], getMax(0, 0, m-1, v-k, v-1, t) + 1); // 查询线段树【v-k,v-1】区间最大值：下标1 开始，左闭右闭区间
-//                 // f[i][v] = Math.max(f[i][v], getMax(0, 0, n-1, v-k, v-1, t) + 1); // 查询线段树【v-k,v-1】区间最大值：下标1 开始，左闭右闭区间
-//                 update(0, 0, m-1, v, f[i][v], t); // 更新线段树单点元素： v 下标值为 f[i][v]
-//                 // update(0, 0, n-1, i, f[i][v], t); // 更新线段树单点元素： v 下标值为 f[i][v]
-//                 ans = Math.max(ans, f[i][v]);
-//             }
-//             return ans;
-//         }
-//         int [] t;
-//         void update(int u, int l, int r, int idx, int v, int [] t) {
-//             if (l == r) {
-//                 t[u] = v;
-//                 return ;
-//             }
-//             int m = l + (r - l) / 2;
-//             if (idx <= m) update(u << 1 | 1, l, m, idx, v, t);
-//             else update((u << 1) + 2, m+1, r, idx, v, t);
-//             t[u] = Math.max(t[u << 1 | 1], t[(u << 1) + 2]); // 最大值线段树：根节点最大值，取左右子节点最大值 
-//         }
-//         int getMax(int u, int l, int r, int L, int R, int [] t) { // 【 l,r】：现存线段树的有效区间跨度；【L,R】：查询区间跨度
-//             if (R < l || r < L) return 0;
-//             if (L <= l && r <= R) return t[u];
-//             int m = l + (r - l) / 2;
-//             int ll = getMax(u << 1 | 1, l, m, L, R, t);
-//             int rr = getMax((u << 1) + 2, m+1, r, L, R, t);
-//             return Math.max(ll, rr);
-//         }
 
         // public boolean splitArraySameAverage(int[] a) { // 805
         //     this.a = a; sum = Arrays.stream(a).sum();
@@ -1444,26 +1207,6 @@ public class dpthree {
         //     return r;
         // }
 
-        // public int stoneGameII(int[] a) { // 不知道这里两个人的顺序是怎么回事。。。1140 // TODO TODO TODO: 
-        //     this.a = a;         n = a.length; 
-        //     f = new Integer [n][n][2];
-        //     return dfs(0, 1, 0);
-        // }
-        // Integer [][][] f;
-        // int [] a;
-        // int n;
-        // int dfs(int i, int j, int k) {
-        //     if (i == n) return 0;
-        //     if (f[i][j][k%2] != null) return f[i][j][k%2];
-        //     int r = 0, sum = 0;
-        //     for (int x = 1; x <= 2 * j && i+x-1 < n; x++) {
-        //         int y = i + x - 1;
-        //         sum += a[y];
-        //         r = Math.max(r, sum - dfs(y+1, Math.max(j, x), k+1));
-        //     }
-        //     return f[i][j][k%2] = r;
-        // }
-
         // public int countArrangement(int n) {
         //     this.n = n;
         //     backTracking(0, new ArrayList<Integer>(), new boolean [n]);
@@ -1614,28 +1357,6 @@ public class dpthree {
         //             if (s[i-1] == t[j-1]) f[i][j] = f[i-1][j-1] + 1;
         //             else f[i][j] = Math.max(f[i-1][j], f[i][j-1]);
         //     return m + n - f[m][n] * 2;
-        // }
-
-        // public int longestStrChain(String[] a) { // TODO: 不知道哪里写错了
-        //     int n = 16, m = a.length, max = 0, min = n;
-        //     int [] f = new int [n];
-        //     Arrays.fill(f, 1);
-        //     Set<String> [] s = new HashSet[n];
-        //     Arrays.setAll(s, z -> new HashSet<>());
-        //     for (String v : a) {
-        //         int i = v.length();
-        //         max = Math.max(max, i);
-        //         min = Math.min(min, i);
-        //         s[i].add(v);
-        //     }
-        //     for (int i = max; i >= min+1; i--) 
-        //         for (String v : s[i]) 
-        //             for (int j = 0; j < i; j++) {
-        //                 String cur = (j == 0 ? "" : v.substring(0, j)) + (j == i-1 ? "" : v.substring(j+1, i));
-        //                 if (s[i-1].contains(cur)) f[i-1] = Math.max(f[i-1], f[i] + 1);
-        //             }
-        //     // System.out.println(Arrays.toString(f));
-        //     return Arrays.stream(f).max().getAsInt();
         // }
 
         // public int maxUncrossedLines(int[] a, int[] b ) {
@@ -1795,4 +1516,3 @@ public class dpthree {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
-

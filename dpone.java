@@ -703,19 +703,6 @@ public class dpone { // 【动规三刷：】从最简单Middle 到 Hard, 希望
             for (int i = 0; i < n; i++) r[i] = (i == 0 ? 0 : r[i-1]) + a[i];
         }
 
-        // TLE TLE TLE: 34/39 O(N^2)
-        public int longestSubsequence(int[] a, int dif) {
-            int n = a.length, f [] = new int [n], max = 1;
-            Arrays.fill(f, 1);
-            for (int i = 1; i < n; i++) {
-                int v = a[i];
-                for (int j = 0; j < i; j++) 
-                    if (a[j] + dif == v) f[i] = Math.max(f[i], f[j] + 1);
-                max = Math.max(max, f[i]);
-            }
-            return max;
-        }
-
         // 这个题：就真正到了不得不考虑玩家顺序的时候了【两个元家轮流的问题】忘记了，要好好想一下，如何处理两个玩家轮流的？。。。
         public boolean PredictTheWinner(int[] a) {
             int n = a.length;
@@ -1007,45 +994,6 @@ public class dpone { // 【动规三刷：】从最简单Middle 到 Hard, 希望
                 if ((long)a[i] + r > (long)v) r = (long)a[i] + r - (long)v;
                 else r = 0l;
             return r == 0;
-        }
-
-        // TODO TODO TODO: 换种方法来写
-        public int findMaxForm(String[] sa, int m, int n) {
-            for (String s : sa) 
-                if (valid(s, m+n, n)) ll.add(s);
-            Collections.sort(ll, (x, y) -> x.length() - y.length());
-            // min = 0;
-            // backTracking(0, m, n, 0); // TLE TLE TLE:
-            int min = 0;
-            int [] f = new int [ll.size()];
-            for (int i = 0; i < ll.size(); i++)
-            return min;
-        }
-        Map<String, int []> ms = new HashMap<>(); // 【0-cnt, 1-cnt】
-        List<String> ll = new ArrayList<>();
-        int min;
-        void backTracking(int idx, int zero, int one, int len) {
-            if (min > 0 && ll.size() - idx + len < min) return;
-            if (idx == ll.size()) {
-                if (len > min) 
-                    min = len;
-                return ;
-            }
-            int [] cur = ms.get(ll.get(idx));
-            if (cur[0] <= zero && cur[1] <= one)
-                backTracking(idx+1, zero - cur[0], one - cur[1], len+1);
-            backTracking(idx+1, zero, one, len);
-        }        
-        boolean valid(String t, int l, int n) { // n 1s
-            int m = t.length(), cnt = 0;
-            if (m > l) return false;
-            char [] s = t.toCharArray();
-            for (char c : s) cnt += c - '0';
-            if (cnt <= n) {
-                ms.put(t, new int [] {m-cnt, cnt});
-                return true;
-            }
-            return false;
         }
 
         // 【DFS 剪枝深搜 || 动规】：动规的方法，晚点儿可以再补一下
@@ -1684,3 +1632,6 @@ public class dpone { // 【动规三刷：】从最简单Middle 到 Hard, 希望
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+
+
+
