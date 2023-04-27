@@ -121,74 +121,6 @@ public class dpfour {
             return Math.max(leftMax, rightMax);
         }
 
-        static final int mod = (int)1e9 + 7; // TODO TODO TODO: 太繁琐了，写得没有意思。。。改天再写 639
-        public int numDecodings(String t) {
-            n = t.length();
-            s = t.toCharArray();
-            f = new Integer [n];
-            return dfs(0);
-        }
-        char [] s;
-        int n;
-        Integer [] f;
-        int dfs(int i) {
-            // if (i == n) return 1;
-            if (s[i] == '0') return f[i] = 0; // 主要是防：哪里自己写漏了，没处理好这个逻辑
-            if (i == n-1) {
-                if (s[i] == '*') return f[i] = 9;
-                else if (s[i] == '0') return f[i] = 0;
-                else return f[i] = s[i] - '0';
-            }
-            if (i == n-2) {
-                int j = s[i] - '0';
-                if (s[n-1] == '*' || s[n-1] == '0') {
-                    if (s[n-1] == '0') {
-                        if (s[i] == '*') return f[i] = 2;
-                        else if (s[i] -'0' > 0 && s[i] - '0' <= 2) return f[i] = 1;
-                        else return f[i] = 0;
-                    } else if (s[n-1] == '*') { // 
-                        if (j >= 3) return f[i] = dfs(i+1); // 9
-                        else if (j == 1) return f[i] = dfs(i+1) * 2;
-                        else if (j == 2) return f[i] = dfs(i+1) + 6;
-                        else if (s[i] == '*') return f[i] = 96; // 不知道这个是怎么数来的。。。
-                    }
-                } else if (s[i] == '*') {
-                    if (s[i+1] == '*') return f[i] = 96; // 不知道这个是怎么数来的。。。
-                    else if (s[i+1] - '0' == 0) return f[i] = 2;
-                    else if (s[i+1] - '0' <= 6 && s[i+1] - '0' > 0) return f[i] = 11;
-                    else if (s[i+1] - '0' <= 9 && s[i+1] - '0' > 6) return f[i] = 9;
-                }
-            }
-            if (f[i] != null) return f[i];
-            long r = 0;
-            int j = s[i] - '0';
-            if (s[i+1] == '0') {
-                if (s[i] == '*') return f[i] = 2 * dfs(i+2);
-                else if (s[i] -'0' > 0 && s[i] - '0' <= 2) return f[i] = dfs(i+2);
-                else return f[i] = 0; // 【3456789-0】【00】
-            } else if (s[i+1] == '*') { // '*' 如果当前位是 0 呢
-                if (j >= 3 && j <= 9) return f[i] = dfs(i+1);
-                else if (j == 1) return f[i] = dfs(i+1) * 2;
-                else if (j == 2) return f[i] = dfs(i+1) + 6 * dfs(i+2);
-                else if (j == 0) return f[i] = dfs(i+1); // "*' 打头
-            } else if (i == 0 && s[i] == '*') { // s[i] [12...9]
-                if (s[i+1] == '0') return f[i] = 2 * dfs(i+2);
-                else if (s[i+1] == '*') return f[i] = 2 * dfs(i+2);
-                
-            } else if (j > 0 && j <= 9) { // s[i] [12...9]
-                if (j == 2 && s[i+1] - '0' <= 6 && s[i+1] -'0' > 0) {
-                    // r = (r + 2 * dfs(i+2)) % mod;
-                    r = (r + dfs(i+1)) % mod; // 当前位单独处理
-                    r = (r + dfs(i+2)) % mod; // 当前位，与后一位一起（20,27)
-                } else if (j == 1 && s[i+1] - '0' <= 9 && s[i+1] -'0' >= 0) {
-                    r = (r + dfs(i+2)) % mod; // 两位当一个处理 
-                    if (s[i+1] - '0' > 0)
-                        r = (r + dfs(i+1)) % mod;
-                }
-            }
-            return f[i] = (int)r;
-        }
-
         // 早上从最难往最简单写，下午傍晚从最简单往最难写，哈哈哈哈哈
         public boolean divisorGame(int n) {
             this.n = n;
@@ -648,42 +580,6 @@ public class dpfour {
             return n - Arrays.stream(f).max().getAsInt();
         }
 
-        public int minOperations(int n) { // 不对，把过程想得太简单了点儿。。。 // TODO TODO TODO: 
-            return Math.min(Integer.bitCount(n), 1 + Integer.bitCount(~n));
-        }
-
-        public int minSideJumps(int[] a) {
-            n = a.length; this.a = a;
-            f = new Integer [n][4];
-            return dfs(0, 2, false);
-        }
-        int n; int [] a;
-        Integer [][] f;
-        int dfs(int i, int j, boolean vis) {
-            System.out.println("\n i: " + i);
-            System.out.println("j: " + j);
-            if (i == n) return 0;
-            if (f[i][j] != null) return f[i][j];
-            if (a[i] == j) return f[i][j] = Integer.MAX_VALUE / 2;
-            int r = Integer.MAX_VALUE / 2;
-            if (a[i] == 0 && !vis) {
-                for (int k = 1; k <= 3; k++)
-                    if (k == j)
-                        r = Math.min(r, dfs(i+1, j, false));
-                    else if (k != j && !vis)
-                        r = Math.min(r, dfs(i, k, true));
-            } else {
-                for (int k = 1; k <= 3; k++) {
-                    if (a[i] == k) continue;
-                    if (j == k)
-                        r = Math.min(r, dfs(i+1, j, false));
-                    else if (j != k && !vis)
-                        r = Math.min(r, dfs(i, k, true));
-                }
-            }
-            return f[i][j] = r;
-        }
-
         public List<Integer> goodDaysToRobBank(int[] a, int t) {
             int n = a.length;
             int [] l = new int [n], r = new int [n];
@@ -888,57 +784,6 @@ public class dpfour {
                 if (j == 0 || k % j == 0) 
                     r = (r + dfs(i+1, k)) % mod;
             return f[i][j] = (int)r;
-        }
-
-        // 【记忆化深搜：】深深惊讶，我这两天把记忆化深搜写得像 1+1=2 一样简单。。。。。
-        // Queue<Integer> q = new PriorityQueue<>(); 感觉确实能再快一点儿
-        public int minimumVisitedCells(int[][] a) { // 记忆化深搜： TLE 1028/1069 动态规划，应该也会超时
-            m = a.length; n = a[0].length; this.a = a;
-            f = new Integer [m][n];  // 自己认准某一个方向来遍历
-            Arrays.stream(f).forEach(z -> Arrays.fill(z, Integer.MAX_VALUE));
-            int r = dfs(0, 0);
-            return r == Integer.MAX_VALUE ? -1 : r;
-        }
-        Integer [][] f;
-        int [][] a;
-        int m, n;
-        int dfs(int i, int j) { // 记忆化揵从当前坐标到终点的最小步数
-            if (i == m-1 && j == n-1) return f[i][j] = 1;
-            if (f[i][j] < Integer.MAX_VALUE ) return f[i][j];
-            int r = Integer.MAX_VALUE;
-            for (int y = Math.min(j + a[i][j], n-1); y > j; y--) 
-                r = Math.min(r, 1 + dfs(i, y));
-            for (int x = Math.min(m-1, a[i][j] + i); x > i; x--) 
-                r = Math.min(r, 1 + dfs(x, j));
-            return f[i][j] = r;
-        }
-        public int minimumVisitedCells(int[][] a) { // 带两个优先队列的动规写法：// TLE 1043/1069 改天再接着写。。。
-            int m = a.length, n = a[0].length;
-            if (m == 1 & n == 1) return 1;
-            int [][] f = new int [m][n];
-            Arrays.stream(f).forEach(z -> Arrays.fill(z, m+n));
-            // Queue<int []> h = new PriorityQueue<>((x, y) -> x[0] - y[0]); // 水平方向【可以简化为只用一个】
-            for (int i = 0; i < m; i++) {
-                for (int j = 0; j < n; j++) { // 水平方向上的
-                    if (i == 0 && j == 0) {
-                        f[i][j] = 1; continue;
-                    }
-                    // h.clear();
-                    // for (int k = Math.max(0, i - a[i][j]); k < i; k++) { // 上下方向【这里可能会漏掉一些相对优解】
-                    for (int k = 0; k < i; k++) // 上下方向
-                        // if (f[k][j] != m+n && a[k][j] > 0 && a[k][j] + k >= i) h.offer(new int [] {f[k][j], k, j});
-                        if (f[k][j] != m+n && a[k][j] > 0 && a[k][j] + k >= i)
-                            f[i][j] = Math.min(f[i][j], f[k][j] + 1);
-                    // for (int k = Math.max(0, j - a[i][j]); k < j; k++) { // 左右方向【这里可能会漏掉一些相对优解】 
-                    for (int k = 0; k < j; k++) // 左右方向 
-                        // if (f[i][k] != m+n && a[i][k] > 0 && a[i][k] + k >= j) h.offer(new int [] {f[i][k], i, k});
-                        if (f[i][k] != m+n && a[i][k] > 0 && a[i][k] + k >= j) // h.offer(new int [] {f[i][k], i, k});
-                            f[i][j] = Math.min(f[i][j], f[i][k] + 1);
-                    // if (!h.isEmpty()) f[i][j] = Math.min(f[i][j], f[h.peek()[1]][h.peek()[2]] + 1);
-                    // h.offer(new int [] {f[i][j], i, j});
-                }
-            }
-            return f[m-1][n-1] == m+n ? -1 : f[m-1][n-1];
         }
 
         public int minNumberOfSemesters(int n, int[][] a, int k) { // TLE TLE TLE: 应该主要是回塑的过程中，状态太多，会超时，动规应该就不会了
@@ -1153,36 +998,6 @@ public class dpfour {
             return ans;
         }
 
-        public int cherryPickup(int[][] a) { // 能不能像那个类似题一样，一次起两个格呢？没说错了，但是严重超时。。。741
-            n = a.length; this.a = a;
-            if (n == 1) return a[0][0];
-            vis = new boolean [n * n][n * n]; 
-            dfs(0, 0, a[0][0]);
-            return max;
-        }
-        int [][] dirs = {{1, 0}, {0, 1}};
-        boolean [][] vis; int [][] a;
-        int n, max = 0;
-        void dfs(int ij, int iijj, int cur) {
-            int i = ij / n, j = ij % n, ii = iijj / n, jj = iijj % n;
-            if (i < 0 || i >= n || j < 0 || j >= n || ii < 0 || ii >= n || jj < 0 || jj >= n
-                || a[i][j] == -1 || a[ii][jj] == -1 || vis[ij][iijj]) return ;
-            if (i == n-1 && j == n-1 && ii == n-1 && jj == n-1) {
-                max = Math.max(max, cur + a[i][j]);
-                return ;
-            }
-            vis[ij][iijj] = true;
-            cur += (i != ii && j != jj) ? a[i][j] + a[ii][jj] : a[i][j];
-            for (int [] d : dirs) {
-                int x = i + d[0], y = j + d[1];
-                for (int [] dd : dirs) {
-                    int xx = ii + dd[0], yy = jj + dd[1];
-                    dfs(x * n + y, xx * n + yy, cur);
-                }
-            }
-            vis[ij][iijj] = false;
-        }
-
         public int minimumIncompatibility(int[] a, int k) { // TLE TLE TLE: 优化不够，会超时, 主要是对重复数字的处理？ // TODO TODO TODO: 
             n = a.length; m = n / k;  this.a = a;
             if (n % k != 0) return -1;
@@ -1306,27 +1121,6 @@ public class dpfour {
             return r == 0;
         }
 
-        public int longestArithSeqLength(int[] a) { // 1027
-            int n = a.length, m = Arrays.stream(a).max().getAsInt() + 1;
-            if (n == 2) return a[0] != a[1] ? 2 : 0;
-            int [] f = new int [m];
-            for (int v : a) f[v] = 1;
-            for (int i = 1; i < n; i++) {
-                for (int j = i-1; j >= 0; j--) {
-                    // System.out.println("\n a[i]: " + a[i]);
-                    // System.out.println("a[j]: " + a[j]);
-                    int d = a[i] - a[j], v = d + a[i], x = 2;
-                    while (d != 0 && v < m  && v >= 0 && f[v] > 0) {
-                        f[v] = Math.max(f[v], x + 1);
-                        x = f[v];
-                        v = d + v;
-                    }
-                    System.out.println(Arrays.toString(f));
-                }
-            }
-            return Arrays.stream(f).max().getAsInt();
-        }
-
         public int minSpaceWastedKResizing(int[] a, int k) {
             n = a.length; this.k = k; this.a = a;
             int max = 1;
@@ -1400,24 +1194,6 @@ public class dpfour {
             return max;
         }
 
-        public int coinChange(int[] a, int t) { // 边界条件，狠烦人。。。
-            if (t == 0) return 0;
-            Arrays.sort(a);
-            int n = a.length;
-            if (t < a[0]) return -1;
-            int [] f = new int [Math.max(t+1, Arrays.stream(a).max().getAsInt() + 1)];
-            Arrays.fill(f, Integer.MAX_VALUE / 2);
-            for (int v : a) f[v] = 1;
-            f[0] = 0;
-            for (int i = n-1; i >= 0; i--) { // 只是从大到小，来遍历硬币
-                int v = a[i];
-                f[v] = 1;
-                for (int j = t; j >= v; j--) 
-                    f[j] = Math.min(f[j], f[j-v] + 1);
-            }
-            return f[t] >= Integer.MAX_VALUE / 2 ? -1 : f[t];
-        }
-
         public boolean validPartition(int[] a) {
             int n = a.length; this.a = a;
             return validPartition(0, n-1);
@@ -1434,61 +1210,6 @@ public class dpfour {
                 || validPartition(i, i+2) && validPartition(i+3, j);
             m.put(k, r);
             return r;
-        }
-
-        static final int mod = (int)1e9 + 7;
-        public int countRestrictedPaths(int n, int[][] egs) { // TODO TODO TODO: 
-            this.n = n; m = n + 1;
-            g = new ArrayList [m];
-            Arrays.setAll(g, z -> new ArrayList<>());
-            for (int [] e : egs) {
-                int u = e[0], v = e[1], w = e[2];
-                g[u].add(new int [] {v, w});
-                g[v].add(new int [] {u, w});
-            }
-            d = new int [m];
-            Arrays.fill(d, Integer.MAX_VALUE / 2);
-            calculateMinimumHP(n); // 计算到节点 n 的最短距离
-            System.out.println(Arrays.toString(d));
-            // 根据最短距离先有用边，动规解题
-            f = new int [m];
-            f[1] = 1;
-            dfs(1);
-            System.out.println(Arrays.toString(f));
-            return f[n];
-        }
-        void dfs(int u) { // 不知道这里错哪里了。。。
-            // System.out.println("\nu: " + u);
-            // System.out.println("(u == n): " + (u == n));
-            if (u == n) return ;
-            for (int [] e : g[u]) {
-                int v = e[0];
-                if (d[v] >= d[u]) continue;
-                // System.out.println("v: " + v);
-                f[v] = (f[v] + f[u]) % mod;
-                System.out.println(Arrays.toString(f));
-                dfs(v);
-            }
-        }
-        List<int []> [] g;
-        int m, n;
-        int [] d, f;
-        void calculateMinimumHP(int uu) {
-            d[uu] = 0;
-            // boolean [] vis = new boolean [m];
-            Queue<int []> q = new PriorityQueue<>((x, y) -> x[1] - y[1]);
-            q.offer(new int [] {uu, 0});
-            // vis[uu] = true;
-            while (!q.isEmpty()) {
-                int [] cur = q.poll();
-                int u = cur[0], t = cur[1];
-                for (int [] v : g[u]) 
-                    if (t + v[1] < d[v[0]]) {
-                        d[v[0]] = t + v[1];
-                        // vis[v[0]] = true;
-                        q.offer(new int [] {v[0], d[v[0]]});
-                    }
-            }
         }
 
         public int findCheapestPrice(int n, int[][] a, int src, int d, int k) {
@@ -1536,21 +1257,6 @@ public class dpfour {
                     return f[i][j][k] = (m == 1 || n == 1 ? 3 : 1);
             }
         }
-
-        public int sumSubarrayMins(int[] a) { // 这么算不准：要用栈
-            int n = a.length;
-            int [] l = new int [n], r = new int [n];
-            Arrays.fill(l, 1); Arrays.fill(r, 1);
-            for (int i = 1; i < n; i++)
-                if (a[i] < a[i-1]) l[i] = l[i-1] + 1;
-            for (int i = n-2; i >= 0; i--)
-                if (a[i] < a[i+1]) r[i] = r[i+1] + 1;
-            int ans = 0;
-            for (int i = 0; i < n; i++) 
-                ans += a[i] * l[i] * r[i];
-            return ans;
-        }
-        int [] a = new int [] {11,81,94,43,3};
 
         public int integerReplacement(int n) {
             return dfs((long)n);
@@ -1612,6 +1318,11 @@ public class dpfour {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+
+
+
+
+
 
 
 

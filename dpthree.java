@@ -409,86 +409,6 @@ public class dpthree {
             backTracking(i+1, j, end, l);
         }
 
-        // 不知道怎么写；先走一遍，采最多的走，再走一遍，能采多少采多少？ // TODO TODO TODO: 
-        public int cherryPickup(int[][] a) {
-            int n = a.length;
-            int [][] f = new int [n][n];
-            Arrays.stream(f).forEach(z -> Arrays.fill(z, Integer.MIN_VALUE));
-            f[0][0] = a[0][0];
-            for (int i = 0; i < n; i++)
-                for (int j = 0; j < n; j++) {
-                    if (f[i][j] == Integer.MIN_VALUE) continue;
-                    // 向下
-                    if (j < n-1 && a[i][j+1] != -1) f[i][j+1] = Math.max(f[i][j+1], f[i][j] + a[i][j+1]);
-                    // 向右
-                    if (i < n-1 && a[i+1][j] != -1) f[i+1][j] = Math.max(f[i+1][j], f[i][j] + a[i+1][j]);
-                }
-            int ans = f[m-1][n-1];
-            if (ans == Integer.MIN_VALUE) return 0;
-        }
-
-        public int squareFreeSubsets(int[] a) { // 这里回到了写动规的 baby 状态。。。
-            n = a.length;
-            p = new int [n];
-            for (int i = 0; i < n; i++) p[i] = getPrimeFactors(a[i]);
-            System.out.println(Arrays.toString(p));
-            
-            int m = (1 << 10);
-            f = new Integer [n][m];
-            return (int)dfs(0, 0, a) - 1;
-        }
-        static final int mod = (int)1e9 + 7;
-        List<Integer> ip = List.of(2, 3, 5, 7, 11, 13, 17, 19, 23, 29);
-        int [] p;
-        Integer [][] f;
-        int n, ans = 0;
-        int dfs(int i, int j, int [] a) { // J: mask
-            if (i == n) return 1;
-            if (f[i][j] != null) return f[i][j];
-            long ans = 0;
-            if ((j & p[i]) == 0) // 【包含】当前数，因为不存在公因子，乘积就不会产生平方因子
-                ans = (ans + dfs(i+1, j | p[i], a)) % mod;
-            // 【不包含】当前数：任何情况下都是可以不包含当前数的
-            ans = (ans + dfs(i+1, j, a)) % mod;
-            return f[i][j] = (int)ans;
-        }
-        // 刚才写糊了，是因为，回想一下，最开始不会写动规时，
-        // 不总把动规自顶向下，与记忆化深搜自底向上【向下与向上，一起】写一起写糊吗？【一起不该是前两天，那个树 ZigZag 才向下与向上一起的吗？】
-        // 用动规写起来，应该是最自然的，昨天的青蛙跳，就是单向从头跳到尾，这里两维与一维的本质相同，第一维下标就是单向跳，从头跳到尾，自头向尾更新。。。
-        static final int mod = (int)1e9 + 7; // TODO TODO TODO: 这里还有点儿小问题
-        List<Integer> ip = List.of(2, 3, 5, 7, 11, 13, 17, 19, 23, 29);
-        // int [] p;
-        // Integer [][] f;
-        // int n, ans = 0;
-        public int squareFreeSubsets(int[] a) {
-            int n = a.length;
-            if (n == 1) return 1;
-            int [] p = new int [n];
-            for (int i = 0; i < n; i++) p[i] = getPrimeFactors(a[i]);
-            int m = (1 << 10);
-            int [][] f = new int [n+1][m];
-            // 【初始化：】感觉有时候弄不清楚，怎么初始化？
-            for (int i = 0; i < n; i++) f[i+1][0] = 1; // 每个元素单数，都是一个最小的子集
-            // f[0][0] = 1; // 空集是 1 ？ 
-            for (int i = 1; i <= n; i++) { // 遍历当前的下标 i
-                int mask = p[i-1]; // 当前数 a[i] 的质因子掩码
-                f[i][mask] = (f[i][0] + f[i][mask]) % mod;
-                for (int j = m-1; j >= mask; j--) { // 遍历所有可能的子集：
-                    if ((j & mask) == mask) // 掩码 j 可以通过添加一个当前元素 a[i], 或是或上当前掩码 mask 得到
-                        f[i][j] = (f[i][j] + f[i-1][j ^ mask]) % mod; // 添加了由 f[j^mask] 而来的所有可能数
-                }
-            }
-            return (int)(Arrays.stream(f[n]).asLongStream().sum() % mod) - 1;
-        }
-        int getPrimeFactors(int x) {
-            int r = 0;
-            for (int i = 0; i < 10; i++) {
-                int v = ip.get(i);
-                if (x >= v && x % v == 0) r |= (1 << i);
-            }
-            return r;
-        }
-
         public int minCut(String t) { // 最小切割数：那么每个回文子串，尽可能地最长。。。132 // TODO TODO TODO: 
             int n = t.length();
             char [] s = t.toCharArray();
@@ -571,75 +491,6 @@ public class dpthree {
             }
             backTracking(i+1, cnt+1, end, sum + a[i], l); // 包含当前数 a[i]
             backTracking(i+1, cnt, end, sum, l);          // 不包含当前数 a[i]
-        }
-
-        public boolean splitArraySameAverage(int[] a) { // 805
-            this.a = a; sum = Arrays.stream(a).sum();
-            n = a.length; m = n / 2 + n % 2; avg = sum / n;
-            int max = Arrays.stream(a).max().getAsInt();
-            if (n == 2) return a[0] == a[1];
-            // if (max > avg) return false;
-            // if (n % 2 != 0) return false;
-            l = new TreeSet[m+1]; r = new TreeSet[m+1];
-            Arrays.setAll(l, z -> new TreeSet<>()); Arrays.setAll(r, z -> new TreeSet<>());
-             System.out.println("avg: " + avg);
-            if (backTracking(0, m, 0, 0, l)) return true;
-            System.out.println("0 avg: " + avg);
-            if (backTracking(m, n, 0, 0, r)) return true;
-            for (int i = 0; i <= m; i++) { // TODO TODO TODO: 这里的部分不知道错哪时了
-                int j = m - i;
-                for (int right : r[i]) {
-                    if (right <= avg * m) {
-                         Integer v = l[j].ceiling(avg * m - right);
-                         Integer vv = l[j].floor(avg * m - right);
-                         // if ((v != null || vv != null) && (i != 0 && j != 0 || (v != null ? v == avg * m : vv == avg * m))){
-                         //     return true;
-                         // }
-                    }
-                }
-            }
-            return false; 
-        }
-        TreeSet<Integer> [] l, r;
-        int [] a;
-        int m, n, avg, sum;
-        boolean backTracking(int i, int end, int cur, int cnt, TreeSet<Integer> [] l) {
-            if (i == end) {
-                // if (cnt == m && cnt * avg == cur) return true;
-                if (cnt > 0 && cnt * (sum - cur) == cur * (n - cnt)) {
-                    System.out.println("cnt: " + cnt);
-                    System.out.println("cur: " + cur);
-                    return true;
-                }
-                l[cnt].add(cur);
-                return false;
-            }
-            if (backTracking(i+1, end, cur + a[i], cnt+1, l)) return true;
-            return backTracking(i+1, end, cur, cnt, l);
-        }
-        public boolean splitArraySameAverage(int[] a) {
-            int n = a.length, m = n / 2 + n % 2, N = (1 << m);
-            for (int i = 0; i < N; i++) {
-                int cnt = Integer.bitCount(i);
-            }
-        }
-
-        public boolean isMatch(String S, String T) { // 这个题的边边角角狠烦人。。。10 // TODO TODO TODO: 
-            m = S.length(); n = T.length();
-            s = s.toCharArray(); t = T.toCharArray();
-            f = new Boolean [m][n];
-            return dfs(0, 0);
-        }
-        char [] s, t;
-        int m, n;
-        Boolean [][] f;
-        boolean dfs(int i, int j) {
-            if (i == m && j == n) return true;
-            if (f[i][j] != null) return f[i][j];
-            if (i == m-1 && j == n-1)
-                return f[i][j] = (s[i] == t[j] || t[j] == '.' || t[j] == '*');
-            if (s[i] == t[j] || t[j] == '.') return f[i][j] = dfs(i+1, j+1);
-            if (t[j] == '*')
         }
 
         public int longestValidParentheses(String t) { // TODO TODO TODO: 
@@ -1344,6 +1195,25 @@ public class dpthree {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

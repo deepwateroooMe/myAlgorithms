@@ -85,36 +85,6 @@ public class dptwo {
             l.remove(l.size()-1);
         }
 
-        public int numDecodings(String t) {
-            n = t.length();
-            s = t.toCharArray();
-            if (s[0] == '0') return 0;
-            f = new Integer [n];
-            dfs(0);
-            System.out.println(Arrays.toString(f));
-            return f[0];
-        }
-        char [] s;
-        int n;
-        Integer [] f;
-        int dfs(int i) {
-            if (i > n) return 0;
-            if (i == n) return 1;
-            if (f[i] != null) return f[i];
-            if (s[i] == '0') return f[i] = 0;
-            if (i == n-1) return f[i] = (s[i] == '0' ? 0 : 1);
-            if (s[i+1] == '0') { // 必须反编两位，因为后面的 0 必须跟这一位一起破解
-                if (s[i] == '1' || s[i] == '2') return f[i] = dfs(i+2);
-                else return f[i] = 0;
-            } else {
-                int r = 0;
-                r += dfs(i+1); // 破解当前一位
-                if (s[i] - '0' <= 2 && (s[i] == '1' || s[i+1] - '0' < 7)) // 破解一位，或者【两位】都可以【这里狠容易出 bug, 要把条件都想清楚了】
-                    r += dfs(i+2);
-                return f[i] = r;
-            }
-        }
-
         public int minimizeTheDifference(int[][] a, int t) { // TLE TLE TLE: 14/81 .....
             m = a.length;
             n = a[0].length;
@@ -264,9 +234,6 @@ public class dptwo {
             return true;
         }
 
-        public int cherryPickup(int[][] a) { // 741. Cherry Pickup 忘记这个题的思路了：怎么才能取到最多呢？ // TODO TODO TODO: 
-            int n = a.length;
-        }
         public int cherryPickup(int[][] a) { // 【暴力解法：】不知道要怎么样才能再快一点儿呢？
             int m = a.length, n = a[0].length;
             int [][][] f = new int [m][n][n];
@@ -276,7 +243,7 @@ public class dptwo {
             f[0][0][n-1] = a[0][0] + a[0][n-1];
             for (int i = 0; i < m-1; i++) 
                 for (int j = 0; j < n; j++) {
-                    for (int k = 0; k < n; k++) { // 这里注意处理： j ＝＝ k 的情况：在一个格，只能取一次值【遍历上一行的【i,j】】
+                    for (int k = 0; k < n; k++) { // 这里注意处理： j == k 的情况：在一个格，只能取一次值【遍历上一行的【i,j】】
                         if (f[i][j][k] == -1) continue;
                         for (int x = Math.max(0, j-1); x <= Math.min(n-1, j+1); x++) 
                             for (int y = Math.max(0, k-1); y <= Math.min(n-1, k+1); y++) {
@@ -646,29 +613,6 @@ public class dptwo {
             return f[i][j] = (int)r;
         }
         
-        // 这个死题目：算出最长公有子序列之后，要用这个东西把最短XX 给还原回来。。。。。// TODO TODO TODO: 
-        public String shortestCommonSupersequence(String S, String T) { // 1092
-            int m = S.length(), n = T.length();
-            char [] s = S.toCharArray();
-            char [] t = T.toCharArray();
-            int [][] f = new int [m+1][n+1];
-            for (int i = 0; i < m; i++) 
-                for (int j = 0; j < n; j++)
-                    if (s[i] == t[j]) f[i+1][j+1] = f[i][j] + 1;
-                    else f[i+1][j+1] = Math.max(f[i+1][j], f[i][j+1]);
-            System.out.println("f.length: " + f.length);
-            for (int z = 0; z < f.length; ++z) 
-                System.out.println(Arrays.toString(f[z]));
-            // 然后根据上面的统计结果，往回倒。。。。。妈的。。。
-            int i = m-1, j = n-1, k = 0;
-            return "";
-        }
-        String a = "abac";
-        String b = "cab";
-        System.out.println("a: " + a);
-        System.out.println("b: " + b);
-        String r = s.shortestCommonSupersequence(a, b);
-        
         static final int mod = (int)1e9 + 7;
         Set<Integer> s = new HashSet<>(); // 【活宝妹就是一定要嫁给亲爱的表哥！！！】
         public int numOfWays(int n) { // 刚刚摘桃子写了个多维数组，不想再写多维的。滚动数组。因为当前行结果只与前一行的结果相关
@@ -853,40 +797,6 @@ public class dptwo {
                 for (int j = 1; j <= k; j++) 
                     f[i][j] = f[i-1][j] + f[i-1][j-1];
             return f[n-1][k];
-        }
-
-
-        static final int mod = (int)1e9 + 7; // TODO TODO TODO: 还是不知道哪里错了。。。
-        public int distinctSequences(int n) {
-            int m = 7;
-            List<Integer> [] l = new ArrayList[7];
-            l[0] = new ArrayList<>();
-            l[1] = new ArrayList<>(List.of(2, 3, 4, 5, 6)); // 这么，自顶往下的更新，会当前行似乎理不清来自哪里，换个方向写，以当前更新行的当前下标的眼光来写
-            l[2] = new ArrayList<>(List.of(1, 3, 5));
-            l[3] = new ArrayList<>(List.of(1, 2, 4, 5));
-            l[4] = new ArrayList<>(List.of(1, 3, 5));
-            l[5] = new ArrayList<>(List.of(1, 2, 3, 4, 6));
-            l[6] = new ArrayList<>(List.of(1, 5));
-            long [][] f = new long [n][m];
-            Arrays.fill(f[0], 1);
-            for (int i = 1; i < n; i++) // 用前一行的结果来更新当前行的结果
-                for (int j = 1; j < m; j++) { // 当前行可能会有的结果：【1,2...6】
-                    for (int v : l[j]) // 更新当前行的结果: v 来自于上一行
-                        f[i][j] = (f[i-1][v] + f[i][j]) % mod;
-                    // 减去前两行不该有的结果，加上前三行可能会有的结果
-                    f[i][j] = (f[i][j] - (i != 1 ? f[i-2][j] : 0) + (i > 2 ? f[i-3][j] : 0)) % mod;
-                        // f[i+1][v] = (f[i+1][v]+ f[i][j]) % mod;
-                    // if (i < n-3) // 相同数的出现【间隔】至少是2: 这里可能算重复了狠多。。。【这里要考虑其它方式，来计算。。。】
-                    //     f[i+3][j] = ((f[i+3][j] == -1 ? 0 : f[i+3][j]) + f[i][j]) % mod;
-                    // if (i == 1) // 【BUG:】感觉这里改得还是不对。。。再想一下。。
-                    //     f[i+1][j] = (f[i+1][j] - f[i-1][j] + mod) % mod;
-                    // else if (i > 1)
-                    //     f[i+1][j] = (f[i+1][j] + f[i-2][j] + mod) % mod;
-                }
-            long r = 0;
-            for (int j = 1; j < m; j++)
-                r = (r + f[n-1][j]) % mod;
-            return (int)r;
         }
 
         public int minDistance(String S, String T) { // 72: 这个思路好像不太对。。// TODO TODO TODO: 
@@ -1505,4 +1415,14 @@ public class dptwo {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+
+
+
+
+
+
+
+
+
+
 
