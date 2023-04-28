@@ -11,36 +11,6 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toMap;
 public class dpfive {
     public static class Solution {
-// // 【主要是长整型溢出之类的细节】：这个题的细节，比我想像得要再多一点儿, 记忆化深搜，也会超时，会需要再优化。。。 // TODO TODO TODO: 1977 158/257
-//         public int numberOfCombinations(String t) { 
-//             n = t.length(); s = t.toCharArray();
-//             if (n == 1) return s[0] == '0' ? 0 : 1;
-//             return dfs(0, 0);
-//         }
-//         static final int mod = (int)1e9 + 7;
-//         char [] s;
-//         int n;
-//         Map<String, Integer> m = new HashMap<>(); // 它可能还要记一下前面的数字是多少？如果这样，数据过于离散，是需要用字典的
-//         int dfs(int i, long j) { // 【繁琐深搜：】这个记忆化深搜，的难点在， Integer.MAX_VALUE 待特殊数字的处理，狠繁琐，改天再写。。。
-//             if (i == n) return 1;
-//             String key = i + "-" + j;
-//             if (m.containsKey(key)) return m.get(key);
-//             if (i < n && s[i] == '0') // 以【0】打头, 不合法，直接返回
-//                 return m.getOrDefault(key, 0);
-//             long r = 0, v = 0;
-//             int k = i;
-//             for (k = i; k < n; k++) {
-//                 v = v * 10 + (s[k] - '0');
-//                 if (v > (long)Long.MAX_VALUE) {
-//                     System.out.println("v: " + v);
-//                     break;
-//                 }
-//                 if (j == 0 || v >= j) r = (r + (long)dfs(k+1, v)) % mod;
-//             }
-//             m.put(key, (int)r);
-//             return (int)r;
-//         }
-//         String a = "3745299124190496631931491905";
 
         // public boolean splitArraySameAverage(int[] a) { // N: 【1,30】数据规模太大了，一定会超时的 // TLE TLE TLE: 
         //     n = a.length; this.a = a;  N = (1 << n);
@@ -92,38 +62,6 @@ public class dpfive {
         //     return false; 
         // }
 
-        // public boolean isMatch(String S, String T) { // 这个题的边边角角狠烦人。。。10 // TODO TODO TODO: 10
-        //     m = S.length(); n = T.length();
-        //     s = s.toCharArray(); t = T.toCharArray();
-        //     f = new Boolean [m][n];
-        //     return dfs(0, 0);
-        // }
-        // char [] s, t;
-        // int m, n;
-        // Boolean [][] f;
-        // boolean dfs(int i, int j) {
-        //     if (i == m && j == n) return true; // 【终止条件】
-        //     if (i == m) { // j < n
-        //         while (j < n && t[j] == '*') j++;
-        //         return j == n ? true : false;
-        //     }
-        //     if (f[i][j] != null) return f[i][j];
-        //     // 【处理当前下标】：各种可能性, 需要防备 t[j+1] == '*'
-        //     if (j == n-1 || t[j+1] != '*') {
-        //         if (s[i] == t[j] || t[j] == '.') return f[i][j] = dfs(i+1, j+1); // 都是字母
-        //         else { // t[j] == '*'
-        //             if (dfs(i+1, j)) return f[i][j] = true; // 不用×
-        //             if (dfs(i+1, j+1)) return f[i][j] = true; // 配合成当前字符
-        //             for (int k = i+1; k < m; k++) // 要用这个 × 来配一个，所有可能的片段
-        //                 if (dfs(k, j+1)) return f[i][j] = true; // 配合成当前字符
-        //         }                
-        //     } else { // j < n-1 && t[j+1] == '*' 再想一下，这个死题目，要怎么处理，烦死了。。。
-        //     }
-        // }
-        // // if (i == m-1 && j == n-1)
-        // //     return f[i][j] = (s[i] == t[j] || t[j] == '.' || t[j] == '*');
-        // // if (s[i] == t[j] || t[j] == '.') return f[i][j] = dfs(i+1, j+1);
-
         // // 【记忆化深搜：】深深惊讶，我这两天把记忆化深搜写得像 1+1=2 一样简单。。。。。
         // // Queue<Integer> q = new PriorityQueue<>(); 感觉确实能再快一点儿
         // public int minimumVisitedCells(int[][] a) { // 记忆化深搜： TLE 1028/1069 动态规划，应该也会超时
@@ -174,48 +112,6 @@ public class dpfive {
         //     }
         //     return f[m-1][n-1] == m+n ? -1 : f[m-1][n-1];
         // }
-
-        // static final int mod = (int)1e9 + 7; // TODO TODO TODO: 得想办法，如何解决 *** 的处理？
-        // public int numDecodings(String t) {
-        //     n = t.length();
-        //     s = t.toCharArray();
-        //     f = new Integer [n];
-        //     return dfs(0);
-        // }
-        // char [] s;
-        // int n;
-        // Integer [] f;
-        // int dfs(int i) { // 这里，一定把‘×’所前面的一起处理
-        //     if (i == n) return 1;
-        //     if (s[i] == '0') return f[i] = 0; // 主要是防：哪里自己写漏了，没处理好这个逻辑
-        //     if (f[i] != null) return f[i];
-        //     if (i == n-1) {
-        //         if (s[i] == '*') return f[i] = 9;
-        //         // else if (s[i] == '0') return f[i] = 0; // 这种情况，不再考虑
-        //         else return f[i] = s[i] - '0';
-        //     }
-        //     if (s[i+1] == '*') {
-        //     } else { // s[i+1] != '*', j = 【【12】【3456789】】, k =【0,【12】？【3456】789】
-        //         int j = s[i] - '0', k = s[i+1] - '0';
-        //         if (s[i] == '*') { // k =【0,【12】？【3456】789】
-        //             if (k == 0) return f[i][j] = 2 * dfs(i+2);     // 【10, 20】
-        //             else if (k > 0 && k <= 6) return f[i][j] = 19; // 【 [12][123456],11-16,21-26,[3456789][123456]】
-        //             else {
-        //                 if (k == 7) return f[i][j] = 2 * dfs(i+2); // 【[1][7],【17】】
-        //                 else return f[i][j] = 8 * dfs(i+2); // 【[23456789]-[89]】
-        //             }
-        //         } else {
-        //             if (k == 0) return f[i][j] = (j > 0 && j < 3 ? dfs(i+2) : 0); // [10, 20]
-        //             else if (k > 0 && k <= 6) return f[i][j] = (j > 0 && j < 3 ? 2 * dfs(i+2) : dfs(i+2));
-        //             else { // k ＝【789】
-        //                 if (j == 1) return f[i][j] = 2 * dfs(i+2); // [17]
-        //                 else return f[i][j] = dfs(i+2);
-        //             }
-        //         }
-        //     }
-        //     return f[i] = (int)r;
-        // }
-
 
         // // 这个题：写出涂房子、分街区有街区数目的限制了的之后，应该就会写了，要背背带背背包，背个数组作状态。。。
         // // 背个数组背太多了，只要背：最后一次的数字和出现次数就可以了。。。【活宝妹就是一定要嫁给亲爱的表哥！！！】
@@ -924,45 +820,766 @@ public class dpfive {
         //     return (ans == 0 ? mod : ans)-1;
         // }
 
-        public int minNumberOperations(int[] a) {
-            n = a.length; this.a = a;
-            if (Arrays.stream(a).distinct().count() == 1) return a[0];
-            return minNumberOperations(0, n-1, 0);
+        // public int minNumberOperations(int[] a) { // TODO TODO TODO: 这个题目狠简单，可是昨天晚上没有耐心了。。。
+        //     n = a.length; this.a = a;
+        //     if (Arrays.stream(a).distinct().count() == 1) return a[0];
+        //     return minNumberOperations(0, n-1, 0);
+        // }
+        // int [] a; int n;
+        // int minNumberOperations(int i, int j, int v) {
+        //     if (i == j) return a[i] - v;
+        //     int min = a[i], idx = -1;
+        //     for (int k = i; k <= j; k++) 
+        //         if (a[k] < min) {
+        //             min = a[k];
+        //             idx = k;
+        //         }
+        //     if (min == a[i] || min == a[j]) {
+        //         if (a[i] == a[j]) return min - v + minNumberOperations(i+1, j-1, min);
+        //         if (min == a[i]) {
+        //             int x = i+1;
+        //             while (x < j && a[x] == min) x++;
+        //             return min - v + minNumberOperations(x, j, min);
+        //         } else {
+        //             int x = j-1;
+        //             while (x > i && a[x] == min) x--;
+        //             // System.out.println("x: " + x);
+        //             return min - v + minNumberOperations(i, x, min);
+        //         }
+        //     } else if (idx > i && idx < j) {
+        //         return min + minNumberOperations(i, idx-1, min) + minNumberOperations(idx+1, j, min);
+        //     }
+        //     return -1;
+        // }
+
+        // public boolean isMatch(String S, String T) { // 昨天想了一天，今天弱于会写这两个题目了。。。扔了那么多舍子。。。293/354 改天再写
+        //     m = S.length(); n = T.length();
+        //     s = S.toCharArray(); t = T.toCharArray();
+        //     f = new Boolean [m][n][26];
+        //     return dfs(0, 0, -1);
+        // }
+        // Boolean [][][] f; // 【机关：】这里，就像扔舍子、房子涂街区，狠多时候会需要记住前一个舍子或是房子的涂色，要把前一个字母给记住。。。
+        // char [] s, t;
+        // int m, n;
+        // boolean dfs(int i, int j, int k) {
+        //     System.out.println("\n i: " + i);
+        //     System.out.println("j: " + j);
+        //     System.out.println("k: " + (char)(k + 'a'));
+        //     if (i == m && j == n) return true; // 【终止条件】
+        //     if (i == m) { // j < n
+        //         while (j < n && t[j] == '*') j++;
+        //         return j == n ? true : false;
+        //     }
+        //     if (j == n) return false;
+        //     if (k >= 0 && f[i][j][k] != null) return f[i][j][k];
+        //     // 【处理当前下标】：各种可能性
+        //     if (s[i] == t[j] || t[j] == '.') {
+        //         boolean v = dfs(i+1, j+1, s[i]-'a');
+        //         if (k >= 0) f[i][j][k] = v;
+        //         return v;
+        //     } else if (s[i] != t[j] && t[j] != '.' && t[j] != '*') { // 【坑人不眨眼】×还有个特效：它能把带×字符的前一个字符给消除了。。。
+        //         if (j == n-1 || t[j+1] != '*') { // 后面不可能再跟 *
+        //             if (k >= 0) f[i][j][k] = false;
+        //             return false;
+        //         } else { // (j < n-1 && t[j+1] == '*')
+        //             // int x = i; // 这里考虑的是：【t[j]*】来匹配【s[i]+[12...9m...]】
+        //             // while (x < m && s[x] == s[i]) {  // 【坑人不眨眼】×还有个特效：它能把带×字符的前一个【严格地说是，如果连续，前一片同字符重复的片段】字符给消除了。。。
+        //             if (dfs(i+1, j, s[i]-'a') || dfs(i, j+2, k)) { // 这里记的是： t[j] 中消除掉的前一个字符，因为以后可能还需要消除。。。
+        //                 if (k >= 0) f[i][j][k] = true;
+        //                 return true;
+        //             }
+        //             //     x++;
+        //             // }
+        //             if (k >= 0) f[i][j][k] = false;
+        //             return false;
+        //         }
+        //     } else { // s[i] != t[j] && t[j] == '*': 【这里应该还需要考虑 * 的消除作用。。。】 // TODO TODO TODO: 
+        //         System.out.println("\n i: " + i);
+        //         System.out.println("j: " + j);
+        //         int x = i;
+        //         while (x < m && s[x] == s[i]) { // 用‘×’来配【0, 或是剩下的【i,i+1...m-1】】序列
+        //             // if (dfs(x, j + 1, s[i] - 'a')) return f[i][j][k] = true;
+        //             if (dfs(x, j + 1, s[i] - 'a')) return f[i][j][k] = true;
+        //             x++;
+        //         }
+        //         // if (x == m && j == n-1) { // 【BUG:】这只是一个特例
+        //         //     if (k >= 0) f[i][j][k] = true;
+        //         //     return true;
+        //         // }
+        //         if (dfs(x, j+1, s[i]-'a')) return f[i][j][k] = true;
+        //         return f[i][j][k] = false;
+        //     }
+        // }
+        // String a =  "mississippi";
+        // String b = "mis*is*p*.";
+
+        // public boolean isMatch(String S, String T) { // 【爱表哥，爱生活！！！活宝妹就是一定要嫁给亲爱的表哥！！！】
+        //     m = S.length(); n = T.length(); s = S.toCharArray(); t = T.toCharArray();
+        //     f = new Boolean [m][n];
+        //     return dfs(0, 0);
+        // }
+        // Boolean [][] f;
+        // char [] s, t;
+        // int m, n;
+        // boolean dfs(int x, int y) {
+        //     int i = x, j = y;
+        //     if (y == n) return x == m;
+        //     if (x == m) {
+        //         while (j < n && t[j] == '*') j++;
+        //         return j == n;
+        //     }
+        //     if (f[x][y] != null) return f[x][y];
+        //     while (i < m && j < n && (s[i] == t[j] || t[j] == '?')) {
+        //         i++;
+        //         j++;
+        //     }
+        //     if (i < m && j < n && s[i] != t[j] && t[j] != '?' && t[j] != '*') return f[x][y] = false;
+        //     if (i < m && j < n && t[j] == '*') {
+        //         for (int k = i; k < m; k++)
+        //             if (dfs(k, j+1) || dfs(k+1, j+1) || dfs(k+1, j)) return f[x][y] = true;
+        //         return f[x][y] = false;
+        //     } else if (i == m && j == n) return f[x][y] = true;
+        //     else if (j < n) {
+        //         int k = j;
+        //         while (k < n && t[k] == '*') k++;
+        //         return f[x][y] = (k == n);
+        //     }
+        //     return f[x][y] = false;
+        // }
+
+        // // 【主要是长整型溢出之类的细节】：这个题的细节，比我想像得要再多一点儿，改天上午再写一下。。。 // TODO TODO TODO: 1977 157/257
+        // public int numberOfCombinations(String t) { 
+        //     n = t.length(); s = t.toCharArray();
+        //     if (n == 1) return s[0] == '0' ? 0 : 1;
+        //     return dfs(0, 0);
+        // }
+        // static final int mod = (int)1e9 + 7;
+        // char [] s;
+        // int n;
+        // Map<String, Integer> m = new HashMap<>(); // 它可能还要记一下前面的数字是多少？如果这样，数据过于离散，是需要用字典的
+        // int dfs(int i, long j) { // 【繁琐深搜：】这个记忆化深搜，的难点在， Integer.MAX_VALUE 待特殊数字的处理，狠繁琐，改天再写。。。
+        //     if (i == n) return 1;
+        //     String key = i + "-" + j;
+        //     if (m.containsKey(key)) return m.get(key);
+        //     if (i < n && s[i] == '0') { // 以【0】打头, 不合法，直接返回
+        //         m.put(key, 0);
+        //         return 0;
+        //     }
+        //     long r = 0, v = 0;
+        //     int k = i;
+        //     for (k = i; k < n; k++) {
+        //         // if (v > (Long.MAX_VALUE - (s[k] - '0')) / 10l) break;
+        //         v = v * 10 + (s[k] - '0');
+        //         if (v >= j) r = (r + dfs(k+1, v)) % mod;
+        //     }
+        //     if (k < n) r = (r + dfs(k, v)) % mod;
+        //     m.put(key, (int)r);
+        //     return (int)r;
+        // }
+        // String a = "3745299124190496631931491905";
+
+        // static final int mod = (int)1e9 + 7; // TODO TODO TODO: 现在初步尝试，还想不清楚哪里出错了。。。 // TODO TODO TODO: 
+        // public int countPartitions(int[] a, int k) {
+        //     int n = a.length;
+        //     long sum = 0;
+        //     for (int v : a) sum += v;
+        //     if (sum < 2 * k) return 0;
+        //     int [] f = new int [k]; // 去数和记：和不超过 k 的所有的可能性【O(10^6)】可能是苛以过的
+        //     f[0] = 1;
+        //     for (int i = 0; i < n; i++) { // 遍历每个当前数：把这个数，加与不加
+        //         int v = a[i];
+        //         for (int j = k-1; j - v >= 0; j--) // 对于每个出现的数值，不管是不是 v 的重复出现，累计更新重复效果。。
+        //             if (f[j-v] > 0) f[j] = (f[j] + f[j-v]) % mod;
+        //         if (v < k) f[v] = Math.max(f[v], 1); // 更新当前和的可能性：最小为 1
+        //     }
+        //     // System.out.println(Arrays.toString(f));
+        //     int ans = 0;
+        //     for (int v : f) ans = (ans + v) % mod;
+        //     return quickPow(2, n) - ans;
+        // }
+        // int quickPow(int v, int n) {
+        //     long r = 1;
+        //     while (n > 0) {
+        //         if (n % 2 == 1)
+        //             r = (r * v) % mod;
+        //         v = (v * v) % mod;
+        //         n >>= 1;
+        //     }
+        //     return (int)r;
+        // }
+
+        // public int longestValidParentheses(String t) { // TODO TODO TODO: 不知道这个转化的思路对不对，改天再写。。。
+        //     int n = t.length(), max = 0, sum = 0; char [] s = t.toCharArray();
+        //     int [] r = new int [n];
+        //     for (int i = 0; i < n; i++) r[i] = (s[i] == '(' ? -1 : 1);
+        //     System.out.println(Arrays.toString(r));
+        //     Map<Integer, Integer> m = new HashMap<>();
+        //     m.put(0, -1);
+        //     for (int i = 0; i < n; i++) {
+        //         System.out.println("\n i: " + i);
+        //         int v = r[i];
+        //         sum += v;
+        //         if (sum >= 1) {
+        //             sum = 0;
+        //             m.put(0, i);
+        //         } else if (sum == 0 || m.containsKey(sum)) {
+        //             max = Math.max(max, i - m.get(sum));
+        //         }
+        //         System.out.println("sum: " + sum);
+        //         m.put(sum, i);
+        //     }
+        //     return max;
+        // }
+
+        // static final int mod = (int)1e9 + 7; 
+        // public int numDecodings(String t) { // 就是没有想明白：哪里出错了。。。今天的脑袋不适合想这些数来数去的题目。。。
+        //     n = t.length(); this.t = t; 
+        //     s = t.toCharArray();
+        //     f = new Integer [n][11]; // 【傻傻数不清楚：】这下可以数了吗？该死的“×××”这个榆木脑袋，真是一根筋呀。。。
+        //     return dfs(0, 10);
+        // }
+        // char [] s; String t;
+        // int n;
+        // Integer [][] f;
+        // int dfs(int i, int j) { // 【机关：】把前面一位数字给记住，当前位就狠好判断了。。。
+        //     System.out.println("\n i: " + i);
+        //     System.out.println("j: " + j);
+        //     if (i == n) return 1;
+        //     if (s[i] == '0') return f[i][j] = 0; // 主要是防：哪里自己写漏了，没处理好这个逻辑
+        //     if (f[i][j] != null) return f[i][j];
+        //     if (i == n-1) {
+        //         if (s[i] == '*') {
+        //             System.out.println("\n i: " + i);
+        //             System.out.println("t.substring(0, i+1): " + t.substring(0, i+1));
+        //             System.out.println("j: " + j);
+        //             // System.out.println("ans: " + ans);
+        //             if (j % 10 == 0 || 3 <= j && j <= 9) return f[i][j] = 9;
+        //             else if (j == 1) return f[i][j] = 18;
+        //             else return f[i][j] = 15;
+        //         } else { // s[i] != '*"  s[i] ==【0123456789-10】
+        //             if (j % 10 == 0 || 3 <= j && j <= 9) return f[i][j] = 1;
+        //             else if (j == 1) return f[i][j] = 2;
+        //             else return f[i][j] = (s[i] - '0' > 0 && s[i] - '0' <= 6 ? 2 : 1);
+        //         } 
+        //     }
+        //     int k = s[i] - '0', x = s[i+1] - '0'; // x: '*'
+        //     if (0 < k && k <= 2) {
+        //         if (s[i+1] == '0') return f[i][j] = dfs(i+2, 0);
+        //         else if (0 < x && x <= 6) return f[i][j] = (dfs(i+2, x) + dfs(i+1, k)) % mod; 
+        //         else if (s[i+1] != '*') { // x 【789】 17 18 19
+        //             if (k == 1)
+        //                 // return f[i][j] = (dfs(i+2, x) + dfs(i+1, x)) % mod; // 两个结果应该是一样的
+        //                 return f[i][j] = 2 * dfs(i+2, x) % mod; // 两个结果应该是一样的
+        //             else return f[i][j] = dfs(i+2, x); // 这里之前写错了。。。手误。。。
+        //         } else { // s[i+1] == '*'
+        //             long ans = 0;
+        //             for (int y = 1; y <= 9; y++) // 当前位单独 
+        //                 ans = (ans + dfs(i+2, y)) % mod;
+        //             System.out.println("ans 0: " + ans);
+        //             if (k == 1) ans = (ans * 2) % mod;
+        //             else {
+        //                 for (int y = 1; y <= 6; y++) // 当前位＋下一位一起
+        //                     ans = (ans + dfs(i+2, y)) % mod;
+        //             }
+        //             System.out.println("\n i: " + i);
+        //             System.out.println("t.substring(0, i+2): " + t.substring(0, i+2));
+        //             System.out.println("j: " + j);
+        //             System.out.println("ans: " + ans);
+        //             return f[i][j] = (int)ans;
+        //         }
+        //     } else if (3 <= k && k <= 9) return f[i][j] = dfs(i+1, k);
+        //     else { // s[i] = '*'
+        //         long ans = 0;
+        //         for (int y = 1; y <= 9; y++) 
+        //             ans = (ans + dfs(i+1, y)) % mod;
+        //         System.out.println("\n i: " + i);
+        //         System.out.println("t.substring(0, i+1): " + t.substring(0, i+1));
+        //         System.out.println("j: " + j);
+        //         System.out.println("ans: " + ans);
+        //         if (j % 10 == 0 || 3 <= j && j <= 9)
+        //             return f[i][j] = (int)ans;
+        //         else { // (0 < j && j <= 2) {
+        //             if (j == 1) ans = (ans * 2) % mod;
+        //             else { // j == 2
+        //                 for (int y = 1; y <= 6; y++) 
+        //                     ans = (ans + dfs(i+1, y)) % mod;
+        //             }
+        //             System.out.println("\n i: " + i);
+        //             System.out.println("j: " + j);
+        //             System.out.println("ans: " + ans);
+        //             return f[i][j] = (int)ans;
+        //         }
+        //     }
+        // }
+
+        // // 记忆化搜索: 这里引入了次序，怎么知道是甲方赢了？ alice ？这好像是个 min-max 的题型：但是感觉这个题型没有吃透。。。 // TODO TODO TODO:  1140
+        // public int stoneGameII(int[] a) {
+        //     n = a.length; this.a = a; 
+        //     f = new Integer [n][n][2];
+        //     return dfs(0, 0, 0);
+        // }
+        // Integer [][] f;
+        // int [] a; int n;
+        // int dfs(int i, int j, int k) { // i: idx j: M, k: turn
+        //     if (idx == n) return 0;
+        //     if (f[i][j][k] != null) return f[i][j][k];
+        //     int ans = 0, sum = 0;
+        //     for (int x = 1; x <= 2 * j && i+x-1 < n; x++) {
+        //         int idx = i + x - 1;
+        //         sum += a[idx];
+        //         ans = Math.max(ans, sum + )
+        //     }
+        //     int r = 0, sum = 0;
+        //     for (int i = 1; i <= 2 * v && idx + i - 1 < n; i++) {
+        //         int j = idx + i -1;
+        //         sum += a[j];
+        //         int x = sum + dfs(j+1, Math.max(v, i), a);
+        //         System.out.println("x: " + x);
+        //         r = Math.max(r, x);
+        //     }
+        //     return f[idx][v] = r;
+        // }
+
+        // public int waysToMakeFair(int[] a) { 
+        //     int n = a.length;
+        //     int [] l = new int [n], r = new int [n];
+        //     for (int i = 0; i < n; i++)
+        //         if (i % 2 == 0) {
+        //             r[i] = (i == 0 ? 0 : r[i-2]) + a[i];
+        //             if (i > 0)
+        //                 l[i] = l[i-1];
+        //         } else {
+        //             l[i] = (i == 1 ? 0 : l[i-2]) + a[i];
+        //             if (i > 0) r[i] = r[i-1];
+        //         }
+        //     int ans = 0;
+        //     for (int i = 0; i < n; i++) {
+        //         if (i == 0) {
+        //             if (r[n-1] - r[0] == l[n-1]) ans++;
+        //             continue;
+        //         } else if (i == n-1) {
+        //             // if (i % 2 == 0 && l[n-1] - l[n-1] == r[n-1] // 这里好像写反了。。。。
+        //             //     || i % 2 == 1 && r[n-1] - r[n-1] == l[n-1]) ans++;
+        //             if (i % 2 == 0 && r[n-1] - a[n-1] == l[n-1]
+        //                 || i % 2 == 1 && l[n-1] - a[n-1] == r[n-1]) ans++;
+        //             continue;
+        //         } else {
+        //             if (i % 2 == 0 && r[i-2] + l[n-1] - l[i] == l[i] + r[n-1] - r[i]) ans++;
+        //             else if (i % 2 == 1 && l[i-1] + r[n-1] - r[i] == r[i] + l[n-1] - l[i]) ans++;
+        //         }
+        //     }
+        //     return ans;
+        // }
+
+        // public int mincostTickets(int[] a, int[] b) {
+        //     int n = a.length;
+        //     int [] f = new int [n];
+        //     f[0] = b[0];
+        //     for (int i = 1; i < n; i++) {
+        //         System.out.println("\n i: " + i);
+        //         System.out.println("a[i]: " + a[i]);
+        //         f[i] = f[i-1] + b[0];
+        //         for (int j = i-1; j >= 0; j--) {
+        //             if (a[i] - a[j] <= 7) f[i] = Math.min(f[i], (j == 0 ? 0 : f[j-1]) + b[1]);
+        //             if (a[i] - a[j] == 30) f[i] = Math.min(f[i], f[j] + b[2]);
+        //         }
+        //         System.out.println(Arrays.toString(f));
+        //     }
+        //     System.out.println(Arrays.toString(f));
+        //     return f[n-1];
+        // }
+
+        // public double nthPersonGetsNthSeat(int n) {
+        //     if (n == 1) return 1;
+        //     if (n == 2) return 0.5;
+        //     double [] f = new double [n];
+        //     f[1] = 1;
+        //     f[2] = 0.5;
+        //     for (int i = 3; i < n; i++)
+        //         f[i] = 0.5 * f[i-1];
+        //     return f[n-1];
+        // }
+
+        // public int minCost(String t, int[] a) {
+        //     int n = a.length; char [] s = t.toCharArray();
+        //     int max = a[0], sum = a[0], i = 1, cnt = 1, globalSum = Arrays.stream(a).sum(), ans = 0;
+        //     while (i < n) {
+        //         while (i < n && s[i] == s[i-1]) { // 统计同一色的：最大值，与和
+        //             cnt++;
+        //             max = Math.max(max, a[i]);
+        //             sum += a[i];
+        //             i++;
+        //         }
+        //         if (cnt == 1) {
+        //             sum = a[i];
+        //             max = a[i];
+        //             cnt = 1;
+        //             if (i == n-1) return ans;
+        //         } else if (cnt > 1) {
+        //             ans += sum - max;
+        //             sum = (i == n ? 0 : a[i]);
+        //             max = (i == n ? 0 : a[i]);
+        //             cnt = (i == n ? 0 : 1);
+        //         }
+        //         i++;
+        //     }
+        //     return ans;
+        // }
+
+        // public int longestSubarray(int[] a) { // 【滑动窗口：】里面最多一个0
+        //     int n = a.length, cnt = 0, max = 0, i = 0, j = 0;
+        //     while (i < n ) {
+        //         while (i < n && a[i] == 1) i++;
+        //         if (i == n) return Math.max(max, i - j - 1); // 必须要有 1 个删除操作
+        //         if (a[i] == 0) {
+        //             if (cnt == 1) max = Math.max(max, i-1 - j);
+        //             cnt++;
+        //             while (j < i && cnt > 1) { // 左端点右移
+        //                 if (a[j] == 0) --cnt;
+        //                 ++j; // 到 0 后面的，那一个不是 0 的下标 
+        //             }
+        //         }
+        //         i++;
+        //     }
+        //     if (i == n && a[n-1] == 1) max = Math.max(max, i - j - (cnt == 1 ? 0 : 1));
+        //     return max;
+        // }
+
+        // public int longestStrChain(String[] a) { // TODO: 这里要找的是同一个词的一连串的桥接下来，不能两三个混搭，想想怎么写
+        //     int n = 16, m = a.length, max = 0, min = n, ans = 1;
+        //     Set<String> [] s = new HashSet[n];
+        //     Arrays.setAll(s, z -> new HashSet<>());
+        //     int [] f = new int [n];
+        //     Arrays.fill(f, 1);
+        //     for (String v : a) {
+        //         int i = v.length();
+        //         max = Math.max(max, i);
+        //         min = Math.min(min, i);
+        //         s[i].add(v);
+        //     }
+        //     for (int i = max; i >= min+1; i--) 
+        //         for (String v : s[i]) {
+        //             int cnt = 0;
+        //             for (int j = 0; j < i; j++) {
+        //                 String cur = (j == 0 ? "" : v.substring(0, j)) + (j == i-1 ? "" : v.substring(j+1, i));
+        //                 if (s[i-1].contains(cur)) f[i-1] = Math.max(f[i-1], f[i] + 1);
+        //             }
+        //         }
+        //     return Arrays.stream(f).max().getAsInt();
+        // }
+        // String [] a = new String [] {"ksqvsyq","ks","kss","czvh","zczpzvdhx","zczpzvh","zczpzvhx","zcpzvh","zczvh","gr","grukmj","ksqvsq","gruj","kssq","ksqsq","grukkmj","grukj","zczpzfvdhx","gru"};
+
+        // public int deleteAndEarn(int[] a) { // TODO TODO TODO: 740
+        //     int n = a.length, m = 10001, max = Arrays.stream(a).max().getAsInt();
+        //     int [] r = new int [m];
+        //     for (int v : a) r[v]++;
+        //     int [][] f = new int [m][2]; // 0 不选 1 选
+        //     f[max][1] = max * r[max];
+        //     for (int i = max-1; i >= 0; i--) {
+        //         // if (r[i] == 0) continue; // 这个数，数组中不存在
+        //         f[i][0] = f[i+1][1];
+        //         f[i][1] = (i == max-1 ? 0 : f[i+2][1]) + i * r[i];
+        //     }
+        //     return Math.max(a, b)
+        // }
+
+        // public int maxProfit(int[] a) { // 122 理不清这些乱东西。。。
+        //     int n = a.length, min = Arrays.stream(a).min().getAsInt(), ma = Arrays.stream(a).max().getAsInt();
+        //     int max = ma - min; // 全局只一次交易的最大利润。再扫一遍，去找多次交易，是否可以获得更多利润
+        //     int localMin = a[0], localSum = 0, localMax = 0;
+        //     for (int i = 1; i < n; i++) {
+        //         if (a[i] > a[i-1]) {
+        //             localSum += a[i] - a[i-1];
+        //             localMax = Math.max(localMax, Math.max(localSum, a[i] - localMin));
+        //         } else {
+        //             localMin = Math.min(localMin, a[i]);
+        //         }
+        //     }
+        // }
+
+        // public int maxProfit(int[] a, int fee) { // 【或买或卖】：这是自己能够想出来的，最原始的解题出发点
+        //     int n = a.length;
+        //     int [] b = new int [n+1], s = new int [n+1]; // buy sell
+        //     for (int i = 0; i < n; i++) {
+        //         b[i+1] = Math.max((i == 0 ? Integer.MIN_VALUE : b[i]), s[i] - a[i] - fee); // 这里是，这天，买，或是不买 
+        //         s[i+1] = Math.max(s[i], i == 0 ? 0 : b[i] + a[i]); // 今天卖，或是不卖
+        //     }
+        //     return Arrays.stream(s).max().getAsInt();
+        // }
+
+        // public int maxProfit(int[] a) { // 前一笔卖出后，要间隔一天才能再买进
+        //     int n = a.length;
+        //     int [] b = new int [n+1], s = new int [n+1];
+        //     for (int i = 0; i < n; i++) { // 就是，【买进】的时候，需要在前一题的基础中【在上一次卖出之后隔一天】，两笔交易间隔一天
+        //         b[i+1] = Math.max((i == 0 ? Integer.MIN_VALUE : b[i]), (i == 0 ? 0 : s[i-1]) - a[i]); // 这一天，或不买【取前一天买进的】，或买
+        //         s[i+1] = Math.max(s[i], i == 0 ? 0 : b[i] + a[i]); // 今天不卖【取前一天的】，或是卖出
+        //     }
+        //     return Arrays.stream(s).max().getAsInt();
+        // }
+
+        // public int maxProfit(int[] a) { // 前一笔卖出后，当天就可以再买进 122...
+        //     int n = a.length;
+        //     int [] b = new int [n+1], s = new int [n+1];
+        //     for (int i = 0; i < n; i++) { // 就是，【买进】的时候，需要在前一题的基础中【在上一次卖出之后隔一天】，两笔交易间隔一天
+        //         s[i+1] = Math.max(s[i], b[i] + a[i]); // 今天不卖【取前一天的】，或是卖出
+        //         b[i+1] = Math.max(b[i], s[i+1] - a[i]); // 这一天，或不买【取前一天买进的】，或买
+        //     }
+        //     return Arrays.stream(s).max().getAsInt();
+        // }
+
+        // public int findTheCity(int n, int[][] egs, int t) { // 【基本功：】感觉这类题目就是最基本的基本功，供自己下午晚上头脑不清醒的时候写写玩玩。。。
+        //     g = new ArrayList [n]; this.n = n; this.t = t; 
+        //     Arrays.setAll(g, z -> new ArrayList<>());
+        //     for (int [] e : egs) {
+        //         int u = e[0], v = e[1], w = e[2];
+        //         g[u].add(new int [] {v, w});
+        //         g[v].add(new int [] {u, w});
+        //     }
+        //     d = new int [n];
+        //     int ans = n-1, min = n, cnt = 0;
+        //     for (int i = n-1; i >= 0; i--) {
+        //         Arrays.fill(d, Integer.MAX_VALUE);
+        //         calculateMinimumHP(i);
+        //         cnt = 0;
+        //         for (int j = 0; j < n; j++) 
+        //             if (d[j] <= t) cnt++;
+        //         if (cnt < min) {
+        //             ans = i;
+        //             min = cnt;
+        //         }
+        //     }
+        //     return ans;
+        // }
+        // List<int []> [] g;
+        // int n, t; int [] d;
+        // void calculateMinimumHP(int x) {
+        //     d[x] = 0;
+        //     Queue<int []> q = new PriorityQueue<>((w, y) -> w[1] - y[1]);
+        //     q.offer(new int [] {x, 0});
+        //     while (!q.isEmpty()) {
+        //         int [] cur = q.poll();
+        //         int u = cur[0], w = cur[1];
+        //         for (int [] v : g[u]) {
+        //             if (v[1] + w < d[v[0]]) {
+        //                 d[v[0]] = w + v[1];
+        //                 q.offer(new int [] {v[0], d[v[0]]});
+        //             }
+        //         }
+        //     }
+        // }
+
+        // public int shoppingOffers(List<Integer> p, List<List<Integer>> s, List<Integer> a) {
+        //     this.p = p; this.s = s; this.a = a; n = a.size();
+        //     int [] r = new int [n];
+        //     for (int i = 0; i < n; i++) r[i] = a.get(i);
+        //     return dfs(r);
+        // }
+        // Map<String, Integer> m = new HashMap<>(); // 记忆化深搜: 可以用个 mask, 但是位操作还是太繁琐了，这里就背个数组。。。
+        // List<List<Integer>> s;
+        // List<Integer> p, a;
+        // int n;
+        // int dfs(int [] r) {
+        //     if (Arrays.stream(r).sum() == 0) return 0;
+        //     String k = Arrays.toString(r);
+        //     if (m.containsKey(k)) return m.get(k);
+        //     int ans = 0;
+        //     for (int i = 0; i < n; i++)
+        //         ans += r[i] * p.get(i);
+        //     for (int i = 0; i < s.size(); i++) {
+        //         boolean valid = true;
+        //         for (int j = 0; j < n; j++)
+        //             if (s.get(i).get(j) > r[j]) {
+        //                 valid = false; break;
+        //             }
+        //         if (valid) {
+        //             int [] cur = r.clone();
+        //             for (int j = 0; j < n; j++)
+        //                 cur[j] -= s.get(i).get(j);
+        //             ans = Math.min(ans, s.get(i).get(n) + dfs(cur));
+        //         }
+        //     }
+        //     m.put(k, ans);
+        //     return ans;
+        // }
+
+        // // public int longestSubsequence(int[] a, int dif) { // TLE TLE TLE: 34/39 O(N^2) 可能还需要一点儿特殊处理与优化 
+        // //     int n = a.length, f [] = new int [n], max = 1;
+        // //     Arrays.fill(f, 1);
+        // //     for (int i = 1; i < n; i++) {
+        // //         int v = a[i];
+        // //         for (int j = i-1; j >= 0; j--) { // 我觉得这里一步步找太浪费时间了，换个字典用
+        // //             if (a[i] - a[j] == dif) {
+        // //                 f[i] = Math.max(f[i], f[j] + 1);
+        // //                 break;
+        // //             } else if (a[i] == a[j])
+        // //                 f[i] = Math.max(f[i], f[j]);
+        // //         }
+        // //         max = Math.max(max, f[i]);
+        // //     }
+        // //     return max;
+        // // }
+        // public int longestSubsequence(int[] a, int d) { // 换个字典就可以过了。。。
+        //     int n = a.length, max = 1;
+        //     Map<Integer, Integer> m = new HashMap<>();
+        //     for (int i = 0; i < n; i++) {
+        //         int u = a[i], v = u - d;
+        //         if (m.containsKey(v)) 
+        //             m.put(u, Math.max(m.getOrDefault(u, 2), m.get(v) + 1));
+        //         else m.put(u, 1);
+        //     }
+        //     return Collections.max(m.values());
+        // }
+
+        // public int maxSumDivThree(int[] a) { // 记忆化深搜：这里感觉失效了呀。。。
+        //     this.a = a; n = a.length; m = 3;
+        //     f = new Integer [n][3];
+        //     return dfs(0, 0);
+        // }
+        // Integer [][] f;
+        // int [] a;
+        // int n, m;
+        // int dfs(int i, int j) {
+        //     if (f[i][j] != null) return f[i][j];
+        //     if (i == n-1) return f[i][j] = (a[i] % m == j ? a[i] : 0); // 感觉这里需要一个标记，怎么知道有效与无效，所以得去用动规来写
+        //     int ans = dfs(i+1, j), v = 0; // 不要当前的数
+        //     int curMod = a[i] % m;
+        //     if (curMod == 0) {
+        //         if (j == 0) v = dfs(i+1, 0); 
+        //         else if (j == 1) v = dfs(i+1, 1); 
+        //         else v = dfs(i+1, 2);
+        //     } else if (curMod == 1) {
+        //         if (j == 0) v = dfs(i+1, 2); // 1+2
+        //         else if (j == 1) v = dfs(i+1, 0); //1+0
+        //         else v = dfs(i+1, 1);// 2:1+1
+        //     } else { // (curMod == 2)
+        //         if (j == 0) v = dfs(i+1, 1); 
+        //         else if (j == 1) v = dfs(i+1, 2); 
+        //         else v = dfs(i+1, 0);
+        //     }
+        //     if (v > 0) ans = Math.max(ans, a[i] + v);
+        //     return f[i][j] = ans;
+        // }
+        // public int maxSumDivThree(int[] a) { // 感觉这里，是写得脑袋一团浆糊。。。
+        //     int n = a.length;
+        //     int [][] f = new int [n][3];
+        //     Arrays.stream(f).forEach(z -> Arrays.fill(z, -1));
+        //     f[n-1][a[n-1]%3] = a[n-1];
+        //     for (int i = n-2; i >= 0; i--) {
+        //         int m = a[i] % 3; // 接下来，想糊了，其实狠简单, 明天再改这个
+        //         if (m == 0) {
+        //             f[i][0] = (f[i+1][0] == -1 ? 0 : f[i+1][0]) + a[i];
+        //             for (int j = 1; j < 3; j++)
+        //                 f[i][j] = f[i+1][j];
+        //         } else if (m == 1) {
+        //             f[i][0] = Math.max(f[i+1][2] != -1 ? f[i+1][2] + a[i] : -1, f[i+1][0]);
+        //             f[i][1] = Math.max(f[i+1][0] == -1 ? 0 : f[i+1][0] + a[i], Math.max(f[i+1][1], a[i]));
+        //             f[i][2] = Math.max(f[i+1][2], f[i+1][1] == -1 ? 0 : f[i+1][1] + a[i]);
+        //         } else { // m == 2
+        //             f[i][0] = Math.max(f[i+1][1] == -1 ? 0 : f[i+1][1] + a[i], f[i+1][0]);
+        //             f[i][1] = Math.max(f[i+1][1], f[i+1][2] == -1 ? 0 : f[i+1][2] + a[i]);
+        //             f[i][2] = Math.max(f[i+1][2], f[i+1][0] == -1 ? 0 : f[i+1][0] + a[i]);
+        //         }
+        //     }
+        //     return f[0][0];
+        // }
+
+        // public int minOperations(int v) { // 54 情况比较特殊，它好像是以四个位为单位的。。。
+        //     System.out.println("\n Integer.toBinaryString(v): " + Integer.toBinaryString(v));
+        //     System.out.println("\n Integer.toBinaryString(56): " + Integer.toBinaryString(56));
+        //     if (Integer.bitCount(v) == 1) return 1;
+        //    String t = Integer.toBinaryString(v);
+        //    int n = t.length(); char [] s = t.toCharArray();
+        //     // if (t.chars().distinct().count() == 1) return 2;// "1111111"
+        //     int j = n-1, right = 0;
+        //     while (j >= 0 && s[j] == '1') --j;
+        //     if (j < 0) return 2;
+        //     if (j < n-1) right = n - j - 1;  // 右边连续1 的个数
+        //     int left = Integer.bitCount(v) - right;
+        //     System.out.println("n: " + n);
+        //     System.out.println("right: " + right);
+        //     System.out.println("left: " + left);
+        //     int ans = n;  // 左边一个一个移右边一片移 | 补少的一
+        //     return ans = Math.min(Math.min(left + 2, n - (left + right) + 2), left + right);
+        // }
+
+        // boolean valid(String t, int l, int n) { // n 1s
+        //     int m = t.length(), cnt = 0;
+        //     if (m > l) return false;
+        //     char [] s = t.toCharArray();
+        //     for (char c : s) cnt += c - '0'; // sum of 1s
+        //     if (cnt <= n) {         // 【cnt0s,cnt1s】
+        //         ms.put(t, new int [] {m-cnt, cnt}); // 一边检查，一边加这里记下来备用 
+        //         return true;
+        //     }
+        //     return false;
+        // }
+        // Map<String, int []> ms = new HashMap<>(); // 【0-cnt, 1-cnt】
+        // List<String> ll = new ArrayList<>();
+        // public int findMaxForm(String[] sa, int m, int n) { // 动规：
+        //     for (String s : sa) 
+        //         if (valid(s, m+n, n)) ll.add(s);
+        //     Collections.sort(ll, (x, y) -> x.length() - y.length()); // 长度从小到大排列
+        //     o = ll.size(); this.m = m; this.n = n; 
+        //     f = new Integer [o][m+1][n+1];
+        //     return dfs(0, 0, 0);
+        // }
+        // Integer [][][] f;
+        // int m, n, o;
+        // int dfs(int i, int j, int k) {
+        //     if (j > m || k > n) return Integer.MIN_VALUE / 2;
+        //     if (i == o) return j <= m && k <= n ? 0 : Integer.MIN_VALUE / 2;
+        //     if (f[i][j][k] != null) return f[i][j][k];
+        //     int r = dfs(i+1, j, k);
+        //     int [] cur = ms.get(ll.get(i));
+        //     r = Math.max(r, 1 + dfs(i+1, j+cur[0], k+cur[1]));
+        //     return f[i][j][k] = r;
+        // }
+
+        // public int coinChange(int[] a, int t) {
+        //     Arrays.sort(a);
+        //     System.out.println(Arrays.toString(a));
+        //     n = a.length; this.a = a;
+        //     if (n == 1) return t % a[0] == 0 ? t / a[0] : -1;
+        //     int v = dfs(t, n-1); 
+        //     return v == Integer.MAX_VALUE / 2 ? -1 : v;
+        // }
+        // Map<String, Integer> m = new HashMap<>(); // 防：题目叨钻，离散化数据 
+        // int n; int [] a;
+        // int dfs(int i, int j) {
+        //     if (i == 0) return 0;
+        //     if (j < 0) return (i > 0 ? Integer.MAX_VALUE / 2 : 0);
+        //     String k = i + "-" + j;
+        //     if (m.containsKey(k)) return m.get(k);
+        //     if (a[j] > i) {
+        //         m.put(k, dfs(i, j-1));
+        //         return m.get(k);
+        //     }
+        //     int ans = Integer.MAX_VALUE / 2, cnt = i / a[j];
+        //     for (int x = cnt; x >= Math.max(0, cnt/10); x--)  // 深搜：就有这些不方便优化？的问题？ 186/189 最后几个过不了。。。
+        //         ans = Math.min(ans, x + dfs(i - x * a[j], j-1));
+        //     m.put(k, ans);
+        //     return ans;
+        // }
+
+        // 万能的【记忆化深搜：】这次刷动规，感觉就写记忆化深搜了。。。。。写得像 1+1=2 一样简单熟练。。。不知道这个题型...
+        public List<Integer> largestDivisibleSubset(int[] a) { // 突然想起来：这是一个风味独特的，什么狗屁【接龙型】返回链表等相对特殊的数据结构的记忆化深搜?
+            n = a.length; this.a = a; 
+            return dfs(0);
         }
-        int [] a; int n;
-        int minNumberOperations(int i, int j, int v) {
-            if (i == j) return a[i] - v;
-            int min = a[i], idx = -1;
-            for (int k = i; k <= j; k++) 
-                if (a[k] < min) {
-                    min = a[k];
-                    idx = k;
-                }
-            if (min == a[i] || min == a[j]) {
-                if (a[i] == a[j]) return min - v + minNumberOperations(i+1, j-1, min);
-                if (min == a[i]) {
-                    int x = i+1;
-                    while (x < j && a[x] == min) x++;
-                    return min - v + minNumberOperations(x, j, min);
-                } else {
-                    int x = j-1;
-                    while (x > i && a[x] == min) x--;
-                    // System.out.println("x: " + x);
-                    return min - v + minNumberOperations(i, x, min);
-                }
-            } else if (idx > i && idx < j) {
-                return min + minNumberOperations(i, idx-1, min) + minNumberOperations(idx+1, j, min);
-            }
-            return -1;
+        Map<Integer, List<Integer>> m = new HashMap<>();
+        int [] a;
+        int n;
+        List<Integer> dfs(int i) {
+            if (i == n) return new ArrayList<>();
+            if (m.containsKey(k)) return m.get(i);
         }
     }
     public static void main (String[] args) { // 【爱表哥，爱生活！！！活宝妹就是一定要嫁给亲爱的表哥！！！】
         Solution s  =  new Solution ();
 
-        int [] a = new int [] {5, 5, 3};
-        System.out.println(Arrays.toString(a));
+        int [] a = new int [] {342,268,284,65,217,461,245,249,106};
 
-        int r = s.minNumberOperations(a);
+        int r = s.coinChange(a, 9278);
         System.out.println("r: " + r);
     } 
 }
@@ -972,4 +1589,40 @@ public class dpfive {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
-// 任何时候，活宝妹就是一定要嫁给亲爱的表哥！！！【爱表哥，爱生活！！！活宝妹就是一定要嫁给亲爱的表哥！！！】
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
