@@ -741,18 +741,68 @@ public class cmp {
         //     return ans;
         // }
 
+        // public long countOperationsToEmptyArray(int[] nums) {
+        // }
+
+        public int findMaxFish(int[][] a) {
+            m = a.length; n = a[0].length; this.a = a; 
+            f = new boolean [m][n];
+            for (int i = 0; i < m; i++)
+                for (int j = 0; j < n; j++)  // 这里是要写连通块，也可以用 BFS 来做
+                    if (a[i][j] > 0) {
+                        // System.out.println("\n i: " + i);
+                        // System.out.println("j: " + j);
+                        int v = bfs(i, j);
+                        // System.out.println("v: " + v);
+                        max = Math.max(max, v);
+                        // System.out.println("max: " + max);
+                    }
+            return max;
+        }
+        int [][] dirs = {{1, 0}, {0, 1}, {0, -1}, {-1, 0}};
+        int [][] a;
+        boolean [][] f;
+        int m, n, max = 0;
+        int bfs(int u, int v) {
+            int r = 0;
+            Deque<int []> q = new ArrayDeque<>();
+            q.offer(new int [] {u, v});
+            f[u][v] = true;
+            while (!q.isEmpty()) {
+                int [] cur = q.poll();
+                int x = cur[0], y = cur[1];
+                r += a[x][y];
+                a[x][y] = 0;
+                for (int [] d : dirs) {
+                    int i = x + d[0], j = y + d[1];
+                    if (i < 0 || i >= m || j < 0 || j >= n || f[i][j] || a[i][j] == 0) continue;
+                    f[i][j] = true;
+                    q.offer(new int [] {i, j});
+                }
+            }
+            return r;
+        }
+        // void dfs(int i, int j, int k) {
+        //     if (i < 0 || i >= m || j < 0 || j >= n || v[i][j] || a[i][j] == 0) return;
+        //     v[i][j] = true;
+        //     k += a[i][j];
+        //     for (int [] d : dirs)
+        //         dfs(i+d[0], j + d[1], k);
+        //     k -= a[i][j];
+        //     v[i][j] = false;
+        // }
         
     }
     public static void main (String[] args) { 
         Solution s = new Solution ();
 
-        int [] a = new int [] {20, 2, 14, 19, 31, 9, 30, 13, 17, 33, 10, 3, 26, 28, 5, 8, 6, 29, 22, 21, 23, 4, 1, 27, 24, 11, 12, 18, 7, 25, 32, 16, 15};
-        int [] b = new int [] {7, 1, 3, 5, 11, 2, 16, 26, 4, 13, 22, 23, 31, 9, 18, 19, 17, 8, 32, 12, 24, 25, 20, 28, 6, 33, 14, 30, 15, 21, 10, 29, 27};
-        System.out.println(Arrays.toString(a));
-        System.out.println(Arrays.toString(b));
+        int [][] a = new int [][] {{0,2,1,0},{4,0,0,3},{1,0,0,4},{0,3,2,0}};
+        System.out.println("a.length: " + a.length);
+        for (int z = 0; z < a.length; ++z) 
+            System.out.println(Arrays.toString(a[z]));
 
-        int [] r = s.findThePrefixCommonArray(a, b);
-        System.out.println(Arrays.toString(r));
+        int r = s.findMaxFish(a);
+        System.out.println("r: " + r);
     }
 }
 // 【爱表哥，爱生活！！！活宝妹就是一定要嫁给亲爱的表哥！！！】
