@@ -277,15 +277,6 @@ public class dpone { // 【动规三刷：】从最简单Middle 到 Hard, 希望
             return Arrays.stream(f[m-1]).min().getAsInt();
         }
 
-        TODO TODO TODO: 
-        public int mincostTickets(int[] a, int [] b) {
-            int n = a.length, f [] = new int [n];
-            f[0] = b[0];
-            for (int i = 1; i < n; i++) {
-                if (a[i] - a[i-1] <= 7)
-            }
-        }
-
         public List<List<String>> partition(String s) {
             partitionBackTracking(0, new ArrayList<String>(), s);
             return ll;
@@ -311,31 +302,6 @@ public class dpone { // 【动规三刷：】从最简单Middle 到 Hard, 希望
             while (i < j) 
                 if (s[i++] != s[j--]) return false;
             return true;
-        }
-
-        // TODO TODO TODO: 
-        // 感觉这类题之前都想通过，可是现在再写，就感觉全忘记了。。。。。
-        // 记忆化搜索: 这里引入了次序，怎么知道是甲方赢了？ alice ？
-        // 这里有点儿理解上的欠缺：所有的石头给一个人了，是给两个人的，得 - 另一个人拿走的。。。
-        public int stoneGameII(int[] a) {
-            n = a.length;
-            f = new Integer [n][n];
-            return dfs(0, 1, a);
-        }
-        Integer [][] f;
-        int n;
-        int dfs(int idx, int v, int [] a) {
-            if (idx == n) return 0;
-            if (f[idx][v] != null) return f[idx][v];
-            int r = 0, sum = 0;
-            for (int i = 1; i <= 2 * v && idx + i - 1 < n; i++) {
-                int j = idx + i -1;
-                sum += a[j];
-                int x = sum + dfs(j+1, Math.max(v, i), a);
-                System.out.println("x: " + x);
-                r = Math.max(r, x);
-            }
-            return f[idx][v] = r;
         }
 
         public int minPathSum(int[][] a) {// TLE TLE TLE: 25/61
@@ -426,43 +392,6 @@ public class dpone { // 【动规三刷：】从最简单Middle 到 Hard, 希望
             }
             return f[k];
         }
-
-        TODO TODO TODO: 
-        public int longestSubarray(int[] a) {
-            int n = a.length, max = 0, i = 0, j = 0, nj = -1;
-            boolean d = false;
-            while (i < n && a[i] == 0) i++;
-            if (i == n) return 0;
-            j = i; 
-            for (; i < n; i++) {
-                while (i < n && a[i] == 1) i++;
-                System.out.println("i0: " + i);
-                System.out.println("j0: " + j);
-                if (i == n) return Math.max(max, i - j - 1);
-                if (a[i] == 0 && !d) {
-                    d = true;
-                    nj = i;
-                    i++;
-                } else if (a[i] == 0) { // d == true
-                    int ii = i;
-                    max = Math.max(max, i - j - 1);
-                    System.out.println("i1: " + i);
-                    System.out.println("max: " + max);
-                    while (i < n && a[i] == 0) 
-                        i++;
-                    // j = i; // 左端点没有滑动，可能会丢掉失去正确答案
-                    j = nj + 1;
-                    while (a[j] == 0) j++;
-                    if (j > ii) d = false;
-                    // d = false;
-                    System.out.println("j: " + j);
-                }
-                System.out.println("max: " + max);
-            }
-            if (i == n && a[n-1] == 1) max = Math.max(max, i - j - 1);
-            return max;
-        }
-        int [] a = new int [] {1,1,0,0,1,1,1,0,1};
 
         public int maxSumTwoNoOverlap(int[] a, int one, int two) {
             int n = a.length, r [] = new int [n+1], max = 0;
@@ -752,35 +681,6 @@ public class dpone { // 【动规三刷：】从最简单Middle 到 Hard, 希望
                 l[k]++; // 要统计完当前下标的结果了才更新
             }
             return ans;
-        }
-
-// TODO TODO TODO: 这个题，初始化为某个 Integer.MAX_VALUE/2 之类的值，用来不用判断 == －1, 而且直接加，也可以与正确答案区分开来。。。         
-        public int maxSumDivThree(int[] a) {
-            int n = a.length;
-            int [][] f = new int [n][3];
-            Arrays.stream(f).forEach(z -> Arrays.fill(z, -1));
-
-            f[n-1][a[n-1]%3] = a[n-1];
-            for (int i = n-2; i >= 0; i--) {
-                int m = a[i] % 3; // 接下来，想糊了，其实狠简单, 明天再改这个
-                if (m == 0) {
-                    f[i][0] = (f[i+1][0] == -1 ? 0 : f[i+1][0]) + a[i];
-                    for (int j = 1; j < 3; j++)
-                        f[i][j] = f[i+1][j];
-                } else if (m == 1) {
-                    f[i][0] = Math.max(f[i+1][2] != -1 ? f[i+1][2] + a[i] : -1, f[i+1][0]);
-                    f[i][1] = Math.max(f[i+1][0] == -1 ? 0 : f[i+1][0] + a[i], Math.max(f[i+1][1], a[i]));
-                    f[i][2] = Math.max(f[i+1][2], f[i+1][1] == -1 ? 0 : f[i+1][1] + a[i]);
-                } else { // m == 2
-                    f[i][0] = Math.max(f[i+1][1] == -1 ? 0 : f[i+1][1] + a[i], f[i+1][0]);
-                    f[i][1] = Math.max(f[i+1][1], f[i+1][2] == -1 ? 0 : f[i+1][2] + a[i]);
-                    f[i][2] = Math.max(f[i+1][2], f[i+1][0] == -1 ? 0 : f[i+1][0] + a[i]);
-                }
-            }
-            // System.out.println("f.length: " + f.length);
-            // for (int z = 0; z < f.length; ++z) 
-            //     System.out.println(Arrays.toString(f[z]));
-            return f[0][0];
         }
 
         public List<String> generateParenthesis(int n) { // 自己写的，参看一下别人写的。。。
@@ -1225,37 +1125,6 @@ public class dpone { // 【动规三刷：】从最简单Middle 到 Hard, 希望
             return false;
         }
 
-        public int longestMountain(int[] a) { // TODO TODO TODO: 56/75
-            int n = a.length, j = 0, i = 0, max = 0;
-            boolean up = false, dn = false;
-            while (i < n) {
-                while (!up && i < n-1 && a[i] >= a[i+1]) i++;
-                if (i == n) return max;
-                if (i > 0 && a[i] < a[i-1])
-                    j = i; // 1
-                else if (i > 0 && a[i] > a[i-1])
-                    j = i-1;
-                ++i;
-                if (i == n) return max;
-                while (i < n && a[i] > a[i-1]) {
-                    if (!up) up = true;
-                    i++;
-                }
-                if (i == n) return max;
-                while (i < n && a[i] < a[i-1]) {
-                    if (!dn) dn = true;
-                    i++;
-                }
-                if (up && dn) {
-                    max = Math.max(max, i - j);
-                    System.out.println("max: " + max);
-                    // up = false;
-                    dn = false;
-                }
-            }
-            return max;
-        }
-
         public boolean validPartition(int[] a) {// TODO TODO TODO: 这里还有点儿小问题
             int n = a.length;
             long [] s = new long [n+1];
@@ -1544,6 +1413,7 @@ public class dpone { // 【动规三刷：】从最简单Middle 到 Hard, 希望
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+
 
 
 

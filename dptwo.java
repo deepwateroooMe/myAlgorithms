@@ -482,22 +482,6 @@ public class dptwo {
             return r;
         }
 
-        public int maxPalindromes(String t, int k) { // TODO TODO TODO: 
-            int n = t.length();
-            char [] s = t.toCharArray();
-            boolean [][] f = new boolean [n][n];
-            for (int i = 0; i < n; i++) f[i][i] = true;
-            for (int i = n-2; i >= 0; i--) 
-                for (int j = i+1; j < n; j++) 
-                    if (s[i] == s[j] && (j - i <= 2 || f[i+1][j-1]))
-                        f[i][j] = true;
-            int [] dp = new int [n];
-            for (int i = 0; i+k <= n; i++)  // 这不对，不是说只有固定的 k 长，可以超过的。。。
-                if (f[i][i+k-1]) dp[i+k-1] = (i == 0 ? 0 : dp[i-1]) + 1;
-            // System.out.println(Arrays.toString(dp));
-            return dp[n-1];
-        }
-
         public int longestPalindrome(String S, String T) { // 1771: 提示二没有看懂。。。// TODO TODO TODO: 
             int m = S.length(), n = T.length(), mn = m + n;
             String st = new String(S + T);
@@ -561,37 +545,6 @@ public class dptwo {
             for (int i = n-2; i >= 0; i--) {
             }
         }
-
-        public int minDifficulty(int[] a, int d) { // 看见 d 《 10 我就在想回塑。。。【感觉有个限制条件可能没读懂。。。】 // TODO TODO TODO: 
-            n = a.length;
-            this.d = d;
-            backTracking(0, new ArrayList<Integer>(), a);
-            return min == Integer.MAX_VALUE ? -1 : min;
-        }
-        int n, d, min = Integer.MAX_VALUE;
-        void backTracking(int i, List<Integer> l, int [] a) { // 是遍历分配当前下标为 i 的任务到 d 天的某一天，不要写重复了。。。
-            if (i == n) {
-                if (l.size() == d) {
-                    int sum = l.stream().mapToInt(Integer::intValue).sum();
-                    if (sum < min) min = sum;
-                }
-                return ;
-            }
-            for (int j = 0; j < l.size(); j++) {
-                if (j > 0 && l.get(j) == l.get(j-1)) continue; // 我觉得这步还是可以跳过去的，虽然数组不能排序？
-                int prev = l.get(j);
-                l.set(j, Math.max(prev, a[i]));
-                backTracking(i+1, l, a);
-                l.set(j, prev);
-            }
-            // if (l.size() < d || l.size() <= i) { // 同用限制每天至少一件事
-            if (l.size() < d) { // 同用限制每天至少一件事
-                l.add(a[i]);
-                backTracking(i+1, l, a);
-                l.remove(l.size() - 1);
-            }
-        }
-        int [] a = new int [] {7,1,7,1,7,1}; // 9 15, 这个不过。。。
 
         static final int mod = (int)1e9 + 7; // 【动规：】试着用动规来写, 用动规还是写不到。。。
         public int waysToReachTarget(int t, int[][] a) { 
@@ -1415,9 +1368,6 @@ public class dptwo {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
-
-
-
 
 
 

@@ -13,36 +13,6 @@ import static java.util.stream.Collectors.toMap;
 public class dpfour {
     public static class Solution {
 
-// 【主要是长整型溢出之类的细节】：这个题的细节，比我想像得要再多一点儿，改天上午再写一下。。。 // TODO TODO TODO: 1977 157/257
-        public int numberOfCombinations(String t) { 
-            n = t.length(); s = t.toCharArray();
-            if (n == 1) return s[0] == '0' ? 0 : 1;
-            return dfs(0, 0);
-        }
-        static final int mod = (int)1e9 + 7;
-        char [] s;
-        int n;
-        Map<String, Integer> m = new HashMap<>(); // 它可能还要记一下前面的数字是多少？如果这样，数据过于离散，是需要用字典的
-        int dfs(int i, long j) { // 【繁琐深搜：】这个记忆化深搜，的难点在， Integer.MAX_VALUE 待特殊数字的处理，狠繁琐，改天再写。。。
-            if (i == n) return 1;
-            String key = i + "-" + j;
-            if (m.containsKey(key)) return m.get(key);
-            if (i < n && s[i] == '0') { // 以【0】打头, 不合法，直接返回
-                m.put(key, 0);
-                return 0;
-            }
-            long r = 0, v = 0;
-            int k = i;
-            for (k = i; k < n; k++) {
-                // if (v > (Long.MAX_VALUE - (s[k] - '0')) / 10l) break;
-                v = v * 10 + (s[k] - '0');
-                if (v >= j) r = (r + dfs(k+1, v)) % mod;
-            }
-            if (k < n) r = (r + dfs(k, v)) % mod;
-            m.put(key, (int)r);
-            return (int)r;
-        }
-
         // 【内存溢出：】Memory Limit Exceeded 71/83 这里的意思就是说， max 取值过大，而实际存在的元素少，就成了为一个数据的离散化处理
         // 线段树数据【离散化处理】：意思是说，分布过散的数据，重样集中集合到【0,n-1】下标，不取实际的值了，而用相对集中的下标代替 // TODO TODO TODO: 这里还有点儿没想透彻。。。
         public int lengthOfLIS(int[] a, int k) {  // 动规：＋线段树来找前 f【i】【v-k】范围内的最大值【这个题仍然成了学习题】
@@ -141,73 +111,6 @@ public class dpfour {
             return f[i][j%2] = fst ? false : true;
         }
 
-        public boolean canMouseWin(String[] a, int catLen, int mouseLen) { // 【返回的是：小老鼠赢了吗？】159/179 // TODO TODO TODO: 
-            this.catLen = catLen;
-            this.mouseLen = mouseLen;
-            m = a.length;
-            n = a[0].length(); N = m * n;
-            s = new char [m][n];
-            for (int i = 0; i < m; i++) s[i] = a[i].toCharArray();
-            f = new Boolean [N][N][2];
-            int mi = 0, mj = 0, ci = 0, cj = 0, fi = 0, fj = 0;
-            for (int i = 0; i < m; i++)
-                for (int j = 0; j < n; j++)
-                    if (s[i][j] == 'C') {
-                        ci = i; cj = j;
-                    } else if (s[i][j] == 'M') {
-                        mi = i; mj = j;
-                    } else if (s[i][j] == 'F') {
-                        fi = i; fj = j;
-                    }
-            fd = fi * n + fj;
-            return dfs(mi * n + mj, ci * n + cj, 0);
-        }
-        Boolean [][][] f;
-        int m, n, fd, N, mouseLen, catLen;
-        char [][] s;
-        boolean dfs(int ii, int jj, int k) { // 【想不明白：】哪里写错了。。。
-            boolean mouseTurn = (k % 2 == 0);
-            int len = (mouseTurn ? mouseLen : catLen);
-            int i = 0, j = 0;
-            if (mouseTurn) { i = ii / n; j = ii % n; }
-            else { i = jj / n; j = jj % n; }
-            if (k >= 2000) return !mouseTurn;
-            if (f[ii][jj][k%2] != null) return f[ii][jj][k%2];
-            if (ii == jj) return f[ii][jj][k%2] = false;
-            if (s[i][j] == 'F') return f[ii][jj][k%2] = mouseTurn;
-            for (int x = j-1; x >= Math.max(0, j - len); x--) { // 向左
-                if (s[i][x] == '#') break;
-                if (i * n + x == fd) return f[ii][jj][k%2] = mouseTurn;
-                if (mouseTurn && i * n + x == jj) continue; // 这就是从猫头上跳过了呀。。。
-                else if (!mouseTurn && i * n + x == ii) return f[ii][jj][k%2] = false;
-                if (mouseTurn && dfs(i * n + x, jj, k+1) || !mouseTurn && !dfs(ii, i * n + x, k+1)) return f[ii][jj][k%2] = mouseTurn;
-            }
-            for (int x = j+1; x <= Math.min(n-1, j + len); x++) { // 向右
-                if (s[i][x] == '#') break;
-                if (i * n + x == fd) return f[ii][jj][k%2] = mouseTurn; 
-                if (mouseTurn && i * n + x == jj) continue;
-                else if (!mouseTurn && i * n + x == ii) return f[ii][jj][k%2] = false;
-                if (mouseTurn && dfs(i * n + x, jj, k+1) || !mouseTurn && !dfs(ii, i * n + x, k+1)) return f[ii][jj][k%2] = mouseTurn;
-            }
-            for (int x = i-1; x >= Math.max(0, i - len); x--) { // 向上
-                if (s[x][j] == '#') break;
-                if (x * n + j == fd) return f[ii][jj][k%2] = mouseTurn;
-                if (mouseTurn && x * n + j == jj) continue;
-                else if (!mouseTurn && x * n + j == ii) return f[ii][jj][k%2] = false;
-                if (mouseTurn && dfs(x * n + j, jj, k+1) || !mouseTurn && !dfs(ii, x * n + j, k+1)) return f[ii][jj][k%2] = mouseTurn;
-            }
-            for (int x = i+1; x <= Math.min(m-1, i + len); x++) { // 向下
-                if (s[x][j] == '#') break;
-                if (x * n + j == fd) return f[ii][jj][k%2] = mouseTurn;
-                if (mouseTurn && x * n + j == jj) continue;
-                else if (!mouseTurn && x * n + j == ii) return f[ii][jj][k%2] = false;
-                if (mouseTurn && dfs(x * n + j, jj, k+1) || !mouseTurn && !dfs(ii, x * n + j, k+1)) return f[ii][jj][k%2] = mouseTurn;
-            }
-            if (mouseTurn && dfs(ii, jj, k+1) || !mouseTurn && !(dfs(ii, jj, k+1))) // 【原地不动】
-                return f[ii][jj][k%2] = mouseTurn;
-            return f[ii][jj][k%2] = !mouseTurn;
-        }
-
         public int getMaximumGenerated(int n) { // 鬼知道这个题说的是什么意思。。。。。
             if (n < 2) return n == 1 ? 1 : 0;
             int [] f = new int [n+1];
@@ -297,56 +200,6 @@ public class dpfour {
             }
             return f[i][j] = r;
         }        
-
-        public int longestStrChain(String[] a) { // TODO: 这里要找的是同一个词的一连串的桥接下来，不能两三个混搭，想想怎么写
-            int n = 16, m = a.length, max = 0, min = n;
-            int [] f = new int [n];
-            Arrays.fill(f, 1);
-            Set<String> [] s = new HashSet[n];
-            Arrays.setAll(s, z -> new HashSet<>());
-            for (String v : a) {
-                int i = v.length();
-                max = Math.max(max, i);
-                min = Math.min(min, i);
-                s[i].add(v);
-            }
-            for (int i = n-1; i >= 0; i--)  {
-                System.out.println("i: " + i);
-                System.out.println(Arrays.toString(new ArrayList<>(s[i]).toArray()));
-            }
-            for (int i = max; i >= min+1; i--) 
-                for (String v : s[i]) 
-                    for (int j = 0; j < i; j++) {
-                        String cur = (j == 0 ? "" : v.substring(0, j)) + (j == i-1 ? "" : v.substring(j+1, i));
-                        if (s[i-1].contains(cur)) f[i-1] = Math.max(f[i-1], f[i] + 1);
-                    }
-            System.out.println(Arrays.toString(f));
-            return Arrays.stream(f).max().getAsInt();
-        }
-        String [] a = new String [] {"ksqvsyq","ks","kss","czvh","zczpzvdhx","zczpzvh","zczpzvhx","zcpzvh","zczvh","gr","grukmj","ksqvsq","gruj","kssq","ksqsq","grukkmj","grukj","zczpzfvdhx","gru"};
-    i: 10
-    [zczpzfvdhx]
-    i: 9
-    [zczpzvdhx]
-    i: 8
-    [zczpzvhx]
-    i: 7
-    [ksqvsyq, grukkmj, zczpzvh]
-    i: 6
-    [zcpzvh, ksqvsq, grukmj]
-    i: 5
-    [zczvh, grukj, ksqsq]
-    i: 4
-    [gruj, kssq, czvh]
-    i: 3
-    [kss, gru]
-    i: 2
-    [ks, gr]
-    i: 1
-    []
-    i: 0
-    []
-    [1, 1, 9, 8, 7, 6, 5, 4, 3, 2, 1, 1, 1, 1, 1, 1]
 
         public long getDescentPeriods(int[] a) {
             int n = a.length, i = 0, j = 0;
@@ -464,23 +317,6 @@ public class dpfour {
             return max;
         }
 
-        public int longestSubsequence(int[] a, int dif) { // TLE TLE TLE: 34/39 O(N^2) 可能还需要一点儿特殊处理与优化 
-            int n = a.length, f [] = new int [n], max = 1;
-            Arrays.fill(f, 1);
-            for (int i = 1; i < n; i++) {
-                int v = a[i];
-                for (int j = i-1; j >= 0; j--) {
-                    if (a[i] - a[j] == dif) {
-                        f[i] = Math.max(f[i], f[j] + 1);
-                        break;
-                    } else if (a[i] == a[j])
-                        f[i] = Math.max(f[i], f[j]);
-                }
-                max = Math.max(max, f[i]);
-            }
-            return max;
-        }
-
         // public int bestTeamScore(int[] a, int[] b) { // TLE TLE TLE: 131/149 记忆化深搜会，TLE 
         //     n = a.length;
         //     for (int i = 0; i < n; i++)
@@ -525,24 +361,6 @@ public class dpfour {
                 }
             }
             return Arrays.stream(f).max().getAsInt();
-        }
-
-        public int maxSumDivThree(int[] a) { // TODO TODO TODO: 
-            this.a = a; n = a.length; m = 3;
-            f = new Integer [n][3];
-            return dfs(0, 0);
-        }
-        Integer [][] f;
-        int [] a;
-        int n, m;
-        int dfs(int i, int j) {
-            if (i == n) return 0;
-            if (f[i][j] != null) return f[i][j];
-            if (i == n-1) return (a[i] % m == j ? a[i] : 0);
-            int curMod = a[i] % m;
-            int r = a[i] + dfs(i+1, (curMod == j ? 0 : (j == 1 ? ))); // 这里的逻辑仍然是疯的。。。1262
-            r = Math.max(r, (curMod == j ? a[i] : 0) + dfs(i+1, 0));
-            return f[i][j] = r;
         }
 
         public int videoStitching(int[][] a, int t) {
@@ -723,44 +541,6 @@ public class dpfour {
             return f[i] = (int)ans;
         }
 
-        public int findMaxForm(String[] sa, int m, int n) { // TODO : 换种方法来写，真不敢想，我几天是用回塑来写这个题的。。。
-            for (String s : sa) 
-                if (valid(s, m+n, n)) ll.add(s);
-            Collections.sort(ll, (x, y) -> x.length() - y.length());
-            // min = 0;
-            // backTracking(0, m, n, 0); // TLE TLE TLE:
-            int min = 0;
-            // int [] f = new int [ll.size()];
-            for (int i = 0; i < ll.size(); i++)
-                return min;
-        }
-        Map<String, int []> ms = new HashMap<>(); // 【0-cnt, 1-cnt】
-        List<String> ll = new ArrayList<>();
-        int min;
-        void backTracking(int idx, int zero, int one, int len) {
-            if (min > 0 && ll.size() - idx + len < min) return;
-            if (idx == ll.size()) {
-                if (len > min) 
-                    min = len;
-                return ;
-            }
-            int [] cur = ms.get(ll.get(idx));
-            if (cur[0] <= zero && cur[1] <= one)
-                backTracking(idx+1, zero - cur[0], one - cur[1], len+1);
-            backTracking(idx+1, zero, one, len);
-        }        
-        boolean valid(String t, int l, int n) { // n 1s
-            int m = t.length(), cnt = 0;
-            if (m > l) return false;
-            char [] s = t.toCharArray();
-            for (char c : s) cnt += c - '0';
-            if (cnt <= n) {
-                ms.put(t, new int [] {m-cnt, cnt});
-                return true;
-            }
-            return false;
-        }
-
         // static final int mod = (int)1e9 + 7;
         // public int idealArrays(int n, int m) { // m: maxVal 写不到动规，写记忆化深搜
         //     int [][] f = new int [n+1][m+1]; //f[i][j]: 到第 i 个数，最大值用到 j 的数组的数目
@@ -932,23 +712,6 @@ public class dpfour {
                 }
             }
             return ans;
-        }
-
-        public int minCut(String t) { // 最少切割的意思是说，每个回文尽可能地长 // TODO TODO TODO: 
-            int n = t.length(); char [] s = t.toCharArray();
-            boolean [][] f = new boolean [n][n];
-            for (int i = 0; i < n; i++) f[i][i] = true;
-            for (int i = n-2; i >= 0; i--)
-                for (int j = i+1; j < n; j++) 
-                    if (s[i] == s[j] && (j - i <= 2 || f[i+1][j-1])) f[i][j] = true;
-            int [] r = new int [n+1];
-            Arrays.fill(r, Integer.MAX_VALUE);
-            r[0] = 1;
-            for (int j = 1; j < n; j++)
-                for (int i = j-1; i >= 0; i--) 
-                    if (f[i][j]) r[j+1] = Math.min(r[j], r[i] + 1);
-            System.out.println(Arrays.toString(r));
-            return r[n];
         }
 
         Map<Integer, Integer> m = new HashMap<>();
@@ -1318,6 +1081,13 @@ public class dpfour {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+
+
+
+
+
+
+
 
 
 

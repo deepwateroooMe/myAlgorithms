@@ -12,43 +12,6 @@ import static java.util.stream.Collectors.toMap;
 public class dpthree {
     public static class Solution {
 
-// 【 n<= 500, 2^10】【 o<= 50, 2^6】【YN:2^2】【YN:2^2】【可以建一个 20 （10+6+2+2）位的 mask】1397
-        public int findGoodStrings(int n, String S, String T, String E) { // 【哪里没有写对，上下字符的处理，与受限字符的处理，可能不对】// TODO TODO TODO: 
-            this.n = n;
-            m = E.length();
-            s = S.toCharArray();
-            t = T.toCharArray();
-            e = E.toCharArray();
-            return dfs(0, 0, true, true);
-        }
-        Map<Integer, Integer> f = new HashMap<>(); // 动规：记忆化用它，因为2^20=(int)1e6 数据规模有点儿大，但是是离散化的，用字典比较好
-        static final int mod = (int)1e9 + 7;
-        char [] s, t, e;
-        int m, n;
-        int dfs(int i, int j, boolean lo, boolean hi) {
-            if (j == m) return 0; // 是说，包含了 evil 字符串为子串，【不合法】
-            if (i == n) return j < m ? 1 : 0;
-            int key = getKey(i, j, lo, hi);
-            if (f.containsKey(key)) return f.get(key);
-            // 遍历当前下标 i 所有【可能，且合法】的字符选择并深搜：受最小最大限制，且不能出现在不可出现的字符串
-            int x = lo ? s[i] - 'a' : 0;   // 【等于S:】最小字符受限，
-            int y = hi ? t[i] - 'a' : 25; // 【等于T:】最大字符受限
-            // System.out.println("x: " + x);
-            // System.out.println("y: " + y);
-            long r = 0;
-            for (int k = x; k <= y; k++) {
-                // System.out.println("k: " + k);
-                r = (r + (long)dfs(i+1, j + (k == e[j] - 'a' ? 1 : 0), lo && k == s[i] - 'a', hi && k == t[i] - 'a')) % mod;
-                // System.out.println("r: " + r);
-            }
-            f.put(key, (int)r);
-            return (int)r;
-        }
-        int getKey(int i, int j, boolean l, boolean r) {
-            // return ((1 << i) << 10) | ((1 << j) << 4) | ((1 << (l ? 1 : 0)) << 2) | (1 << (r ? 1 : 0));
-            return (1 << i) << 10 | (1 << j) << 4 | (1 << (l ? 1 : 0)) << 2 | 1 << (r ? 1 : 0); // 【没括号】
-        }
-
         public int minimumTime(String t) { // 不知道这个题说的是什么意思 // TODO TODO TODO: 
             int n = t.length(), l [] = new int [n+1], r [] = new int [n+1], i = 0;
             char [] s = t.toCharArray();
@@ -162,171 +125,6 @@ public class dpthree {
             return max;
         }
 
-        class Node { // TODO TODO TODO: 55/58
-            int s, ll, rr; // ll: maxLeft, rr: minRight: 主要是用来帮助父节点判断是否是 BST 来用来着。。。
-            boolean b;
-            Node l, r;
-            public Node() {
-                // l = new Node(); // 栈溢出
-                // r = new Node();
-            }
-        }
-        boolean allNeg = true;
-        public int maxSumBST(TreeNode root) {
-            Node r = new Node();
-            traversal(root, r);
-            if (allNeg) return 0;
-            return getMax(r);
-        }
-        int max = 0;
-        int getMax(Node r) {
-            if (r == null) return 0;
-            if (r.b) max = Math.max(max, r.s);
-            return Math.max(max, Math.max(getMax(r.l), getMax(r.r)));
-        }
-        void traversal(TreeNode r, Node p) {
-            if (r == null) {
-                p.b = true;
-                p = null; // <<<<<<<<<<<<<<<<<<<< 不起效？
-                return ;
-            }
-            // System.out.println("\n r.val: " + r.val);
-            if (r.val >= 0 && allNeg) allNeg = false;
-            if (r.left == null && r.right == null) {
-                p.s = r.val;
-                p.b = true;
-                p.ll = p.s; // 【叶子节点：】左右最值，是自己
-                p.rr = p.s;
-                return;
-            }
-            p.l = new Node();
-            p.r = new Node();
-            // p.l.b = true;
-            // p.r.b = true;
-            traversal(r.left, p.l);
-            traversal(r.right, p.r);
-            // System.out.println("\n r.val: " + r.val);
-            p.s = p.l.s + p.r.s + r.val; // 左右子树，与父节点和
-            // p.b = (p.l == null || p.l.b && p.l.ll < r.val) && (p.r == null || p.r.b && r.val < p.r.rr); // BST: 左中右，小大关系
-            p.b = (p.l.b || p.l.s == 0) && (p.r.b || p.r.s == 0) && (p.l.ll == 0 || p.l.ll < r.val) && (p.r.rr == 0 || r.val < p.r.rr);
-            // System.out.println("p.b: " + p.b);
-            // System.out.println("p.s: " + p.s);
-            p.ll = Math.max(p.l.ll, r.val); // 【这里不要更新到根节点】：
-            // p.rr = Math.min(Math.min(p.l.ll, p.r.rr), r.val);
-            p.rr = Math.min(p.r.rr, r.val);
-            // p.rr = Math.min((p.r.s == 0 ? Integer.MAX_VALUE : p.r.rr), r.val);
-        }
-
-        public int maxSum(int[] a, int[] b) { // // TODO TODO TODO: 35/82 1537
-            int m = a.length, n = b.length, i = 0, j = 0, x = -1, y = -1;
-            long [] l = new long [m+1], r = new long [n+1];
-            for ( i = 0; i < m; i++) l[i+1] = l[i] + a[i];
-            for ( i = 0; i < n; i++) r[i+1] = r[i] + b[i];
-            // System.out.println(Arrays.toString(l));
-            // System.out.println(Arrays.toString(r));
-            Map<Integer, List<Integer>> mi = new HashMap<>();
-            i = 0; j = 0;
-            while (i < m && j < n) {
-                if (a[i] == b[j]) {
-                    mi.put(a[i], List.of(i, j));
-                    i++;
-                    j++;
-                } else if (a[i] < b[j]) i++;
-                else j++;
-            }
-            // System.out.println("mi.size(): " + mi.size());
-            // for (Map.Entry<Integer, List<Integer>> en : mi.entrySet()) {
-            //     System.out.print(en.getKey() + ": ");
-            //     System.out.println(Arrays.toString(en.getValue().toArray()));
-            // }
-            long ans = 0;
-            i = 0; j = 0;
-            for (Map.Entry<Integer, List<Integer>> en : mi.entrySet()) {
-                int k = en.getKey();
-                List<Integer> li = en.getValue();
-                if (x == -1 && y == -1) {
-                    x = li.get(0);
-                    y = li.get(1);
-                    ans = Math.max(l[x], r[y]); // 不带公共点
-                } else {
-                    ans += Math.max(l[li.get(0)] - l[x], r[li.get(1)] - r[y]); // 带一端公共点：带头，不带尾。。。
-                    x = li.get(0);
-                    y = li.get(1);
-                }
-            }
-            if (x != -1 && y != -1)
-                ans += Math.max(l[m] - l[x], r[n] - r[y]);
-            else return (int)Math.max(l[m], r[n]);
-            return (int)ans;
-        }
-
-        public boolean isScramble(String S, String T) {
-            if (S.equals(T)) return true;
-            int m = S.length(), n = T.length();
-            char [] s = S.toCharArray();
-            char [] t = T.toCharArray();
-        }
-
-        static final int mod = (int)1e9 + 7;
-        int [][] dirs = {{-1, 0}, {0, -1}, {-1, -1}};
-        public int[] pathsWithMaxScore(List<String> l) {
-            int m = l.size(), n = l.get(0).length(), i = 0, j = 0;
-            int [][] f = new int [m][n];
-            Arrays.stream(f).forEach(z -> Arrays.fill(z, -1));
-            f[m-1][n-1] = 0;
-            long [][] r = new long [m][n];
-            r[m-1][n-1] = 1;
-            for (i = m-1; i >= 0; i--) 
-                for (j = n-1; j >= 0; j--) {
-                    if (f[i][j] == -1) continue;
-                    char c = l.get(i).charAt(j);
-                    if (c == 'X') continue;
-                    if (c == 'S' || c != 'X' || c == 'E') {
-                        for (int [] d : dirs) {
-                            int x = i + d[0], y = j + d[1];
-                            if (x < 0 || y < 0 || l.get(x).charAt(y) == 'X') continue;
-                            int v = f[i][j] + (Character.isDigit(l.get(x).charAt(y)) ? l.get(x).charAt(y) - '0' : 0);
-                            if (v > f[x][y]) {
-                                f[x][y] = v;
-                                r[x][y] = 1;
-                            } else if (v == f[x][y])
-                                r[x][y]++;
-                            // else
-                            //     r[x][y] = (r[x][y] + r[i][j]) % mod;
-                        }
-                    }
-                }
-            System.out.println("f.length: " + f.length);
-            for (int z = 0; z < f.length; ++z) 
-                System.out.println(Arrays.toString(f[z]));
-            if (i < 0 && j < 0 && f[0][0] != -1) return new int [] {f[0][0], (int)r[0][0]};
-            else return new int [] {0, 0};
-        }
-        List<String> a = List.of("E11345","X452XX","3X43X4","422812","284522","13422S"); // "E11","XXX","11S"
-
-        public int maxPalindromes(String t, int k) { // TODO TODO TODO: 
-            int n = t.length();
-            char [] s = t.toCharArray();
-            boolean [][] f = new boolean [n][n]; // 方便 O[1] 查询是否为回文
-            for (int i = 0; i < n; i++) f[i][i] = true;
-            for (int i = n-1; i >= 0; i--) 
-                for (int j = i+1; j < n; j++) 
-                    if (s[i] == s[j] && (j - i <= 2 || f[i+1][j-1]))
-                        f[i][j] = true;
-            int [] dp = new int [n];
-            for (int i = k-1; i < n; i++) {
-                if (i == k-1 && f[0][i]) {
-                    dp[i] = 1;
-                    continue;
-                }
-                for (int j = 0; j < i; j++) 
-                    if (f[j+1][i] && (i - j - 1 >= k)) dp[i] = Math.max(dp[i], dp[j] + 1);
-                dp[i] = Math.max(dp[i], dp[i-1]);
-            }
-            // System.out.println(Arrays.toString(dp));
-            return dp[n-1];
-        }
-
 // 【记忆化深搜：】什么题用记忆，什么可以不用记忆，看来现在还是傻傻分不清楚。。【爱表哥，爱生活！！！活宝妹就是一定要嫁给亲爱的表哥！！！】
         public boolean hasValidPath(char[][] a) {
             this.a = a;
@@ -366,24 +164,6 @@ public class dpthree {
             return f[i][j] = Math.max(a[i] * b[j] + dfs(i+1, j+1), a[n-(j-i)-1] * b[j] + dfs(i, j+1));
         }
 
-        int [][] dirs = {{0, -1}, {-1, 0}}; // 思路可能想错了。。。
-        public int calculateMinimumHP(int[][] a) {
-            int m = a.length, n = a[0].length;
-            int [][] f = new int [m][n];
-            Arrays.stream(f).forEach(z -> Arrays.fill(z, Integer.MIN_VALUE / 2));
-            f[m-1][n-1] = a[m-1][n-1];
-            for (int i = m-1; i >= 0; i--) 
-                for (int j = n-1; j >= 0; j--) {
-                    if (f[i][j] == Integer.MIN_VALUE / 2) continue;
-                    for (int [] d : dirs) {
-                        int x = i + d[0], y = j + d[1];
-                        if (x < 0 || y < 0) continue;
-                        f[x][y] = Math.max(f[x][y], f[i][j] + a[x][y]);
-                    }
-                }
-            return f[0][0] + 1;
-        }
-
         public int minAbsDifference(int[] a, int goal) {
             n = a.length; m = n / 2; this.a = a;
             TreeSet<Integer> l = new TreeSet<>(), r = new TreeSet<>();
@@ -407,21 +187,6 @@ public class dpthree {
             }
             backTracking(i+1, j + a[i], end, l);
             backTracking(i+1, j, end, l);
-        }
-
-        public int minCut(String t) { // 最小切割数：那么每个回文子串，尽可能地最长。。。132 // TODO TODO TODO: 
-            int n = t.length();
-            char [] s = t.toCharArray();
-            boolean [][] f = new boolean [n][n]; // 方便O[1] 查询是否为回文
-            for (int i = 0; i < n; i++) f[i][i] = true;
-            for (int i = n-2; i >= 0; i--)
-                for (int j = i+1; j < n; j++)
-                    if (s[i] == s[j] && (j - i <= 2 || f[i+1][j-1])) f[i][j] = true;
-            int [][] r = new int [n][n]; // 统计最少切割等: 还是不知道怎么算最长回文。。。
-            for (int i = 0; i < n; i++) r[0][i] = 1;
-            for (int i = 0; i < n; i++) 
-                for (int j = i+1; j < n; j++) {
-                }
         }
 
         static final int mod = (int)1e9 + 7; // 注意数、计数的原理：生成与撤销的原理
@@ -504,39 +269,6 @@ public class dpthree {
                         f[i][j] = true;
                         // max = Math.max(max, j - i + 1);
                     }
-        }
-
-        public int countPartitions(int[] a, int k) { // 2518 这个题目可能思路不太对
-            int n = a.length; this.a = a;
-            long sum = Arrays.stream(a).asLongStream().sum();
-            if (sum < 2l * k) return 0;
-            f = new Integer [n][k+1];
-            return quickPow(2, n) - dfs(0, k) + 1;
-        }
-        static final int mod = (int)1e9 + 7;
-        int [] a;
-        Integer [][] f;
-        int n;
-        int dfs(int i, int j) { // sum < j
-            if (i == n) return 0;
-            if (j == 0) return f[i][j] = 0; // ？
-            if (f[i][j] != null) return f[i][j];
-            long r = dfs(i+1, j);
-            if (a[i] <= j)
-                r = (r + dfs(i+1, j - a[i])) % mod;
-            return f[i][j] = (int)r;
-        }
-        int quickPow(int v, int n) {
-            long r = 1;
-            while (n > 0) {
-                if (n % 2 == 1) {
-                    r *= v;
-                    r %= mod;
-                }
-                v *= v;
-                n /= 2;
-            }
-            return (int)r;
         }
 
         public int[] countBits(int n) {
@@ -845,26 +577,6 @@ public class dpthree {
             return ans;
         }
 
-        public int mincostTickets(int[] a, int[] b) {
-            int n = a.length;
-            int [] f = new int [n];
-            f[0] = b[0];
-            for (int i = 1; i < n; i++) {
-                System.out.println("\n i: " + i);
-                System.out.println("a[i]: " + a[i]);
-    f[i] = f[i-1] + b[0];
-                for (int j = i-1; j >= 0; j--) {
-                    if (a[i] - a[j] <= 7) f[i] = Math.min(f[i], (j == 0 ? 0 : f[j-1]) + b[1]);
-                    if (a[i] - a[j] == 30) f[i] = Math.min(f[i], f[j] + b[2]);
-                }
-                System.out.println(Arrays.toString(f));
-            }
-            System.out.println(Arrays.toString(f));
-            return f[n-1];
-        }
-        int [] a = new int [] {1,4,6,7,8,20};
-        int [] b = new int [] {7, 2, 15};
-
         public int maxProfit(int[] a, int v) { // TODO TODO TODO: 714
             int n = a.length;
             int [] buy = new int [n], sell = new int [n];
@@ -873,7 +585,7 @@ public class dpthree {
                 sell[i] = a[i] + buy[i-1] - v; // 如果卖
                 buy[i] = Math.max(a, b)
             }
-        }
+        } 
 
         public int numberOfArithmeticSlices(int[] a) { // TODO TODO TODO: 
             int n = a.length, i = 1, j = 0, r = 0, d = a[1] - a[0];
@@ -910,39 +622,6 @@ public class dpthree {
                     l.remove(s);
                 }
             }
-        }
-
-        public int waysToMakeFair(int[] a) { // 1664 // TODO TODO TODO: 
-            int n = a.length;
-            int [] l = new int [n], r = new int [n];
-            for (int i = 0; i < n; i++)
-                if (i % 2 == 0) {
-                    r[i] = (i == 0 ? 0 : r[i-2]) + a[i];
-                    if (i > 0)
-                        l[i] = l[i-1];
-                } else {
-                    l[i] = (i == 1 ? 0 : l[i-2]) + a[i];
-                    if (i > 0) r[i] = r[i-1];
-                }
-            // System.out.println(Arrays.toString(l));
-            // System.out.println(Arrays.toString(r));
-            int ans = 0, oddSum = (n % 2 == 0 ? l[n-1] : l[n-2]);
-            int evnSum = (n % 2 == 0 ? r[n-2] : r[n-1]);
-            for (int i = 0; i < n; i++) {
-                // System.out.println("\n i: " + i);
-                if (i == 0) {
-                    if (evnSum - r[0] == oddSum) ans++;
-                    continue;
-                } else if (i == n-1) {
-                    if (i % 2 == 0 && oddSum - l[n-1] == evnSum
-                        || i % 2 == 1 && evnSum - r[n-1] == oddSum) ans++;
-                    continue;
-                } else {
-                    if (i % 2 == 0 && r[i-2] + oddSum - l[i] == l[i] + evnSum - r[i]) ans++;
-                    else if (i % 2 == 1 && l[i-1] + evnSum - r[i] == r[i] + oddSum - l[i]) ans++;
-                }
-            }
-            return ans;
         }
 
         public int uniquePaths(int m, int n) { // 不知道写错在哪里，换
@@ -1195,6 +874,28 @@ public class dpthree {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
