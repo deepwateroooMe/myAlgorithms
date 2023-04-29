@@ -741,67 +741,95 @@ public class cmp {
         //     return ans;
         // }
 
-        // public long countOperationsToEmptyArray(int[] nums) {
+        // public int findMaxFish(int[][] a) {
+        //     m = a.length; n = a[0].length; this.a = a; 
+        //     f = new boolean [m][n];
+        //     for (int i = 0; i < m; i++)
+        //         for (int j = 0; j < n; j++)  // 这里是要写连通块，也可以用 BFS 来做
+        //             if (a[i][j] > 0) 
+        //                 max = Math.max(max, bfs(i, j));
+        //     return max;
+        // }
+        // int [][] dirs = {{1, 0}, {0, 1}, {0, -1}, {-1, 0}};
+        // int [][] a;
+        // boolean [][] f;
+        // int m, n, max = 0;
+        // int bfs(int u, int v) {
+        //     int r = 0;
+        //     Deque<int []> q = new ArrayDeque<>();
+        //     q.offer(new int [] {u, v});
+        //     f[u][v] = true;
+        //     while (!q.isEmpty()) {
+        //         int [] cur = q.poll();
+        //         int x = cur[0], y = cur[1];
+        //         r += a[x][y];
+        //         a[x][y] = 0;
+        //         for (int [] d : dirs) {
+        //             int i = x + d[0], j = y + d[1];
+        //             if (i < 0 || i >= m || j < 0 || j >= n || f[i][j] || a[i][j] == 0) continue;
+        //             f[i][j] = true;
+        //             q.offer(new int [] {i, j});
+        //         }
+        //     }
+        //     return r;
         // }
 
-        public int findMaxFish(int[][] a) {
-            m = a.length; n = a[0].length; this.a = a; 
-            f = new boolean [m][n];
-            for (int i = 0; i < m; i++)
-                for (int j = 0; j < n; j++)  // 这里是要写连通块，也可以用 BFS 来做
-                    if (a[i][j] > 0) {
-                        // System.out.println("\n i: " + i);
-                        // System.out.println("j: " + j);
-                        int v = bfs(i, j);
-                        // System.out.println("v: " + v);
-                        max = Math.max(max, v);
-                        // System.out.println("max: " + max);
-                    }
-            return max;
+        // 不知道这个题目说的是什么意思，怎么办呢？先试着用万能的【记忆化深搜】搜寻试试看？试着用用【最小值－线段树】，看看？
+        public long countOperationsToEmptyArray(int[] a) {
+            n = a.length; this.a = a; max = Arrays.stream(a).max().getAsInt(); m = 2 * n + 1;
+            // 【最小值线段树】：这里我是要把值全填进去，构建这棵树先？
+            buildTree(0, n-1);
+            f = new Long [m][m];
+            return dfs(0, n-1);
         }
-        int [][] dirs = {{1, 0}, {0, 1}, {0, -1}, {-1, 0}};
-        int [][] a;
-        boolean [][] f;
-        int m, n, max = 0;
-        int bfs(int u, int v) {
-            int r = 0;
-            Deque<int []> q = new ArrayDeque<>();
-            q.offer(new int [] {u, v});
-            f[u][v] = true;
-            while (!q.isEmpty()) {
-                int [] cur = q.poll();
-                int x = cur[0], y = cur[1];
-                r += a[x][y];
-                a[x][y] = 0;
-                for (int [] d : dirs) {
-                    int i = x + d[0], j = y + d[1];
-                    if (i < 0 || i >= m || j < 0 || j >= n || f[i][j] || a[i][j] == 0) continue;
-                    f[i][j] = true;
-                    q.offer(new int [] {i, j});
-                }
+        Long [][] f; int [] t; // 线段树
+        int [] a; int m, n, max;
+        long dfs(int i, int j) {
+            if (i == j) return 1;
+            if (f[i][j] != null) return f[i][j];
+           long ans = Long.MAX_VALUE;
+            int min = query(1, 1, m, i+1, j+1); // 查询整个区间的最小值 
+            // if (a[i] == min) return dfs(i+1, j); // 这里 i 就会越界，必须区间查询最小值
+            int curVal = query(1, 1, m, i+1, i+1);
+            if (min == curVal) return f[i][j] = 1 + dfs(i+1, j);
+            update(1, 1, m, j+2, curVal);  // 把这个当前元素贴尾巴上去
+            return f[i][j] = 1 + dfs(i+1, j+1);
+        }
+        int query(int u, int l, int r, int L, int R) { // 查询，区间【L,R】的最小值 
+            if (L <= l && r <= R) return t[u];
+            int m = l + (r - l) / 2;
+            int leftMin = Integer.MAX_VALUE, rightMin = Integer.MAX_VALUE;
+            if (L <= m) leftMin = query(u << 1, l, m, L, R);
+            if (m+1 <= R) rightMin = query(u << 1 | 1, m+1, r, L, R);
+            return Math.min(leftMin, rightMin);
+        }
+        void buildTree(int l, int r) {
+            t = new int [8 * n]; // 这里，我想给足它空间最长，以空间换时间，不用数组左移，而是自动向右增长, 最差情况，数组变2 倍长【变成一个自动右滑的滑动窗口】？
+            for (int i = 0; i < m; i++) // 这个题目，占用的空间还是太多了，可能不适合
+                update(1, 1, m, i+1, (i < n ? a[i] : Integer.MAX_VALUE)); // 通过每个值更新的方式，构建了这树
+            System.out.println(Arrays.toString(t));
+        }
+        void update(int u, int l, int r, int i, int v) {
+            if (l == r) {
+                t[u] = v;
+                return ;
             }
-            return r;
-        }
-        // void dfs(int i, int j, int k) {
-        //     if (i < 0 || i >= m || j < 0 || j >= n || v[i][j] || a[i][j] == 0) return;
-        //     v[i][j] = true;
-        //     k += a[i][j];
-        //     for (int [] d : dirs)
-        //         dfs(i+d[0], j + d[1], k);
-        //     k -= a[i][j];
-        //     v[i][j] = false;
-        // }
-        
+            int m = l + (r - l) / 2;
+            if (i <= m) update(u << 1, l, m, i, v);
+            else update(u << 1 | 1, m+1, r, i, v);
+            t[u] = Math.min(t[u << 1], t[u << 1 | 1]); // 更新父节点的最小值 
+        }        
     }
     public static void main (String[] args) { 
         Solution s = new Solution ();
 
-        int [][] a = new int [][] {{0,2,1,0},{4,0,0,3},{1,0,0,4},{0,3,2,0}};
-        System.out.println("a.length: " + a.length);
-        for (int z = 0; z < a.length; ++z) 
-            System.out.println(Arrays.toString(a[z]));
+        // int [] a = new int [] {1,2,4,3};
+        // int [] a = new int [] {3, 4, -1};
+        // int [] a = new int [] {-14,-16,-17,10};
+        int [] a = new int [] {-7,18,4,0,-13};
+        System.out.println(Arrays.toString(a));
 
-        int r = s.findMaxFish(a);
+      long r = s.countOperationsToEmptyArray(a);
         System.out.println("r: " + r);
     }
 }
