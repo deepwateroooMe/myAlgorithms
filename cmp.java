@@ -664,85 +664,94 @@ public class cmp {
         //     return gcd(y, x % y);
         // }
 
+// // TODO TODO TODO: 703/717 这个题目出得太恶心人了。
+//         // 最近的比较狠 EVIL... 出题者居心何在呢？
+//         // 【活宝妹就是一定要嫁给亲爱的表哥！！！爱表哥，爱生活！！！】
+//         public int [] getSubarrayBeauty(int[] a, int k, int v) { 
+//             int n = a.length, min = Arrays.stream(a).min().getAsInt();
+//             int [] r = new int [n - k + 1];
+//             if (min >= 0) return r;
+//             int idx = 0, cnt = 0, val = 0;
+//             for (int i = 0; i < n; i++)
+//                 if (a[i] >= 0) a[i] = 0;
+//             System.out.println(Arrays.toString(a));
+//             Queue<Integer> q;
+//             ArrayDeque<Integer> s = new ArrayDeque<>();
+//             boolean larger = false;
+//             q = new PriorityQueue<>((x, y)-> a[x] - a[y]); // 按值【升序】排列
+//             for (int i = 0; i < k-1; i++)
+//                 q.offer(i);
+//             for (int i = k-1; i < n; i++) {
+//                 while (!q.isEmpty() && q.peek() <= i-k) q.poll();  // 这些不合法，扔掉。。。
+//                 cnt = 0;
+//                 while (!q.isEmpty() && a[q.peek()] <= a[i]) {
+//                     while (!q.isEmpty() && q.peek() <= i-k) {
+//                         q.poll();
+//                         continue;
+//                     }
+//                     if (!q.isEmpty() && a[q.peek()] <= a[i]) {
+//                         val = a[q.peek()];
+//                         s.offerFirst(q.poll());
+//                         cnt++;
+//                         if (cnt == v) {
+//                             r[idx] = val;
+//                         }
+//                     }
+//                 }
+//                 q.offer(i);
+//                 while (cnt < v && !q.isEmpty()) {
+//                     while (!q.isEmpty() && q.peek() <= i-k) {
+//                         q.poll();
+//                         continue;
+//                     }
+//                     // if (!q.isEmpty() && a[q.peek()] <= a[i]) {
+//                     if (!q.isEmpty()) {
+//                         val = a[q.peek()];
+//                         s.offerFirst(q.poll());
+//                         cnt++;
+//                         if (cnt == v) {
+//                             r[idx] = val;
+//                         }
+//                     }
+//                 }
+//                 idx++;
+//                 while (!s.isEmpty())
+//                     if (s.peekFirst() <= i-k) s.pollFirst();
+//                     else
+//                         q.offer(s.pollFirst());
+//             }
+//             return r;
+//         }
 
-// TODO TODO TODO: 703/717 这个题目出得太恶心人了。
-        // 最近的比较狠 EVIL... 出题者居心何在呢？
-        // 【活宝妹就是一定要嫁给亲爱的表哥！！！爱表哥，爱生活！！！】
-        public int [] getSubarrayBeauty(int[] a, int k, int v) { 
-            int n = a.length, min = Arrays.stream(a).min().getAsInt();
-            int [] r = new int [n - k + 1];
-            if (min >= 0) return r;
-            int idx = 0, cnt = 0, val = 0;
-            for (int i = 0; i < n; i++)
-                if (a[i] >= 0) a[i] = 0;
-            System.out.println(Arrays.toString(a));
-            Queue<Integer> q;
-            ArrayDeque<Integer> s = new ArrayDeque<>();
-            boolean larger = false;
-            q = new PriorityQueue<>((x, y)-> a[x] - a[y]); // 按值【升序】排列
-            for (int i = 0; i < k-1; i++)
-                q.offer(i);
-            for (int i = k-1; i < n; i++) {
-                while (!q.isEmpty() && q.peek() <= i-k) q.poll();  // 这些不合法，扔掉。。。
-                cnt = 0;
-                while (!q.isEmpty() && a[q.peek()] <= a[i]) {
-                    while (!q.isEmpty() && q.peek() <= i-k) {
-                        q.poll();
-                        continue;
-                    }
-                    if (!q.isEmpty() && a[q.peek()] <= a[i]) {
-                        val = a[q.peek()];
-                        // System.out.println("val: " + val);
-                        s.offerFirst(q.poll());
-                        cnt++;
-                        // System.out.println("cnt: " + cnt);
-                        if (cnt == v) {
-                            r[idx] = val;
-                            // System.out.println("0     r[idx]: " + r[idx]);
-                        }
-                    }
-                }
-                q.offer(i);
-                // System.out.println("cnt: " + cnt);
-                // System.out.println("q.size(): " + q.size());
-                while (cnt < v && !q.isEmpty()) {
-                    while (!q.isEmpty() && q.peek() <= i-k) {
-                        q.poll();
-                        continue;
-                    }
-                    // if (!q.isEmpty() && a[q.peek()] <= a[i]) {
-                    if (!q.isEmpty()) {
-                        val = a[q.peek()];
-                        s.offerFirst(q.poll());
-                        cnt++;
-                        // System.out.println("cnt: " + cnt);
-                        // System.out.println("val: " + val);
-                        if (cnt == v) {
-                            r[idx] = val;
-                            // System.out.println("1     r[idx]: " + r[idx]);
-                        }
-                    }
-                }
-                idx++;
-                while (!s.isEmpty())
-                    if (s.peekFirst() <= i-k) s.pollFirst();
-                    else
-                        q.offer(s.pollFirst());
-            }
-            return r;
-        }
+        // public int maximizeSum(int[] a, int k) {
+        //     int n = a.length, max = Arrays.stream(a).max().getAsInt();
+        //     return max * k + k * (k-1) / 2;
+        // }
+
+        // public int [] findThePrefixCommonArray(int [] a, int [] b) {
+        //     int l = 0, r = 0, ll = 0, rr = 0;
+        //     int n = a.length;
+        //     int [] ans = new int [n];
+        //     for (int i = 0; i < n; i++) {
+        //         if (a[i] < 32) l |= (1 << a[i]); else ll |= (1 << (a[i] - 32));
+        //         if (b[i] < 32) r |= (1 << b[i]); else rr |= (1 << (b[i] - 32));
+        //         int v = Integer.bitCount(l & r) + Integer.bitCount(ll & rr);
+        //        ans[i] = v;
+        //     }
+        //     return ans;
+        // }
+
+        
     }
     public static void main (String[] args) { 
         Solution s = new Solution ();
-        // int [] a = new int [] {-29,48,-25,-47,-29,9};
-        int [] a = new int [] {-17,29,-27,-41,-1,-50};
 
-        // int [] a = new int [] {-3, 1, 2, -3, 0, -3};
-        // int [] a = new int [] {1,-1,-3,-2,3};
-        // int [] a = new int [] {-21, -24, 50};
+        int [] a = new int [] {20, 2, 14, 19, 31, 9, 30, 13, 17, 33, 10, 3, 26, 28, 5, 8, 6, 29, 22, 21, 23, 4, 1, 27, 24, 11, 12, 18, 7, 25, 32, 16, 15};
+        int [] b = new int [] {7, 1, 3, 5, 11, 2, 16, 26, 4, 13, 22, 23, 31, 9, 18, 19, 17, 8, 32, 12, 24, 25, 20, 28, 6, 33, 14, 30, 15, 21, 10, 29, 27};
         System.out.println(Arrays.toString(a));
+        System.out.println(Arrays.toString(b));
 
-        int [] r = s.getSubarrayBeauty(a, 5, 5);
+        int [] r = s.findThePrefixCommonArray(a, b);
         System.out.println(Arrays.toString(r));
     }
 }
@@ -753,16 +762,3 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
-
-
-
-
-
-
-
-
-
-
-
-
-
