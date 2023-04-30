@@ -139,71 +139,6 @@ public class dpfive {
             return (int)ans;
         }
 
-
-        // 算出最长公有子序列之后，要用这个东西把最短XX 给还原回来。。。。。
-        public String shortestCommonSupersequence(String S, String T) { // 1092
-            int m = S.length(), n = T.length();
-            char [] s = S.toCharArray();
-            char [] t = T.toCharArray();
-            int [][] f = new int [m+1][n+1];
-            for (int i = 0; i < m; i++) 
-                for (int j = 0; j < n; j++)
-                    if (s[i] == t[j]) f[i+1][j+1] = f[i][j] + 1;
-                    else f[i+1][j+1] = Math.max(f[i+1][j], f[i][j+1]);
-            if (f[m][n] == Math.max(m, n)) return S;
-            System.out.println("f.length: " + f.length);
-            for (int z = 0; z < f.length; ++z) 
-                System.out.println(Arrays.toString(f[z]));
-            // 然后根据上面的统计结果，往回倒。。。。。
-            int i = 0, j = 0;
-            StringBuilder sb = new StringBuilder("");
-            while (i < m && j < n) {
-                if (s[i] == t[j]) {
-                    sb.append(s[i]);
-                    i++;
-                    j++;
-                } else if ()
-            }            
-            int i = m, j = n;
-            while (i > 0 && j > 0) {
-                if (s[i-1] == t[j-1]) {
-                    sb.insert(0, s[i]);
-                    i--;
-                    j--;
-                } else { // (i > 0 && j > 0)
-                    if (f[i][j] == f[i-1][j]) 
-                        i--;
-                    else if (f[i][j] == f[i][j-1]) 
-                        j--;  
-                }
-            }
-            System.out.println("sb.toString(): " + sb.toString());
-            int o = m + n - f[m][n], k = 0;
-            i = 0; j = 0;
-            while (k < o) {
-                // System.out.println("\n i: " + i);
-                // System.out.println("j: " + j);
-                // System.out.println("k: " + k);
-                if (i < m && j < n && s[i] == t[j]) {
-                    i++;
-                    j++;
-                    k++;
-                } else {
-                    while (i < m && k < o && (sb.length() == k || sb.charAt(k) != s[i])) {
-                        sb.insert(k, s[i]);
-                        k++;
-                        i++;
-                    }
-                    while (j < n && k < o && (sb.length() == k || sb.charAt(k) != t[j])) {
-                        sb.insert(k, t[j]);
-                        k++;
-                        j++;
-                    }
-                }
-            }
-            return sb.toString();
-        }
-
         // static final int mod = (int)1e9 + 7; // 【爱表哥，爱生活！！！活宝妹就是一定要嫁给亲爱的表哥！！！】
         public int distinctSequences(int n) {
             this.n = 7;
@@ -1349,6 +1284,11 @@ public class dpfive {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+
+
+
+
+
 
 
 

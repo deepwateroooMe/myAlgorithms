@@ -1266,86 +1266,6 @@ public class cmp {
         //     return j;
         // }
 
-        // // 这个题之前写过，有点儿印象，但感觉消化不透：
-        // // 超时了再来想这个：数据规模小，感觉能瓣出来一样。。。。。脑袋有点儿糊，想得不透
-        // // 思路：1<= N<= 20, 怎么把这个数组分成两半，一折为二，变成两个 10 个长度的，就不会超时
-        // public int beautifulSubsets(int[] a, int k) { // 它说，这个方法超时了 TLE TLE TLE 
-        //     n = a.length;
-        //     int r = (1 << n), ans = 0;
-        //     for (int i = 1; i < r; i++)             
-        //         if (isValidSubsets(i, a, k)) ans++;
-        //     return ans;
-        // }
-        // int n;
-        // boolean isValidSubsets(int v, int [] a, int k) {
-        //     Set<Integer> s = new HashSet<>();
-        //     for (int i = 0; i < n; i++) {
-        //         if (((v >> i) & 1) == 1) { // 这一个位是 1
-        //             if (s.contains(a[i] + k) || s.contains(a[i] - k)) return false;
-        //             s.add(a[i]);
-        //         }
-        //     }
-        //     return true;
-        // }
-        // public int beautifulSubsets(int[] a, int k) { // 越写越糊。。。。。
-        //     nn = a.length;
-        //     m = nn / 2;
-        //     n = nn - m;
-        //     int ll = (1 << m), rr = (1 << n);
-        //     int [] l = new int [m], r = new int [n];
-        //     int ans = 0;
-        //     l = Arrays.copyOfRange(a, 0, m);
-        //     r = Arrays.copyOfRange(a, m, nn);
-        //     for (int i = 0; i < ll; i++) 
-        //         for (int j = 0; j < rr; j++) 
-        //             if (isValidSubsets(i, j, a, k)) ans++;
-        //     return ans;
-        // }
-        // int m, n, nn;
-        // boolean isValidSubsets(int l, int r, int [] a, int k) {
-        //     int cur = ((l << n) | r);
-        //     for (int v : masks) 
-        //         if ((cur & v) >= v) return false;
-        //     return true;
-        // }
-        // Set<Integer> masks = new HashSet<>();
-        // void buildMasks(int [] a, int k) {
-        //     int n = a.length;
-        //     Map<Integer, List<Integer>> m = new HashMap<>();
-        //     for (int i = 0; i < nn; i++)
-        //         m.computeIfAbsent(a[i], z -> new ArrayList<>()).add(i);
-        //     for (int i = 0; i < nn; i++) {
-        //         int v = a[i];
-        //         int cur = (1 << i);
-        //         if (m.containsKey(v + k)) {
-        //             for (int idx : m.get(v+k)) 
-        //                 masks.add(cur | (1 << idx));
-        //         }
-        //         if (m.containsKey(v - k)) {
-        //             for (int idx : m.get(v-k)) 
-        //                 masks.add(cur | (1 << idx));
-        //         }
-        //     }
-        // }
-        // // 现在是，把回塑方法，给忘得一干二净了。。。。。
-        // public int beautifulSubsets(int[] a, int k) { // 【亲爱的表哥，活宝妹一定要嫁的亲爱的表哥！！！活宝妹就是一定要嫁给亲爱的表哥！！！】
-        //     Arrays.sort(a);// 把它按照升序排列
-        //     Map<Integer, Integer> m = new HashMap<>();// 已经包含了的数
-        //     int n = a.length;
-        //     return dfs(0, a, k, m, n) - 1;
-        // }
-        // int dfs(int idx, int [] a, int k, Map<Integer, Integer> m, int n) {
-        //     if (idx == n) return 1;
-        //     int r = 0;
-        //     if (m.getOrDefault(a[idx]-k, 0) == 0) {
-        //         m.put(a[idx], m.getOrDefault(a[idx], 0) + 1);
-        //         r += dfs(idx+1, a, k, m, n);
-        //         m.put(a[idx], m.getOrDefault(a[idx], 0)-1);
-        //     }
-        //     r += dfs(idx+1, a, k, m, n);
-        //     return r;
-        // }
-
         // public int minMaxDifference(int v) {
         //     int max = getMax(v);
         //     int min = getMin(v);
@@ -1469,25 +1389,6 @@ public class cmp {
 // TreeNode root = new TreeNode(a[0]);
 // root.buildTree(root, a);
 // root.levelPrintTree(root);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
