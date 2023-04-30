@@ -8,8 +8,10 @@ import java.util.stream.Collectors;
 import java.util.HashSet;
 import java.util.Set;
 import static java.util.stream.Collectors.toMap;
+
 public class cmp {
     public static class Solution {
+
         // 这是最气人的一次比较，每个题目的时间被卡得极严，连最简单的题目也不给过。。。
         // public int diagonalPrime(int[][] a) {
         //     int n = a.length;
@@ -774,62 +776,219 @@ public class cmp {
         //     return r;
         // }
 
-        // 不知道这个题目说的是什么意思，怎么办呢？先试着用万能的【记忆化深搜】搜寻试试看？试着用用【最小值－线段树】，看看？
-        public long countOperationsToEmptyArray(int[] a) {
-            n = a.length; this.a = a; max = Arrays.stream(a).max().getAsInt(); m = 2 * n + 1;
-            // 【最小值线段树】：这里我是要把值全填进去，构建这棵树先？
-            buildTree(0, n-1);
-            f = new Long [m][m];
+        // // 不知道这个题目说的是什么意思，怎么办呢？先试着用万能的【记忆化深搜】搜寻试试看？试着用用【最小值－线段树】，看看？
+        // public long countOperationsToEmptyArray(int[] a) {
+        //     n = a.length; this.a = a; max = Arrays.stream(a).max().getAsInt(); m = 2 * n + 1;
+        //     // 【最小值线段树】：这里我是要把值全填进去，构建这棵树先？
+        //     buildTree(0, n-1);
+        //     f = new Long [m][m];
+        //     return dfs(0, n-1);
+        // }
+        // Long [][] f; int [] t; // 线段树
+        // int [] a; int m, n, max;
+        // long dfs(int i, int j) {
+        //     if (i == j) return 1;
+        //     if (f[i][j] != null) return f[i][j];
+        //    long ans = Long.MAX_VALUE;
+        //     int min = query(1, 1, m, i+1, j+1); // 查询整个区间的最小值 
+        //     // if (a[i] == min) return dfs(i+1, j); // 这里 i 就会越界，必须区间查询最小值
+        //     int curVal = query(1, 1, m, i+1, i+1);
+        //     if (min == curVal) return f[i][j] = 1 + dfs(i+1, j);
+        //     update(1, 1, m, j+2, curVal);  // 把这个当前元素贴尾巴上去
+        //     return f[i][j] = 1 + dfs(i+1, j+1);
+        // }
+        // int query(int u, int l, int r, int L, int R) { // 查询，区间【L,R】的最小值 
+        //     if (L <= l && r <= R) return t[u];
+        //     int m = l + (r - l) / 2;
+        //     int leftMin = Integer.MAX_VALUE, rightMin = Integer.MAX_VALUE;
+        //     if (L <= m) leftMin = query(u << 1, l, m, L, R);
+        //     if (m+1 <= R) rightMin = query(u << 1 | 1, m+1, r, L, R);
+        //     return Math.min(leftMin, rightMin);
+        // }
+        // void buildTree(int l, int r) {
+        //     t = new int [8 * n]; // 这里，我想给足它空间最长，以空间换时间，不用数组左移，而是自动向右增长, 最差情况，数组变2 倍长【变成一个自动右滑的滑动窗口】？
+        //     for (int i = 0; i < m; i++) // 这个题目，占用的空间还是太多了，可能不适合
+        //         update(1, 1, m, i+1, (i < n ? a[i] : Integer.MAX_VALUE)); // 通过每个值更新的方式，构建了这树
+        //     System.out.println(Arrays.toString(t));
+        // }
+        // void update(int u, int l, int r, int i, int v) {
+        //     if (l == r) {
+        //         t[u] = v;
+        //         return ;
+        //     }
+        //     int m = l + (r - l) / 2;
+        //     if (i <= m) update(u << 1, l, m, i, v);
+        //     else update(u << 1 | 1, m+1, r, i, v);
+        //     t[u] = Math.min(t[u << 1], t[u << 1 | 1]); // 更新父节点的最小值 
+        // }
+
+        // public int isWinner(int[] a, int[] b) {
+        //     int n = a.length;
+        //     if (n == 1) return a[0] > b[0] ? 1 : (a[0] < b[0] ? 2 : 0);
+        //     int [] l = new int [n], r = new int [n];
+        //     l[0] = a[0]; r[0] = b[0];
+        //     l[1] = (a[0] == 10 ? 2 * a[1] : a[1]) + l[0];
+        //     r[1] = (b[0] == 10 ? 2 * b[1] : b[1]) + r[0];
+        //     for (int i = 2; i < n; i++) {
+        //         int x = (a[i-1] == 10 || a[i-2] == 10 ? a[i] * 2 : a[i]);
+        //         int y = (b[i-1] == 10 || b[i-2] == 10 ? b[i] * 2 : b[i]);
+        //         l[i] = l[i-1] + x;
+        //         r[i] = r[i-1] + y;
+        //     }             
+        //     return l[n-1] > r[n-1] ? 1 : (l[n-1] <r[n-1] ? 2 : 0);
+        // }
+
+        // public int firstCompleteIndex(int[] b, int[][] a) {
+        //     int m = a.length, n = a[0].length;
+        //     Map<Integer, int []> mi = new HashMap<>();
+        //     for (int i = 0; i < m; i++)
+        //         for (int j = 0; j < n; j++)
+        //             mi.put(a[i][j], new int [] {i, j});
+        //     int [] r = new int [m], l = new int [n];
+        //     for (int i = 0; i < m*n; i++) {
+        //         int [] cur = mi.get(b[i]);
+        //         r[cur[0]]++;
+        //         l[cur[1]]++;
+        //         if (r[cur[0]] == n || l[cur[1]] == m) return i;
+        //     }
+        //     return -1;
+        // }
+
+        // public int minimumCost(int[] s, int[] t, int[][] p) {
+        //     n = (int)1e5 + 1; this.t = t; 
+        //     // int [][] f = new int [n][n];
+        //     for (int i = 0; i < n; i++) Arrays.fill(f, Integer.MAX_VALUE);
+        //     f[s[0]][s[1]] = 1;
+        //     // List<int []> l = new ArrayList<>();
+        //     // int [][] r = new int [m][5];
+        //     for (int k = 0; k < m; k++) {
+        //         int [] a = p[k];
+        //         int i = a[0], j = a[1], x = a[2], y = a[3], w = a[4];
+        //         int d = Math.abs(i - x) + Math.abs(j - y);
+        //         if (d > w) {
+        //             li.add(new int [] {i, j, x, y, w});
+        //             si.add((long)i * n + (long)j);
+        //         }
+        //     }
+        //     Collections.sort(li, (x, y)-> x[0] - y[0]);
+        //     m = li.size();
+        //     r = new ArrayList<>(li);
+        //     Collections.sort(r, (x, y)-> x[1] - y[1]);
+        //     f = new int [n][n];
+        //     return dfs(s[0], s[1]);
+        // }
+        // int [][] f;
+        // List<int []> li, r;
+        // int m, n; int [] t;
+        // Set<Long> si = new HashSet<>();
+        // int dfs(int i, int j) {
+        //     if (i == t[0] && j == t[1]) return f[i][j] = 1;
+        //     if (f[i][j] != null) return f[i][j];
+        //     int ans = Integer.MAX_VALUE;
+        //     if (j < n-1) ans = Math.min(ans, 1 + dfs(i, j+1));
+        //     if (i < n-1) ans = Math.min(ans, 1 + dfs(i+1, j));
+        //     int idx = binarySearch(i, j);
+        //     if (idx == -1) return f[i][j] = ans;
+        //     for (int k = idx; k < m; k++) {
+        //         int [] r = li.get(k);
+        //         ans = Math.min(ans, Math.abs(r[0] - i) + Math.abs(r[1] - j) + r[4] + dfs(r[2], r[3]));
+        //     }
+        //     return f[i][j] = ans;
+        // }
+        // int binarySearch(int x, int y) {
+        //     int l = 0, r = li.size();
+        //     if (x <= li.get(0)[0] && y <= li.get(0)[1]) return l;
+        //     if (x >= li.get(m-1)[2] && y >= li.get(m-1)[3]) return -1;
+        //     while (l < r) {
+        //         int m = (l + r)  /2;
+        //         if (li.get(m)[0] >= x) r = m;
+        //         else l = m+1;
+        //     }
+        //     return l >= 0 && l < m && li.get(l)[0] >= x ? l : -1;
+        // }
+        // public int minimumCost(int[] s, int[] t, int[][] p) {
+        //     int n = (int)1e5 + 1;
+        //     int si = s[0], sj = s[1], ti = t[0], tj = t[1];
+        //     int [][] f = new int [n][n];
+        //     for (int i = 0; i < n; i++) Arrays.fill(f, Integer.MAX_VALUE);
+        //     f[si][sj] = 0;
+        //     // Deque<int []> q = new ArrayDeque<>();
+        //     Queue<int []> q = new PriorityQueue<>((x, y) -> x[2] - y[2]);
+        //     int min = Math.abs(ti - si) + Math.abs(tj - sj);
+        //     q.offer(new int [] {si, sj, min});
+        //     Arrays.sort(p, (x, y)-> x[0] != y[0] ? x[0] - y[0] : (x[1] != y[1] ? x[1] - y[1] : x[2] - y[2]));
+        //     while (!q.isEmpty()) {
+        //         int [] cur = q.poll();
+        //         int a = cur[0], b = cur[1], ww = cur[2];
+        //         if (ww < min) min = ww;
+        //         // min = Math.min(min, Math.abs(a - ti) + Math.abs(b - tj) + ww);
+        //         for (int [] e : p) {
+        //             int i = e[0], j = e[1], x = e[2], y = e[3], w = e[4];
+        //             int d = Math.abs(a - si) + Math.abs(b - sj);
+        //             int curVal = ww + d + w + Math.abs(x - ti) + Math.abs(y - tj);
+        //             if (curVal < min) {
+        //                 min = curVal;
+        //                 // q.offer(new int [] {x, y, ww + d + w});
+        //             }
+        //         }
+        //     }
+        //     return min;
+        // }
+
+        public String smallestBeautifulString(String t, int k) { // 走生成的思路，按照它的要求，去努力生成一个比较大的字符串
+            int n = t.length(); char [] s = t.toCharArray(); this.k = k; this.t = t; 
+            // boolean [][] f = new boolean [n][k];
+            p = new boolean [n][n];
+            for (int i = 0; i < n; i++) p[i][i] = true;
+            for (int i = n-1; i >= 0; i--)
+                for (int j = i+1; j < n; j++)
+                    if (s[i] == s[j] && (j - i <= 2 || p[i+1][j-1]))
+                        p[i][j] = true;
+            g = new ArrayList [26];
+            Arrays.setAll(g, z -> new ArrayList<>());
+            for (int i = 0; i < n; i++)
+                g[s[i]-'a'].add(i);
+            f = new String [n][n];
             return dfs(0, n-1);
         }
-        Long [][] f; int [] t; // 线段树
-        int [] a; int m, n, max;
-        long dfs(int i, int j) {
-            if (i == j) return 1;
+        String [][] f;
+        boolean [][] p;
+        List<Integer> [] g;// idx for letters 【 KMP】哪个好用呢？
+        char [] s; String t;
+        int n, k;
+        String dfs(int i, int j) { // 仍然是从后往前遍历
+            if (j < i) return "";
             if (f[i][j] != null) return f[i][j];
-           long ans = Long.MAX_VALUE;
-            int min = query(1, 1, m, i+1, j+1); // 查询整个区间的最小值 
-            // if (a[i] == min) return dfs(i+1, j); // 这里 i 就会越界，必须区间查询最小值
-            int curVal = query(1, 1, m, i+1, i+1);
-            if (min == curVal) return f[i][j] = 1 + dfs(i+1, j);
-            update(1, 1, m, j+2, curVal);  // 把这个当前元素贴尾巴上去
-            return f[i][j] = 1 + dfs(i+1, j+1);
-        }
-        int query(int u, int l, int r, int L, int R) { // 查询，区间【L,R】的最小值 
-            if (L <= l && r <= R) return t[u];
-            int m = l + (r - l) / 2;
-            int leftMin = Integer.MAX_VALUE, rightMin = Integer.MAX_VALUE;
-            if (L <= m) leftMin = query(u << 1, l, m, L, R);
-            if (m+1 <= R) rightMin = query(u << 1 | 1, m+1, r, L, R);
-            return Math.min(leftMin, rightMin);
-        }
-        void buildTree(int l, int r) {
-            t = new int [8 * n]; // 这里，我想给足它空间最长，以空间换时间，不用数组左移，而是自动向右增长, 最差情况，数组变2 倍长【变成一个自动右滑的滑动窗口】？
-            for (int i = 0; i < m; i++) // 这个题目，占用的空间还是太多了，可能不适合
-                update(1, 1, m, i+1, (i < n ? a[i] : Integer.MAX_VALUE)); // 通过每个值更新的方式，构建了这树
-            System.out.println(Arrays.toString(t));
-        }
-        void update(int u, int l, int r, int i, int v) {
-            if (l == r) {
-                t[u] = v;
-                return ;
+            if (s[j] - 'a' == k-1) return f[i][j] = dfs(i, j-1); // 这一位没空间了，只能从前一位来改
+            for (int x = s[j]-'a'+1; x < k; x++) { // 从最后一位往前遍历，大一点儿的字符，是否可能
+                // 去验证：是否存在这样的回文
+               if (!isPalindrome(i, x))
+                   return f[i][j] = t.substring(i, j) + (char)('a'+x) + (i == n-1 ? "" : generate(x, i+1));
             }
-            int m = l + (r - l) / 2;
-            if (i <= m) update(u << 1, l, m, i, v);
-            else update(u << 1 | 1, m+1, r, i, v);
-            t[u] = Math.min(t[u << 1], t[u << 1 | 1]); // 更新父节点的最小值 
-        }        
-    }
+            return f[i][j] = dfs(i, j-1); // 这一位没空间了，只能从前一位来改
+        }
+        String generate(int x, int i) { // 根据需要来生成后面的片段：用【ab...(a+k-1)】不能回文，最小即可
+        }
+        boolean isPalindrome(int i, int j) { // 【效率问题：】不能每个都这么遍历，有个表
+            List<Integer> l = g[j];
+            for (int x = l.size()-1; x >= 0; x--) {
+                int idx = l.get(x);
+                if (idx >= i) continue; //// TODO TODO TODO: 【二分查找】，省时间，可以O(logN) 时间找到这个下标，【KMP-O(1)】？
+                if (i-idx <= 2 || p[idx+1][i-1]) return true;
+            }
+            return false;
+        }            
+    }             
+            
+
     public static void main (String[] args) { 
         Solution s = new Solution ();
 
-        // int [] a = new int [] {1,2,4,3};
-        // int [] a = new int [] {3, 4, -1};
-        // int [] a = new int [] {-14,-16,-17,10};
-        int [] a = new int [] {-7,18,4,0,-13};
-        System.out.println(Arrays.toString(a));
+        int [] a = new int [] {1, 1};
+        int [] b = new int [] {4, 5};
+        int [][] c = new int [][] {{1,2,3,3,2},{3,4,4,5,1}};
 
-      long r = s.countOperationsToEmptyArray(a);
+        int r = s.minimumCost(a, b, c);
         System.out.println("r: " + r);
     }
 }
