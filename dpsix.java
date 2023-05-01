@@ -9,10 +9,9 @@ import java.math.BigInteger;
 import java.util.stream.*;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toMap;
-
 public class dpsix {
     public static class Solution {
-
+        
         // 万能的【记忆化深搜：】这次刷动规，感觉就写记忆化深搜了。。。。。写得像 1+1=2 一样简单熟练。。。 368
         public List<Integer> largestDivisibleSubset(int[] a) { // 突然想起来：这是一个风味独特的，什么狗屁【接龙型】返回链表等相对特殊的数据结构的记忆化深搜?
             n = a.length; this.a = a;
@@ -940,49 +939,6 @@ public class dpsix {
             return f[i][j] = ans;
         }
 
-        public int minimumTime(int n, int[][] egs, int [] t) { // 2050 还是不知道哪里写错了。。。
-            int [] p = new int [n];
-            for (int [] e : egs) {
-                int u = e[0], v = e[1];
-                p[v-1] |= (1 << (u-1)); // 这样才能用 n 位来表示
-            }
-            System.out.println(Arrays.toString(p));
-            for (int i = 0; i < n; i++) System.out.println("\n Integer.toBinaryString(p[i]): " + Integer.toBinaryString(p[i]));
-            int [] f = new int [1 << n];
-            Arrays.fill(f, Integer.MAX_VALUE / 2);
-            f[0] = 0;
-            for (int i = 0; i < (1 << n); i++) {  // 遍历所有的状态
-                // System.out.println("\n i: " + i);
-                int r = 0;
-                for (int j = 0; j < n; j++) // 遍历每种状态下的【备选课程候选】：没要求，或是要求全上过满足了
-                    if (p[j] == 0 || ((i & p[j]) == p[j])) // 这么写，就可能包括了已经选过的课，但运行快一点儿
-                        r |= (1 << j);
-                r = (r & (~i)); // 【过滤：】过滤掉所有已经选过的课程
-                if (i == 0)
-                    System.out.println("\n Integer.toBinaryString(r): " + Integer.toBinaryString(r));
-                // for (int toBeSelected = r; toBeSelected > 0; toBeSelected = toBeSelected & (toBeSelected-1)) { // 遍历候选课程所有可能的状态【这里写错了？】
-// 遍历候选课程所有可能的状态【这里写错了？】感觉这里写的状态太少了
-                // for (int toBeSelected = r; toBeSelected > 0; toBeSelected = ((toBeSelected -1) & toBeSelected)) {
-                for (int toBeSelected = r; toBeSelected > 0; toBeSelected--) {
-                    int timeNeeded = 0;
-                    toBeSelected = (r & toBeSelected); // 这才遍历了所有的状态
-                    if (i == 0)
-                        System.out.println("Integer.toBinaryString(toBeSelected): " + Integer.toBinaryString(toBeSelected));
-                    for (int j = 0; j < n; j++)
-                        if ((toBeSelected & (1 << j)) > 0)
-                            timeNeeded = Math.max(timeNeeded, t[j]);
-                    if (i == 0)
-                        System.out.println("timeNeeded: " + timeNeeded);
-                    if (toBeSelected > 0)
-                        f[i | toBeSelected] = Math.min(f[i | toBeSelected], f[i] + timeNeeded);
-                }
-            }
-            return f[(1 << n) -1];
-        }
-        int [][] a = new int [][] {{2,7},{2,6},{3,6},{4,6},{7,6},{2,1},{3,1},{4,1},{6,1},{7,1},{3,8},{5,8},{7,8},{1,9},{2,9},{6,9},{7,9}};
-        int [] b = new int [] {9, 5, 9, 5, 8, 7, 7, 8, 4};
-        int r = s.minimumTime(9, a, b);
-
         // 算出最长公有子序列之后，要用这个东西把最短XX 给还原回来。。。。。
         public String shortestCommonSupersequence(String S, String T) { // 1092
             int m = S.length(), n = T.length();
@@ -1320,34 +1276,6 @@ public class dpsix {
             return f[i] = r;
         }
 
-        public int largestPathValue(String t, int[][] egs) { // 【动规：】这里动规的部分，与其它无向图记忆化深搜，感觉方向是反的，还没想透 1857
-            int n = s.length(); int [] r = new int [n]; char [] s = t.toCharArray();
-            List<Integer> [] g = new ArrayList [n];
-            Arrays.setAll(g, z -> new ArrayList<>());
-            for (int [] e : egs) {
-                int u = e[0], v = e[1];
-                g[u].add(v);
-                r[v]++;
-            }
-            int [][] f = new int [n][26];
-            Deque<Integer> q = new ArrayDeque<>();
-            for (int i = 0; i < n; i++)
-                if (r[i] == 0) {
-                    q.offer(i);
-                    f[i][s[i]-'a']++;
-                    for (int v : g[i]) {
-                        --r[v];
-                        if (r[v] == 0) q.offer(v);
-                        f[v][s[v]-'a']++;
-                    }
-                }
-            if (q.isEmpty()) return -1; // 说明有环，有环就没有入度为 0 的节点
-            while (!q.isEmpty()) {
-                int u = q.poll();
-                f[u][s[u]-'a']
-            }
-        }
-
         public int minimumDistance(String t) { // 1320: 我本来要【记忆化深搜】的，可是一看，它说让【暴搜】，想下感觉暴搜不该是天下最简单的事吗？
             n = t.length; s = t.toCharArray();
             f = new Integer [n][26][27];
@@ -1418,13 +1346,132 @@ public class dpsix {
             }
             return l < li.size() && li.get(i) >= v ? l : -1;
         }
+
+        public int minimumTime(int n, int[][] egs, int [] t) { // 【动规：】2050 ：这里主要是没能理解，为什么这种方法下会漏掉最优解？
+            int [] p = new int [n];
+            for (int [] e : egs) {
+                int u = e[0], v = e[1];
+                p[v-1] |= (1 << (u-1)); // 这样才能用 n 位来表示
+            }
+            int [] f = new int [1 << n];
+            Arrays.fill(f, Integer.MAX_VALUE / 2);
+            f[0] = 0;
+            for (int i = 0; i < (1 << n); i++) {  // 遍历所有的状态
+                int r = 0;
+                for (int j = 0; j < n; j++) // 遍历每种状态下的【备选课程候选】：没要求，或是要求全上过满足了
+                    if (p[j] == 0 || ((i & p[j]) == p[j])) // 这么写，就可能包括了已经选过的课，但运行快一点儿
+                        r |= (1 << j);
+                r = (r & (~i)); // 【过滤：】过滤掉所有已经选过的课程
+// 遍历候选课程所有可能的状态【这里写错了？】感觉这里写的状态太少了
+                for (int toBeSelected = r; toBeSelected > 0; toBeSelected = r & (toBeSelected-1)) { // 遍历候选课程所有可能的状态【这里写错了？】
+                    int timeNeeded = 0;
+                    for (int j = 0; j < n; j++)
+                        if ((toBeSelected & (1 << j)) > 0)
+                            timeNeeded = Math.max(timeNeeded, t[j]);
+                    f[i | toBeSelected] = Math.min(f[i | toBeSelected], f[i] + timeNeeded);
+                }
+            }
+            return f[(1 << n) -1];
+        } // 需要研究一下：下面的这个例子，为什么上面的动规方法会错失掉最优解，仍然不理解
+        int [][] a = new int [][] {{2,7},{2,6},{3,6},{4,6},{7,6},{2,1},{3,1},{4,1},{6,1},{7,1},{3,8},{5,8},{7,8},{1,9},{2,9},{6,9},{7,9}};
+        int [] b = new int [] {9, 5, 9, 5, 8, 7, 7, 8, 4};
+        int r = s.minimumTime(9, a, b);
+        public int minimumTime(int n, int[][] egs, int [] t) { // 【拓朴排序：】
+            List<Integer> [] g = new ArrayList [n];
+            Arrays.setAll(g, z -> new ArrayList<>());
+            int [] r = new int [n];
+            for (int [] e : egs) {
+                int u = e[0]-1, v = e[1]-1;
+                g[u].add(v);
+                r[v]++;
+            }
+            int [] f = new int [n]; // 返回用时最多的那门课所需要的时间
+            Deque<Integer> q = new ArrayDeque<>(); // 【拓朴排序】：
+            for (int i = 0; i < n; i++) // 【这么着】，好像才写对了。。。
+                if (r[i] == 0) {
+                    q.offer(i);
+                    f[i] = t[i]; // 选一门没要求的课的时间
+                }
+            while (!q.isEmpty()) {
+                int u = q.poll();
+                for (int v : g[u]) {
+                    f[v] = Math.max(f[v], f[u] + t[v]);
+                    if (--r[v] == 0) q.offer(v);
+                }
+            }
+            return Arrays.stream(f).max().getAsInt();
+        }
+
+        public int largestPathValue(String t, int[][] egs) { // 【动规：】这里动规的部分，与其它无向图记忆化深搜，感觉方向是反的，还没想透 1857
+            if (egs.length == 0) return 1;
+            int n = t.length(); int [] r = new int [n]; char [] s = t.toCharArray();
+            // boolean [] vis = new boolean [n]; // 用计数的：如果遍历过的节点数《 n, 就说明有环存在。。。
+            List<Integer> [] g = new ArrayList [n]; Arrays.setAll(g, z -> new ArrayList<>());
+            for (int [] e : egs) {
+                int u = e[0], v = e[1];
+                // 【哈哈哈】：只有一个圈儿，是一个人永远走不出的，那就是在自己身上画个圈儿。。。也是说，只有想不到，没有做不到【爱表哥，爱生活！！！活宝妹就是一定要嫁给亲爱的表哥！！！】
+                // if (u == v || g[v].contains(u)) return -1; // 【环儿：】这里有个从自己到自己的环。【这里一个特例：】不喜欢，别人用计数法
+                if (u == v) return -1; // 【环儿：】这里有个从自己到自己的环。【这里一个特例：】不喜欢，别人用计数法
+                // vis[u] = true; vis[v] = true;
+                g[u].add(v);
+                r[v]++;
+            }
+            Deque<Integer> q = new ArrayDeque<>();
+            for (int i = 0; i < n; i++)
+                // if (r[i] == 0 && vis[i]) 
+                if (r[i] == 0)
+                    q.offer(i);
+            if (q.isEmpty()) return -1; // 说明有环，有环就没有入度为 0 的节点
+            int [][] f = new int [n][26];
+            int cnt = 0; // 遍历过的节点【计数】：用来帮助判断，有向图中是否有环
+            while (!q.isEmpty()) {
+                int u = q.poll(), j = s[u] - 'a';
+                f[u][j]++;
+                cnt++;
+                for (int v : g[u]) {
+                    // f[v][j] = Math.max(f[v][j], f[u][j]); // 【BUG：】不能只复制这一个，要把整个的复制过来
+                    // f[v] = f[u].clone(); // 【BUG：】这里不能只是复制，因为当前节点 v 可能有比节点 u 更多某些颜色的值，这种情况下要保留最大值 ?
+                    for (int x = 0; x < 26; x++) 
+                        f[v][x] = Math.max(f[v][x], f[u][x]);
+                    if (--r[v] == 0) q.offer(v);
+                }
+            }
+            if (cnt < n) return -1;
+            int ans = 0;
+            for (int i = 0; i < n; i++)
+                for (int j = 0; j < 26; j++)
+                    ans = Math.max(ans, f[i][j]);
+            return ans;
+        }
+
+        public int uniqueLetterString(String t) {
+            int n = t.length(); char [] s = t.toCharArray();
+            int [] l = new int [n], r = new int [n], c = new int [26];
+            Arrays.fill(c, -1); Arrays.fill(l, -1); Arrays.fill(r, -1);
+            for (int i = 0; i < n; i++) {
+                int j = s[i] - 'A';
+                if (c[j] != -1) l[i] = c[j];
+                c[j] = i;
+            }
+            Arrays.fill(c, -1);
+            for (int i = n-1; i >= 0; i--) {
+                int j = s[i] - 'A';
+                if (c[j] != -1) r[i] = c[j];
+                c[j] = i;
+            }
+            int ans = 0;
+            for (int i = 0; i < n; i++)
+                ans += ((r[i] == -1 ? n : r[i]) - i) * (i - (l[i] == -1 ? -1 : l[i]));
+            return ans;
+        }
     }                                         
     public static void main (String[] args) { // 【爱表哥，爱生活！！！活宝妹就是一定要嫁给亲爱的表哥！！！】
         Solution s  =  new Solution ();
 
-        String a = "CAKE";
+        String a = "ABA";
+        System.out.println("a: " + a);
 
-        int r = s.minimumDistance(a);
+        int r = s.uniqueLetterString(a);
         System.out.println("r: " + r);
     } 
 }
@@ -1434,5 +1481,19 @@ public class dpsix {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

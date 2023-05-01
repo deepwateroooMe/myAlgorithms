@@ -1050,87 +1050,10 @@ public class dptwo {
             return (int)ans;
         }
 
-        public int minTaps(int n, int[] a) { // TODO TODO TODO: 暂时不想再写这个题目了
-            int m = a.length;
-            List<int []> l = new ArrayList<>();
-            for (int i = 0; i < m; i++) 
-                l.add(new int [] {i - a[i], i + a[i]});
-            Collections.sort(l, (x, y) -> x[0] != y[0] ? x[0] - y[0] : x[1] - y[1]);
-            int ans = 1, i = 1, r = l.get(0)[1], newRit = 0;
-            while (r < n) {
-                int [] cur = l.get(i);
-                int j = i;
-                while (l.get(j)[0] == cur[0]) {
-                    r = Math.max(r, l.get(j)[1]);
-                    j++;
-                }
-                if (l.get(j)[0] > r) return -1;
-                ans++;
-                newRit = r;
-                while (l.get(j)[0] <= r) {
-                    newRit = Math.max(newRit, l.get(j)[1]);
-                    j++;
-                }                
-                r = newRit;
-                if (r >= n) return ans;
-            }
-            return -1;
-        }
-
         public long minimumDifference(int[] a) { // TODO TODO TODO: 
             int m = a.length, n = m / 3;
             long [] p = new long [m+1], l = new long [m], r = new long [m]; // 算中间一段的左 n 个数的最小和，与右 n 个数的最大和
             for (int i = 0; i < m; i++) p[i+1] = a[i] + p[i];
-        }
-
-        public int connectTwoGroups(List<List<Integer>> ll) { // 我记得我当初写过这个题目，忘记了
-            m = ll.size();
-            n = ll.get(0).size();
-            f = new int [m][1 << n];
-            return dfs(0, 0, ll);
-        }
-        int m, n;
-        int [][] f;
-        int dfs(int i, int j, List<List<Integer>> ll) {
-        }
-
-        public int maxScore(int[] a) { // TLE TLE TLE: 
-            n = a.length;
-            m = n / 2;
-            g = new ArrayList [m];
-            Arrays.setAll(g, z -> new ArrayList<Integer>());
-            Arrays.sort(a);
-            for (int i = 0; i < n; i++)
-                for (int j = i+1; j < n; j++) {
-                    int x = a[i], y = a[j], g = gcd(x, y);
-                    String k = String.valueOf(x) + String.valueOf(y);
-                    mg.put(k, g);
-                }
-            backTracking(0, 0, a);
-            return max;
-        }
-        int n, m, max = 0;
-        List<Integer> [] g;
-        Map<String, Integer> mg = new HashMap<>();
-        void backTracking(int i, int cur, int [] a) {
-            if (i == n) {
-                if (cur > max) max = cur;
-                return ;
-            }
-            for (int k = 0; k < m; k++) {
-                List<Integer> l = g[k];
-                if (l.size() < 2) {
-                    l.add(a[i]);
-                    // backTracking(i+1, cur + (l.size() == 1 ? 0 : gcd(l.get(0), a[i]) * (k+1)), a);
-                    String key = String.valueOf(Math.min(l.get(0), a[i])) + String.valueOf(Math.max(l.get(0), a[i]));
-                    backTracking(i+1, cur + (l.size() == 1 ? 0 : mg.get(key) * (k+1)), a);
-                    l.remove(l.size()-1);
-                }
-            }
-        }
-        int gcd(int x, int y) {
-            if (y == 0) return x;
-            return gcd(y, x % y);
         }
 
         public int numDistinct(String S, String T) {
@@ -1154,25 +1077,6 @@ public class dptwo {
                 r += dfs(i+1, j+1);
             r += dfs(i+1, j);
             return f[i][j] = r;
-        }
-
-        public int numberWays(List<List<Integer>> ll) { // TLE TLE TLE: 帽子太多了就会超时，得用动规。。。
-            n = ll.size();
-            backTracking(0, 0, ll);
-            return ans;
-        }
-        int n, m, ans = 0;
-        void backTracking(int i, int j, List<List<Integer>> ll) { // j: mask
-            if (i == n) {
-                if (Integer.bitCount(j) == n) // 一定要有这么多人顶帽子
-                    ans++;
-                return ;
-            }
-            for (int k = 0; k < ll.get(i).size(); k++) {
-                int id = ll.get(i).get(k);
-                if ((j & (1 << id)) == 0) // 这顶帽子还没人带
-                    backTracking(i+1, j | (1 << id), ll);
-            }
         }
 
         public boolean canCross(int[] a) {
@@ -1298,10 +1202,6 @@ public class dptwo {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
-
-
-
-
 
 
 
