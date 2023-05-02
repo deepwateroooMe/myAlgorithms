@@ -647,37 +647,6 @@ public class dpsix {
             return (int)ans;
         }
 
-        public boolean canDistribute(int[] a, int [] b) { // TODO TODO TODO: 102/109 1655
-            n = b.length; int N = a.length; this.a = b;
-            Map<Integer, Integer> m = new HashMap<>();
-            for (int v : a) m.put(v, m.getOrDefault(v, 0) + 1); // 50 个
-            Arrays.sort(b); // 升序排列
-            backTracking(n-1, 0, 0);
-            boolean [] f = new boolean [1 << n];
-            f[0] = true;
-            for (Map.Entry<Integer, Integer> en : m.entrySet()) {
-                int k = en.getKey(), v = en.getValue();
-                Integer key = masks.floorKey(v); // 这些里面的，应该是最全最优解，其它键值比它小的，不用遍历了，忆经可以保证结果正确
-                if (key == null) continue; // 什么也填不了
-                for (int i = (1 << n)-1; i > 0; i--)
-                    for (int mask : masks.get(key)) { // 遍历这个数：所有可能的分布，必须暴力以保证结果正确
-                        if ((i & mask) == mask)
-                            f[i] |= f[i ^ mask];
-                    }
-            }
-            return f[(1 << n)-1];
-        }
-        int n; int [] a;
-        TreeMap<int, Set<Integer>> masks = new TreeMap<>(); // sum, mask 可能会有不同的，或是多个
-        void backTracking(int i, int j, int k) { // i: idx j: sum k: mask 
-            if (i < 0) {
-                masks.computeIfAbsent(j, z -> new TreeSet<>((x, y)-> y-x)).add(k);
-                return ;
-            }
-            backTracking(i-1, j + a[i], k | (1 << i));
-            backTracking(i-1, j, k);
-        }
-
         class Node { // TODO TODO TODO: 55/58
             int s, ll, rr; // ll: maxLeft, rr: minRight: 主要是用来帮助父节点判断是否是 BST 来用来着。。。
             boolean b;
@@ -729,21 +698,6 @@ public class dpsix {
             // p.b = (p.l == null || p.l.b && p.l.ll < r.val) && (p.r == null || p.r.b && r.val < p.r.rr); // BST: 左中右，小大关系
             p.b = (p.l.b || p.l.s == 0) && (p.r.b || p.r.s == 0) && (p.l.ll == 0 || p.l.ll < r.val) && (p.r.rr == 0 || r.val < p.r.rr);
         }
-
-        public boolean possiblyEquals(String S, String T) {  // 【记忆化深搜：】解题思路，应该是这样，不知道还有没有什么细节？改天再写这个 2060
-            m = S.length(); n = T.length(); s = S.toCharArray(); t = T.toCharArray();
-            if (s[0] != t[0] && !Character.isDigit(s[0]) && !Character.isDigit(t[0])) return false;
-            f = new Boolean [m][n];
-            return dfs(0, 0);
-        }
-        int m, n; char [] s, t;
-        Boolean [][] f;
-        boolean dfs(int i, int j) { // 因为数字的参入，存在四种比较可能性，要把那些瓣清楚。。。
-            if (i == m && n == j) return true;
-            if (i == m || j == n) return false;
-            if (f[i][j] != null) return f[i][j];
-            if (!Character.isDigit(s[i]) && s[i] == t[j]) return f[i][j] = dfs(i+1, j+1);
-        }        
 
 // 【 n<= 500, 2^10】【 o<= 50, 2^6】【YN:2^2】【YN:2^2】【可以建一个 20 （10+6+2+2）位的 mask】1397 【KMP】【爱表哥，爱生活！！！活宝妹就是一定要嫁给亲爱的表哥！！！】
         public int findGoodStrings(int n, String S, String T, String E) { // 【哪里没有写对，上下字符的处理，与受限字符的处理，可能不对】// TODO TODO TODO: 
@@ -1481,6 +1435,21 @@ public class dpsix {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
