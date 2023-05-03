@@ -774,36 +774,6 @@ public class dpthree {
             return Arrays.stream(f).max().getAsInt();
         }
 
-        public int minScoreTriangulation(int[] a) { // 完全没能回想起来是怎么回事 // TODO TODO TODO: 
-            this.a = a; n = a.length;
-            f = new Integer [n][n];
-            return dfs(0, n-1);
-        }
-        int [] a;
-        int n;
-        Integer [][] f;
-        int dfs(int i, int j) {
-            // System.out.println("\n i: " + i);
-            // System.out.println("j: " + j);
-            if (i > j) return 0;
-            // if (j - i < 2) return 0;
-            // if (i == j) return f[i][j] = a[i];
-            if (i + 2 == j) return f[i][j] = a[i] * a[i+1] * a[j];
-            if (i + 3 == j) return f[i][j] = Math.min(a[i] * a[i+1] * a[j] + a[j] * a[i+1] * a[j-1], a[i] * a[i+1] * a[j-1] + a[j-1] * a[j] * a[i]);
-            if (f[i][j] != null) return f[i][j];
-            int r = Integer.MAX_VALUE;
-            for (int k = i; k <= j; k++) {
-                // System.out.println("k: " + k);
-                // r = Math.min(r, a[i] * a[k] * a[j] + dfs(i+1, k-1) + (k+2 == j ? a[k] * a[k+1] * a[j] : dfs(k+1, j-1)));
-                r = Math.min(r, a[i] * a[k] * a[j] + dfs(i+1, k) + dfs(k+1, j));
-                // System.out.println("r: " + r);
-            }
-            // System.out.println("\n i: " + i);
-            // System.out.println("j: " + j);
-            // System.out.println("r: " + r);
-            return f[i][j] = r;
-        }
-
         public List<TreeNode> generateTrees(int n) {
             List<TreeNode> l = generateTrees(1, n);
             return l;
@@ -874,27 +844,6 @@ public class dpthree {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -1360,17 +1360,6 @@ public class dpone { // 【动规三刷：】从最简单Middle 到 Hard, 希望
             return min == Integer.MAX_VALUE ? -1 : min;
         }
 
-        public long maxPoints(int[][] a) { // TLE TLE TLE: 156/157
-            int m = a.length, n = a[0].length;
-            long [][] f = new long [m][n];
-            for (int i = 0; i < n; i++) f[0][i] = a[0][i];
-            for (int i = 0; i < m-1; i++) 
-                for (int j = 0; j < n; j++) // 用上一行【i,j】来更新下一行的【 i+1,[0,1..j.n]】
-                    for (int k = 0; k < n; k++) 
-                        f[i+1][j] = Math.max(f[i+1][j], f[i][k] + a[i+1][j] - Math.abs(j - k)); // 还需要一点儿优化。。。
-            return Arrays.stream(f[m-1]).max().getAsLong();
-        }
-
         public boolean checkValidString(String t) { 
             n = t.length();
             s = t.toCharArray();

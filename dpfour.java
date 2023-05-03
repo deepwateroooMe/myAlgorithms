@@ -1033,21 +1033,6 @@ public class dpfour {
             return m.getOrDefault(i, 1 + Math.min(dfs(i+1), dfs(i-1)));
         }
 
-        public int maxProduct(int[] a) {
-            int n = a.length, max = 0, min = a[0], cnt = a[0] < 0 ? 1 : 0;
-            int [] p = new int [n]; p[0] = a[0];
-            for (int i = 1; i < n; i++) {
-                p[i] = p[i-1] * a[i];
-                if (a[i] < 0) {
-                    min = Math.min(min, a[i]);
-                    cnt++;
-                }
-                max = Math.min(max, p[i]);
-                max = Math.max(max, p[i] / min);
-            }
-            return max;
-        }
-
         static final int mod = (int)1e9 + 7;
         public int numberOfWays(int s, int e, int k) { // 大致有个什么其它操作
             this.n = e; 

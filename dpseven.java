@@ -9,7 +9,9 @@ import java.math.BigInteger;
 import java.util.stream.*;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toMap;
+
 public class dpseven {
+
     public static class Solution {
 
 //         static final int mod = (int)1e9 + 7;
@@ -720,12 +722,608 @@ public class dpseven {
         // //         }
         // //     }
         // // }
+
+// // 【min-max:】：把这个题写出来，感觉终于明白先前那些，差值题型算是怎么回事了【爱表哥，爱生活！！！活宝妹就是一定要嫁给亲爱的表哥！！！】
+//         public boolean stoneGame(int[] a) { 
+        //     n = a.length; this.a = a; 
+        //     f = new Integer [n][n];
+        //     return dfs(0, 0) > 0;
+        // }
+        // Integer [][] f;
+        // int [] a;
+        // int n;
+        // int dfs(int i, int j) { // i: idx, j: r
+        //     if (i == n || j < 0) return 0;
+        //     if (i > j) return f[i][j] = 0;
+        //     if (f[i][j] != null) return f[i][j];
+        //     return f[i][j] = Math.max(a[i] - dfs(i+1, 1-j), a[j] - dfs(i, j-1));
+        // }
+
+        // public int stoneGameII(int[] a) {
+        //     n = a.length; this.a = a;
+        //     if (n == 1) return a[0];
+        //     f = new Integer [n][n];
+        //     return (dfs(0, 1) + Arrays.stream(a).sum()) / 2;
+        // }
+        // Integer [][] f;
+        // int [] a;
+        // int n;
+        // int dfs(int i, int j) { // i: idx, j: r
+        //     if (i == n) return 0;
+        //     if (f[i][j] != null) return f[i][j];
+        //     int r = Integer.MIN_VALUE, sum = 0;
+        //     for (int k = 1; k <= 2 * j && i + k <= n; k++) {
+        //         sum += a[i + k - 1];
+        //         r = Math.max(r, sum - dfs(i + k, Math.max(j, k)));
+        //     }
+        //     return f[i][j] = r;
+        // }
+
+        // public String stoneGameIII(int[] a) {
+        //     n = a.length; this.a = a;
+        //     if (n == 1) return a[0] > 0 ? "Alice" : (a[0] == 0 ? "Tie" : "Bob");
+        //     f = new Integer [n];
+        //     int v = dfs(0);
+        //     return v == 0 ? "Tie" : (v > 0 ? "Alice" : "Bob"); 
+        // }
+        // Integer [] f;
+        // int [] a;
+        // int n;
+        // int dfs(int i) { 
+        //     if (i == n) return 0;
+        //     if (f[i] != null) return f[i];
+        //     int r = Integer.MIN_VALUE, sum = 0;
+        //     for (int k = i; k < Math.min(n, i+3); k++) {
+        //         sum += a[k];
+        //         r = Math.max(r, sum - dfs(k+1));
+        //     }
+        //     return f[i] = r;
+        // }
+
+        // public int stoneGameVIII(int[] a) { // 【记忆化深搜：】// TLE TLE TLE: 61/78 必须改写成【动规】的写法。。。 // TODO TODO TODO: 
+        //     n = a.length; this.a = a;
+        //     p = new int [n+1];
+        //     for (int i = 0; i < n; i++) p[i+1] = p[i] + a[i];
+        //     f = new Integer [n];
+        //     return dfs(0);
+        // }
+        // Integer [] f;
+        // int [] a, p;
+        // int n;
+        // int dfs(int i) {
+        //     if (i == n) return 0;
+        //     if (f[i] != null) return f[i];
+        //     int r = Integer.MIN_VALUE;
+        //     for (int j = i + (i == 0 ? 1 : 0); j < n; j++) 
+        //         r = Math.max(r, p[j+1] - dfs(j+1));
+        //     return f[i] = r;
+        // }
+
+        // public int maxProfit(int [] a) {
+        //     int n = a.length, r = 0;
+        //     for (int i = 1; i < n; i++) 
+        //         if (a[i] > a[i-1]) r += a[i] - a[i-1];
+        //     return r;
+        // }
+
+        // // 【区间型动规：】感觉慢慢可以认出这种题型了。。。【爱表哥，爱生活！！！活宝妹就是一定要嫁给亲爱的表哥！！！】
+        // public List<Integer> diffWaysToCompute(String t) {
+        //     n = t.length(); s = t.toCharArray(); r = new int [n];
+        //     int x = 0, y = 0;
+        //     for (int i = 0; i < n; i++) {
+        //         if (!Character.isDigit(s[i])) s[x++] = s[i];
+        //         else {
+        //             int v = s[i] - '0';
+        //             if (v == 0 || i == n-1 || !Character.isDigit(s[i+1]))
+        //                 r[y++] = v;
+        //             else {
+        //                 r[y++] = v * 10 + s[i+1] - '0';
+        //                 i++; // 这里，多处理了一位数字
+        //             }
+        //         }
+        //     }
+        //     n = y; m = x;
+        //     f = new ArrayList [n][n];
+        //     return new ArrayList<Integer>(dfs(0, n-1)); // 这个区间【l,r】的数字，搭配相应符号，所有可能的计算结果
+        // }
+        // List<Integer> [][] f; // 区间型动规：本质仍然是【记忆化深搜】，只是风格独特奇葩。。。
+        // int [] r;
+        // char [] s;
+        // int n, m;
+        // List<Integer> dfs(int i, int j) {
+        //     List<Integer> l = new ArrayList<Integer>();
+        //     if (i > j) return l;
+        //     if (i == j) {
+        //         l.add(r[i]);
+        //         return l;
+        //     }
+        //     if (i + 1 == j) {
+        //         l.add(getRes(i, r[i], r[j]));
+        //         return l;
+        //     }
+        //     for (int k = i; k < j; k++) { // 以 k 为中间断点，来划分区间
+        //         List<Integer> left = dfs(i, k), right = dfs(k+1, j);
+        //         for (int x : left)
+        //             for (int y : right)
+        //                 l.add(getRes(k, x, y));
+        //     }
+        //     return l;
+        // }
+        // int getRes(int i, int x, int y) {
+        //     switch(s[i]) {
+        //     case '+': return x + y;
+        //     case '-': return x - y;
+        //     case '*': return x * y;
+        //     }
+        //     return -1;
+        // }
+
+        // public long countVowels(String t) { // TODO TODO TODO: 可能哪里没有想对
+        //     int n = t.length(); char [] s = t.toCharArray();
+        //     int [] l = new int [26], r = new int [26], c = new int [26];
+        //     Arrays.fill(l, -1); Arrays.fill(r, -1); Arrays.fill(c, -1);
+        //     for (int i = 0; i < n; i++) {
+        //         l[s[i]-'a'] = c[s[i] - 'a'];
+        //         c[s[i] - 'a'] = i;
+        //     }
+        //     Arrays.fill(c, -1);
+        //     for (int i = n-1; i >= 0; i--) {
+        //         r[s[i]-'a'] = c[s[i] - 'a'];
+        //         c[s[i] - 'a'] = i;
+        //     }
+        //     Set<Character> sc = new HashSet<>(List.of('a', 'e', 'i', 'o', 'u'));
+        //     long ans = 0;
+        //     for (int i = 0; i < n; i++)
+        //         if (sc.contains(s[i]))
+        //             ans += (l[i] == -1 ? 1 : i - l[i] + 1) * (r[i] == -1 ? 1 : r[i] - i + 1);
+        //     return ans;
+        // }
+
+        // public int minScoreTriangulation(int[] a) { // 完全没能回想起来是怎么回事 // TODO TODO TODO: 
+        //     this.a = a; n = a.length;
+        //     f = new Integer [n][n];
+        //     return dfs(0, n-1);
+        // }
+        // int [] a;
+        // int n;
+        // Integer [][] f;
+        // int dfs(int i, int j) {
+        //     if (i > j) return 0;
+        //     if (j - i < 2) return 0;
+        //     // if (i == j) return f[i][j] = a[i];
+        //     if (i + 2 == j) return f[i][j] = a[i] * a[i+1] * a[j];
+        //     // if (i + 3 == j) return f[i][j] = Math.min(a[i] * a[i+1] * a[j] + a[j] * a[i+1] * a[j-1], a[i] * a[i+1] * a[j-1] + a[j-1] * a[j] * a[i]);
+        //     if (f[i][j] != null) return f[i][j];
+        //     int r = Integer.MAX_VALUE;
+        //     for (int k = i+1; k < j; k++) {
+        //         // r = Math.min(r, a[i] * a[k] * a[j] + dfs(i+1, k-1) + (k+2 == j ? a[k] * a[k+1] * a[j] : dfs(k+1, j-1)));
+        //         r = Math.min(r, a[i] * a[k] * a[j] + dfs(i+1, k) + dfs(k+1, j));
+        //         // r = Math.min(r, a[i] * a[k] * a[j] + dfs(i, k-1) + dfs(k, j-1));
+        //     }
+        //     return f[i][j] = r;
+        // }
+
+        // public int mergeStones(int[] a, int k) { // 1000
+        //     n = a.length; this.a = a; this.k = k;
+        //     if (n % k != 0) return -1;
+        //     s = new int [n+1];
+        //     for (int i = 0; i < n; i++) s[i+1] = s[i] + a[i];
+        //     System.out.println(Arrays.toString(s));
+        //     f = new Integer [n][n];
+        //     Arrays.stream(f).forEach(z -> Arrays.fill(z, Integer.MAX_VALUE / 2));
+        //     return dfs(0, n-1);
+        // }
+        // Integer [][] f;
+        // int [] a, s;
+        // int n, k;
+        // int dfs(int i, int j) {
+        //     System.out.println("\n i: " + i);
+        //     System.out.println("j: " + j);
+        //     if (i + k - 1 > j) return Integer.MAX_VALUE / 2;
+        //     if (i + k - 1 == j) {
+        //         System.out.println("(s[j+1] - s[i]): " + (s[j+1] - s[i]));
+        //         return f[i][j] = s[j+1] - s[i];
+        //     }
+        //     if (f[i][j] != Integer.MAX_VALUE / 2) return f[i][j];
+        //     int r = Integer.MAX_VALUE / 2;
+        //     for (int x = i; x + k - 1 <= j; x++) {
+        //         System.out.println("x: " + x);
+        //         r = Math.min(r, (x == i ? 0 : dfs(i, x-1)) + s[x+k] - s[x] + dfs(x+k, j));
+        //         System.out.println("r: " + r);
+        //     }
+        //     // for (int x = i + k - 1; x <= j; x++) 
+        //     //     r = Math.min(r, (x == i+k-1 ? 0 : dfs(i, x-1)) + s[x+1] - (x == i+k-1 ? 0 : s[x-k]) + dfs(x+1, j));
+        //     //     // r = Math.min(r, s[x+1] - (x == i+k-1 ? 0 : s[x-k]) + dfs(x+1, j));
+        //     System.out.println("\n i: " + i);
+        //     System.out.println("j: " + j);
+        //     System.out.println("r: " + r);
+        //     return f[i][j] = r;
+        // }
+
+        // public int maxProduct(int[] a) {
+        //     int n = a.length, max = 0, min = a[0], cnt = a[0] < 0 ? 1 : 0;
+        //     int [] p = new int [n]; p[0] = a[0];
+        //     for (int i = 1; i < n; i++) {
+        //         p[i] = p[i-1] * a[i];
+        //         if (a[i] < 0) {
+        //             min = Math.min(min, a[i]);
+        //             cnt++;
+        //         }
+        //         max = Math.min(max, p[i]);
+        //         max = Math.max(max, p[i] / min);
+        //     }
+        //     return max;
+        // }
+
+        // public int maxProduct(String t) { // 【笨办法：】后成所有的两个两个子序列，暴力遍历所有的求解。。。
+        //     n = t.length();
+        //     s = t.toCharArray();
+        //     int max = 1;
+        //     for (int i = 0; i < (1 << n); i++) // 暴搜：遍历所有的两个互补子序列，找出可能存在的两个回文子序列的最大乘积
+        //         max = Math.max(max, getPalinSeqLength(i) * getPalinSeqLength(~i));
+        //     return max;
+        // }
+        // char [] s;
+        // int n;
+        // int getPalinSeqLength(int i) {
+        //     StringBuilder sb = new StringBuilder("");
+        //     for (int j = 0; j < n; j++)
+        //         if ((i & (1 << j)) > 0) sb.append(s[j]);
+        //     return longestPalinSeqLength(sb.toString());
+        // }
+        // int longestPalinSeqLength(String T) {
+        //     int n = T.length(); char [] s = T.toCharArray();
+        //     char [] t = new char [n];
+        //     for (int i = 0; i < n; i++) t[n-1-i] = s[i];
+        //     int [][] f = new int [n+1][n+1];
+        //     for (int i = 0; i < n; i++)
+        //         for (int j = 0; j < n; j++)
+        //             if (s[i] == t[j]) f[i+1][j+1] = f[i][j] + 1;
+        //             else f[i+1][j+1] = Math.max(f[i+1][j], f[i][j+1]);
+        //     return f[n][n];
+        // }
+
+        // // 【回塑】方法本身：感觉狠简单，可是从前面回塑生成各种树来看，觉得用回塑来解决一些相对奇特的题型，感觉转得不够灵活。。。
+        // public int countNumbersWithUniqueDigits(int n) {
+        //     if (n == 0) return 1;
+        //     int [] f = new int [n+1];
+        //     f[0] = 1;
+        //     f[1] = 9;
+        //     for (int i = 2; i <= n; i++) {
+        //         this.n = i;
+        //         r = 0;
+        //         backTracking(0, 0, 0);
+        //         f[i] = r;
+        //     }
+        //     return Arrays.stream(f).sum();
+        // }
+        // int r = 0, n;
+        // void backTracking(int i, int j, int k) { // i: val j: idxCnt k: mask-10 位，对应 10 个数字位
+        //     if (j == n) { // 终止条件：位数够了，已经有 n 位了
+        //         r++;
+        //         return ;
+        //     }
+        //     int min = (i == 0 ? 1 : 0); // 数字第一位：不能是 0
+        //     for (int x = min; x <= 9; x++) // 遍历每一位：上的所有的可能性
+        //         if ((k & (1 << x)) == 0)  // 这个数字还没有用过，可以用
+        //             backTracking(i * 10 + x, j+1, k | (1 << x));
+        // }
+
+        // // 跟以前的思路有点儿不一样：这里提示说：遍历每个格，知道这个格出发【上下左右】各最少格数，再根据两个和来判断【周长】是否合格
+        // public int largest1BorderedSquare(int[][] a) {
+        //     int m = a.length, n = a[0].length;
+        //     int [][] u = new int [m+1][n+1], d = new int [m+1][n+1];
+        //     int [][] l = new int [m+1][n+1], r = new int [m+1][n+1], s = new int [m+1][n+1];
+        //     // prefixSum
+        //     for (int i = 0; i < m; i++)
+        //         for (int j = 0; j < n; j++)
+        //             s[i+1][j+1] = s[i+1][j] + s[i][j+1] - s[i][j] + a[i][j];
+        //     // 从当前格出发：【左右、上下】连续1 的最多个数
+        //     for (int i = 0; i < m; i++) {
+        //         for (int j = 0; j < n; j++)
+        //             if (a[i][j] == 1)
+        //                 l[i+1][j+1] = l[i+1][j] + 1;  // 【左】【i+1,j+1】
+        //         for (int j = n-1; j >= 0; j--) 
+        //             if (a[i][j] == 1)
+        //                 r[i+1][j] = r[i+1][j+1] + 1; // 【右】【i+1,j】
+        //     }
+        //     for (int j = 0; j < n; j++) {
+        //         for (int i = 0; i < m; i++)
+        //             if (a[i][j] == 1) u[i+1][j+1] = u[i+1][j] + 1; // 【上】【i+1,j+1】
+        //         for (int i = m-1; i >= 0; i--) 
+        //             if (a[i][j] == 1) d[i][j+1] = d[i+1][j+1] + 1; // 【下】【i,j+1】
+        //     }
+        //     int max = 0;
+        //     for (int i = 0; i < m; i++)
+        //         for (int j = 0; j < n; j++) { // 【BUG：】这里把它当 1 了，而它实际可以是 0 ，以后再写这个题目
+        //             int k = Math.min(Math.min(l[i+1][j+1], r[i+1][j]), Math.min(u[i+1][j+1], d[i][j+1])); // k: min
+        //             int sumOuter = s[i+k][j+k] - s[i-k+1][j+k] - s[i+k][j-k+1] + s[i-k+1][j-k+1], sum = (k * 2 - 1) * (k * 2 -1);
+        //             --k;
+        //             int sukner = 0;
+        //             if (k > 1)
+        //                 sukner = s[i+k][j+k] - s[i-k+1][j+k] - s[i+k][j-k+1] + s[i-k+1][j-k+1];
+        //             if (sumOuter - sukner == 2 * (k * 2 - 1) + 2 * (k * 2 - 3)) max = Math.max(max, sum);
+        //         }
+        //     return max;
+        // }
+
+        // public boolean PredictTheWinner(int[] a) {
+        //     n = a.length; this.a = a; 
+        //     f = new Integer [n][n];
+        //     return dfs(0, n-1) >= 0;
+        // }
+        // Integer [][] f;
+        // int n;
+        // int dfs(int i, int j) {
+        //     if (i > j) return 0;
+        //     if (i == n) return 0;
+        //     if (f[i][j] != null) return f[i][j];
+        //     return Math.max(a[i] - dfs(i+1, j), a[j] - dfs(i, j-1));
+        // }
+
+        // // 【lowbit:】这个不懂，就彻底不懂线段树，要搞明白了。。。
+        // // 【贪心算法：】如果有多个连续 1, 那么采用加法是更优的，可以一次消除多个 1，减法更优。 2571
+        // public int minOperations(int i) {
+        //     int r = 1;
+        //     while ((i & (i - 1)) > 0) { // n 不是 2 的幂次
+        //         int lowbit = i & -i; // 这就考到自己的短板了：谁能告诉我，上个周末的周赛题，为什么数 long 的 ibc=Integer.bitCount(long) 就不对，必须折成两关截？
+        //         if ((i & (lowbit << 1)) > 0) i += lowbit; // 多个连续 1
+        //         else i -= lowbit;  // 单个 1
+        //         ++r;
+        //     }
+        //     return r;
+        // }
+
+        // // 万能的【记忆化深搜：】这次刷动规，感觉就写记忆化深搜了。。。。。写得像 1+1=2 一样简单熟练。。。 368
+        // public List<Integer> largestDivisibleSubset(int[] a) { // 突然想起来：这是一个风味独特的，什么狗屁【接龙型】返回链表等相对特殊的数据结构的记忆化深搜?
+        //     n = a.length; this.a = a;
+        //     for (int v : a) s.add(v);
+        //     List<Integer> ans = new ArrayList<>();
+        //     for (int i = 0; i < n; i++) // 【O(N^2logN)】能过吗？
+        //         for (int j = 0; j < n; j++) {
+        //             int u = a[i], v = a[j], min = Math.min(u, v), max = Math.max(u, v);
+        //             if (max % min == 0) {
+        //                 List<Integer> l = dfs(max, max / min);
+        //                 if (l.size() > ans.size()) ans = l;
+        //             }
+        //         }
+        //     return ans;
+        // }
+        // Set<Integer> s = new HashSet<>();
+        // Map<String, List<Integer>> m = new HashMap<>();
+        // int [] a;
+        // int n;
+        // List<Integer> dfs(long i, int j) { // i: u j: d
+        //     long v = i * j;
+        //     if (i > (int)1e9 * 2 || !s.contains((int)v))
+        //         return new ArrayList<>();
+        //         // return null;
+        //     String k = i + "-" + j;
+        //     if (m.containsKey(k)) return m.get(k);
+        //     List<Integer> l = dfs(v, j), ans = new ArrayList<>(); // 感觉这里哪里写得可能不对。。。
+        //     ans.add((int)v);
+        //     // if (l != null)
+        //         for (int val : l) ans.add(val);
+        //     m.put(k, ans);
+        //     return ans;
+        // }
+
+        // public long maxPoints(int[][] a) { 
+        //     int m = a.length, n = a[0].length;
+        //     long [][] f = new long [m][n];
+        //     for (int i = 0; i < n; i++) f[0][i] = a[0][i];
+        //     // for (int i = 0; i < m-1; i++) // 【暴力动规】：还需要一点儿优化 // TLE TLE TLE: 156/157
+        //     //     for (int j = 0; j < n; j++) 
+        //     //         for (int k = 0; k < n; k++) 
+        //     //             f[i+1][j] = Math.max(f[i+1][j], f[i][k] + a[i+1][j] - Math.abs(j - k)); // 还需要一点儿优化。。。
+        //     for (int i = 1; i < m; i++) {
+        //         long ret = f[i-1][0] + 0;
+        //         for (int j = 0; j < n; j++) {
+        //             ret = Math.max(ret, f[i-1][j] + j);
+        //             f[i][j] = a[i][j] - j + ret;
+        //         }
+        //         ret = f[i-1][n-1] - (n-1);
+        //         for (int j = n-2; j >= 0; j--) {
+        //             f[i][j] = Math.max(f[i][j], a[i][j] + j + ret);
+        //             ret = Math.max(ret, f[i-1][j] - j);
+        //         }
+        //     }
+        //     return Arrays.stream(f[m-1]).max().getAsLong();
+        // }
+
+        // public int maxProduct(int[] a) {
+        //     int n = a.length;
+        //     int [] l = new int [n], r = new int [n]; // l: min, r: max
+        //     for (int i = 0; i < n; i++) {
+        //         l[i] = Math.min((i == 0 ? 1 : l[i-1]) * a[i], Math.min((i == 0 ? 1 : r[i-1]) * a[i], a[i]));
+        //         r[i] = Math.max((i == 0 ? 1 : r[i-1]) * a[i], Math.max((i == 0 ? 1 : l[i-1]) * a[i], a[i]));
+        //     }
+        //     return Math.max(Arrays.stream(l).max().getAsInt(), Arrays.stream(r).max().getAsInt());
+        // }
+
+        // static final int mod = (int)1e9 + 7;
+        // public int maxProductPath(int[][] a) { // 负数能取 mod 吗？还有些问题
+        //     int m = a.length, n = a[0].length;
+        //     long [][] f = new long [m][n], r = new long [m][n];
+        //     Arrays.stream(f).forEach(z -> Arrays.fill(z, Integer.MAX_VALUE));
+        //     Arrays.stream(r).forEach(z -> Arrays.fill(z, Integer.MIN_VALUE));
+        //     f[0][0] = a[0][0]; r[0][0] = a[0][0];
+        //     for (int i = 0; i < m; i++) // 【自顶向下】：习惯自顶向下，往下走
+        //         for (int j = 0; j < n; j++) { // 只能向右向下动
+        //             if (j < n-1) {
+        //                 f[i][j+1] = Math.min(f[i][j+1], Math.min(f[i][j] * (long)a[i][j+1] % mod, r[i][j] * (long)a[i][j+1] % mod));
+        //                 r[i][j+1] = Math.max(r[i][j+1], Math.max(f[i][j] * (long)a[i][j+1] % mod, r[i][j] * (long)a[i][j+1] % mod));
+        //             }
+        //             if (i < m-1)  {
+        //                 f[i+1][j] = Math.min(f[i+1][j], Math.min(f[i][j] * (long)a[i+1][j] % mod, r[i][j] * (long)a[i+1][j] % mod));
+        //                 r[i+1][j] = Math.max(r[i+1][j], Math.max(f[i][j] * (long)a[i+1][j] % mod, r[i][j] * (long)a[i+1][j] % mod));
+        //             }
+        //         }
+        //     int v = (int)Math.max(f[m-1][n-1], r[m-1][n-1]);
+        //     return v <= 0 ? -1 : v;
+        // }
+
+        // public boolean canIWin(int n, int t) { // 不知道这里是不是位操作的时候弄错了，再写一遍
+        //     this.t = t; this.n = n; m = n+1;
+        //     return dfs(0, 0);
+        // }
+        // Map<Integer, Boolean> map = new HashMap<>();
+        // int m, n, t;
+        // boolean dfs(int i, int j) { // i: mask 【这里要带玩家顺序】, j: sum
+        //     boolean fstPlayer = (((i >> m) & 1) == 0);
+        //     if (j >= t) {
+        //         map.put(i, fstPlayer);
+        //         return fstPlayer; // 【第一个玩家】赢
+        //     }
+        //     if (map.containsKey(i)) return map.get(i);
+        //     if (fstPlayer) {
+        //         for (int k = 1; k <= n; k++) 
+        //             if ((i & (1 << k)) == 0) {
+        //                 int v = (i | (1 << k) | (fstPlayer ? (1 << m) : 0));
+        //                 if (dfs(v, j + k)) {
+        //                     map.put(i, true);
+        //                     return true;
+        //                 }
+        //             }
+        //     } else {
+        //         for (int k = 1; k <= n; k++) 
+        //             if ((i & (1 << k)) == 0) {
+        //                 int v = (i | (1 << k));
+        //                 v ^= (1 << m); // 把那一位的 1 拿掉
+        //                 if (!dfs(v, j + k)) {
+        //                     map.put(i, false);
+        //                     return false;
+        //                 }
+        //             }
+        //     }
+        //     map.put(i, !fstPlayer);
+        //     return !fstPlayer;
+        // }        
+        // public boolean canIWin(int n, int t) { // 可能哪里没有想对？
+        //     this.t = t; this.n = n; m = n+1;
+        //     return dfs(new boolean [n+1], 0);
+        // }
+        // Map<String, Boolean> f = new HashMap<>();
+        // int m, n, t;
+        // boolean dfs(boolean [] r, int j) { // i: mask 【这里要带玩家顺序】, j: sum
+        //     String key = Arrays.toString(r) + "-" + j;
+        //     if (j >= t) {
+        //         f.put(key, !r[0]);
+        //         return !r[0]; // 【第一个玩家】赢
+        //     }
+        //     if (f.containsKey(key)) return f.get(key);
+        //     if (!r[0]) {
+        //         for (int k = 1; k <= n; k++) {
+        //             if (r[k]) continue;
+        //             boolean [] cur = r.clone();
+        //             cur[0] = true;
+        //             cur[k] = true;
+        //             if (dfs(cur, j + k)) {
+        //                 f.put(key, true);
+        //                 return true;
+        //             }
+        //         }
+        //     } else {
+        //         for (int k = 1; k <= n; k++) {
+        //             if (r[k]) continue;
+        //             boolean [] cur = r.clone();
+        //             cur[0] = false;
+        //             cur[k] = true;
+        //             if (!dfs(cur, j + k)) {
+        //                 f.put(key, false);
+        //                 return false;
+        //             } 
+        //         }
+        //     }
+        //     f.put(key, !r[0]);
+        //     return !r[0];
+        // }
+
+        // public int minNumberOperations(int[] a) { // TLE TLE TLE: 127/129 弄个线段树，来区间型更新不好吗？ 1526
+        //     n = a.length; this.a = a;
+        //     if (Arrays.stream(a).distinct().count() == 1) return a[0];
+        //     return minNumberOperations(0, n-1, 0);
+        // }
+        // int [] a; int n;
+        // int minNumberOperations(int i, int j, int v) {
+        //     if (i > j) return 0;
+        //     if (i == j) return a[i] - v;
+        //     int min = a[i];
+        //     List<Integer> l = new ArrayList<>();
+        //     for (int k = i; k <= j; k++) 
+        //         if (a[k] < min) {
+        //             min = a[k];
+        //             l.clear();
+        //             l.add(k);
+        //         } else if (a[k] == min) l.add(k);
+        //     int ans = min - v, pre = -1, idx = -1;
+        //     for (int k = 0; k < l.size(); k++) {
+        //         idx = l.get(k);
+        //         ans += (k == 0 ? minNumberOperations(i, idx-1, min) :
+        //                 minNumberOperations(pre + 1, idx-1, min));
+        //         pre = idx;
+        //     }
+        //     ans += minNumberOperations(idx+1, j, min);
+        //     return ans;
+        // }
+        // // 【线段树】: 既然上面超时了，就用线段树来写吧【【BUG：】】还有，改天清醒的时候再调一下 1526 
+        // public int minNumberOperations(int[] a) {
+        //     n = a.length;
+        //     m = new HashMap<>(); // 用来记下标
+        //     t = new int [4 * n]; // 初始化 
+        //     for (int i = 0; i < n; i++) {
+        //         update(1, 1, n, i+1, a[i]);
+        //         m.computeIfAbsent(a[i], z -> new ArrayList<>()).add(i);
+        //     }
+        //     return minNumberOperationsRecursion(0, n-1);
+        // }
+        // int minNumberOperationsRecursion(int i, int j) {
+        //     System.out.println("\n i: " + i);
+        //     System.out.println("j: " + j);
+        //     int min = query(1, 1, n, i+1, j+1), ans = min;
+        //     System.out.println("min: " + min);
+        //     List<Integer> l = m.get(min); // 升序排列：可以二分查找，找到在【i,j】范围内的下标，即左右端点
+        //     for (int k = 0; k < l.size(); k++) {
+        //         if (l.get(k) < i) continue;
+        //         if (l.get(k) > j) break;
+        //         // if (a[l.get(k)] == min) { // 以最小值来分片段
+        //         if (l.get(k) < i) ans += minNumberOperationsRecursion(i, l.get(k)-1);
+        //         if (k < l.size()-1) ans += minNumberOperationsRecursion(l.get(k)+1, l.get(k+1)-1);
+        //         else if (k == l.size()-1 && l.get(k) < j) ans += minNumberOperationsRecursion(l.get(k)+1, j);
+        //         // }
+        //     }
+        //     return ans;
+        // }
+        // Map<Integer, List<Integer>> m;
+        // int [] t, a;
+        // int n;
+        // int query(int u, int l, int r, int L, int R) {
+        //     if (L <= l && r <= R) return t[u];
+        //     int m = (l + r) >> 1, left = 0, right = 0;
+        //     if (L <= m) left = query(u << 1, l, m, L, R);
+        //     if (m+1 <= R) right = query(u << 1 | 1, m+1, r, L, R);
+        //     return Math.min(left, right); // 【最小值】
+        // }
+        // void update(int u, int l, int r, int i, int v) {
+        //     if (l == r) {
+        //         t[u] = v;
+        //         return ;
+        //     }
+        //     int m = (l + r) >> 1;
+        //     if (i <= m) update(u << 1, l, m, i, v);
+        //     else update(u << 1 | 1, m+1, r, i, v);
+        //     t[u] = Math.min(t[u << 1], t[u << 1 | 1]); // 【最小值线段树】
+        // }
+
     }
     public static void main (String[] args) { // 【爱表哥，爱生活！！！活宝妹就是一定要嫁给亲爱的表哥！！！】
         Solution s  =  new Solution ();
 
-        int r = s.numberOfArrays(a, 823924906);
-        System.out.println("r: " + r);
+        int [] a = new int [] {3,1,5,4,2};
+        System.out.println(Arrays.toString(a));
+
+      int r = s.minNumberOperations(a);
+       System.out.println("r: " + r);
     } 
 }
 // ListNode head = new ListNode(a[0]); 
@@ -734,7 +1332,6 @@ public class dpseven {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
-
 
 
 

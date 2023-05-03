@@ -12,38 +12,6 @@ import static java.util.stream.Collectors.toMap;
 public class dpsix {
     public static class Solution {
         
-        // 万能的【记忆化深搜：】这次刷动规，感觉就写记忆化深搜了。。。。。写得像 1+1=2 一样简单熟练。。。 368
-        public List<Integer> largestDivisibleSubset(int[] a) { // 突然想起来：这是一个风味独特的，什么狗屁【接龙型】返回链表等相对特殊的数据结构的记忆化深搜?
-            n = a.length; this.a = a;
-            for (int v : a) s.add(v);
-            List<Integer> ans = new ArrayList<>();
-            for (int i = 0; i < n; i++) // 【O(N^2logN)】能过吗？
-                for (int j = 0; j < n; j++) {
-                    int u = a[i], v = a[j], min = Math.min(u, v), max = Math.max(u, v);
-                    if (max % min == 0) {
-                        List<Integer> l = dfs(max, max / min);
-                        if (l.size() > ans.size()) ans = l;
-                    }
-                }
-            return ans;
-        }
-        Set<Integer> s = new HashSet<>();
-        Map<String, List<Integer>> m = new HashMap<>();
-        int [] a;
-        int n;
-        List<Integer> dfs(long i, int j) { // i: u j: d
-            long v = i * j;
-            if (i > (int)1e9 * 2 || !s.contains((int)v)) return null;
-            String k = i + "-" + j;
-            if (m.containsKey(k)) return m.get(k);
-            List<Integer> l = dfs(v, j), ans = new ArrayList<>(); // 感觉这里哪里写得可能不对。。。
-            ans.add((int)v);
-            if (l != null)
-                for (int val : l) ans.add(val);
-            m.put(k, ans);
-            return ans;
-        }
-
         public int longestValidParentheses(String t) { // TODO TODO TODO: 不知道这个转化的思路对不对，改天再写。。。这个思路可能不太对，应该用栈
             int n = t.length(), max = 0, sum = 0; char [] s = t.toCharArray();
             int [] r = new int [n];
@@ -782,34 +750,6 @@ public class dpsix {
             }
         }
 
-        public int minNumberOperations(int[] a) { // TLE TLE TLE: 127/129 弄个线段树，来区间型更新不好吗？ 1526
-            n = a.length; this.a = a;
-            if (Arrays.stream(a).distinct().count() == 1) return a[0];
-            return minNumberOperations(0, n-1, 0);
-        }
-        int [] a; int n;
-        int minNumberOperations(int i, int j, int v) {
-            if (i > j) return 0;
-            if (i == j) return a[i] - v;
-            int min = a[i];
-            List<Integer> l = new ArrayList<>();
-            for (int k = i; k <= j; k++) 
-                if (a[k] < min) {
-                    min = a[k];
-                    l.clear();
-                    l.add(k);
-                } else if (a[k] == min) l.add(k);
-            int ans = min - v, pre = -1, idx = -1;
-            for (int k = 0; k < l.size(); k++) {
-                idx = l.get(k);
-                ans += (k == 0 ? minNumberOperations(i, idx-1, min) :
-                        minNumberOperations(pre + 1, idx-1, min));
-                pre = idx;
-            }
-            ans += minNumberOperations(idx+1, j, min);
-            return ans;
-        }
-
         public int minDifficulty(int[] a, int d) { // 如果能读明白，是把这个数级划分为 d 个子数组，就狠好解题了。。。
             n = a.length; this.a = a;
             if (n < d) return -1;
@@ -978,26 +918,6 @@ public class dpsix {
                     return f[i][j] = (j == 0 ? true : false);
             }
             return f[i][j] = (j == 0 ? false : true);
-        }
-
-        public String stoneGameIII(int[] a) { // 【没弄明白：】 min-max 题型，算是怎么回事？ 1406
-            n = a.length; this.a = a; 
-            f = new Integer [n][2];
-            int v = dfs(0);
-            return v > 0 ? "Alice" : (v == 0 ? "Tie" : "Bob");
-        }
-        Integer [][] f;
-        int [] a;
-        int n;
-        int dfs(int i, int j) { // 怎么才能把它设计成：A － B 多出来的分值呢？
-            if (i == n) return 0;
-            if (f[i][j] != null) return f[i][j];
-            int ans = 0, sum = 0;
-            for (int k = i; k <= Math.min(n-1, i+2); k++) {
-                sum += a[k];
-                ans = Math.max(ans, sum - dfs(k+1, 1-j));
-            }
-            return f[i] = ans;
         }
 
         public int maxCoins(int[] a) { // 这个题被自己彻底忘记了，只能先硬瓣一下。。。没弄懂。。。 312
@@ -1201,33 +1121,6 @@ public class dpsix {
                 else r = m;
             }
             return l >= 0 && l <= r && a[l][0] >= v ? l : -1;
-        }
-
-        public int stoneGameVIII(int[] a) { // 【记忆化深搜：】仍处在试着去理解这些 min-max 之类的题型，还是昏的 1872
-            n = a.length; this.a = a;
-            p = new int [n+1];
-            for (int i = 0; i < n; i++) p[i+1] = p[i] + a[i];
-            System.out.println(Arrays.toString(p));
-            f = new Integer [n];
-            return dfs(0);
-        }
-        Integer [] f;
-        int [] a, p;
-        int n;
-        int dfs(int i) {
-            System.out.println("\n i: " + i);
-            if (i >= n-1) return 0;
-            if (f[i] != null) return f[i];
-            int r = 0, sum = a[i];
-            for (int j = i+1; j < n; j++) {
-                sum += a[j];
-                a[j] = sum;
-                // r = Math.max(r, p[j+1] - dfs(j+1));
-                r = Math.max(r, sum - dfs(j));
-            }
-            System.out.println("\n i: " + i);
-            System.out.println("r: " + r);
-            return f[i] = r;
         }
 
         public int minimumDistance(String t) { // 1320: 我本来要【记忆化深搜】的，可是一看，它说让【暴搜】，想下感觉暴搜不该是天下最简单的事吗？
@@ -1435,34 +1328,5 @@ public class dpsix {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
