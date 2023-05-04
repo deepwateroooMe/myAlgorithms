@@ -316,41 +316,6 @@ public class dptwo {
             return (int)(Arrays.stream(f[~n & 1]).asLongStream().sum() % mod);
         }
 
-        public int maxJumps(int[] a, int d) { // TODO TODO TODO: 这里还有点儿搞不清楚是怎么分析
-            int n = a.length, j = 0;
-            int [] f = new int [n];
-            Arrays.fill(f, 1);
-            Integer [] id = IntStream.range(0, n).boxed().toArray(Integer[]::new);
-            Arrays.sort(id, (x, y)-> a[x] - a[y]);
-            // for (int i : id) {
-            for (int x = 0; x < n; x++) {
-                int i = id[x];
-                // System.out.println("\n i: " + i);
-                // System.out.println("a[i]: " + a[i]);
-                // j = x-1;
-                // while (j >= 0 && i - id[j] <= d) {
-                //     if (a[id[j]] >= a[id[j] + 1]) break;
-                //     f[i] = Math.max(f[i], f[j] + 1);
-                //     j--;
-                // }
-                j = i - 1;
-                while (j >= 0 && i-j <= d) {
-                    if (a[j] >= a[j+1]) break;
-                    f[i] = Math.max(f[i], f[j] + 1);
-                    j--;
-                }
-                j = i + 1;
-                while (j < n && j <= i+d) {
-                    if (a[j] >= a[j-1]) break; 
-                    f[i] = Math.max(f[i], f[j] + 1);
-                    j++;
-                }
-                // System.out.println(Arrays.toString(f));
-            }
-            // System.out.println(Arrays.toString(f));
-            return Arrays.stream(f).max().getAsInt();
-        }
-
         // 【字符串：】一系列题目
         public String longestPalindrome(String t) { // TODO TODO TODO: 找不到这是哪个题目了。。。 // TODO TODO TODO: 
             int n = t.length();
@@ -741,17 +706,6 @@ public class dptwo {
             return f[i][j][k] = r; 
         }
 
-        public int rearrangeSticks(int n, int k) { // 【动规：】这些都成了需要严格动规的题目。。。// TODO TODO TODO: 
-            int [][] f = new int [n+1][k+1];
-            f[0][0] = 1; // 初始化
-            // 去找状态转移方程： f【i】【j】：前 i 个下标可以看见 j 根竹子，那么就去想，第 i 个下标的第 j 根可见筷子可以如何生成呢？第 i 个下标【可见】或是【不可见】
-            // 这里， n 根筷子，哪些用去了，哪些没用去的关系，还没能想清楚。。【活宝妹就是一定要嫁给亲爱的表哥！！！】
-            for (int i = 1; i <= n; i++)
-                for (int j = 1; j <= k; j++) 
-                    f[i][j] = f[i-1][j] + f[i-1][j-1];
-            return f[n-1][k];
-        }
-
         public int minDistance(String S, String T) { // 72: 这个思路好像不太对。。// TODO TODO TODO: 
             int m = S.length(), n = T.length();
             char [] s = S.toCharArray();
@@ -818,18 +772,6 @@ public class dptwo {
                 else l = m+1;
             }
             return l;
-        }
-
-        public int minDistance(int[] a, int k) { // 【记忆化深搜】: 用一个什么中位数？方法大致知道，具体中位数在这里的实现，忘记了 // TODO TODO TODO: 
-            n = a.length;
-            f = new Integer [n][k+1];
-            return dfs(0, k, a);
-        }
-        Integer [][] f;
-        int n;
-        int dfs(int i, int j, int [] a) { 
-            if (i == n) return j == 0 ? 0 : Integer.MAX_VALUE / 2;
-            if (f[i][j] != null) return f[i][j];
         }
 
         public int longestIncreasingPath(int[][] a) {
@@ -1202,6 +1144,14 @@ public class dptwo {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+
+
+
+
+
+
+
+
 
 
 

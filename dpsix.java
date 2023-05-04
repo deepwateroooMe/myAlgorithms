@@ -58,34 +58,6 @@ public class dpsix {
             return max;
         }
 
-        // 【比较繁琐：】先用栈解出正确答案；再记忆化深搜【这个地方的思路还不太清楚。。。】出所有可能答案？再计结果 2019
-        public int scoreOfStudents(String t, int[] a) { 
-            n = a.length; m = t.length(); s = t.toCharArray(); this.a = a; 
-            int ans = getCorrectResult();
-            System.out.println("ans: " + ans);
-
-            return 0;
-        }
-        char [] s; int [] a;
-        int n, m;
-        int getCorrectResult() {
-            Stack<Integer> si = new Stack<>(); 
-            Stack<Character> sc = new Stack<>();
-            for (int i = 0; i < m; i++) {
-                char c = s[i];
-                if (Character.isDigit(c)) {
-                    if (!sc.isEmpty() && sc.peek() == '*') { // 计算一步结果: 先算乘法 
-                        int v = si.pop() * (c - '0');
-                        sc.pop();  // 把乘号，扔出去
-                        si.push(v); // 把当前结果，入数字栈
-                    } else si.push(c-'0'); // 数字栈
-                } else sc.push(c); // 符号栈
-            }
-            int r = 0; // 当前，只剩下加法来做
-            while (!si.isEmpty()) r += si.pop();
-            return r;
-        }
-
         public int minCut(String t) { // 最少切割的意思是说，每个回文尽可能地长 // TODO TODO TODO: 思路不清楚，没写完
             int n = t.length(); char [] s = t.toCharArray();
             boolean [][] f = new boolean [n][n];
@@ -833,52 +805,6 @@ public class dpsix {
             return f[i][j] = ans;
         }
 
-        // 算出最长公有子序列之后，要用这个东西把最短XX 给还原回来。。。。。
-        public String shortestCommonSupersequence(String S, String T) { // 1092
-            int m = S.length(), n = T.length();
-            char [] s = S.toCharArray();
-            char [] t = T.toCharArray();
-            int [][] f = new int [m+1][n+1];
-            for (int i = 0; i < m; i++) 
-                for (int j = 0; j < n; j++)
-                    if (s[i] == t[j]) f[i+1][j+1] = f[i][j] + 1;
-                    else f[i+1][j+1] = Math.max(f[i+1][j], f[i][j+1]);
-            if (f[m][n] == Math.max(m, n)) return S;
-            System.out.println("f.length: " + f.length);
-            for (int z = 0; z < f.length; ++z) 
-                System.out.println(Arrays.toString(f[z]));
-            // 然后根据上面的统计结果，往回倒。。。。。
-            int o = m + n - f[m][n]; int i = 0, j = 0;
-            char [] r = new char [o];
-            for (int k = 0; k < o; k++) {
-                System.out.println("\n k: " + k);
-                // System.out.println("i: " + i);
-                // System.out.println("j: " + j);
-                if (i < m && j < n && s[i] == t[j]) {
-                    r[k] = s[i];
-                    i++;
-                    j++;
-                } else if (i < m-1 && j < n-1 && f[i+1][j+2] > f[i+2][j+1]) {
-                    r[k] = t[j]; j++;
-                } else if (i < m-1 && j < n-1) {
-                    r[k] = s[i]; i++;
-                } else if (i < m || j < n) {
-                    while (i < m) r[k++] = s[i++];
-                    System.out.println("j: " + j);
-                    System.out.println("k: " + k);
-                    while (j < n) r[k++] = t[j++];
-                }
-                 System.out.println(Arrays.toString(r));
-            }
-             System.out.println(Arrays.toString(r));
-            return new String(r);
-        }
-        String a = "bbabacaa";
-        String b = "cccababab";
-        System.out.println("a: " + a);
-        System.out.println("b: " + b);
-        String r = s.shortestCommonSupersequence(a, b);
-
         public int minCost(int n, int[] a) {
             this.n = n; m = a.length+2; 
             Arrays.sort(a);
@@ -987,40 +913,6 @@ public class dpsix {
         System.out.println(Arrays.toString(b));
         int r = s.maximumsSplicedArray(a, b);
 
-        public int minDistance(int[] a, int k) { // 1478 中位数，讨厌数学
-            n = a.length; this.a = a;
-            r = new int [n+1];
-            for (int i = 0; i < n; i++) r[i+1] = r[i] + a[i];
-            System.out.println(Arrays.toString(r));
-            f = new Integer [n][k+1];
-            return dfs(0, k);
-        }
-        Integer [][] f;
-        int [] a, r;
-        int n;
-        int dfs(int i, int j) {
-            System.out.println("\n i: " + i);
-            System.out.println("j: " + j);
-            if (i == n) return 0;
-            if (j == 1) {
-                // int r = 0;
-                // for (int k = i; k < n; k++)
-                //     r += a[k] - a[i + (n - i) / 2 - 1];
-                return f[i][j] = r[n] - r[i] - (n-i) * a[i+(n-i) / 2 -1];
-            }
-            if (f[i][j] != null) return f[i][j];
-            int ans = Integer.MAX_VALUE;
-            for (int k = i; k < n-(j-1); k++) { // 不会算中位数。。。
-                System.out.println("k: " + k);
-                ans = Math.min(ans, (k-i == 0 ? 0 : r[k+1] - r[i] - a[i + (k+1-i)/2 - 1] * (k + 1 - i)) + dfs(k+1, j-1));
-                // ans = Math.min(ans, (k-i == 0 ? 0 : r[k+1] - r[i] - (a[k] + a[i]) / 2 * (k + 1 - i)) + dfs(k+1, j-1));
-            }
-            System.out.println("\n i: " + i);
-            System.out.println("j: " + j);
-            System.out.println("ans: " + ans);
-            return f[i][j] = ans;
-        }
-
         public int maxHeight(int[][] a) {
             int n = a.length;
             List<int []> l = new ArrayList<>();
@@ -1121,42 +1013,6 @@ public class dpsix {
                 else r = m;
             }
             return l >= 0 && l <= r && a[l][0] >= v ? l : -1;
-        }
-
-        public int minimumDistance(String t) { // 1320: 我本来要【记忆化深搜】的，可是一看，它说让【暴搜】，想下感觉暴搜不该是天下最简单的事吗？
-            n = t.length; s = t.toCharArray();
-            f = new Integer [n][26][27];
-            return dfs(0, 26, 26);
-        }
-        int n; char [] s;
-        Integer [][][] f;
-        int dfs(int i, int j, int k) {
-            if (i == n) return 0;
-            if (f[i][j][k] != null) return f[i][j][k];
-        }        
-        public int minimumDistance(String t) {// 1320: 我本来要【记忆化深搜】的，可是一看，它说让【暴搜】，想下感觉暴搜不该是天下最简单的事吗？
-            int n = t.length(); char [] s = t.toCharArray(); int x = 5, y = 6;
-            int [][][] f = new int [26][26][n];
-            for (int i = 0; i < n; i++) for (int j = 0; j < n; j++) Arrays.fill(f[i][j], Integer.MAX_VALUE);
-            f[0][0][0] = 0;
-            for (int i = 0; i < 26; i++) // 第一个手指头
-                for (int j = 0; j < 26; j++) { // 第二个手指头
-                    if (j == i) continue; // 不会笨到，两个手指头敲一个键吧。。。
-                    for (int k = 0; k < n; k++) { // 第 k 个字符
-                        int ii = (s[k] - 'A') / y, jj = (s[k] - 'A') % y;
-                        int d = Math.abs(ii - i / y) + Math.abs(jj - i % y), dd = Math.abs(ii - j / y) + Math.abs(jj - j % y);
-                        // System.out.println("\n (s[k]-'A): " + (s[k]-'A'));
-                        // System.out.println("j: " + j);
-                        // System.out.println("k: " + k);
-                        if (d <= dd) f[s[k]-'A'][j][k] = Math.min(f[s[k]-'A'][j][k], (k == 0 ? 0 : f[i][j][k-1]) + d);
-                        else f[i][s[k]-'A'][k] = Math.min(f[i][s[k]-'A'][k], (k == 0 ? 0 : f[i][j][k-1]) + dd);
-                    }
-                }
-            int ans = Integer.MAX_VALUE;
-            for (int i = 0; i < 26; i++)
-                for (int j = 0; j < 26; j++)
-                    ans = Math.min(ans, f[i][j][n-1]);
-            return ans;
         }
 
         static final int mod = (int)1e9 + 7;
@@ -1328,5 +1184,14 @@ public class dpsix {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+
+
+
+
+
+
+
+
+
 
 
