@@ -856,36 +856,6 @@ public class dptwo {
             return f[i][j][k] = r;
         }
 
-        public int numSquarefulPerms(int[] a) { // TODO TODO TODO: 996
-            Arrays.sort(a);
-            n = a.length;
-            backTracking(0, new ArrayList<Integer>(), a);
-            return r * 2;
-        }
-        int n, r = 0;
-        void backTracking(int u, List<Integer> l, int [] a) {
-            if (l.size() >= 2) 
-                if (!check(l)) return ;
-            if (u == n) {
-                if (l.size() == n) {
-                    r++;
-                }
-                return ;
-            }
-            l.add(a[u]);
-            backTracking(u+1, l, a);
-            l.remove(l.size()-1);
-            backTracking(u+1, l, a);
-        }
-        boolean check(List<Integer> l) {
-            int r = l.get(l.size()-1) + l.get(l.size()-2);
-            return isSquare(r);
-        }
-        boolean isSquare(int v) {
-            int sr = (int)Math.sqrt(v);
-            return sr * sr == v;
-        }
-
         // 【动规：】用动规先找出三段的和的最大值，仍然一旦扫到最大值就退出。或是说动规找到最大值后，根据住处，再把下标倒出来？？？
         public int [] maxSumOfThreeSubarrays(int[] a, int l) { // 这是最土的暴力解法，怎么优化呢？ // TLE TLE TLE: 34/43
             int n = a.length, ans [] = new int [3]; 

@@ -14,37 +14,6 @@ public class dpseven {
 
     public static class Solution {
 
-        static final int mod = (int)1e9 + 7;
-        public int profitableSchemes(int n, int t, int[] g, int[] p) { // 【记忆化深搜：】数据规模狠小，我可以暴搜之。。。// TLE TLE TLE: 就搞不懂，为什么它就会超时？
-            m = g.length; this.n = n; this.g = g; this.p = p; this.t = t; 
-            return dfs(n, 0, 0);
-        }
-        Map<String, Integer> f = new HashMap<>();
-        int [] g, p;
-        int n, m, t;
-        int dfs(int i, int j, int k) {
-            if (i <= 0 || j == m) return k < t ? 0 : 1; // 没窃贼可用了
-            // if (k >= t) return 1; // 这样不对，没有遍历到尾巴，计数可能远不止 1 种，好多种。。。
-            String key = i + "-" + j + "-" + k;
-            if (f.containsKey(key)) return f.get(key);
-            long ans = dfs(i, j+1, k); // 放弃，第 j 个案件，不作此案
-            if (i >= g[j]) // 作案前提：此案参案人数得足够
-                ans = (ans + dfs(i - g[j], j+1, k + p[j])) % mod; // 第 j 件案：参与了
-            f.put(key, (int)ans);
-            return (int)ans;
-        }
-        static final int mod = (int)1e9 + 7; // TODO TODO TODO: 用动规，仍然不熟悉，瓣不出来。。。
-        public int profitableSchemes(int n, int t, int[] g, int[] p) { // 【动规：】应该就是个最基本的动规题型，可是为什么会没有思路呢？
-            int m = g.length;
-            int [][][] f = new int [m][n][t+1]; // 【自顶向下：】所有的参数用最压缩的空间，应该不会暴栈。。。
-            f[0][0][0] = 1;
-            for (int i = 0; i < m; i++) // 遍历案件
-                for (int j = 0; j + g[i] < n; j++) // 遍历可用人选方案
-                    for (int k = 0; k + p[i] <= t; k++) // 这里糊涂：统计少了吗？
-                        f[i][j+g[i]][k+p[i]] = (f[i][j+g[i]][k+p[i]] + f[i][j][k]) % mod;
-            return f[m-1][n-1][t];
-        }
-
         public int maxStudents(char[][] a) { // 1349
             int m = a.length, n = a[0].length;
             int [] l = new int [m];
@@ -858,30 +827,6 @@ public class dpseven {
                 if (sc.contains(s[i]))
                     ans += (l[i] == -1 ? 1 : i - l[i] + 1) * (r[i] == -1 ? 1 : r[i] - i + 1);
             return ans;
-        }
-
-        public int minScoreTriangulation(int[] a) { // 完全没能回想起来是怎么回事 // TODO TODO TODO: 
-            this.a = a; n = a.length;
-            f = new Integer [n][n];
-            return dfs(0, n-1);
-        }
-        int [] a;
-        int n;
-        Integer [][] f;
-        int dfs(int i, int j) {
-            if (i > j) return 0;
-            if (j - i < 2) return 0;
-            // if (i == j) return f[i][j] = a[i];
-            if (i + 2 == j) return f[i][j] = a[i] * a[i+1] * a[j];
-            // if (i + 3 == j) return f[i][j] = Math.min(a[i] * a[i+1] * a[j] + a[j] * a[i+1] * a[j-1], a[i] * a[i+1] * a[j-1] + a[j-1] * a[j] * a[i]);
-            if (f[i][j] != null) return f[i][j];
-            int r = Integer.MAX_VALUE;
-            for (int k = i+1; k < j; k++) {
-                // r = Math.min(r, a[i] * a[k] * a[j] + dfs(i+1, k-1) + (k+2 == j ? a[k] * a[k+1] * a[j] : dfs(k+1, j-1)));
-                r = Math.min(r, a[i] * a[k] * a[j] + dfs(i+1, k) + dfs(k+1, j));
-                // r = Math.min(r, a[i] * a[k] * a[j] + dfs(i, k-1) + dfs(k, j-1));
-            }
-            return f[i][j] = r;
         }
 
         public int mergeStones(int[] a, int k) { // 1000

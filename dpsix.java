@@ -169,39 +169,6 @@ public class dpsix {
             return f[ii][jj][k%2] = !mouseTurn;
         }
 
-        public int catMouseGame(int[][] g) { / 改天再写这两个题目
-            n = g.length; this.g = g; 
-            f = new Integer [n][n][2*n+1];
-            return dfs(1, 2, 0);
-        }
-        int n; int [][] g;
-        Integer [][][] f;
-        int dfs(int i, int j, int k) {
-            // if (k == 2 * n) return f[i][j][k] = 0;
-            if (k == 2 * n) return 0;
-            if (i == j) return f[i][j][k] = 2; // 同一位置：猫赢
-            if (i == 0) return f[i][j][k] = 1; // 老鼠：能够先进洞房...
-            if (f[i][j][k] != null) return f[i][j][k];
-            if (k % 2 == 0) { // 老鼠
-                boolean catWin = true;
-                for (int v : g[i]) {
-                    int val = dfs(v, j, k+1);
-                    if (val == 1) return f[i][j][k] = 1;
-                    else if (val != 2) catWin = false;
-                }
-                return f[i][j][k] = (catWin ? 2 : 0);
-            } else { // 猫
-                boolean mouseWin = true;
-                for (int v : g[j]) {
-                    if (v == 0) continue; // 猫：不许进老鼠房间...
-                    int val = dfs(i, v, k+1);
-                    if (val == 2) return f[i][j][k] = 2;
-                    else if (val != 1) mouseWin = false;
-                }
-                return f[i][j][k] = (mouseWin ? 1 : 0);
-            }
-        }
-
         // 没有读懂题目的提示：是什么意思，为什么传统的方法不可以？【这里有个问题是：】找到了时间限度内可达，可是因为每个节点的重量。。。再想一下 1928
         public int minCost(int t, int [][] egs, int[] a) {
             n = egs.length; g = new ArrayList [n]; this.a = a; 
@@ -291,51 +258,6 @@ public class dpsix {
             }
             return f[n];
         }        
-
-        static final int mod = (int)1e9 + 7; // TODO TODO TODO: 现在初步尝试，还想不清楚哪里出错了。。。 // TODO TODO TODO: 
-        public int countPartitions(int[] a, int k) {
-            n = a.length; this.a = a; 
-            long sum = 0;
-            for (int v : a) sum += v;
-            if (sum < 2 * k) return 0;
-            // int [] f = new int [k]; // 去数和记：和不超过 k 的所有的可能性【O(10^6)】可能是苛以过的
-            // f[0] = 1;
-            // for (int i = 0; i < n; i++) { // 遍历每个当前数：把这个数，加与不加
-            //     int v = a[i];
-            //     for (int j = k-1; j - v >= 0; j--) // 对于每个出现的数值，不管是不是 v 的重复出现，累计更新重复效果。。
-            //         if (f[j-v] > 0) f[j] = (f[j] + f[j-v]) % mod;
-            //     if (v < k) f[v] = Math.max(f[v], 1); // 更新当前和的可能性：最小为 1
-            // }
-            Arrays.sort(a);
-            f = new Integer [n][k];
-            dfs(n-1, k-1); // 记忆化深搜
-            System.out.println("f.length: " + f.length);
-            for (int z = 0; z < f.length; ++z) 
-                System.out.println(Arrays.toString(f[z]));
-            // int ans = 0;
-            // for (int i = 0; i < k; i++)
-            //     if (f[n-1][i] != null) ans = (ans + f[n-1][i]) % mod;
-            // return quickPow(2, n) - ans;
-            return quickPow(2, n) - dfs(n-1, k-1);
-        }
-        Integer [][] f;
-        int n; int [] a;
-        int dfs(int i, int j) { // 搜和 <= j
-            if (j < 0) return 0;
-            if (i < 0) return 1;
-            if (f[i][j] != null) return f[i][j];
-            return f[i][j] = (int)(dfs(i-1, j-a[i]) + dfs(i-1, j)) % mod;
-        }
-        int quickPow(int v, int n) {
-            long r = 1;
-            while (n > 0) {
-                if (n % 2 == 1)
-                    r = (r * v) % mod;
-                v = (v * v) % mod;
-                n >>= 1;
-            }
-            return (int)r;
-        }
 
         // 先走一遍，采最多的走，再走一遍，能采多少采多少？那么第一遍走，就把采得最多的路径给改掉，变每格为0 【好像仍然会失掉最优解】
         public int cherryPickup(int[][] a) {
@@ -1184,6 +1106,15 @@ public class dpsix {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+
+
+
+
+
+
+
+
+
 
 
 

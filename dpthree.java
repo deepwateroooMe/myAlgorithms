@@ -587,19 +587,6 @@ public class dpthree {
             }
         } 
 
-        public int numberOfArithmeticSlices(int[] a) { // TODO TODO TODO: 
-            int n = a.length, i = 1, j = 0, r = 0, d = a[1] - a[0];
-            if (n == 1) return 0;
-            while (i < n) {
-                while (i < n-1 && a[i+1] - a[i] == d) i++;
-                r++; // 数得不对。。。413
-                ++i;
-                if (i == n) return r;
-                d = a[i] - a[i-1];
-            }
-            return r;
-        }
-
         public int countArrangement(int n) {
             this.n = n;
             backTracking(0, new ArrayList<Integer>(), new boolean [n]);
@@ -844,33 +831,6 @@ public class dpthree {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

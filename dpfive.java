@@ -62,57 +62,6 @@ public class dpfive {
             return false; 
         }
 
-        // 【记忆化深搜：】深深惊讶，我这两天把记忆化深搜写得像 1+1=2 一样简单。。。。。
-        // Queue<Integer> q = new PriorityQueue<>(); 感觉确实能再快一点儿
-        public int minimumVisitedCells(int[][] a) { // 记忆化深搜： TLE 1028/1069 动态规划，应该也会超时
-            m = a.length; n = a[0].length; this.a = a;
-            f = new Integer [m][n];  // 自己认准某一个方向来遍历
-            Arrays.stream(f).forEach(z -> Arrays.fill(z, Integer.MAX_VALUE));
-            int r = dfs(0, 0);
-            return r == Integer.MAX_VALUE ? -1 : r;
-        }
-        Integer [][] f;
-        int [][] a;
-        int m, n;
-        int dfs(int i, int j) { // 记忆化揵从当前坐标到终点的最小步数
-            if (i == m-1 && j == n-1) return f[i][j] = 1;
-            if (f[i][j] < Integer.MAX_VALUE ) return f[i][j];
-            int r = Integer.MAX_VALUE;
-            for (int y = Math.min(j + a[i][j], n-1); y > j; y--) 
-                r = Math.min(r, 1 + dfs(i, y));
-            for (int x = Math.min(m-1, a[i][j] + i); x > i; x--) 
-                r = Math.min(r, 1 + dfs(x, j));
-            return f[i][j] = r;
-        }
-        public int minimumVisitedCells(int[][] a) { // 带两个优先队列的动规写法：// TLE 1043/1069 改天再接着写。。。
-            int m = a.length, n = a[0].length;
-            if (m == 1 & n == 1) return 1;
-            int [][] f = new int [m][n];
-            Arrays.stream(f).forEach(z -> Arrays.fill(z, m+n));
-            // Queue<int []> h = new PriorityQueue<>((x, y) -> x[0] - y[0]); // 水平方向【可以简化为只用一个】
-            for (int i = 0; i < m; i++) {
-                for (int j = 0; j < n; j++) { // 水平方向上的
-                    if (i == 0 && j == 0) {
-                        f[i][j] = 1; continue;
-                    }
-                    // h.clear();
-                    // for (int k = Math.max(0, i - a[i][j]); k < i; k++) { // 上下方向【这里可能会漏掉一些相对优解】
-                    for (int k = 0; k < i; k++) // 上下方向
-                        // if (f[k][j] != m+n && a[k][j] > 0 && a[k][j] + k >= i) h.offer(new int [] {f[k][j], k, j});
-                        if (f[k][j] != m+n && a[k][j] > 0 && a[k][j] + k >= i)
-                            f[i][j] = Math.min(f[i][j], f[k][j] + 1);
-                    // for (int k = Math.max(0, j - a[i][j]); k < j; k++) { // 左右方向【这里可能会漏掉一些相对优解】 
-                    for (int k = 0; k < j; k++) // 左右方向 
-                        // if (f[i][k] != m+n && a[i][k] > 0 && a[i][k] + k >= j) h.offer(new int [] {f[i][k], i, k});
-                        if (f[i][k] != m+n && a[i][k] > 0 && a[i][k] + k >= j) // h.offer(new int [] {f[i][k], i, k});
-                            f[i][j] = Math.min(f[i][j], f[i][k] + 1);
-                    // if (!h.isEmpty()) f[i][j] = Math.min(f[i][j], f[h.peek()[1]][h.peek()[2]] + 1);
-                    // h.offer(new int [] {f[i][j], i, j});
-                }
-            }
-            return f[m-1][n-1] == m+n ? -1 : f[m-1][n-1];
-        }
-
         // 这个题：写出涂房子、分街区有街区数目的限制了的之后，应该就会写了，要背背带背背包，背个数组作状态。。。
         // 背个数组背太多了，只要背：最后一次的数字和出现次数就可以了。。。【活宝妹就是一定要嫁给亲爱的表哥！！！】
         static final int mod = (int)1e9 + 7;
@@ -264,45 +213,6 @@ public class dpfive {
             return 0;
         }
 
-        public int coinChange(int[] a, int t) { // 边界条件，狠烦人。。。写不到了，再写记忆化深搜呀。。。
-            if (t == 0) return 0;
-            Arrays.sort(a);
-            int n = a.length;
-            if (t < a[0]) return -1;
-            int [] f = new int [Math.max(t+1, Arrays.stream(a).max().getAsInt() + 1)];
-            Arrays.fill(f, Integer.MAX_VALUE / 2);
-            for (int v : a) f[v] = 1;
-            f[0] = 0;
-            for (int i = n-1; i >= 0; i--) { // 只是从大到小，来遍历硬币
-                int v = a[i];
-                f[v] = 1;
-                for (int j = t; j >= v; j--) 
-                    f[j] = Math.min(f[j], f[j-v] + 1);
-            }
-            return f[t] >= Integer.MAX_VALUE / 2 ? -1 : f[t];
-        }
-        public int coinChange(int[] a, int t) { // TLE TLE TLE: 
-            Arrays.sort(a);
-            // System.out.println(Arrays.toString(a));
-            n = a.length; this.a = a;
-            if (n == 1) return t % a[0] == 0 ? t / a[0] : -1;
-            if (t < a[0]) return -1;
-            return dfs(t, n-1);
-        }
-        Map<Integer, Integer> m = new HashMap<>(); // 防：题目叨钻，离散化数据 
-        int n; int [] a;
-        int dfs(int i, int j) {
-            if (i == 0) return 0;
-            if (j < 0) return Integer.MAX_VALUE / 2;
-            String k = i + "-" + j;
-            if (m.containsKey(k)) return m.get(k);
-            if (a[j] > i) return m.getOrDefault(k, dfs(i, j-1));
-            int ans = Integer.MAX_VALUE / 2, cnt = i / a[j];
-            for (int x = cnt; x >= 0; x--) 
-                ans = Math.min(ans, x + dfs(i - x * a[j], j-1));
-            return m.getOrDefault(k, ans);
-        }
-        
         static final int mod = (int)1e9 + 7;
         public int countRestrictedPaths(int n, int[][] egs) {
             this.n = n; m = n + 1;
@@ -544,67 +454,6 @@ public class dpfive {
             return (ans == 0 ? mod : ans)-1;
         }
 
-        public boolean isMatch(String S, String T) { // 昨天想了一天，今天弱于会写这两个题目了。。。扔了那么多舍子。。。293/354 改天再写
-            m = S.length(); n = T.length();
-            s = S.toCharArray(); t = T.toCharArray();
-            f = new Boolean [m][n][26];
-            return dfs(0, 0, -1);
-        }
-        Boolean [][][] f; // 【机关：】这里，就像扔舍子、房子涂街区，狠多时候会需要记住前一个舍子或是房子的涂色，要把前一个字母给记住。。。
-        char [] s, t;
-        int m, n;
-        boolean dfs(int i, int j, int k) {
-            System.out.println("\n i: " + i);
-            System.out.println("j: " + j);
-            System.out.println("k: " + (char)(k + 'a'));
-            if (i == m && j == n) return true; // 【终止条件】
-            if (i == m) { // j < n
-                while (j < n && t[j] == '*') j++;
-                return j == n ? true : false;
-            }
-            if (j == n) return false;
-            if (k >= 0 && f[i][j][k] != null) return f[i][j][k];
-            // 【处理当前下标】：各种可能性
-            if (s[i] == t[j] || t[j] == '.') {
-                boolean v = dfs(i+1, j+1, s[i]-'a');
-                if (k >= 0) f[i][j][k] = v;
-                return v;
-            } else if (s[i] != t[j] && t[j] != '.' && t[j] != '*') { // 【坑人不眨眼】×还有个特效：它能把带×字符的前一个字符给消除了。。。
-                if (j == n-1 || t[j+1] != '*') { // 后面不可能再跟 *
-                    if (k >= 0) f[i][j][k] = false;
-                    return false;
-                } else { // (j < n-1 && t[j+1] == '*')
-                    // int x = i; // 这里考虑的是：【t[j]*】来匹配【s[i]+[12...9m...]】
-                    // while (x < m && s[x] == s[i]) {  // 【坑人不眨眼】×还有个特效：它能把带×字符的前一个【严格地说是，如果连续，前一片同字符重复的片段】字符给消除了。。。
-                    if (dfs(i+1, j, s[i]-'a') || dfs(i, j+2, k)) { // 这里记的是： t[j] 中消除掉的前一个字符，因为以后可能还需要消除。。。
-                        if (k >= 0) f[i][j][k] = true;
-                        return true;
-                    }
-                    //     x++;
-                    // }
-                    if (k >= 0) f[i][j][k] = false;
-                    return false;
-                }
-            } else { // s[i] != t[j] && t[j] == '*': 【这里应该还需要考虑 * 的消除作用。。。】 // TODO TODO TODO: 
-                System.out.println("\n i: " + i);
-                System.out.println("j: " + j);
-                int x = i;
-                while (x < m && s[x] == s[i]) { // 用‘×’来配【0, 或是剩下的【i,i+1...m-1】】序列
-                    // if (dfs(x, j + 1, s[i] - 'a')) return f[i][j][k] = true;
-                    if (dfs(x, j + 1, s[i] - 'a')) return f[i][j][k] = true;
-                    x++;
-                }
-                // if (x == m && j == n-1) { // 【BUG:】这只是一个特例
-                //     if (k >= 0) f[i][j][k] = true;
-                //     return true;
-                // }
-                if (dfs(x, j+1, s[i]-'a')) return f[i][j][k] = true;
-                return f[i][j][k] = false;
-            }
-        }
-        String a =  "mississippi";
-        String b = "mis*is*p*.";
-
         public boolean isMatch(String S, String T) { // 【爱表哥，爱生活！！！活宝妹就是一定要嫁给亲爱的表哥！！！】
             m = S.length(); n = T.length(); s = S.toCharArray(); t = T.toCharArray();
             f = new Boolean [m][n];
@@ -638,37 +487,6 @@ public class dpfive {
             }
             return f[x][y] = false;
         }
-
-        // 【主要是长整型溢出之类的细节】：这个题的细节，比我想像得要再多一点儿，改天上午再写一下。。。 // TODO TODO TODO: 1977 157/257
-        public int numberOfCombinations(String t) { 
-            n = t.length(); s = t.toCharArray();
-            if (n == 1) return s[0] == '0' ? 0 : 1;
-            return dfs(0, 0);
-        }
-        static final int mod = (int)1e9 + 7;
-        char [] s;
-        int n;
-        Map<String, Integer> m = new HashMap<>(); // 它可能还要记一下前面的数字是多少？如果这样，数据过于离散，是需要用字典的
-        int dfs(int i, long j) { // 【繁琐深搜：】这个记忆化深搜，的难点在， Integer.MAX_VALUE 待特殊数字的处理，狠繁琐，改天再写。。。
-            if (i == n) return 1;
-            String key = i + "-" + j;
-            if (m.containsKey(key)) return m.get(key);
-            if (i < n && s[i] == '0') { // 以【0】打头, 不合法，直接返回
-                m.put(key, 0);
-                return 0;
-            }
-            long r = 0, v = 0;
-            int k = i;
-            for (k = i; k < n; k++) {
-                // if (v > (Long.MAX_VALUE - (s[k] - '0')) / 10l) break;
-                v = v * 10 + (s[k] - '0');
-                if (v >= j) r = (r + dfs(k+1, v)) % mod;
-            }
-            if (k < n) r = (r + dfs(k, v)) % mod;
-            m.put(key, (int)r);
-            return (int)r;
-        }
-        String a = "3745299124190496631931491905";
 
         // 记忆化搜索: 这里引入了次序，怎么知道是甲方赢了？ alice ？这好像是个 min-max 的题型：但是感觉这个题型没有吃透。。。 // TODO TODO TODO:  1140
         public int stoneGameII(int[] a) {
@@ -988,59 +806,6 @@ public class dpfive {
             return Collections.max(m.values());
         }
 
-        public int maxSumDivThree(int[] a) { // 记忆化深搜：这里感觉失效了呀。。。
-            this.a = a; n = a.length; m = 3;
-            f = new Integer [n][3];
-            return dfs(0, 0);
-        }
-        Integer [][] f;
-        int [] a;
-        int n, m;
-        int dfs(int i, int j) {
-            if (f[i][j] != null) return f[i][j];
-            if (i == n-1) return f[i][j] = (a[i] % m == j ? a[i] : 0); // 感觉这里需要一个标记，怎么知道有效与无效，所以得去用动规来写
-            int ans = dfs(i+1, j), v = 0; // 不要当前的数
-            int curMod = a[i] % m;
-            if (curMod == 0) {
-                if (j == 0) v = dfs(i+1, 0); 
-                else if (j == 1) v = dfs(i+1, 1); 
-                else v = dfs(i+1, 2);
-            } else if (curMod == 1) {
-                if (j == 0) v = dfs(i+1, 2); // 1+2
-                else if (j == 1) v = dfs(i+1, 0); //1+0
-                else v = dfs(i+1, 1);// 2:1+1
-            } else { // (curMod == 2)
-                if (j == 0) v = dfs(i+1, 1); 
-                else if (j == 1) v = dfs(i+1, 2); 
-                else v = dfs(i+1, 0);
-            }
-            if (v > 0) ans = Math.max(ans, a[i] + v);
-            return f[i][j] = ans;
-        }
-        public int maxSumDivThree(int[] a) { // 感觉这里，是写得脑袋一团浆糊。。。
-            int n = a.length;
-            int [][] f = new int [n][3];
-            Arrays.stream(f).forEach(z -> Arrays.fill(z, -1));
-            f[n-1][a[n-1]%3] = a[n-1];
-            for (int i = n-2; i >= 0; i--) {
-                int m = a[i] % 3; // 接下来，想糊了，其实狠简单, 明天再改这个
-                if (m == 0) {
-                    f[i][0] = (f[i+1][0] == -1 ? 0 : f[i+1][0]) + a[i];
-                    for (int j = 1; j < 3; j++)
-                        f[i][j] = f[i+1][j];
-                } else if (m == 1) {
-                    f[i][0] = Math.max(f[i+1][2] != -1 ? f[i+1][2] + a[i] : -1, f[i+1][0]);
-                    f[i][1] = Math.max(f[i+1][0] == -1 ? 0 : f[i+1][0] + a[i], Math.max(f[i+1][1], a[i]));
-                    f[i][2] = Math.max(f[i+1][2], f[i+1][1] == -1 ? 0 : f[i+1][1] + a[i]);
-                } else { // m == 2
-                    f[i][0] = Math.max(f[i+1][1] == -1 ? 0 : f[i+1][1] + a[i], f[i+1][0]);
-                    f[i][1] = Math.max(f[i+1][1], f[i+1][2] == -1 ? 0 : f[i+1][2] + a[i]);
-                    f[i][2] = Math.max(f[i+1][2], f[i+1][0] == -1 ? 0 : f[i+1][0] + a[i]);
-                }
-            }
-            return f[0][0];
-        }
-
         public int minOperations(int v) { // 54 情况比较特殊，它好像是以四个位为单位的。。。
             System.out.println("\n Integer.toBinaryString(v): " + Integer.toBinaryString(v));
             System.out.println("\n Integer.toBinaryString(56): " + Integer.toBinaryString(56));
@@ -1203,10 +968,6 @@ public class dpfive {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
-
-
-
-
 
 
 

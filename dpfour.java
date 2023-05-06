@@ -541,31 +541,6 @@ public class dpfour {
             return f[i] = (int)ans;
         }
 
-        // static final int mod = (int)1e9 + 7;
-        // public int idealArrays(int n, int m) { // m: maxVal 写不到动规，写记忆化深搜
-        //     int [][] f = new int [n+1][m+1]; //f[i][j]: 到第 i 个数，最大值用到 j 的数组的数目
-        //     f[0][0] = 1;
-        //     for (int i = 1; i < n; i++) {
-        //     }
-        // }
-        static final int mod = (int)1e9 + 7;
-        public int idealArrays(int n, int m) { // TLE: 记忆化深搜，的问题就是【容易超时】所以，还是要再改回动规来写。。。// TODO TODO TODO: 
-            this.m = m; this.n = n;
-            f = new Integer [n][m+1]; //f[i][j]: 到第 i 个数，最大值用到 j 的数组的数目
-            return dfs(0, 0);
-        }
-        Integer [][] f;
-        int m, n;
-        int dfs(int i, int j) { // i: idx , k: maxVal
-            if (i == n) return j <= m ? 1 : 0;
-            if (f[i][j] != null) return f[i][j];
-            long r = 0;
-            for (int k = j + (j == 0 ? 1 : 0); k <= m; k++)
-                if (j == 0 || k % j == 0) 
-                    r = (r + dfs(i+1, k)) % mod;
-            return f[i][j] = (int)r;
-        }
-
         public int minNumberOfSemesters(int n, int[][] a, int k) { // TLE TLE TLE: 应该主要是回塑的过程中，状态太多，会超时，动规应该就不会了
             this.n = n; this.k = k; min = n;
             if (a.length == 0) return n / k + (n % k > 0 ? 1 : 0);
@@ -760,53 +735,6 @@ public class dpfour {
                 ans = (ans + f[i]) % mod;
             return ans;
         }
-
-        public int minimumIncompatibility(int[] a, int k) { // TLE TLE TLE: 优化不够，会超时, 主要是对重复数字的处理？ // TODO TODO TODO: 
-            n = a.length; m = n / k;  this.a = a;
-            if (n % k != 0) return -1;
-            if (k == 1) return Arrays.stream(a).distinct().count() == n ? Arrays.stream(a).max().getAsInt() - Arrays.stream(a).min().getAsInt() : -1;
-            this.k = k;
-            Arrays.sort(a);
-            System.out.println(Arrays.toString(a));
-            backTracking(n-1, 0);
-            return min == Integer.MAX_VALUE ? -1 : min;
-        }
-        int n, m, k, min = Integer.MAX_VALUE;
-        int [] a;
-        List<List<Integer>> ll = new ArrayList<>();
-        void backTracking(int i, int j) {
-            if (i < 0) {
-                if (j < min) min = j;
-                return ;
-            }
-            if (ll.size() == 0) ll.add(new ArrayList<>());
-            for (int x = 0; x < ll.size(); x++) {
-                if (ll.get(x).size() == n / k) continue; // 每个桶里个数相同
-                int s = ll.get(x).size();
-                // if (x > 0 && s > 0 && ll.get(x-1).size() > 0 && ll.get(x).get(0) == ll.get(x-1).get(0)) continue; // 当前桶，与前一个桶差值一样【不一定对】
-                // if (x > 0 && s > 0 && ll.get(x-1).size() > 0 && ll.get(x).get(s-1) == ll.get(x-1).get(ll.get(x-1).size()-1)) continue; // 当前桶，与前一个桶差值一样【不一定对】
-                if (s > 0 && ll.get(x).get(s-1) == a[i]) continue; // 同一个桶：不能有相同元素
-                ll.get(x).add(a[i]);
-                backTracking(i-1, j + (s == 0 ?  0 : ( s == 1 ? ll.get(x).get(0) - a[i] : ll.get(x).get(s-1) - a[i])));
-                ll.get(x).remove(s);
-            }
-            if (ll.size() < k) {
-                ll.add(new ArrayList<>());
-                ll.get(ll.size()-1).add(a[i]);
-                backTracking(i-1, j);
-                ll.remove(ll.size()-1);
-            }
-        }
-        // for (int x = 0; x < k; x++) {  // 遍历这 k 个桶: 这个不好，是因为狠多空桶时要遍历每个空桶，是不应该的
-        //     if (g[x].size() == n / k) continue;
-        //     int s = g[x].size();
-        //     if (x > 0 && s > 0 && g[x-1].size() > 0 && g[x].get(s-1) == g[x-1].get(s-1)) continue;
-        //     // if (x > 0 && g[x].size() > 0 && g[x].get(0) == g[x-1].get(0)) continue;
-        //     if (s > 0 && g[x].get(s-1) == a[i]) continue;
-        //     g[x].add(a[i]);
-        //     backTracking(i-1, j + (s == 0 ? a[i] : (s == 1 ? -a[i] : g[x].get(s-1) - a[i])));
-        //     g[x].remove(s);
-        // }
 
         int [][] dirs = {{1, 0}, {0, 1}, {0, -1}, {-1, 0}};
         public int[][] updateMatrix(int[][] a) {
@@ -1066,6 +994,23 @@ public class dpfour {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
