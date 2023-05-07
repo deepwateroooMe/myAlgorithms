@@ -1,5 +1,4 @@
 *.class
-*.tex
 tmp.*
 _minted*
 ./summary/_minted*
