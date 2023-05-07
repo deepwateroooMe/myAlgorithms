@@ -10,6 +10,7 @@ import java.util.Set;
 import static java.util.stream.Collectors.toMap;
 public class cmp {
     public static class Solution {
+
         // public boolean haveConflict(String[] s, String[] t) {
         //     int a = getVal(s[0]), b = getVal(s[1]);
         //     int c = getVal(t[0]), d = getVal(t[1]);
@@ -1259,28 +1260,185 @@ public class cmp {
         //     return r;
         // }
 
-        // 不知道这个P 题目说的是什么意思
-        public int[] minReverseOperations(int n, int p, int[] b, int k) {
-            int m = b.length;
-            Set<Integer> s = new HashSet<>(Arrays.stream(b).boxed().collect(Collectors.toList()));
-            int [] r = new int [n];
-            Arrays.fill(r, -1);
-            r[p] = 0;
-            for (int i = 0; i < n; i++) {
-                if (s.contains(i) || i == p) continue; // -1 0
-            }
+        // // 不知道这个P 题目说的是什么意思
+        // public int[] minReverseOperations(int n, int p, int[] b, int k) {
+        //     int m = b.length;
+        //     Set<Integer> s = new HashSet<>(Arrays.stream(b).boxed().collect(Collectors.toList()));
+        //     int [] r = new int [n];
+        //     Arrays.fill(r, -1);
+        //     r[p] = 0;
+        //     for (int i = 0; i < n; i++) {
+        //         if (s.contains(i) || i == p) continue; // -1 0
+        //     }
+        // }
+        // int getCnt(int idx, int n, int p, Set<Integer> s, int k) { // 这个巅倒片段，不知道说的是什么意思 
+        // }
+
+        // public int[] distinctDifferenceArray(int[] a) {
+        //     int n = a.length, cnt = 0;
+        //     int [] ll = new int [51], rr = new int [51];
+        //     int [] l = new int [n], r = new int [n], ans = new int [n];
+        //     for (int i = 0; i < n; i++) {
+        //         int v = a[i];
+        //         if (ll[v] == 0) {
+        //             cnt++;
+        //             ll[v]++;
+        //         }
+        //         l[i] = cnt;
+        //     }
+        //     cnt = 0;
+        //     for (int i = n-1; i >= 0; i--) {
+        //         int v = a[i];
+        //         r[i] = cnt;
+        //         if (rr[v] == 0) {
+        //             cnt++;
+        //             rr[v]++;
+        //         } 
+        //     }
+        //     for (int i = 0; i < n; i++)
+        //         ans[i] = l[i] - r[i];
+        //     return ans;
+        // }
+
+    // Map<Integer, Integer> m = new HashMap<>();
+    // Map<Integer, Set<Integer>> cnt = new HashMap<>();
+    // public FrequencyTracker() {
+    // }
+    // public void add(int v) {
+    //     m.put(v, m.getOrDefault(v, 0) + 1);
+    //     int f = m.get(v);
+    //     if (f > 1) { // 原来的减少，现在的增加
+    //         cnt.get(f-1).remove(v);
+    //         cnt.computeIfAbsent(f, z -> new HashSet<>()).add(v);
+    //     } else {
+    //         cnt.computeIfAbsent(1, z -> new HashSet<>()).add(v);
+    //     }
+    // }
+    // public void deleteOne(int v) {
+    //     if (!m.containsKey(v)) return;
+    //     int f = m.get(v);
+    //     if (f == 1){
+    //         m.remove(v);
+    //         cnt.get(1).remove(v);
+    //     } else {
+    //         m.put(v, f-1);
+    //         cnt.get(f).remove(v);
+    //         cnt.computeIfAbsent(f-1, z -> new HashSet<>()).add(v);
+    //     }
+    // }
+    // public boolean hasFrequency(int frequency) {
+    //     return cnt.containsKey(frequency) && cnt.get(frequency).size() > 0;
+    // }
+
+        public int minIncrements(int n, int[] a) {
+            return 0;
         }
-        int getCnt(int idx, int n, int p, Set<Integer> s, int k) { // 这个巅倒片段，不知道说的是什么意思 
+
+        int [] t;
+        void update(int u, int l, int r, int i, int v) {
+            if (l == r) {
+                t[u] = v;
+                return ;
+            }
+            int m = (l + r) >> 1;
+            if (i <= m) update(u << 1, l, m, i, v);
+            else update(u << 1 | 1, m+1, r, i, v);
+            t[u] = Math.max(t[u << 1], t[u << 1 | 1]); // 【最大值线段树】
+        }
+        int query(int u, int l, int r, int L, int R) {
+            if (L <= l && r <= R) return t[u];
+            int m = (l + r) >> 1, ll = 0, rr = 0;
+            if (L <= m) ll = query(u << 1, l, m, L, R);
+            if (m+1 <= R) rr = query(u << 1 | 1, m+1, r, L, R);
+            return Math.max(ll, rr);
+        }
+        // 感觉好像是线段树，可是怎么求最大相同元素的片段和呢？【最大值线段树】：作用在 f[n] 上 ?
+        public int[] colorTheArray(int n, int[][] a) {
+            int m = a.length, max = 0;
+            int [] r = new int [n], ans = new int [m], f = new int [n];
+            t = new int [n * 4];
+            for (int j = 0; j < m; j++) {
+                System.out.println("\n j: " + j);
+                int [] cur = a[j];
+                int i = cur[0], v = cur[1];
+                if (r[i] == 0 || r[i] == v) {
+                    r[i] = v;
+                    if (i == 0 || v == r[i-1]) {
+                        f[i] = (i == 0 ? 0 : f[i-1]) + 1; // 包括了当前的元素
+                        System.out.println("f[i]]: " + f[i]);
+                        // 向后更新
+                        if (i < n-1 && r[i+1] == r[i]) {
+                            int k = i+1;
+                            while (k < n && r[k] == r[i]) {
+                                f[k] = f[k-1] + 1;
+                                System.out.println("k: " + k);
+                                System.out.println("f[k]: " + f[k]);
+                                update(1, 1, n, k+1, f[k]);
+                                k++;
+                            }
+                        }
+                            
+                    } else f[i] = 1;
+                    update(1, 1, n, i+1, f[i]);  // <<<<<<<<<<<<<<<<<<<< 
+                    // 这里可以是断点儿更新，所以必须求左右最大值
+                    int ll = query(1, 1, n, 1, i+1);
+                    int rr = query(1, 1, n, i+2, n);
+                    // max = Math.max(Math.max(ll, max), f[i] > 0 ? f[i]-1 : 0);
+                    max = Math.max(Math.max(ll-1, max), rr-1);
+                } else { // 这里还有必要的更新工作
+                    r[i] = v;
+                    if (i > 0 && r[i] == r[i-1]) {
+                        f[i] = f[i-1] + 1;
+                    }
+                    update(1, 1, n, i+1, f[i]);  // <<<<<<<<<<<<<<<<<<<< 
+                    if (i < n-1 && r[i] == r[i+1]) {
+                        int k = i+1;
+                        while (k < n && r[k] == r[i]) {
+                            f[k] = f[k-1] + 1;
+                            System.out.println("k: " + k);
+                            System.out.println("f[k]: " + f[k]);
+                            update(1, 1, n, k+1, f[k]);
+                            k++;
+                        }
+                    }
+                    if (max == f[i]-1) { // 问题是：最大片段，不一定只出现一次，所以还需要求最大连续片段和
+                        int maxRight = query(1, 1, n, i+2, n);
+                        max = Math.max(maxRight-1, max-1);
+                        // f[i] = max;
+                        f[i]--;
+                    }
+                    update(1, 1, n, i+1, f[i]);  // <<<<<<<<<<<<<<<<<<<< 
+                    // 这里可以是断点儿更新，所以必须求左右最大值
+                    int ll = query(1, 1, n, 1, i+1);
+                    int rr = query(1, 1, n, i+2, n);
+                    System.out.println("ll: " + ll);
+                    System.out.println("rr: " + rr);
+                    System.out.println("max: " + max);
+// max = Math.max(Math.max(ll, max), f[i] > 0 ? f[i]-1 : 0);
+                    max = Math.max(Math.max(ll-1, max), rr-1);
+                }
+                // ans[j] = f[i] > 0 ? f[i] - 1 : f[i]; // -1
+                ans[j] = max; // 不一定是连续的，可是先前的
+                System.out.println(Arrays.toString(r));
+                System.out.println(Arrays.toString(f));
+                System.out.println(Arrays.toString(ans));
+            }
+            return ans;
         }
     }
     public static void main (String[] args) { 
         Solution s = new Solution ();
 
-        int [] a = new int [] {1, 1, 3, 4};
-        int [] b = new int [] {4, 4, 1, 1};
+        // int [][] a = new int [][] {{0,2},{1,2},{3,1},{1,1},{2,1}};
+        // int [][] a = new int [][] {{9,5},{14,15},{8,14},{0,4},{10,19},{13,11},{11,18},{8,15},{17,9},{10,1},{17,8},{9,13},{2,17},{0,10},{10,15},{10,19},{1,13},{7,1},{2,7},{13,16},{2,12},{1,19},{0,9},{4,1},{1,7},{3,18},{10,7},{13,2},{13,9},{0,17},{14,11},{12,7},{12,18},{16,15},{16,13},{7,12},{15,12},{7,18},{15,16},{15,6}};
+        int [][] a = new int [][] {{11,3},{5,1},{16,2},{4,4},{5,1},{13,2},{15,1},{15,3},{8,1},{14,4},{1,3},{6,2},{8,2},{2,2},{3,4},{7,1},{10,2},{14,3},{6,5},{3,5},{5,5},{9,2},{2,3},{3,3},{4,1},{12,1},{0,4},{16,4},{8,1},{14,3},{15,3},{12,1},{11,5},{3,1},{2,4},{10,1},{14,5},{15,5},{5,2},{8,1},{6,5},{10,2}};
 
-        int r = s.miceAndCheese(a, b, 2);
-        System.out.println("r: " + r);
+        System.out.println("a.length: " + a.length);
+        for (int z = 0; z < a.length; ++z) 
+            System.out.println(Arrays.toString(a[z]));
+        
+        int [] r = s.colorTheArray(17, a);
+        System.out.println(Arrays.toString(r));
     }
 }
 // 【爱表哥，爱生活！！！活宝妹就是一定要嫁给亲爱的表哥！！！】
@@ -1291,10 +1449,3 @@ public class cmp {
 // TreeNode root = new TreeNode(a[0]);
 // root.buildTree(root, a);
 // root.levelPrintTree(root);
-
-
-
-
-
-
-
