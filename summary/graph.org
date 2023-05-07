@@ -765,11 +765,98 @@ int dfs(int cur, int pre, int dep) { // 返回值为当前节点所有dfs路径�
 }
      #+END_SRC
 
+** 无向图
+*** 2508. Add Edges to Make Degrees of All Nodes Even
+There is an undirected graph consisting of n nodes numbered from 1 to n. You are given the integer n and a 2D array edges where edges[i] = [ai, bi] indicates that there is an edge between nodes ai and bi. The graph can be disconnected.
 
+You can add at most two additional edges (possibly none) to this graph so that there are no repeated edges and no self-loops.
+
+Return true if it is possible to make the degree of each node in the graph even, otherwise return false.
+
+The degree of a node is the number of edges connected to it.
+**** 怎么才能把问题分析透彻，看清问题考查的本质
+     
+[[./pic/graph_20230412_083249.png]]
+   #+BEGIN_SRC java
+public boolean isPossible(int n, List<List<Integer>> edges) {
+    // 【建图】
+    var g = new Set [n+1];
+    Arrays.setAll(g, e -> new HashSet<Integer>()); // 初始化
+    for (var e : edges) {
+        int u = e.get(0), v = e.get(1);
+        g[u].add(v);
+        g[v].add(u);
+    }
+    // 【数与列举：度数为奇数的节点】
+    var odd = new ArrayList<Integer>();
+    for (int i = 1; i <= n; i++) 
+        if (g[i].size() % 2 > 0) odd.add(i);
+    var m = odd.size();
+    // 【对度数为奇数的节点，结果，进行分析】
+    if (m == 0) return true;
+    if (m == 2) {
+        int x = odd.get(0), y = odd.get(1);
+        if (!g[x].contains(y)) return true;
+        for (int i = 1; i <= n; i++) 
+            if (i != x && i != y && !g[x].contains(i) && !g[y].contains(i)) return true;
+        return false;
+    }
+    if (m == 4) {
+        int x = odd.get(0), y = odd.get(1), i = odd.get(2), j = odd.get(3);
+        return !g[x].contains(y) && !g[i].contains(j) // [a, b], [c, d]
+            || !g[x].contains(i) && !g[y].contains(j) // [a, c], [b, d]
+            || !g[x].contains(j) && !g[y].contains(i);// [a, d], [b, c]
+    }
+    return false;
+}
+#+END_SRC
+*** 2538. Difference Between Maximum and Minimum Price Sum
+There exists an undirected and initially unrooted tree with n nodes indexed from 0 to n - 1. You are given the integer n and a 2D integer array edges of length n - 1, where edges[i] = [ai, bi] indicates that there is an edge between nodes ai and bi in the tree.
+
+Each node has an associated price. You are given an integer array price, where price[i] is the price of the ith node.
+
+The price sum of a given path is the sum of the prices of all nodes lying on that path.
+
+The tree can be rooted at any node root of your choice. The incurred cost after choosing root is the difference between the maximum and minimum price sum amongst all paths starting at root.
+
+Return the maximum possible cost amongst all possible root choices.
+**** 基本分析
+     
+[[./pic/graph_20230412_132942.png]]
+#+BEGIN_SRC java
+public long maxOutput(int n, int[][] edges, int[] price) {
+    g = new ArrayList [n];
+    Arrays.setAll(g, x -> new ArrayList<>());
+    for (int [] e : edges) {
+        int x = e[0], y = e[1];
+        g[x].add(y);
+        g[y].add(x);
+    }
+    dfs(0, -1, price);
+    return ans;
+}
+List<Integer> [] g;
+long ans;
+// 返回【带叶子的最大路径和，不带叶子的最大路径和】
+long [] dfs(int x, int fa, int [] price) {
+    long p = price[x], maxSone = p, maxStwo = 0;
+    for (int v : g[x]) 
+        if (v != fa) {
+            var res = dfs(v, x, price);
+            long s = res[0], ss = res[1];
+            // 前面最大  带叶子的路径和 + 当前不带叶子的路径和【  带 + 不带】
+            // 前面最大不带叶子的路径和 + 当前  带叶子的路径和【不带 +   带】
+            ans = Math.max(ans, Math.max(maxSone + ss, maxStwo + s));
+            maxSone = Math.max(maxSone, s + p);
+            maxStwo = Math.max(maxStwo, ss + p); // 这里加上 p 是因为 x 必然不是叶子【什么情况下是叶了的情况，我没想清楚】
+        }
+    return new long [] {maxSone, maxStwo};
+}
+#+END_SRC
 ** 欧拉回路: Hierholzer 算法, Fleury算法
 - AOV&AOE
-  - AOVAOV网，顶点表示活动，弧表示活动间的优先关系的有向图。 即如果a->b,那么a是b的先决条件。
-  - AOEAOE网，边表示活动，是一个带权的有向无环图， 其中顶点表示事件，弧表示活动，权表示活动持续时间。
+- AOVAOV网，顶点表示活动，弧表示活动间的优先关系的有向图。 即如果a->b,那么a是b的先决条件。
+- AOEAOE网，边表示活动，是一个带权的有向无环图， 其中顶点表示事件，弧表示活动，权表示活动持续时间。
 
 求拓扑序列就是AOVAOV，求关键路径就是AOEAOE
 
@@ -2096,3 +2183,120 @@ void dfs(int u, int p) { // 参数：当前节点，与父节点
     out[u] = t;
 }
 #+END_SRC 
+*** 2258. Escape the Spreading Fire: 多源头 BFS
+You are given a 0-indexed 2D integer array grid of size m x n which represents a field. Each cell has one of three values:
+#+BEGIN_SRC text
+0 represents grass,
+1 represents fire,
+2 represents a wall that you and fire cannot pass through.
+#+END_SRC
+You are situated in the top-left cell, (0, 0), and you want to travel to the safehouse at the bottom-right cell, (m - 1, n - 1). Every minute, you may move to an adjacent grass cell. After your move, every fire cell will spread to all adjacent cells that are not walls.
+
+Return the maximum number of minutes that you can stay in your initial position before moving while still safely reaching the safehouse. If this is impossible, return -1. If you can always reach the safehouse regardless of the minutes stayed, return 109.
+
+Note that even if the fire spreads to the safehouse immediately after you have reached it, it will be counted as safely reaching the safehouse.
+
+A cell is adjacent to another cell if the former is directly north, east, south, or west of the latter (i.e., their sides are touching).
+#+BEGIN_SRC java
+public int maximumMinutes(int[][] a) { // 9/55 没有过，不知道是什么原因，改天再写这个
+    m = a.length;
+    n = a[0].length; // mn: kMax
+    r = new int [m * n]; // 火烧到每个方格所需要的最短时间 
+    Arrays.fill(r, Integer.MAX_VALUE);
+    buildFireGrid(a); // 把这个方法提出去，就可能让代码各个功能模块更加独立  // <<<<<<<<<<<<<<<<<<<< 
+
+    int l = 0, h = m*n, ans = -1; // 接下来，再用二分查找法找一个最大的等待时间
+    while (l <= h) { // 判断条件： l 《＝ r 等号狠重要
+        int m = l + (h - l) / 2;
+        if (isSuccesible(m, r, a)) {
+            ans = Math.max(ans, m);
+            l = m + 1;
+        } else h = m-1;
+    }
+// 再判断一遍，可以永远等吗？【这里，自己最初的想法：是需要再遍历一遍，但是参考别人的，只要答案 ans ＝ m*n 就可以认定，可以永远等！！！一定要嫁给亲爱的表哥！！！】
+// 【去掉这个多余步骤之后： 】 51 / 55 testcases passed
+    //     if (ans == -1) return ans; // 再判断一遍，可以永远等吗？
+    //     Deque<int []> qq = new ArrayDeque<>();
+    //     qq.offerFirst(new int [] {0, 0});
+    //     Arrays.stream(vis).forEach(x -> Arrays.fill(x, false));
+    //     while (!qq.isEmpty()) {
+    //         for (int size = qq.size()-1; size >= 0; size--) {
+    //             int [] cur = qq.pollLast();
+    //             int i = cur[0], j = cur[1];
+    //             if (i == m-1 && j == n-1) return 1000000000;
+    //             for (int [] d : dirs) {
+    //                 int x = i + d[0], y = j + d[1];
+    //                 if (x < 0 || x >= m || y < 0 || y >= n || vis[x][y] || a[x][y] != 0 || r[x*n+y] != Integer.MAX_VALUE) continue;
+    //                 vis[x][y] = true;
+    //                 qq.offerFirst(new int [] {x, y});
+    //             }
+    //         }
+    //     }
+    //     return ans;
+    return ans == m*n ? (int)1e9 : ans;
+}
+int [][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+int [] r;
+int m, n;
+boolean isSuccesible(int v, int [] r, int [][] a) {
+    Deque<int []> q = new ArrayDeque<>();
+    boolean [][] vis = new boolean [m][n];
+    q.offerFirst(new int [] {0, 0});
+    vis[0][0] = true;
+    while (!q.isEmpty()) {
+        v++; // 提到前面来
+        for (int size = q.size()-1; size >= 0; size--) {
+            int [] cur = q.pollLast();
+            int i = cur[0], j = cur[1];
+            // // 【不一定：即便最后一个格，也是可能有火烧身的。。。也需要先行判断：因为特权主义，亲爱的表哥在活宝妹这里永远拥有特权！！！】
+            // if (i == m-1 && j == n-1) {
+            //     if (r[i*n+j] < v) continue; // 【不合法解：火及时烧到了终点。。。】
+            //     return true;
+            // }
+            for (int [] d : dirs) {
+                int x = i + d[0], y = j + d[1];
+// 这里下面判断用 v+1, 也可以把后面 v++ 提前面、循环的前面去
+// 【看似简洁，漏洞无数：折三段：来判断】: 最主要的，当 r[x*n+y]==v-Continue 时，会过滤掉一个可能存在的正确答案！！！它给了最后一个终点格特权。。。
+                // if (x < 0 || x >= m || y < 0 || y >= n || vis[x][y] || a[x][y] != 0 || r[x*n+y] <= v+1) continue; // 【折三段：来判断】
+                if (x < 0 || x >= m || y < 0 || y >= n || a[x][y] != 0 || vis[x][y] || r[x*n+y] < v) continue;
+                // 【把终止条件结果，放在这里判断】
+                if (x == m-1 && y == n-1) { // 【不一定：即便最后一个格，也是可能有火烧身的。。。】
+                    if (r[x*n+y] < v) continue;
+                    return true;
+                }
+                if (r[x*n+y] == v) continue;
+
+                vis[x][y] = true;
+                q.offerFirst(new int [] {x, y});
+            }
+        }
+        // v++;
+    }
+    return false;
+}
+void buildFireGrid(int [][] a) {
+    int time = 0;
+    boolean [][] vis = new boolean [m][n];
+    Deque<int []> q = new ArrayDeque<>();
+    for (int i = 0; i < m; i++) 
+        for (int j = 0; j < n; j++) 
+            if (a[i][j] == 1) {
+                q.offerFirst(new int [] {i, j});
+                vis[i][j] = true;
+            }
+    while (!q.isEmpty()) {
+        for (int size = q.size()-1; size >= 0; size--) {
+            int [] cur = q.pollLast();
+            int i = cur[0], j = cur[1];
+            r[i*n+j] = time; // 更新纪录：烧到某个方格的最短时间
+            for (int [] d : dirs) {
+                int x = i + d[0], y = j + d[1];
+                if (x < 0 || x >= m || y < 0 || y >= n || vis[x][y] || a[x][y] == 2) continue; // 遍历过了，或是不能穿墙
+                vis[x][y] = true;
+                q.offerFirst(new int [] {x, y});
+            }
+        }
+        time++;
+    }
+}
+#+END_SRC

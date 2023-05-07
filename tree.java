@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class tree {
     public static class Solution {
@@ -730,18 +731,140 @@ public class tree {
         //         r[idx++] = d[v[0]] + d[v[1]] + 1;
         //     return r;
         // }
-    }
+        // public List<Integer> pathInZigZagTree(int label) { } // 这个题更像是数学题，不喜欢，放弃它
+
+        // TODO: 这个题目，脑袋还是比较酱。。。不想再写这个题目
+        // public int minimumOperations(TreeNode r) { // 这个题的解法就极其朴实：反正就是一行一行地来，每行最少操作数相加
+        //     if (r.left == null && r.right == null) return 0;
+        //     List<List<Integer>> ll = new ArrayList<>();
+        //     Deque<TreeNode> q = new ArrayDeque<>();
+        //     q.offerFirst(r);
+        //     while (!q.isEmpty()) {
+        //         List<Integer> l = new ArrayList<>();
+        //         for (int i = q.size()-1; i >= 0; i--) {
+        //             TreeNode f = q.pollLast();
+        //             l.add(f.val);
+        //             if (f.left != null) q.offerFirst(f.left);
+        //             if (f.right != null) q.offerFirst(f.right);
+        //         }
+        //         ll.add(l);
+        //     }            
+        //     int ans = 0;
+        //     Map<Integer, Integer> e = new HashMap<>(); // exchanged within each row
+        //     for (List<Integer> l : ll) {
+        //         System.out.println("\nl.size(): " + l.size());
+        //         System.out.println(Arrays.toString(l.toArray()));
+        //         e.clear();
+        //         List<Integer> t = new ArrayList<>(l);
+        //         Collections.sort(t);
+        //         for (int i = 0; i < l.size(); i++) {
+        //             if (l.get(i) != t.get(i) && (!e.containsKey(t.get(i)) || e.get(t.get(i)) != l.get(i))) {
+        //                 if (e.containsKey(t.get(i))) {
+        //                     int v = e.get(t.get(i));
+        //                     e.put(l.get(i), v);
+        //                 } else {
+        //                     if (!e.containsKey(l.get(i)))
+        //                     e.put(l.get(i), t.get(i));
+        //                 }
+        //                 l.set(i, t.get(i));
+        //                 ans++;
+        //             }
+        //             System.out.println("\n i: " + i);
+        //             System.out.println("l.size(): " + l.size());
+        //             System.out.println(Arrays.toString(l.toArray()));
+        //             System.out.println("t.size(): " + t.size());
+        //             System.out.println(Arrays.toString(t.toArray()));
+        //             System.out.println("ans: " + ans);
+        //         }
+        //         // System.out.println("ans: " + ans);
+        //     }
+        //     return ans;
+        // }
+        // int [] a = new int [] {49, 45, 1, 20, 46, 15, 39, 27, -1, -1, -1, 25};
+
+        // public List<List<Integer>> closestNodes(TreeNode root, List<Integer> queries) {
+        //     int n = queries.size();
+        //     List<List<Integer>> ll = new ArrayList<>();
+        //     inOrderTraversal(root);
+        //     for (int i = 0; i < n; i++) {// 这里当是顺序遍历链表，就少了排序链表优化的步骤【？】
+        //         Integer hi = s.floor(queries.get(i));
+        //         Integer lo = s.ceiling(queries.get(i));
+        //         ll.add(List.of((hi == null ? -1 : hi.intValue()), (lo == null ? -1 : lo.intValue())));
+        //     }
+        //     return ll;
+        // }
+        // TreeSet<Integer> s = new TreeSet<>();// 这里相当于是自己借助数据结构帮助自己查找了，实际可以自己二无查找？
+        // void inOrderTraversal(TreeNode r) {
+        //     if (r == null) return ; // 因为这里判断，所以下面不面再判断 
+        //     // if (r.left != null) inOrderTraversal(r.left);
+        //     // s.add(r.val);
+        //     // if (r.right != null) inOrderTraversal(r.right);
+        //     inOrderTraversal(r.left);
+        //     s.add(r.val);
+        //     inOrderTraversal(r.right);
+        // }
+        // public List<List<Integer>> closestNodes(TreeNode root, List<Integer> queries) { // 用二分查找，自己找，不用数据结构 
+        //     int n = queries.size();
+        //     List<List<Integer>> ll = new ArrayList<>();
+        //     inOrderTraversal(root);
+        //     for (int i = 0; i < n; i++) {// 这里当是顺序遍历链表，就少了排序链表优化的步骤【？】
+        //         // Integer hi = s.floor(queries.get(i));
+        //         // Integer lo = s.ceiling(queries.get(i));
+        //         // ll.add(List.of((hi == null ? -1 : hi.intValue()), (lo == null ? -1 : lo.intValue())));
+        //         ll.add(binarysearch(queries.get(i), l));
+        //     }
+        //     return ll;
+        // }
+        // List<Integer> binarysearch(int t, List<Integer> list) {
+        //     int l = 0, r = list.size()-1;
+        //     while (l <= r) {
+        //         int m = l + (r - l) / 2;
+        //         if (list.get(m) == t) return List.of(t, t);
+        //         else if (list.get(m) > t) r = m - 1;
+        //         else l = m + 1;
+        //     }
+        //     int lo = r == -1 ? -1 : list.get(r);
+        //     int hi = l == list.size() ? -1 : list.get(l);
+        //     return List.of(lo, hi);
+        // }
+        // List<Integer> l = new ArrayList<>();
+        // void inOrderTraversal(TreeNode r) {
+        //     if (r == null) return ;
+        //     inOrderTraversal(r.left);
+        //     l.add(r.val);
+        //     inOrderTraversal(r.right);
+        // }
+
+        // // 对于题目所给完全二叉树中的任意一个节点，起父节点的val = 当前节点val / 2;
+        // // 对于给定两个节点值，只需要对两个节点值中的较大值/2，直到两个节点值相等，记录执行除操作的次数最后+1即为环的边数。
+        // public int[] cycleLengthQueries(int n, int[][] q) {// 不得不承认，上面的思路真是精练呀。。。
+        //     int m = q.length, idx = 0;
+        //     int [] r = new int [m];
+        //     for (int [] v : q) {
+        //         int x = v[0], y = v[1];
+        //         int cnt = 0;
+        //         while (x != y) {
+        //             if (x > y) x /= 2;
+        //             else y /= 2;
+        //             cnt++;
+        //         }
+        //         r[idx++] = cnt + 1;
+        //     }
+        //     return r;
+        // }
+
         
+    }
     public static void main(String[] args) {
         Solution s = new Solution();
 
-        int [][] a = new int [][] {{5,3},{4,7},{2,3}};
-        // TreeNode r1 = new TreeNode(a[0]);
-        // r1.buildTree(r1, a);
-        // r1.levelPrintTree(r1);
+        TreeNode r1 = new TreeNode(a[0]);
+        r1.buildTree(r1, a);
+        r1.levelPrintTree(r1);
 
-        int [] r = s.cycleLengthQueries(3, a);
-        System.out.println(Arrays.toString(r));
+        List<List<Integer>> r = s.closestNodes(r1, l);
+        System.out.println("r.size(): " + r.size());
+        for (int z = 0; z < r.size(); ++z) 
+            System.out.println(Arrays.toString(r.get(z).toArray()));
     }
 }
-

@@ -10,6 +10,7 @@ import java.util.Set;
 import static java.util.stream.Collectors.toMap;
 public class cmp {
     public static class Solution {
+<<<<<<< HEAD
 
         // public boolean haveConflict(String[] s, String[] t) {
         //     int a = getVal(s[0]), b = getVal(s[1]);
@@ -58,1204 +59,903 @@ public class cmp {
 //             System.out.println("mb.size(): " + mb.size());
 //             for (Map.Entry<Integer, Integer> en : mb.entrySet()) 
 //                 System.out.print(en.getKey() + ", " + en.getValue() + "\n");
+=======
+>>>>>>> 1dde0e9e453e309bab5dfe0f8e88bbb2347800bd
 
-//             Set<Integer> ka = ma.keySet();
-//             Set<Integer> kb = mb.keySet();
-//             ka.retainAll(kb);
-//             for (var v : ka) {
-//                 int va = ma.get(v), vb = mb.get(v);
-//                 if (va == vb) {
-//                     ma.remove(v);
-//                     mb.remove(v);
-//                 } else if (va < vb)
-//                     mb.put(v, vb - va);
-//                 else 
-//                     ma.put(v, va - vb);
-//             }
-//             long f = 0;
-//             for (Map.Entry<Integer, Integer> en : ma.entrySet()) {
-//                 int k = en.getKey(), v = en.getValue();
-// // returns the least key greater than or equal to the given key or null if the such a key is absent.
-//                 Integer hi = mb.ceilingKey(k);
-//                 if (hi == null) {
-//                     Integer lo = mb.floorKey(k);
-//                 }
-//             }
+//         // 这是最气人的一次比较，每个题目的时间被卡得极严，连最简单的题目也不给过。。。
+//         public int diagonalPrime(int[][] a) {
+//             int n = a.length;
+//             List<int []> l = new ArrayList<>();
+//             for (int i = 0; i < n; i++)
+//                 for (int j = 0; j < n; j++)
+//                     l.add(new int [] {a[i][j], i, j});
+//             Collections.sort(l, (x, y)-> x[0] != y[0] ? y[0] - x[0] : x[1] - y[1]); // 降序排列
+//             for (int [] v : l)
+//                 if ((v[1] == v[2] || v[2] == n-1 - v[1]) && isPrime(v[0])) return v[0];
 //             return 0;
 //         }
-        // public long makeSimilar(int[] a, int[] b) {
-        //     int n = a.length, N = 1000001, min = 0;
-        //     int [] ca = new int [N];
-        //     int [] cb = new int [N];
-        //     for (var v : a) ca[v]++;
-        //     for (var v : b) cb[v]++;
-        //     long f = 0;
-        //     for (int i = N-1; i >= 0; i--) {
-        //         if (ca[i] == cb[i]) continue;
-        //         min = Math.min(ca[i], cb[i])
-        //     }
-        //     return 0;
-        // }
+//         public static boolean isPrime(int n) {
+//             if (n < 3) {
+//                 if (n == 2) 
+//                     return true;
+//                 else
+//                     return false;
+//             }
+//             for (int i = 2; i < n; i++) 
+//                 if (n % i == 0) 
+//                     return false;
+//             return true;
+//         }
 
-// // 想得太简单了:要对每个元素分解质因子,统计每个质因子的个数
-// // 因为每个数值可能会狠大,要用[1, 30]?内的质因素怎么样的.......
-// // 这个题感觉有点儿像1735,但是今天头比较昏,数值也很大[1, 1000000000],想不清楚这个题要怎么分解每个数
-//         public int subarrayGCD(int[] a, int k) {
-//             Set<Integer> st = new HashSet<>(Arrays.stream(a).boxed().collect(Collectors.toList()));
-//             if (!st.contains(k)) return 0;
-//             int n = a.length, f = 0, j = 0, l = 0, r = 0;
-//             boolean [] vis = new boolean[n];
+//         public long [] distance(int[] a) { // TLE TLE TLE: 就是想不到平时这类没要求的题目怎么会超时的？ 1066/1068 不知道是哪里错掉了？ 3 个不过【这个题我已经不想写它了。。。】
+//             int n = a.length;
+//             Map<Integer, List<Integer>> m = new HashMap<>();
 //             for (int i = 0; i < n; i++) 
-//                 if (a[i] % k == 0) vis[i] = true;
-//             for (int i = 0; i < n; i++) {
-//                 if (a[i] != k) continue;
-//                 System.out.println("\n i: " + i);
-//                 j = i-1;
-//                 while (j >= 0 && vis[j]) j--;
-//                 l = (i == 0 ? 1 : i - j);
-//                 j = i + 1;
-//                 while (j < n && vis[j]) j++;
-//                 r = j - i;
-//                 System.out.println("l: " + l); 
-//                 System.out.println("r: " + r); 
-//                 f += l * r;
-//                 System.out.println("f: " + f); 
-//             }
-//             return f;
-//         }
-
-         
-// // 用TreeMap<Integer, TreeSet<Integer>> 会比下面的效率高吗?        
-//         // Map<Integer, Queue<Integer>> idx; // [num, Queue[idx1 idx1 ....]] 为什么我会用这种相对奇怪的数据结构呢?
-//         Map<Integer, Integer> m;          // [idx, num]
-//         Map<Integer, TreeSet<Integer>> idx;
-//         public NumberContainers() {
-//         // public cmp() {
-//             m = new HashMap<>();
-//             idx = new HashMap<>();
-//         }
-//         public void change(int index, int number) {
-//             // 这里,因为没有从idx中移除,所以下次取的时候就需要遍历一下            
-//             m.put(index, number);
-//             idx.computeIfAbsent(number, z -> new TreeSet<>()).add(index);
-//             // // 先处理更改前的位标数据更新
-//             // if (m.containsKey(index)) {
-//             //     // idx.get(m.get(index)).remove((Integer)number);
-//             //     idx.get(m.get(index)).remove((Integer)index);
-//             //     if (idx.get(m.get(index)).isEmpty()) // 如果数据清空了就清空这个键
-//             //         idx.remove(m.get(index));
-//             // }
-//             // m.put(index, number);
-//             // idx.computeIfAbsent(number, z -> new PriorityQueue<>());
-//             // idx.get(number).add(index);
-//         }
-//         public int find(int number) {
-//             // return idx.containsKey(number) ? idx.get(number).peek() : -1;
-//             if (!idx.containsKey(number)) return -1;
-//             for (var v : idx.get(number))  // idx 从小到大遍历,当某个是合法值
-//                 if (m.get(v) == number)
-//                     return v;
-//             return -1;
-//         }
- 
-        // public long countExcellentPairs(int[] a, int k) { // >= k 不是 == k
-        //     int n = a.length;
-        //     Integer [] f = new Integer [n];
-        //     // TreeMap<Integer, Integer> m = new TreeMap<>();
-        //     TreeSet<Integer> m = new TreeSet<>();
-        //     for (int i = 0; i < n; i++) {
-        //         f[i] = Integer.bitCount(a[i]);
-        //         // m.put(f[i], m.getOrDefault(f[i], 0) + 1);
-        //         m.add(f[i]);
-        //     }
-        //     Arrays.sort(f);
-        //     int [] s = new int [n+1];
-        //     for (int i = 1; i <= n; i++) 
-        //         s[i] = s[i-1] + f[i-1];
-        //     System.out.println(Arrays.toString(f));
-        //     System.out.println(Arrays.toString(s));
-        //     Set<Integer> vis = new HashSet<>();
-        //     long ans = 0;
-        //     for (int i = 0; i < n; i++) {
-        //         if (vis.contains(f[i])) continue;
-        //         Integer hi = m.ceiling(k - f[i]); // ceilingKey() floorKey()
-        //         if (hi != null && hi != f[i]) ans += Math.min(m.get(f[i]), m.get(hi)) * 2;
-        //         else if (hi != null) ans += 1;
-        //         vis.add(f[i]);
-        //     }
-        //     return ans;
-        // }
-
-        // public int AlternateDigitSum(int n) {
-        //     if (n < 10) return n;
-        //     int cnt = 0;
-        //     int v = n;
-        //     int [] p = new int [10];
-        //     p[0] = 1;
-        //     while (v >= 10) {
-        //         cnt++;
-        //         v /= 10;
-        //         p[cnt] = 10 * p[cnt-1];
-        //     } 
-        //     int r = 0, s = 1;
-        //     while (cnt > 0) {
-        //         r += s * n / (p[cnt]) % 10;
-        //         s *= -1;
-        //         cnt--;
-        //     }
-        //     r += s * n % 10;
-        //     return r;
-        // }
-
-        // public int[][] sortTheStudents(int[][] a, int k) { 
-        //     int m = a.length, n = a[0].length;
-        //     List<int []> l = new ArrayList<>();
-        //     for (int [] v : a) 
-        //         l.add(v);
-        //     Collections.sort(l, new Comparator<int []>() {
-        //             @Override
-        //             public int compare(int [] o1, int [] o2) {
-        //                 return o2[k] - o1[k];
-        //             }
-        //         });
-        //     int idx = 0;
-        //     for (int [] v : l) 
-        //         a[idx++] = v;
-        //     return a;
-        // }
-
-//  感觉这个题目没有想透，有很多犄角旮旯没想透彻        
-        public boolean makeStringsEqual(String ss, String tt) {
-            int n = ss.length(), i = 0, j = n-1, k = 0, x = 0;
-            char [] s = ss.toCharArray();
-            char [] t = tt.toCharArray();
-            while (i <= j && s[i] == t[i]) i++;
-            if (i == n) return true;
-            // while (j > i && s[j] == t[j]) j--;
-            // if (j < 0 || i == j && s[i] == t[j]) return true;
-            while (i < n) {
-                while (i < j && s[i] == t[i]) i++;
-                if (i == n) return true;
-                
-                System.out.println("\n i: " + i);
-                k = n-1;
-                while (k > i && s[k] == '0') k--; // 找个1
-                // System.out.println(Arrays.toString(s));
-                x = 0;
-                while (x < i && s[x] == '0') x++;
-                System.out.println("k: " + k);
-                System.out.println("x: " + x);
-
-                // if (k == i) return false;
-                // if (k == i && x == i) {
-                //     return false;
-                // }
-                if (k == n-1 && x == 0) return false;
-                if (s[i] == '1') { // 从尾巴找个1
-                    s[i] = '0';
-                    // s[k] = 1;
-                    if (k == i && x == i) {
-                        if (i < n-1) s[i+1] = 1;
-                        else s[x-1] = 1;
-                    }
-                } else { // [0, 1]
-                    s[i] = '1';
-                }
-                i++;
-                // System.out.println(Arrays.toString(s));
-                System.out.println("i: " + i);
-            }
-            if (i == j) return s[i] == t[j];
-            if (i == n) return true;
-            return false;
-        }
-
-// // 区间型动态规划
-//        Long [][] dp;
-//        long minCost(int [] a, int x, int y, int k) {
-//             if (dp[x][y] != null) return dp[x][y];
-//             if (x == y) return dp[x][y] = (long)k; // 长度为1个元素
-//             // 不划分，作为一个整体
-//             Map<Integer, Integer> m = new HashMap<>();
-//             for (int i = x; i <= y; i++) 
-//                 m.put(a[i], m.getOrDefault(a[i], 0) + 1);
-//             long base = k, min = Long.MAX_VALUE;
-//             for (Integer val : m.values()) 
-//                 if (val > 1) base += val; // 不划分，作为一个整体
-//             min = base;
-//             // 从不同的地方划分，取最优解
-//             for (int i = x; i < y; i++) { // 在它后面划分
-//                long cur = minCost(a, x, i, k) + minCost(a, i+1, y, k);
-//                 min = Math.min(min, cur);
-//             }
-//             return dp[x][y] = min;
-//         } 
-//         public int minCost(int[] a, int k) { // TLE: 什么地方没有优化好？
-//             int n = a.length; // [1, 1000]
-//             dp = new Long [n][n];
-//             return (int)minCost(a, 0, n-1, k);
-//         }
-
-        // public long pickGifts(int[] a, int k) {
-        //     int n = a.length;
-        //     Deque<Integer> q = new ArrayDeque<>((x, y) -> y - x);
-        //     for (int v : a) 
-        //         q.offerFirst(v);
-        //     while (k > 0 && !q.isEmpty()) {
-        //         int v = Math.sqrt(q.pollLast());
-        //         q.offerFirst(v);
-        //     }
-        //     long r = 0;
-        //     while (!q.isEmpty()) r += q.pollLast();
-        //     return r;
-        // }
-
-        // public int[][] mergeArrays(int[][] a, int[][] b) {
-        //     int m = a.length, n = b.length;
-        //     Set<Integer> s = new HashSet<>();
-        //     for (int i = 0; i < m; i++) 
-        //         s.add(a[i][0]);
-        //     for (int i = 0; i < n; i++) 
-        //         s.add(b[i][0]);
-        //     int [][] r = new int [s.size()][2];
-        //     int i = 0, j = 0, k = 0, p = 0;
-        //     while (i < m || j < n) {
-        //         if (i < m && j < n) {
-        //             int min = Math.min(a[i][0], b[j][0]);
-        //             if (p != 0 && min > p) k++;
-        //             if (min > p)
-        //                 r[k][0] = a[i][0];
-        //             if (a[i][0] == b[j][0]) {
-        //                 r[k][1] = a[i][1] + b[j][1];
-        //                 i++;
-        //                 j++;
-        //             } else {
-        //                 if (min == a[i][0]) {
-        //                     r[k][1] = a[i][1];
-        //                     i++;
-        //                 } else {
-        //                     r[k][0] = b[j][0];
-        //                     r[k][1] = b[j][1];
-        //                     j++;
-        //                 }                   
-        //             }
-        //             p = min;
-        //         } else {
-        //             while (i < m) {
-        //                 if (a[i][0] > p) {
-        //                     k++;
-        //                     r[k][0] = p = a[i][0];
-        //                 } 
-        //                 r[k][1] += a[i++][1];
-        //             }
-        //             while (j < n) {
-        //                 if (b[j][0] > p) {
-        //                     k++;
-        //                     r[k][0] = p = b[j][0];
-        //                 } 
-        //                 r[k][1] += b[j++][1];
-        //             } 
-        //         }
-        //     }
-        //     return r;
-        // }
-
-        // // 我会被它一行代码的解决方法气死的。。。。。看不懂
-        // public int minOperations(int n) {
-        //     return Integer.bitCount(n ^ (3 * n));
-        // }
-        // public int minOperations(int n) {
-        //         int l = log2(n);
-        //         int num =(int)Math.pow(2, l);
-        //         if (num == n) return 1;
-        //         int op = 0;
-        //         while (n != 0) {
-        //             l = log2(n);
-        //             int left = (int) Math.pow(2, l); 
-        //             int right = (int) Math.pow(2, l+1); 
-        //             if ((n-left) < (right-n)) n = n - left;  // 转换为左边，或是右边数的操作 
-        //             else n = right - n;
-        //             op++;
-        //         }
-        //         return op;
-        //     }
-        // public static int log2(int N) { // 把以 10 为底的数，求2 的指数次数
-        //         int result = (int)(Math.log(N) / Math.log(2));
-        //         return result;
-        //     }
-
-// 这里，自己像是画了只五脏俱全的麻雀，可是还是差了那么一点儿：没写完的
-        // 这个题目就成为分解质因子，因为数比较小 [1, 30], 所以只需要考虑2 3 5 三个质因子就可以了，然后就是选元素：2 3 5 三个质因子都不能含有，多于一个
-        // int [] getCnts(int v) { // 得到当前数所含的： 2 3 5 质因子的个数
-        //     int [] r = new int [3];
-        //     int cnt = 0, a = v;
-        //     while (a >= 2) {
-        //         a /= 2;
-        //         cnt++;
-        //     }
-        //     r[0] = cnt;
-        //     a = v;
-        //     cnt = 0;
-        //     while (a >= 3) {
-        //         a /= 3;
-        //         cnt++;
-        //     }
-        //     r[1] = cnt;
-        //     cnt = 0;
-        //     while (v >= 5) {
-        //         v /= 5;
-        //         cnt++;
-        //     }
-        //     r[2] = cnt; 
-        //     return r;
-        // }
-        // public int squareFreeSubsets(int[] a) {
-        //     int n = a.length, cnt = 0;
-        //     int [][] r = new int [31][3]; // [3]: 2 3 5
-        //     for (int i = 1; i < 31; i++) 
-        //         r[i] = getCnts(i);
-        //     List<Integer> l = new ArrayList<>(); // 加链表里因为它是可能会存在重复的，后可以把它转换成数组成操作
-        //     for (int v : a) 
-        //         if (r[v][0] < 2 && r[v][1] < 2 && r[v][2] < 2) {
-        //             cnt++;
-        //             l.add(v);
-        //         }
-        //     int [] cur = l.toArray(new int [0]); // 不知道这么用对不对
-        //     // 然后接下来应该就是动态规划：链表里的数，每个都有可选和不可选两种可能，然后动态规划这部分，不太会做了
-        //     // 2 3 5
-        //     // 0 0 0
-        //     // 1
-        //     //   1
-        //     //     1
-        //     // 1 1
-        //     //   1 1
-        //     // 1   1
-        //     // 1 1 1
-        //     // 它只存在以上8 种可能性，笨办法就是每种可能性计算一遍，把结果相加. 先假定可以为空数组，最后减掉空数组这种可能性
-        //     // 这里动态规划的部分，还是不会，动态规划的基础不够，也快被自己忘光了
-        //     static final int mod = (int)1e9 + 7;
-        //     long ans = 1, rnd = 1;
-        //     // 0 0 0
-        //     for (int i = 0; i < l.size(); i++) {
-        //         int c = cur[i];
-        //         if (r[c][0] == 0 && r[c][1] == 0 && r[c][2] == 0) {
-        //             ans *= 2;
-        //             ans %= mod;
-        //         }
-        //     }
-        //     // 1 1 1 
-        // }
-// // 下面是正确的解法：记忆可真好呀
-//         public int squareFreeSubsets(int[] a) {
-//             Arrays.stream(dp).forEach(x -> Arrays.fill(x, -1));  // 流式处理法
-//             p = new ArrayList<>(Arrays.asList(2, 3, 5, 7, 11, 13, 17, 19, 23, 29));
-//             return (int)dfs(0, 1, a) - 1; // 减去的，应该是空数组
-//         }
-//         long [][] dp = new long [1001][1 << 11];
-//         static final long mod = (long)1e9 + 7;
-//         List<Integer> p = new ArrayList<>(); // primes
-//         long dfs(int idx, int prodmask, int [] a) {
-//             if (idx >= a.length) return 1;
-//             if (dp[idx][prodmask] != -1) return dp[idx][prodmask];  // 计算过，保存过，直接返回结果
-//             int mask = getMask(a[idx]);  // 拿到当前数，质因子的分布情况
-//             long ans = dfs(idx+1, prodmask, a); // 不包含当前数，可能有的角法
-//             if ((mask & prodmask) == 0) // 不含有公共质因子：当前数也可以包含进去
-//                 ans += dfs(idx+1, mask | prodmask, a);
-//             return dp[idx][prodmask] = ans % mod;
-//         } 
-//         int getMask(int v) {
-//             int r = 0;
-//             for (int i = 0; i < 10; i++) {
-//                 int cnt = 0;
-//                 while (v % p.get(i) == 0) {
-//                     cnt++;
-//                     v /= p.get(i);
+//                 m.computeIfAbsent(a[i], z -> new ArrayList<>()).add(i);
+//             long [] r = new long [n];
+//             for (Map.Entry<Integer, List<Integer>> en : m.entrySet()) {
+//                 List<Integer> l = en.getValue();
+//                 if (l.size() == 1) {
+//                     r[l.get(0)] = 0;
+//                     continue;
 //                 }
-//                 if (cnt > 1) return -1;  // 这是一步优化过滤筛选，直接过滤掉不合格的
-//                 if (cnt == 1) // 存在，且仅有一个当前质因子的情况下
-//                     r |= (1 << (i + 1));
+//                 long [] s = new long [l.size()]; // 它说这里用 prefix 算。妈的。。。
+//                 s[0] = l.get(0);
+//                 for (int i = 1; i < l.size(); i++) 
+//                     s[i] = s[i-1] + l.get(i);
+//                 for (int i = 0; i < l.size(); i++) 
+//                     r[l.get(i)] = (long)l.get(i) * (i+1) - s[i] + (s[l.size()-1] - (i == 0 ? 0 : s[i-1])) - l.get(i) * (l.size()-i);
 //             }
 //             return r;
 //         }
 
-        // public String findTheString(int[][] a) {
-        //     int n = a.length;
-        //     char [] s = new char [n];
-        //     s[0] = 'a';
-        //     boolean found = false;
-        //     // char prev = 'a';// 不知道这里可不可以优化，改天可以再试一下
-        //     for (int i = 1; i < n; i++) {
-        //         char cur = 'a'; // 总是从最小的开始取值
-        //         found = false;
-        //         for (int j = 0; j < i; j++) { // 我想要到上面的，但是没有想这个往前遍历的方法，和下面再计算一遍，比较的方法 
-        //             cur = (char)Math.max(s[j], cur); // 纪录用到的最大值，好像这个比较麻烦了一点儿
-        //             if (a[i][j] > 0) {
-        //                 found = true;
-        //                 s[i] = s[j];
-        //                 break;
-        //             }                    
-        //         }
-        //         if (found) continue;
-        //         if (cur == 'z') return "";
-        //         ++cur;
-        //         s[i] = (char)cur;
-        //     }
-        //     int [][] cnt = new int [n+1][n+1];
-        //     for (int i = n-1; i >= 0; i--) {
-        //         for (int j = n-1; j >= 0; j--) {
-        //             if (s[i] == s[j]) cnt[i][j] = cnt[i+1][j+1] + 1;
-        //             else cnt[i][j] = 0;
-        //             if (cnt[i][j] != a[i][j]) return "";
-        //         }
-        //     }
-        //     return String.valueOf(s);
-        // }
-
-        // public int[] leftRigthDifference(int[] a) {
-        //     int n = a.length;
-        //     int [] l = new int [n+1], r = new int [n+1];
-        //     for (int i = 1; i <= n; i++) 
-        //         l[i] = l[i-1] + a[i-1];
-        //     for (int i = n-1; i >= 0; i--) 
-        //         r[i] = r[i+1] + a[i]; // r[i+1]
-        //     int [] ans = new int [n];
-        //     for (int i = 0; i < n; i++) 
-        //         ans[i] = Math.abs(l[i] - r[i+1]);
-        //     return ans;
-        // }
-
-// // 把题目转化一下，这个方法很容易懂        
-//         public int minimumTime(int[][] a) {
-//             if (a[0][1] > 1 && a[1][0] > 1) return -1; // 永远无法到达
-//             m = a.length;
-//             n = a[0].length;
-//             dp = new int [m][n];
-//             for (int i = 0; i < m; i++) 
-//                 Arrays.fill(dp[i], Integer.MAX_VALUE);
-//             return bfs(0, 0, 0, a);
-//         }
-//         int [][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
-//         int [][] dp; // 定义 dp[i][j] 为到达（i, j）的最小时间，那么dp[0][0] = 0, 答案为dp[m-1][n-1]
-//         int m, n;
-//         int bfs(int xx, int yy, int dd, int [][] a) {
-//             Queue<int []> q = new PriorityQueue<>((x, y) -> x[2] - y[2]); // 优先队列
-//             q.offer(new int [] {xx, yy, dd});
-//             while (!q.isEmpty()) {
-//                 int [] cur = q.poll();
-//                 int x = cur[0], y = cur[1], t = cur[2];
-//                 if (x == m-1 && y == n-1) return t; // 最短路径：永远是第一次走到的就是最短的
-//                 for (int [] d : dirs) { // 枚举周围四个格子
-//                     int i = x + d[0], j = y + d[1];
-//                     if (i < 0 || i >= m || j < 0 || j >= n) continue;
-//                     int nd = Math.max(t+1, a[i][j]);
-//                     nd += (nd - i - j) % 2; // nd 必须和 x+y 同奇偶, 就是说 nd ％ 2 ＝＝ (x+y) ％ 2
-//                     if (nd < dp[i][j]) {
-//                         dp[i][j] = nd; // 更新最短路
-//                         q.offer(new int [] {i, j, nd});
+//         // The recurrence relation is
+//         //     fn(i, x) = min[ fn(i+1, x), max( abs(nums[i]-nums[i+1]), fn(i+2, p-1) )] ？没看懂，它在说什么？？？
+//         // and fn(0,p) gives the desired answer.
+//         public int minimizeMax(int[] a, int p) { // 这个就是看着题目，认不出来，没能认出来它是在考查什么。。。
+//             int n = a.length;
+//             Arrays.sort(a);// 先排序是对的 // sort to get minimum differences
+//             int l = -1, h = 1000000007; // binary search logic: 直接二分查找这个最小可能存在的最大差值 
+//             while (l < h - 1) {
+//                 int m = l + (h-l) / 2;
+//                 int cnt = 0; // to count total possible pairs if mid is the max value
+//                 for (int i = 1; i < n; i++) 
+//                     if (a[i] - a[i-1] <= m) { // counting only if difference is <= mid
+//                         i++;
+//                         cnt++;
 //                     }
-//                 }
+//                 if (cnt >= p) h = m; // store the last possible value in hi
+//                 else l = m;
 //             }
-//             return -1;
+//             return h;
 //         }
-// // 换另一种方法写一下：
-//         public int minimumTime(int[][] a) {
-//             if (a[0][1] > 1 && a[1][0] > 1) return -1; // 永远无法到达
+
+//         // 我记忆化搜索的方向，与它动态规划的方向是反的。可是两个本来就是反着的。。。
+//         public int minimumVisitedCells(int[][] a) { // TLE TLE TLE 已经是记忆化搜索了呀？！！！怎么会超时的呢？
 //             m = a.length;
 //             n = a[0].length;
-//             vis = new int [m][n];
-//             int left = Math.max(a[m-1][n-1], m+n-2)-1;
-//             int right = (int)1e5 + m + n;
-//             while (left + 1 < right) {
-//                 int mid = (left + right) >>> 1;
-//                 if (check(mid, a)) right = mid;
-//                 else left = mid;
-//             }
-//             return right + (right + m + n) % 2;
+//             f = new Integer [m][n];  
+//             for (int i = 0; i < m; i++) // 这里有个可以 stream 一行搞定的写法，忘记了
+//                 Arrays.fill(f[i], Integer.MAX_VALUE / 2);
+//             int r = dfs(0, 0, a);
+//             System.out.println("f.length: " + f.length);
+//             for (int z = 0; z < f.length; ++z) 
+//                 System.out.println(Arrays.toString(f[z]));
+//             return r == Integer.MAX_VALUE / 2 ? -1 : r;
 //         }
-//         int [][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
-//         int [][] vis;
+//         Integer [][] f;
 //         int m, n;
-//         boolean check(int t, int [][] a) { // 给一个固定的时间，判断，能否在这个时间之内，从尾巴走到头？
-//             vis[m-1][n-1] = t; // 这里是，想要从尾巴上走
-//             var q = new ArrayList<int []>();
-//             q.add(new int [] {m-1, n-1});
-//             for (int ii = t-1; !q.isEmpty(); ii--) { // 遍历时间点【对应时间点所在的格子】，队列里要有元素
-//                 var tmp = q;
-//                 q = new ArrayList<>();
-//                 for (var p : tmp) {
-//                     int x = p[0], y = p[1];
-//                     for (int [] d : dirs) {
-//                         int i = x + d[0], j = y + d[1];
-//                         if (i >= 0 && i < m && j >= 0 && j < n && vis[i][j] != t && a[i][j] <= ii) { // 如果当前的格、方向是可以走的
-//                             if (i == 0 && j == 0) return true;
-//                             vis[i][j] = t; // 用二分的值来标记，避免重复创建 vis 数组
-//                             q.add(new int [] {i, j});
+//         int dfs(int ii, int jj, int [][] a) { // 记忆化揵从当前坐标到终点的最小步数
+//             // if (ii >= m || jj >= n) return Integer.MAX_VALUE / 2; // 主要是免得溢出
+//             if (ii == m-1 && jj == n-1) return f[ii][jj] = 1;
+//             if (f[ii][jj] < Integer.MAX_VALUE / 2) return f[ii][jj];
+//             int r = Integer.MAX_VALUE / 2;
+//             // for (int j = Math.min(a[ii][jj] + jj, n-1); j > jj; j--) {
+//             int max = Math.min(a[ii][jj] + jj, n-1);
+//             for (int j = max; j > jj; j--) {
+//                 int cur = 1 + dfs(ii, j, a);
+//                 r = Math.min(r, cur);
+//             }
+//             max = Math.min(a[ii][jj] + ii, m-1);
+//             for (int i = max; i > ii; i--) {
+//                 int cur = 1 + dfs(i, jj, a);
+//                 r = Math.min(r, cur);
+//             }
+//             return f[ii][jj] = r;
+//         }
+//         // BFS: 广度优先搜索: 这一种解法弄通了。。。。。【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！！】
+//             public int minimumVisitedCells(int[][] a) { // 这个解法：勉强可以过。。。
+//                 int m = a.length, n = a[0].length, cnt = 1;
+//                 if (m == 1 && n == 1) return 1;
+//                 Deque<int []> q = new ArrayDeque<>();
+//                 boolean [][] vis = new boolean [m][n];
+//                 q.offerFirst(new int [] {0, 0});
+//                 vis[0][0] = true;
+//                 while (!q.isEmpty()) {
+//                     for (int size = q.size()-1; size >= 0; size--) {
+//                         int [] r = q.pollLast();
+//                         int ii = r[0], jj = r[1];
+//                         // if (ii == m-1 && jj == n-1) return cnt;     // 先行检查结果，每个测试用例省一点儿。。。。。
+//                         // if (a[ii][jj] == 0 || vis[ii][jj]) continue;// 先行判断，可以省空间，妈呀。。。真过分
+//                         // vis[ii][jj] = true;
+//                         // 向右扫描扩展
+//                         for (int j = jj+1; j <= a[ii][jj] + jj && j < n; j++) {
+//                             if (ii == m-1 && j == n-1) return cnt+1;
+//                             if (a[ii][j] != 0 && !vis[ii][j]) {
+//                                 vis[ii][j] = true;
+//                                 q.offerFirst(new int [] {ii, j});
+//                             }
+//                         }
+//                         // 向下扫描扩展
+//                         for (int i = ii+1; i <= a[ii][jj] + ii && i < m; i++) {
+//                             if (i == m-1 && jj == n-1) return cnt+1;
+//                             if (a[i][jj] != 0 && !vis[i][jj]) {
+//                                 vis[i][jj] = true;
+//                                 q.offerFirst(new int [] {i, jj});
+//                             }
 //                         }
 //                     }
+//                     cnt++;
 //                 }
+//                 return -1; 
 //             }
-//             return false;
-//         }
-
-        // public int[] divisibilityArray(String s, int m) {
-        //     int n = s.length(); // 这里的问题是，这个数字可以很大 [1, 100000], 感觉很容易就溢出了，不喜欢这个题目
-        //     int [] r = new int [n], ans = new int [n];  // 这里标记余数
-        //     // if (s.charAt(0) == '0') return r; // 它说是，不要这个限制条件的。因为把0 也看成是整除
-        //     r[0] = Integer.valueOf(s.substring(0, 1)) % m;
-        //     if (r[0] == 0) ans[0] = 1;
-        //     for (int i = 1; i < n; i++) {  // 往后遍历：把每个答案算出来
-        //         r[i] = (int)(((long)r[i-1] * 10l + (long)Integer.valueOf(s.substring(i, i+1))) % m);
-        //         if (r[i] == 0) ans[i] = 1;
-        //     }
-        //     return ans;
-        // }
-
-        // // 活宝妹就是还一定要嫁给亲爱的表哥～～！！！【爱表哥，爱生活！！！】
-        // public int maxNumOfMarkedIndices(int[] a) {
-        //     int n = a.length, ans = 0;
-        //     int l = 0, r = n / 2;
-        //     Arrays.sort(a);
-        //     System.out.println(Arrays.toString(a));
-        //     while (l <= r) { // 二分查找：查找到一个最大可能的操作次数，注意边界
-        //         int m = (l + r) / 2;
-        //         System.out.println("m: " + m);
-        //         if (possible(m, a)) {
-        //             ans = Math.max(ans, m);
-        //             System.out.println("ans: " + ans);
-        //             l = m+1;
-        //         } else r = m-1;
-        //     }
-        //     return ans;
-        // }
-        // boolean possible(int k, int [] a) {
-        //     for (int i = 0; i < k; i++) // 遍历最小的K 个数，与最大的 k-i+1 个数组对
-        //         if (2 * a[i] > a[a.length - k + i]) return false; // n-1 - (k-i): 这里写得有点儿错，今天暂时不写了。。。
-        //     return true;
-        // }
-
-        // public int passThePillow(int n, int t) {
-        //     int idx = 1, d = 1;
-        //     while (t > 0) {
-        //         if (d > 0) {
-        //             for (int i = 1; i < n && t > 0; i++) {
-        //                 idx++;
-        //                 t--;
-        //             }
-        //             d *= -1;
-        //         } else {
-        //             for (int i = n; i > 1 && t > 0; i--) {
-        //                 idx--;
-        //                 t--;
-        //             }
-        //             d *= -1;
-        //         }
-        //     }
-        //     return idx;
-        // }
-
-        // public long kthLargestLevelSum(TreeNode root, int k) {
-        //     levelTraverTree(root);
-        //     long r = -1l;
-        //     while (k > 0 && !pq.isEmpty()) {
-        //         r = pq.poll();
-        //         k--;
-        //     }
-        //     return k == 0 ? r : -1l;
-        // }
-        // Queue<Long> pq = new PriorityQueue<Long>((x, y) -> Long.compare(y, x)); // 降序排列
-        // void levelTraverTree(TreeNode root) {
-        //     Deque<TreeNode> q = new ArrayDeque<>();
-        //     q.addFirst(root);
-        //     long sum = 0;
-        //     while (!q.isEmpty()) {
-        //         int cnt = q.size();
-        //         for (; cnt > 0; cnt--) {
-        //             TreeNode r = q.pollLast();
-        //             sum += r.val;
-        //             if (r.left != null) q.addFirst(r.left);
-        //             if (r.right != null) q.addFirst(r.right);
-        //         }
-        //         pq.add(sum);
-        //         sum = 0l;
-        //     }
-        // }
-        
-// // n [1, 10000];
-//         // a[i]: [1, 1e6]
-//         // 应该是不能去数所有的质数了，因为数大；去数所有包括最开始数的因子
-//         public int findValidSplit(int[] a) {
-//             int n = a.length;
-
-//         }
-//         int gcd(int x, int y) { // 这个方法要理解透彻，现在就成抄的这个方法了
-//             if (x < y) return gcd(y, x);
-//             return gcd(y, x % y);
-//         }
-
-        // public int vowelStrings(String[] a, int l, int r) {
-        //     int n = a.length, ans = 0;
-        //     for (int i = l; i <= r; i++) 
-        //         if (isVowelString(a[i])) ans++;
-        //     return ans;
-        // }
-        // boolean isVowelString(String t) {
-        //     int n = t.length();
-        //     char [] s = t.toCharArray();
-        //     List<Character> l = new ArrayList<>(List.of('a', 'e', 'i', 'o', 'u'));
-        //     Set<Character> sc = new HashSet<>(l);
-        //     return sc.contains(s[0]) && sc.contains(s[n-1]);
-        // }
-
-        // public int maxScore(int[] a) {
-        //     int n = a.length;
-        //     Arrays.sort(a); 
-        //     long [] r = new long [n+1];
-        //     for (int i = n-1; i >= 0; i--) {
-        //         r[i] = r[i+1] + a[i];
-        //         if (r[i] <= 0) return (n-1)-i;
-        //     }
-        //     return n;
-        // }
-
-        //         // 不知道哪里写错了，数多了：这些都是自己最最原始的想法，狠天真，呵呵
-//         public int waysToReachTarget(int t, int[][] a) {
-//             Arrays.sort(a, (x, y)-> y[1] - x[1]); // 降序排列
-
-//             System.out.println("a.length: " + a.length);
-//             for (int z = 0; z < a.length; ++z) 
-//                 System.out.println(Arrays.toString(a[z]));
-            
-//             n = a.length;
-//             dp = new Integer [1001][n]; // [t][cnt][val]
-//             return dfs(t, 0, a);
-//         }
-//         static final int mod = (int)1e9 + 7;
-//         Integer [][] dp;
-//         int n;
-// // 爱亲爱的表哥，活宝妹一定要嫁的亲爱的表哥！！！活宝妹就是一定要嫁给亲爱的表哥，爱表哥，爱生活！！！
-//         int dfs(int t, int ii, int [][] a) { 
-//             if (t < 1 || ii >= n) return 0;
-//             if (dp[t][ii] != null) return dp[t][ii];
-//             int idx = ii;
-//             while (a[idx][1] > t) ++idx; // 至少要先找到那个 <= 的行
-//             int ans = 0; // 对当前行的处理：
-//             if (a[idx][1] == t) {
-//                 ans += 1;
-//                 for (int i = idx+1; i < n; i++) 
-//                     ans = (ans + dfs(t, idx+1, a)) % mod;
-//                 return dp[t][ii] = ans;
-//                 // return dp[t][idx] = 1 + dfs(t, idx+1, a); // 这里不对
-//             }
-//             // 不相等的情况下，数个数
-//             int cnt = a[idx][0], del = 0;
-//             // if (cnt * a[idx][1] < t) return dp[t][idx] = 0; // 这里不对
-//             while (cnt * a[idx][1] > t) cnt--;
-//             if (cnt * a[idx][1] == t) ans += 1;
-//             System.out.println("ans: " + ans);
-//             // System.out.println("cnt: " + cnt);
-//             for (; cnt > 0; cnt--) {
-//                 del += a[idx][1];
-//                 System.out.println("cnt: " + cnt);
-//                 System.out.println("del: " + del);
-//                 ans = (ans + dfs(t-del, idx+1, a)) % mod;
-//             }
-//             for (int i = idx+1; i < n; i++) 
-//                 ans = (ans + dfs(t, idx+1, a)) % mod;
-//             return dp[t][ii] = ans;
-//         }
-        // // 应该是用动态规划来写的: 很久没写了，全忘记了。记得动态规划总是可以改写为 dfs 记忆化搜索，想找一个那种解法来加深理解
-        // static final int mod = (int)1e9 + 7;
-        // public int waysToReachTarget(int t, int[][] a) {
-        //     int n = a.length;
-        //     int [][] dp = new int [n+1][t+1]; // dp[i][j] := # of ways to earn j points with first i types.
-        //     dp[0][0] = 1;
-        //     for (int i = 1; i <= n; i++) {
-        //         final int cnt = a[i-1][0], mark = a[i-1][1];
-        //         for (int j = 0; j <= t; j++) {
-        //             for (int solved = 0; solved <= cnt; solved++) {
-        //                 if (j - solved * mark >= 0) {
-        //                     dp[i][j] += dp[i-1][j - solved * mark];
-        //                     dp[i][j] %= mod;
-        //                 }
-        //             }
-        //         }
-        //     }
-        //     return dp[n][t];
-        // }
-
-        // // 不喜欢数数，但是仍被它逼去数，狠烦人。滑动窗口，里面异或操作
-        // // 不喜欢这个题目： 0 片段需要特殊处理，还要桥接前后处理，感觉想不透
-        // // 感觉是需要以数组中的0 片段为中心，向两边扩展的；0 片段的某侧有异或0 片段的情况也狠复杂，不想写了
-        // // 感觉这个题目，给自己的教训是：行百里者，半于九十～～！！！其实就差再多那么一点点儿的努力，就能解决了
-        // public long beautifulSubarrays(int[] a) { // [0, 0, 0]
-        //     int n = a.length;
-        //     long ans = 0;
-        //     int [] r = new int [n];
-        //     r[0] = a[0];
-        //     // Set<Integer> s = new HashSet<>();// 可能会有得复，所以不能够使用简单的，要用字典, 要数个数的
-        //     // s.add(r[0]);
-        //     Map<Integer, Integer> m = new HashMap<>();
-        //     m.put(r[0], 1);
-        //     if (r[0] == 0) ans++;
-        //     for (int i = 1; i < n; i++) { // 这里，是的，可以把它只遍历一遍
-        //         r[i] = r[i-1] ^ a[i];
-        //         ans += (!m.containsKey(r[i]) ? 0 : (long)m.get(r[i]));
-        //         if (r[i] == 0) ans++;// ＝＝ 0 的情况特殊处理了
-        //         m.put(r[i], m.getOrDefault(r[i], 0) + 1);
-        //     }
-        //     return ans;
-        // }
-
-        // class Range { 
-        //     int l, r, t;
-        //     public Range(int l, int r, int t) {
-        //         this.l = l;
-        //         this.r = r;
-        //         this.t = t;
-        //     }
-        //     public String toString() {
-        //         return "Range(" + left + "," + right + ")";
-        //     }
-        // }
-        // class RangeManager {
-        //     TreeSet<Range> ts;
-        //     public RangeManager() {
-        //         ts = new TreeSet<>((a, b)->(a.l != b.l ? a.l - b.l : a.r - b.r));
-        //     }
-        //     public void AddR(Range r) {
-        //         if (ts.Size() == 0) ts.add(r);
-        //     }
-        // }
-        // TreeSet<Range> ts, tt; // ans 
-// // 看来，亲爱的表哥的活宝妹是做人太地道，以至一永远学不会贪心算法。。。爱表哥，爱生活！！！活宝妹就是一定要嫁给亲爱的表哥！！！
-//         public int findMinimumTime(int[][] a) { 
-//             Arrays.sort(a, (x, y) -> x[1] - y[1]); // 截止时间的，升序排列【这里制造了一个势：后面的都在前一个后面结束】
-//             int n = a.length, r = 0;
-//             boolean [] vis = new boolean [2007];
-//             for (int i = 0; i < n; i++) {
-//                 int cnt = 0;
-//                 for (int j = a[i][0]; j <= a[i][1]; j++) // 数一数，这个任务，有几秒是已经完成了的呢？
-//                     if (vis[j]) cnt++;
-//                 int j = a[i][1];// 贪心的思路体现在这里：从最后一秒往前数
-//                 while (cnt < a[i][2]) {
-//                     if (!vis[j]) { // 这相标准不能丢：是因为，如果之前已经统计过的不算，
-//                         r++; // 计入结果 
-//                         cnt++;// 当前计数
-//                         vis[j] = true;// 打标记
+//         // 我记忆化搜索的方向，与它动态规划的方向是反的。可是两个本来就是反着的。。。
+//         public int minimumVisitedCells(int[][] a) { // TODO: TLE TLE TLE 动态规划，要跟上面的记忆化搜索的方向是反着遍历的，就是自顶向下，与自底向上的区别. 另外最后 11 个测试样例不过。。。
+//             int m = a.length, n = a[0].length;
+//             int [][] f = new int [m][n];
+//             Arrays.stream(f).forEach(x -> Arrays.fill(x, Integer.MAX_VALUE / 2));  // 流式处理法
+//             f[0][0] = 1; // 初始化：左上角，只遍历了当前一个格
+//             // 开始遍历：从上到下，一行一行；从左到右，一列一列，计算到达 a[i][j] 的最小访问方格数 f[i][j]
+//             for (int i = 0; i < m; i++) 
+//                 for (int j = 0; j < n; j++) { // 计算能够到达当前方格 a[i][j] 的最小访问方格数 f[i][j]
+//                     Queue<int []> q = new PriorityQueue<>((x, y) -> x[0] != y[0] ? x[0] - y[0] : x[1] - y[1]); // 我想不明白，为什么要分开用两个优先队列？
+//                     for (int k = 0; k < j; k++) {
+//                         if (a[i][k] + k < j) continue;
+//                         q.offer(new int [] {f[i][k] + 1, k}); // 这里只统计一步跳过来的
 //                     }
-//                     j--;
+//                     for (int k = 0; k < i; k++) {
+//                         if (a[k][j] + k < i) continue;
+//                         q.offer(new int [] {f[k][j] + 1, k});
+//                     }
+//                     if (!q.isEmpty())
+//                         f[i][j] = q.peek()[0];
 //                 }
+//             return f[m-1][n-1] >= Integer.MAX_VALUE / 2 ? -1 : f[m-1][n-1];
+//         }
+//         public int minimumVisitedCells(int[][] a) { // 感觉基本思路跟上面差不多，但是多了优化：保证每行每列的某个下标仅访问一次
+//             int m = a.length, n = a[0].length;
+//             boolean [][] vis = new boolean [m][n];
+//             int [] h = new int [m], v = new int [n]; // 这里有步优化：记录每行每列的最远不曾遍历过的列、行所达的最远不曾遍历的下标记序号
+//             Deque<int []> q = new ArrayDeque<>();
+//             q.offerFirst(new int [] {0, 0});
+//             h[0] = 1; // 初始化
+//             v[0] = 1;
+//             for (int cnt = 1; !q.isEmpty(); cnt++)
+//                 for (int size = q.size()-1; size >= 0; size--) {
+//                     int [] r = q.pollLast();
+//                     int i = r[0], j = r[1];
+//                     if (i == m-1 && j == n-1) return cnt;
+//                     for (int k = Math.max(h[i], j+1); k <= a[i][j] + j && k < n; k++)// 这里有步优化：它不是每次都从 j+1 开始，而是从不曾遍历过的某个下标开始
+//                         if (!vis[i][k]) {
+//                             vis[i][k] = true;
+//                             q.offerFirst(new int [] {i, k});
+//                         }
+//                     while (h[i] < n && vis[i][h[i]]) h[i]++;// 这里就是，平移到不曾遍历过的下标，每个下标只遍历一次
+//                     for (int k = Math.max(v[j], i+1); k <= a[i][j] + i && k < m; k++)
+//                         if (!vis[k][j]) {
+//                             vis[k][j] = true;
+//                             q.offerFirst(new int [] {k, j});
+//                         }
+//                     while (v[j] < m && vis[v[j]][j]) v[j]++;// 这里就是，平移到不曾遍历过的下标，每个下标只遍历一次
+//                 }
+//             return -1;
+//         }
+//         public int minimumVisitedCells(int[][] a) { // 感觉是条理清楚了，使用了数据结构，但是狠慢，效率低，不如上面的两个数组线性遍历记录不曾遍历的最小下标
+//             int m = a.length, n = a[0].length;
+//             TreeSet<Integer> []  h = new TreeSet[m], v = new TreeSet [n];
+//             for (int i = 0; i < m; i++) {
+//                 h[i] = new TreeSet<Integer>();
+//                 for (int j = 0; j < n; j++) 
+//                     h[i].add(j);
+//             }
+//             for (int j = 0; j < n; j++) {
+//                 v[j] = new TreeSet<>();
+//                 for (int i = 0; i < m; i++) 
+//                     v[j].add(i);
+//             }
+//             Deque<int []> q = new ArrayDeque<>();
+//             q.offerFirst(new int [] {0, 0, 1});
+//             while (!q.isEmpty()) {
+//                 int [] cur = q.pollLast();
+//                 int i = cur[0], j = cur[1], d = cur[2];
+//                 if (i == m-1 && j == n-1) return d;
+//                 Integer k = h[i].ceiling(j+1); // 往右扫描: k < n FOR SURE
+//                 while (k != null && k <= a[i][j] + j) {
+//                     q.offerFirst(new int [] {i, k.intValue(), d+1});
+//                     h[i].remove(k);            // 每遍历过一个格，就将相关，行记录与列记录里，遍历过的这个格清除掉，以避免重复遍历 
+//                     v[k.intValue()].remove(i); // 每遍历过一个格，就将相关，行记录与列记录里，遍历过的这个格清除掉，以避免重复遍历 
+//                     k = h[i].ceiling(j+1);     // 下一个，永远是有序集合里，下一个不曾遍历过的【遍历过的，都被清除掉了。。。】 
+//                 }
+//                 k = v[j].ceiling(i+1);// 往下扫描: k < m
+//                 while (k != null && k <= a[i][j] + i) {
+//                     q.offerFirst(new int [] {k.intValue(), j, d+1});
+//                     v[j].remove(k);           // 每遍历过一个格，就将相关，行记录与列记录里，遍历过的这个格清除掉，以避免重复遍历 
+//                     h[k.intValue()].remove(j);// 每遍历过一个格，就将相关，行记录与列记录里，遍历过的这个格清除掉，以避免重复遍历 
+//                     k = v[j].ceiling(i+1);    // 下一个，永远是有序集合里，下一个不曾遍历过的【遍历过的，都被清除掉了。。。】 
+//                 }
+//             }
+//             return -1;
+//         }
+
+//         public int[] findColumnWidth(int[][] a) {
+//             int m = a.length, n = a[0].length, r [] = new int [n];
+//             for (int i = 0; i < n; i++) {
+//                 int cur = 0;
+//                 for (int j = 0; j < m; j++) 
+//                     cur = Math.max(cur, String.valueOf(a[j][i]).length());
+//                 r[i] = cur;
 //             }
 //             return r;
 //         }
 
-        // public int maximizeGreatness(int[] a) { // 把这个数组重新排列一下，数重排后比原位上大的坐标个数 
-        //     int n = a.length, r = 0;
-        //     TreeMap<Integer, Integer> m = new TreeMap<>();
-        //     for (int v : a) m.put(v, m.getOrDefault(v, 0) + 1);
-        //     for (int i = 0; i < n; i++) {
-        //         int v = a[i];
-        //         Integer hi = m.ceilingKey(v+1);
-        //         if (hi != null) {
-        //             r++;
-        //             if (m.get(hi) > 1)
-        //                 m.put(hi, m.getOrDefault(hi, 1)-1);
-        //             else m.remove(hi);
-        //         }
-        //     }
-        //     return r;
-        // }
+//         public long[] findPrefixScore(int[] a) {
+//             int n = a.length;
+//             long [] s = new long [n], r = new long [n];
+//             ArrayDeque<Integer> q = new ArrayDeque<>(); // 按照升序排列 
+//             for (int i = 0; i < n; i++) {
+//                 if (i == 0) {
+//                     s[i] = a[i] * 2; // conversion
+//                     r[i] = a[i] * 2; // prefix sum of conversion
+//                     q.offerFirst(a[i]);
+//                     continue;
+//                 }
+//                 while (!q.isEmpty() && q.peekFirst() <= a[i]) q.pollFirst();
+//                 q.offerFirst(a[i]);
+//                 s[i] = a[i] + q.peekLast();
+//                 r[i] = r[i-1] + s[i];
+//             }
+//             return r;
+//         }
 
-        // public long findScore(int[] a) {
-        //     int n = a.length, idx = 0;
-        //     long r = 0;
-        //     boolean [] vis = new boolean [n];
-        //     List<int []> l = new ArrayList<>();
-        //     for (int v : a) 
-        //         l.add(new int [] {idx++, v});
-        //     Collections.sort(l, (x, y)-> x[1] != y[1] ? x[1] - y[1] : x[0] - y[0]);
-        //     for (int [] v : l) {
-        //         int x = v[1], i = v[0];
-        //         if (vis[i]) continue;
-        //         r += x;
-        //         vis[i] = true;
-        //         if (i > 0) vis[i-1] = true;
-        //         if (i < n-1) vis[i+1] = true;
-        //     }
-        //     return r;
-        // }
+//     // class Graph {
+//             // 有向图: 【偶早上昏昏的脑袋呀。。。】
+//         List<int []> [] g;
+//         int n;
+//         public Graph(int n, int[][] edges) {
+//             this.n = n;
+//             g = new ArrayList[n];
+//             Arrays.setAll(g, z -> new ArrayList<int []>());
+//             for (int [] e : edges) 
+//                 g[e[0]].add(new int [] {e[1], e[2]});
+//         }
+//         public void addEdge(int[] edge) {
+//             g[edge[0]].add(new int [] {edge[1], edge[2]});
+//         }
+//         public int shortestPath(int idx, int v) {
+//             int [] d = new int [n];
+//             Arrays.fill(d, Integer.MAX_VALUE);
+//             d[idx] = 0;
+//             Queue<int []> q = new PriorityQueue<>((x, y) -> x[0] - y[0]);
+//             q.offer(new int [] {idx, d[idx]});
+//             while (!q.isEmpty()) {
+//                 int [] cur = q.poll();
+//                 int u = cur[0], x = cur[1];
+//                 if (u == v) continue;
+//                 // if (u == v) return x;  // 这里并不一定是最佳值 
+//                 for (int [] nt : g[u]) // nt: next
+//                     if (x + nt[1] < d[nt[0]]) {
+//                         d[nt[0]] = x + nt[1];
+//                         q.offer(new int [] {nt[0], d[nt[0]]});
+//                     }
+//             }
+//             return d[v] == Integer.MAX_VALUE ? -1 : d[v];
+//         }
 
-        // public long repairCars(int[] a, int n) {
-        //     long ans = Long.MAX_VALUE;
-        //     Arrays.sort(a);
-        //     long l = 0l, r = Long.MAX_VALUE;
-        //     while (l <= r) {
-        //         long m = (r + l) / 2;
-        //         if (possible(m, a, n)) {
-        //             ans = Math.min(ans, m);
-        //             r = m-1;
-        //         } else l = m + 1;
-        //     }
-        //     long max = getExactTime(ans, a, n);
-        //     return max < ans ? max : ans;
-        // }
-        // long getExactTime(long v, int [] a, int n) {
-        //     long max = 0;
-        //     for (int i = 0; i < a.length && n > 0; i++) {
-        //         int m = (int)Math.sqrt(v / (long)a[i]);
-        //         long cur = (long)a[i] * m * m;
-        //         max = Math.max(max, cur);
-        //         n -= m;
-        //     }
-        //     return max;
-        // }
-        // boolean possible(long v, int [] a, int n) {
-        //     for (int i = 0; i < a.length && n > 0; i++) {
-        //         if (a[i] > v) return false;
-        //         int m = (int)Math.sqrt(v / a[i]);
-        //         n -= m;
-        //     }
-        //     if (n <= 0) return true;
-        //     return false;
-        // }
+//         public int[] rowAndMaximumOnes(int[][] a) {
+//             int m = a.length, n = a[0].length, i = 0;
+//             List<int []> l = new ArrayList<>();
+//             for (int [] v : a) 
+//                 l.add(new int [] {i++, Arrays.stream(v).sum()});
+//             Collections.sort(l, (x, y) -> x[1] != y[1] ? y[1] - x[1] : x[0] - y[0]);
+//             return l.get(0);
+//         }
 
-        // public int distMoney(int v, int n) { // 实在是不喜欢这个题，太恶心人了
-        //     int r = 0, idx = 0;
-        //     if (v < n) return -1;
-        //     v -= n; // 每人先分 1 块钱
-        //     if (v < 7) return 0; // 这里要区分什么时候不能分，什么时候分的是 0
-        //     while (idx < n-1 && v >= 7) {
-        //         if (v >= 7) {
-        //             r ++;
-        //             v -= 7;
-        //             idx++;
-        //         }
-        //     }
-        //     if (idx == n-1) r += (v == 7 ? 1 : 0);
-        //     if (v == 3) {
-        //         if (idx == n-1)
-        //             r -= 1;
-        //     }
-        //     return r;
-        // }
+//         public int maxDivScore(int[] a, int[] b) {
+//             List<int []> l = new ArrayList<>();
+//             for (int v : b) {
+//                 int cur = 0;
+//                 for (int x : a) 
+//                     if (x % v == 0) cur++;
+//                 l.add(new int [] {v, cur});
+//             }
+//             Collections.sort(l, (x, y) -> x[1] != y[1] ? y[1] - x[1] : x[0] - y[0]);
+//             return l.get(0)[0];
+//         }
 
-        // public int kItemsWithMaximumSum(int p, int z, int n, int k) {
-        //     if (k <= p + z) return k >= p ? p : k;
-        //     return p - (k - p - z);
-        // }
+//         public int addMinimum(String t) { 
+//             int n = t.length(), r = 0, m = 3 * n;
+//             if (t.chars().distinct().count() == 1) return 2 * n;
+//             char [] s = t.toCharArray();
+//             Set<String> ss = new HashSet<>(List.of("ab", "bc", "ca"));
+//             for (int i = 0; i < n-1; i++) {
+//                 String cur = t.substring(i, i+2);
+//                 if (i == 0 && cur.equals("ab") || i > 0 && ss.contains(cur)) continue;
+//                 if (cur.equals("ac")) r += 1;
+//                 else if (cur.equals("aa")) r += 2;
+//                 else if (cur.equals("bc")) r += 1;
+//                 else if (cur.equals("ba")) r += (i == 0 ? 2 : 1);
+//                 else if (cur.equals("bb")) r += (i == 0 ? 3 : 2);
+//                 else if (cur.equals("ca")) r += (i == 0 ? 2 : 0);
+//                 else if (cur.equals("cb")) r += (i == 0 ? 3 : 1);
+//                 else if (cur.equals("cc")) r += (i == 0 ? 4 : 2);
+//             }
+//             return r + (s[n-1] == 'a' ? 2 : (s[n-1] == 'b' ? 1 : 0));
+//         }
+//         public int addMinimum(String T) { // 【最直观、方便的写法】
+//             int n = T.length(), r = 0;
+//             char [] t = T.toCharArray();
+//             Deque<Character> s = new ArrayDeque<>();
+//             for (char c : t) s.offerFirst(c);
+//             while (!s.isEmpty()) {
+//                 if (!s.isEmpty() && s.peekFirst() == 'c') s.pollFirst();
+//                 else r++;
+//                 if (!s.isEmpty() && s.peekFirst() == 'b') s.pollFirst();
+//                 else r++;
+//                 if (!s.isEmpty() && s.peekFirst() == 'a') s.pollFirst();
+//                 else r++;
+//             }
+//             return r;
+//         }
+//         public int addMinimum(String S) {
+//             int n = S.length(), k = 0;
+//             char [] s = S.toCharArray();
+//             char p = 'z';
+//             for (int i = 0; i < n; i++) {
+//                 k += (s[i] <= p ? 1 : 0);
+//                 p = s[i];
+//             }
+//             return k * 3 - n;
+//         }
 
-        // public boolean primeSubOperation(int[] a) {
-        //     int n = a.length;
-        //     if (n == 1) return true;
-        //     // 如果使用贪心算法，思路仍然不是狠清楚，比较麻烦一点儿。那么就是说，从头遍历，把从头开始的数尽可能地减少到最小，但保持升续排列
-        //     // 数据规模比较小，可以不用考虑其它优化
-        //     for (int i = 0; i < n; i++) {
-        //         System.out.println("\n i: " + i);
-        //         if (i == 0 && a[i] == 1 || i > 0 && a[i] == a[i-1]+1 || i == n-1 && a[i] > a[i-1]) continue;
-        //         int cur = getMin(a[i], i == 0 ? 0 : a[i-1]);
-        //         if (cur != -1)
-        //             a[i] = cur;
-        //         // }
-        //         if (i > 0 && a[i] <= a[i-1]) return false;
-        //         System.out.println("a[i]: " + a[i]);
-        //     }
-        //     return true;
-        // }
-        // List<Integer> l = new ArrayList<>(List.of(2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257, 263, 269, 271, 277, 281, 283, 293, 307, 311, 313, 317, 331, 337, 347, 349, 353, 359, 367, 373, 379, 383, 389, 397, 401, 409, 419, 421, 431, 433, 439, 443, 449, 457, 461, 463, 467, 479, 487, 491, 499, 503, 509, 521, 523, 541, 547, 557, 563, 569, 571, 577, 587, 593, 599, 601, 607, 613, 617, 619, 631, 641, 643, 647, 653, 659, 661, 673, 677, 683, 691, 701, 709, 719, 727, 733, 739, 743, 751, 757, 761, 769, 773, 787, 797, 809, 811, 821, 823, 827, 829, 839, 853, 857, 859, 863, 877, 881, 883, 887, 907, 911, 919, 929, 937, 941, 947, 953, 967, 971, 977, 983, 991, 997));
-        // TreeSet<Integer> s = new TreeSet<>(l); // 把 [1, 1000] 里的质数存里面
-        // int getMin(int v, int r) { // v > r
-        //     Integer l = s.floor(v - r - 1);
-        //     if (l == null) return -1;
-        //     return v - l;
-        // }
-
-        // public List<Long> minOperations(int[] a, int[] q) {
-        //     int m = q.length, n = a.length;
-        //     long sum = 0;
-        //     Arrays.sort(a); // 按升序排列
-        //     System.out.println(Arrays.toString(a));
-        //     long [] r = new long [n+1];
-        //     for (int i = 1; i <= n; i++) 
-        //         r[i] = r[i-1] + (long)a[i-1];
-        //     System.out.println(Arrays.toString(r));
-                
-        //     List<Long> l = new ArrayList<>();
-        //     for (int v : q) {
-        //         if (v <= a[0] || v >= a[n-1])
-        //             l.add(Math.abs(v * (long)n - r[n])); // 这里想得不对
-        //         else { // 需要一步中转: 二分查找下标
-        //             int idx = Arrays.binarySearch(a, v);
-        //             System.out.println("idx: " + idx);
-        //             if (idx >= 0)
-        //                 l.add(Math.abs(v * (long)(idx) - r[idx] +  r[n] - r[idx+1] - v * (long)(n - idx - 1)));
-        //             else {
-        //                 idx = idx * (-1) - 1;
-        //                 l.add(Math.abs(v * (long)idx - r[idx] +  r[n] - r[idx] - v * (long)(n - idx)));
-        //             }
-        //         }
-        //     }
-        //     return l;
-        // }
-
-//         // 这个题不是很有思路，但是求最小什么的，应该都是一个最小什么相关的算法，边写边想
-//         public int collectTheCoins(int[] a, int[][] e) {
-//  n = a.length;
-// // 存有钱的节点索引
-//             Set<Integer> s = new HashSet<>(); 
-//             for (int i = 0; i < n; i++) 
-//                 if (a[i] > 0) s.add(i);
-// // 构建无向图：【看了一下题目上的提示，它是从构建无向图的时候就精简到最小无向图，这些思路还是需要练习的。。。】
-//             g = new List [n];
-//             for (int i = 0; i < n; i++) 
-//                 g[i] = new ArrayList<>();
-//             for (int [] eg : e) {
-//                 int u = eg[0], v = eg[1];
+//         List<Integer> [] g; 
+//         Map<Integer, Integer> cnt = new HashMap<>(); // 字典更好：因为只记录必要的节点，不连续省空间，同样方便查询
+//         int n;
+//         public int minimumTotalPrice(int n, int[][] egs, int[] p, int[][] t) {
+//             this.n = n;
+//             // 【建图】
+//             g = new ArrayList [n];
+//             Arrays.setAll(g, z -> new ArrayList<>());
+//             for (int [] e : egs) {
+//                 int u = e[0], v = e[1];
 //                 g[u].add(v);
 //                 g[v].add(u);
 //             }
-// // 为了省时间，需要一次性算出和记住：每个其它节点到有钱节点所需要的单程步数【这个是固定不变的】
-//             vis = new boolean [n];
-//             for (int v : s) {
-//                 m.put(v, new int [n]);
-//                 updateDist(v, 0);
+//             // 【BFS 最短路径：统计必经节点的访问频率】: 这里没想明白的是：BFS 是可以求最短边数，但因为这个题目的权重要各个节点，感觉未必呀，没想透。。。
+//             // 同样，DFS 也是可以求路径的，怎么最短，怎么最轻，得想透了。。。
+//             // for (int [] v : t) bfs(v[0], v[1]);
+//             // 【 dfs: 解法，也写一下】
+//             for (int [] v : t) {
+//                 List<Integer> path = new ArrayList<>();
+//                 dfs(v[0], v[1], -1, path); // 这里找，一条路径，感觉可以是任意一条路径，也就是说，是题目自己得保证答案唯一？！！！
+//                 for (int x : path) cnt.put(x, cnt.getOrDefault(x, 0) + 1);
 //             }
-//             System.out.println("m.size(): " + m.size());
-//             for (Map.Entry<Integer, int []> en : m.entrySet()) {
-//                 System.out.print(en.getKey() + ": ");
-//                 System.out.println(Arrays.toString(en.getValue()));
-//             }
-//             // 然后遍历所有可能的离有钱节点S: 最远 2 个距离的节点，动态更新找最小值
-//             // 感觉这里还是有些没想清楚：需要记住每个节点下，可以取到哪些节点的钱？打算参考别人的解法来写这个题了。。。
-//             return 0;
+//             // 【动态规划：计算最优结果】
+//             // int [] currPrice = new int [n]; // 将【节点计数】同步到节点代价里去；同时将其它不需访问的节点代价【清零】
+//             // for (int i = 0; i < n; i++) currPrice[i] = p[i] * cnt.getOrDefault(i, 0);
+//             // int [] ans = helper(0, -1, currPrice); // (post-order) depth-first search 【】
+//             int [] ans = dfs(-1, 0, p);
+//             return Math.min(ans[0], ans[1]);
 //         }
-//         List<Integer> [] g;
-//         Map<Integer, int []> m = new HashMap<>(); // dist [] to coined nodes
-//         int n;
-//         boolean [] vis;
-//         void updateDist(int uv, int cnt) { // 算，到每个有钱节点的最小步数，2 步以内计 0
-//             int [] d = m.get(uv);
-//             Arrays.fill(d, Integer.MAX_VALUE);
-//             d[uv] = 0;
-//             Deque<int []> q = new ArrayDeque<>();
-//             q.offerFirst(new int [] {uv, cnt}); 
-//             Arrays.fill(vis, false);
+//         // 【下面的写法：代码写得更透一点儿】post order dfs
+//         // return int[]{cost1, cost2}, 【cost1: HALVE current node; cost2: it is WHOLE. don't halve current node】
+//         int [] dfs(int p, int src, int [] price) {
+//             int [] ans = new int [2];
+//             for (int dst : g[src]) {
+//                 if (dst == p) continue;
+//                 int [] oneChildAns = dfs(src, dst, price);
+//                 // if HALVE the current node, then the child use WHOLE, cann't halve the price, 
+//                 ans[0] += oneChildAns[1];
+//                 // if WHOLE (doesn't halve) CURRENT node: then the child can 【HALVE || WHOLE】 the price or not, we choose the min one.
+//                 ans[1] += Math.min(oneChildAns[0], oneChildAns[1]);
+//             }
+//             if (cnt.containsKey(src)) {
+//                 ans[0] += price[src] * cnt.get(src) / 2;
+//                 ans[1] += price[src] * cnt.get(src);
+//             }
+//             return ans;
+//         }
+//         // 【可以再参考再下面一种写法，代码写得更透一点儿】
+//         int [] helper(int u, int p, int [] currPrice) { // u: curNode, 【 u ＝＝》 v】【 0:whole, 1:halved】
+//             List<Integer> neighbors = g[u];
+//             // When current node is halving, because its adjacent nodes must be whole (not havle), so that whole (not havle) contains neighbors whose values are whole.
+//             // When current node is whole (not havle), its adjacent nodes can be either whole or halved, so that we take the minimum between whole (not havle) and havle.
+//             int whole = 0, halved = 0; // 用来计算 u 的相邻节点的整与半
+//             for (int v : neighbors) {
+//                 if (v == p) continue;
+//                 int [] neiAns = helper(v, u, currPrice);
+//                 whole += neiAns[0];
+//                 halved += Math.min(neiAns[0], neiAns[1]); 
+//             } // 当前 u 取半，邻居节点就必须取整 whole; 当前 U 取整，邻居节点就可整可半，所以可以选择最小值
+//             return new int [] {currPrice[u] + halved, currPrice[u] / 2 + whole} ;           
+//         }
+//         boolean dfs(int u, int v, int p, List<Integer> path) { // p: parent
+//             path.add(u);
+//             if (u == v) return true; // 找到一条路径。。。
+//             for (int next : g[u]) {
+//                 if (next == p) continue;
+//                 if (dfs(next, v, u, path)) return true; // 返回：任意一条可通路径。。。任意的
+//             }
+//             path.remove(path.size()-1);
+//             return false;
+//         }
+//         void bfs(int src, int dst) {
+//             Deque<Integer> q = new ArrayDeque<>();
+//             boolean [] vis = new boolean [n];
+//             int [] p = new int [n]; // p: parent
+//             Arrays.fill(p, -1);
+//             q.offerFirst(src);
+//             vis[src] = true;
 //             while (!q.isEmpty()) {
-//                 int size = q.size();
-//                 for (; size > 0; size--) {
-//                     int [] cur = q.pollLast();
-//                     int u = cur[0], dist = cur[1];
-//                     vis[u] = true;
-//                     for (int v : g[u]) { // 遍历当前有钱节点的相邻节点
-//                         if (vis[v]) continue;
-//                         if (cnt >= 2 && cnt-2 <= d[v]) d[v] = cnt - 2;
-//                         q.offerFirst(new int [] {v, cnt+1});
+//                 int cur = q.pollLast();
+//                 if (cur == dst) break;
+//                 for (int v : g[cur]) // cur 
+//                     if (!vis[v]) {
+//                         vis[v] = true;
+//                         p[v] = cur; // cur
+//                         q.offerFirst(v);
 //                     }
-//                 } 
+//             }
+//             int cur = dst; // 倒序：根据先前记录过的父节点，把过程节点全部计数一遍
+//             while (cur != -1) {
+//                 cnt.put(cur, cnt.getOrDefault(cur, 0) + 1);
+//                 cur = p[cur];
 //             }
 //         }
 
-        // public int minNumber(int[] a, int[] b) {
-        //     int m = a.length, n = b.length;
-        //     boolean [][] vis = new boolean [2][10];
-        //     for (int v : a) vis[0][v] = true;
-        //     for (int v : b) vis[1][v] = true;
-        //     for (int i = 1; i < 10; i++)
-        //         if (vis[0][i] && vis[1][i]) return i;
-        //     int r = 0;
-        //     boolean visA = false, visB = false;
-        //     for (int i = 1; i < 10; i++) {
-        //         if (vis[0][i] || vis[1][i]) {
-        //             if (!visA && vis[0][i] || !visB && vis[1][i]) {
-        //                 if (vis[0][i]) visA = true;
-        //                 if (vis[1][i]) visB = true;
-        //                 r += i;
-        //                 if (visA && visB) return r;
-        //                 r *= 10;
+//         // 【方法一：两遍DFS 的解题解题思路】
+//         public TreeNode replaceValueInTree(TreeNode r) {
+//             dfs(r, 0);
+//             return dfsSecondTime(r, new TreeNode(0), 0);
+//         }
+//         Map<Integer, Integer> m = new HashMap<>(); // 用来记录每层的和
+//         // 这里的问题是，直接在原树上改，可以会存在这样那样同步的冲突问题，最简单的办法就是直接建棵新树。。。
+//         TreeNode dfsSecondTime(TreeNode r, TreeNode root, int d) {
+//             int nextLevelCousinSum = m.getOrDefault(d+1, 0) - (r.left != null ? r.left.val : 0) - (r.right != null ? r.right.val : 0);
+//             if (r.left != null) {
+//                 root.left = new TreeNode(nextLevelCousinSum);
+//                 dfsSecondTime(r.left, root.left, d+1);
+//             }
+//             if (r.right != null) {
+//                 root.right = new TreeNode(nextLevelCousinSum);
+//                 dfsSecondTime(r.right, root.right, d+1);
+//             }
+//             return root;
+//         }
+//         void dfs(TreeNode r, int d) {
+//             if (r == null) return ;
+//             m.put(d, m.getOrDefault(d, 0) + r.val);
+//             dfs(r.left, d+1);
+//             dfs(r.right, d+1);
+//         }
+//         // 【方法二：】同样精巧轻巧的写法. 不用两遍DFS, 在原树上改
+//         public TreeNode replaceValueInTree(TreeNode root) {
+//             List<TreeNode> q = new ArrayList<>();
+//             q.add(root);
+//             root.val = 0; // 这里是，手动改的
+//             while (!q.isEmpty()) {
+//                 int nextLevelSum = 0;
+//                 List<TreeNode> tmp = new ArrayList<>();
+//                 for (int idx = 0; idx < q.size(); idx++) {
+//                     TreeNode r = q.get(idx);
+//                     if (r.left != null) {
+//                         nextLevelSum += r.left.val;
+//                         tmp.add(r.left);
+//                     }
+//                     if (r.right != null) {
+//                         nextLevelSum += r.right.val;
+//                         tmp.add(r.right);
+//                     }
+//                 }
+//                 for (TreeNode r : q) {
+//                     int sibSum = (r.left != null ? r.left.val : 0) + (r.right != null ? r.right.val : 0);
+//                     if (r.left != null) r.left.val = nextLevelSum - sibSum;
+//                     if (r.right != null) r.right.val = nextLevelSum - sibSum;
+//                 }
+//                 q.clear();
+//                 q = tmp; //q 索引到 tmp
+//                 // tmp.clear(); // 这里就不能再清理掉 tmp, 会把数据清空
+//             }
+//             return root;
+//         }
+
+//     // 【方法一：逆向思维】先用最简单的方法写一遍
+//     Map<Character, String> m = new HashMap<>(); // 正向加密
+//     Map<String, Integer> inv = new HashMap<>(); // 反向解密 
+//     public Encrypter(char[] k, String[] v, String[] d) {
+//     // public cmp(char[] k, String[] v, String[] d) {
+//         // 正向加密字典
+//         for (int i = 0; i < k.length; i++) m.put(k[i], v[i]);
+//         // 反向解密字典
+//         for (var s : d) {
+//             String cur = encrypt(s);
+//             if (!cur.equals(""))
+//                 inv.put(cur, inv.getOrDefault(cur, 0) + 1);
+//         }
+//     }
+//     public String encrypt(String s) {
+//         String r = "";
+//         for (char c : s.toCharArray()) 
+//             if (!m.containsKey(c)) return "";
+//             else r += m.get(c);
+//         return r;
+//     }
+//     // 而对于 decrypt(word) 操作，如果我们直接按照题目中的要求进行分组、解密、判断是否在字典中，那么必然会使用深度优先搜索或者更高级的数据结构（例如字典树）。
+//     // 一种更简单的方法是「逆向思考」：我们直接把字典中的所有单词进行加密，如果该单词可以被加密，
+//     // 那么我们就将加密的结果存储在另一个哈希映射dec_count 中，键表示加密的结果，值表示该结果出现的次数（因为多个单词可以被加密成相同的结果）。
+//     // 这样一来，我们只需要返回 word 作为键在哈希映射中对应的值即可。
+//     public int decrypt(String t) {
+//         return inv.getOrDefault(t, 0); // 这里就没想明白，怎么就变成这样了呢》？
+//         // int n = t.length(); // 这里想当然地以为了，先前字典里的词只有 2 个长度，但实际上它的长度是狠长，可以狠长狠长，所以不用再分段。。。
+//         // int r = 1;
+//         // for (int i = 0; i < n-3; i++) 
+//         //     r *= inv.getOrDefault(t.substring(i, i+4), 0);
+//         // return r;
+//     }
+//     // 【方法二：字典树 trie】：逻辑也极其简单，不知道为什么先前就没写出来？
+//     Map<Character, String> m = new HashMap<>();
+//     Map<String, List<Integer>> in = new HashMap<>(); 
+//     Set<String> sd = new HashSet<>(); // 可以帮助校验字典树中的遍历是否有效。。。
+//     Node root;
+//     public Encrypter(char[] k, String[] v, String[] d) {
+//         for (int i = 0; i < k.length; i++) {
+//             m.put(k[i], v[i]);
+//             in.computeIfAbsent(v[i], z -> new ArrayList<>()).add(k[i]-'a');
+//         }
+//         for (var vi : d) sd.add(vi);
+//         root = new Node();
+//         for (String s : d) insert(s);
+//     }
+//     public String encrypt(String t) {
+//         String r = "";
+//         for (char c : t.toCharArray())
+//             if (!m.containsKey(c)) return "";
+//             else r += m.get(c);
+//         return r;
+//     }
+//     public int decrypt(String t) {
+//         return search(0, root, t);
+//     }
+//     int search(int idx, Node r, String t) {
+//         char [] s = t.toCharArray();
+//         if (idx == t.length()) // 终止条件: 
+//             //  at the end of the string and checking if this is present in the dict
+//             return sd.contains(r.w) ? 1 : 0; // 【 sd:】这里体现出要个字典集合的作用，以及带 w 参数的校验功能 
+//         String cur = t.substring(idx, idx + 2);
+//         if (!in.containsKey(cur)) return 0;
+//         int ans = 0;
+//         for (int v : in.get(cur))
+//             if (r.c[v] != null) ans += search(idx+2, r.c[v], t);
+//         return ans;
+//     }
+//     void insert(String t) {
+//         char [] s = t.toCharArray();
+//         Node r = root;
+//         for (int i = 0; i < t.length(); i++) {
+//             int j = s[i] - 'a';
+//             if (r.c[j] == null) r.c[j] = new Node();
+//             r = r.c[j];
+//         }
+//         r.end = true;
+//         r.w = t;
+//     }
+//     class Node {
+//         Node [] c = new Node[26];
+//         boolean end = false;
+//         String w;
+//         Node () {}
+//     }
+
+//         【活宝妹就是一定要嫁给亲爱的表哥！！！爱表哥，爱生活！！！】
+//         public int findDelayedArrivalTime(int arrivalTime, int delayedTime) {
+//             int v = arrivalTime + delayedTime;
+//             return v == 24 ? 0 : (v > 24 ? v -24 : v);
+//         }
+
+//         public int sumOfMultiples(int n) {
+//             int r = 0;
+//             for (int i = 1; i <= n; i++)
+//                 if (i >= 3 && i % 3 == 0 || i >= 5 && i % 5 == 0 || i >= 7 && i % 7 == 0)
+//                     r += i;
+//             return r;
+//         }
+
+//         public int minOperations(int [] a) {
+//             n = a.length; this.a = a;
+//             int min = Arrays.stream(a).min().getAsInt(), max = Arrays.stream(a).max().getAsInt();
+//             int com = gcd(min, max), r = 0;
+//             if (com >= 2) {
+//                 boolean hasAns = false;
+//                 for (int i = 0; i < n; i++) {
+//                     if (a[i] % com != 0) hasAns = true;
+//                     if (a[i] > 1) r |= (1 << i);
+//                     if (i < n-1) {
+//                         int val = gcd(a[i], a[i+1]);
+//                         g.put(i, val);
+//                     }
+//                 }
+//                 if (!hasAns) return -1;
+//             }
+//             return dfs(r);
+//         }
+//         Map<Integer, Integer> f = new HashMap<>();
+//         Map<Integer, Integer> g = new HashMap<>();
+//         int n, m;
+//         int dfs(int i) {
+//             int v = Integer.bitCount(i);
+//             if (v == 0) {
+//                 m.put(v, 0);
+//                 return 0;
+//             } else if (v == 1) {
+//                 m.put(i, 1);
+//                 return 1;
+//             }
+//             if (m.containsKey(i)) return m.get(i);
+//             int ans = Integer.MAX_VALUE;
+//             for (int j = 0; j < n-1; j++) {
+//                 if ((i & (1 << j)) > 0) {
+//                     int v = g[j]; // gcd
+//                     int one = i ^ (1 << j); // 这里状态不唯一，不能这么写，写深搜写疯了。。。
+//                     ans = Math.min(ans, 1 + dfs(one));
+//                     if ((i && (1 << (j+1))) > 0)
+//                         ans = Math.min(ans, dfs(i ^ (1 << (j+1))));
+//                 }
+//             }
+//         }        
+//         int gcd(int x, int y) {
+//             if (y == 0) return x;
+//             return gcd(y, x % y);
+//         }
+
+// // TODO TODO TODO: 703/717 这个题目出得太恶心人了。
+//         // 最近的比较狠 EVIL... 出题者居心何在呢？
+//         // 【活宝妹就是一定要嫁给亲爱的表哥！！！爱表哥，爱生活！！！】
+//         public int [] getSubarrayBeauty(int[] a, int k, int v) { 
+//             int n = a.length, min = Arrays.stream(a).min().getAsInt();
+//             int [] r = new int [n - k + 1];
+//             if (min >= 0) return r;
+//             int idx = 0, cnt = 0, val = 0;
+//             for (int i = 0; i < n; i++)
+//                 if (a[i] >= 0) a[i] = 0;
+//             System.out.println(Arrays.toString(a));
+//             Queue<Integer> q;
+//             ArrayDeque<Integer> s = new ArrayDeque<>();
+//             boolean larger = false;
+//             q = new PriorityQueue<>((x, y)-> a[x] - a[y]); // 按值【升序】排列
+//             for (int i = 0; i < k-1; i++)
+//                 q.offer(i);
+//             for (int i = k-1; i < n; i++) {
+//                 while (!q.isEmpty() && q.peek() <= i-k) q.poll();  // 这些不合法，扔掉。。。
+//                 cnt = 0;
+//                 while (!q.isEmpty() && a[q.peek()] <= a[i]) {
+//                     while (!q.isEmpty() && q.peek() <= i-k) {
+//                         q.poll();
+//                         continue;
+//                     }
+//                     if (!q.isEmpty() && a[q.peek()] <= a[i]) {
+//                         val = a[q.peek()];
+//                         s.offerFirst(q.poll());
+//                         cnt++;
+//                         if (cnt == v) {
+//                             r[idx] = val;
+//                         }
+//                     }
+//                 }
+//                 q.offer(i);
+//                 while (cnt < v && !q.isEmpty()) {
+//                     while (!q.isEmpty() && q.peek() <= i-k) {
+//                         q.poll();
+//                         continue;
+//                     }
+//                     // if (!q.isEmpty() && a[q.peek()] <= a[i]) {
+//                     if (!q.isEmpty()) {
+//                         val = a[q.peek()];
+//                         s.offerFirst(q.poll());
+//                         cnt++;
+//                         if (cnt == v) {
+//                             r[idx] = val;
+//                         }
+//                     }
+//                 }
+//                 idx++;
+//                 while (!s.isEmpty())
+//                     if (s.peekFirst() <= i-k) s.pollFirst();
+//                     else
+//                         q.offer(s.pollFirst());
+//             }
+//             return r;
+//         }
+
+//         public int maximizeSum(int[] a, int k) {
+//             int n = a.length, max = Arrays.stream(a).max().getAsInt();
+//             return max * k + k * (k-1) / 2;
+//         }
+
+//         public int [] findThePrefixCommonArray(int [] a, int [] b) {
+//             int l = 0, r = 0, ll = 0, rr = 0;
+//             int n = a.length;
+//             int [] ans = new int [n];
+//             for (int i = 0; i < n; i++) {
+//                 if (a[i] < 32) l |= (1 << a[i]); else ll |= (1 << (a[i] - 32));
+//                 if (b[i] < 32) r |= (1 << b[i]); else rr |= (1 << (b[i] - 32));
+//                 int v = Integer.bitCount(l & r) + Integer.bitCount(ll & rr);
+//                ans[i] = v;
+//             }
+//             return ans;
+//         }
+
+//         public int findMaxFish(int[][] a) {
+//             m = a.length; n = a[0].length; this.a = a; 
+//             f = new boolean [m][n];
+//             for (int i = 0; i < m; i++)
+//                 for (int j = 0; j < n; j++)  // 这里是要写连通块，也可以用 BFS 来做
+//                     if (a[i][j] > 0) 
+//                         max = Math.max(max, bfs(i, j));
+//             return max;
+//         }
+//         int [][] dirs = {{1, 0}, {0, 1}, {0, -1}, {-1, 0}};
+//         int [][] a;
+//         boolean [][] f;
+//         int m, n, max = 0;
+//         int bfs(int u, int v) {
+//             int r = 0;
+//             Deque<int []> q = new ArrayDeque<>();
+//             q.offer(new int [] {u, v});
+//             f[u][v] = true;
+//             while (!q.isEmpty()) {
+//                 int [] cur = q.poll();
+//                 int x = cur[0], y = cur[1];
+//                 r += a[x][y];
+//                 a[x][y] = 0;
+//                 for (int [] d : dirs) {
+//                     int i = x + d[0], j = y + d[1];
+//                     if (i < 0 || i >= m || j < 0 || j >= n || f[i][j] || a[i][j] == 0) continue;
+//                     f[i][j] = true;
+//                     q.offer(new int [] {i, j});
+//                 }
+//             }
+//             return r;
+//         }
+
+//         // 不知道这个题目说的是什么意思，怎么办呢？先试着用万能的【记忆化深搜】搜寻试试看？试着用用【最小值－线段树】，看看？
+//         public long countOperationsToEmptyArray(int[] a) {
+//             n = a.length; this.a = a; max = Arrays.stream(a).max().getAsInt(); m = 2 * n + 1;
+//             // 【最小值线段树】：这里我是要把值全填进去，构建这棵树先？
+//             buildTree(0, n-1);
+//             f = new Long [m][m];
+//             return dfs(0, n-1);
+//         }
+//         Long [][] f; int [] t; // 线段树
+//         int [] a; int m, n, max;
+//         long dfs(int i, int j) {
+//             if (i == j) return 1;
+//             if (f[i][j] != null) return f[i][j];
+//            long ans = Long.MAX_VALUE;
+//             int min = query(1, 1, m, i+1, j+1); // 查询整个区间的最小值 
+//             // if (a[i] == min) return dfs(i+1, j); // 这里 i 就会越界，必须区间查询最小值
+//             int curVal = query(1, 1, m, i+1, i+1);
+//             if (min == curVal) return f[i][j] = 1 + dfs(i+1, j);
+//             update(1, 1, m, j+2, curVal);  // 把这个当前元素贴尾巴上去
+//             return f[i][j] = 1 + dfs(i+1, j+1);
+//         }
+//         int query(int u, int l, int r, int L, int R) { // 查询，区间【L,R】的最小值 
+//             if (L <= l && r <= R) return t[u];
+//             int m = l + (r - l) / 2;
+//             int leftMin = Integer.MAX_VALUE, rightMin = Integer.MAX_VALUE;
+//             if (L <= m) leftMin = query(u << 1, l, m, L, R);
+//             if (m+1 <= R) rightMin = query(u << 1 | 1, m+1, r, L, R);
+//             return Math.min(leftMin, rightMin);
+//         }
+//         void buildTree(int l, int r) {
+//             t = new int [8 * n]; // 这里，我想给足它空间最长，以空间换时间，不用数组左移，而是自动向右增长, 最差情况，数组变2 倍长【变成一个自动右滑的滑动窗口】？
+//             for (int i = 0; i < m; i++) // 这个题目，占用的空间还是太多了，可能不适合
+//                 update(1, 1, m, i+1, (i < n ? a[i] : Integer.MAX_VALUE)); // 通过每个值更新的方式，构建了这树
+//             System.out.println(Arrays.toString(t));
+//         }
+//         void update(int u, int l, int r, int i, int v) {
+//             if (l == r) {
+//                 t[u] = v;
+//                 return ;
+//             }
+//             int m = l + (r - l) / 2;
+//             if (i <= m) update(u << 1, l, m, i, v);
+//             else update(u << 1 | 1, m+1, r, i, v);
+//             t[u] = Math.min(t[u << 1], t[u << 1 | 1]); // 更新父节点的最小值 
+//         }
+
+//         public int isWinner(int[] a, int[] b) {
+//             int n = a.length;
+//             if (n == 1) return a[0] > b[0] ? 1 : (a[0] < b[0] ? 2 : 0);
+//             int [] l = new int [n], r = new int [n];
+//             l[0] = a[0]; r[0] = b[0];
+//             l[1] = (a[0] == 10 ? 2 * a[1] : a[1]) + l[0];
+//             r[1] = (b[0] == 10 ? 2 * b[1] : b[1]) + r[0];
+//             for (int i = 2; i < n; i++) {
+//                 int x = (a[i-1] == 10 || a[i-2] == 10 ? a[i] * 2 : a[i]);
+//                 int y = (b[i-1] == 10 || b[i-2] == 10 ? b[i] * 2 : b[i]);
+//                 l[i] = l[i-1] + x;
+//                 r[i] = r[i-1] + y;
+//             }             
+//             return l[n-1] > r[n-1] ? 1 : (l[n-1] <r[n-1] ? 2 : 0);
+//         }
+
+//         public int firstCompleteIndex(int[] b, int[][] a) {
+//             int m = a.length, n = a[0].length;
+//             Map<Integer, int []> mi = new HashMap<>();
+//             for (int i = 0; i < m; i++)
+//                 for (int j = 0; j < n; j++)
+//                     mi.put(a[i][j], new int [] {i, j});
+//             int [] r = new int [m], l = new int [n];
+//             for (int i = 0; i < m*n; i++) {
+//                 int [] cur = mi.get(b[i]);
+//                 r[cur[0]]++;
+//                 l[cur[1]]++;
+//                 if (r[cur[0]] == n || l[cur[1]] == m) return i;
+//             }
+//             return -1;
+//         }
+
+        // public String smallestBeautifulString(String t, int k) { // 走生成的思路，按照它的要求，去努力生成一个比较大的字符串
+        //     int n = t.length(); char [] s = t.toCharArray();
+        //     char maxChar = (char)('a' + k - 1);
+        //     for (int index = n-1; index >= 0; index--) { // 从后往前遍历 
+        //         if (index == maxChar) continue;
+        //         char newChar = (char)(s[index] + 1);
+        //         while (newChar <= maxChar) { // 从最小，到往大遍历，因为想找最小的
+        //             if (index > 0 && s[index-1] == newChar || index - 2 >= 0 && s[index - 2] == newChar) {
+        //                 newChar = (char)(newChar + 1);
+        //                 continue;
+        //             }
+        //             s[index] = newChar;
+        //             fixSuffix(s, index, maxChar);
+        //             return String.valueOf(s);
+        //         }
+        //     }
+        //     return "";
+        // }
+        // void fixSuffix(char [] s, int idx, char maxChar) {
+        //     for (int i = idx+1; i < s.length; i++) {
+        //         for (char minValidChar = 'a'; minValidChar <= maxChar; minValidChar = (char)(minValidChar + 1)) {
+        //             if (i > 0 && s[i-1] == minValidChar || i >= 2 && s[i-2] == minValidChar) continue;
+        //             s[i] = minValidChar;
+        //             break;
+        //         }
+        //     }
+        // }
+
+        // public int minimumCost(int[] s, int[] t, int[][] p) { // 自己写的，什么乱七八糟的。。。
+        //     int n = (int)1e5 + 1;
+        //     int si = s[0], sj = s[1], ti = t[0], tj = t[1];
+        //     int [][] f = new int [n][n];
+        //     for (int i = 0; i < n; i++) Arrays.fill(f, Integer.MAX_VALUE);
+        //     f[si][sj] = 0;
+        //     Queue<int []> q = new PriorityQueue<>((x, y) -> x[2] - y[2]);
+        //     int min = Math.abs(ti - si) + Math.abs(tj - sj);
+        //     q.offer(new int [] {si, sj, min});
+        //     Arrays.sort(p, (x, y)-> x[0] != y[0] ? x[0] - y[0] : (x[1] != y[1] ? x[1] - y[1] : x[2] - y[2]));
+        //     while (!q.isEmpty()) {
+        //         int [] cur = q.poll();
+        //         int a = cur[0], b = cur[1], ww = cur[2];
+        //         if (ww < min) min = ww;
+        //         // min = Math.min(min, Math.abs(a - ti) + Math.abs(b - tj) + ww);
+        //         for (int [] e : p) {
+        //             int i = e[0], j = e[1], x = e[2], y = e[3], w = e[4];
+        //             int d = Math.abs(a - si) + Math.abs(b - sj);
+        //             int curVal = ww + d + w + Math.abs(x - ti) + Math.abs(y - tj);
+        //             if (curVal < min) {
+        //                 min = curVal;
+        //                 // q.offer(new int [] {x, y, ww + d + w});
         //             }
         //         }
-        //     }
-        //     return -1;
-        // }
-
-        // // 数组里面会存在负数，并不是只要有个负数，就一定去掉，因为左右两边如果和》 0, 仍然是能够增加的
-        // public int maximumCostSubstring(String s, String chars, int[] vals) {
-        //     Map<Character, Integer> m = new HashMap<>();
-        //     int n = chars.length();
-        //     for (int i = 0; i < n; i++) 
-        //         m.put(chars.charAt(i), vals[i]);
-        //     int [] r = new int [s.length()];
-        //     // r[0] = m.containsKey(chars.charAt(0)) ? m.get(chars.charAt(0)) : chars.charAt(0) - 'a' + 1;
-        //     for (int i = 0; i < s.length(); i++) 
-        //         r[i] = m.containsKey(s.charAt(i)) ? m.get(s.charAt(i)) : s.charAt(i) - 'a' + 1;                
-        //     // 然后，这里就是求最大片段和：滑动窗口? 这里好像还有点儿什么没想透？
-        //     System.out.println(Arrays.toString(r));
-        //     int v = maxsequence3(r, r.length);
-        //     System.out.println("vi: " + v);
-        //     return v > 0 ? v : 0;
-        // }
-        // int maxsequence3(int a[], int len) { // 这个算法好像哪里不对
-        //     int maxsum, maxhere;
-        //     maxsum = maxhere = a[0];   //初始化最大和为a【0】
-        //     for (int i=1; i<len; i++) {
-        //         if (maxhere <= 0)
-        //             maxhere = a[i];  //如果前面位置最大连续子序列和小于等于0，则以当前位置i结尾的最大连续子序列和为a[i]
-        //         else
-        //             maxhere += a[i]; //如果前面位置最大连续子序列和大于0，则以当前位置i结尾的最大连续子序列和为它们两者之和
-        //         if (maxhere > maxsum) {
-        //             maxsum = maxhere;  //更新最大连续子序列和
-        //         }
-        //     }
-        //     return maxsum;
-        // }
-
-        // 下面，是被自己在超时后改昏了头的：        
-        //        public int findShortestCycle(int n, int[][] eg) { // 求一个最小环的大小，检测有没有环: 超时，需要找一个优化方法
-        //            g = new HashSet [n];
-        //            for (int i = 0; i < n; i++) g[i] = new HashSet<>();
-        //            for (int [] e : eg) {
-        //                int u = e[0], v = e[1];
-        //                g[u].add(v);
-        //                g[v].add(u);
-        //            }
-        //            for (int i = 0; i < n; i++) 
-        //                traverase(i, -1, 0, new HashSet<>());
-        //            return min == Integer.MAX_VALUE ? -1 : min;
-        //        }
-        //        Set<Integer> [] g;
-        //        int min = Integer.MAX_VALUE;
-        //        // class Node {
-        //        //     int [] r;
-        //        //     HashSet<Integer> v;
-        //        //     public Node(int [] a, HashSet<Integer> vv) {
-        //        //         r = a;
-        //        //         v = vv;
-        //        //     }
-        //        // }
-        //        void traverase(int uu, int p, int cnt, Set<Integer> vis) {
-        //            System.out.println("\n uu: " + uu);
-        //            System.out.println("cnt: " + cnt);
-        //            Deque<int []> q = new ArrayDeque<>();
-        // // if (vis.contains(uu)) {
-        //            //     if (cnt < min) min = cnt;
-        //            //     System.out.println("min: " + min);
-        //            //     return ;
-        //            // }
-        //            // q.offerFirst(new Node(new int [] {uu, p, cnt}, new HashSet<>()));
-        //            q.offerFirst(new int [] {uu, p, cnt});
-        //            while (!q.isEmpty()) {
-        //                // Node tmp = q.pollLast();
-        //                // int [] cur = tmp.r;
-        //                int [] cur = q.pollLast();
-        //                System.out.println(Arrays.toString(cur));
-        //                int u = cur[0], pr = cur[1];
-        //                if (vis.contains(u)) {
-        //                    if (cnt < min) min = cnt;
-        //                    System.out.println("u: " + u);
-        //                    System.out.println("min: " + min);
-        //                    return ;
-        //                }
-        //                // tmp.v.add(u);
-        //                vis.add(u);
-        //                for (int v : g[u]) { 
-        //                    if (v == pr) continue;
-        //                    // traverase(v, uu, cnt+1, vis);
-        //                    // q.offerFirst(new Node(new int [] {v, u, cur[2]+1}, tmp.v));
-        //                    q.offerFirst(new int [] {v, u, cur[2]+1});
-        //                }
-        //                // tmp.v.remove(u);
-        //            }
-        //        }
-        // public int findShortestCycle(int n, int[][] eg) { // 求一个最小环的大小，检测有没有环: 超时，需要找一个优化方法 // // TLE TLE TLE: 
-        //     g = new HashSet [n];
-        //     for (int i = 0; i < n; i++) g[i] = new HashSet<>();
-        //     for (int [] e : eg) {
-        //         int u = e[0], v = e[1];
-        //         g[u].add(v);
-        //         g[v].add(u);
-        //     }
-        //     for (int i = 0; i < n; i++) 
-        //         traverase(i, -1, 0, new HashSet<>());
-        //     return min == Integer.MAX_VALUE ? -1 : min;
-        // }
-        // Set<Integer> [] g;
-        // int min = Integer.MAX_VALUE;
-        // void traverase(int uu, int p, int cnt, Set<Integer> vis) {
-        //     System.out.println("\n uu: " + uu);
-        //     System.out.println("cnt: " + cnt);
-        //     if (vis.contains(uu)) {
-        //         if (cnt < min) min = cnt;
-        //         System.out.println("min: " + min);
-        //         return ;
-        //     }
-        //     vis.add(uu);
-        //     for (int v : g[uu]) {
-        //         if (v == p) continue;
-        //         traverase(v, uu, cnt+1, vis);
-        //     }
-        //     vis.remove(uu);
-        // }
-
-        // // 没有思路: 知道环形如何处理，不知道怎么让它们全相等？
-        // public long makeSubKSumEqual(int[] a, int k) {
-        //     int n = a.length;
-        // }
-                
-        // public int findTheLongestBalancedSubstring(String t) {
-        //     int n = t.length(), max = 0;
-        //     char [] s = t.toCharArray();
-        //     int i = 0, j = 0, cntA = 0, cntB = 0;
-        //     while (i < n && s[i] == '1') i++;
-        //     if (i == n) return max;
-        //     System.out.println("\n i: " + i);
-        //     while (i < n) {
-        //         while (i < n && s[i] == '0') {
-        //             cntA++;
-        //             i++;
-        //         }
-        //         if (i == n) return max;
-        //         while (i < n && s[i] == '1') {
-        //             cntB++;
-        //             i++;
-        //         }
-        //         max = Math.max(max, Math.min(cntA, cntB) * 2);
-        //         cntA = 0;
-        //         cntB = 0;
-        //         if (i == n) return max;
-        //     }
-        //     max = Math.max(max, Math.min(cntA, cntB) * 2);
-        //     return max;
-        // }
-
-        // public List<List<Integer>> findMatrix(int[] a) {
-        //     Map<Integer, Integer> m = new HashMap<>();
-        //     for (int v : a)
-        //         m.put(v, m.getOrDefault(v, 0) + 1);
-        //     int n = Collections.max(m.values());
-        //     List<List<Integer>> r = new ArrayList<>(n);
-        //     for (int i = 0; i < n; i++)
-        //         r.add(new ArrayList<>());
-        //     for (Map.Entry<Integer, Integer> en : m.entrySet()) {
-        //         for (int i = 0; i < en.getValue(); i++)
-        //             r.get(i).add(en.getKey());
-        //     }
-        //     return r;
-        // }
-
-        // public int miceAndCheese(int[] a, int[] b, int k) {
-        //     int n = a.length;
-        //     int [][] d = new int [n][2]; // a[i] - b[i]
-        //     for (int i = 0; i < n; i++) {
-        //         d[i][0] = i;
-        //         d[i][1] = a[i] - b[i];
-        //     }
-        //     Arrays.sort(d, (x, y) -> y[1] - x[1]);
-        //     boolean [] vis = new boolean [n];
-        //     for (int i = 0; i < k; i++) // 第一只老鼠吃的 K 块
-        //         vis[d[i][0]] = true;
-        //     int r = 0;
-        //     for (int i = 0; i < n; i++) {
-        //         if (vis[i]) r += a[i];
-        //         else r += b[i];
         //     }
         //     return r;
         // }
@@ -1425,7 +1125,7 @@ public class cmp {
             }
             return ans;
         }
-    }
+    }             
     public static void main (String[] args) { 
         Solution s = new Solution ();
 
@@ -1445,7 +1145,14 @@ public class cmp {
 // ListNode head = new ListNode(a[0]); 
 // head.buildList(head, a);
 // head.printList(head);
+// TreeNode rr = new TreeNode(a[0]);
+// rr.buildTree(rr, a);
+// rr.levelPrintTree(rr);
 
-// TreeNode root = new TreeNode(a[0]);
-// root.buildTree(root, a);
-// root.levelPrintTree(root);
+
+
+
+
+
+
+
