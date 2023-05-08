@@ -540,30 +540,520 @@ public class dpnine {
 //         int dfs(int i, int j, int k) {
 //         }
 
-        // 【栈：】这个好像与前面那个求数组的所有子数组最小值的和是类似的
-        public int oddEvenJumps(int[] a) {
-            int n = a.length;
-            int [] l = new int [n], r = new int [n]; // l: odd -s - 从右往左降序； r: even-t 从右往左升序
-            Arrays.fill(l, -1); Arrays.fill(r, -1);
-            ArrayDeque<Integer> s = new ArrayDeque<>(), t = new ArrayDeque<>();
-            // 【从右往左遍历】： s 降序栈，t 升序栈
-            for (int i = n-1; i >= 0; i--) {
-                while (!s.isEmpty() && a[s.peekFirst()] > a[i]) s.pollFirst();
-                if (!s.isEmpty()) l[i] = s.peekFirst();
-                while (!t.isEmpty() && a[t.peekFirst()] < a[i]) t.pollFirst();
-                if (!t.isEmpty()) r[i] = s.peekFirst();
-                s.offerFirst(i);
-                t.offerFirst(i);
-            }
-            // 【动规：】因为分奇数跳与偶数跳，所以动规的数组，可能也要分奇数与偶数跳，【可以行用记忆化深搜写一遍，再试写动规！！！】
-        }
+        //         // 【内存溢出：】Memory Limit Exceeded 71/83 这里的意思就是说， max 取值过大，而实际存在的元素少，就成了为一个数据的离散化处理
+//         // 线段树数据【离散化处理】：意思是说，分布过散的数据，重样集中集合到【0,n-1】下标，不取实际的值了，而用相对集中的下标代替
+//         public int lengthOfLIS(int[] a, int k) {  // 动规：＋线段树来找前 f【i】【v-k】范围内的最大值【这个题仍然成了学习题】
+//             int n = a.length, m = Arrays.stream(a).max().getAsInt()+1, ans = 1;
+//             t = new int [4 * m]; // 不是说，线段树？下标是从 1 开始的吗？最大值 m 元素在哪里 
+//             int [][] f = new int [n][m]; // 第二维表达的是以当前数 a[i] 为结尾的最长合法子序列长度，所以取最值
+//             for (int i = 0; i < n; i++) { // 注意【0】下标更新线段树。。。
+//                 int v = a[i];
+//                 f[i][v] = 1;
+//                 // 这里要找：前所有 i 个数【0,i-1】中，以【v-k,v-1】结尾的最大值，最大长度，
+// // 这里我是在想要遍历，总复杂度为【O(N^2)】，线段树可以做到【O(NlogN)】线段树中的第一维就给消除掉，只累加更新【0,maxVal+1】范围内的最大值
+//                 // for (int j = Math.max(0, v - k); j < v; j++) // 因为线段树区间求最大值：这里就不用遍历，一次【 O(logN)】查询就可以了
+//                     // f[i][v] = Math.max(f[i][v], f[i-1][j] + 1); // 【分不清：哪个 i?】
+//                 f[i][v] = Math.max(f[i][v], getMax(0, 0, m-1, v-k, v-1, t) + 1); // 查询线段树【v-k,v-1】区间最大值：下标1 开始，左闭右闭区间
+//                 // f[i][v] = Math.max(f[i][v], getMax(0, 0, n-1, v-k, v-1, t) + 1); // 查询线段树【v-k,v-1】区间最大值：下标1 开始，左闭右闭区间
+//                 update(0, 0, m-1, v, f[i][v], t); // 更新线段树单点元素： v 下标值为 f[i][v]
+//                 // update(0, 0, n-1, i, f[i][v], t); // 更新线段树单点元素： v 下标值为 f[i][v]
+//                 // ans = Math.max(ans, f[i][v]);
+//             }
+//             return t[0];
+//         }
+//         int [] t; // 【奇葩线段树】：下标从 0 开始的
+//         void update(int u, int l, int r, int idx, int v, int [] t) { // 我这里参考别人的奇葩写法，写得自己稀里糊涂的。。。重写一遍
+//             if (l == r) {
+//                 t[u] = v;
+//                 return ;
+//             }
+//             int m = l + (r - l) / 2;
+//             if (idx <= m) update(u << 1 | 1, l, m, idx, v, t);
+//             else update((u << 1) + 2, m+1, r, idx, v, t);
+//             t[u] = Math.max(t[u << 1 | 1], t[(u << 1) + 2]); // 最大值线段树：根节点最大值，取左右子节点最大值 
+//         }
+//         int getMax(int u, int l, int r, int L, int R, int [] t) { // 【 l,r】：现存线段树的有效区间跨度；【L,R】：查询区间跨度
+//             if (R < l || r < L) return 0;
+//             if (L <= l && r <= R) return t[u];
+//             int m = l + (r - l) / 2;
+//             int ll = getMax(u << 1 | 1, l, m, L, R, t);
+//             int rr = getMax((u << 1) + 2, m+1, r, L, R, t);
+//             return Math.max(ll, rr);
+//         }
+        // public int lengthOfLIS(int[] a, int k) {  // 动规：＋线段树来找前 f【i】【v-k】范围内的最大值
+        //     int n = a.length, m = Arrays.stream(a).max().getAsInt();
+        //     t = new int [4 * m]; // 线段树？下标是从 1 开始的吗？这里感觉取不到最大值【m】
+        //     for (int v : a) {
+        //         System.out.println("\n v: " + v);
+        //         if (v == 1) update(1, 1, m, 1, 1); // 更新单点：【v, res】成 t[1] ＝ 1
+        //         else {
+        //             int res = 1 + query(1, 1, m, Math.max(1, v-k), v-1); // 查询区间：【v-k, v-1】
+        //             update(1, 1, m, v, res); // 更新单点：【v, res】成 t[v] ＝ res
+        //         }
+        //         System.out.println("t[v]: " + t[v]);
+        //         levelPrintTree();
+        //     }
+        //     return t[1];
+        // }
+        // int [] t; // 线段树：最大值线段树，下标从1 开始的标准写法
+        // void update(int u, int l, int r, int i, int v) { // 更新下标为 i 元素的值为 v, 从 u 节点开始遍历
+        //     if (l == r) {
+        //         t[u] = v;
+        //         return ;
+        //     }
+        //     int m = l + (r - l) / 2;
+        //     if (i <= m) update(u << 1, l, m, i, v);
+        //     else update(u << 1 | 1, m+1, r, i, v); // 【左右节点的下标：】 U 《 1 | 1 
+        //     t[u] = Math.max(t[u << 1], t[u << 1 | 1]); // 根节点最大值：取左右节点的最大值 
+        // }
+        // // 查询【L,R】范围内的最大值，线段树的跨越区间为【l,r】. L 和 R 在整个递归过程中均不变，将其大写，视作常量
+        // int query(int u, int l, int r, int L, int R) { // 返回区间 [L,R] 内的最大值
+        //     if (L <= l && r <= R) return t[u]; // 整个线段树，处于查询区间内，返回根节点最大值 
+        //     int m = l + (r - l) / 2, leftMax = 0, rightMax = 0;
+        //     if (L <= m)   leftMax = query(u << 1, l, m, L, R);
+        //     if (m+1 <= R) rightMax = query(u << 1 | 1, m+1, r, L, R);
+        //     return Math.max(leftMax, rightMax);
+        // }
+        // // 【打印：】这里，感觉我还旧需要一个打印方法，来打印出来，帮助自己理解。因为下标总弄不清楚
+        // void levelPrintTree() {
+        //     Deque<Integer> q = new ArrayDeque<>();
+        //     q.offer(1); // 下标从 1 开始
+        //     // System.out.println("\nTREE Level order traversal:");
+        //     // System.out.println("idx: " + 1);
+        //     // System.out.println("{t[idx]: " + t[1] + "  -> root\n");
+        //     //             System.out.print("    ");
+        //     while (!q.isEmpty()) {
+        //         for (int size = q.size()-1; size >= 0; size--) {
+        //             int curr = q.poll();
+        //             System.out.print("{" + Integer.toBinaryString(curr) + "," + t[curr] + "} ");
+        //             if (curr * 2 + 1 < t.length) {
+        //                 q.offer(curr << 1);
+        //                 q.offer(curr << 1 | 1);
+        //             }
+        //         }
+        //         System.out.println("");
+        //     }
+        // }
+
+        // public int minNumberOperations(int[] a) { // TLE TLE TLE: 127/129 弄个线段树，来区间型更新不好吗？ 1526
+        //     n = a.length; this.a = a;
+        //     if (Arrays.stream(a).distinct().count() == 1) return a[0];
+        //     return minNumberOperations(0, n-1, 0);
+        // }
+        // int [] a; int n;
+        // int minNumberOperations(int i, int j, int v) {
+        //     if (i > j) return 0;
+        //     if (i == j) return a[i] - v;
+        //     int min = a[i];
+        //     List<Integer> l = new ArrayList<>();
+        //     for (int k = i; k <= j; k++) 
+        //         if (a[k] < min) {
+        //             min = a[k];
+        //             l.clear();
+        //             l.add(k);
+        //         } else if (a[k] == min) l.add(k);
+        //     int ans = min - v, pre = -1, idx = -1;
+        //     for (int k = 0; k < l.size(); k++) {
+        //         idx = l.get(k);
+        //         ans += (k == 0 ? minNumberOperations(i, idx-1, min) :
+        //                 minNumberOperations(pre + 1, idx-1, min));
+        //         pre = idx;
+        //     }
+        //     ans += minNumberOperations(idx+1, j, min);
+        //     return ans;
+        // }
+        // // 【最彻底的解法】：差分数组
+        // public int minNumberOperations(int[] a) {
+        //     int n = a.length, ans = a[0];
+        //     for (int i = 1; i < n; i++)
+        //         ans += Math.max(0, a[i] - a[i-1]);
+        //     return ans;
+        // }
+        // // 【线段树】: 既然上面超时了，就用线段树来写吧【【BUG：】】这里有个下标的问题，// TODO TODO TODO: 
+        // public int minNumberOperations(int[] a) {
+        //     int n = a.length; N = Arrays.stream(a).max().getAsInt(); // m = 100000
+        //     m = new HashMap<>(); // 用来记下标
+        //     t = new int [4 * N]; // 初始化：不够，因为求最小值，就必须把其它所有的非空填为最大值。。。
+        //     for (int i = 0; i < n; i++) {
+        //         update(1, 1, N, i, a[i]);
+        //         m.computeIfAbsent(a[i], z -> new ArrayList<>()).add(i);
+        //     }
+        //     for (int i = 0; i < N; i++)
+        //         // if (t[i] == 0)
+        //         if (!m.containsKey(i))
+        //             update(1, 1, N, i, Integer.MAX_VALUE / 2);
+        //     System.out.println(Arrays.toString(t));
+        //     return minNumberOperationsRecursion(0, n-1);
+        // }
+        // int minNumberOperationsRecursion(int i, int j) {
+        //     System.out.println("\n i: " + i);
+        //     System.out.println("j: " + j);
+        //     int min = query(1, 1, N, i, j), ans = min;
+        //     System.out.println("min: " + min);
+        //     List<Integer> l = m.get(min); // 升序排列：可以二分查找，找到在【i,j】范围内的下标，即左右端点
+        //     for (int k = 0; k < l.size(); k++) {
+        //         if (l.get(k) < i) continue;
+        //         if (l.get(k) > j) break;
+        //         // if (a[l.get(k)] == min) { // 以最小值来分片段
+        //         if (l.get(k) < i) ans += minNumberOperationsRecursion(i, l.get(k)-1);
+        //         if (k < l.size()-1) ans += minNumberOperationsRecursion(l.get(k)+1, l.get(k+1)-1);
+        //         else if (k == l.size()-1 && l.get(k) < j) ans += minNumberOperationsRecursion(l.get(k)+1, j);
+        //         // }
+        //     }
+        //     return ans;
+        // }
+        // Map<Integer, List<Integer>> m;
+        // int [] t, a;
+        // int N;
+        // int query(int u, int l, int r, int L, int R) {
+        //     if (L <= l && r <= R) return t[u];
+        //     int m = (l + r) >> 1, left = 0, right = 0;
+        //     if (L <= m) left = query(u << 1, l, m, L, R);
+        //     if (m+1 <= R) right = query(u << 1 | 1, m+1, r, L, R);
+        //     return Math.min(left, right); // 【最小值】
+        // }
+        // void update(int u, int l, int r, int i, int v) {
+        //     if (l == r) {
+        //         t[u] = v;
+        //         return ;
+        //     }
+        //     int m = (l + r) >> 1;
+        //     if (i <= m) update(u << 1, l, m, i, v);
+        //     else update(u << 1 | 1, m+1, r, i, v);
+        //     t[u] = Math.min(t[u << 1], t[u << 1 | 1]); // 【最小值线段树】
+        // }
+
+        // // 【栈：】这个好像与前面那个求数组的所有子数组最小值的和是类似的 // TODO TODO TODO: 
+        // public int oddEvenJumps(int[] a) {
+        //     int n = a.length;
+        //     int [] l = new int [n], r = new int [n]; // l: odd -s - 从右往左降序； r: even-t 从右往左升序
+        //     Arrays.fill(l, -1); Arrays.fill(r, -1);
+        //     ArrayDeque<Integer> s = new ArrayDeque<>(), t = new ArrayDeque<>();
+        //     // 【从左往右遍历】： s 升序， t 降序
+        //     for (int i = 0; i < n; i++) {
+        //         while (!s.isEmpty() && a[s.peekFirst()] > a[i]) s.pollFirst();
+        //         if (!s.isEmpty()) l[s.peekFirst()] = i;
+        //         while (!t.isEmpty() && a[t.peekFirst()] < a[i]) t.pollFirst();
+        //         if (!t.isEmpty()) r[t.peekFirst()] = i;
+        //         s.offerFirst(i);
+        //         t.offerFirst(i);
+        //     }
+        //     // // 【从右往左遍历】： s 降序栈，t 升序栈 // 【这些写得仍然是错的】！！！
+        //     // for (int i = n-1; i >= 0; i--) {
+        //     //     while (!s.isEmpty() && a[s.peekFirst()] < a[i]) s.pollFirst();
+        //     //     if (!s.isEmpty()) l[i] = s.peekFirst();
+        //     //     while (!t.isEmpty() && a[t.peekFirst()] > a[i]) t.pollFirst();
+        //     //     if (!t.isEmpty()) r[i] = t.peekFirst();
+        //     //     s.offerFirst(i);
+        //     //     t.offerFirst(i);
+        //     // } 
+        //     System.out.println(Arrays.toString(l));
+        //     System.out.println(Arrays.toString(r));
+        //     // 【动规：】因为分奇数跳与偶数跳，所以动规的数组，可能也要分奇数与偶数跳，【可以行用记忆化深搜写一遍，再试写动规！！！】
+        //     boolean [] fl = new boolean [n], fr = new boolean [n];
+        //     // 【初始化】：这点儿不够
+        //     fl[n-1] = true; fr[n-1] = true;
+        //     for (int i = 0; i < n; i++) { // 【初始化】：这些要全部补上
+        //         if (l[i] == n-1) fl[i] = true;
+        //         // if (r[i] == n-1) fr[i] = true;
+        //     }
+        //     int ans = 1;
+        //     for (int i = n-2; i >= 0; i--) {
+        //         if (r[i] == n-1) 
+        //             fl[i] = true;
+        //         for (int j = i+1; j < n; j++) {
+        //             if (l[i] == j && r[j] == n-1) {
+        //                 fl[i] = true;
+        //                 fr[j] = true;
+        //             }
+        //         }
+        //         if (fl[i] || fr[i]) ans++;
+        //     }
+        //     System.out.println(Arrays.toString(fl));
+        //     System.out.println(Arrays.toString(fr));
+        //     return ans;
+        // }
+
+        // public int numberWays(List<List<Integer>> ll) { // 【回塑：】一定会超时。。。: 帽子太多了就会超时，得用动规。。。
+        //     n = ll.size(); this.ll = ll; 
+        //     backTracking(0, 0);
+        //     return ans;
+        // }
+        // List<List<Integer>> ll = new ArrayList<>();
+        // int n, m, ans = 0;
+        // void backTracking(int i, int j) { // j: mask
+        //     if (i == n) {
+        //         if (Integer.bitCount(j) == n) // 一定要有这么多人顶帽子
+        //             ans = (ans + 1) % mod;
+        //         return ;
+        //     }
+        //     for (int k : ll.get(i)) { // 这个人喜欢的所有的帽子：
+        //         if (((j & (1 << k)) == 0) // 这顶帽子还没人带
+        //             backTracking(i+1, j | (1 << k));
+        //     }
+        // }
+        // static final int mod = (int)1e9 + 7; 
+        // public int numberWays(List<List<Integer>> ll) { // 【动规：】比较习惯写【自顶向下】，仍然是从没有帽子开始，遍历到所有的人都有帽子，感觉是自顶向下
+        //     int n = ll.size(), m = 0;
+        //     for (int i = 0; i < n; i++)
+        //         m = Math.max(m, Collections.max(ll.get(i)));
+        //     m++;
+        //     // 因为要遍历帽子，需要简单重构：每顶帽子，是有哪些人比较喜欢它？
+        //     List<Integer> [] g = new ArrayList [m];
+        //     Arrays.setAll(g, z -> new ArrayList<>());
+        //     Set<Integer> hats = new HashSet<>();
+        //     for (int i = 0; i < n; i++) 
+        //         for (int v : ll.get(i)) {
+        //             g[v].add(i); // 【每顶帽子：】有这些人会比较喜欢它。。。
+        //             hats.add(v);
+        //         }
+        //     List<Integer> l = new ArrayList<>();
+        //     for (int v : hats) l.add(v);
+        //     System.out.println("l.size(): " + l.size());
+        //     System.out.println(Arrays.toString(l.toArray()));
+        //     m = l.size();
+        //     int [][] f = new int [m][1 << n];
+        //     f[0][0] = 1;
+        //     for (int j = 0; j < m; j++) { // 遍历帽子：当前这顶帽子 j, 可以给谁带？它说前面的【1,j-1】的帽子已经有人带了
+        //         System.out.println("\n j: " + l.get(j));
+        //         System.out.println("g[l.get(j)].size(): " + g[l.get(j)].size());
+        //         System.out.println(Arrays.toString(g[l.get(j)].toArray()));
+        //         for (int i = 0; i < (1 << n); i++) { // 遍历：人的带与没带，帽子的状态
+        //             for (int k : g[l.get(j)]) { // 遍历：喜欢这顶帽子 j 的所有可能会带它的人
+        //                 System.out.println("k: " + k);
+        //                 if ((i & (1 << k)) == 0) { // 喜欢这顶帽子的，这个当前人，还没带帽子，可以给它带下【自顶向下】
+        //                     f[j][i | (1 << k)] = (f[j][i | (1 << k)] + (j == 0 ? 1 : f[j-1][i])) % mod;
+        //                 }
+        //             }
+        //         }
+        //         System.out.println("f.length: " + f.length);
+        //         for (int z = 0; z < f.length; ++z) 
+        //             System.out.println(Arrays.toString(f[z]));
+        //     }
+        //     System.out.println("f.length: " + f.length);
+        //     for (int z = 0; z < f.length; ++z) 
+        //         System.out.println(Arrays.toString(f[z]));
+        //     return f[m-1][(1 << n)-1];
+        // }
+
+        // public int minSteps(int n) {
+        //     int [] f = new int [n+1];
+        //     for (int i = 2; i <= n; i++) {
+        //         f[i] = Integer.MAX_VALUE;
+        //         for (int j = 1; j * j <= i; j++) 
+        //             if (i % j == 0) {
+        //                 f[i] = Math.min(f[i], f[j] + i / j);
+        //                 f[i] = Math.min(f[i], f[i / j] + j);
+        //              }
+        //     }
+        //     return f[n];
+        // }
+
+        // static final int mod = (int)1e9 + 7;
+        // public int numTilings(int n) {
+        //     long [][] f = new long [n+1][4];
+        //     f[0][3] = 1;
+        //     for (int i = 1; i <= n; i++) {
+        //         f[i][0] = f[i-1][3];
+        //         f[i][1] = (f[i-1][0] + f[i-1][2]) % mod;
+        //         f[i][2] = (f[i-1][0] + f[i-1][1]) % mod;
+        //         f[i][3] = (f[i-1][0] + f[i-1][1] + f[i-1][2] + f[i-1][3]) % mod;
+        //     }
+        //     return (int)f[n][3];
+        // }
+
+        // public int combinationSum4(int[] a, int k) {
+        //     int [] f = new int [k + 1];
+        //     f[0] = 1;  // 代表空集
+        //     for (int i = 1; i <= k; i++) 
+        //         for (int v : a) 
+        //             if (v <= i) f[i] += f[i-v];
+        //     return  f[k];
+        // }
+
+        // // 【记忆化深搜：】: 要搜的是，最差情况下，花费最少的钱，来保证猜对，所需要的最少的钱。。最差情况下的，最小花费？
+        // public int getMoneyAmount(int n) {
+        //     f = new Integer [n+1][n+1]; // 一维可能不够用，需要一个大致的范围
+        //     Arrays.stream(f).forEach(z -> Arrays.fill(z, Integer.MAX_VALUE / 2));
+        //     return dfs(1, n);
+        // }
+        // Integer [][] f;
+        // int dfs(int i, int j) {
+        //     if (i > j) return Integer.MAX_VALUE / 2;
+        //     if (f[i][j] != Integer.MAX_VALUE / 2) return f[i][j];
+        //     if (i == j) return f[i][j] = 0; // 这是终止条件：猜对了，确定到最后一个数字。。。
+        //     int ans = Integer.MAX_VALUE / 2;
+        //     for (int k = i; k <= j; k++)  // 猜错了，最差情况下最多的花费，取最小值 
+        //         ans = Math.min(ans, k + Math.max(k == i ? 0 : dfs(i, k-1), k == j ? 0 : dfs(k+1, j)));
+        //     return f[i][j] = ans;
+        // }
+
+        // public int longestArithSeqLength(int[] a) { // 1027: 二维思路出发点是对的，数据结构没选对。。
+        //     int n = a.length, m = Arrays.stream(a).max().getAsInt() + 1;
+        //     if (n == 2) return a[0] != a[1] ? 2 : 0;
+        //     int [][] f = new int [n][m]; // 这里是对的：当公差为负数的时候，不好处理【负数不好处理，就把负数转正！！】，也可以改用字典。。。
+        //     for (int i = 0; i < n; i++) 
+        //         for (int j = 0; j < i; j++) {
+        //         }
+        //     for (int j = i-1; j >= 0; j--) {
+        //         f[a[i]] = Math.max(2, f[a[i]]);
+        //         int d = a[i] - a[j], v = d + a[i], x = a[i];
+        //         while (d != 0 && v < m  && v >= 0 && f[v] > 0) {
+        //             f[v] = Math.max(f[v], f[x] + 1);
+        //             x = v;
+        //             v = d + v;
+        //         }
+        //     }
+        //     return Arrays.stream(f).max().getAsInt();
+        // }
+        // public int longestArithSeqLength(int[] a) { // 1027: 二维思路出发点是对的，数据结构没选对。。
+        //     int n = a.length, max = 0;
+        //     int [][] f = new int [n][1001];
+        //     for (int i = 0; i < n; i++)
+        //         for (int j = 0; j < i; j++) {
+        //             int d = a[i] - a[j] + 500;
+        //             f[i][d] = Math.max(Math.max(2, f[i][d]), f[j][d] + 1);
+        //             max = Math.max(max, f[i][d]);
+        //         }
+        //     return max;
+        // }
+        // public int longestArithSeqLength(int[] a) { // 1027: 【自顶向下】的动规：这么看来，简单的题，动规也是信手拈来，就是复杂的动规不会。。。。
+        //     int n = a.length, max = 0;
+        //     Map<Integer, Integer> [] m = new HashMap [n]; // 每个下标对应一个字典！！！忘记了吧，破记性！！
+        //     Arrays.setAll(m, z -> new HashMap<>());
+        //     for (int i = 1; i < n; i++) // 遍历所有可以组对的下标
+        //         for (int j = 0; j < i; j++) { // 遍历所有可能产生的公差
+        //             int d = a[i] - a[j];
+        //             m[i].put(d, m[j].getOrDefault(d, 1) + 1); // 更新存储
+        //             max = Math.max(max, m[i].get(d));
+        //         }
+        //     return max;
+        // }
+
+        // public int maxTwoEvents(int[][] a) {
+        //     n = a.length;
+        //     // 按开始时间升序，【从右往左遍历】：方便接下来【从左往右遍历】遍历时，找第二个发生在后面的事件
+        //     Arrays.sort(a, (x, y) -> x[0] != y[0] ? x[0] - y[0] : x[1] - y[1]);
+        //     // 【最大值线段树】：【离散化的数据：】必缩对应到下标，对应到下标，就需要把排序过的重新再加到一个数据结构中，方便树去离散化。。
+        //     li = new ArrayList<>();
+        //     t = new int [4 * n]; // 对应到【下标】【O(logN)】查找最大值 
+        //     for (int i = 0; i < n; i++) {
+        //         li.add(new int [] {i, a[i][0], a[i][2]}); // 二分查找下标
+        //         update(1, 1, n, i, a[i][2]);
+        //     }
+        //     // 按结束时间升序，【从左往右遍历】：遍历当前事件，与选择最优第二事件，所有可能优化全局最值 
+        //     Arrays.sort(a, (x, y) -> x[1] - y[1]);
+        //     int ans = 0;
+        //     for (int i = 0; i < n; i++) {
+        //         int [] r = a[i];
+        //         int j = binarySearch(r[1] + 1);
+        //         if (j != li.size()) ans = Math.max(ans, r[2] + query(1, 1, n, li.get(j)[0], n));
+        //         else ans = Math.max(ans, r[2]);
+        //     }
+        //     return ans;
+        // }
+        // int binarySearch(int v) { // 这里写得不标准 
+        //     int l = 0, r = li.size()-1; 
+        //     if (v > li.get(r)[1]) return r+1;
+        //     while (l < r) { 
+        //         int m = l + (r - l) / 2;
+        //         if (li.get(m)[1] < v) l = m + 1;
+        //         else r = m;
+        //     }
+        //     return l;
+        // }
+        // List<int []> li;
+        // int [] t;
+        // int n;
+        // int query(int u, int l, int r, int L, int R) {
+        //     if (L <= l && r <= R) return t[u];
+        //     int m = (l + r) >> 1, ll = 0, rr = 0;
+        //     if (L <= m) ll = query(u << 1, l, m, L, R);
+        //     if (m+1 <= R) rr = query(u << 1 | 1, m+1, r, L, R);
+        //     return Math.max(ll, rr);
+        // }
+        // void update(int u, int l, int r, int i, int v) {
+        //     if (l == r) {
+        //         t[u] = v;
+        //         return ;
+        //     }
+        //     int m = (l + r) / 2;
+        //     if (i <= m) update(u << 1, l, m, i, v);
+        //     else update(u << 1 | 1, m+1, r, i, v);
+        //     t[u] = Math.max(t[u << 1], t[u << 1 | 1]);
+        // }
+        // class Event { // 把起始结束统一成了一起排序
+        //     int ts, op, val;
+        //     Event(int ts, int op, int val) {
+        //         this.ts = ts; this.op = op; this.val = val; 
+        //     }
+        // }
+        // public int maxTwoEvents(int[][] a) {
+        //     List<Event> li = new ArrayList<>();
+        //     for (int [] v : a) {
+        //         li.add(new Event(v[0], 0, v[2]));
+        //         li.add(new Event(v[1], 1, v[2]));
+        //     }
+        //     Collections.sort(li, (x, y) -> x.ts != y.ts ? x.ts - y.ts : x.op - y.op);
+        //     int ans = 0, maxFstEvent = 0;
+        //     for (Event e : li) {
+        //         if (e.op == 0) ans = Math.max(ans, maxFstEvent + e.val);
+        //         else maxFstEvent = Math.max(maxFstEvent, e.val);
+        //     }
+        //     return ans;
+        // }
+        // public int maxTwoEvents(int[][] a) {
+        //     // 【最小堆最大堆的解法：】这个是最大众化的解法
+        //     Queue<int []> q = new PriorityQueue<>((x, y) -> x[1] != y[1] ? y[1] - x[1] : x[0] - y[0]);
+        //     for (int [] e : a) q.offer(new int [] {e[0], e[2]});
+        //     int ans = 0;
+        //     Arrays.sort(a, (x, y) -> x[1] - y[1]);
+        //     for (int [] e : a) {
+        //         while (!q.isEmpty() && q.peek()[0] < e[1] + 1) q.poll();
+        //         if (!q.isEmpty()) ans = Math.max(ans, e[2] + q.peek()[1]);
+        //         else ans = Math.max(ans, e[2]);
+        //     }
+        //     return ans;
+        // }
+
+        // public int minHeightShelves(int[][] a, int k) { // 改天再写这些题目。。。
+        //     int n = a.length, r = 0, maxHeight = 0, j = 0;
+        //     int [] f = new int [n+1];
+        //     Arrays.fill(f, 1000000);
+        //     f[0] = 0;
+        //     for (int i = 1; i <= n; i++) {
+        //         System.out.println("\n i: " + i);
+        //         f[i] = f[i-1] + a[i-1][1]; // 单独摆一层
+        //         if (i == 1) continue;
+        //         // 再试着优化一下：能不能把它塞进之前放过的某一层？优化空间，这本书之前，最后放上去的几本书，某层还有地方吗？
+        //         r = a[i-1][0]; // 当前，这本书的宽度，只能塞时最后一层
+        //         // maxHeight = r[i][1];// 当前，这本书的高度
+        //         maxHeight = 0;// 当前，这本书的高度
+        //         for (j = i-1; j >= 0 && r <= k; j--) {
+        //             r += a[j][0]; 
+        //             if (r <= k)
+        //                 maxHeight = Math.max(maxHeight, a[j-1][1]);
+        //             else break;
+        //         }
+        //         System.out.println("j: " + j);
+        //         if (j == i - 1) continue; // 必须单独摆一层
+        //         System.out.println("maxHeight: " + maxHeight);
+        //         if (maxHeight < a[i-1][1]) // 这里不知道 j 跑哪里去了。。
+        //             // f[i] = f[i-1] - maxHeight + a[i-1][1];
+        //             f[i] = f[j] + a[i-1][1];
+        //         else f[i] = f[j] + maxHeight;
+        //         System.out.println(Arrays.toString(f));
+        //     }
+        //     return f[n];
+        // }
+
     }
     public static void main (String[] args) { // 【爱表哥，爱生活！！！活宝妹就是一定要嫁给亲爱的表哥！！！】
         Solution s  =  new Solution ();
 
-        int [] a = new int [] {7,3,16,15,1,13,1,2,14,5,3,10,6,2,7,15};
+        int [][] a = new int [][] {{1,1},{2,3},{2,3},{1,1},{1,1},{1,1},{1,2}};
 
-        int r = s.minimumIncompatibility(a, 8);
+        int r = s.minHeightShelves(a, 4);
         System.out.println("r: " + r);
     } 
 }
@@ -573,6 +1063,14 @@ public class dpnine {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+
+
+
+
+
+
+
+
 
 
 

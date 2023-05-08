@@ -1077,107 +1077,112 @@ public class cmp {
         //     }
         // }
 
-
-//         int [] t;
-//         void update(int u, int l, int r, int i, int v) {
-//             if (l == r) {
-//                 t[u] = v;
-//                 return ;
-//             }
-//             int m = (l + r) >> 1;
-//             if (i <= m) update(u << 1, l, m, i, v);
-//             else update(u << 1 | 1, m+1, r, i, v);
-//             t[u] = Math.max(t[u << 1], t[u << 1 | 1]); // 【最大值线段树】
-//         }
-//         int query(int u, int l, int r, int L, int R) {
-//             if (L <= l && r <= R) return t[u];
-//             int m = (l + r) >> 1, ll = 0, rr = 0;
-//             if (L <= m) ll = query(u << 1, l, m, L, R);
-//             if (m+1 <= R) rr = query(u << 1 | 1, m+1, r, L, R);
-//             return Math.max(ll, rr);
-//         }
-//         // 感觉好像是线段树，可是怎么求最大相同元素的片段和呢？【最大值线段树】：作用在 f[n] 上 ?
-//         public int[] colorTheArray(int n, int[][] a) {
-//             int m = a.length, max = 0;
-//             int [] r = new int [n], ans = new int [m], f = new int [n];
-//             t = new int [n * 4];
-//             for (int j = 0; j < m; j++) {
-//                 System.out.println("\n j: " + j);
-//                 int [] cur = a[j];
-//                 int i = cur[0], v = cur[1];
-//                 if (r[i] == 0 || r[i] == v) {
-//                     r[i] = v;
-//                     if (i == 0 || v == r[i-1]) {
-//                         f[i] = (i == 0 ? 0 : f[i-1]) + 1; // 包括了当前的元素
-//                         System.out.println("f[i]]: " + f[i]);
-//                         // 向后更新
-//                         if (i < n-1 && r[i+1] == r[i]) {
-//                             int k = i+1;
-//                             while (k < n && r[k] == r[i]) {
-//                                 f[k] = f[k-1] + 1;
-//                                 System.out.println("k: " + k);
-//                                 System.out.println("f[k]: " + f[k]);
-//                                 update(1, 1, n, k+1, f[k]);
-//                                 k++;
-//                             }
-//                         }
-//                     } else f[i] = 1;
-//                     update(1, 1, n, i+1, f[i]);  // <<<<<<<<<<<<<<<<<<<< 
-//                     // 这里可以是断点儿更新，所以必须求左右最大值
-//                     int ll = query(1, 1, n, 1, i+1);
-//                     int rr = query(1, 1, n, i+2, n);
-//                     // max = Math.max(Math.max(ll, max), f[i] > 0 ? f[i]-1 : 0);
-//                     max = Math.max(Math.max(ll-1, max), rr-1);
-//                 } else { // 这里还有必要的更新工作
-//                     r[i] = v;
-//                     if (i > 0 && r[i] == r[i-1]) {
-//                         f[i] = f[i-1] + 1;
-//                     }
-//                     update(1, 1, n, i+1, f[i]);  // <<<<<<<<<<<<<<<<<<<< 
-//                     if (i < n-1 && r[i] == r[i+1]) {
-//                         int k = i+1;
-//                         while (k < n && r[k] == r[i]) {
-//                             f[k] = f[k-1] + 1;
-//                             System.out.println("k: " + k);
-//                             System.out.println("f[k]: " + f[k]);
-//                             update(1, 1, n, k+1, f[k]);
-//                             k++;
-//                         }
-//                     }
-//                     if (max == f[i]-1) { // 问题是：最大片段，不一定只出现一次，所以还需要求最大连续片段和
-//                         int maxRight = query(1, 1, n, i+2, n);
-//                         max = Math.max(maxRight-1, max-1);
-//                         // f[i] = max;
-//                         f[i]--;
-//                     }
-//                     update(1, 1, n, i+1, f[i]);  // <<<<<<<<<<<<<<<<<<<< 
-//                     // 这里可以是断点儿更新，所以必须求左右最大值
-//                     int ll = query(1, 1, n, 1, i+1);
-//                     int rr = query(1, 1, n, i+2, n);
-//                     System.out.println("ll: " + ll);
-//                     System.out.println("rr: " + rr);
-//                     System.out.println("max: " + max);
-// // max = Math.max(Math.max(ll, max), f[i] > 0 ? f[i]-1 : 0);
-//                     max = Math.max(Math.max(ll-1, max), rr-1);
-//                 }
-//                 // ans[j] = f[i] > 0 ? f[i] - 1 : f[i]; // -1
-//                 ans[j] = max; // 不一定是连续的，可是先前的
-//                 System.out.println(Arrays.toString(r));
-//                 System.out.println(Arrays.toString(f));
-//                 System.out.println(Arrays.toString(ans));
-//             }
-//             return ans;
-//         }
-        
+        // int [] t;
+        // void update(int u, int l, int r, int i, int v) {
+        //     if (l == r) {
+        //         t[u] = v;
+        //         return ;
+        //     }
+        //     int m = (l + r) >> 1;
+        //     if (i <= m) update(u << 1, l, m, i, v);
+        //     else update(u << 1 | 1, m+1, r, i, v);
+        //     t[u] = Math.max(t[u << 1], t[u << 1 | 1]); // 【最大值线段树】
+        // }
+        // int query(int u, int l, int r, int L, int R) {
+        //     if (L <= l && r <= R) return t[u];
+        //     int m = (l + r) >> 1, ll = 0, rr = 0;
+        //     if (L <= m) ll = query(u << 1, l, m, L, R);
+        //     if (m+1 <= R) rr = query(u << 1 | 1, m+1, r, L, R);
+        //     return Math.max(ll, rr);
+        // }
+        // // 感觉好像是线段树，可是怎么求最大相同元素的片段和呢？【最大值线段树】：作用在 f[n] 上 ?
+        // // 感觉这里想复杂了，并且浪费了很多时间，最后一个简单题，也没时间写
+        // public int[] colorTheArray(int n, int[][] a) {
+        //     int m = a.length, max = 0;
+        //     int [] r = new int [n], ans = new int [m], f = new int [n];
+        //     t = new int [n * 4];
+        //     for (int j = 0; j < m; j++) {
+        //         int [] cur = a[j];
+        //         int i = cur[0], v = cur[1];
+        //         if (r[i] == 0 || r[i] == v) {
+        //             r[i] = v;
+        //             if (i == 0 || v == r[i-1]) {
+        //                 f[i] = (i == 0 ? 0 : f[i-1]) + 1; // 包括了当前的元素
+        //                 // 向后更新
+        //                 if (i < n-1 && r[i+1] == r[i]) {
+        //                     int k = i+1;
+        //                     while (k < n && r[k] == r[i]) {
+        //                         f[k] = f[k-1] + 1;
+        //                         update(1, 1, n, k+1, f[k]);
+        //                         k++;
+        //                     }
+        //                 }
+        //             } else f[i] = 1;
+        //             update(1, 1, n, i+1, f[i]);  // <<<<<<<<<<<<<<<<<<<< 
+        //             // 这里可以是断点儿更新，所以必须求左右最大值
+        //             int ll = query(1, 1, n, 1, i+1);
+        //             int rr = query(1, 1, n, i+2, n);
+        //             // max = Math.max(Math.max(ll, max), f[i] > 0 ? f[i]-1 : 0);
+        //             max = Math.max(Math.max(ll-1, max), rr-1);
+        //         } else { // 这里还有必要的更新工作
+        //             r[i] = v;
+        //             if (i > 0 && r[i] == r[i-1]) {
+        //                 f[i] = f[i-1] + 1;
+        //             }
+        //             update(1, 1, n, i+1, f[i]);  // <<<<<<<<<<<<<<<<<<<< 
+        //             if (i < n-1 && r[i] == r[i+1]) {
+        //                 int k = i+1;
+        //                 while (k < n && r[k] == r[i]) {
+        //                     f[k] = f[k-1] + 1;
+        //                     update(1, 1, n, k+1, f[k]);
+        //                     k++;
+        //                 }
+        //             }
+        //             if (max == f[i]-1) { // 问题是：最大片段，不一定只出现一次，所以还需要求最大连续片段和
+        //                 int maxRight = query(1, 1, n, i+2, n);
+        //                 max = Math.max(maxRight-1, max-1);
+        //                 // f[i] = max;
+        //                 f[i]--;
+        //             }
+        //             update(1, 1, n, i+1, f[i]);  // <<<<<<<<<<<<<<<<<<<< 
+        //             // 这里可以是断点儿更新，所以必须求左右最大值
+        //             int ll = query(1, 1, n, 1, i+1);
+        //             int rr = query(1, 1, n, i+2, n);
+        //             // max = Math.max(Math.max(ll, max), f[i] > 0 ? f[i]-1 : 0);
+        //             max = Math.max(Math.max(ll-1, max), rr-1);
+        //         }
+        //         // ans[j] = f[i] > 0 ? f[i] - 1 : f[i]; // -1
+        //         ans[j] = max; // 不一定是连续的，可是先前的
+        //     }
+        //     return ans;
+        // }
+        // public int[] colorTheArray(int n, int[][] a) {
+        //     int m = a.length, cnt = 0;
+        //     int [] r = new int [n], ans = new int [m];
+        //     for (int j = 0; j < m; j++) {
+        //         int i = a[j][0], v = a[j][1];
+        //         int ll = (i == 0) ? 0 : r[i-1];
+        //         int rr = (i == n-1) ? 0 : r[i+1];
+        //         if (r[i] != 0 && (r[i] == ll)) cnt--;
+        //         if (r[i] != 0 && (r[i] == rr)) cnt--;
+        //         r[i] = v;
+        //         if (ll == r[i]) cnt++;
+        //         if (rr == r[i]) cnt++;
+        //         ans[j] = cnt;
+        //     }
+        //     return ans;
+        // }
     }             
     public static void main (String[] args) { 
         Solution s = new Solution ();
 
-        int [] a = new int [] {1,5,2,2,3,3,1};
-        System.out.println(Arrays.toString(a));
+        int [][] a = new int [][] {{0,2},{1,2},{3,1},{1,1},{2,1}};
+        System.out.println("a.length: " + a.length);
+        for (int z = 0; z < a.length; ++z) 
+            System.out.println(Arrays.toString(a[z]));
 
-        int r = s.minIncrements(7, a);
-        System.out.println("r: " + r);
+        int [] r = s.colorTheArray(4, a);
+        System.out.println(Arrays.toString(r));
     }
 }
 // 【爱表哥，爱生活！！！活宝妹就是一定要嫁给亲爱的表哥！！！】

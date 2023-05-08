@@ -1183,25 +1183,6 @@ public class dpeight {
             // return (int)r;
         }
 
-        public int longestArithSeqLength(int[] a) { // 1027
-            int n = a.length, m = Arrays.stream(a).max().getAsInt() + 1;
-            if (n == 2) return a[0] != a[1] ? 2 : 0;
-            int [][] f = new int [n][m];
-            for (int i = 0; i < n; i++) 
-                for (int j = 0; j < i; j++) {
-                }
-                for (int j = i-1; j >= 0; j--) {
-                    f[a[i]] = Math.max(2, f[a[i]]);
-                    int d = a[i] - a[j], v = d + a[i], x = a[i];
-                    while (d != 0 && v < m  && v >= 0 && f[v] > 0) {
-                        f[v] = Math.max(f[v], f[x] + 1);
-                        x = v;
-                        v = d + v;
-                    }
-                }
-                return Arrays.stream(f).max().getAsInt();
-        }
-
         public int nthUglyNumber(int n) { // 2, 3, 5
             List<Integer> [] g = new ArrayList[3];
             Arrays.setAll(g, z -> new ArrayList<>());

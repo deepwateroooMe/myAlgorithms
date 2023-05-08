@@ -3,7 +3,7 @@
 
 * Dynamic Programming, 动态规划
 ** 第二次仍不会的题号记这里
-- 1872 (stone game 8), 647 329 494 131 518 1723(need summary)
+-  329 494 131 518 1723(need summary)
 
 - 需要重写的： 1187，2035, 1000
 
@@ -15,28 +15,6 @@
 以 "reverse topological order" 处理
 每个子问题下面依赖的所有子问题都算完了才开始计算当前
 一般依赖于子问题之间天然的 "size
-
-*** 516. Longest Palindromic Subsequence - Medium
-Given a string s, find the longest palindromic subsequence's length in s.
-
-A subsequence is a sequence that can be derived from another sequence by deleting some or no elements without changing the order of the remaining elements.
-
-只要把原字符串反过来，两个字符串找最长公共子序列，就是最长回文了
-
-#+BEGIN_SRC java
-public int longestPalindromeSubseq(String tt) {
-    int n = tt.length();
-    char [] s = tt.toCharArray(); // ori
-    char [] t = (new StringBuilder(tt).reverse().toString()).toCharArray(); // reverse
-    int [][] dp = new int [n+1][n+1];
-    for (int i = 1; i <= n; i++) 
-        for (int j = 1; j <= n; j++) {
-            if (s[i-1] == t[j-1]) dp[i][j] = dp[i-1][j-1] + 1;
-            else dp[i][j] = Math.max(dp[i-1][j], dp[i][j-1]);
-        }
-    return dp[n][n];
-}
-#+END_SRC
 
 *** 518. Coin Change 2
 You are given an integer array coins representing coins of different denominations and an integer amount representing a total amount of money.
@@ -61,103 +39,6 @@ public int change(int target, int[] nums) {
     return dp[target];
 }
 #+END_SRC
-*** 2218. Maximum Value of K Coins From Piles: 动态规划，记忆化搜索
-There are n piles of coins on a table. Each pile consists of a positive number of coins of assorted denominations.
-
-In one move, you can choose any coin on top of any pile, remove it, and add it to your wallet.
-
-Given a list piles, where piles[i] is a list of integers denoting the composition of the ith pile from top to bottom, and a positive integer k, return the maximum total value of coins you can have in your wallet if you choose exactly k coins optimally.
-**** 动态规划：总是忘得很快，想到一半，都快被自己放弃了。。。。
-#+BEGIN_SRC csharp
-public int maxValueOfCoins(List<List<Integer>> ll, int k) {
-    int [] dp = new int [k+1];
-    int cnt = 0;
-    for (List<Integer> l : ll) {
-        for (int i = 1; i < l.size(); i++)
-            l.set(i, l.get(i) + l.get(i-1)); // pile 前缀和
-        cnt = Math.min(cnt + l.size(), k);   // 优化：j 从前 i 个栈的大小之和开始枚举（不超过 k）
-        for (int i = cnt; i > 0; i--) {
-            for (int j = 0; j < Math.min(l.size(), i); j++) // j 从下标 idx = 0 开始遍历，硬币的个数为 j+1 个
-                dp[i] = Math.max(dp[i], dp[i - (j+1)] + l.get(j));
-        }
-    }
-    return dp[k];
-}
-#+END_SRC 
-**** 记忆化搜索
-#+BEGIN_SRC csharp
-public int maxValueOfCoins(List<List<Integer>> ll, int k) {
-    int n = ll.size();
-    dp = new Integer [n][k+1];
-    return backpack(n-1, k, ll);
-}
-Integer [][] dp;
-int backpack(int i, int k, List<List<Integer>> ll) {
-    if (i < 0  || k == 0) return 0;
-    if (dp[i][k] != null) return dp[i][k];
-    int n = Math.min(ll.get(i).size(), k);
-    int exclude = backpack(i-1, k, ll);
-    int include = 0;
-    for (int j = 0, sum = 0; j < n; j++) {
-        sum += ll.get(i).get(j);
-        include = Math.max(sum + backpack(i-1, k-j-1, ll), include);
-    }
-    return dp[i][k] = Math.max(exclude, include);
-}
-#+END_SRC 
-
-*** 1872. Stone Game VIII - hard 需要好好理解消化
-Alice and Bob take turns playing a game, with Alice starting first.
-There are n stones arranged in a row. On each player's turn, while the number of stones is more than one, they will do the following:
-Choose an integer x > 1, and remove the leftmost x stones from the row.
-Add the sum of the removed stones' values to the player's score.
-Place a new stone, whose value is equal to that sum, on the left side of the row.
-The game stops when only one stone is left in the row.
-The score difference between Alice and Bob is (Alice's score - Bob's score). Alice's goal is to maximize the score difference, and Bob's goal is the minimize the score difference.
-Given an integer array stones of length n where stones[i] represents the value of the ith stone from the left, return the score difference between Alice and Bob if they both play optimally.
-**** 解题思路与分析
-
-这里我原始的做法dfs+记忆数组会超时，是因为数组发生了改变，萁盘状态发生了改变，所以记忆无效？！！！才会超时（感觉还理解得不透，这里）
-
-所以采用反向遍历的方法，将O(N^2)变为O(N)
-  
-[[./pic/stone8.png]]
-  
-[[./pic/stone82.png]]
-
-
-#+BEGIN_SRC csharp
-// 使用 dp(i) 表示还剩下 [i, n) 要选择的情况下，Alice 所能得到的最大分数差。
-//     对于某个玩家来说，其对应决策可以分为两种：
-//     选取当前数及之前的所有数（等价于 pres[pos]，其中 pos 为上个玩家选完后的下个位置），那么 dp[i] = pres[i] - dp[i+1]。
-//     这是因为 bob 也会最大化发挥。
-//     不选择当前数（可能选下一个，下下一个。。。 etc），那么 dp[i] = dp[i + 1]
-public int stoneGameVIII(int[] stones) {
-    int n = stones.length;
-    int [] dp = new int [n];
-    Arrays.fill(dp, Integer.MIN_VALUE);
-    int [] pre = new int [n+1];
-    for (int i = 1; i <= n; i++)
-        pre[i] = pre[i-1] + stones[i-1];
-    dp[n-1] = pre[n];
-    for (int i = n-2; i >= 0; i--) 
-        dp[i] = Math.max(dp[i+1], pre[i+1]-dp[i+1]);
-    return dp[1];
-}
-#+END_SRC
-- 更精简的代码如下
-#+BEGIN_SRC csharp
-public int stoneGameVIII(int[] stones) {
-    int n = stones.length;
-    for (int i = 1; i < n; i++) 
-        stones[i] += stones[i-1]; // 原位求前缀和
-    int ans = stones[n-1];
-    for (int i = n-1; i >= 2; i--) 
-        ans = Math.max(ans, stones[i-1] - ans); // 一遍反向遍历求最优解
-    return ans;
-}
-#+END_SRC
-
 *** 464. Can I Win 这个题：为什么顺序无关了？
 In the "100 game" two players take turns adding, to a running total, any integer from 1 to 10. The player who first causes the running total to reach or exceed 100 wins.
 What if we change the game so that players cannot re-use integers?
@@ -369,285 +250,13 @@ Vn就是nums数组所有数字的组合值之和的集合
     https://www.i4k.xyz/article/gqk289/54709004
     https://github.com/cherryljr/LeetCode/blob/master/Target%20Sum.java
 
-*** 647. Palindromic Substrings - Medium
-Given a string s, return the number of palindromic substrings in it.
-
-A string is a palindrome when it reads the same backward as forward.
-
-A substring is a contiguous sequence of characters within the string.
-#+BEGIN_SRC csharp
-public int countSubstrings(String t) {
-    int n = t.length(), ans = 0;
-    char [] s = t.toCharArray();
-    boolean [][] dp = new boolean [n][n];
-    for (int i = n-1; i >= 0; i--) 
-        for (int j = i; j < n; j++) {
-            dp[i][j] = s[i] == s[j] && (j-i <= 2 || dp[i+1][j-1]);
-            if (dp[i][j]) ans++;
-        }
-    return ans;
-}
-#+END_SRC
-*** 1444. Number of Ways of Cutting a Pizza - Hard
-Given a rectangular pizza represented as a rows x cols matrix containing the following characters: 'A' (an apple) and '.' (empty cell) and given the integer k. You have to cut the pizza into k pieces using k-1 cuts. 
-
-For each cut you choose the direction: vertical or horizontal, then you choose a cut position at the cell boundary and cut the pizza into two pieces. If you cut the pizza vertically, give the left part of the pizza to a person. If you cut the pizza horizontally, give the upper part of the pizza to a person. Give the last piece of pizza to the last person.
-
-Return the number of ways of cutting the pizza such that each piece contains at least one apple. Since the answer can be a huge number, return this modulo 10^9 + 7.
-**** 解题思路与分析: 自底向上
-
-常规的矩阵DP做法，这里还需要通过前缀和的思想来快速获取指定范围矩阵的苹果数量。
-
-首先是建立状态表示数组，通过一个三维数组，分别代表矩阵左上角顶点xy坐标和需要分配的人数，数组值表示分该状态下的配方案数；
-
-然后是进行状态转移，从右下角开始枚举所有以该点为状态中左上角的状态，再从低到高枚举需要分配的人数，接着进行切的操作，可以横着切和竖着切，分别枚举所有可能的切除的长度，当前状态的方案数需要从切除后剩下的矩阵状态中进行转移累加。
-
-最后返回以原矩阵左上角为顶点的，分配人数为k的方案数即可。
-
-这里为什么需要将状态表示中的xy设定为矩阵的左上角，还有为什么苹果数的前缀和也是求的右下角的前缀和呢？
-
-因为题意中的切除操作后，要将上半部分或者左半部分给分掉，所以只有右下部分是剩余状态的，我们需要从切除之前的状态获取剩余状态。
-
-#+BEGIN_SRC csharp
-public int ways(String[] pizza, int p) {
-    int mod = (int)1e9 + 7;
-    int m = pizza.length, n = pizza[0].length();
-    int [][] cnt = new int [m+1][n+1]; // 苹果数的前缀和，用于快速获得在指定矩阵范围内的苹果数量，两个维度也分别是左上角的x、y
-    for (int i = m-1; i >= 0; i--) 
-        for (int j = n-1; j >= 0; j--) 
-            cnt[i][j] = cnt[i+1][j] + cnt[i][j+1] - cnt[i+1][j+1] + (pizza[i].charAt(j) == 'A' ? 1 : 0);
-    int [][][] dp = new int [m+1][n+1][p+1]; // 状态数组，三个维度分别表示以x、y为左上角的矩阵中，分给k个人，元素值表示方案数
-    for (int i = m-1; i >= 0; i--)       // 遍历矩阵，获取指定左上角矩阵中范围内的苹果数量
-        for (int j = n-1; j >= 0; j--) { // 从右下角开始，向左上角开始枚举所有状态
-            if (cnt[i][j] > 0) dp[i][j][1] = 1; // 如果这个范围矩阵内存在苹果，那么这个矩阵肯定可以分给1个人，且方案数为1
-            for (int k = 2; k <= p; k++) {      // 枚举所有人数状态下的方案，前面已经判断了人数为1的状态，所以这里只需要从2开始枚举
-                for (int x = m-1-i; x >= 0; x--)     // 横着切，枚举所有切法
-                    if (cnt[i][j] - cnt[i+x][j] > 0) // 如果当前切掉的矩阵内存在苹果，则可以进行状态转移
-                        dp[i][j][k] = (dp[i][j][k] + dp[i+x][j][k-1]) % mod;
-                for (int y = n-1-j; y >= 0; y--)     // 竖着切
-                    if (cnt[i][j] - cnt[i][j+y] > 0)
-                        dp[i][j][k] = (dp[i][j][k] + dp[i][j+y][k-1]) % mod;
-            }
-        }
-    return (int)dp[0][0][p];
-}
-#+END_SRC
-**** 解题思路与分析: 自顶向下
-
-先用dp方法求出以（i,j）位置为右下角，左上角为（0,0）的区域的苹果数量
-
-建立3维数组，dp[i][j][k]表示切完k次后，剩余蛋糕左上角 在i, j位置时的方案数
-
-初始化，dp[0][0][0] = 1
-
-样本维度为切的次数 k
-
-状态维度，这次切之前的状态（蛋糕左上角位置 i, j）
-
-状态转移，这次切完后蛋糕左上角位置（横向切，ni，j；竖向切，i, nj，切的次数 +1）
-
-转移条件：切出去的蛋糕当中有苹果（用上面求得的苹果数量，dp公式求得）
-
-最后求结果总和：最后的一块蛋糕中有苹果，sum += dp[i][j][k-1]
-#+BEGIN_SRC csharp
-public int ways(String[] pizza, int p) { // 自顶向下: 与自底向上相比
-    int mod = (int)1e9 + 7;
-    int m = pizza.length, n = pizza[0].length();
-    int [][] cnt = new int [m+1][n+1];  // 苹果数的前缀和，用于快速获得在指定矩阵范围内的苹果数量，两个维度也分别是左上角的x、y
-    for (int i = 1; i <= m; i++) 
-        for (int j = 1; j <= n; j++) 
-            cnt[i][j] = cnt[i-1][j] + cnt[i][j-1] - cnt[i-1][j-1] + (pizza[i-1].charAt(j-1) == 'A' ? 1 : 0);
-    int [][][] dp = new int [m+1][n+1][p]; // dp[i][j][k]表示切完k次后，剩余蛋糕左上角 在i,j位置时的方案数
-    dp[1][1][0] = 1; // 初始值是为了程序的运行，
-    for (int k = 1; k < p; k++) 
-        for (int i = 1; i <= m; i++) 
-            for (int j = 1; j <= n; j++) {
-                System.out.println("(dp[i][j][k-1] == 0) : " + (dp[i][j][k-1] == 0) );
-                if (dp[i][j][k-1] == 0) continue; // 上一次cut完后，剩余蛋糕左上角在i,j
-                for (int x = i+1; x <= m; x++)   // 横向切，切完后的剩余左上角为 x, j
-                    if (cnt[x-1][n] - cnt[i-1][n] - cnt[x-1][j-1] + cnt[i-1][j-1] > 0)
-                        dp[x][j][k] = (dp[x][j][k] + dp[i][j][k-1]) % mod;
-                for (int y = j+1; y <= n; y++)  // 竖向切
-                    if (cnt[m][y-1] - cnt[m][j-1] - cnt[i-1][y-1] + cnt[i-1][j-1] > 0)
-                        dp[i][y][k] = (dp[i][y][k] + dp[i][j][k-1]) % mod;
-            }
-    long ans = 0;
-    for (int i = 1; i <= m; i++) 
-        for (int j = 1; j <= n; j++) 
-            if (cnt[m][n] - cnt[i-1][n] - cnt[m][j-1] + cnt[i-1][j-1] > 0) // 先前并没有确认切的结果有效，即最后剩下的那块是否有苹果
-                ans = (ans + dp[i][j][p-1]) % mod;                         // 统计结果的时候，要先确保有效
-    return (int)ans;
-}
-#+END_SRC
-
-
-** 字符串、数组等双序列
-   
-   [[./pic/doubSeq.png]]
-   
-*** 题目拓展
 **** 718. 最长重复子数组 （类似题目，只是由字符串变为数组）
 **** 72. 编辑距离
 **** 1143. 最长公共子序列
-**** 10. 正则表达式匹配
 **** 583. 两个字符串的删除操作
 **** 727. 最小窗口子序列
 
 你会发现这些都是 求 2 个字符串(或数组)之间的某种关系的题目
-*** 10. Regular Expression Matching - Hard
-Given an input string s and a pattern p, implement regular expression matching with support for '.' and '*' where:
-
-'.' Matches any single character.​​​​
-'*' Matches zero or more of the preceding element.
-The matching should cover the entire input string (not partial).
-**** 解题思路与分析
-    
-    [[./pic/regMatch.png]]
-
-#+BEGIN_SRC csharp
-public boolean isMatch(String s, String p) {
-    int m = s.length();
-    int n = p.length();
-    boolean[][] f = new boolean[m + 1][n + 1];
-    f[0][0] = true;
-    for (int i = 0; i <= m; ++i) 
-        for (int j = 1; j <= n; ++j) 
-            if (p.charAt(j - 1) == '*') {
-                f[i][j] = f[i][j - 2];
-                if (matches(s, p, i, j - 1)) 
-                    f[i][j] = f[i][j] || f[i - 1][j];
-            } else {
-                if (matches(s, p, i, j)) 
-                    f[i][j] = f[i - 1][j - 1];
-            }
-    return f[m][n];
-}
-public boolean matches(String s, String p, int i, int j) {
-    if (i == 0) return false;
-    if (p.charAt(j - 1) == '.') return true;
-    return s.charAt(i - 1) == p.charAt(j - 1);
-}
-#+END_SRC
-*** 115. Distinct Subsequences - Hard
-Given two strings s and t, return the number of distinct subsequences of s which equals t.
-
-A string's subsequence is a new string formed from the original string by deleting some (can be none) of the characters without disturbing the remaining characters' relative positions. (i.e., "ACE" is a subsequence of "ABCDE" while "AEC" is not).
-
-It is guaranteed the answer fits on a 32-bit signed integer.
-**** 解题思路与分析
-这道题不是求两个字符串是匹配，而是判断S有多少种方式可以得到T。但其实还是动态规划，我们一个定义二维数组dp，dp[i][j]为字符串s(0,i)变换到t(0,j)的变换方法的个数。
-
-如果S[i]==T[j]，那么dp[i][j] = dp[i-1][j-1] + dp[i-1][j]
-
-意思是：如果当前S[i]==T[j]，那么当前这个字符即可以保留也可以抛弃，所以变换方法等于保留这个字符的变换方法加上不用这个字符的变换方法， 
-
-dp[i-1][j-1]为保留这个字符时的变换方法个数，dp[i-1][j]表示抛弃这个字符时的变换方法个数。
-
-如果S[i]!=T[i]，那么dp[i][j] = dp[i-1][j]，意思是如果当前字符不等，那么就只能抛弃当前这个字符。
-
-#+BEGIN_SRC csharp
-public int numDistinct(String ss, String tt) {
-    int m = ss.length(), n = tt.length();
-    char [] s = ("#"+ss).toCharArray();
-    char [] t = ("#"+tt).toCharArray();
-    int [][] dp = new int [m+1][n+1];
-    dp[0][0] = 1;
-    for (int j = 1; j <= n; j++) // 注意这两行初始状态的设置
-        dp[0][j] = 0;
-    for (int i = 1; i <= m; i++) 
-        dp[i][0] = 1;
-    for (int i = 1; i <= m; i++) 
-        for (int j = 1; j <= n; j++) 
-            if (s[i] == t[j])
-                dp[i][j] = dp[i-1][j-1] + dp[i-1][j];
-            else dp[i][j] = dp[i-1][j];
-    return dp[m][n];
-}
-#+END_SRC
-
-*** 将一个数组分为两个部分，分别求和S1与S2，使得|S1-S2|最小
-    
-    [[./pic/dpArray.png]]
-    
-#+BEGIN_SRC csharp
-public static int getMaxDiff(int[] array) {
-    int sum = Arrays.stream(array).sum();
-    int length = array.length;
-    int [][] f = new int[length+1][sum/2+1];
-    for (int i = 0; i < length; i++) 
-        for (int j = 1; j <  = sum/2; j++) {
-            f[i+1][j]  =  f[i][j];
-            if (array[i] <= j && f[i][j-array[i]] + array[i] > f[i][j]) 
-                f[i+1][j] = f[i][j-array[i]] + array[i];
-        }
-    return sum-2*f[length][sum/2];
-}
-#+END_SRC
-*** 给定一个序列，不保证有序，求这个序列的最长等差序列的长度。
-    
-    [[./pic/dpArray2.png]]
-
-#+BEGIN_SRC csharp
-private static int lengthOfLongest(int[] set){
-    Arrays.sort(set);
-    int n = set.length;
-    if (n <= 2) return n;
-    int llap = 2;
-    int[][] dp = new int[n][n];
-    for (int i=0; i<n; i++) dp[i][n-1] = 2;
-    for (int j=n-2; j>=1; j--) {
-        int i=j-1, k=j+1;
-        while (i>=0 && k<=n-1) {
-            if (set[i] + set[k] < 2 * set[j])
-                k++;
-            else if (set[i] + set[k] > 2 * set[j]) {
-                dp[i][j] = 2;
-                i--;
-            } else {
-                dp[i][j] = dp[j][k] + 1;
-                llap = Math.max(llap, dp[i][j]);
-                i--;
-                k++;
-            }
-        }
-        while (i >= 0) {
-            dp[i][j] = 2;
-            i--;
-        }
-    }
-    return llap;
-}
-#+END_SRC    
-*** 求一个序列的最长子序列，使得最多修改一个数字使得这个子序列的为严格递增序列
-    
-    [[./pic/dpArray3.png]]
-#+BEGIN_SRC csharp
-private static int getMaxLength(int[] arr){
-    if (arr.length <= 2) return arr.length;
-    int[][] dp = new int[arr.length][2];
-    dp[0][0] = 1;
-    dp[0][1] = 1;
-    for (int i = 1; i < arr.length; i++) {
-        dp[i][0] = dp[i-1][0]+1;
-        if (arr[i] <= arr[i-1])
-            dp[i][0]--;
-        if (dp[i-1][0] == dp[i-1][1] && arr[i] <= arr[i-1]) {// 说明前面还没有改的
-            dp[i][1] = dp[i][0] + 1;
-            arr[i] = arr[i-1]+1;
-        } else {//说明前面已经改动或者arr[i] <= arr[i-1]
-            if (arr[i] > arr[i-1]) {
-                //判断前面是否已经改动
-                dp[i][1] = dp[i-1][1]+1;
-                if (dp[i-1][0] != dp[i-1][1]) 
-                    dp[i][1]--;
-            } else
-                dp[i][1] = dp[i-1][1];
-        }
-    }
-    return dp[arr.length-1][1];
-}
-#+END_SRC    
-
 *** 801. Minimum Swaps To Make Sequences Increasing - Hard
 You are given two integer arrays of the same length nums1 and nums2. In one operation, you are allowed to swap nums1[i] with nums2[i].
 
@@ -811,75 +420,6 @@ public int minScoreTriangulation(int[] a) {
 }
 #+END_SRC
 
-*** 2019. The Score of Students Solving Math Expression - Hard 有人说这是区间dp，无感
-You are given a string s that contains digits 0-9, addition symbols '+', and multiplication symbols '*' only, representing a valid math expression of single digit numbers (e.g., 3+5*2). This expression was given to n elementary school students. The students were instructed to get the answer of the expression by following this order of operations:
-
-Compute multiplication, reading from left to right; Then,
-Compute addition, reading from left to right.
-You are given an integer array answers of length n, which are the submitted answers of the students in no particular order. You are asked to grade the answers, by following these rules:
-
-If an answer equals the correct answer of the expression, this student will be rewarded 5 points;
-Otherwise, if the answer could be interpreted as if the student applied the operators in the wrong order but had correct arithmetic, this student will be rewarded 2 points;
-Otherwise, this student will be rewarded 0 points.
-Return the sum of the points of the students.
-**** 解题思路与分析
-- 思路是记忆化搜索。先求一下正确答案，然后开始算所有可能得到的错误答案。枚举运算符，然后递归求解两边可能的答案，汇总成当前表达式可能得到的答案。用记忆化的方式避免重复计算。
-- 时间复杂度O(l_s^3+l_A))，空间O(l_s^2)。注意有1000这个限制，上面所说的复杂度的常数是1000^2，是很大的
-  
-[[./pic/score.png]]
-  
-[[./pic/score2.png]]
-
-#+BEGIN_SRC csharp
-private int compute(String t) {
-    ArrayDeque<Integer> st = new ArrayDeque<>();
-    char [] s = t.toCharArray();
-    for (int i = 0; i < s.length; i++) {
-        char c = s[i];
-        if (Character.isDigit(c)) 
-            if (i > 0 && s[i-1] == '*') 
-                st.push(st.pop() * (c-'0'));
-            else st.push(c-'0');
-    }
-    int ans = 0;
-    while (!st.isEmpty()) 
-        ans += st.pop();
-    return ans;
-}
-Set<Integer> dfs(String t, int l, int r, Set<Integer> [][] f) {
-    if (f[l][r] != null) return f[l][r]; // 有记忆则调取记忆
-    char [] s = t.toCharArray();
-    int n = t.length(), v = 0;
-    f[l][r] = new HashSet<>();
-    if (l == r) {
-        f[l][r].add(s[l] - '0');
-        return f[l][r];
-    }
-    for (int i = l+1; i < r; i++) 
-        if (!Character.isDigit(s[i])) { // 递归求解左右两边可能算出的答案
-            Set<Integer> left = dfs(t, l, i-1, f);
-            Set<Integer> right = dfs(t, i+1, r, f);
-            for (Integer va : left) 
-                for (Integer vb : right) {
-                    if (s[i] == '*') v = va * vb;
-                    else v = va + vb;
-                    if (v >= 0 && v <= 1000) f[l][r].add(v);
-                }
-        }
-    return f[l][r];
-}
-public int scoreOfStudents(String s, int [] num) { 
-    int m = num.length, res = compute(s), n = s.length(), ans = 0;
-    Set<Integer> [][] f = new HashSet[n][n]; // 第一次见，学习一下
-    dfs(s, 0, n-1, f);
-    Set<Integer> can = f[0][n-1];        // candidates: of wrong answers
-    for (Integer v : num) 
-        if (v == res) ans += 5;
-        else if (can.contains(v)) ans += 2;
-    return ans;
-}
-#+END_SRC  
-
 *** 312. Burst Balloons 区间型动态规划的典型代表
 You are given n balloons, indexed from 0 to n - 1. Each balloon is painted with a number on it represented by an array nums. You are asked to burst all the balloons.
 If you burst the ith balloon, you will get nums[i - 1] * nums[i] * nums[i + 1] coins. If i - 1 or i + 1 goes out of bounds of the array, then treat it as if there is a balloon with a 1 painted on it.
@@ -929,86 +469,6 @@ public int maxCoins(int[] nums) {
     return memorizedSearch(arr, 1, n-2);
 }
 #+END_SRC
-
-*** 1000. Minimum Cost to Merge Stones - Hard
-There are n piles of stones arranged in a row. The ith pile has stones[i] stones.
-A move consists of merging exactly k consecutive piles into one pile, and the cost of this move is equal to the total number of stones in these k piles.
-Return the minimum cost to merge all piles of stones into one pile. If it is impossible, return -1.
-**** 解题思路与分析
-
-看到了论坛上有人定义了三维的 dp 数组，把每次合并的堆数K也当作一维放入到 dp 数组中了，其实博主觉得不是很有必要，因为像这种必须要对 dp 数组进行升维操作的是当题目中有隐藏信息 Hidden Information，而当前定义的 dp 数组无法重现子问题，即无法找到状态转移方程的时候必须要做的，最典型的例子就是之前那道 Remove Boxes，那道题自区间的 dp 值非常依赖于区间左边相同的数字的个数，而这道题每次合并的堆数K并不是很依赖其他小于K的合并的堆数，所以博主感觉没有必要加。
-
-#+BEGIN_SRC csharp
-public int mergeStones(int[] stones, int k) {
-    int n = stones.length;
-    if ((n-1) % (k-1) != 0) return -1;
-    int [][] dp = new int[n][n];
-    int [] pre = new int[n+1];
-    for (int i = 1; i <= n; i++) 
-        pre[i] = pre[i-1] + stones[i-1];
-    int j = 0;
-    for (int len = k; len <= n; len++) {
-        for (int i = 0; i+len-1 < n; i++) {
-            j = i + len -1;
-            dp[i][j] = Integer.MAX_VALUE; // have to initialize it here !!!
-            for (int x = i; x < j; x += k-1) 
-                dp[i][j] = Math.min(dp[i][j], dp[i][x] + dp[x+1][j]);
-            if ((j - i) % (k - 1) == 0) // 如果总长度满足合并只剩一个数的条件，则可以再合并一次
-                dp[i][j] += pre[j+1] - pre[i];
-        }
-    }
-    return dp[0][n-1];
-}
-#+END_SRC
-**** 解题思路与分析: 上述解法的时间复杂度是O(n^3*k).我们可以对它进行优化。
-- https://leetcode.com/problems/minimum-cost-to-merge-stones/discuss/247657/JAVA-Bottom-Up-%2B-Top-Down-DP-With-Explaination
-
-定义dp[i][j]为尽可能多的合并区间[i, j] 所需的成本，不一定能合并成一堆，但合并完成后剩下的堆数一定小于k，更具体地，剩余的堆数一定是(n - 1) % (k - 1) + 1。
-
-证明：
-
-已知一次合并会导致堆数减少k-1，假设最多进行了a次合并，则有
-
-remain = n - (k - 1) * a，1 <= remain <= k - 1，
-
-\Rightarrow⇒ remain - 1 = n - 1 - (k - 1) * a
-
-\Rightarrow⇒ remain - 1 = (n - 1) % (k - 1)
-
-\Rightarrow⇒ remain = (n - 1) % (k - 1) + 1
-
-证毕。
-
-我们参照解法一来定义状态转移方程，同样将区间[i，j]划分为两部分。
-
-我们保证将左部分合并成1堆，而尽可能多地合并右部分。（左部分需要满足(len - 1) % (k - 1) == 0）。
-
-右部分剩余堆数满足1 <= remain <= k - 1，如果最后右部分剩余k-1堆（也即(j - i) % (k - 1) == 0），则还可以继续将这两部分合并成1堆。
-
-因此合并区间[i，j]的成本是合并其左右部分成本之和（对于最优的划分）。如果可以进一步合并的话，则额外的成本是sum(i, j)。
-
-状态转移方程为：dp[i][j] = min(dp[i][p] + dp[p + 1][j]), i <= p < j，如果可以继续合并，dp[i][j] += sum(i, j)。
-
-这样的话枚举的区间长度就必须从k开始了，因为长度在[1，k-1]之间的区间已经无法进行合并了，它们的dp[i][j] == 0。
-
-     #+BEGIN_SRC csharp
-public int mergeStones(int[] s, int k) {
-    int n = s.length;
-    if ((n - 1) % (k - 1) != 0) return -1;
-    int [][] dp = new int [n+1][n+1];
-    int [] sum = new int [n+1];
-    for (int i = 1; i <= n; i++)  sum[i] = sum[i-1] + s[i-1];
-    for (int len = k; len <= n; len++) // 枚举区间长度
-        for (int i = 1; i+len <= n+1; i++) { // 枚举区间起点
-            int j = i + len - 1;
-            dp[i][j] = Integer.MAX_VALUE;
-            for (int p = i; p < j; p += k-1) // 枚举分界点
-                dp[i][j] = Math.min(dp[i][j], dp[i][p] + dp[p+1][j]);
-            if ((j - i) % (k-1) == 0) dp[i][j] += sum[j] - sum[i-1];
-        }
-    return dp[1][n];
-}
-     #+END_SRC
 
 *** 546. Remove Boxes - Hard: 带隐含信息，需要第三维参数加入的
 You are given several boxes with different colors represented by different positive numbers.
@@ -1255,62 +715,6 @@ bool splitArraySameAverage(vector<int>& A) {  // https://www.cnblogs.com/grandya
     return false;
 }
 #+END_SRC
-*** 1235. Maximum Profit in Job Scheduling - Hard
-We have n jobs, where every job is scheduled to be done from startTime[i] to endTime[i], obtaining a profit of profit[i].
-
-You're given the startTime, endTime and profit arrays, return the maximum profit you can take such that there are no two jobs in the subset with overlapping time range.
-
-If you choose a job that ends at time X you will be able to start another job that starts at time X.
-**** 解题思路与分析
-
-Sort the elements by starting time, then define the dp[i] as the maximum profit taking elements from the suffix starting at i.
-
-Use binarySearch (lower_bound/upper_bound on C++) to get the next index for the DP transition.- 
-
-#+BEGIN_SRC csharp
-// 目标：在最接近自己startime的endtime里得到最大的proft前缀
-// 维护一个递增的endtime序列
-// 该序列同时记录在此endtime下的最大profit
-// 按递增endtime遍历工作
-// 如果本次工作后profit比更早的endtime下的更多，就把这个工作记进去，不然做个p
-// 因为升序，所以还能二分查找。exciting！
-public int jobScheduling(int[] startTime, int[] endTime, int[] profit) { // 这个前后的时间点总是没能确定，所以思路不清晰
-    int n = startTime.length;
-    List<int []> map = new ArrayList<>();
-    for (int i = 0; i < startTime.length; i++) 
-        map.add(new int [] {startTime[i], endTime[i], profit[i]});
-    Collections.sort(map, (a, b) -> a[0] - b[0]);
-    for (int [] zz : map) 
-        System.out.println(Arrays.toString(zz));
-
-    int [] dp = new int [n];
-    dp[n-1] = map.get(n-1)[2]; // 反向逆序遍历的优点：遍历过的时间点一定在当前事件之后，只有选与不选当前事件两种策略中取最优解
-    int j = 0;
-    for (int i = n-2; i >= 0; i--) {
-        j = binarySearchNext(i+1, map);
-        // j = getNext(i, map);
-        dp[i] = Math.max(dp[i+1], (j == -1 ? 0 : dp[j]) + map.get(i)[2]);
-    }
-    return dp[0];
-}
-private int getNext(int idx, List<int []> ll) {
-    for (int i = idx+1; i < ll.size(); i++) 
-        if (ll.get(i)[0] >= ll.get(idx)[1]) return i;
-    return -1;
-}
-private int binarySearchNext(int x, List<int []> ll) { // 这里居然写出bug来了 // bug todo
-    int l = x + 1, r = ll.size()-1, v = ll.get(x)[1], ans = -1; // x end time
-    while (l <= r) {
-        int m = l + (r - l) / 2;
-        if (ll.get(m)[0] >= v) {
-            ans = m;
-            r = m-1;
-        } else l = m+1;
-    }
-    // return l < ll.size() && ll.get(l)[0] >= v ? l : -1;
-    return ans;
-}
-#+END_SRC
 *** 2008. Maximum Earnings From Taxi - Medium
 There are n points on a road you are driving your taxi on. The n points on the road are labeled from 1 to n in the direction you are going, and you want to drive from point 1 to point n to make money by picking up passengers. You cannot change the direction of the taxi.
 
@@ -1402,57 +806,6 @@ public int binarySearch(List<Integer> li, int t) {
     return low;
 }
      #+END_SRC
-*** 1879. Minimum XOR Sum of Two Arrays - Hard
-You are given two integer arrays nums1 and nums2 of length n.
-
-The XOR sum of the two integer arrays is (nums1[0] XOR nums2[0]) + (nums1[1] XOR nums2[1]) + ... + (nums1[n - 1] XOR nums2[n - 1]) (0-indexed).
-
-For example, the XOR sum of [1,2,3] and [3,2,1] is equal to (1 XOR 3) + (2 XOR 2) + (3 XOR 1) = 2 + 0 + 2 = 4.
-Rearrange the elements of nums2 such that the resulting XOR sum is minimized.
-
-Return the XOR sum after the rearrangement.
-**** 解题思路与分析
-     #+BEGIN_SRC csharp
-// 参考 n 的范围 [1, 14]，可状态压缩后结合动态规划方法求解。
-// 设计一个动态规划数组 dp[1 << n]，
-// 对每个 dp[i]，若 i 的二进制表示中 1 的个数为 num, 1 的位置为 k1, k2, …, knum,
-//     dp[i] 表示 nums1 的前 num 个数和 nums2 第 k1, k2, …, knum 个数的最小异或值之和。
-public int minimumXORSum(int[] a, int[] b) { // 就像前面有题可以一个字母一个字母地match寻找最少单词个数，这里有每增加一个数对的异或都优化结果的细节在
-    int n = a.length, r = 1 << n;
-    int [] dp = new int [r]; // dp[]: 这个设计奇特，最开始居然没能想起来，要熟悉起来
-    Arrays.fill(dp, Integer.MAX_VALUE);
-    dp[0] = 0; // 每一个数对取最小值结果的优化是从0开始
-    for (int i = 0; i < r; i++) 
-        for (int j = 0; j < n; j++) 
-            if (((i >> j) & 1) == 1)
-                dp[i] = Math.min(dp[i], dp[i ^ (1 << j)] + (a[Integer.bitCount(i)-1] ^ b[j])); 
-                // dp[i] = Math.min(dp[i], dp[i ^ (1 << j)] + a[Integer.bitCount(i)-1] ^ b[j]); // BUG: ^ 位操作符优先给很低，需要（）起来
-    return dp[r-1];
-}
-     #+END_SRC
-- 当这类题写熟悉了，要写得横看成岭侧成峰，远近高低各不同，要写得随心所欲，想怎么写都能写得出来才可以
-#+BEGIN_SRC csharp
-public int minimumXORSum(int[] a, int[] b) {
-    int n = a.length, r = 1 << n;
-    int [] dp = new int [r]; 
-    Arrays.fill(dp, Integer.MAX_VALUE);
-    for (int i = 0; i < n; i++) 
-        dp[1 << i] = a[0] ^ b[i];
-    int [] cnt = new int [r];
-    for (int i = 0; i < r; i++)
-        cnt[i] = Integer.bitCount(i);
-    for (int i = 1; i < n; i++) 
-        for (int j = r-1; j > 0; j--) { // 为避免产生赃数据，这里需要倒序遍历
-            if (dp[j] == Integer.MAX_VALUE) continue;
-            if (cnt[j] == i) // 原状态的 1 的个数 为 i 个，可以进行状态转移
-                for (int k = 0; k < n; k++) 
-                    if (((j >> k) & 1) == 0 && (j | (1 << k)) < r) // 遍历所有的位，碰到 state 0 的位置可以放一个异或
-                        dp[j | (1 << k)] = Math.min(dp[j | (1 << k)], dp[j] + (a[i] ^ b[k])); // 新产生的数据向后覆盖
-        }
-    return dp[r-1];
-}
-#+END_SRC
-
 *** 1883. Minimum Skips to Arrive at Meeting On Time - Hard
 You are given an integer hoursBefore, the number of hours you have to travel to your meeting. To arrive at your meeting, you have to travel through n roads. The road lengths are given as an integer array dist of length n, where dist[i] describes the length of the ith road in kilometers. In addition, you are given an integer speed, which is the speed (in km/h) you will travel at.
 
@@ -1485,60 +838,6 @@ public int minSkips(int [] dist, int speed, int hoursBefore) {
     return -1;
 }   
      #+END_SRC
-
-*** 1786. Number of Restricted Paths From First to Last Node - Dijkstra算法
-There is an undirected weighted connected graph. You are given a positive integer n which denotes that the graph has n nodes labeled from 1 to n, and an array edges where each edges[i] = [ui, vi, weighti] denotes that there is an edge between nodes ui and vi with weight equal to weighti.
-A path from node start to node end is a sequence of nodes [z0, z1, z2, ..., zk] such that z0 = start and zk = end and there is an edge between zi and zi+1 where 0 <= i <= k-1.
-The distance of a path is the sum of the weights on the edges of the path. Let distanceToLastNode(x) denote the shortest distance of a path between node n and node x. A restricted path is a path that also satisfies that distanceToLastNode(zi) > distanceToLastNode(zi+1) where 0 <= i <= k-1.
-Return the number of restricted paths from node 1 to node n. Since that number may be too large, return it modulo 109 + 7.
-#+BEGIN_SRC csharp
-public int countRestrictedPaths(int n, int[][] edges) {
-    this.n = n;
-    for (int [] e : edges) {
-        adj.computeIfAbsent(e[0], z -> new HashMap<>()).put(e[1], e[2]);
-        adj.computeIfAbsent(e[1], z -> new HashMap<>()).put(e[0], e[2]);
-    }
-    dist = new int [n+1];
-    Arrays.fill(dist, Integer.MAX_VALUE);
-    dist[n] = 0;
-    dijkstra();
-    dp = new int [n+1];
-    Arrays.fill(dp, -1);
-    return (int)dfs(1);
-}
-HashMap<Integer, Map<Integer, Integer>> adj = new HashMap<>();
-int mod = (int)1e9 + 7;
-int [] dist;
-int [] dp;
-int n;
-private long dfs(int u) {
-    if (u == n) return 1;
-    if (dp[u] != -1) return dp[u];
-    long ans = 0;
-    Map<Integer, Integer> tmp = adj.get(u);
-    if (tmp != null) 
-        for (Integer v : tmp.keySet()) 
-            if (dist[u] > dist[v])
-                ans = (ans + dfs(v)) % mod;
-    return dp[u] = (int)ans;
-}
-private void dijkstra() {
-    // Queue<int []> q = new LinkedList<>(); // tle 
-    Queue<int []> q = new PriorityQueue<>((a, b)->a[1] - b[1]); // 狠重要
-    q.offer(new int [] {n, 0});
-    while (!q.isEmpty()) {
-        int [] u = q.poll();
-        if (dist[u[0]] < u[1]) continue; // 狠重要
-        Map<Integer, Integer> tmp = adj.get(u[0]);
-        if (tmp == null) continue;
-        for (Integer v : tmp.keySet()) 
-            if (u[1] + tmp.get(v) < dist[v]) {
-                dist[v] = u[1] + tmp.get(v);
-                q.offer(new int [] {v, dist[v]});
-            }
-    }
-}
-#+END_SRC
 
 *** 1911. Maximum Alternating Subsequence Sum - Medium todo: 还需要总结题解
 The alternating sum of a 0-indexed array is defined as the sum of the elements at even indices minus the sum of the elements at odd indices.
@@ -2524,24 +1823,6 @@ def numberOfUniqueGoodSubsequences(self, binary: str) -> int:
         return sum(dp)%M 
 
 #+END_SRC
-*** 714. Best Time to Buy and Sell Stock with Transaction Fee
-You are given an array prices where prices[i] is the price of a given stock on the ith day, and an integer fee representing a transaction fee.
-Find the maximum profit you can achieve. You may complete as many transactions as you like, but you need to pay the transaction fee for each transaction.
-Note: You may not engage in multiple transactions simultaneously (i.e., you must sell the stock before you buy again).
-#+BEGIN_SRC csharp
-public int maxProfit(int[] prices, int fee) {
-    int n = prices.length;
-    int [] sold = new int[n];
-    int [] hold = new int[n];
-    hold[0] = -prices[0];
-    for (int i = 1; i < n; i++) {
-        sold[i] = Math.max(sold[i-1], hold[i-1]+prices[i]-fee);
-        hold[i] = Math.max(hold[i-1], sold[i-1]-prices[i]);
-    }
-    return sold[n-1];
-}
-#+END_SRC
-
 *** 847. Shortest Path Visiting All Nodes
 You have an undirected, connected graph of n nodes labeled from 0 to n - 1. You are given an array graph where graph[i] is a list of all the nodes connected with node i by an edge.
 Return the length of the shortest path that visits every node. You may start and stop at any node, you may revisit nodes multiple times, and you may reuse edges.
@@ -2626,117 +1907,6 @@ public int minFlipsMonoIncr(String t) { // bug
      #+END_SRC
  
 早上的时候不是刚写过一个这样的题吗 ？ 与1493 的第二种解法有什么区别？ 
-
-*** 1931. Painting a Grid With Three Different Colors
-You are given two integers m and n. Consider an m x n grid where each cell is initially white. You can paint each cell red, green, or blue. All cells must be painted.
-Return the number of ways to color the grid with no two adjacent cells having the same color. Since the answer can be very large, return it modulo 109 + 7.
-- lightweighted轻巧点儿的解题方案: bitmask
-#+BEGIN_SRC csharp
-// time O( (2^5) *2 * N)
-// SPACE O(N)
-//     For m = 5, there are at most 48 valid states for a single column so we can handle it column by column.
-//     We encode the color arrangement by bit mask (3 bit for a position) and use dfs to generate the all valid states.
-//         Then for each column, we iterator all the states and check if its still valid with the previous column.
-public void helper(int m, int pos, HashMap<Integer, Long> dic, int pre, int cur) {
-    if (pos == m) {
-        dic.put(cur, 1L);
-        return;
-    }
-    //不需要{1, 2, 4} {0, 1, 2} is ok 每个格（实际占用3个bit）
-    for (int i = 0; i < 3; i++) {
-        if (i == pre) continue; 
-        helper(m, pos + 1, dic, i, (cur << 3) | (1 << i)); // 每处理一格，将当前状态左移3位？（实际每个格占用3个bit位）| 现在这个格的值？这个，我好昏呀
-    }
-}
-static int mod = (int) 1e9 + 7;
-public int colorTheGrid(int m, int n) {
-    HashMap<Integer,Long> dic = new HashMap<>();
-    helper(m, 0, dic, -1, 0);     // 这应该就是我想找的精巧不占多少空间的mask了，可是有点儿看不懂
-    HashSet<Integer> set = new HashSet<>(dic.keySet());
-    for (int i = 1; i < n; i++) { // 动态规划： 用两个图像滚动数组一样轮流记载得出答案
-        HashMap<Integer, Long> tmp = new HashMap<>();
-        for (int x: set) 
-            for (int y : set) 
-                if ((x & y) == 0) // 相邻涂色方案为有效方案
-                    tmp.put(y, (tmp.getOrDefault(y, 0L) + dic.get(x)) % mod);
-        dic = tmp;
-    }
-    long res = 0L;
-    for (Long x : dic.values()) {
-        res += x;
-        res %= mod;
-    }
-    return (int) res;
-}
-#+END_SRC
-- 比较传统一点儿的解法，思路清晰
-#+BEGIN_SRC csharp
-// 参考的答案里，这个最逻辑简单、通俗大众易懂，但稍显笨重，两个图，用一个链表来记忆一行的涂色方案，如果有更精巧一点儿的bitmask，是我想找的答案
-// https://leetcode.com/problems/painting-a-grid-with-three-different-colors/discuss/1334366/Easy-Java-comments-28ms-O(n*P*P)-complexity-memory-O(P)-where-P-is-column-permutations-count 这个又稍嫌太偏了，考得极少，不易懂，容易出错，可是bitmask又只能set 1 or 0，BitSet()可以吗？
-// 先预处理得到单行的所有有效涂色方案，
-// 再进一步计算得到每种单行方案对应的有效邻行方案
-// 在此基础上，结合动态规划方法，逐行求解各种涂色状态对应的方案总数，最后统计得到总方案数。
-public int colorTheGrid(int m, int n) {
-// 获得单行所有涂色方案
-    Map<Integer, List<Integer>> line = new HashMap<>(); //  3^m ways of paying one row
-    int range = (int)Math.pow(3, m); // 用0、1、2表示各个网格的颜色，key为方案对应的数值，value为方案对应的数组
-    for (int i = 0; i < range; i++) {
-        List<Integer> list = new ArrayList<>(); //  val val values (0, 1, 2) of every m cols into list
-        int val = i;
-        for (int j = 0; j < m; j++) {
-            list.add(val % 3);
-            val /= 3;
-        }
-        boolean valid = true; // 确认该数组中是否存在相邻位置颜色相同
-        for (int j = 1; j < m; j++) 
-            if (list.get(j-1) == list.get(j)) {
-                valid = false;
-                break;
-            }
-        if (valid) line.put(i, list); // 相邻网格颜色均不同，为有效方案，加入哈希表
-    }
-// 预处理得到每种单行方案对应的有效邻行方案
-    Map<Integer, List<Integer>> adj = new HashMap<>();
-    Iterator it = line.entrySet().iterator();
-    while (it.hasNext()) {     //  3^m ways of paying one row
-        Map.Entry entry = (Map.Entry)it.next();
-        int va = (int)entry.getKey();
-        List<Integer> lva = (List<Integer>)entry.getValue();
-        adj.put(va, new ArrayList<Integer>());
-        Iterator itb = line.entrySet().iterator();
-        while (itb.hasNext()) { //  3^m ways of paying one row
-            Map.Entry enb = (Map.Entry)itb.next(); 
-            int vb = (int)enb.getKey();
-            List<Integer> lvb = (List<Integer>)enb.getValue();
-            boolean valid = true;
-            for (int i = 0; i < m; i++) 
-                if (lva.get(i) == lvb.get(i)) {
-                    valid = false;
-                    break;
-                } // among 3^m ways of painting one row, how many is valid, and valid mask into adj.get(va);
-            if (valid) adj.get(va).add(vb); 
-        }
-    }
-// 动态规划，逐行求解方案数
-    int mod = (int)(1e9+7);
-    long [] dp = new long [range];  // 上一行各种涂色方案对应的总方法数
-    for (int i = 0; i < range; i++) // 初始化
-        dp[i] = line.containsKey(i) ? 1 : 0;
-    for (int i = 1; i < n; i++) {   // 从第二行开始动态规划
-        long [] cur = new long [range];  // 新一行各种涂色方案对应的总方法数
-        for (int j = 0; j < range; j++) 
-            if (adj.containsKey(j)) {    // 该方案有效
-                for (int v : adj.get(j)) // 遍历有效的相邻方案
-                    cur[j] = (cur[j] + dp[v]) % mod; // 总方法数累加
-            }
-        System.arraycopy(cur, 0, dp, 0, range);
-    }
-    long ans = 0;
-    for (int i = 0; i < range; i++) 
-        ans = (ans + dp[i]) % mod;
-    return (int)ans;
-}
-#+END_SRC
 
 *** 313. Super Ugly Number
 A super ugly number is a positive integer whose prime factors are in the array primes.
@@ -3378,39 +2548,6 @@ public int minScoreTriangulation(int[] arr) {
 }
 #+END_SRC
 
-*** 375. Guess Number Higher or Lower II - Medium
-We are playing the Guessing Game. The game will work as follows:
-
-I pick a number between 1 and n.
-
-You guess a number.
-
-If you guess the right number, you win the game.
-
-If you guess the wrong number, then I will tell you whether the number I picked is higher or lower, and you will continue guessing.
-
-Every time you guess a wrong number x, you will pay x dollars. If you run out of money, you lose the game.
-
-Given a particular n, return the minimum amount of money you need to guarantee a win regardless of what number I pick.
-
-[[./pic/guessNumber.png]]
-
-#+BEGIN_SRC csharp
-private int dfs(int l, int r) {
-    if (dp[l][r] > 0) return dp[l][r];
-    if (l == r) return dp[l][r] = 0;
-    if (l == r-1) return dp[l][r] = Math.min(l, r);
-    int min = Integer.MAX_VALUE;
-    for (int i = l; i <= r; i++) 
-        min = Math.min(min, i + Math.max((i == r ? i : dfs(i+1, r)), (i == l ? i : dfs(l, i-1))));
-    return dp[l][r] = min;
-}
-int [][] dp;
-public int getMoneyAmount(int n) {
-    dp = new int[n+1][n+1];
-    return dfs(1, n);
-}
-#+END_SRC
 *** 1478. Allocate Mailboxes - Hard
 Given the array houses and an integer k. where houses[i] is the location of the ith house along a street, your task is to allocate k mailboxes in the street.
 
@@ -3501,39 +2638,6 @@ public int minDistance(int[] h, int k) {
 }
      #+END_SRC
 
-*** 1477. Find Two Non-overlapping Sub-arrays Each With Target Sum
-Given an array of integers arr and an integer target.
-You have to find two non-overlapping sub-arrays of arr each with a sum equal target. There can be multiple answers so you have to find an answer where the sum of the lengths of the two sub-arrays is minimum.
-Return the minimum sum of the lengths of the two required sub-arrays, or return -1 if you cannot find such two sub-arrays.
-#+BEGIN_SRC csharp
-// 找出数组中等于target的最小非重叠区间的长度，用dp[i]表示当前i以及i之前的满足条件的最小区间长度,状态更新规则为
-//     dp[i]=min(dp[i-1],i-j+1) if sum[j,i]=target
-//     答案更新规则
-//     res=min(res,dp[j−1]+i−j+1)
-public int minSumOfLengths(int[] arr, int target) {
-    int n = arr.length;
-    int [] dp = new int [n];
-    Arrays.fill(dp, Integer.MAX_VALUE);
-    int cur = 0, s = 0;
-    int res = Integer.MAX_VALUE, minLen = Integer.MAX_VALUE;
-    for (int i = 0; i < n; i++) {
-        cur += arr[i];
-        while (cur > target) {
-            cur -= arr[s];
-            s += 1;
-        }
-        if (cur == target) {
-            int curLen = i - s + 1;
-            if (s > 0 && dp[s-1] != Integer.MAX_VALUE) 
-                res = Math.min(res, curLen + dp[s-1]);
-            minLen = Math.min(minLen, curLen);
-        }
-        dp[i] = minLen;
-    }
-    return res == Integer.MAX_VALUE ? -1 : res;
-}
-#+END_SRC
-
 *** 1771. Maximize Palindrome Length From Subsequences
 You are given two strings, word1 and word2. You want to construct a string in the following manner:
 Choose some non-empty subsequence subsequence1 from word1.
@@ -3581,29 +2685,6 @@ public int longestPalindrome(String ss, String tt) {
         }
     }
     return max;
-}
-#+END_SRC
-
-*** 486. Predict the Winner
-You are given an integer array nums. Two players are playing a game with this array: player 1 and player 2.
-Player 1 and player 2 take turns, with player 1 starting first. Both players start the game with a score of 0. At each turn, the player takes one of the numbers from either end of the array (i.e., nums[0] or nums[nums.length - 1]) which reduces the size of the array by 1. The player adds the chosen number to their score. The game ends when there are no more elements in the array.
-Return true if Player 1 can win the game. If the scores of both players are equal, then player 1 is still the winner, and you should also return true. You may assume that both players are playing optimally.
-
-博弈类题目，使用minMax思想,使自己分数最大化，对手分数尽量小，递归自顶向下求解。
-
-该题不使用备忘机制同样能通过测试例，只不过耗时相对较长，单纯的比较取数后两players的分数差即可：Math.max(nums[l] - getScore(nums, l + 1, r), nums[r] - getScore(nums, l, r - 1));
-
-[[./pic/predictWinner.png]]
-
-#+BEGIN_SRC csharp
-private int helper( int [] arr, int i, int j) {
-    if (i == j) return arr[i];
-    else return Math.max(arr[i] - helper(arr, i+1, j), arr[j] - helper(arr, i, j-1));
-}
-public boolean PredictTheWinner(int[] nums) {
-    int n = nums.length;
-    if (n == 1) return true;
-    return helper(nums, 0, n-1) >= 0;
 }
 #+END_SRC
 
@@ -3684,205 +2765,6 @@ public int numFactoredBinaryTrees(int[] arr) {
         res %= mod;
     }
     return (int)(res % mod);
-}
-#+END_SRC
-
-*** 907. Sum of Subarray Minimums
-Given an array of integers arr, find the sum of min(b), where b ranges over every (contiguous) subarray of arr. Since the answer may be large, return the answer modulo 109 + 7.
-#+BEGIN_SRC csharp
-public int sumSubarrayMins(int[] arr) {
-    int n = arr.length;
-    // for each A[i], find k <= i <= j, so that A[i] is the min from [k,j]
-    // sum += A[i] * (i-k+1) * (j-i+1)
-    // so we need to find the next min to the right and to the left
-    //这个过程可以简化为使用一个栈。对于被某个数从栈中弹出的数而言，它右侧第一个比它小的数就是这个数。所以我们可以对所有被弹出的数得到左侧的区间范围和右侧的区间范围。我觉得这是一种非常聪明的做法。 这个栈我看得稀里糊涂，再想一下
-public int sumSubarrayMins(int[] a) { // 以每一个数为最小值找出左右边界。累加和
-    int mod = (int)1e9 + 7;
-    int n = a.length;
-    int [] l = new int [n]; // 以每个当前数为最小值的左右最长边界
-    int [] r = new int [n];
-    ArrayDeque<Integer> s = new ArrayDeque<>();
-    for (int i = 0; i < n; i++) {
-        while (!s.isEmpty() && a[i] <= a[s.peek()]) // bug: a[i] < a[s.peek()]
-            r[s.pop()] = i-1;
-        s.push(i);
-    }
-    while (!s.isEmpty()) r[s.pop()] = n-1;
-    for (int i = n-1; i >= 0; i--) {
-        while (!s.isEmpty() && a[i] < a[s.peek()])
-            l[s.pop()] = i+1;
-        s.push(i);
-    }
-    while (!s.isEmpty()) 
-        l[s.pop()] = 0;
-    long sum = 0;
-    long lcnt = 0, rcnt = 0;
-    for (int i = 0; i < n; i++) {
-        lcnt = i - l[i] + 1;
-        rcnt = r[i] - i + 1;
-        sum += a[i] * lcnt * rcnt;
-        sum %= mod;
-    }
-    return (int)sum;
-}
-     #+END_SRC
-**** 解题思路与分析
- 
-思路是单调栈。开一个单调递增栈，里面存A AA中的数的下标，并且要保持下标对应的A AA的值单调递增。
-
-遍历A AA，当遍历到A [ i ] A[i]A[i]的时候，如果栈不空并且栈顶t tt对应的值A [ t ] > A [ i ]，那么我们就知道了A [ t ]作为最小值的最长的那个区间的左右端点，
-
-先pop掉A [ t ] ，如果栈空了，说明左端点可以取到0 ，否则取栈顶加1（因为栈顶是A [ t ]左边第一个小于等于它的数的下标），而A [ i ] 是A [ t ]右边第一个小于它的数，所以右端点可以取到i − 1。
-
-设左端点取l右端点取r，则以A [ t ]为最小值的区间的数量就是( t − l + 1 ) ( r − t + 1 ) 这么多，所以答案只需要累加一下A [ t ] × ( t − l + 1 ) ( r − t + 1 )即可。
-
-     #+BEGIN_SRC csharp
-public int sumSubarrayMins(int[] a) { // 将上面的三次遍历three passes变为一次遍历求结果
-    int mod = (int)1e9 + 7;
-    Deque<Integer> s = new ArrayDeque<>();
-    long res = 0;
-    for (int i = 0; i < a.length; i++) {
-        while (!s.isEmpty() && a[i] < a[s.peek()]) { // 对于pop()出来的每一个数，计算出以它为最小值的左右边界，并累加和
-            int pos = s.pop();                       // l和r是a[pos]左右数的选择数
-            long l = pos - (s.isEmpty() ? -1 : s.peek()), r = i - pos;
-            res += (l * r % mod) * a[pos] % mod;
-            res %= mod;
-        }
-        s.push(i);
-    }
-    while (!s.isEmpty()) {
-        int pos = s.pop();
-        long l = pos - (s.isEmpty() ? -1 : s.peek()), r = a.length - pos;
-        res += (l * r % mod) * a[pos] % mod;
-        res %= mod;
-    }
-    return (int) res;
-}
-     #+END_SRC
-- 上面的写法是包装出来的方法，用原始函数来写，效率狠好
-#+BEGIN_SRC csharp
-private int MOD = (int)(1e9 + 7);
-public int sumSubarrayMins(int[] arr) {
-    int n = arr.length;
-    Deque<Integer> dk = new LinkedList<>(); // 单调递增栈， 效率狠好！
-    long res = 0;
-    for (int i = 0; i < n; i++) {
-        while (!dk.isEmpty() && arr[dk.peekLast()] > arr[i]) {
-            int pkIdx = dk.pollLast();
-            int stIdx;
-            if (dk.isEmpty()) stIdx = -1;
-            else stIdx = dk.peekLast();
-            res += (long)arr[pkIdx] * (long)(i - pkIdx) * (long)(pkIdx - stIdx);
-        }
-        dk.offerLast(i);
-    }
-    while (!dk.isEmpty()) {
-        int pkIdx = dk.pollLast();
-        int stIdx;
-        if (dk.isEmpty()) stIdx = -1;
-        else stIdx = dk.peekLast();
-        res += (long)arr[pkIdx] * (long)(n - pkIdx) * (long)(pkIdx - stIdx);
-    }
-    return (int)(res % MOD);
-}
-#+END_SRC
-- 找到的效率最高的写法
-#+BEGIN_SRC csharp
-public int sumSubarrayMins(int[] arr) {
-    int sum = 0;
-    int mod = (int) 1e9 + 7;
-    int curStVal = 0;
-    Deque<int[]> s = new ArrayDeque<>(); // int [] {value, count}
-    for (int i = 0; i < arr.length; i++) {
-        int curCnt = 1;
-        int curVal = arr[i];
-        while (!s.isEmpty() && s.peek()[0] >= curVal) {
-            int[] popped = s.pop();
-            curStVal -= popped[1] * popped[0];
-            curCnt += popped[1]; // assign all previous count to current
-        }
-        s.push(new int[]{curVal, curCnt});
-        curStVal += curVal * curCnt;
-        sum = (sum + curStVal) % mod;
-    }
-    return sum;
-}
-#+END_SRC
-**** 解题思路与分析: 另一种解法吧
-     #+BEGIN_SRC csharp
-int mod = 1_000_000_007;
-public int sumSubarrayMins(int[] arr) {
-    int n = arr.length;
-    long [] left = new long[n];
-    long [] right = new long[n];
-    long sum = 0;
-    long cnt = 0;
-    int j = 0;
-    for (int i = 0; i < n; i++) { // 计算左边比自身大的数的个数
-        cnt = 1;
-        j = i-1;
-        while (j >= 0 && arr[j] >= arr[i]) {
-            cnt += left[j];
-            j -= left[j];
-        }
-        left[i] = cnt;
-    }
-    // 就是因为计算了两个方向，所以对于数组里面有相同元素的情况下，需要特别考虑一下。
-    //     不能重复计算， 也不能漏掉，
-    //     具体就是一个方向的时候用<=, 另外一个方向的时候用<。 这个在做的时候也bug了。
-    for (int i = n-1; i >= 0; i--) { // 计算右边比自身大的数的个数
-        cnt = 1;
-        j = i+1;
-        while (j < n && arr[j] > arr[i]) {
-            cnt += right[j];
-            j += right[j];
-        }
-        right [i] = cnt;
-    }
-    for (int i = 0; i < n; i++) 
-        sum += arr[i] * left[i] * right[i];
-    return (int) (sum % mod);
-}
-#+END_SRC
-
-*** 689. Maximum Sum of 3 Non-Overlapping Subarrays
-Given an integer array nums and an integer k, find three non-overlapping subarrays of length k with maximum sum and return them.
-Return the result as a list of indices representing the starting position of each interval (0-indexed). If there are multiple answers, return the lexicographically smallest one.
-#+BEGIN_SRC csharp
-public int[] maxSumOfThreeSubarrays(int[] nums, int k) {
-    int n = nums.length;
-    int [] pre = new int [n+1];
-    for (int i = 1; i <= n; i++) 
-        pre[i] = pre[i-1] + nums[i-1];
-    // left[i]表示在区间[0, i]范围内长度为k且和最大的子数组的起始位置
-    // right[i]表示在区间[i, n - 1]范围内长度为k且和最大的子数组的起始位置
-    int [] left = new int [n];
-    int [] right = new int [n];
-    int [] res = new int [3];
-    Arrays.fill(right, n-k);
-    for (int i = k, total = pre[k]-pre[0]; i < n; i++) {
-        if (pre[i+1] - pre[i+1-k] > total) {
-            left[i]= i+1-k;
-            total = pre[i+1] - pre[i+1-k];
-        } else left[i] = left[i-1];
-    }
-    for (int i = n-1-k, total = pre[n]-pre[n-k]; i >= 0; i--) {
-        if (pre[i+k] - pre[i] >= total) {
-            right[i] = i;
-            total = pre[i+k] - pre[i];
-        } else right[i] = right[i+1];
-    }
-    int max = Integer.MIN_VALUE;
-    for (int i = k; i <= n-2*k; i++) {
-        int l = left[i-1];
-        int r = right[i+k];
-        int total = (pre[i+k]-pre[i]) + (pre[k+l]-pre[l]) + (pre[r+k] - pre[r]);
-        if (max < total) {
-            max = total;
-            res = new int [] {l, i, r};
-        }
-    }
-    return res;
 }
 #+END_SRC
 
@@ -4369,6 +3251,23 @@ You have two types of tiles: a 2 x 1 domino shape and a tromino shape. You may r
 Given an integer n, return the number of ways to tile an 2 x n board. Since the answer may be very large, return it modulo 109 + 7.
 
 In a tiling, every square must be covered by a tile. Two tilings are different if and only if there are two 4-directionally adjacent cells on the board such that exactly one of the tilings has both squares occupied by a tile.
+**** 官方的：更为直接的图形动规题的分析方法 
+
+[[./pic/dp_20230507_110151.png]]
+#+BEGIN_SRC java
+static final int mod = (int)1e9 + 7;
+public int numTilings(int n) {
+    long [][] f = new long [n+1][4];
+    f[0][3] = 1;
+    for (int i = 1; i <= n; i++) {
+        f[i][0] = f[i-1][3];
+        f[i][1] = (f[i-1][0] + f[i-1][2]) % mod;
+        f[i][2] = (f[i-1][0] + f[i-1][1]) % mod;
+        f[i][3] = (f[i-1][0] + f[i-1][1] + f[i-1][2] + f[i-1][3]) % mod;
+    }
+    return (int)f[n][3];
+}
+#+END_SRC
 **** 解题思路与分析
      
      [[./pic/790.png]]
@@ -5422,123 +4321,6 @@ public int numSubmat(int[][] mat) {
     return tot;
 }
      #+END_SRC
-*** 1621. Number of Sets of K Non-Overlapping Line Segments - Medium
-Given n points on a 1-D plane, where the ith point (from 0 to n-1) is at x = i, find the number of ways we can draw exactly k non-overlapping line segments such that each segment covers two or more points. The endpoints of each segment must have integral coordinates. The k line segments do not have to cover all n points, and they are allowed to share endpoints.
-
-Return the number of ways we can draw k non-overlapping line segments. Since this number can be huge, return it modulo 109 + 7.
-**** 解题思路与分析: dfs记忆化搜索, 很慢很慢很慢。。。。。。
-     #+BEGIN_SRC csharp
-public int numberOfSets(int n, int k) { 
-    if (k == n-1) return 1;
-    this.n = n;
-    dp = new Long [n][k+1];
-    return (int)dfs(0, k);
-}
-long mod = (int)1e9 + 7;
-Long [][] dp; // have to be Long, Integer overflow
-int n;
-private long dfs(int idx, int k) {
-    if (dp[idx][k] != null) return dp[idx][k];
-    if (k == 0) return 1;
-    long ans = 0;
-    for (int i = idx+1; i < n; i++)
-        ans += (i - idx) * dfs(i, k-1);
-    return dp[idx][k] = ans % mod;
-}
-     #+END_SRC
-**** 解题思路与分析: dp[i][j][k]
-
-记 f[i][j]f[i][j] 表示使用 0 .. i 的点构造了 jj 条线段的方案数。我们需要区分第 jj 条线段的右端点是否就是 ii，因此可以考虑把 f[i][j] 拆分成两个状态：
-
-  - f[i][j][0] 表示第 jj 条线段的右端点不是 ii，也就是说我们没有办法继续延长第 jj 条线段；
-  - f[i][j][1] 表示第 jj 条线段的右端点就是 ii，也就是说我们可以选择是否继续延长第 jj 条线段。
-
-如何进行状态转移呢？
-
-首先考虑 f[i][j][0]f[i][j][0]，因为第 jj 条线段的右端点不是 ii，因此第 ii 个点没有用上，那么 0 .. i-1 的点构造了 jj 条线段，即
-
-  - f[i][j][0] = f[i-1][j][0] + f[i-1][j][1]
-
-再考虑 f[i][j][1]f[i][j][1]，因为第 jj 条线段的右端点就是 ii，因此有两种情况：
-
-第 jj 条线段长度为 11，那么 0 .. i-1 的点构造了 j-1j−1 条线段，即
-
-  - f[i][j][1] = f[i-1][j-1][0] + f[i-1][j-1][1]
-
-第 jj 条线段长度大于 11，那么删去第 jj 条线段 i-1 .. i 的这一部分，0 .. i-1 的点仍然构造了 jj 条线段，并且点 i-1i−1 是属于第 jj 条线段的，即
-
-  - f[i][j][1] = f[i-1][j][1]
-
-加上边界条件 f[0][0][0] = 1，最终答案即为 f[n-1][k][0] + f[n-1][k][1].
-
-    #+BEGIN_SRC csharp
-public int numberOfSets(int n, int k) {
-    int mod = (int)1e9 + 7;
-    long [][][] dp = new long [n][k+1][2]; // dp[i][j][0/1]: 0, 1, 2 ... i形成j段线段，并且第j段线段是1（否0）以点i结尾
-    dp[0][0][0] = 1;
-    for (int i = 1; i < n; i++) {
-        for (int j = 0; j <= k; j++) {
-            dp[i][j][0] = (dp[i-1][j][0] + dp[i-1][j][1]) % mod;
-            dp[i][j][1] = dp[i-1][j][1];
-            if (j > 0)
-                dp[i][j][1] = (dp[i][j][1] + dp[i-1][j-1][0] + dp[i-1][j-1][1]) % mod; 
-        }
-    }
-    return (int)((dp[n-1][k][0] + dp[n-1][k][1]) % mod);
-}
-    #+END_SRC
-**** 解题思路与分析: dp[i][j]
-
-dp[i][j] means how many number of ways we cut j segments for first i points. The result will be dp[n - 1][k]
-
-It is easy to come up with O(N * N * K) solutions
-#+BEGIN_SRC csharp
-1. Initial value: dp[0][0] = 1. It is only 1 ways to cut first 0 points to 0 segments.
-2. For i > 0, dp[i][j] = dp[i - 1][j]. This is assuming that we don't have jth segment ends up with i th points but j segments can be formed by first i - 1 points.
-3. Now lets' handle those cases that j th segment which will ends up with ith points. jth segments length varies.
-#+END_SRC
-
-dp[i][j] = sum(dp[0][j - 1] ..... dp[i - 1][j - 1])
-
-     #+BEGIN_SRC csharp
-int mod = 1_000_000_007;                // tle
-public int numberOfSets(int n, int k) { // tle
-    long[][] dp = new long[n][k + 1];
-    dp[0][0] = 1;
-    for (int i = 0; i < n; i++) 
-        for (int j = 0; j <= Math.min(k, i); j++) {
-            if (i > 0) dp[i][j] = dp[i - 1][j];
-            if (j > 0) 
-                for (int h = i - 1; h >= 0; h--) 
-                    dp[i][j] = (dp[i][j] + dp[h][j - 1]) % mod;
-        }
-    return (int)dp[n - 1][k];
-}
-     #+END_SRC
-
-- However it won't pass LC, because the time complexity is too high. Let's optimize it. We can see the inner for loop. It counts ALL values of dp[0...i - 1][j - 1].
-#+BEGIN_SRC csharp
-for (int h = i - 1; h >= 0; h--) 
-    dp[i][j] = (dp[i][j] + dp[h][j - 1]) % mod;
-#+END_SRC
-
-- We can use a new array to store the previous sum of it. In this way, we don't need compute again. In order to use previous sum, we have to reverse the order of for (int j = 0; j <= Math.min(k, i); j++) to for (int j = Math.min(k, i); j >= 0; j--).
-#+BEGIN_SRC csharp
-int mod = 1_000_000_007;
-public int numberOfSets(int n, int k) {
-    long[][] dp = new long[n][k + 1];
-    dp[0][0] = 1;
-    long[] sums = new long[k + 1];
-    for (int i = 0; i < n; i++) 
-        for (int j = Math.min(k, i); j >= 0; j--) {
-            if (i > 0) dp[i][j] = dp[i - 1][j];
-            if (j > 0) dp[i][j] = (sums[j - 1] + dp[i][j]) % mod;
-            sums[j] = (sums[j] + dp[i][j]) % mod;
-        }
-    return (int)dp[n - 1][k];
-}
-#+END_SRC
-
 ** BitMask掩码相关的【这是第三次不会的】
 *** 1595. Minimum Cost to Connect Two Groups of Points
 You are given two groups of points where the first group has size1 points, the second group has size2 points, and size1 >= size2.

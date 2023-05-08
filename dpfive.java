@@ -156,32 +156,6 @@ public class dpfive {
             return cnt;
         }
 
-        public int longestArithSeqLength(int[] a) { // 1027
-            int n = a.length, m = Arrays.stream(a).max().getAsInt() + 1;
-            if (n == 2) return a[0] != a[1] ? 2 : 0;
-            int [] f = new int [m];
-            // for (int v : a) f[v] = 1;
-            f[a[0]] = 1;
-            for (int i = 1; i < n; i++) {
-                f[a[i]] = Math.max(f[a[i]], 1);
-                for (int j = i-1; j >= 0; j--) {
-                    System.out.println("\n a[i]: " + a[i]);
-                    System.out.println("a[j]: " + a[j]);
-                    int d = a[i] - a[j], v = d + a[i], x = 2;
-                    System.out.println("d: " + d);
-                    System.out.println("v: " + v);
-                    while (d != 0 && v < m  && v >= 0 && f[v] > 0) {
-                        System.out.println("v: " + v);
-                        f[v] = Math.max(f[v], x + 1);
-                        x = f[v];
-                        v = d + v;
-                    }
-                    System.out.println(Arrays.toString(f));
-                }
-            }
-            return Arrays.stream(f).max().getAsInt();
-        }
-
         public long mostPoints(int[][] a) {
             n = a.length; this.a = a; 
             f = new Long [n];
