@@ -873,44 +873,6 @@ public class dpseven {
                     backTracking(i * 10 + x, j+1, k | (1 << x));
         }
 
-        // 跟以前的思路有点儿不一样：这里提示说：遍历每个格，知道这个格出发【上下左右】各最少格数，再根据两个和来判断【周长】是否合格
-        public int largest1BorderedSquare(int[][] a) {
-            int m = a.length, n = a[0].length;
-            int [][] u = new int [m+1][n+1], d = new int [m+1][n+1];
-            int [][] l = new int [m+1][n+1], r = new int [m+1][n+1], s = new int [m+1][n+1];
-            // prefixSum
-            for (int i = 0; i < m; i++)
-                for (int j = 0; j < n; j++)
-                    s[i+1][j+1] = s[i+1][j] + s[i][j+1] - s[i][j] + a[i][j];
-            // 从当前格出发：【左右、上下】连续1 的最多个数
-            for (int i = 0; i < m; i++) {
-                for (int j = 0; j < n; j++)
-                    if (a[i][j] == 1)
-                        l[i+1][j+1] = l[i+1][j] + 1;  // 【左】【i+1,j+1】
-                for (int j = n-1; j >= 0; j--) 
-                    if (a[i][j] == 1)
-                        r[i+1][j] = r[i+1][j+1] + 1; // 【右】【i+1,j】
-            }
-            for (int j = 0; j < n; j++) {
-                for (int i = 0; i < m; i++)
-                    if (a[i][j] == 1) u[i+1][j+1] = u[i+1][j] + 1; // 【上】【i+1,j+1】
-                for (int i = m-1; i >= 0; i--) 
-                    if (a[i][j] == 1) d[i][j+1] = d[i+1][j+1] + 1; // 【下】【i,j+1】
-            }
-            int max = 0;
-            for (int i = 0; i < m; i++)
-                for (int j = 0; j < n; j++) { // 【BUG：】这里把它当 1 了，而它实际可以是 0 ，以后再写这个题目
-                    int k = Math.min(Math.min(l[i+1][j+1], r[i+1][j]), Math.min(u[i+1][j+1], d[i][j+1])); // k: min
-                    int sumOuter = s[i+k][j+k] - s[i-k+1][j+k] - s[i+k][j-k+1] + s[i-k+1][j-k+1], sum = (k * 2 - 1) * (k * 2 -1);
-                    --k;
-                    int sukner = 0;
-                    if (k > 1)
-                        sukner = s[i+k][j+k] - s[i-k+1][j+k] - s[i+k][j-k+1] + s[i-k+1][j-k+1];
-                    if (sumOuter - sukner == 2 * (k * 2 - 1) + 2 * (k * 2 - 3)) max = Math.max(max, sum);
-                }
-            return max;
-        }
-
         public boolean PredictTheWinner(int[] a) {
             n = a.length; this.a = a; 
             f = new Integer [n][n];
@@ -1119,6 +1081,8 @@ public class dpseven {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+
+
 
 
 

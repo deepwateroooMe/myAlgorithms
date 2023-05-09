@@ -9,11 +9,8 @@ import java.math.BigInteger;
 import java.util.stream.*;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toMap;
-
 public class dpnine {
-
     public static class Solution {
-
         // public String findTheString(int[][] a) { // 53/55: 自已写的: 不知道这里哪里写错了。。
         //     int n = a.length, i = 0;
         //     char [] s = new char [n];
@@ -1016,44 +1013,290 @@ public class dpnine {
         //     return ans;
         // }
 
-        // public int minHeightShelves(int[][] a, int k) { // 改天再写这些题目。。。
-        //     int n = a.length, r = 0, maxHeight = 0, j = 0;
+        // public int minHeightShelves(int[][] a, int k) { 
+        //     int n = a.length;
         //     int [] f = new int [n+1];
         //     Arrays.fill(f, 1000000);
         //     f[0] = 0;
-        //     for (int i = 1; i <= n; i++) {
-        //         System.out.println("\n i: " + i);
-        //         f[i] = f[i-1] + a[i-1][1]; // 单独摆一层
-        //         if (i == 1) continue;
-        //         // 再试着优化一下：能不能把它塞进之前放过的某一层？优化空间，这本书之前，最后放上去的几本书，某层还有地方吗？
-        //         r = a[i-1][0]; // 当前，这本书的宽度，只能塞时最后一层
-        //         // maxHeight = r[i][1];// 当前，这本书的高度
-        //         maxHeight = 0;// 当前，这本书的高度
-        //         for (j = i-1; j >= 0 && r <= k; j--) {
-        //             r += a[j][0]; 
-        //             if (r <= k)
-        //                 maxHeight = Math.max(maxHeight, a[j-1][1]);
-        //             else break;
+        //     for (int i = 0; i < n; i++) {
+        //         int maxHeight = 0, curWidth = 0;
+        //         for (int j = i; j >= 0; j--) { // 【把当前下标的书：】也一起努力塞进当前层，或是前一层书里。。
+        //             curWidth += a[j][0];
+        //             if (curWidth > k) break;
+        //             maxHeight = Math.max(maxHeight, a[j][1]);
+        //             f[i+1] = Math.min(f[i+1], f[j] + maxHeight);
         //         }
-        //         System.out.println("j: " + j);
-        //         if (j == i - 1) continue; // 必须单独摆一层
-        //         System.out.println("maxHeight: " + maxHeight);
-        //         if (maxHeight < a[i-1][1]) // 这里不知道 j 跑哪里去了。。
-        //             // f[i] = f[i-1] - maxHeight + a[i-1][1];
-        //             f[i] = f[j] + a[i-1][1];
-        //         else f[i] = f[j] + maxHeight;
-        //         System.out.println(Arrays.toString(f));
         //     }
         //     return f[n];
         // }
 
+        // // 因为是偶数下标和，减去奇数下标和，两个动规数组，分别记：偶数和最大值 , 与奇数和最小值【不对，应该记，到当前下标的，答案差值】
+        // public long maxAlternatingSum(int[] a) {
+        //     int n = a.length, max = Integer.MIN_VALUE;
+        //     long [] f = new long [n+1], d = new long [n+1]; // f even  d odd 当前下标: 是当作奇数下标，还是当作偶数下标，分别记到当前下标的差值最大值，而不是记和。。。
+        //     for (int i = 0; i < n; i++) {
+        //         // 当前下标当作奇数：选【前 i-1 的偶数f[i] - a[i]】，与不选
+        //         d[i+1] = Math.max(f[i] - a[i], d[i]);
+        //         // f[i+1] = Math.max(f[i] + (i > 1 ? a[i] - d[i] : (i == 1 ? 0 : a[i])), f[i]); // 【这里，这里那里不对。。。】
+        //         f[i+1] = Math.max(d[i] + a[i], f[i]); // 因为奇偶都记着全局最优值，直接从前一个奇数来。。。
+        //     }
+        //     return Math.max(f[n], d[n]);
+        // }
+
+        // public int numSubmat(int[][] a) {
+        //     int m = a.length, n = a[0].length, ans = 0, cnt = 0;
+        //     // 一点儿优化：横轴方向上个数的预处理，优化出一个【O(N)】
+        //     int [][] r = new int [m][n+1];
+        //     for (int i = 0; i < m; i++)
+        //         for (int j = 0; j < n; j++) // r[i][j+1]
+        //             if (a[i][j] == 1) r[i][j+1] = r[i][j] + 1;
+        //     for (int i = 0; i < m; i++)
+        //         for (int j = 0; j < n; j++) { // 枚举以 [i][j] 为右下角的子数组的个数
+        //             cnt = r[i][j+1];
+        //             for (int k = i; k >= 0 && r[k][j+1] > 0; k--) {
+        //                 cnt = Math.min(cnt, r[k][j+1]);
+        //                 ans += cnt; // 每一行都数过，第 i 当前行，与第 k[<i] 行，意义不一样。。。
+        //             }
+        //         }
+        //     return ans;
+        //     // for (int i = 0; i < m; i++)
+        //     //     for (int j = 0; j < n; j++) { // 枚举以 [i][j] 为右下角的子数组的个数
+        //     //         int maxWidth = r[i][j+1]; // 当前行的最大宽度
+        //     //         ans += r[i][j+1]; // 当前行的，以 [i,j] 为结尾的【横子矩形】个数
+        //     //         if (maxWidth < 1) continue; // 最多一个格
+        //     //         // 优化横轴【一个轴】后，只需要遍历另一个轴上的【O(N)】，全局可以是【O(M N * Math.min(M, N))】
+        //     //         for (int k = i-1; k >= 0 && r[k][j+1] > 0; k--) {
+        //     //             maxWidth = Math.min(maxWidth, r[k][j+1]);
+        //     //             // ans += r[k][j+1]; // 这里算重复了，每行都会数的。。。
+        //     //             ans += maxWidth; // 考虑两个轴上的扩展, 横轴上的扩展，每行不一样。。。
+        //     //         }
+        //     //         // ans += maxWidth * (i - k - 1); // 【BUG：】考虑两个轴上的扩展，横轴上的扩展，每行不一样。。。
+        //     //     }
+        //     // return ans;
+        // }
+
+        // // 【缺点：】占用空间大，因为需要存储过多的丑丑的数。。。。。
+        // public int nthUglyNumber(int n) {
+        //     Queue<Long> q = new PriorityQueue<>();
+        //     q.offer(1l);
+        //     long r = 0;
+        //     while (n > 0) {
+        //         r = q.poll();
+        //         while (!q.isEmpty() && q.peek() == r) q.poll();
+        //         q.offer(r * 2);
+        //         q.offer(r * 3);
+        //         q.offer(r * 5);
+        //         n--;
+        //     }
+        //     return (int)r;
+        // }        
+        // // 【动规：】只占用必要的空间
+        // public int nthUglyNumber(int n) {
+        //     int [] f = new int [n+1];
+        //     f[1] = 1;
+        //     int i = 1, j = 1, k = 1; // index for 2 3 5 
+        //     for (int x = 2; x <= n; x++) {
+        //         f[x] = Math.min(f[i] * 2, Math.min(f[j] * 3, f[k] * 5));
+        //         if (f[x] == f[i] * 2) i++;
+        //         if (f[x] == f[j] * 3) j++;
+        //         if (f[x] == f[k] * 5) k++;
+        //     }
+        //     return f[n];
+        // }
+
+        // // 这里好像是有个 queue[] 但想不起来了，连不起来。。。【动规】：要怎么解决呢？ // TODO TODO TODO:
+        // // 【可能是我记错题目了 】这个这里瓣不出来。。。改天再把这个题目的原题，找出来看一下
+        // public int nthSuperUglyNumber(int n, int[] a) {
+        //     int m = a.length;
+        //     int [] f = new int [n+1], r = new int [m];
+        //     Arrays.fill(r, 1);
+        //     Integer [] id = IntStream.range(0, m).boxed().toArray(Integer[]::new); // 这么用不好
+        //     Queue<Integer> q = new PriorityQueue<>((x, y) -> a[x] * r[x] - a[y] * r[y]); // 这样就把质数与 r[] 动态绑定了？
+        //     // Queue<Integer> q = new PriorityQueue<>((x, y) -> a[x] * f[r[x]] - a[y] * f[r[y]]); // 这样就把质数与 r[] 动态绑定了？
+        //     for (int i = 0; i < m; i++) q.offer(i);
+        //     f[1] = 1;
+        //     for (int i = 2; i <= n; i++) {
+        //         int t = q.poll(); // idx
+        //         // int t = q.peek(); // idx 跟下面一起统一管理，会存在重复问题？
+        //         f[i] = a[t] * r[t];  // 更新答案
+        //         while (!q.isEmpty() && a[q.peek()] * r[q.peek()] == a[t] * r[t]) {
+        //             int cur = q.poll();
+        //             r[cur]++; // 这里不能是简单倍数。因为会制造其它，非允许质因子
+        //             // r[cur] = f[r[cur]+1];
+        //             // r[cur] = f[r[cur]];
+        //             q.offer(cur);
+        //         } 
+        //         r[t]++;
+        //         // r[t] = f[r[t]+1]; // 这个，还没有算出来。。。【要怎么处理呢？】
+        //         // r[t] = f[r[t]]; // 这个，还没有算出来。。。【要怎么处理呢？】
+        //         q.offer(t);
+        //     }
+        //     return f[n];
+        // }
+        // public int nthSuperUglyNumber(int n, int[] a) {
+        //     int m = a.length;
+        //     int [] f = new int [n+1], r = new int [m];
+        //     long [] nums = new long [m];
+        //     Arrays.fill(nums, 1l);
+        //     for (int i = 1; i <= n; i++) {
+        //         int minNum = (int)Arrays.stream(nums).min().getAsLong();
+        //         f[i] = minNum;
+        //         for (int j = 0; j < m; j++) 
+        //             if (nums[j] == minNum) {
+        //                 r[j]++;
+        //                 nums[j] = (long)f[r[j]] * a[j];
+        //             }
+        //     }
+        //     return f[n];
+        // }
+
+        // static final int mod = (int)1e9 + 7;
+        // public int peopleAwareOfSecret(int n, int d, int fg) {
+        //     int [] f = new int [n]; // 【定义：】第 i 天的可以产生利息的钱，是本金，没带利息
+        //     f[0] = 1; // 【自顶向下：】向后更新，但是区分清楚，哪些可以产生哪些。。。
+        //     int cnt = 0; // 这部分要分开统计：是因为现数组的下标，容不下了。。。
+        //     // 就是节省一点儿空间【这是不能产生利息的钱，但它也是钱，是知道了秘密的人，只是还不能分享】
+        //     for (int i = 0; i < n; i++) {
+        //         if (i + d >= n) cnt = (cnt + f[i]) % mod; // 为什么要把 >= n 的也全部统计上 ?
+        //             for (int j = i + d; j < Math.min(n, i + fg); j++) // 左闭右开区间：【i+d, i+fg）
+        //             // 【自顶向下】：向后更新
+        //             f[j] = (f[j] + f[i]) % mod;
+        //     }
+        //     return (f[n-1] + cnt) % mod;
+        //     // int [] f = new int [n + 1000];
+        //     // for (int i = 0; i < n; i++) {
+        //     //     for (int j = i + d; j < i + fg; j++) // 左闭右开区间：【i+d, i+fg）
+        //     //         f[j] = (f[j] + f[i]) % mod;
+        //     // return f[n-1];
+        // }
+
+//         // 跟以前的思路有点儿不一样：这里提示说：遍历每个格，知道这个格出发【上下左右】各最少格数，再根据四个边的边长是否合法来判断 
+//         public int largest1BorderedSquare(int[][] a) {
+//             int m = a.length, n = a[0].length, ans = 0;
+//             // 【代码优化】：并不真的需要四个数组，两个就够用了；并且可以一次遍历过程中，动态更新，而非三四次遍历数组。。。。。
+//             int [][] u = new int [m+1][n], d = new int [m+1][n];
+//             int [][] l = new int [m][n+1], r = new int [m][n+1];
+//             // 从当前格出发：【左右、上下】连续1 的最多个数
+//             for (int i = 0; i < m; i++) {
+//                 for (int j = 0; j < n; j++)
+//                     if (a[i][j] == 1)
+//                         l[i][j+1] = l[i][j] + 1; // 【左】【i,j+1】
+//                 for (int j = n-1; j >= 0; j--) 
+//                     if (a[i][j] == 1)
+//                         r[i][j] = r[i][j+1] + 1; // 【右】【i,j】
+//             }
+//             for (int j = 0; j < n; j++) {
+//                 for (int i = 0; i < m; i++)
+//                     if (a[i][j] == 1) u[i+1][j] = u[i][j] + 1; // 【上】【i+1,j】
+//                 for (int i = m-1; i >= 0; i--) 
+//                     if (a[i][j] == 1) d[i][j] = d[i+1][j] + 1;   // 【下】【i,j】
+//             }
+//             int max = 0;
+//             for (int i = 0; i < m; i++)
+//                 for (int j = 0; j < n; j++) { // 不是以【i, j】为中心点，而是以 [i,j] 为右下点，来计算四条边是否都合法
+//                     if (a[i][j] == 0) continue;
+//                     int k = Math.min(l[i][j+1], u[i+1][j]); // 右下角连续1 的最短边长
+//                     // k = Math.min(k, Math.min(i+1, j+1)); // 限制在矩阵范围内【这步也可以优化掉】
+// // 左上角的顶点坐标：【i-d+1, j-d+1】
+//                     while (k > 0) {
+//                         if (k > 0 && Math.min(r[i-k+1][j-k+1], d[i-k+1][j-k+1]) >= k) {
+//                             ans = Math.max(ans, k * k);
+//                             break;
+//                         }
+//                         k--;
+//                     } 
+//                 }
+//             return ans;
+//         }
+        // public int largest1BorderedSquare(int[][] grid) {
+        //     int m = grid.length, n = grid[0].length;
+        //     int[][] left = new int[m + 1][n + 1];
+        //     int[][] up = new int[m + 1][n + 1];
+        //     int maxBorder = 0;
+        //     for (int i = 1; i <= m; i++) {
+        //         for (int j = 1; j <= n; j++) {
+        //             if (grid[i - 1][j - 1] == 1) {
+        //                 left[i][j] = left[i][j - 1] + 1;
+        //                 up[i][j] = up[i - 1][j] + 1;
+        //                 int border = Math.min(left[i][j], up[i][j]);
+        //                 while (left[i - border + 1][j] < border || up[i][j - border + 1] < border) 
+        //                     border--;
+        //                 maxBorder = Math.max(maxBorder, border);
+        //             }
+        //         }
+        //     }
+        //     return maxBorder * maxBorder;
+        // }
+        // public int largest1BorderedSquare(int[][] a) {
+        //     int m = a.length, n = a[0].length, ans = 0;
+        //     int [][] u = new int [m+1][n], l = new int [m][n+1];
+        //     int max = 0;
+        //     for (int i = 0; i < m; i++)
+        //         for (int j = 0; j < n; j++) { // 不是以【i, j】为中心点，而是以 [i,j] 为右下点，来计算四条边是否都合法
+        //             if (a[i][j] == 0) continue;
+        //             u[i+1][j] = u[i][j] + 1; // 【上】 [i+1,j]
+        //             l[i][j+1] = l[i][j] + 1; // 【左】 [i,j+1]
+        //             int k = Math.min(l[i][j+1], u[i+1][j]); // 右下角连续1 的最短边长
+        //             // 左上角的顶点坐标：【i-k+1, j-k+1】这里扫的不是左上顶点。扫的是左边边往上，顶上边往左。。。
+        //             // 【理解：】这里是顶上的边，往左扫；左边的边，往上扫，来递减，边长。这才是【只用两个动规矩阵】的原因。。。
+        //             while (k >= 0 && (l[i-k+1][j+1] < k || u[i+1][j-k+1] < k)) k--;
+        //             if (k > 0) ans = Math.max(ans, k * k);
+        //         }
+        //     return ans;
+        // }
+        // public int largest1BorderedSquare(int[][] grid) { // 上面瓣那些边，感觉官方写法，这个还算是比较简洁的
+        //     int m = grid.length, n = grid[0].length;
+        //     int[][] left = new int[m + 1][n + 1];
+        //     int[][] up = new int[m + 1][n + 1];
+        //     int maxBorder = 0;
+        //     for (int i = 1; i <= m; i++) 
+        //         for (int j = 1; j <= n; j++) 
+        //             if (grid[i - 1][j - 1] == 1) {
+        //                 left[i][j] = left[i][j - 1] + 1;
+        //                 up[i][j] = up[i - 1][j] + 1;
+        //                 int border = Math.min(left[i][j], up[i][j]);
+        //                 while (left[i - border + 1][j] < border || up[i][j - border + 1] < border) 
+        //                     border--;
+        //                 maxBorder = Math.max(maxBorder, border);
+        //             }
+        //     return maxBorder * maxBorder;
+        // }
+
+        public int findNumberOfLIS(int [] a) { // 【经典题型：】
+            int n = a.length, max = 0, ans = 0;
+            int [] f = new int [n], r = new int [n+1]; // 分别记：以当前下标 i 为结尾最后一个元素的，最长序列长度，与最长序列个数
+            Arrays.fill(f, 1);
+            // f[0] = 1;
+            // r[1] = 1;
+            for (int i = 1; i < n; i++) {
+                for (int j = 0; j < i; j++) {
+                    if (a[j] < a[i]) {
+                        System.out.println("\n i: " + i);
+                        if (f[i] < f[j] + 1) {
+                            f[i] = f[j] + 1;
+                            r[f[i]] = r[f[j]];
+                        } else if (f[i] == f[j] + 1 && f[i] > 2) // 找到了添加的新途径
+                            r[f[i]] += r[f[j]];
+                    }
+                }
+                System.out.println(Arrays.toString(f));
+                System.out.println(Arrays.toString(r));
+            }
+            for (int i = 0; i < n; i++) 
+                if (f[i] > max) {
+                    max = f[i];
+                    ans = r[i];
+                }
+            return ans;
+        }
     }
     public static void main (String[] args) { // 【爱表哥，爱生活！！！活宝妹就是一定要嫁给亲爱的表哥！！！】
         Solution s  =  new Solution ();
 
-        int [][] a = new int [][] {{1,1},{2,3},{2,3},{1,1},{1,1},{1,1},{1,2}};
+        int [] a = new int [] {1,3,5,4,7};
+        System.out.println(Arrays.toString(a));
 
-        int r = s.minHeightShelves(a, 4);
+        int r = s.findNumberOfLIS(a);
         System.out.println("r: " + r);
     } 
 }
@@ -1063,15 +1306,6 @@ public class dpnine {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
-
-
-
-
-
-
-
-
-
 
 
 
