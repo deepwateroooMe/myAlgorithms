@@ -1295,55 +1295,44 @@ public class cmp {
 //         }
 
         // 这里永远是先操作最大的数，再补其它可能的位, 每个数字要用一个 19 位的 mask
-        public long maximumOr(int[] a, int k) {
-            // long r = 0;
-            // for (int v : a) r |= v;
-            // System.out.println("\n Integer.toBinaryString(v): " + Integer.toBinaryString(v));
+        public long maximumOr(int[] a, int k) { // 1208/1209 passed
+            n = a.length;
             li = Arrays.stream(a).boxed().collect(Collectors.toList());
             Collections.sort(li);
-            // long max = Arrays.stream(a).asLongStream().max().getAsLong();
             // 【回归】：用下个回归的方法，在当前数 r的基础上，最多 k 次，能够取得的最大值 . 记装链表后【记忆化深搜】
-            // f = new Long [n][k+1];
-            return dfs(0, n-1, k);
-            // long max = l.get(l.size()-1);
-            // l.remove(l.size()-1);
-            // while (k > 0) {
-            //     while (k > 0 && max * 2l <= Long.MAX_VALUE) {
-            //         k--;
-            //         max *= 2l;
-            //     }
-            //     r |= max;
-            //     System.out.println("r: " + r);
-            // }
-            // int cnt = Integer.bitCount(r);
-            // if (cnt + k) >
+            f = new Long [n][k+1];
+            return dfs(n-1, k);
         }
-        // Long [][] f;
-        Map<String, Long> m = new HashMap<>();
+        Long [][] f;
         List<Integer> li;
         int n;
-        long dfs(int i, int j, int k) { // i r  j idx k: times 从右往左遍历每个数
-            if (j < 0) return 0; // 遍历完了
-            String key = i + "-" + j + "-" + k;
-            if (m.containsKey(key)) return m.get(key);
+        long dfs(int i, int j) { // i idx j: times 从右往左遍历每个数
+            // System.out.println("\n i: " + i);
+            // System.out.println("j: " + j);
+            if (i < 0 || j < 0) return 0;
+            if (f[i][j] != null) return f[i][j];
             int cnt = 0;
-            long r = 0, v = (long)li.get(j);
-            r = Math.max(r, v | dfs(i | v, j-1, k-cnt)); // 当前的数，不能不要，至少用上 cnt ＝ 0
-            while (v * 2l <= Long.MAX_VALUE) {
+            long r = 0, v = (long)li.get(i);
+            r = Math.max(r, v | dfs(i-1, j-cnt)); // 当前的数，不能不要，至少用上 cnt ＝ 0
+            while (v * 2l <= Long.MAX_VALUE && cnt < j) {
                 ++cnt;
-                r = Math.max(r, v | dfs(i | v × 2l, j-1, k-cnt));
+                v *= 2l;
+                r = Math.max(r, v | dfs(i-1, j-cnt));
             }
-            m.put(key, r);
-            return r;
+            // System.out.println("\n i: " + i);
+            // System.out.println("j: " + j);
+            // System.out.println("r: " + r);
+            return f[i][j] = r;
         }
     }             
     public static void main (String[] args) { 
         Solution s = new Solution ();
 
-        int [] a = new int [] {2,1,4};
+        // int [] a = new int [] {8, 1, 2};
+        int [] a = new int [] {24,29,26};
         System.out.println(Arrays.toString(a));
 
-        int r = s.sumOfPower(a);
+        long r = s.maximumOr(a, 1);
         System.out.println("r: " + r);
     }
 }
