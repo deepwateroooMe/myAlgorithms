@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import java.util.HashSet;
 import java.util.Set;
 import static java.util.stream.Collectors.toMap;
+
 public class cmp {
     public static class Solution {
 
@@ -1172,17 +1173,178 @@ public class cmp {
         //     }
         //     return ans;
         // }
+
+        // public int countSeniors(String[] a) {
+        //     int n = a.length, r = 0;
+        //     for (String s : a) 
+        //         if (Integer.parseInt(s.substring(11, 13)) > 60) r++;
+        //     return r;
+        // }
+
+        // public int matrixSum(int[][] a) {
+        //     int m = a.length, n = a[0].length, r = 0;
+        //     Queue<List<Integer>> q = new PriorityQueue<>((x, y) -> y.get(y.size()-1) - x.get(x.size()-1));
+        //     for (int [] v : a) {
+        //         List<Integer> l = Arrays.stream(v).boxed().collect(Collectors.toList());
+        //         Collections.sort(l);
+        //         q.offer(l);
+        //     }
+        //     for (int i = n-1; i >= 0; i--) {
+        //         List<Integer> l = q.poll();
+        //         r += l.get(l.size()-1);
+        //         for (List<Integer> li : q) {
+        //             li.remove(l.size()-1);
+        //             q.offer(li);
+        //         }
+        //         q.offer(l);
+        //     }
+        //     return r;
+        // }
+        // public int matrixSum(int[][] a) {
+        //     int m = a.length, n = a[0].length, r = 0;
+        //     List<List<Integer>> ll = new ArrayList<>();
+        //     for (int [] v : a) 
+        //         ll.add(Arrays.stream(v).boxed().collect(Collectors.toList()));
+        //     for (List<Integer>  l : ll)
+        //         Collections.sort(l);
+        //     List<Integer> li = new ArrayList<>();
+        //     for (int i = n-1; i >= 0; i--) {
+        //        li.clear();
+        //         for (List<Integer> l : ll) 
+        //             li.add(l.get(i));
+        //         r += Collections.max(li);
+        //     }
+        //     return r;
+        // }
+
+        // // 因为 N 的数量级比较大，【记忆化深搜】一定会超时，这个时候只能写动规
+        // public long maximumOr(int[] a, int k) {
+        //     int n = a.length;
+        //     // int [][] f = new int [n][1 << k];// 这里的问题是：每个数可以重复用，并且数值是在变化的
+        //     long [] f = new long [1 << k];
+        //     for (int v : a) {
+        //     // for (int i = 0; i < n; i++) { // 遍历每个下标
+        //         v *= 2; // 一次操作
+        //         for (int j = (1 << k)-1; j > 0; j--) { // 遍历每个可能的状态
+        //             System.out.println("j: " + j);
+        //             if ((j & v) == v && (j ^ v) < (1 << k))
+        //                 f[j] = Math.max(f[j], f[j ^ v] | (long)v);
+        //         }
+        //     }
+        //     return Arrays.stream(f).max().getAsLong();
+        // }
+        // // 【记忆化深搜】：先搜一遍 这里的问题是：每个数可以重复用，并且数值是在变化的
+        // public long maximumOr(int[] a, int k) {
+        //     n = a.length; this.a = a; 
+        //     f = new Integer [k+1];
+        //     return dfs(k);
+        // }
+        // Integer [] f; // 仍然跟数组取值相关，状态不对
+        // int [] a;
+        // int n;
+        // int dfs(int i) {
+        //     if (i >= 0) return 
+        // }
+
+//         //  最小值子数组和的变形题。只是这个不再只是子数组，而是子序列
+//         static final int mod = (int)1e9 + 7;
+//         public int sumOfPower(int[] a) {
+//             int n = a.length;
+//             int [] l = new int [n], r = new int [n];// min
+//             Arrays.fill(l, -1); Arrays.fill(r, n);
+//             Deque<Integer> s = new ArrayDeque<>();
+//             // 【从左往右遍历】：维护单调递增栈
+//             for (int i = 0; i < n; i++) {
+//                 while (!s.isEmpty() && a[s.peekFirst()] >= a[i]) s.pollFirst();
+//                 if (!s.isEmpty()) l[i] = s.peekFirst();
+//                 s.offerFirst(i);
+//             }
+//             s.clear();
+//             // 【从右往左遍历】：单调递增
+//             for (int i = n-1; i >= 0; i--) {
+//                 while (!s.isEmpty() && a[s.peekFirst()] > a[i]) s.pollFirst();
+//                 if (!s.isEmpty()) r[i] = s.peekFirst();
+//                 s.offerFirst(i);
+//             }
+// // 我想要用同样的方法，处理一遍 max 值 
+//             int [] ll = new int [n], rr = new int [n];// max: 以当前元素为最右且最大，左片段最远延伸
+//             Arrays.fill(ll, -1); Arrays.fill(rr, n);
+//             // 【从左往右遍历】：维护单调递增栈
+//             for (int i = 0; i < n; i++) {
+//                 while (!s.isEmpty() && a[s.peekFirst()] <= a[i]) s.pollFirst();
+//                 if (!s.isEmpty()) ll[i] = s.peekFirst();
+//                 s.offerFirst(i);
+//             }
+//             s.clear();
+//             // 【从右往左遍历】：单调递增，以当前元素为最左且最大，向右延伸的最远下标
+//             for (int i = n-1; i >= 0; i--) {
+//                 while (!s.isEmpty() && a[s.peekFirst()] < a[i]) s.pollFirst();
+//                 if (!s.isEmpty()) r[i] = s.peekFirst();
+//                 s.offerFirst(i);
+//             }
+//             System.out.println(Arrays.toString(l));
+//             System.out.println(Arrays.toString(r));
+//             System.out.println(Arrays.toString(ll));
+//             System.out.println(Arrays.toString(rr));
+//             // 接下来需要把最小最大两个合并起来，并考虑所有子序列？的个数, 这里感觉还有点儿没想透，脑袋有点儿酱。。
+//             long ans = 0;
+//             for (int w = 0; w < n; w++) {
+//                 int i = l[w], j = r[w], x = ll[w], y = rr[w];
+//             }
+//             return (int)ans;
+//         }
+
+        // 这里永远是先操作最大的数，再补其它可能的位, 每个数字要用一个 19 位的 mask
+        public long maximumOr(int[] a, int k) {
+            // long r = 0;
+            // for (int v : a) r |= v;
+            // System.out.println("\n Integer.toBinaryString(v): " + Integer.toBinaryString(v));
+            li = Arrays.stream(a).boxed().collect(Collectors.toList());
+            Collections.sort(li);
+            // long max = Arrays.stream(a).asLongStream().max().getAsLong();
+            // 【回归】：用下个回归的方法，在当前数 r的基础上，最多 k 次，能够取得的最大值 . 记装链表后【记忆化深搜】
+            // f = new Long [n][k+1];
+            return dfs(0, n-1, k);
+            // long max = l.get(l.size()-1);
+            // l.remove(l.size()-1);
+            // while (k > 0) {
+            //     while (k > 0 && max * 2l <= Long.MAX_VALUE) {
+            //         k--;
+            //         max *= 2l;
+            //     }
+            //     r |= max;
+            //     System.out.println("r: " + r);
+            // }
+            // int cnt = Integer.bitCount(r);
+            // if (cnt + k) >
+        }
+        // Long [][] f;
+        Map<String, Long> m = new HashMap<>();
+        List<Integer> li;
+        int n;
+        long dfs(int i, int j, int k) { // i r  j idx k: times 从右往左遍历每个数
+            if (j < 0) return 0; // 遍历完了
+            String key = i + "-" + j + "-" + k;
+            if (m.containsKey(key)) return m.get(key);
+            int cnt = 0;
+            long r = 0, v = (long)li.get(j);
+            r = Math.max(r, v | dfs(i | v, j-1, k-cnt)); // 当前的数，不能不要，至少用上 cnt ＝ 0
+            while (v * 2l <= Long.MAX_VALUE) {
+                ++cnt;
+                r = Math.max(r, v | dfs(i | v × 2l, j-1, k-cnt));
+            }
+            m.put(key, r);
+            return r;
+        }
     }             
     public static void main (String[] args) { 
         Solution s = new Solution ();
 
-        int [][] a = new int [][] {{0,2},{1,2},{3,1},{1,1},{2,1}};
-        System.out.println("a.length: " + a.length);
-        for (int z = 0; z < a.length; ++z) 
-            System.out.println(Arrays.toString(a[z]));
+        int [] a = new int [] {2,1,4};
+        System.out.println(Arrays.toString(a));
 
-        int [] r = s.colorTheArray(4, a);
-        System.out.println(Arrays.toString(r));
+        int r = s.sumOfPower(a);
+        System.out.println("r: " + r);
     }
 }
 // 【爱表哥，爱生活！！！活宝妹就是一定要嫁给亲爱的表哥！！！】
