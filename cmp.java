@@ -1299,6 +1299,8 @@ public class cmp {
             n = a.length;
             li = Arrays.stream(a).boxed().collect(Collectors.toList());
             Collections.sort(li);
+            System.out.println("li.size(): " + li.size());
+            System.out.println(Arrays.toString(li.toArray()));
             // 【回归】：用下个回归的方法，在当前数 r的基础上，最多 k 次，能够取得的最大值 . 记装链表后【记忆化深搜】
             f = new Long [n][k+1];
             return dfs(n-1, k);
@@ -1343,3 +1345,14 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+
+
+
+
+
+
+
+
+
+
+
