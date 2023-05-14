@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 import java.util.HashSet;
 import java.util.Set;
 import static java.util.stream.Collectors.toMap;
-
 public class cmp {
     public static class Solution {
 
@@ -1217,35 +1216,41 @@ public class cmp {
         //     return r;
         // }
 
-        // // 因为 N 的数量级比较大，【记忆化深搜】一定会超时，这个时候只能写动规
-        // public long maximumOr(int[] a, int k) {
-        //     int n = a.length;
-        //     // int [][] f = new int [n][1 << k];// 这里的问题是：每个数可以重复用，并且数值是在变化的
-        //     long [] f = new long [1 << k];
-        //     for (int v : a) {
-        //     // for (int i = 0; i < n; i++) { // 遍历每个下标
-        //         v *= 2; // 一次操作
-        //         for (int j = (1 << k)-1; j > 0; j--) { // 遍历每个可能的状态
-        //             System.out.println("j: " + j);
-        //             if ((j & v) == v && (j ^ v) < (1 << k))
-        //                 f[j] = Math.max(f[j], f[j ^ v] | (long)v);
-        //         }
-        //     }
-        //     return Arrays.stream(f).max().getAsLong();
+        // // 这里永远是先操作最大的数，再补其它可能的位, 每个数字要用一个 19 位的 mask
+        // public long maximumOr(int[] a, int k) { // 1208/1209 passed
+        //     n = a.length;
+        //     li = Arrays.stream(a).boxed().collect(Collectors.toList());
+        //     Collections.sort(li);
+        //     // System.out.println("li.size(): " + li.size());
+        //     // System.out.println(Arrays.toString(li.toArray()));
+        //     // 【回归】：用下个回归的方法，在当前数 r的基础上，最多 k 次，能够取得的最大值 . 记装链表后【记忆化深搜】
+        //     f = new Long [n][k+1];
+        //     return dfs(n-1, k);
         // }
-        // // 【记忆化深搜】：先搜一遍 这里的问题是：每个数可以重复用，并且数值是在变化的
-        // public long maximumOr(int[] a, int k) {
-        //     n = a.length; this.a = a; 
-        //     f = new Integer [k+1];
-        //     return dfs(k);
-        // }
-        // Integer [] f; // 仍然跟数组取值相关，状态不对
-        // int [] a;
+        // Long [][] f;
+        // List<Integer> li;
         // int n;
-        // int dfs(int i) {
-        //     if (i >= 0) return 
+        // long dfs(int i, int j) { // i idx j: times 从右往左遍历每个数
+        //      // System.out.println("\n i: " + i);
+        //      // System.out.println("j: " + j);
+        //     if (i < 0 || j < 0) return 0;
+        //     if (f[i][j] != null) return f[i][j];
+        //     int cnt = 0;
+        //     long r = 0, v = (long)li.get(i);
+        //     r = Math.max(r, v | dfs(i-1, j-cnt));  // 当前的数，不能不要，至少用上 cnt ＝ 0
+        //     while (v * 2l <= Long.MAX_VALUE && cnt < j) {
+        //         ++cnt;
+        //         v *= 2l;
+        //         r = Math.max(r, v | dfs(i-1, j-cnt));
+        //     }
+        //      // System.out.println("\n i: " + i);
+        //      // System.out.println("j: " + j);
+        //      // System.out.println("r: " + r);
+        //     return f[i][j] = r;
         // }
+        // int [] a = new int [] {24,29,26};  // 不知道为什么，这个特例错掉了
 
+//         // 看到提示，觉得这个题目好简单，可是考场上，就忘记排序了。一排序，这个题就什么也不剩下了。。。
 //         //  最小值子数组和的变形题。只是这个不再只是子数组，而是子序列
 //         static final int mod = (int)1e9 + 7;
 //         public int sumOfPower(int[] a) {
@@ -1282,10 +1287,6 @@ public class cmp {
 //                 if (!s.isEmpty()) r[i] = s.peekFirst();
 //                 s.offerFirst(i);
 //             }
-//             System.out.println(Arrays.toString(l));
-//             System.out.println(Arrays.toString(r));
-//             System.out.println(Arrays.toString(ll));
-//             System.out.println(Arrays.toString(rr));
 //             // 接下来需要把最小最大两个合并起来，并考虑所有子序列？的个数, 这里感觉还有点儿没想透，脑袋有点儿酱。。
 //             long ans = 0;
 //             for (int w = 0; w < n; w++) {
@@ -1293,48 +1294,145 @@ public class cmp {
 //             }
 //             return (int)ans;
 //         }
+        // static final int mod = (int)1e9 + 7;
+        // public int sumOfPower(int[] a) {
+        //     int n = a.length, idx = 0;
+        //     List<int []> l = new ArrayList<>();
+        //     for (int v : a) 
+        //         l.add(new int [] {idx++, v});
+        //     Collections.sort(l, (x, y) -> x[1] != y[1] ? x[1] - y[1] : x[0] - y[0]);
+        //     Map<Integer, List<Integer>> m = new HashMap<>();
+        //     long [] f = new long [n]; f[0] = 1;
+        //     for (int i = 1; i < n; i++)
+        //         f[i] = f[i-1] * 2l % mod;
+        //     System.out.println(Arrays.toString(f));
+        //     long r = 0;
+        //     for (int [] v : l) {
+        //         int j = v[0]; // 当前下标
+        //         r = (r + v[1] * v[1] * v[1]) % mod;
+        //         for (Map.Entry<Integer, List<Integer>> en : m.entrySet()) {
+        //             int k = en.getKey();
+        //             List<Integer> li = en.getValue();
+        //             for (int i : li)
+        //                 // r = (r + k * v[1] * v[1] * (f[Math.abs(j-i)- 1])) % mod;
+        //                 if (i < j) // 这里的判断条件也不够：所在需要一个预处理，帮助O(1) 时间判断序列是否合法？ // TODO TODO TODO: 
+        //                     r = (r + k * v[1] * v[1] * f[j - i - 1]) % mod;
+        //         }
+        //         // System.out.println("\nm.size(): " + m.size());
+        //         // for (Map.Entry<Integer, List<Integer>> en : m.entrySet()) {
+        //         //     System.out.print(en.getKey() + ": ");
+        //         //     System.out.println(Arrays.toString(en.getValue().toArray()));
+        //         // }
+        //         // System.out.println("r: " + r);
+        //         m.computeIfAbsent(v[1], z -> new ArrayList<>()).add(j); // 这里面好像是多添加了不合法的，比如 i-j 之间夹入了最小值 
+        //     }
+        //     return (int)r;
+        // }
 
-        // 这里永远是先操作最大的数，再补其它可能的位, 每个数字要用一个 19 位的 mask
-        public long maximumOr(int[] a, int k) { // 1208/1209 passed
-            n = a.length;
-            li = Arrays.stream(a).boxed().collect(Collectors.toList());
-            Collections.sort(li);
-            System.out.println("li.size(): " + li.size());
-            System.out.println(Arrays.toString(li.toArray()));
-            // 【回归】：用下个回归的方法，在当前数 r的基础上，最多 k 次，能够取得的最大值 . 记装链表后【记忆化深搜】
-            f = new Long [n][k+1];
-            return dfs(n-1, k);
-        }
-        Long [][] f;
-        List<Integer> li;
-        int n;
-        long dfs(int i, int j) { // i idx j: times 从右往左遍历每个数
-            // System.out.println("\n i: " + i);
-            // System.out.println("j: " + j);
-            if (i < 0 || j < 0) return 0;
-            if (f[i][j] != null) return f[i][j];
-            int cnt = 0;
-            long r = 0, v = (long)li.get(i);
-            r = Math.max(r, v | dfs(i-1, j-cnt)); // 当前的数，不能不要，至少用上 cnt ＝ 0
-            while (v * 2l <= Long.MAX_VALUE && cnt < j) {
-                ++cnt;
-                v *= 2l;
-                r = Math.max(r, v | dfs(i-1, j-cnt));
+        // public int [] circularGameLosers(int n, int k) {
+        //     int [] v = new int [n];
+        //     int i = 0, cnt = 0;
+        //     while (Arrays.stream(v).max().getAsInt() < 2) {
+        //         while (i < n) {
+        //             v[i]++;
+        //             ++cnt;
+        //             if (v[i] == 2) break;
+        //             i += cnt * k;
+        //             while (i >= n) i = i - n;
+        //         }
+        //     }
+        //     int [] r = new int [n - Arrays.stream(v).sum()+ 1];
+        //     int idx = 0;
+        //     for ( i = 0; i < n; i++)
+        //         if (v[i] == 0) r[idx++] = i + 1;
+        //     return r;
+        // }
+
+        // public boolean doesValidArrayExist(int[] a) {
+        //     int n = a.length, r = 0;
+        //     for (int v : a) r ^= v;
+        //     return r == 0;
+        // }
+
+        // public int maxMoves(int[][] a) {
+        //     int m = a.length, n = a[0].length;
+        //     int [][] f = new int [m][n];
+        //     Arrays.stream(f).forEach(z -> Arrays.fill(z, Integer.MIN_VALUE / 2));
+        //     for (int j = 0; j < m; j++)
+        //         f[j][0] = 0;
+        //     for (int j = 0; j < n-1; j++)
+        //         for (int i = 0; i < m; i++) {
+        //             for (int k = Math.max(0, i-1); k <= Math.min(m-1, i+1); k++) {
+        //                 if (a[k][j+1] > a[i][j])
+        //                     f[k][j+1] = Math.max(f[k][j+1], f[i][j] + 1);
+        //             }
+        //         }
+        //     int max = 0;
+        //     for (int i = 0; i < m; i++)
+        //         max = Math.max(max, Arrays.stream(f[i]).max().getAsInt());
+        //     return max;
+        // }
+
+        public int countCompleteComponents(int n, int[][] egs) {
+            this.n = n;
+            g = new ArrayList [n];
+            Arrays.setAll(g, z -> new ArrayList<>());
+            for (int [] e : egs) {
+                int u = e[0], v = e[1];
+                g[u].add(v);
+                g[v].add(u);
             }
-            // System.out.println("\n i: " + i);
-            // System.out.println("j: " + j);
-            // System.out.println("r: " + r);
-            return f[i][j] = r;
+            v = new int [n];
+            int ans = 0;
+            boolean [] vis = new boolean [n];
+            for (int i = 0; i < n; i++) {
+                if (vis[i]) continue; // 如果被包括在有效解里面
+                dfs(i, -1);
+                if (check()) {
+                    // System.out.println("\n i: " + i);
+                    // System.out.println(Arrays.toString(v));
+                    for (int j = 0; j < n; j++)
+                        vis[j] |= (v[j] > 0);
+                    ans++;
+                }
+                Arrays.fill(v, 0); // 会擦除解
+            }
+            // System.out.println("ans: " + ans);
+            // for (int i = 0; i < n; i++)
+            //     if (g[i].size() == 0) ans++;
+            return ans;
+        }
+        List<Integer> [] g;
+        int [] v;
+        int n;
+        boolean check() {
+            int size = Arrays.stream(v).sum();
+            System.out.println("size: " + size);
+            // 还有一种情况没考虑：边数不够
+            int cnt = 0;
+            for (int i = 0; i < n; i++)
+                if (v[i] == 1)
+                    cnt += g[i].size();
+            return cnt == 1 && size == 1 || cnt == size * (size - 1);
+            // return cnt == size * (size - 1);
+        }
+        void dfs(int u, int p) {
+            v[u]++;
+            if (g[u].size() == 1 && g[u].get(0) == p) return ;
+            for (int x : g[u]) {
+                if (x == p || v[x] > 0) continue; // 因为有环
+                dfs(x, u);
+            }
         }
     }             
     public static void main (String[] args) { 
         Solution s = new Solution ();
 
-        // int [] a = new int [] {8, 1, 2};
-        int [] a = new int [] {24,29,26};
-        System.out.println(Arrays.toString(a));
+        // int [][] a = new int [][] {{0,1},{0,2},{1,2},{3,4},{3,5}};
+        int [][] a = new int [][] {{0,1},{0,2},{1,2},{3,4}};
+        // int [][] a = new int [][] {};
 
-        long r = s.maximumOr(a, 1);
+        int r = s.countCompleteComponents(6, a);
         System.out.println("r: " + r);
     }
 }
@@ -1345,11 +1443,6 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
-
-
-
-
-
 
 
 
