@@ -1494,7 +1494,7 @@ public class cmp {
         // }
 
         public int[][] modifiedGraphEdges(int n, int[][] egs, int src, int dst, int t) {
-            g = new ArrayList [n]; this.srcc = src; this.dst = dst; 
+            g = new ArrayList [n]; this.src = src; this.dst = dst; 
             Arrays.setAll(g, z -> new ArrayList<>());
             for (int [] e : egs) {
                 int u = e[0], v = e[1];
@@ -1506,30 +1506,44 @@ public class cmp {
             calculateDist(src);
             System.out.println(Arrays.toString(d));
             if (d[dst] > t) return new int [0][];
-            // 倒过来 dfs ：接龙型的. 我这个地方可能不用写得这么费力
-            f = new ArrayList [n];
-            Arrays.setAll(f, z -> new ArrayList<>());
-            // dfs(src, 0);
-            int [][] r = new int [n][];
+            // // 倒过来 dfs ：接龙型的. 我这个地方可能不用写得这么费力
+            // f = new ArrayList [n];
+            // Arrays.setAll(f, z -> new ArrayList<>());
+            // // dfs(src, 0);
+            List<int []> ans = new ArrayList<>();
+            int j = dst;
+            while (j != src) {
+                System.out.println("\n j: " + j);
+                for (int [] e : g[j]) {
+                    int u = e[0], w = e[1];
+                    if (d[j] == d[u] + w + (w == 0 ? 1 : 0)) {
+                        ans.add(new int [] {u, j, w + (w == 0 ? 1 : 0)});
+                        j = u;
+                        break;
+                    }
+                }
+            }
+            int [][] r = new int [ans.size()][];
+            int i = 0;
+            for (int [] e : ans) 
+                r[i++] = e;
             return r;
         }
         List<int []> [] g;
         long [] d;
-        // List<int []> ans = new ArrayList<>();
-        List<int []> [] f; // 【记忆化深搜】
-        int srcc, dst;
-        List<int []> dfs(int src, int cnt) {
-            // if (src != srcc && f[src].size() > 0) return f[src];
-            // for (int [] one : g[src]) {
-            //     int v = one[0], dist = one[1];
-            //     if (d[src] == d[v] + dist + (dist == 0 ? 1 : 0)) {
-            //         List<int []> cur = dfs(v, cnt + (dist == 0 ? 1 : 0));
-            //     }                
-            // }
-            List<int []> l = new ArrayList<>();
-            return l;
-        }
-        
+        // List<int []> [] f; // 【记忆化深搜】
+        int src, dst;
+        // List<int []> dfs(int src, int cnt) {
+        //     // if (src != srcc && f[src].size() > 0) return f[src];
+        //     // for (int [] one : g[src]) {
+        //     //     int v = one[0], dist = one[1];
+        //     //     if (d[src] == d[v] + dist + (dist == 0 ? 1 : 0)) {
+        //     //         List<int []> cur = dfs(v, cnt + (dist == 0 ? 1 : 0));
+        //     //     }                
+        //     // }
+        //     List<int []> l = new ArrayList<>();
+        //     return l;
+        // }
         void calculateDist(int src) {
             d[src] = 0;
             Queue<long []> q = new PriorityQueue<>((x, y) -> (Long.compare(x[1], y[1])));
@@ -1546,8 +1560,6 @@ public class cmp {
                     }
             }
         }
-        
-
     }             
     public static void main (String[] args) { 
         Solution s = new Solution ();
@@ -1555,7 +1567,9 @@ public class cmp {
         int [][] a = new int [][] {{1,0,4},{1,2,3},{2,3,5},{0,3,-1}};
 
         int [][] r = s.modifiedGraphEdges(4, a, 0, 2, 6);
-        System.out.println("r: " + r);
+        System.out.println("r.length: " + r.length);
+        for (int z = 0; z < r.length; ++z) 
+            System.out.println(Arrays.toString(r[z]));
     }
 }
 // 【爱表哥，爱生活！！！活宝妹就是一定要嫁给亲爱的表哥！！！】
@@ -1565,7 +1579,6 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
-
 
 
 
