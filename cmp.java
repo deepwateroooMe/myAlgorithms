@@ -1506,6 +1506,11 @@ public class cmp {
             calculateDist(src);
             System.out.println(Arrays.toString(d));
             if (d[dst] > t) return new int [0][];
+            // 【感觉前面的都写得狠好】：后半部分，没能思考全面
+            // 它建议说：算两遍，即算从 src 到 dst 的最短距离数组 d, 也算从 dst 到 src 的最短距离数组 f
+            // 再一条边一条边地改？。。。 3.3% 死题目，把人难死了
+            // 【任何时候，活宝妹不用想，活宝妹就是一定要、一定会嫁给偶亲爱的表哥！！！】
+         
             // // 倒过来 dfs ：接龙型的. 我这个地方可能不用写得这么费力
             // f = new ArrayList [n];
             // Arrays.setAll(f, z -> new ArrayList<>());
