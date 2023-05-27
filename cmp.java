@@ -1466,7 +1466,7 @@ public class cmp {
         // }
         // int n;
         // Boolean [][] f;
-        // Boolean dfs(int i, int j, int v, String t) {
+        // Boolean dfs(int i, int j, int v, String t) { // 这个深搜的方法不对，想到可能是区间型的，但想得不对不透彻。。。
         //     char [] s = t.toCharArray();
         //     // System.out.println("i: " + i);
         //     // System.out.println("j: " + j);
@@ -1493,88 +1493,219 @@ public class cmp {
         //     return f[i][j] = false;
         // }
 
-        public int[][] modifiedGraphEdges(int n, int[][] egs, int src, int dst, int t) {
-            g = new ArrayList [n]; this.src = src; this.dst = dst; 
-            Arrays.setAll(g, z -> new ArrayList<>());
-            for (int [] e : egs) {
-                int u = e[0], v = e[1];
-                g[u].add(new int [] {v, e[2] < 0 ? 0 : e[2]});
-                g[v].add(new int [] {u, e[2] < 0 ? 0 : e[2]});
-            }
-            d = new long [n];
-            Arrays.fill(d, Long.MAX_VALUE / 2);
-            calculateDist(src);
-            System.out.println(Arrays.toString(d));
-            if (d[dst] > t) return new int [0][];
-            // 【感觉前面的都写得狠好】：后半部分，没能思考全面
-            // 它建议说：算两遍，即算从 src 到 dst 的最短距离数组 d, 也算从 dst 到 src 的最短距离数组 f
-            // 再一条边一条边地改？。。。 3.3% 死题目，把人难死了
-            // 【任何时候，活宝妹不用想，活宝妹就是一定要、一定会嫁给偶亲爱的表哥！！！】
+        // public int[][] modifiedGraphEdges(int n, int[][] egs, int src, int dst, int t) {
+        //     g = new ArrayList [n]; this.src = src; this.dst = dst; 
+        //     Arrays.setAll(g, z -> new ArrayList<>());
+        //     for (int [] e : egs) {
+        //         int u = e[0], v = e[1];
+        //         g[u].add(new int [] {v, e[2] < 0 ? 0 : e[2]});
+        //         g[v].add(new int [] {u, e[2] < 0 ? 0 : e[2]});
+        //     }
+        //     d = new long [n];
+        //     Arrays.fill(d, Long.MAX_VALUE / 2);
+        //     calculateDist(src);
+        //     System.out.println(Arrays.toString(d));
+        //     if (d[dst] > t) return new int [0][];
+        //     // 【感觉前面的都写得狠好】：后半部分，没能思考全面
+        //     // 它建议说：算两遍，即算从 src 到 dst 的最短距离数组 d, 也算从 dst 到 src 的最短距离数组 f
+        //     // 再一条边一条边地改？。。。 3.3% 死题目，把人难死了
+        //     // 【任何时候，活宝妹不用想，活宝妹就是一定要、一定会嫁给偶亲爱的表哥！！！】
          
-            // // 倒过来 dfs ：接龙型的. 我这个地方可能不用写得这么费力
-            // f = new ArrayList [n];
-            // Arrays.setAll(f, z -> new ArrayList<>());
-            // // dfs(src, 0);
-            List<int []> ans = new ArrayList<>();
-            int j = dst;
-            while (j != src) {
-                System.out.println("\n j: " + j);
-                for (int [] e : g[j]) {
-                    int u = e[0], w = e[1];
-                    if (d[j] == d[u] + w + (w == 0 ? 1 : 0)) {
-                        ans.add(new int [] {u, j, w + (w == 0 ? 1 : 0)});
-                        j = u;
-                        break;
-                    }
+        //     // // 倒过来 dfs ：接龙型的. 我这个地方可能不用写得这么费力
+        //     // f = new ArrayList [n];
+        //     // Arrays.setAll(f, z -> new ArrayList<>());
+        //     // // dfs(src, 0);
+        //     List<int []> ans = new ArrayList<>();
+        //     int j = dst;
+        //     while (j != src) {
+        //         System.out.println("\n j: " + j);
+        //         for (int [] e : g[j]) {
+        //             int u = e[0], w = e[1];
+        //             if (d[j] == d[u] + w + (w == 0 ? 1 : 0)) {
+        //                 ans.add(new int [] {u, j, w + (w == 0 ? 1 : 0)});
+        //                 j = u;
+        //                 break;
+        //             }
+        //         }
+        //     }
+        //     int [][] r = new int [ans.size()][];
+        //     int i = 0;
+        //     for (int [] e : ans) 
+        //         r[i++] = e;
+        //     return r;
+        // }
+        // List<int []> [] g;
+        // long [] d;
+        // // List<int []> [] f; // 【记忆化深搜】
+        // int src, dst;
+        // // List<int []> dfs(int src, int cnt) {
+        // //     // if (src != srcc && f[src].size() > 0) return f[src];
+        // //     // for (int [] one : g[src]) {
+        // //     //     int v = one[0], dist = one[1];
+        // //     //     if (d[src] == d[v] + dist + (dist == 0 ? 1 : 0)) {
+        // //     //         List<int []> cur = dfs(v, cnt + (dist == 0 ? 1 : 0));
+        // //     //     }                
+        // //     // }
+        // //     List<int []> l = new ArrayList<>();
+        // //     return l;
+        // // }
+        // void calculateDist(int src) {
+        //     d[src] = 0;
+        //     Queue<long []> q = new PriorityQueue<>((x, y) -> (Long.compare(x[1], y[1])));
+        //     q.offer(new long [] {src, 0});
+        //     while (!q.isEmpty()) {
+        //        long [] cur = q.poll();
+        //        int u = (int)cur[0];
+        //        long w = cur[1];
+        //        if (u == dst) return;
+        //         for (int [] v : g[u]) 
+        //             if (v[1] + w + (v[1] == 0 ? 1 : 0) < d[v[0]]) {
+        //                 d[v[0]] = w + v[1] + (v[1] == 0 ? 1 : 0);
+        //                 q.offer(new long [] {v[0], d[v[0]]});
+        //             }
+        //     }
+        // }
+
+        // public int buyChoco(int[] a, int v) {
+        //     Arrays.sort(a);
+        //     return a[0] + a[1] <= v ? v - (a[0] + a[1]) : v;
+        // }
+
+        // public int minExtraChar(String s, String[] d) {
+        //     n = s.length(); this.s = s; 
+        //     f = new Integer [n];
+        //     for (var v : d) ss.add(v);
+        //     return dfs(0);
+        // }
+        // Integer [] f;
+        // int n; String s;
+        // Set<String> ss = new HashSet<>();
+        // int dfs(int i) {
+        //     if (i == n) return 0;
+        //     if (f[i] != null) return f[i];
+        //     int r = n - i;
+        //     for (int j = i+1; j <= n; j++) 
+        //         if (ss.contains(s.substring(i, j)))
+        //             r = Math.min(r, dfs(j));
+        //     r = Math.min(r, 1 + dfs(i+1));
+        //     return f[i] = r;
+        // }        
+
+        // // 这个题目太简单了，随便一种方法就能写出来
+        // public long maxStrength(int[] a) {
+        //     int n = a.length, m = (1 << n);
+        //     long max = Integer.MIN_VALUE, r = 1;
+        //     for (int i = 1; i < m; i++) {
+        //         r = 1;
+        //         for (int j = 0; j < n; j++)
+        //             if (((i >> j) & 1) == 1)
+        //                 r = r * (long)a[j];
+        //         max = Math.max(max, r);
+        //     }
+        //     return max;
+        // }
+
+        // 不知道所有的 i<j 都能连通是什么意思，但是大概是先转化成一个无向图，再求所有的 i<j
+        // N(10^5) 感觉上面想得太复杂了，能不能直接理解为存在一个公质因子
+        // 走连通图，含公因质子的一个模块里: 好好的思路，被我写成了 TLE...
+        class UnionFind {
+            private int[] p;
+            int cnt;
+            public UnionFind(int size) {
+                p = new int[size];
+                cnt = size;
+                for (int i = 0; i < size; i++) 
+                    p[i] = i;
+            }
+            public int find(int x) {
+                if (p[x] != x) 
+                    p[x] = find(p[x]);
+                return p[x];
+            }
+            public void union(int x, int y) {
+                int px = find(x), py = find(y);
+                if (px != py) {
+                    p[px] = py;
+                    --cnt;
                 }
             }
-            int [][] r = new int [ans.size()][];
-            int i = 0;
-            for (int [] e : ans) 
-                r[i++] = e;
-            return r;
-        }
-        List<int []> [] g;
-        long [] d;
-        // List<int []> [] f; // 【记忆化深搜】
-        int src, dst;
-        // List<int []> dfs(int src, int cnt) {
-        //     // if (src != srcc && f[src].size() > 0) return f[src];
-        //     // for (int [] one : g[src]) {
-        //     //     int v = one[0], dist = one[1];
-        //     //     if (d[src] == d[v] + dist + (dist == 0 ? 1 : 0)) {
-        //     //         List<int []> cur = dfs(v, cnt + (dist == 0 ? 1 : 0));
-        //     //     }                
-        //     // }
-        //     List<int []> l = new ArrayList<>();
-        //     return l;
-        // }
-        void calculateDist(int src) {
-            d[src] = 0;
-            Queue<long []> q = new PriorityQueue<>((x, y) -> (Long.compare(x[1], y[1])));
-            q.offer(new long [] {src, 0});
-            while (!q.isEmpty()) {
-               long [] cur = q.poll();
-               int u = (int)cur[0];
-               long w = cur[1];
-               if (u == dst) return;
-                for (int [] v : g[u]) 
-                    if (v[1] + w + (v[1] == 0 ? 1 : 0) < d[v[0]]) {
-                        d[v[0]] = w + v[1] + (v[1] == 0 ? 1 : 0);
-                        q.offer(new long [] {v[0], d[v[0]]});
-                    }
+            public int getCnt() {// 去拿连通集的个数：我这里数得不对。。。。。【活宝妹就是一定要嫁给亲爱的表哥！！】
+                return cnt;
             }
+        }
+        private UnionFind uf; // 【活宝妹就是一定要嫁给亲爱的表哥！！！】
+        Set<Integer> s = new HashSet<>(); // 出现过的质因子，备案
+        public boolean canTraverseAllPairs(int[] a) {
+            int n = a.length, max = Arrays.stream(a).max().getAsInt(), j;
+            if (n == 1) return true;
+            // 自己求质数表备案
+            List<Integer> p = new ArrayList<>();
+            for (int i = 1; i <= max; i++) 
+                if (isPrime(i)) p.add(i);
+            System.out.println("p.size(): " + p.size());
+            System.out.println(Arrays.toString(p.toArray()));
+            uf = new UnionFind(p.size());
+            boolean [] v = new boolean [p.size()];
+            for (int i = 0; i < n; i++) {
+                System.out.println("\n i: " + i);
+                int pre = -1;
+                for (j = 0; j < p.size(); j++) // 这么写的目的是：把【O(N^2)】转化成【O(N*Contant)】免得超时
+                    if (a[i] % p.get(j) == 0) {
+                        s.add(j);
+                        if (pre == -1) pre = j;
+                        else uf.union(j, pre); // 对同一个数来说，它的质因子要连起来
+                        if (v[j]) break;
+                        else v[j] = true;
+                    }
+                System.out.println("j: " + j);
+                if (j < p.size()) // 可以与其它的连通: 用这个数把它所有质因子的连通集连接起来
+                    for (int k = 0; k < p.size(); k++) {
+                        if (k == j) continue;
+                        if (v[k])
+                            uf.union(k, j);
+                        if (!v[k] && a[i] % p.get(k) == 0) v[k] = true;
+                    }
+                System.out.println(Arrays.toString(v));
+                System.out.println("uf.getCnt(): " + uf.getCnt());
+            }
+            // 下面的，不能这么比对写，【O(N^2)】一定会超时，按它是否含某个质因子写
+            // for (int i = 0; i < n; i++)
+            //     for (int j = 0; j < i; j++) // 这么遍历，O(N^2) 不会超时吗？
+            //         // if (gcd(a[i], a[j]) <= 1) return false; // 这么着，会截断图中的其它路线，所以还是要先建图
+            //         if (gcd(a[i], a[j]) > 1) { // 把它们合并在一个连通集里
+            //             // g[i].add(j);
+            //             // g[j].add(i);
+            //             uf.union(i, j);
+            //         }
+            // 然后数个数，返回只有一个集，就可以了
+            // 这里的【BUG：】是： 100000 以内的数，某些质因子可能从来不曾出现过
+            int cnt = 0;
+            for (var vis : v) if (vis) cnt++;
+            System.out.println("cnt: " + cnt);
+            System.out.println("uf.getCnt(): " + uf.getCnt());
+            return uf.getCnt() == p.size() - cnt + 1;
+        }
+        boolean isPrime(int x) {
+            if (x <= 1) return false;
+            // 判断是否被2~自身数-1范围内的值整除
+            for (int i = 2; i < x;++i){
+                if (x%i == 0)
+                    return false;
+            }
+            return true;
+        }
+        int gcd(int x, int y) {
+            if (y == 0) return x;
+            return gcd(y, x % y);
         }
     }             
     public static void main (String[] args) { 
         Solution s = new Solution ();
 
-        int [][] a = new int [][] {{1,0,4},{1,2,3},{2,3,5},{0,3,-1}};
+        int [] a = new int [] {20, 6};
 
-        int [][] r = s.modifiedGraphEdges(4, a, 0, 2, 6);
-        System.out.println("r.length: " + r.length);
-        for (int z = 0; z < r.length; ++z) 
-            System.out.println(Arrays.toString(r[z]));
+       boolean r = s.canTraverseAllPairs(a);
+        System.out.println("r: " + r);
     }
 }
 // 【爱表哥，爱生活！！！活宝妹就是一定要嫁给亲爱的表哥！！！】
@@ -1584,7 +1715,6 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
-
 
 
 
