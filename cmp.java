@@ -1605,106 +1605,237 @@ public class cmp {
         //     return max;
         // }
 
-        // 不知道所有的 i<j 都能连通是什么意思，但是大概是先转化成一个无向图，再求所有的 i<j
-        // N(10^5) 感觉上面想得太复杂了，能不能直接理解为存在一个公质因子
-        // 走连通图，含公因质子的一个模块里: 好好的思路，被我写成了 TLE...
-        class UnionFind {
-            private int[] p;
-            int cnt;
-            public UnionFind(int size) {
-                p = new int[size];
-                cnt = size;
-                for (int i = 0; i < size; i++) 
-                    p[i] = i;
-            }
-            public int find(int x) {
-                if (p[x] != x) 
-                    p[x] = find(p[x]);
-                return p[x];
-            }
-            public void union(int x, int y) {
-                int px = find(x), py = find(y);
-                if (px != py) {
-                    p[px] = py;
-                    --cnt;
+        // // 不知道所有的 i<j 都能连通是什么意思，但是大概是先转化成一个无向图，再求所有的 i<j
+        // // N(10^5) 感觉上面想得太复杂了，能不能直接理解为存在一个公质因子
+        // // 走连通图，含公因质子的一个模块里: 好好的思路，被我写成了 TLE...
+        // class UnionFind {
+        //     private int[] p;
+        //     int cnt;
+        //     public UnionFind(int size) {
+        //         p = new int[size];
+        //         cnt = size;
+        //         for (int i = 0; i < size; i++) 
+        //             p[i] = i;
+        //     }
+        //     public int find(int x) {
+        //         if (p[x] != x) 
+        //             p[x] = find(p[x]);
+        //         return p[x];
+        //     }
+        //     public void union(int x, int y) {
+        //         int px = find(x), py = find(y);
+        //         if (px != py) {
+        //             p[px] = py;
+        //             --cnt;
+        //         }
+        //     }
+        //     public int getCnt() {// 去拿连通集的个数：我这里数得不对。。。。。【活宝妹就是一定要嫁给亲爱的表哥！！】
+        //         return cnt;
+        //     }
+        // }
+        // private UnionFind uf; // 【活宝妹就是一定要嫁给亲爱的表哥！！！】
+        // Set<Integer> s = new HashSet<>(); // 出现过的质因子，备案
+        // public boolean canTraverseAllPairs(int[] a) {
+        //     int n = a.length, max = Arrays.stream(a).max().getAsInt(), j;
+        //     if (n == 1) return true;
+        //     // 自己求质数表备案
+        //     List<Integer> p = new ArrayList<>();
+        //     for (int i = 1; i <= max; i++) 
+        //         if (isPrime(i)) p.add(i);
+        //     System.out.println("p.size(): " + p.size());
+        //     System.out.println(Arrays.toString(p.toArray()));
+        //     uf = new UnionFind(p.size());
+        //     boolean [] v = new boolean [p.size()];
+        //     for (int i = 0; i < n; i++) {
+        //         System.out.println("\n i: " + i);
+        //         int pre = -1;
+        //         for (j = 0; j < p.size(); j++) // 这么写的目的是：把【O(N^2)】转化成【O(N*Contant)】免得超时
+        //             if (a[i] % p.get(j) == 0) {
+        //                 s.add(j);
+        //                 if (pre == -1) pre = j;
+        //                 else uf.union(j, pre); // 对同一个数来说，它的质因子要连起来
+        //                 if (v[j]) break;
+        //                 else v[j] = true;
+        //             }
+        //         System.out.println("j: " + j);
+        //         if (j < p.size()) // 可以与其它的连通: 用这个数把它所有质因子的连通集连接起来
+        //             for (int k = 0; k < p.size(); k++) {
+        //                 if (k == j) continue;
+        //                 if (v[k])
+        //                     uf.union(k, j);
+        //                 if (!v[k] && a[i] % p.get(k) == 0) v[k] = true;
+        //             }
+        //         System.out.println(Arrays.toString(v));
+        //         System.out.println("uf.getCnt(): " + uf.getCnt());
+        //     }
+        //     // 下面的，不能这么比对写，【O(N^2)】一定会超时，按它是否含某个质因子写
+        //     // for (int i = 0; i < n; i++)
+        //     //     for (int j = 0; j < i; j++) // 这么遍历，O(N^2) 不会超时吗？
+        //     //         // if (gcd(a[i], a[j]) <= 1) return false; // 这么着，会截断图中的其它路线，所以还是要先建图
+        //     //         if (gcd(a[i], a[j]) > 1) { // 把它们合并在一个连通集里
+        //     //             // g[i].add(j);
+        //     //             // g[j].add(i);
+        //     //             uf.union(i, j);
+        //     //         }
+        //     // 然后数个数，返回只有一个集，就可以了
+        //     // 这里的【BUG：】是： 100000 以内的数，某些质因子可能从来不曾出现过
+        //     int cnt = 0;
+        //     for (var vis : v) if (vis) cnt++;
+        //     System.out.println("cnt: " + cnt);
+        //     System.out.println("uf.getCnt(): " + uf.getCnt());
+        //     return uf.getCnt() == p.size() - cnt + 1;
+        // }
+        // boolean isPrime(int x) {
+        //     if (x <= 1) return false;
+        //     // 判断是否被2~自身数-1范围内的值整除
+        //     for (int i = 2; i < x;++i){
+        //         if (x%i == 0)
+        //             return false;
+        //     }
+        //     return true;
+        // }
+        // int gcd(int x, int y) {
+        //     if (y == 0) return x;
+        //     return gcd(y, x % y);
+        // }
+
+        // public String removeTrailingZeros(String t) {
+        //     int n = t.length(), i = n-1;
+        //     char [] s = t.toCharArray();
+        //     while (i >= 0 && s[i] == '0') i--;
+        //     return i < 0 ? "0" : t.substring(0, i+1);
+        // }
+
+        // public int[][] differenceOfDistinctValues(int[][] a) {
+        //     int m = a.length, n = a[0].length;
+        //     int [] cnt = new int [51];
+        //     int [][] f = new int [m][n];
+        //     for (int i = 0; i < m; i++)
+        //         for (int j = 0; j < n; j++) {
+        //             Arrays.fill(cnt, 0);
+        //             // 算左上角的个数
+        //             int x = i-1, y = j-1;
+        //             while (x >= 0 && y >= 0) {
+        //                 if (cnt[a[x][y]] == 0) cnt[a[x][y]] = 1;
+        //                 x--;
+        //                 y--;
+        //             }
+        //             f[i][j] = Arrays.stream(cnt).sum();
+        //             Arrays.fill(cnt, 0);
+        //             x = i+1;
+        //             y = j+1;
+        //             while (x < m && y < n) {
+        //                 if (cnt[a[x][y]] == 0) cnt[a[x][y]] = 1;
+        //                 x++;
+        //                 y++;
+        //             }
+        //             // 算右下角的个数
+        //             f[i][j] = Math.abs(f[i][j] - Arrays.stream(cnt).sum());
+        //         }
+        //     return f;
+        // }
+
+        // // 这个题目想不透，只考虑了一种情况，还有换左边的情况
+        // public long minimumCost(String t) {
+        //     n = t.length(); char [] s = t.toCharArray();
+        //     r = new int [n];
+        //     for (int i = 0; i < n; i++) r[i] = s[i] - '0';
+        //     // 先算全变成 0 的情况 0: true
+        //     int i = 0;
+        //     while (i < n && r[i] == 0) i++;
+        //     // after: [i, n-1]
+        //     long ans = minimumCostRecursive(i, 0);
+        //     // 先算全变成 1 的情况
+        //     i = 0;
+        //     while (i < n && r[i] == 1) i++;
+        //     ans = Math.min(ans, minimumCostRecursive(i, 1));
+        //     return ans;
+        // }
+        // int [] r;
+        // int n;
+        // long minimumCostRecursive(int i, int j) { // 从 i 开始，后面变成0
+        //     long ans = n - i;
+        //     int [] cur = Arrays.copyOf(r);
+        //     for (int k = i; k < n; k++) cur[k] = 1 - r[k];
+        //     while (i < n && cur[i] == j) i++;
+        //     if (i == n) return ans;
+        //     return ans + minimumCostRecursive(i, j);
+        // }
+
+        public int maxIncreasingCells(int[][] a) {
+            int m = a.length, n = a[0].length; this.a = a; 
+            Integer [] idx = IntStream.range(0, m*n).boxed().toArray(Integer[]::new);
+            Arrays.sort(idx, (x, y)-> a[y/n][y%n] != a[x/n][x%n] ? a[y/n][y%n] - a[x/n][x%n] : x - y);  // 降序排列
+            System.out.println(Arrays.toString(idx));
+            int [] f = new int [m*n];
+            Arrays.fill(f, 1);
+            // 因为数量级比较大，需要有一个纪录，纪录说某行某列出现过某个数
+            List<int []> [] r = new ArrayList[m], c = new ArrayList[n];
+            Arrays.setAll(r, z -> new ArrayList<>());
+            Arrays.setAll(c, z -> new ArrayList<>());
+            // Map<Integer, Queue<int []>> r = new HashMap<>(), c = new HashMap<>(); // 这里涉及到一点儿对重复数字的处理 
+            // r.computeIfAbsent(idx[0] / n, z -> new PriorityQueue<>((x, y) -> x[0] != y[0] ? x[0] - y[0] : y[1] - x[1])).add(new int [] {a[idx[0]/n][idx[0]%n], 1});
+            // c.computeIfAbsent(idx[0]%n, z -> new PriorityQueue<>((x, y) -> x[0] != y[0] ? x[0] - y[0] : y[1] - x[1])).add(new int [] {a[idx[0]/n][idx[0]%n], 1});
+            r[idx[0]/n].add(new int [] {idx[0]%n, 1});// 每行，按值升序排列，同值按降序排列
+            c[idx[0]%n].add(new int [] {idx[0]/n, 1});
+            for (int k = 1; k < m*n; k++) {
+                int i = k / n, j = k % n, maxRow = 0, maxCol = 0;
+                // if (r.containsKey(i)) {
+                //     // 用 Queue 的缺点就在这里：不好操作重复的数字，所以还是链表模拟方便二分查找比较方便，同样二分插入更新
+                //     Queue<int []> q = r.get(i);
+                //     while (!q.isEmpty() && q.peek()[0] == a[i][j]) 
+                //         maxRow = Math.max(maxRow, q.poll()[1]); // 我不可以，就这样把它们扔了
+                // }
+                // if (c.containsKey(j)) {
+                //     Queue<int []> q = c.get(j);
+                //     while (!q.isEmpty() && q.peek()[0] == a[i][j]) 
+                //         maxCol = Math.max(maxCol, q.poll()[1]);
+                // }
+                int idxRow = 0, idxCol = 0;
+                if (r[i].size() > 0) {
+                   idxRow = binarySearch(r[i], a[i][j], i);
+                    if (idxRow < r[i].size()) maxRow = r[i].get(idxRow)[1];
                 }
+                if (c[j].size() > 0) {
+                   idxCol = binarySearch(c[j], a[i][j], j);
+                    if (idxCol < c[j].size()) maxCol = c[j].get(idxCol)[1];
+                }
+                // int max = Math.max(r.containsKey(i) && !r.get(i).isEmpty() ? r.get(i).peek()[1] : 0,
+                //                    c.containsKey(j) && !c.get(j).isEmpty() ? c.get(j).peek()[1] : 0);
+                int max = Math.max(maxRow, maxCol);
+                if (max > 0)
+                //     // f[k] = Math.max(max + 1, Math.max(maxRow, maxCol)); // 同样不能用它们的结果来更新当前的行列
+                    f[k] = max + 1;
+                // r.computeIfAbsent(i, z -> new PriorityQueue<>((x, y) -> x[0] != y[0] ? x[0] - y[0] : y[1] - x[1])).add(new int [] {a[i][j], f[k]});
+                // c.computeIfAbsent(j, z -> new PriorityQueue<>((x, y) -> x[0] != y[0] ? x[0] - y[0] : y[1] - x[1])).add(new int [] {a[i][j], f[k]});
+                // 这里要二分插入更新
+                r[i].add(idxRow, new int [] {j, f[k]});
+                c[j].add(idxCol, new int [] {i, f[k]});
             }
-            public int getCnt() {// 去拿连通集的个数：我这里数得不对。。。。。【活宝妹就是一定要嫁给亲爱的表哥！！】
-                return cnt;
-            }
+            System.out.println(Arrays.toString(f));
+            return Arrays.stream(f).max().getAsInt();
         }
-        private UnionFind uf; // 【活宝妹就是一定要嫁给亲爱的表哥！！！】
-        Set<Integer> s = new HashSet<>(); // 出现过的质因子，备案
-        public boolean canTraverseAllPairs(int[] a) {
-            int n = a.length, max = Arrays.stream(a).max().getAsInt(), j;
-            if (n == 1) return true;
-            // 自己求质数表备案
-            List<Integer> p = new ArrayList<>();
-            for (int i = 1; i <= max; i++) 
-                if (isPrime(i)) p.add(i);
-            System.out.println("p.size(): " + p.size());
-            System.out.println(Arrays.toString(p.toArray()));
-            uf = new UnionFind(p.size());
-            boolean [] v = new boolean [p.size()];
-            for (int i = 0; i < n; i++) {
-                System.out.println("\n i: " + i);
-                int pre = -1;
-                for (j = 0; j < p.size(); j++) // 这么写的目的是：把【O(N^2)】转化成【O(N*Contant)】免得超时
-                    if (a[i] % p.get(j) == 0) {
-                        s.add(j);
-                        if (pre == -1) pre = j;
-                        else uf.union(j, pre); // 对同一个数来说，它的质因子要连起来
-                        if (v[j]) break;
-                        else v[j] = true;
-                    }
-                System.out.println("j: " + j);
-                if (j < p.size()) // 可以与其它的连通: 用这个数把它所有质因子的连通集连接起来
-                    for (int k = 0; k < p.size(); k++) {
-                        if (k == j) continue;
-                        if (v[k])
-                            uf.union(k, j);
-                        if (!v[k] && a[i] % p.get(k) == 0) v[k] = true;
-                    }
-                System.out.println(Arrays.toString(v));
-                System.out.println("uf.getCnt(): " + uf.getCnt());
+        int [][] a;
+        int binarySearch(List<int []> ll, int v, int i) {
+            int l = 0, r = ll.size()-1;
+            if (v < a[i][ll.get(0)[0]]) return 0; // 比最小的小，就排第一个
+            while (l < r) {
+                int m = (l + r) / 2;
+                if (a[i][ll.get(m)[0]] > v) r = m;
+                else l = m+1;
             }
-            // 下面的，不能这么比对写，【O(N^2)】一定会超时，按它是否含某个质因子写
-            // for (int i = 0; i < n; i++)
-            //     for (int j = 0; j < i; j++) // 这么遍历，O(N^2) 不会超时吗？
-            //         // if (gcd(a[i], a[j]) <= 1) return false; // 这么着，会截断图中的其它路线，所以还是要先建图
-            //         if (gcd(a[i], a[j]) > 1) { // 把它们合并在一个连通集里
-            //             // g[i].add(j);
-            //             // g[j].add(i);
-            //             uf.union(i, j);
-            //         }
-            // 然后数个数，返回只有一个集，就可以了
-            // 这里的【BUG：】是： 100000 以内的数，某些质因子可能从来不曾出现过
-            int cnt = 0;
-            for (var vis : v) if (vis) cnt++;
-            System.out.println("cnt: " + cnt);
-            System.out.println("uf.getCnt(): " + uf.getCnt());
-            return uf.getCnt() == p.size() - cnt + 1;
-        }
-        boolean isPrime(int x) {
-            if (x <= 1) return false;
-            // 判断是否被2~自身数-1范围内的值整除
-            for (int i = 2; i < x;++i){
-                if (x%i == 0)
-                    return false;
-            }
-            return true;
-        }
-        int gcd(int x, int y) {
-            if (y == 0) return x;
-            return gcd(y, x % y);
+            return l;
         }
     }             
     public static void main (String[] args) { 
         Solution s = new Solution ();
 
-        int [] a = new int [] {20, 6};
+        int [][] a = new int [][] {{1,1},{1,1}};
+        System.out.println("a.length: " + a.length);
+        for (int z = 0; z < a.length; ++z) 
+            System.out.println(Arrays.toString(a[z]));
 
-       boolean r = s.canTraverseAllPairs(a);
+        int r = s.maxIncreasingCells(a);
         System.out.println("r: " + r);
     }
 }
@@ -1715,6 +1846,17 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+
+
+
+
+
+
+
+
+
+
+
 
 
 
