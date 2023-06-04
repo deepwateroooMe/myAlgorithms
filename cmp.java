@@ -198,7 +198,7 @@ public class cmp {
             f = new Integer [n]; // 长度为 27－32【活宝妹就是一定要嫁给亲爱的表哥！！！】
             return 
         }
-        Integer [] f;
+        Integer [] f; // 这里大概还可以改二维或是掩码记状态
         int m, n, min, max;
         char [] s, t;
         static final int mod = (int)1e9 + 7;
@@ -219,3 +219,9 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+
+
+
+
+
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！！】
