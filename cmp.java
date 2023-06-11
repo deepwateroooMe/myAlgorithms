@@ -8,7 +8,9 @@ import java.util.stream.Collectors;
 import java.util.HashSet;
 import java.util.Set;
 import static java.util.stream.Collectors.toMap;
+
 public class cmp {
+
     public static class Solution {
 
         // // 不知道所有的 i<j 都能连通是什么意思，但是大概是先转化成一个无向图，再求所有的 i<j
@@ -190,25 +192,169 @@ public class cmp {
         //     // }
         //     return ans / 2;
         // }
+        
+        // // 这个题：大概是要按位来生成这些数，因为数量级非常大，数位动规【记忆化深搜】参考 1397 大概需要一两个 boolean 变量来标记是 lo-hi 最后一位什么的
+        // public int count(String S, String T, int min, int max) {
+        //     m = S.length(); n = T.length(); this.min = min; this.max = max; 
+        //     s = S.toCharArray(); t = T.toCharArray();
+        //     int r = count(t) - count(s) + mod, tmp = 0;
+        //     for (var c : s) tmp += c - '0';
+        //     if (tmp >= min && tmp <= max) r ++;
+        //     return r % mod;
+        // }
+        // static final int mod = (int)1e9 + 7;
+        // int m, n, min, max;
+        // char [] s, t;
+        // int count(char [] s) {
+        //     int n = s.length;
+        //     int [][] f = new int [n][Math.min(9 * n, max) + 1];
+        //     Arrays.stream(f).forEach(z -> Arrays.fill(z, -1)); // -1 表示没有计算过  // 这里，不能忘记设置初始值的标记了。。【BUG：】
+        //     return dfs(s, f, 0, 0, true);
+        // }
+        // int dfs(char [] s, int [][] f, int i, int j, boolean isLimit) { // j: sum
+        //     if (j > max) return 0; // 数字和超值，非法数字
+        //     if (i == s.length) return j >= min ? 1 : 0;
+        //     // boolean 变量 val 没有记入状态，是因为 f 记的永远是 val ＝ false 时的状态值； val ＝ true 只有长度的 n 种情况，可以不用记
+        //     if (!isLimit && f[i][j] != -1) return f[i][j]; 
+        //     int r = 0;
+        //     int hi = isLimit ? s[i] - '0' : 9; // 当前数位 i, 如果标记变量 isLimit与限制数是一样的，那就只能取到有限最大值，否则取 9
+        //     for (int k = 0; k <= hi; k++) // 遍历当前数位 i 可能取到的所有的数值
+        //         r = (r + dfs(s, f, i+1, j + k, isLimit && k == hi)) % mod;
+        //     if (!isLimit) f[i][j] = r;
+        //     return r;
+        // }
 
-        // 这个死题：大概是要按位来生成这些数，因为数量级非常大，数位动规【记忆化深搜】参考 1397 大概需要一两个 boolean 变量来标记是 lo-hi 最后一位什么的
-        public int count(String S, String T, int min, int max) {
-            m = S.length(); n = T.length(); this.min = min; this.max = max; 
-            s = S.toCharArray(); t = T.toCharArray();
-            f = new Integer [n]; // 长度为 27－32【活宝妹就是一定要嫁给亲爱的表哥！！！】
-            return 
-        }
-        Integer [] f; // 这里大概还可以改二维或是掩码记状态
-        int m, n, min, max;
-        char [] s, t;
-        static final int mod = (int)1e9 + 7;
+        // public boolean isFascinating(int n) {
+        //     String s = n + "" + String.valueOf(2 * n) + String.valueOf(3 * n);
+        //     if (s.length() != 9) return false;
+        //     Set<Character> sc = new HashSet<>(List.of('1', '2', '3', '4', '5', '6', '7', '8', '9'));
+        //     if (s.indexOf("0") != -1) return false;
+        //     for (char c : sc) 
+        //         if (s.indexOf(c) == -1) return false;
+        //     return true;
+        // }
+
+// // 数据规模狠小，随便来个暴力解法就可以了
+//         public int longestSemiRepetitiveSubstring(String t) {
+//             int n = t.length(), max = 1; char [] s = t.toCharArray();
+//             for (int i = 0; i < n; i++)
+//                 for (int j = i+1; j <= n; j++) {
+//                     String cur = t.substring(i, j);
+//                      System.out.println("cur: " + cur);
+//                     if (valid(cur)) {
+//                         max = Math.max(max, cur.length());
+//                          System.out.println("max: " + max);
+//                     }
+//                 }
+//             return max;
+//         }
+//         boolean valid(String t) { // 它说，只要是最多只有一对连续两个字符相同
+//             int n = t.length(), cnt = 0; char [] s = t.toCharArray();
+//             for (int i = 0; i < n-1; i++) {
+//                 if (s[i] != s[i+1]) continue;
+//                 cnt++;
+//             }
+//             return cnt <= 1;
+//         }
+
+        // // 感觉：读不懂这个题目，为什么 (i,j) 跟 (j,i) 会是一样的？读不懂这个题目，先跳过去
+        // 一维的，无限长的线，因为两个相邻的只要会撞，就会改变方向【亲爱的表哥，活宝妹永远不改变方向：因为活宝妹永远就是一定要嫁给亲爱的表哥！！！】
+        // 所以 d 时间内，可能是动态变化的。想不透这些动态变化，不写了
+        // public int sumDistance(int[] nums, String s, int d) {
+        // }
+        // 这里 m 【1,10000】， n 【1,5】想的是二分查找，O[NlogN] 搜出一个最大子数组行长度，可是 check(int-v) 行数为某个值时，
+        // 觉得这里面，有点儿什么机巧想得不透，今天就不写这个了
+        // public List<Integer> goodSubsetofBinaryMatrix(int[][] grid) {
+        // }
+
+        // public int findNonMinOrMax(int[] a) {
+        //     int min = Arrays.stream(a).min().getAsInt(), max = Arrays.stream(a).max().getAsInt();
+        //     for (int v : a)
+        //         if (v != min && v != max) return v;
+        //     return -1;
+        // }
+
+        // public String smallestString(String t) {
+        //     int n = t.length(); char [] s = t.toCharArray();
+        //     int i = 0, j = -1;
+        //     while (i < n && s[i] == 'a') i++;
+        //     if (i == n) {
+        //         s[n-1] = 'z';
+        //     } else {
+        //         j = i;
+        //         while (j < n && s[j] != 'a') {
+        //             s[j] = (char)(s[j] - 1);
+        //             j++;
+        //         }
+        //     }
+        //     return new String(s);
+        // }
+
+        // // 鬼读得懂这个题目：说得是什么意思呢？读不懂它在移什么。。。
+        // public long minCost(int[] a, int x) {
+        //     int n = a.length;
+        //     return n;
+        // }
+
+        // 不写了，不喜欢这些恶心死人不偿命的算法题。。。写项目比较好玩一点儿
+        // public int[] maximumSumQueries(int[] a, int[] b, int[][] c) {
+        //     n = a.length; m = c.length;
+        //     List<int []> l = new ArrayList<>();
+        //     for (int i = 0; i < m; i++) l.add(new int [] {i, c[i][0], c[i][1]});
+        //     Collections.sort(l, (x, y) -> x[1] != y[1] ? x[1] - y[1] : x[2] - y[2]); // 第一个数组值升序排列
+        //     List<int []> ll = new ArrayList<>();
+        //     for (int i = 0; i < n; i++) ll.add(new int [] {a[i], b[i]});
+        //     Collections.sort(ll, (x, y) -> x[1] != y[1] ? x[1] - y[1] : x[2] - y[2]); //a 升序， b 升序
+        //     int [] r = new int [m];
+        //     for (int [] v : l) {
+        //         int i = v[1], j = v[2];
+        //         int k = binarySearch(i, ll);
+        //     }
+        // }
+        // int m, n;
+        // int binarySearch(int i, int j, List<int []> l) { // 直接就二分查找最大值，最大和
+        //     int [] r = l.get(m-1);
+        //     if (i > r[1] || j > r[2]) return -1; // 完全没有满足条件的
+        //     // if (r[1] >= i && r[2] >= j) return r[1] + r[2];
+        //     // 其它情况，就是至少有一个满足条件的，直接二分查找和
+        //     int lo = l.get(0)[1] + l.get(0)[2], hi = l.get(m-1)[1] + l.get(m-1)[2];
+        // }
+
+        // static final int mod = (int)1e9 + 7;
+        // public int sumDistance(int[] a, String t, int d) {
+        //     int n = a.length; char [] s = t.toCharArray();
+        //     // 先独立计算这些机器人在 d 秒后的位置：因为机器人可以互相穿透对方
+        //     // （【活宝妹想要能够从亲爱的表哥的灵魂中川行、穿过。。。任何时候，活宝妹就是一定要嫁给亲爱的表哥！！！】）
+        //     long [] r = new long [n];
+        //     for (int i = 0; i < n; i++)
+        //         // a[i] = (s[i] == 'L' ? a[i] - d : a[i] + d); // 这个，只是它的系统测试用例不健全，这种写法会溢出，必须改变 long 【】数组才对。。。
+        //         r[i] = (s[i] == 'L' ? (long)a[i] - (long)d : (long)a[i] + (long)d); // 这个，只是它的系统测试用例不健全，这种写法会溢出，必须改变 long 【】数组才对。。。
+        //         // r[i] = (long) a[i] + d * ((s[i] & 2) - 1); // L=-1, R=1 看不懂这算是什么写法？ s[i] & 2: 活宝妹就是一定要嫁给亲爱的表哥！！
+        //     Arrays.sort(r); // 排序一下，不影响结果
+        //     // long [] r = new long [n]; // 这里并不真的需要前缀和，只要一个变量记之前的和就可以了
+        //     // for (int i = 0; i < n; i++)
+        //     //     r[i] = (i == 0 ? 0 : r[i-1]) + (long)a[i];
+        //     long sum = 0, ans = 0;
+        //     for (int i = 0; i < n; i++) {
+        //         ans = (ans + (long)i * r[i] - sum) % mod;
+        //         sum += r[i];
+        //     }
+        //     return (int)ans;
+        // }
+
+        // // 看不懂：这个题目的列数，是在干什么，起什么作用？读不懂提示，不理解提示。。。
+        // public List<Integer> goodSubsetofBinaryMatrix(int[][] a) {
+        //     int m = a.length, n = a[0].length;
+        //     for (int i = 0; i < m; i++) 
+        //         if (Arrays.stream(v).sum() == 0) return i;
+        // }
+        // 其它的题目，晚点儿改天再写
     }             
     public static void main (String[] args) { 
         Solution s = new Solution ();
+        String a = "cbabc";
 
-        int [][] a = new int [][] {{1,1,1},{1,0,7},{0,0,0}};
-
-        long r = s.matrixSumQueries(2, a);
+        String r = s.smallestString(a);
         System.out.println("r: " + r);
     }
 }
@@ -223,5 +369,4 @@ public class cmp {
 
 
 
-
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
