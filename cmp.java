@@ -1,12 +1,21 @@
 import com.TreeNode;
+
 import java.util.HashMap;
+
 import java.util.Map;
+
 import java.util.ArrayList;
+
 import java.util.*;
+
 import java.util.stream.*;
+
 import java.util.stream.Collectors;
+
 import java.util.HashSet;
+
 import java.util.Set;
+
 import static java.util.stream.Collectors.toMap;
 
 public class cmp {
@@ -349,12 +358,115 @@ public class cmp {
         //         if (Arrays.stream(v).sum() == 0) return i;
         // }
         // 其它的题目，晚点儿改天再写
+
+        // public int distanceTraveled(int x, int y) {
+        //     int r = 0;
+        //     while (x >= 5 && y >= 1) {
+        //         r += 10 * 5;
+        //         x -= 4;
+        //         y -= 1;
+        //     }
+        //     return r + 10 * x;
+        // }
+
+        // public int findValueOfPartition(int[] a) {
+        //     int n = a.length, min = Integer.MAX_VALUE;
+        //     Arrays.sort(a);
+        //     for (int i = 0; i < n-1; i++)
+        //         min = Math.min(min, Math.abs(a[i] - a[i+1]));
+        //     return min;
+        // }
+
+        // // 感觉这个题：数据规模小，只要写出一个干净的全排列，必要的优化，应该就可以过，不明白为什么只有 2665 个人写过了？
+        // public int specialPerm(int[] a) {
+        //     n = a.length; this.a = a;
+        //     Arrays.sort(a); // 为什么要升序排列：全排列顺序不再重要，所以可以排列帮助自己
+        //     // 最后几十个测试用例：可能有些特殊情况需要考虑，但是还没能想明白
+        //     // int d = a[1] / a[0];
+        //     // if (a[1] % a[0] == 0) {
+        //     //     if (n == 2) return 2;
+        //     //     int i = 2;
+        //     //     for (i = 2; i < n; i++)
+        //     //         if (a[i] % a[i-1] != 0 || a[i] / a[i-1] != d) break;
+        //     //     if (i == n) return 2 * n;
+        //     // }
+        //     perm(0, new ArrayList<Integer>(), new boolean [n]);
+        //     return (int)(r % mod);
+        // }
+        // static final int mod = (int)1e9 + 7;
+        // int [] a; int n;
+        // long r = 0; 
+        // void perm(int i, List<Integer> l, boolean [] vis) {
+        //     if (l.size() == n) {
+        //         r++;
+        //         return ;
+        //     }
+        //     for (int j = 0; j < n; j++) {
+        //         if (vis[j]) continue;
+        //         if (l.size() == 0 || a[j] % l.get(l.size()-1) == 0 || l.get(l.size()-1) % a[j] == 0) {
+        //             l.add(a[j]);
+        //             vis[j] = true;
+        //             perm(j+1, l, vis);
+        //             l.remove(l.size()-1);
+        //             vis[j] = false;
+        //         }
+        //     }
+        // }
+
+        // 【动规：】只有两个涂匠，是什么意思呢？两个要花钱的涂匠永远涂最便宜的两个，同样时间范围内，1 个免费涂匠永远涂最贵的这个时间段的墙。。。
+        // 先排序一下：费用【从小到大】；但是因为消耗时间的问题，仍然是一个因素
+        // 再用一个最大堆来消息 n 个费用最大的墙【这里就成为费用、时间两个因素的平衡。。。】
+        // 【记忆化深搜】：一般动规，都能改写成记忆化深搜。。。？？？觉得这个方法仍然是最合适的
+        public int paintWalls(int[] a, int[] b) {
+            n = a.length; this.a = a; this.b = b; 
+            return dfs(2, 0, new int [n]); // 2 个涂匠
+        }
+        Map<String, Integer> m = new HashMap<>();
+        int n; int [] a, b;
+        int dfs(int i, int j, int [] vis) {
+            // System.out.println("\n i: " + i);
+            // System.out.println("j: " + j);
+            // System.out.println(Arrays.toString(vis));
+            if (Arrays.stream(vis).sum() == n) return 0; // 全部涂完了
+            String key = i + "-" + j + "-" + Arrays.toString(vis);
+            if (m.containsKey(key)) return m.get(key);
+            if (i == 0) {
+                Queue<Integer> q = new PriorityQueue<>((x, y)->a[y] - a[x]); // 最大堆
+                for (int k = 0; k < n; k++)
+                    if (vis[k] == 0) q.offer(k);
+                int x = j;
+                while (x > 0 && !q.isEmpty()) {
+                    vis[q.poll()] = 1;
+                    x--;
+                }
+                m.put(key, dfs(2, 0, vis));
+                return m.get(key);
+            }
+            int r = Integer.MAX_VALUE;
+            for (int k = 0; k < n; k++) { // 这里一定会超时，所以需要排序的优化。。。【这个会超时的方法】：也不知道哪里写错了，改天再写。。【活宝妹就是一定要嫁给亲爱的表哥！！爱表哥，爱生活！！！】
+                if (vis[k] == 1) continue;
+                vis[k] = 1;
+                System.out.println(Arrays.toString(vis));
+                r = Math.min(r, a[k] + dfs(i-1, j + b[k], vis));
+                // System.out.println("r: " + r);
+                vis[k] = 0;
+            }
+            m.put(key, r);
+            // System.out.println("\n i: " + i);
+            // System.out.println("j: " + j);
+            // System.out.println("r: " + r);
+            return r;
+        }        
     }             
     public static void main (String[] args) { 
         Solution s = new Solution ();
-        String a = "cbabc";
 
-        String r = s.smallestString(a);
+        // int [] a = new int [] {1, 2, 3, 2};
+        // int [] b = new int [] {1,2,3,2};
+        int [] a = new int [] {2, 3, 4, 2};
+        int [] b = new int [] {1, 1, 1, 1};
+
+        int r = s.paintWalls(a, b);
         System.out.println("r: " + r);
     }
 }
@@ -367,6 +479,49 @@ public class cmp {
 // rr.levelPrintTree(rr);
 
 
-
-
 // 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
