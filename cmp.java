@@ -450,28 +450,6 @@ public class cmp {
         //     return r;
         // }
 
-        // // 【记忆化深搜】：方法思路是对的，不知道、不明白为什么会超时？
-        // public int longestString(int x, int y, int z) {
-        //     n = Math.max(x, Math.max(y, z)) + 1;
-        //     f = new Integer [n][n][n][4];// 最后一维：标记前面一个字符串是哪个
-        //     return dfs(x, y, z, 3);
-        // }
-        // Integer [][][][] f;
-        // int n;
-        // int dfs(int i, int j, int k, int x) {
-        //     if (i < 0 || j < 0 || k < 0) return 0;
-        //     if (i == 0 && j == 0 && k == 0) return 0;
-        //     if (f[i][j][k][x] != null) return f[i][j][k][x];
-        //     int r = 0;
-        //     if (i > 0 && x != 0) // 可以接在 y z 后面，不能接在自己的后面
-        //         r = Math.max(r, 2 + dfs(i-1, j, k, 0));
-        //     if (j > 0 && (x == 3 || x == 0)) // 可以接在 x 后面
-        //         r = Math.max(r, 2 + dfs(i, j-1, k, 1));
-        //     if (k > 0 && x != 0) // 可以接在 y,z 自己的后面
-        //         r = Math.max(r, 2 + dfs(i, j, k-1, 2));
-        //     return f[i][j][k][x] = r;
-        // }
-
         // // 【记忆化深搜】：直接用自顶向下的【动规】来写。因为是自顶向下，这里感觉不太会用【记忆化深搜】来倒着搜？这两个方法的转化，在这个题，脑袋里失效了。。。先写下一个
         // public int minimizeConcatenatedLength(String[] a) {
         //     n = a.length;
@@ -504,57 +482,79 @@ public class cmp {
         //     return i == n ? "" : T.substring(i);
         // }
 
-        // 要把题目所给的线索稍微理一理：排序，滑动窗口？
-        public int[] countServers(int n, int[][] a, int v, int[] q) {
-            // 【排序：】分两边：
-            Arrays.sort(a, (x, y) -> x[1] != y[1] ? x[1] - y[1] : x[0] - y[0]); // 服务器时间顺序的排序
-            int m = q.length;
-            List<int []> li = new ArrayList<>(); // 查询的排序
-            for (int i = 0; i < m; i++)             
-                li.add(new int [] {i, q[i]});
-            Collections.sort(li, (x, y) -> x[1] != y[1] ? x[1] - y[1] : x[0] - y[0]);
-            // 解题：顺序遍历，感觉一个滑动窗口，是可以解决问题的
-            int i = 0, j = 0, k = 0;
-            int [] r = new int [m];
-            while (j < m) { // j: 遍历查询;
-                while (i < n && a[i][1] < li.get(j)[1] - v) i++; // 去头：【左端点，右移】 前面所有时间不符合的去掉
-                if (i == n) {
-                    r[li.get(j)[0]] = 0;
-                    return r;
-                }
-                // 把当前 i 记下来
-                // m.put(i, a[i][1]);
-                insert(new int [] {i, a[i][1]});                
-                k = i+1; // 右端点
-                while (k < n && a[k][1] <= li.get(j)[1]) {
-                    // 入窗口管理，记下来
-                    k++; // 【右端点：】右移
-                }
-                r[li.get(j)[0]] = k - i; // 计结果: 不能直接这么数，它还有重复！！！
-                j++;
-            }
-            return r;
-        }
-        // Map<Integer, int []> m = new HashMap<>(); // 记录窗口内的 id, 最后发布时间 ?
-        // 需要一个有序字典：有序数据结构来，记录过往时间，方便【左端点】右移时，删除不符合条件的
-        // 数据结构：必须方便查找、更新，与踢除，所以最好自己维护升序链表，自己维护排序
-        // Queue<int []> q = new PriorityQueue<>((x, y) -> x[]); // 这个可能会超时
-        List<int []> l = new ArrayList<>();// 维护 l[i][1] 升序排列，可是同样会有更新时，需要更新某个 id 的情况？怎么查，没序？
-        // 还是把这个题先放一下，改天再写
-        void insert(int [] a) {
-            if (l.size() == 0) {
-                l.add(0, a);
-                return ;
-            }
-        }
+        // // 要把题目所给的线索稍微理一理：排序，滑动窗口？
+        // public int[] countServers(int n, int[][] a, int v, int[] q) {
+        //     // 【排序：】分两边：
+        //     Arrays.sort(a, (x, y) -> x[1] != y[1] ? x[1] - y[1] : x[0] - y[0]); // 服务器时间顺序的排序
+        //     int m = q.length;
+        //     List<int []> li = new ArrayList<>(); // 查询的排序
+        //     for (int i = 0; i < m; i++)             
+        //         li.add(new int [] {i, q[i]});
+        //     Collections.sort(li, (x, y) -> x[1] != y[1] ? x[1] - y[1] : x[0] - y[0]);
+        //     // 解题：顺序遍历，感觉一个滑动窗口，是可以解决问题的
+        //     int i = 0, j = 0, k = 0;
+        //     int [] r = new int [m];
+        //     while (j < m) { // j: 遍历查询;
+        //         while (i < n && a[i][1] < li.get(j)[1] - v) i++; // 去头：【左端点，右移】 前面所有时间不符合的去掉
+        //         if (i == n) {
+        //             r[li.get(j)[0]] = 0;
+        //             return r;
+        //         }
+        //         // 把当前 i 记下来
+        //         // m.put(i, a[i][1]);
+        //         insert(new int [] {i, a[i][1]});                
+        //         k = i+1; // 右端点
+        //         while (k < n && a[k][1] <= li.get(j)[1]) {
+        //             // 入窗口管理，记下来
+        //             k++; // 【右端点：】右移
+        //         }
+        //         r[li.get(j)[0]] = k - i; // 计结果: 不能直接这么数，它还有重复！！！
+        //         j++;
+        //     }
+        //     return r;
+        // }
+        // // Map<Integer, int []> m = new HashMap<>(); // 记录窗口内的 id, 最后发布时间 ?
+        // // 需要一个有序字典：有序数据结构来，记录过往时间，方便【左端点】右移时，删除不符合条件的
+        // // 数据结构：必须方便查找、更新，与踢除，所以最好自己维护升序链表，自己维护排序
+        // // Queue<int []> q = new PriorityQueue<>((x, y) -> x[]); // 这个可能会超时
+        // List<int []> l = new ArrayList<>();// 维护 l[i][1] 升序排列，可是同样会有更新时，需要更新某个 id 的情况？怎么查，没序？
+        // // 还是把这个题先放一下，改天再写
+        // void insert(int [] a) {
+        //     if (l.size() == 0) {
+        //         l.add(0, a);
+        //         return ;
+        //     }
+        // }
+
+        // // 【记忆化深搜】：方法思路是对的，不知道、不明白为什么会超时？是因为还是更简单的，脑袋急转变的解法，妈的，吭死人不偿命。。。活宝妹哼哧哼哧写了半天。。。
+        // public int longestString(int x, int y, int z) {
+        //     n = Math.max(x, Math.max(y, z)) + 1;
+        //     f = new Integer [n][n][n][4];// 最后一维：标记前面一个字符串是哪个
+        //     return dfs(x, y, z, 3);
+        // }
+        // Integer [][][][] f;
+        // int n;
+        // int dfs(int i, int j, int k, int x) {
+        //     if (i < 0 || j < 0 || k < 0) return 0;
+        //     if (i == 0 && j == 0 && k == 0) return 0;
+        //     if (f[i][j][k][x] != null) return f[i][j][k][x];
+        //     int r = 0;
+        //     if (i > 0 && x != 0) // 可以接在 y z 后面，不能接在自己的后面
+        //         r = Math.max(r, 2 + dfs(i-1, j, k, 0));
+        //     if (j > 0 && (x == 3 || x == 0)) // 可以接在 x 后面
+        //         r = Math.max(r, 2 + dfs(i, j-1, k, 1));
+        //     if (k > 0 && x != 0) // 可以接在 y,z 自己的后面
+        //         r = Math.max(r, 2 + dfs(i, j, k-1, 2));
+        //     return f[i][j][k][x] = r;
+        // }
+        // public int longestString(int x, int y, int z) { // 吭死人不偿命，这种题太可恶了！！！
+        //     return Math.min(x, y) * 4 + (x != y ? 2 : 0) + 2 * z;
+        // }
     }             
     public static void main (String[] args) { 
         Solution s = new Solution ();
 
-        int [][] a = new int [][] {{1,3},{2,6},{1,5}};
-        int [] b = new int [] {10, 11};
-
-        int [] r = s.countServers(3, a, 5, b);
+        int r = s.longestString(9, 9, 34);
         System.out.println(Arrays.toString(r));
     }
 }
@@ -565,6 +565,7 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
 // 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
 // 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
 // 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
