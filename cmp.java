@@ -377,96 +377,142 @@ public class cmp {
         //     return min;
         // }
 
-        // // 感觉这个题：数据规模小，只要写出一个干净的全排列，必要的优化，应该就可以过，不明白为什么只有 2665 个人写过了？
         // public int specialPerm(int[] a) {
         //     n = a.length; this.a = a;
-        //     Arrays.sort(a); // 为什么要升序排列：全排列顺序不再重要，所以可以排列帮助自己
-        //     // 最后几十个测试用例：可能有些特殊情况需要考虑，但是还没能想明白
-        //     // int d = a[1] / a[0];
-        //     // if (a[1] % a[0] == 0) {
-        //     //     if (n == 2) return 2;
-        //     //     int i = 2;
-        //     //     for (i = 2; i < n; i++)
-        //     //         if (a[i] % a[i-1] != 0 || a[i] / a[i-1] != d) break;
-        //     //     if (i == n) return 2 * n;
-        //     // }
-        //     perm(0, new ArrayList<Integer>(), new boolean [n]);
-        //     return (int)(r % mod);
+        //     return dfs(1, 0);
         // }
         // static final int mod = (int)1e9 + 7;
         // int [] a; int n;
-        // long r = 0; 
-        // void perm(int i, List<Integer> l, boolean [] vis) {
-        //     if (l.size() == n) {
-        //         r++;
-        //         return ;
-        //     }
-        //     for (int j = 0; j < n; j++) {
-        //         if (vis[j]) continue;
-        //         if (l.size() == 0 || a[j] % l.get(l.size()-1) == 0 || l.get(l.size()-1) % a[j] == 0) {
-        //             l.add(a[j]);
-        //             vis[j] = true;
-        //             perm(j+1, l, vis);
-        //             l.remove(l.size()-1);
-        //             vis[j] = false;
+        // Map<Long, Integer> m = new HashMap<>();
+        // int dfs(int i, int j) {
+        //     if (j == (1 << n) - 1) return 1;
+        //     long key = (long) i << 14 | j;
+        //     if (m.containsKey(key)) return m.get(key);
+        //     int r = 0;
+        //     for (int k = 0; k < n; k++) 
+        //         if ((j & (1 << k)) == 0 && (a[k] % i == 0 || i % a[k] == 0))
+        //             r = (r + dfs(a[k], j | (1 << k))) % mod;
+        //     m.put(key, r);
+        //     return r;
+        // }        
+
+        // // 这个题目：有个参数没有拎清楚。再想一下，改天再试着来写
+        // public int paintWalls(int[] a, int[] b) {
+        //     n = a.length; this.a = a; this.b = b; 
+        //     for (int i = 0; i < n; i++)
+        //         l.add(new int [] {a[i], b[i]});
+        //     Collections.sort(l, (x, y) -> x[0] != y[0] ? x[0] - y[0] : y[1] - x[1]);
+        //     return dfs(0, 0, new int [n]);
+        // }
+        // List<int []> l = new ArrayList<>();
+        // Map<String, Integer> m = new HashMap<>(); // 数据比较离散
+        // int [] a, b;
+        // int n;
+        // int dfs(int i, int j, int [] v) { // 对于每个当前的 i, 付费做和留给闲将做
+        //     if (Arrays.stream(v).sum() == n) return 0;
+        //     String key = i + "-" + j + "-" + Arrays.toString(v);
+        //     if (m.containsKey(key)) return m.get(key);
+        //     int r = Integer.MAX_VALUE;
+        //     if (j > 0) {
+        //         int x = j;
+        //         for (int k = n-1; k >= 0 && x > 0; k--) {
+        //             if (v[k] == 1) continue; 
+        //             v[k] = 1;
+        //             x --;
         //         }
+        //         m.put(key, dfs(i, 0, v));
+        //         return m.get(key);
         //     }
+        //     while (i < n && v[i] == 1) i++;
+        //     if (i == n) {
+        //         i = 0;
+        //         while (i < n && v[i] == 1) i++;
+        //         if (i == n) return 0;
+        //     }
+        //     v[i] = 1;
+        //     r = Math.min(r, l.get(i)[0] + dfs(i+1, l.get(i)[1], v));
+        //     v[i] = 0;
+        //     r = Math.min(r, dfs(i+1, 0, v)); // 这里跳过 i, 就是前面可能存在没有处理的元素
+        //     m.put(key, r);
+        //     return r;
         // }
 
-        // 【动规：】只有两个涂匠，是什么意思呢？两个要花钱的涂匠永远涂最便宜的两个，同样时间范围内，1 个免费涂匠永远涂最贵的这个时间段的墙。。。
-        // 先排序一下：费用【从小到大】；但是因为消耗时间的问题，仍然是一个因素
-        // 再用一个最大堆来消息 n 个费用最大的墙【这里就成为费用、时间两个因素的平衡。。。】
-        // 【记忆化深搜】：一般动规，都能改写成记忆化深搜。。。？？？觉得这个方法仍然是最合适的
-        public int paintWalls(int[] a, int[] b) {
-            n = a.length; this.a = a; this.b = b; 
-            return dfs(2, 0, new int [n]); // 2 个涂匠
+        // public int maximumNumberOfStringPairs(String[] a) {
+        //     int n = a.length, r = 0;
+        //     Set<String> s = new HashSet<>();
+        //     for (int i = 0; i < n; i++) {
+        //         String cur = new String(new StringBuilder(a[i]).reverse());
+        //         if (s.contains(cur)) {
+        //             r++;
+        //             s.remove(cur);
+        //         } else s.add(a[i]);
+        //     }
+        //     return r;
+        // }
+
+        // // 【记忆化深搜】：方法思路是对的，不知道、不明白为什么会超时？
+        // public int longestString(int x, int y, int z) {
+        //     n = Math.max(x, Math.max(y, z)) + 1;
+        //     f = new Integer [n][n][n][4];// 最后一维：标记前面一个字符串是哪个
+        //     return dfs(x, y, z, 3);
+        // }
+        // Integer [][][][] f;
+        // int n;
+        // int dfs(int i, int j, int k, int x) {
+        //     if (i < 0 || j < 0 || k < 0) return 0;
+        //     if (i == 0 && j == 0 && k == 0) return 0;
+        //     if (f[i][j][k][x] != null) return f[i][j][k][x];
+        //     int r = 0;
+        //     if (i > 0 && x != 0) // 可以接在 y z 后面，不能接在自己的后面
+        //         r = Math.max(r, 2 + dfs(i-1, j, k, 0));
+        //     if (j > 0 && (x == 3 || x == 0)) // 可以接在 x 后面
+        //         r = Math.max(r, 2 + dfs(i, j-1, k, 1));
+        //     if (k > 0 && x != 0) // 可以接在 y,z 自己的后面
+        //         r = Math.max(r, 2 + dfs(i, j, k-1, 2));
+        //     return f[i][j][k][x] = r;
+        // }
+
+        // // 【记忆化深搜】：直接用自顶向下的【动规】来写。因为是自顶向下，这里感觉不太会用【记忆化深搜】来倒着搜？这两个方法的转化，在这个题，脑袋里失效了。。。先写下一个
+        // public int minimizeConcatenatedLength(String[] a) {
+        //     n = a.length;
+        //     // f = new int [n][2]; // 后一维：标记是【i-1,i】＝0, 【i,i-1】＝ 1 的最小长度
+        //     m.put(0, new String [] {a[0], a[0], String.valueOf(a[0].length()), String.valueOf(a[0].length())});
+        //     for (int i = 1; i < n; i++) {
+        //         // 这里的情况：就变成为，细节狠繁琐，思路仍然是直白的
+        //         String pone = m.get(i-1)[0], ptwo = m.get(i-1)[1];
+                
+        //         String one = getAddedString(pone, a[i]);    // 这里要去拿先前存的
+        //         String oneone = getAddedString(a[i], pone); // 这里要去拿先前存的
+        //         String two = getAddedString(ptwo, a[i]);
+        //         String twotwo = getAddedString(a[i], ptwo);
+        //         // 现在脑袋有点儿不转了：过程中，非最终结果，字符串可能存在的个数，是呈指数增加，还是固定不变的？
+        //         // 如何过把程中的结果记下来呢？
+        //         int p = Integer.parseInt(m.get(i-1)[2]);
+        //         String oo = one.length() >
+        //         m.put(i, new String [] {
+        //                 one, two, String.valueOf(p + one.length()), String.valueOf(p + two.length())});
+        //     }
+        //     return Math.max(Integer.parseInt(m.get(n-1)[2]), Integer.parseInt(m.get(n-1)[3]));
+        // }
+        // Map<Integer, String []> m = new HashMap<>();
+        // int n;
+        // String getAddedString(String S, String T) {
+        //     int m = S.length(), n = T.length();
+        //     char [] s = S.toCharArray(), t = T.toCharArray();
+        //     int i = 0;
+        //     while (i < n && m >= i+1 && S.endsWith(T.substring(0, i+1))) i++;
+        //     return i == n ? "" : T.substring(i);
+        // }
+
+        // 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！！爱表哥，爱生活！！！】
+        public int[] countServers(int n, int[][] logs, int x, int[] queries) {
+            
         }
-        Map<String, Integer> m = new HashMap<>();
-        int n; int [] a, b;
-        int dfs(int i, int j, int [] vis) {
-            // System.out.println("\n i: " + i);
-            // System.out.println("j: " + j);
-            // System.out.println(Arrays.toString(vis));
-            if (Arrays.stream(vis).sum() == n) return 0; // 全部涂完了
-            String key = i + "-" + j + "-" + Arrays.toString(vis);
-            if (m.containsKey(key)) return m.get(key);
-            if (i == 0) {
-                Queue<Integer> q = new PriorityQueue<>((x, y)->a[y] - a[x]); // 最大堆
-                for (int k = 0; k < n; k++)
-                    if (vis[k] == 0) q.offer(k);
-                int x = j;
-                while (x > 0 && !q.isEmpty()) {
-                    vis[q.poll()] = 1;
-                    x--;
-                }
-                m.put(key, dfs(2, 0, vis));
-                return m.get(key);
-            }
-            int r = Integer.MAX_VALUE;
-            for (int k = 0; k < n; k++) { // 这里一定会超时，所以需要排序的优化。。。【这个会超时的方法】：也不知道哪里写错了，改天再写。。【活宝妹就是一定要嫁给亲爱的表哥！！爱表哥，爱生活！！！】
-                if (vis[k] == 1) continue;
-                vis[k] = 1;
-                System.out.println(Arrays.toString(vis));
-                r = Math.min(r, a[k] + dfs(i-1, j + b[k], vis));
-                // System.out.println("r: " + r);
-                vis[k] = 0;
-            }
-            m.put(key, r);
-            // System.out.println("\n i: " + i);
-            // System.out.println("j: " + j);
-            // System.out.println("r: " + r);
-            return r;
-        }        
     }             
     public static void main (String[] args) { 
         Solution s = new Solution ();
 
-        // int [] a = new int [] {1, 2, 3, 2};
-        // int [] b = new int [] {1,2,3,2};
-        int [] a = new int [] {2, 3, 4, 2};
-        int [] b = new int [] {1, 1, 1, 1};
-
-        int r = s.paintWalls(a, b);
+        int r = s.minimizeConcatenatedLength(a);
         System.out.println("r: " + r);
     }
 }
@@ -477,43 +523,7 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
-
-
 // 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
