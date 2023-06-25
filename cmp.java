@@ -450,6 +450,31 @@ public class cmp {
         //     return r;
         // }
 
+        // // 【记忆化深搜】：方法思路是对的，不知道、不明白为什么会超时？是因为还是更简单的，脑袋急转变的解法，妈的，吭死人不偿命。。。活宝妹哼哧哼哧写了半天。。。
+        // public int longestString(int x, int y, int z) {
+        //     n = Math.max(x, Math.max(y, z)) + 1;
+        //     f = new Integer [n][n][n][4];// 最后一维：标记前面一个字符串是哪个
+        //     return dfs(x, y, z, 3);
+        // }
+        // Integer [][][][] f;
+        // int n;
+        // int dfs(int i, int j, int k, int x) {
+        //     if (i < 0 || j < 0 || k < 0) return 0;
+        //     if (i == 0 && j == 0 && k == 0) return 0;
+        //     if (f[i][j][k][x] != null) return f[i][j][k][x];
+        //     int r = 0;
+        //     if (i > 0 && x != 0) // 可以接在 y z 后面，不能接在自己的后面
+        //         r = Math.max(r, 2 + dfs(i-1, j, k, 0));
+        //     if (j > 0 && (x == 3 || x == 0)) // 可以接在 x 后面
+        //         r = Math.max(r, 2 + dfs(i, j-1, k, 1));
+        //     if (k > 0 && x != 0) // 可以接在 y,z 自己的后面
+        //         r = Math.max(r, 2 + dfs(i, j, k-1, 2));
+        //     return f[i][j][k][x] = r;
+        // }
+        // public int longestString(int x, int y, int z) { // 吭死人不偿命，这种题太可恶了！！！
+        //     return Math.min(x, y) * 4 + (x != y ? 2 : 0) + 2 * z;
+        // }
+
         // // 【记忆化深搜】：直接用自顶向下的【动规】来写。因为是自顶向下，这里感觉不太会用【记忆化深搜】来倒着搜？这两个方法的转化，在这个题，脑袋里失效了。。。先写下一个
         // public int minimizeConcatenatedLength(String[] a) {
         //     n = a.length;
@@ -526,36 +551,114 @@ public class cmp {
         //     }
         // }
 
-        // // 【记忆化深搜】：方法思路是对的，不知道、不明白为什么会超时？是因为还是更简单的，脑袋急转变的解法，妈的，吭死人不偿命。。。活宝妹哼哧哼哧写了半天。。。
-        // public int longestString(int x, int y, int z) {
-        //     n = Math.max(x, Math.max(y, z)) + 1;
-        //     f = new Integer [n][n][n][4];// 最后一维：标记前面一个字符串是哪个
-        //     return dfs(x, y, z, 3);
+        // public int countBeautifulPairs(int[] a) {
+        //     int n = a.length, r = 0;
+        //     for (int i = 0; i < n-1; i++)
+        //         for (int j = i+1; j < n; j++)
+        //             if (gcd(Integer.parseInt(String.valueOf(a[i]).substring(0, 1)), a[j] % 10) == 1) r++;
+        //     return r;
         // }
-        // Integer [][][][] f;
-        // int n;
-        // int dfs(int i, int j, int k, int x) {
-        //     if (i < 0 || j < 0 || k < 0) return 0;
-        //     if (i == 0 && j == 0 && k == 0) return 0;
-        //     if (f[i][j][k][x] != null) return f[i][j][k][x];
-        //     int r = 0;
-        //     if (i > 0 && x != 0) // 可以接在 y z 后面，不能接在自己的后面
-        //         r = Math.max(r, 2 + dfs(i-1, j, k, 0));
-        //     if (j > 0 && (x == 3 || x == 0)) // 可以接在 x 后面
-        //         r = Math.max(r, 2 + dfs(i, j-1, k, 1));
-        //     if (k > 0 && x != 0) // 可以接在 y,z 自己的后面
-        //         r = Math.max(r, 2 + dfs(i, j, k-1, 2));
-        //     return f[i][j][k][x] = r;
+        // int gcd(int x, int y) {
+        //     if (y == 0) return x;
+        //     return gcd(y, x % y);
         // }
-        // public int longestString(int x, int y, int z) { // 吭死人不偿命，这种题太可恶了！！！
-        //     return Math.min(x, y) * 4 + (x != y ? 2 : 0) + 2 * z;
+
+        // static final int mod = (int)1e9 + 7;
+        // public int numberOfGoodSubarraySplits(int[] a) {
+        //     int n = a.length;
+        //     long ans = 1;
+        //     int [] r = new int [n];
+        //     for (int i = 0; i < n; i++)
+        //         r[i] = (i == 0 ? 0 : r[i-1]) + a[i];
+        //     if (r[n-1] <= 1) return r[n-1];
+        //     System.out.println(Arrays.toString(r));
+        //     int i = 0, j = 0;
+        //     while (i < n && r[i] < 1) i++;
+        //     while (j < n) {
+        //         j = i+1;
+        //         while (j < n && r[j] == r[i]) j++;
+        //         ans = (ans * (j == n ? 1 : j - i)) % mod;
+        //         i = j;
+        //     }
+        //     return (int)ans;
         // }
+
+        // public List<Integer> survivedRobotsHealths(int[] a, int[] h, String T) {
+        //     int n = T.length(); 
+        //     if (T.chars().distinct().count() == 1) return Arrays.stream(h).boxed().collect(Collectors.toList()); // 如果只有一个方向，直接返回
+        //     // 需要先排序一下，但是要记住下标
+        //     List<int []> l = new ArrayList<>();
+        //     for (int i = 0; i < n; i++)
+        //         l.add(new int [] {h[i], (T.charAt(i) == 'R' ? 0 : 1), i, a[i]});
+        //     Collections.sort(l, (x, y) -> x[3] - y[3]);
+        //     int [] tmp = new int [n];
+        //     int i = 0;
+        //     Deque<int []> s = new ArrayDeque<>();
+        //     while (i < n && l.get(i)[1] == 1) {
+        //         tmp[l.get(i)[2]] = l.get(i)[0];
+        //         i++;
+        //     }
+        //     while (i < n) {
+        //         while (i < n && l.get(i)[1] == 0) { // 向右移动
+        //             s.offerFirst(l.get(i));
+        //             i++;
+        //         }
+        //         while (i < n && l.get(i)[1] == 1 && !s.isEmpty()) {
+        //             if (s.peekFirst()[0] > l.get(i)[0]) {
+        //                 s.peekFirst()[0] -= 1;
+        //                 i++;
+        //             } else if (s.peekFirst()[0] == l.get(i)[0]) {
+        //                 s.pollFirst();
+        //                 i++;
+        //             } else {
+        //                 s.pollFirst();
+        //                 l.get(i)[0] -= 1;
+        //             }
+        //         }
+        //         if (i < n && s.isEmpty() && l.get(i)[1] == 1) {
+        //             // s.offerFirst(l.get(i));
+        //             tmp[l.get(i)[2]] = l.get(i)[0];
+        //             i++;
+        //             while (i < n && l.get(i)[1] == 1) {
+        //                 tmp[l.get(i)[2]] = l.get(i)[0];
+        //                 i++;
+        //             }
+        //         } 
+        //     }
+        //     while (!s.isEmpty()) {
+        //         int [] cur = s.pollFirst();
+        //         tmp[cur[2]] = cur[0];
+        //     }
+        //     List<Integer> ans = new ArrayList<>();
+        //     for ( i = 0; i < n; i++)
+        //         if (tmp[i] > 0) ans.add(tmp[i]);
+        //     return ans;
+        // }
+
+        // 把人恶心死的贱题目。。。
+        // 不知道这个死题目说的是什么意思，讨厌这种恶心题目，以后不写了。。。
+        public int makeTheIntegerZero(int x, int y) {
+            return dfs(x, y);
+        }
+        Map<Integer, int []> m = new HashMap<>();
+        int dfs(int i, int j) {
+            if (i == 0) return 0;
+            if (m.containsKey(i)) return m.get(i);
+        }
     }             
     public static void main (String[] args) { 
         Solution s = new Solution ();
 
-        int r = s.longestString(9, 9, 34);
-        System.out.println(Arrays.toString(r));
+        // int [] a = new int [] {3, 5, 2, 6};
+        // int [] b = new int [] {10, 10, 15, 12};
+        // String c = "RLRL";
+        int [] a = new int [] {37, 35};
+        int [] b = new int [] {16, 19};
+        String c = "RL";
+
+        List<Integer> r = s.survivedRobotsHealths(a, b, c);
+        System.out.println("r.size(): " + r.size());
+        System.out.println(Arrays.toString(r.toArray()));
     }
 }
 // 【爱表哥，爱生活！！！活宝妹就是一定要嫁给亲爱的表哥！！！】
@@ -577,3 +680,4 @@ public class cmp {
 // 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
 // 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
 // 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+
