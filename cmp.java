@@ -1,25 +1,15 @@
 import com.TreeNode;
-
 import java.util.HashMap;
-
 import java.util.Map;
-
 import java.util.ArrayList;
-
 import java.util.*;
-
 import java.util.stream.*;
-
 import java.util.stream.Collectors;
-
 import java.util.HashSet;
-
 import java.util.Set;
-
 import static java.util.stream.Collectors.toMap;
 
 public class cmp {
-
     public static class Solution {
 
         // // 不知道所有的 i<j 都能连通是什么意思，但是大概是先转化成一个无向图，再求所有的 i<j
@@ -635,30 +625,102 @@ public class cmp {
         //     return ans;
         // }
 
-        // 把人恶心死的贱题目。。。
-        // 不知道这个死题目说的是什么意思，讨厌这种恶心题目，以后不写了。。。
-        public int makeTheIntegerZero(int x, int y) {
-            return dfs(x, y);
-        }
-        Map<Integer, int []> m = new HashMap<>();
-        int dfs(int i, int j) {
-            if (i == 0) return 0;
-            if (m.containsKey(i)) return m.get(i);
-        }
+        // // 把人恶心死的贱题目。。。
+        // // 不知道这个死题目说的是什么意思，讨厌这种恶心题目，以后不写了。。。
+        // public int makeTheIntegerZero(int x, int y) {
+        //     return dfs(x, y);
+        // }
+        // Map<Integer, int []> m = new HashMap<>();
+        // int dfs(int i, int j) {
+        //     if (i == 0) return 0;
+        //     if (m.containsKey(i)) return m.get(i);
+        // }
+
+        // public int longestAlternatingSubarray(int[] a, int k) { // 把人恶心死的题目
+        //     int n = a.length;
+        //     int [] f = new int [n];
+        //     for (int i = 0; i < n; i++)
+        //         if (a[i] % 2 == 0 && a[i] <= k) f[i] = 1;
+        //     if (a[n-1] <= k) f[n-1] = (a[n-1] % 2 == 0 ? 1 : 0);
+        //     if (n == 1) return a[0] % 2 == 0 && a[0] <= k ? 1 : 0;
+        //     for (int i = n-2; i >= 0; i--) { // 从后往前遍历
+        //         if (a[i] > k) continue;
+        //         if (f[i] > 0 && a[i] % 2 != a[i+1] % 2)
+        //             f[i] = (f[i+1] > 0 ? f[i+1] : (a[i+1] <= k ? 1 : 0)) + 1;
+        //         else if (i > 0 && f[i] == 0 && a[i-1] <= k && a[i-1] % 2 != a[i] % 2 && a[i+1] <= k && a[i] % 2 != a[i+1] % 2)
+        //             f[i] = f[i+1] + 1;
+        //     }
+        //     return Arrays.stream(f).max().getAsInt();
+        // }
+
+        // // TLE: 不知道再怎么提速了。。。我感觉自己先 process 了一遍，用一个数组标记了是否是质数，但计算是否是质数的算法不对
+        // public List<List<Integer>> findPrimePairs(int n) {
+        //     List<List<Integer>> ll = new ArrayList<>();
+        //     f = new Boolean [n+1];
+        //     for (int i = 2; i <= n; i++)
+        //         for (int j = 2; j * j <= i; j++) {
+        //             if (i == j) continue;
+        //             if (i % j == 0) f[i] = false;
+        //         }
+        //     for (int i = 2; i <= n / 2; i++) {
+        //         if (f[i] != null && !f[i]) continue;
+        //         if (isPrime(i) && isPrime(n - i))
+        //             ll.add(List.of(i, n-i));
+        //     }
+        //     return ll;
+        // }
+        // Boolean [] f;
+        // boolean isPrime(int v) {
+        //     if (f[v] != null) return f[v];
+        //     if (v == 1) {
+        //         f[v] = true;
+        //         return true;
+        //     }
+        //     for (int i = 2; i * i <= v; i++) 
+        //         if (v % i == 0) {
+        //             f[v] = false;
+        //             return false;
+        //         }
+        //     f[v] = true;
+        //     return true;
+        // }
+
+//         public long continuousSubarrays(int[] a) {
+//             int n = a.length;
+// // 只有使用【双端队列】自己维护排序，才是【O(N)】解法；其它是【O(NlgN)】解法 
+//             ArrayDeque<Integer> min = new ArrayDeque<>(); // 升序: 保留重复
+//             ArrayDeque<Integer> max = new ArrayDeque<>(); // 降序
+//             long ans = 0;
+//             for (int r = 0, l = 0; r < n; r++) { // 遍历：处理每一个右端点 r
+//                 // 在添加当前下标 r 的值前，检查两队列，维护他们的排序，【预处理】: 两队列的右端点，并添加进队列
+//                 while (!min.isEmpty() && a[min.peekLast()] > a[r]) min.pollLast();
+//                 min.offerLast(r);
+//                 while (!max.isEmpty() && a[max.peekLast()] < a[r]) max.pollLast();
+//                 max.offerLast(r);
+//                 // 【预处理】：两队列的队列头，舍弃不合法的队列头
+//                 while (!min.isEmpty() && !max.isEmpty() && a[max.peekFirst()] - a[min.peekFirst()] > 2) { // 去看两队列的排序，当然是比较头呀。。。
+//                     if (max.peekFirst() < min.peekFirst()) 
+//                         l = max.pollFirst() + 1;
+//                     else l = min.pollFirst() + 1;
+//                 }
+//                 ans += r - l + 1; // 取【遍历当前下标 r】的子数组的个数
+//             }
+//             return ans;
+//         }
+
+// // 这个题：完全读不懂，也读不懂它的破烂提示说的是什么意思，过段时间再写
+//         public int sumImbalanceNumbers(int[] a) { 
+//             int n = a.length;
+//         }
+        
     }             
     public static void main (String[] args) { 
         Solution s = new Solution ();
 
-        // int [] a = new int [] {3, 5, 2, 6};
-        // int [] b = new int [] {10, 10, 15, 12};
-        // String c = "RLRL";
-        int [] a = new int [] {37, 35};
-        int [] b = new int [] {16, 19};
-        String c = "RL";
-
-        List<Integer> r = s.survivedRobotsHealths(a, b, c);
+        List<List<Integer>> r = s.findPrimePairs(10);
         System.out.println("r.size(): " + r.size());
-        System.out.println(Arrays.toString(r.toArray()));
+        for (int z = 0; z < r.size(); ++z) 
+            System.out.println(Arrays.toString(r.get(z).toArray()));
     }
 }
 // 【爱表哥，爱生活！！！活宝妹就是一定要嫁给亲爱的表哥！！！】
@@ -675,9 +737,3 @@ public class cmp {
 // 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
 // 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
 // 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-
