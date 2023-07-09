@@ -712,24 +712,212 @@ public class cmp {
 //         public int sumImbalanceNumbers(int[] a) { 
 //             int n = a.length;
 //         }
-        
+
+        // 亲爱的表哥，早上的活宝妹，被他们破烂网站以网络宕机为名，剥夺了活宝妹早上做这几个题目的机会，下午就稍微写一下
+        // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹，就是一定要嫁给亲爱的表哥！！爱表哥，爱生活！！！】
+
+        // 这个题目，说得狠绕，看半天才看懂: 【记忆化深搜】：真的，第一个题目记忆化深搜，他们真来了。。。
+        // 这个方法对吗，子数组，如果记忆化深搜，怎么处理连贯性问题？
+        // 爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！
+        // public int alternatingSubarray(int[] a) { // 不知道哪里写错了，先放一下
+        //     n = a.length; this.a = a; 
+        //     f = new Integer [n][2];
+        //     int r = dfs(0, 0); 
+        //     System.out.println("f.length: " + f.length);
+        //     for (int z = 0; z < f.length; ++z) 
+        //         System.out.println(Arrays.toString(f[z]));
+        //     return r == 0 ? -1 : r;
+        // }
+        // Integer [][] f; int [] a;
+        // int n;
+        // int dfs(int i, int j) {
+        //     if (j == 1 && i == n-1) return 1;
+        //     if (i >= n-1) return 0;
+        //     if (f[i][j] != null) return f[i][j];
+        //     int r = 0;
+        //     if (j == 0 && a[i] == a[i+1] - 1)
+        //         r = Math.max(r, 1 + dfs(i+1, 1));
+        //     else if (j == 1 && a[i] == a[i+1] + 1)
+        //         r = Math.max(r, 1 + dfs(i+1, 0));
+        //     if (j == 0) r = Math.max(r, dfs(i+1, 0));
+        //     if (j == 1) r = Math.max(r, dfs(i+1, 0));
+        //     if (j == 1 && r == 1) r = 2;
+        //     return f[i][j] = r;
+        // }        
+        // // int [] a = new int [] {42,43,44,43,44,43,44,45,46};
+
+        // public List<Integer> relocateMarbles(int[] a, int[] s, int[] e) {
+        //     int n = s.length;
+        //     Set<Integer> c = new HashSet<>(Arrays.stream(a).boxed().collect(Collectors.toList()));
+        //     for (int i = 0; i < n; i++) {
+        //         c.remove(new Integer(s[i]));
+        //         c.add(e[i]);
+        //     }
+        //     List<Integer> l = new ArrayList<>(c);
+        //     Collections.sort(l);
+        //     return l;
+        // }
+
+        // // 先试写一下：【自顶向下】动规：
+        // public int minimumBeautifulSubstrings(String S) {
+        //     int n = S.length();
+        //     char [] s = S.toCharArray();
+        //     f = new int [n];
+        //     Arrays.fill(f, Integer.MAX_VALUE);
+        //     if (s[0] == '0') return -1;
+        //     return dfs(0);
+        // }
+        // // 【记忆化深搜】：
+        // public int minimumBeautifulSubstrings(String S) {
+        //     n = S.length(); this.t = S; 
+        //     s = S.toCharArray();
+        //     f = new int [n];
+        //     Arrays.fill(f, Integer.MAX_VALUE / 2);
+        //     int r = dfs(0); 
+        //     return r == Integer.MAX_VALUE / 2 ? -1 : r;
+        // }
+        // int [] f;
+        // int n; char [] s; String t;
+        // int dfs(int i) {
+        //     if (i == n) return 0;
+        //     if (f[i] != Integer.MAX_VALUE / 2) return f[i];
+        //     if (s[i] == '0') return f[i] = Integer.MAX_VALUE / 2;
+        //     if (i == n-1) return f[i] = 1;
+        //     if (i > n-3) return f[i] = 1 + dfs(i+1);
+        //     int r = Integer.MAX_VALUE / 2, j = 0;
+        //     for (j = n; j >= i+1; j--) {
+        //         // 我这里：5 的指数次方，简单想成是以 1 或 101 结尾，可能不一定对？
+        //         if (j - i >= 3 && t.substring(j-3, j).equals("101")) {
+        //             r = Math.min(r, 1 + dfs(j));
+        //             // break;// 因为我倒序遍历，找到一个应该可以停
+        //         }
+        //     }
+        //     if (j == i) r = Math.min(r, 1 + dfs(i+1));
+        //     return f[i] = r;
+        // }
+
+        // // 这个题目，说的不知道是什么意思，没有思路
+        // public long[] countBlackBlocks(int m, int n, int[][] coordinates) {
+        // }
+
+        // public int theMaximumAchievableX(int num, int t) {
+        //     return num + t * 2;
+        // }
+
+        // public int maximumJumps(int[] a, int t) {
+        //     n = a.length; this.a = a; this.t = t; 
+        //     f = new Integer [n];
+        //     int r = dfs(0);
+        //     return r < 0 ? -1 : r;
+        // }
+        // Integer [] f;
+        // int n, t; int [] a;
+        // int dfs(int i) {
+        //     if (i == n-1) return 0;
+        //     if (f[i] != null) return f[i];
+        //     int r = Integer.MIN_VALUE / 2;
+        //     for (int j = i+1; j < n; j++) {
+        //         if (Math.abs(a[j] - a[i]) > t) continue;
+        //         r = Math.max(r, 1 + dfs(j));
+        //     }
+        //     return f[i] = r;
+        // }        
+
+        // public boolean checkArray(int[] a, int k) {
+        //     if (k == 1) return true;
+        //     int n = a.length;
+        //     for (int i = n-1; i - k >= -1; i--) {
+        //         if (a[i] == 0) continue;
+        //         for (int j = i-1; j > i - k && j >= 0; j--) {
+        //             a[j] -= a[i];
+        //             if (a[j] < 0) return false;
+        //         }
+        //         a[i] = 0;
+        //     }
+        //     return Arrays.stream(a).max().getAsInt() == 0;
+        // }
+
+        // public int maxNonDecreasingLength(int[] a, int[] b) {
+        //     int n = a.length;
+        //     Integer [][] f = new Integer [n][2]; // 0 : a, 1 : b
+        //     // 不用【记忆化深搜】，就【自顶向下】从头到尾动规
+        //     Arrays.stream(f).forEach(z -> Arrays.fill(z, 1));
+        //     for (int i = 1; i < n; i++) {
+        //         if (a[i] >= a[i-1]) f[i][0] = Math.max(f[i][0], 1 + f[i-1][0]);
+        //         if (a[i] >= b[i-1]) f[i][0] = Math.max(f[i][0], 1 + f[i-1][1]);
+        //         if (b[i] >= a[i-1]) f[i][1] = Math.max(f[i][1], 1 + f[i-1][0]);
+        //         if (b[i] >= b[i-1]) f[i][1] = Math.max(f[i][1], 1 + f[i-1][1]);
+        //     }
+        //     int max = 0;
+        //     for (int i = 0; i < n; i++)
+        //         max = Math.max(max, Math.max(f[i][0], f[i][1]));
+        //     return max;
+        // } // 今天晚上的题目出得太简单了，写得也没有什么意思。。
     }             
     public static void main (String[] args) { 
         Solution s = new Solution ();
 
-        List<List<Integer>> r = s.findPrimePairs(10);
-        System.out.println("r.size(): " + r.size());
-        for (int z = 0; z < r.size(); ++z) 
-            System.out.println(Arrays.toString(r.get(z).toArray()));
+        int [] a = new int [] {1, 3, 2, 1};
+        int [] b = new int [] {2, 2, 3, 4};
+
+        int r = s.maxNonDecreasingLength(a, b);
+        System.out.println("r: " + r);
     }
 }
-// 【爱表哥，爱生活！！！活宝妹就是一定要嫁给亲爱的表哥！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
 // ListNode head = new ListNode(a[0]); 
 // head.buildList(head, a);
 // head.printList(head);
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
 // 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
 // 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
 // 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
