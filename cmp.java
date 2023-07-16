@@ -8,10 +8,8 @@ import java.util.stream.Collectors;
 import java.util.HashSet;
 import java.util.Set;
 import static java.util.stream.Collectors.toMap;
-
 public class cmp {
     public static class Solution {
-
         // // 不知道所有的 i<j 都能连通是什么意思，但是大概是先转化成一个无向图，再求所有的 i<j
         // // N(10^5) 感觉上面想得太复杂了，能不能直接理解为存在一个公质因子
         // // 走连通图，含公因质子的一个模块里: 好好的思路，被我写成了 TLE...
@@ -852,15 +850,237 @@ public class cmp {
         //     for (int i = 0; i < n; i++)
         //         max = Math.max(max, Math.max(f[i][0], f[i][1]));
         //     return max;
-        // } // 今天晚上的题目出得太简单了，写得也没有什么意思。。
+        // } // 今天晚上的题目出得太简单了，写得也没有什么意思。。今天晚上暂时先写两三个题目，要脑袋好好转一转，晚上才睡得着吧。。爱表哥，爱生活！！！
+
+    //     // 这个题目应该不难，繁琐在哪里呢？这题写得太烦人，没有收获，不写这个题目了
+    // Map<Integer, List<int []>> m = new HashMap<>(); // mID: [idx, size]
+    // // TreeMap<Integer, Integer> idx = new TreeMap<>(); // idx: length 按占用着的、下标升序排列. 【这个是优化】O(10^6) 可能暴力可以过？
+    // boolean [] v; // vis
+    // int n;
+    // public Allocator(int n) {
+    // // public cmp(int n) {
+    //     this.n = n; 
+    //     v = new boolean [n];
+    // }
+    // public int allocate(int size, int mID) { // 同一个 mID 可能多次出现，得记住【用个字典】
+    //     int idx = getIdx(size);
+    //     System.out.println("idx: " + idx);
+    //     if (idx == -1) return -1;
+    //     for (int i = idx; i < idx + size; i++)
+    //         v[i] = true;
+    //     m.computeIfAbsent(mID, z -> new ArrayList<>()).add(new int [] {mID, size});
+    //     return idx;
+    // }
+    // public int free(int mID) {
+    //     if (!m.containsKey(mID)) return 0;
+    //     int r = 0;
+    //     for (int [] c : m.get(mID)) {
+    //         r += c[1];
+    //         for (int i = c[0]; i + c[1] <= n; i++)
+    //             v[i] = false;
+    //     }
+    //     return r;
+    // }
+    // int getIdx(int x) {
+    //     for (int i = 0; i < n; i++) {
+    //         if (v[i]) continue;
+    //         if (x == 1) return i;
+    //         int j = i+1;
+    //         for ( j = i+1; j < i + x && j < n; j++) 
+    //             if (v[j]) break;
+    //         if (j + x > n) return i;
+    //     }
+    //     return -1;
+    // }
+
+        // int [][] dirs = {{1, 0}, {0, 1}, {0, -1}, {-1, 0}};
+        // int [] p, size; // 使用【并查集】
+        // // 不仅求值数值排序，也要把矩形排序。【矩形的排序】，这个题目，被我忘记了。。
+        // public int[] maxPoints(int[][] arr, int[] b) {
+        //     int m = arr.length, n = arr[0].length, mn = m * n, o = b.length;
+        //     // 【并查集】
+        //     p = new int [mn];
+        //     for (int i = 0; i < mn; i++) p[i] = i;
+        //     size = new int [mn];
+        //     Arrays.fill(size, 1);
+        //     // 【矩阵排序：】升序处理
+        //     int [][] a = new int [mn][3];
+        //     for (int i = 0; i < m; i++)
+        //         for (int j = 0; j < n; j++)
+        //             a[i*n+j] = new int [] {arr[i][j], i, j};
+        //     Arrays.sort(a, (x, y)-> x[0] - y[0]);
+        //     // 查询的下标按照查询值从小到大排序，方便离线
+        //     Integer [] id = IntStream.range(0, o).boxed().toArray(Integer[]::new);
+        //     Arrays.sort(id, (i, j)->b[i] - b[j]); // 按查询值：升序排列
+        //     int [] ans = new int [o];
+        //     int j = 0;
+        //     for (int i : id) { // 遍历查询值 
+        //         int val = b[i];
+        //         for (; j < mn && a[j][0] < val; ++j) { // 这里 j 是，对所有 id 的数，连续遍历一次
+        //             int x = a[j][1],  y = a[j][2];
+        //             // 枚举周围四个格子，值小于 val才可以合并：并查连通集
+        //             for (int [] d : dirs) { // 遍历周边四个方向
+        //                 int xx = x + d[0], yy = y + d[1];
+        //                 if (xx >= 0 && xx < m && yy >= 0 && yy < n && arr[xx][yy] < val) // 题目要求的是：严格小于
+        //                     merge(x * n + y, xx * n + yy); // 把坐标压缩成一维的编号
+        //             }
+        //         }
+        //         if (arr[0][0] < val)
+        //             ans[i] = size[find(0)];
+        //     }
+        //     return ans;
+        // }
+        // // 并查集模板
+        // int find(int v) {
+        //     if (p[v] != v)
+        //         p[v] = find(p[v]); // 这一步的原理，需要再熟悉一下
+        //     return p[v];
+        // }
+        // void merge(int bgn, int end) {
+        //     bgn = find(bgn); // 找到最原始的父节点
+        //     end = find(end);
+        //     if (bgn != end) { // 不在同一个连通集里
+        //         p[bgn] = end;
+        //         size[end] += size[bgn];
+        //     }
+        // }
+        // // 【最小堆】：跟我最原始的思路差不多，可是自己有一点儿没能想透，没写完。。。【这个方法没再写一遍，改天再写】
+        // // 睡眠被干扰，一窃一丝没想明白，就没能写完。。。恨它们恨得要死！！！【任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！！爱表哥，爱生活！！！】
+        // private static final int[][] dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+        // public int[] maxPoints(int[][] grid, int[] queries) {
+        //     // 查询的下标按照查询值从小到大排序，方便离线
+        //     var k = queries.length;
+        //     var id = IntStream.range(0, k).boxed().toArray(Integer[]::new);
+        //     Arrays.sort(id, (i, j) -> queries[i] - queries[j]);
+        //     var ans = new int[k];
+        //     var pq = new PriorityQueue<int[]>((a, b) -> a[0] - b[0]);
+        //     pq.add(new int[]{grid[0][0], 0, 0});
+        //     grid[0][0] = 0; // 充当 vis 数组的作用
+        //     int m = grid.length, n = grid[0].length, cnt = 0;
+        //     for (var i : id) {
+        //         var q = queries[i];
+        //         while (!pq.isEmpty() && pq.peek()[0] < q) {
+        //             ++cnt;
+        //             var p = pq.poll();
+        //             for (var d : dirs) { // 枚举周围四个格子
+        //                 int x = p[1] + d[0], y = p[2] + d[1];
+        //                 if (0 <= x && x < m && 0 <= y && y < n && grid[x][y] > 0) {
+        //                     pq.add(new int[]{grid[x][y], x, y});
+        //                     grid[x][y] = 0; // 充当 vis 数组的作用
+        //                 }
+        //             }
+        //         }
+        //         ans[i] = cnt;
+        //     }
+        //     return ans;
+        // }
+
+        // public int sumOfSquares(int[] a) {
+        //     int n = a.length, r = 0;
+        //     for (int i = 1; i <= n; i++)
+        //         if (n % i == 0) r += a[i-1] * a[i-1];
+        //     return r;
+        // }
+        
+        // // 【亲爱的表哥，你的活宝妹居然没忘记，轻松写过了。。。任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！爱表哥，爱生活！！！】
+        // // 这个破题目：感觉是什么差分数组，之类的.
+        // public int maximumBeauty(int[] a, int k) {
+        //     int n = a.length, r [] = new int [100001], max = 0;
+        //     for (int v : a) {
+        //         r[Math.max(0, v-k)] += 1;
+        //         r[Math.min(100000, v + k + 1)] -= 1;
+        //     }
+        //     max = r[0];
+        //     for (int i = 1; i <= 100000; i++) {
+        //         r[i] += r[i-1];
+        //         max = Math.max(max, r[i]);
+        //     }
+        //     return max;
+        // }
+
+        // public int minimumIndex(List<Integer> l) {
+        //     int n = l.size(), maxVal = 0, maxCnt = 0;
+        //     Map<Integer, Integer> m = new HashMap<>();
+        //     for (int i = 0; i < n; i++) {
+        //         int v = l.get(i);
+        //         m.put(v, m.getOrDefault(v, 0) + 1);
+        //         if (m.get(v) > maxCnt) {
+        //             maxVal = v;
+        //             maxCnt = m.get(v);
+        //         }
+        //     }
+        //     m.clear();
+        //     for (int i = 0; i < n-1; i++) {
+        //         int v = l.get(i);
+        //         m.put(v, m.getOrDefault(v, 0) + 1);
+        //         if (l.get(i) != maxVal) continue;
+        //         if (m.get(v) * 2 > i+1 && (maxCnt - m.get(v)) * 2 > n - (i+1))
+        //             return i;
+        //     }
+        //     return -1;
+        // }
+
+        // public class Node {
+        //     Node [] c; // children
+        //     boolean w;
+        //     public Node() {
+        //         this.c = new Node[26];
+        //         w = false;
+        //     }
+        // }
+        // // 这个破题目：应该是要去用什么狗屁的 Tier? 。。。。。这个题，思路不够透彻，今天晚上不太想写了
+        // public int longestValidSubstring(String t, List<String> ls) {
+        //     int n = t.length(), max = 0, l = 0;
+        //     char [] s = t.toCharArray();
+        //     // // 把所有禁止的放到，什么狗屁死东西上面，方便查找O(26*10) ？
+        //     // Node r = new Node();
+        //     // for (String s : l) insert(r, s);
+        //     Set<String> ss = new HashSet<>(ls);
+        //     // 查找：搜索字典树
+        //     for (int i = 0; i + max <= n && i < n; i++) {
+        //         int j = i + 1;
+        //         for (j = i+1; j <= Math.max(i + max, i+10) && j <= n; j++) {
+        //             String cur = t.substring(i, j);
+        //             // if (startsWith(r))
+        //             if (!ss.contains(cur)) continue;
+        //             break;
+        //         }
+        //         if (j <= Math.max(i + max, i+10)) { // 当前右端点不起效，取值
+        //             max = Math.max(max, j - l);
+        //             l = i+1;
+        //             continue;
+        //         } 
+        //     }
+        //     return max;
+        // }
+        // boolean startsWith(Node r, String t) {
+        //     int n = t.length(); char [] s = t.toCharArray();
+        //     for (int i = 0; i < n; i++) {
+        //         int j = s[i] - 'a';
+        //         if (r.c[j] == null) return false;
+        //         r = r.c[j];
+        //     }
+        //     return r.w;
+        // }
+        // public void insert(Node r, String t) { // 插入数值
+        //     int n = t.length();
+        //     char [] s = t.toCharArray();
+        //     for (int i = 0; i < n; i++) {
+        //         int j = s[i] - 'a';
+        //         if (r.c[j] == null) r.c[j] = new Node();
+        //         r = r.c[j];
+        //     }
+        //     r.w = true;
+        // }
     }             
     public static void main (String[] args) { 
         Solution s = new Solution ();
 
-        int [] a = new int [] {1, 3, 2, 1};
-        int [] b = new int [] {2, 2, 3, 4};
+        String a = "cbaaaabc";
+        String [] b = new String [] {"aaa","cb"};
 
-        int r = s.maxNonDecreasingLength(a, b);
+        List<String> c = Arrays.asList(b);
+        int r = s.longestValidSubstring(a, c);
         System.out.println("r: " + r);
     }
 }
@@ -871,26 +1091,6 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
 // 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
 // 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
 // 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
