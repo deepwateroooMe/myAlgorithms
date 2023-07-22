@@ -8,8 +8,10 @@ import java.util.stream.Collectors;
 import java.util.HashSet;
 import java.util.Set;
 import static java.util.stream.Collectors.toMap;
+
 public class cmp {
     public static class Solution {
+
         // // 不知道所有的 i<j 都能连通是什么意思，但是大概是先转化成一个无向图，再求所有的 i<j
         // // N(10^5) 感觉上面想得太复杂了，能不能直接理解为存在一个公质因子
         // // 走连通图，含公因质子的一个模块里: 好好的思路，被我写成了 TLE...
@@ -1072,15 +1074,122 @@ public class cmp {
         //     }
         //     r.w = true;
         // }
+
+        // public boolean isGood(int[] a) {
+        //     int n = a.length;
+        //     Map<Integer, Integer> m = new HashMap<>();
+        //     for (int v : a) {
+        //         if (v >= n) return false;
+        //         m.put(v, m.getOrDefault(v, 0) + 1);
+        //         if (m.get(v) > 1 && v != n-1) return false;
+        //     }
+        //     return true;
+        // }
+
+        // public String sortVowels(String t) {
+        //     int n = t.length(); char [] s = t.toCharArray();
+        //     Map<Character, Integer> m = new HashMap<>();
+        //     Map<Integer, Integer> o = new HashMap<>();
+        //     int [] r = new int [10];
+        //     m.put('A', 0);
+        //     m.put('E', 1);
+        //     m.put('I', 2);
+        //     m.put('O', 3);
+        //     m.put('U', 4);
+        //     m.put('a', 5);
+        //     m.put('e', 6);
+        //     m.put('i', 7);
+        //     m.put('o', 8);
+        //     m.put('u', 9);
+        //     o.put(0, 0);
+        //     o.put(1, 4);
+        //     o.put(2, 8);
+        //     o.put(3, 14);
+        //     o.put(4, 20);
+        //     o.put(5, 0);
+        //     o.put(6, 4);
+        //     o.put(7, 8);
+        //     o.put(8, 14);
+        //     o.put(9, 20);
+        //     Set<Character> sc = new HashSet<>(List.of('a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U'));
+        //     for (char c : s) 
+        //         if (sc.contains(c))
+        //             // m.put(c, m.getOrDefault(c, 0) + 1);
+        //             r[m.get(c)]++;
+        //     System.out.println(Arrays.toString(r));
+        //     int idx = 0;
+        //     for (int i = 0; i < n; i++) {
+        //         if (!sc.contains(s[i])) continue;
+        //         while (r[idx] == 0) ++idx;
+        //         System.out.println("\n idx: " + idx);
+        //         if (idx >= 10)
+        //             return new String(s);
+        //         System.out.println("\n idx: " + idx);
+        //         System.out.println("i: " + i);
+        //         char c = s[i];
+        //         s[i] = (char)((idx < 5 ? 'A' + o.get(idx): 'a' + o.get(idx)));
+        //         --r[idx];
+        //         System.out.println(Arrays.toString(r));
+        //         System.out.println(Arrays.toString(s));
+        //     }
+        //     return new String(s);
+        // }
+
+        // // 【记忆化深搜】：超时了。。。【自底向上、的动规】是可能能过的，不太会写动规。。。
+        // public long maxScore(int[] a, int x) {
+        //     n = a.length; this.a = a; this.x = x; 
+        //     f = new Long [n];
+        //     return dfs(0);
+        // }
+        // int n, x; int [] a;
+        // Long [] f;
+        // long dfs(int  i) {
+        //     if (i >= n) return 0;
+        //     if (f[i] != null) return f[i];
+        //     long r = a[i];
+        //     for (int j = i+1; j < n; j++)
+        //         r = Math.max(r, a[i] + dfs(j) - (a[i] % 2 == a[j] % 2 ? 0 : x));
+        //     return f[i] = r;
+        // }        
+        // public long maxScore(int[] a, int x) {
+        //     int n = a.length;
+        //     long mOdd = 0, mEven = 0; // 记遍历过的最大奇偶值
+        //     int idxOdd = -1, idxEven = -1;
+        //     long [] f = new long [n];
+        //     for (int i = 0; i < n; i++) f[i] = (long)a[i];
+        //     if (a[n-1] % 2 == 0) {
+        //         mEven = a[n-1];
+        //         idxEven = n-1;
+        //     } else {
+        //         mOdd = a[n-1];
+        //         idxOdd = n-1;
+        //     }
+        //     for (int i = n-2; i >= 0; i--) {
+        //         f[i] = Math.max(f[i], a[i] + Math.max(idxEven == -1 ? 0 : (mEven - (a[i] % 2 == a[idxEven] % 2 ? 0 : x)),
+        //                                               idxOdd == -1 ? 0 : (mOdd - (a[i] % 2 == a[idxOdd] % 2 ? 0 : x))));
+        //         if (a[i] % 2 == 0) {
+        //             mEven = f[i];
+        //             idxEven = i;
+        //         } else {
+        //             mOdd = f[i];
+        //             idxOdd = i;
+        //         }
+        //     }
+        //     return f[0];
+        // }
+
+        // 感觉这个题，好奇葩。。。
+        public int numberOfWays(int n, int x) {
+            
+        }
     }             
     public static void main (String[] args) { 
         Solution s = new Solution ();
 
-        String a = "cbaaaabc";
-        String [] b = new String [] {"aaa","cb"};
+        String a = "uZcPmqAd";
+        System.out.println("a: " + a);
 
-        List<String> c = Arrays.asList(b);
-        int r = s.longestValidSubstring(a, c);
+        String r = s.sortVowels(a);
         System.out.println("r: " + r);
     }
 }
@@ -1091,16 +1200,6 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
 // 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
 // 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
 // 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
