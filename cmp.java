@@ -8,10 +8,8 @@ import java.util.stream.Collectors;
 import java.util.HashSet;
 import java.util.Set;
 import static java.util.stream.Collectors.toMap;
-
 public class cmp {
     public static class Solution {
-
         // // 不知道所有的 i<j 都能连通是什么意思，但是大概是先转化成一个无向图，再求所有的 i<j
         // // N(10^5) 感觉上面想得太复杂了，能不能直接理解为存在一个公质因子
         // // 走连通图，含公因质子的一个模块里: 好好的思路，被我写成了 TLE...
@@ -1178,49 +1176,152 @@ public class cmp {
         //     return f[0];
         // }
 
-        // 感觉这个题，好奇葩。。。
-        public int numberOfWays(int n, int x) {
-            
+        // public int numberOfWays(int n, int x) {
+        //     ll = new ArrayList<>();
+        //     Arrays.setAll(ll, z -> new ArrayList<>());
+        //     for (int i = 1; i < 301; i++) ll[1].add(i);
+        //     ll[2] = List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17);
+        //     ll[3] = List.of(1, 2, 3, 4, 5, 6);
+        //     ll[4] = List.of(1, 2, 3, 4);
+        //     ll[5] = List.of(1, 2, 3);
+        //     // 接下来：凑和为一个固定的数，就是硬币问题了，可是今天不想再写了。。
+        //     f = new Integer [n+1];
+        //     f[0] = 1; this.j = x; 
+        //     return helper(n);
+        // }
+        // List<Integer> [] ll; int j;
+        // static final int mod = (int)1e9 + 7;
+        // Integer [] f;
+        // int helper(int i) {
+        //     if (i < 0) return 0; // 这里需要有一个区分：不合法解，需要能够从答案里去掉
+        //     if (f[i] != null) return f[i];
+        //     int n = ll[j].size(), r = 0;
+        //     List<Integer> l = ll[j];
+        //     for (int k = n-1; k >= 0; k--) {
+        //         if (Math.pow(l.get(k), j) > i) continue;
+        //         // if (l.get(k) == i) r += 1;
+        //         r = (r + ) // 改天再写这个题目                
+        //     }
+        // }
+
+        // public List<String> splitWordsBySeparator(List<String> a, char c) {
+        //     List<String> l = new ArrayList<>();
+        //     for (String t : a) {
+        //         int n = t.length(), j = 0, i = 0;
+        //         char [] s = t.toCharArray();
+        //         while (i < n) {
+        //             if (s[i] == c && i > 0 && j != i) // 把可能的答案先写出来
+        //                 l.add(t.substring(j, i));
+        //             while (i < n && s[i] == c) {
+        //                 j = i+1;
+        //                 i++;
+        //             }
+        //             i++;
+        //         }
+        //         if (i == n && j < i) l.add(t.substring(j, i));
+        //     }
+        //     return l;
+        // }
+
+        // // 【区间型动规】：？太恐怖了吧。。。可以先算一个【非降序小区间的和】，再求整个更大片段【非降序小区间的和】，直到找不到更大的值。。
+        // public long maxArrayValue(int[] a) {
+        //     int n = a.length, i = n-1;
+        //     if (n == 1) return a[0];
+        //     List<Long> l = new ArrayList<>();
+        //     long r = 0;
+        //     while (i > 0) { // 【从左到右遍历】：但是否，从左到右，能够保证正确性呢？现改成：【从右往左遍历】
+        //         while (!l.isEmpty() && i >= 0 && a[i] <= l.get(l.size()-1)) {
+        //             l.set(l.size()-1, l.get(l.size()-1) + (long)a[i]);
+        //             --i;
+        //         }
+        //         if (i < 0) return l.get(l.size()-1);
+        //         if (i == 0) break;
+        //         if (a[i] < a[i-1]) {
+        //             l.add((long)a[i]);
+        //             i--;
+        //             r = 0;
+        //         } else {
+        //             while (i > 0 && a[i] >= a[i-1]) {
+        //                 r += a[i];
+        //                 --i;
+        //             }
+        //             if (i > 0) {
+        //                 if (l.size() == 0 || l.get(l.size()-1) < r + (long)a[i]) {
+        //                     l.add((long)a[i] + r);
+        //                     --i;
+        //                     r = 0;
+        //                 }
+        //             }
+        //         }
+        //     }
+        //     if (r >= a[0]) {
+        //         if (!l.isEmpty() && (long)a[0] + r <= l.get(l.size()-1)) 
+        //             return (long)a[0] + r + l.get(l.size()-1);
+        //         l.add((long)a[0] + r);
+        //     } else {
+        //         if (r == 0) {
+        //             if (l.isEmpty() || a[0] > l.get(l.size()-1))
+        //                 l.add((long)a[0]);
+        //             else 
+        //                 l.set(l.size()-1, l.get(l.size()-1) + (long)a[0]); 
+        //         } else {
+        //             while (!l.isEmpty() && r <= l.get(l.size()-1)) {
+        //                 r += l.get(l.size()-1);
+        //                 l.remove(l.size()-1);
+        //             }
+        //             l.add(r);
+        //         }
+        //     }
+        //     return Collections.max(l);
+        // }
+
+        // 【蜀道难，难于上青天的两个难题。。。爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // 读不懂：这个题目是在说什么？
+        public int maxIncreasingGroups(List<Integer> usageLimits) {
+            return 0;
         }
+
+        // 感觉这个最难的，反而是可以稍微想一想的
+        public long countPalindromePaths(List<Integer> p, String t) {
+            n = t.length(); s = t.toCharArray();
+            if (t.chars().distinct().count() == 1) return (long)n * (long)(n-1) / 2l; // 极特殊：只有一个字符，所有路径 
+            long r = n-1;  // 再添加更多的
+            // 不能遍历所有可能性，但可以遍历所有回文字符串 aa-bb-cc-...-zz, 所出现在过的节点
+            for (int i = 1; i < n; i++) {
+                char c = s[i];
+                m.computeIfAbsent(c-'a', z -> new ArrayList<>()).add(i);
+            }
+            // 【无向图：】
+            g = new ArrayList [n];
+            Arrays.setAll(g, z -> new ArrayList<>());
+            for (int i = 1; i < n; i++) { // 无向图
+                g[i].add(p.get(i));
+                g[p.get(i)].add(i);
+            }
+            // 【无向图：】建好之后，可以建 Trie, 方便 O(26 × 26) 来找组合数。可是这里不该又成为树状DP 动规才对吗？
+        }
+        // 先走基本功：把图建好，设计基本数据结构存储必备信息. 这里也要考虑字符串，都是能够狠有帮助的。。
+        int n; char [] s;
+        Map<Integer, List<Integer>> m;  // 记录：【a-z】对应的所有可能节点
+        List<Integer> [] g;
+        // 可是感觉这个题，用 Trie （每个节点：背个数组，数频率）似乎更像呀。。。不是建无向图。怎么根据这个数组来建 Trie 呢？
     }             
     public static void main (String[] args) { 
         Solution s = new Solution ();
 
-        String a = "uZcPmqAd";
-        System.out.println("a: " + a);
+        // int [] a = new int [] {2,3,7,9,3};
+        // int [] a = new int [] {5, 3, 3};
+        // int [] a = new int [] {91, 50};
+        int [] a = new int [] {94, 27, 5, 47};
 
-        String r = s.sortVowels(a);
+        long r = s.maxArrayValue(a);
         System.out.println("r: " + r);
     }
 }
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
 // ListNode head = new ListNode(a[0]); 
 // head.buildList(head, a);
 // head.printList(head);
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
-// 【任何时候，活宝妹就是一定要嫁给亲爱的表哥！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
