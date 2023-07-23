@@ -1285,12 +1285,11 @@ public class cmp {
         public long countPalindromePaths(List<Integer> p, String t) {
             n = t.length(); s = t.toCharArray();
             if (t.chars().distinct().count() == 1) return (long)n * (long)(n-1) / 2l; // 极特殊：只有一个字符，所有路径 
-            long r = n-1;  // 再添加更多的
-            // 不能遍历所有可能性，但可以遍历所有回文字符串 aa-bb-cc-...-zz, 所出现在过的节点
-            for (int i = 1; i < n; i++) {
-                char c = s[i];
-                m.computeIfAbsent(c-'a', z -> new ArrayList<>()).add(i);
-            }
+            // // 不能遍历所有可能性，但可以遍历所有回文字符串 aa-bb-cc-...-zz, 所出现在过的节点
+            // for (int i = 1; i < n; i++) {
+            //     char c = s[i];
+            //     m.computeIfAbsent(c-'a', z -> new ArrayList<>()).add(i);
+            // }
             // 【无向图：】
             g = new ArrayList [n];
             Arrays.setAll(g, z -> new ArrayList<>());
@@ -1298,21 +1297,30 @@ public class cmp {
                 g[i].add(p.get(i));
                 g[p.get(i)].add(i);
             }
+            // 【深搜：】遍历每个节点，更新每个节点的 mask. 那么下一步，最简单最该考的考点，就是树状DP 动规。。
+            f = new int [n];
+            dfs(0, -1, 0);
+            // 【树状DP 动规】：有上面的 mask 数组，怎么数个数呢？还是需要树状遍历最高效，可是没有思路。。。
             // 【无向图：】建好之后，可以建 Trie, 方便 O(26 × 26) 来找组合数。可是这里不该又成为树状DP 动规才对吗？
+            long r = n-1;  // 再添加更多的
+            // todo
         }
-        // 先走基本功：把图建好，设计基本数据结构存储必备信息. 这里也要考虑字符串，都是能够狠有帮助的。。
-        int n; char [] s;
-        Map<Integer, List<Integer>> m;  // 记录：【a-z】对应的所有可能节点
+        // 先走基本功：把图建好，设计基本数据结构存储必备信息. 
         List<Integer> [] g;
-        // 可是感觉这个题，用 Trie （每个节点：背个数组，数频率）似乎更像呀。。。不是建无向图。怎么根据这个数组来建 Trie 呢？
+        int n; char [] s;
+        // 可是感觉这个题，用 Trie （每个节点：背个马甲，记字符出现的奇偶性【不用背太重的数组，背个26 位的 mask 标记字符出现的奇偶性就可以了】）似乎更像呀。。。不是建无向图。怎么根据这个数组来建 Trie 呢？
+        // 上面想错了，不用Trie, 只要一个 mask数组来记每个节点，从根节点字符出现的奇偶性就对了
+        int [] f;
+        void dfs(int u, int p, int mask) { // 【深搜：】更新每个节点的 mask
+            f[u] = mask;
+            for (int v : g[u]) {
+                if (v == p) continue;
+                dfs(v, u, mask | (1 << (s[v] - 'a')));
+            }            
+        }
     }             
     public static void main (String[] args) { 
         Solution s = new Solution ();
-
-        // int [] a = new int [] {2,3,7,9,3};
-        // int [] a = new int [] {5, 3, 3};
-        // int [] a = new int [] {91, 50};
-        int [] a = new int [] {94, 27, 5, 47};
 
         long r = s.maxArrayValue(a);
         System.out.println("r: " + r);
@@ -1324,4 +1332,8 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
