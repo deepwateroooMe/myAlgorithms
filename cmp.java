@@ -1387,45 +1387,56 @@ public class cmp {
         // }
 
         // 【记忆化深搜】：找到这个题目的正确状态  数位DP, 一个位一个位的数，数最多100 位
-        public int countSteppingNumbers(String low, String high) {
+        // 这里，昨天晚上脑袋打转的是：明明思路想的是【自顶向下】的动规，可是写的是不伦不类的【记忆化深搜】，显得条理极不清楚
+        // 这里，我怎么尝试直接写：【自顶向下】的动规呢？昨天晚上累着了睡前狂啃饼干影响了昨天晚上休息的的活宝妹感觉早上脑袋还有点儿咯应，再想几天，改天再写！！！【任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        public int countSteppingNumbers(String low, String high) { // 今天先想这么多，再想几天，改天再接着写【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
             s = low.toCharArray(); t = high.toCharArray();
             m = low.length(); n = high.length();
             f = new Integer [n][11];
-            return dfs(0, 10, false, false);
+            // 既然思路是【自顶向下】，写【记忆化深搜】就求 n 位, 记忆化深搜的方向与动规是反着的，清楚知道自顶向下数，深搜就自底向上搜
+            // return dfs(0, 10, false, false, false); // 需要多一个位数的，如【90, 5267】是可以有 127, 227,927, 1327 1427等打头数字不同的
+            return dfs(n, 10, false, false, false, false); // 需要多一个位数的，如【90, 5267】是可以有 127, 227,927, 1327 1427等打头数字不同的
         }
         static final int mod = (int)1e9 + 7;
         char [] s, t;
         int m, n;
-        Integer [][] f; // 【哪里数错了。。】
-        int dfs(int i, int j, boolean lo, boolean hi) { // i 是遍历的数位，j: 当前数位值, 。从高位往低位遍历，可是要比较数的长度, 感觉状态欠缺，需要 boolean
+        Integer [][] f; 
+// i 是遍历的数位，j: 当前数位值, 。从高位往低位遍历，可是要比较数的长度, 感觉状态欠缺，需要 boolean;
+        // mid: 标记第1 位数字，是否在【s[0],t[0]】范围内；范围外的只能数位长（m,n）两边不包含
+        int dfs(int i, int j, boolean lo, boolean hi, boolean slo, boolean mid) { // 先把这个方法：mid 参数补齐 
             System.out.println("\n i: " + i);
             System.out.println("j: " + j);
             System.out.println("lo: " + lo);
             System.out.println("hi: " + hi);
-            if (i > n || j < 0 || i > 0 && j >= 10) return 0;
-            // 从这里处理不合法的，有点儿低效，没关系: 【比小的小，比大的大】不可以
-            if (i > 0 && (lo && i < m && s[i]-'0' > j+1 || hi && i < n && t[i]-'0' < j-1)) return 0;
-            // if (i == m || i == n) return 1;
-            if (i == n) return 1;
+            if (j < 0 || i > 0 && j >= 10) return 0;
             if (f[i][j] != null) return f[i][j];
+            // 从这里处理不合法的，有点儿低效，没关系: 【比小的小，比大的大】不可以
+            // 因为也数（m,n）中间长度，这里考虑不全，要再写细一点儿|||||
+            if (i > 0 && (lo && i < m && s[i]-'0' > j+1 || hi && i < n && t[i]-'0' < j-1)) return 0; // 不合法的：这里直接返回了
+            // 因为 0 位扩充了，这里数多了
+            // if (i == n) return 1; // 数到了这个长度，可是过程中的呢？（m,n）长度的？
+            if (i == n && (m == n || m+1 < n && mid)) return 1; // 数到了这个长度，可是过程中的呢？（m,n）长度的？
+            // if (m+1 < n && (i == m || i > m && i < n-1)) r += 1; // 数，当前长度（m,n）开区间两者之间，的当前数结果. 可能可以不在这里数
             long r = 0;
             if (i == 0) { // 起始位特殊：可以任意打头，其它受限
-                if (m == n) {
+                if (m == n) { // 长度相同，只能取两者之间
                     for (int k = s[i]-'0'; k <= t[i]-'0'; k++) 
-                        r = (r + dfs(i+1, k, k == s[i]-'0', k == t[i]-'0')) % mod;
-                } else { // m < n
-                    for (int k = 1; k <= t[i] - '0'; k++) 
-                        r = (r + dfs(i+1, k, k == s[i]-'0', k == t[i]-'0')) % mod;
+                        r = (r + dfs(i+1, k, k == s[i]-'0', k == t[i]-'0', true, true)) % mod;
+                } else { // m < n: 长度不同，可以有中间不同长度
+                    // for (int k = 1; k <= t[i] - '0'; k++)  // 这里可能会数少，也需要多个标记变量标记头的范围
+                    for (int k = 1; k <= 9; k++)  // 这里可能会数少，也需要多个标记变量标记头的范围
+                        // 这里 s[0],t[0], 当长度不同，并不能保证 t[0]>s[0]
+                        // r = (r + dfs(i+1, k, k == s[i]-'0', k == t[i]-'0', k >= s[i]-'0' && k <= t[i]-'0')) % mod;
+                        r = (r + dfs(i+1, k, k == s[i]-'0', k == t[i]-'0', k >= s[0]-'0', k <= t[i]-'0')) % mod;
                 }
-            } else { // 受前一位了限制：＋－1 只能
-                r = (r + dfs(i+1, j+1, lo && j+1 == s[i] - '0', hi && j+1 == t[i]-'0')) % mod;
-                r = (r + dfs(i+1, j-1, lo && j-1 == s[i]-'0', hi && j-1 == t[i]-'0')) % mod;
+            } else { // 受前一位了限制：＋－1 只能：并且加上必要的限制条件
+                // 脑袋想糊了： i==m 怎么就保证一定比小数,等大更大了？把mid 折成两个变量：比 s[0] 大，比 t[0] 小！！
+                if (m+1 < n && (i == m-1 && slo || i >= m && i < n-1)) r += 1; // 数，当前长度（m,n）开区间两者之间，的当前数结果. i=n-1 结果已经数过
+                if (!hi)  // 不是最大值，才可以再加
+                    r = (r + dfs(i+1, j+1, lo && j+1 == s[i] - '0', false, slo, mid)) % mod;
+                if (!lo) // 不是最小值 , 才可以再减
+                    r = (r + dfs(i+1, j-1, false, hi && j-1 == t[i]-'0', slo, mid)) % mod;
             }
-            System.out.println("\n i: " + i);
-            System.out.println("j: " + j);
-            System.out.println("lo: " + lo);
-            System.out.println("hi: " + hi);
-            System.out.println("r: " + r);
             return f[i][j] = (int)r;
         }
     }             
@@ -1445,6 +1456,7 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
