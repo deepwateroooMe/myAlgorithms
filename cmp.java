@@ -8,8 +8,10 @@ import java.util.stream.Collectors;
 import java.util.HashSet;
 import java.util.Set;
 import static java.util.stream.Collectors.toMap;
+
 public class cmp {
     public static class Solution {
+
         // // 不知道所有的 i<j 都能连通是什么意思，但是大概是先转化成一个无向图，再求所有的 i<j
         // // N(10^5) 感觉上面想得太复杂了，能不能直接理解为存在一个公质因子
         // // 走连通图，含公因质子的一个模块里: 好好的思路，被我写成了 TLE...
@@ -1275,54 +1277,165 @@ public class cmp {
         //     return Collections.max(l);
         // }
 
-        // 【蜀道难，难于上青天的两个难题。。。爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // 读不懂：这个题目是在说什么？
-        public int maxIncreasingGroups(List<Integer> usageLimits) {
-            return 0;
-        }
+        // public long countPalindromePaths(List<Integer> p, String t) {
+        //     n = t.length(); s = t.toCharArray();
+        //     // if (t.chars().distinct().count() == 1) return (long)n * (long)(n-1) / 2l; // 极特殊：只有一个字符，所有路径 
+        //     // 【无向图：】==> 【有向图】处理
+        //     g = new ArrayList [n];
+        //     Arrays.setAll(g, z -> new ArrayList<>());
+        //     for (int i = 1; i < n; i++) { // 有向图：题目说的是无向图，但实际上，这里当作【有向图】来处理
+        //         // g[i].add(p.get(i));
+        //         g[p.get(i)].add(new int [] {i, 1 << (s[i] - 'a')});
+        //     }
+        //     // 【深搜：】遍历每个节点，更新每个节点的 mask. 同步统计结果
+        //     // f = new int [n]; // 这里当时脑袋还有一点儿昏：光 mask 是不对的，应该是异或。（手误。。亲爱的表哥的活宝妹，当时心里想的是异或，手上敲的是或。。。）
+        //     // m.put(0, 1); // 它说，特殊情况是：当前节点（从根到当前节点的异或值）就为0 或是2^i 一个数位。【卫兵值？】不需要这行？
+        //     dfs(0, 0);
+        //     return r;
+        // }
+        // // 先走基本功：把图建好，设计基本数据结构存储必备信息. 
+        // List<int []> [] g;
+        // int n; char [] s;
+        // long r = 0; // 这个用来记结果
+        // // 可是感觉这个题，用 Trie （每个节点：背个马甲，记字符出现的奇偶性【不用背太重的数组，背个26 位的 mask 标记字符出现的奇偶性就可以了】）似乎更像呀。。。不是建无向图。怎么根据这个数组来建 Trie 呢？
+        // // 上面想错了，不用Trie, 只要一个 mask数组来记每个节点，从根节点字符出现的奇偶性就对了
+        // // int [] f; // 这个数组不好：这是记每个节点的 mask
+        // Map<Integer, Integer> m = new HashMap<>(); // 用字典记更方便：记的是每个节点异或 mask 的出现频率，所以必须用字典
+        // void dfs(int u, int mask) { // 【深搜：】更新每个节点的异或 mask: 同步数结果
+        //     // f[u] = mask;
+        //     // 先统计：【当前节点】已经存在的两种情况下的结果
+        //     r +=  m.getOrDefault(mask, 0); // 把，两个节点异或为 0 的个数，统计入结果。其实也包含了当前节点异或值为 0 的情况
+        //     for (int i = 0; i < 26; i++)   // 把，两个节点异或为 2^i 的个数，统计入结果 
+        //         r += m.getOrDefault(mask ^ (1 << i), 0);
+        //     // 【BUG：】忘记更新，异或值出现过的词频了  // <<<<<<<<<<<<<<<<<<<< 
+        //     m.put(mask, m.getOrDefault(mask, 0) + 1); // <<<<<<<<<<<<<<<<<<<< 
+        //     // 再【深搜】：遍历子节点
+        //     for (int [] v : g[u]) 
+        //         dfs(v[0], mask ^ v[1]); // 手误。。亲爱的表哥的活宝妹，当时心里想的是异或，手上敲的是或。。。
+        // }
+        
+        // // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int maxIncreasingGroups(List<Integer> usageLimits) {
+        //     return 0;
+        // }
 
-        // 感觉这个最难的，反而是可以稍微想一想的
-        public long countPalindromePaths(List<Integer> p, String t) {
-            n = t.length(); s = t.toCharArray();
-            if (t.chars().distinct().count() == 1) return (long)n * (long)(n-1) / 2l; // 极特殊：只有一个字符，所有路径 
-            // // 不能遍历所有可能性，但可以遍历所有回文字符串 aa-bb-cc-...-zz, 所出现在过的节点
-            // for (int i = 1; i < n; i++) {
-            //     char c = s[i];
-            //     m.computeIfAbsent(c-'a', z -> new ArrayList<>()).add(i);
-            // }
-            // 【无向图：】
-            g = new ArrayList [n];
-            Arrays.setAll(g, z -> new ArrayList<>());
-            for (int i = 1; i < n; i++) { // 无向图
-                g[i].add(p.get(i));
-                g[p.get(i)].add(i);
-            }
-            // 【深搜：】遍历每个节点，更新每个节点的 mask. 那么下一步，最简单最该考的考点，就是树状DP 动规。。
-            f = new int [n];
-            dfs(0, -1, 0);
-            // 【树状DP 动规】：有上面的 mask 数组，怎么数个数呢？还是需要树状遍历最高效，可是没有思路。。。
-            // 【无向图：】建好之后，可以建 Trie, 方便 O(26 × 26) 来找组合数。可是这里不该又成为树状DP 动规才对吗？
-            long r = n-1;  // 再添加更多的
-            // todo
+        // public int numberOfEmployeesWhoMetTarget(int[] a, int target) {
+        //     int n = a.length, r = 0;
+        //     for (int v : a) 
+        //         if (v >= target) r++;
+        //     return r;
+        // }
+
+        // // 不知道哪里写错了：先把右端点移到尽可能右，再右移左端点
+        // public int countCompleteSubarrays(int[] a) {
+        //     Set<Integer> s = new HashSet<>(Arrays.stream(a).boxed().collect(Collectors.toList()));
+        //     int n = a.length, cnt = s.size(), ans = 0, l = 0, r = 0;
+        //     System.out.println("cnt: " + cnt);
+        //     if (cnt == 1) return n * (n + 1) / 2;
+        //     Map<Integer, Integer> m = new HashMap<>();
+        //     boolean mod = false;
+        //     for (; r < n; r++) { // 滑动窗口
+        //         System.out.println("\n r: " + r);
+        //         int v = a[r];
+        //         m.put(v, m.getOrDefault(v, 0) + 1);
+        //         while (r < n && m.size() == cnt) {
+        //         // if (r < n && m.size() == cnt) {
+        //             ans++;
+        //             // continue;
+        //             r++;
+        //             if (r < n) {
+        //                 v = a[r];
+        //                 m.put(v, m.getOrDefault(v, 0) + 1);
+        //             }
+        //         }
+        //         System.out.println("ans: " + ans);
+        //         if (m.size() > cnt) mod = true;
+        //         while (m.size() > cnt) {
+        //             v = a[l];
+        //             m.put(v, m.getOrDefault(v, 1)-1);
+        //             if (m.get(v) == 0) m.remove(v);
+        //             l++;
+        //         }
+        //         if (mod && m.size() == cnt) {
+        //             ans++;
+        //             l++;
+        //         }
+        //     }
+        //     if (m.size() > cnt) mod = true;
+        //     while (l < r && m.size() > cnt) {
+        //         int v = a[l];
+        //         m.put(v, m.getOrDefault(v, 1)-1);
+        //         if (m.get(v) == 0) m.remove(v);
+        //         l++;
+        //     }
+        //     if (mod) ans++;
+        //     int v = a[l];
+        //     m.put(v, m.getOrDefault(v, 1)-1);
+        //     if (m.get(v) == 0) m.remove(v);
+        //     while (m.size() == cnt && l < r) {
+        //         System.out.println("\n l: " + l);
+        //         System.out.println("ans: " + ans);
+        //         ans++;
+        //         v = a[l];
+        //         m.put(v, m.getOrDefault(v, 1)-1);
+        //         if (m.get(v) == 0) m.remove(v);
+        //         l++;
+        //         // ans++;
+        //         // continue;
+        //     }
+        //     return ans;
+        // }
+
+        // 【记忆化深搜】：找到这个题目的正确状态  数位DP, 一个位一个位的数，数最多100 位
+        public int countSteppingNumbers(String low, String high) {
+            s = low.toCharArray(); t = high.toCharArray();
+            m = low.length(); n = high.length();
+            f = new Integer [n][11];
+            return dfs(0, 10, false, false);
         }
-        // 先走基本功：把图建好，设计基本数据结构存储必备信息. 
-        List<Integer> [] g;
-        int n; char [] s;
-        // 可是感觉这个题，用 Trie （每个节点：背个马甲，记字符出现的奇偶性【不用背太重的数组，背个26 位的 mask 标记字符出现的奇偶性就可以了】）似乎更像呀。。。不是建无向图。怎么根据这个数组来建 Trie 呢？
-        // 上面想错了，不用Trie, 只要一个 mask数组来记每个节点，从根节点字符出现的奇偶性就对了
-        int [] f;
-        void dfs(int u, int p, int mask) { // 【深搜：】更新每个节点的 mask
-            f[u] = mask;
-            for (int v : g[u]) {
-                if (v == p) continue;
-                dfs(v, u, mask | (1 << (s[v] - 'a')));
-            }            
+        static final int mod = (int)1e9 + 7;
+        char [] s, t;
+        int m, n;
+        Integer [][] f; // 【哪里数错了。。】
+        int dfs(int i, int j, boolean lo, boolean hi) { // i 是遍历的数位，j: 当前数位值, 。从高位往低位遍历，可是要比较数的长度, 感觉状态欠缺，需要 boolean
+            System.out.println("\n i: " + i);
+            System.out.println("j: " + j);
+            System.out.println("lo: " + lo);
+            System.out.println("hi: " + hi);
+            if (i > n || j < 0 || i > 0 && j >= 10) return 0;
+            // 从这里处理不合法的，有点儿低效，没关系: 【比小的小，比大的大】不可以
+            if (i > 0 && (lo && i < m && s[i]-'0' > j+1 || hi && i < n && t[i]-'0' < j-1)) return 0;
+            // if (i == m || i == n) return 1;
+            if (i == n) return 1;
+            if (f[i][j] != null) return f[i][j];
+            long r = 0;
+            if (i == 0) { // 起始位特殊：可以任意打头，其它受限
+                if (m == n) {
+                    for (int k = s[i]-'0'; k <= t[i]-'0'; k++) 
+                        r = (r + dfs(i+1, k, k == s[i]-'0', k == t[i]-'0')) % mod;
+                } else { // m < n
+                    for (int k = 1; k <= t[i] - '0'; k++) 
+                        r = (r + dfs(i+1, k, k == s[i]-'0', k == t[i]-'0')) % mod;
+                }
+            } else { // 受前一位了限制：＋－1 只能
+                r = (r + dfs(i+1, j+1, lo && j+1 == s[i] - '0', hi && j+1 == t[i]-'0')) % mod;
+                r = (r + dfs(i+1, j-1, lo && j-1 == s[i]-'0', hi && j-1 == t[i]-'0')) % mod;
+            }
+            System.out.println("\n i: " + i);
+            System.out.println("j: " + j);
+            System.out.println("lo: " + lo);
+            System.out.println("hi: " + hi);
+            System.out.println("r: " + r);
+            return f[i][j] = (int)r;
         }
     }             
     public static void main (String[] args) { 
         Solution s = new Solution ();
 
-        long r = s.maxArrayValue(a);
+        String a = "90";
+        String b = "101";
+
+        int r = s.countSteppingNumbers(a, b);
         System.out.println("r: " + r);
     }
 }
@@ -1332,6 +1445,21 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
