@@ -1,4 +1,4 @@
-import com.TreeNode;
+import com.ListNode;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
@@ -1384,102 +1384,197 @@ public class cmp {
         //     return ans;
         // }
 
-        // 【记忆化深搜】：找到这个题目的正确状态  数位DP, 一个位一个位的数，数最多100 位
-        // 这里，昨天晚上脑袋打转的是：明明思路想的是【自顶向下】的动规，可是写的是不伦不类的【记忆化深搜】，显得条理极不清楚
-        // 这里，我怎么尝试直接写：【自顶向下】的动规呢？昨天晚上累着了睡前狂啃饼干影响了昨天晚上休息的的活宝妹感觉早上脑袋还有点儿咯应，再想几天，改天再写！！！【任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】这个题型，改天需要再好好总结一下，消化透彻了。现在似乎还有一丝丝的不透！！
-        // 【亲爱的表哥的活宝妹，今天早上跟这个破题目打起仗来了。。。真是不服呀】破题目。。。感觉明明能写出来，就是这里那里哪里一点儿小细节作怪。。。
-        // 还受两三处的细节困扰，再想几天再写。。。思路不清晰不透彻。。。
-        // 看了一下提示：题目就狠简单了，忘记了【第一点儿提示】，写过类似第一点提示的数目，可是忘记了：数【low,high】的个数 = 【1,high】个数 - 【1,low-1】个数。改天再写完
-        public int countSteppingNumbers(String low, String high) {
-            s = low.toCharArray(); t = high.toCharArray();
-            m = low.length(); n = high.length();
-            f = new Integer [n][11];
-            // 既然思路是【自顶向下】，写【记忆化深搜】就求 n 位, 记忆化深搜的方向与动规是反着的，清楚知道自顶向下数动规，深搜就自底向上搜
-            // return dfs(0, 10, false, false, false); // 需要多一个位数的，如【90, 5267】是可以有 127, 227,927, 1327 1427等打头数字不同的
-            return dfs(0, 10, false, false, false, false); // 需要多一个位数的，如【90, 5267】是可以有 127, 227,927, 1327 1427等打头数字不同的
-        }
-        static final int mod = (int)1e9 + 7;
-        char [] s, t;
-        int m, n;
-        Integer [][] f; 
-// i 是遍历的数位从【n-1,0】倒着深搜，j: 前一位数位的取值, 。从低位往高位遍历
-        // mid: 标记第1 位数字，是否比s[0] 大, 是否比t[0] 小；范围外的只能数位长开区间（m,n）两边不包含
-        int dfs(int i, int j, boolean lo, boolean hi, boolean ss, boolean st) { // 先把这个方法：ss，st 参数补齐： 0 位必备标记 start of [S,T]
-            System.out.println("\n i: " + i);
-            System.out.println("j: " + j);
-            System.out.println("lo: " + lo);
-            System.out.println("hi: " + hi);
-            // System.out.println("ss: " + ss);
-            // System.out.println("st: " + st);
-// 剪枝：最粗剪枝，数位上值，不合法
-            if (j < 0 || i > 0 && j >= 10) return 0;
-            // 从这里处理不合法的，有点儿低效，没关系: 【比小的小，比大的大】不可以
-            // 因为也数（m,n）中间长度，这里考虑不全，要再写细一点儿|||||
-// 【当前数位不合法】：【当前 i 位的最初、最粗、剪枝】：当前位上，受限于前一位，无解。。这里剪枝剪太多了？？它只【粗剪】两个数【最小数】与【最大数】，
-// 【过裁，错误减了、数少了正确答案：】但是数位长度变化时呢，感觉还是剪过了，因为可以增长度。。
-    // 【m == n】限制死；
-    // 其它情况下，状态转移时考虑周全！！！【下面两个转移步骤】
-            if (m == n && i > 0 && i < m && (lo && s[i]-'0' > j+1 || hi && t[i]-'0' < j-1)) return 0; // 过裁：假阴性。。。???
-            // if (i > 0 && (lo && i < m && s[i]-'0' > j+1 || hi && i < n && t[i]-'0' < j-1)) return 0;// 先前错误的
-// 【统计结果】：ST 等长：数首位【s[0],t[0]】范围内的；不等长：数首位合法（这里首位合法，能保证所有长度为 n 的取值合法吗？？？）
-// 当不能保证【low,high】取值范围，假阳性太多。。。。下面不对！！！
-// 当 m==n-1 长度相差1, 统计结果没统计对，因为没有校正对过程中数值在【low,high】范围内，数多了。。。
-            // if (i == n) return (m == n && ss && st || m < n-1 && st) ? 1 : 0; // 数到了这两个端点长度【m,n】，可是过程中的呢？（m,n）长度的？过程中长度，下面的过程中计数了
-            if (i == n) return (m == n && ss && st || m <= n-1 && st) ? 1 : 0; // 数到了这两个端点长度【m,n】，可是过程中的呢？（m,n）长度的？过程中长度，下面的过程中计数了
-            // if (m+1 < n && (i == m || i > m && i < n-1)) r += 1; // 数，当前长度（m,n）开区间两者之间，的当前数结果. 可能可以不在这里数
-// 查字典            
-            if (f[i][j] != null) return f[i][j];
-            long r = 0;
-            if (i == 0) { // 起始位特殊：可以任意打头，其它受限
-                if (m == n) { // 长度相同，只能取两者之间
-                    for (int k = s[i]-'0'; k <= t[i]-'0'; k++) 
-                        r = (r + dfs(i+1, k, k == s[i]-'0', k == t[i]-'0', true, true)) % mod;
-                } else { // m < n: 长度不同，可以有中间不同长度
-                    for (int k = 1; k <= 9; k++) 
-                        r = (r + dfs(i+1, k, k == s[i]-'0', k == t[i]-'0', k >= s[0]-'0', k <= t[i]-'0')) % mod; // 考虑： ss 与 st 变量：这里是否取等号？？？？？
-                }
-            } else { // 受前一位了限制：＋－1 只能：并且加上必要的限制条件
-                // i == m 怎么就保证一定比小数,等大更大了？两个标记首位的变量：是否，比 s[0] 大，比 t[0] 小！！取等号吗？【＝＝】
-// 下面这个，【＝】考虑丢了                
-                // if (m+1 < n && (i == m-1 && ss || i >= m && i < n-1)) r += 1; // 数，当前长度（m,n）开区间两者之间，的当前数结果. i=n-1 结果已经数过
-// 【过程计数】：数位长度在【m,n）并且 m <= n-1 前提下的中间长度结果；m == n 前提下的结果，前面统一数过了
-// 可以只有一位差别【m <= n-1】（m==n 情况下的解，上面已经数过了）这里只数 m <= n-1 的情况
-    // 这里数长度为 m 【m】的个数：只要 SS ，解就全合法！
-    // 长度位于、半闭半开区间【m+1,n）：由长度决定，全合法！！重点考虑 m+1 == n 的特殊性
-                // if (m+1 <= n && (i == m-1 && ss || i >= m && i <= n-1 && (m < n-1 || ss))) r += 1; // 等效于下面的：当 m+1 == n && i == m-1 也就数过、计算过了 i==n-1 的情况
-                if (m <= n-1 && (i == m-1 && ss || i >= m && i < n-1)) r += 1; // 数，当前长度（m,n）开区间两者之间，的当前数结果. i=n-1 结果已经数过
-// 这两种情况下的限制条件：确保【不比小的小，不比大的大】
-                // if (!hi)  // 不是最大值，才可以再加：这两个限制条件，好像还是想错了，加多余了？毕竟它处理的是当前数位 i, 与先前位，可以看作关系不大
-                //     r = (r + dfs(i+1, j+1, lo && j+1 == s[i] - '0', false, ss, st)) % mod;
-// 【状态转移】可转移的前提：这两个步骤，必须细节到位！！！我觉得哪里还是没有考虑到位，必须以数的位长为记录。。。
-                // if (!hi || hi && t[i]-'0' >= j+1) // 当前位取 j+1, 确保合法正确。【前面，剪枝、粗剪】确保了正确性？
-                // 【!hi】【不等长 m <= n-1】【hi && 等长m == n, 务必限制！！】可是限制，仍是，会有数位长度变化？等长没有数位变化。。。
-                // 【问题：】一个特定数位上，怎么就确保了 t[i] >= s[i] ?
-                if (!hi || m <= n-1 || t[i]-'0' >= j+1) // 当前位取 j+1, 确保合法正确。【前面，剪枝、粗剪】确保了正确性？
-                    r = (r + dfs(i+1, j+1, lo && j+1 == s[i] - '0', hi && j+1 == t[i]-'0', ss, st)) % mod;
-                if (!lo || m <= n-1 || s[i]-'0' >= j-1) // 当前位取 j-1, 确保不小于小的数
-                    r = (r + dfs(i+1, j-1, lo && j-1 == s[i]-'0', hi && j-1 == t[i]-'0', ss, st)) % mod;
-// 把上面的思路全部抛开，重新换个思路再写
-                // // 先检查当前数位的合法性：只有极少数不合法: m == n && (v[i] < s[i] || v[i] > t[i]) 
-                // if (m == n && (lo && s[i]-'0' > j+1 || hi && t[i]-'0' < j-1)) return f[i][j] = 0;
+//         // 【记忆化深搜】：找到这个题目的正确状态  数位DP, 一个位一个位的数，数最多100 位
+//         // 这里，昨天晚上脑袋打转的是：明明思路想的是【自顶向下】的动规，可是写的是不伦不类的【记忆化深搜】，显得条理极不清楚
+//         // 这里，我怎么尝试直接写：【自顶向下】的动规呢？昨天晚上累着了睡前狂啃饼干影响了昨天晚上休息的的活宝妹感觉早上脑袋还有点儿咯应，再想几天，改天再写！！！【任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】这个题型，改天需要再好好总结一下，消化透彻了。现在似乎还有一丝丝的不透！！
+//         // 【亲爱的表哥的活宝妹，今天早上跟这个破题目打起仗来了。。。真是不服呀】破题目。。。感觉明明能写出来，就是这里那里哪里一点儿小细节作怪。。。
+//         // 还受两三处的细节困扰，再想几天再写。。。思路不清晰不透彻。。。
+//         // 看了一下提示：题目就狠简单了，忘记了【第一点儿提示】，写过类似第一点提示的数目，可是忘记了：数【low,high】的个数 = 【1,high】个数 - 【1,low-1】个数。改天再写完
+//         public int countSteppingNumbers(String low, String high) {
+//             s = low.toCharArray(); t = high.toCharArray();
+//             m = low.length(); n = high.length();
+//             f = new Integer [n][11];
+//             // 既然思路是【自顶向下】，写【记忆化深搜】就求 n 位, 记忆化深搜的方向与动规是反着的，清楚知道自顶向下数动规，深搜就自底向上搜
+//             // return dfs(0, 10, false, false, false); // 需要多一个位数的，如【90, 5267】是可以有 127, 227,927, 1327 1427等打头数字不同的
+//             return dfs(0, 10, false, false, false, false); // 需要多一个位数的，如【90, 5267】是可以有 127, 227,927, 1327 1427等打头数字不同的
+//         }
+//         static final int mod = (int)1e9 + 7;
+//         char [] s, t;
+//         int m, n;
+//         Integer [][] f; 
+// // i 是遍历的数位从【n-1,0】倒着深搜，j: 前一位数位的取值, 。从低位往高位遍历
+//         // mid: 标记第1 位数字，是否比s[0] 大, 是否比t[0] 小；范围外的只能数位长开区间（m,n）两边不包含
+//         int dfs(int i, int j, boolean lo, boolean hi, boolean ss, boolean st) { // 先把这个方法：ss，st 参数补齐： 0 位必备标记 start of [S,T]
+//             System.out.println("\n i: " + i);
+//             System.out.println("j: " + j);
+//             System.out.println("lo: " + lo);
+//             System.out.println("hi: " + hi);
+//             // System.out.println("ss: " + ss);
+//             // System.out.println("st: " + st);
+// // 剪枝：最粗剪枝，数位上值，不合法
+//             if (j < 0 || i > 0 && j >= 10) return 0;
+//             // 从这里处理不合法的，有点儿低效，没关系: 【比小的小，比大的大】不可以
+//             // 因为也数（m,n）中间长度，这里考虑不全，要再写细一点儿|||||
+// // 【当前数位不合法】：【当前 i 位的最初、最粗、剪枝】：当前位上，受限于前一位，无解。。这里剪枝剪太多了？？它只【粗剪】两个数【最小数】与【最大数】，
+// // 【过裁，错误减了、数少了正确答案：】但是数位长度变化时呢，感觉还是剪过了，因为可以增长度。。
+//     // 【m == n】限制死；
+//     // 其它情况下，状态转移时考虑周全！！！【下面两个转移步骤】
+//             if (m == n && i > 0 && i < m && (lo && s[i]-'0' > j+1 || hi && t[i]-'0' < j-1)) return 0; // 过裁：假阴性。。。???
+//             // if (i > 0 && (lo && i < m && s[i]-'0' > j+1 || hi && i < n && t[i]-'0' < j-1)) return 0;// 先前错误的
+// // 【统计结果】：ST 等长：数首位【s[0],t[0]】范围内的；不等长：数首位合法（这里首位合法，能保证所有长度为 n 的取值合法吗？？？）
+// // 当不能保证【low,high】取值范围，假阳性太多。。。。下面不对！！！
+// // 当 m==n-1 长度相差1, 统计结果没统计对，因为没有校正对过程中数值在【low,high】范围内，数多了。。。
+//             // if (i == n) return (m == n && ss && st || m < n-1 && st) ? 1 : 0; // 数到了这两个端点长度【m,n】，可是过程中的呢？（m,n）长度的？过程中长度，下面的过程中计数了
+//             if (i == n) return (m == n && ss && st || m <= n-1 && st) ? 1 : 0; // 数到了这两个端点长度【m,n】，可是过程中的呢？（m,n）长度的？过程中长度，下面的过程中计数了
+//             // if (m+1 < n && (i == m || i > m && i < n-1)) r += 1; // 数，当前长度（m,n）开区间两者之间，的当前数结果. 可能可以不在这里数
+// // 查字典            
+//             if (f[i][j] != null) return f[i][j];
+//             long r = 0;
+//             if (i == 0) { // 起始位特殊：可以任意打头，其它受限
+//                 if (m == n) { // 长度相同，只能取两者之间
+//                     for (int k = s[i]-'0'; k <= t[i]-'0'; k++) 
+//                         r = (r + dfs(i+1, k, k == s[i]-'0', k == t[i]-'0', true, true)) % mod;
+//                 } else { // m < n: 长度不同，可以有中间不同长度
+//                     for (int k = 1; k <= 9; k++) 
+//                         r = (r + dfs(i+1, k, k == s[i]-'0', k == t[i]-'0', k >= s[0]-'0', k <= t[i]-'0')) % mod; // 考虑： ss 与 st 变量：这里是否取等号？？？？？
+//                 }
+//             } else { // 受前一位了限制：＋－1 只能：并且加上必要的限制条件
+//                 // i == m 怎么就保证一定比小数,等大更大了？两个标记首位的变量：是否，比 s[0] 大，比 t[0] 小！！取等号吗？【＝＝】
+// // 下面这个，【＝】考虑丢了                
+//                 // if (m+1 < n && (i == m-1 && ss || i >= m && i < n-1)) r += 1; // 数，当前长度（m,n）开区间两者之间，的当前数结果. i=n-1 结果已经数过
+// // 【过程计数】：数位长度在【m,n）并且 m <= n-1 前提下的中间长度结果；m == n 前提下的结果，前面统一数过了
+// // 可以只有一位差别【m <= n-1】（m==n 情况下的解，上面已经数过了）这里只数 m <= n-1 的情况
+//     // 这里数长度为 m 【m】的个数：只要 SS ，解就全合法！
+//     // 长度位于、半闭半开区间【m+1,n）：由长度决定，全合法！！重点考虑 m+1 == n 的特殊性
+//                 // if (m+1 <= n && (i == m-1 && ss || i >= m && i <= n-1 && (m < n-1 || ss))) r += 1; // 等效于下面的：当 m+1 == n && i == m-1 也就数过、计算过了 i==n-1 的情况
+//                 if (m <= n-1 && (i == m-1 && ss || i >= m && i < n-1)) r += 1; // 数，当前长度（m,n）开区间两者之间，的当前数结果. i=n-1 结果已经数过
+// // 这两种情况下的限制条件：确保【不比小的小，不比大的大】
+//                 // if (!hi)  // 不是最大值，才可以再加：这两个限制条件，好像还是想错了，加多余了？毕竟它处理的是当前数位 i, 与先前位，可以看作关系不大
+//                 //     r = (r + dfs(i+1, j+1, lo && j+1 == s[i] - '0', false, ss, st)) % mod;
+// // 【状态转移】可转移的前提：这两个步骤，必须细节到位！！！我觉得哪里还是没有考虑到位，必须以数的位长为记录。。。
+//                 // if (!hi || hi && t[i]-'0' >= j+1) // 当前位取 j+1, 确保合法正确。【前面，剪枝、粗剪】确保了正确性？
+//                 // 【!hi】【不等长 m <= n-1】【hi && 等长m == n, 务必限制！！】可是限制，仍是，会有数位长度变化？等长没有数位变化。。。
+//                 // 【问题：】一个特定数位上，怎么就确保了 t[i] >= s[i] ?
+//                 if (!hi || m <= n-1 || t[i]-'0' >= j+1) // 当前位取 j+1, 确保合法正确。【前面，剪枝、粗剪】确保了正确性？
+//                     r = (r + dfs(i+1, j+1, lo && j+1 == s[i] - '0', hi && j+1 == t[i]-'0', ss, st)) % mod;
+//                 if (!lo || m <= n-1 || s[i]-'0' >= j-1) // 当前位取 j-1, 确保不小于小的数
+//                     r = (r + dfs(i+1, j-1, lo && j-1 == s[i]-'0', hi && j-1 == t[i]-'0', ss, st)) % mod;
+// // 把上面的思路全部抛开，重新换个思路再写
+//                 // // 先检查当前数位的合法性：只有极少数不合法: m == n && (v[i] < s[i] || v[i] > t[i]) 
+//                 // if (m == n && (lo && s[i]-'0' > j+1 || hi && t[i]-'0' < j-1)) return f[i][j] = 0;
+//             }
+//             System.out.println("\n i: " + i);
+//             System.out.println("j: " + j);
+//             System.out.println("lo: " + lo);
+//             System.out.println("hi: " + hi);
+//             System.out.println("ss: " + ss);
+//             System.out.println("st: " + st);
+//             System.out.println("r: " + r);
+//             return f[i][j] = (int)r;
+//         }
+
+        // public ListNode insertGreatestCommonDivisors(ListNode head) {
+        //     ListNode r = new ListNode(head.val), ans = r, c = head, n = head.next;
+        //     while (n != null) {
+        //         int v = gcd(c.val, n.val);
+        //         r.next = new ListNode(v);
+        //         r = r.next;
+        //         r.next = new ListNode(n.val);
+        //         r = r.next;
+        //         c = n;
+        //         n = n.next;
+        //     }
+        //     return ans;
+        // }
+        // int gcd(int x, int y) {
+        //     if (y == 0) return x;
+        //     return gcd(y, x % y);
+        // }
+
+        // public int accountBalanceAfterPurchase(int purchaseAmount) {
+        //     return 100 - 10 * (purchaseAmount / 10 + (purchaseAmount % 10 >= 5 ? 1 : 0));
+        // }
+
+        // public int minimumSeconds(List<Integer> a) {
+        //     int n = a.size(), v = 0, max = 0; // 统计：出现最多的数字频率
+        //     Map<Integer, List<Integer>> m = new HashMap<>();
+        //     for (int i = 0; i < n; i++) {
+        //         int val = a.get(i);
+        //         m.computeIfAbsent(val, z -> new ArrayList<>()).add(i);
+        //         if (m.get(val).size() > v) {
+        //             v = m.get(val).size();
+        //             max = val;
+        //         }
+        //     }
+        //     if (m.size() == 1) return 0;
+        //     // 这个统计最小时候的过程：感觉需要什么【求和线段树】之类的数据结构？遍历 m.get(max) 链表, 这个先放一下，呆会儿再回来试写
+        // }
+
+        // 最难的：《 1.7% 通过率【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // 链表的长度不长 N ＝ 1000, 可能随便写写能骗过去？！！！【二分查找，找一个可能存在的值】
+        public int minimumTime(List<Integer> l, List<Integer> li, int x) { // 527/1269 passed ...
+            n = l.size(); this.x = x;
+            int sum = 0, max = 0;
+            for (int i = 0; i < n; i++) {
+                ll.add(new int [] {l.get(i), li.get(i)});
+                sum += li.get(i);
+                max = Math.max(max, li.get(i));
             }
-            System.out.println("\n i: " + i);
-            System.out.println("j: " + j);
-            System.out.println("lo: " + lo);
-            System.out.println("hi: " + hi);
-            System.out.println("ss: " + ss);
-            System.out.println("st: " + st);
-            System.out.println("r: " + r);
-            return f[i][j] = (int)r;
+            if (sum - max > x) return -1; // 最粗，剪枝
+            int v = binarySearch(0, n) ;
+            return v == Integer.MAX_VALUE ? -1 : v;
+        }
+        List<int []> ll = new ArrayList<>();
+        // Queue<int []> q = new PriorityQueue<>((x, y) -> (x[0] + q.size() * x[1]) - (y[0] + q.size() * y[1])); // 按升序：把堆大小带入排序，动态移除，每步都要自动排序
+        int x, n;
+        int binarySearch(int l, int r) {
+            if (l < 0 || r > n) return -1;
+            int ans = Integer.MAX_VALUE;
+            while (l <= r) { // l+1 < r
+                int m = (l + r) / 2;
+                System.out.println("m: " + m);
+// 亲爱的表哥的活宝妹的脑袋狠奇特：感觉这个是要个【最小值线段树】，还附加一个时间参数，最小值【根据时间 m,m-1,m-2】动态调整。。。够绝吧！！爱表哥，爱生活！！！
+                // Collections.sort(ll, (x, y) -> x[0] + m * x[1] -  (y[0] + m * y[1]));
+                boolean tmp = yesCanDo(m,  new ArrayList<int []>(ll));
+                System.out.println("tmp: " + tmp);
+                if (tmp) {
+                    ans = Math.min(ans, m);
+                    r = m-1;
+                } else l = m+1;
+            }
+            return ans;
+        }        
+        boolean yesCanDo(int v, List<int []> ll) {
+            int r = 0, val = v-1;
+            for (int [] zz : ll) 
+                System.out.println(Arrays.toString(zz));
+            while (v > 1 && ll.size() > 1) {
+                Collections.sort(ll, (x, y) -> (x[0] + x[1] * ll.size()) - (y[0] + ll.size() * y[1]));
+                int [] c = ll.remove(0);
+                System.out.println("\nv: " + v);
+                System.out.println(Arrays.toString(c));
+                System.out.println("ll.size(): " + ll.size());
+                r += (v-1) * c[1];
+                System.out.println("r: " + r);
+                v--;
+                if (r > x) return false;
+            }
+            while (ll.size() > 1) {
+                int [] c = ll.remove(0);
+                System.out.println(Arrays.toString(c));
+                r += c[0] + c[1] * (val > 0 ? val : 1);
+                System.out.println("r: " + r);
+            }
+            return r <= x;
         }
     }             
     public static void main (String[] args) { 
         Solution s = new Solution ();
 
-        String a = "90";
-        String b = "101";
-
-        int r = s.countSteppingNumbers(a, b); // 98 可以数对，101 数不对。。。 m==n-1
+        int [] a = new int [] {1, 2, 3};
+        int [] b  = new int [] {1, 2, 3};
+        int r = s.minimumTime(Arrays.stream(a).boxed().collect(Collectors.toList()), Arrays.stream(b).boxed().collect(Collectors.toList()),
+                              4);
         System.out.println("r: " + r);
     }
 }
@@ -1489,13 +1584,6 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
