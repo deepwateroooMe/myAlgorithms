@@ -1612,33 +1612,45 @@ public class cmp {
         // }
 
         // 【爱表哥，爱生活！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // 这个题目的思路，我只想出了一半。        
         // 【动规】呀，这个动规特殊的地方，在于第一个元素的求和。N K 都狠大， 10^5, 两个不同变化方向之间，有个最值，去求那个该死的最值。。。
         public long findMaximumElegance(int[][] a, int k) {
-            int n = a.length;
-            long [][] f = new long [n][k+1];
+            int n = a.length, ccnt = 0;
+            Set<Integer> s = new HashSet<>();
+            for (int i = 0; i < n; i++) s.add(a[i][1]);
+            ccnt = s.size();
             Arrays.sort(a, (x, y) -> x[0] != y[0] ? y[0] - x[0] : x[1] - y[1]); // 利润降序
             byValue cmp = new byValue();
-            TreeMap<Integer, Queue<Integer>> m = new TreeMap<>(cmp);
+            Map<Integer, Queue<Integer>> m = new HashMap<Integer, Queue<Integer>>(cmp);
 //             两个思路 :
-            // 另一个方向：平方和最大，递减，利润递增: 先平方数最大，再递增和，可能更好写。。。。。。
+            // 另一个方向：平方和最大，递减，利润递增: 先平方数最大，再递增和，不写这个。。。。
             // 求K 个利润量大和：一个方向，最大利润和，递减，平方和递增，这个思路不好写
             long r = 0;
             for (int i = 0; i < k; i++) {
                 r += (long)a[i][0];
-                m.computeIfAbsent(a[i][1], z -> new PriorityQueue<Integer>(x, y)->x-y).add(a[i][0]);
+                m.computeIfAbsent(a[i][1], z -> new PriorityQueue<Integer>((x, y)->x-y)).add(a[i][0]);
             }
             r += (long)m.size() * m.size(); // 这个，可以当一个基数标准。往后遍历
+            int oriSize = m.size(), cnt = oriSize;
             // 往后遍历的过程：是动态
             for (int i = k; i < n; i++) {
                 if (m.containsKey(a[i][1])) continue;
-                // Iterator<Map.Entry<Integer, PriorityQueue<Integer>> it = map.entrySet().iterator();
-                // while (it.hasNext()) {
-                // }
-                if (a[i][0] <= m.firstEntry.getValue().peek()) continue; // 这里不对，因为不同种类，增加了平方数
-                // 就是两个方向，递减，与平方数的递增之间，找到一个什么过度转折值？这个思路比较难。。。
+                // if (a[i][0] <= m.firstEntry.getValue().peek()) continue; // 这里不对，因为不同种类，增加了平方数
+                // 就是两个方向，递减，与平方数的递增之间，找到一个什么过度转折值？这个思路比较难。。。【这里仍然想得不对】
+                Iterator<Map.Entry<Integer, PriorityQueue<Integer>>> it = map.entrySet().iterator();
+                while (it.hasNext()) {
+                    Map.Entry<Integer, PriorityQueue<Integer>> cur = it.next();
+                    if (cur.getValue().size() == 1) continue; // 提示说要多于一个数；
+                    r -= (long)cur.getValue().poll() - (long)oriSize * oriSize;
+                    break;
+                }
+                cnt++;
+                m.computeIfAbsent(a[i][1], z -> new PriorityQueue<>((x, y)->x-y)).add(a[i][0]);
+                r += (long)a[i][1] + (long)cnt * cnt;
+                if (cnt == ccnt || cnt == k) return r;
             }
         }
-        class byValue implements Comparator<Map.Entry<Integer, Queue<Integer>> {
+        public class byValue implements Comparator<Map.Entry<Integer, Queue<Integer>>> {
             public int compare(Map.Entry<Integer, Queue<Integer>> x, Map.Entry<Integer, Queue<Integer>> y) {
                 if (x.getValue().peek() < y.getValue().peek()){
                     return 1;
@@ -1675,3 +1687,14 @@ public class cmp {
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
