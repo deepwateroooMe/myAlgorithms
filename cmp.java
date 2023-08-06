@@ -1510,71 +1510,152 @@ public class cmp {
         //     // 这个统计最小时候的过程：感觉需要什么【求和线段树】之类的数据结构？遍历 m.get(max) 链表, 这个先放一下，呆会儿再回来试写
         // }
 
-        // 最难的：《 1.7% 通过率【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // 链表的长度不长 N ＝ 1000, 可能随便写写能骗过去？！！！【二分查找，找一个可能存在的值】
-        public int minimumTime(List<Integer> l, List<Integer> li, int x) { // 527/1269 passed ...
-            n = l.size(); this.x = x;
-            int sum = 0, max = 0;
-            for (int i = 0; i < n; i++) {
-                ll.add(new int [] {l.get(i), li.get(i)});
-                sum += li.get(i);
-                max = Math.max(max, li.get(i));
+//         // 最难的：《 1.7% 通过率【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//         // 链表的长度不长 N ＝ 1000, 可能随便写写能骗过去？！！！【二分查找，找一个可能存在的值】
+//         public int minimumTime(List<Integer> l, List<Integer> li, int x) { // 527/1269 passed ...
+//             n = l.size(); this.x = x;
+//             int sum = 0, max = 0;
+//             for (int i = 0; i < n; i++) {
+//                 ll.add(new int [] {l.get(i), li.get(i)});
+//                 sum += li.get(i);
+//                 max = Math.max(max, li.get(i));
+//             }
+//             if (sum - max > x) return -1; // 最粗，剪枝
+//             int v = binarySearch(0, n) ;
+//             return v == Integer.MAX_VALUE ? -1 : v;
+//         }
+//         List<int []> ll = new ArrayList<>();
+//         int x, n;
+//         int binarySearch(int l, int r) {
+//             if (l < 0 || r > n) return -1;
+//             int ans = Integer.MAX_VALUE;
+//             while (l <= r) { // l+1 < r
+//                 int m = (l + r) / 2;
+//                 System.out.println("m: " + m);
+// // 亲爱的表哥的活宝妹的脑袋狠奇特：感觉这个是要个【最小值线段树】，还附加一个时间参数，最小值【根据时间 m,m-1,m-2】动态调整。。。够绝吧！！爱表哥，爱生活！！！
+//                 boolean tmp = yesCanDo(m,  new ArrayList<int []>(ll));
+//                 System.out.println("tmp: " + tmp);
+//                 if (tmp) {
+//                     ans = Math.min(ans, m);
+//                     r = m-1;
+//                 } else l = m+1;
+//             }
+//             return ans;
+//         }        
+//         boolean yesCanDo(int v, List<int []> ll) {
+//             int r = 0, val = v-1;
+//             for (int [] zz : ll) 
+//                 System.out.println(Arrays.toString(zz));
+//             while (v > 1 && ll.size() > 1) {
+//                 Collections.sort(ll, (x, y) -> (x[0] + x[1] * ll.size()) - (y[0] + ll.size() * y[1]));
+//                 int [] c = ll.remove(0);
+//                 // System.out.println("\nv: " + v);
+//                 // System.out.println(Arrays.toString(c));
+//                 // System.out.println("ll.size(): " + ll.size());
+//                 r += (v-1) * c[1]; // 这里，后来是已经看出，只有 b[] 起作用，但是没能再把问题简化。。。
+//                 // System.out.println("r: " + r);
+//                 v--;
+//                 if (r > x) return false;
+//             }
+//             while (ll.size() > 1) {
+//                 int [] c = ll.remove(0);
+//                 System.out.println(Arrays.toString(c));
+//                 r += c[0] + c[1] * (val > 0 ? val : 1);
+//                 // System.out.println("r: " + r);
+//             }
+//             return r <= x;
+//         }
+
+        // public String finalString(String t) {
+        //     int n = t.length(), cnt = 0, idx = 0; char [] s = t.toCharArray();
+        //     for (int i = 0; i < n; i++)
+        //         if (s[i] == 'i') cnt++;
+        //     char [] r = new char [n - cnt];
+        //     for (int i = 0; i < n; i++) {
+        //         if (s[i] == 'i') {
+        //             for (int j = 0; j <= (idx-1) / 2; j++) {
+        //                 char c = r[j];
+        //                 r[j] = r[idx - 1 - j];
+        //                 r[idx-1-j] = c;
+        //             }
+        //         } else r[idx++] = s[i];
+        //     }
+        //     return new String(r);
+        // }
+
+        // public boolean canSplitArray(List<Integer> nums, int v) {
+        //     this.v = v; int n = nums.size();
+        //     if (nums.size() <= 2) return true;
+        //     f = new Boolean [n][n];
+        //     return canNotSplitArray(nums, 0, nums.size()-1);
+        // }
+        // int v;
+        // Boolean [][] f;
+        // boolean canNotSplitArray(List<Integer> li, int l, int r) {
+        //     if (f[l][r] != null) return f[l][r];
+        //     if (l == r) return f[l][r] = true;
+        //     if (l + 1 == r) return f[l][r] = (li.get(l) + li.get(r) >= v);
+        //     return f[l][r] = canNotSplitArray(li, l+1, r) || canNotSplitArray(li, l, r-1);
+        // }
+
+        // public int maximumSafenessFactor(List<List<Integer>> ll) {
+        //     n = ll.size();
+        //     if (ll.get(0).get(0) == 1 || ll.get(n-1).get(n-1) == 1) return 0;
+        //     return binarySearch(0, n*n, ll);
+        // }
+        // int n;
+        // // 想试：【二分查找】，可是仍觉思路不够透彻
+        // int binarySearch(int l, int r, List<List<Integer>> ll) {
+        //     while (l < r) {
+        //         int m = (l + r) / 2;
+        //     }
+        // }
+
+        // 【爱表哥，爱生活！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // 【动规】呀，这个动规特殊的地方，在于第一个元素的求和。N K 都狠大， 10^5, 两个不同变化方向之间，有个最值，去求那个该死的最值。。。
+        public long findMaximumElegance(int[][] a, int k) {
+            int n = a.length;
+            long [][] f = new long [n][k+1];
+            Arrays.sort(a, (x, y) -> x[0] != y[0] ? y[0] - x[0] : x[1] - y[1]); // 利润降序
+            byValue cmp = new byValue();
+            TreeMap<Integer, Queue<Integer>> m = new TreeMap<>(cmp);
+//             两个思路 :
+            // 另一个方向：平方和最大，递减，利润递增: 先平方数最大，再递增和，可能更好写。。。。。。
+            // 求K 个利润量大和：一个方向，最大利润和，递减，平方和递增，这个思路不好写
+            long r = 0;
+            for (int i = 0; i < k; i++) {
+                r += (long)a[i][0];
+                m.computeIfAbsent(a[i][1], z -> new PriorityQueue<Integer>(x, y)->x-y).add(a[i][0]);
             }
-            if (sum - max > x) return -1; // 最粗，剪枝
-            int v = binarySearch(0, n) ;
-            return v == Integer.MAX_VALUE ? -1 : v;
+            r += (long)m.size() * m.size(); // 这个，可以当一个基数标准。往后遍历
+            // 往后遍历的过程：是动态
+            for (int i = k; i < n; i++) {
+                if (m.containsKey(a[i][1])) continue;
+                // Iterator<Map.Entry<Integer, PriorityQueue<Integer>> it = map.entrySet().iterator();
+                // while (it.hasNext()) {
+                // }
+                if (a[i][0] <= m.firstEntry.getValue().peek()) continue; // 这里不对，因为不同种类，增加了平方数
+                // 就是两个方向，递减，与平方数的递增之间，找到一个什么过度转折值？这个思路比较难。。。
+            }
         }
-        List<int []> ll = new ArrayList<>();
-        // Queue<int []> q = new PriorityQueue<>((x, y) -> (x[0] + q.size() * x[1]) - (y[0] + q.size() * y[1])); // 按升序：把堆大小带入排序，动态移除，每步都要自动排序
-        int x, n;
-        int binarySearch(int l, int r) {
-            if (l < 0 || r > n) return -1;
-            int ans = Integer.MAX_VALUE;
-            while (l <= r) { // l+1 < r
-                int m = (l + r) / 2;
-                System.out.println("m: " + m);
-// 亲爱的表哥的活宝妹的脑袋狠奇特：感觉这个是要个【最小值线段树】，还附加一个时间参数，最小值【根据时间 m,m-1,m-2】动态调整。。。够绝吧！！爱表哥，爱生活！！！
-                // Collections.sort(ll, (x, y) -> x[0] + m * x[1] -  (y[0] + m * y[1]));
-                boolean tmp = yesCanDo(m,  new ArrayList<int []>(ll));
-                System.out.println("tmp: " + tmp);
-                if (tmp) {
-                    ans = Math.min(ans, m);
-                    r = m-1;
-                } else l = m+1;
+        class byValue implements Comparator<Map.Entry<Integer, Queue<Integer>> {
+            public int compare(Map.Entry<Integer, Queue<Integer>> x, Map.Entry<Integer, Queue<Integer>> y) {
+                if (x.getValue().peek() < y.getValue().peek()){
+                    return 1;
+                } else if (x.getValue().peek() == y.getValue().peek()) {
+                    return 0;
+                } else {
+                    return -1;
+                }
             }
-            return ans;
-        }        
-        boolean yesCanDo(int v, List<int []> ll) {
-            int r = 0, val = v-1;
-            for (int [] zz : ll) 
-                System.out.println(Arrays.toString(zz));
-            while (v > 1 && ll.size() > 1) {
-                Collections.sort(ll, (x, y) -> (x[0] + x[1] * ll.size()) - (y[0] + ll.size() * y[1]));
-                int [] c = ll.remove(0);
-                System.out.println("\nv: " + v);
-                System.out.println(Arrays.toString(c));
-                System.out.println("ll.size(): " + ll.size());
-                r += (v-1) * c[1];
-                System.out.println("r: " + r);
-                v--;
-                if (r > x) return false;
-            }
-            while (ll.size() > 1) {
-                int [] c = ll.remove(0);
-                System.out.println(Arrays.toString(c));
-                r += c[0] + c[1] * (val > 0 ? val : 1);
-                System.out.println("r: " + r);
-            }
-            return r <= x;
         }
     }             
     public static void main (String[] args) { 
         Solution s = new Solution ();
 
-        int [] a = new int [] {1, 2, 3};
-        int [] b  = new int [] {1, 2, 3};
-        int r = s.minimumTime(Arrays.stream(a).boxed().collect(Collectors.toList()), Arrays.stream(b).boxed().collect(Collectors.toList()),
-                              4);
+        int [] a = new int [] {2, 1, 3};
+
+        boolean r = s.canSplitArray(Arrays.stream(a).boxed().collect(Collectors.toList()), 5);
         System.out.println("r: " + r);
     }
 }
@@ -1593,25 +1674,4 @@ public class cmp {
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！
