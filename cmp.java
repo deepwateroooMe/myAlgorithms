@@ -1,15 +1,22 @@
 import com.ListNode;
+
 import java.util.HashMap;
+
 import java.util.Map;
+
 import java.util.ArrayList;
+
 import java.util.*;
+
 import java.util.stream.*;
 import java.util.stream.Collectors;
 import java.util.HashSet;
 import java.util.Set;
 import static java.util.stream.Collectors.toMap;
+
 public class cmp {
     public static class Solution {
+
         // // 不知道所有的 i<j 都能连通是什么意思，但是大概是先转化成一个无向图，再求所有的 i<j
         // // N(10^5) 感觉上面想得太复杂了，能不能直接理解为存在一个公质因子
         // // 走连通图，含公因质子的一个模块里: 好好的思路，被我写成了 TLE...
@@ -1611,63 +1618,250 @@ public class cmp {
         //     }
         // }
 
-        // 【爱表哥，爱生活！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // 这个题目的思路，我只想出了一半。        
-        // 【动规】呀，这个动规特殊的地方，在于第一个元素的求和。N K 都狠大， 10^5, 两个不同变化方向之间，有个最值，去求那个该死的最值。。。
-        public long findMaximumElegance(int[][] a, int k) {
-            int n = a.length, ccnt = 0;
-            Set<Integer> s = new HashSet<>();
-            for (int i = 0; i < n; i++) s.add(a[i][1]);
-            ccnt = s.size();
-            Arrays.sort(a, (x, y) -> x[0] != y[0] ? y[0] - x[0] : x[1] - y[1]); // 利润降序
-            byValue cmp = new byValue();
-            Map<Integer, Queue<Integer>> m = new HashMap<Integer, Queue<Integer>>(cmp);
-//             两个思路 :
-            // 另一个方向：平方和最大，递减，利润递增: 先平方数最大，再递增和，不写这个。。。。
-            // 求K 个利润量大和：一个方向，最大利润和，递减，平方和递增，这个思路不好写
-            long r = 0;
-            for (int i = 0; i < k; i++) {
-                r += (long)a[i][0];
-                m.computeIfAbsent(a[i][1], z -> new PriorityQueue<Integer>((x, y)->x-y)).add(a[i][0]);
-            }
-            r += (long)m.size() * m.size(); // 这个，可以当一个基数标准。往后遍历
-            int oriSize = m.size(), cnt = oriSize;
-            // 往后遍历的过程：是动态
-            for (int i = k; i < n; i++) {
-                if (m.containsKey(a[i][1])) continue;
-                // if (a[i][0] <= m.firstEntry.getValue().peek()) continue; // 这里不对，因为不同种类，增加了平方数
-                // 就是两个方向，递减，与平方数的递增之间，找到一个什么过度转折值？这个思路比较难。。。【这里仍然想得不对】
-                Iterator<Map.Entry<Integer, PriorityQueue<Integer>>> it = map.entrySet().iterator();
-                while (it.hasNext()) {
-                    Map.Entry<Integer, PriorityQueue<Integer>> cur = it.next();
-                    if (cur.getValue().size() == 1) continue; // 提示说要多于一个数；
-                    r -= (long)cur.getValue().poll() - (long)oriSize * oriSize;
-                    break;
-                }
-                cnt++;
-                m.computeIfAbsent(a[i][1], z -> new PriorityQueue<>((x, y)->x-y)).add(a[i][0]);
-                r += (long)a[i][1] + (long)cnt * cnt;
-                if (cnt == ccnt || cnt == k) return r;
-            }
-        }
-        public class byValue implements Comparator<Map.Entry<Integer, Queue<Integer>>> {
-            public int compare(Map.Entry<Integer, Queue<Integer>> x, Map.Entry<Integer, Queue<Integer>> y) {
-                if (x.getValue().peek() < y.getValue().peek()){
-                    return 1;
-                } else if (x.getValue().peek() == y.getValue().peek()) {
-                    return 0;
-                } else {
-                    return -1;
-                }
-            }
+//         // 【爱表哥，爱生活！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//         // 这个题目的思路，我只想出了一半。看完提示后，现在感觉明明思路清楚了，可是写起来，因为数据结构的选择等，仍然写不完整。。看别人怎么写完整的，参照改一下        
+//         // 【动规】呀，这个动规特殊的地方，在于第一个元素的求和。N K 都狠大， 10^5, 两个不同变化方向之间，有个最值，去求那个该死的最值。。。
+//         public long findMaximumElegance(int[][] a, int k) {
+//             int n = a.length, ccnt = 0;
+//             Set<Integer> s = new HashSet<>();
+//             for (int i = 0; i < n; i++) s.add(a[i][1]);
+//             ccnt = s.size();
+//             Arrays.sort(a, (x, y) -> x[0] != y[0] ? y[0] - x[0] : x[1] - y[1]); // 利润降序
+//             byValue cmp = new byValue();
+//             Map<Integer, Queue<Integer>> m = new HashMap<Integer, Queue<Integer>>(cmp);
+// //             两个思路 :
+//             // 另一个方向：平方和最大，递减，利润递增: 先平方数最大，再递增和，不写这个。。。。
+//             // 求K 个利润量大和：一个方向，最大利润和，递减，平方和递增，这个思路不好写
+//             long r = 0;
+//             for (int i = 0; i < k; i++) {
+//                 r += (long)a[i][0];
+//                 m.computeIfAbsent(a[i][1], z -> new PriorityQueue<Integer>((x, y)->x-y)).add(a[i][0]);
+//             }
+//             r += (long)m.size() * m.size(); // 这个，可以当一个基数标准。往后遍历
+//             int oriSize = m.size(), cnt = oriSize;
+//             // 往后遍历的过程：是动态
+//             for (int i = k; i < n; i++) {
+//                 if (m.containsKey(a[i][1])) continue;
+//                 // if (a[i][0] <= m.firstEntry.getValue().peek()) continue; // 这里不对，因为不同种类，增加了平方数
+//                 // 就是两个方向，递减，与平方数的递增之间，找到一个什么过度转折值？这个思路比较难。。。【这里仍然想得不对】
+//                 Iterator<Map.Entry<Integer, PriorityQueue<Integer>>> it = map.entrySet().iterator();
+//                 while (it.hasNext()) {
+//                     Map.Entry<Integer, PriorityQueue<Integer>> cur = it.next();
+//                     if (cur.getValue().size() == 1) continue; // 提示说要多于一个数；
+//                     r -= (long)cur.getValue().poll() - (long)oriSize * oriSize;
+//                     break;
+//                 }
+//                 cnt++;
+//                 m.computeIfAbsent(a[i][1], z -> new PriorityQueue<>((x, y)->x-y)).add(a[i][0]);
+//                 r += (long)a[i][1] + (long)cnt * cnt;
+//                 if (cnt == ccnt || cnt == k) return r;
+//             }
+//         }
+//         public long findMaximumElegance(int[][] items, int k) {
+//             final int n = items.length;
+//             Integer[] ind = new Integer[n];
+//             for (int i = 0; i < n; ++i) {
+//                 ind[i] = i;
+//             }
+//             Arrays.sort(ind, new Comparator<Integer>() {
+//                     @Override
+//                     public int compare(Integer x, Integer y) {
+//                         return Integer.compare(items[y][0], items[x][0]);
+//                     }
+//                 });
+//             Map<Integer, Integer> num = new HashMap<>();
+//             PriorityQueue<Pair<Integer, Integer>> q = new PriorityQueue<>(new Comparator<Pair<Integer, Integer>>() {
+//                     @Override
+//                     public int compare(Pair<Integer, Integer> p1, Pair<Integer, Integer> p2) {
+//                         return Integer.compare(p2.getKey(), p1.getKey());
+//                     }
+//                 });
+//             long v = 0;
+//             for (int i = 0; i < k; ++i) {
+//                 v += items[ind[i]][0];
+//                 num.put(items[ind[i]][1], num.getOrDefault(items[ind[i]][1], 0) + 1);
+//                 q.add(new Pair<>(-items[ind[i]][0], ind[i]));
+//             }
+//             long r = v + sqr(num.size());
+//             for (int i = k; i < n && !q.isEmpty(); ++i) {
+//                 if (num.containsKey(items[ind[i]][1])) {
+//                     continue;
+//                 }
+//                 int x = q.peek().getValue();
+//                 q.poll();
+//                 if (num.get(items[x][1]) == 1) {
+//                     --i;
+//                     continue;
+//                 }
+//                 v += items[ind[i]][0] - items[x][0];
+//                 num.put(items[x][1], num.get(items[x][1]) - 1);
+//                 num.put(items[ind[i]][1], num.getOrDefault(items[ind[i]][1], 0) + 1);
+//                 r = Math.max(r, v + sqr(num.size()));
+//             }
+//             return r;
+//         }
+//         long sqr(long x) {
+//             return x * x;
+//         }
+//         public class byValue implements Comparator<Map.Entry<Integer, Queue<Integer>>> {
+//             public int compare(Map.Entry<Integer, Queue<Integer>> x, Map.Entry<Integer, Queue<Integer>> y) {
+//                 if (x.getValue().peek() < y.getValue().peek()){
+//                     return 1;
+//                 } else if (x.getValue().peek() == y.getValue().peek()) {
+//                     return 0;
+//                 } else {
+//                     return -1;
+//                 }
+//             }
+//         }
+
+        // public int maxSum(int[] a) {
+        //     int n = a.length, max = -1;
+        //     Map<Integer, int []> m = new HashMap<>();
+        //     for (int v : a) {
+        //         int r = getMaxDigit(v);
+        //         m.computeIfAbsent(r, z -> new int [2]);
+        //         int [] cur = m.get(r);
+        //         fillV(cur, v);
+        //         if (cur[1] != 0) max = Math.max(max, cur[0] + cur[1]);
+        //     }
+        //     return max;
+        // }
+        // void fillV(int [] a, int v) { // 0 最大， 1 第二大
+        //     if (a[0] == 0) {
+        //         a[0] = v; return ;
+        //     }
+        //     if (a[1] == 0) {
+        //         if (v > a[0]) {
+        //             a[1] = a[0];
+        //             a[0] = v;
+        //         } else a[1] = v;
+        //     } else {
+        //         if (v >= a[0]) {
+        //             a[1] = a[0];
+        //             a[0] = v;
+        //         } else if (v > a[1])
+        //             a[1] = v;
+        //     }
+        // }
+        // int getMaxDigit(int v) {
+        //     String t = String.valueOf(v); char [] s = t.toCharArray();
+        //     int r = 0;
+        //     for (char c : s) 
+        //         r = Math.max(r, c-'0');
+        //     return r;
+        // }
+
+        // public ListNode doubleIt(ListNode head) {
+        //     if (head.val == 0) return head;
+        //     List<Integer> l = new ArrayList<>();            
+        //     ListNode r = head, p = null;
+        //     while (r != null) {
+        //         l.add(r.val);
+        //         r = r.next;
+        //     }
+        //     int res = 0;
+        //     for (int i = l.size()-1; i >= 0; i--) {
+        //         int v = l.get(i) * 2 + res;
+        //         l.set(i, v % 10);
+        //         res = v / 10;
+        //     }
+        //     if (res > 0) l.add(0, res);
+        //     r = head;
+        //     for (int i = 0; i < l.size(); i++) {
+        //         r.val = l.get(i);
+        //         if (r.next == null) r.next = new ListNode(-1);
+        //         p = r;
+        //         r = r.next;
+        //     }
+        //     if (r.val == -1) p.next = null;
+        //     return head;
+        // }
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+
+    //     public int minAbsoluteDifference(List<Integer> li, int x) {
+    //         int r = (int)1e9, n = li.size(); this.ll = li; 
+    //         // 下面的数据结构不对，还需要可以二分查找，自己用链表来模拟: 【可是维护单调性不入解不对】会漏掉解：所以可能思路还是没有想透彻。。。
+    //         // ArrayDeque<Integer> q = new ArrayDeque<>(); // 单调递增 [小last,first 大] 增增增
+    //         List<Integer> q = new ArrayList<>();
+    //         for (int i = x; i < n; i++) {
+    //             while (q.size() > 0 && li.get(q.get(q.size()-1)) > li.get(i)) q.remove(q.size()-1); // 不能拿走，只能二分插入正解的位置。。。
+    //             q.add(i);
+    //         }
+    //         // ArrayDeque<Integer> s = new ArrayDeque<>(); // 单调递减 [大last,first 小] 减减减
+    //         List<Integer> s = new ArrayList<>();
+    //         System.out.println("r: " + r);
+    //         for (int i = 0; i+x < n; i++) {
+    //             System.out.println("\n i: " + i);
+    //             // 先去，右侧不合法的头
+    //             while (q.size() > 0 && q.get(0) < i+x) q.remove(0);
+    //             System.out.println("q.size(): " + q.size());
+    //             System.out.println(Arrays.toString(q.toArray()));
+    // // 取右侧，可能的最小解
+    //             if (q.size() > 0)
+    //                 // r = Math.min(r, Math.abs(li.get(i) - li.get(q.get(0))));  // <<<<<<<<<<<<<<<<<<<< 
+    //                 r = Math.min(r, getAbsMinIncList(q, li.get(i)));  // <<<<<<<<<<<<<<<<<<<< 
+    //             System.out.println("r: " + r);
+    //             // 取左偶，可能的最小解
+    //             if (s.size() > 0)
+    //                 // r = Math.min(r, Math.abs(li.get(i) - li.get(s.size()-1))); // <<<<<<<<<<<<<<<<<<<< 
+    //                 r = Math.min(r, getAbsMinDecList(s, li.get(i))); // <<<<<<<<<<<<<<<<<<<< 
+    //             if (i >= x) 
+    //                 if (s.size() == 0 || li.get(i) < li.get(s.size()-1)) s.add(i); // 只在更小的情悦下入队列，递减
+    //             System.out.println("r: " + r);
+    //         }
+    //         return r;
+    //     }
+    //     List<Integer> ll;
+    //     int getAbsMinDecList(List<Integer> l, int v) {
+    //         if (v >= ll.get(l.get(0))) return v - ll.get(l.get(0));
+    //         if (v <= ll.get(l.get(l.size()-1))) return ll.get(l.get(l.size()-1)) - v;
+    //         int s = l.get(0), e = l.get(l.size()-1);
+    //         while (s < e) {
+    //             int m = (s + e) / 2;
+    //             if (ll.get(l.get(m)) == v) return 0;
+    //             if (ll.get(l.get(m)) > v && m < e && ll.get(l.get(m+1)) <= v)
+    //                 return Math.min(Math.abs(v - ll.get(l.get(m))), Math.abs(v - ll.get(l.get(m+1))));
+    //             if (ll.get(l.get(m)) > v) s = m+1;
+    //             else e = m-1;
+    //         }
+    //         return (int)1e9;
+    //     }
+    //     int getAbsMinIncList(List<Integer> l, int v) { // 二分查找：最小差值: 这里要考虑该死的重复
+    //         if (v <= ll.get(l.get(0))) return ll.get(l.get(0)) - v ;
+    //         if (v >= ll.get(l.get(l.size()-1))) return v - ll.get(l.get(l.size()-1));
+    //         int s = 0, e = l.size()-1;
+    //         while (s <= e) {
+    //             System.out.println("s: " + s);
+    //             System.out.println("e: " + e);
+    //             int m = (s + e) / 2;
+    //             System.out.println("m: " + m);
+    //             if (ll.get(l.get(m)) == v) return 0;
+    //             if (s == e) return Math.abs(v - ll.get(l.get(s)));
+    //             System.out.println("(ll.get(l.get(m)) < v && m < e && ll.get(l.get(m+1)) >= v): " + (ll.get(l.get(m)) < v && m < e && ll.get(l.get(m+1)) >= v));
+    //             if (ll.get(l.get(m)) < v && m < e && ll.get(l.get(m+1)) >= v)
+    //                 return Math.min(Math.abs(v - ll.get(l.get(m))), Math.abs(v - ll.get(l.get(m+1))));
+    //             if (ll.get(l.get(m)) < v) s = m+1;
+    //             else e = m-1;
+    //         }
+    //         return (int)1e9;
+    //     }
+
+        static final int mod = (int)1e9 + 7;
+        public int maximumScore(List<Integer> l, int k) {
+            // 没读懂题目：【左，右】子数组，左侧下标用来标记新数组，最多找K 个数组5
+            Map<Integer, Integer> m = new HashMap<>();
+            
+            return 0;
         }
     }             
     public static void main (String[] args) { 
         Solution s = new Solution ();
 
-        int [] a = new int [] {2, 1, 3};
+        int [] a = new int [] {93,96,2};
+        System.out.println(Arrays.toString(a));
 
-        boolean r = s.canSplitArray(Arrays.stream(a).boxed().collect(Collectors.toList()), 5);
+        int r = s.minAbsoluteDifference(Arrays.stream(a).boxed().collect(Collectors.toList()), 1);
         System.out.println("r: " + r);
     }
 }
@@ -1686,8 +1880,21 @@ public class cmp {
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
