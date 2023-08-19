@@ -1926,7 +1926,7 @@ public class cmp {
         //     return r;
         // }
 
-// 这个题目：【亲爱的表哥的活宝妹，要学会把它折小。折小是说：】
+// 这个题目：【亲爱的表哥的活宝妹，要学会把它折小。折小是说：】感觉整体思路，除了被 K 整除，可能没能想透彻，其它思路，应该都是对的！！
         // 在 [low,high] 范围内的，可以折成 [1,high] － [1,low-1]. 这个大方向还要【再折小】
         // 可以被 k 【1,20】整除：要如何折解呢？
         // 数据规模大，【1, 1000,000,000】就必须数位DP 般的按位来遍历，否则超时
@@ -1935,16 +1935,6 @@ public class cmp {
         // 【再拆小】：high ＝ 627,999,927 要分两个方法数，数长位数少于当前数长的【1-8】位长的个数 + 当前数位长，但值 <= 当前数的个数
         // 【被 K 整除（0,20】】的思路，也透彻：分解质因子【2,3,5,7,11,13,17,19】，记K 分解质因子后各质因子的个数，遍历时，背数组马甲记个数
         // 8 个质因子，每个最多出现 4 次，每个质因子，如何用3 个数位 bit 表示，是个 int 长度的 mask 马甲. 问题是遍历过程中，以3 个数位为单位来更换某个因子的出现频率，相对复杂
-        List<Integer> li = List.of(2,3,5,7,11,13,17,19);
-        int [] p = new int [8]; // 分解K 的8 个质因子的个数。极端情况16=2*2*2*2 一个质因子最多出现4 次，如何背个最轻便的马甲，数组好大？
-        public int numberOfBeautifulIntegers(int low, int high, int k) {
-            this.k = k;
-            // Arrays.fill(p, 0);
-            // 暂时就背：一个数组，写起来方便，晚点儿不过再说
-            cntPrimeFactors(k); // 质数子数组的【标准】
-            return getCnt(high) - getCnt(low-1);
-        }
-        int k, n;
         // 先数，一个因定长度的【合法数】的个数:
         // 去想，能被 K 整除，分解K 的质因子，马甲要怎么背着？
         void cntPrimeFactors(int v) {
@@ -1958,16 +1948,42 @@ public class cmp {
                 }
             }
         }
+        List<Integer> li = List.of(2,3,5,7,11,13,17,19);
+        int [] p = new int [8]; // 分解K 的8 个质因子的个数。极端情况16=2*2*2*2 一个质因子最多出现4 次，如何背个最轻便的马甲，数组好大？
+        public int numberOfBeautifulIntegers(int low, int high, int k) {
+            this.k = k;
+            // Arrays.fill(p, 0);
+            // 暂时就背：一个数组，写起来方便，晚点儿不过再说
+            // cntPrimeFactors(k); // 质数子数组的【标准】这个我没有用到
+            int x = getCnt(high);
+            System.out.println("x: " + x);
+            int y = getCnt(low-1);
+            System.out.println("y: " + y);
+            // return getCnt(high) - getCnt(low-1);
+            return x - y;
+        }
+        int k, n, val;
+        char [] s;
         int getCnt(int v) {
             n = String.valueOf(v).length(); // 当前数的长度；
+            System.out.println("n: " + n);
             f = new Integer [10]; // [0-9]
-            return getCntLessLength(0, new int [2], 0, n) + getCntExactLength(v, n); // 小于长度个数＋当前长度的个数
+            ff = new Integer [n+1];
+            val = v; // 标记：当前是 high 还是 low
+            s = String.valueOf(v).toCharArray();  // 数固定长度为 n 时，要用到，比较每个数位
+            int xx = getCntLessLength(0, new int [2], 0, n);
+            System.out.println("xx: " + xx);
+            int yy = getCntExactLength(0, new int [2], false, 0, n); // 小于长度个数＋当前长度的个数
+            System.out.println("yy: " + yy);
+            // return getCntLessLength(0, new int [2], 0, n) + getCntExactLength(0, new int [2], false, 0, n); // 小于长度个数＋当前长度的个数
+            return xx + yy;
         }
         // 最后才检测质因子【特殊的是 3 ，要数位和；】，总之检测这一步，暂时放最后！！！放到最后，就得把这个数给记住，要不然不知道数值大小？
         // 这步要不要：【记忆化深搜】？数位DP 好像是要的，犯迷糊。。。
-        Integer [] f;
+        Integer [] f, ff;
         int getCntLessLength(int i, int [] r, int v, int n) { // 背数组，数遍历到当前数位，奇偶数字的出现个数；最后才检测质因子【特殊的是 3 ，要数位和】
-            if (i == n) return r[0] != r[1] ? 0 : (v % k == 0 ? 1 : 0); // 最后的标准：可能需要优化
+            // if (i == n) return r[0] != r[1] ? 0 : (v % k == 0 ? 1 : 0); // 最后的标准：可能需要优化
+            if (i == n) return r[0] != r[1] ? 0 : (v >= k && v % k == 0 ? 1 : 0); // 最后的标准：可能需要优化
             if (f[i] != null) return f[i]; // 这个记忆状态：对吗？是否唯一标识？还是要用字典来记？应该可以，固定长度的合法个数
             int ans = 0;
             for (int j = (i == 0 ? 1 : 0); j < 10; j++) { // 遍历当前数位的可能取值：【从高位到低位遍历】最高位不能取 0; 如果从低位向高位会怎么样？没区别
@@ -1976,21 +1992,35 @@ public class cmp {
                 ans += getCntLessLength(i+1, r, v * 10 + j, n);
                 r[k]--;
             }
+            System.out.println("f[i]: " + f[i]);
             return f[i] = ans;
         }
-        // 数固定长度为 n, 但是值 <= v 的数的个数. 同样的，【记忆化深搜】
-        int getCntExactLength(int v, int n) {
-            
+        // 数固定长度为 n, 但是值 <= v 的数的个数. 同样的，【记忆化深搜】; 多个变量来标记：是否等同于当前数位
+        int getCntExactLength(int i, int [] r, boolean hi, int v, int n) {// v: 当前值 
+            if (i == n) {
+                System.out.println("v: " + v);
+                return r[0] != r[1] ? 0 : (v <= val && v % k == 0 ? 1 : 0);
+            }
+            if (ff[i] != null) return ff[i];
+            int ans = 0;
+            // 当前位上的取值：可能的【最小值，最大值】
+            int l = (i == 0 ? 1 : 0);
+            int ri = (hi ? s[i] - '0' : 9);
+            // for (int j = (i == 0 ? 1 : 0); j < 10; j++) { // 遍历当前数位的可能取值：【从高位到低位遍历】最高位不能取 0; 如果从低位向高位会怎么样？没区别
+                for (int j = l; j <= ri; j++) { // 遍历当前数位的可能取值：【从高位到低位遍历】最高位不能取 0; 如果从低位向高位会怎么样？没区别
+                int k = j % 2;
+                r[k]++; // 这么操作数组，可以吗？
+                ans += getCntExactLength(i+1, r, (i == 0 || hi) && j == s[i]-'0', v * 10 + j, n);
+                r[k]--;
+            }
+                System.out.println("ff[i]: " + ff[i]);
+            return ff[i] = ans;
         }
      }             
     public static void main (String[] args) { 
         Solution s = new Solution ();
 
-        // int [] a = new int [] {93,96,2};
-        int [] a = new int [] {4,3,2,4};
-        System.out.println(Arrays.toString(a));
-
-        int r = s.minAbsoluteDifference(Arrays.stream(a).boxed().collect(Collectors.toList()), 2);
+        int r = s.numberOfBeautifulIntegers(10, 20, 3);
         System.out.println("r: " + r);
     }
 }
@@ -2000,6 +2030,16 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要嫁给亲爱的表哥！！活宝妹若是还没能嫁给亲爱的表哥，活宝妹就是永远守候在亲爱的表哥的身边！！爱表哥，爱生活！！！】
