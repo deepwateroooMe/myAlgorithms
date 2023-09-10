@@ -220,40 +220,141 @@ public class cmp {
         //     return ans;
         // }
 
-        // 怎么感觉，这是个像是【最大值、最小值】线段树（还有【sum 线段树】），或是求出现次数最多元素的线段树一样。。。
-        // 最有效的帮助信息 W 【1,26】要怎么使用这个参数呢？
-        public int[] minOperationsQueries(int n, int[][] egs, int[][] qs) {
-            g = new ArrayList [n];
-            Arrays.stream(g).forEach(z -> Arrays.fill(z, new ArrayList<int []>()));
-            for (int [] e : egs) {
-                int u = e[0], v = e[1], w = e[2];
-                g[u].add(new int [] {v, w});
-                g[v].add(new int [] {u, w});
-            }
-            // 感觉，这个题，可能可以当＝【有向图】来处理，就是随便选哪个作为【根结点】，结果都一样
-            // 随机选定一个【根节点】预处理，建立【1,26】词频表
-            // 动规解题, 就是先前的什么树状动规？
-            f = new int [n][26];
-            // 选【0】作为根结点
-            dfs(0, -1);
-            
-        }
-        List<int []> [] g;
-        int [][] f;
-        void dfs(int u, int p) {
-            for (int [] v : g[u]) { // 遍历每个子节点
-                if (v[0] == p) continue;
-                f[u][v[1]]++; // 统计词频
-                dfs(v[0], u);
-            }
-        }
+        // // 怎么感觉，这是个像是【最大值、最小值】线段树（还有【sum 线段树】），或是求出现次数最多元素的线段树一样。。。
+        // // 最有效的帮助信息 W 【1,26】要怎么使用这个参数呢？
+        // public int[] minOperationsQueries(int n, int[][] egs, int[][] qs) {
+        //     g = new ArrayList [n];
+        //     Arrays.stream(g).forEach(z -> Arrays.fill(z, new ArrayList<int []>()));
+        //     for (int [] e : egs) {
+        //         int u = e[0], v = e[1], w = e[2];
+        //         g[u].add(new int [] {v, w});
+        //         g[v].add(new int [] {u, w});
+        //     }
+        //     // 感觉，这个题，可能可以当＝【有向图】来处理，就是随便选哪个作为【根结点】，结果都一样
+        //     // 随机选定一个【根节点】预处理，建立【1,26】词频表
+        //     // 动规解题, 就是先前的什么树状动规？
+        //     f = new int [n][26];
+        //     // 选【0】作为根结点
+        //     dfs(0, -1);
+        // }
+        // List<int []> [] g;
+        // int [][] f;
+        // void dfs(int u, int p) {
+        //     for (int [] v : g[u]) { // 遍历每个子节点
+        //         if (v[0] == p) continue;
+        //         f[u][v[1]]++; // 统计词频
+        //         dfs(v[0], u);
+        //     }
+        // }
+
+        // public int numberOfPoints(List<List<Integer>> ll) {
+        //     int n = ll.size();
+        //     int [] r = new int [102];
+        //     for (List<Integer> l : ll) {
+        //         r[l.get(0)]++;
+        //         r[l.get(1)+1]--;
+        //     }
+        //     int cnt = (r[1] > 0 ? 1 : 0);
+        //     for (int i = 2; i < 102; i++) {
+        //         r[i] += r[i-1];
+        //         if (r[i] > 0) cnt++;
+        //     }
+        //     return cnt;
+        // }
+
+        // // 不光能走横的、竖的，还能走斜的, 呆会儿再写这个题目
+        // // 最讨厌这种破题目：就在那里瓣呀瓣，没什么意思。。。又不能提高算法能力，是专门用来折磨活宝妹的。。。讨厌他们贱鸡、贱畜牲。。。
+        // public boolean isReachableAtTime(int sx, int sy, int fx, int fy, int t) {
+        //     int a = Math.abs(fx - sx), b = Math.abs(fy - sy);
+        //     if (a == 0 && b == 0 && t == 1) return false;
+        //     if (t > a + b) {
+        //         int v = t - (Math.min(a, b) + Math.abs(a - b));
+        //         return  v % 2 == 0 || v % 3 == 0 || v % 5 == 0 || t - (a+b) == 1
+        //             || (v-1) % 2 == 0 || (v-1) % 3 == 0 || (v-1) % 5 == 0;
+        //     }
+        //     return Math.min(a, b) + Math.abs(a - b) <= t && t <= a + b;
+        // }
+
+        // // 562/611: 算法不完美。【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // 知道这个题狠 tricky, 可是还没有狠好的思路。。放着不写了
+        // 不喜欢这个题目，瓣来瓣去狠没意思。。。
+        // int [][] dirs = {{0, -1}, {-1, 0}, {0, 1}, {1, 0}};
+        // int [][] dd = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+        // public int minimumMoves(int[][] a) {
+        //     return Math.min(minimumMovesOne(a), minimumMovesOtherDirection(a));
+        // }
+        // int minimumMovesOtherDirection(int[][] a) {
+        //     int n = 3, cnt = 0, nn = 0;
+        //     List<int []> l = new ArrayList<>();
+        //     for (int i = n-1; i >= 0; i--) 
+        //         for (int j = n-1; j >= 0; j--) {
+        //             if (a[i][j] == 0) continue;
+        //             if (a[i][j] > 1) {
+        //                 for (int[] d : dd) {
+        //                     int x = i + d[0], y = j + d[1];
+        //                     if (x < 0 || x >= n || y < 0 || y >= n || a[x][y] > 0) continue;
+        //                     a[x][y] = 1;
+        //                     ++cnt;
+        //                     --a[i][j];
+        //                     if (a[i][j] == 1) break;
+        //                 }
+        //             }
+        //             if (a[i][j] > 1) l.add(new int [] {i, j});
+        //         }
+        //     for (int i = 0; i < n; i++)
+        //         for (int j = 0; j < n; j++)
+        //             if (a[i][j] == 0) {
+        //                 int [] r = l.get(0);
+        //                 --a[r[0]][r[1]];
+        //                 cnt += Math.abs(r[0] - i) + Math.abs(r[1] - j);
+        //                 if (a[r[0]][r[1]] == 1) l.remove(0);
+        //             }
+        //     return cnt;
+        // }
+        // int minimumMovesOne(int[][] a) {
+        //     int n = 3, cnt = 0, nn = 0;
+        //     List<int []> l = new ArrayList<>();
+        //     for (int i = 0; i < n; i++)
+        //         for (int j = 0; j < n; j++) {
+        //             if (a[i][j] == 0) continue;
+        //             if (a[i][j] > 1) {
+        //                 System.out.println("\n i: " + i);
+        //                 System.out.println("j: " + j);
+        //                 for (int[] d : dirs) {
+        //                     int x = i + d[0], y = j + d[1];
+        //                     if (x < 0 || x >= n || y < 0 || y >= n || a[x][y] > 0) continue;
+        //                     a[x][y] = 1;
+        //                     ++cnt;
+        //                     --a[i][j];
+        //                     if (a[i][j] == 1) break;
+        //                     System.out.println("cnt: " + cnt);
+        //                 }
+        //             }
+        //             if (a[i][j] > 1) l.add(new int [] {i, j});
+        //         }
+        //     // System.out.println("a.length: " + a.length);
+        //     // for (int z = 0; z < a.length; ++z) 
+        //     //     System.out.println(Arrays.toString(a[z]));
+        //     // System.out.println("cnt: " + cnt);
+        //     for (int i = 0; i < n; i++)
+        //         for (int j = 0; j < n; j++)
+        //             if (a[i][j] == 0) {
+        //                 int [] r = l.get(0);
+        //                 --a[r[0]][r[1]];
+        //                 cnt += Math.abs(r[0] - i) + Math.abs(r[1] - j);
+        //                 if (a[r[0]][r[1]] == 1) l.remove(0);
+        //             }
+        //     return cnt;
+        // }
+
+        // public int numberOfWays(String s, String t, long k) {
+        //     return 0;
+        // }
     }
     public static void main (String[] args) {
         Solution s = new Solution ();
 
-        System.out.println(Arrays.toString(a));
-
-        long r = s.countInterestingSubarrays(Arrays.stream(a).boxed().collect(Collectors.toList()), 10, 1);
+        boolean r = s.isReachableAtTime(1, 1, 3, 3, 9);
         System.out.println("r: " + r);
     }
 
@@ -264,12 +365,6 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
