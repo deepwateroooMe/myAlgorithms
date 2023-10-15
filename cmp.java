@@ -1,16 +1,28 @@
 import com.ListNode;
+
 import java.util.HashMap;
+
 import java.util.Map;
+
 import java.util.ArrayList;
+
 import java.util.*;
+
 import java.util.stream.*;
+
 import java.util.stream.Collectors;
+
 import java.util.HashSet;
+
 import java.util.Set;
+
 import static java.util.stream.Collectors.toMap;
+
 public class cmp {
+
     public static class Solution {
-        // // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+
+		// // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 
         // public boolean canBeEqual(String ss, String tt) {
         //     char [] s = ss.toCharArray(), t = tt.toCharArray();
@@ -545,15 +557,122 @@ public class cmp {
 		// 	return f[i][j];
 		// }
 
-		
+		// public int[] findIndices(int[] a, int idxdiff, int valdiff) {
+		// 	int n = a.length;
+		// 	for (int i = 0; i < n; i++)
+		// 		for (int j = i + idxdiff; j < n; j++) {
+		// 			if (Math.abs(a[i] - a[j]) >= valdiff)
+		// 				return new int [] {i, j};
+		// 		}
+		// 	return new int [] {-1, -1};				
+		// }
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// public String shortestBeautifulSubstring(String t, int k) {
+		// 	int n = t.length(); char [] s = t.toCharArray();
+		// 	int [] r = new int [n+1];
+		// 	for (int i = 0; i < n; i++)
+		// 		r[i+1] = r[i] + (s[i] == '1' ? 1 : 0);
+		// 	String ans = "";
+		// 	int min = n;
+		// 	Map<Integer, Integer> m = new HashMap<>();
+		// 	m.put(0, -1);
+		// 	for (int i = 0; i < n; i++) {
+		// 		System.out.println("\n i: " + i);
+		// 		if (m.containsKey(r[i+1] - k)) {
+		// 			int j = m.get(r[i+1] - k);
+		// 			int len = i - j;
+		// 			String cur = t.substring(j+1, i+1);
+		// 			if (len <= min || ans.equals("")) {
+		// 				if (ans.equals("") || len < min || len == min && cur.compareTo(ans) < 0)
+		// 					ans = cur;
+		// 				if (len < min) min = len;
+		// 			}
+		// 		}
+		// 		m.put(r[i+1], i);
+        //     }
+		// 	return ans;
+		// }
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// // 这个思路有点儿问题：保留最大值，可能不能保证 idx 
+		// public int [] findIndices(int [] a, int idxdiff, int valdiff) {
+		// 	int n = a.length;
+		// 	int [] l = new int [n], r = new int [n];
+		// 	Arrays.fill(l, -1);
+		// 	Arrays.fill(r, -1);
+		// 	ArrayDeque<Integer> s = new ArrayDeque<>();
+		// 	// 从右往左，递减
+		// 	s.offerFirst(n-1);
+		// 	for (int i = n-2; i >= 0; i--) {
+		// 		while (s.size() > 1 && a[i] >= a[s.peekFirst()]) s.pollFirst();
+		// 	    if (s.peekLast() - i >= idxdiff)
+		// 			r[i] = s.peekLast(); // 记的是：右边第一个比当前数大的下标
+		// 		if (a[i] > a[s.peekFirst()]) s.pollFirst();
+		// 		if (s.isEmpty() || a[s.peekFirst()] > a[i])
+		// 			s.offerFirst(i);
+		// 	}			
+		// 	s.clear();
+		// 	// 从左往右，递减
+		// 	s.offerFirst(0);
+		// 	for (int i = 1; i < n; i++) {
+		// 		while (s.size() > 1 && a[s.peekLast()] <= a[i]) s.pollLast();
+		// 		if (i - s.peekLast() >= idxdiff)
+		// 			l[i] = s.peekFirst();
+		// 		if (a[s.peekLast()] < a[i]) s.pollLast();
+		// 		if (s.isEmpty() || a[s.peekLast()] > a[i])
+		// 			s.offerLast(i);
+		// 	}
+		// 	System.out.println(Arrays.toString(l));
+		// 	System.out.println(Arrays.toString(r));
+		// 	for (int i = 0; i < n; i++) { // 遍历，以当前数为最小值 
+		// 		if (l[i] != -1 && Math.abs(l[i] - i) >= idxdiff && Math.abs(a[l[i]] - a[i]) >= valdiff)
+		// 			return new int [] {l[i], i};
+		// 		if (r[i] != -1 && Math.abs(r[i] - i) >= idxdiff && Math.abs(a[r[i]] - a[i]) >= valdiff)
+		// 			return new int [] {i, r[i]};
+		// 	}
+		// 	if (n == 1 && idxdiff == 0 && valdiff == 0) return new int [] {0, 0};
+		// 	return new int [] {-1, -1};
+		// }
+
+		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// 不知道这个题目，说的是什么意思。。。
+		static final int mod = 12345;
+		public int[][] constructProductMatrix(int[][] a) {
+			int m = a.length, n = a[0].length, cnt = 0;
+			long r = 1;
+			boolean hasZero = false;
+			for (int i = 0; i < m; i++)
+				for (int j = 0; j < n; j++)
+					if (a[i][j] % mod == 0) {
+						a[i][j] = 0;
+						hasZero |= true;
+						cnt++;
+					} else r = (r * (long)a[i][j]) % (long)mod;
+			System.out.println("r: " + r);
+			int [][] ans = new int [m][n];
+			if (cnt == m*n) r = 0;
+			for (int i = 0; i < m; i++)
+				for (int j = 0; j < n; j++)
+					if (a[i][j] == 0) 
+						ans[i][j] = (int)r;
+					else if (hasZero) ans[i][j] = 0;
+					else ans[i][j] = (int)(r / a[i][j] + mod) % mod;
+			return ans;
+		}
     }
     public static void main (String[] args) {
         Solution s = new Solution ();
-		String a = "10110";
-		String b = "00011";
+		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		int [][] a = new int [][] {{3,2,5},{6,4,3},{6,3,1}};
+		System.out.println("a.length: " + a.length);
+		for (int z = 0; z < a.length; ++z) 
+			System.out.println(Arrays.toString(a[z]));
 
-		int r = s.minOperations(a, b, 4);
-        System.out.println("r: " + r);
+		int [][] r = s.constructProductMatrix(a);
+		System.out.println("r.length: " + r.length);
+		for (int z = 0; z < r.length; ++z) 
+			System.out.println(Arrays.toString(r[z]));
     }
 
 }
@@ -563,5 +682,51 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
