@@ -635,44 +635,127 @@ public class cmp {
 		// 	return new int [] {-1, -1};
 		// }
 
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// // 不知道这个题目，说的是什么意思。。。
+		// static final int mod = 12345;
+		// public int[][] constructProductMatrix(int[][] a) {
+		// 	int m = a.length, n = a[0].length, cnt = 0;
+		// 	long r = 1;
+		// 	boolean hasZero = false;
+		// 	for (int i = 0; i < m; i++)
+		// 		for (int j = 0; j < n; j++)
+		// 			if (a[i][j] % mod == 0) {
+		// 				a[i][j] = 0;
+		// 				hasZero |= true;
+		// 				cnt++;
+		// 			} else r = (r * (long)a[i][j]) % (long)mod;
+		// 	System.out.println("r: " + r);
+		// 	int [][] ans = new int [m][n];
+		// 	if (cnt == m*n) r = 0;
+		// 	for (int i = 0; i < m; i++)
+		// 		for (int j = 0; j < n; j++)
+		// 			if (a[i][j] == 0) 
+		// 				ans[i][j] = (int)r;
+		// 			else if (hasZero) ans[i][j] = 0;
+		// 			else ans[i][j] = (int)(r / a[i][j] + mod) % mod;
+		// 	return ans;
+		// }
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// public int minimumSum(int[] a) {
+		// 	int n = a.length, r = 151;
+		// 	for (int i = 0; i < n; i++)
+		// 		for (int j = i+1; j+1 < n; j++)
+		// 			for (int k = j+1; k < n; k++) 
+		// 				if (a[i] < a[j] && a[j] > a[k])
+		// 					r = Math.min(r, a[i] + a[j] + a[k]);
+		// 	return r == 151 ? -1 : r;
+		// }
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// public int minimumSum(int[] a) {
+		// 	int n = a.length, ans = Integer.MAX_VALUE;
+		// 	ArrayDeque<Integer> s = new ArrayDeque<>();
+		// 	int [] l = new int [n], r = new int [n];
+		// 	Arrays.fill(l, -1); Arrays.fill(r, -1);
+		// 	s.offerFirst(a[0]);
+		// 	for (int i = 1; i < n; i++) {
+		// 		while (!s.isEmpty() && s.peekLast() >= a[i]) s.pollLast();
+		// 		if (!s.isEmpty()) l[i] = s.peekFirst();
+		// 		s.offerLast(a[i]);
+		// 	}
+		// 	s.clear();
+		// 	s.offerFirst(a[n-1]);
+		// 	for (int i = n-2; i >= 0; i--) {
+		// 		while (!s.isEmpty() && s.peekFirst() >= a[i]) s.pollFirst();
+		// 		if (!s.isEmpty()) r[i] = s.peekLast();
+		// 		s.offerFirst(a[i]);
+		// 	}
+		// 	System.out.println(Arrays.toString(l));
+		// 	System.out.println(Arrays.toString(r));
+		// 	for (int i = 1; i < n-1; i++) 
+		// 		if (l[i] != -1 && r[i] != -1)
+		// 			ans = Math.min(ans, l[i] + a[i] + r[i]);
+		// 	return ans == Integer.MAX_VALUE ? -1 : ans;
+		// }
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// public int minGroupsForValidAssignment(int[] a) {
+		// 	int n = a.length, r = 0;
+		// 	Map<Integer, Integer> m = new HashMap<>();
+		// 	for (int v : a)
+		// 		m.put(v, m.getOrDefault(v, 0) + 1);
+		// 	int min = Collections.min(m.values());// 一个最小的组，次数。这里面还涉及【最小公约数】的问题？6, 14%6=2 etc 
+		// 	for (int v : m.values()) {
+		// 			}
+		// }
+
 		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
-		// 不知道这个题目，说的是什么意思。。。
-		static final int mod = 12345;
-		public int[][] constructProductMatrix(int[][] a) {
-			int m = a.length, n = a[0].length, cnt = 0;
-			long r = 1;
-			boolean hasZero = false;
-			for (int i = 0; i < m; i++)
-				for (int j = 0; j < n; j++)
-					if (a[i][j] % mod == 0) {
-						a[i][j] = 0;
-						hasZero |= true;
-						cnt++;
-					} else r = (r * (long)a[i][j]) % (long)mod;
-			System.out.println("r: " + r);
-			int [][] ans = new int [m][n];
-			if (cnt == m*n) r = 0;
-			for (int i = 0; i < m; i++)
-				for (int j = 0; j < n; j++)
-					if (a[i][j] == 0) 
-						ans[i][j] = (int)r;
-					else if (hasZero) ans[i][j] = 0;
-					else ans[i][j] = (int)(r / a[i][j] + mod) % mod;
-			return ans;
+		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// 这个题目好难，只能【动规】：也不是，应该也是可以【记忆化深搜】的！！！
+		public int minimumChanges(String t, int k) {// [2,200] [1,n/2]
+			n = t.length(); s = t.toCharArray();
+			p = new int [n][n];
+			Arrays.stream(p).forEach(z -> Arrays.fill(z, n));// ？
+			f = new Integer [n][k+1];
+			return dfs(0, k);
 		}
+		char [] s;
+		int n;
+		Integer [][] f;
+		int [][] p; // pre-processing: cost of [i,j] to be semi-palindrome
+		int dfs(int i, int j) {
+			if (i == n-1) return Integer.MAX_VALUE / 2; // 特殊：可以不用记住在 f[i][j] 里，并且 j<0? 是可能的？
+			if (i == n) return j == 0 ? 0 : Integer.MAX_VALUE / 2;
+			if (f[i][j] != null) return f[i][j];
+			int r = n-i - (j-1)*2, idx = (j == 1 ? n-1 :  n - (j-1) * 2 -1);// 最后一个可能的下标
+			for (int k = i+2; k <= idx; k++) {
+				if ()
+			}
+		}
+		// 这里，可能还涉及字符串的预处理：[i,j] 变成 semi-palindrome 的最小代价，预处理一下就可以了O(1) 拿到结果
+		int prep() {// 这个【预处理】：还有【动规】的机关吗？
+			for (int i = 0; i < n; i++)
+				for (int j = i+2; j < n; j++) {
+					
+				}
+		}
+		// boolean isSemiPalindrome(int i, int j) { // s[bgn,end) 【关，尾）
+		// 	if (j - i <= 1) return false;
+		// 	if (j - i == 2) return s[i] == s[i+1];
+		// 	int n = j - i;
+		// }
     }
     public static void main (String[] args) {
         Solution s = new Solution ();
-		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
-		int [][] a = new int [][] {{3,2,5},{6,4,3},{6,3,1}};
-		System.out.println("a.length: " + a.length);
-		for (int z = 0; z < a.length; ++z) 
-			System.out.println(Arrays.toString(a[z]));
 
-		int [][] r = s.constructProductMatrix(a);
-		System.out.println("r.length: " + r.length);
-		for (int z = 0; z < r.length; ++z) 
-			System.out.println(Arrays.toString(r[z]));
+		int [] a = new int [] {2, 3, 2, 1};
+		System.out.println(Arrays.toString(a));
+
+		int r = s.minimumSum(a);
+		System.out.println("r: " + r);
     }
 
 }
@@ -682,24 +765,6 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
