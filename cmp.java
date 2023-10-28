@@ -710,69 +710,175 @@ public class cmp {
 		// 			}
 		// }
 
-		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
-		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
-		// 这个题目好难，只能【动规】：也不是，应该也是可以【记忆化深搜】的！！！
-		public int minimumChanges(String t, int k) {// [2,200] [1,n/2]
-			n = t.length(); s = t.toCharArray();
-			a = new int [n][n];
-			Arrays.stream(p).forEach(z -> Arrays.fill(z, n));// 【初始化】：为 n
-			prep(); // preprocessing a[i][j]
-			f = new Integer [n][k+1];
-			return dfs(0, k);
+	// 	// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+	// 	// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+	// 	// 这个题目好难，只能【动规】：也不是，应该也是可以【记忆化深搜】的！！！
+	// 	public int minimumChanges(String t, int k) {// [2,200] [1,n/2]
+	// 		n = t.length(); s = t.toCharArray();
+	// 		a = new int [n][n];
+	// 		Arrays.stream(p).forEach(z -> Arrays.fill(z, n));// 【初始化】：为 n
+	// 		prep(); // preprocessing a[i][j]
+	// 		f = new Integer [n][k+1];
+	// 		return dfs(0, k);
+	// 	}
+	// 	char [] s;
+	// 	int n;
+	// 	Integer [][] f;
+	// 	int [][] a; // pre-processing: cost of [i,j] to be semi-palindrome
+	// 	int dfs(int i, int j) {
+	// 		if (i == n-1) return Integer.MAX_VALUE / 2; // 特殊：可以不用记住在 f[i][j] 里，并且 j<0? 是可能的？
+	// 		if (i == n) return j == 0 ? 0 : Integer.MAX_VALUE / 2;
+	// 		if (f[i][j] != null) return f[i][j];
+	// 		int r = n-i - (j-1)*2, idx = (j == 1 ? n-1 :  n - (j-1) * 2 -1);// 最后一个可能的下标
+	// 		for (int k = i+2; k <= idx; k++)// 遍历一段：所有可能的，当前片段的最大长度范围，取全局最小值  
+	// 			if (a[i][k] < k-i) r = Math.min(r, a[i][k] + dfs(k, j-1));
+	// 		return f[i][j] = r;
+	// 	}
+	// 	// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+	// 	// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+	// 	// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+	// 	// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+	// 	// 这里，可能还涉及字符串的预处理：[i,j] 变成 semi-palindrome 的最小代价，预处理一下就可以了O(1) 拿到结果
+	// // 2: aa
+	// // 3: aba
+	// // 4: ab-ab aaaa
+	// // 5: aaaaa
+	// // 6: abxyab abcabc
+	// // 7: aaaaaa
+	// // 8: abababab abcdabcd aaaa-aaaa
+	// // 9: abcxyzabc aaa-aaa-aaa
+	// // 10:
+	// 	int prep() {// 这个【预处理】：还有【动规】的机关吗？题目的重点，就落到这里来了
+	// 		for (int i = 0; i < n; i++)
+	// 			for (int j = i+2; j < n; j++) {
+	// 				int m = j - i;
+	// 				a[i][j] = j - i;// 真正【初始化】为，片段长度
+	// 				for (int k = m-1; k >= 1; k--) { // 这个暴力解法 N[1,200] 不知道是否会超时。。
+	// 					if (m % k != 0) continue;
+	// 					// 【机关来了】：长度为 k 的片段，的 m%k 次重复：比较两个字符串，是否一样？，有个算法。。
+	// 					// 【机关来了】：上面不仅仅是是否一样，而是动规，算最小修改代价。。这个细节，本身是个【动规】算法题目。。忘记细节了：数组、长度相等的连续子数组，某些要求。。
+	// 				}						
+	// 			}
+	// 	}
+	// 	// boolean isSemiPalindrome(int i, int j) { // s[bgn,end) 【关，尾）
+	// 	// 	if (j - i <= 1) return false;
+	// 	// 	if (j - i == 2) return s[i] == s[i+1];
+	// 	// 	int n = j - i;
+	// 	// }
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// // 写最简单的题目：就脑袋不用转，直接上暴力
+		// public int sumCounts(List<Integer> l) {
+		// 	int n = l.size(), r = 0;
+		// 	Set<Integer> s = new HashSet<>();
+		// 	for (int i = 0; i < n; i++) {
+		// 		s.clear();
+		// 		// s.add(l.get(i));
+		// 		for (int j = i; j < n; j++) {
+		// 			s.add(l.get(j));
+		// 			r += s.size() * s.size();
+		// 		}
+		// 	}
+		// 	return r;
+		// }
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// public int minChanges(String t) {
+		// 	int n = t.length(); char [] s = t.toCharArray();
+		// 	int [][] f = new int [n][2]; // 0, 1
+		// 	// 求最小值：就【初始化】为最大
+		// 	Arrays.stream(f).forEach(z -> Arrays.fill(z, n));
+		// 	f[1][0] = s[0] - '0' + s[1] - '0';
+		// 	f[1][1] = 2 - (s[0] - '0' + s[1] - '0');
+		// 	for (int i = 3; i < n; i += 2) {
+		// 		int r = Math.min(s[i-1]-'0' + s[i]-'0', 2 - (s[i-1]-'0' + s[i]-'0'));
+		// 		f[i][0] = Math.min(f[i-2][0] + s[i-1]-'0' + s[i]-'0', f[i-2][1] + s[i-1]-'0' + s[i]-'0');
+		// 		f[i][1] = Math.min(f[i-2][0] + 2 - (s[i-1]-'0' + s[i]-'0'), f[i-2][1] + 2 - (s[i-1]-'0' + s[i]-'0'));
+		// 	}
+		// 	return Math.min(f[n-1][0], f[n-1][1]);
+		// }
+
+	// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// 亲爱的表哥，亲爱的表哥的活宝妹，就想不明白：他们现在是, 他们都不敢再，挑战亲爱的表哥的活宝妹了吗？为什么每天都在出那什么破烂【动规】与【记忆化深搜】？
+		// 亲爱的表哥的活宝妹，写这类题目，都写麻木了，它们还不换点儿新题型。。。
+		// 这个题目：思路是透彻的，还有一点点儿细节，没能完成，627/941 passed, 先想最后一题的思路
+		public int lengthOfLongestSubsequence(List<Integer> li, int t) {
+			n = li.size(); 
+			f = new Integer [n][1001];
+			Collections.sort(li); // 【从小到大】，升序排列
+			System.out.println("li.size(): " + li.size());
+			System.out.println(Arrays.toString(li.toArray()));
+			int idx = 0;
+			for (int v : li) { // 统计：数频。健：从小到大排列
+				m.computeIfAbsent(v, z -> new int [] {0, 0});
+				m.get(v)[0]++;
+				m.get(v)[1] = idx++;
+				// m.put(v, m.getOrDefault(v, 0) + 1);
+			}
+			p = new int [n+1];
+			for (int i = 0; i < n; i++) // preSum
+				p[i+1] = p[i] + li.get(i);
+			System.out.println(Arrays.toString(p));
+			int r = dfs(n-1, t); 
+			return r > n ? -1 : r;
 		}
-		char [] s;
+		TreeMap<Integer, int []> m = new TreeMap<>(); // [cnt, idx] 最右边的 idx
+		int [] p;
 		int n;
 		Integer [][] f;
-		int [][] a; // pre-processing: cost of [i,j] to be semi-palindrome
-		int dfs(int i, int j) {
-			if (i == n-1) return Integer.MAX_VALUE / 2; // 特殊：可以不用记住在 f[i][j] 里，并且 j<0? 是可能的？
-			if (i == n) return j == 0 ? 0 : Integer.MAX_VALUE / 2;
+		int dfs(int i, int j) { // i: idx; j: val
+			System.out.println("\n i: " + i);
+			System.out.println("j: " + j);
+			if (i < 0) return j == 0 ? 0 : n+1;  // 这里，会导致过滤出错。。
+			if (j < 0) return n+1;
+			if (j == 0) return f[i][j] = 0;
 			if (f[i][j] != null) return f[i][j];
-			int r = n-i - (j-1)*2, idx = (j == 1 ? n-1 :  n - (j-1) * 2 -1);// 最后一个可能的下标
-			for (int k = i+2; k <= idx; k++)// 遍历一段：所有可能的，当前片段的最大长度范围，取全局最小值  
-				if (a[i][k] < k-i) r = Math.min(r, a[i][k] + dfs(k, j-1));
-			return f[i][j] = r;
-		}
-		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
-		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
-		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
-		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
-		// 这里，可能还涉及字符串的预处理：[i,j] 变成 semi-palindrome 的最小代价，预处理一下就可以了O(1) 拿到结果
-	// 2: aa
-	// 3: aba
-	// 4: ab-ab aaaa
-	// 5: aaaaa
-	// 6: abxyab abcabc
-	// 7: aaaaaa
-	// 8: abababab abcdabcd aaaa-aaaa
-	// 9: abcxyzabc aaa-aaa-aaa
-	// 10:
-		int prep() {// 这个【预处理】：还有【动规】的机关吗？题目的重点，就落到这里来了
-			for (int i = 0; i < n; i++)
-				for (int j = i+2; j < n; j++) {
-					int m = j - i;
-					a[i][j] = j - i;// 真正【初始化】为，片段长度
-					for (int k = m-1; k >= 1; k--) { // 这个暴力解法 N[1,200] 不知道是否会超时。。
-						if (m % k != 0) continue;
-						// 【机关来了】：长度为 k 的片段，的 m%k 次重复：比较两个字符串，是否一样？，有个算法。。
-						// 【机关来了】：上面不仅仅是是否一样，而是动规，算最小修改代价。。这个细节，本身是个【动规】算法题目。。忘记细节了：数组、长度相等的连续子数组，某些要求。。
-					}						
+			f[i][j] = n+1; // 【初始化】：为不合法最大
+			int r = -1; // 直接【初始化】为非法值 
+			if (j > p[i+1]) return f[i][j] = n+1;
+			if (j == p[i+1]) return f[i][j] = i+1;
+			Integer loKey = m.floorKey(j);
+			if (loKey == null) return f[i][j] = n+1;
+			while (loKey != null) { // 这里要：遍历所有可能的解。。
+				System.out.println("loKey: " + loKey);
+				int cnt = m.get(loKey)[0], idx = m.get(loKey)[1];
+				System.out.println("cnt: " + cnt);
+				for (int k = 1; k <= cnt; k++) { // 遍历，当前，最大可能数，的词频
+					int sub = dfs(idx-cnt, j - (int)loKey * k); // 这个过程中，一些数消耗了。。
+					if (sub <= i-k+1) r = Math.max(r, sub + k); // 合法最大解
+					else continue; // 这里，不合法解，是继续的
+					System.out.println("r: " + r);
 				}
+				loKey = m.floorKey(loKey-1);
+				// if (loKey != null && (int)loKey * (i-1) < j) break;
+			}
+			System.out.println("\n i: " + i);
+			System.out.println("j: " + j);
+			System.out.println("r: " + r);
+			return f[i][j] = (r == -1 ? n+1 : r);
 		}
-		// boolean isSemiPalindrome(int i, int j) { // s[bgn,end) 【关，尾）
-		// 	if (j - i <= 1) return false;
-		// 	if (j - i == 2) return s[i] == s[i+1];
-		// 	int n = j - i;
-		// }
-    }
+		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// 这个题目的思路其实狠简单：它们为打劫亲爱的表哥的活宝妹，一劳永逸地、永远、永欠到中国大陆，它们想使用什么滑动窗口的办法
+		// 来压迫、压炸别人的生存地。但是亲爱的表哥的活宝妹的存在，就是警告世人：他们眉高眼低，永远打劫、打压他人的人生！！！
+		// 思路：滑动窗口，用个词频字典记次数就可以了
+		static final int mod = (int)1e9 + 7;
+		public int sumCounts(int[] a) {
+			int n = a.length;
+			Map<Integer, Integer> m = new HashMap<>();
+			for (int r = 0, l = 0; r < n; r++) { // l,r: 左右指针
+			    
+		   }
+
+			return 0;
+		}
+	}
     public static void main (String[] args) {
         Solution s = new Solution ();
 
-		int [] a = new int [] {2, 3, 2, 1};
+		// int [] a = new int [] {2, 3, 5};
+		int [] a = new int [] {2,1,8,4,7,2,10,1};
 		System.out.println(Arrays.toString(a));
-
-		int r = s.minimumSum(a);
+		int r = s.lengthOfLongestSubsequence(Arrays.stream(a).boxed().collect(Collectors.toList()), 22);
 		System.out.println("r: " + r);
     }
 
@@ -783,6 +889,30 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
