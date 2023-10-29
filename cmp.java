@@ -1,5 +1,4 @@
 import com.ListNode;
-
 import java.util.HashMap;
 
 import java.util.Map;
@@ -798,90 +797,257 @@ public class cmp {
 		// 	return Math.min(f[n-1][0], f[n-1][1]);
 		// }
 
-	// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
-		// 亲爱的表哥，亲爱的表哥的活宝妹，就想不明白：他们现在是, 他们都不敢再，挑战亲爱的表哥的活宝妹了吗？为什么每天都在出那什么破烂【动规】与【记忆化深搜】？
-		// 亲爱的表哥的活宝妹，写这类题目，都写麻木了，它们还不换点儿新题型。。。
-		// 这个题目：思路是透彻的，还有一点点儿细节，没能完成，627/941 passed, 先想最后一题的思路
-		public int lengthOfLongestSubsequence(List<Integer> li, int t) {
-			n = li.size(); 
-			f = new Integer [n][1001];
-			Collections.sort(li); // 【从小到大】，升序排列
-			System.out.println("li.size(): " + li.size());
-			System.out.println(Arrays.toString(li.toArray()));
-			int idx = 0;
-			for (int v : li) { // 统计：数频。健：从小到大排列
-				m.computeIfAbsent(v, z -> new int [] {0, 0});
-				m.get(v)[0]++;
-				m.get(v)[1] = idx++;
-				// m.put(v, m.getOrDefault(v, 0) + 1);
-			}
-			p = new int [n+1];
-			for (int i = 0; i < n; i++) // preSum
-				p[i+1] = p[i] + li.get(i);
-			System.out.println(Arrays.toString(p));
-			int r = dfs(n-1, t); 
-			return r > n ? -1 : r;
-		}
-		TreeMap<Integer, int []> m = new TreeMap<>(); // [cnt, idx] 最右边的 idx
-		int [] p;
-		int n;
-		Integer [][] f;
-		int dfs(int i, int j) { // i: idx; j: val
-			System.out.println("\n i: " + i);
-			System.out.println("j: " + j);
-			if (i < 0) return j == 0 ? 0 : n+1;  // 这里，会导致过滤出错。。
-			if (j < 0) return n+1;
-			if (j == 0) return f[i][j] = 0;
-			if (f[i][j] != null) return f[i][j];
-			f[i][j] = n+1; // 【初始化】：为不合法最大
-			int r = -1; // 直接【初始化】为非法值 
-			if (j > p[i+1]) return f[i][j] = n+1;
-			if (j == p[i+1]) return f[i][j] = i+1;
-			Integer loKey = m.floorKey(j);
-			if (loKey == null) return f[i][j] = n+1;
-			while (loKey != null) { // 这里要：遍历所有可能的解。。
-				System.out.println("loKey: " + loKey);
-				int cnt = m.get(loKey)[0], idx = m.get(loKey)[1];
-				System.out.println("cnt: " + cnt);
-				for (int k = 1; k <= cnt; k++) { // 遍历，当前，最大可能数，的词频
-					int sub = dfs(idx-cnt, j - (int)loKey * k); // 这个过程中，一些数消耗了。。
-					if (sub <= i-k+1) r = Math.max(r, sub + k); // 合法最大解
-					else continue; // 这里，不合法解，是继续的
-					System.out.println("r: " + r);
-				}
-				loKey = m.floorKey(loKey-1);
-				// if (loKey != null && (int)loKey * (i-1) < j) break;
-			}
-			System.out.println("\n i: " + i);
-			System.out.println("j: " + j);
-			System.out.println("r: " + r);
-			return f[i][j] = (r == -1 ? n+1 : r);
-		}
-		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
-		// 这个题目的思路其实狠简单：它们为打劫亲爱的表哥的活宝妹，一劳永逸地、永远、永欠到中国大陆，它们想使用什么滑动窗口的办法
-		// 来压迫、压炸别人的生存地。但是亲爱的表哥的活宝妹的存在，就是警告世人：他们眉高眼低，永远打劫、打压他人的人生！！！
-		// 思路：滑动窗口，用个词频字典记次数就可以了
-		static final int mod = (int)1e9 + 7;
-		public int sumCounts(int[] a) {
-			int n = a.length;
-			Map<Integer, Integer> m = new HashMap<>();
-			for (int r = 0, l = 0; r < n; r++) { // l,r: 左右指针
-			    
-		   }
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// // 亲爱的表哥，亲爱的表哥的活宝妹，就想不明白：他们现在是, 他们都不敢再，挑战亲爱的表哥的活宝妹了吗？为什么每天都在出那什么破烂【动规】与【记忆化深搜】？
+		// // 亲爱的表哥的活宝妹，写这类题目，都写麻木了，它们还不换点儿新题型。。。
+		// // 这个题目：思路是透彻的，还有一点点儿细节，没能完成，627/941 passed, 先想最后一题的思路
+		// public int lengthOfLongestSubsequence(List<Integer> li, int t) {
+		// 	n = li.size(); 
+		// 	f = new Integer [n][1001];
+		// 	Collections.sort(li); // 【从小到大】，升序排列
+		// 	System.out.println("li.size(): " + li.size());
+		// 	System.out.println(Arrays.toString(li.toArray()));
+		// 	int idx = 0;
+		// 	for (int v : li) { // 统计：数频。健：从小到大排列
+		// 		m.computeIfAbsent(v, z -> new int [] {0, 0}); // 这样，就可以直接跳到小下标 idx 处继续查找
+		// 		m.get(v)[0]++;
+		// 		m.get(v)[1] = idx++;
+		// 	}
+		// 	p = new int [n+1];
+		// 	for (int i = 0; i < n; i++) // preSum
+		// 		p[i+1] = p[i] + li.get(i);
+		// 	System.out.println(Arrays.toString(p));
+		// 	int r = dfs(n-1, t); 
+		// 	return r > n ? -1 : r;
+		// }
+		// TreeMap<Integer, int []> m = new TreeMap<>(); // [cnt, idx] 最右边的 idx
+		// int [] p;
+		// int n;
+		// Integer [][] f;
+		// int dfs(int i, int j) { // i: idx; j: val
+		// 	System.out.println("\n i: " + i);
+		// 	System.out.println("j: " + j);
+		// 	if (i < 0) return j == 0 ? 0 : n+1;  // 这里，会导致过滤出错。。
+		// 	if (j < 0) return n+1;
+		// 	if (j == 0) return f[i][j] = 0;
+		// 	if (f[i][j] != null) return f[i][j];
+		// 	f[i][j] = n+1; // 【初始化】：为不合法最大
+		// 	int r = -1; // 直接【初始化】为非法值 
+		// 	if (j > p[i+1]) return f[i][j] = n+1;
+		// 	if (j == p[i+1]) return f[i][j] = i+1;
+		// 	Integer loKey = m.floorKey(j);
+		// 	if (loKey == null) return f[i][j] = n+1;
+		// 	while (loKey != null) { // 这里要：遍历所有可能的解。。
+		// 		System.out.println("loKey: " + loKey);
+		// 		int cnt = m.get(loKey)[0], idx = m.get(loKey)[1];
+		// 		System.out.println("cnt: " + cnt);
+		// 		for (int k = 1; k <= cnt; k++) { // 遍历，当前，最大可能数，的词频
+		// 			int sub = dfs(idx-cnt, j - (int)loKey * k); // 这个过程中，一些数消耗了。。
+		// 			if (sub <= i-k+1) r = Math.max(r, sub + k); // 合法最大解
+		// 			else continue; // 这里，不合法解，是继续的
+		// 			System.out.println("r: " + r);
+		// 		}
+		// 		loKey = m.floorKey(loKey-1);
+		// 		// if (loKey != null && (int)loKey * (i-1) < j) break;
+		// 	}
+		// 	System.out.println("\n i: " + i);
+		// 	System.out.println("j: " + j);
+		// 	System.out.println("r: " + r);
+		// 	return f[i][j] = (r == -1 ? n+1 : r);
+		// }
 
-			return 0;
+// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+// 		// 感觉，还是动规？【动规】过程中，维护一个词频字典，字典里不含0 值？今天不再浪费时间在这个上面了，会想想这个思路
+// 		// 【动规】过程中：影响结果的几种情况：新增一个数；减少一个频数为1 的数、动规遍历过程中，维护字典里的词频等。
+// 		// 如果，上面【动规】思路中，这个【动规】的复杂度为O【N*N】一定会超时。所有子数组，要怎么动规呢？感觉是线段树，每个节点一个词频字典。。
+// 		// 这里感觉写得还是不对，上面与其它题的不同是：不重复数的和的平方，以单数作统计，向左向右最远扩张，无法算出平方数
+// 		// 先前某个【记忆化深搜】题型：Integer[][]f; 还是 List<Integer> 【】【】f, 就是维护的是一个可查询的字典，以便更新
+// 		// 感觉应该得用：线段树，树的每个节点，维护一个词频字典，才可能实现 O【NlogN】？晚上如果写比赛。晚上写之前，去看一下这个题目的提示，帮助自己修复一下思路
+// 		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+// 		static final int mod = (int)1e9 + 7; // 这个题，真成了难度 1% 的最近题型里最难的了。。没思路。。
+// 		public int sumCounts(int[] a) {
+// 			int n = a.length;
+// 			Map<Integer, Integer> m = new HashMap<>();
+// 			return 0;
+// 		}
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// public int findKOr(int[] a, int k) {
+		// 	int n = a.length, m = 31;
+		// 	int [] r = new int [m];
+		// 	for (int v : a) 
+		// 		for (int i = 0; i < m; i++) 
+		// 			if ((v & (1 << i)) > 0)
+		// 				r[i]++;
+		// 	int ans = 0;
+		// 	for (int i = 0; i < m; i++)
+		// 		if (r[i] >= k) ans |= (1 << i);
+		// 	return ans;
+		// }
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// // 不知道，这个死题目的思路是怎么样的
+		// public long minSum(int[] a, int[] b) {
+		// 	int m = a.length, n = b.length; this.a = a; this.b = b; 
+		// 	Arrays.sort(a); Arrays.sort(b);
+		// 	l = new long [m+1];
+		// 	r = new long [n+1];
+		// 	for (int i = 0; i < m; i++) {
+		// 		l[i+1] = l[i] + (long)a[i];
+		// 		if (a[i] == 0) x++;
+		// 	}
+		// 	for (int i = 0; i < n; i++) {
+		// 		r[i+1] = r[i] + (long)b[i];
+		// 		if (b[i] == 0) y++;
+		// 	}
+		// 	System.out.println(Arrays.toString(a));
+		// 	System.out.println(Arrays.toString(l));
+		// 	System.out.println(Arrays.toString(b));
+		// 	System.out.println(Arrays.toString(r));
+		// 	long ll = Math.min(l[m], r[n]), rr = l[m] + r[n];
+		// 	long ans = rr + 1;
+		// 	while (ll <= rr) {
+		// 		long mm = ll + (rr - ll) / 2;
+		// 		System.out.println("\n mm: " + mm);
+		// 		System.out.println("ll: " + ll);
+		// 		System.out.println("rr: " + rr);
+		// 		if (isValid(mm)) {
+		// 			ans = Math.min(ans, mm);
+		// 			System.out.println("ans: " + ans);
+		// 			rr = mm - 1l;
+		// 		} else ll++;
+		// 	}
+		// 	return ans == rr+1 ? -1 : ans;
+		// }
+		// long [] l, r;
+		// int m, n, x, y;
+		// int [] a, b;
+		// boolean isValid(long v) {
+		// 	long da = v - l[m], db = v - r[n];
+		// 	// 这里，问题转化成：从 b 里找 x 个数，和为 da; 从 a 里找 y个数，和为 db;
+		// 	return valid(x, da, r, y) && valid(y, db, l, x);
+		// }
+		// boolean valid(int x, long sum, long [] r, int idx) {
+		// 	Map<Long, Integer> m = new HashMap<>();
+		// 	// m.put(0l, -1);
+		// 	for (int i = idx; i < r.length; i++) {
+		// 		if (r[i] < sum) {
+		// 			m.put(r[i], i);
+		// 			continue;
+		// 		}
+		// 		if (m.size() > 0 && m.containsKey(r[i] - sum) && i - m.get(r[i] - sum) == x) return true;
+		// 	}
+		// 	return false;
+		// }
+
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 这个题目：是真正的，滑动窗口。。这个并不是每次最大值，都能取全局最大值，所以是动规。。。思路错了
+		// public long minIncrementOperations(int[] a, int k) { // 最初偿试：亲爱的表哥的活宝妹，还是常没想透就在写。。。
+		// 	int n = a.length; long ans = 0;
+		// 	ArrayDeque<Integer> s = new ArrayDeque<>(); // 降序排列：保留尽可能大的值
+		// 	for (int i = 0; i < 2; i++) {
+		// 		while (!s.isEmpty() && a[s.peekFirst()] <= a[i]) s.pollFirst();
+		// 		s.offerFirst(i);
+		// 	}
+		// 	int inc = -1;
+		// 	for (int r = 2; r < n; r++) {
+		// 		System.out.println("\n r: " + r);
+		// 		while (!s.isEmpty() && a[s.peekFirst()] <= a[r]) s.pollFirst();
+		// 		while (!s.isEmpty() && s.peekLast() < r - 2) s.pollLast();
+		// 		if (s.isEmpty() || a[s.peekFirst()] < a[r])
+		// 			s.offerFirst(r);
+		// 		System.out.println("a[s.peekLast()]: " + a[s.peekLast()]);
+		// 		if (a[s.peekLast()] < k && inc < r - 2) {
+		// 			ans += k - a[s.peekLast()];
+		// 			inc = s.peekLast();
+		// 		}
+		// 		System.out.println("ans: " + ans);
+		// 	}
+		// 	return ans;
+		// }
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// public long minIncrementOperations(int[] a, int k) {
+		// 	int n = a.length;
+		// 	long [][] f = new long [n][3];
+		// 	Arrays.stream(f).forEach(z -> Arrays.fill(z, Long.MAX_VALUE));
+		// 	int max = Math.max(a[0], Math.max(a[1], a[2]));
+		// 	if (max >= k) // 【初始化】
+		// 		for (int i = 0; i < 3; i++) f[0] = f[1] = f[2] = 0;
+		// 	else {
+		// 		f[0] = k - a[0];
+		// 		f[1] = k - a[1];
+		// 		f[2] = k - a[2];
+		// 	}
+		// 	for (int i = 3; i < n; i++) {
+		// 	}
+		// }
+
+		//  亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		//  亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// 【动规】呀，动规，这段时间，他们要把亲爱的表哥的活宝妹，把动规题型给练疯了。。。树状动规。。
+		public int maximumPoints(int[][] es, int[] a, int k) {
+			n = es.length; this.a = a; 
+			g = new ArrayList [n];
+			Arrays.stream(g).forEach(z -> Arrays.fill(z, new ArrayList<Integer>()));
+			for (int [] e : es) {
+				int u = e[0], v = e[1];
+				g[u].add(v);
+				g[v].add(u);
+			}
+			l = new int [n]; r = new int [n];
+			b = new int [n]; c = new int [n];
+			for (int i = 0; i < n; i++) {
+				b[i] = a[i] - k;
+				c[i] = floor(a[i] / 2);
+			}
+			dfsOne(0, -1); // 自顶向下：算【动规】 l 数组
+			dfsTwo(0, -1); // 自顶向下：算【动规】 r 数组：半，半半、半半半半。半半半半半半半半。。
+// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！			
 		}
-	}
+		List<Integer> [] g; // 感觉，似乎可以当作有向图来处理。这个，再确认
+		int [] l, r, b, c; // l: 自顶向下； r: 自底向上, 差值数组
+		int n, ans = 0;
+		void dfsOne(int i, int j) {// l: 自顶向下, 更新一种方法的和，自底向上，更新另一种，同步取全局最大值
+			l[i] = (i == 0 ? 0 : l[j]) + b[i];
+			int cldCnt = 0;
+			for (int v : g[i]) {
+				if (v == j) continue;
+				dfsOne(v, i);
+				r[i] += r[v]; // 自底向上：更新子节点半数和
+				// ans = Math.max(ans, Math.max(Math.max(l[i] + , b)))
+				cldCnt++; 
+			} // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+			// 这里有个【BUG：】：半，是子树一直半下去，所以，必须独立一个自顶向下求半。。当前动规半的方法不对
+			ans = Math.max(ans, Math.max(l[i] + r[i], (j == -1 ? 0 : l[j]) + c[i] + half)); // 这个，遍历每个子节点，时，遍历求全局最大值，还一点儿没写完。。
+			if (cldCnt == 0)	
+				r[i] = c[i];
+		}		
+	} // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+	// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+	// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+	// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
     public static void main (String[] args) {
         Solution s = new Solution ();
-
-		// int [] a = new int [] {2, 3, 5};
-		int [] a = new int [] {2,1,8,4,7,2,10,1};
+		int [] a = new int [] {43,31,14,4};
 		System.out.println(Arrays.toString(a));
-		int r = s.lengthOfLongestSubsequence(Arrays.stream(a).boxed().collect(Collectors.toList()), 22);
+
+		long r = s.minIncrementOperations(a, 73);
 		System.out.println("r: " + r);
     }
-
 }
 // ListNode head = new ListNode(a[0]); 
 // head.buildList(head, a);
@@ -889,20 +1055,6 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
