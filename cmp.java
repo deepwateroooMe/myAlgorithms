@@ -1,26 +1,15 @@
 import com.ListNode;
 import java.util.HashMap;
-
 import java.util.Map;
-
 import java.util.ArrayList;
-
 import java.util.*;
-
 import java.util.stream.*;
-
 import java.util.stream.Collectors;
-
 import java.util.HashSet;
-
 import java.util.Set;
-
 import static java.util.stream.Collectors.toMap;
-
 public class cmp {
-
     public static class Solution {
-
 		// // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 
         // public boolean canBeEqual(String ss, String tt) {
@@ -996,56 +985,157 @@ public class cmp {
 		// 	}
 		// }
 
-		//  亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
-		//  亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
-		// 【动规】呀，动规，这段时间，他们要把亲爱的表哥的活宝妹，把动规题型给练疯了。。。树状动规。。
-		public int maximumPoints(int[][] es, int[] a, int k) {
-			n = es.length; this.a = a; 
-			g = new ArrayList [n];
-			Arrays.stream(g).forEach(z -> Arrays.fill(z, new ArrayList<Integer>()));
-			for (int [] e : es) {
-				int u = e[0], v = e[1];
-				g[u].add(v);
-				g[v].add(u);
-			}
-			l = new int [n]; r = new int [n];
-			b = new int [n]; c = new int [n];
-			for (int i = 0; i < n; i++) {
-				b[i] = a[i] - k;
-				c[i] = floor(a[i] / 2);
-			}
-			dfsOne(0, -1); // 自顶向下：算【动规】 l 数组
-			dfsTwo(0, -1); // 自顶向下：算【动规】 r 数组：半，半半、半半半半。半半半半半半半半。。
-// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！			
+// 		//  亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+// 		//  亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+// 		// 【动规】呀，动规，这段时间，他们要把亲爱的表哥的活宝妹，把动规题型给练疯了。。。树状动规。。
+// 		public int maximumPoints(int[][] es, int[] a, int k) {
+// 			n = es.length; this.a = a; 
+// 			g = new ArrayList [n];
+// 			Arrays.stream(g).forEach(z -> Arrays.fill(z, new ArrayList<Integer>()));
+// 			for (int [] e : es) {
+// 				int u = e[0], v = e[1];
+// 				g[u].add(v);
+// 				g[v].add(u);
+// 			}
+// 			l = new int [n]; r = new int [n];
+// 			b = new int [n]; c = new int [n];
+// 			for (int i = 0; i < n; i++) {
+// 				b[i] = a[i] - k;
+// 				c[i] = floor(a[i] / 2);
+// 			}
+// 			dfsOne(0, -1); // 自顶向下：算【动规】 l 数组
+// 			dfsTwo(0, -1); // 自顶向下：算【动规】 r 数组：半，半半、半半半半。半半半半半半半半。。
+// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！			
+// 		}
+// 		List<Integer> [] g; // 感觉，似乎可以当作有向图来处理。这个，再确认
+// 		int [] l, r, b, c; // l: 自顶向下； r: 自底向上, 差值数组
+// 		int n, ans = 0;
+// 		void dfsOne(int i, int j) {// l: 自顶向下, 更新一种方法的和，自底向上，更新另一种，同步取全局最大值
+// 			l[i] = (i == 0 ? 0 : l[j]) + b[i];
+// 			int cldCnt = 0;
+// 			for (int v : g[i]) {
+// 				if (v == j) continue;
+// 				dfsOne(v, i);
+// 				r[i] += r[v]; // 自底向上：更新子节点半数和
+// 				// ans = Math.max(ans, Math.max(Math.max(l[i] + , b)))
+// 				cldCnt++; 
+// 			} // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+// 			// 这里有个【BUG：】：半，是子树一直半下去，所以，必须独立一个自顶向下求半。。当前动规半的方法不对
+// 			ans = Math.max(ans, Math.max(l[i] + r[i], (j == -1 ? 0 : l[j]) + c[i] + half)); // 这个，遍历每个子节点，时，遍历求全局最大值，还一点儿没写完。。
+// 			if (cldCnt == 0)	
+// 				r[i] = c[i];
+// 		}
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// 检测有向图，有没有环、【拓朴排序】
+		// public int findChampion(int n, int[][] egs) {
+		// 	int [] r = new int [n];
+		// 	for (int [] e : egs) {
+		// 		int u = e[0], v = e[1];
+		// 		r[v]++;
+		// 	}
+		// 	int cnt = 0, one = -1;
+		// 	for (int i = 0; i < n; i++)
+		// 		if (r[i] == 0) {
+		// 			cnt++;
+		// 			if (one == -1) one = i;
+		// 		}
+		// 	return cnt == 1 ? one : -1;
+		// }
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// // 这是个真正的【树形DP 动规题】：并且是小窃贼偷东西一样的思路。。。感觉这里的思路，树形动规，还有点儿没想透彻。。
+		// public long maximumScoreAfterOperations(int[][] egs, int [] a) {
+		// 	int n = egs.length+ 1;
+		// 	g = new ArrayList[n];
+		// 	Arrays.stream(g).forEach(z -> Arrays.fill(z, new ArrayList<Integer>()));
+		// 	for (int [] e : egs) {
+		// 		int u = e[0], v = e[1];
+		// 		g[u].add(v);
+		// 		g[v].add(u);
+		// 	 }
+		// 	this.a = a; 
+		// 	f = new Long [n][2]; // 0: 不要， 1 要
+		// 	f[0][0] = 0;
+		// 	f[0][1] = a[0];
+		// 	return  dfs(0, -1);// 0 是，根结点
+		// }
+		// List<Integer> [] g;
+		// Long [][] f; int [] a;
+		// long dfs(int i, int j) { // 必须得，自底向上。。
+		// 	boolean zeroSum = false;
+		// 	long sum = 0l, subMax = 0l;
+		// 	for (int v : g[i]) {
+		// 		if (v == j) {
+		// 			f[v][0] = 0; // 不要
+		// 			f[v][1] = a[v];
+		// 			if (a[v] == 0) {
+		// 				zeroSum = true;
+		// 				f[v][1] = 0;
+		// 			}
+		// 			// return a[v];
+		// 		} else { // 非根节点：
+		// 			long r = dfs(v, i);
+		// 			if (r == 0l) zeroSum = true;
+		// 			sum += r;// 如果子节点都要。。
+		// 		}
+		// 	}
+		// 	if (zeroSum) { // 有 0 节点，必须不能要
+		// 		f[i][0] = sum;
+		// 		f[i][1] = sum;
+		// 	} else {
+		// 		f[i][0] = ;
+		// 		f[i][1] = sum;
+		// 	}
+		// }
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// // 今天晚上，吃了大肉的亲爱的表哥的活宝妹，感觉就是想不透彻呀，。下个周再来写！！
+		// // O[NlogN] 的解法。。是那个什么【接龙型】记忆化深搜 
+		// public long maxBalancedSubsequenceSum(int[] a) {
+		// 	int n = a.length, min = Arrays.stream(a).min().getAsInt();
+		// 	for (int i = 0; i < n; i++) m.put(a[i], i);
+		// 	// 从右往左遍历, 从大值往小值遍历
+		// 	for (int key : m.keySet()) 
+		// 		dfs(key);
+		// 	return max;
+		// }
+		// TreeMap<Integer, Integer> m = new TreeMap<>();
+		// TreeMap<Integer, long []> f = new TreeMap<>(); // 记忆化深搜:[0:idx 1:max]
+		// long max = 0l;
+		// long dfs(int i) {
+		// 	if (f.containsKey((Integer)i)) return f.get(i)[1];
+		// }		
+
+		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// 感觉这个题目是个什么排序，可是彻底忘记了。。。就先放一下, 像是个什么狗屁排序，最不会最基础的几种排序算法。。。
+		public int findChampion(int[][] a) { // 531/590 不知道哪里写错了。。
+			int n = a.length;
+			Set<Integer> s = new HashSet<>();
+			for (int i = 0; i < n; i++)
+				for (int j = 0; j < n; j++) {
+					if (j == i) continue;
+					if (a[i][j] == 1) { // i > j
+						if (s.contains(j)) 
+							s.remove(j);
+						s.add(i);
+					}
+					// else { // j > i
+					// 	if (s.contains(i)) 
+					// 		s.remove(i);
+					// 	s.add(j);
+					// }
+				}
+			Iterator<Integer> it = s.iterator();
+			return it.next();
 		}
-		List<Integer> [] g; // 感觉，似乎可以当作有向图来处理。这个，再确认
-		int [] l, r, b, c; // l: 自顶向下； r: 自底向上, 差值数组
-		int n, ans = 0;
-		void dfsOne(int i, int j) {// l: 自顶向下, 更新一种方法的和，自底向上，更新另一种，同步取全局最大值
-			l[i] = (i == 0 ? 0 : l[j]) + b[i];
-			int cldCnt = 0;
-			for (int v : g[i]) {
-				if (v == j) continue;
-				dfsOne(v, i);
-				r[i] += r[v]; // 自底向上：更新子节点半数和
-				// ans = Math.max(ans, Math.max(Math.max(l[i] + , b)))
-				cldCnt++; 
-			} // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
-			// 这里有个【BUG：】：半，是子树一直半下去，所以，必须独立一个自顶向下求半。。当前动规半的方法不对
-			ans = Math.max(ans, Math.max(l[i] + r[i], (j == -1 ? 0 : l[j]) + c[i] + half)); // 这个，遍历每个子节点，时，遍历求全局最大值，还一点儿没写完。。
-			if (cldCnt == 0)	
-				r[i] = c[i];
-		}		
-	} // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
-	// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
-	// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
-	// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+	}
+// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
     public static void main (String[] args) {
         Solution s = new Solution ();
-		int [] a = new int [] {43,31,14,4};
-		System.out.println(Arrays.toString(a));
+		int [][] a = new int [][] {{0,0,0,0,0,0,0,1,0,0,0,1,0,1,0,0,0},{1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1},{1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1},{1,0,0,0,0,0,0,1,0,0,0,1,0,1,0,1,0},{1,0,0,1,0,0,1,1,1,1,1,1,0,1,0,1,1},{1,0,0,1,1,0,1,1,1,1,1,1,0,1,0,1,1},{1,0,0,1,0,0,0,1,1,1,0,1,0,1,0,1,1},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{1,0,0,1,0,0,0,1,0,0,0,1,0,1,0,1,0},{1,0,0,1,0,0,0,1,1,0,0,1,0,1,0,1,1},{1,0,0,1,0,0,1,1,1,1,0,1,0,1,0,1,1},{0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0},{1,0,0,1,1,1,1,1,1,1,1,1,0,1,1,1,1},{0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0},{1,0,0,1,1,1,1,1,1,1,1,1,0,1,0,1,1},{1,0,0,0,0,0,0,1,0,0,0,1,0,1,0,0,0},{1,0,0,1,0,0,0,1,1,0,0,1,0,1,0,1,0}};
 
-		long r = s.minIncrementOperations(a, 73);
+		int r = s.findChampion(a);
 		System.out.println("r: " + r);
     }
 }
@@ -1055,6 +1145,14 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
