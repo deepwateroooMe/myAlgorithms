@@ -4,11 +4,17 @@ import java.util.Map;
 import java.util.ArrayList;
 import java.util.*;
 import java.util.stream.*;
+
 import java.util.stream.Collectors;
+
 import java.util.HashSet;
+
 import java.util.Set;
+
 import static java.util.stream.Collectors.toMap;
+
 public class cmp {
+
     public static class Solution {
 		// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 
@@ -104,58 +110,115 @@ public class cmp {
 		// 	int m = a.length, n = b.length;
 		// }
 
-		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
-		public int maximumStrongPairXor(int[] a) { // 二分查找，O(NlogN)
-			int n = a.length;
-			for (int v : a) {
-				for (int j = 0; j < 20; j++) 
-					if (((v >> j) & 1) == 1)
-						m.computeIfAbsent(j, z -> new HashSet<>()).add(v);
-			int l = 1, r = (int)(Math.pow(2, 20)-1), max = 0;
-			for (int v : a) s.add(v);
-			while (l <= r) {
-				int m = l + (r - l) / 2;
-				if (valid(m, a)) {
-					max = Math.max(max, m);
-					l = m+1;
-				} else r = m-1;
-			}
-			return max;
-		}
-		Set<Integer> s = new HashSet<>();
-		Map<Integer, Set<Integer>> m = new HashMap<>(); // 记每个位，存在的数，还是多 
-		// 这个方法，要写得巧一点儿：就是遍历 v 的所有的数位, 那么这个题目就成了，选课I II 题型。。可是亲爱的表哥的活宝妹，忘记细节了。。
-		// 选课题是：一个学期最多选几个学分，20 个数位里，哪些组合，出有效存在数，如何巧妙遍历等
-// 这个方法太复杂了，今天晚上不想写这个了：前面某个两根梯子支撑什么的题型，亲爱的表哥的活宝妹，要怎么才能写出那么所有数位的所有可能的数值？？
-		boolean valid(int v, int [] a) { // 先把前面的题目，至少得解决一个掉，再想这个相对难一点儿的
-			for (int i = 0; i < 20; i++) { // 这么遍历的规模还是太大了，感觉。。
-				if (((v >> i) & 1) == 1) {
-					for (int j : m.get(i)) {
-						if ()
-					}
-				}
-			}
-			// for (int i = v; i >= 0; i = (i & (i-1))) { // 没有考虑，可能存在相同位的情况: 所以还要考虑，所有补位（20-bitCnt）位中，所有可能情况，两数同时存在的情况。。
-			// 	if (s.contains(i) && s.contains(v ^ i) && Math.abs(v-(v^i)) <= Math.min(v, v^i)) return true;
-			// 	for (int j = 0; j < 20; j++) {
-			// 		if (r[j] > 0) continue;
-			// 	}
-			return false;
-		}
+// 		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+// 		public int maximumStrongPairXor(int[] a) { // 二分查找，O(NlogN)
+// 			int n = a.length;
+// 			for (int v : a) {
+// 				for (int j = 0; j < 20; j++) 
+// 					if (((v >> j) & 1) == 1)
+// 						m.computeIfAbsent(j, z -> new HashSet<>()).add(v);
+// 			int l = 1, r = (int)(Math.pow(2, 20)-1), max = 0;
+// 			for (int v : a) s.add(v);
+// 			while (l <= r) {
+// 				int m = l + (r - l) / 2;
+// 				if (valid(m, a)) {
+// 					max = Math.max(max, m);
+// 					l = m+1;
+// 				} else r = m-1;
+// 			}
+// 			return max;
+// 		}
+// 		Set<Integer> s = new HashSet<>();
+// 		Map<Integer, Set<Integer>> m = new HashMap<>(); // 记每个位，存在的数，还是多 
+// 		// 这个方法，要写得巧一点儿：就是遍历 v 的所有的数位, 那么这个题目就成了，选课I II 题型。。可是亲爱的表哥的活宝妹，忘记细节了。。
+// 		// 选课题是：一个学期最多选几个学分，20 个数位里，哪些组合，出有效存在数，如何巧妙遍历等
+// // 这个方法太复杂了，今天晚上不想写这个了：前面某个两根梯子支撑什么的题型，亲爱的表哥的活宝妹，要怎么才能写出那么所有数位的所有可能的数值？？
+// 		boolean valid(int v, int [] a) { // 先把前面的题目，至少得解决一个掉，再想这个相对难一点儿的
+// 			for (int i = 0; i < 20; i++) { // 这么遍历的规模还是太大了，感觉。。
+// 				if (((v >> i) & 1) == 1) {
+// 					for (int j : m.get(i)) {
+// 						if ()
+// 					}
+// 				}
+// 			}
+// 			// for (int i = v; i >= 0; i = (i & (i-1))) { // 没有考虑，可能存在相同位的情况: 所以还要考虑，所有补位（20-bitCnt）位中，所有可能情况，两数同时存在的情况。。
+// 			// 	if (s.contains(i) && s.contains(v ^ i) && Math.abs(v-(v^i)) <= Math.min(v, v^i)) return true;
+// 			// 	for (int j = 0; j < 20; j++) {
+// 			// 		if (r[j] > 0) continue;
+// 			// 	}
+// 			return false;
+// 		}
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// public int findMinimumOperations(String s, String t, String o) {
+		// 	if (s.length() == 1 && t.length() == 1 && o.length() == 1 && s.charAt(0) == t.charAt(0) && t.charAt(0) == o.charAt(0)) return 0;
+		// 	if (!s.substring(0,1).equals(t.substring(0, 1)) || !t.substring(0, 1).equals(o.substring(0, 1))) return -1;
+		// 	int m = s.length(), n = t.length(), x = o.length();
+		// 	int i = 0, min = Math.min(m, Math.min(n, x));
+		// 	while (i < min) {
+		// 		if (s.charAt(i) != t.charAt(i) || t.charAt(i) != o.charAt(i)) break;
+		// 		i++;
+		// 	}
+		// 	return s.length() - i + t.length() -i + o.length()-i;
+		// }
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// // 从右往左遍历，是个暴力死计算题。。。
+		// public long minimumSteps(String t) {
+		// 	int n = t.length(); char [] s = t.toCharArray();
+		// 	ArrayDeque<Integer> q = new ArrayDeque<>(); // 升序排列
+		// 	int i = n-1;
+		// 	long r = 0;
+		// 	while (i > -1 && s[i] == '1') i--;
+		// 	if (i < 0) return 0;
+		// 	while (i > -1) {
+		// 		// 这里，认为， s[i]=0
+		// 		while (i > -1 && s[i]-'0' == 0) {
+		// 			q.offerFirst(i); // 从头，从左边添加
+		// 			i--;
+		// 		}
+		// 		if (i < 0) return r;
+		// 		if (s[i] == '1' && !q.isEmpty()) {
+		// 			r += (long)(q.pollLast() - i);
+		// 			q.offerFirst(i);
+		// 		}
+		// 		i--;
+		// 	}
+		// 	return r;
+		// }
+
+// 		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+// 		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+// 		// 这个题目狠简单，感觉暴力遍历所有可能性都是可以的? n=[0,50]
+// 		// 找两个数的 most-significant 位的下标
+// 		static final int mod = (int)1e9 + 7; 
+// 		public int maximumXorProduct(long a, long b, int idx) {
+// 			int m = 64 - Long.numberOfLeadingZeros(a), n = 64 - Long.numberOfLeadingZeros(b);
+// 			System.out.println("m: " + m);
+// 			System.out.println("n: " + n);
+// 			int [] r = new int [50];
+// 			long base = 0l, mask = 0l; // mask 不能要
+// 			for (int i = 49; i >= 0; i--) {// fd
+// 				if (((a >> i) & 1) == 1 && ((b >> i) & 1) == 1)
+// 					// r[i] = 1;
+// 					mask |= (1 << i);
+// 				else if (((a >> i) & 1) + ((b >> i) & 1) == 1) // 两个数这个位上不同
+// 					r[i] = 1;
+// 				// else if (idx > i) // 这个位上可以有1: 但是这不一定是最优解，它还需要把 ab 聚合收敛，以便乘积最大
+// 				else if (idx > i && (i >= Math.max(m, n) || ((a >> i) & 1) == 0 && ((b >> i) & 1) == 0)) // 这个位上可以有1: 但是这不一定是最优解，它还需要把 ab 聚合收敛，以便乘积最大
+// 					base += (long)(1 << i);
+// 			}
+// 			int o = Arrays.stream(r).sum();// 想把它收敛一下，遍历所有（1<o）种可能性，可是会超时。。
+// // 感觉，这里最差情况 o=50, 除非是暴力，再从右往左数多少个位强制为1, 亲爱的表哥的活宝妹，这会儿想不出来了，改天再写
+// 			return (int)((base ^ a) * (base ^ b) % mod);
+// 		}		
 	}
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
     public static void main (String[] args) {
         Solution s = new Solution ();
 
-		String [][] a = new String [][] {{"fnlmbcedu","0052"},{"fnlmbcedu","0103"},{"fnlmbcedu","0055"}};
-
-		List<List<String>> lls = new ArrayList<>();
-		for (int i = 0; i < a.length; i++) 
-			lls.add(List.of(a[i][0], a[i][1]));
-
-		List<String> r = s.findHighAccessEmployees(lls);
-		System.out.println("r.size(): " + r.size());
-		System.out.println(Arrays.toString(r.toArray()));
+		int r = s.maximumXorProduct(1, 6, 3);
+		System.out.println("r: " + r);
     }
 }
 // ListNode head = new ListNode(a[0]); 
@@ -223,5 +286,12 @@ public class cmp {
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
