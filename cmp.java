@@ -5,8 +5,11 @@ import java.util.ArrayList;
 import java.util.*;
 import java.util.stream.*;
 import java.util.stream.Collectors;
+
 import java.util.HashSet;
+
 import java.util.Set;
+
 import static java.util.stream.Collectors.toMap;
 
 public class cmp {
@@ -245,53 +248,56 @@ public class cmp {
 		// public int findMaximumLength(int[] nums) {
 		// }
 		
-		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
-		// 这是个，什么把二维数组上的最大区间和，转化为一维最大区间和，之类的题型。。
-		public int maximizeSquareHoleArea(int n, int m, int[] a, int[] b) {
-			int x = a.length, y = b.length, ans = 0;
-			int [] r = new int [x+2], c = new int [y+2];
-			r[0] = 1; r[x+1] = n+2;
-			c[0] = 1; c[y+1] = m+2;
-			// // 这个死题狠怪异，倒序排列，要求先去除后面的。。可是题目没有说清楚。所以题目比较坑人。。。
-			// Arrays.sort(a); Arrays.sort(b);
-			for (int i = 0; i < a.length; i++) r[i+1] = a[i]; // 复制过去
-			for (int i = 0; i < b.length; i++) c[i+1] = b[i];
-			System.out.println(Arrays.toString(r));
-			System.out.println(Arrays.toString(c));
-			// 遍历：一个维度上的。对这个维度上的每个可能取值，遍历另一维度上的所有可能性
-			TreeMap<Integer, Integer> t = new TreeMap<>();
-			t.put(r[0], 0);
-			int one = 0;
-			for (int i = 1; i < x+2; i++) {
-				for (Map.Entry<Integer, Integer> en : t.entrySet()) {
-					int k = en.getKey(), v = en.getValue();
-					one = r[i] - k;
-					if (one < 0) continue;
-					System.out.println("\n one: " + one);
-					if (one * one > ans) { // 在比先前的解，可能会优的前提下，才检查有效性. 横边一定有效，只检查竖边
-						// 同样的方式遍历竖边，是否存在一组可能的和为 one 边长的
-						if (valid(one, c)) {// 找到的第一个有效值，一定当前下标 i下，最优
-							ans = one * one;
-							System.out.println("ans: " + ans);
-							found = true;
-							break;
-						}
-					}
-				}
-				t.put(r[i], i); // 把当前横边点加进去
-			}
-			return ans;
-		}
-		boolean valid(int v, int [] r) {
-			int n = r.length;
-			Map<Integer, Integer> m = new HashMap<>();
-			m.put(r[0], 0);
-			for (int i = 1; i < n; i++) {
-				if (m.containsKey(r[i] - v)) return true;
-				m.put(r[i], i);
-			}
-			return false;
-		}
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// // 这是个，什么把二维数组上的最大区间和，转化为一维最大区间和，之类的题型。。
+		// public int maximizeSquareHoleArea(int n, int m, int[] a, int[] b) {
+		// 	int x = a.length, y = b.length, ans = 0;
+		// 	int [] r = new int [x+2], c = new int [y+2];
+		// 	r[0] = 1; r[x+1] = n+2;
+		// 	c[0] = 1; c[y+1] = m+2;
+		// 	// // 这个死题狠怪异，倒序排列，要求先去除后面的。。可是题目没有说清楚。所以题目比较坑人。。。
+		// 	// Arrays.sort(a); Arrays.sort(b);
+		// 	for (int i = 0; i < a.length; i++) r[i+1] = a[i]; // 复制过去
+		// 	for (int i = 0; i < b.length; i++) c[i+1] = b[i];
+		// 	System.out.println(Arrays.toString(r));
+		// 	System.out.println(Arrays.toString(c));
+		// 	// 遍历：一个维度上的。对这个维度上的每个可能取值，遍历另一维度上的所有可能性
+		// 	TreeMap<Integer, Integer> t = new TreeMap<>();
+		// 	t.put(r[0], 0);
+		// 	int one = 0;
+		// 	for (int i = 1; i < x+2; i++) {
+		// 		for (Map.Entry<Integer, Integer> en : t.entrySet()) {
+		// 			int k = en.getKey(), v = en.getValue();
+		// 			one = r[i] - k;
+		// 			if (one < 0) continue;
+		// 			System.out.println("\n one: " + one);
+		// 			if (one * one > ans) { // 在比先前的解，可能会优的前提下，才检查有效性. 横边一定有效，只检查竖边
+		// 				// 同样的方式遍历竖边，是否存在一组可能的和为 one 边长的
+		// 				if (valid(one, c)) {// 找到的第一个有效值，一定当前下标 i下，最优
+		// 					ans = one * one;
+		// 					System.out.println("ans: " + ans);
+		// 					found = true;
+		// 					break;
+		// 				}
+		// 			}
+		// 		}
+		// 		t.put(r[i], i); // 把当前横边点加进去
+		// 	}
+		// 	return ans;
+		// }
+		// boolean valid(int v, int [] r) {
+		// 	int n = r.length;
+		// 	Map<Integer, Integer> m = new HashMap<>();
+		// 	m.put(r[0], 0);
+		// 	for (int i = 1; i < n; i++) {
+		// 		if (m.containsKey(r[i] - v)) return true;
+		// 		m.put(r[i], i);
+		// 	}
+		// 	return false;
+		// }
+
+		亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
 	}
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
     public static void main (String[] args) {
@@ -385,10 +391,6 @@ public class cmp {
 	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
