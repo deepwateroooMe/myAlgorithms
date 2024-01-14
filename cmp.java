@@ -798,7 +798,7 @@ public class cmp {
 		// 	for (int i = 0; i < u.length; i++) {
 		// 		char key = u[i];
 		// 		m[key-'a'].put(v[i], Math.min(m[key-'a'].getOrDefault(v[i], 0), c[i]));
-		//    }
+		// 	}
 		// 	long r = 0;
 		// 	d = new long [26];
 		// 	for (int i = 0; i < n; i++) {
@@ -833,19 +833,195 @@ public class cmp {
 		// 	 }
 		// 	return Long.MAX_VALUE;
 		// }
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// public boolean hasTrailingZeros(int[] a) {
+		// 	int n = a.length, cnt = 0;
+		// 	for (int v : a) {
+		// 		if (v % 2 == 0) cnt++;
+		// 		if (cnt == 2) return true;
+		// 	}
+		// 	return false;
+		// }
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// public int maximumLength(String S) {
+		// 	n = S.length(); max = 1; s = S.toCharArray(); this.S = S; 
+		// 	m = new HashMap<>();
+		// 	map = new HashMap<>();
+		// 	for (int i = 0; i < n; i++) {
+		// 		char c = s[i];
+		// 		map.put(c, map.getOrDefault(c, 0) + 1);
+		// 		m.computeIfAbsent(c, z -> new ArrayList<>()).add(i);
+		// 	}
+		// 	if (Collections.max(map.values()) < 3) return -1;
+		// 	r = new int [26];
+		// 	return binarySearch(1, n);
+		// }
+		// Map<Character, Integer> map;
+		// Map<Integer, List<Integer>> m = new HashMap<>();
+		// char [] s; String S;
+		// int n, max;
+		// int [] r;
+		// int binarySearch(int l, int r) {
+		// 	int ans = 1;
+		// 	while (l <= r) {
+		// 		int m = (l + r) / 2;
+		// 		if (check(m)) {
+		// 			ans = Math.max(ans, m);
+		// 			l = m + 1;
+		// 		} else r = m - 1;
+		// 	}
+		// 	return ans;
+		// }
+		// boolean check(int l) { // l: length 这几天休息不够，感觉不难，可是脑袋糊糊的，晚点儿再写这个繁琐细节的。。。
+		// 	boolean valid = true;
+		// 	for (int i = 0; i <= n - 3 * l; i++) {
+		// 		valid = true;
+		// 		Arrays.fill(r, 0);
+		// 		for (int j = i; j < i+l; j++) {
+		// 			if (map.get(s[j]) < 3 || m.get(s[j]).size()-r[s[j]-'a']-1 < 2) {
+		// 				valid = false;
+		// 				break;
+		// 			}
+		// 			// r[s[j]-'a'] = // 遍历有序【升序】下标链条，查找。。
+		// 		}
+		// 		if (S.substring(i, i+l).chars().distinct().count != l) continue;
+		// 		// 接下来，就是：建立一个 Map<Integer, List<Integer>> m = new HashMap<>();
+		// 		// 把每个字符，所在下标记下来
+		// 		// 确保第一个片段：每个字符仅只出现一次；每个字符都至少剩余频次 >=3
+		// 		// 继续查找，下两个可能存在的同【子串】
+		// 	}
+		// }
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// public boolean[] canMakePalindromeQueries(String s, int[][] queries) {
+		// }
+
+		// // 亲爱的表哥的活宝妹，真讨厌他们的死题目，一出来就是两个一样的。。。死鬼，要死不得活的！！！
+		// public int areaOfMaxDiagonal(int[][] a) {
+		// 	int r = 0, max = 0;
+		// 	for (int [] v : a)
+		// 		if (v[0] * v[0] + v[1] * v[1] > r) {
+		// 			r = v[0] * v[0] + v[1] * v[1];
+		// 			max = v[0] * v[1];
+		// 		} else if (v[0] * v[0] + v[1] * v[1] == r)
+		// 			max = Math.max(max, v[0] * v[1]);
+		// 	return max;
+		// }
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// // 亲爱的表哥的活宝妹，读不懂这个破题目：说的是什么意思？
+		// // 两个子，可以动，一个不动。找【两个源头的、最短距离问题】Multiple-source BFS
+		// // 可是，不懂，那两个字，可以，怎么动，破烂题目。。。
+		// public int minMovesToCaptureTheQueen(int a, int b, int c, int d, int e, int f) {
+		// }
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// // 这个题目的表述是清楚的：可是思路不透彻
+		// public int maximumSetSize(int[] a, int[] b) {
+		// 	int n = a.length / 2;
+		// }
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// public int maxPartitionsAfterOperations(String s, int k) {
+		// }
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// public int maxFrequencyElements(int[] a) {
+		// 	int n = a.length, max = 0, cnt = 0;
+		// 	int [] r = new int [101];
+		// 	for (int v : a) {
+		// 		r[v]++;
+		// 		if (r[v] > max) {
+		// 			max = r[v];
+		// 			cnt = 1;
+		// 		} else if (r[v] == max)
+		// 			cnt++;
+		// 	}
+		// 	return max * cnt;
+		// }
+
+		// // // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// // 这个题目：现在，数据规模狠小，随便瓣瓣，能够出来；当数据规模大的时候，就得考虑算法了
+		// public List<Integer> beautifulIndices(String s, String a, String b, int k) {
+		// 	int n = s.length();
+		// 	int x = a.length(), y = b.length();
+		// 	List<Integer> l = new ArrayList<>();
+		// 	// 因为 j 不变化，所以，可以【预处理】：把结果存起来备用
+		// 	// List<Integer> lj = new ArrayList<>(); // index of j for b
+		// 	// 为【避免，自己手写二分查找法】使用 TreeSet 数据结构，帮助减少和精确，二分查找的结果
+		// 	TreeSet<Integer> lj = new TreeSet<>();
+		// 	for (int i = 0; i+y <= n; i++) 
+		// 		if (s.substring(i, i+y).equals(b))
+		// 			lj.add(i);
+		// 	for (int i = 0; i+x <= n; i++) 
+		// 		if (s.substring(i, i+x).equals(a)) {
+		// 			Integer lo = lj.lower(i), hi = lj.higher(i); // 严格，小于，或是大于，不等于。【特殊情况得考虑】
+		// 			if (lo != null && Math.abs(i - lo) <= k || hi != null && Math.abs(i - hi) <= k || lj.contains(i))
+		// 				l.add(i);
+		// 		}
+		// 	return l;
+		// }
+
+		// // // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// // 感觉，这个题目的思路，有点儿跳级：【K 数量级大，二分查找法】；
+		// // 可是，是【1,x】的代价总和，这个总和，就不知道，怎么计算，就是，数与数之间，当以【从右往左的数位为单位遍历】，代价和的计算方法，总结规律，不懂
+		// public long findMaximumNumber(long k, int x) {
+		// }
+
+		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// 【优化改进、包括】：
+		// 查找、不变的、S 中B 子片段的下标，不能O(ny) 一定超时, 得用一个什么狗屁【primeNumber/Mod 数/ 算法】来实现 O(N) 线性扫描
+		// 查找、不变的、S 中A 子片段的下标，不能O(nx) 一定超时, 得用一个什么狗屁【primeNumber/Mod 数/ 算法】来实现 O(N) 线性扫描
+		// 不知道，细节哪里写错了，改天再重写这个题型
+		// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		public List<Integer> beautifulIndices(String s, String a, String b, int k) {
+			int n = s.length(), y = b.length(), x = a.length();
+			TreeSet<Integer> li = new TreeSet<>();
+			TreeSet<Integer> lj = new TreeSet<>();
+			scanBinSinONTime(s, a, li);
+			scanBinSinONTime(s, b, lj);
+			List<Integer> l = new ArrayList<>();
+			for (int i : li) {
+				Integer lo = lj.lower(i), hi = lj.higher(i); // 严格，小于，或是大于，不等于。【特殊情况得考虑】
+				if (lo != null && Math.abs(i - lo) <= k || hi != null && Math.abs(i - hi) <= k || lj.contains(i))
+				l.add(i);
+			 }
+			return l;
+		}
+		static final int mod = (int)1e9 + 7; // 这个数，可以可以换一个其它的。。。
+	// 亲爱的表哥的活宝妹，忘记这个算法是什么了，大致原理明白记得【每向后移动一个字符，递推关系】，可是写的细节不懂
+		TreeSet<Integer> scanBinSinONTime(String S, String T, TreeSet<Integer> lj) { 
+			char [] s = S.toCharArray(), t = T.toCharArray();
+			int base = 101;
+			long [] p = new long [T.length()]; // 用来，计算，快速幂？
+			p[0] = 1;
+			for (int i = 1; i < T.length(); i++)
+				p[i] = p[i-1] * base % mod;
+			long id = 0, cur;
+			for (int i = 0; i < T.length(); i++) // 【基片段、长度固定为 y】：算法的，标记值
+				id = (id + (long)(s[i] - 'a') * p[i]) % mod;
+			cur = id; // previous
+			for (int i = 1; i+T.length() <= S.length(); i++) {
+				cur = (cur + mod - (s[i-1] - 'a') + (long)(s[i] - 'a') * p[T.length()-1]) % mod;
+				if (cur == id) lj.add(i);
+			}
+			return lj;
+		}
 	}
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
     public static void main (String[] args) {
 		Solution s = new Solution ();
 
-		String a = "abcd";
-		String b = "acbe";
-		char [] c = new char [] {'a','b','c','c','e','d'};
-		char [] d = new char [] {'b','c','b','e','b','e'};
-		int [] e = new int [] {2,5,5,1,2,20};
-		long r = s.minimumCost(a, b, c, d, e);
-		System.out.println("r: " + r);
+		String c = "isawsquirrelnearmysquirrelhouseohmy";
+		String a = "my";
+		String b = "squirrel";
+
+		List<Integer> r = s.beautifulIndices(c, a, b, 15);
+		System.out.println("r.size(): " + r.size());
+		System.out.println(Arrays.toString(r.toArray()));
     }
 }
 // ListNode head = new ListNode(a[0]); 
@@ -1025,3 +1201,18 @@ public class cmp {
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
