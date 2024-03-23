@@ -1738,49 +1738,143 @@ public class cmp {
 		// public String[] shortestSubstrings(String[] arr) {
 		// }
 
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// // 【k 是奇数， k/2+1 个最大正数和 - k/2 个最小负数和】还要乘个递减因子【 k,k-1,k-2,.... 1】
+		// // 不知道，怎么遍历，怎么扫？感觉是像是【动规】，可是感觉数据规模大【 n*k <= 10^6】就没能往下想。。。
+		// // 一条提示【0】没看懂，不知道哪里错了，改天再写。。。
+		// public long maximumStrength(int[] a, int k) {
+		// 	int n = a.length;
+		// 	long [][][] f = new long [n+1][k+1][2];
+		// 	// for (int i = 0; i <= n; i++)
+		// 	// 	for (int j = 0; j <= k; j++)
+		// 	// 		Arrays.fill(f[i][j], Long.MIN_VALUE);
+		// 	// f[i][j][x == 0 不选不包括 / 1选包括]
+		// 	f[n][0][0] = 0; f[n][1][0] = 0; 
+		// 	f[n][1][1] = 0; f[n][0][1] = 0;
+		// 	for (int i = n-1; i >= 0; i--) 
+		// 		for (int j = 1; j <= k; j++) {
+		// 			// 一定包含当前数 a[i]: 作为第 j 个片段的、最后一个元素【后面j-1 个片段】；或作为第 j 个片段的一个元素
+		// 			f[i][j][1] = (long)a[i] * (j % 2 == 1 ? j : -1 * j) + Math.max(f[i+1][j-1][0], f[i+1][j][1]);
+		// 			// We can select nums[i] as a separate subarray or select at least nums[i] and nums[i + 1] as the first subarray. dp[i][j][0] = max(dp[i + 1][j][0], dp[i][j][1]). 这个提示没看懂，不知道它说什么意思
+		// 			// 对【0】： j 个片段，不包括当前数 i, 与包括当前数 i, 永远取个最大值
+		// 			f[i][j][0] = Math.max(f[i+1][j][0], f[i][j][1]);
+		// 			// System.out.println("f[i][j][0]: " + f[i][j][0]);
+		// 			// System.out.println("f[i][j][1]: " + f[i][j][1]);
+		// 		}
+		// 	return  f[0][k][0];
+		// }
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// public int sumOfEncryptedInt(int[] a) {
+		// 	int n = a.length, r = 0;
+		// 	for (int v : a) 
+		// 		r += getVal(v);
+		// 	return r;
+		// }
+		// int getVal(int x) {
+		// 	String t = String.valueOf(x); char [] s = t.toCharArray();
+		// 	int max = 0, r = 0;
+		// 	for (char c : s) 
+		// 		max = Math.max(max, c - '0');
+		// 	for (int i = 0; i < t.length(); i++)
+		// 		r = r * 10 + max;
+		// 	return r;
+		// }
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// public long[] unmarkedSumArray(int[] a, int[][] qs) {
+		// 	int m = qs.length, n = a.length;
+		// 	long r = 0;// 总和
+		// 	for (int v : a) r += (long)v;
+		// 	long [] ans = new long [m];
+		// 	Queue<int []> q = new PriorityQueue<>((x, y) -> x[0] != y[0] ? x[0] - y[0] : x[1] - y[1]);
+		// 	for (int i = 0; i < n; i++)
+		// 		q.offer(new int [] {a[i], i});
+		// 	// 要找到那个下标的数，怎么找？先不写这个题目了
+		// }
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// public String minimizeStringValue(String s) {
+		// }
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// // 感觉，亲爱的表哥的活宝妹，这个题目哪里没有读懂：不是找，和为K 的特异子序列的个数；而是找：不同子序列的、含子序列和为 K 的，所有的个数。。 
+		// static final int mod = (int)1e9 + 7;
+		// public int sumOfPower(int[] a, int k) {
+		// 	int n = a.length;
+		// 	TreeMap<Integer, Integer> m = new TreeMap<>();// 频次字典
+		// 	for (int v : a) m.put(v, m.getOrDefault(v, 0) + 1);
+		// 	int [] r = new int [k+1];
+		// 	for (Map.Entry<Integer, Integer> en : m.entrySet()) {
+		// 		int key = en.getKey(), v = en.getValue();
+		// 		r[key] = (r[key] + v) % mod;
+		// 		for (int i = Math.max(1, key-1); i >= 0; i--) {
+		// 			if (i + key > k) continue;
+		// 			r[i+key] = (r[i] + r[key]) % mod;
+		// 		}
+		// 	}
+		// 	return r[k];
+		// }
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// public boolean isSubstringPresent(String t) {
+		// 	int n = t.length(); char [] s = t.toCharArray();
+		// 	for (int i = 0; i < t.length()-1; i++) {
+		// 		if (s[i] == s[i+1]) return true;
+		// 		String re = new StringBuilder("").append(s[i+1]).append(s[i]).toString();
+		// 		System.out.println("re: " + re);
+		// 		if (t.indexOf(re) != -1) return true;
+		// 	}
+		// 	return false;
+		// }
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// public long countSubstrings(String s, char c) {
+		// 	int cnt = 0;
+		// 	for (char a : s)  if (a == c) cnt++;
+		// 	if (cnt == 1) return 1;
+		// 	long r = (long)cnt;
+		// 	// 排列组合题：这题目好恶心人呀，不想写了
+		// 	return 0;
+		// }
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// public int minimumDeletions(String t, int k) {
+		// 	int n = t.length(); char [] s = t.toCharArray();
+		// 	int [] r = new int [26];
+		// 	for (char c : s) r[c-'a']++;
+		// 	Arrays.sort(r);
+		// 	System.out.println(Arrays.toString(r));
+		// 	int min = n, curMin = 0, preSum = 0;
+		// 	for (int i = 0; i < 26; i++) {
+		// 		curMin = preSum;
+		// 		for (int j = i+1; j < 26; j++) {
+		// 			if (r[j] < r[i]) curMin += r[j];
+		// 			else if (r[j] > r[i] + k) curMin += r[j] - r[i] - k;
+		// 		}
+		// 		min = Math.min(min, curMin);
+		// 		preSum += r[i];
+		// 	}
+		// 	return min;
+		// }
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// // 这个题目，感觉没有读懂，暂时不写它了
+		// public long minimumMoves(int[] a, int k, int maxChanges) {
+		// 	int n = a.length;
+		// }
+
 		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
 		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
 		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
 		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
-		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
-		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
-		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
-		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
-		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
-		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
-		// 【k 是奇数， k/2+1 个最大正数和 - k/2 个最小负数和】还要乘个递减因子【 k,k-1,k-2,.... 1】
-		// 不知道，怎么遍历，怎么扫？感觉是像是【动规】，可是感觉数据规模大【 n*k <= 10^6】就没能往下想。。。
-		// 一条提示【0】没看懂，不知道哪里错了，改天再写。。。
-		public long maximumStrength(int[] a, int k) {
-			int n = a.length;
-			long [][][] f = new long [n+1][k+1][2];
-			// for (int i = 0; i <= n; i++)
-			// 	for (int j = 0; j <= k; j++)
-			// 		Arrays.fill(f[i][j], Long.MIN_VALUE);
-			// f[i][j][x == 0 不选不包括 / 1选包括]
-			f[n][0][0] = 0; f[n][1][0] = 0; 
-			f[n][1][1] = 0; f[n][0][1] = 0;
-			for (int i = n-1; i >= 0; i--) 
-				for (int j = 1; j <= k; j++) {
-					// 一定包含当前数 a[i]: 作为第 j 个片段的、最后一个元素【后面j-1 个片段】；或作为第 j 个片段的一个元素
-					f[i][j][1] = (long)a[i] * (j % 2 == 1 ? j : -1 * j) + Math.max(f[i+1][j-1][0], f[i+1][j][1]);
-					// We can select nums[i] as a separate subarray or select at least nums[i] and nums[i + 1] as the first subarray. dp[i][j][0] = max(dp[i + 1][j][0], dp[i][j][1]). 这个提示没看懂，不知道它说什么意思
-					// 对【0】： j 个片段，不包括当前数 i, 与包括当前数 i, 永远取个最大值
-					f[i][j][0] = Math.max(f[i+1][j][0], f[i][j][1]);
-					// System.out.println("f[i][j][0]: " + f[i][j][0]);
-					// System.out.println("f[i][j][1]: " + f[i][j][1]);
-				}
-			return  f[0][k][0];
-		}
-}
+ }
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
     public static void main (String[] args) {
 		Solution s = new Solution ();
+		String a = "vnnppvvbbn";
 
-		// int []  a = new int []  {1, 2, 3, -1, 2};
-		int []  a = new int []  {12, -2, -2, -2, -2};
-
-		long r = s.maximumStrength(a, 5);
+		int r = s.minimumDeletions(a, 0);
 		System.out.println("r: " + r);
     }
 }
@@ -2675,5 +2769,10 @@ public class cmp {
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
