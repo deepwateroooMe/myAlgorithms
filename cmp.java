@@ -32,10 +32,10 @@ public class cmp {
 		// 	return max;
 		// }
 
-		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
-		public int minOperations(int k) {
-			return 0;
-		}
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// public int minOperations(int k) {
+		// 	return 0;
+		// }
 
 		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
 		// public long [] mostFrequentIDs(int[] a, int [] b) {
@@ -63,111 +63,237 @@ public class cmp {
 		// 	return r;
 		// }
 
-		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
-		// 感觉，这是好大一颗【字典树】！好像，亲爱的表哥的活宝妹、中国大陆妈妈生前故居老宅的、参天皂荚树！
-		public class Trie {
-			private class Node {
-				public int i; // idx
-				public boolean f; // final: isWord
-				public Node [] n; // next
-				public Node(boolean a) {
-					this.f = a;
-					n = new Node[26];
-					i = -1;
-				}
-				public Node() {
-					this(false);
-				}
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// // 感觉，这是好大一颗【字典树】！好像，亲爱的表哥的活宝妹、中国大陆妈妈生前故居老宅的、参天皂荚树！
+		// public class Trie {
+		// 	private class Node {
+		// 		public int i; // idx
+		// 		public boolean f; // final: isWord
+		// 		public Node [] n; // next
+		// 		public Node(boolean a) {
+		// 			this.f = a;
+		// 			n = new Node[26];
+		// 			i = -1;
+		// 		}
+		// 		public Node() {
+		// 			this(false);
+		// 		}
+		// 	}
+		// 	private Node root;
+		// 	public Trie() {
+		// 		root = new Node();
+		// 	}
+		// 	public void insert(String t, int idx) { 
+		// 		int m = t.length(), j = 0; char [] s = t.toCharArray();
+		// 		// 把字符串倒一下：忘记高效是怎么倒的了，先手动来一下
+		// 		for (int i = 0; i < m/2; i++) {
+		// 			char c = s[i];
+		// 			s[i] = s[m-1-i];
+		// 			s[m-1-i] = c;
+		// 		}
+		// 		Node r = root;
+		// 		for (int i = 0; i < m; i++) {
+		// 			j = s[i] - 'a';
+		// 			if (r.n[j] == null) 
+		// 				r.n[j] = new Node();
+		// 			r = r.n[j];
+		// 		}
+		// 		r.f = true;
+		// 		r.i = idx;
+		// 	}
+		// 	// level-order-traversal 找一个最短、下标最小的。。
+		// 	private int levelOrderTraversal(Node root) { // 跟遍历、普通二叉树、是一样的呀，只不过假冒伪劣成、字典树而已。。。
+		// 		Deque<Node> q = new ArrayDeque<>();
+		// 		q.offerFirst(root);
+		// 		int levelSmallestIdx = Integer.MAX_VALUE;
+		// 		while (!q.isEmpty()) {
+		// 			levelSmallestIdx = Integer.MAX_VALUE;
+		// 			for (int i = q.size()-1; i >= 0; i--) {
+		// 				Node r = q.pollLast();
+		// 				for (int j = 0; j < 26; j++)
+		// 					if (r.n[j] != null) {
+		// 						if (r.n[j].f) {
+		// 							levelSmallestIdx = Math.min(levelSmallestIdx, r.n[j].i);
+		// 							continue;
+		// 						}
+		// 						q.offerFirst(r.n[j]);
+		// 					}
+		// 			}
+		// 			if (levelSmallestIdx != Integer.MAX_VALUE) return levelSmallestIdx;
+		// 		}
+		// 		return -1;
+		// 	}
+		// 	private int searchRecursive(char [] s, Node r) {
+		// 		int i = 0;
+		// 		while (i < s.length && r.n[s[i]-'a'] != null) {
+		// 			r = r.n[s[i]-'a'];
+		// 			++i;
+		// 		}
+		// 		// i == != s.length() 不重要
+		// 		if (r.f) return r.i;
+		// 		// level-order-traversal 找一个最短、下标最小的。。
+		// 		return levelOrderTraversal(r);
+		// 	}
+		// 	public int search(String t) { // 还要最好能写成、相对高效的 recursive-search...
+		// 		int m = t.length(), j = 0; char [] s = t.toCharArray();
+		// 		// 把字符串倒一下：忘记高效是怎么倒的了，先手动来一下
+		// 		for (int i = 0; i < m/2; i++) {
+		// 			char c = s[i];
+		// 			s[i] = s[m-1-i];
+		// 			s[m-1-i] = c;
+		// 		}
+		// 		return searchRecursive(s, root);
+		// 	}
+		// }
+		// public int[] stringIndices(String[] a, String[] b) {
+		// 	Trie t = new Trie();
+		// 	Set<String> s = new HashSet<>();
+		// 	for (int i = 0; i < a.length; i++) {
+		// 		if (s.contains(a[i])) continue;
+		// 		s.add(a[i]);
+		// 		t.insert(a[i], i);
+		//    }
+		// 	int [] r = new int [b.length];
+		// 	for (int i = 0; i < b.length; i++) 
+		// 		r[i] = t.search(b[i]);
+		// 	return r;
+		// }
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// // 【二分查找法】找每个二分的长短；对每个二分长度，用滑动窗口，找是否存在一个非空数组满足要求
+		// // 因为K 取值狠小【n <= 7】应该也是可以暴力的；暴力的结果。。
+		// public int minimumSubarrayLength(int[] a, int k) {
+		// 	int len = binarySearch(a, k);
+		// 	return len == Integer.MAX_VALUE ? -1 : len;
+		// }
+		// int binarySearch(int [] a, int v) {
+		// 	int l = 1, r = a.length;
+		// 	int min = Integer.MAX_VALUE;
+		// 	while (l <= r) {
+		// 		int m = (l + r) / 2;
+		// 		if (valid(m, a, v)) {
+		// 			min = Math.min(min, m);
+		// 			r = m-1;
+		// 		} else l = m + 1;
+		// 	}
+		// 	return min;
+		// }
+		// boolean valid(int len, int [] a, int v) {
+		// 	int [] r = new int [8];
+		// 	for (int i = 0, j = 0; i < a.length; i++) { // i: right j: left
+		// 		for (int k = 0; k < 8; k++) {
+		// 			if (((a[i] >> k) & 1) == 1)
+		// 				r[k]++;
+		// 		}
+		// 		if (i - j < len-1)
+		// 				continue;
+		// 		int cur = 0;
+		// 		for (int x = 0; x < 8; x++) 
+		// 			if (r[x] > 0) cur |= (1 << x);
+		// 		if (cur >= v) return true;
+		// 		for (int k = 0; k < 8; k++) {
+		// 			if (((a[j] >> k) & 1) == 1)
+		// 				r[k]--;
+		// 		}
+		// 		j++;
+		// 	}
+		// 	return false;
+		// }
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// public int minimumLevels(int[] a) {
+		// 	int n = a.length;
+		// 	int [] r = new int [n]; // preSum
+		// 	for (int i = 0; i < n; i++)
+		// 		r[i] = (i == 0 ? 0 : r[i-1]) + (a[i] > 0 ? 1 : -1);
+		// 	// 像是，想要从 preSum 数组里，找一个可能存在的中间点，让左边和比右边和大；但是仍然感觉没能读懂这个破烂恶心死人不偿命的鬼题目。。
+		// }
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// // 亲爱的表哥的活宝妹，第1 个最简单题目，就把它写出来了吗？
+		// // 【二分查找法】找每个二分的长短；对每个二分长度，用滑动窗口，找是否存在一个非空数组满足要求
+		// // 因为K 取值狠小【n <= 7】应该也是可以暴力的；暴力的结果。。亲爱的表哥的活宝妹，真的一遍用相对逻辑算法化的解法把最简单的题目给解了。。
+		// // 它们 leetcode 的出题目的人，真衰。。。
+		// public int minimumSubarrayLength(int[] a, int k) {
+		// 	int len = binarySearch(a, k);
+		// 	return len == Integer.MAX_VALUE ? -1 : len;
+		// }
+		// int binarySearch(int [] a, int v) {
+		// 	int l = 1, r = a.length;
+		// 	int min = Integer.MAX_VALUE;
+		// 	while (l <= r) {
+		// 		int m = (l + r) / 2;
+		// 		if (valid(m, a, v)) {
+		// 			min = Math.min(min, m);
+		// 			r = m-1;
+		// 		} else l = m + 1;
+		// 	}
+		// 	return min;
+		// }
+		// boolean valid(int len, int [] a, int v) {
+		// 	int [] r = new int [32];
+		// 	for (int i = 0, j = 0; i < a.length; i++) { // i: right j: left
+		// 		for (int k = 0; k < 32; k++) {
+		// 			if (((a[i] >> k) & 1) == 1)
+		// 				r[k]++;
+		// 		}
+		// 		if (i - j < len-1)
+		// 			continue;
+		// 		int cur = 0;
+		// 		for (int x = 0; x < 32; x++) 
+		// 		if (r[x] > 0) cur |= (1 << x);
+		// 		if (cur >= v) return true;
+		// 		for (int k = 0; k < 32; k++) {
+		// 			if (((a[j] >> k) & 1) == 1)
+		// 				r[k]--;
+		// 		}
+		// 		j++;
+  		//     }
+		// 	return false;
+		// }
+
+		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// 亲爱的表哥的活宝妹，觉得，他们 leetcode 贱鸡、贱畜牲的出题目的贱鸡、贱畜牲们，一定是黔驴技穷了吗？。。
+		// 亲爱的表哥的活宝妹，感觉，这题目出得真笨。。。难点在于，去数：以当前绝对差值、为最小绝对差值的、子序列的、长度为K 的个数，有几个？
+		// 恶心死人不偿命的：排列组合，数可能性的个数。。。真恶！！
+		static final int mod = (int)1e9 + 7;
+		public int sumOfPowers(int[] a, int k) {
+			int n = a.length;
+			// Arrays.sort(a); // 会：丢掉了数组下标、统计个数的相关信息
+			List<int []> l = new ArrayList<>();
+			for (int i = 0; i < n; i++)
+				l.add(new int [] {a[i], i});
+			Collections.sort(l, (x, y)->x[0] != y[0] ? x[0] - y[0] : x[1] - y[1]);
+			if (k == n) return l.get(0)[0];// 只有一种情况：全整数组
+			// 绝对差值、再排序列
+			int [] d = new int [n]; // Math.abs(a) diff array 
+			for (int i = 1; i < n; i++)
+				d[i] = Math.abs(l.get(i)[0] - l.get(i-1)[0]);
+			List<int []> ll = new ArrayList<>();
+			for (int i = 0; i < n; i++)
+				ll.add(new int [] {d[i], i});
+			Collections.sort(ll, (x, y) -> x[0] != y[0] ? x[0] - y[0] : x[1] - y[1]);
+			long ans = 0;
+			for (int i = 0; i < n; i++) {
+				// 现在数个数，数的是：数组总共 n 个元素里，
+				// 除去【当前遍历节点的、假定为】最小绝对差值的、当前2 个数，
+				// 除去【绝对差值链条、前半头——更小差值的存在】——除去是，每组更小差值的2 个数，可以不同时存在，便不会产生更小差值。。
+				// 剩余的数里，能够组成K 个数的，所有可能性的、子序列个数方案数
+				// 不想再瓣这种题目了，瓣得恶心吧啦的。。。
+				// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+				ans = (ans + (long)ll.get(i)[0] * (k == 2 ? 1 : ))
 			}
-			private Node root;
-			public Trie() {
-				root = new Node();
-			}
-			public void insert(String t, int idx) { 
-				int m = t.length(), j = 0; char [] s = t.toCharArray();
-				// 把字符串倒一下：忘记高效是怎么倒的了，先手动来一下
-				for (int i = 0; i < m/2; i++) {
-					char c = s[i];
-					s[i] = s[m-1-i];
-					s[m-1-i] = c;
-				}
-				Node r = root;
-				for (int i = 0; i < m; i++) {
-					j = s[i] - 'a';
-					if (r.n[j] == null) 
-						r.n[j] = new Node();
-					r = r.n[j];
-				}
-				r.f = true;
-				r.i = idx;
-			}
-			// level-order-traversal 找一个最短、下标最小的。。
-			private int levelOrderTraversal(Node root) { // 跟遍历、普通二叉树、是一样的呀，只不过假冒伪劣成、字典树而已。。。
-				Deque<Node> q = new ArrayDeque<>();
-				q.offerFirst(root);
-				int levelSmallestIdx = Integer.MAX_VALUE;
-				while (!q.isEmpty()) {
-					levelSmallestIdx = Integer.MAX_VALUE;
-					for (int i = q.size()-1; i >= 0; i--) {
-						Node r = q.pollLast();
-						for (int j = 0; j < 26; j++)
-							if (r.n[j] != null) {
-								if (r.n[j].f) {
-									levelSmallestIdx = Math.min(levelSmallestIdx, r.n[j].i);
-									continue;
-								}
-								q.offerFirst(r.n[j]);
-							}
-					}
-					if (levelSmallestIdx != Integer.MAX_VALUE) return levelSmallestIdx;
-				}
-				return -1;
-			}
-			private int searchRecursive(char [] s, Node r) {
-				int i = 0;
-				while (i < s.length && r.n[s[i]-'a'] != null) {
-					r = r.n[s[i]-'a'];
-					++i;
-				}
-				// i == != s.length() 不重要
-				if (r.f) return r.i;
-				// level-order-traversal 找一个最短、下标最小的。。
-				return levelOrderTraversal(r);
-			}
-			public int search(String t) { // 还要最好能写成、相对高效的 recursive-search...
-				int m = t.length(), j = 0; char [] s = t.toCharArray();
-				// 把字符串倒一下：忘记高效是怎么倒的了，先手动来一下
-				for (int i = 0; i < m/2; i++) {
-					char c = s[i];
-					s[i] = s[m-1-i];
-					s[m-1-i] = c;
-				}
-				return searchRecursive(s, root);
-			}
-		}
-		public int[] stringIndices(String[] a, String[] b) {
-			Trie t = new Trie();
-			Set<String> s = new HashSet<>();
-			for (int i = 0; i < a.length; i++) {
-				if (s.contains(a[i])) continue;
-				s.add(a[i]);
-				t.insert(a[i], i);
-		   }
-			int [] r = new int [b.length];
-			for (int i = 0; i < b.length; i++) 
-				r[i] = t.search(b[i]);
-			return r;
+			return 0;
 		}
 }
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
     public static void main (String[] args) {
 		Solution s = new Solution ();
 
-		String []  a = new String []  {"abcde", "abcde"};
-		String []  b = new String []  {"abcde", "bcde", "cde", "de", "e"};
+		int []  a = new int []  {1, 32, 256, 481, 196, 234, 246, 142, 146, 2};
 
-		int [] r = s.stringIndices(a, b);
-		System.out.println(Arrays.toString(r));
+		int r = s.minimumSubarrayLength(a, 502);
+		System.out.println("r: " + r);
     }
 }
 // ListNode head = new ListNode(a[0]); 
