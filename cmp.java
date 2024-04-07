@@ -252,47 +252,243 @@ public class cmp {
 		// 	return false;
 		// }
 
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// // 亲爱的表哥的活宝妹，觉得，他们 leetcode 贱鸡、贱畜牲的出题目的贱鸡、贱畜牲们，一定是黔驴技穷了吗？。。
+		// // 亲爱的表哥的活宝妹，感觉，这题目出得真笨。。。难点在于，去数：以当前绝对差值、为最小绝对差值的、子序列的、长度为K 的个数，有几个？
+		// // 恶心死人不偿命的：排列组合，数可能性的个数。。。真恶！！
+		// static final int mod = (int)1e9 + 7;
+		// public int sumOfPowers(int[] a, int k) {
+		// 	int n = a.length;
+		// 	// Arrays.sort(a); // 会：丢掉了数组下标、统计个数的相关信息
+		// 	List<int []> l = new ArrayList<>();
+		// 	for (int i = 0; i < n; i++)
+		// 		l.add(new int [] {a[i], i});
+		// 	Collections.sort(l, (x, y)->x[0] != y[0] ? x[0] - y[0] : x[1] - y[1]);
+		// 	if (k == n) return l.get(0)[0];// 只有一种情况：全整数组
+		// 	// 绝对差值、再排序列
+		// 	int [] d = new int [n]; // Math.abs(a) diff array 
+		// 	for (int i = 1; i < n; i++)
+		// 		d[i] = Math.abs(l.get(i)[0] - l.get(i-1)[0]);
+		// 	List<int []> ll = new ArrayList<>();
+		// 	for (int i = 0; i < n; i++)
+		// 		ll.add(new int [] {d[i], i});
+		// 	Collections.sort(ll, (x, y) -> x[0] != y[0] ? x[0] - y[0] : x[1] - y[1]);
+		// 	long ans = 0;
+		// 	for (int i = 0; i < n; i++) {
+		// 		// 现在数个数，数的是：数组总共 n 个元素里，
+		// 		// 除去【当前遍历节点的、假定为】最小绝对差值的、当前2 个数，
+		// 		// 除去【绝对差值链条、前半头——更小差值的存在】——除去是，每组更小差值的2 个数，可以不同时存在，便不会产生更小差值。。
+		// 		// 剩余的数里，能够组成K 个数的，所有可能性的、子序列个数方案数
+		// 		// 不想再瓣这种题目了，瓣得恶心吧啦的。。。
+		// 		// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// 		ans = (ans + (long)ll.get(i)[0] * (k == 2 ? 1 : ))
+		// 	}
+		// 	return 0;
+		// }
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// public int sumOfTheDigitsOfHarshadNumber(int x) {
+		// 	String a = String.valueOf(x); char [] s = a.toCharArray();
+		// 	int r = 0;
+		// 	for (char c : s)  r += c -'0';
+		// 	return x % r == 0 ? r : -1;
+		// }
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// // 破烂题目，出得像是小孩子过家家一样，没有半点儿价值，真恶心人类。。。
+		// public int maxBottlesDrunk(int v, int e) {
+		// 	int r = v, c = 0; // c : current empty bottles
+		// 	c += v;
+		// 	while (c >= e) {
+		// 		r++;
+		// 		c -= e;
+		// 		e++;
+		// 		c += 1;
+		// 	}
+		// 	return r;
+		// }
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// // 不知道，怎么去想这类题目：【数量级大：N-10^5】；两个轴上的绝对差值的和；求最小可能的值
+		// // 【排序】：按一个轴方向上排序，如X 轴升序排列；可以储备2 个轴上的排序，以空间换时间
+		// // 【二分查找法】：【0,2*10^8】【NlogN】解法；二分中的任何一个猜测值：评估... 感觉，思路还是没能想透彻
+		// public int minimumDistance(int[][] a) {
+		// 	int n = a.length, min = Integer.MAX_VALUE;
+		// 	List<int []> l = new ArrayList<>();
+		// 	TreeMap<Integer, Integer> m = new TreeMap<>();
+		// 	for (int i = 0; i < n; i++) {
+		// 		l.add(new int [] {a[i][0] - a[i][1], a[i][0] + a[i][1]});
+		// 		m.put(a[i][0]-a[i][1], m.getOrDefault(a[i][0]-a[i][1], 0) + 1);
+		// 	}
+		// 	Collections.sort(l, (x, y) -> x[1] != y[1] ? x[1] - y[1] : x[0] - y[0]); // y 轴升序排列
+		// 	for (int i = 0; i < n; i++) {
+		// 		if (m.get(l.get(i)[0]) == 1) m.remove(l.get(i)[0]);
+		// 		else m.put(l.get(i)[0], m.get(l.get(i)[0])-1);
+		// 		int maxX = m.lastKey() - m.firstKey(); 
+		// 		int [] cur = l.remove(i);
+		// 		int maxY = 0;
+		// 		if (i == 0 || i == n-1)
+		// 			maxY = (i == 0 ? l.get(n-2)[1] - l.get(0)[1] : l.get(n-2)[1] - l.get(0)[1]);
+		// 		else maxY = l.get(n-2)[1] - l.get(0)[1];
+		// 		min = Math.min(min, Math.max(maxX, maxY));
+		// 		l.add(i, cur);
+		// 		m.put(l.get(i)[0], m.getOrDefault(l.get(i)[0], 0) + 1);
+		// 	}
+		// 	return min;
+		// }
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// // 这种数个数的题目，快要被亲爱的表哥的活宝妹，永远弃绝了，要亲爱的表哥的活宝妹程序员来数个数，太恶了。。
+		// // 改天再写这个破烂题目
+		// public long countAlternatingSubarrays(int[] a) {
+		// 	int n = a.length;
+		// }
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// public int longestMonotonicSubarray(int[] a) {
+		// 	int n = a.length;
+		// 	int [] l = new int [n], r = new int [n]; // l: increasing r: decreasing
+		// 	Arrays.fill(l, 1); Arrays.fill(r, 1);
+		// 	for (int i = 1; i < n; i++) {
+		// 		if (a[i] > a[i-1]) l[i] = l[i-1] + 1;
+		// 		else if (a[i] < a[i-1]) r[i] = r[i-1] + 1;
+		// 	}
+		// 	return Math.max(Arrays.stream(l).max().getAsInt(), Arrays.stream(r).max().getAsInt());
+		// }
+
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// public String getSmallestString(String t, int k) {
+		// 	if (k == 0) return t;
+		// 	int n = t.length(); char [] s = t.toCharArray();
+		// 	char [] r = new char [n];
+		// 	for (int i = 0; i < n; i++) {
+		// 		if (k == 0) {
+		// 			for (int j = i; j < n; j++)
+		// 				r[j] = s[j];
+		// 			return new String(r);
+		// 		}
+		// 		if (k >= Math.min(s[i] - 'a', 'z' - s[i] + 1)) {
+		// 			r[i] = 'a';
+		// 			k -= Math.min(s[i] - 'a', 'z' - s[i] + 1);
+		// 		}
+		// 		else { // a z ?
+		// 			r[i] = (char)(s[i] - k);
+		// 			for (int j = i+1; j < n; j++)
+		// 				r[j] = s[j];
+		// 			return new String(r);
+		// 		}
+		// 	}
+		// 	return new String(r);
+		// }
+
+// 		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+// 		// 思路：应该是可以，把树根固定在任何一个节点上, 如 0 节点；求根节点到任何其它节点的最小代价值 d[]；再遍历查询，找两个节点的最近公共祖先，要异或掉祖先节点的部分，就可以了！！
+// 		// 还需要考虑：这个题目是，可以有环的
+// 		// 对【无向图中、环的处理】：
+// 		// 1. 先处理重复边，就是2 相连节点，超过一条直接边，连接他们，先前问题简化
+// 		// 上面1: 不一定对： & 需要边所在环的特定数位，上面操作对2 节点小环外，有大环的情况并不适用。。
+// 		// 2.求环的 & 值，并用这个【最小值】来 cover 环上任何2 节点间的【最小值】
+// 		// 感觉这个难度【求公共祖先】，好像超出了亲爱的表哥的活宝妹，现在的解题能力。。。
+// 		public int[] minimumCost(int n, int[][] egs, int[][] qs) {
+// 			this.n = n;
+// 			g = new ArrayList[n];
+// 			Arrays.setAll(g, z -> new ArrayList<int[]>);
+// 			for (int [] e : egs) {
+// 				int u = e[0], v = e[1];
+// 				if (u > v) {
+// 					int tmp = u;
+// 					u = v;
+// 					v = tmp;
+// 				}
+//     		}
+// 			Arrays.sort(egs, (x, y)-> x[0] != y[0] ? x[0] - y[0] : x[1] - y[1]);
+// 			int [] p = egs[0];
+// 			for (int i = 1; i < n; i++) {
+// 				int u = egs[i][0], v = egs[i][1], cur = Integer.MAX_VALUE;
+// 				if (u == p[0] && v == p[1]) { // 假设相邻 2 节点间有多条直接边: 简化2 节点间重复边：求最小值 
+// 					cur &= p[2]; //cur &= egs[i][2];
+// 					p = egs[i];
+// 					int j = i+1;
+// 					while (j < n && egs[j][0] == u && egs[j][1] == v) {
+// 						// cur &= egs[j][2];
+// 						cur &= p[2];
+// 						p = egs[j];
+// 						j++;
+// 					}
+// 					cur &= p[2]; //cur &= egs[i][2];
+// 					// if (j == n) {
+// 					g[u].add(new int [] {v, cur});
+// 					g[v].add(new int [] {u, cur});
+// 					// }
+// 					i = j - 1;
+// 					p = new int [] {-1, -1};
+// 				} else if (p[0] != -1) { // 
+// 					u = p[0]; v = p[1];
+// 					g[u].add(new int [] {v, p[2]});
+// 					g[v].add(new int [] {u, p[2]});
+// 					p = egs[i];
+// 				}
+// 			}
+// 			if (p[0] != -1) {
+// 				u = p[0]; v = p[1];
+// 				g[u].add(new int [] {v, p[2]});
+// 				g[v].add(new int [] {u, p[2]});
+// 			}
+// // suppose rooted at node 0
+// 			dijkstra();
+// 			int [] r = new int [qs.length];
+// 			Arrays.fill(r, -1);
+// 			// 求两个节点的最近公共祖先问题，以前写过，没能完全理解，感觉全忘记了
+// 			// 亲爱的表哥的活宝妹，现在得发挥聪明才智，好好回想、边回想、边自己试着理解开窃，来理解这个求有向图上公共祖先的问题
+// 		}
+// 		int closestSharedGrandRelativeNode(int u, int v) {
+// 		}
+// 		List<int []> [] g;
+// 		int [] d;
+// 		int n;
+// 		void dijkstra() {
+// 			Arrays.fill(d, Integer.MAX_VALUE);
+// 			d[0] = Integer.MAX_VALUE;
+// 			Deque<int []> q = new ArrayDeque<>();
+// 			q.offerFirst(new int [] {-1, 0, 0}); // parent, u, curD
+// 			while (!q.isEmpty()) {
+// 				int [] r = q.pollLast();
+// 				int u = q[1], curD = r[2];
+// 				for (int [] n : g[u]) {
+// 					if (n[0] == r[0]) continue;// 这里就不对了。。。
+// 					if ((curD & n[1]) < d[n[0]]) { // <= ? <
+// 						d[n[0]] = (curD & n[1]);
+// 						q.offerFirst(new int [] {u, n[0], d[n[0]]});
+// 					}
+// 				}
+// 			 }
+// 		}
+
 		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
-		// 亲爱的表哥的活宝妹，觉得，他们 leetcode 贱鸡、贱畜牲的出题目的贱鸡、贱畜牲们，一定是黔驴技穷了吗？。。
-		// 亲爱的表哥的活宝妹，感觉，这题目出得真笨。。。难点在于，去数：以当前绝对差值、为最小绝对差值的、子序列的、长度为K 的个数，有几个？
-		// 恶心死人不偿命的：排列组合，数可能性的个数。。。真恶！！
-		static final int mod = (int)1e9 + 7;
-		public int sumOfPowers(int[] a, int k) {
-			int n = a.length;
-			// Arrays.sort(a); // 会：丢掉了数组下标、统计个数的相关信息
-			List<int []> l = new ArrayList<>();
-			for (int i = 0; i < n; i++)
-				l.add(new int [] {a[i], i});
-			Collections.sort(l, (x, y)->x[0] != y[0] ? x[0] - y[0] : x[1] - y[1]);
-			if (k == n) return l.get(0)[0];// 只有一种情况：全整数组
-			// 绝对差值、再排序列
-			int [] d = new int [n]; // Math.abs(a) diff array 
-			for (int i = 1; i < n; i++)
-				d[i] = Math.abs(l.get(i)[0] - l.get(i-1)[0]);
-			List<int []> ll = new ArrayList<>();
-			for (int i = 0; i < n; i++)
-				ll.add(new int [] {d[i], i});
-			Collections.sort(ll, (x, y) -> x[0] != y[0] ? x[0] - y[0] : x[1] - y[1]);
+		// 从左往右，与从右往左扫，求最小差值，想得稀里糊涂的。。。
+		public long minOperationsToMakeMedianK(int[] a, int k) {
+			int n = a.length, p = 0;
+			Arrays.sort(a);;
 			long ans = 0;
-			for (int i = 0; i < n; i++) {
-				// 现在数个数，数的是：数组总共 n 个元素里，
-				// 除去【当前遍历节点的、假定为】最小绝对差值的、当前2 个数，
-				// 除去【绝对差值链条、前半头——更小差值的存在】——除去是，每组更小差值的2 个数，可以不同时存在，便不会产生更小差值。。
-				// 剩余的数里，能够组成K 个数的，所有可能性的、子序列个数方案数
-				// 不想再瓣这种题目了，瓣得恶心吧啦的。。。
-				// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-				ans = (ans + (long)ll.get(i)[0] * (k == 2 ? 1 : ))
+			int [] l = new int [n], r = new int [n];
+			if (n % 2 == 1) {
+				ans += Math.abs(a[n/2] - k);
+				l[n/2] = r; r[n/2] = r;
+				p = k;
+				for (int i = n/2-1; i >= 0; i--) {
+					if (a[i] > p) r[i] = a[i] - p;
+				}
 			}
-			return 0;
 		}
-}
+	}
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
     public static void main (String[] args) {
 		Solution s = new Solution ();
 
-		int []  a = new int []  {1, 32, 256, 481, 196, 234, 246, 142, 146, 2};
+		String a = "qdc";
 
-		int r = s.minimumSubarrayLength(a, 502);
+		String r = s.getSmallestString(a, 10);
 		System.out.println("r: " + r);
     }
 }
