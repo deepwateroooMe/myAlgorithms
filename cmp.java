@@ -1,15 +1,25 @@
 import com.ListNode;
+
 import java.util.HashMap;
+
 import java.util.Map;
+
 import java.util.ArrayList;
+
 import java.util.*;
+
 import java.util.stream.*;
+
 import java.util.stream.Collectors;
+
 import java.util.HashSet;
+
 import java.util.Set;
+
 import static java.util.stream.Collectors.toMap;
 
 public class cmp {
+
     public static class Solution {
 		// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 
@@ -546,52 +556,165 @@ public class cmp {
 		// 	return pre;
 		// }
 
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// // 这个题目，感觉好一点儿. 【动规】. 【记忆化深搜】可能会超时10^4*10=10^5;
+		// // 但是【记忆化深搜】超时的，【动规】不一定会超时。先试写【记忆化深搜】
+		// // 亲爱的表哥的活宝妹，成为“伟大”的预言家。。。逼着亲爱的表哥的活宝妹，去写、怎么也写不习惯的破烂【动规】！！
+		// // 先放一下，去想另一个题目
+		// public int minimumValueSum(int[] a, int[] b) {
+		// 	int n = a.length, m = b.length; this.a = a; this.b = b; 
+		// 	int [][] f = new int [n][m];
+		// 	Arrays.stream(f).forEach(z -> Arrays.fill(z, 1000000));
+		// 	for (int i = n-1; i >= 0; i--) {
+		// 		for (int j = m-1; j >= 0; j--) {
+		// 		}
+		// 	}
+		// }		
+		// public int minimumValueSum(int[] a, int[] b) { // TLE TLE TLE 。。。
+		// 	n = a.length; m = b.length; this.a = a; this.b = b; 
+		// 	f = new Integer [n][m+1];
+		// 	Arrays.stream(f).forEach(z -> Arrays.fill(z, 1000000));
+		// 	int r = dfs(0, m); 
+		// 	return r >= 1000000 ? -1 : r;
+		// }
+		// int [] a, b; int m, n;
+		// Integer [][] f;
+		// int dfs(int i, int j) { // i: idx j: idx subarray
+		// 	if (i == n && j == 0) return 0; // 2^14=100000 15 位数字
+		// 	if (j <= 0) return 1000000;
+		// 	if (f[i][j] != 1000000) return f[i][j];
+		// 	int r = 1000000;
+		// 	int curAnd = 32767;
+		// 	for (int k = i; k < n-j+1; k++) {
+		// 		if (k == i) curAnd = a[k];
+		// 		else curAnd &= a[k];
+		// 		if (curAnd == b[m-j])
+		// 			r = Math.min(r, a[k] + dfs(k+1, j-1));
+		// 	}
+		// 	return f[i][j] = r;
+		// }
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！		
+		// public int numberOfSpecialChars(String t) {
+		// 	int n = t.length(); char [] s = t.toCharArray();
+		// 	int [] l = new int [26], r = new int [26];
+		// 	for (char c : s) {
+		// 		if (Character.isLowerCase(c)) l[c-'a']++;
+		// 		else r[c-'A']++;
+     	// 	 }
+		// 	int ans = 0;
+		// 	for (int i = 0; i < 26; i++)
+		// 		if (l[i] > 0 && r[i] > 0) ans++;
+		// 	return ans;
+		// }
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// public int numberOfSpecialChars(String t) {
+		// 	int n = t.length(); char [] s = t.toCharArray();
+		// 	int [] l = new int [26], r = new int [26];
+		// 	Arrays.fill(l, -1); Arrays.fill(r, -1);
+		// 	for (int i = 0; i < n; i++) {
+		// 		char c = s[i];
+		// 		if (Character.isLowerCase(c)) l[c-'a'] = i;
+		// 		else if (Character.isUpperCase(c) && r[c-'A'] == -1) r[c-'A'] = i;
+		// 	 }
+		// 	int ans = 0;
+		// 	for (int i = 0; i < 26; i++)
+		// 		if (l[i] >= 0 && r[i] >= 0 && l[i] < r[i]) ans++;
+		// 	return ans;
+		// }
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// 不知道这个破烂题目怎么想。。
+		// public int minimumOperations(int[][] a) {
+		// 	int m = a.length, n = a[0].length, r = 0;
+		// 	int [][] f = new int [m][n];
+		// 	for (int j = 0; j < n; j++) {
+		// 		for (int i = 1; i < m; i++) {
+		// 		}
+		// 	}
+		// }
+		
 		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
-		// 这个题目，感觉好一点儿. 【动规】. 【记忆化深搜】可能会超时10^4*10=10^5;
-		// 但是【记忆化深搜】超时的，【动规】不一定会超时。先试写【记忆化深搜】
-		// 亲爱的表哥的活宝妹，成为“伟大”的预言家。。。逼着亲爱的表哥的活宝妹，去写、怎么也写不习惯的破烂【动规】！！
-		// 先放一下，去想另一个题目
-		public int minimumValueSum(int[] a, int[] b) {
-			int n = a.length, m = b.length; this.a = a; this.b = b; 
-			int [][] f = new int [n][m];
-			Arrays.stream(f).forEach(z -> Arrays.fill(z, 1000000));
-			for (int i = n-1; i >= 0; i--) {
-				for (int j = m-1; j >= 0; j--) {
+		// 【最短路径】狠好写，用个队列；可是怎么再倒回去，找最短路径. MLE MLE MLE..它说，某些测试不过，但是它藏起来了。。。
+		public boolean[] findAnswer(int n, int[][] egs) {
+			g = new ArrayList[n]; this.n = n;
+			Arrays.setAll(g, z -> new ArrayList<int []>());
+			for (int [] e : egs) {
+				int u = e[0], v = e[1], w = e[2];
+				g[u].add(new int [] {v, w});
+				g[v].add(new int [] {u, w});
+			}
+			d = new long [n];
+			dijkstra();
+			// dfs: 从0 到 n-1 节点，深搜. 忘记得好干净，怎么不重遍遍历呢
+			dfs(0, 0l, new ArrayList<Integer>(), new boolean [n]);
+			int [][] r = new int [n][n];
+			for (List<Integer> l : ll)
+				for (int i = 0; i < l.size(); i++) {
+					if (i == 0) {
+						r[0][l.get(i)]++;
+						r[l.get(i)][0]++;
+						continue;
+					}
+					r[l.get(i-1)][l.get(i)]++;
+					r[l.get(i)][l.get(i-1)]++;
 				}
-			}
-		}		
-		public int minimumValueSum(int[] a, int[] b) { // TLE TLE TLE 。。。
-			n = a.length; m = b.length; this.a = a; this.b = b; 
-			f = new Integer [n][m+1];
-			Arrays.stream(f).forEach(z -> Arrays.fill(z, 1000000));
-			int r = dfs(0, m); 
-			return r >= 1000000 ? -1 : r;
+			boolean [] ans = new boolean [egs.length];
+			for (int i = 0; i < egs.length; i++) 
+				ans[i] = (r[egs[i][0]][egs[i][1]] > 0 ? true : false);
+			return ans;
 		}
-		int [] a, b; int m, n;
-		Integer [][] f;
-		int dfs(int i, int j) { // i: idx j: idx subarray
-			if (i == n && j == 0) return 0; // 2^14=100000 15 位数字
-			if (j <= 0) return 1000000;
-			if (f[i][j] != 1000000) return f[i][j];
-			int r = 1000000;
-			int curAnd = 32767;
-			for (int k = i; k < n-j+1; k++) {
-				if (k == i) curAnd = a[k];
-				else curAnd &= a[k];
-				if (curAnd == b[m-j])
-					r = Math.min(r, a[k] + dfs(k+1, j-1));
+		List<List<Integer>> ll = new ArrayList<>();
+		List<int []> [] g;
+		long [] d; // 最小距离
+		int n;
+		void dfs(int u, long w, List<Integer> l, boolean [] vis) { // 环
+			if (u == n-1) {
+				if (w == d[n-1]) ll.add(new ArrayList<>(l));
+				return ;
 			}
-			return f[i][j] = r;
+			for (int [] e : g[u]) {
+				int v = e[0], we = e[1];
+				if (vis[v] || (long)w + (long)we > d[n-1]) continue;
+				l.add(v);
+				vis[v] = true;
+				dfs(v, (long)w + (long)we, new ArrayList<>(l), vis);
+				l.remove(l.size()-1);
+				vis[v] = false;
+			}
 		}
-	}
+		void dijkstra() {
+			Arrays.fill(d, Long.MAX_VALUE);
+			d[0] = 0;
+			Queue<long []> q = new PriorityQueue<long []>((x, y) -> Long.compare(x[1], y[1]));
+			q.offer(new long [] {0, 0, -1});
+			while (!q.isEmpty()) {
+				long [] cur = q.poll();
+				long u = cur[0], dis = cur[1], p = cur[2];
+				for (int [] e : g[(int)u]) {
+					int v = e[0];
+					long w = (long)e[1];
+					if (v == p) continue;
+					if (dis + w <= d[v]) {
+						d[v] = dis + w;
+						q.offer(new long [] {(long)v, d[v], (long)u});
+					}
+				}
+			 }
+		}
+	} 
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
     public static void main (String[] args) {
 		Solution s = new Solution ();
 
-		int [] a = new int [] {3, 6, 9};
+		// int [][] a = new int [][] {{0,1,4},{0,2,1},{1,3,2},{1,4,3},{1,5,1},{2,3,1},{3,5,3},{4,5,2}};
+		// int [][] a = new int [][] {{2, 1, 6}};
+		int [][] a = new int [][] {{0,1,1},{2,0,2},{4,5,5},{4,0,8},{3,5,1},{2,3,6},{0,5,6}};
 
-		long r = s.findKthSmallest(a, 3);
-		System.out.println("r: " + r);
+		boolean [] r = s.findAnswer(7, a);
+		System.out.println(Arrays.toString(r));
     }
 }
 // ListNode head = new ListNode(a[0]); 
@@ -689,3 +812,16 @@ public class cmp {
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
