@@ -1,25 +1,15 @@
 import com.ListNode;
-
 import java.util.HashMap;
-
 import java.util.Map;
-
 import java.util.ArrayList;
-
 import java.util.*;
-
 import java.util.stream.*;
-
 import java.util.stream.Collectors;
-
 import java.util.HashSet;
-
 import java.util.Set;
-
 import static java.util.stream.Collectors.toMap;
 
 public class cmp {
-
     public static class Solution {
 		// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 
@@ -636,85 +626,258 @@ public class cmp {
 		// 	}
 		// }
 		
-		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
-		// 【最短路径】狠好写，用个队列；可是怎么再倒回去，找最短路径. MLE MLE MLE..它说，某些测试不过，但是它藏起来了。。。
-		public boolean[] findAnswer(int n, int[][] egs) {
-			g = new ArrayList[n]; this.n = n;
-			Arrays.setAll(g, z -> new ArrayList<int []>());
-			for (int [] e : egs) {
-				int u = e[0], v = e[1], w = e[2];
-				g[u].add(new int [] {v, w});
-				g[v].add(new int [] {u, w});
-			}
-			d = new long [n];
-			dijkstra();
-			// dfs: 从0 到 n-1 节点，深搜. 忘记得好干净，怎么不重遍遍历呢
-			dfs(0, 0l, new ArrayList<Integer>(), new boolean [n]);
-			int [][] r = new int [n][n];
-			for (List<Integer> l : ll)
-				for (int i = 0; i < l.size(); i++) {
-					if (i == 0) {
-						r[0][l.get(i)]++;
-						r[l.get(i)][0]++;
-						continue;
-					}
-					r[l.get(i-1)][l.get(i)]++;
-					r[l.get(i)][l.get(i-1)]++;
-				}
-			boolean [] ans = new boolean [egs.length];
-			for (int i = 0; i < egs.length; i++) 
-				ans[i] = (r[egs[i][0]][egs[i][1]] > 0 ? true : false);
-			return ans;
-		}
-		List<List<Integer>> ll = new ArrayList<>();
-		List<int []> [] g;
-		long [] d; // 最小距离
-		int n;
-		void dfs(int u, long w, List<Integer> l, boolean [] vis) { // 环
-			if (u == n-1) {
-				if (w == d[n-1]) ll.add(new ArrayList<>(l));
-				return ;
-			}
-			for (int [] e : g[u]) {
-				int v = e[0], we = e[1];
-				if (vis[v] || (long)w + (long)we > d[n-1]) continue;
-				l.add(v);
-				vis[v] = true;
-				dfs(v, (long)w + (long)we, new ArrayList<>(l), vis);
-				l.remove(l.size()-1);
-				vis[v] = false;
-			}
-		}
-		void dijkstra() {
-			Arrays.fill(d, Long.MAX_VALUE);
-			d[0] = 0;
-			Queue<long []> q = new PriorityQueue<long []>((x, y) -> Long.compare(x[1], y[1]));
-			q.offer(new long [] {0, 0, -1});
-			while (!q.isEmpty()) {
-				long [] cur = q.poll();
-				long u = cur[0], dis = cur[1], p = cur[2];
-				for (int [] e : g[(int)u]) {
-					int v = e[0];
-					long w = (long)e[1];
-					if (v == p) continue;
-					if (dis + w <= d[v]) {
-						d[v] = dis + w;
-						q.offer(new long [] {(long)v, d[v], (long)u});
-					}
-				}
-			 }
-		}
-	} 
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// // 【最短路径】狠好写，用个队列；可是怎么再倒回去，找最短路径. MLE MLE MLE..它说，某些测试不过，但是它藏起来了。。。
+		// public boolean[] findAnswer(int n, int[][] egs) {
+		// 	g = new ArrayList[n]; this.n = n;
+		// 	Arrays.setAll(g, z -> new ArrayList<int []>());
+		// 	for (int [] e : egs) {
+		// 		int u = e[0], v = e[1], w = e[2];
+		// 		g[u].add(new int [] {v, w});
+		// 		g[v].add(new int [] {u, w});
+		// 	}
+		// 	d = new long [n];
+		// 	dijkstra();
+		// 	// dfs: 从0 到 n-1 节点，深搜. 忘记得好干净，怎么不重遍遍历呢
+		// 	dfs(0, 0l, new ArrayList<Integer>(), new boolean [n]);
+		// 	int [][] r = new int [n][n];
+		// 	for (List<Integer> l : ll)
+		// 		for (int i = 0; i < l.size(); i++) {
+		// 			if (i == 0) {
+		// 				r[0][l.get(i)]++;
+		// 				r[l.get(i)][0]++;
+		// 				continue;
+		// 			}
+		// 			r[l.get(i-1)][l.get(i)]++;
+		// 			r[l.get(i)][l.get(i-1)]++;
+		// 		}
+		// 	boolean [] ans = new boolean [egs.length];
+		// 	for (int i = 0; i < egs.length; i++) 
+		// 		ans[i] = (r[egs[i][0]][egs[i][1]] > 0 ? true : false);
+		// 	return ans;
+		// }
+		// List<List<Integer>> ll = new ArrayList<>();
+		// List<int []> [] g;
+		// long [] d; // 最小距离
+		// int n;
+		// void dfs(int u, long w, List<Integer> l, boolean [] vis) { // 环
+		// 	if (u == n-1) {
+		// 		if (w == d[n-1]) ll.add(new ArrayList<>(l));
+		// 		return ;
+		// 	}
+		// 	for (int [] e : g[u]) {
+		// 		int v = e[0], we = e[1];
+		// 		if (vis[v] || (long)w + (long)we > d[n-1]) continue;
+		// 		l.add(v);
+		// 		vis[v] = true;
+		// 		dfs(v, (long)w + (long)we, new ArrayList<>(l), vis);
+		// 		l.remove(l.size()-1);
+		// 		vis[v] = false;
+		// 	}
+		// }
+		// void dijkstra() {
+		// 	Arrays.fill(d, Long.MAX_VALUE);
+		// 	d[0] = 0;
+		// 	Queue<long []> q = new PriorityQueue<long []>((x, y) -> Long.compare(x[1], y[1]));
+		// 	q.offer(new long [] {0, 0, -1});
+		// 	while (!q.isEmpty()) {
+		// 		long [] cur = q.poll();
+		// 		long u = cur[0], dis = cur[1], p = cur[2];
+		// 		for (int [] e : g[(int)u]) {
+		// 			int v = e[0];
+		// 			long w = (long)e[1];
+		// 			if (v == p) continue;
+		// 			if (dis + w <= d[v]) {
+		// 				d[v] = dis + w;
+		// 				q.offer(new long [] {(long)v, d[v], (long)u});
+		// 			}
+		// 		}
+		// 	 }
+		// }
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// public int scoreOfString(String t) {
+		// 	int n = t.length(); char [] s = t.toCharArray();
+		// 	int r = 0;
+		// 	for (int i = 1; i < n; i++)
+		// 		r += Math.abs(s[i] - s[i-1]);
+		// 	return r;
+		// }
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// // 【动规】： f[i][j] 用第 i 个矩形， cover 第 j 个点。。。可是这个动规的系统思路，还没能建立起来。。先写别的
+		// public int minRectanglesToCoverPoints(int[][] a, int w) {
+		// }
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// // 相对于普通题目，它加了个时间参数。这个时间参数，就导致建立好的无向图，随时可能会变形要重建？不需要重新建图，只是遍历时走不走已经消失的节点的问题。图还是传统建法
+		// // 没有上面想得那么难，节点消失的时间是固定不变的，那么也就是，可以根据消失时间，根据从无向图根 0 节点出发，如果最短路径能够遍历到它【在它消失之前】。不难不难。。。
+		// public int[] minimumTime(int n, int[][] egs, int[] a) { // TLE 531/532 passed 不知道为什么没能过，改天再写这个破烂题目
+		// 	if (n == 1) return new int [] {0};
+		// 	g = new ArrayList[n]; this.a = a; 
+		// 	Arrays.setAll(g, z -> new ArrayList<>());
+		// 	// 去掉，所有可能的重复边，只保留时间最短的. 去除这些重复边，怎么可能导致错误答案呢？
+		// 	List<int []> l = new ArrayList<>();
+		// 	for (int [] e : egs) {
+		// 		int u = e[0], v = e[1];
+		// 		e[0] = Math.min(u, v);
+		// 		e[1] = Math.max(u, v);
+		// 		l.add(new int [] {e[0], e[1], e[2]});
+		// 	}
+		// 	Collections.sort(l, (x, y)-> x[0] != y[0] ? x[0] -y[0] : (x[1] != y[1] ? x[1] - y[1] : x[2] - y[2]));
+		// 	for (int i = egs.length-1; i >= 1; i--) 
+		// 		if (l.get(i)[0] == l.get(i-1)[0] && l.get(i)[1] == l.get(i-1)[1])
+		// 			l.remove(i);
+		// 	for (int [] e : egs) {
+		// 		int u = e[0], v = e[1], w = e[2];
+		// 		g[u].add(new int [] {v, w});
+		// 		g[v].add(new int [] {u, w});
+     	// 	}
+		// 	d = new long [n];
+		// 	dijkstra();
+		// 	System.out.println(Arrays.toString(d));
+		// 	int [] r = new int [n];
+		// 	for (int i = 0; i < n; i++)
+		// 		if (d[i] == Long.MAX_VALUE) r[i] = -1;
+		// 		else r[i] = (int) d[i];
+		// 	System.out.println(Arrays.toString(r));
+		// 	return r;
+		// }
+		// List<int []> [] g; int n; int [] a;
+		// long [] d;
+		// void dijkstra() {
+		// 	Arrays.fill(d, Long.MAX_VALUE);
+		// 	d[0] = 0l;
+		// 	Queue<long []> q = new PriorityQueue<>((x, y) -> Long.compare(x[1], y[1]));
+		// 	q.offer(new long [] {0, 0, -1}); // u, d, p
+		// 	while (!q.isEmpty()) {
+		// 		long [] cur = q.poll();
+		// 		long u = cur[0], w = cur[1];
+		// 		for (int [] e : g[(int)u]) {
+		// 			long v = (long)e[0], di = (long)e[1];
+		// 			if ((int)v == cur[2]) continue;
+		// 			if (di + w < (long)a[(int)v] && di + w <= d[(int)v]) {
+		// 				d[(int)v] = di + w;
+		// 				q.offer(new long [] {v, d[(int)v], u});
+		// 			}
+		// 		}
+		// 	}
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// public int addedInteger(int[] a, int[] b) {
+		// 	Arrays.sort(a);  Arrays.sort(b); 
+		// 	return b[0] - a[0];
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 不知道哪里想错了，感觉思路基本都对了，可是就还差那么点儿细节，可能亲爱的表哥的活宝妹，今天总体还是太浮躁了点儿。。没能沉下心来好好写。。。
+		// // 数量级极大：【二分查找法】
+		// public long minEnd(int n, int x) {
+		// 	this.n = n; this.v = x;
+		// 	int r1 = (int)Math.pow(2, 27); // 数位是小于 27 位的
+		// 	System.out.println("r: " + r1);
+		// 	m = Integer.toBinaryString(x).length();
+		// 	r = new int [m];
+		// 	for (int i = 0; i < Math.min(27, m); i++) 
+		// 		if (((x >> i) & 1) == 1)
+		// 			r[i] = 1;
+		// 	System.out.println(Arrays.toString(r));
+		// 	if (m - Integer.bitCount(x) >= n-(x % 2 == 0 ? 0 : 1)) return x;
+		// 	int cnts = m - Integer.bitCount(x);
+		// 	StringBuilder s = new StringBuilder(Integer.toBinaryString(x));
+		// 	for (int i = n-(x % 2 == 0 ? 0 : 1) - cnts; i > 0; i--) 
+		// 		s.insert(s.length()-1, '0');
+		// 	System.out.println("s.toString(): " + s.toString());
+		// 	long ans = 0l;
+		// 	for (int i = 0; i < s.length(); i++)
+		// 		if (s.charAt(i) == '1')
+		// 			ans |= (long)(1 << (s.length()-1-i));
+		// 	return ans;
+		// 	// return binarySearch(1, Long.MAX_VALUE);
+		// }
+		// int n, m, v;
+		// int [] r; // 标记 x 的数位
+		// // 那么，这里检查的就是：数组最大元素 v, 它的非标记位 >=n
+		// boolean isValid(long x) {
+		// 	int oo = 0, o = Long.toBinaryString(x).length();
+		// 	int bgn = Math.min(27, Math.min(o, m));
+		// 	if (bgn < m || Long.bitCount(x) < Arrays.stream(r).sum()) return false;
+		// 	for (int i = 0; i < bgn; i++) 
+		// 		if (r[i] > 0 && ((x >> i) & 1) != 1)
+		// 			return false;
+		// 		// else if (r[i] == 0 && ((x >> i) & 1) == 0) oo++;
+		// 		else if (r[i] == 0) oo++;
+		// 	if (oo >= n-1-(v % 2 == 0 ? 0 : 1)) return true;
+		// 	for (int i = bgn; i < o; i++) 
+		// 		if (((x >> i) & 1) == 0)
+		// 			oo++;
+		// 	return oo >= n-1;
+		// }
+		// long binarySearch(long l, long r) {
+		// 	long ans = Long.MAX_VALUE;
+		// 	while (l <= r) {
+		// 		long m = l + (r - l) / 2;
+		// 		System.out.println("m: " + m);
+		// 		if (isValid(m)) {
+		// 			ans = Math.min(ans, m);
+		// 			r = m-1;
+		// 		} else l = m + 1;
+		// 	}
+		// 	System.out.println("ans: " + ans);
+		// 	return ans;
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 亲爱的表哥的活宝妹，它说傻瓜型的一个一个慢慢瓣，真坑人、坑死人不偿命。。。
+		// public int minimumAddedInteger(int[] a, int[] b) {
+		// 	n = b.length; this.a = a; this.b = b; 
+		// 	d = Arrays.stream(a).sum() - sum; // Sa - x - y - sb = n * v ==> d = nv + x + y
+		// 	Arrays.sort(a); Arrays.sort(b);
+		// 	m = new HashMap<Integer, Integer>();
+		// 	for (int v : a)
+		// 		m.put(v, m.getOrDefault(v, 0) + 1);
+		// 	sum = Arrays.stream(b).sum();
+		// 	System.out.println("sum: " + sum);
+		// 	int r = binarySearch(-1000, 0);
+		// 	int r1 = binarySearch(0, 1000);
+		// 	System.out.println("r: " + r);
+		// 	System.out.println("r1: " + r1);
+		// 	return r != 1001 ? r / n : -1 * r1 / n;
+		// }
+		// Map<Integer, Integer> m ;
+		// int [] a, b; int n, sum, d;
+		// boolean valid(int v) {
+		// 	if (d == 0 && m.containsKey(0) && m.get(0) >= 2) return true;
+		// 	for (Map.Entry<Integer, Integer> en : m.entrySet()) {
+		// 		int k = en.getKey();
+		// 		if (m.containsKey(d - v * n - k)) return true; 
+		// 	}
+		// 	return false;
+		// }
+		// int binarySearch(int l, int r) {
+		// 	int ans = 1001;
+		// 	while (l <= r) {
+		// 		int mid = (l + r) / 2;
+		// 		System.out.println("mid: " + mid);
+		// 		if (valid(mid)) {
+		// 			ans = Math.min(ans, mid);
+		// 			r = mid - 1;
+		// 		} else l = mid + 1;
+		// 	}
+		// 	System.out.println("ans: " + ans);
+		// 	return ans;
+		// }
+	}
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
     public static void main (String[] args) {
 		Solution s = new Solution ();
 
-		// int [][] a = new int [][] {{0,1,4},{0,2,1},{1,3,2},{1,4,3},{1,5,1},{2,3,1},{3,5,3},{4,5,2}};
-		// int [][] a = new int [][] {{2, 1, 6}};
-		int [][] a = new int [][] {{0,1,1},{2,0,2},{4,5,5},{4,0,8},{3,5,1},{2,3,6},{0,5,6}};
+		int []  a = new int []  {3, 5, 5, 3};
+		int [] b = new int [] {7, 7};
 
-		boolean [] r = s.findAnswer(7, a);
-		System.out.println(Arrays.toString(r));
+		int r = s.minimumAddedInteger(a, b);
+		System.out.println("r: " + r);
     }
 }
 // ListNode head = new ListNode(a[0]); 
@@ -825,3 +988,40 @@ public class cmp {
 	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
