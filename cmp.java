@@ -1,12 +1,21 @@
 import com.ListNode;
+
 import java.util.HashMap;
+
 import java.util.Map;
+
 import java.util.ArrayList;
+
 import java.util.*;
+
 import java.util.stream.*;
+
 import java.util.stream.Collectors;
+
 import java.util.HashSet;
+
 import java.util.Set;
+
 import static java.util.stream.Collectors.toMap;
 
 public class cmp {
@@ -868,15 +877,105 @@ public class cmp {
 		// 	System.out.println("ans: " + ans);
 		// 	return ans;
 		// }
+
+		// // 亲爱的表哥的活宝，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// public boolean isValid(String t) {
+		// 	int n = t.length(), cnts = 0, two = 0;
+		// 	char [] s = t.toCharArray();
+		// 	if (n < 3) return false;
+		// 	Set<Character> sc = new HashSet<>(List.of('a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U'));
+		// 	Set<Character> not = new HashSet<>(List.of('@', '#', '$'));
+		// 	boolean hasDigit = false;
+		// 	for (char c : s) {
+		// 		if (not.contains(c)) return false;
+		// 		if (sc.contains(c)) cnts++;
+		// 		else if (Character.isUpperCase(c) || Character.isLowerCase(c)) two++;
+		// 	}
+		// 	return cnts > 0 && two > 0;
+		// }
+
+		// // 亲爱的表哥的活宝，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// public int minimumOperationsToMakeKPeriodic(String t, int k) {
+		// 	int n = t.length();
+		// 	Map<String, Integer> m = new HashMap<>();
+		// 	for (int i = 0; i <= n-k; i += k) {
+		// 		String cur = t.substring(i, i+k);
+		// 		m.put(cur, m.getOrDefault(cur, 0) + 1);
+		// 									  }
+		// 	System.out.println("(n/k): " + (n/k));
+		// 	System.out.println("Collections.max(m.values()): " + Collections.max(m.values()));
+		// 	return n/k - Collections.max(m.values());
+		// }			
+
+		// 亲爱的表哥的活宝，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// 没过，测试用例隐藏了。。。不知道哪里没想到。。。
+		public int minAnagramLength(String t) {
+			int n = t.length(), min = n, max = 0;
+			char [] s = t.toCharArray();
+			int [] cnts = new int [26];
+			// int [] l = new int [26], r = new int [26];
+			// Arrays.fill(l, -1);
+			// Arrays.fill(r, -1);
+			for (int i = 0; i < n; i++) {
+				char c = s[i];
+				cnts[c-'a']++;
+				// if (l[c-'a'] == -1) l[c-'a'] = i;
+				// else if (r[c-'a'] == -1) r[c-'a'] = i;
+    		}
+			// System.out.println(Arrays.toString(cnts));
+			max = Arrays.stream(cnts).max().getAsInt();
+			for (int i = 0; i < 26; i++)
+				if (cnts[i] > 0) min = Math.min(min, cnts[i]);
+			// System.out.println("min: " + min);
+			// System.out.println("max: " + max);
+			// return min == n ? 1 : n / min;
+			if (min == n) return 1;
+			if (min == 1) return n;
+			if (n % min == 0) return n / min;
+			int v = n / min;
+			while (n % v != 0 && v > 1) {
+				v--;
+			}
+			return v;
+		}
+
+		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// 现在这个思路有个问题：并不是只能取【最大值 max】来取最优解；可能还可以增加 max 成为更大的值。。。
+		static final int mod = (int)1e9 + 7; // 还没有取模
+		public int minCostToEqualizeArray(int[] a, int x, int y) {
+			int n = a.length, max = Arrays.stream(a).max().getAsInt();
+			if (n == 1) return 0;
+			long r = 0, sum = 0;
+			for (int v : a) sum += (long)v;
+			if (x * 2 <= y) return (int)((long)max * n - sum);
+			Arrays.sort(a);
+			while (a[0] != max && a[1] != max) {
+				for (int i = 0; i < n-1; i++) {
+					if (a[i] == max || a[i+1] == max) break;
+					r += y * (max - a[i+1]);
+					if (a[i] == a[i+1]) {
+						a[i] = max;
+					} else {
+						a[i] = a[i] + (max - a[i+1]);
+					}
+					a[i+1] = max;
+					System.out.println(Arrays.toString(a));
+					i++;
+				}
+				Arrays.sort(a);
+			}
+			if (a[0] < max) r += x * (max - a[0]);
+			return (int)r;
+		}
+
 	}
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
     public static void main (String[] args) {
 		Solution s = new Solution ();
 
-		int []  a = new int []  {3, 5, 5, 3};
-		int [] b = new int [] {7, 7};
+		String a = "leetcodeleet";
 
-		int r = s.minimumAddedInteger(a, b);
+		int r = s.minimumOperationsToMakeKPeriodic(a, 4);
 		System.out.println("r: " + r);
     }
 }
