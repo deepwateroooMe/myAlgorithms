@@ -907,76 +907,173 @@ public class cmp {
 		// 	return n/k - Collections.max(m.values());
 		// }			
 
-		// 亲爱的表哥的活宝，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
-		// 没过，测试用例隐藏了。。。不知道哪里没想到。。。
-		public int minAnagramLength(String t) {
-			int n = t.length(), min = n, max = 0;
-			char [] s = t.toCharArray();
-			int [] cnts = new int [26];
-			// int [] l = new int [26], r = new int [26];
-			// Arrays.fill(l, -1);
-			// Arrays.fill(r, -1);
-			for (int i = 0; i < n; i++) {
-				char c = s[i];
-				cnts[c-'a']++;
-				// if (l[c-'a'] == -1) l[c-'a'] = i;
-				// else if (r[c-'a'] == -1) r[c-'a'] = i;
-    		}
-			// System.out.println(Arrays.toString(cnts));
-			max = Arrays.stream(cnts).max().getAsInt();
-			for (int i = 0; i < 26; i++)
-				if (cnts[i] > 0) min = Math.min(min, cnts[i]);
-			// System.out.println("min: " + min);
-			// System.out.println("max: " + max);
-			// return min == n ? 1 : n / min;
-			if (min == n) return 1;
-			if (min == 1) return n;
-			if (n % min == 0) return n / min;
-			int v = n / min;
-			while (n % v != 0 && v > 1) {
-				v--;
-			}
-			return v;
-		}
+		// // 亲爱的表哥的活宝，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// // 没过，测试用例隐藏了。。。不知道哪里没想到。。。
+		// public int minAnagramLength(String t) {
+		// 	int n = t.length(), min = n, max = 0;
+		// 	char [] s = t.toCharArray();
+		// 	int [] cnts = new int [26];
+		// 	// int [] l = new int [26], r = new int [26];
+		// 	// Arrays.fill(l, -1);
+		// 	// Arrays.fill(r, -1);
+		// 	for (int i = 0; i < n; i++) {
+		// 		char c = s[i];
+		// 		cnts[c-'a']++;
+		// 		// if (l[c-'a'] == -1) l[c-'a'] = i;
+		// 		// else if (r[c-'a'] == -1) r[c-'a'] = i;
+    	// 	}
+		// 	// System.out.println(Arrays.toString(cnts));
+		// 	max = Arrays.stream(cnts).max().getAsInt();
+		// 	for (int i = 0; i < 26; i++)
+		// 		if (cnts[i] > 0) min = Math.min(min, cnts[i]);
+		// 	// System.out.println("min: " + min);
+		// 	// System.out.println("max: " + max);
+		// 	// return min == n ? 1 : n / min;
+		// 	if (min == n) return 1;
+		// 	if (min == 1) return n;
+		// 	if (n % min == 0) return n / min;
+		// 	int v = n / min;
+		// 	while (n % v != 0 && v > 1) {
+		// 		v--;
+		// 	}
+		// 	return v;
+		// }
 
-		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
-		// 现在这个思路有个问题：并不是只能取【最大值 max】来取最优解；可能还可以增加 max 成为更大的值。。。
-		static final int mod = (int)1e9 + 7; // 还没有取模
-		public int minCostToEqualizeArray(int[] a, int x, int y) {
-			int n = a.length, max = Arrays.stream(a).max().getAsInt();
-			if (n == 1) return 0;
-			long r = 0, sum = 0;
-			for (int v : a) sum += (long)v;
-			if (x * 2 <= y) return (int)((long)max * n - sum);
-			Arrays.sort(a);
-			while (a[0] != max && a[1] != max) {
-				for (int i = 0; i < n-1; i++) {
-					if (a[i] == max || a[i+1] == max) break;
-					r += y * (max - a[i+1]);
-					if (a[i] == a[i+1]) {
-						a[i] = max;
-					} else {
-						a[i] = a[i] + (max - a[i+1]);
-					}
-					a[i+1] = max;
-					System.out.println(Arrays.toString(a));
-					i++;
-				}
-				Arrays.sort(a);
-			}
-			if (a[0] < max) r += x * (max - a[0]);
-			return (int)r;
-		}
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// // 现在这个思路有个问题：并不是只能取【最大值 max】来取最优解；可能还可以增加 max 成为更大的值。。。
+		// static final int mod = (int)1e9 + 7; // 还没有取模
+		// public int minCostToEqualizeArray(int[] a, int x, int y) {
+		// 	int n = a.length, max = Arrays.stream(a).max().getAsInt();
+		// 	if (n == 1) return 0;
+		// 	long r = 0, sum = 0;
+		// 	for (int v : a) sum += (long)v;
+		// 	if (x * 2 <= y) return (int)((long)max * n - sum);
+		// 	Arrays.sort(a);
+		// 	while (a[0] != max && a[1] != max) {
+		// 		for (int i = 0; i < n-1; i++) {
+		// 			if (a[i] == max || a[i+1] == max) break;
+		// 			r += y * (max - a[i+1]);
+		// 			if (a[i] == a[i+1]) {
+		// 				a[i] = max;
+		// 			} else {
+		// 				a[i] = a[i] + (max - a[i+1]);
+		// 			}
+		// 			a[i+1] = max;
+		// 			System.out.println(Arrays.toString(a));
+		// 			i++;
+		// 		}
+		// 		Arrays.sort(a);
+		// 	}
+		// 	if (a[0] < max) r += x * (max - a[0]);
+		// 	return (int)r;
+		// }
 
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// public int findPermutationDifference(String S, String T) {
+		// 	int [] l = new int [26], r = new int [26];
+		// 	char [] s = S.toCharArray(); char [] t = T.toCharArray();
+		// 	for (int i = 0; i < S.length(); i++) {
+		// 		l[s[i]-'a'] = i;
+		// 		r[t[i]-'a'] = i;
+		// 	}
+		// 	int ans = 0;
+		// 	for (int i = 0; i < 26; i++) 
+		// 		ans += Math.abs(l[i] - r[i]);
+		// 	return ans;
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 从后往前遍历，从右往左，或者【记忆化深搜】		
+		// public int maximumEnergy(int[] a, int k) {
+		// 	n = a.length; this.k = k; this.a = a; 
+		// 	f = new Integer [n];
+		// 	int max = Integer.MIN_VALUE;
+		// 	for (int i = 0; i < n; i++) {
+		// 		dfs(i);
+		// 		max = Math.max(max, f[i]);
+		// 	}
+		// 	return max;
+		// }
+		// int n, k; int [] a;
+		// Integer [] f;
+		// int dfs(int i) {
+		// 	if (i >= n) return 0;
+		// 	if (f[i] != null) return f[i];
+		// 	if (i == n-1) return f[i] = a[i];
+		// 	// return f[i] = Math.max(a[i] + dfs(i + k), dfs(i+1));
+		// 	return f[i] = a[i] + dfs(i + k);
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 这个题目，要自己维护：每行、每列的有序排列最大值？
+		// public int maxScore(List<List<Integer>> ll) {
+		// 	int m = ll.size(), n = ll.get(0).size();
+		// 	long [][] f = new long [m+1][n+1];
+		// 	Arrays.setAll(f, z -> Long.MIN_VALUE);
+		// 	for (int i = 0; i < m; i++) f[i][n] = 0;
+		// 	for (int i = 0; i < n; i++) f[m][i] = 0;
+		// 	for (int i = m; i > 0; i--) {
+		// 		for (int j = n; j > 0; j--) {
+		// 		}
+		// 	}
+		// 	return 0;
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // n 的取值狠小【1,14】也就是说，基本可能，暴力也能过？？
+		// // 这里，亲爱的表哥的活宝妹，还没能把它转化成【动规思维】： n 个数，用前第几个数。。。之类的
+		// public int[] findPermutation(int[] a) { // TLE TLE TLE: 901/939 passed...
+		// 	n = a.length; this.a = a; 
+		// 	getPerm(0, new boolean [n], new ArrayList<Integer>(), 0);
+		// 	int [] r = new int [n];
+		// 	for (int i = 0; i < n; i++) 
+		// 		r[i] = ll.get(i);
+		// 	return r;
+		// }
+		// List<Integer> ll;
+		// int n, min = Integer.MAX_VALUE; int [] a;
+		// void getPerm(int i, boolean [] vis, List<Integer> l, int d) {
+		// 	if (i == n) {
+		// 		if (d <= min) {
+		// 			// System.out.println("\nd: " + d);
+		// 			// if (ll != null) {
+		// 			// 	System.out.println("ll.size(): " + ll.size());
+		// 			// 	System.out.println(Arrays.toString(ll.toArray()));
+		// 			// }
+		// 			// System.out.println("l.size(): " + l.size());
+		// 			// System.out.println(Arrays.toString(l.toArray()));
+		// 			if (d < min || (d == min && isSmaller(l, ll))) {
+		// 				min = d;
+		// 				ll = new ArrayList<Integer>(l);
+		// 			}
+		// 		}
+		// 		return ;
+		// 	}
+		// 	for (int j = 0; j < n; j++) {
+		// 		if (vis[j]) continue;
+		// 		vis[j] = true;
+		// 		l.add(a[j]);
+		// 		getPerm(i+1, vis, new ArrayList<Integer>(l), d + (i == 0 ? 0 : (i == n-1 ? Math.abs(a[j] - a[l.get(0)]) : 0) + Math.abs(l.get(l.size()-2) - a[a[j]])));
+		// 		l.remove(l.size()-1);
+		// 		vis[j] = false;
+		// 	}
+		// }
+		// boolean isSmaller(List<Integer> l, List<Integer> r) {
+		// 	for (int i = 0; i < l.size(); i++)
+		// 		if (l.get(i) < r.get(i)) return true;
+		// 		else if (l.get(i) > r.get(i)) return false;
+		// 	return false;
+		// }
 	}
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
     public static void main (String[] args) {
 		Solution s = new Solution ();
 
-		String a = "leetcodeleet";
+		// int []  a = new int []  {0, 2, 1};
+		int []  a = new int []  {7, 5, 3, 0, 8, 6, 1, 4, 9, 2};
 
-		int r = s.minimumOperationsToMakeKPeriodic(a, 4);
-		System.out.println("r: " + r);
+		int [] r = s.findPermutation(a);
+		System.out.println(Arrays.toString(r));
     }
 }
 // ListNode head = new ListNode(a[0]); 
@@ -1124,3 +1221,9 @@ public class cmp {
 	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 	// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
