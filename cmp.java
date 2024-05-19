@@ -1064,16 +1064,139 @@ public class cmp {
 		// 		else if (l.get(i) > r.get(i)) return false;
 		// 	return false;
 		// }
+
+		// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// public boolean isArraySpecial(int[] a) {
+		// 	int n = a.length, r = 0;
+		// 	for (int i = 1; i < n; i++)
+		// 		if (a[i] % 2 == a[i-1] % 2) return false;
+		// 	return true;
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// class Range {
+		// 	int left, right;
+		// 	// boolean r;
+		// 	public Range(int left, int right) {
+		// 		this.left = left;
+		// 		this.right = right;
+		// 		// r = false;
+		// 	}
+		// }
+		// TreeSet<Range> ts;
+		// public void addRange(int left, int right) {
+		// 	int nl = left, nr = right;
+		// 	Range high = new Range(right, Integer.MAX_VALUE);
+		// 	while (true) {
+		// 		Range r = ts.lower(high);
+		// 		if (r == null || r.right < left) break;
+		// 		if (r.right > right) nr = r.right;
+		// 		if (r.left < left) nl = r.left;
+		// 		ts.remove(r);
+		// 	 }
+		// 	ts.add(new Range(nl, nr));
+		// }
+		// public boolean queryRange(int left, int right) {
+		// 	Range target = ts.floor(new Range(left, Integer.MAX_VALUE));
+		// 	return target != null && target.left <= left && target.right >= right;
+		// }
+		// public void removeRange(int left, int right) {
+		// 	Range high = new Range(right, right);
+		// 	while (true) {
+		// 		Range r = ts.lower(high);
+		// 		if (r == null || r.right <= left) break;
+		// 		if (r.right > right)
+        //         ts.add(new Range(right, r.right));
+		// 		if (r.left < left)
+        //         ts.add(new Range(r.left, left));
+		// 		ts.remove(r);
+		// 	}
+		// }
+		// public boolean[] isArraySpecial(int[] a, int[][] qs) {
+		// 	List<int []> l = new ArrayList<>(); // 排序的目的：是为了顺序遍历. 感觉这里像是【线段树？合并区间？】有个各段合并的过程。。
+		// 	for (int i = 0; i < qs.length; i++)
+		// 		l.add(new int [] {i, qs[i][0], qs[i][1]});
+		// 	Collections.sort(l, (x, y) -> x[1] != y[1] ? x[1] - y[1] : x[2] - y[2]);
+		// 	boolean [] r = new boolean [qs.length];
+		// 	ts = new TreeSet<>((x, y)->(x.left != y.left ? x.left - y.left : x.right - y.right));
+		// 	for (int i = 0; i < l.size(); i++) {
+		// 		int [] cur = l.get(i);
+		// 		if (queryRange(cur[1], cur[2])) { // 那我只记： true 进 ts 
+		// 			r[cur[0]] = true;
+		// 			continue;
+		// 		}
+		// 		boolean valid = true;
+		// 		for (int j = cur[1]+1; j <= cur[2]; j++) {
+		// 			if (a[j] % 2 == a[j-1] % 2) {
+		// 				valid = false;
+		// 				break;
+		// 			}
+		// 		}
+		// 		if (valid) {
+		// 			r[cur[0]] = true;
+		// 			ts.add(new Range(cur[1], cur[2]));
+		// 		} else r[cur[0]] = false;
+   		//     }
+		// 	return r;
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 亲爱的表哥的活宝妹，不知道，这里哪里想得不对，暂时不写这个题目了
+		// public long sumDigitDifferences(int[] a) {
+		// 	int n = a.length, o = String.valueOf(a[0]).length();
+		// 	// int r = (int)Math.pow(2, 29);// 最多 29 个数位
+		// 	// System.out.println("r: " + r);
+		// 	Map<Integer, Integer> [] m = new HashMap[o];
+		// 	Arrays.setAll(m, z -> new HashMap<Integer, Integer>());
+		// 	for (int v : a) {
+		// 		char [] s = String.valueOf(v).toCharArray();
+		// 		for (int i = 0; i < o; i++) 
+		// 			m[i].put(s[i]-'0', m[i].getOrDefault(s[i]-'0', 0) + 1);
+		// 	}
+		// 	long r = 0;
+		// 	for (int i = 0; i < o; i++) 
+		// 		for (Map.Entry<Integer, Integer> en : m[i].entrySet()) 
+		// 			r += (long)(n - en.getValue());
+		// 	return r / 2l;
+		// }
+
+		// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// 这个死题目，读得好费劲，读不懂题目。。。万能的【记忆化深搜】，再写一遍
+		public int waysToReachStair(int k) {
+			if (k == 0) return 2;
+			n = (int)(Math.log(k) / Math.log(2));
+			System.out.println("n: " + n);
+			m = new HashMap[n+2][2]; this.v = k;
+			for (int i = 0; i <= n+1; i++) 
+				for (int j = 0; j < 2; j++) 
+					m[i][j] = new HashMap<Integer, Integer>();
+			return dfs(k, 0, 0) + dfs(k-1, 0, 1); // 现在是，【自顶往下】深搜
+		}
+		Map<Integer, Integer> [][] m; // 记忆化深搜：用来记忆，曾经得到过的答案
+		int n, v;
+		int dfs(int i, int j, int k) {
+			if (i == 0) return 1 + dfs(i + (int)Math.pow(2, j), j+1, 0);
+			if (j >= n+2) return 0;
+			// if (i > v +1) return 0; // 不知道哪里写错掉了。。细节。。
+			System.out.println("j: " + j);
+			System.out.println("k: " + k);
+			if (m[j][k].containsKey(i)) return m[j][k].get(i);
+			int r = 0;
+			if (k == 0)
+				r += dfs(i-1, j, 1);
+			if (i + (int)Math.pow(2, j) <= v + 1)
+				r += dfs(i + (int)Math.pow(2, j), j+1, 0);
+			m[j][k].put(i, r);
+			return r;
+	    }
 	}
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
     public static void main (String[] args) {
 		Solution s = new Solution ();
 
-		// int []  a = new int []  {0, 2, 1};
-		int []  a = new int []  {7, 5, 3, 0, 8, 6, 1, 4, 9, 2};
-
-		int [] r = s.findPermutation(a);
-		System.out.println(Arrays.toString(r));
+		int r = s.waysToReachStair(2);
+		System.out.println("r: " + r);
     }
 }
 // ListNode head = new ListNode(a[0]); 
