@@ -1270,67 +1270,204 @@ public class cmp {
 		// 	return f[i][j] = Math.max(a[i] + dfsF(i+2, 1), dfsF(i+1, 1));
 		// }
 
-		// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-		// 好像，这个该死的破烂题目，要【分解质因子】： a[i] 与 b[j]*k 的质因子，再数个数。讨厌这类题目，最后才写它
-		// 只过滤了一遍最简单的，还是超时了TLE TLE TLE
-		public long numberOfPairs(int[] a, int[] b, int k) {
-			int n = a.length, o = b.length;
-			List<Integer> l = new ArrayList<>(List.of(2, 3, 5, 7, 11, 13, 17, 19, 23, 29,
-													  31, 37, 41, 43, 47, 53, 59, 61, 67, 71,
-													  73, 79, 83, 89, 97, 101, 103, 107, 109, 113,
-													  127, 131, 137, 139, 149, 151, 157, 163, 167, 173,
-													  179, 181, 191, 193, 197, 199, 211, 223, 227, 229,
-													  233, 239, 241, 251, 257, 263, 269, 271, 277, 281,
-													  283, 293, 307, 311, 313, 317, 331, 337, 347, 349,
-													  353, 359, 367, 373, 379, 383, 389, 397, 401, 409,
-													  419, 421, 431, 433, 439, 443, 449, 457, 461, 463,
-													  467, 479, 487, 491, 499, 503, 509, 521, 523, 541,
-													  547, 557, 563, 569, 571, 577, 587, 593, 599, 601,
-													  607, 613, 617, 619, 631, 641, 643, 647, 653, 659,
-													  661, 673, 677, 683, 691, 701, 709, 719, 727, 733,
-													  739, 743, 751, 757, 761, 769, 773, 787, 797, 809,
-													  811, 821, 823, 827, 829, 839, 853, 857, 859, 863,
-													  877, 881, 883, 887, 907, 911, 919, 929, 937, 941,
-													  947, 953, 967, 971, 977, 983, 991, 997));
-			Map<Integer, Integer> m = new HashMap<>(); // 统计 K 的质因子个数
-			for (int i = 0; i < l.size() && l.get(i) <= k; i++) 
-				if (k % l.get(i) == 0) {
-					int v = k, cnt = 0;
-					while (v % l.get(i) == 0) {
-						cnt++;
-						v /= l.get(i);
-					}
-					m.put(l.get(i), cnt);
-				}
-			if (k == 1) m.put(1, 1);
-			long r = 0;
-			for (int i = 0; i < n; i++) {
-				int v = a[i];
-				// 只过滤了一遍最简单的，还是超时了TLE TLE TLE
-				boolean valid = true;
-				for (Map.Entry<Integer, Integer> en : m.entrySet()) {
-					int key = en.getKey(), val = en.getValue();
-					if (v % key != 0 || v % ((int)Math.pow(key, val)) != 0) {
-						valid = false;
-						break;
-					}
-				}
-				if (!valid) continue;
-				for (int j = 0; j < o; j++) 
-					if (v % (k * b[j]) == 0) 
-						r++;
-			}
-			return r;
-		}
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 好像，这个该死的破烂题目，要【分解质因子】： a[i] 与 b[j]*k 的质因子，再数个数。讨厌这类题目，最后才写它
+		// // 只过滤了一遍最简单的，还是超时了TLE TLE TLE
+		// public long numberOfPairs(int[] a, int[] b, int k) {
+		// 	int n = a.length, o = b.length;
+		// 	List<Integer> l = new ArrayList<>(List.of(2, 3, 5, 7, 11, 13, 17, 19, 23, 29,
+		// 											  31, 37, 41, 43, 47, 53, 59, 61, 67, 71,
+		// 											  73, 79, 83, 89, 97, 101, 103, 107, 109, 113,
+		// 											  127, 131, 137, 139, 149, 151, 157, 163, 167, 173,
+		// 											  179, 181, 191, 193, 197, 199, 211, 223, 227, 229,
+		// 											  233, 239, 241, 251, 257, 263, 269, 271, 277, 281,
+		// 											  283, 293, 307, 311, 313, 317, 331, 337, 347, 349,
+		// 											  353, 359, 367, 373, 379, 383, 389, 397, 401, 409,
+		// 											  419, 421, 431, 433, 439, 443, 449, 457, 461, 463,
+		// 											  467, 479, 487, 491, 499, 503, 509, 521, 523, 541,
+		// 											  547, 557, 563, 569, 571, 577, 587, 593, 599, 601,
+		// 											  607, 613, 617, 619, 631, 641, 643, 647, 653, 659,
+		// 											  661, 673, 677, 683, 691, 701, 709, 719, 727, 733,
+		// 											  739, 743, 751, 757, 761, 769, 773, 787, 797, 809,
+		// 											  811, 821, 823, 827, 829, 839, 853, 857, 859, 863,
+		// 											  877, 881, 883, 887, 907, 911, 919, 929, 937, 941,
+		// 											  947, 953, 967, 971, 977, 983, 991, 997));
+		// 	Map<Integer, Integer> m = new HashMap<>(); // 统计 K 的质因子个数
+		// 	for (int i = 0; i < l.size() && l.get(i) <= k; i++) 
+		// 		if (k % l.get(i) == 0) {
+		// 			int v = k, cnt = 0;
+		// 			while (v % l.get(i) == 0) {
+		// 				cnt++;
+		// 				v /= l.get(i);
+		// 			}
+		// 			m.put(l.get(i), cnt);
+		// 		}
+		// 	if (k == 1) m.put(1, 1);
+		// 	long r = 0;
+		// 	for (int i = 0; i < n; i++) {
+		// 		int v = a[i];
+		// 		// 只过滤了一遍最简单的，还是超时了TLE TLE TLE
+		// 		boolean valid = true;
+		// 		for (Map.Entry<Integer, Integer> en : m.entrySet()) {
+		// 			int key = en.getKey(), val = en.getValue();
+		// 			if (v % key != 0 || v % ((int)Math.pow(key, val)) != 0) {
+		// 				valid = false;
+		// 				break;
+		// 			}
+		// 		}
+		// 		if (!valid) continue;
+		// 		for (int j = 0; j < o; j++) 
+		// 			if (v % (k * b[j]) == 0) 
+		// 				r++;
+		// 	}
+		// 	return r;
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// public int minimumChairs(String t) {
+		// 	int n = t.length(); char [] s = t.toCharArray();
+		// 	int max = 0, l = 0, r = 0; // l: left r: enter
+		// 	for (int i = 0; i < n; i++) {
+		// 		char c = s[i];
+		// 		if (c == 'E') r++;
+		// 		else l++;
+		// 		max = Math.max(max, r - l);
+		// 	}
+		// 	return max;
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// //days: 数值狠大。但解法仍然狠简单，就是合并交叉会议，数总天数 Range 前几天刚写过 
+		// class Range implements Comparable<Range> {
+		// 	int left, right;
+		// 	public Range(int left, int right) {
+		// 		this.left = left;
+		// 		this.right = right;
+		// 	}
+		// 	@Override public int compareTo(Range other) {
+        //         return this.left != other.left ? this.left - other.left : this.right - other.right;
+		// 	}
+		// }
+		// TreeSet<Range> ts;
+		// public void addRange(int left, int right) {
+		// 	int nl = left, nr = right;
+		// 	Range high = new Range(right, Integer.MAX_VALUE);
+		// 	while (true) {
+		// 		Range r = ts.lower(high);
+		// 		if (r == null || r.right < left) break;
+		// 		if (r.right > right) nr = r.right;
+		// 		if (r.left < left) nl = r.left;
+		// 		ts.remove(r);
+		// 	 }
+		// 	ts.add(new Range(nl, nr));
+		// }
+		// public boolean queryRange(int left, int right) {
+		// 	Range target = ts.floor(new Range(left, Integer.MAX_VALUE));
+		// 	return target != null && target.left <= left && target.right >= right;
+		// }
+		// public void removeRange(int left, int right) {
+		// 	Range high = new Range(right, right);
+		// 	while (true) {
+		// 		Range r = ts.lower(high);
+		// 		if (r == null || r.right <= left) break;
+		// 		if (r.right > right)
+        //         ts.add(new Range(right, r.right));
+		// 		if (r.left < left)
+        //         ts.add(new Range(r.left, left));
+		// 		ts.remove(r);
+		// 	}
+		// }
+		// public int countDays(int days, int[][] a) {
+		// 	int n = a.length, r = 0;
+		// 	Arrays.sort(a, (x, y)->x[0] != y[0] ? x[0] - y[0] : x[1] - y[1]); 
+		// 	ts = new TreeSet<Range>();
+		// 	for (int [] v : a) 
+		// 		addRange(v[0], v[1]);
+		// 	for (Range v : ts) 
+		// 		r += v.right - v.left + 1;
+		// 	return days - r;
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 这个题目，题目狠简单，细节狠恶心人。。。
+		// public String clearStars(String t) {
+		// 	int n = t.length(), cnt = 0, j = 0; char [] s = t.toCharArray();
+		// 	for (char c : s) 
+		// 		if (c == '*') cnt++;
+		// 	char [] r = new char [n - cnt];
+		// 	TreeMap<Character, List<Integer>> m = new TreeMap<>();
+		// 	for (int i = 0; i < n; i++) {
+		// 		if (s[i] != '*') {
+		// 			r[j] = s[i];
+		// 			m.computeIfAbsent(s[i], z -> new ArrayList<>()).add(j++);
+		// 		} else { // s[i] == '*'
+		// 			List<Integer> l = m.firstEntry().getValue();
+		// 			int idx = l.remove(l.size()-1);
+		// 			r[idx] = ' '; // 作个标记就可以了
+		// 			if (l.size() == 0)
+		// 				m.pollFirstEntry();
+		// 	    }
+		// 	}
+		// 	System.out.println(Arrays.toString(r));
+		// 	int i = 0; j = 0;
+		// 	while (i < n - cnt * 2 && j < n - cnt) {
+		// 		if (i < n - cnt*2 && r[i] != ' ') {
+		// 			if (j == i) j++;
+		// 			i++;
+		// 		} else {
+		// 			while (j < n-cnt && r[j] == ' ') j++;
+		// 			// System.out.println("\n i: " + i);
+		// 			// System.out.println("j: " + j);
+		// 			if (i < n-cnt*2 && j < n - cnt) {
+		// 				r[i++] = r[j];
+		// 				r[j] = ' ';
+		// 				j++;
+		// 			}
+		// 		}			
+   		//     }
+		// 	System.out.println(Arrays.toString(r));
+		// 	char [] tmp = Arrays.copyOf(r, n - cnt * 2);
+		// 	return new String(tmp);
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 破烂题目：不知道怎么去想？有想法，但想得不一定对！参考一下它的提示，再写！！
+		// //a[i] 取值在 [1,10^9] 所以一定【012...31】遍历数位，就是每个 a[i] 用一个30 位 mask 表示；
+		// // 下面2 点：亲爱的表哥的活宝妹，想得不对
+		// // 【子数组、位和】：【10^5】线段树，保存区间子数组的位和
+		// // 再找最小差值，可能【二分查找法】——感觉这里可能想得不对
+		// // 它用一个稍微简化的动规思路，可以试写一下
+		// public int minimumDifference(int[] a, int k) {
+		// 	// int r = (int)Math.pow(2, 30); // 最多 30 个数位
+		// 	// System.out.println("r: " + r);
+		// 	int n = a.length, min = Math.max(k, Arrays.stream(a).max().getAsInt());
+		// 	Set<Integer> [] s = new HashSet[n];
+		// 	Arrays.setAll(s, z -> new HashSet<Integer>());
+		// 	s[0].add(a[0]);
+		// 	min = Math.min(min, Math.abs(k - a[0]));
+		// 	for (int i = 1; i < n; i++) {
+		// 		s[i].add(a[i]); // 一个元素的【子数组】
+		// 		min = Math.min(min, Math.abs(k - a[i]));
+		// 		// for (int j = i-1; j >= 0; j--) {  // 亲爱的表哥的活宝妹的木头脑袋，真不转。。。
+		// 			for (int v : s[i-1]) {
+		// 				int cur = (v & a[i]);
+		// 				if (s[i].add(cur))
+		// 					min = Math.min(min, Math.abs(k - cur));
+		// 			}
+		// 		// }
+		// 	}
+		// 	return min;
+		// }
+		// 亲爱的表哥的活宝妹，第一次，轻轻松松，全写对了！！！除了最后一题目看了一下提示！！！
+		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
 	}
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
     public static void main (String[] args) {
 		Solution s = new Solution ();
 
-		int []  a = new int []  {12};
-		int []  b = new int []  {2};
-	
-		long r = s.numberOfPairs(a, b, 6);
+		int [] a = new int [] {22,87,5,78,94};
+
+		int r = s.minimumDifference(a, 10);
 		System.out.println("r: " + r);
     }
 }
@@ -1524,4 +1661,10 @@ public class cmp {
 	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 	// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
