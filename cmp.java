@@ -1,12 +1,21 @@
 import com.ListNode;
+
 import java.util.HashMap;
+
 import java.util.Map;
+
 import java.util.ArrayList;
+
 import java.util.*;
+
 import java.util.stream.*;
+
 import java.util.stream.Collectors;
+
 import java.util.HashSet;
+
 import java.util.Set;
+
 import static java.util.stream.Collectors.toMap;
 
 public class cmp {
@@ -1459,15 +1468,169 @@ public class cmp {
 		// 	return min;
 		// }
 		// 亲爱的表哥的活宝妹，第一次，轻轻松松，全写对了！！！除了最后一题目看了一下提示！！！
-		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+
+		// // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+		// public String clearDigits(String t) {
+		// 	int n = t.length(), r = 0; char [] s = t.toCharArray();
+		// 	ArrayDeque<Integer> q = new ArrayDeque<>();
+		// 	for (int i = 0; i < n; i++) {
+		// 		if (Character.isDigit(s[i])) {
+		// 			r++;
+		// 			s[i] = ' ';
+		// 			s[q.pollLast()] = ' ';
+		// 		} else q.offerLast(i);
+		// 	}
+		// 	char [] tp = new char [n-2 * r];
+		// 	int j = 0;
+		// 	for (int i = 0; i < n; i++) 
+		// 		if (s[i] != ' ') tp[j++] = s[i];
+		// 	return new String (tp);
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 感觉，这个题目是【滑动窗口】相关的思路，可遇想得不透，后面再写. 先用最笨的办法，试写一下
+		// public int findWinningPlayer(int[] a, int k) { // 571/684 passed 暂时不写这个题目了
+		// 	int n = a.length, p = -1, max = Arrays.stream(a).max().getAsInt();
+		// 	if (k > n)
+		// 		k %= n; // 这里想当然，不对！！
+		// 	System.out.println("k: " + k);
+		// 	ArrayDeque<Integer> q = new ArrayDeque<>(); // idx
+		// 	if (k == 0) {
+		// 		for (int i = 0; i < n; i++)
+		// 		if (a[i] == max) return i;
+		// 	}
+		// 	for (int i = 1; i < n && k > 0; i++) {
+		// 		if (p == -1) {
+		// 			if (a[i] > a[i-1]) {
+		// 				p = i;
+		// 				q.offerLast(i-1);
+		// 			} else {
+		// 				p = i-1;
+		// 				q.offerLast(i);
+		// 			}
+		// 		} else if (a[i] > a[p]) {
+		// 			q.offerLast(p);
+		// 			p = i;
+		// 		} else { // a[i] < a[p]
+		// 			q.offerLast(i);
+		// 		}
+		// 		--k;
+		// 	}
+		// 	if (k == 0) return p;
+		// 	while (k > 0) {
+		// 		if (a[q.peekFirst()] > a[p]) {
+		// 			q.offerLast(p);
+		// 			p = q.pollFirst();
+		// 		} else {
+		// 			q.offerLast(q.pollFirst());
+		// 		}
+		// 		--k;
+		// 	}
+		// 	return p;
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 这些题目，最近的这些题目——包括上周的最后最难一题目，都成为训练【动规】思维的基本功题目了。。。
+		// public int maximumLength(int[] a, int k) {
+		// 	int n = a.length;
+		// 	List<int []> l = new ArrayList<>();
+		// 	for (int i = 0; i < n; i++) 
+		// 		l.add(new int [] {i, a[i]});
+		// 	Collections.sort(l, (x, y)->x[1] - y[1]);
+		// 	for (int i = 0; i < n; i++) {
+		// 		int [] r = l.get(i);
+		// 		a[r[1]] = r[0]; // [0,n-1] 按其值升序排列
+		// 	}
+		// 	return 0;
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// public int numberOfChild(int n, int k) {
+		// 	if (k < n) return k;
+		// 	int d = k / (n - 1);
+		// 	if (d % 2 == 0) return k % (n-1);
+		// 	return n-1 - k % (n-1);
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// static final int mod = (int)1e9 + 7;
+		// public int valueAfterKSeconds(int n, int k) {
+		// 	int [] f = new int [n];
+		// 	Arrays.fill(f, 1);
+		// 	for (int i = 1; i <= k; i++) {
+		// 		for (int j = 1; j < n; j++) 
+		// 			f[j] = (f[j-1] + f[j]) % mod;
+		// 	}
+		// 	return f[n-1];
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// public int maxTotalReward(int[] a) {
+		// 	int n = a.length;
+		// 	TreeSet<Integer> s = new TreeSet<>();
+		// 	for (int v : a) s.add(v);
+		// 	int [] b = new int [s.size()];
+		// 	int i = 0;
+		// 	for (int v : s) {
+		// 		b[i] = v;
+		// 		i++;
+		// 	}
+		// 	TreeSet<Integer> [] f = new TreeSet[b.length];
+		// 	Arrays.setAll(f, z -> new TreeSet<Integer>((x, y)->y-x)); // 降序排列
+		// 	f[0].add(b[0]);
+		// 	for (i = 1; i < b.length; i++) {
+		// 		f[i].add(b[i]);// 当前数
+		// 		for (int v : f[i-1]) {
+		// 			f[i].add(v);
+		// 			if (v >= b[i]) continue;
+		// 			f[i].add(v + b[i]);
+		// 		}
+		// 	}
+		// 	int max = 0;
+		// 	for (i = 0; i < b.length; i++)
+		// 		max = Math.max(max, f[i].first());
+		// 	return max;
+		// }
+
+		// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// 亲爱的表哥的活宝妹，想要直接搬上一题目的解法，但显然 TLE TLE TLE 呵呵呵呵呵。。。。
+		public int maxTotalReward(int[] a) { // TLE TLE TLE ...
+			int n = a.length;
+			TreeSet<Integer> s = new TreeSet<>();
+			for (int v : a) s.add(v);
+			int [] b = new int [s.size()];
+			int i = 0;
+			for (int v : s) {
+				b[i] = v;
+				i++;
+			}
+			TreeSet<Integer> f = new TreeSet<>((x, y)->y-x), g = new TreeSet<>((x, y)->y-x);
+			f.add(b[0]);
+			for (i = 1; i < b.length; i++) {
+				g = (TreeSet)f.clone();
+				g.add(b[i]);// 当前数
+				for (int v : f) {
+					if (v >= b[i]) continue;
+					g.add(v + b[i]);
+				}
+				f.clear();
+				f = (TreeSet)g.clone();
+				g.clear();
+			}
+			return f.first();
+			// int max = 0;
+			// for (i = 0; i < b.length; i++)
+			// 	max = Math.max(max, f[i].first());
+			// return max;
+		}
 	}
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
     public static void main (String[] args) {
 		Solution s = new Solution ();
 
-		int [] a = new int [] {22,87,5,78,94};
+		int [] a = new int [] {10,2,3,12,9,1};
 
-		int r = s.minimumDifference(a, 10);
+		int r = s.findWinningPlayer(a, 2);
 		System.out.println("r: " + r);
     }
 }
@@ -1661,6 +1824,12 @@ public class cmp {
 	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 	// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 	// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 	// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
