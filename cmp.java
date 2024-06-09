@@ -1594,7 +1594,7 @@ public class cmp {
 
 		// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 		// 亲爱的表哥的活宝妹，想要直接搬上一题目的解法，但显然 TLE TLE TLE 呵呵呵呵呵。。。。
-		public int maxTotalReward(int[] a) { // TLE TLE TLE ...
+		public int maxTotalReward(int[] a) { // TLE TLE TLE ... 572/580 passed...
 			int n = a.length;
 			TreeSet<Integer> s = new TreeSet<>();
 			for (int v : a) s.add(v);
@@ -1604,6 +1604,8 @@ public class cmp {
 				b[i] = v;
 				i++;
 			}
+			// 感觉，这里需要、必须要保存的，可以不是，所有可能的数，只要某个范围内、能够保证正确答案的数，就可以了。。。
+			// 是这么想的：去看下它的提示！！
 			TreeSet<Integer> f = new TreeSet<>((x, y)->y-x), g = new TreeSet<>((x, y)->y-x);
 			f.add(b[0]);
 			for (i = 1; i < b.length; i++) {
