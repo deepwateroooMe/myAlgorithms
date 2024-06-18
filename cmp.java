@@ -1594,6 +1594,7 @@ public class cmp {
 
 		// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 		// 亲爱的表哥的活宝妹，想要直接搬上一题目的解法，但显然 TLE TLE TLE 呵呵呵呵呵。。。。
+		// 亲爱的表哥的活宝妹，看它的提示，感觉看得狠飘渺。。。看不懂它的提示说的是什么意思，明天再写
 		public int maxTotalReward(int[] a) { // TLE TLE TLE ... 572/580 passed...
 			int n = a.length;
 			TreeSet<Integer> s = new TreeSet<>();
@@ -1625,14 +1626,101 @@ public class cmp {
 			// 	max = Math.max(max, f[i].first());
 			// return max;
 		}
-	}
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// public int countCompleteDayPairs(int[] a) {
+		// 	int n = a.length, r = 0;
+		// 	for (int i = 0; i < n; i++) 
+		// 		for (int j = i + 1; j < n; j++) 
+		// 			if ((a[i] + a[j]) % 24 == 0) r++;
+		// 	return r;
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// public long countCompleteDayPairs(int[] a) {
+		// 	int n = a.length;
+		// 	List<Integer> [] f = new ArrayList[24];
+		// 	Arrays.setAll(f, z -> new ArrayList<Integer>());
+		// 	for (int i = 0; i < n; i++) 
+		// 		f[a[i] % 24].add(i);
+		// 	long r = 0;
+		// 	for (int i = 0; i < 24; i++) { // 遍历 mod 余数
+		// 		System.out.println("\n i: " + i);
+		// 		System.out.println("r: " + r);
+		// 		if (i == 0 || i == 12) {
+		// 			r += (long)f[i].size() * (long)(f[i].size()-1) / 2;
+		// 		} else {
+		// 			for (int j = 0; j < f[i].size(); j++) {
+		// 				int v = binarySearch(f[24-i], f[i].get(j));
+		// 				if (v != -1)
+		// 					r += f[24-i].size() - v;
+		// 			}
+		// 		}
+		// 	}
+		// 	return r;
+		// }
+		// int binarySearch(List<Integer> li, int i) { // i: idx 感觉快要把【二分查找忘记光了】这里这个方法，被自己写得有点儿问题，晚点儿再写
+		// 	if (li.size() == 0) return -1;
+		// 	// if (i <= li.get(0) || i >= li.get(li.size()-1)) return -1;
+		// 	if (i >= li.get(li.size()-1)) return -1;
+		// 	int l = 0, r = li.size()-1;
+		// 	while (l <= r) {
+		// 		int m = (l + r) / 2;
+		// 		if (li.get(m) == i) return m + 1;
+		// 		if (li.get(m) == i+1) return m; // 短路吗？
+		// 		if (li.get(m) < i) l = m + 1;
+		// 		else r = m-1;
+		// 	}
+		// 	return -1;
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 【动规思路】：－2-1-0+1+2 后面2 个数，好像考虑不全. 先看后面的
+		// public long maximumTotalDamage(int[] b) {
+		// 	int n = b.length, i = 0;
+		// 	TreeMap<Integer, Integer> m = new TreeMap<>();
+		// 	for (int v : b) m.put(v, m.getOrDefault(v, 0) + 1);
+
+		// 	Map<Integer, Integer> o = new HashMap<>();
+		// 	int [][] a = new int [m.size()][2];
+		// 	for (TreeMap.Entry<Integer, Integer> en : m.entrySet()) {
+		// 		int k = en.getKey(), v = en.getValue();
+		// 		a[i][0] = k; a[i][1] = v;
+		// 		o.put(k, i); // 帮助记下标的
+		// 		i++;
+		// 	}
+		// 	// Arrays.sort(a, (x, y)->x[0] - y[0]);
+		// 	long [][] f = new long [m.size()][2];
+		// 	f[0][0] = 0; f[0][1] = (long)a[0][0] * a[0][1];
+		// 	// f[1][0] = f[0][1];
+		// 	// f[1][1] = (long)a[1][0] * a[1][1];
+		// 	for (int i = 1; i < a.length; i++) {
+		// 		Integer lo = m.lowerKey(a[i][0]); // v-1
+		// 		if (lo == null || a[i][0] - lo > 2) {
+		// 			f[i][0] = f[o.get(lo)][1];
+		// 			f[i][1] = (long)a[i][0] * a[i][1] + f[o.get(lo)][1];	
+		// 		} else {
+		// 			f[i][0] = f[o.get(lo)][1];
+		// 			f[i][1] = (long)a[i][0] * a[i][1] + f[o.get(lo)][1];	
+		// 		}
+		// 	}
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 【线段树】的思路：快要、已经、被亲爱的表哥的活宝妹，忘记干净了。。。再找出来参考一下，自己写写玩玩儿
+		// // 今天，亲爱的表哥的活宝妹，暂时还不写这个题目，先把亲爱的表哥的活宝妹，上次那个难题弄懂572/580 passed，改天再写这个破烂题目
+		// public List<Integer> countOfPeaks(int[] a, int[][] qs) {
+		// }
+
+		// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+}
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
     public static void main (String[] args) {
 		Solution s = new Solution ();
 
-		int [] a = new int [] {10,2,3,12,9,1};
+		int []  a = new int []  {21, 12, 24, 27};
 
-		int r = s.findWinningPlayer(a, 2);
+		long r = s.countCompleteDayPairs(a);
 		System.out.println("r: " + r);
     }
 }
