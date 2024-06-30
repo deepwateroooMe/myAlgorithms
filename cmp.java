@@ -70,86 +70,227 @@ public class cmp {
 		// 	return f.bitLength() - 1; // 这个大数 f 的最高位， f 的长度－1,就是 v 的最大、可能有效取值
 		// }
 
+// 		// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 		// 亲爱的表哥的活宝妹，切【苹果蛋糕——先前的动规题型】——所有的苹果，要极尽可能地，分布在总面积最小的三块蛋糕上
+// 		// 变形变型的【记忆化深搜】？657/661 passed !!! TLE TLE TLE !!!
+// 		// 写出这个题目，感觉亲爱的表哥的活宝妹，真强大！！用实际题目来证明：只要亲爱的表哥的活宝妹，能够自己相得明白，亲爱的表哥的活宝妹，就能够把代码写出来、实现出来！！
+// 		// 感觉这里，亲爱的表哥的活宝妹，应该还可以再优化一些不必的重复过的边角检测之类的小细节。。现在，再来试写一下，为什么会有最后几个测试、不过？？？
+// 		// 写出这个题目，感觉亲爱的表哥的活宝妹，真强大！！亲爱的表哥的活宝妹，只要还想用点儿力写，就能自己、独立，把它写过！！！
+// 		// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 		public int minimumSum(int[][] a) {
+// 			m = a.length; n = a[0].length; this.a = a; 
+// 			f = new Integer [m][n][m][n][4];
+// 			sum = new int [m+1][n+1]; // 数组和，预处理，备用
+// 			for (int i = 1; i <= m; i++) 
+// 				for (int j = 1; j <= n; j++) 
+// 					sum[i][j] = sum[i-1][j] + sum[i][j-1] - sum[i-1][j-1] + a[i-1][j-1];
+// 			int r = dfs(0, 0, m-1, n-1, 3);
+// 			return r;
+// 		}
+// 		Integer [][][][][] f; // 得有【起点】与【终点】与【要的块数】
+// 		int [][] a, sum;
+// 		int m, n;
+// 		int dfs(int i, int j, int x, int y, int k) {
+// 			if (i < 0 || j < 0 || x < 0 || y < 0 || i >= m || j >= n || x >= m || y >= n || k < 0 || k > 3) return 1000;
+// 			if (k == 0) {
+// 				int s = sum[x+1][y+1] - sum[i+1][j] - sum[i][j+1] + sum[i][j];
+// 				return f[i][j][x][y][k] = (s == 0 ? 0 : 1000);
+// 			}
+// 			if (f[i][j][x][y][k] != null) return f[i][j][x][y][k];
+// 			if (i == x && j == y && k == 1) return f[i][j][x][y][k] = 1;
+// 			// 遍历：行切、列切、并减少1 块. 这里要再想深一点儿：【3 块的行列分布、等细节】
+// 			if (k == 1) 
+// 				return f[i][j][x][y][k] = minimumArea(i, j, x, y);
+// 			// k = [2 || 3] 少考虑了一种情况 0 因为行、列可能是空行
+// 			int r = 1000;
+// // 遍历，先行切: 行切至当前行，包括当前行
+// 			for (int ii = i; ii < x; ii++) {
+// 				int s = sum[ii+1][y+1] - sum[i+1][j] - sum[i][j+1] + sum[i][j];
+// 				if (s == 0) continue;
+// 				r = Math.min(r, Math.min(dfs(i, j, ii, y, 1) + dfs(ii+1, j, x, y, k-1), // 行：上半1 ＋下半 k-1
+// 										 dfs(i, j, ii, y, 2) + dfs(ii+1, j, x, y, k-2))); // 行：上半2 ＋下半 k-2
+// 			}
+// // 遍历，先行列: 行切至当前列，包括当前列
+// 			for (int jj = j; jj < y; jj++) {
+// 				int s = sum[x+1][jj+1] - sum[i+1][j] - sum[i][j+1] + sum[i][j];
+// 				if (s == 0) continue;
+// 				r = Math.min(r, Math.min(dfs(i, j, x, jj, 1) + dfs(i, jj+1, x, y, k-1),
+// 										 dfs(i, j, x, jj, 2) + dfs(i, jj+1, x, y, k-2)));
+// 			}
+// 			return f[i][j][x][y][k] = r;
+// 		}
+// 		public int minimumArea(int ii, int jj, int x, int y) {
+// 			int [] r = new int [2], c = new int [2];
+// 			Arrays.fill(r, -1); Arrays.fill(c, -1);
+// 			for (int i = ii; i <= x; i++) {
+// 				int sum = 0;
+// 				for (int j = jj; j <= y; j++) 
+// 					sum += a[i][j];
+// 				if (sum == 0) {
+// 					if (r[0] == -1) continue;
+// 					if (r[1] == -1) r[1] = i-1;
+// 				} else {
+// 					if (r[0] == -1) r[0] = i;
+// 					else r[1] = i;
+// 					for (int j = jj; j <= y; j++) {
+// 						if (a[i][j] == 1) {
+// 							if (c[0] == -1 || j < c[0]) c[0] = j;
+// 							if (c[1] == -1 || j > c[1]) c[1] = j;
+// 						}
+// 					}
+// 				}
+// 			}
+// 			return (r[1] == -1 ? 1 : r[1] - r[0] + 1) * (c[1] == -1 ? 1 : c[1] - c[0] + 1);
+// 		}
+		// 上面，亲爱的表哥的活宝妹，强大的亲爱的表哥的活宝妹，想得清思路，就能够实现出来；想利透彻的边边角角、写多余的不必要步骤，都能一一裁剪掉，自己独立解决、写过、写过，100% 过，所有测试用例，全过！！
+		// 可是，也仍然只是 32% 的能写过里面的 bottom 5% ！！还是需要学习、训练、和适应、写【动规】！！
+		// 现在的亲爱的表哥的活宝妹，狠强大了！狠多动规题目，都能够自己努力、尝试、独立去想，和解决动规思路。这次，现在的亲爱的表哥的活宝妹，感觉真心强大、能够掌握和征服【动规】！！
+		// 参考一个99.99%? 的动规思路，可是就是感觉预处理的步骤，繁琐得像一团乱麻、、、亲爱的表哥的活宝妹自己的 5 维记忆数组，反而思路极度清晰、简洁！！
+		// 参考一个99.99%? 的动规思路，可是就是感觉预处理的步骤，繁琐得像一团乱麻、、、还是改天遇到题目，再偿试写它，极度繁琐、一团乱麻。。。
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// public int maxHeightOfTriangle(int red, int blue) {
+		// 	int l = Math.min(red, blue), r = Math.max(red, blue), a = 0, b = 0, n = 1;
+		// 	int f = 0;// flag: 0: l 1:r 轮次：红的、蓝的？
+		// 	while (f == 0 && l >= n || f == 1 && r >= n) {
+		// 		if (f == 0) {
+		// 			l -= n;
+		// 		} else {
+		// 			r -= n;
+		// 		}
+		// 		n++; // 每行要的个数
+		// 		a++;
+		// 		f = 1 - f;
+		// 	}
+		// 	l = Math.max(red, blue); r = Math.min(red, blue);
+		// 	f = 0; n = 1;
+		// 	while (f == 0 && l >= n || f == 1 && r >= n) {
+		// 		if (f == 0) {
+		// 			l -= n;
+		// 		} else {
+		// 			r -= n;
+		// 		}
+		// 		n++; // 每行要的个数
+		// 		b++;
+		// 		f = 1 - f;
+		// 	}
+		// 	return Math.max(a, b);
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// public int maximumLength(int[] a) {
+		// 	int n = a.length, l = 1, r = 0, ans = 2, p = a[0] % 2;
+		// 	for (int i = 0; i < n; i++) a[i] %= 2;
+		// 	if (Arrays.stream(a).distinct().count() == 1) return n;
+		// 	for (int i = 1; i < n; i++) {
+		// 		if (a[i] == p) continue;
+		// 		l++;
+		// 		p = a[i];
+		// 	}
+		// 	int sum = Arrays.stream(a).sum();
+		// 	int i = 1;
+		// 	while (i < n && a[i] == a[0]) i++;
+		// 	if (i == n) return Math.max(Math.max(sum, n - sum), l);
+		// 	r++;
+		// 	p = a[i];
+		// 	i++;
+		// 	for (; i < n; i++) {
+		// 		if (a[i] == p) continue;
+		// 		r++;
+		// 		p = a[i];
+		// 	}
+		// 	return Math.max(Math.max(sum, n - sum),
+		// 					Math.max(l, r));
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 感觉，现在的同一个问题、连出、并添加难度：似在训练思维。。。
+		// // 可是，亲爱的表哥的活宝妹，有时候，还是看不懂，它在考什么。。。如这题当 k 在【1,1000】范围内，就不知道算是在考什么。。。
+		// // 不知道哪里细节没想对，不喜欢这类乱题目，没意思，先写难的。。
+		// int getKeyCnts(int v, int idx) {
+		// 	int r = 1, p = a[idx];
+		// 	for (int i = idx+1; i < a.length; i++) {
+		// 		if (a[i]%k != k-(p == 0 || k == p + p ? 1 : 0) - p) continue;
+		// 		r++;
+		// 		p = a[i]%k;
+		// 	}
+		// 	System.out.println("r: " + r);
+		// 	return Math.max(2, r);
+		// }
+		// int [] a; int k;
+		// public int maximumLength(int[] a, int k) {
+		// 	int n = a.length, ans = 2; this.a = a; this.k = k; 
+		// 	TreeMap<Integer, List<Integer>> m = new TreeMap<>(), o = new TreeMap<>();
+		// 	for (int i = 0; i < n; i++) {
+		// 		// a[i] %= k;
+		// 		m.computeIfAbsent(a[i] % k, z -> new ArrayList<>()).add(i);
+		// 	}
+		// 	for (Map.Entry<Integer, List<Integer>> en : m.entrySet()) {
+		// 		int key = en.getKey();
+		// 		System.out.println("\n key: " + key);
+		// 		List<Integer> l = en.getValue();
+		// 		if (o.containsKey(k - key)) continue;
+		// 		ans = Math.max(ans, getKeyCnts(key, l.get(0)));
+		// 		System.out.println("ans: " + ans);
+		// 	}
+		// 	return ans;
+		// }
+
 		// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-		// 亲爱的表哥的活宝妹，切【苹果蛋糕——先前的动规题型】——所有的苹果，要极尽可能地，分布在总面积最小的三块蛋糕上
-		// 变形变型的【记忆化深搜】？657/661 passed !!! TLE TLE TLE !!!
-		// 写出这个题目，感觉亲爱的表哥的活宝妹，真强大！！用实际题目来证明：只要亲爱的表哥的活宝妹，能够自己相得明白，亲爱的表哥的活宝妹，就能够把代码写出来、实现出来！！
-		// 感觉这里，亲爱的表哥的活宝妹，应该还可以再优化一些不必的重复过的边角检测之类的小细节。。现在，再来试写一下，为什么会有最后几个测试、不过？？？
-		// 写出这个题目，感觉亲爱的表哥的活宝妹，真强大！！亲爱的表哥的活宝妹，只要还想用点儿力写，就能自己、独立，把它写过！！！
-		// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-		public int minimumSum(int[][] a) {
-			m = a.length; n = a[0].length; this.a = a; 
-			f = new Integer [m][n][m][n][4];
-			sum = new int [m+1][n+1]; // 数组和，预处理，备用
-			for (int i = 1; i <= m; i++) 
-				for (int j = 1; j <= n; j++) 
-					sum[i][j] = sum[i-1][j] + sum[i][j-1] - sum[i-1][j-1] + a[i-1][j-1];
-			int r = dfs(0, 0, m-1, n-1, 3);
-			return r;
+		public int minimumDiameterAfterMerge(int[][] ea, int[][] eb) {
+			n = ea.length+1; m = eb.length+1;
+			f = new ArrayList[n]; g = new ArrayList[m];
+			Arrays.setAll(f, z -> new ArrayList<>());
+			Arrays.setAll(g, z -> new ArrayList<>());
+			if (n > 1) buildTree(ea, f);
+			if (m > 1) buildTree(eb, g);
+			// assume 根节点在 0 节点：求最大、次大深度
+			l = new int [2]; r = new int [2];
+			Arrays.fill(l, -1); Arrays.fill(r, -1);
+			maxDepth(f, l, 0, 0, -1); maxDepth(g, r, 0, 0, -1);
+			System.out.println(Arrays.toString(l));
+			System.out.println(Arrays.toString(r));
+			if (l[1] == -1) l[0] = l[0] / 2 + l[0] % 2;
+			if (r[1] == -1) r[0] = r[0] / 2 + r[0] % 2;
+			return l[0] + 1 + r[0]; // 这里还有点儿机关，没想透彻。。。
 		}
-		Integer [][][][][] f; // 得有【起点】与【终点】与【要的块数】
-		int [][] a, sum;
+		List<Integer> [] f, g;
 		int m, n;
-		int dfs(int i, int j, int x, int y, int k) {
-			if (i < 0 || j < 0 || x < 0 || y < 0 || i >= m || j >= n || x >= m || y >= n || k < 0 || k > 3) return 1000;
-			if (k == 0) {
-				int s = sum[x+1][y+1] - sum[i+1][j] - sum[i][j+1] + sum[i][j];
-				return f[i][j][x][y][k] = (s == 0 ? 0 : 1000);
+		int [] l, r;
+		void maxDepth(List<Integer> [] f, int [] l, int d, int u, int p) {
+			int cnt = 0;
+			for (int v : f[u]) {
+				if (v == p) continue;
+				cnt++;
+				maxDepth(f, l, d+1, v, u);
 			}
-			if (f[i][j][x][y][k] != null) return f[i][j][x][y][k];
-			if (i == x && j == y && k == 1) return f[i][j][x][y][k] = 1;
-			// 遍历：行切、列切、并减少1 块. 这里要再想深一点儿：【3 块的行列分布、等细节】
-			if (k == 1) 
-				return f[i][j][x][y][k] = minimumArea(i, j, x, y);
-			// k = [2 || 3] 少考虑了一种情况 0 因为行、列可能是空行
-			int r = 1000;
-// 遍历，先行切: 行切至当前行，包括当前行
-			for (int ii = i; ii < x; ii++) {
-				int s = sum[ii+1][y+1] - sum[i+1][j] - sum[i][j+1] + sum[i][j];
-				if (s == 0) continue;
-				r = Math.min(r, Math.min(dfs(i, j, ii, y, 1) + dfs(ii+1, j, x, y, k-1), // 行：上半1 ＋下半 k-1
-										 dfs(i, j, ii, y, 2) + dfs(ii+1, j, x, y, k-2))); // 行：上半2 ＋下半 k-2
+			if (cnt == 0) {
+				if (l[0] == -1) l[0] = d;
+				else if (d >= l[0]) {
+					if (d != l[0])
+						l[1] = l[0];
+					if (d > l[0])
+						l[0] = d;
+				} else if (d > l[1])
+					l[1] = d;
 			}
-// 遍历，先行列: 行切至当前列，包括当前列
-			for (int jj = j; jj < y; jj++) {
-				int s = sum[x+1][jj+1] - sum[i+1][j] - sum[i][j+1] + sum[i][j];
-				if (s == 0) continue;
-				r = Math.min(r, Math.min(dfs(i, j, x, jj, 1) + dfs(i, jj+1, x, y, k-1),
-										 dfs(i, j, x, jj, 2) + dfs(i, jj+1, x, y, k-2)));
-			}
-			return f[i][j][x][y][k] = r;
 		}
-		public int minimumArea(int ii, int jj, int x, int y) {
-			int [] r = new int [2], c = new int [2];
-			Arrays.fill(r, -1); Arrays.fill(c, -1);
-			for (int i = ii; i <= x; i++) {
-				int sum = 0;
-				for (int j = jj; j <= y; j++) 
-					sum += a[i][j];
-				if (sum == 0) {
-					if (r[0] == -1) continue;
-					if (r[1] == -1) r[1] = i-1;
-				} else {
-					if (r[0] == -1) r[0] = i;
-					else r[1] = i;
-					for (int j = jj; j <= y; j++) {
-						if (a[i][j] == 1) {
-							if (c[0] == -1 || j < c[0]) c[0] = j;
-							if (c[1] == -1 || j > c[1]) c[1] = j;
-						}
-					}
-				}
+		void buildTree(int [][] a, List<Integer> [] f) {
+			for (int [] e : a) {
+				int u = e[0], v = e[1];
+				f[u].add(v);
+				f[v].add(u);
 			}
-			return (r[1] == -1 ? 1 : r[1] - r[0] + 1) * (c[1] == -1 ? 1 : c[1] - c[0] + 1);
 		}
 }
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
     public static void main (String[] args) {
 		Solution s = new Solution ();
 
-		int []  a = new int []  {1, 6, 4, 3, 2};
+		int [][] a = new int [][] {{1,0},{2,3},{1,4},{2,1},{2,5}};
+		int [][] b = new int [][] {{4,5},{2,6},{3,2},{4,7},{3,4},{0,3},{1,0},{1,8}};
 
-		int r = s.maxTotalReward(a);
+		int r = s.minimumDiameterAfterMerge(a, b);
 		System.out.println("r: " + r);
     }
 }
@@ -161,6 +302,25 @@ public class cmp {
 // rr.levelPrintTree(rr);
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
