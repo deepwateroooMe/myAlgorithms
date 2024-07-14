@@ -7,6 +7,7 @@ import java.util.stream.*;
 import java.util.stream.Collectors;
 import java.util.HashSet;
 import java.util.Set;
+
 import java.math.BigInteger;
 import static java.util.stream.Collectors.toMap;
 
@@ -440,113 +441,534 @@ public class cmp {
 		// 	return r;
 		// }
 
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 感觉是，狗屁的【记忆化深搜＋字典树】？遍历【目标字符串】＋遍历【dfs 深搜字典树】，【记忆化深搜】找最小代价。。。702/803 passed ...
+		// // 【记忆化深搜】思路写不过的时候，永远要先去想，进一步的优化，首先去想：【动规】！！这一次，想忘记了。。。
+		// // 上面不对：Deque<Integer> [26] q  = new ArrayDeque[26]; 用来记S 里【ab...z】的所有下标
+		// // 上面想得不对，题目内嵌套了一个【字符串哈希】。。亲爱的表哥的活宝妹，当年写这个嵌套类型，永远写不对。。。
+		// public class Trie {
+		// 	public  class Node {
+		// 		char c;
+		// 		boolean f;
+		// 		int i; // 用来记：串的长度
+		// 		Node [] n;
+		// 		public Node(char c, boolean f) {
+		// 			this.c = c; this.f = f;
+		// 			n = new Node[26];
+		// 			i = -1;
+		// 		}
+		// 	}
+		// 	Node r;
+		// 	public Trie() {
+		// 		r = new Node(' ', false);
+		// 	}
+		// 	public void insert(String S) {
+		// 		int n = S.length();
+		// 		char [] s = S.toCharArray();
+		// 		Node f = r;
+		// 		for (int i = 0; i < n; i++) {
+		// 			int j = s[i] - 'a';
+		// 			if (f.n[j] == null)
+		// 				f.n[j] = new Node(s[i], false);
+		// 			f = f.n[j];
+		// 		}
+		// 		f.f = true;
+		// 		f.i = S.length();
+		// 	}
+		// 	List<Integer> searchAllLength(int i) { // 遍历【字典树】：找 s[] 从下标 i 开始，所有匹配的字符串的下标
+		// 		List<Integer> l = new ArrayList<>();
+		// 		Node f = r;
+		// 		int j = i;
+		// 		while (j < s.length && f.n[s[j]-'a'] != null) {
+		// 			if (f.n[s[j]-'a'].f) l.add(f.n[s[j]-'a'].i);
+		// 			f = f.n[s[j]-'a'];
+		// 			j++;
+		// 		}
+		// 		return l;
+		// 	}
+		// }
+		// public int minimumCost(String S, String[] sa, int[] a) {
+		// 	n = S.length(); this.sa = sa; this.a = a; this.S = S; 
+		// 	t = new Trie(); ss = new Trie();
+		// 	s = S.toCharArray();
+		// 	q = new ArrayDeque[26];
+		// 	Arrays.setAll(q, z -> new ArrayDeque<Integer>());
+		// 	for (int i = 0; i < n; i++)
+		// 		q[s[i]-'a'].offerLast(i);
+		// 	for (int i = 0; i < sa.length; i++) {
+		// 		if (!isSubString(i)) continue;
+		// 		if (ms.containsKey(sa[i])) {
+		// 			ms.put(sa[i], Math.min(ms.get(sa[i]), a[i]));
+		// 			continue;
+		// 		}
+		// 		if (sa[i].length() <= n)
+		// 		t.insert(sa[i]);
+		// 		ms.put(sa[i], a[i]);
+		// 	}
+		// 	f = new Integer [n];
+		// 	int r = dfs(0); 
+		// 	return r >= Integer.MAX_VALUE / 2 ? -1 : r;
+		// }
+		// boolean isSubString(int i) { // i:idx in sa
+		// 	boolean valid = true;
+		// 	Deque<Integer> sq = q[sa[i].charAt(0)-'a'];
+		// 	for (int j : sq) {
+		// 		valid = true;
+		// 		for (int k = j; k < j+sa[i].length(); k++) 
+		// 			if (s[k] != sa[i].charAt(k-j)) {
+		// 				valid = false;
+		// 				break;
+		// 			}
+		// 		if (valid)
+		// 			return true;
+		// 	}
+		// 	return false ;
+		// }
+		// Trie ss, t;
+		// int n; String [] sa; int [] a; char [] s; String S;
+		// Deque<Integer> [] q = new ArrayDeque[26];
+		// Map<String, Integer> ms = new HashMap<>(); // 如果：记另外字典里，就需要【字典树返回长度。。】
+		// Integer [] f;
+		// int dfs(int i) {
+		// 	if (i == n) return 0;
+		// 	List<Integer> l = t.searchAllLength(i);
+		// 	if (l.size() == 0) return f[i] = Integer.MAX_VALUE / 2;
+		// 	int r = Integer.MAX_VALUE / 2;
+		// 	for (int j : l) 
+		// 		r = Math.min(r, ms.get(S.substring(i, i+j)) + dfs(i+j));
+		// 	return f[i] = r;
+		// }
+		// // 重新写：参照别人的思路来写，但是写懂写会。。。
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// public int minimumCost(String S, String[] sa, int[] a) {
+		// 	int n = S.length(); char [] s = S.toCharArray();
+		// 	// 【子串哈希值】：这个题型和算法，感觉是亲爱的表哥的活宝妹，第1 或是第2 次接触，不熟悉。。。这次写会。。。
+		// 	// 多项式字符串哈希（方便计算子串哈希值）
+		// 	// 哈希函数 hash(s) = s[0] * base^(n-1) + s[1] * base^(n-2) + ... + s[n-2] * base + s[n-1]
+		// 	final int mod = 1_627_777_777; // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】 
+		// 	final int base = (int) 2e7 + new Random().nextInt((int) 1e7); // 随机 base，防止 hack
+		// 	int [] p = new int [n+1]; // powBase[i] = base^i 这个是【预处理，备用】：过会儿算子串会用到的
+		// 	int [] ph = new int [n+1];// 前缀哈希值 preHash[i] = hash(target[0] 到 target[i-1]) ：这个是S 的如【前缀和】般的【前缀哈希值】，备用后用的计算小段。。
+		// 	p[0] = 1;
+		// 	for (int i = 1; i <= n; i++) {
+		// 		p[i] = (int)((long)p[i-1] * base % mod); 
+		// 		ph[i] = (int)(((long)ph[i-1] * base + s[i-1]) % mod);
+		// 	}
+		// 	int [] f = new int [n+1]; // 动态规划：
+		// 	Map<Integer, Integer> m = new HashMap<>(); // 记录：组里的【字符串，最小代价】对
+		// 	HashSet<Integer> si = new HashSet<>(); // 记录：组里的、所有可能的长度. 【动规】时只遍历、可能的长度就可以了
+		// 	long h = 0;
+		// 	for (int i = 0; i < sa.length; i++) {
+		// 		si.add(sa[i].length()); // 记录：组里的、所有可能的长度
+		// 		h = 0;
+		// 		for (char c : sa[i].toCharArray()) 
+		// 			h = (h * base + c) % mod;
+		// 		m.merge((int)h, a[i], Integer::min); // 合并项：取小的！！
+		// 	}
+		// 	int [] lens = new int [si.size()]; int j = 0;
+		// 	for (int v : si) lens[j++] = v;
+		// 	Arrays.sort(lens); 
+		// 	// 【动规】解题：
+		// 	Arrays.fill(f, Integer.MAX_VALUE / 2);
+		// 	f[0] = 0;
+		// 	for (int i = 1; i <= n; i++) {
+		// 		for (int len : lens) { // 遍历：S 当前下标 i 下：所有优化子集、所有可能的子串的、长度选项. 优化到了：只遍历可能的、有限的几个长度
+		// 			if (len > i) break;
+		// 			// 新题型：计算【子串哈希值】: 像是，填一个长度为 len 的空后缀一样，作差，算出【子串哈希值】
+		// 			// h = (int)((long)ph[i] - (long)ph[i - len] * p[len] % mod + mod) % mod; // 【TODO】：这里写错了？？？
+		// 			h = (((ph[i] - (long)ph[i - len] * p[len]) % mod + mod) % mod);
+		// 			f[i] = Math.min(f[i], f[i - len] + m.getOrDefault((int)h, Integer.MAX_VALUE / 2));
+		// 		}
+		// 	}
+		// 	return f[n] >= Integer.MAX_VALUE / 2 ? -1 : f[n];
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// public long countSubarrays(int[] a, int k) {
+		// 	int n = a.length;
+		// 	long r = 0;
+		// 	for (int i = 0; i < n; i++) {
+		// 		int v = a[i];
+		// 		for (int j = i-1; j >= 0 && (a[j] & v) != a[j] ; j--)
+		// 			a[j] &= v;
+		// 		r += lowerBound(a, i+1, k+1) - lowerBound(a, i+1, k);
+		// 	}
+		// 	return r;
+		// }
+		// int lowerBound(int [] a, int r, int k) { // 感觉，这类破烂【二分查找】左开右开区间之类的，还是不太会写。。。
+		// 	int l = -1; // 左开右开 (l,r) 区间
+		// 	while (l + 1 < r) { // 非空
+		// 		// 循环不变量：
+		// 		// nums[left] < target
+		// 		// nums[right] >= target
+		// 		int m = l + (r - l) / 2;
+		// 		if (a[m] < k) // 范围缩小到 (mid, right)
+		// 			l = m;
+		// 		else r = m; // 范围缩小到 (left, mid)
+		// 	}
+		// 	return r;
+		// }
+		// // 方法二：三指针
+		// // 由于元素值只会减少，所以当 i 增大时，left 和 right 不会减少，有了单调性的保证，上面的二分查找可以改成 滑动窗口：
+		// // 当 left≤i 且 nums[left]<k 时，把 left 加一。
+		// // 当 right≤i 且 nums[right]≤k 时，把 right 加一。
+		// // 把左闭右开区间的长度 right−left 加入答案。
+		// public long countSubarrays(int[] a, int k) {
+		// 	long ans = 0;
+		// 	int l = 0, r = 0; // 左闭右开区间【l,r）
+		// 	for (int i = 0; i < a.length; i++) {
+		// 		int v = a[i];
+		// 		for (int j = i-1; j >= 0 && (a[j] & v) != a[j]; j--)
+		// 			a[j] &= v;
+		// 		while (l <= i && a[l] < k) l++;
+		// 		while (r <= i && a[r] <= k) r++;
+		// 		ans += r - l;
+		// 	}
+		// 	return ans;
+		// }
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// public long countSubarrays(int[] a, int k) {
+		// 	long r = 0;
+		// 	int cumulativeCounts = 0; // 注意这个【累积效应】的变量： cumulativeCounts
+		// 	for (int i = 0; i < a.length; i++) {
+		// 		int v = a[i];
+		// 		cumulativeCounts += (v == k ? 1 : 0);
+		// 		for (int j = i-1; j >= 0 && (a[j] & v) != a[j]; j--) {
+		// 			cumulativeCounts -= (a[j] == k ? 1 : 0);
+		// 			a[j] &= v;
+		// 			cumulativeCounts += (a[j] == k ? 1 : 0);
+		// 		}
+		// 		r += cumulativeCounts;
+		// 	}
+		// 	return r;
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 【动规】：应该就是一个简单的、线性一维动规，就可以了 
+		// public long maxTaxiEarnings(int n, int[][] a) {
+        //     Arrays.sort(a, (x, y) ->  x[0] != y[0] ? x[0] - y[0] : x[1] - y[1]);
+        //     long [] f = new long [n+1];
+		// 	// 需要记：遍历当前下标 i 时，先前所有经历过的终点【1,a[i][0]-1】的最大利润
+		// 	// TreeMap<Integer, Integer> m = new TreeMap<>(); // 可以按：【终点】升序排列. 遍历字典 it，不是狠方便
+		// 	// 优先队列，就得用2 个，才能方便滚动；
+		// 	// 要么，就该写自己的 List<int []> l = new ArrayList<>(); 自己手动维护终点升序排列，可以只用一条链
+		// 	// 还有就是【线段树】：随时O(1) 更新？
+		// 	Queue<long []> p = new PriorityQueue<>((x, y) -> -1 * Long.compare(x[1], y[1])); // 利润最大堆 
+		// 	Queue<long []> q = new PriorityQueue<long []>((x, y)->Long.compare(x[0], y[0])); // 终点升序,备用滚动的
+		// 	long u, v, r, max = 0;
+		// 	for (int i = 0; i < a.length; i++) {
+		// 		System.out.println(Arrays.toString(a[i]));
+		// 		u = (long)a[i][0]; v = (long)a[i][1]; r = (long)a[i][2];
+		// 		while (!p.isEmpty() && q.peek()[0] > u) q.offer(p.poll());
+		// 		while (!q.isEmpty() && q.peek()[0] <= u) {
+		// 			if (q.peek()[1] == f[(int)q.peek()[0]])
+		// 				p.offer(q.poll());
+		// 			else q.poll(); // 过滤：把先前的、同一终点的、非最优解，扔掉
+		// 		}
+		// 		f[(int)v] = Math.max(f[(int)v], (p.isEmpty() ? v - u + r : p.peek()[1] + v - u + r));
+		// 		max = Math.max(max, f[(int)v]);
+		// 		q.offer(new long [] {v, f[(int)v]});
+		// 	}
+		// 	return max;
+        // }
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 感觉，上面的破烂题目，被亲爱的表哥的活宝妹自己，想得一团乱麻一样。。实际思路可以狠简洁。。。
+		// public long maxTaxiEarnings(int n, int[][] a) {
+        //     Arrays.sort(a, (x, y) ->  x[1] - y[1]); // 【终点：升序】
+		// 	int m = a.length;
+		// 	long [] f = new long [m+1];
+		// 	for (int i = 0; i < m; i++) {
+		// 		int j = binarySearch(a, i, a[i][0]);
+		// 		f[i+1] = Math.max(f[i], f[j] + a[i][1] -  a[i][0] + a[i][2]);
+		// 	}
+		// 	return f[m];
+		// }
+		// int binarySearch(int [] a, int h, int v) {
+		// 	int l = 0; // 这是，左开右开区间吗（l,h）
+		// 	while (l < h) {
+		// 		int m = l + (h - l) / 2;
+		// 		if (a[m][1] > v)
+		// 			h = m; // 右开区间
+		// 		else l = m + 1;
+		// 	}
+		// 	return l;
+		// }
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 感觉，上面的破烂题目，被亲爱的表哥的活宝妹自己，想得一团乱麻一样。。实际思路可以狠简洁。。。
+		// public long maxTaxiEarnings(int n, int[][] a) {
+        //     Arrays.sort(a, (x, y) ->  x[1] - y[1]); // 【终点：升序】
+		// 	Map<Integer, List<int []>> m = new HashMap<>();
+		// 	for (int [] r : a) 
+		// 		m.computeIfAbsent(r[1], z -> new ArrayList<>()).add(r);
+		// 	long [] f = new long [n+1];
+
+		// 	for (int i = 1; i <= n; i++) {
+		// 		f[i] = f[i-1]; // 初始化成：这站不接客；前一站的最大值 
+		// 		for (int [] r : m.getOrDefault(i, new ArrayList<int []>()))
+		// 			f[i] = Math.max(f[i], f[r[0]] + r[1] - r[0] + r[2]);
+		// 	}
+		// 	return f[n];
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 亲爱的表哥的活宝妹，就是那么瓣，也算是把它给瓣过去了。。。。
+		// public int longestMountain(int[] a) {
+        //     int n = a.length, ans = 0, r = 1;
+		// 	int up = -1;
+		// 	for (int i = 1; i < n; i++) {
+		// 		if (a[i] > a[i-1] && up != 0 || up == 0 && a[i] < a[i-1]) {
+		// 			if (up == -1) up = 1;
+		// 			r++;
+		// 		} else if (up > 0 && a[i] < a[i-1]) {
+		// 			up = 0;
+		// 			++r;
+		// 		} else {
+		// 			if (r > 2 && up == 0)
+		// 				ans = Math.max(ans, r);
+		// 			r = (a[i] > a[i-1] ? 2 : 1);
+		// 			up = (a[i] > a[i-1] ? 1 : -1);
+		// 		}
+		// 	}
+		// 	if (up == 0) ans = Math.max(ans, r);
+		// 	return ans;
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 【二分查找】：思路，亲爱的表哥的活宝妹是清楚的；对上界的界定，不太清楚
+		// // 【数位 DP】：感觉是掌握了的、但是忘记得差不多了... 说的是【数位DP】，亲爱的表哥的活宝妹的活宝脑袋里，永远是，改装版本的、万变不离其踪的【记忆化深搜】
+		// // 这个题目，就是简单复习一下【数位DP】＋【二分查找】
+		// public long findMaximumNumber(long k, int x) {
+		// 	this.x = x;
+		// 	// 开区间二分: 左开右开都开？
+		// 	long left = 0, right = (k+1) << x; // 【TODO】：亲爱的表哥的活宝妹，看不懂这里写的是，什么意思
+		// 	// System.out.println("right: " + right); // 亲爱的表哥的活宝妹，搞不懂，它上面写得是什么意思。。。
+		// 	while (left + 1 < right) {
+		// 		long mid = (left + right) >>> 1; // 就是 /  2 的意思
+		// 		if (countDigitOne(mid) <= k)
+		// 			left = mid;
+		// 		else
+		// 			right = mid;
+		// 	}
+		// 	return left;
+		// }
+		// Long [][] f; // 记忆数组, 只记非 limit 状态下的相应组值，就压缩掉了不必要记忆的、一维数组
+		// int x;
+		// long v;
+		// long countDigitOne(long v) {
+		// 	this.v = v;
+		// 	int m = 64 - Long.numberOfLeadingZeros(v);
+		// 	f = new Long [m][m+1];
+		// 	return dfs(m-1, 0, true);
+		// }
+		// long dfs(int i, int j, boolean isLimit) { // isLimit: 标记，是否匹配 v 的原数位？？
+		// 	if (i < 0) return j;
+		// 	if (!isLimit && f[i][j] != null) return f[i][j];
+		// 	int upperBound = isLimit ? (int)(v >> i & 1) : 1; // 当前数位【m-1-i】下，可以取值的高值上限，是0/1?
+		// 	long r = 0;
+		// 	for (int k = 0; k <= upperBound; k++) {
+		// 		// 感觉，下面，亲爱的表哥的活宝妹，写得还是比较混。。。
+		// 		r += dfs(i-1, j + (k == 1 && (i+1) % x == 0 ? 1 : 0), isLimit && k == upperBound);
+		// 	}
+		// 	if (!isLimit) f[i][j] = r;
+		// 	return r;
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 亲爱的表哥的活宝妹，昨天晚上暴食暴饮面包吃多了、夜间极热夜里醒2 遍、今天上午极度头痛；午餐前约 1.5 小时，看能写出几个破烂题目
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 亲爱的表哥的活宝妹，可怜的亲爱的表哥的活宝妹，下午的脑袋真疆，看似看懂提醒思路，就是写不对，改天上午再写。。。
+		// // 亲爱的表哥的活宝妹，看不懂，它破烂网站上说得不清不楚的提示，不知道它写的是什么意思。。。
+		// public int lengthOfLongestSubsequence(List<Integer> li, int t) { // 【TODO】：不明天这里初始化与动规传递推理逻辑。。。
+		// 	int n = li.size();
+		// 	// Set<Integer> s = new HashSet<>(li);
+		// 	Integer [][] f = new Integer [n+1][t+1];
+		// 	f[0][0] = 0; // 初始化 
+		// 	for (int i = 1; i <= t; i++)
+		// 		// if (s.contains(i))
+		// 		f[0][i] = 0;
+		// 	for (int i = 1; i <= n; i++) {
+		// 		System.out.println("\n i: " + i);
+		// 		// f[i][li.get(i-1)] = 1;
+		// 		for (int j = li.get(i-1); j <= t; j++) 
+		// 			// for (int j = t; j - li.get(i-1) >= 0; j--)
+		// 			if (f[i-1][j - li.get(i-1)] != null && (i == 1 || f[i-1][j - li.get(i-1)] > 0))
+		// 				// f[i][j] = Math.max(Math.max(f[i][j], f[i-1][j]), 1 + f[i-1][j - li.get(i-1)]);
+		// 				f[i][j] = Math.max(f[i-1][j], (j > li.get(i-1) ? 1 : 0) + f[i-1][j - li.get(i-1)]);
+		// 			else continue;
+		// 		System.out.println("f.length: " + f.length);
+		// 		for (int z = 0; z < f.length; ++z) 
+		// 			System.out.println(Arrays.toString(f[z]));
+		// 	}
+		// 	return f[n][t] == 0 ? -1 : f[n][t];
+		// }
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 亲爱的表哥的活宝妹，如果不受限它破烂写得不清不楚的提示，直接自己写0-1 背包一维动规，感觉能够写得出来的。。。。
+		// public int lengthOfLongestSubsequence(List<Integer> li, int t) {
+		// 	int n = li.size(), s = 0;
+		// 	int [] f = new int [t+1]; // 求最大值，一般不用改这里什么，但因为可能存在无解，将其初始化到 Integer.MIN_VALUE
+		// 	Arrays.fill(f, Integer.MIN_VALUE);
+		// 	f[0] = 0;
+		// 	for (int v : li) {
+		// 		s = Math.min(s+v, t); // 【优化】：不必从【t】递减，从当前最大和递减就可以了
+		// 		for (int j = s; j >= v; j--) {
+		// 			if (f[j-v] != Integer.MIN_VALUE) //f[j-v] 有合法解，就是前面的数，可以合理合并到 j-v 这个目标值 
+		// 				f[j] = Math.max(f[j], f[j-v] + 1);
+		// 		}
+		// 	}
+		// 	return f[t] == Integer.MIN_VALUE ? -1 : f[t];
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// public int maxOperations(int[] a) {
+		// 	n = a.length; this.a = a; 
+		// 	// 【记忆化深搜】：先写万能的记忆化深搜
+		// 	// f = new Integer [n][n][3]; // 8*10^9 感觉，有可能会超时？应该不会，k 只有最多3 种可能取值，就降至O(12,000,000) 应该不会超时
+		// 	f.put(a[0] + a[1], new int [n][n]);
+		// 	f.put(a[n-2] + a[n-1], new int [n][n]);
+		// 	f.put(a[0] + a[n-1], new int [n][n]);
+		// 	int i = dfs(0, n-1, a[0]+a[1]);
+		// 	int j = dfs(0, n-1, a[n-2] + a[n-1]);
+		// 	int k = dfs(0, n-1, a[0] + a[n-1]);
+		// 	return Math.max(Math.max(i, j), k);
+		// }
+		// // 还有一种省空间的，就是 dfs(i,j) 执行3 遍，就可以不用字典了
+		// Map<Integer, int [][]> f = new HashMap<>();
+		// int n; int [] a;
+		// int dfs(int i, int j, int k) {
+		// 	if (i >= j) return 0;
+		// 	if (f.get(k)[i][j] > 0) return f.get(k)[i][j];
+		// 	int r = 0;
+		// 	if (a[i] + a[i+1] == k)
+		// 		r = Math.max(r, 1 + dfs(i+2, j, k));
+		// 	if (a[i] + a[j] == k)
+		// 		r = Math.max(r, 1 + dfs(i+1, j-1, k));
+		// 	if (a[j-1] + a[j] == k)
+		// 		r = Math.max(r, 1 + dfs(i, j-2, k));
+		// 	f.get(k)[i][j] = r;
+		// 	return r;
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 亲爱的表哥的活宝妹，感觉今年的亲爱的表哥的活宝妹的脑袋，终于可以想一想、试着自己去解决一些动规问题。
+		// // 感觉其实不少的动规题型，亲爱的表哥的活宝妹，只要自己稍微有点儿思路，能够自己想得明白，亲爱的表哥的活宝妹，是可以做到、完全100% 自己独立写出来的！！
+		// // 感觉，像是，戴帽子动规：给多少个人戴不同的帽子。。。
+		// public List<String> getWordsInLongestSubsequence(String[] sa, int[] gs) {
+		// 	Set<Integer> s = new HashSet<>(Arrays.stream(gs).boxed().collect(Collectors.toList()));
+		// 	int n = sa.length, max = 0, gmax = 1, idx = 0, r [] = new int [n]; Arrays.fill(r, -1);
+		// 	int [] f = new int [n];
+		// 	f[0] = 1; r[0] = 0;
+		// 	for (int i = 1; i < n; i++) {
+		// 		f[i] = 1;
+		// 		max = 1;
+		// 		for (int j = i-1; j >= 0; j--) {
+		// 			if (gs[j] == gs[i] || !withinOne(sa[i], sa[j])) continue;
+		// 			if (f[j] + 1 > f[i]) {
+		// 				f[i] = f[j] + 1;
+		// 				max = f[i];
+		// 				r[i] = j; // 记的是：取得当前下标 i 最大可能值的、前一个字符的下标 j
+		// 			}
+		// 		}
+		// 		if (f[i] > gmax) {
+		// 			gmax = f[i];
+		// 			idx = i;
+		// 		}
+		// 	}
+		// 	List<String> l = new ArrayList<>();
+		// 	l.add(sa[idx]);
+		// 	if (idx == 0) return l;
+		// 	while (r[idx] >= 0) {
+		// 		idx = r[idx];
+		// 		l.add(0, sa[idx]);
+		// 		if (idx == 0) break;
+		// 	} 
+		// 	return l;
+		// }
+		// boolean withinOne(String S, String T) {
+		// 	if (S.length() != T.length()) return false;
+		// 	int r = 0;
+		// 	for (int i = 0; i < S.length(); i++) {
+		// 		if (S.charAt(i) != T.charAt(i)) r++;
+		// 		if (r > 1) return false;
+		// 	}
+		// 	return true;
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// public String getSmallestString(String S) {
+		// 	int n = S.length(); char [] s = S.toCharArray();
+		// 	char c = ' ';
+		// 	for (int i = 0; i+1 < n; i++) {
+		// 		if (s[i] > s[i+1] && (s[i]-'0') % 2 == (s[i+1]-'0') % 2) {
+		// 			c = s[i];
+		// 			s[i] = s[i+1];
+		// 			s[i+1] = c;
+		// 			break;
+		// 		}
+		// 	}
+		// 	return new String(s);
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 这个题目狠简单，用个最笨的办法，快点儿把它写过
+		// public ListNode modifiedList(int[] nums, ListNode h) {
+		// 	Set<Integer> s = new HashSet<>(Arrays.stream(nums).boxed().collect(Collectors.toList()));
+		// 	ListNode f = h, p = null, pp = null, r = null;
+		// 	List<Integer> l = new ArrayList<>();
+		// 	while (f != null) {
+		// 		if (!s.contains(f.val)) l.add(f.val);
+		// 		f = f.next;
+		// 	}
+		// 	r = new ListNode(l.get(0));
+		// 	f = r;
+		// 	for (int i = 1; i < l.size(); i++) {
+		// 		f.next = new ListNode(l.get(i));
+		// 		f = f.next;
+		// 	}
+		// 	return r;
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // MN[1,20] 应该是：暴力所有可能性，取最优是可以过的。那么最简单的写法就是：万能的【记忆化深搜】！！
+		// public int minimumCost(int m, int n, int[] h, int[] v) {
+		// 	this.m = m; this.n = n; this.h = h; this.v = v;
+		// 	f = new int [m][n][m][n];
+		// 	for (int i = 0; i < m; i++) 
+		// 		for (int j = 0; j < n; j++) 
+		// 			for (int k = 0; k < m; k++) 
+		// 				Arrays.fill(f[i][j][k], Integer.MAX_VALUE / 2);
+		// 	return dfs(0, 0, m-1, n-1);
+		// }
+		// int m, n, h[], v[];
+		// int [][][][] f;
+		// int dfs(int i, int j, int x, int y) {
+		// 	if (i > x || j > y) return Integer.MAX_VALUE / 2;
+		// 	if (i == x && j == y) return f[i][j][x][y] = 0;
+		// 	if (f[i][j][x][y] < Integer.MAX_VALUE / 2) return f[i][j][x][y];
+		// 	int r = Integer.MAX_VALUE / 2;
+		// 	for (int ii = i; ii < x; ii++) 
+		// 		r = Math.min(r, h[ii] + dfs(i, j, ii, y) + dfs(ii+1, j, x, y));
+		// 	for (int jj = j; jj < y; jj++) 
+		// 		r = Math.min(r, v[jj] + dfs(i, j, x, jj) + dfs(i, jj+1, x, y));
+		// 	return f[i][j][x][y] = r;
+		// }
+
 		// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-		// 感觉是，狗屁的【记忆化深搜＋字典树】？遍历【目标字符串】＋遍历【dfs 深搜字典树】，【记忆化深搜】找最小代价。。。702/803 passed ...
-		// TLE 的情况下：亲爱的表哥的活宝妹，就得去想，字典树，可能加反了。。。加S 的所有子串，或至少另一棵字典树，加S 的所有子串，用来提速。。。
-		// 上面不对：Deque<Integer> [26] q  = new ArrayDeque[26]; 用来记S 里【ab...z】的所有下标
-		public class Trie {
-			public  class Node {
-				char c;
-				boolean f;
-				int i; // 用来记：串的长度
-				Node [] n;
-				public Node(char c, boolean f) {
-					this.c = c; this.f = f;
-					n = new Node[26];
-					i = -1;
-				}
-			}
-			Node r;
-			public Trie() {
-				r = new Node(' ', false);
-			}
-			public void insert(String S) {
-				int n = S.length();
-				char [] s = S.toCharArray();
-				Node f = r;
-				for (int i = 0; i < n; i++) {
-					int j = s[i] - 'a';
-					if (f.n[j] == null)
-						f.n[j] = new Node(s[i], false);
-					f = f.n[j];
-				}
-				f.f = true;
-				// f.i = (f.i == -1 || f.i > k ? k : f.i);
-				f.i = S.length();
-			}
-			List<Integer> searchAllLength(int i) { // 遍历【字典树】：找 s[] 从下标 i 开始，所有匹配的字符串的下标
-				List<Integer> l = new ArrayList<>();
-				Node f = r;
-				int j = i;
-				while (j < s.length && f.n[s[j]-'a'] != null) {
-					if (f.n[s[j]-'a'].f) l.add(f.n[s[j]-'a'].i);
-					f = f.n[s[j]-'a'];
-					j++;
-				}
-				return l;
-			}
+		// m/n[1,100000] 数量级升级后，感觉，亲爱的表哥的活宝妹，有个规律，没能找到、想到，不知道怎么才能写过。。。
+		public long minimumCost(int m, int n, int [] h, int [] v) {
+			this.m = m; this.n = n; this.h = h; this.v = v;
 		}
-		public int minimumCost(String S, String[] sa, int[] a) {
-			n = S.length(); this.sa = sa; this.a = a; this.S = S; 
-			t = new Trie(); ss = new Trie();
-			s = S.toCharArray();
-			q = new ArrayDeque[26];
-			Arrays.setAll(q, z -> new ArrayDeque<Integer>());
-			for (int i = 0; i < n; i++)
-				q[s[i]-'a'].offerLast(i);
-			for (int i = 0; i < sa.length; i++) {
-				if (!isSubString(i)) continue;
-				if (ms.containsKey(sa[i])) {
-					ms.put(sa[i], Math.min(ms.get(sa[i]), a[i]));
-					continue;
-				}
-				if (sa[i].length() <= n)
-				t.insert(sa[i]);
-				ms.put(sa[i], a[i]);
-			}
-			f = new Integer [n];
-			int r = dfs(0); 
-			return r >= Integer.MAX_VALUE / 2 ? -1 : r;
-		}
-		boolean isSubString(int i) { // i:idx in sa
-			boolean valid = true;
-			Deque<Integer> sq = q[sa[i].charAt(0)-'a'];
-			for (int j : sq) {
-				valid = true;
-				for (int k = j; k < j+sa[i].length(); k++) 
-					if (s[k] != sa[i].charAt(k-j)) {
-						valid = false;
-						break;
-					}
-				if (valid)
-					return true;
-			}
-			return false ;
-		}
-		Trie ss, t;
-		int n; String [] sa; int [] a; char [] s; String S;
-		Deque<Integer> [] q = new ArrayDeque[26];
-		Map<String, Integer> ms = new HashMap<>(); // 如果：记另外字典里，就需要【字典树返回长度。。】
-		Integer [] f;
-		int dfs(int i) {
-			if (i == n) return 0;
-			List<Integer> l = t.searchAllLength(i);
-			if (l.size() == 0) return f[i] = Integer.MAX_VALUE / 2;
-			int r = Integer.MAX_VALUE / 2;
-			for (int j : l) 
-				r = Math.min(r, ms.get(S.substring(i, i+j)) + dfs(i+j));
-			return f[i] = r;
-		}
-}
+		int m, n, h[], v[];
+		int [][][][] f;
+	}
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
     public static void main (String[] args) {
 		Solution s = new Solution ();
+		int []  a = new int []  {1, 3};
+		int [] b = new int [] {5};
+		System.out.println(Arrays.toString(a));
+		System.out.println(Arrays.toString(b));
 
-		String a = "xmjpkowhuefntanqvygzukqlxrrpsbuscjesdxilsjodkjjzhfrzymiaeedjsfpquiu";
-		String [] b = new String []  {"u","m","i","d","busc","z","j","s","huefntanqvygzuk","d","qlxrrpsbuscjesdxilsjodkjj","nqvygzukqlxrrpsbuscjesdxilsjodkjjzhfrzymiaee","h","c","o","s","l","sjodkjjzhfrzymi","aeedjsfpqu","i","u","kowhue","pkowhuefntanqvygzukqlxrrpsbus","x","j","djsfpquiu","dxilsjodkjjzhfrzymiaeedjsfpqu","j","jodkjjzhfrzymia","xrrpsbuscjesdxilsj","r","f","iu","k","frzymiaeedjsf","zymiaee","djsf","j","mjpkowh","d","j","x","i","miaeed","fntanqvygzukqlxrrpsbuscjesdxilsjodkjjzhfrzymiaeedjsfpq","lxrrpsbuscjesdxilsjod","jsfpqu","e"};
-		int []  c = new int []  {41,2,23,44,1,2,31,12,4,43,17,16,19,34,36,36,16,17,30,19,34,5,43,28,43,31,1,21,26,2,23,10,48,24,7,44,1,46,26,25,24,31,23,13,7,13,24,41};
-
-		int r = s.minimumCost(a, b, c);
+		int r = s.minimumCost(3, 2, a, b);
 		System.out.println("r: " + r);
     }
 }
@@ -625,3 +1047,22 @@ public class cmp {
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
