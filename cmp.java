@@ -9,7 +9,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.math.BigInteger;
 import static java.util.stream.Collectors.toMap;
-
 public class cmp {
     public static class Solution {
 		// // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
@@ -1005,61 +1004,7 @@ public class cmp {
 		// 	}
 		// 	return n/2 - m.firstEntry().getValue();
 		// }
-		
-		// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 		// 【动规】：应该是这个思路。数据规模不大，能写出来，就应该能够过！！另外，也可能是【贪心】解法，毕竟列的和，这里作用狠大。。
-// 		// 【列、和、预处理】：列、【自顶向下】的和
-// 		// 亲爱的表哥的活宝妹，哏赤哏赤写了个O[NNNNN] 的解法，超时
-// 		// 亲爱的表哥的活宝妹，却没能想到一个维度的优化，使用一点点儿贪心思想，就能把某个维度从【N】优化到【2】成O[NNNN2] 就能过。。。
-// 		// 可怜的亲爱的表哥的活宝妹，还是得要再修练修练。。才能写【动规】成仙。。。
-		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
-// 		public long maximumScore(int[][] a) { // TLE TLE TLE: 790/795
-// 			n = a.length;
-// 			r = new Long [n][n]; // r:colSum
-// 			for (int j = 0; j < n; j++) 
-// 				r[0][j] = (long)a[0][j];
-// 			for (int j = 0; j < n; j++)
-// 				for (int i = 1; i < n; i++) 
-// 					r[i][j] = r[i-1][j] + a[i][j];
-// 			f = new Long [n+1][n][n+1]; // 【TODO】：【n】[n][2] 就可以过。。
-// 			return dfs(n, 0, n);
-// 		}
-// 		Long [][][] f;
-// 		Long [][] r;
-// 		int n;  //i:[0,n]  j:colIdx k:j-1,collect/NOT
-// 		long dfs(int i, int j, int k) { // i: black or not k: prev collected or not
-// 			if (j == n) return 0l; //f[i][j][k] = 0l;
-// 			if (f[i][j][k] != null) return f[i][j][k];
-// 			long ans = 0;
-// 			if (j == 0) {// j == 0
-// 				// 遍历：当前列0,从【0,n-1】格，最优解
-// 				for (int x = 0; x < n; x++) 
-// 					ans = Math.max(ans, dfs(x, j+1, n));
-// // 当前列0: 不涂
-// 				ans = Math.max(ans, dfs(n, j+1, n));
-// 				return f[i][j][k] = ans;
-// 			}
-// 			if (i != n) {// 前一列：涂黑了, 前一列涂至【0,i】行
-// 				// 当前列 j: 不涂, 收集 j 列 i
-// 				ans = Math.max(ans, dfs(n, j+1, i) + r[i][j]);
-// 				// 当前列，也涂
-// 				for (int x = 0; x < n; x++)  // 统计入了偏差: 前一列的，或是当前列的
-// 					ans = Math.max(ans, dfs(x, j+1, (x >= i ? n : i)) +
-// 								   (k == n ? (x >= i ? r[x][j-1] - r[i][j-1] : r[i][j] - r[x][j])
-// 									: 
-// 									(x >= k ? r[x][j-1] - r[k][j-1] : (x < i ? r[i][j] - r[x][j] : 0)))); 
-// 			} else { // 前一列：没涂 i ＝＝ n
-// 				// 当前列 j: 不涂
-// 				ans = Math.max(ans, dfs(n, j+1, n));
-// 				// 当前列，涂
-// 				for (int x = 0; x < n; x++)  // 统计入了偏差
-// 					ans = Math.max(ans, dfs(x, j+1, n)
-// 								 // 前一列：收集了吗？多添少补前一列的
-// 								   + (k == n ? r[x][j-1] : (x >= k ? r[x][j-1] - r[k][j-1] : 0)));
-// 			}
-// 			return f[i][j][k] = ans;
-// 		}
-
+ 		
 		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 		// public int minChanges(int n, int k) {
 		// 	int r = 0;
@@ -1118,7 +1063,6 @@ public class cmp {
 		// 	return r;
 		// }
 
-
 		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 		// // 这个题目，亲爱的表哥的活宝妹，没有思路，不熟悉这个题型，感觉比较难一点儿
 		// // 看下提示，再试着看：能否启动，接着写？亲爱的表哥的活宝妹，不喜欢这类乱题目，不写了。。。
@@ -1129,15 +1073,290 @@ public class cmp {
 		// 	for (int i = 0; i < n; i++)
 		// 		r[i] = a[i] - b[i];
 		// }
+
+// 		// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 		// 【动规】：应该是这个思路。数据规模不大，能写出来，就应该能够过！！另外，也可能是【贪心】解法，毕竟列的和，这里作用狠大。。
+// 		// 【列、和、预处理】：列、【自顶向下】的和
+// 		// 可怜的亲爱的表哥的活宝妹，还是得要再修练修练。。才能写【动规】成仙。。。
+// 		// 亲爱的表哥的活宝妹，哏赤哏赤写了个O[NNNNN] 的解法，超时
+// 		// 亲爱的表哥的活宝妹，却没能想到一个维度的优化，使用一点点儿贪心思想，就能把某个维度从【N】优化到【2】成O[NNNN2] 就能过。。。
+// 		// 亲爱的表哥的活宝妹，自己写出来的：三维动规，跟它们传统三维动规不一样，只是答案也对但超时；
+// 		// 自己的解法，距离，再加一步【贪心优化】把三维动规O[NNN-N] 转化为O[NNN-2], 感觉就没有思路
+// 		// 网络上的题解、不超时的题解，看起来像是看懂了，实际上没看懂。。亲爱的表哥的活宝妹的三维动规，怎么才能【贪心】优化成O[NNN-2], 得好好想一想把它写出来。。
+// 		// 看了网络上的分析后，想：亲爱的表哥的活宝妹当天的解，为什么没有，没出现统计结果上的偏差？是亲爱的表哥的活宝妹真写对了，还是它们的测试用例太有限了？越看越糊涂。。
+// 		// 看来，亲爱的表哥的活宝妹，就不得不，自己再手写一遍，把它想透，才能真正搞明白。。。
+// 		// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+// 		public long maximumScore(int[][] a) { // TLE TLE TLE: 790/795
+// 			n = a.length;
+// 			r = new Long [n][n]; // r:colSum
+// 			for (int j = 0; j < n; j++) 
+// 				r[0][j] = (long)a[0][j];
+// 			for (int j = 0; j < n; j++)
+// 				for (int i = 1; i < n; i++) 
+// 					r[i][j] = r[i-1][j] + a[i][j];
+// 			f = new Long [n+1][n][n+1]; // 【前一列涂色与否、与涂到 i 行】【当前列索引 j】【前一列收集与否、或收集过收集到 k 行】
+// 			return dfs(n, 0, n);
+// 		}
+// 		Long [][][] f;
+// 		Long [][] r;
+// 		int n;  //i:[0,n]  j:colIdx k:j-1,collect/NOT 某一维，需要优化成N->2
+// 		long dfs(int i, int j, int k) { // i: black or not k: prev collected or not
+// 			if (j == n) return 0l; //f[i][j][k] = 0l;
+// 			if (f[i][j][k] != null) return f[i][j][k];
+// 			long ans = 0;
+// 			if (j == 0) {// j == 0
+// 				// 遍历：当前列0,从【0,n-1】格，最优解
+// 				for (int x = 0; x < n; x++) 
+// 					ans = Math.max(ans, dfs(x, j+1, n));
+// // 当前列0: 不涂
+// 				ans = Math.max(ans, dfs(n, j+1, n));
+// 				return f[i][j][k] = ans;
+// 			}
+// 			if (i != n) {// 前一列：涂黑了, 前一列涂至【0,i】行
+// 				// 当前列 j: 不涂, 收集 j 列 i
+// 				ans = Math.max(ans, dfs(n, j+1, i) + r[i][j]);
+// 				// 当前列，也涂
+// 				for (int x = 0; x < n; x++)  // 统计入了偏差: 前一列的，或是当前列的
+// 					ans = Math.max(ans, dfs(x, j+1, (x >= i ? n : i)) +
+// 								   (k == n ? (x >= i ? r[x][j-1] - r[i][j-1] : r[i][j] - r[x][j])
+// 									: 
+// 									(x >= k ? r[x][j-1] - r[k][j-1] : (x < i ? r[i][j] - r[x][j] : 0)))); 
+// 			} else { // 前一列：没涂 i ＝＝ n
+// 				// 当前列 j: 不涂
+// 				ans = Math.max(ans, dfs(n, j+1, n));
+// 				// 当前列，涂
+// 				for (int x = 0; x < n; x++)  // 统计入了偏差
+// 					ans = Math.max(ans, dfs(x, j+1, n)
+// 								 // 前一列：收集了吗？多添少补前一列的
+// 								   + (k == n ? r[x][j-1] : (x >= k ? r[x][j-1] - r[k][j-1] : 0)));
+// 			}
+// 			return f[i][j][k] = ans;
+// 		}
+// 		// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 		// 亲爱的表哥的活宝妹，根据网络题解，自己再试着写一次。。。
+// // 【TODO】：破烂题解，文言能力有限，一个思路讲不通、讲不透，读者亲爱的表哥的活宝妹看不懂！！！
+// 		public long maximumScore(int[][] a) { // TLE TLE TLE: 790/795
+// 			n = a.length;
+// 			r = new long [n+1][n]; // r:colSum 每列的前缀和（从上到下）: 列 +1就是【初始化】的时候，稍微方便一点儿而已，破烂题解写晦涩难懂。。
+// 			for (int i = 1; i <= n; i++)
+// 				for (int j = 0; j < n; j++)
+// 					r[i][j] = r[i-1][j] + a[i-1][j];
+// 			f = new Long [n-1][n+1][2]; // 【当前列号 i】【后一列 i+1 列黑格个数【0,N】】【 i+1 列黑格数，是否小于 i+2 列黑格个数？0:否；1:是】
+// 			long ans = 0;
+// 			for (int j = 0; j <= n; j++) 
+// 				ans = Math.max(ans, dfs(n-2, j, 0));
+// 			return ans;
+// 		}
+// 		Long [][][] f;
+// 		long [][] r;
+// 		int n;  // i:[ 当前列下标 i:0,n-1] j: 后一列i+1 的黑格数[0,N] k:[0,1]
+// 		long dfs(int i, int j, int k) { 
+// 			if (i < 0) return 0;
+// 			if (f[i][j][k] != null) return f[i][j][k];
+// 			long ans = 0;
+// 			for (int x = 0; x <= n; x++) { // 遍历：当前列 i 列，所有可能的黑格个数【0,N】个
+// 				if (x == j) // 【第一种情况】：当前列 i 与后一列 i+1 列，两列黑格数完全一样，不产生【新增收集】，直接递归深搜。。
+// 					ans = Math.max(ans, dfs(i-1, j, 0));
+// 				else if (x < j) // 【第二种情况】：【右边黑格多】当前列 i 列，黑格个数 < 后一列 i+1 列黑格个数：计入当前列【新增收集】
+// 					// 引入、收集、当前列的【x-cur,j-prev）计入总分数
+// 					ans = Math.max(ans, dfs(i-1, x, 1) + r[j][i] - r[x][i]);
+// 				// x > j:
+// 				// 【TODO】：下面仅只【贪心遍历：贪心地，仅只考虑 x=0 唯一一种、极度贪心、快速解】？？？
+// 				// 亲爱的表哥的活宝妹，上面理解得不对，要怎么测试一下这个理解。。。。【TODO】：
+// 				else if (k == 0) // 【第三种、贪心跳跃情况】：当前列 i 黑格数大于后一列 i+1 列黑格数；i+1 列黑格大不小于 i+2 列黑格数
+// 					// 当，当前列 i 列黑格数大于后一列 i+1 列黑格数时，后一列 i+1 列，（pre,cur】新增加的收集，计入总分数
+// 					ans = Math.max(ans, dfs(i-1, x, 0) + r[x][i+1] - r[j][i+1]);
+// // 亲爱的表哥的活宝妹，少考虑了下面的一种情况：【TODO】：破烂题解，文言能力有限，一个思路讲不通、讲不透，读者亲爱的表哥的活宝妹看不懂！！！
+// 				else if (j == 0) // 【第四种：（凹形）：cur > pre < 第 j+2 列的黑格个数】
+// 					// 此时第 j+2 列全黑最优（递归过程中一定可以枚举到这种情况）
+// 					// 第 j+1 列全白是最优的，所以只需考虑 pre=0 的情况
+// 					// 由于第 j+1 列在 dfs(j+1) 的情况二中已经统计过，这里不重复统计
+// 					ans = Math.max(ans, dfs(i-1, x, 0));
+// 			}
+// 			return f[i][j][k] = ans;
+// 		}
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// public boolean canAliceWin(int[] a) {
+		// 	int n = a.length, l = 0, r = 0;
+		// 	for (int v : a)
+		// 		if (v < 10) l += v;
+		// 		else r += v;
+		// 	return l != r;
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 破烂题目：跟什么狗屁的质数、分解质因子相关
+		// // 这个破烂题目：极度恶心人。一个数，如果它只有1 和它的开平方根两个合数，也就是说，这个数必须是某个【质数】的平方
+		// // 这个破烂题目：就转化为是，数【1,r】里，有多少个数y是，某质数的平方；数【1,l-1】里，有多少个数x是，某质数的平方；结果为 y-x
+		// // 这个破烂题目：数【1,10^9】里，平方上限为 10^9 的最大质数是 31622;
+		// // 31622 以下的质数，共有 3401 个。。。破烂题目，不写！！
+		// public int nonSpecialCount(int l, int r) {
+		// 	int v = (int)Math.sqrt((int)Math.pow(10, 9));
+		// 	System.out.println("v: " + v);
+		// 	return 0;
+		// }
+
+		// // 亲爱的表哥的活宝妹，感觉，这个破烂死题目，太难了，鬼知道，圆圈里的点，是怎么数的？看下提示才再写。。。
+		// // 【提示】：思路比较巧妙，把数学问题，转化成【图形问题】，就比较好解。试写一下
+		// boolean canReachCorner(int ll, int rr, int [][] lli) {
+		// 	n = lli.length; this.lli = lli; this.ll = ll; this.rr = rr; 
+		// 	// 先把 n 个圆圈：按【最左端点、X 轴、升序】【最底端点、Y 轴、升序】【半径、升序】排列
+		// 	Arrays.sort(lli, (a, b) -> a[0] - a[2] != b[0] - b[2] ? a[0] - a[2] - (b[0] - b[2]) :
+		// 				(a[1] - a[2] != b[1] - b[2] ? a[1] - a[2] - (b[1] - b[2]) : a[2] - b[2])); 
+		// 	System.out.println("lli.length: " + lli.length);
+		// 	for (int z = 0; z < lli.length; ++z) 
+		// 		System.out.println(Arrays.toString(lli[z]));
+		// 	// 【建图】：N+4 个顶点、可变数的边的个数
+		// 	// 【N+4 个顶点的、图】：图，这里是什么？把它转化成一个可以编程的东西
+		// 	g = new ArrayList[n+4];
+		// 	Arrays.setAll(g, z -> new ArrayList<Integer>());
+		// 	// 【建图】：遍历 n 个圆：同步检测，与四边、和前序圆的、交差情况
+		// 	int x = 0, y = 0, r = 0, xx = 0, yy = 0, rp = 0, pj = -1;// pj: 可以记住，全程只遍历一遍？！！！
+		// 	for (int i = 0; i < n; i++) {
+		// 		// System.out.println("\n i: " + i);
+		// 		// System.out.println(Arrays.toString(lli[i]));
+		// 		x = lli[i][0]; y = lli[i][1]; r = lli[i][2];
+		// 		// 【预处理】：排除不合法解: 跟左下角0 或右上角（ll,rr）有交差，直接返假
+		// 		if ((int)Math.pow(x, 2) + (int)Math.pow(y, 2) <= r * r
+		// 			|| (int)Math.pow(x-ll, 2) + (int)Math.pow(y-rr, 2) <= r * r) return false;
+		// 		// 遍历：【前序圆】，建立可 reachable 的有效连接边，直到，不可能再有任何交差
+		// 		// 先，检测与【四边】的交差情况
+		// 		// 上, n
+		// 		if (y + r >= rr) {
+		// 			g[n].add(i);
+		// 			g[i].add(n);
+		// 		}
+		// 		// 右: n+1
+		// 		if (x + r >= ll) {
+		// 			g[n+1].add(i);
+		// 			g[i].add(n+1);
+		// 		}
+		// 		// 下: n+2
+		// 		if (y - r <= 0) {
+		// 			g[n+2].add(i);
+		// 			g[i].add(n+2);
+		// 		}
+		// 		// 左: n+3
+		// 		if (x - r <= 0) {
+		// 			g[n+3].add(i);
+		// 			g[i].add(n+3);
+		// 		}
+		// 		// 再，【前序圆】，建立可 reachable 的有效连接边，直到，不可能再有任何交差
+		// 		// for (int j = i-1; j >= 0 && j > pj; j--) {
+		// 			for (int j = i-1; j >= 0; j--) {
+		// 			xx = lli[j][0]; yy = lli[j][1]; rp = lli[j][2];
+		// 			// 与前面的所有圈，完全无交差，不再遍历. pj可以记住，全程只遍历一遍？！！！
+		// 			if (xx + rp < x - r && (yy + rp < y - r || yy - rp > y + r)) { // Y 轴上：可在上，也可以在下
+		// 				// pj = j;
+		// 				break;
+		// 			}
+		// 			// 当前圆圈 i 与前圆圈 j 有交差，建立交差边
+		// 			// 这里，亲爱的表哥的活宝妹，可能有考虑不周，判断不准的情况，再精确一点儿：
+		// 			if ((int)Math.pow(x-xx, 2) + (int)Math.pow(y-yy, 2) <= (int)Math.pow(r+rp, 2)) {
+		// 				g[i].add(j);
+		// 				g[j].add(i);
+		// 			}
+		// 		}
+		// 	}
+		// 	// 【打印图】：
+		// 	for (int i = 0; i < n+4; i++)
+		// 		if (g[i].size() > 0)
+		// 			System.out.println(g[i].size() + Arrays.toString(g[i].toArray()));
+		// 		else 
+		// 			System.out.println("i: " + i + "empty");
+		// 	// 【求解】：检查四边的可达情况：转化为一种 dfs(u, v): u v 两顶点，可达吗？
+		// 	boolean a = dfs(n, -1, n+2, BigInteger.ZERO);
+		// 	System.out.println("a: " + a);
+		// 	if (a) return false;
+		// 	boolean b = dfs(n+1, -1, n+3, BigInteger.ZERO);
+		// 	System.out.println("b: " + b);
+		// 	if (b) return false;
+		// 	boolean c = dfs(n, -1, n+1, BigInteger.ZERO);
+		// 	System.out.println("c: " + c);
+		// 	if (c) return false;
+		// 	boolean d = dfs(n+2, -1, n+3, BigInteger.ZERO);
+		// 	System.out.println("d: " + d);
+		// 	if (d) return false;
+		// 	// if (dfs(n, -1, n+2) || dfs(n+1, -1, n+3) || dfs(n, -1, n+1) || dfs(n+2, -1, n+3)) return false;
+		// 	// if (a || b || c || d) return false;
+		// 	return true;
+		// }
+		// int n, ll, rr;
+		// int [][] lli;
+		// List<Integer> [] g;
+		// // 如果图中可能存在环，N[1,1000] 遍历过一次与否的标记，又得使用狗屁BigInteger 好烦人。。
+		// // 亲爱的表哥的活宝妹，不知道，这里哪里想错了，为什么会 StackOverflowError, 改天约几天或是一周后再回来看这题目。。
+		// boolean dfs(int u, int p, int V, BigInteger mask) { // 不知道哪里写错了，java.lang.StackOverflowError... 也就是说，图中可能存在环
+		// 	if (u == V) return true;
+		// 	// 下面一行：仅用作参考
+		// 	// BigInteger mask = BigInteger.ONE.shiftLeft(v).subtract(BigInteger.ONE); // 制造一个：有V 个数位、每个数位都是 1 的大数 mask
+		// 	// 下面，换种写法
+		// 	// if (mask.shiftRight(u).and(BigInteger.ONE) == BigInteger.ONE) return false;
+		// 	if (mask.compareTo(BigInteger.ZERO) > 0 && mask.and(BigInteger.ONE.shiftLeft(u)) == BigInteger.ONE.shiftLeft(u)) return false; // 说明：有环
+		// 	mask = mask.add(BigInteger.ONE.shiftLeft(u));
+		// 	// if (g[u].size() == 0) return false;
+		// 	for (int v : g[u]) {
+		// 		if (v == p) continue;// 无向图，不要重复遍历
+		// 		if (dfs(v, u, V, mask)) return true;
+		// 	}
+		// 	return false;
+		// }
+
+		// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// N:[1,10^4] 应该是【动规】解法，可是思路。。O(NN=10^8) 不知道，能不能过 TLE ？
+		// 这个【动规】题目，其实狠难，是周赛里通过率最低的一个题目，只有9.0% 通过率
+		// 亲爱的表哥的活宝妹，不知道，哪里想错、数错了。。。晚点儿再写这个
+		public int numberOfSubstrings(String S) {
+			int n = S.length(), x = 0, y = 0; char [] s = S.toCharArray();
+			int [] r = new int [n+1]; // 1 的前缀和
+			for (int i = 0; i < n; i++) 
+				r[i+1] = r[i] + s[i] - '0';
+			System.out.println(Arrays.toString(r));
+			boolean oneDom = r[n] > n-r[n];
+			System.out.println("oneDom: " + oneDom);
+			int [] f = new int [n+1]; // 定义为 f[i]：以 i 为结尾的、S 的前缀、合法子串的个数
+			// 暴力＋部分【动规】解法
+			for (int i = 0; i < n; i++) { // 遍历下标：O(N)
+				System.out.println("\n i: " + i);
+				f[i+1] += (!oneDom ? s[i] - '0' : 1-(s[i]-'0'));
+				System.out.println(Arrays.toString(f));
+				// 当前数是‘1’：狠简单
+				if (!oneDom && s[i] - '0' == 1 && (i > 0 && s[i-1]-'0' == 1)
+					|| oneDom && s[i] - '0' == 0 && (i > 0 && s[i-1]-'0' == 0)) {
+					f[i+1] += f[i] * 2;
+					System.out.println(Arrays.toString(f));
+					continue;
+				}
+				// 当前数是 '0': 比较复杂、繁琐： x=0 y = 1:
+				// 首先：当前 s[i]='0', 子串可以不以当前的’0' 为结尾，那么 f[i+1] 的基数、初始化为 f[i], 就是前一个下标的最多个数
+				f[i+1] += (!oneDom && s[i]-'0' == 0 || oneDom && s[i] == '1' ? f[i] : 0);
+				// 其次，以当前s[i]='0', 子串、以、当前的’0' 为结尾，新增的个数，数出来。。弱弱亲爱的表哥的活宝妹，滚去数吧。。。
+				// 去找、倒序遍历 j, 最大的 j, 使S.substring(j,i+1) 是一个最短的？、以 i 为结尾的合法字符串
+				System.out.println(Arrays.toString(f));
+				for (int j = i-1; j >= 0; j--) {
+					y = r[i+1] - r[j]; // Sum of 1 [j, i]
+					x = i-j+1 - y;     // sum of 0 [j, i]
+					if (!oneDom && y >= (int)Math.pow(x, 2)
+						|| oneDom && y < (int)Math.pow(x, 2)) {
+						System.out.println("S.substring(j, i+1): " + S.substring(j, i+1));
+						f[i+1] += f[j] + 1;
+						System.out.println(Arrays.toString(f));
+					}
+				}
+			}
+				return !oneDom ? f[n] : n * (n+1) / 2 - f[n];
+		}
 	}
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
     public static void main (String[] args) {
 		Solution s = new Solution ();
 
-		String a = "1001101";
+		// String a = "101101";
+		String a = "1001";
 		System.out.println("a: " + a);
 
-		int r = s.maxOperations(a);
+		int r = s.numberOfSubstrings(a);
 		System.out.println("r: " + r);
     }
 }
@@ -1268,6 +1487,7 @@ public class cmp {
 // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
