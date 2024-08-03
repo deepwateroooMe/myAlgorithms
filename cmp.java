@@ -1,16 +1,28 @@
 import com.ListNode;
+
 import java.util.HashMap;
+
 import java.util.Map;
+
 import java.util.ArrayList;
+
 import java.util.*;
+
 import java.util.stream.*;
+
 import java.util.stream.Collectors;
+
 import java.util.HashSet;
+
 import java.util.Set;
+
 import java.math.BigInteger;
+
 import static java.util.stream.Collectors.toMap;
+
 public class cmp {
     public static class Solution {
+
 		// // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 		// // 亲爱的表哥的活宝妹，想要直接搬上一题目的解法，但显然 TLE TLE TLE 呵呵呵呵呵。。。。
 		// // 这个题目，参考别人的题解，把它真正理解透彻、自己写一遍，掌握解题思路
@@ -1302,68 +1314,343 @@ public class cmp {
 		// 	}
 		// 	return false;
 		// }
+		// // 亲爱的表哥的活宝妹，还是把上面的题目，想得复杂了一点儿。看看别人的思路、再想想、简单轻松呀。。亲爱的表哥的活宝妹，得学会自己想思路。。。
+		// // 亲爱的表哥的活宝妹，希望有人列出亲爱的表哥的活宝妹上面的解法，因为现在的亲爱的表哥的活宝妹，不知道上面写错哪里了。。。
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// class Uf { // UnionFind
+		// 	int [] f;
+		// 	public  Uf(int n) {
+		// 		f = new int [n];
+		// 		for (int i = 1; i < n; i++) // 真正有效的是从：下标 1 开始的, 还是从 0 开始的？？【TODO】：
+		// 			f[i] = i;
+		// 	}
+		// 	int find(int i) { // 【TODO】：忘记，这个的底层原理了
+		// 		if (f[i] != i)
+		// 			f[i] = find(f[i]);
+		// 		return f[i];
+		// 	}
+		// 	void union(int i, int j) {
+		// 		// if (f[i] != f[j]) // 【写错了】：这里 f[i] 与 f[j] 未必是实时更新了的，必须检查确保一下
+		// 		// 	f[i] = find(f[j]); // 随便偏向哪边
+		// 		f[find(i)] = find(j); // 【TODO】：亲爱的表哥的活宝妹，需要再次消化理解一遍，把这些破烂弄懂弄透彻。。
+		// 	}
+		// }
+		// public boolean canReachCorner(int ll, int rr, int[][] a) {
+		// 	int n = a.length, x = 0, y = 0, r = 0, xx = 0, yy = 0, rp = 0;
+		// 	Uf uf = new Uf(n+2);
+		// 	// 填充【并查集】
+		// 	for (int i = 0; i < n; i++) {
+		// 		x = a[i][0]; y = a[i][1]; r = a[i][2];
+		// 		if (x - r <= 0 || y + r >= rr) // 与【左上】有连接 
+		// 			uf.union(i, n);
+		// 		if (x + r >= ll || y - r <= 0) // 与【右下】有连接
+		// 			uf.union(i, n+1);
+		// 		for (int j = 0; j < i; j++) {
+		// 			xx = a[j][0]; yy = a[j][1]; rp = a[j][2];
+		// 			// 两个圆：【相交】或是【相切】
+		// 			if ((long)Math.pow(x - xx, 2) + (long)Math.pow(y - yy, 2) <= (long)Math.pow(r + rp, 2))
+		// 				uf.union(i, j);
+		// 		}
+		// 	}
+		// 	if (uf.find(n) != uf.find(n+1)) return true;
+		// 	return false;
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // N:[1,10^4] 应该是【动规】解法，可是思路。。O(NN=10^8) 不知道，能不能过 TLE ？
+		// // 这个【动规】题目，其实狠难，是周赛里通过率最低的一个题目，只有9.0% 通过率
+		// // 亲爱的表哥的活宝妹，不知道，哪里想错、数错了。。。晚点儿再写这个
+		// public int numberOfSubstrings(String S) {
+		// 	int n = S.length(), x = 0, y = 0; char [] s = S.toCharArray();
+		// 	int [] r = new int [n+1]; // 1 的前缀和
+		// 	for (int i = 0; i < n; i++) 
+		// 		r[i+1] = r[i] + s[i] - '0';
+		// 	boolean oneDom = r[n] > n-r[n];
+		// 	int [] f = new int [n+1]; // 定义为 f[i]：以 i 为结尾的、S 的前缀、合法子串的个数
+		// 	// 暴力＋部分【动规】解法
+		// 	for (int i = 0; i < n; i++) { // 遍历下标：O(N)
+		// 		f[i+1] += (!oneDom ? s[i] - '0' : 1-(s[i]-'0'));
+		// 		// 当前数是‘1’：狠简单
+		// 		if (!oneDom && s[i] - '0' == 1 && (i > 0 && s[i-1]-'0' == 1)
+		// 			|| oneDom && s[i] - '0' == 0 && (i > 0 && s[i-1]-'0' == 0)) {
+		// 			f[i+1] += f[i] * 2;
+		// 			continue;
+		// 		}
+		// 		// 当前数是 '0': 比较复杂、繁琐： x=0 y = 1:
+		// 		// 首先：当前 s[i]='0', 子串可以不以当前的’0' 为结尾，那么 f[i+1] 的基数、初始化为 f[i], 就是前一个下标的最多个数
+		// 		f[i+1] += (!oneDom && s[i]-'0' == 0 || oneDom && s[i] == '1' ? f[i] : 0);
+		// 		// 其次，以当前s[i]='0', 子串、以、当前的’0' 为结尾，新增的个数，数出来。。弱弱亲爱的表哥的活宝妹，滚去数吧。。。
+		// 		// 去找、倒序遍历 j, 最大的 j, 使S.substring(j,i+1) 是一个最短的？、以 i 为结尾的合法字符串
+		// 		for (int j = i-1; j >= 0; j--) {
+		// 			y = r[i+1] - r[j]; // Sum of 1 [j, i]
+		// 			x = i-j+1 - y;     // sum of 0 [j, i]
+		// 			if (!oneDom && y >= (int)Math.pow(x, 2)
+		// 				|| oneDom && y < (int)Math.pow(x, 2)) {
+		// 				f[i+1] += f[j] + 1;
+		// 			}
+		// 		}
+		// 	}
+		// 		return !oneDom ? f[n] : n * (n+1) / 2 - f[n];
+		// }
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 这种狗屁破烂思路，考试的时候，怎么想得到？
+		// public int numberOfSubstrings(String S) {
+		// 	int n = S.length(), m = 0, i = 0, r = 0; char [] s = S.toCharArray();
+		// 	int [] idx = new int [n+1]; // 记：每个0 所在的下标索引
+		// 	for (int j = 0; j < n; j++)
+		// 		if (s[j] == '0') idx[m++] = j;
+		// 	idx[m] = n; // 【哨兵】；什么意思？
+		// 	int ttOne = n - m, cntZero = 0, cntOne; // 1 的总个数
+		// 	// 枚举：所有子串的【左端点】
+		// 	for (int left = 0; left < n; left++) {
+		// 		if (s[left] == '1') // 不包含任何0 的子串的个数: 下一个‘0’会出现在 a[i] 下标
+		// 			r += idx[i] - left;
+		// 		// 枚举：以 left 为【左端点】的任何子串里，所有可能的 0 的个数，最多为 sqrt(n) 个 0
+		// 		for (int j = i; j < m; j++) {
+		// 			cntZero = j - i + 1; // [left,a[j]] 之间，0 的总个数
+		// 			if (cntZero * cntZero > ttOne) break;
+		// 			// cntOne = a[j]+1 - left - cntZero;
+		// 			// cntOne = a[j]+1 - left - (j - i + 1);
+		// 			cntOne = idx[j] - left - (j - i);
+		// 			// 【精减】：下面的判断条件可以去掉，因为不满足条件时，就是取值 0
+		// 			// if (a[j]+1 - left - cntZero >= (int)Math.pow(cntZero, 2))
+		// 				// 【left,a[j]】片段，仅只精确 j+1 个0, 可以延展到的最右端下标为 a[j+1]-1, 计算这个可延展片段长度，即子串个数
+		// 			r += Math.max(0, idx[j+1]-1+1 - idx[j] - Math.max(0, cntZero * cntZero - cntOne));
+		// 		}
+		// 		// 每遍历过一个’0', 这个0 以后就不会再遍历到了
+		// 		if (left == idx[i]) i++; // 跟下面的条件，等价，写哪个都行
+		// 		// if (s[left] == '0') i++;
+		// 	}
+		// 	return r;
+		// }
+
+// 		// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 		// 【差分数组】的解法：这些基础知道，都快要忘光了。。
+// 		public long minimumOperations(int[] a, int[] b) {
+// 			int n = a.length;
+// // r:ans s:sum 至当前下标，【差分数组】操作、所累积的、可以免费【反方向】操作的次数
+// 			long s = b[0] - a[0], k = 0, r = Math.abs(b[0] - a[0]); 
+// 			for (int i = 1; i < n; i++) { // 遍历：【差分数组】的下标
+// 				k = (b[i] - b[i-1]) - (a[i] - a[i-1]); // 当前下标下：两差分数组的差值，务必需要调整的大小
+// 				if (k >= 0)
+// 					r += s >= 0 ? k : Math.max(s + k, 0);
+// 				else // k <= 0
+// 					// r += s <= 0 ? -1 * k : -1 * Math.min(s + k, 0);
+// 					r -= s <= 0 ? k : Math.min(s + k, 0);
+// 				s += k;
+// 			}
+// 			return r;
+// 		}
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 【记忆化深搜：】一定会超时？O(N=10^5*3?) 可是写不到动规，就先深搜一遍，启蒙一下。。。再改动规。。。改天再写 1955
+        // public int countSpecialSubsequences(int[] a) { // 【TODO】：亲爱的表哥的活宝妹，没想明白，这里怎么会数少了的？明明算法，能够所括所有情况。。明天再想这个题目
+        //     n = a.length; this.a = a;
+        //     g = new ArrayList [3]; Arrays.setAll(g, z -> new ArrayList<>());
+        //     for (int i = 0; i < n; i++)
+        //         g[a[i]].add(i);
+        //     f = new Integer [n][3][2]; // 最后一维，用来标记：是否一定填 j (k=0), 能不能,增加 j 的大小(k=1 时可以)？
+        //     return dfs(0, 0, 0);
+        // }
+        // static final int mod = (int)1e9 + 7; int [] a;
+        // List<Integer> [] g;
+        // Integer [][][] f;
+        // int n; 
+        // int dfs(int i, int j, int k) { // 【TODO】：少数了几种，重复数字的情况
+        //     if (i == n) return j == 2 && k == 1 ? 1 : 0; // 消灭掉了【假阳性】
+		// 	if (j > 2) return 0;
+		// 	if (f[i][j][k] != null) return f[i][j][k];
+        //     long ans = 0;
+		// 	// 任何情况下：都可以，先填一个、在下标 g[j].get(x) 的值为j 时 、被要求的 j
+		// 	for (int x = 0; x < g[j].size(); x++) {
+		// 		if (g[j].get(x) < i) continue;
+		// 		// 【不要，不取、当前下标的 j 值 , 去取下一个可能的 j 值】：
+		// 		// if (x < g[j].size()-1) // 限制条件：不影响结果
+		// 		if (k == 0)
+		// 			ans = (ans + (long)dfs(g[j].get(x)+1, j, 0)) % mod;
+		// 		// 【要，取、当前下标的 j 值 】：
+		// 		ans = (ans + (long)dfs(g[j].get(x) + 1, j, 1)) % mod;
+		// 	}
+		// 	if (k == 1)
+		// 		ans = (ans + (long)dfs(i, j+1, 0)) % mod;
+        //     return f[i][j][k] = (int)ans;
+        // }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// public int winningPlayerCount(int n, int[][] a) {
+		// 	int [][] f = new int [n][11]; // 每个人，不同颜色球的个数
+		// 	for (int [] v : a)
+		// 		f[v[0]][v[1]]++;
+		// 	int ans = 0;
+		// 	boolean win = false;
+		// 	for (int i = 0; i < n; i++) {
+		// 		win = false;
+		// 		for (int j = 0; j < 11; j++) 
+		// 			if (f[i][j] >= i+1) {
+		// 				win = true;
+		// 				break;
+		// 			}
+		// 		if (win) 
+		// 			ans++;
+		// 	}
+		// 	return ans;
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// public int minFlips(int[][] a) {
+		// 	int m = a.length, n = a[0].length;
+		// 	int [] r = new int [m], c = new int [n];
+		// 	for (int i = 0; i < m; i++)
+		// 		for (int j = 0; j < n/2; j++) {
+		// 			if (a[i][j] != a[i][n-1-j])
+		// 				r[i]++;
+		// 		}
+		// 	for (int j = 0; j < n; j++)
+		// 		for (int i = 0; i < m/2; i++)
+		// 			if (a[i][j] != a[m-1-i][j]) c[j]++;
+		// 	return Math.min(Arrays.stream(r).sum(), Arrays.stream(c).sum());
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// public int minFlips(int[][] a) { // 399/661 passed 再不想写这么恶心人的题目了。。。
+		// 	int m = a.length, n = a[0].length;
+		// 	int ss = 0;
+		// 	for (int i = 0; i < m; i++) 
+		// 		ss += Arrays.stream(a[i]).sum();
+		// 	if (m * n < 4) return ss;
+		// 	if (m * n == 4) return Math.min(ss, 4 - ss);
+		// 	int [][] f = new int [m/2+m%2][n/2+n%2];
+		// 	int r = 0, cnt = 0;
+		// 	for (int i = 0; i < m/2+m%2; i++) 
+		// 		for (int j = 0; j < n/2+n%2; j++) {
+		// 			r = 0; cnt = 1; 
+		// 			r += a[i][j];
+		// 			if (m-1-i != i) {
+		// 				r += a[m-1-i][j];
+		// 				cnt++;
+		// 			}
+		// 			if (n-1-j != j) {
+		// 				r += a[i][n-1-j];
+		// 				cnt++;
+		// 			}
+		// 			if (m-1-i != i && n-1-j != j) {
+		// 				r += a[m-1-i][n-1-j];
+		// 				cnt++;
+		// 			}
+		// 			f[i][j] = Math.min(r, cnt - r);
+		// 			if (cnt <= 2 && m != 1 && n != 1) f[i][j] = Math.max(f[i][j], r == 0 ? 0 : r);
+		// 		}
+		// 	// System.out.println("f.length: " + f.length);
+		// 	// for (int z = 0; z < f.length; ++z) 
+		// 	// 	System.out.println(Arrays.toString(f[z]));
+		// 	int sum = 0;
+		// 	for (int i = 0; i < m/2+m%2; i++) 
+		// 		sum += Arrays.stream(f[i]).sum();
+		// 	return Math.min(sum, m * n - ss);
+		// }
 
 		// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-		// N:[1,10^4] 应该是【动规】解法，可是思路。。O(NN=10^8) 不知道，能不能过 TLE ？
-		// 这个【动规】题目，其实狠难，是周赛里通过率最低的一个题目，只有9.0% 通过率
-		// 亲爱的表哥的活宝妹，不知道，哪里想错、数错了。。。晚点儿再写这个
-		public int numberOfSubstrings(String S) {
-			int n = S.length(), x = 0, y = 0; char [] s = S.toCharArray();
-			int [] r = new int [n+1]; // 1 的前缀和
-			for (int i = 0; i < n; i++) 
-				r[i+1] = r[i] + s[i] - '0';
-			System.out.println(Arrays.toString(r));
-			boolean oneDom = r[n] > n-r[n];
-			System.out.println("oneDom: " + oneDom);
-			int [] f = new int [n+1]; // 定义为 f[i]：以 i 为结尾的、S 的前缀、合法子串的个数
-			// 暴力＋部分【动规】解法
-			for (int i = 0; i < n; i++) { // 遍历下标：O(N)
-				System.out.println("\n i: " + i);
-				f[i+1] += (!oneDom ? s[i] - '0' : 1-(s[i]-'0'));
-				System.out.println(Arrays.toString(f));
-				// 当前数是‘1’：狠简单
-				if (!oneDom && s[i] - '0' == 1 && (i > 0 && s[i-1]-'0' == 1)
-					|| oneDom && s[i] - '0' == 0 && (i > 0 && s[i-1]-'0' == 0)) {
-					f[i+1] += f[i] * 2;
-					System.out.println(Arrays.toString(f));
-					continue;
-				}
-				// 当前数是 '0': 比较复杂、繁琐： x=0 y = 1:
-				// 首先：当前 s[i]='0', 子串可以不以当前的’0' 为结尾，那么 f[i+1] 的基数、初始化为 f[i], 就是前一个下标的最多个数
-				f[i+1] += (!oneDom && s[i]-'0' == 0 || oneDom && s[i] == '1' ? f[i] : 0);
-				// 其次，以当前s[i]='0', 子串、以、当前的’0' 为结尾，新增的个数，数出来。。弱弱亲爱的表哥的活宝妹，滚去数吧。。。
-				// 去找、倒序遍历 j, 最大的 j, 使S.substring(j,i+1) 是一个最短的？、以 i 为结尾的合法字符串
-				System.out.println(Arrays.toString(f));
-				for (int j = i-1; j >= 0; j--) {
-					y = r[i+1] - r[j]; // Sum of 1 [j, i]
-					x = i-j+1 - y;     // sum of 0 [j, i]
-					if (!oneDom && y >= (int)Math.pow(x, 2)
-						|| oneDom && y < (int)Math.pow(x, 2)) {
-						System.out.println("S.substring(j, i+1): " + S.substring(j, i+1));
-						f[i+1] += f[j] + 1;
-						System.out.println(Arrays.toString(f));
-					}
-				}
+		// 这个题目，亲爱的表哥的活宝妹，可以回想起先前一个【类似】，求以不同节点为【根节点】的，什么和之类的题型，感觉类似
+		public int[] timeTaken(int[][] egs) {
+			n = egs.length + 1;
+			g = new ArrayList [n];
+			Arrays.setAll(g, z -> new ArrayList<Integer>());
+			for (int [] e : egs) {
+				int u = e[0], v = e[1];
+				g[u].add(v);
+				g[v].add(u);
 			}
-				return !oneDom ? f[n] : n * (n+1) / 2 - f[n];
+// 重新建立树？还是说，【动规】，只要记住状态就可以了，未必一定需要一棵【物理树】！
+			// 感觉，这里，亲爱的表哥的活宝妹，需要一个【数据结构：DFS 深搜】来标记深度等
+			// 设定：【以0 为根节点】: 建立【无向图、树的、基础数据】
+			//f[i][j][k][x]: 以 i 为根节点的，子树的、距离根节点0 的[2:Deptth-odd/even-Cnts];
+			// 以 i 为根节点的，子树的、最深叶子【奇数叶子】【偶数叶子】的【深度记录】
+			int [][] f = new int [n][6]; // [2:Deptth-odd/even-Cnts][2:maxDepth-ODD[odd/even]][2:maxDepth-EVEN[odd/even]]
+			ans = new int [n];
+			Arrays.fill(ans, 2 * n);
+			ans[0] = 0;
+			// 同步计算：0 为根节点，ans[0] 时，各节点的更新时间，在 ans 数组里
+			dfs(0, -1, new int [2], 0);     //  [0,1]                  Odd: [2,3]                 Even:[4,5]
+			// 最后精确：与其它任何节点非0 节点为【根节点】，所存在的、与以0 为根节点的【时间出入、误差校正】
+			// 这部分最难：但感觉，不是不能攻克的！！先写前一题，再回来写这里
+		}
+		List<Integer> [] g;
+		int [] ans;
+		int n;
+		void dfs(int u, int p, int [] depth, int t) {
+			// 笨宝妹：叶子节点，拎不清楚，提出来，单独考虑
+			if (g[u].size() == 1 && g[u].get(0) == p) { // 叶子节点
+				if (u % 2 == 1) { // 奇
+					// f[u][0] = f[u][2] = 1; // 以 i 为根节点的，子树的、距离根节点0 的[2:Deptth-odd/even-Cnts];
+					// f[u][1] = f[u][3] = 0;
+					f[u][2] = 1; // 以 i 为根节点的，子树的、距离根节点0 的[2:Deptth-odd/even-Cnts];
+					f[u][3] = 0;
+				} else {         // 偶
+					// f[u][0] = f[u][4] = 0;
+					// f[u][1] = f[u][5] = 1; // 
+					f[u][4] = 0;
+					f[u][5] = 1; // 
+				}   
+			}
+			if (p != -1) {
+				t += 2 - u % 2;
+				ans[u] = t;
+			}
+			if (u % 2 == 0) depth[1]++;// 亲爱的表哥的活宝妹，这里把奇偶写得反一点儿了。。。
+			else depth[0]++; // 记入当前节点 u 奇偶性深度
+			f[u][0] = depth[0]; // 以 i 为根节点的，子树的、距离根节点0 的/ 自已所在深度的 [2:Deptth-odd/even-Cnts] 计数
+			f[u][1] = depth[1]; // [0,1] 是自0 为根节点，【自顶向下】纪录 
+			for (int v : g[u]) {
+				if (v == p) continue;
+				dfs(v, u, depth);
+				// 根据子节点：累积当前【根节点U】的【最大深度、奇数】【最大深度、偶数】
+				// 【2,3】【4,5】是自叶子向上，【自底向上】纪录的
+				// 取所有叶子节点的最大值 
+				// if (f[v][2] >= f[u][2]) {
+					// f[u][2] = f[v][2];
+					f[u][2] = Math.max(f[u][2], f[v][2]); // 这个不同步更新，会造成什么结果灾难吗？总之，记的是最大深度。。
+					f[u][3] = Math.max(f[u][3], f[v][3]); // 这个不同步更新，会造成什么结果灾难吗？总之，记的是最大深度。。
+				// }
+				// if (f[v][5] >= f[u][5]) {
+					// f[u][5] = f[v][5];
+					f[u][4] = Math.max(f[u][4], f[v][4]);
+					f[u][5] = Math.max(f[u][5], f[v][5]);
+				// }
+			}
+			// 累加当前节点的深度信息
+			if (u % 2 == 1) {
+				f[u][2]++;
+				f[u][4]++;
+			} else {
+				f[u][3]++;
+				f[u][5]++;
+			}
 		}
 	}
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
     public static void main (String[] args) {
 		Solution s = new Solution ();
 
-		// String a = "101101";
-		String a = "1001";
-		System.out.println("a: " + a);
+		// int [][] a = new int [][] {{1,0,0},{0,1,0},{0,0,1}};
+		// int [][] a = new int [][] {{0,1},{0,1},{0,0}};
+		// int [][] a = new int [][] {{1},{1},{1},{0}};
+		// int [][] a = new int [][] {{1,0,0},{0,0,1},{0,0,1}};
+		// int [][] a = new int [][] {{0},{1},{0},{1},{1}};
+		// int [][] a = new int [][] {{0,1,1,0}};
+		int [][] a = new int [][] {{0},{1},{1},{1},{1}};
 
-		int r = s.numberOfSubstrings(a);
+		System.out.println("a.length: " + a.length);
+		for (int z = 0; z < a.length; ++z) 
+			System.out.println(Arrays.toString(a[z]));
+
+		int r = s.minFlips(a);
 		System.out.println("r: " + r);
     }
 }
-// ListNode head = new ListNode(a[0]); 
+// ListNode head = new ListNode(a0]); 
 // head.buildList(head, a);
 // head.printList(head);
-// TreeNode rr = new TreeNode(a[0]);
+// Tree [N de rr = new [] TreeNode(a0);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
@@ -1476,22 +1763,5 @@ public class cmp {
 // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
