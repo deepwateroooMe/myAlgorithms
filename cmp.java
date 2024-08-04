@@ -1,23 +1,14 @@
 import com.ListNode;
-
 import java.util.HashMap;
-
 import java.util.Map;
-
 import java.util.ArrayList;
-
 import java.util.*;
-
 import java.util.stream.*;
-
 import java.util.stream.Collectors;
-
 import java.util.HashSet;
-
 import java.util.Set;
 
 import java.math.BigInteger;
-
 import static java.util.stream.Collectors.toMap;
 
 public class cmp {
@@ -1549,102 +1540,322 @@ public class cmp {
 		// 	return Math.min(sum, m * n - ss);
 		// }
 
+// 		// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 		// 这个题目，亲爱的表哥的活宝妹，可以回想起先前一个【类似】，求以不同节点为【根节点】的，什么和之类的题型，感觉类似
+// 		// 亲爱的表哥的活宝妹，目前能够想到的基本也就是这么多
+// 		public int[] timeTaken(int[][] egs) {
+// 			n = egs.length + 1;
+// 			g = new ArrayList [n];
+// 			Arrays.setAll(g, z -> new ArrayList<Integer>());
+// 			for (int [] e : egs) {
+// 				int u = e[0], v = e[1];
+// 				g[u].add(v);
+// 				g[v].add(u);
+// 			}
+// // 重新建立树？还是说，【动规】，只要记住状态就可以了，未必一定需要一棵【物理树】！
+// 			// 感觉，这里，亲爱的表哥的活宝妹，需要一个【数据结构：DFS 深搜】来标记深度等
+// 			// 设定：【以0 为根节点】: 建立【无向图、树的、基础数据】
+// 			//f[i][j][k][x]: 以 i 为根节点的，子树的、距离根节点0 的[2:Deptth-odd/even-Cnts];
+// 			// 以 i 为根节点的，子树的、最深叶子【奇数叶子】【偶数叶子】的【深度记录】
+// 			int [][] f = new int [n][6]; // [2:Deptth-odd/even-Cnts][2:maxDepth-ODD[odd/even]][2:maxDepth-EVEN[odd/even]]
+// 			dist = new int [n];
+// 			Arrays.fill(dist, 2 * n);
+// 			dist[0] = 0;
+// 			// 同步计算：0 为根节点，dist[0] 时，各节点的更新时间，在 dist 数组里
+// 			dfs(0, -1, new int [2], 0);     //  [0,1]                  Odd: [2,3]                 Even:[4,5]
+// 			// 最后精确：与其它任何节点非0 节点为【根节点】，所存在的、与以0 为根节点的【时间出入、误差校正】
+// 			// 这部分最难：但感觉，不是不能攻克的！！先写前一题，再回来写这里
+// 			int [] ans = new int [n];
+// 			ans = Arrays.copyOf(dist, n);
+// // 遍历：以其它非0 节点、为【根节点】时，必要的修正：
+// 			// 【TODO】：亲爱的表哥的活宝妹，把思路基本自己想清楚了，但没能想到最佳思路的【换根动规】。。以前写过【两次深搜】的题型，当时没能理解消化透，忘记了
+// 			// 【TODO】：亲爱的表哥的活宝妹，再自己想想这个问题，改天——某天上午，再花一两个小时的时间，来熟悉这个题型。。
+// 			// 亲爱的表哥的活宝妹，继续去想：0 为根节点时，其它节点，3 种情况：亲爱的表哥的活宝妹，把这里想狠复杂了，先看下提示思路，再写。。。
+// 			// 要么【最大深度、奇数、偶数、叶子节点】：只区分，叶子节点的奇偶性，就可以了；
+// 			// 但是根节点0 有其它叶子，要怎纪录？似乎要记一个【次长深度、奇偶叶子。。】思路能够想通，类似【树的最大直径，记两条最长的叶子路径】
+// 			// 要么【非最大深度、叶子节点】：最简单，【此叶子－0- 最大深度最耗时叶子】，就可以了 
+// 			// 要么【非叶子节点】：也最简单，它的【最深度最耗时叶子－0-】
+// 			// 【总结】：思考的缺陷，亲爱的表哥的活宝妹，只想到了，如题目要求答案所要求的、【顺序遍历】N 个节点为根的最大耗时，
+// 			// 亲爱的表哥的活宝妹，没能想到，如果【DFS 深搜、树型深搜、遍历N 个节点】，会有奇妙解法。。
+// 			for (int i = 1; i < n; i++) {
+// 				if (i % 2 == 1) { // 当前【奇数节点】
+// 					// 【叶子节点】：
+// 					if (f[i][2]+f[i][3] == 0 && f[i][4] + f[i][5] == 0) {
+// 						// 继续区分：最大深度叶子，与，非最大深度短叶子
+// 					}
+// 				} else {
+// 				}
+// 			}
+// 		}
+// 		List<Integer> [] g;
+// 		int [] dist;
+// 		int n;
+// 		void dfs(int u, int p, int [] depth, int t) {
+// 			if (p != -1) {
+// 				t += 2 - u % 2;
+// 				dist[u] = t;
+// 			}
+// 			if (u % 2 == 0) depth[1]++;// 亲爱的表哥的活宝妹，这里把奇偶写得反一点儿了。。。
+// 			else depth[0]++; // 记入当前节点 u 奇偶性深度
+// 			f[u][0] = depth[0]; // 以 i 为根节点的，子树的、距离根节点0 的/ 自已所在深度的 [2:Deptth-odd/even-Cnts] 计数
+// 			f[u][1] = depth[1]; // [0,1] 是自0 为根节点，【自顶向下】纪录 
+// 			for (int v : g[u]) {
+// 				if (v == p) continue;
+// 				dfs(v, u, depth);
+// 				// 根据子节点：累积当前【根节点U】的【最大深度、奇数】【最大深度、偶数】
+// 				// 【2,3】【4,5】是自叶子向上，【自底向上】纪录的
+// 				// 取所有叶子节点的最大值：区分，【奇数叶子】与【偶数叶子】
+// 				if (f[u][2] + f[u][3] == 0 && v % 2 == 1) { // 初始化值 :第一个奇数叶子
+// 					if (f[v][2] + f[v][3] == 0) { // 奇数叶子节点 
+// 						f[u][2] = f[v][0];
+// 						f[u][3] = f[v][1];
+// 					} else {
+// 						f[u][2] = f[v][2];
+// 						f[u][3] = f[v][3];
+// 					}
+// 				} else if (f[u][4] + f[u][5] == 0 && v % 2 == 0) { // 初始化值 :第一个偶数叶子
+// 					if (f[v][4] + f[v][5] == 0) {  // 偶数叶子节点 
+// 						f[u][4] = f[v][0];
+// 						f[u][5] = f[v][1];
+// 					} else {
+// 						f[u][4] = f[v][4];
+// 						f[u][5] = f[v][5];
+// 					}
+// 				} else if (f[v][2] + f[v][3] > f[u][2] + f[u][3]) { // 同步调更新：最大深度【奇数叶子】
+// 					f[u][2] = f[v][2];
+// 					f[u][3] = f[v][3];
+// 				}
+// 				if (f[v][4] + f[v][5] > f[u][4] + f[u][5]) { // 同步调更新：最大深度【偶数叶子】
+// 					f[u][4] = f[v][4];
+// 					f[u][5] = f[v][5];
+// 				}
+// 			}
+// 		}
+// 		// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 		// 亲爱的表哥的活宝妹，亲爱的表哥的、弱弱活宝妹，感觉，把上面的思路，基本都想透彻了，但亲爱的表哥的活宝妹，现在的亲爱的表哥的活宝妹，还是缺乏第一时间【动规】的直觉。。。
+// 		// 亲爱的表哥的活宝妹，再看别人的题解后，亲爱的表哥的活宝妹，这是亲爱的表哥的活宝妹，【行百里者，半于九十】、就差最后那一丝丝儿的提升的、缺撼。。。
+// 		// 看来，亲爱的表哥的活宝妹，以后还是得，每个周的比较，乖乖地、一个一个地，都理解透彻、写完写好。。。
+// 		// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 		public int[] timeTaken(int[][] egs) {
+// 			n = egs.length + 1;
+// 			g = new ArrayList [n];
+// 			Arrays.setAll(g, z -> new ArrayList<Integer>());
+// 			for (int [] e : egs) {
+// 				int u = e[0], v = e[1];
+// 				g[u].add(v);
+// 				g[v].add(u);
+// 			}
+// 			f = new int [n]; // f[i] ：定义为，以 i 为根节点，从 i 开始，遍历完其所有子树，所需要的最长时间
+// 			ans = new int [n];
+// 			// 第一次【DFS 深搜】：自底向上，更新 f[i]: 从更新 i 开始，更新完所有子树、所需要的最长时间
+// 			dfs(0, -1);
+// 			// 第二次【DFS 深搜】：【换根动规】
+// 			dfs2(0, -1);
+// 			return ans;
+// 		}
+// 		List<Integer> [] g;
+// 		int [] f, ans;
+// 		int n;
+// 		void dfs(int u, int p) {
+// 			for (int v : g[u]) {
+// 				if (v == p) continue;
+// 				dfs(v, u);
+// 				f[u] = Math.max(f[u], f[v] + 2 - v % 2);
+// 			}
+// 		}
+// 		void dfs2(int u, int p) {
+// 			int max = 0, sec = 0, time = 0;
+// 			// 使用：第一次【DFS 深搜】的结果 f[i], 来O(1) 算出，当前【根节点 u】的最大、次大耗时
+// 			for (int v : g[u]) {
+// // 下面【写错了】：想当然呀、想当然。。都写出惯性了。。。
+// 				// if (v == p) continue; 
+// 				time = f[v] + 2 - v % 2;
+// 				if (time > max) {
+// 					sec = max;
+// 					max = time;
+// 				} else if (time > sec)
+// 					sec = time;
+// 			}
+// 			ans[u] = max; // 以 u 为根节点时，最大耗时
+// 			// 【换根动规】：【DFS 深搜，树型遍历、换根父节点与子节点】，实现【DFS 深搜、树型动规】解题
+// 			for (int v : g[u]) { // 换根子节点：遍历子节点，分别以各【子节点】作为根节点时，引发的【根节点 u 的值f[u] 的、动规更新】
+// 				if (v == p) continue;
+// 				time = f[v] + 2 - v % 2;
+// 				// f[u] = (time == max ? sec : max) + 2 - u % 2; // 区分：当前子节点 v, 是最耗时子节点，与否？
+// 				f[u] = time == max ? sec : max; // 当先前U 的子节点V 成新根节点时， V 是先前U 根节点的最大耗时子节点吗？
+// 				// 上面，当以、特定子节点 v 为【根节点】时， f[u] 也是一个固定、确定、精确值
+// 				// 【DFS 深搜】：以 v 为根节点时，最大耗时。。。思路狠奇特。。
+// 				dfs2(v, u);
+// 			}
+// 		}
+
+	// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+	// int [][] dirs = {{1, 0}, {0, 1}, {0, -1}, {-1, 0}};
+	// int [][] ddis = {{-1, -1}, {1, -1}, {-1, 1}, {1, 1}};
+	// int n;
+	// int [][] r, a;
+	// public neighborSum(int[][] a) {
+	// 	n = a.length;
+	// 	r = new int [n*n][2];
+	// 	for (int i = 0; i < n; i++)
+	// 		for (int j = 0; j < n; j++) 
+	// 			r[a[i][j]] = new int [] {i, j};
+	// 	this.a = new int [n][n];
+	// 	// this.a = a;
+	// 	for (int i = 0; i < n; i++)
+	// 		this.a[i] = Arrays.copyOf(a[i], n);
+	// }
+	// public int adjacentSum(int value) {
+	// 	int ans = 0, i = 0, j = 0;
+	// 	for (int [] d : dirs) {
+	// 		i = r[value][0] + d[0];
+	// 		j = r[value][1] + d[1];
+	// 		if (i < 0 || i >= n || j < 0 || j >= n) continue;
+	// 		ans += a[i][j];
+	// 	}
+	// 	return ans;
+	// }
+	// public int diagonalSum(int value) {
+	// 	int ans = 0, i = 0, j = 0;
+	// 	for (int [] d : ddis) {
+	// 		i = r[value][0] + d[0];
+	// 		j = r[value][1] + d[1];
+	// 		if (i < 0 || i >= n || j < 0 || j >= n) continue;
+	// 		ans += a[i][j];
+	// 	}
+	// 	return ans;
+	// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 笨宝妹；它说是图，那就建个图呀，然后求最短距离，就可以了。。。
+		// public int [] shortestDistanceAfterQueries(int n, int[][] qs) {
+		// 	int m = qs.length;
+		// 	this.n = n;
+		// 	g = new ArrayList [n-1];
+		// 	Arrays.setAll(g, z -> new ArrayList<Integer>());
+		// 	for (int i = 0; i < n-1; i++)
+		// 		g[i].add(i+1);
+		// 	int [] ans = new int [m];
+		// 	d = new int [n];
+		// 	for (int i = 0; i < m; i++) {
+		// 		int u = qs[i][0], v = qs[i][1];
+		// 		g[u].add(v);
+		// 		ans[i] = shortestDist(0, n-1);
+		// 	}
+		// 	return ans;
+		// }
+		// List<Integer> [] g; // 有向图
+		// int n;
+		// int [] d;
+		// int shortestDist(int u, int vv) {
+		// 	Arrays.fill(d, Integer.MAX_VALUE);
+		// 	d[u] = 0;
+		// 	Queue<int []> q = new PriorityQueue<>((x, y) -> x[1] - y[1]);
+		// 	q.offer(new int [] {u, 0});
+		// 	while (!q.isEmpty()) {
+		// 		int [] cur = q.poll();
+		// 		if (cur[0] == vv) return cur[1];
+		// 		for (int v : g[cur[0]]) {
+		// 			if (d[v] > cur[1]+1) {
+		// 				d[v] = 1 + cur[1];
+		// 				q.offer(new int [] {v, d[v]});
+		// 			}
+		// 		}
+		// 	}
+		// 	return -1;
+		// }
+
 		// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-		// 这个题目，亲爱的表哥的活宝妹，可以回想起先前一个【类似】，求以不同节点为【根节点】的，什么和之类的题型，感觉类似
-		public int[] timeTaken(int[][] egs) {
-			n = egs.length + 1;
-			g = new ArrayList [n];
-			Arrays.setAll(g, z -> new ArrayList<Integer>());
-			for (int [] e : egs) {
-				int u = e[0], v = e[1];
-				g[u].add(v);
-				g[v].add(u);
+		// N:[1,10^5] 数量级变大了，要怎么处理呢？ TLE 638/642
+		public int[] shortestDistanceAfterQueries(int n, int [][] qs) { 
+			int m = qs.length; this.n = n; 
+			f = new int [n];
+			// int [] df = new int [n]; // d: 【差分数组】, 倒着的。。感觉这里的【初始化】有点儿问题
+			// for (int i = 0; i < n; i++)
+			// 	f[i] = n-1-i;
+			// Arrays.fill(df, 1); df[n-1] = 0;
+			// int [] ss = new int [n];
+			// for (int i = n-2; i >= 0; i--) 
+			// 	ss[i] = ss[i+1] + df[i];
+			// System.out.println(Arrays.toString(f));
+			// System.out.println(Arrays.toString(df));
+			// System.out.println(Arrays.toString(ss));
+			// 【建图】：亲爱的表哥的活宝妹的图，另外它用：仅只记，添加的边。。
+			g = new ArrayList [n];  // 有向图。。
+			Arrays.setAll(g, z -> new ArrayList<>());
+			for (int i = 0; i < n-1; i++) 
+				g[i+1].add(i);
+			d = new int [n];
+			for (int i = 0; i < n; i++)
+				d[i] = n-1-i;
+			int [] r = new int [m];
+			for (int i = 0; i < m; i++) {
+				System.out.println("\n i: " + i);
+				int u = qs[i][0], v = qs[i][1];
+				// f[u] = Math.min(f[u], f[v] + 1);
+				// g[v].add(u);
+				// // r[i] = shortestDist(v);
+				// 亲爱的表哥的活宝妹、呀。。。不是说好的，下午想通的，【树型动规】吗？ TLE 更慢：637/642 passed
+				dfs(v); // v, f[v]
+				r[i] = f[0];
+				// // 亲爱的表哥的活宝妹，再试：【差分数组】
+				// df[v-1]--;
+				// df[u]++;
+				// System.out.println(Arrays.toString(df));
+				// for (int j = v-1; j >= 0; j--) 
+				// 	ss[j] = ss[j+1] + df[j];
+				// r[i] = ss[0];
 			}
-// 重新建立树？还是说，【动规】，只要记住状态就可以了，未必一定需要一棵【物理树】！
-			// 感觉，这里，亲爱的表哥的活宝妹，需要一个【数据结构：DFS 深搜】来标记深度等
-			// 设定：【以0 为根节点】: 建立【无向图、树的、基础数据】
-			//f[i][j][k][x]: 以 i 为根节点的，子树的、距离根节点0 的[2:Deptth-odd/even-Cnts];
-			// 以 i 为根节点的，子树的、最深叶子【奇数叶子】【偶数叶子】的【深度记录】
-			int [][] f = new int [n][6]; // [2:Deptth-odd/even-Cnts][2:maxDepth-ODD[odd/even]][2:maxDepth-EVEN[odd/even]]
-			ans = new int [n];
-			Arrays.fill(ans, 2 * n);
-			ans[0] = 0;
-			// 同步计算：0 为根节点，ans[0] 时，各节点的更新时间，在 ans 数组里
-			dfs(0, -1, new int [2], 0);     //  [0,1]                  Odd: [2,3]                 Even:[4,5]
-			// 最后精确：与其它任何节点非0 节点为【根节点】，所存在的、与以0 为根节点的【时间出入、误差校正】
-			// 这部分最难：但感觉，不是不能攻克的！！先写前一题，再回来写这里
+			return r;
 		}
-		List<Integer> [] g;
-		int [] ans;
-		int n;
-		void dfs(int u, int p, int [] depth, int t) {
-			// 笨宝妹：叶子节点，拎不清楚，提出来，单独考虑
-			if (g[u].size() == 1 && g[u].get(0) == p) { // 叶子节点
-				if (u % 2 == 1) { // 奇
-					// f[u][0] = f[u][2] = 1; // 以 i 为根节点的，子树的、距离根节点0 的[2:Deptth-odd/even-Cnts];
-					// f[u][1] = f[u][3] = 0;
-					f[u][2] = 1; // 以 i 为根节点的，子树的、距离根节点0 的[2:Deptth-odd/even-Cnts];
-					f[u][3] = 0;
-				} else {         // 偶
-					// f[u][0] = f[u][4] = 0;
-					// f[u][1] = f[u][5] = 1; // 
-					f[u][4] = 0;
-					f[u][5] = 1; // 
-				}   
-			}
-			if (p != -1) {
-				t += 2 - u % 2;
-				ans[u] = t;
-			}
-			if (u % 2 == 0) depth[1]++;// 亲爱的表哥的活宝妹，这里把奇偶写得反一点儿了。。。
-			else depth[0]++; // 记入当前节点 u 奇偶性深度
-			f[u][0] = depth[0]; // 以 i 为根节点的，子树的、距离根节点0 的/ 自已所在深度的 [2:Deptth-odd/even-Cnts] 计数
-			f[u][1] = depth[1]; // [0,1] 是自0 为根节点，【自顶向下】纪录 
+		List<Integer> [] g; int n;
+		int [] d, f;
+		void dfs(int u) {
+			if (u == 0) return;
 			for (int v : g[u]) {
-				if (v == p) continue;
-				dfs(v, u, depth);
-				// 根据子节点：累积当前【根节点U】的【最大深度、奇数】【最大深度、偶数】
-				// 【2,3】【4,5】是自叶子向上，【自底向上】纪录的
-				// 取所有叶子节点的最大值 
-				// if (f[v][2] >= f[u][2]) {
-					// f[u][2] = f[v][2];
-					f[u][2] = Math.max(f[u][2], f[v][2]); // 这个不同步更新，会造成什么结果灾难吗？总之，记的是最大深度。。
-					f[u][3] = Math.max(f[u][3], f[v][3]); // 这个不同步更新，会造成什么结果灾难吗？总之，记的是最大深度。。
-				// }
-				// if (f[v][5] >= f[u][5]) {
-					// f[u][5] = f[v][5];
-					f[u][4] = Math.max(f[u][4], f[v][4]);
-					f[u][5] = Math.max(f[u][5], f[v][5]);
-				// }
+				f[v] = Math.min(f[v], f[u] + 1);
+				dfs(v);
 			}
-			// 累加当前节点的深度信息
-			if (u % 2 == 1) {
-				f[u][2]++;
-				f[u][4]++;
-			} else {
-				f[u][3]++;
-				f[u][5]++;
+		}
+		int shortestDist(int u) {
+			Queue<int []> q = new PriorityQueue<>((x, y) -> x[1] - y[1]);
+			q.offer(new int [] {u, d[u]});
+			while (!q.isEmpty()) {
+				int [] cur = q.poll();
+				if (cur[0] == 0) {
+					d[0] = Math.min(d[0], cur[1]);
+					return d[0];
+				}
+				for (int v : g[cur[0]]) {
+					if (d[v] > cur[1] + 1) {
+						d[v] = cur[1] + 1;
+						q.offer(new int [] {v, d[v]});
+					}
+				}
 			}
+			return d[0];
+		}
+
+		// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// 这题目好难！！仅只27 个人能过！！
+		// 亲爱的表哥的活宝妹，没有想、这个题目，改天再写。。
+		public List<Integer> numberOfAlternatingGroups(int[] a, int[][] qs) {
+			int n = a.length, m = qs.length;
+			int [] d = new int [n]; // 差分数组
+			d[0] = a[0];
+			for (int i = 1; i < n; i++) 
+				d[i] = d[i-1] + (a[i] - a[i-1]);
+			int [] f = new int [n];// 动规： f[i]: 以 i 为起点的，最大长度
 		}
 	}
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
     public static void main (String[] args) {
 		Solution s = new Solution ();
 
-		// int [][] a = new int [][] {{1,0,0},{0,1,0},{0,0,1}};
-		// int [][] a = new int [][] {{0,1},{0,1},{0,0}};
-		// int [][] a = new int [][] {{1},{1},{1},{0}};
-		// int [][] a = new int [][] {{1,0,0},{0,0,1},{0,0,1}};
-		// int [][] a = new int [][] {{0},{1},{0},{1},{1}};
-		// int [][] a = new int [][] {{0,1,1,0}};
-		int [][] a = new int [][] {{0},{1},{1},{1},{1}};
+		int [][] a = new int [][] {{2,4},{0,2},{0,4}};
 
-		System.out.println("a.length: " + a.length);
-		for (int z = 0; z < a.length; ++z) 
-			System.out.println(Arrays.toString(a[z]));
-
-		int r = s.minFlips(a);
-		System.out.println("r: " + r);
+		int [] r = s.shortestDistanceAfterQueries(5, a);
+		System.out.println(Arrays.toString(r));
     }
 }
 // ListNode head = new ListNode(a0]); 
@@ -1763,5 +1974,6 @@ public class cmp {
 // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
