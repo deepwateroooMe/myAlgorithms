@@ -1,23 +1,13 @@
 import com.ListNode;
-
 import java.util.HashMap;
-
 import java.util.Map;
-
 import java.util.ArrayList;
-
 import java.util.*;
-
 import java.util.stream.*;
-
 import java.util.stream.Collectors;
-
 import java.util.HashSet;
-
 import java.util.Set;
-
 import java.math.BigInteger;
-
 import static java.util.stream.Collectors.toMap;
 
 public class cmp {
@@ -309,80 +299,222 @@ public class cmp {
 		// 	f = new int [n];
 		// 	a = new Boolean [n];
 		// 	dfs(0, -1);
-		// 	System.out.println(Arrays.toString(f));
-		// 	System.out.println(Arrays.toString(a));
 		// 	int ans = 0;
+		// 	// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 		// 	// 亲爱的表哥的活宝妹，上面、这里、理解错了，不是说，所有【子树】相同大小，而是，所有的、【子树的子树】，都是合格好树！！
 		// 	// 中间【隔了一代子树】！题型，像是，那个【小偷、树型偷东西】
 		// 	// 【小偷、树型偷东西】：那个题型，也狠经典，可是亲爱的表哥的活宝妹，把它弄忘记了，一时想不起来，是如何隔代隔层偷东西的？
+		// 	// 亲爱的表哥的活宝妹，这么简单的题目，周六傍晚没能写出来，仅只因为，那天，亲爱的表哥的活宝妹，没有带本子回住处
+		// 	// 对于写错了的 test-case, 没能画出树图来分析和 debug 而已。但是亲爱的表哥的活宝妹只要想写，就一定写得出来！！
 		// 	for (int i = 0; i < n; i++) 
 		// 		if (a[i] != null && a[i]) ans++;
 		// 	return ans;
 		// }
 		// List<Integer> [] g;
-		// int [] f; // nodes count 
-		// Boolean [] a; // balanced or not
+		// int [] f;     // total  nodes count 
+		// Boolean [] a; // balanced or not 重新定义为：是否，所有的、以该根节点的、任何【子节点】为根的子树，都是合格好树
 		// int n;
 		// void dfs(int u, int p) {
-		// 	// if (g[u].size() == 1 && g[u].get(0) == p) {
-		// 	if (g[u].size() == 1) {
+		// 	// if (g[u].size() == 1) {  // 【写错了】：特例，0 根节点
+		// 	if (g[u].size() == 1 && g[u].get(0) == p) {
 		// 		f[u] = 1;
-		// 		a[u] = true;
+		// 		a[u] = true; // 【叶子节点】一定是全格的
 		// 		return ;
 		// 	}
 		// 	int val = 0, cnt = 0, ttCnt = 0;
-		// 	// int cnt = 0;
+		// 	// 以【子节点】的子节点为根的、树的大小，也是严格标准
 		// 	for (int v : g[u]) {
 		// 		if (v == p) continue;
 		// 		dfs(v, u);
-		// 		if (val == 0) {
+		// 		if (val == 0) 
 		// 			val = f[v];
-		// 		} else if (f[v] != val) 
+		// 		else if (f[v] != val)  // 【写错了】：题目要求中间隔一代。。
 		// 			a[u] = false;
 		// 		ttCnt += f[v];
 		// 		// if (a[v]) cnt++; // 【写错了】：这相标准，不对！！
-		// 		if (a[v] || f[v] == val) cnt++;
+		// 		// 重定标准：所有、子节点为根的子树，都合法的、子节点统计
+		// 		// // 先定义不合法的：这里写得也不对
+		// 		// if (!a[v]) a[u] = false;
+		// 		// if (a[v] || f[v] == val) cnt++;
+		// 		// if (a[v])
+		// 		cnt++;
 		// 	}
 		// 	if (a[u] == null && cnt == g[u].size()-(p == -1 ? 0 : 1)) a[u] = true;
 		// 	else a[u] = false;
 		// 	f[u] = ttCnt + 1;
 		// }
 
+// 		// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 		// 【数据规模变大了】：【N=2000,a[i]=1000,preA[i]=1000】，上个写法，一定超时！！
+// 		// 【亲爱的表哥的活宝妹，今天还不能写这个题目，读不懂。。明天上午再写这个题目】
+// 		// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 		// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 		// 【记忆化深搜】就不用再想了，如上题解法的【记忆化深搜】也一定超时！！
+// 		// 【动规】：亲爱的表哥的活宝妹，可以试写。但感觉，这个数据规模的【动规】，仅只改写【记忆化深搜】为【动规】，亲爱的表哥的活宝妹感觉，【动规】，也还会超时！！
+// 		// 【动规】＋必要的【优化】：什么狗屁【树状数组】【O(logN) 级别的、区间求和】优化，用起来，或许能过, 解法为O(N*M*log(M)) 应该能过
+// 		// 【动规】＋必要的【优化】：也可以从，对【原数组 A 的、数据预处理】方面考虑，优化。也就是，将每个下标 i 的【合法、取值范围】极尽可能地缩小，缩小到，不TLE
+// 		// 这么看，这个题目，也仅仅只是，亲爱的表哥的活宝妹，还没能民习惯写【动规】而已。。
+// 		// 习惯了写【自尾向头】的【记忆化深搜】，亲爱的表哥的活宝妹，还需要也应该适应，写【自头向尾】的【动规】！！
+// 		static final int mod = (int)1e9 + 7;
+// 		public int countOfPairs(int[] a) {
+// 			int n = a.length, m = Arrays.stream(a).max().getAsInt();
+// 			int [][] f = new int [n][m+1]; // 不再用，这个常规打开方式。。。
+// 			// 【记忆化深搜】：亲爱的表哥的活宝妹，总是【自尾向头】来解决子下标的结果；
+// 			// 【动规】：它们的题解，都是【自头向尾】来解决子下标的结果。。
+// // The range to be filled extends from index fromIndex, inclusive, to index toIndex, exclusive.
+// 			Arrays.fill(f[0], 0, a[0]+1, 1); // [fromIndex_Inclusive, toIndex_Exclusive)
+// 			long s = 0l; // 【每个下标、都初始化】的、每个下标的、前缀和
+// 			int maxK = 0;
+// 			// 遍历：下标【1,n-1】求解
+// 			for (int i = 1; i < n; i++) {
+// 				s = 0l;
+// 				maxK = Math.min(0, a[i-1] - a[i]);
+// 				for (int j = 0; j <= m; j++) {
+// 					if (j + maxK < 0) f[i][j] = 0;
+// 					else {
+// 						s += f[i-1][j + maxK];
+// 						f[i][j] = (int)(s % mod);
+// 					}
+// 				}
+// 			}
+// 			s = 0l;
+// 			for (int i = 0; i <= a[n-1]; i++) 
+// 				s = (s + f[n-1][i]) % mod;
+// 			return (int) s;
+// 		}
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// public int[] resultsArray(int[] a, int k) {
+		// 	int n = a.length, j = 0;
+		// 	int [] r = new int [n-k+1];
+		// 	Arrays.fill(r, -1);
+		// 	boolean valid = false;
+		// 	for (int i = 0; i < n-k+1; i++) {
+		// 		valid = true;
+		// 		for (j = i+1; j < i+k; j++) {
+		// 			if (j == i+1 && a[j] != a[i] + 1
+		// 				|| j > i+1 && a[j] != a[j-1]+1) {
+		// 				valid = false;
+		// 				break;
+		// 			} 
+		// 		}
+		// 		if (valid) r[i] = a[j-1];
+		// 	}
+		// 	return r;
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// public int[] resultsArray(int[] a, int k) {
+		// 	int n = a.length, j = 0;
+		// 	int [] f = new int [n];// counts the # of consecutive increasing length
+		// 	Arrays.fill(f, 1);
+		// 	for (int i = 1; i < n; i++) 
+		// 		if (a[i] == a[i-1] + 1)
+		// 			f[i] = f[i-1] + 1;
+		// 	int [] r = new int [n-k+1];
+		// 	Arrays.fill(r, -1);
+		// 	for (int i = k-1; i < n; i++) 
+		// 		if (f[i] >= k) r[j++] = a[i];
+		// 		else j++;
+		// 	return r;
+		// }
+
 		// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-		// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-		// 【数据规模变大了】：【N=2000,a[i]=1000,preA[i]=1000】，上个写法，一定超时！！
-		// 亲爱的表哥的活宝妹，亲爱的表哥的活宝妹、木头活宝妹！！要怎么想这相题目呢？
-		// 【记忆化深搜】就不用再想了，如上题解法的【记忆化深搜】也一定超时！！
-		// 【动规】：亲爱的表哥的活宝妹，可以试写。但感觉，这个数据规模的【动规】，仅只改写【记忆化深搜】为【动规】，亲爱的表哥的活宝妹感觉，【动规】，也还会超时！！
-		// 【动规】＋必要的【优化】：什么狗屁【树状数组】【O(logN) 级别的、区间求和】优化，用起来，或许能过, 解法为O(N*M*log(M)) 应该能过
-		// 【动规】＋必要的【优化】：也可以从，对【原数组 A 的、数据预处理】方面考虑，优化。也就是，将每个下标 i 的【合法、取值范围】极尽可能地缩小，缩小到，不TLE
-		static final int mod = (int)1e9 + 7;
-		public int countOfPairs(int[] a) {
-			// 亲爱的表哥的活宝妹，这个题目，是可能过的，再稍微优化一下，不必要的遍历，不做；前合法性，不自己制造不合法和后续检测
-			int n = a.length, m = Arrays.stream(a).max().getAsInt();
-			if (n == 1) return n+1;
-			// long [][] f = new long [n][m+1]; // 不再用，这个常规打开方式。。。
-			// 【TODO】：BIT O(logN) 级别的【区间和】，可以取余 % mod 吗？应该也可以？
-			BIT [] f = new BIT [n]; // 定义，每个 BIT-f[i]: 是个长度为 m+1 的数组。。。可是，亲爱的表哥的活宝妹，上个题目，还没能吃透，没能 debug 出来。。
-			// 亲爱的表哥的活宝妹，不写这个题目了，过几天再写。。亲爱的表哥的活宝妹，这次一定把这个狗屁BIT 弄懂弄透彻。。
-			for (int i = 0; i <= Math.min(a[0], a[1]); i++)
-				f[0][i][0] = 1;
-// 遍历：下标【1,n-1】
-			for (int i = 1; i < n; i++) {
-				// 遍历：当前下标 i 下，所有合法 j
-				for (int j = 0; j <= Math.min(a[i], b); j++) {
+		// 【数据规模】有点儿大，如果【暴力O(10000*10000*10000)】应该会超时, 数量级在【O(N=10000*10000)】可能可以过，不超时
+		// 忘记一个因素：【前状态，需要记忆】。第一个、第二个的摆放位置，需要记住。需要重新定义【记忆、数据结构】 
+		// 可能需要结合【贪心思路】来只遍历、最优解可能性的部分位置
+		public long maximumValueSum(int[][] a) { // TLE: 725/843 passed
+			m = a.length; n = a[0].length; this.a = a; 
+			// Integer [] rank = IntStream.range(0, m*n).boxed().toArray(Integer[]::new);			
+			// Arrays.sort(rank, (x, y)->a[y/n][y%n] - a[x/n][x%n]); // 按值大小，降序排列
+			long max = Long.MIN_VALUE;
+			f = new HashMap<>();
+			for (int i = 0; i < m*n; i++) {
+				String [] s = new String [3];
+				// s[0] = String.valueOf(rank[i]);
+				// long ans = a[rank[i]/n][rank[i]%n] + dfs(rank[i]/n, rank[i] % n, s);
+				s[0] = String.valueOf(i);
+				long ans = a[i/n][i%n] + dfs(i/n, i % n, s);
+				max = Math.max(max, ans);
+				// if (ans < a[rank[0]/n][rank[0]%n]) break;
+			}
+			return max;
+		}
+		int [][] a;
+		Map<String, Long> f;
+		int m, n;
+		long dfs(int i, int j, String [] s) {
+			String key = String.valueOf(i * n + j) + "-" + s[0] + (s[1] == null ? "" : "-" + s[1] + (s[2] == null ? "" :  "-" + s[2]));
+			if (f.containsKey(key)) return f.get(key);
+			long r = Long.MIN_VALUE;
+			Set<Integer> si = new HashSet<>(), sj = new HashSet<>();
+			TreeSet<Integer> ts = new TreeSet<>();
+			for (int x = 0; x < 3; x++) 
+				if (s[x] != null) {
+					si.add(Integer.parseInt(s[x]) / n);
+					sj.add(Integer.parseInt(s[x]) % n);
+					ts.add(Integer.parseInt(s[x]));
+				}
+			if (ts.size() == 3) return 0;
+			StringBuilder sb = new StringBuilder();
+			Iterator it;
+			int jj = 0;
+			for (int x = 0; x < m; x++) {
+				if (si.contains(x)) continue;
+				for (int y = 0; y < n; y++) {
+					if (sj.contains(y)) continue;
+					ts.add(x * n + y); // 添加【当前数】
+					sb.setLength(0);
+					it = ts.iterator();
+					if (it.hasNext()) {
+						sb.append(String.valueOf(ts.first()));
+						s[0] = String.valueOf(ts.first());
+						it.next();
+						jj = 0;
+					}
+					while (it.hasNext()) { 
+						int v = (int)it.next();
+						sb.append("-");
+						sb.append(String.valueOf(v));
+						s[++jj] = String.valueOf(v);
+					}
+					String [] ss = new String [3];
+					for (int zz = 0; zz < 3; zz++) 
+						ss[zz] = s[zz];
+					r = Math.max(r, (long)a[x][y] + (s[2] == null ? dfs(x, y, ss) : 0l));
+					ts.remove(x * n + y); // 移除【当前数】
 				}
 			}
-			return (int)r;
+			sb.setLength(0);
+			it = ts.iterator();
+			if (it.hasNext()) {
+				sb.append(String.valueOf(ts.first()));
+				it.next();
+			}			
+			while (it.hasNext()) { 
+				sb.append('-');
+				sb.append(it.next());
+			} 
+			f.put(sb.toString(), r);
+			return r;
 		}
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// public long maximumValueSum(int[][] board) {
+			
+		// }
 	}
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
     public static void main (String[] args) {
 		Solution s = new Solution ();
 
-		int []  a = new int []  {2, 3, 2};
+		int [][] a = new int [][] {{-88,-80,40,0,-33,-32,26,-11,-18,8},{79,-65,-40,-76,31,24,34,73,-85,-53},{47,33,59,58,90,94,83,41,26,-81},{89,36,-10,63,66,-59,71,61,-56,-16},{-77,5,97,12,-74,-79,22,72,-2,0},{-30,82,-47,37,10,-58,80,-50,90,-53},{20,-47,-57,-30,-85,0,-41,84,22,29},{46,29,66,2,62,-43,82,25,24,72},{57,75,10,-85,53,-82,1,40,51,-33},{-10,-74,-95,-49,51,20,-53,-41,60,24}};
 
-		int r = s.countOfPairs(a);
+		System.out.println("a.length: " + a.length);
+		for (int z = 0; z < a.length; ++z) 
+			System.out.println(Arrays.toString(a[z]));
+
+		long r = s.maximumValueSum(a);
 		System.out.println("r: " + r);
     }
 }
@@ -522,6 +654,7 @@ public class cmp {
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
