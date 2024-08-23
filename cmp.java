@@ -1,4 +1,5 @@
 import com.ListNode;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
@@ -7,6 +8,7 @@ import java.util.stream.*;
 import java.util.stream.Collectors;
 import java.util.HashSet;
 import java.util.Set;
+
 import java.math.BigInteger;
 import static java.util.stream.Collectors.toMap;
 
@@ -419,100 +421,361 @@ public class cmp {
 		// 	return r;
 		// }
 
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// public int countKConstraintSubstrings(String S, int k) {
+		// 	int n = S.length(); char [] s = S.toCharArray();
+		// 	int ans = 0, l = 0, r = 0, ll = 0, rr = 0;// l r 0 1
+		// 	for (int i = 0; i < n; i++) {
+		// 		if (i > 0) {
+		// 			if (s[i-1] == '0') l--;
+		// 			else r--;
+		// 		}
+		// 		if (s[i] == '0') l++;
+		// 		else r++;
+		// 		for (int j = i; j < n; j++) {
+		// 			if (j == i) {
+		// 				ll = l; rr = r;
+		// 			} else {
+		// 				if (s[j] == '0') ll++;
+		// 				else rr++;
+		// 			}
+		// 			if (ll <= k || rr <= k) ans++;
+		// 		}
+		// 	}
+		// 	return ans;
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// public long maxEnergyBoost(int[] a, int[] b) {
+		// 	int n = a.length;
+		// 	long [][][] f = new long [n][2][2]; // 【最后一维】：前一个小时，喝的是哪种？0: a 1:b
+		// 	Arrays.fill(f[0][0], (long)a[0]);
+		// 	Arrays.fill(f[0][1], (long)b[0]);
+		// 	for (int i = 1; i < n; i++) {
+		// 		// 【本小时】：喝继上，同一种
+		// 		f[i][0][0] = Math.max(f[i-1][0][0], f[i-1][0][1]) + a[i];
+		// 		f[i][1][1] = Math.max(f[i-1][1][1], f[i-1][1][0]) + b[i];
+		// 		// 【本小时】：喝不同种: 这里，感觉亲爱的表哥的活宝妹，写得稀里糊涂它就过了。。。
+		// 		f[i][0][1] = f[i-1][1][1];
+		// 		// f[i][0][1] = Math.max(f[i-1][1][1], f[i-1][1][0] + a[i]);
+		// 		f[i][1][0] = f[i-1][0][0];
+		// 		// f[i][1][0] = Math.max(f[i-1][0][0], f[i-1][0][1] + b[i]);
+		// 	}
+		// 	long r = 0l;
+		// 	for (int i = 0; i < 2; i++) 
+		// 		for (int j = 0; j < 2; j++) 
+		// 			r = Math.max(r, f[n-1][i][j]);
+		// 	return r;
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 【数据规模】有点儿大，如果【暴力O(10000*10000*10000)】应该会超时, 数量级在【O(N=10000*10000)】可能可以过，不超时
+		// // 忘记一个因素：【前状态，需要记忆】。第一个、第二个的摆放位置，需要记住。需要重新定义【记忆、数据结构】 
+		// // 可能需要结合【贪心思路】来只遍历、最优解可能性的部分位置
 		// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 		// 【数据规模】有点儿大，如果【暴力O(10000*10000*10000)】应该会超时, 数量级在【O(N=10000*10000)】可能可以过，不超时
 		// 忘记一个因素：【前状态，需要记忆】。第一个、第二个的摆放位置，需要记住。需要重新定义【记忆、数据结构】 
 		// 可能需要结合【贪心思路】来只遍历、最优解可能性的部分位置
-		public long maximumValueSum(int[][] a) { // TLE: 725/843 passed
-			m = a.length; n = a[0].length; this.a = a; 
-			// Integer [] rank = IntStream.range(0, m*n).boxed().toArray(Integer[]::new);			
-			// Arrays.sort(rank, (x, y)->a[y/n][y%n] - a[x/n][x%n]); // 按值大小，降序排列
-			long max = Long.MIN_VALUE;
-			f = new HashMap<>();
-			for (int i = 0; i < m*n; i++) {
-				String [] s = new String [3];
-				// s[0] = String.valueOf(rank[i]);
-				// long ans = a[rank[i]/n][rank[i]%n] + dfs(rank[i]/n, rank[i] % n, s);
-				s[0] = String.valueOf(i);
-				long ans = a[i/n][i%n] + dfs(i/n, i % n, s);
-				max = Math.max(max, ans);
-				// if (ans < a[rank[0]/n][rank[0]%n]) break;
-			}
-			return max;
-		}
-		int [][] a;
-		Map<String, Long> f;
-		int m, n;
-		long dfs(int i, int j, String [] s) {
-			String key = String.valueOf(i * n + j) + "-" + s[0] + (s[1] == null ? "" : "-" + s[1] + (s[2] == null ? "" :  "-" + s[2]));
-			if (f.containsKey(key)) return f.get(key);
-			long r = Long.MIN_VALUE;
-			Set<Integer> si = new HashSet<>(), sj = new HashSet<>();
-			TreeSet<Integer> ts = new TreeSet<>();
-			for (int x = 0; x < 3; x++) 
-				if (s[x] != null) {
-					si.add(Integer.parseInt(s[x]) / n);
-					sj.add(Integer.parseInt(s[x]) % n);
-					ts.add(Integer.parseInt(s[x]));
-				}
-			if (ts.size() == 3) return 0;
-			StringBuilder sb = new StringBuilder();
-			Iterator it;
-			int jj = 0;
-			for (int x = 0; x < m; x++) {
-				if (si.contains(x)) continue;
-				for (int y = 0; y < n; y++) {
-					if (sj.contains(y)) continue;
-					ts.add(x * n + y); // 添加【当前数】
-					sb.setLength(0);
-					it = ts.iterator();
-					if (it.hasNext()) {
-						sb.append(String.valueOf(ts.first()));
-						s[0] = String.valueOf(ts.first());
-						it.next();
-						jj = 0;
-					}
-					while (it.hasNext()) { 
-						int v = (int)it.next();
-						sb.append("-");
-						sb.append(String.valueOf(v));
-						s[++jj] = String.valueOf(v);
-					}
-					String [] ss = new String [3];
-					for (int zz = 0; zz < 3; zz++) 
-						ss[zz] = s[zz];
-					r = Math.max(r, (long)a[x][y] + (s[2] == null ? dfs(x, y, ss) : 0l));
-					ts.remove(x * n + y); // 移除【当前数】
-				}
-			}
-			sb.setLength(0);
-			it = ts.iterator();
-			if (it.hasNext()) {
-				sb.append(String.valueOf(ts.first()));
-				it.next();
-			}			
-			while (it.hasNext()) { 
-				sb.append('-');
-				sb.append(it.next());
-			} 
-			f.put(sb.toString(), r);
-			return r;
-		}
+		// public long maximumValueSum(int[][] a) { // TLE: 725/843 passed
+		// 	m = a.length; n = a[0].length; this.a = a; 
+		// 	// Integer [] rank = IntStream.range(0, m*n).boxed().toArray(Integer[]::new);			
+		// 	// Arrays.sort(rank, (x, y)->a[y/n][y%n] - a[x/n][x%n]); // 按值大小，降序排列
+		// 	long max = Long.MIN_VALUE;
+		// 	f = new HashMap<>();
+		// 	for (int i = 0; i < m*n; i++) {
+		// 		String [] s = new String [3];
+		// 		// s[0] = String.valueOf(rank[i]);
+		// 		// long ans = a[rank[i]/n][rank[i]%n] + dfs(rank[i]/n, rank[i] % n, s);
+		// 		s[0] = String.valueOf(i);
+		// 		long ans = a[i/n][i%n] + dfs(i/n, i % n, s);
+		// 		max = Math.max(max, ans);
+		// 		// if (ans < a[rank[0]/n][rank[0]%n]) break;
+		// 								  }
+		// 	return max;
+		// }
+		// int [][] a;
+		// Map<String, Long> f;
+		// int m, n;
+		// long dfs(int i, int j, String [] s) {
+		// 	String key = String.valueOf(i * n + j) + "-" + s[0] + (s[1] == null ? "" : "-" + s[1] + (s[2] == null ? "" :  "-" + s[2]));
+		// 	if (f.containsKey(key)) return f.get(key);
+		// 	long r = Long.MIN_VALUE;
+		// 	Set<Integer> si = new HashSet<>(), sj = new HashSet<>();
+		// 	TreeSet<Integer> ts = new TreeSet<>();
+		// 	for (int x = 0; x < 3; x++) 
+		// 		if (s[x] != null) {
+		// 			si.add(Integer.parseInt(s[x]) / n);
+		// 			sj.add(Integer.parseInt(s[x]) % n);
+		// 			ts.add(Integer.parseInt(s[x]));
+		// 		}
+		// 	if (ts.size() == 3) return 0;
+		// 	StringBuilder sb = new StringBuilder();
+		// 	Iterator it;
+		// 	int jj = 0;
+		// 	for (int x = 0; x < m; x++) {
+		// 		if (si.contains(x)) continue;
+		// 		for (int y = 0; y < n; y++) {
+		// 			if (sj.contains(y)) continue;
+		// 			ts.add(x * n + y); // 添加【当前数】
+		// 			sb.setLength(0);
+		// 			it = ts.iterator();
+		// 			if (it.hasNext()) {
+		// 				sb.append(String.valueOf(ts.first()));
+		// 				s[0] = String.valueOf(ts.first());
+		// 				it.next();
+		// 				jj = 0;
+		// 			}
+		// 			while (it.hasNext()) { 
+		// 				int v = (int)it.next();
+		// 				sb.append("-");
+		// 				sb.append(String.valueOf(v));
+		// 				s[++jj] = String.valueOf(v);
+		// 			}
+		// 			String [] ss = new String [3];
+		// 			for (int zz = 0; zz < 3; zz++) 
+		// 				ss[zz] = s[zz];
+		// 			r = Math.max(r, (long)a[x][y] + (s[2] == null ? dfs(x, y, ss) : 0l));
+		// 			ts.remove(x * n + y); // 移除【当前数】
+		// 		}
+		// 	}
+		// 	sb.setLength(0);
+		// 	it = ts.iterator();
+		// 	if (it.hasNext()) {
+		// 		sb.append(String.valueOf(ts.first()));
+		// 		it.next();
+		// 	}			
+		// 	while (it.hasNext()) { 
+		// 		sb.append('-');
+		// 		sb.append(it.next());
+		// 	} 
+		// 	f.put(sb.toString(), r);
+		// 	return r;
+		// }
+		// // 【亲爱的表哥的活宝妹，换个 long 作键，结果把这个题目写疆了。。。再不想写它了，看答案写。。。】
+		// public long maximumValueSum(int[][] a) { // TLE: 725/843 passed
+		// 	m = a.length; n = a[0].length; this.a = a; 
+		// 	long max = Long.MIN_VALUE;
+		// 	f = new HashMap<>();
+		// 	for (int i = 0; i < m*n; i++) {
+		// 		long ans = a[i/n][i%n] + dfs(i/n, i % n, i+1);
+		// 		max = Math.max(max, ans);
+		// 		// if (ans < a[rank[0]/n][rank[0]%n]) break;
+		// 	}
+		// 	return max;
+		// }
+		// int [][] a;
+		// Map<Integer, Long> f = new HashMap<>(); 
+		// int m, n;
+		// long dfs(int i, int j, int k) {
+		// 	// System.out.println("\n k: " + k);
+		// 	if (f.containsKey(k)) return f.get(k);
+		// 	long r = Long.MIN_VALUE;
+		// 	Set<Integer> si = new HashSet<>(), sj = new HashSet<>();
+		// 	Set<Integer> st = new HashSet<>();
+		// 	int key = (k & ((1 << 14)-1));
+		// 	int cnter = 0;
+		// 	while (key > 0) {
+		// 		System.out.println("key: " + key);
+		// 		++cnter;
+		// 		st.add(key);
+		// 		si.add((key -1) / n);
+		// 		sj.add((key -1) % n);
+		// 		key = (key >> 14);
+		// 	}
+		// 	int [] tmp = new int [cnter+1];
+		// 	for (int x = 0; x < m; x++) {
+		// 		if (si.contains(x)) continue;
+		// 		for (int y = 0; y < n; y++) {
+		// 			if (sj.contains(y)) continue;
+		// 			// System.out.println("(x * n + y + 1): " + (x * n + y + 1));
+		// 			st.add(x * n + y + 1);
+		// 			int ii = 0;
+		// 			for (int v : st) 
+		// 				tmp[ii++] = v;
+		// 			Arrays.sort(tmp);
+		// 			System.out.println(Arrays.toString(tmp));
+		// 			key = tmp[0];
+		// 			// for (int xx = 1; xx < tmp.length; xx++) {
+		// 			for (int xx = 1; xx < 2; xx++) {
+		// 				// key <<= 14;
+		// 				key = (key << 14);
+		// 				key |= tmp[xx];
+		// 			}
+		// 			// System.out.println("key: " + key);
+		// 			r = Math.max(r, (long)a[x][y] + (cnter == 2 ? 0l : dfs(x, y, key)));
+		// 			st.remove(x * n + y + 1);
+		// 		}
+		// 								}
+		// 	tmp = new int [st.size()];
+		// 	int ii = 0;
+		// 	for (int v : st) 
+		// 		tmp[ii++] = v;
+		// 	Arrays.sort(tmp);
+		// 	key = 0;
+		// 	for (int v : tmp) {
+		// 		key = (key << 14);
+		// 		key |= v;
+		// 	}
+		// 	f.put(key, r);
+		// 	return r;
+		// }
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 【破烂题解】：思路讲得狠清楚、代码【注释不清】——读【注释不清楚】的源码，像读天书一样。。。浪费无数查题解的【码工亲爱的表哥的活宝妹们】的时间。。。
+		// // 【直角三角形】：攻举中间情况
+		// public long maximumValueSum(int[][] a) { 
+		// 	m = a.length; n = a[0].length;
+		// 	// 仅先【倒序遍历一次】：预处理【后缀】；前缀处理，与求解同时遍历更新
+		// 	s = new int [m][3][2]; // 最后一维【2】：0, 最大、次大、第三大的【取值】；1: 三个不同取值所用的对应【列号】
+		// 	p = new int [3][2];
+		// 	for (int [] pi : p) // 【前缀】初始化：最小值
+		// 		pi[0] = Integer.MIN_VALUE;
+		// 	// 预处理：【后缀】最大、次大、第三大的【取值】与，对应取值时、所用的【列号】
+		// 	// 替代【前缀】预处理 p 数组空间一用。。。
+		// 	for (int i = m-1; i > 1; i--) { // 【倒序、后缀遍历行】：行结果、临时写入 p 数组
+		// 		update(a[i], p); 
+		// 		for (int j = 0; j < 3; j++) {  // 行结果、存入 s数组
+		// 			s[i][j][0] = p[j][0];
+		// 			s[i][j][1] = p[j][1];
+		// 		}
+		// 	}
+		// 	long r = (long)Long.MIN_VALUE;
+		// 	// 【写错了】：忽略掉了细节， p 被借用过，填写过脏数据，这里要重新【初始化！】
+		// 	for (int [] pi : p) { // 【前缀】初始化：最小值
+		// 		pi[0] = Integer.MIN_VALUE;
+		// 		pi[1] = 0; // 列的脏数据，也得清除干净。。
+		// 	}
+		// 	// // 【精简代码】： a【0】行的处理，也可以放进【遍历中间值、中间车】的遍历逻辑里，就可以合并只写一遍
+		// 	// update(a[0], p); // 预处理a[0] 存入 p. 【写错了】：忽略掉了细节， p 被借用过，填写过脏数据，这里要重新【初始化】之后，才处理 a[0] 行！！！
+		// 	// 求解：【遍历中间值】的合法【行】范围（0,m-1）【假定：前车，在 i 行之前；后车，在 i 行之后。这样当前中间车，可值所有列值】；同步累积处理【前缀 p】
+		// 	for (int i = 1; i < m-1; i++) { // 【遍历中间车、行】
+		// 		update(a[i-1], p);
+		// 		// 遍历：中间车，可能位于的所有的合法列【0,n-1】
+		// 		for (int j = 0; j < n; j++) { // 【遍历中间车、列】
+		// 			// // 【优化】：优先考虑，全局——本行最优解；最早裁枝。效果：看似优化及及时裁枝，可能实际多此一举。。。
+		// 			// if (p[0][1] != j && j != s[i+1][0][1]) {// 三车：全【最大解】且都不同列，直接取所有三车【最大值】
+		// 			// 	r = Math.max(r, (long)a[i][j] + (long)p[0][0] + (long)s[i+1][0][0]);
+		// 			// 	// 同取【三车、最优解】，就一定会是【本行、全局最优解】，不用再遍历后序 j 了
+		// 			// 	break;
+		// 			// }
+		// 			// 【暴力求解】：当中间车在【i,j】位置，前后两车、可能位置的所有情况
+		// 			for (int [] fst : p) // 遍历，前车，三种较优解
+		// 				for (int [] trd : s[i+1]) // 遍历：后车，三种较优解 
+		// 					if (fst[1] != j && trd[1] != j && fst[1] != trd[1]) // 三车不同列
+		// 						r = Math.max(r, (long)a[i][j] + (long)fst[0] + (long)trd[0]);
+		// 			// for (int x = 0; x < 3; x++) { // 攻举：前车，三种解【最大、次大、第三大】所有【优解列】
+		// 			// 	if (p[x][1] == j) // 前车，与 j 同列，不考虑
+		// 			// 		continue;
+		// 			// 	for (int y = 0; y < 3; y++) { // 攻举：后车，三种解【最大、次大、第三大】所有【优解列】，不与前车、当前中间车，同列
+		// 			// 		if (s[i+1][y][1] == j || s[i+1][y][1] == p[x][1]) continue;
+		// 			// 		r = Math.max(r, (long)a[i][j] + (long)p[x][0] + (long)s[i+1][y][0]);
+		// 			// 	}
+		// 			// }
+		// 		}
+		// 		// // 同步处理【前缀】：【更新，当前行 i, 入前缀 p 处理】。与 a[0] 行处理，共同合并到，遍历逻辑开始的地方了
+		// 		// update(a[i], p);
+		// 	}
+		// 	return r;
+		// }
+		// int m, n;
+		// int [][] p;  // pre 预处理 
+		// int [][][] s;// suffix 预处理
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 处理 a 数组里，最大、次大、第三大的【取值】与所用对应的【列号】，存入【反复擦写】数组 f 里
+		// void update(int [] a, int [][] f) {
+		// 	for (int j = 0; j < a.length; j++) { // 遍历【列】：
+		// 		// 【前缀】【后缀】累积更新的原则是：【最大】【次大】【第三大】不同列；同列只占据三种解中的一种
+		// 		// 【写错了】：亲爱的表哥的活宝妹，写下面更新的时候，细节一定，有什么地方，写错了
+		// 		if (a[j] > f[0][0]) { // 比，最大值，大，也同时意味着： j != f[0][1]
+		// 			if (j != f[0][1]) { // 取过值的情况下，进这里。f[0-2][0] 缺省都为 0. 与【最优】解，不同列
+		// 				if (j != f[1][1])  // 【TODO】：感觉这里，三车不同列，什么时候不能换。。傻傻瓣不清楚。。。改天再看这个细节
+		// 					f[2] = f[1]; // 这么写，最简单，就是重新索引一下数组行。。
+		// 				f[1] = f[0];
+		// 			}
+		// 			f[0] = new int [] {a[j], j}; // 因为前面的【重新索引】，这里就要重新分配空间，写新数组
+		// 		} else if (a[j] > f[1][0] && j != f[0][1]) { // 比，次大，大; 第【前车】不同列
+		// 			if (j != f[1][1]) // 可以合法更新 f[1]
+		// 				f[2] = f[1]; // 这么写，最简单，就是重新索引一下数组行。。
+		// 			f[1] = new int [] {a[j], j};
+		// 	    } else if (a[j] > f[2][0] && j != f[1][1] && j != f[0][1]) // 比，第三大，大, 三个不同列【合法有效】存解
+		// 		    f[2] = new int [] {a[j], j};
+		// 	}
+		// }
 
 		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-		// public long maximumValueSum(int[][] board) {
-			
+		// // 这个题目还是有点儿难，晚点儿再去想：昨天的四个难题。。。早上的一两个难题目，好恶心人。。。浪费亲爱的表哥的活宝妹宝贵的青春。。。
+		// public long [] countKConstraintSubstrings(String S, int k, int[][] q) {
+		// 	int n = S.length(); char [] s = S.toCharArray();
+		// 	int [] f = new int [n]; // left [] 数组: 【有序、升序】排列，单调递增
+		// 	long [] a = new long [n+1]; // preSum 以每个下标为【右端点】的合法个数
+		// 	int [] cnt = new int [2];
+		// 	int l = 0; // 【自左向右】遍历一次，预处理 f[] 数组
+		// 	for (int i = 0; i < n; i++) {
+		// 		cnt[s[i] & 1]++;
+		// 		while (cnt[0] > k && cnt[1] > k) // 当前下标 i 下，不合法，就左端点 l 右移
+		// 			cnt[s[l++] & 1]--;
+		// 		f[i] = l;
+		// 		a[i+1] = a[i] + (long)(i - l + 1); // 计算 i-left[i]+1 的前缀和
+		// 	}
+		// 	long [] ans = new long [q.length];
+		// 	for (int i = 0; i < q.length; i++) {
+		// 		int ll = q[i][0], rr = q[i][1];
+		// 		if (f[rr] <= ll) {
+		// 			ans[i] = (long)(rr - ll + 1) * (rr - ll + 2) / 2l;
+		// 			continue;
+		// 		}
+		// 		int j = lower_bound(f, ll-1, rr+1, ll); // f[j] >= ll
+		// 		ans[i] = (long)(j - ll) * (j - ll + 1) / 2l + a[rr+1] - a[j];
+		// 	}
+		// 	return ans;
 		// }
+		// // 返回在开区间 (left, right) 中的最小的 j，满足 nums[j] >= target
+		// // 如果没有这样的数，返回 right
+		// int lower_bound(int [] f, int l, int r, int t) { 
+		// 	while (l + 1 < r) { // 遍历范围：只要非空，就得遍历
+		// 		int m = l + (r - l) / 2;
+		// 		if (f[m] < t)
+		// 			l = m;
+		// 		else r = m;
+		// 	}
+		// 	return r;
+		// }
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 这个题目还是有点儿难，晚点儿再去想：昨天的四个难题。。。早上的一两个难题目，好恶心人。。。浪费亲爱的表哥的活宝妹宝贵的青春。。。
+		// public long [] countKConstraintSubstrings(String S, int k, int[][] q) {
+		// 	int n = S.length(); char [] s = S.toCharArray();
+		// 	int [] f = new int [n]; // right [] 数组: 【有序、升序】排列，单调递增
+		// 	long [] a = new long [n+1]; // preSum 以每个下标为【右端点】的合法个数
+		// 	int [] cnt = new int [2];
+		// 	int l = 0; // 【自左向右】遍历一次，预处理 f[] 数组
+		// 	for (int i = 0; i < n; i++) {
+		// 		cnt[s[i] & 1]++;
+		// 		while (cnt[0] > k && cnt[1] > k) { // 当前下标 i 下，不合法，就左端点 l 右移
+		// 			cnt[s[l] & 1]--;
+		// 			f[l++] = i;
+		// 		}
+		// 		a[i+1] = a[i] + (long)(i - l + 1); // 计算 i-right[i]+1 的前缀和
+		// 	}
+		// 	// 【写错了】：后面没填充的，要【哨兵】 n
+		// 	Arrays.fill(f, l, n, n); // 往下标段【l,n-1】里填 n
+		// 	long [] ans = new long [q.length];
+		// 	for (int i = 0; i < q.length; i++) {
+		// 		int ll = q[i][0], rr = q[i][1];
+		// 		int j = Math.min(f[ll], rr+1); // f[j] right[j] > LL
+		// 		ans[i] = a[rr+1] - a[j] + (long)(j-1 - ll + 1) * (j - ll + 1) / 2;
+		// 	}
+		// 	return ans;
+		// }
+
+		// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// 亲爱的表哥的活宝妹，感觉这个题目的思路是清晰的、可以想明白，感觉想得几乎是透彻的。因为是回文，按【数位动规】或说【数位深搜】N/2+1? 的字符串长度，检测合法性
+		// 但是N 在【1,10^5】数量级大，不知道，是不是又得用狗屁 BigInteger, 狠烦人，先去写其它的
+		// k 的取值范围【1,9】：仍然搞不清楚，要写 9 个不同的方法来处理不同的、是否能被 k 整除吗？考场上想到这些，就不想再写了。。。
+		public String largestPalindrome(int n, int k) {
+		}
 	}
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
     public static void main (String[] args) {
 		Solution s = new Solution ();
-
-		int [][] a = new int [][] {{-88,-80,40,0,-33,-32,26,-11,-18,8},{79,-65,-40,-76,31,24,34,73,-85,-53},{47,33,59,58,90,94,83,41,26,-81},{89,36,-10,63,66,-59,71,61,-56,-16},{-77,5,97,12,-74,-79,22,72,-2,0},{-30,82,-47,37,10,-58,80,-50,90,-53},{20,-47,-57,-30,-85,0,-41,84,22,29},{46,29,66,2,62,-43,82,25,24,72},{57,75,10,-85,53,-82,1,40,51,-33},{-10,-74,-95,-49,51,20,-53,-41,60,24}};
-
-		System.out.println("a.length: " + a.length);
-		for (int z = 0; z < a.length; ++z) 
-			System.out.println(Arrays.toString(a[z]));
 
 		long r = s.maximumValueSum(a);
 		System.out.println("r: " + r);
@@ -654,6 +917,10 @@ public class cmp {
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
