@@ -766,19 +766,283 @@ public class cmp {
 		// 	return ans;
 		// }
 
+// 		// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 		// 亲爱的表哥的活宝妹，感觉这个题目的思路是清晰的、可以想明白，感觉想得几乎是透彻的。因为是回文，按【数位动规】或说【数位深搜】N/2+1? 的字符串长度，检测合法性
+// 		// 但是N 在【1,10^5】数量级大，不知道，是不是又得用狗屁 BigInteger, 狠烦人，先去写其它的
+// 		// k 的取值范围【1,9】：仍然搞不清楚，要写 9 个不同的方法来处理不同的、是否能被 k 整除吗？考场上想到这些，就不想再写了。。。
+// 		// 亲爱的表哥的活宝妹，上次看题解就看不懂，昨天晚上因为。。昨天晚上极晚才勉强入睡、今天状态狠差，可是今天却看懂了。。。
+// 		// 【记忆化深搜】传统解法的【贪心思想】改装版本：仍然记忆状态，状态是 true-false...
+// 		public String largestPalindrome(int n, int k) {
+// 			m = (n + 1) / 2; this.n = n; this.k = k; 
+// 			f = new boolean [m+1][k];
+// 			a = new int [n]; // 【预处理】：× 10 % k
+// 			a[0] = 1;
+// 			for (int i = 1; i < n; i++)
+// 				a[i] = a[i-1] * 10 % k;
+// 			r = new char [n];
+// 			dfs(0, 0);
+// 			return new String(r);
+// 		}
+// 		int m, n, k;
+// 		int [] a;
+// 		boolean [][] f; // vis 数组
+// 		char [] r;
+// 		boolean dfs(int i, int j) { // 当前状态：【i,j】；图下一个节点状态：【i+1,jj】
+// 			// 【终止条件】：i=[0,m-1]
+// 			if (i == m) return j == 0; // 确保，％ k==0 
+// 			int jj = k; // 填位【i,j】后的、新余数
+// 			f[i][j] = true; // 标记：【i,j】遍历过了。永远只遍历一次，并记结果???
+// // 【贪心思路】：【从大到小】往每个位 i 填数字
+// 			for (int ii = 9; ii >= 0; ii--) {
+// 				if (n % 2 == 1 && i == m-1) // 最中间一位数字
+// 					jj = (j + ii * a[i]) % k;
+// 				else
+// 					jj = (j + ii * (a[i] + a[n-1-i])) % k;
+// 				if (!f[i+1][jj] && dfs(i+1, jj)) {
+// 					// 【贪心】地把、数位 i 与数位 n-1-i 填上、最大可能的数字。就是这一两个数位上的最优解
+// 					r[i] = r[n-1-i] = (char)('0' + ii);
+// 					return true;
+// 				}
+// 			}
+// 			return false;
+// 		}
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// public int[] getFinalState(int[] a, int k, int m) {
+		// 	int n = a.length;
+		// 	int [] f = new int [n];
+		// 	Queue<Integer> q = new PriorityQueue<>((x, y) -> a[x] != a[y] ? a[x] - a[y] : x - y);
+		// 	for (int i = 0; i < n; i++) q.offer(i);
+		// 	for (int i = 0; i < k; i++) {
+		// 		int j = q.poll();
+		// 		a[j] = m * a[j];
+		// 		q.offer(j);
+		// 	}
+		// 	f = Arrays.copyOf(a, n);
+		// 	return f;
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// public int countPairs(int[] f) { // 比赛的时候，亲爱的表哥的活宝妹自己写的，没想透细节的破烂代码。。
+		// 	int n = f.length, r = 0;
+		// 	for (int i = 0; i < n-1; i++) {
+		// 		for (int j = i+1; j < n; j++) {
+		// 			if (f[i] == f[j] || Math.max(f[i], f[j]) == Math.min(f[i], f[j]) * 10) r++;
+		// 			if (almostEqual(f[i], f[j]))
+		// 				r++;
+		// 		}
+		// 	}
+		// 	return r;
+		// }
+		// boolean almostEqual(int ii, int jj) {
+		// 	String S = String.valueOf(Math.max(ii, jj)), T = String.valueOf(Math.min(ii, jj));
+		// 	if (S.length() != T.length()) return false;
+		// 	// if (Math.abs(S.length() - T.length()) > 1) return false;
+		// 	char [] s = S.toCharArray(), t = T.toCharArray();
+		// 	int r = 0;
+		// 	for (int i = 0; i < s.length; i++) {
+		// 		if (s[i] == t[i]) continue;
+		// 		for (int j = i+1; j < S.length(); j++) {
+		// 			if (s[j] == t[i] && t[j] == s[i]) {
+		// 				r++;
+		// 				s[j] = s[i];
+		// 				break;
+		// 			}
+		// 		}
+		// 	}
+		// 	return r == 1;
+		// }
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// public int countPairs(int[] a) {
+		// 	int n = a.length, r = 0;
+		// 	// 字典：是【数个数】的经典方法
+		// 	Map<Integer, Integer> m = new HashMap<>();
+		// 	Set<Integer> si = new HashSet<>();
+		// 	Arrays.sort(a); 
+		// 	for (int v : a) {
+		// 		si.clear();
+		// 		si.add(v);
+		// 		char [] s = String.valueOf(v).toCharArray();
+		// 		// 把人恶心死不偿命的【暴力交换】: 当前数 V 只交换一次，可能产生的、所有数
+		// 		for (int i = 0; i < s.length; i++) 
+		// 			for (int j = i+1; j < s.length; j++) {
+		// 				swap(s, i, j);
+		// 				si.add(Integer.parseInt(new String(s)));
+		// 				swap(s, i, j);
+		// 			}
+		// 		// 数：数组里，有多少对，符合要求
+		// 		for (int vi : si) 
+		// 			r += m.getOrDefault(vi, 0);
+		// 		// 把当前数计入：
+		// 		m.put(v, m.getOrDefault(v, 0) + 1);
+		// 	}
+		// 	return r;
+		// }
+		// void swap(char [] s, int i, int j) {
+		// 	char c = s[i];
+		// 	s[i] = s[j];
+		// 	s[j] = c;
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 亲爱的表哥的活宝妹，肿么知道，它们的破烂题目，要那么恶心死人不偿命地【暴力交换】？真恶心人。。。
+		// // 亲爱的表哥的活宝妹，被提示一下，不是也轻轻松松、写过了？。。。破烂题目，狠恶心人！！！
+		// // 题解说，还有种O(1) 算出交换后的值的解法，但是，亲爱的表哥的活宝妹，今天看不懂、懒得看，今天暂时不看它了。。。太恶心人了。。。改天再看这个细节
+		// public int countPairs(int[] a) {
+		// 	int n = a.length, r = 0;
+		// 	// 字典：是【数个数】的经典方法
+		// 	Map<Integer, Integer> m = new HashMap<>();
+		// 	Set<Integer> si = new HashSet<>(), sj = new HashSet<>();
+		// 	Arrays.sort(a); 
+		// 	System.out.println(Arrays.toString(a));
+		// 	for (int v : a) {
+		// 		si.clear();
+		// 		sj.clear();
+		// 		char [] s = String.valueOf(v).toCharArray();
+		// 		// 把人恶心死不偿命的【暴力交换】: 当前数 V 只交换一次，可能产生的、所有数
+		// 		// 下面，亲爱的表哥的活宝妹，把【不交换0 交换的 v】＋【暴力交换一次、所有可能产生的数的、集合】＋【暴力交换两次、所有可能产生的数的、集合】
+		// 		// 分两次遍历、分得狠清楚。也可以，【一次遍历，把一次交换、与第二次交换、循环嵌套、写进一次遍历里】，如下
+		// 		// 【暴力交换】：只一次，可能产生的，所有可能的数
+		// 		for (int i = 0; i < s.length-1; i++) 
+		// 			for (int j = i+1; j < s.length; j++) {
+		// 				swap(s, i, j);
+		// 				si.add(Integer.parseInt(new String(s)));
+		// 				// 也可以，【一次遍历，把一次交换、与第二次交换、循环嵌套、写进一次遍历里】，如下
+		// 				// 【区分 j 与 x】：主要是，暴力后，方便恢复
+		// 				for (int x = i+1; x < s.length-1; x++) // 这里，从 i+1 开始
+		// 					for (int y = x+1; y < s.length; y++) {
+		// 						swap(s, x, y);
+		// 						si.add(Integer.parseInt(new String(s)));
+		// 						swap(s, x, y);
+		// 					}
+		// 				swap(s, i, j);
+		// 			}
+		// 		// // 【暴力交换】：第二次，可能产生的，所有可能的数
+		// 		// for (int vi : si) {
+		// 		// 	char [] t = String.valueOf(vi).toCharArray();
+		// 		// 	for (int i = 0; i < t.length-1; i++) 
+		// 		// 		for (int j = i+1; j < t.length; j++) {
+		// 		// 			swap(t, i, j);
+		// 		// 			sj.add(Integer.parseInt(new String(t)));
+		// 		// 			swap(t, i, j);
+		// 		// 		}
+		// 		// }
+		// 		// si.addAll(sj);
+		// 		// 【暴力交换】：0次，就是 v 本身
+		// 		si.add(v);
+		// 		// 数：数组里，有多少对，符合要求
+		// 		for (int vi : si) 
+		// 			r += m.getOrDefault(vi, 0);
+		// 		// 把当前数计入：
+		// 		m.put(v, m.getOrDefault(v, 0) + 1);
+		// 	}
+		// 	return r;
+		// }
+		// void swap(char [] s, int i, int j) {
+		// 	char c = s[i];
+		// 	s[i] = s[j];
+		// 	s[j] = c;
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 亲爱的表哥的活宝妹，【快速幂】的思路都有，就是那【核心观察】观察不到、不会想。。。
+		// static final int mod = (int)1e9 + 7;
+		// public int[] getFinalState(int[] a, int k, int m) { // 526/692 passed 
+		// 	int n = a.length;
+		// 	long [] f = new long [n];
+		// 	Queue<Integer> q = new PriorityQueue<>((x, y)->f[x] != f[y] ? Long.compare(f[x], f[y]) : x - y);
+		// 	for (int i = 0; i < n; i++) {
+		// 		f[i] = (long)a[i];
+		// 		q.offer(i);
+		// 	}
+		// 	// 当 k>n, 想要去想： a[n] 数组， k 次乘最小数，数组中，每个数，乘的次数，有没有什么周期性重复？可是，这个周期性的规律，要怎么找、怎么想呢？？？
+		// 	// 感觉，就是上面的重点想不清楚，写不出、这几个周、它们的贱鸡、贱畜牲，越来越挑战亲爱的表哥的活宝妹，出的题目越来越发疯犯贱、越来越恶心死人不偿命的破烂题目。。。
+		// 	long mm = 1l;
+		// 	if (k > n) // 这里细节，有什么地方写错了。。。
+		// 		mm = (long)quickMul((long)m, k / n);
+		// 	System.out.println("mm: " + mm);
+		// 	if (k > n) k %= n;
+		// 	for (int i = 0; i < k; i++) {
+		// 		int j = q.poll();
+		// 		f[j] = f[j] * (long)m;
+		// 		if (n <= k) f[j] %= mod;
+		// 		q.offer(j);
+		// 	}
+		// 	for (int i = 0; i < n; i++) {
+		// 		f[i] = f[i] * mm % mod;
+		// 		a[i] = (int)f[i]; 
+		// 	}
+		// 	return a;
+		// }
+		// int quickMul(long b, int p) { // 快速幂
+		// 	long r = 1;
+		// 	while (p > 0) {
+		// 		if ((p & 1) == 1) {
+		// 				r *= b;
+		// 				r %= mod;
+		// 		}
+		// 		b *= b;
+		// 		b %= mod;
+		// 		p >>= 1;
+		// 	}
+		// return (int)r;
+		// }
 		// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-		// 亲爱的表哥的活宝妹，感觉这个题目的思路是清晰的、可以想明白，感觉想得几乎是透彻的。因为是回文，按【数位动规】或说【数位深搜】N/2+1? 的字符串长度，检测合法性
-		// 但是N 在【1,10^5】数量级大，不知道，是不是又得用狗屁 BigInteger, 狠烦人，先去写其它的
-		// k 的取值范围【1,9】：仍然搞不清楚，要写 9 个不同的方法来处理不同的、是否能被 k 整除吗？考场上想到这些，就不想再写了。。。
-		public String largestPalindrome(int n, int k) {
+		// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		static final int mod = (int)1e9 + 7;
+		public int[] getFinalState(int[] a, int k, int m) { // 526/692 passed 
+			int n = a.length, idx = 0, max = a[0];
+			if (m == 1) return a;
+			// if (n == 1) {
+			// 	a[0] = (int)(((long)a[0] * (long)quickMul((long)m, k)) % mod);
+			// 	return a;
+			// } 
+			long [] f = new long [n];
+			Queue<Integer> q = new PriorityQueue<>((x, y)->f[x] != f[y] ? Long.compare(f[x], f[y]) : x - y);
+			for (int i = 0; i < n; i++) {
+				f[i] = (long)a[i];
+				q.offer(i);
+										}
+			for (int i = 1; i < n; i++) 
+				if (a[i] > max) {
+					max = a[i];
+					idx = i;
+				}
+			// 【手动、人工、人力、寻找： k > n 时，可能循环到 a-max 的、循环规律】！！
+			for (; k > 0 && q.peek() != idx; --k) {
+				int i = q.poll();
+				f[i] = f[i] * m;
+				q.offer(i);
+			}
+			// 设此时还剩下 k 次操作，那么：
+			// 	对于前 kmodn 小的数，还可以再操作 ⌊n/k⌋+1 次。
+			// 	其余元素，还可以再操作 ⌊n/k⌋ 次。
+			for (int i = 0; i < n; i++) {
+				// 【写错了】：数组的顺序，是优先队列，帮维护的。亲爱的表哥的活宝妹笨宝妹、下面的写法，就又【想当然成、升序数组了。。。】
+				// a[i] = (int)(f[i] * (long)quickMul(m, k/n + (i < k % n ? 1 : 0)) % mod);
+				int j = q.poll();
+				// 【写错了】：下面，
+				// a[j] = (int)(f[j] * (long)quickMul(m, k / n + (i < k % n  ? 1 : 0)) % mod);
+				a[j] = (int)(f[j] % mod * (long)quickMul(m, k / n + (i < k % n  ? 1 : 0)) % mod);
+			}
+			return a;
 		}
-	}
+		int quickMul(long b, int p) {
+			long r = 1l;
+			for ( ; p > 0; p /= 2) {
+				if ((p & 1) == 1)
+					r = r * b % mod;
+				b = b * b % mod;
+			}
+			return (int)r;
+		}
+ 	} 
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
     public static void main (String[] args) {
 		Solution s = new Solution ();
 
-		long r = s.maximumValueSum(a);
-		System.out.println("r: " + r);
+		int [] r = s.getFinalState(a, 27, 32);
+		System.out.println(Arrays.toString(r));
     }
 }
 // ListNode head = new ListNode(a0]); 
@@ -900,28 +1164,4 @@ public class cmp {
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
