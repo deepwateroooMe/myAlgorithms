@@ -987,62 +987,371 @@ public class cmp {
 		// 	}
 		// return (int)r;
 		// }
-		// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-		// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-		static final int mod = (int)1e9 + 7;
-		public int[] getFinalState(int[] a, int k, int m) { // 526/692 passed 
-			int n = a.length, idx = 0, max = a[0];
-			if (m == 1) return a;
-			// if (n == 1) {
-			// 	a[0] = (int)(((long)a[0] * (long)quickMul((long)m, k)) % mod);
-			// 	return a;
-			// } 
-			long [] f = new long [n];
-			Queue<Integer> q = new PriorityQueue<>((x, y)->f[x] != f[y] ? Long.compare(f[x], f[y]) : x - y);
-			for (int i = 0; i < n; i++) {
-				f[i] = (long)a[i];
-				q.offer(i);
-										}
-			for (int i = 1; i < n; i++) 
-				if (a[i] > max) {
-					max = a[i];
-					idx = i;
-				}
-			// 【手动、人工、人力、寻找： k > n 时，可能循环到 a-max 的、循环规律】！！
-			for (; k > 0 && q.peek() != idx; --k) {
-				int i = q.poll();
-				f[i] = f[i] * m;
-				q.offer(i);
-			}
-			// 设此时还剩下 k 次操作，那么：
-			// 	对于前 kmodn 小的数，还可以再操作 ⌊n/k⌋+1 次。
-			// 	其余元素，还可以再操作 ⌊n/k⌋ 次。
-			for (int i = 0; i < n; i++) {
-				// 【写错了】：数组的顺序，是优先队列，帮维护的。亲爱的表哥的活宝妹笨宝妹、下面的写法，就又【想当然成、升序数组了。。。】
-				// a[i] = (int)(f[i] * (long)quickMul(m, k/n + (i < k % n ? 1 : 0)) % mod);
-				int j = q.poll();
-				// 【写错了】：下面，
-				// a[j] = (int)(f[j] * (long)quickMul(m, k / n + (i < k % n  ? 1 : 0)) % mod);
-				a[j] = (int)(f[j] % mod * (long)quickMul(m, k / n + (i < k % n  ? 1 : 0)) % mod);
-			}
-			return a;
-		}
-		int quickMul(long b, int p) {
-			long r = 1l;
-			for ( ; p > 0; p /= 2) {
-				if ((p & 1) == 1)
-					r = r * b % mod;
-				b = b * b % mod;
-			}
-			return (int)r;
-		}
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// static final int mod = (int)1e9 + 7;
+		// public int[] getFinalState(int[] a, int k, int m) { // 526/692 passed 
+		// 	int n = a.length, idx = 0, max = a[0];
+		// 	if (m == 1) return a;
+		// 	// if (n == 1) {
+		// 	// 	a[0] = (int)(((long)a[0] * (long)quickMul((long)m, k)) % mod);
+		// 	// 	return a;
+		// 	// } 
+		// 	long [] f = new long [n];
+		// 	Queue<Integer> q = new PriorityQueue<>((x, y)->f[x] != f[y] ? Long.compare(f[x], f[y]) : x - y);
+		// 	for (int i = 0; i < n; i++) {
+		// 		f[i] = (long)a[i];
+		// 		q.offer(i);
+		// 								}
+		// 	for (int i = 1; i < n; i++) 
+		// 		if (a[i] > max) {
+		// 			max = a[i];
+		// 			idx = i;
+		// 		}
+		// 	// 【手动、人工、人力、寻找： k > n 时，可能循环到 a-max 的、循环规律】！！
+		// 	for (; k > 0 && q.peek() != idx; --k) {
+		// 		int i = q.poll();
+		// 		f[i] = f[i] * m;
+		// 		q.offer(i);
+		// 	}
+		// 	// 设此时还剩下 k 次操作，那么：
+		// 	// 	对于前 kmodn 小的数，还可以再操作 ⌊n/k⌋+1 次。
+		// 	// 	其余元素，还可以再操作 ⌊n/k⌋ 次。
+		// 	for (int i = 0; i < n; i++) {
+		// 		// 【写错了】：数组的顺序，是优先队列，帮维护的。亲爱的表哥的活宝妹笨宝妹、下面的写法，就又【想当然成、升序数组了。。。】
+		// 		// a[i] = (int)(f[i] * (long)quickMul(m, k/n + (i < k % n ? 1 : 0)) % mod);
+		// 		int j = q.poll();
+		// 		// 【写错了】：下面，
+		// 		// a[j] = (int)(f[j] * (long)quickMul(m, k / n + (i < k % n  ? 1 : 0)) % mod);
+		// 		a[j] = (int)(f[j] % mod * (long)quickMul(m, k / n + (i < k % n  ? 1 : 0)) % mod);
+		// 	}
+		// 	return a;
+		// }
+		// int quickMul(long b, int p) {
+		// 	long r = 1l;
+		// 	for ( ; p > 0; p /= 2) {
+		// 		if ((p & 1) == 1)
+		// 			r = r * b % mod;
+		// 		b = b * b % mod;
+		// 	}
+		// 	return (int)r;
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// public int generateKey(int i, int j, int k) {
+		// 	char [][] f = new char [3][4];
+		// 	for (int x = 0; x < 3; x++) 
+		// 		Arrays.fill(f[x], '0');
+
+		// 	for (int x = 3; x >= 0; x--) {
+		// 		f[0][x] += i % 10;
+		// 		f[1][x] += j % 10;
+		// 		f[2][x] += k % 10;
+		// 		i /= 10; j /= 10; k /= 10;
+		// 	}
+		// 	char [] r = new char [4];
+		// 	for (int x = 0; x < 4; x++) 
+		// 		r[x] = (char)Math.min((char)Math.min(f[0][x], f[1][x]), Math.min(f[0][x], f[2][x]));
+		// 	return Integer.parseInt(new String(r));
+		// }
+		
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// public String stringHash(String S, int k) {
+		// 	int n = S.length(); char [] s = S.toCharArray();
+		// 	int [] a = new int [n+1];
+		// 	for (int i = 1; i <= n; i++) 
+		// 		a[i] = a[i-1] + s[i-1]-'a';
+		// 	char [] f = new char [n/k];
+		// 	int j = 0;
+		// 	for (int i = 0; i+k <= n; i += k) 
+		// 		f[j++] = (char)('a' + (a[i+k] - a[i]) % 26);
+		// 	return new String(f);
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// public long minDamage(int v, int [] d, int [] a) {
+		// 	int n = d.length;
+		// 	// Queue<int []> l = new PriorityQueue<>((x, y) -> x[0] != y[0] ? y[0] - x[0] : x[1] - y[1]);
+		// 	Queue<int []> l = new PriorityQueue<>((x, y) -> -1 * Long.compare((long)x[0] * (long)(x[1] / v + (x[1] % v > 0 ? 1 : 0)), 
+		// 	(long)y[0] * (long)(y[1] / v + (y[1] % v > 0 ? 1 : 0))));
+		// 	long r = 0l, t = 0l, min = 0l;
+		// 	for (int i = 0; i < n; i++) {
+		// 		r += d[i]; // 总伤害
+		// 		l.offer(new int [] {d[i], a[i]});
+		// 		t += a[i] / v + (a[i] % v > 0 ? 1 : 0); // 总时间 
+		// 	}
+		// 	// 【动规】：倒序遍历
+		// 	while (!l.isEmpty()) {
+		// 		// 【贪心】地认为：两个武力最接近的邻居之间，可以取最优解。但这个思路，能保证总局，最小值吗？？？
+		// 		int [] cur = l.poll(), top;
+		// 		if (!l.isEmpty()) {
+		// 			top = l.peek();
+		// 			int ct = cur[1] / v + (cur[1] % v > 0 ? 1 : 0), tt = top[1] / v + (top[1] % v > 0 ? 1 : 0);
+		// 			long ctt = r * ct + (r - cur[0]) * (t - ct);
+		// 			long ttt = r * tt + (r - top[0]) * (t - tt);
+		// 			// System.out.println("ctt: " + ctt + " " + "ttt: " + ttt);
+		// 			if (ctt >= ttt) {
+		// 				min += r * tt;
+		// 				r -= top[0];
+		// 				t -= tt;
+		// 				l.poll(); // 把更大伤害的 top, 先杀掉
+		// 				l.offer(cur);
+		// 			} else {
+		// 				min += r * ct;
+		// 				r -= cur[0];
+		// 				t -= ct;
+		// 			}
+		// 		} else {
+		// 			int ct = cur[1] / v + (cur[1] % v > 0 ? 1 : 0);
+		// 			min += r * ct;
+		// 		}
+		// 	}
+		// 	return min;
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// public boolean checkTwoChessboards(String S, String T) {
+		// 	char [] s = S.toCharArray(); char [] t = T.toCharArray();
+		// 	return (s[0]-'a') % 2 == (t[0]-'a') % 2
+		// 		? (s[1] - '1') % 2 == (t[1] - '1') % 2
+		// 		: (s[1] - '1') % 2 != (t[1] - '1') % 2;
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 在两倍大小N[1,2*10^5] 个点中，找相对较小，第 K[1,10^5] 小的单点，数据规模比较大，并且 query 顺序相关，无法【离线处理】
+		// // 根据N 与K 的大小，选择使用【最小堆】或是【最大堆】。但是当K 无限接近 N/2, 占用空间比较大
+		// public int[] resultsArray(int[][] q, int k) {
+		// 	int n = q.length, kk, x = 0, y = 0;
+		// 	int [] f = new int [n];
+		// 	Arrays.fill(f, -1);
+		// 	if (n < k) return f;
+		// 	TreeMap<Integer, Integer> s, t; // = new TreeMap<>();
+		// 	s = new TreeMap<>((o, oo)-> oo-o); // 【最大堆】 k or k-1
+		// 	t = new TreeMap<>((o, oo)-> o-oo); // 【最小堆】 n-k+1
+		// 	boolean minQueue = true;
+		// 	if (k > n/2 + n%2) {
+		// 		minQueue = false;
+		// 		kk = n - k + 1;
+		// 	}
+		// 	for (int i = 0; i < k; i++) {
+		// 		int key = Math.abs(q[i][0]) + Math.abs(q[i][1]);
+		// 		s.put(key, s.getOrDefault(key, 0) + 1);
+		// 		x++;
+		// 	}
+		// 	f[k-1] = s.firstEntry().getKey();
+		// 	for (int i = k; i < n; i++) {
+		// 		// 先添加，如果超出个数，再扔一个，进另一个滚动里:
+		// 		int cur = Math.abs(q[i][0]) + Math.abs(q[i][1]);
+		// 		// 最小工作量：存放方法？
+		// 		int l = s.firstEntry().getKey(), r = -1;
+		// 		if (!t.isEmpty())
+		// 			r = t.firstEntry().getKey();
+		// 		// 放：左边【最大堆】
+		// 		if (cur >= l && (r == -1 || cur < r) || cur < l) {
+		// 			s.put(cur, s.getOrDefault(cur, 0) + 1);
+		// 			x++;
+		// 		} else if (r != -1 && cur >= r) { // 放：右边【最小堆】
+		// 			t.put(cur, t.getOrDefault(cur, 0) + 1);
+		// 			y++;
+		// 		}
+		// 		// 滚动，确定当前结果
+		// 		while (minQueue && x > k || !minQueue && x > k-1) { // 从左往右放
+		// 			int cnt = s.firstEntry().getValue();
+		// 			if (minQueue && x - cnt >= k || !minQueue && x - cnt >= k-1) {
+		// 				t.put(s.firstEntry().getKey(), s.firstEntry().getValue());
+		// 				s.remove(s.firstEntry().getKey());
+		// 				x -= cnt;
+		// 				y += cnt;
+		// 			} else if (minQueue && x - cnt < k || !minQueue && x - cnt < k-1) {
+		// 				f[i] = s.firstEntry().getKey();
+		// 				break;
+		// 			}
+		// 		}
+		// 		if (f[i] == -1) {
+		// 			if (minQueue && x == k) f[i] = s.firstEntry().getKey();
+		// 			else if (!minQueue && x == k-1) f[i] = t.firstEntry().getKey();
+		// 		}
+		// 		// 从右往左放
+		// 		while (f[i] == -1 && (minQueue && x < k || !minQueue && x < k-1)) {
+		// 			int cnt = t.firstEntry().getValue();
+		// 			if (minQueue && x + cnt <= k || !minQueue && x + cnt <= k-1) {
+		// 				s.put(t.firstEntry().getKey(), t.firstEntry().getValue());
+		// 				t.remove(t.firstEntry().getKey());
+		// 				x += cnt;
+		// 				y -= cnt;
+		// 			} else if (minQueue && x + cnt > k || !minQueue && x + cnt > k-1) {
+		// 				f[i] = t.firstEntry().getKey();
+		// 				break;
+		// 			}
+		// 		}
+		// 		if (f[i] == -1) {
+		// 			if (minQueue && x == k) f[i] = s.firstEntry().getKey();
+		// 			else if (!minQueue && x == k-1) f[i] = t.firstEntry().getKey();
+		// 		}
+		// 	}
+		// 	return f;
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 【离线处理】：这个 m[1,10^5] 可以离线处理，升序处理
+		// // N[1,2000], M[1,10^5] 数组【XOR预处理】，效果极显著！！
+		// // 两个思路：
+		// // 一个：前几天，刚学，什么狗屁【从右往左】【从左往右】双端XOR 预处理？什么先只处理【从右往左】，求解同步处理【从左往右】，没想透彻。。
+		// // 一个：XOR 最值线段树？亲爱的表哥的活宝妹，今天想试写这个，回想这个【最值、求和Sum 线段树】写写试试看
+		// // 【线段树】：解决的是，实时更新数组，求和 Sum O(logN) 的问题，可是同步用到【数组片段 Seg XOR】吗？感觉，这里没有想透彻。。
+		// // 感觉，上面，亲爱的表哥的活宝妹，还需要理解得再透彻一点儿。。。
+        // class Range implements Comparable<Range> { // 【重要：】只有这样，才可以借助 TreeSet 等数据结构简单查询，就不用自己再写二分搜索了。。。
+        //     public int l, r;
+        //     public Range(int l, int r) {
+        //         this.l = l;
+        //         this.r = r;
+        //     }
+        //     @Override public int compareTo(Range other) { 
+        //         return this.l != other.l ? this.l - other.l : this.r - other.r;
+        //     }
+        // }
+        // TreeSet<Range> s = new TreeSet<>();
+		// class Node {
+		// 	int lo, hi, m;
+		// 	// ll, rr; // low high, XOR-max, low-idx hi-idx
+		// 	// TreeSet<Range>.... 越弄越复杂了。。
+		// 	TreeSet<Range> s;
+		// 	Node l, r;
+		// 	public Node(int left, int right) {
+		// 		lo = left; hi = right;
+		// 		m = 0;
+		// 		l = null; r = null;
+		// 	}
+		// }
+		// public insert(Node r, int i) { // 想以，下标索引 idx 的形式，求【线段、片段、最大值 XOR】
+		// 	if (r.lo == r.hi) {
+		// 		r.m = f[r.lo]; // 想以，下标索引 idx 的形式，求【线段、片段、最大值 XOR】
+		// 		r.s.add(new Range(i, i));
+		// 		return ;
+		// 	}
+		// 	int mid = (r.lo + r.hi) / 2;
+		// 	if (i <= mid)
+		// 		insert(r.l, i);
+		// 	else insert(r.r, i);
+		// 	// 想以，下标索引 idx 的形式，求【线段、片段、最大值 XOR】
+		// 	// 可是，如果，左、右、各出现一个同等最大值，要怎么办纪录呢。。
+		// 	if (r.l.m == r.r.m) { // 左右最值、一样
+		// 		// 左右最值，区间，左右端点连续吗？可以合并吗？
+		// 		// 写到这里，亲爱的表哥的活宝妹，感觉，思路，可能想偏了，弄太复杂了，想其它思路。。。
+		// 	}
+		// 	if (r.l.m > r.r.m) {
+		// 		r.m = r.l.m;
+		// 		r.ll = r.l.ll;
+		// 		r.rr = r.l.rr;
+		// 	} else if (r.l.m > r.r.m) {
+		// 	}
+		// 	r.m = Math.max(r.l.m, r.r.m);
+		// 	// if (r.l.rr + 1 == r.r.ll) {
+		// 	// }
+		// 	r.m = Math.max(r.m, r.l.m ^ r.r.m)
+		// }
+		// int [] f;
+		// public int[] maximumSubarrayXor(int[] a, int[][] qs) {
+		// 	int n = a.length, m = qs.length; this.f = a; 
+		// 	int [] r = new int [n+1];
+		// 	for (int i = 1; i <= n; i++) 
+		// 		r[i] = r[i-1] ^ a[i-1];
+		// 	System.out.println(Arrays.toString(r));
+		// 	List<int []> l = new ArrayList<>();
+		// 	for (int i = 0; i < m; i++) 
+		// 		l.add(new int [] {i, qs[i][0], qs[i][1]});
+		// 	Collections.sort(l, (x, y)-> x[1] != y[1] ? x[1] - y[1] : x[2] - y[2]); // 起止点，升序排列
+		// 	int [] f = new int [m];
+			
+
+		// 	return new int [0];
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 数据规模狠小：感觉，亲爱的表哥的活宝妹，只要把思路想通，哪怕是弄个【dfs 记忆化深搜】都能过！！
+		// // 【dfs 记忆化深搜】：这里的难点是，怎么定义、方便、好用的【记忆化、数据结构】？
+		// // mask = 0; // 标记：【行、行的组合】Integer
+		// // curSum: 标记，当前最大和值， Integer
+		// // hsi 标记，当前用过的数字。。 Set<Integer> s = new HashSet<>();
+		// class Node implements Comparable<Node> {
+		// 	int i, j; // i: mask, j: sum
+		// 	Set<Integer> s = new HashSet<>();
+		// 	public Node(int i, int j, Set<Integer> s) {
+		// 		this.i = i; this.j = j; this.s = s; 
+  		//     }
+		// 	@Override public int compareTo(Node other) { 
+		// 		return this.j != other.j ? this.j - other.j : this.i - other.i;
+		// 	}
+		// }
+		// public int maxScore(List<List<Integer>> lli) {
+		// 	m = lli.size(); n = lli.get(0).size(); max = 0; this.lli = lli; 
+		// 	for (List<Integer> l : lli) 
+		// 		Collections.sort(l, (x, y)->y - x);
+		// 	r = new int [m];
+		// 	q = new PriorityQueue<>((x, y) -> lli.get(y).get(r[y]) - lli.get(x).get(r[x]));
+		// 	for (int i = 0; i < m; i++) q.offer(i);
+		// 	Set<Integer> s = new HashSet<>();
+		// 	f = new HashMap<>();
+		// 	int mask = 0; // 标记：【行、行的组合】Integer
+		// 	int sum = 0;
+		// 	// for (int i = 0; i < m; i++) {
+		// 	while (!q.isEmpty()) {
+		// 		int i = q.poll();
+		// 		mask |= (1 << i);
+		// 		sum += lli.get(i).get(r[i]);
+		// 		s.add(lli.get(i).get(r[i]));
+		// 		r[i]++;
+		// 		dfs(new Node(mask, sum, s), r);
+		// 		r[i]--;
+		// 		mask ^= (1 << i);
+		// 		sum -= lli.get(i).get(r[i]);
+		// 		s.remove(lli.get(i).get(r[i]));
+		// 		q.offer(i);
+		// 	}
+		// 	return max;
+		// }
+		// List<List<Integer>> lli = new ArrayList<>();
+		// Map<Node, Integer> f;
+		// int [] r;
+		// Queue<Integer> q;
+		// int m, n, max;
+		// void dfs(Node ro, int [] r) {
+		// 	if (f.containsKey(ro)) return; // f.get(ro);
+		// 	int mask = ro.i, sum = ro.j;
+		// 	Set<Integer> s = ro.s;
+		// 	if (s.size() == m && mask == (1 << m)-1) {
+		// 		max = Math.max(max, sum);
+		// 		f.put(ro, sum);
+		// 		return ;
+		// 	}
+		// 	// 优化：剪枝
+		// 	// if (100 * )
+		// 	// 暴力：全局最优解
+		// 	// while (!q.isEmpty() && (mask >> q.peek() & 1) == 0)) {
+		// 	int cur = sum;// 呵呵呵哈哈哈：亲爱的表哥的活宝妹，如同几年前写二叉树， dfs 深搜，自顶向下自底向上，两个方向又、双、写混杂了。。。
+		// 	while (!q.isEmpty()) {
+		// 		int i = q.poll();
+		// 		// if (mask >> idx & 1 == 0)
+		// 		mask |= (1 << i);
+		// 		sum += lli.get(i).get(r[i]);
+		// 		s.add(lli.get(i).get(r[i]));
+		// 		r[i]++;
+		// 		dfs(new Node(mask, sum, s), r);
+		// 		r[i]--;
+		// 		mask ^= (1 << i);
+		// 		sum -= lli.get(i).get(r[i]);
+		// 		s.remove(lli.get(i).get(r[i]));
+		// 		q.offer(i);
+		// 	}
+		// 	// f.put(ro, )// 呵呵呵哈哈哈：亲爱的表哥的活宝妹，如同几年前写二叉树， dfs 深搜，自顶向下自底向上，两个方向又、双、写混杂了。。。
+		// }
  	} 
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
     public static void main (String[] args) {
 		Solution s = new Solution ();
 
-		int [] r = s.getFinalState(a, 27, 32);
-		System.out.println(Arrays.toString(r));
+		int r = s.maxScore(ll);
+		System.out.println("r: " + r);
     }
 }
 // ListNode head = new ListNode(a0]); 
@@ -1160,8 +1469,9 @@ public class cmp {
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
