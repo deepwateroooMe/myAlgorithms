@@ -1,20 +1,27 @@
 import com.ListNode;
 
 import java.util.HashMap;
+
 import java.util.Map;
+
 import java.util.ArrayList;
+
 import java.util.*;
+
 import java.util.stream.*;
+
 import java.util.stream.Collectors;
+
 import java.util.HashSet;
+
 import java.util.Set;
 
 import java.math.BigInteger;
+
 import static java.util.stream.Collectors.toMap;
-
 public class cmp {
-    public static class Solution {
 
+    public static class Solution {
 		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 		// // 亲爱的表哥的活宝妹，现在【不再贫血？】的亲爱的表哥的活宝妹，能够把这些、先前、搞不明白的难题，这次都弄明白了。。
 		// // 对照着【题解】来写，但把【每个细节】都弄懂，弄明白！！！
@@ -1069,47 +1076,6 @@ public class cmp {
 		// }
 
 		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-		// public long minDamage(int v, int [] d, int [] a) {
-		// 	int n = d.length;
-		// 	// Queue<int []> l = new PriorityQueue<>((x, y) -> x[0] != y[0] ? y[0] - x[0] : x[1] - y[1]);
-		// 	Queue<int []> l = new PriorityQueue<>((x, y) -> -1 * Long.compare((long)x[0] * (long)(x[1] / v + (x[1] % v > 0 ? 1 : 0)), 
-		// 	(long)y[0] * (long)(y[1] / v + (y[1] % v > 0 ? 1 : 0))));
-		// 	long r = 0l, t = 0l, min = 0l;
-		// 	for (int i = 0; i < n; i++) {
-		// 		r += d[i]; // 总伤害
-		// 		l.offer(new int [] {d[i], a[i]});
-		// 		t += a[i] / v + (a[i] % v > 0 ? 1 : 0); // 总时间 
-		// 	}
-		// 	// 【动规】：倒序遍历
-		// 	while (!l.isEmpty()) {
-		// 		// 【贪心】地认为：两个武力最接近的邻居之间，可以取最优解。但这个思路，能保证总局，最小值吗？？？
-		// 		int [] cur = l.poll(), top;
-		// 		if (!l.isEmpty()) {
-		// 			top = l.peek();
-		// 			int ct = cur[1] / v + (cur[1] % v > 0 ? 1 : 0), tt = top[1] / v + (top[1] % v > 0 ? 1 : 0);
-		// 			long ctt = r * ct + (r - cur[0]) * (t - ct);
-		// 			long ttt = r * tt + (r - top[0]) * (t - tt);
-		// 			// System.out.println("ctt: " + ctt + " " + "ttt: " + ttt);
-		// 			if (ctt >= ttt) {
-		// 				min += r * tt;
-		// 				r -= top[0];
-		// 				t -= tt;
-		// 				l.poll(); // 把更大伤害的 top, 先杀掉
-		// 				l.offer(cur);
-		// 			} else {
-		// 				min += r * ct;
-		// 				r -= cur[0];
-		// 				t -= ct;
-		// 			}
-		// 		} else {
-		// 			int ct = cur[1] / v + (cur[1] % v > 0 ? 1 : 0);
-		// 			min += r * ct;
-		// 		}
-		// 	}
-		// 	return min;
-		// }
-
-		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 		// public boolean checkTwoChessboards(String S, String T) {
 		// 	char [] s = S.toCharArray(); char [] t = T.toCharArray();
 		// 	return (s[0]-'a') % 2 == (t[0]-'a') % 2
@@ -1262,10 +1228,28 @@ public class cmp {
 		// 		l.add(new int [] {i, qs[i][0], qs[i][1]});
 		// 	Collections.sort(l, (x, y)-> x[1] != y[1] ? x[1] - y[1] : x[2] - y[2]); // 起止点，升序排列
 		// 	int [] f = new int [m];
-			
-
 		// 	return new int [0];
 		// }
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 亲爱的表哥的活宝妹，解这些题目的难点，就是，【观察不到】那些规律。。若不是看它人分析，亲爱的表哥的活宝妹自己，想不出、找不到、找不出，那些规律来。。。
+		// public int[] maximumSubarrayXor(int[] nums, int[][] q) {
+		// 	int n = nums.length, m = q.length;
+		// 	int [][] f = new int [n][n], a = new int [n][n];// a: max
+		// 	// 预处理【初始化】
+		// 	for (int i = n-1; i >= 0; i--) {
+		// 		f[i][i] = nums[i];
+		// 		a[i][i] = nums[i];
+		// 		for (int j = i+1; j < n; j++) {
+		// 			f[i][j] = f[i][j-1] ^ f[i+1][j]; 
+		// 			a[i][j] = Math.max(f[i][j], Math.max(a[i+1][j], a[i][j-1]));
+		// 		}
+		// 	}
+		// 	int [] r = new int [m];
+		// 	for (int i = 0; i < m; i++) 
+		// 		r[i] = a[q[i][0]][q[i][1]];
+		// 	return r;
+		// }
+
 
 		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 		// // 数据规模狠小：感觉，亲爱的表哥的活宝妹，只要把思路想通，哪怕是弄个【dfs 记忆化深搜】都能过！！
@@ -1345,12 +1329,305 @@ public class cmp {
 		// 	}
 		// 	// f.put(ro, )// 呵呵呵哈哈哈：亲爱的表哥的活宝妹，如同几年前写二叉树， dfs 深搜，自顶向下自底向上，两个方向又、双、写混杂了。。。
 		// }
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 亲爱的表哥的活宝妹，看了提示，感觉，就会写这个题目了
+		// // 可是，这个题目的思路，亲爱的表哥的活宝妹，可能没有想透，先写其它2 个；晚点儿再回来写这个。。。
+		// // 亲爱的表哥的活宝妹自己，也排序了，但是限制在排每行的序；只要整个数组排序，就可以，把它变成【一维、线性动规】就狠好解题目了。。。脑袋一根筋。。。
+		// // 变型的【记忆化深搜】：定义【记忆数据结构】
+		// // 亲爱的表哥的活宝妹，少分析了一个要求：数字不能重复。少考虑了一个因素 Set<Integer> s = new HashSet<>();
+		// public int maxScore(List<List<Integer>> ll) {
+		// 	m = ll.size(); n = ll.get(0).size(); kk = 0;
+		// 	l = new ArrayList<int []>();
+		// 	Set<Integer> s = new HashSet<>();
+		// 	for (int i = 0; i < m; i++) {
+		// 		s.clear();
+		// 		for (int j = 0; j < n; j++) {
+		// 			if (!s.contains(ll.get(i).get(j))) {
+		// 				l.add(new int [] {i, ll.get(i).get(j)});
+		// 				s.add(ll.get(i).get(j));
+		// 				kk++;
+		// 			}
+		// 		}
+		// 	}
+		// 	Collections.sort(l, (x, y)-> x[1] != y[1] ? y[1] - x[1] : x[0] - y[0]);
+		// 	f = new HashMap[kk];
+		// 	Arrays.fill(f, new HashMap<Integer, Integer>());
+		// 	r = 0;
+		// 	for (int i = 0; i < kk; i++) 
+		// 		dfs(i, 0, -1);
+		// 	return r; 
+		// }
+		// Map<Integer, Map<Integer, Integer>> [] f;// 状态没有定义对，存在【此错误状态下，多个子状态、全局最优解漏掉了】
+		// // Map<Integer, Integer> [] f;// 状态没有定义对，存在【此错误状态下，多个子状态、全局最优解漏掉了】
+		// List<int []> l;
+		// int m, n, kk, r;
+		// int dfs(int i, int j, int v) { // i: idx from l; j: mask; v: 前一个用过的最小数字
+		// 	if (i == kk || j == ( 1 << m)-1)
+		// 		return 0;
+		// 	if (f[i].containsKey(j) && f[i].get(j).containsKey(v)) return f[i].get(j).get(v);
+		// 	// // 【暴力】就容易【超时】；这里要想【优化】——尽早裁枝, 或是，使用，【贪心】思路，来缩短时间
+		// 	// if (Integer.bitCount(j) >= m / 2 && )
+		// 	int ans = 0;
+		// 	// 【自头向尾】：单方向遍历，暴力所有可能性
+		// 	int bgn = (((j >> l.get(i)[0]) & 1) == 1 ? i+1 : (v == -1 || l.get(i)[1] < v ? i : i+1));
+		// 	for (int k = bgn; k < kk; k++) {
+		// 		ans = Math.max(ans, (k == i ? l.get(i)[1] : 0) + dfs(k + (k == i ? 1 : 0), k == i ? j | (1 << l.get(i)[0]) : j, k == i ? l.get(i)[1] : v)); 
+		// 		// // 【写错了】：裁枝要裁得精确，不能漏掉【全局最优解】
+		// 		// int cnt = Math.min(m - Integer.bitCount(j), kk - k);
+		// 		// // if (cnt * (cnt + 1) / 2 * l.get(k)[1] < r) break;
+		// 		// if (v > 0 && cnt * (cnt + 1) / 2 * v < r) break;
+		// 	}
+		// 	Map<Integer, Integer> mm;
+ 		// 	if (!f[i].containsKey(j)) 
+		// 		mm = new HashMap<Integer, Integer>();
+		// 	else mm = f[i].get(j);
+		// 	mm.put(v, ans);
+		// 	r = Math.max(r, ans);
+		// 	return ans;
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // 这些，都是亲爱的表哥的活宝妹，思路没能想透时的。。。。
+		// public long minDamage(int v, int [] d, int [] a) {
+		// 	int n = d.length;
+		// 	// Queue<int []> l = new PriorityQueue<>((x, y) -> x[0] != y[0] ? y[0] - x[0] : x[1] - y[1]);
+		// 	Queue<int []> l = new PriorityQueue<>((x, y) -> -1 * Long.compare((long)x[0] * (long)(x[1] / v + (x[1] % v > 0 ? 1 : 0)), 
+		// 	(long)y[0] * (long)(y[1] / v + (y[1] % v > 0 ? 1 : 0))));
+		// 	long r = 0l, t = 0l, min = 0l;
+		// 	for (int i = 0; i < n; i++) {
+		// 		r += d[i]; // 总伤害
+		// 		l.offer(new int [] {d[i], a[i]});
+		// 		t += a[i] / v + (a[i] % v > 0 ? 1 : 0); // 总时间 
+		// 	}
+		// 	// 【动规】：倒序遍历
+		// 	while (!l.isEmpty()) {
+		// 		// 【贪心】地认为：两个武力最接近的邻居之间，可以取最优解。但这个思路，能保证总局，最小值吗？？？
+		// 		int [] cur = l.poll(), top;
+		// 		if (!l.isEmpty()) {
+		// 			top = l.peek();
+		// 			int ct = cur[1] / v + (cur[1] % v > 0 ? 1 : 0), tt = top[1] / v + (top[1] % v > 0 ? 1 : 0);
+		// 			long ctt = r * ct + (r - cur[0]) * (t - ct);
+		// 			long ttt = r * tt + (r - top[0]) * (t - tt);
+		// 			// System.out.println("ctt: " + ctt + " " + "ttt: " + ttt);
+		// 			if (ctt >= ttt) {
+		// 				min += r * tt;
+		// 				r -= top[0];
+		// 				t -= tt;
+		// 				l.poll(); // 把更大伤害的 top, 先杀掉
+		// 				l.offer(cur);
+		// 			} else {
+		// 				min += r * ct;
+		// 				r -= cur[0];
+		// 				t -= ct;
+		// 			}
+		// 		} else {
+		// 			int ct = cur[1] / v + (cur[1] % v > 0 ? 1 : 0);
+		// 			min += r * ct;
+		// 		}
+		// 	}
+		// 	return min;
+		// }
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// public long minDamage(int v, int [] d, int [] h) {
+		// 	int n = d.length;
+		// 	int [][] f = new int [n][2];
+		// 	for (int i = 0; i < n; i++) {
+		// 		f[i][0] = (h[i] - 1) / v + 1;
+		// 		f[i][1] = d[i];
+		// 	}
+		// 	Arrays.sort(f, (x, y) -> x[0] * y[1] - x[1] * y[0]); 
+		// 	long s = 0l, r = 0l;
+		// 	for (int [] fi : f) {
+		// 		s += fi[0];
+		// 		r += s * fi[1];
+		// 	}
+		// 	return r;
+		// }
+
+// 		// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 		public long countGoodIntegers(int n, int k) {
+// 			int [] f = new int [n+1]; // factorial
+// 			f[0] = 1;
+// 			for (int i = 1; i <= n; i++) 
+// 				f[i] = f[i-1] * i;
+// 			long ans = 0;
+// 			int cur = 0;
+// 			int base = (int)Math.pow(10, (n-1)/2);
+// 			Set<String> si = new HashSet<>();
+// 			int [] r = new int [10];
+// // 枚举：这个范围内的所有的数字，一个一个数个数
+// 			for (int i = base; i < 10 * base; i++) {
+// 				String s = String.valueOf(i) + new StringBuilder(String.valueOf(i)).reverse().substring(n % 2).toString();
+// 				// 【写错了】：下面，没排序 S 的话，是数得会有重复的！！
+// 				// if (Long.parseLong(s) % k > 0 || !si.add(Long.parseLong(s))) // 这个数字，出现过了
+// 				// 	continue;
+// 				if (Long.parseLong(s) % k > 0) // 这个数字，出现过了
+// 					continue;
+// 				char [] sortedS = s.toCharArray();
+// 				Arrays.sort(sortedS);
+// 				// 【写错了】：
+// 				// if (!si.add(sortedS.toString())) // 【TODO】：。。。
+// 				if (!si.add(new String(sortedS)))
+// 					continue;
+// 				Arrays.fill(r, 0);
+// 				for (char c : sortedS) 
+// 					r[c-'0']++;
+// 				cur = (n - r[0]) * f[n-1];
+// 				for (int v : r) 
+// 					cur /= f[v];
+// 				ans += cur;
+// 			}
+// 			return ans;
+// 		}
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// public String convertDateToBinary(String S) {
+		// 	String [] s = S.split("-", 3);
+		// 	String [] t = new String [3];
+		// 	StringBuilder sb = new StringBuilder();
+		// 	for (int i = 0; i < 3; i++) {
+		// 		t[i] = Integer.toBinaryString(Integer.parseInt(s[i]));
+		// 		sb.append(t[i]);
+		// 		if (i < 2)
+		// 		sb.append("-");
+		// 								}
+		// 	return sb.toString();
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// public int maxPossibleScore(int [] a, int d) { // 684/685 passed 测试数据太大了，本地运行不了
+		// 	n = a.length; this.a = a; this.d = d; 
+		// 	Arrays.sort(a);
+		// 	System.out.println(Arrays.toString(a));
+		// 	int minDif = a[1]-a[0];
+		// 	for (int i = 2; i < n; i++) 
+		// 		minDif = Math.min(minDif, a[i] - a[i-1]);
+		// 	int l = minDif, r = a[n-1]+d-a[0], ans = 0;
+		// 	if (n == 2) return r;
+		// 	// 【二分查找】：并判断、解的、正确性
+		// 	while (l <= r) {
+		// 		int m = (l + r ) / 2;
+		// 		if (valid(m)) {
+		// 			ans = Math.max(ans, m);
+		// 			l = m + 1;
+		// 		} else
+		// 			r = m-1;
+		// 	}
+		// 	return ans;
+		// }
+		// int [] a; int n, d;
+		// boolean valid(int v) {
+		// 	int [] f = Arrays.copyOf(a, n);
+		// 	boolean one = false;
+		// 	for (int i = 1; i < n; i++) {
+		// 		if (f[i-1] + v <= f[i] + d) {
+		// 			f[i] = Math.max(f[i-1]+v, f[i]);
+		// 			if (f[i] == f[i-1]+v && !one)
+		// 				one = true;
+		// 		} else return false;
+		// 	}
+		// 	return one;
+		// }
+
+		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// // N:[1,10^5] a[i]:[1,10^5]
+		// // 数据规模比较大，亲爱的表哥的活宝妹，不知道，怎么想这个题目。。。
+		// public long findMaximumScore(List<Integer> l) {
+		// 	int n = l.size();
+		// 	long [] f = new long [n];
+		// 	// long [] r = new long [n];
+		// 	// for (int i = n-2; i >= 0; i--) {
+		// 	// 	r[i] = 				
+		// 	// }
+		// 	f[1] = l.get(0);
+		// 	for (int i = 2; i < n; i++) {
+		// 		f[i] = Math.max(f[i-1] + l.get(i-1), b)
+		// 	}
+		// 	return 0;
+		// }
+
+		// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// 亲爱的表哥的活宝妹，觉得，这类题目写狠多，这个题目，像是不太难的样子_???
+		// 当马每移动一次，都需要再动态更新，最大最小。。！！！
+		// 怎么会只有 29% Hard ？数据规模，倒是不大
+		// 先写【暴力方法】：遍历所有可能性，TLE 才再去想其它解法。。
+		// 亲爱的表哥的活宝妹，今天下午不想再写了、、晚点儿、晚一两天才再写这几个破烂题目。。。
+		int [][] dirs = {{-2, -1}, {-2, 1}, {-1, -2}, {-1, 2},
+						 {2, -1}, {2, 1}, {1, -2}, {1, 2}};
+		public int maxMoves(int kx, int ky, int[][] a) {
+			n = 50; m = a.length;
+			int i = 0;
+			for (int [] v : a) l.add(new int [] {v[0], v[1], i++});
+			l.add(new int [] {kx, ky, i});
+			f = new Integer [m+1][2];
+			g = new Integer [n][n][m];
+			vis = new boolean [m];
+			v = new boolean [n][n];
+			return dfs(m, 0);
+		}
+		List<int []> l = new ArrayList<>();
+// 记：每个小兵，到其它所有小兵的【最大距离、最小距离】的小兵号
+		// 记：奇偶 player 的最佳得分。。
+		Integer [][] f; 
+		Integer [][][] g; 
+		int m, n;
+		boolean [] vis;
+		boolean [][] v;
+		int dfs(int i, int j) {
+			if (j == m) return 0;
+			if (f[i][j%2] != null) return f[i][j%2];
+			int r = (j % 2  == 0 ? Integer.MIN_VALUE : Integer.MAX_VALUE);
+			if (j % 2 == 0) { // 求最大值
+				for (int k = 0; k < m; k++) {
+					if (vis[k]) continue;
+					vis[k] = true;
+					int v = ddfs(l.get(i)[0], l.get(i)[1], k);
+					System.out.println("v: " + v);
+					if (v <= 0) continue;
+					// r = Math.max(r, ddfs(l.get(i)[0], l.get(i)[1], k) + dfs(k, j++));
+					r = Math.max(r, v + dfs(k, j++));
+					System.out.println("r0: " + r);
+					vis[k] = false;
+				}
+			} else { // 求最小值
+				for (int k = 0; k < m; k++) {
+					if (vis[k]) continue;
+					vis[k] = true;
+					r = Math.min(r, ddfs(l.get(i)[0], l.get(i)[1], k) + dfs(k, j++));
+					vis[k] = false;
+				}
+			}
+			System.out.println("r: " + r);
+			return f[i][j%2] = r;
+		}
+		// 马[x,y]到，小兵 i的，[最少步数】。感觉，这步，或可以优化，预处理＋动态更新、之类的
+		int ddfs(int x, int y, int idx) {
+			// System.out.println("x: " + x + " " + "y: " + y);
+			// System.out.println("l.get(idx)[0]: " + l.get(idx)[0] + " " + "l.get(idx)[1]: " + l.get(idx)[1]);
+			if (x < 0 || x >= n || y < 0 || y >= n || v[x][y]) return Integer.MAX_VALUE;
+			if (x == l.get(idx)[0] && y == l.get(idx)[1]) return 0;
+			if (g[x][y][idx] != null) return g[x][y][idx];
+			v[x][y] = true;
+			int r = Integer.MAX_VALUE / 2;
+			for (int [] d : dirs)
+				r = Math.min(r, 1 + ddfs(x + d[0], y + d[1], idx));
+			v[x][y] = false;
+			return g[x][y][idx] = r;
+		}
  	} 
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
     public static void main (String[] args) {
 		Solution s = new Solution ();
 
-		int r = s.maxScore(ll);
+		int [][] a = new int [][] {{0,0}};
+
+		int r = s.maxMoves(1, 1, a);
 		System.out.println("r: " + r);
     }
 }
@@ -1470,6 +1747,19 @@ public class cmp {
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
