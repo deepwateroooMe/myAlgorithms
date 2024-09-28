@@ -2,8 +2,8 @@
 #+author: deepwaterooo
 
 * 字符串 
-** 总结
-- Rabin-Karp Rolling Hash算法
+** 总结：几种【字符串算法】关键字
+- Rabin-Karp Rolling Hash算法、AC 自动机
 ** KMP算法
 *** 1392. Longest Happy Prefix  - Hard : Use Longest Prefix Suffix (KMP-table) or String Hashing.
 A string is called a happy prefix if is a non-empty prefix which is also a suffix (excluding itself).
@@ -700,3 +700,88 @@ void swap(int i, int j, char [] s) {
 | LinkedList | 双向链表 | 无                    | 0(1)                | 0(n)           | 否             |
 |------------+----------+-----------------------+---------------------+----------------+----------------|
 - 最好的做法是自己用arrayDeque封装一个一端进出的stack
+** AC 自动机：
+- 亲爱的表哥的活宝妹，最近第一次，接触到这个数据结构的题目. 不过，觉得这个【AC 自动机】不难。
+*** 3292. Minimum Number of Valid Strings to Form Target II
+- You are given an array of strings words and a string target.
+
+A string x is called valid if x is a 
+
+prefix  of any string in words.
+
+Return the minimum number of valid strings that can be concatenated to form target. If it is not possible to form target, return -1.
+#+BEGIN_SRC java
+// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+public class Node {
+    Node [] n;
+    Node f; // 当 cur.son[i] 不能匹配 target 中的某个字符时，cur.fail.son[i] 即为下一个待匹配节点（等于 root 则表示没有匹配）
+    int l; // l: length
+    public Node(int l) {
+        n = new Node [26];
+        this.l = l; 
+    }
+}
+public class AhoCorasick {
+    Node root = new Node(0);
+    public void put(String s) {
+        Node r = root;
+        for (char j : s.toCharArray()) {
+            j -= 'a';
+            if (r.n[j] == null) 
+                r.n[j] = new Node(r.l + 1);
+            r = r.n[j];
+        }
+    }
+    public void buildFail() {
+        Node r = root;
+        r.f = r; // 【根节点】： f 指向自己，方便转圈【避开、不必要的、非空检测】？？？
+        ArrayDeque<Node> q = new ArrayDeque<>();
+        // 处理：【根节点】所有可能的子节点
+        for (int i = 0; i < 26; i++) {
+            Node s = r.n[i];
+            if (s == null) // 它说，这里是，【虚拟指针】。。什么意思。。
+                // 不存在，就指向父节点的，这个指针
+                // r.n[i] = r.f.n[i]; // 【写错了】：根节点，不存在还是不存在；就是后来的子节点，能转什么吗？？？
+                r.n[i] = r; // 根节点，不存在的子节点，就指向自己 
+            else {
+                // s.f = r.f.n[i]; // 【写错了】：根节点 f 指向自己 
+                s.f = r;
+                q.offerFirst(s);
+            }
+        }
+        // 处理后代: 跟【根节点】写法一模一样，为什么要写两遍？
+        while (!q.isEmpty()) {
+            r = q.pollLast(); // 全部、非空
+            for (int i = 0; i < 26; i++) {
+                Node s = r.n[i];
+                if (s == null) // 它说，这里是，【虚拟指针】。。什么意思。。
+                    // 虚拟子节点 cur.son[i]，和 cur.fail.son[i] 是同一个
+                    // 方便失配时直接跳到下一个可能匹配的位置（但不一定是某个 words[k] 的最后一个字母）
+                    r.n[i] = r.f.n[i]; // 当 r.f 非空，就指向了 r.f.n[i] 节点
+                else {
+                    // 下面：一次【赋值跳转】，但在【字典树】中，因为【自顶向下】的 f 指针构建
+                    s.f = r.f.n[i]; 
+                      q.offerFirst(s);
+                  }
+              }
+          }
+        }
+    }
+    public int minValidStrings(String [] sa, String S) { 
+        int n = S.length(); char [] s = S.toCharArray();
+          AhoCorasick ac = new AhoCorasick();
+          for (String si : sa) ac.put(si);
+          ac.buildFail();
+          int [] f = new int [n+1];
+          Node r = ac.root;
+          for (int i = 0; i < n; i++) {
+              // 下面：如果没有匹配，相当于移动到，父节点 r 的 fail 节点的 son[s[i]-'a']
+              r = r.n[s[i] - 'a']; // 隐藏在幕后的、无数链接跳转。。。
+              // 没有任何字符串的前缀与 target[..i] 的后缀匹配
+              if (r == ac.root)
+                  return -1;
+              f[i+1] = f[i+1 - r.l] + 1;
+          }
+          return f[n];
+      }
+#+END_SRC

@@ -12,13 +12,6 @@
 #+INCLUDE: "./summary/string.org" :minlevel 1
 #+INCLUDE: "./summary/bitMaskManipulation.org" :minlevel 1
 
-* Try to Update something daily (from Tomorrow)
-- I feel I am pretty familiar with Android IPC already, but having NOT find an efficient way to udpate here on GitHub yet. 
-- From tomorrow, I will try tp udpate at least one repository daily, till I return back to work (vacation at home this a few days)
-- Feel windows font and size all looked so urgly back a few days ago, but as I am adjusting the 2K monitor brightness, and spend more and more time using it. I am getting familar with and get tolerance with the urgly looks now. 
-- I am able to think more deeply, can configure slightly complicated tools, like emacs, window 10 WSL terminator terminals etc.
-- Meanwhile, I want to promote myself with more advanced data structures and algorithms. So will try to practice this part during these a few days too. 
-
 * Dynamic Programming, 动态规划
 ** 第二次仍不会的题号记这里
 - 1872 (stone game 8), 647 329 494 131 518 1723(need summary)
