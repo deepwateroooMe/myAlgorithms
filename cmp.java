@@ -1,5 +1,5 @@
 import com.ListNode;            
-// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
@@ -8,13 +8,14 @@ import java.util.stream.*;
 import java.util.stream.Collectors;
 import java.util.HashSet;
 import java.util.Set;
+
 import java.math.BigInteger;
 import static java.util.stream.Collectors.toMap;
-// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+
 public class cmp {
     public static class Solution {
-		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】		
+        
+// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 		// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 		// // 亲爱的表哥的活宝妹，今天下午，或是傍晚，再来爬这恶心吧啦的、破烂算法题目
 		// public int maxPossibleScore(int [] a, int d) {
@@ -441,100 +442,412 @@ public class cmp {
         //     return ans;
         // }
 
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public char kthCharacter(int k) {
+        //     StringBuilder s = new StringBuilder("a");
+        //     while (s.length() < k) {
+        //         int n = s.length();
+        //         for (int i = 0; i < n; i++) 
+        //             s.append((char)((s.charAt(i)-'a'+1) % 26 + 'a'));
+        //     }
+        //     return s.charAt(k-1);
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public long countOfSubstrings(String word, int k) {
+        //     return 0;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 【滑动窗口＋双指针】：那天刚写的，亲爱的表哥的活宝妹不会的、不知道【左右指针】怎么滑动的、破烂题目。。。又见【滑动窗口＋双指针】。。。
+        // // 他们的贱鸡、贱畜牲，真贱！！！
+        // // 感觉，哪里，想得还不对，现在不想再写个题目了，晚点儿再写。。。722/815-passed
+        // public int countOfSubstrings(String S, int k) {
+        //     int m = 5, n = S.length(), ans = 0, i = 0, j = 0, mask = 0, cnt = 0; char [] f = S.toCharArray();
+        //     Map<Character, Integer> map = new HashMap<>(), mii = new HashMap<>();
+        //     map.put('a', 0); map.put('e', 1); map.put('i', 2); map.put('o', 3); map.put('u', 4); 
+        //     for ( i = 0; i < n; i++) {
+        //         System.out.println("\n i: " + i);
+        //         // 处理当前下标的【字符】
+        //         if (map.containsKey(f[i])) {
+        //             mask |= (1 << map.get(f[i]));
+        //             mii.put(f[i], mii.getOrDefault(f[i], 0) + 1);
+        //         } else cnt++;
+        //         // while (cnt > k) {
+        //         if (cnt > k) {
+        //             // 【左端点】右移：是在当前为【辅音】时发生的。。。处理：右端点在【i-1】时，【左端点 j：极尽可能在右移】
+        //             while (mask == 31 && j < n && map.containsKey(f[j])) {
+        //                 mii.put(f[j], mii.get(f[j])-1);
+        //                 if (mii.get(f[j]) == 0)
+        //                     mask ^= (1 << map.get(f[j]));
+        //                 if (mask == 31) ans++;
+        //                 j++;
+        //             }
+        //             if (map.containsKey(f[j])) { 
+        //                 mii.put(f[j], mii.get(f[j])-1);
+        //                 if (mii.get(f[j]) == 0)
+        //                     mask ^= (1 << map.get(f[j]));
+        //             } else cnt--;
+        //             j++;
+        //         }
+        //         System.out.println("Integer.toBinaryString(mask): " + Integer.toBinaryString(mask));
+        //         // 1 个【合法窗口】: 可能还有多个！！
+        //         // if (cnt == k && mask == 31) ans++;
+        //         // if (cnt == k) {
+        //         if (cnt == k && mask == 31) { 
+        //             ans++;
+        //             // while (mask == 31 && j < n && map.containsKey(f[j])) {
+        //             //     mii.put(f[j], mii.get(f[j])-1);
+        //             //     if (mii.get(f[j]) == 0)
+        //             //         mask ^= (1 << map.get(f[j]));
+        //             //     if (mask == 31) ans++;
+        //             //     j++;
+        //             // }
+        //         }
+        //         // }
+        //         System.out.println("ans: " + ans + " " + "j: " + j);
+        //     }
+        //     System.out.println("j: " + j);
+        //     int jj = j;
+        //     //  【左端点】右移：极尽可能地右移，添加、可能合法个数
+        //     while (j < n-(5+k) && map.containsKey(f[j]) && mask == 31) {
+        //         if (map.containsKey(f[j])) { 
+        //             mii.put(f[j], mii.get(f[j])-1);
+        //             if (mii.get(f[j]) == 0) {
+        //                 mii.put(f[j], mii.get(f[j])+1);
+        //                 // mask ^= (1 << map.get(f[j]));
+        //                 if (jj == j) break;
+        //                 //  【右端点】左移：极尽可能地左移，添加、可能合法个数
+        //                 // --i;
+        //                 i = n-1;
+        //                 while (i >= j+(5+k) && mask == 31 && cnt == k && map.containsKey(f[i])) {
+        //                     if (map.containsKey(f[i])) { 
+        //                         mii.put(f[i], mii.get(f[i])-1);
+        //                         if (mii.get(f[i]) == 0)
+        //                             mask ^= (1 << map.get(f[i]));
+        //                     } else cnt--;
+        //                     if (cnt == k && mask == 31) ans++;
+        //                     i--;
+        //                     System.out.println("ans: " + ans + " " + "i: " + i);
+        //                 }
+        //                 break;
+        //             }
+        //         } else cnt--;
+        //         if (cnt == k && mask == 31) ans++;
+        //         j++;
+        //         System.out.println("ans: " + ans + " " + "j: " + j);
+        //     }
+        //     return ans;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 【解题思路】：用【贪心思路】，应该不会超时！！
+        // public int [] validSequence(String S, String T) { // 750/907 passed
+        //     int m = S.length(), n = T.length(), i = 0, j = 0, p = -1, pi = -1; char [] s = S.toCharArray(); char [] t = T.toCharArray();
+        //     int [] f = new int [n]; // 找：【下标】的最小数组
+        //     // g: 用来存 S 中【az】依次出现的下标
+        //     List<Integer> [] g = new ArrayList[26];
+        //     Arrays.setAll(g, z -> new ArrayList<Integer>());
+        //     for ( i = 0; i < m; i++) 
+        //         g[s[i]-'a'].add(i);
+        //     boolean useOnce = false;
+        //     for ( i = 0; i < n; i++) { // 遍历 T 串
+        //         if (s[j] == t[i] || !useOnce) {
+        //             f[i] = j; // j: 标记S 串下标
+        //             if (s[j] != t[i] && !useOnce) { // 在这里使用了这次、全局最贪心 j
+        //                 useOnce = true;
+        //                 p = j; // 做记号：
+        //                 pi = i;
+        //             }
+        //             j++;
+        //         } else {
+        //             // while (j < m && s[j] != t[i]) j++;  // TLE 会超时
+        //             // 【二分查找】：链条中，第一个，比 j 大的下标
+        //             if (j < m && s[j] != t[i])
+        //                 j = binarySearch(g[t[i]-'a'], j+1);
+        //             if (j == m || j == -1) {
+        //                 j = p+1;// TLE: 这里，可能会超时
+        //                 i = pi-1;
+        //                 useOnce = false;
+        //                 continue;
+        //             } else {
+        //                 f[i] = j++; // j: 标记S 串下标
+        //             }
+        //         }
+        //         if (j == m) { // 【TODO】：这里的细节，还要再改。【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        //             if (pi < n) {
+        //                 i = pi-1;
+        //                 j = p+1;
+        //             }
+        //         }
+        //     }
+        //     return i == n ? f : new int [0];
+        // }
+        // int binarySearch(List<Integer> li, int idx) {
+        //     int n = li.size(), l = 0, r = n-1; // 双开区间
+        //     if (n == 0 || li.get(n-1) <= idx) return -1;
+        //     while (l < r) {
+        //         int m = (l + r) / 2;
+        //         if (li.get(m) < idx)
+        //             l = m + 1;
+        //         else r = m;
+        //     }
+        //     return l == -1 ? -1 : li.get(l);
+        //     // return r == n ? -1 : li.get(r);
+        // }
+//         // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//         // 破烂题目，被推荐、建议：得先去写一个破烂难题。。
+//         public int minimumScore(String S, String T) {
+//             int m = T.length(), n = S.length(), j = m-1;
+//             char [] s = S.toCharArray(); char [] t = T.toCharArray();
+// // f[i]: 对应于 S[i:] 后缀的、T 串最长【后缀、子序列】的【开始下标】
+//             int [] f = new int [n+1];
+//             f[n] = m;
+//             for (int i = n-1; i >= 0; i--) { //f[i] 数据预处理: 从后向前、处理后缀数组
+//                 if (s[i] == t[j])
+//                     j--;
+//                 if (j < 0) // T 是S 的【子序列】：什么也不用删除，0 消耗
+//                     return 0;
+//                 f[i] = j+1;
+//             }
+//             int r = f[0]; // 删除 t[:suf[0]]
+//             // 【从前向后】：处理【前缀数组】——这里隐了。。同步优化求解
+//             j = 0;
+//             for (int i = 0; i < n; i++) 
+//                 if (s[i] == t[j]) { // 这个条件下： j 才是对应于 S[:i] 前缀的、T 串【最长、前缀、子序列】的【结束下标】
+//                     // 前面，判断了 t 是 s 子序列的情况，上面的 j, 不会越界
+//                     j++;
+//                     // r = Math.min(r, f[i+1]-1 - (j-1+1) + 1); // 删除 t[j:suf[i+1]]
+//                     r = Math.min(r, f[i+1] - j); // 删除 t[j:suf[i+1]]
+//                 }
+//             return r;
+//         }
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 它们的贱鸡、贱畜牲，好贱！！
+        // // 把这么难一个题目，伪装成，中等难度。。。
+        // public int [] validSequence(String S, String T) {
+        //     int m = T.length(), n = S.length(), j = m-1, k = 0;
+        //     char [] s = S.toCharArray(); char [] t = T.toCharArray();
+        //     int [] f = new int [n+1];
+        //     f[n] = m;
+        //     for (int i = n-1; i >= 0; i--) {
+        //         if (s[i] == t[j])
+        //             j--;
+        //         f[i] = j+1;
+        //         if (j < 0) // T 是S 的子序列
+        //             break; //f[0-i]==0
+        //     }
+        //     int [] g = new int [m];
+        //     j = 0;
+        //     boolean useOnce = false; // 仅能修改一次
+        //     for (int i = 0; i < n; i++) {
+        //         if (s[i] == t[j] || !useOnce && f[i+1] <= j+1) {
+        //             if (s[i] != t[j]) // 这里：作了1 次修改
+        //                 useOnce = true;
+        //             g[j++] = i;
+        //             if (j == m) return g;
+        //         }
+        //     }
+        //     return new int [0];
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 亲爱的表哥，他们的贱鸡、贱畜牲，真贱！！同一场比赛里，连出2 题、同一个思路、同样难受的难题，还伪装一个假装它不难。。。
+        // // 亲爱的表哥的活宝妹，为什么要套：【子序列】的解题思路、而不是、未必适合【子串】的思路？这就是，【没能消化、理解透彻的、胡乱乱套思路】。。根本就不对
+        // // 亲爱的表哥的活宝妹，【看了提示】之后，亲爱的表哥的活宝妹，能把这个、破烂题目、瓣出来了吗？亲爱的表哥的活宝妹，把思路看懂了，可是KMP? 不会写。。
+        // // 那个什么狗屁【KMP? O(N) 线性、算法】，是什么意思呢？上次，看它的题解，以为看懂了、可以自己写了；现在看来，还是没能理解透彻，思路不透彻写不出来。。
+        // int [] calcZ(String S) { // 【TODO】：没有看懂，要去找、去翻，它先前的某个讲解。。。
+        //     int n = S.length(); char [] s = S.toCharArray();
+        //     int [] f = new int [n];
+        //     int boxL = 0, boxR = 0; // z-box 左右边界
+        //     for (int i = 1; i < n; i++) { // 遍历：以当前下标 i 为中心点【奇、偶中心】的、左右扩展、最大单侧长度
+        //         if (i <= boxR) // 两边的、最小长度、作为 f[i] 涨长的起点大小
+        //             f[i] = Math.min(f[i-boxL], boxR - i + 1);
+        //         while (i + f[i] < n && s[f[i]] == s[i + f[i]]) {
+        //             boxL = i;
+        //             boxR = i + f[i];
+        //             f[i]++; // 一个个字符涨长的。。
+        //         }
+        //     }
+        //     return f;
+        // }
+        // public int minStartingIndex(String S, String T) {
+        //     int m = T.length(), n = S.length();
+        //     char [] s = S.toCharArray(); char [] t = T.toCharArray();
+        //     int [] f = calcZ(T + S);
+        //     // 下面的数组，是倒序的
+        //     int [] g = calcZ(new StringBuilder(T).reverse().toString() + new StringBuilder(S).reverse().toString());
+        //     for (int i = m; i <= n; i++) {
+        //         // 回到原问题，我们枚举 i = 0,1,⋯, n−m，那么当前需要匹配的子串为 s[i..i+m−1]，对应的 Z 数组元素为 preZ[i+m] 和 sufZ[i+m−1]。
+        //         //     如果preZ[i+m] + sufZ[i+m−1] ≥ m−1
+        //         //     那么答案为 i。
+        //         //     代码实现时，也可以枚举 i = m, m+1,⋯,n，这样上面的式子可以简化为
+        //         //     preZ[i] + sufZ[i−1] ≥ m−1
+        //         //     答案为 i−m。
+        //         if (f[i] + g[g.length -i] >= m-1)
+        //             // if (f[i] + g[m+n-1-i] >= m-1) // 【写错了】
+        //             return i-m;
+        //     }
+        //     return -1;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 【滑动窗口】：被他们的贱鸡、贱畜牲，永远风吹草动的时候，就官宣、真恨人。。。
+        // public long countOfSubstrings(String S, int k) {
+        //     char [] s = S.toCharArray();
+        //     return getCnts(s, k) - getCnts(s, k+1);
+        // }
+        // int n;
+        // long getCnts(char [] s, int k) {
+        //     Map<Character, Integer> m = new HashMap<>();
+        //     long f = 0; int j = 0, cnt = 0;
+        //     for (char c : s) {
+        //         if ("aeiou".indexOf(c) >= 0) 
+        //             m.merge(c, 1, Integer::sum);
+        //         else cnt++;
+        //         while (m.size() == 5 && cnt >= k) {
+        //             if ("aeiou".indexOf(s[j]) >= 0) {
+        //                 if (m.merge(s[j], -1, Integer::sum) == 0)
+        //                     // m.merge(c, -1, Integer::sum);  // 这两行，同上面一行，效果等同
+        //                     // if (m.get(s[j]) == 0)
+        //                     m.remove(s[j]);
+        //             } else --cnt;
+        //             j++;
+        //         }
+        //         // if (m.size() == 5) // 【写错了】添加这个条件，答案不对！为什么，可以不要这个限制条件？
+        //         // 即使，出 while(){} 后，m.size()==4 了，
+        //         // 当m.size()==4 时， j 要么 j=0; 要么添加 s[j-1] 元音后， m.size()==5, 即当前 i 右端点时， j 个新子串产生。。
+        //         // j: 要么停留在 j=0 狠久，因为子串不合要求；要么，就一定停在、特定的位置：添加 j 个子串
+        //             f += j;
+        //     }
+        //     return f;
+        // }
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public long countOfSubstrings(String S, int k) { // 这个，还没有测试
+        //     char [] s = S.toCharArray();
+        //     return getCnts(s, k) - getCnts(s, k+1);
+        // }
+        // int n;
+        // long getCnts(char [] s, int k) {
+        //     final int mask = 1065233; // 鬼会去算，这什么狗屁的数字吗？ 1<<('a'-'a')|1 << ('e'-'a')|1<<('i'-'a')|1<<('o'-'a')|1<<('u'-'a')
+        //     long ans = 0;
+        //     int [] r = new int ['u'-'a'+1];
+        //     int f = 0, g = 0, j = 0; //f: 元音种类 g: 辅音个数
+        //     for (char c : s) {
+        //         c -= 'a';
+        //         if ((mask >> c & 1) == 1) {
+        //             if (r[c]++ == 0) f++;
+        //         } else g++;
+        //         while (f == 5 && g >= k) {
+        //             if ((mask >> (s[j]-'a') & 1) == 1) {
+        //                 if (--r[s[j]-'a'] == 0) --f;
+        //             } else --g;
+        //             j++;
+        //         }
+        //         ans += j;
+        //     }
+        //     return ans;
+        // }
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 这哪里，还是什么狗屁、三指针、滑动窗口呢？【双、双指针、滑动窗口】：对同一个【右端点】，对应两个不同的【左端点】
+        // public long countOfSubstrings(String S, int k) {
+        //     char [] s = S.toCharArray();
+        //     final int mask = 1065233; // 鬼会去算，这什么狗屁的数字吗？ 1<<('a'-'a')|1 << ('e'-'a')|1<<('i'-'a')|1<<('o'-'a')|1<<('u'-'a')
+        //     int [] r = new int ['u'-'a'+1], rr = new int ['u'-'a'+1];
+        //     int f = 0, g = 0, ff = 0, gg = 0, j = 0, jj = 0;
+        //     long ans = 0;
+        //     for (char c : s) {
+        //         c -= 'a';
+        //         if ((mask >> c & 1) == 1) {
+        //             // 看下面：
+        //             if (r[c]++ == 0)
+        //                 f++;
+        //             if (rr[c]++ == 0)
+        //                 ff++;
+        //         } else {
+        //             g++;
+        //             gg++;
+        //         }
+        //         while (f == 5 && g >= k) {
+        //             if ((mask >> (s[j]-'a') & 1) == 1) {
+        //                 if (--r[s[j]-'a'] == 0) --f;
+        //             } else --g;
+        //             j++;
+        //         }
+        //         while (ff == 5 && gg >= k+1) {
+        //             if ((mask >> (s[jj]-'a') & 1) == 1) {
+        //                 if (--rr[s[jj]-'a'] == 0) --ff;
+        //             } else --gg;
+        //             jj++;
+        //         }
+        //         ans += j - jj;
+        //     }
+        //     return ans;
+        // }
+
         // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // 亲爱的表哥的活宝妹，写第1 题时，就讨厌这个题目；现在，终于又崩出这么个破烂题目，恶心死人不偿命。。。讨厌这类题目。。。世界上最恶心死人不偿命的破烂题目，抄抄过了就扔了，破烂题目。。
+        // public char kthCharacter(long k, int [] f) { // 亲爱的表哥的活宝妹，笨宝妹，永远讨厌这些破烂掰掰掰、用完十个手指头也掰不清楚的破烂题目！！！
+        //     int m = f.length, j = 0;
+        //     StringBuilder s = new StringBuilder("a"); // StringBuilder 的最大长度为： Integer.MAX_VALUE
+        //     while (s.length() < k) {
+        //         int n = s.length();
+        //         if (f[j++] == 0)
+        //             s.append(new String(s));
+        //             // for (int i = 0; i < n; i++) 
+        //             //     s.append((char)((s.charAt(i)-'a'+1) % 26 + 'a'));
+        //         else {
+        //             for (int i = 0; i < n; i++) 
+        //                 s.append((char)((s.charAt(i)-'a'+1) % 26 + 'a'));
+        //         }
+        //     }
+        //     return s.charAt((long)(k-1));
+        // }
+//         // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//         public char kthCharacter(long k, int [] a) {
+//             return recursion(k, a, 64 - Long.numberOfLeadingZeros(k-1) -1); // 从 k-1 的二进制长度、减一、开始。 k-1 中 -1 是因为字符串从 0 开始 index 
+//         }
+//         char recursion(long k, int [] a, int i) {
+//             if (i < 0) // i: 当前 n-1, 即 n ＝ 0 时 Alice 手上仅只 'a'
+//                 return 'a';
+// // 在【左半边】，可以舍弃最后一个操作, 变成 i-1
+//             if (k <= (1L << i)) 
+//                 return recursion(k, a, i-1);
+// // 在【右半边】：继续、努力，缩小1 个操作、通过变换, 变成一个【更小量级的、左右半边、子问题】
+//             // if (k > (1L << i)) { 
+//             char c = recursion(k - (1L << i), a, i-1); // 变成【i-1】子问题后：【左右半边】，加不加1? 加与不加，是受第 i 次操作类型决定的
+//             return (char)('a' + (c - 'a' + a[i]) % 26); // 所以，返回后，再、加不加1
+//             // }
+//         }
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public char kthCharacter(long k, int [] a) {
+        //     int f = 0;
+        //     for (int i = 64 - Long.numberOfLeadingZeros(k-1)-1; i >= 0; i--) 
+        //         if (k > (1L << i)) {
+        //             f += a[i];
+        //             k -= (1L << i);
+        //         }
+        //     return (char)('a' + f % 26);
+        // }
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public char kthCharacter(long k, int [] a) {
+        //     int f = 0;
+        //     --k; // 这里，一定把 k 给变了。。写起来方便
+        //     for (int i = 64 - Long.numberOfLeadingZeros(k) - 1; i >= 0; i--) 
+        //         if (((k >> i) & 1) == 1)
+        //             f += a[i];
+        //     return (char)('a' + f % 26);
+        // }
+
         // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // 【解题思路】：用【贪心思路】，应该不会超时！！
-        public int [] validSequence(String S, String T) { // 750/907 passed
-            int m = S.length(), n = T.length(), i = 0, j = 0, p = -1, pi = -1; char [] s = S.toCharArray(); char [] t = T.toCharArray();
-            int [] f = new int [n]; // 找：【下标】的最小数组
-            // g: 用来存 S 中【az】依次出现的下标
-            List<Integer> [] g = new ArrayList[26];
-            Arrays.setAll(g, z -> new ArrayList<Integer>());
-            for ( i = 0; i < m; i++) 
-                g[s[i]-'a'].add(i);
-            boolean useOnce = false;
-            for ( i = 0; i < n; i++) { // 遍历 T 串
-                // useOnce = false;
-                System.out.println("\n i: " + i);
-                System.out.println("j: " + j);
-                System.out.println("(s[j] == t[i] || !useOnce): " + (s[j] == t[i] || !useOnce));
-                if (s[j] == t[i] || !useOnce) {
-                    f[i] = j; // j: 标记S 串下标
-                    if (s[j] != t[i] && !useOnce) { // 在这里使用了这次、全局最贪心 j
-                        useOnce = true;
-                        p = j; // 做记号：
-                        pi = i;
-                        System.out.println("p: " + p + " " + "pi: " + pi);
-                    }
-                    j++;
-                } else {
-                    // while (j < m && s[j] != t[i]) j++;  // TLE 会超时
-                    // 【二分查找】：链条中，第一个，比 j 大的下标
-                    if (j < m && s[j] != t[i])
-                        j = binarySearch(g[t[i]-'a'], j+1);
-                    System.out.println("j: " + j);
-                    if (j == m || j == -1) {
-                        j = p+1;// TLE: 这里，可能会超时
-                        i = pi-1;
-                        useOnce = false;
-                        continue;
-                    } else {
-                        f[i] = j++; // j: 标记S 串下标
-                    }
-                }
-                if (j == m) { // 【TODO】：这里的细节，还要再改。【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-                    if (pi < n) {
-                        i = pi-1;
-                        j = p+1;
-                    }
-                }
-                System.out.println(Arrays.toString(f));
-            }
-            return i == n ? f : new int [0];
-        }
-        int binarySearch(List<Integer> li, int idx) {
-            int n = li.size(), l = 0, r = n-1; // 双开区间
-            // System.out.println("n: " + n);
-            // System.out.println("li.size(): " + li.size());
-            // System.out.println(Arrays.toString(li.toArray()));
-            // if (n == 0 || r-1 <= idx) return -1;
-            if (n == 0 || li.get(n-1) <= idx) return -1;
-            while (l < r) {
-                // System.out.println("l: " + l + " " + "r: " + r);
-                int m = (l + r) / 2;
-                // System.out.println("m: " + m);
-                if (li.get(m) < idx)
-                    l = m + 1;
-                else r = m;
-            }
-            // System.out.println("l: " + l + " " + "r: " + r);
-            return l == -1 ? -1 : li.get(l);
-            // return r == n ? -1 : li.get(r);
-        }
     }
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
-    public static void main (String[] args) {
+    public static void main (String[] args) { 
 		Solution s = new Solution ();
 
-        String a = "accbbaeddkddddeeed";
-        String b = "eddedd";
-
-        int [] r = s.validSequence(a, b);
-        System.out.println(Arrays.toString(r));
+        int r = s.minStartingIndex(a, b);
+        System.out.println("r: " + r);
     }
 }
 // ListNode head = new ListNode(a0]); 
@@ -543,6 +856,33 @@ public class cmp {
 // Tree [N de rr = new [] TreeNode(a0);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
