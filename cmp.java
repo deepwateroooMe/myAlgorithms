@@ -840,14 +840,379 @@ public class cmp {
         //     return (char)('a' + f % 26);
         // }
 
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
+        // // 亲爱的表哥的活宝妹，笨宝妹，现在，再写这些破烂题目，狠简单了吗。。
+        // public int minimumDiameterAfterMerge(int[][] edges1, int[][] edges2) {
+        //     int d = diameter(edges1), dd = diameter(edges2);
+        //     return Math.max(Math.max(d, dd), (d + 1) / 2 + (dd + 1) / 2 + 1);
+        // }
+        // int diameter;
+        // int diameter(int [][] f) {
+        //     // 【构建】：无向图
+        //     List<Integer> [] g = new ArrayList[f.length+1];
+        //     // Arrays.stream(g).forEach(z -> Arrays.fill(z, new ArrayList<Integer>())); // asf
+        //     Arrays.setAll(g, z -> new ArrayList<Integer>()); // asa
+        //     for (int [] e : f) {
+        //         int u = e[0], v = e[1];
+        //         g[u].add(v);
+        //         g[v].add(u);
+        //     }
+        //     // 求：无向图、树的直径
+        //     diameter = 0; // 全局，【最大直径】
+        //     dfs(0, -1, g); // 【DFS 深搜】：求最大、单侧、伪半径
+        //     return diameter;
+        // }
+        // int dfs(int u, int p, List<Integer> [] g) {
+        //     int max = 0; // 最大、单侧、伪半径
+        //     for (int v : g[u]) {
+        //         if (v == p) continue;
+        //         int subLen = dfs(v, u, g) + 1; // 当前、或【次大】：单侧、伪半径
+        //         diameter = Math.max(diameter, max + subLen);
+        //         max = Math.max(max, subLen);
+        //     }
+        //     return max;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 什么乌龟王八蛋的、破烂题目。。。
+        // public long maximumPoints(int [] f, int v) {
+        //     int min = Integer.MAX_VALUE;
+        //     long s = 0;
+        //     for (int vv : f) {
+        //         min = Math.min(min, vv);
+        //         s += (long)vv;
+        //     }
+        //     if (v < min) return 0;
+        //     return (long)((long)v + s - (long)min) / (long)min;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public long countAlternatingSubarrays(int[] a) {
+        //     int n = a.length;
+        //     int [] f = new int [n];
+        //     Arrays.fill(f, 1); // 每个下标元素、自己：都是一个【子数组】
+        //     long s = 1;
+        //     for (int i = 1; i < n; i++) {
+        //         if (a[i] != a[i-1])
+        //             // a[i] 可以单独成1 个【子数组】；也可以连前边的数组，成为最后一个元素
+        //             f[i] = 1 + f[i-1];
+        //         s += (long)f[i];
+        //     }
+        //     return s;
+        // }
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 亲爱的表哥的活宝妹，这里的思路，还是想得太幼稚，呵呵呵。。。
+        // public int numberOfAlternatingGroups(int[] a, int k) {
+        //     int n = a.length, ans = 0;
+        //     // 现在的亲爱的表哥的活宝妹，笨宝妹，努力适应去写【动规】：先，按【动规、数组】的写法、慢慢掰。。等写习惯了，数组可以变成一个变量，就可以了
+        //     int [] f = new int [n * 2];
+        //     Arrays.fill(f, 1);
+        //     // for (int i = 1; i < n; i++) {
+        //     //     if (a[i] != a[i-1])
+        //     //         f[i] = f[i-1] + 1;
+        //     //     if (f[i] >= k) ans++;
+        //     // }
+        //     // 把数组复制一份拼接起来，和 3101 题一样，遍历数组的同时，维护以 i 为右端点的交替子数组的长度 cnt。
+        //     //     如果 i≥n 且 cnt≥k，那么 i 就是一个长为 k 的交替子数组的右端点，答案加一。注意这里要判断 i≥n，从而避免重复统计。
+        //     //     代码实现时，不需要复制数组，而是用 imodn 的方式取到对应的值。
+        //     for (int i = 0; i < n * 2; i++) {
+        //         if (i > 0 && a[i % n] != a[(i-1) % n])
+        //             f[i] += f[i-1];
+        //         if (i >= n && f[i] >= k) ans++;
+        //     }
+        //     // // 【环形数组】：首尾相连的、特殊处理，这里脑袋昏昏，不知道是怎么回事了。。。写错了
+        //     // if (a[0] != a[n-1]) {
+        //     //     for (int i = 0; i < k - f[n-1]; i++) {
+        //     //         f[i] += f[n-1];
+        //     //         if (f[i] >= k) ans++;
+        //     //     }
+        //     //     // for (int i = k-f[n-1]-1; i >= 0; i--) {
+        //     //     //     f[i] += f[n-1];
+        //     //     //     if (f[i] >= k) ans++;
+        //     //     //     else break;
+        //     //     // }
+        //     // }
+        //     return ans;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public long minimumCost(int m, int n, int[] h, int[] v) {
+        //     int i = m-2, j = n-2, hcnts = 1, vcnts = 1;
+        //     long r = 0;
+        //     Arrays.sort(h); Arrays.sort(v);  // 倒序遍历
+        //     while (i >= 0 || j >= 0) {
+        //         // 先横切，再后序。也包括了， j<0 时仅剩下的横切
+        //         if (j < 0 || i >= 0 && h[i] >= v[j]) {
+        //             r += (long)h[i--] * hcnts;
+        //             vcnts++;
+        //         } else { // 先竖切、再后序。。
+        //             r += (long)v[j--] * vcnts;
+        //             hcnts++;
+        //         }
+        //     }
+        //     return r;
+        // }
+        // // cntH 和 cntV 这两个变量可以省略，因为从上面的过程可以发现，cntH=j+1, cntV=i+1。
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public long minimumCost(int m, int n, int[] h, int[] v) {
+        //     int i = m-2, j = n-2;
+        //     long r = 0;
+        //     Arrays.sort(h); Arrays.sort(v);  // 倒序遍历
+        //     while (i >= 0 || j >= 0) {
+        //         // 先横切，再后序。也包括了， j<0 时仅剩下的横切
+        //         if (j < 0 || i >= 0 && h[i] >= v[j]) 
+        //             r += (long)h[i--] * (n-1-j); // hcnts=(n-2 － j ＋ 1)
+        //         else // 先竖切、再后序。。
+        //             r += (long)v[j--] * (m-1 - i); // vcnts=(m-2 － i ＋ 1)
+        //     }
+        //     return r;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 亲爱的表哥的活宝妹、笨宝妹、活宝木头妹，就是不动脑子呀。。。
+		// public int minChanges(int [] a, int k) {
+        //     int n = a.length, ans = n;
+        //     // 【差分数组】：一次遍历数组，预处理2 个差分数组的数据
+        //     // 亲爱的表哥的活宝妹，笨宝妹，这里是用的是，【差分数组】吗？？？
+        //     int [] f = new int [k+1], r = new int [k+1];
+        //     for (int i = 0; i < n/2; i++) {
+        //         int x = a[i], y = a[n-1-i];
+        //         if (x > y) { // x <= y
+        //             int tmp = x;
+        //             x = y; y = tmp;
+        //         }
+        //         f[y-x]++; // 【Math.abs(x,y)】所有可能的取值、出现的频率
+        //         r[Math.max(y, k-x)]++; // 【Math.max(y, k-x)】所有可能的取值、出现的频率
+        //     }
+        //     int sum = 0;
+        //     for (int i = 0; i <= k; i++) { // 遍历：【0,k】所有可能的取值
+        //         ans = Math.min(ans, n/2 - f[i] + sum);
+        //         sum += r[i];
+        //     }
+        //     return ans;
+        // }
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+		// public int minChanges(int [] a, int k) {
+        //     int n = a.length, ans = n;
+        //     // 【差分数组】
+        //     int [] f = new int [k+2];
+        //     // 遍历一次数组：填充【差分数组】里的数据
+        //     for (int i = 0; i < n/2; i++) {
+        //         int x = a[i], y = a[n-1-i];
+        //         if (x > y) {
+        //             int tmp = x;
+        //             x = y; y = tmp;
+        //         }
+        //         int xx = y - x, mx = Math.max(y, k-x);
+        //         // 分段、分情况讨论：分段、填充【差分数组】
+        //         // 【0,xx-1】：只需要修改一次
+        //         f[0]++;
+        //         f[xx]--;
+        //         // 【xx+1,mx】：只需要修改一次
+        //         f[xx+1]++;
+        //         f[mx+1]--;
+        //         // 【mx+1,k】：需要修改2 次
+        //         f[mx+1] += 2;
+        //     }
+        //     // 遍历：【差分数组】，求全局最优解
+        //     int s = 0;
+        //     for (int i = 0; i < k+1; i++) {
+        //         s += f[i];
+        //         ans = Math.min(ans, s);
+        //     }
+        //     return ans;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 亲爱的表哥的活宝妹、不动脑袋的亲爱的表哥的活宝妹、笨宝妹。。。
+		// public int minFlips(int[][] f) {
+        //     int m = f.length, n = f[0].length, r = 0, dif = 0, cnt = 0;
+        //     for (int i = 0; i < m/2; i++) 
+        //         for (int j = 0; j < n/2; j++) {
+        //             cnt = f[i][j] + f[m-1-i][j] + f[m-1-i][n-1-j] + f[i][n-1-j];
+        //             r += Math.min(cnt, 4 - cnt);
+        //         }
+        //     if (m % 2 > 0 && n % 2 > 0)
+        //         r += f[m/2][n/2];
+        //     cnt = 0;
+        //     if (m % 2 > 0) // 特殊处理：奇数、最中间一行
+        //         for (int j = 0; j < n/2; j++) {
+        //             if (f[m/2][j] != f[m/2][n-1-j])
+        //                 dif++;
+        //             else cnt += f[m/2][j] * 2;
+        //         }
+        //     if (n % 2 > 0) // 特殊处理：奇数、最中间一列
+        //         for (int i = 0; i < m/2; i++) {
+        //             if (f[i][n/2] != f[m-1-i][n/2])
+        //                 dif++;
+        //             else cnt += f[i][n/2] * 2;
+        //         }
+        //     return r + (dif > 0 ? dif : cnt % 4);
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int maxGoodNumber(int[] a) {
+        //     int n = a.length;
+        //     String s = Integer.toBinaryString(a[0]), t = Integer.toBinaryString(a[1]), v = Integer.toBinaryString(a[2]);
+        //     int aaa = Integer.parseInt(s + t+v, 2), aa = Integer.parseInt(t + s+v, 2);
+        //     int b = Integer.parseInt(s + v+t, 2), bb = Integer.parseInt(v + s+t, 2);
+        //     int c = Integer.parseInt(t + v+s, 2), cc = Integer.parseInt(v + t+s, 2);
+        //     int x = Math.max(aaa, aa), y = Math.max(b, bb), z = Math.max(c, cc);
+        //     return Math.max(Math.max(x, y), z);
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 这个比较难，亲爱的表哥的活宝妹、不会想，不写。。。
+        // // 数组有重复元素，可以压缩，计次数
+        // public int[] gcdValues(int[] a, long[] qs) {
+        //     int m = qs.length, n = a.length;
+        // }
+        
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 破烂题目，说的是什么破烂意思，读不懂。。。，晚点儿再写这个
+        // // 有向图：入度、图有几个组群？有没有环
+        // public List<Integer> remainingMethods(int n, int k, int [][] a) {
+        //     g = new ArrayList [n]; gg = new ArrayList[n];
+        //     Arrays.setAll(g, z -> new ArrayList<>());
+        //     Arrays.setAll(gg, z -> new ArrayList<>()); // 可以用来、反方向遍历，触发它们的节点。。。
+        //     int [] f = new int [n]; // 入度数组
+        //     for (int [] e : a) {
+        //         int u = e[0], v = e[1];
+        //         f[v]++;
+        //         g[u].add(v);
+        //         gg[v].add(u);
+        //     }
+        //     List<Integer> l = new ArrayList<>(), ans = new ArrayList<>();
+        //     int r = 0;
+        //     // for (int v : f)
+        //     for (int i = 0; i < n; i++) 
+        //         if (f[i] == 0) {
+        //             r++;
+        //             l.add(i);
+        //         }
+        //     if (r == 0) // 一个环
+        //         return new ArrayList<Integer>();
+        //     // 再区分：一个组件，多个组件，【TODO】：怎么判断，是多个组件来着？这个细节，忘记了。。。
+        //     boolean [] vis = new boolean [n];
+        //     System.out.println("l.size(): " + l.size());
+        //     System.out.println(Arrays.toString(l.toArray()));
+        //     for (int u : l) {
+        //         Arrays.fill(vis, false);
+        //         in = false;
+        //         System.out.println("u: " + u);
+        //         dfs(u, k, vis, g);
+        //         if (in) {
+        //             System.out.println(Arrays.toString(vis));
+        //             // 再、反方向遍历：去掉所有、可以触发它们的节点, 这里不是应该拓朴遍历吗，用个 queue...
+        //             for (int i = 0; i < n; i++) {
+        //                 if (vis[i])
+        //                     dfsdfs(i, vis, gg);
+        //             }
+        //             for (int i = 0; i < n; i++) 
+        //                 if (!vis[i]) ans.add(i);
+        //             if (ans.size() == 0)
+        //                 for (int i = 0; i < n; i++)
+        //                     ans.add(i);
+        //             return ans;
+        //         }
+        //     }
+        //     return new ArrayList<>();
+        // }
+        // List<Integer> [] g, gg;
+        // int n;
+        // boolean in;
+        // void dfsdfs(int u, boolean [] vis, List<Integer> [] g) {
+        //     vis[u] = true;
+        //     for (int v : g[u]) 
+        //         dfsdfs(v, vis, g);
+        // }
+        // void dfs(int u, int k, boolean [] vis, List<Integer> [] g) {
+        //     if (u == k && !in) in = true;
+        //     vis[u] = true;
+        //     for (int v : g[u]) 
+        //         dfs(v, k, vis, g);
+        // }
+
+        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // 破烂题目：感觉，还是与【入度】相关的，可是，亲爱的表哥的活宝妹，把图忘记得几乎是干干净净的了。。。。
+        public int [][] constructGridLayout(int n, int [][] egs) {
+            int [] f = new int [n]; this.n = n; 
+            g = new ArrayList[n];
+            Arrays.setAll(g, z -> new ArrayList<>());
+            for (int [] e : egs) {
+                int u = e[0], v = e[1];
+                f[u]++;
+                f[v]++;
+                g[u].add(v);
+                g[v].add(u);
+            }
+            System.out.println(Arrays.toString(f));
+            int [] r = new int [5];
+            for (int v : f) 
+                r[v]++;
+            System.out.println(Arrays.toString(r));
+            int [][] ans;
+            int u = -1; // 遍历入口
+            // 一条链：
+            if (r[1] == 2 && Arrays.stream(r).sum() == r[1] + r[2]) {
+                ans = new int [1][n];
+                List<Integer> l = new ArrayList<Integer>();
+                for (int i = 0; i < n; i++) 
+                    if (f[i] == 1) {
+                        u = i;
+                        break;
+                    }
+                dfs(u, -1, l);
+                for (int i = 0; i < n; i++) 
+                    ans[0][i] = l.get(i);
+                return ans;
+            }
+            // 其它：相对复杂的，数个数：数 2 3 4 的个数，来确定数组维度 m 与 n
+            if (r[2] == 4) {  // 应该，所有的，都是这种情况：可以把 m 与 n 确定下来，可是不会写
+                // m*n=r3 ＋ r4 + 4 
+                // 2(m+n)=r3+8
+                int m = (r[3] + 8 + (int)Math.sqrt((int)Math.pow(r[3]+8, 2) - 16 * (r[3] + r[4] + 8))) / 4;
+                int nn = (r[3] + r[4] + 4) / m;
+                ans = new int [m][nn];
+                for (int i = 0; i < m; i++)
+                    Arrays.fill(ans[i], -1);
+                System.out.println("m: " + m + " " + "n: " + nn);
+                // 一个特殊的遍历、填空数组。。【TODO】：                
+                for (int i = 0; i < n; i++) 
+                    if (f[i] == 2) { // 找一个角，作为入口
+                        u = i;
+                        break;
+                    }
+                dfsdfs(u, -1, f, ans);
+                return ans;
+            }
+            return new int [0][];
+        }
+        List<Integer> [] g;
+        int n;
+        void dfsdfs(int u, int p, int [] f, int [][] a) { // 【TODO】：怎么填空呢？
+            if (f[u] == 2 && a[0][0] == -1) a[0][0] = u;
+        }
+        void dfs(int u, int p, List<Integer> f) {
+            f.add(u);
+            for (int v : g[u]) {
+                if (v == p) continue;
+                dfs(v, u, f);
+            }
+        }
         // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
     }
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
     public static void main (String[] args) { 
 		Solution s = new Solution ();
 
-        int r = s.minStartingIndex(a, b);
-        System.out.println("r: " + r);
+        int [][] a = new int [][] {{1,2},{0,1},{3,2}};
+
+        List<Integer> r = s.remainingMethods(4, 1, a);
+        System.out.println("r.size(): " + r.size());
+        System.out.println(Arrays.toString(r.toArray()));
     }
 }
 // ListNode head = new ListNode(a0]); 
@@ -856,11 +1221,6 @@ public class cmp {
 // Tree [N de rr = new [] TreeNode(a0);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
