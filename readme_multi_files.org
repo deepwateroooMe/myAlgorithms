@@ -2,15 +2,16 @@
 #+title: LeetCode Online Coding Interview Questions -- 错题集v2精减版
 #+author: deepwaterooo
 
+#+INCLUDE: "./summary/dp.org" :minlevel 1
 #+INCLUDE: "./summary/dfs.org" :minlevel 1
 #+INCLUDE: "./summary/dataStructure.org" :minlevel 1
+#+INCLUDE: "./summary/string.org" :minlevel 1
+#+INCLUDE: "./summary/bitMaskManipulation.org" :minlevel 1
+#+INCLUDE: "./summary/graphAlgConcepts.org" :minlevel 1
+#+INCLUDE: "./summary/graph.org" :minlevel 1
 #+INCLUDE: "./summary/scan5.org" :minlevel 1
 #+INCLUDE: "./summary/hashTree.org" :minlevel 1
 #+INCLUDE: "./summary/binarySearch.org" :minlevel 1
-#+INCLUDE: "./summary/string.org" :minlevel 1
-#+INCLUDE: "./summary/bitMaskManipulation.org" :minlevel 1
-* debug for errors
-- #+INCLUDE: "./summary/dp.org" :minlevel 1
-- #+INCLUDE: "./summary/graph.org" :minlevel 1
-- 上面，前面的文件里，都有出错
-
+#+INCLUDE: "./summary/Tree.org" :minlevel 1
+#+INCLUDE: "./summary/segmentTree.org" :minlevel 1
+ 

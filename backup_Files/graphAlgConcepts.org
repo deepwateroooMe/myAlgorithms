@@ -1,0 +1,5 @@
+#+latex_class: book
+#+title: 图形算法基本概念——旁听 Graph Theory/Algorithm 课，概念消化
+#+author: deepwaterooo
+
+* 

@@ -910,17 +910,11 @@ Hierholzer 算法可以在一个欧拉图中找出欧拉回路。
 
 [[./pic/crackingSafe.png]]
 
-由于这个图的每个节点都有 kk 条入边和出边，因此它一定存在一个欧拉回路，即可以从任意一个节点开始，一次性不重复地走完所有的边且回到该节点。因此，我们可以用 \text{Hierholzer}Hierholzer 算法找出这条欧拉回路：
+由于这个图的每个节点都有 kk 条入边和出边，因此它一定存在一个欧拉回路，即可以从任意一个节点开始，一次性不重复地走完所有的边且回到该节点。因此，我们可以用Hierholzer 算法找出这条欧拉回路：
 ​
 我们从节点 uu 开始，任意地经过还未经过的边，直到我们「无路可走」。此时我们一定回到了节点 uu，这是因为所有节点的入度和出度都相等。
 
-回到节点 uu 之后，我们得到了一条从 uu 开始到 uu 结束的回路，这条回路上仍然有些节点有未经过的出边。我么从某个这样的节点 vv 开始，继续得到一条从 vv 开始到 vv 结束的回路，再嵌入之前的回路中，即
-
-u→⋯→v→⋯→u
-
-变为
-
-u→⋯→v→⋯→v→⋯→u
+回到节点 uu 之后，我们得到了一条从 uu 开始到 uu 结束的回路，这条回路上仍然有些节点有未经过的出边。我么从某个这样的节点 vv 开始，继续得到一条从 vv 开始到 vv 结束的回路，再嵌入之前的回路中，即 u->...->v->...->u 变为 u->...->v->...->v->...->u
 
      #+BEGIN_SRC csharp
 Set<Integer> seen = new HashSet<Integer>();
@@ -1359,7 +1353,6 @@ private boolean topologicalSort(Set<Integer> vis, int c) { // 这种写法好陌
     return true;
 }
 #+END_SRC
-
 
 ** 双端队列BFS
 *** 1368. Minimum Cost to Make at Least One Valid Path in a Grid - Hard
@@ -1822,7 +1815,6 @@ public int shortestPath(int[][] a, int k) { // 这个思路极为简洁，但速
     return -1;
 }
      #+END_SRC
-
 
 ** 最小生成树
 *** 1489. Find Critical and Pseudo-Critical Edges in Minimum Spanning Tree - Hard
@@ -2298,5 +2290,77 @@ void buildFireGrid(int [][] a) {
         }
         time++;
     }
+}
+#+END_SRC
+*** 3311. Construct 2D Grid Matching Graph Layout
+You are given a 2D integer array edges representing an undirected graph having n nodes, where edges[i] = [ui, vi] denotes an edge between nodes ui and vi.
+
+Construct a 2D grid that satisfies these conditions:
+
+The grid contains all nodes from 0 to n - 1 in its cells, with each node appearing exactly once.
+
+Two nodes should be in adjacent grid cells (horizontally or vertically) if and only if there is an edge between them in edges.
+
+It is guaranteed that edges can form a 2D grid that satisfies the conditions.
+
+Return a 2D integer array satisfying the conditions above. If there are multiple solutions, return any of them.
+#+BEGIN_SRC java
+public int [][] constructGridLayout(int n, int [][] egs) {
+    // 【建图】：无向图
+    List<Integer> [] g = new ArrayList[n];
+    Arrays.setAll(g, z -> new ArrayList<>());
+    for (int [] e : egs) {
+        int u = e[0], v = e[1];
+        g[u].add(v);
+        g[v].add(u);
+    }
+    // 入度：【0,4】每个入度，去找和标记，一个该入度的节点，就可以了。答案的不唯一性
+    int [] f = new int [5];
+    Arrays.fill(f, -1); // 便于：后结区分，是否存在【0,4] 入度的节点
+    for (int i = 0; i < n; i++) 
+        f[g[i].size()] = i;
+    // 构建：结果数组的【第一行】
+    List<Integer> l = new ArrayList<>();
+    if (f[1] != -1) { // 【入度为1】：仅只一列
+        l.add(f[1]); // 前面，纪录过，入度为1 的节点、中的一个 f[1], 就用这个
+    } else if (f[4] == -1) { // 【入度：最大为 3】：仅只2 列
+        l.add(f[2]); // 添加：纪录过的【入度为 2】的节点、作为，一个角
+        for (int v : g[f[2]])  // 遍历：此角节点的、所有邻居，寻找另一个【入度为2 的、角节点】
+            if (g[v].size() == 2) {
+                l.add(v);
+                break;
+            }
+    } else { // 最少三列【至少：三行三列】：构建【第一行】
+        l.add(f[2]); // 添加：纪录过的【入度为 2】的节点、作为，一个角
+        int pre = f[2], x = g[f[2]].get(0); // 【至少：三行三列】随便任意一邻居，入度都为3
+        while (g[x].size() == 3) {
+            l.add(x);
+            for (int y : g[x]) // 遍历：每个连线节点，找一个【入度为 3】的邻居，连一条边
+                // if (y != pre && g[y].size() == 3) { // 【写错了】：这里只需要 == 3 || ==2
+                if (y != pre && g[y].size() < 4) {
+                    pre = x;
+                    x = y;
+                    break; // break 掉的是：内嵌 for-loop
+                }
+        }
+        l.add(x); // 退出 while 前的、最后一个 for 内嵌 x, 它的 g[x].size()==2 ，是第一行边的【另一个角】，要加上
+    }
+    int nn = l.size(), m = n / nn;
+    int [][] a = new int [m][nn];
+    boolean [] vis = new boolean [n];
+    for (int i = 0; i < nn; i++) {
+        a[0][i] = l.get(i);
+        vis[l.get(i)] = true;
+    }
+    for (int i = 1; i < m; i++) // 遍历：填充，剩余的行
+        for (int j = 0; j < nn; j++) { // 遍历：列
+            for (int v : g[a[i-1][j]]) // 对于：此格的【此列正上方一格 a[i-1][j]】：其【左上右】三个邻居全填过了
+                if (!vis[v]) { // 如果，没有遍历过，就填它！
+                    vis[v] = true;
+                    a[i][j] = v;
+                    break;
+                }
+        }
+    return a;
 }
 #+END_SRC

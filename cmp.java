@@ -1,4 +1,4 @@
-import com.ListNode;            
+import com.TreeNode;            
 
 import java.util.HashMap;
 import java.util.Map;
@@ -1062,157 +1062,769 @@ public class cmp {
         // }
 
         // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // // 这个比较难，亲爱的表哥的活宝妹、不会想，不写。。。
-        // // 数组有重复元素，可以压缩，计次数
-        // public int[] gcdValues(int[] a, long[] qs) {
-        //     int m = qs.length, n = a.length;
+        // // 破烂题目，说的是什么破烂意思，读不懂。。。，亲爱的表哥的活宝妹，看它人题解后，觉得，这个题目就是，破烂描述不清，亲爱的表哥的活宝妹读不懂题目 
+        // // 有向图：入度、图有几个组群？有没有环. 亲爱的表哥的活宝妹自己想的，比解题本题目所要求的，还要多、还要复杂。。。
+        // // 比赛的时候，破烂题目读不懂，是他们的贱鸡、贱畜牲破烂题目，出得最没意思的。。。
+        // public List<Integer> remainingMethods(int n, int k, int [][] a) {
+        //     g = new ArrayList [n];
+        //     Arrays.setAll(g, z -> new ArrayList<>());
+        //     for (int [] e : a) {
+        //         int u = e[0], v = e[1];
+        //         g[u].add(v);
+        //     }
+        //     // 标记：所有 k 方法，或是其后续方法，它们都可能存在 bug 
+        //     boolean [] vis = new boolean [n];
+        //     dfs(k, vis);
+        //     // System.out.println(Arrays.toString(vis));
+        //    List<Integer> l = new ArrayList<>();
+        //     // 遍历边：如果不可编译，直接返回 
+        //     for (int [] e : a) {
+        //         int u = e[0], v = e[1];
+        //         if (!vis[u] && vis[v]) {
+        //             for (int i = 0; i < n; i++)
+        //                 l.add(i);
+        //             return l;
+        //         }
+        //     }
+        //     for (int i = 0; i < n; i++) 
+        //         if (!vis[i]) l.add(i);
+        //     return l;
+        // }
+        // List<Integer> [] g;
+        // int n;
+        // void dfs(int k, boolean [] vis) {
+        //     vis[k] = true;
+        //     for (int v : g[k]) {
+        //         if (vis[v]) continue;
+        //         dfs(v, vis);
+        //     }
         // }
         
         // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // // 破烂题目，说的是什么破烂意思，读不懂。。。，晚点儿再写这个
-        // // 有向图：入度、图有几个组群？有没有环
-        // public List<Integer> remainingMethods(int n, int k, int [][] a) {
-        //     g = new ArrayList [n]; gg = new ArrayList[n];
+        // // 破烂题目：感觉，还是与【入度】相关的，可是，亲爱的表哥的活宝妹，把图忘记得几乎是干干净净的了。。。。
+        // // 这个难题，亲爱的表哥的活宝妹，自己想得有点儿接近了。。。可是，亲爱的表哥的活宝妹，自己想得，钻进了一个小牛角尖里去了。。。接下去就不知道怎么写了。。。
+        // public int [][] constructGridLayout(int n, int [][] egs) {
+        //     int [] f = new int [n]; this.n = n; 
+        //     g = new ArrayList[n];
         //     Arrays.setAll(g, z -> new ArrayList<>());
-        //     Arrays.setAll(gg, z -> new ArrayList<>()); // 可以用来、反方向遍历，触发它们的节点。。。
-        //     int [] f = new int [n]; // 入度数组
-        //     for (int [] e : a) {
+        //     for (int [] e : egs) {
         //         int u = e[0], v = e[1];
+        //         f[u]++;
         //         f[v]++;
         //         g[u].add(v);
-        //         gg[v].add(u);
+        //         g[v].add(u);
         //     }
-        //     List<Integer> l = new ArrayList<>(), ans = new ArrayList<>();
-        //     int r = 0;
-        //     // for (int v : f)
-        //     for (int i = 0; i < n; i++) 
-        //         if (f[i] == 0) {
-        //             r++;
-        //             l.add(i);
-        //         }
-        //     if (r == 0) // 一个环
-        //         return new ArrayList<Integer>();
-        //     // 再区分：一个组件，多个组件，【TODO】：怎么判断，是多个组件来着？这个细节，忘记了。。。
-        //     boolean [] vis = new boolean [n];
-        //     System.out.println("l.size(): " + l.size());
-        //     System.out.println(Arrays.toString(l.toArray()));
-        //     for (int u : l) {
-        //         Arrays.fill(vis, false);
-        //         in = false;
-        //         System.out.println("u: " + u);
-        //         dfs(u, k, vis, g);
-        //         if (in) {
-        //             System.out.println(Arrays.toString(vis));
-        //             // 再、反方向遍历：去掉所有、可以触发它们的节点, 这里不是应该拓朴遍历吗，用个 queue...
-        //             for (int i = 0; i < n; i++) {
-        //                 if (vis[i])
-        //                     dfsdfs(i, vis, gg);
+        //     System.out.println(Arrays.toString(f));
+        //     int [] r = new int [5];
+        //     for (int v : f) 
+        //         r[v]++;
+        //     System.out.println(Arrays.toString(r));
+        //     int [][] ans;
+        //     int u = -1; // 遍历入口
+        //     // 一条链：
+        //     if (r[1] == 2 && Arrays.stream(r).sum() == r[1] + r[2]) {
+        //         ans = new int [1][n];
+        //         List<Integer> l = new ArrayList<Integer>();
+        //         for (int i = 0; i < n; i++) 
+        //             if (f[i] == 1) {
+        //                 u = i;
+        //                 break;
         //             }
-        //             for (int i = 0; i < n; i++) 
-        //                 if (!vis[i]) ans.add(i);
-        //             if (ans.size() == 0)
-        //                 for (int i = 0; i < n; i++)
-        //                     ans.add(i);
-        //             return ans;
-        //         }
+        //         dfs(u, -1, l);
+        //         for (int i = 0; i < n; i++) 
+        //             ans[0][i] = l.get(i);
+        //         return ans;
         //     }
-        //     return new ArrayList<>();
+        //     // 其它：相对复杂的，数个数：数 2 3 4 的个数，来确定数组维度 m 与 n
+        //     if (r[2] == 4) {  // 应该，所有的，都是这种情况：可以把 m 与 n 确定下来，可是不会写
+        //         // m*n=r3 ＋ r4 + 4 
+        //         // 2(m+n)=r3+8
+        //         int m = (r[3] + 8 + (int)Math.sqrt((int)Math.pow(r[3]+8, 2) - 16 * (r[3] + r[4] + 8))) / 4;
+        //         int nn = (r[3] + r[4] + 4) / m;
+        //         ans = new int [m][nn];
+        //         for (int i = 0; i < m; i++)
+        //             Arrays.fill(ans[i], -1);
+        //         System.out.println("m: " + m + " " + "n: " + nn);
+        //         // 一个特殊的遍历、填空数组。。【TODO】：                
+        //         for (int i = 0; i < n; i++) 
+        //             if (f[i] == 2) { // 找一个角，作为入口
+        //                 u = i;
+        //                 break;
+        //             }
+        //         dfsdfs(u, -1, f, ans);
+        //         return ans;
+        //     }
+        //     return new int [0][];
         // }
-        // List<Integer> [] g, gg;
+        // List<Integer> [] g;
         // int n;
-        // boolean in;
-        // void dfsdfs(int u, boolean [] vis, List<Integer> [] g) {
-        //     vis[u] = true;
-        //     for (int v : g[u]) 
-        //         dfsdfs(v, vis, g);
+        // void dfsdfs(int u, int p, int [] f, int [][] a) { // 【TODO】：怎么填空呢？
+        //     if (f[u] == 2 && a[0][0] == -1) a[0][0] = u;
         // }
-        // void dfs(int u, int k, boolean [] vis, List<Integer> [] g) {
-        //     if (u == k && !in) in = true;
-        //     vis[u] = true;
-        //     for (int v : g[u]) 
-        //         dfs(v, k, vis, g);
+        // void dfs(int u, int p, List<Integer> f) {
+        //     f.add(u);
+        //     for (int v : g[u]) {
+        //         if (v == p) continue;
+        //         dfs(v, u, f);
+        //     }
         // }
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 怎么看看别人是肿么分析的，再、亲爱的表哥的活宝妹自己写，它也没那么难了嘛。。。
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int [][] constructGridLayout(int n, int [][] egs) {
+        //     // 【建图】：无向图
+        //     List<Integer> [] g = new ArrayList[n];
+        //     Arrays.setAll(g, z -> new ArrayList<>());
+        //     for (int [] e : egs) {
+        //         int u = e[0], v = e[1];
+        //         g[u].add(v);
+        //         g[v].add(u);
+        //     }
+        //     // 入度：【0,4】每个入度，去找和标记，一个该入度的节点，就可以了。答案的不唯一性
+        //     int [] f = new int [5];
+        //     Arrays.fill(f, -1); // 便于：后结区分，是否存在【0,4] 入度的节点
+        //     for (int i = 0; i < n; i++) 
+        //         f[g[i].size()] = i;
+        //     // 构建：结果数组的【第一行】
+        //     List<Integer> l = new ArrayList<>();
+        //     if (f[1] != -1) { // 【入度为1】：仅只一列
+        //         l.add(f[1]); // 前面，纪录过，入度为1 的节点、中的一个 f[1], 就用这个
+        //     } else if (f[4] == -1) { // 【入度：最大为 3】：仅只2 列
+        //         l.add(f[2]); // 添加：纪录过的【入度为 2】的节点、作为，一个角
+        //         for (int v : g[f[2]])  // 遍历：此角节点的、所有邻居，寻找另一个【入度为2 的、角节点】
+        //             if (g[v].size() == 2) {
+        //                 l.add(v);
+        //                 break;
+        //             }
+        //     } else { // 最少三列【至少：三行三列】：构建【第一行】
+        //         l.add(f[2]); // 添加：纪录过的【入度为 2】的节点、作为，一个角
+        //         int pre = f[2], x = g[f[2]].get(0); // 【至少：三行三列】随便任意一邻居，入度都为3
+        //         while (g[x].size() == 3) {
+        //             l.add(x);
+        //             for (int y : g[x]) // 遍历：每个连线节点，找一个【入度为 3】的邻居，连一条边
+        //                 // if (y != pre && g[y].size() == 3) { // 【写错了】：这里只需要 == 3 || ==2
+        //                 if (y != pre && g[y].size() < 4) {
+        //                     pre = x;
+        //                     x = y;
+        //                     break; // break 掉的是：内嵌 for-loop
+        //                 }
+        //         }
+        //         l.add(x); // 退出 while 前的、最后一个 for 内嵌 x, 它的 g[x].size()==2 ，是第一行边的【另一个角】，要加上
+        //     }
+        //     int nn = l.size(), m = n / nn;
+        //     int [][] a = new int [m][nn];
+        //     boolean [] vis = new boolean [n];
+        //     for (int i = 0; i < nn; i++) {
+        //         a[0][i] = l.get(i);
+        //         vis[l.get(i)] = true;
+        //     }
+        //     for (int i = 1; i < m; i++) // 遍历：填充，剩余的行
+        //         for (int j = 0; j < nn; j++) { // 遍历：列
+        //             for (int v : g[a[i-1][j]]) // 对于：此格的【此列正上方一格 a[i-1][j]】：其【左上右】三个邻居全填过了
+        //                 if (!vis[v]) { // 如果，没有遍历过，就填它！
+        //                     vis[v] = true;
+        //                     a[i][j] = v;
+        //                     break;
+        //                 }
+        //         }
+        //     return a;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int[] gcdValues(int[] a, long[] qs) {
+        //     int n = a.length, m = qs.length, max = Arrays.stream(a).max().getAsInt();
+        //     int [] g = new int [max + 1]; // 每个数字：出现频率
+        //     for (int v : a)
+        //         g[v]++;
+        //     long [] f = new long [max + 1];
+        //     for (int i = max; i > 0; i--) {
+        //         int c = 0;
+        //         for (int j = i; j <= max; j += i) { // i,2i,3i,4i,5i,...
+        //             c += g[j];
+        //             f[i] -= f[j]; // 虽然 j 从 i 开始 j=i, 但 f[i] -= f[j] 时 f[j=i]=0 没有关系
+        //         }
+        //         f[i] += (long)c * (c-1) / 2;
+        //     }
+        //     for (int i = 2; i <= max; i++) // 原地：求【前缀和】
+        //         f[i] += f[i-1];
+        //     int [] r = new int [m];
+        //     for (int i = 0; i < m; i++) 
+        //         r[i] = upperBound(f, qs[i]);
+        //     return r;
+        // }
+        // int upperBound(long [] f, long v) {
+        //     int l = -1, r = f.length; // （开区间）（l,r）
+        //     while (l + 1 < r) {       // 开区间：非空
+        //         int m = (l + r) >>> 1;
+        //         if (f[m] > v)
+        //             r = m;
+        //         else l = m;
+        //     }
+        //     return r; // 亲爱的表哥的活宝妹，怎么有时候，分不清楚：到底返回，哪个端点： l or r ？
+        // }
+
+//         // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//         void morris(TreeNode root) {
+//             TreeNode cur = root;
+//             while (cur != null) {
+//                 System.out.println("cur.val: " + cur.val);
+// // 下面这个分支：曾经被搜索到、作为过 rightMost 【叶子节点、其右节点不再为空】的，会被链接到、其先前 cur 的节点！！！
+//                 if (cur.left == null) {
+//                     cur = cur.right; 
+//                     continue;
+//                 }
+//                 // 找到当前节点的左子树的最右节点
+//                 TreeNode rightMost = cur.left;
+//                 // 寻找 rightMost.l 子树里，最右的节点，将其 right 指针，指向【当前节点】
+// // 【写错了】：遍历到：【左子树的：最右、非空、右节点】如此，才能保证：遍历完【左子树】去遍历【右子树】
+//                 // while (rightMost.right != null)  
+//                 while (rightMost.right != null && rightMost.right != cur)  // 遍历到：【左子树的：最右、非空、右节点】如此，才能保证：遍历完【左子树】去遍历【右子树】
+//                     rightMost = rightMost.right;
+//                 // 有【前后】 2 次：遍历当前节点 rightMost
+//                 if (rightMost.right == null) { // 第一次遍历到：赋值，将其 right 指针，指向【当前节点 cur】
+//                     // 遍历中搭建：【临时指针】，指向，当前父节点
+//                     System.out.println("rightMost.val: " + rightMost.val);
+//                     rightMost.right = cur;
+//                     cur = cur.left; // 当前节点：向左移动
+//                 } else { // 【TODO】：什么情况下，会走到这个分支的？？？
+//                     // 如果最右节点的right指针指向当前节点，说明左子树已经遍历完毕，进入右子树
+//                     rightMost.right = null;
+//                     cur = cur.right; // 当前节点：向右移动.
+//                 }
+//             }
+//         }
+
+        
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // int querykth(TreeNode f, int k) {
+        //     if (f == null) return -1;
+        //     if (f.l != null) {
+        //         if (f.l.size >= k)
+        //             return querykth(f.l, k);
+        //         if (f.l.size + f.count >= k)
+        //             return f.val;
+        //     } else {
+        //         if (k == 1)
+        //             return f.val;
+        //     }
+        //     return querykth(f.r, k - (f.l == null ? 0 : f.l.size) - f.count);
+        // }
+
+//         // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】】
+//         // 亲爱的表哥的活宝妹，没弄懂BIT 线段树，中午吃太多骨头汤，下午的脑袋，真笨呀。。。
+//         class SegNode {
+//             int lo, hi, cnt; // lo, hi: 数据集中后，对应的下标索引
+//             SegNode l, r;    // left right children
+//             public SegNode(int lo, int hi) {
+//                 this.lo = lo; this.hi = hi;
+//                 cnt = 0;
+//                 l = null; r = null;
+//             }
+//         }
+// // 这个方法，是怎么计个数的？这里，还没填充数据，仅只分配了【尽可能、短长度】的【集中处理】了的数据的个数
+//         SegNode build(int lo, int hi) { 
+//             SegNode f = new SegNode(lo, hi);
+//             if (lo == hi)
+//                 return f;
+//             int m = (lo + hi) / 2;
+//             f.l = build(lo, m);
+//             f.r = build(m+1, hi);
+//             return f;
+//         }
+//         void insert(SegNode f, int v) { // 真正添加，才开始计数
+//             f.cnt++; // 【自顶向下】的、所有、父节点：个数增加
+//             if (f.lo == f.hi) return ; // 叶子节点
+//             int m = (f.lo + f.hi) / 2;
+//             if (v <= m)
+//                 insert(f.l, v);
+//             else
+//                 insert(f.r, v);
+//         }
+//         int count(SegNode f, int l, int r) {
+//             if (r < f.lo || f.hi < l)   // 破烂【BUG：】方向写反了。。
+//                 return 0;
+//             if (l <= f.lo && f.hi <= r) // 即： f[lo,hi] 是，想要查询区间【l,r】的子集
+//                 return f.cnt;
+//             return count(f.l, l, r) + count(f.r, l, r);
+//         }
+//         // 题解思路：
+//         // 我们从左到右扫描前缀和数组。
+//         // 每遇到一个数 preSum[j]，我们就在线段树中查询区间 [preSum[j]−upper,preSum[j]−lower] 内的整数数量，
+//         // 随后，将 preSum[j] 插入到线段树当中。
+//         public int countRangeSum(int [] a, int lo, int hi) { 
+//             int n = a.length, ans = 0;
+//             long [] f = new long [n+1]; // preSum 数组：机关： f[0]=0 【客观存在】！！
+//             for (int i = 1; i <= n; i++) 
+//                 f[i] = f[i-1] + (long)a[i-1];
+//             System.out.println(Arrays.toString(f));
+//             // 对【离散化数据】【集中】处理：
+//             Set<Long> s = new TreeSet<>(); // 排序：单调升序
+//             for (long v : f) { // preSum 数组：机关： f[0]=0 【客观存在】！！
+//                 s.add(v);
+//                 s.add(v-hi);
+//                 s.add(v-lo);
+//             }
+//             int idx = 0; // idx: 对【离散化数据】【集中】处理, 映射关系、存字典，标记下标、记号
+//             Map<Long, Integer> m = new HashMap<>();
+//             for (long v : s)
+//                 m.put(v, idx++);
+//             SegNode root = build(0, m.size()-1); // 闭区间：【0, m.size()-1】所有下标，全包括了
+//             for (long v : f) {
+//                 int l = m.get(v-hi), r = m.get(v-lo); // 计算：左右端点值、对应的下标 idx  
+//                 ans += count(root, l, r);             // 数：【线段树】中，此【l,r】区间的元素个数
+//                 // 添加：【当前下标 i 的前缀和 v】
+//                 insert(root, m.get(v));
+//             }
+//             return ans;
+//         }
+//         // BIT 方法：亲爱的表哥的活宝妹，几乎、、、就要想到了，可是还差那么一点儿，自己没能想透彻。。。
+//         // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//         class BIT {
+//             int [] f; // 明数组：长度【1,n】下，各下标（或其映射）【0,1】出现与否
+//             int n;
+//             public BIT(int n) {
+//                 this.n = n;
+//                 f = new int [n+1]; // 下标：从1 开始，【1,N】因为2^0=1
+//             }
+//             int lowBit(int x) {
+//                 return x & -x;
+//             }
+//             void update(int i, int v) { // 【自底向上】：把 f[i] 及其、所有层级向上的、父节点、都全部更新
+//                 while (i <= n) {
+//                     f[i] += v; 
+//                     i += lowBit(i);
+//                 }
+//             }
+//             int query(int i) { // 【TODO】：这个过程，还有点儿糊涂。。。
+//                 int ans = 0;
+//                 while (i > 0) {
+//                     ans += f[i];
+//                     i = i - lowBit(i); // 【自顶向下】：从树的、某根节点，【自顶向下】，遍历到【最底层、某特定叶子节点】
+//                 }
+//                 return ans;
+//             }
+//          }
+//         // 题解思路：
+//         // 我们从左到右扫描前缀和数组。
+//         // 每遇到一个数 preSum[j]，我们就在线段树中查询区间 [preSum[j]−upper,preSum[j]−lower] 内的整数数量，
+//         // 随后，将 preSum[j] 插入到线段树当中。
+//         public int countRangeSum(int [] a, int lo, int hi) { 
+//             int n = a.length, ans = 0;
+//             long [] f = new long [n+1]; // preSum 数组：机关： f[0]=0 【客观存在】！！
+//             for (int i = 1; i <= n; i++) 
+//                 f[i] = f[i-1] + (long)a[i-1];
+//             System.out.println(Arrays.toString(f));
+//             // 对【离散化数据】【集中】处理：
+//             Set<Long> s = new TreeSet<>(); // 排序：单调升序。去重。。。
+//             for (long v : f) { // preSum 数组：机关： f[0]=0 【客观存在】！！
+//                 s.add(v);
+//                 s.add(v-hi);
+//                 s.add(v-lo);
+//             }
+//             int idx = 0; // idx: 对【离散化数据】【集中】处理, 映射关系、存字典，标记下标、记号
+//             Map<Long, Integer> m = new HashMap<>();
+//             for (long v : s)
+//                 m.put(v, idx++);
+//             // BIT 方法：查询方法，与【线段树】相比，稍微不同
+//             BIT bit = new BIT(m.size());
+//             for (long v : f) {
+//                 int l = m.get(v-hi), r = m.get(v-lo); // 计算：左右端点值、对应的下标 idx  
+// // 数：【BIT 树状数组】中，此【l,r】区间的元素总个数
+//                 ans += bit.query(r+1) - bit.query(l);
+//                 // 添加：【当前下标 i 的前缀和 v】
+//                 bit.update(m.get(v)+1, 1); // 将 bit 中【m.get(v)+1】下标的元素，更新出现为 1. 有重复元素，会怎么样呢？？？【TODO】：想一想
+//             }
+//             return ans;
+//         }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // TreeNode rotateLeft(TreeNode root) {
+        //     TreeNode newRoot = root.r; // 新：根节点
+        //     root.r = newRoot.l; // 原根节点、右子节点：
+        //     newRoot.l = root;
+        //     // 更新相关节点的信息
+        //     updateHeight(root);
+        //     updateHeight(newRoot);
+        //     return newRoot;  // 返回新的根节点
+        // }
+        // TreeNode rotateRight(TreeNode root) {
+        //     TreeNode newRoot = root.l; // 新：根节点
+        //     root.l = newRoot.r;
+        //     newRoot.r = root;
+        //     // 更新相关节点的信息
+        //     updateHeight(root);
+        //     updateHeight(newRoot);
+        //     return newRoot;  // 返回新的根节点
+        // }
+
+//         // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//         Random rand = new Random();
+//         class Node {
+//             // Node l, r; // 左右子节点
+//             Node [] n;  // 左右子节点
+//             int v, rn, r, s; // 值 val; rank; repeat_cnts; size 以当前节点为根的子树大小
+//             public Node(int v) {
+//                 n[0] = n[1] = null;
+//                 this.v = v;
+//                 r = 1; s = 1; // 1 个重复、1 个节点
+//                 rn = rand.nextInt(1000);
+//             }
+//             void updateSize() {
+//                 // 用于旋转和删除过后，重新计算 siz 的值
+//                 s = r;
+//                 if (n[0] != null) s += n[0].s;
+//                 if (n[1] != null) s += n[1].s;
+//             }
+//         }
+//         // enum rttype { // 反着写：是有原因的！！
+//         //     RT, // 0
+//         //     LF  // 1
+//         // }
+//         int RT = 0, LF = 1;
+//         void _rotate(Node r, int dir) {
+//             // dir参数代表旋转的方向 0为右旋，1为左旋
+//             // 注意传进来的 cur 是指针的引用，也就是改了这个
+//             // cur，变量是跟着一起改的，如果这个 cur 是别的 树的子节点，根据 ch
+//             // 找过来的时候，也是会找到这里的
+
+//             // 以下的代码解释的均是【左旋】时的情况
+//             Node t = r.n[dir]; // t: 临时、节点指针，指向成为【新的根节点】
+//             /* 【左旋】：也就是让【右子节点】变成【根节点】
+//              *         A <-- r           C
+//              *        / \               / \
+//              *       B  C <-- t  ==>   A   E
+//              *         / \            / \
+//              *        D   E          B   D
+//              */
+//             r.n[dir] = t.n[1-dir]; // 让 A 的右子节点变成 D
+//             t.n[1-dir] = r;        // 让 C 的左子节点变成 A
+//             r.updateSize(); // 更新大小信息
+//             t.updateSize(); // 最后把临时储存 C 树的变量赋值到当前根节点上（注意 r 是引用）
+//             r = t;
+//         }
+//         // 【插入】：同【普通二叉搜索树】，多维护【优先级、最小堆】的步骤
+//         void _insert(Node r, int v) {
+//             if (r == null) // 没这个节点直接新建
+//                 r = new Node(v);
+//             else if (r.v == v) {
+//                 // 如果有这个值相同的节点，就把重复数量加一
+//                 r.r ++; // 重复数＋＋
+//                 r.s ++; // 树大小＋＋
+//             } else if (v < r.v) {
+//                 // 维护搜索树性质，val 比当前节点小就插到左边，反之亦然
+//                 _insert(r.n[0], v); // 普通【二叉搜索树】插入
+//                 if (r.n[0].rn < r.rn) 
+//                     // 【小根堆】中，上面节点的优先级一定更小
+//                     // 因为新插的左子节点比父节点小，现在需要让左子节点变成父节点
+//                     _rotate(r, RT); // 注意前面的旋转性质，要把左子节点转上来，需要右旋
+//                 r.updateSize(); // 插入之后大小会变化，需要更新
+//             } else { // r.v < v
+//                 _insert(r.n[1], v);
+//                 if (r.n[1].rn < r.rn)
+//                     _rotate(r, LF);
+//                 r.updateSize(); // 插入之后大小会变化，需要更新
+//             }
+//         }
+//         // 【删除】：
+//         void _del(Node r, int v) {
+//             if (r == null) return ; // 根：空
+//             if (r.n[0] != null && v <= r.n[0].v) { // 【左子节点】
+//                 _del(r.n[0], v);
+//                 r.updateSize();
+//             } else if (r.n[1] != null && r.n[1].v <= v) {  // 【右子节点】
+//                 _del(r.n[1], v);
+//                 r.updateSize();
+//             } else if (r.r > 1) { // 根节点：有重复，只降个数
+//                 r.r--;
+//                 r.s--;
+//             } else { // 根节点：无重复. 【最复杂】：分情况讨论
+//                 int state = ((r.n[0] != null ? 1 : 0) | (r.n[1] == null ? 0 : (1 << 1)));
+//                 switch (state) {
+//                 case 0:
+//                     r = null;
+//                     break;
+//                 case 1: // 有左无右
+//                     r = r.n[0];
+//                     break ;
+//                 case 2: // 有右无左: 删除根节点 r, 变【右子节点】为根节点
+//                     r = r.n[1];
+//                     break ;
+//                 case 3: // 有左有右: 选择【优先级小的、作根节点】、删除【原根节点、现在 r.n[d] 子节点】???
+//                     Node t = r;
+//                     // r = r.n[0];
+//                     int d = (r.n[0].rn < t.n[1].rn ? RT : LF); // dir 是 rank 更小的那个儿子
+//                     _rotate(r, d); // 这里的旋转可以把优先级更小的儿子转上去，rt 是 0，
+//                                    // 而 lf 是 1，刚好跟实际的子树下标【反过来】
+//                     _del(r.n[1-d], v); // 旋转完成后原来的根节点就在旋方向那边，所以需要
+//                     // 继续把这个原来的根节点删掉
+//                     // 如果说要删的这个节点是在整个树的「上层的」，那我们会一直通过这【TODO】：这些破烂，没读懂。。。
+//                     // 这里的旋转操作，把它转到没有子树了（或者只有一个），再删掉它。
+//                     r.updateSize(); // 删除会造成大小改变
+//                 }
+//             }
+//         }
+//         // 根据值查询排名
+//         // 操作含义：查询以 cur 为根节点的子树中，val 这个值的大小的排名（该子树中小于 val 的节点的个数 + 1）
+//         int _query_rank(Node r, int v) {
+//             int lesCnts = (r.n[0] == null ? 0 : r.n[0].s);
+//             if (r.v == v) // 根节点
+//                 return lesCnts + 1;
+//             if (v < r.v) { // 左子节点
+//                 if (r.n[0] == null)
+//                     return 1; // 【左子树、空】：比当前最小节点【根节点】小， rn=1
+//                 return _query_rank(r.n[0], v);
+//             }
+//             // 右子节点
+//             if (r.n[1] == null)
+//                 // 没有右子树的话直接整个树 + 1 相当于 less_siz + cur->rep_cnt + 1
+//                 return r.s + 1;
+//             // 如果要查的值比这个节点大，那这个节点的【左子树】以及这个【节点自身】肯定都比要查的值小
+//             // 所以要加上这两个值，再加上往右边找的结果
+//             // （以右子树为根的子树中，val 这个值的大小的排名）
+//             return lesCnts + r.r + _query_rank(r.n[1], v);
+//         }
+//         // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//         // 根据排名查询值
+//         // 要根据排名查询值，我们首先要知道如何判断要查的节点在树的哪个部分：
+//         int _query_val(Node r, int rn) {
+//             int lesCnts = (r.n[0] == null ? 0 : r.n[0].s);
+//             if (rn <= lesCnts)
+//                 return _query_rank(r.n[0], rn);
+//             if (rn <= lesCnts + r.r)
+//                 return r.v;
+//             return _query_rank(r.n[1], rn - lesCnts - r.r);
+//         }
+//         // 查询第一个比 val 小的节点
+//         // 注意这里使用了一个类中的全局变量，q_prev_tmp。
+//         // 这个值是只有在 val 比当前节点值大的时候才会被更改的，所以返回这个变量就是返回 val 最后一次比当前节点的值大，之后就是更小了。
+//         int q_prev_tmp;
+//         int _query_prev(Node r, int v) {
+//             if (v <= r.v) {
+//                 if (r.n[0] != null) // 左子节点：非空，才存在解；否则无解
+//                     return _query_prev(r.n[0], v);
+//             } else { // r.v < v
+//                 q_prev_tmp = r.v;
+//                 if (r.n[1] != null)
+//                     _query_prev(r.n[1], v); // 递归调用时，可能再次、多次更新 q_prev_tmp 全局变量
+//                 return q_prev_tmp;
+//             }
+//             return -1; // 无解
+//         }
+//         // 查询第一个比 val 大的节点
+//         // 跟前一个很相似，只是大于小于号换了一下。
+//         int q_nex_tmp;
+//         int _query_nex(Node r, int v) {
+//             if (r.v <= v) {
+//                 if (r.n[1] != null)
+//                     return _query_nex(r.n[1], v);
+//             } else { // v < r.v
+//                 q_nex_tmp = r.v;
+//                 if (r.n[0] != null)
+//                     _query_nex(r.n[0], v);
+//                 return q_nex_tmp;
+//             }
+//             return -1;
+//         }
+//         // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//         // 按值分裂
+//         Node [] split(Node r, int v) {
+//             if (r == null) return new Node [] {null, null};
+// ;            if (r.v <= v) { // 分裂：右子节点
+//                 Node [] rr = split(r.n[1], v);
+//                 r.n[1] = rr[0];
+//                 r.updateSize(); // 不要忘记、这点。。。
+//                 return new Node [] {r, rr[1]};
+//             } else {  // 分裂：左子节点
+//                 Node [] ll = split(r.n[0], v);
+//                 r.n[0] = ll[1];
+//                 r.updateSize();
+//                 return new Node [] {ll[0], r};
+//             }
+//         }
+//         // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//          Node [] split_by_rk(Node r, int rn) {
+//              if (r == null) return new Node [] {null, null, null};
+//              int lesCnts = (r.n[0] == null ? 0 : r.n[0].s);
+//              if (rn <= lesCnts) {
+//                  Node [] ll = split_by_rk(r.n[0], rn);
+//                  r.n[0] = ll[2];
+//                  r.updateSize();
+//                  return new Node [] {ll[0], ll[1], r};
+//              }
+//              if (rn <= lesCnts + r.r) {
+//                  Node ll = r.n[0], rr = r.n[1];
+//                  r.n[0] = r.n[1] = null;
+//                  // r.updateSize(); // 把这一步、极度简化
+//                  r.s = r.r;
+//                  return new Node [] {ll, r, rr};
+//              }
+//              Node [] rr = split_by_rk(r.n[1], rn);
+//              r.n[1] = rr[0];
+//              r.updateSize();
+//              return new Node [] {r, rr[1], rr[2]};
+//          }
+//         // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//         Node merge(Node f, Node g) {
+//             if (f == null && g == null) return null;
+//             if (f == null && g != null) return g;
+//             if (f != null && g == null) return f;
+//             if (f.rn < g.rn) { // f 根结点
+//                 f.n[1] = merge(f.n[1], g);
+//                 f.updateSize();
+//                 return f;
+//             } else { // g 根节点
+//                 g.n[0] = merge(f, g.n[0]);
+//                 g.updateSize();
+//                 return g;
+//             }
+//         }
+//         // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//         // 亲爱的表哥的活宝妹，后续的：
+//         // 插入、删除、建树、区间操作等，今天写得太 boring, 今天不再写了，找几个题目、应用着、写写玩玩儿。。。
 
         // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
         // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
         // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // 破烂题目：感觉，还是与【入度】相关的，可是，亲爱的表哥的活宝妹，把图忘记得几乎是干干净净的了。。。。
-        public int [][] constructGridLayout(int n, int [][] egs) {
-            int [] f = new int [n]; this.n = n; 
-            g = new ArrayList[n];
-            Arrays.setAll(g, z -> new ArrayList<>());
-            for (int [] e : egs) {
-                int u = e[0], v = e[1];
-                f[u]++;
-                f[v]++;
-                g[u].add(v);
-                g[v].add(u);
-            }
-            System.out.println(Arrays.toString(f));
-            int [] r = new int [5];
-            for (int v : f) 
-                r[v]++;
-            System.out.println(Arrays.toString(r));
-            int [][] ans;
-            int u = -1; // 遍历入口
-            // 一条链：
-            if (r[1] == 2 && Arrays.stream(r).sum() == r[1] + r[2]) {
-                ans = new int [1][n];
-                List<Integer> l = new ArrayList<Integer>();
-                for (int i = 0; i < n; i++) 
-                    if (f[i] == 1) {
-                        u = i;
-                        break;
-                    }
-                dfs(u, -1, l);
-                for (int i = 0; i < n; i++) 
-                    ans[0][i] = l.get(i);
-                return ans;
-            }
-            // 其它：相对复杂的，数个数：数 2 3 4 的个数，来确定数组维度 m 与 n
-            if (r[2] == 4) {  // 应该，所有的，都是这种情况：可以把 m 与 n 确定下来，可是不会写
-                // m*n=r3 ＋ r4 + 4 
-                // 2(m+n)=r3+8
-                int m = (r[3] + 8 + (int)Math.sqrt((int)Math.pow(r[3]+8, 2) - 16 * (r[3] + r[4] + 8))) / 4;
-                int nn = (r[3] + r[4] + 4) / m;
-                ans = new int [m][nn];
-                for (int i = 0; i < m; i++)
-                    Arrays.fill(ans[i], -1);
-                System.out.println("m: " + m + " " + "n: " + nn);
-                // 一个特殊的遍历、填空数组。。【TODO】：                
-                for (int i = 0; i < n; i++) 
-                    if (f[i] == 2) { // 找一个角，作为入口
-                        u = i;
-                        break;
-                    }
-                dfsdfs(u, -1, f, ans);
-                return ans;
-            }
-            return new int [0][];
-        }
-        List<Integer> [] g;
-        int n;
-        void dfsdfs(int u, int p, int [] f, int [][] a) { // 【TODO】：怎么填空呢？
-            if (f[u] == 2 && a[0][0] == -1) a[0][0] = u;
-        }
-        void dfs(int u, int p, List<Integer> f) {
-            f.add(u);
-            for (int v : g[u]) {
-                if (v == p) continue;
-                dfs(v, u, f);
-            }
-        }
         // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        public class BT { // BT: BalancedTree
+            private class Node {
+                long v, sd; // 值、种子
+                int rr, s;  // 重复、大小
+                Node l, r;  // 左右子节点
+                Node (long v, long sd) {
+                    this.v = v; this.sd = sd;
+                    rr = 1; s = 1;
+                    l = r = null;
+                }
+                Node leftRotate() { // 抄答案不带脑子。。。
+                    int prevSize = size; // 以 this 为根节点的树：大小 
+                    // 当前节点 this 【左旋转】后的、【左中右】节点的、总数目 
+                    int size = (l == null ? 0 : l.s) + (r.l == null ? 0 : r.l.s) + rr;
+                    Node root = r;
+                    this.r = r.l;
+                    root.l = this;
+                    this.s = size; // 旋转后，作为【根左节点】的子树根，子树的新大小
+                    root.s = prevSize; // 不管谁是【根节点】，树的总大小不变
+                    return root;
+                }
+                Node rightRotate() {
+                    int prevSize = size; // 这些大小，这里，傻傻拎不清楚。。。
+                    // 数：当前节点 this 的【左中右】总数目 
+                    int size = (r == null ? 0 : r.s) + (l.r == null ? 0 : l.r.s) + rr;
+                    Node root = l;
+                    this.l = l.r;
+                    root.r = this;
+                    this.s = size;
+                    root.s = prevSize;
+                    return root;
+                }
+            }
+            private Node root;
+            private int size;
+            private Random rand;
+            public BT() {
+                root = null;
+                size = 0;
+                rand = new Random();
+            }
+            public long getSize() {
+                return size;
+            }
+            public void insert(long v) {
+                ++size;
+                root = insert(root, v);
+            }
+            // 【TODO】：亲爱的表哥的活宝妹，下面【三个方法】，写得不对！！！
+            long minEqualOrGreaterThan = Long.MAX_VALUE;
+            public long lowerBound(long v) { // 【自平衡树 treap】中查找：最小，大于等于 v 的值 
+                Node r = root;
+                if (r == null) return Integer.MIN_VALUE;
+                if (r.v == v) return v;
+                while (r != null && v < r.v) {
+                    minEqualOrGreaterThan = r.v;
+                    r = r.l;
+                }
+                return minEqualOrGreaterThan;
+                // r.v < v
+                return r.r.lowerBound(v);
+            }
+            long minLargerThan = Long.MAX_VALUE;
+            public long upperBound(long v) { // 【自平衡树 treap】中查找：最小，大于 v 的值 
+                Node r = root;
+                if (r == null) return Integer.MIN_VALUE;
+                if (r.v <= v)
+                    return r.r.upperBound(v);
+                // v < r.v
+                minLargerThan = r.v;
+                r.l.upperBound(v);
+                return minLargerThan;
+            }
+            public int [] rank(long v) { // 为什么：它要返回2 个、计数？
+                Node r = root;
+                // 下面：极特殊情况，应该不用考虑
+                if (r == null) return new int [] {1, 1};
+                int lesCnts = (r.l == null ? 0 : r.l.s);
+                if (v == r.v)
+                    return new int [] {lesCnts+1, lesCnts + r.rr};
+                if (v < r.v) {
+                }
+                return new int [] {Integer.MIN_VALUE, Integer.MAX_VALUE}; // 不知道，为什么、需要、返回这些极值。。
+            }
+            private Node insert(Node r, long v) { // 这个方法，应该写得是对的！！
+                if (r == null) {
+                    r = new Node(v, rand.nextInt(131427));
+                    // 上面： r.s=1 是缺省自添加的
+                    return r;
+                }
+e                r.s++;  // 【自顶向下】：自根节点，向叶子节点、路径上的、每个节点，都自增。叶子节点自动处理了
+                // 维护【平衡二叉树的、自平衡】：当作一个【sd最大堆】来写。。是用 sd 来维护【自平衡】的
+                if (v < r.v) {
+                    r.l = insert(r.l, v);
+                    if (r.l.sd > r.sd)
+                        r.rightRotate();
+                } else if (r.v < v) {
+                    r.r = insert(r.r, v);
+                    if (r.r.sd > r.sd)
+                        r.leftRotate();
+                } else // r.v == v
+                    r.rr++;
+                return r;
+            }
+        }
+        // 题解思路：
+        // 我们从左到右扫描前缀和数组。
+        // 每遇到一个数 preSum[j]，我们就在线段树中查询区间 [preSum[j]−upper,preSum[j]−lower] 内的整数数量，
+        // 随后，将 preSum[j] 插入到线段树当中。
+        public int countRangeSum(int [] a, int lo, int hi) { 
+            int n = a.length, ans = 0;
+            long [] f = new long [n+1]; // preSum 数组：机关： f[0]=0 【客观存在】！！
+            for (int i = 1; i <= n; i++) 
+                f[i] = f[i-1] + (long)a[i-1];
+            BT treap = new BT();
+            for (long v : f) {
+                long numLeft = treap.lowerBound(v - hi); // 【平衡树中】：最小 >= (v-hi) 的、最小数值
+                // 最小数值：树中最小排行
+                int rankLeft = (numLeft == Integer.MAX_VALUE ? treap.getSize()+1 : treap.rank(numLeft)[0]);
+                long numRight = treap.upperBound(v - lo); // 【平衡树中】：最小 > (v-lo) 的、最小数值
+                // 最小数值：最小树中、排行
+                int rankRight = (numRight == Integer.MAX_VALUE ? treap.getSize() : treap.rank(numRight)[0]-1);
+                ans += rankRight - rankLeft + 1;
+            }
+            return ans;
+        }        
     }
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！
     public static void main (String[] args) { 
 		Solution s = new Solution ();
 
-        int [][] a = new int [][] {{1,2},{0,1},{3,2}};
+        int []  a = new int []  {-2, 5, -1};
+        System.out.println(Arrays.toString(a));
 
-        List<Integer> r = s.remainingMethods(4, 1, a);
-        System.out.println("r.size(): " + r.size());
-        System.out.println(Arrays.toString(r.toArray()));
+        int r = s.countRangeSum(a, -2, 2);
+        System.out.println("r: " + r);
     }
 }
 // ListNode head = new ListNode(a0]); 
@@ -1221,18 +1833,6 @@ public class cmp {
 // Tree [N de rr = new [] TreeNode(a0);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】

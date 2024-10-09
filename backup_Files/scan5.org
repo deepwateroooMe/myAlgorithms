@@ -1,0 +1,2092 @@
+#+latex_class: book
+#+title: LeetCode Online Coding Interview Questions -- 错题集
+#+author: deepwaterooo
+
+* 扫描线
+*** 435. Non-overlapping Intervals - Medium 动态规划 贪心
+Given an array of intervals intervals where intervals[i] = [starti, endi], return the minimum number of intervals you need to remove to make the rest of the intervals non-overlapping.
+**** 解题思路与分析: 动态规划 O（N^2） tle
+     
+     [[./pic/dpgre.png]]
+     
+     #+BEGIN_SRC csharp
+public int eraseOverlapIntervals(int[][] a) { // 刚过去周六早上的比赛简单的当时就想出来O(NlogN)的解法了，这里居然还有些不通
+    int n = a.length, max = 0;
+    Arrays.sort(a, (x, y) -> x[0] != y[0] ? x[0] - y[0] : x[1] - y[1]); // starttime, then end time
+    int [] dp = new int [n];
+    Arrays.fill(dp, 1);
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < i; j++) {
+            if (a[j][1] > a[i][0]) continue;
+            dp[i] = Math.max(dp[i], dp[j] + 1);
+        }
+        max = Math.max(max, dp[i]);
+    }
+    return n-max;
+}
+     #+END_SRC
+**** 解题思路与分析: 贪心
+     
+     [[./pic/dpgre2.png]]
+     
+     #+BEGIN_SRC csharp
+public int eraseOverlapIntervals(int[][] intervals) {
+    if (intervals.length == 0) return 0;
+    Arrays.sort(intervals, (a, b)->a[1] - b[1]);
+    int n = intervals.length;
+    int right = intervals[0][1];
+    int ans = 1;
+    for (int i = 1; i < n; ++i) 
+        if (intervals[i][0] >= right) {
+            ++ans;
+            right = intervals[i][1];
+        }
+    return n - ans;
+}
+     #+END_SRC
+*** 2054. Two Best Non-Overlapping Events - Medium
+You are given a 0-indexed 2D integer array of events where events[i] = [startTimei, endTimei, valuei]. The ith event starts at startTimei and ends at endTimei, and if you attend this event, you will receive a value of valuei. You can choose at most two non-overlapping events to attend such that the sum of their values is maximized.
+
+Return this maximum sum.
+
+Note that the start time and end time is inclusive: that is, you cannot attend two events where one of them starts and the other ends at the same time. More specifically, if you attend an event with end time t, the next event must start at or after t + 1.
+**** 解题思路与分析
+- 因为最多只有两个事件，联想到股票问题的只有两次交易，很容易想到从头到尾扫一遍，从尾到头扫一遍
+- 也是一道扫描线问题，借助TreeMap, PriorityQueue等数据结构，或binary search算法帮助保证正确性以及提速
+- 再熟悉一下NavigableMap类中的floorKey()和ceilingKey()的API：
+|------+-------------------+--------------------------------------------------------|
+| 类型 | 方法              | 描述                                                   |
+|------+-------------------+--------------------------------------------------------|
+| K    | ceilingKey(K key) | 返回大于或等于给定键的最小键，如果没有这样的键，则null |
+| K    | floorKey(K key)   | 返回小于或等于给定键的最大键，如果没有这样的键，则null |
+|------+-------------------+--------------------------------------------------------|
+#+BEGIN_SRC csharp
+public int maxTwoEvents(int[][] events) {  
+    int n = events.length, maxSeenVal = 0;     // for any timestamp - find max of values to left and max of values to right
+    Arrays.sort(events, (a,b) -> a[1] - b[1]); // Sort by end time - to know what events happened previously
+    TreeMap<Integer, Integer> leftMaxSeen = new TreeMap<>();
+    for (int [] event : events) {
+        int eventVal = event[2];
+        if (eventVal >= maxSeenVal) {
+            maxSeenVal = eventVal;
+            leftMaxSeen.put(event[1], maxSeenVal); // save maxSeenVal event value seen so far at END timestamp
+        }
+    }
+    // Sort by start time but in descending order - as we parse events and store max value of future events to current event start timestamp
+    Arrays.sort(events, (a,b) -> b[0] - a[0]);
+    int ans = 0, maxSeenRight = 0;
+    for (int [] event : events) {
+        int eventVal = event[2];
+        if (eventVal >= maxSeenRight) {
+            maxSeenRight = eventVal;
+            Integer maxOnLeftKey = leftMaxSeen.floorKey(event[0] - 1);
+            if (maxOnLeftKey != null)
+                ans = Math.max(ans, leftMaxSeen.get(maxOnLeftKey) + maxSeenRight);
+        }
+    }
+    return Math.max(maxSeenVal, ans); // 有一种单个事件得最大值的情况不能漏掉
+}
+#+END_SRC  
+- 扫描线算法
+#+BEGIN_SRC csharp
+public int maxTwoEvents(int[][] events) {
+    int result = 0, maxOfCompletedEvents = 0;
+    Arrays.sort(events, (x,y) -> x[0] - y[0]);   // Sort by Start time
+    PriorityQueue<int[]> inProgressQueue = new PriorityQueue<>((x,y)->x[1]-y[1]); // sorted by end time
+    for (int[] currentEvent : events) {
+        while (!inProgressQueue.isEmpty() && inProgressQueue.peek()[1] < currentEvent[0])
+            maxOfCompletedEvents = Math.max(maxOfCompletedEvents, inProgressQueue.poll()[2]);
+        result = Math.max(result, maxOfCompletedEvents + currentEvent[2]);
+        inProgressQueue.offer(currentEvent);
+    }
+    return result;
+}
+#+END_SRC
+- 二分查找: 改天补上
+
+*** 2055. Plates Between Candles - Medium
+There is a long table with a line of plates and candles arranged on top of it. You are given a 0-indexed string s consisting of characters '*' and '|' only, where a '*' represents a plate and a '|' represents a candle.
+
+You are also given a 0-indexed 2D integer array queries where queries[i] = [lefti, righti] denotes the substring s[lefti...righti] (inclusive). For each query, you need to find the number of plates between candles that are in the substring. A plate is considered between candles if there is at least one candle to its left and at least one candle to its right in the substring.
+
+For example, s = "||**||**|*", and a query [3, 8] denotes the substring "*||**|". The number of plates between candles in this substring is 2, as each of the two plates has at least one candle in the substring to its left and right.
+Return an integer array answer where answer[i] is the answer to the ith query.
+**** 解题思路与分析
+- 先把每个调用的最左、以及最右的蜡烛的位置找出来，假如作必要的前置处理的话，可以做到O(1)时间
+- 而要数这最左与最右蜡烛之间的盘子个数的话，如果我们前置数清楚所有位置蜡烛个数，我们也可以做到O(1)时间
+- 所以，使用三个数组，一个记录各个位置蜡烛总个数，另两个分别纪录左右端点
+#+BEGIN_SRC csharp
+public int[] platesBetweenCandles(String t, int[][] queries) { 
+    int n = t.length();
+    int [] sum = new int [n+1];
+    int [] pre = new int [n+1], suf = new int [n+1];
+    char [] s = t.toCharArray();
+    for (int i = 0; i < n; i++) {
+        sum[i+1] = sum[i] + (s[i] == '|' ? 1 : 0);
+        pre[i+1] = s[i] == '|' ? i : pre[i]; // pre[i] matches i-1
+    }
+    for (int i = n-1; i >= 0; i--)
+        suf[i] = s[i] == '|' ? i : suf[i+1]; // suf[i] matches i
+    int [] ans = new int [queries.length];
+    for (int i = 0; i < queries.length; i++) {
+        int l = suf[queries[i][0]], r = pre[queries[i][1]+1]; // 注意： 右蜡烛边界 
+        if (l < r)
+            ans[i] = r - l  - (sum[r] - sum[l]);
+    }
+    return ans;
+}
+#+END_SRC  
+
+*** 218. The Skyline Problem - Hard
+A city's skyline is the outer contour of the silhouette formed by all the buildings in that city when viewed from a distance. Given the locations and heights of all the buildings, return the skyline formed by these buildings collectively.
+
+The geometric information of each building is given in the array buildings where buildings[i] = [lefti, righti, heighti]:
+
+lefti is the x coordinate of the left edge of the ith building.
+righti is the x coordinate of the right edge of the ith building.
+heighti is the height of the ith building.
+You may assume all buildings are perfect rectangles grounded on an absolutely flat surface at height 0.
+
+The skyline should be represented as a list of "key points" sorted by their x-coordinate in the form [[x1,y1],[x2,y2],...]. Each key point is the left endpoint of some horizontal segment in the skyline except the last point in the list, which always has a y-coordinate 0 and is used to mark the skyline's termination where the rightmost building ends. Any ground between the leftmost and rightmost buildings should be part of the skyline's contour.
+
+Note: There must be no consecutive horizontal lines of equal height in the output skyline. For instance, [...,[2 3],[4 5],[7 5],[11 5],[12 7],...] is not acceptable; the three lines of height 5 should be merged into one in the final output as such: [...,[2 3],[4 5],[12 7],...]
+**** 解题思路与分析
+- 复杂度分析
+
+时间复杂度：O(nlogn)，其中 nn 为建筑数量。每座建筑至多只需要入队与出队一次，单次时间复杂度为 O(logn)。
+
+空间复杂度：O(n)，其中 nn 为建筑数量。数组boundaries 和优先队列的空间占用均为 O(n)。
+
+     #+BEGIN_SRC csharp
+public List<List<Integer>> getSkyline(int[][] a) {
+    List<Integer> pos = new ArrayList<>();
+    for (int [] b : a) {
+        pos.add(b[0]);
+        pos.add(b[1]);
+    }
+    Collections.sort(pos);
+    List<List<Integer>> ans = new ArrayList<>();
+    Queue<int []> q = new PriorityQueue<>((x, y) -> y[1] - x[1]);
+    int n = a.length, idx = 0;
+    for (int v : pos) {
+        while (idx < n && a[idx][0] <= v) {
+            q.offer(new int [] {a[idx][1], a[idx][2]});
+            idx++;
+        }
+        while (!q.isEmpty() && q.peek()[0] <= v) q.poll();
+        int maxHiCur = q.isEmpty() ? 0 : q.peek()[1];
+        if (ans.size() == 0 || maxHiCur != ans.get(ans.size()-1).get(1))
+            ans.add(Arrays.asList(v, maxHiCur));
+    }
+    return ans;
+}
+     #+END_SRC
+
+**** 解题思路与分析
+
+使用扫描线，从左至右扫过。如果遇到左端点，将高度入堆，如果遇到右端点，则将高度从堆中删除。使用 last 变量记录上一个转折点。O(NLogN)
+
+[[./pic/sweep.png]]
+
+#+BEGIN_SRC csharp
+public List<List<Integer>> getSkyline(int[][] buildings) { // 从左向右扫一遍过去
+    List<List<Integer>> ans = new ArrayList<>();
+    Map<Integer, List<Integer>> map = new TreeMap<>(); // TreeMap, 取其根据键的大小自动排序之意,可以得到logN的效率
+    for (int [] v : buildings) {
+        map.computeIfAbsent(v[0], z -> new ArrayList<>()).add(-v[2]); // 插入左节点: 高度为负
+        map.computeIfAbsent(v[1], z -> new ArrayList<>()).add(v[2]);  // 插入右节点：高度为正
+    }
+    Map<Integer, Integer> heights = new TreeMap<>((a, b) -> b-a); // 保留当前位置的所有高度 重定义排序：从大到小
+    int [] last = {0, 0}; // 保留上一个位置的横坐标及高度           
+    for (Integer key : map.keySet()) {
+        List<Integer> ys = map.get(key);
+        Collections.sort(ys);
+        for (int y : ys) {
+            if (y < 0) // 左端点,高度入队
+                heights.put(-y, heights.getOrDefault(-y, 0) + 1);
+            else {     // 右端点移除高度
+                heights.put(y, heights.getOrDefault(y, 1) - 1);
+                if (heights.get(y) == 0) heights.remove(y);
+            }
+        }
+        Integer maxHeight = 0;      // 获取heights的最大值:就是第一个值
+        if (!heights.isEmpty())
+            maxHeight = heights.keySet().iterator().next();
+        if (last[1] != maxHeight) { // 如果当前最大高度不同于上一个高度，说明其为转折点
+            last[0] = key;          // 更新last，并加入结果集
+            last[1] = maxHeight;
+            ans.add(Arrays.asList(key, maxHeight));
+        }
+    }
+    return ans;
+}
+#+END_SRC
+**** 解题思路与分析:比较慢
+ 
+思路：类似于meeting room的方法，用hashmap存《start, +1》和《end, -1》。在这里就是先用一个List《int[]》来存储《start, height》和《end, -height》, 然后把这个list按照从小到大排序，最后用一个queue来走一遍每个点，每次遇到正值的height，就offer，遇到负值就pop此值，然后在每一个点，都peek heap中的最大height，如果这个height和之前存在result里的值不同，将此点和值存进result，否则更新pre，继续向后走，直到走完。
+
+     #+BEGIN_SRC csharp
+public List<List<Integer>> getSkyline(int[][] buildings) {
+    List<List<Integer>> ans = new ArrayList<>();
+    List<int[]> hite = new ArrayList<>();
+    for (int [] v : buildings) {
+        hite.add(new int [] {v[0], v[2]});
+        hite.add(new int [] {v[1], -v[2]});
+    }
+    Collections.sort(hite, (a, b)-> b[0] != a[0] ? a[0] - b[0] : b[1] - a[1]);
+    Queue<Integer> q = new PriorityQueue<>((a, b)-> b - a);
+    q.offer(0);
+    int cur = 0, pre = 0;
+    for (int [] h : hite) {
+        if (h[1] > 0) q.offer(h[1]);
+        else q.remove(-h[1]);
+        cur = q.peek();
+        if (pre != cur) {
+            ans.add(List.of(h[0], cur));
+            pre = cur;
+        }
+    }
+    return ans;
+}
+     #+END_SRC
+**** 解题思路与分析: Java divide and conquer solution beats 96% todo
+
+The basic idea is divide the buildings into two subarrays, calculate their skylines respectively, then merge two skylines together.
+
+- https://leetcode.com/problems/the-skyline-problem/discuss/61281/Java-divide-and-conquer-solution-beats-96
+     #+BEGIN_SRC csharp
+public List<List<Integer>> getSkyline(int[][] buildings) { // todo; divide and conque代码被我改乱了
+    return merge(buildings, 0, buildings.length-1);        // 今天这个题看累了，改天再补这个
+}
+private List<List<Integer>> merge(int[][] buildings, int lo, int hi) {
+    List<List<Integer>> res = new LinkedList<>();
+    if (lo > hi) {
+        return res;
+    } else if (lo == hi) {
+        res.add(List.of(buildings[lo][0], buildings[lo][2]));
+        res.add(List.of(buildings[lo][1], 0));
+        return res;
+    } 
+    int mid = lo+(hi-lo)/2;
+    List<List<Integer>> left = merge(buildings, lo, mid);
+    List<List<Integer>> right = merge(buildings, mid+1, hi);
+    int leftH = 0, rightH = 0;
+    while(!left.isEmpty() || !right.isEmpty()) {
+        long x1 = left.isEmpty()? Long.MAX_VALUE: left.peekFirst()[0];
+        long x2 = right.isEmpty()? Long.MAX_VALUE: right.peekFirst()[0];
+        int x = 0;
+        if(x1 < x2) {
+            int[] temp = left.pollFirst();
+            x = temp[0];
+            leftH = temp[1];
+        } else if(x1 > x2) {
+            int[] temp = right.pollFirst();
+            x = temp[0];
+            rightH = temp[1];
+        } else {
+            x = left.peekFirst()[0];
+            leftH = left.pollFirst()[1];
+            rightH = right.pollFirst()[1];
+        }
+        int h = Math.max(leftH, rightH);
+        if(res.isEmpty() || h != res.peekLast()[1])
+            res.add(List.of(x, h));
+    }
+    return res;
+}
+     #+END_SRC
+*** 715. Range Module - Hard
+A Range Module is a module that tracks ranges of numbers. Design a data structure to track the ranges represented as half-open intervals and query about them.
+
+A half-open interval [left, right) denotes all the real numbers x where left <= x < right.
+
+Implement the RangeModule class:
+
+RangeModule() Initializes the object of the data structure.
+void addRange(int left, int right) Adds the half-open interval [left, right), tracking every real number in that interval. Adding an interval that partially overlaps with currently tracked numbers should add any numbers in the interval [left, right) that are not already tracked.
+boolean queryRange(int left, int right) Returns true if every real number in the interval [left, right) is currently being tracked, and false otherwise.
+void removeRange(int left, int right) Stops tracking every real number currently being tracked in the half-open interval [left, right).
+#+BEGIN_SRC csharp
+    class Range {
+        int left, right;
+        public Range(int left, int right) {
+            this.left = left;
+            this.right = right;
+        }
+    }
+    TreeSet<Range> ts;
+    public RangeModule() {
+        ts = new TreeSet<>((a, b)->(a.left != b.left ? a.left - b.left : a.right - b.right));
+    }
+    public void addRange(int left, int right) {
+        int nl = left, nr = right;
+        Range high = new Range(right, Integer.MAX_VALUE);
+        while (true) {
+            Range r = ts.lower(high);
+            if (r == null || r.right < left) break;
+            if (r.right > right) nr = r.right;
+            if (r.left < left) nl = r.left;
+            ts.remove(r);
+        }
+        ts.add(new Range(nl, nr));
+    }
+    public boolean queryRange(int left, int right) {
+        Range target = ts.floor(new Range(left, Integer.MAX_VALUE));
+        return target != null && target.left <= left && target.right >= right;
+    }
+    public void removeRange(int left, int right) {
+        Range high = new Range(right, right);
+        while (true) {
+            Range r = ts.lower(high);
+            if (r == null || r.right <= left) break;
+            if (r.right > right)
+                ts.add(new Range(right, r.right));
+            if (r.left < left)
+                ts.add(new Range(r.left, left));
+            ts.remove(r);
+        }
+    }
+#+END_SRC
+
+*** 352. Data Stream as Disjoint Intervals - Hard
+Given a data stream input of non-negative integers a1, a2, ..., an, summarize the numbers seen so far as a list of disjoint intervals.
+
+Implement the SummaryRanges class:
+
+SummaryRanges() Initializes the object with an empty stream.
+void addNum(int val) Adds the integer val to the stream.
+int[][] getIntervals() Returns a summary of the integers in the stream currently as a list of disjoint intervals [starti, endi].
+#+BEGIN_SRC csharp
+    class Range implements Comparable<Range> {
+        int bgn, end;
+        public Range(int bgn, int end) {
+            this.bgn = bgn;
+            this.end = end;
+        }
+        @Override public int compareTo(Range other) {
+            return this.bgn - other.bgn;
+        }
+    }
+    TreeSet<Range> ts; 
+    public SummaryRanges() {
+        ts = new TreeSet<Range>();
+    }
+    public void addNum(int val) {
+        Range cur = new Range(val, val);
+        Range bef = ts.floor(cur);
+        Range aft = ts.ceiling(cur);
+        if (bef != null && bef.end + 1 >= val) {
+            cur.bgn = bef.bgn;
+            cur.end = Math.max(val, bef.end);
+            ts.remove(bef);
+        }
+        if (aft != null && aft.bgn == val + 1) {
+            cur.end = aft.end;
+            ts.remove(aft);
+        }
+        ts.add(cur);
+    }
+    public int[][] getIntervals() {
+        int [][] ans = new int [ts.size()][2];
+        int i = 0;
+        for (Range cur : ts) {
+            ans[i][0] = cur.bgn;
+            ans[i][1] = cur.end;
+            i++;
+        }
+        return ans;
+    }
+#+END_SRC
+
+*** 1419. Minimum Number of Frogs Croaking - Medium
+Given the string croakOfFrogs, which represents a combination of the string "croak" from different frogs, that is, multiple frogs can croak at the same time, so multiple “croak” are mixed. Return the minimum number of different frogs to finish all the croak in the given string.
+
+A valid "croak" means a frog is printing 5 letters ‘c’, ’r’, ’o’, ’a’, ’k’ sequentially. The frogs have to print all five letters to finish a croak. If the given string is not a combination of valid "croak" return -1.
+#+BEGIN_SRC csharp
+public int minNumberOfFrogs(String s) { // 写得有点儿乱
+    int n = s.length();
+    int cc = 0, cr = 0, co = 0, ca = 0, cnt = 0, max = 0;
+    for (int i = 0; i < n; i++) {
+        char c = s.charAt(i);
+        if (c == 'c') {
+            ++cc;
+            ++cnt;
+            max = Math.max(max, cnt);
+        } else if (c == 'r') {
+            if (cc == 0) return -1;
+            --cc;
+            ++cr;
+        } else if (c == 'o') {
+            if (cr == 0) return -1;
+            --cr;
+            ++co;
+        } else if (c == 'a') {
+            if (co == 0) return -1;
+            --co;
+            ++ca;
+        } else if (c == 'k') {
+            if (ca == 0) return -1;
+            --ca;
+            --cnt;
+        }
+    }
+    if (cc + cr + co + ca > 0) return -1;
+    return max;
+}
+#+END_SRC
+
+[[./pic/frogs.png]]
+#+BEGIN_SRC csharp
+public int minNumberOfFrogs(String s) {
+    int n = s.length();
+    int cnt [] = new int [5];
+    int cur = 0, max = 0;
+    for (int i = 0; i < n; i++) {
+        char c = s.charAt(i);
+        int idx = "croak".indexOf(c);
+        ++cnt[idx];
+        if (idx == 0)
+            max = Math.max(max, ++cur);
+        else if (--cnt[idx-1] < 0)
+            return -1;
+        else if (idx == 4)
+            --cur;
+    }
+    return cur == 0 ? max : -1; // 如果最后所有的青蛙都叫完了的话  
+}
+#+END_SRC
+- 解法三:
+
+这个跟上面的解法差不多，优化了查询位置的时间。直接对比每一步的结果。如果当前字符位的个数比上一位多，那么说明当前位没有办法被匹配成功。
+
+#+BEGIN_SRC csharp
+public int minNumberOfFrogs(String croakOfFrogs) {
+    char[] ch = croakOfFrogs.toCharArray();
+    int curr = 0;
+    int res = 0;
+    int c = 0, r = 0, o = 0, a = 0, k = 0;
+    for(int i = 0; i < ch.length; i++) {
+        if(ch[i] == 'c') {
+            c++;
+            curr++;
+        } else if(ch[i] == 'r') 
+            r++;
+        else if(ch[i] == 'o') 
+            o++;
+         else if(ch[i] == 'a') 
+            a++;
+         else {
+            k++; 
+            curr--;
+        }
+        res = Math.max(res, curr);
+        if (c < r || r < o || o < a || a < k) // 要满足所有的条件
+            return -1;
+    }
+    if ((c == r) && (r == o ) && ( o == a) &&  (a == k)) 
+        return res;
+    return -1;
+}
+#+END_SRC
+
+* 单调栈
+*** 975. Odd Even Jump - Hard
+You are given an integer array arr. From some starting index, you can make a series of jumps. The (1st, 3rd, 5th, ...) jumps in the series are called odd-numbered jumps, and the (2nd, 4th, 6th, ...) jumps in the series are called even-numbered jumps. Note that the jumps are numbered, not the indices.
+
+You may jump forward from index i to index j (with i < j) in the following way:
+
+During odd-numbered jumps (i.e., jumps 1, 3, 5, ...), you jump to the index j such that arr[i] <= arr[j] and arr[j] is the smallest possible value. If there are multiple such indices j, you can only jump to the smallest such index j.
+During even-numbered jumps (i.e., jumps 2, 4, 6, ...), you jump to the index j such that arr[i] >= arr[j] and arr[j] is the largest possible value. If there are multiple such indices j, you can only jump to the smallest such index j.
+It may be the case that for some index i, there are no legal jumps.
+A starting index is good if, starting from that index, you can reach the end of the array (index arr.length - 1) by jumping some number of times (possibly 0 or more than once).
+
+Return the number of good starting indices.
+**** 解题思路与分析: 树映射（Tree Map）
+
+在 方法一 中，原问题简化为：奇数次跳跃时，对于一些索引 i，下一步应该跳到哪里去（如果有的话）。
+
+我们可以使用 TreeMap，一个维护有序数据的绝佳数据结构。我们将索引 i 映射到 v = A[i] 上。
+
+从 i = N-2 到 i = 0 的遍历过程中，对于 v = A[i]， 我们想知道比它略大一点和略小一点的元素是谁。 TreeMap.lowerKey 与 TreeMap.higherKey 函数就是用来做这样一件事情的。
+
+了解这一点之后，解法接下来的内容就非常直接了： 我们使用动态规划来维护 odd[i] 和 even[i]：从索引 i 出发奇数次跳跃与偶数次跳跃是否能到达数组末尾。
+
+- 复杂度分析
+
+时间复杂度：O(NlogN)，其中 NN 是数组 A 的长度。
+
+空间复杂度：O(N)
+#+BEGIN_SRC csharp
+public int oddEvenJumps(int [] a) { // 写出这种状况：就该强调，选对数据结构，事半功倍！
+    int n = a.length, ans = 1; // n-1算答案里的一个
+    boolean [] odd = new boolean [n]; 
+    boolean [] evn = new boolean [n];
+    TreeMap<Integer, Integer> m = new TreeMap<>(); // 这里用treemap就比用ArrayDeque好用
+    odd[n-1] = evn[n-1] = true;
+    m.put(a[n-1], n-1);
+    for (int i = n-2; i >= 0; i--) {
+        Integer higher = m.ceilingKey(a[i]); // higherKey() 返回的是键key
+        Integer lower = m.floorKey(a[i]);    // lowerKey()
+        if (higher != null) odd[i] = evn[m.get(higher)]; // 仍需取值，而非用键
+        if (lower != null) evn[i] = odd[m.get(lower)];
+        if (odd[i]) ans++;
+        m.put(a[i], i);
+    }
+    return ans;
+}
+#+END_SRC
+**** 解题思路与分析: 单调栈
+
+首先，我们可以发现下一步应该跳到哪里只与我们当前的位置与跳跃次数的奇偶性有关系。
+
+对于每一种状态，接下来可以跳到的状态一定只有一种（或者接下来不能跳跃了）。如果我们使用某种方法知道了不同状态之间的转移关系，我们就可以通过一次简单的遍历解决这个问题了。
+
+于是，问题就简化为了：从索引 i 进行奇数次跳跃时，下一步应该跳到哪里去（如果有的话）。偶数次跳跃也是类似的。
+
+假设当前是奇数次跳跃，让我们来搞清楚在索引 i 的位置接下来应该跳到哪里去。
+
+我们从小到大考虑数组 A 中的元素。假设当前我们正在考虑 A[j] = v，在我们已经处理过但是还未确定下一步跳跃位置的索引中（也就是 <= v 的那些）进行搜索。 如果我们找到了某些已经处理过的值 v0 = A[i] 且 i < j，那么我们就可以知道从索引 i 下一步应该跳跃到索引 j 的位置。
+
+这种朴素的方法有一点点慢，然而我们可以使用一个很常见的技巧 单调栈 来加速这个过程。
+
+我们在栈中保存所有已经处理过的索引 i ，并且时时刻刻维护这个栈中的元素是递减的。当我们增加一个新的索引 j 的时候，我们弹出栈顶比较小的索引 i < j，并且记录这些索引下一步全都会跳跃到索引 j。
+
+然后，我们就知道所有的 oddnext[i]，也就是位于索引 i 在奇数次跳跃时将会跳到的位置。使用类似的方法，我们也可以求出 evennext[i]。有了这些信息，我们就可以使用动态规划的技巧快速建立所有可达状态。
+
+上面的方法在时间复杂度上并没有优化，而是使用单调栈结构（Monotonic Stack）去解决问题，问题的本质还是求从某一点出发，当进行奇数跳时，他能到达什么位置；然而进行偶数跳时，他又能到达什么位置，将这些信息记录在数组当中。那么问题的关键是如何利用单调栈来求得每一个能到达的相应位置。
+
+     #+BEGIN_SRC csharp
+public int oddEvenJumps(int [] a) { 
+    int n = a.length, ans = 1;
+    ArrayDeque<Integer> s = new ArrayDeque<>();
+    Integer [] idx = new Integer [n];       // idx存储的都是A数组的下标
+    for (int i = 0; i < n; i++) idx[i] = i;
+    Arrays.sort(idx, (x, y)-> a[x] - a[y]); // 将A数组的下标按A中的元素的大小进行排序
+    int [] odIdx = new int [n]; 
+    for (int i = 0; i < n; i++) {
+        while (!s.isEmpty() && s.peekLast() < idx[i]) // 利用单调栈获取每一个元素进行奇数跳时所到达的位置
+            odIdx[s.pollLast()] = idx[i];
+        s.offerLast(idx[i]);
+    }
+    Arrays.sort(idx, (x, y) -> a[y] - a[x]);
+    s.clear();
+    int [] enIdx = new int [n];
+    for (int i = 0; i < n; i++) {
+        while (!s.isEmpty() && s.peekLast() < idx[i])
+            enIdx[s.pollLast()] = idx[i];
+        s.offerLast(idx[i]);
+    }
+    boolean [] odd = new boolean [n], evn = new boolean [n];
+    odd[n-1] = evn[n-1] = true;
+    for (int i = n-2; i >= 0; i--) {
+        odd[i] = evn[odIdx[i]];
+        evn[i] = odd[enIdx[i]];
+        if (odd[i]) ans++;
+    }
+    return ans;
+}
+     #+END_SRC
+
+*** 1793. Maximum Score of a Good Subarray - Hard
+You are given an array of integers nums (0-indexed) and an integer k.
+
+The score of a subarray (i, j) is defined as min(nums[i], nums[i+1], ..., nums[j]) * (j - i + 1). A good subarray is a subarray where i <= k <= j.
+
+Return the maximum possible score of a good subarray.
+**** 解题思路与分析: 左右两个单调栈
+     #+BEGIN_SRC csharp
+public int maximumScore(int[] a, int k) {
+    int n = a.length, ans = 0;
+    List<Integer> li = new ArrayList<>();
+    List<Integer> ri = new ArrayList<>();
+    li.add(k);
+    ri.add(k);
+    for (int i = k-1; i >= 0; i--) 
+        if (a[i] < a[li.get(li.size()-1)]) li.add(i);
+    for (int i = k+1; i < n; i++) 
+        if (a[i] < a[ri.get(ri.size()-1)]) ri.add(i);
+    int i = 0, j = 0, nl = li.size(), nr = ri.size();
+    while (i < nl || j < nr) {
+        int l = (i == nl - 1) ? -1 : li.get(i+1);
+        int r = (j == nr - 1) ? n : ri.get(j+1);
+        ans = Math.max(ans, Math.min(a[li.get(i)], a[ri.get(j)]) * (r - l - 1));
+        if (i == nl - 1 && j == nr - 1) break;
+        else if (i == nl - 1) j++;
+        else if (j == nr - 1) i++;
+        else if (a[l] <= a[r]) j++;
+        else i++;
+    }
+    return ans;
+}
+     #+END_SRC
+**** 解题思路与分析:用真实的栈
+- 上面的解法是用数组来代替栈以提高效率，真正用栈的实现如下：
+     #+BEGIN_SRC csharp
+public int maximumScore(int[] a, int k) { // 这个方法速度很慢， 上面一个比较快
+    ArrayDeque<Integer> s = new ArrayDeque<>();
+    int ans = 0;
+    for (int i = 0; i < a.length; i++) {
+        while (!s.isEmpty() && a[s.peekLast()] > a[i]) {
+            int idx = s.pollLast();
+            int l = -1;
+            if (!s.isEmpty()) l = s.peekLast();
+            int cur = (i - l - 1) * a[idx];
+            if (l + 1 <= k && i-1 >= k) ans = Math.max(ans, cur);
+        }
+        s.offerLast(i);
+    }
+    while (!s.isEmpty()) {
+        int idx = s.pollLast();
+        int l = -1;
+        if (!s.isEmpty()) l = s.peekLast();
+        int cur = (a.length - l - 1) * a[idx];
+        if (l <= k) ans = Math.max(ans, cur);
+    }
+    return ans;
+}
+     #+END_SRC
+**** 解题思路与分析: two pointers
+     #+BEGIN_SRC csharp
+public int maximumScore(int[] a, int k) {  // O(N) Two Pointers
+    int n = a.length, ans = a[k];
+    int l = k, r = k, min = a[k];
+    while (true) {
+        while (r+1 < n && a[r+1] >= min) r++;
+        while (l-1 >= 0 && a[l-1] >= min) l--;
+        ans = Math.max(ans, min*(r - l + 1));
+        if (l == 0 && r == n-1) break;
+        if (l == 0) min = a[r+1];
+        else if (r == n-1) min = a[l-1];
+        else min = Math.max(a[r+1], a[l-1]);
+    }
+    return ans;
+}
+     #+END_SRC
+
+* 字符串 
+** 总结
+- Rabin-Karp Rolling Hash算法
+** KMP算法
+*** 1392. Longest Happy Prefix  - Hard : Use Longest Prefix Suffix (KMP-table) or String Hashing.
+A string is called a happy prefix if is a non-empty prefix which is also a suffix (excluding itself).
+
+Given a string s, return the longest happy prefix of s. Return an empty string "" if no such prefix exists.
+**** 解题思路与分析: KMP算法
+
+    [[./pic/happyString.png]]
+
+#+BEGIN_SRC csharp
+public String longestPrefix(String ss) {
+    int n = ss.length();
+    char [] s = ss.toCharArray();
+    int [] lps = new int [n];
+    for (int i = 1, j = 0; i < n; i++) {
+        while (j > 0 && s[i] != s[j])
+            j = lps[j-1];
+        if (s[i] == s[j])
+            lps[i] = ++j;
+    }
+    return ss.substring(0, lps[n-1]);
+}
+#+END_SRC
+**** rolling hash
+
+Time complexity: O(n) / worst case: O(n^2)
+
+Space complexity: O(1)
+
+#+BEGIN_SRC csharp
+public String longestPrefix(String s) { // 容易出错，KMP写起来比较简单
+    int n = s.length(), hashPre = 0, hashSuf = 0;
+    int left = 0, right = n-1, pow = 1, maxLen = 0;
+    String res = "";
+    while (left < n-1) {
+        hashPre = hashPre * 31 + s.charAt(left);
+        hashSuf = hashSuf + s.charAt(right)*pow;
+        if (hashPre == hashSuf) maxLen = left + 1;
+        left ++;
+        right --;
+        pow *= 31;
+    }
+    return maxLen == 0 ? "" : s.substring(0, maxLen);
+}
+#+END_SRC
+*** 1910. Remove All Occurrences of a Substring - Medium 可用KMP算法
+Given two strings s and part, perform the following operation on s until all occurrences of the substring part are removed:
+
+Find the leftmost occurrence of the substring part and remove it from s.
+Return s after removing all occurrences of part.
+
+A substring is a contiguous sequence of characters in a string.
+#+BEGIN_SRC csharp
+public String removeOccurrences(String s, String part) {
+    if (!s.contains(part)) return s;
+    int n = s.length();
+    int m = part.length();
+    while (s.contains(part)) {
+        int idx = s.indexOf(part);
+        s = s.substring(0, idx) + (idx+m-1 == n-1 ? "" : s.substring(idx+m));
+    }
+    return s;
+}
+#+END_SRC
+- 有人用了KMP: 字符串匹配可以用KMP算法，由于p pp始终不变，可以先算一下p pp的next数组，然后每次从s ss中找p pp的第一次出现，删去之，再重复进行这个过程
+#+BEGIN_SRC csharp
+private int [] buildNext(String s) { // 找与每个位置字符不同的下一个字母的idx
+    int [] next = new int [s.length()];
+    for (int i = 0, j = next[0] = -1; i < s.length()-1; ) {
+        if (j == -1 || s.charAt(i) == s.charAt(j)) {
+            i++;
+            j++;
+            next[i] = s.charAt(i) != s.charAt(j) ? j : next[j];
+        } else j = next[j];
+    }
+    return next;
+}
+private int kmp(String s, String p, int [] next) { // 像是夹生饭，半生不熟的
+    for (int i = 0, j = 0; i < s.length(); ) {
+        if (j == -1 || s.charAt(i) == p.charAt(j)) {
+            i++;
+            j++;
+        } else j = next[j];
+        if (j == p.length()) return i-j;
+    }
+    return -1;
+}
+public String removeOccurrences(String s, String part) {
+    int [] next = buildNext(part);
+    int idx = -1;
+    while ((idx = kmp(s, part, next)) != -1) 
+        s = s.substring(0, idx) + s.substring(idx + part.length());
+    return s;
+}
+#+END_SRC
+
+*** 1316. Distinct Echo Substrings - Hard
+Return the number of distinct non-empty substrings of text that can be written as the concatenation of some string with itself (i.e. it can be written as a + a where a is some string).
+**** 解题思路与分析: 枚举
+我们在 text 中枚举位置 i 和 j，若字符串 text[i:j] 和 text[j:j*2-i] 相等，那么字符串 text[i:j*2-i] 就是一个满足条件的子串，其中 text[x:y] 表示字符串 text 中以位置 x 开始，位置 y 结束并且不包含位置 y 的子串。
+
+由于题目需要求出不同的子串数目，因此我们还需要使用哈希集合（HashSet）对所有满足条件的子串进行去重操作。
+
+     #+BEGIN_SRC csharp
+public int distinctEchoSubstrings(String t) { 
+    int n = t.length(), j = 0;
+    Set<String> ss = new HashSet<>();
+    for (int d = 1; d <= n/2; d++) 
+        for (int i = 0; i+d <= n-d; i++) {
+            if (t.substring(i, i+d).equals(t.substring(i+d, i+d+d)))
+                ss.add(t.substring(i, i+d));
+        }
+    return ss.size();
+}
+     #+END_SRC
+
+[[./pic/1316-1.png]]
+**** 解题思路与分析: 滚动哈希 + 前缀和
+
+本方法需要一些关于「滚动哈希」或「Rabin-Karp 算法」的预备知识，其核心是将字符串看成一个 k 进制的整数，其中 k 是字符串中可能出现的字符种类，本题中字符串只包含小写字母，即 k = 26（也可以取比 k 大的整数，一般来说可以取一个质数，例如 29 或 31）。这样做的好处是绕开了字符串操作，将字符串看成整数进行比较，并可以在常数时间内将字符串加入哈希集合中。
+
+关于「滚动哈希」或「Rabin-Karp 算法」的知识，可以参考 1044. 最长重复子串的官方题解 或使用搜索引擎，这里对算法本身的流程不再赘述。
+
+[[./pic/1316-2.png]]
+
+     #+BEGIN_SRC csharp
+static final int mod = (int)1e9 + 7;
+public int distinctEchoSubstrings(String t) {  
+    int n = t.length(), ans = 0;
+    char [] s = t.toCharArray();
+    int base = 31;
+    int [] pre = new int [n+1], mul = new int [n+1];
+    mul[0] = 1;
+    for (int i = 1; i <= n; i++) {
+        pre[i] = (int)(((long)pre[i-1] * base + s[i-1]) % mod);
+        mul[i] = (int)((long)mul[i-1] * base % mod);
+    }
+    Set<Integer> [] vis = new HashSet[n];
+    for (int i = 0; i < n; i++) vis[i] = new HashSet<>();
+    for (int i = 0; i < n; i++) 
+        for (int j = i+1; j < n; j++) {
+            int l = j - i;
+            if (j + l <= n) {
+                int hash_left = gethash(pre, mul, i, j-1);
+                if (!vis[l-1].contains(hash_left) && hash_left == gethash(pre, mul, j, j+l-1)) {
+                    ++ans;
+                    vis[l-1].add(hash_left);
+                }
+            }
+        }
+    return ans;
+}
+private int gethash(int [] pre, int [] mul, int l, int r) {
+    return (int)((pre[r+1] - (long)pre[l] * mul[r-l+1] % mod + mod) % mod);
+}
+     #+END_SRC
+- 注意事项
+
+由于 Rabin-Karp 算法会将字符串对应的整数值进行取模，那么：
+
+如果字符串 S1 和 S2 对应的整数值 I1 和 I2 不相等，那么 S1 和 S2 一定不相等；
+
+如果字符串 S1 和 S2 对应的整数值 I1 和 I2 相等，并不代表 S1 和 S2 一定相等；
+
+这与实际应用中使用的哈希算法也是一致的，即先判断两个实例的哈希值是否相等，再判断它们本质上是否相等。而在竞赛题目中，由于数据量较少，几乎不会产生哈希冲突，因此我们可以直接用 I1 和 I2 的相等代替 S1 和 S2 的相等，减少时间复杂度。但需要牢记在实际应用中，这样做是不严谨的。
+
+*** 467. Unique Substrings in Wraparound String - Medium Rabin-Karp Rolling Hash算法
+We define the string s to be the infinite wraparound string of "abcdefghijklmnopqrstuvwxyz", so s will look like this:
+
+"...zabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcd....".
+Given a string p, return the number of unique non-empty substrings of p are present in s.
+
+这道题说有一个无限长的封装字符串，然后又给了我们另一个字符串p，问我们p有多少非空子字符串在封装字符串中。我们通过观察题目中的例子可以发现，由于封装字符串是26个字符按顺序无限循环组成的，那么满足题意的p的子字符串要么是单一的字符，要么是按字母顺序的子字符串。这道题遍历p的所有子字符串会TLE，因为如果p很大的话，子字符串很多，会有大量的满足题意的重复子字符串，必须要用到trick，而所谓技巧就是一般来说你想不到的方法。我们看abcd这个字符串，以d结尾的子字符串有abcd, bcd, cd, d，那么我们可以发现bcd或者cd这些以d结尾的字符串的子字符串都包含在abcd中，那么我们知道以某个字符结束的最大字符串包含其他以该字符结束的字符串的所有子字符串，说起来很拗口，但是理解了我上面举的例子就行。那么题目就可以转换为分别求出以每个字符(a-z)为结束字符的最长连续字符串就行了，我们用一个数组cnt记录下来，最后在求出数组cnt的所有数字之和就是我们要的结果啦，
+
+#+BEGIN_SRC csharp
+public int findSubstringInWraproundString(String p) {
+    int n = p.length();
+    int [] arr = new int [n];
+    int [] cnt = new int [26];
+    for (int i = 0; i < n; i++) 
+        arr[i] = p.charAt(i) - 'a';
+    int res = 0, maxLen = 0;
+    for (int i = 0; i < n; i++) {
+        if (i > 0 && (arr[i-1]+1) % 26 == arr[i]) // 判断前一个位置上的字符比现位字符小1
+            ++maxLen;
+        else maxLen = 1;
+        cnt[arr[i]] = Math.max(cnt[arr[i]], maxLen);
+    }
+    for (int i = 0; i < 26; i++) 
+        res += cnt[i];
+    return res;
+}
+#+END_SRC
+
+*** 1044. Longest Duplicate Substring - Hard 
+Given a string s, consider all duplicated substrings: (contiguous) substrings of s that occur 2 or more times. The occurrences may overlap.
+
+Return any duplicated substring that has the longest possible length. If s does not have a duplicated substring, the answer is "".
+#+BEGIN_SRC csharp
+public static int base = 26; // 256
+public static int mod = (1 << 31) - 1;
+public static boolean match(String str1,String str2) {
+    assert str1.length() == str2.length();
+    for (int i = 0; i < str1.length(); i++) 
+        if (str1.charAt(i) != str2.charAt(i))
+            return false; 
+    return true; 
+}
+private String search(String s, int v) { // v: substring length
+    int n = s.length();
+    long hash = 0L, mp = 1l;             // to avoid overflow, long long long
+    Map<Long, List<Integer>> map = new HashMap<>();
+    for (int j = 0; j < v; j++) {
+        hash = ((hash*base) + s.charAt(j)) % mod;
+        if (j >= 1)
+            mp = mp * base % mod;        // 先乘好准备好，准备着备用 
+    }
+    map.computeIfAbsent(hash, k->new ArrayList<>()).add(0);
+    for (int i = 1; i+v <= n; i++) {
+        hash = ((hash - s.charAt(i-1) * mp % mod + mod) % mod * base % mod + s.charAt(i+v-1)) % mod; // mod 
+        if (map.containsKey(hash)) 
+            for (int idx : map.get(hash)) 
+                if (match(s.substring(i, i+v), s.substring(idx, idx+v)))
+                    return s.substring(i, i+v);
+        map.computeIfAbsent(hash, k->new ArrayList<>()).add(i);
+    }
+    return null;
+}
+public String longestDupSubstring(String s) {
+    int n = s.length();
+    int l = 0, r = n;
+    String res = "";
+    while (l <= r) {
+        int m = l + (r-l) / 2;
+        String tmp = search(s, m);
+        if (tmp == null) r = m-1;
+        else {
+            if (tmp.length() > res.length())
+                res = tmp;
+            l = m+1;
+        }
+    }
+    return res;
+}
+#+END_SRC
+
+*** 1156. Swap For Longest Repeated Character Substring - Medium
+You are given a string text. You can swap two of the characters in the text.
+
+Return the length of the longest substring with repeated characters.
+
+给你一个字符串，如何找最长的重复子串，博主会数连续相同的字符，若此时有一个不同字符出现了，只要后面还有相同的字符，就会继续数下去，因为有一次交换的机会，什么时候停止呢，当再次出现不同字符的时候就停止，或者是当前统计个数等于该字符出现的总个数时也停止，因为得到的结果不可能超过某个字符出现的总个数。所以可以先统计每个字符的出现次数，然后开始遍历字符，对于每个遍历到的字符，都开始数之后跟其相等的字符，新建变量j，cnt，和 diff，当j小于n，且当前字符和比较字符相同，或者 diff 等于0，且 cnt 小于比较字符出现的总个数时进行遍历，若当前遍历到的字符和要比较的字符不相等，说明该使用交换操作了，diff 自增1，此时将i更新为 j-1，这是一个优化操作，可以避免一些不必要的计算，下次从这个位置往后统计，也相当于重置了 diff。还有就是这个 cnt 小于字符出现总个数这个条件卡的非常好，即便下一个还是相同字符，也不能再统计了，因为最后的这个相同字符可能是要用来交换前面的断点位置的。每次用统计出来的 cnt 更新结果 res，但是一个方向的遍历可能无法应对所有情况，比如 "acbaaa"，若只是从前往后遍历，那么最终只能得到3，而正确的答案是4，因为可以将b和第一个a交换，所以还需要从后往前进行一次相同的操作，这样才能得到正确的答案，参见代码如下：
+
+#+BEGIN_SRC csharp
+public int maxRepOpt1(String s) { // O(n^2)
+    int n = s.length(), ans = 0;
+    Map<Character, Integer> charCnt = new HashMap<>();
+    for (char c : s.toCharArray()) 
+        charCnt.put(c, charCnt.getOrDefault(c, 0) + 1);
+    for (int i = 0; i < n; i++) {
+        char cur = s.charAt(i);
+        int j = i, cnt = 0, dif = 0;
+        while (j < n && (cur == s.charAt(j) || dif == 0) && cnt < charCnt.get(cur)) {
+            if (cur != s.charAt(j)) {
+                ++dif;
+                i = j-1; // exchanged once, i moves to be the repeated sequence tail
+            }
+            ++cnt;
+            ++j;
+        }
+        ans = Math.max(ans, cnt);
+    }
+    for (int i = n-1; i >= 0; i--) {
+        char cur = s.charAt(i);
+        int j = i, cnt = 0, dif = 0;
+        while (j >= 0 && (cur == s.charAt(j) || dif == 0) && cnt < charCnt.get(cur)) {
+            if (cur != s.charAt(j)) {
+                ++dif;
+                i = j+1;
+            }
+            ++cnt;
+            --j;
+        }
+        ans = Math.max(ans, cnt);
+    }
+    return res;
+}
+#+END_SRC
+- O(N) 解法
+
+上面的解法严格来说还是平方级的，再来看一种线性时间的解法，可能比较难想，由于这里需要关注的是相同字符的出现位置，所以可以将所有相同的字符的位置都放到一个数组中，那么这里就建立一个字符和其出现位置数组之间的映射。由于题目中限制了只有英文字母，所以可以按照每个字母进行遍历，直接遍历每个字符的位置数组，这里新建变量 cnt，cnt2，和 mx，其中 cnt 统计的是连续字母的个数，cnt2 相当于一个临时变量，当使用交换操作时，保存之前的 cnt 值，mx 为二者之和。在遍历完某个字母位置数组之后，最后看一下若该字母出现总个数大于 mx，则说明交换后的字母还没有统计进去，不管之前有没有使用交换操作，都需要加上这个额外的一个，参见代码如下：
+
+#+BEGIN_SRC csharp
+public int maxRepOpt1(String s) { // O(n^2)
+    int n = s.length(), ans = 0;
+    Map<Character, List<Integer>> idxMap = new HashMap<>();
+    for (int i = 0; i < n; i++) 
+        idxMap.computeIfAbsent(s.charAt(i), k -> new ArrayList<>()).add(i);
+    for (char c = 'a'; c <= 'z'; c++) {
+        if (!idxMap.containsKey(c)) continue;
+        int cnt = 1, cntb = 0, max = 0;
+        List<Integer> idxs = idxMap.get(c);
+        for (int i = 1; i < idxs.size(); i++) {
+            if (idxs.get(i) == idxs.get(i-1) + 1) // aa
+                ++cnt;
+            else {
+                cntb = (idxs.get(i) == idxs.get(i-1) + 2) ? cnt : 0; // aba ?
+                cnt = 1;
+            }
+            max = Math.max(max, cnt + cntb);
+        }
+        ans = Math.max(ans, max + (idxs.size() > max ? 1 : 0)); // aaaaabaaaaaca 多于两个重复子段，中间替换字符可是是相同的
+    }
+    return ans;
+}
+#+END_SRC
+- 动态规划
+ [[./pic/ssrepeat.png]]
+#+BEGIN_SRC csharp
+private int solve(char c, String s) {
+    int n = s.length(), max = 0;
+    int f = 0, g = 0, cnt = 0;
+    for (int i = 0; i < n; i++) {
+        if (c == s.charAt(i)) {
+            f++;
+            g++;
+            cnt++;
+        } else {
+            g = f + 1;
+            f = 0;
+        }
+        max = Math.max(max, Math.max(f, g));
+    }
+    return Math.min(max, cnt);
+}
+public int maxRepOpt1(String s) {
+    int n = s.length(), ans = 0;
+    for (char i = 'a'; i <= 'z'; i++) 
+        ans = Math.max(ans, solve(i, s));
+    return ans;
+}
+#+END_SRC
+
+*** 395. Longest Substring with At Least K Repeating Characters - Medium
+Given a string s and an integer k, return the length of the longest substring of s such that the frequency of each character in this substring is greater than or equal to k.
+#+BEGIN_SRC csharp
+//         由于字母只有 26 个，而整型 mask 有 32 位，足够用了，
+//         每一位代表一个字母，如果为1，表示该字母不够k次，如果为0就表示已经出现了k次，这种思路真是太聪明了，
+//         隐约记得这种用法在之前的题目中也用过，但是博主并不能举一反三( 沮丧脸:( )，还得继续努力啊。
+// 遍历字符串，对于每一个字符，都将其视为起点，然后遍历到末尾，增加 HashMap 中字母的出现次数，如果其小于k，将 mask 的对应位改为1，如果大于等于k，将 mask 对应位改为0。
+// 然后看 mask 是否为0，是的话就更新 res 结果，然后把当前满足要求的子字符串的起始位置j保存到 max_idx 中，等内层循环结束后，将外层循环变量i赋值为 max_idx+1，继续循环直至结束
+public int longestSubstring(String s, int k) { // O (N ^ 2)
+    int n = s.length(), res = 0, i = 0;
+    while (i + k <= n) {
+        int [] m = new int [26];
+        int mask = 0, maxIdx = i;
+        for (int j = i; j < n; j++) {
+            int t = s.charAt(j) - 'a';
+            m[t]++;
+            if (m[t] < k) mask |= (1 << t);
+            else mask &= (~(1 << t));
+            if (mask == 0) {
+                res = Math.max(res, j-i+1);
+                maxIdx = j;
+            }
+        }
+        i = maxIdx + 1;
+    }
+    return res;
+}
+#+END_SRC
+- 双指针sliding window O(N)
+#+BEGIN_SRC csharp
+public int longestSubstring(String s, int k) {
+    int n = s.length(), res = 0;
+    for (int cnt = 1; cnt <= 26; cnt++) {
+        int start = 0, i = 0, uniqueCnt = 0;
+        int [] charCnt = new int [26];
+        while (i < n) {
+            boolean valid = true;
+            if (charCnt[s.charAt(i++)-'a']++ == 0) ++ uniqueCnt;
+            while (uniqueCnt > cnt) 
+                if (--charCnt[s.charAt(start++)-'a'] == 0) --uniqueCnt;
+            for (int j = 0; j < 26; j++)
+                if (charCnt[j] > 0 && charCnt[j] < k) valid = false;
+            if (valid) res = Math.max(res, i-start);
+        }
+    }
+    return res;
+}
+#+END_SRC
+- 分治： 分而治之
+#+BEGIN_SRC csharp
+public int longestSubstring(String s, int k) { // str.split("[dkfldjf]")
+    int n = s.length();
+    if (n < k) return 0;
+    if (n == k && s.chars().distinct().count() == 1) return k;
+    int [] cnt = new int [26];
+    for (int i = 0; i < n; i++) 
+        cnt[s.charAt(i)-'a']++;
+    if (Arrays.stream(cnt).max().getAsInt() < k) return 0;
+    StringBuilder sb = new StringBuilder("[");
+    for (int i = 0; i < 26; i++) 
+        if (cnt[i] < k && cnt[i] != 0)
+            sb.append((char)(i+'a'));
+    sb.append(']');
+    if (sb.length() == 2) return n;
+    String [] sa = s.split(sb.toString()); // str.split("[-+*/=]") pay attention to the format
+    System.out.println(Arrays.toString(sa));
+    int max = 0;
+    for (int i = 0; i < sa.length; i++) 
+        max = Math.max(max, longestSubstring(sa[i], k));
+    return max;
+}
+public int longestSubstring(String s, int k) { // 人工手动折分
+    int n = s.length(), maxIdx = 0, res = 0;
+    int [] cnt = new int [128];
+    boolean valid = true;
+    for (char c : s.toCharArray()) 
+        cnt[c]++;
+    for (int i = 0; i < n; i++) 
+        if (cnt[s.charAt(i)] < k) {
+            res = Math.max(res, longestSubstring(s.substring(maxIdx, i), k));
+            valid = false;
+            maxIdx = i+1;
+        }
+    return valid ? n : Math.max(res, longestSubstring(s.substring(maxIdx, n), k));
+}
+#+END_SRC
+
+*** 1830. Minimum Number of Operations to Make String Sorted - Hard 排列组合费小马快速幂
+You are given a string s (0-indexed)​​​​​​. You are asked to perform the following operation on s​​​​​​ until you get a sorted string:
+
+Find the largest index i such that 1 <= i < s.length and s[i] < s[i - 1].
+Find the largest index j such that i <= j < s.length and s[k] < s[i - 1] for all the possible values of k in the range [i, j] inclusive.
+Swap the two characters at indices i - 1​​​​ and j​​​​​.
+Reverse the suffix starting at index i​​​​​​.
+Return the number of operations needed to make the string sorted. Since the answer can be too large, return it modulo 109 + 7.
+**** 解题思路与分析
+题中每次对字符串 s 执行的操作，是将其变为由当前字母组成的前一字典序的字符串。因此求最少操作次数，等价于求解该字符串在由当前字母组成的所有排列中的字典序；
+
+求比当前字符串 s 小的排列个数，可通过排列组合公式计算得到；
+
+排列组合公式中的阶乘逆元取模，可通过费马小定理，转化为对模数的乘方进行计算；
+
+可通过快速乘方算法，进一步提高对乘方的计算效率。
+
+#+BEGIN_SRC csharp
+private int quickmul(int base, int exp) { // 快速乘方算法
+    long ans = 1L;
+    while (exp > 0) {
+        if ((exp & 1) == 1) // 指数是奇数，就先乘一次base
+            ans = ans * base % mod;
+        base = (int)((long)base * base % mod); // 底平方 (指数变偶数之后)
+        exp >>= 1;                              // 指数除2，快速计算
+    }
+    return (int)ans;
+}
+int mod = (int)1e9 + 7;
+public int makeStringSorted(String t) {
+    int n = t.length();
+    char [] s = t.toCharArray();
+    int [] cnt = new int [26]; // 记录剩余字符串中各字母个数
+    Arrays.fill(cnt, 0);
+    for (int i = 0; i < n; i++) 
+        cnt[s[i]-'a']++;
+    int [] fact = new int [n+1];
+    int [] finv = new int [n+1];
+    fact[0] = 1;
+    finv[0] = 1;
+    for (int i = 1; i <= n; i++) {
+        fact[i] = (int)((long)fact[i-1] * i % mod); // fac[i] = i! % mod
+        finv[i] = quickmul(fact[i], mod - 2); // 费马小定理计算乘法逆元, facinv[i] = (i!) ^ -1 % mod
+    }
+    long ans = 0L;
+    for (int i = 0; i < n-1; i++) {
+        int lessCnt = 0; // 比当前位置小的字母总数
+        for (int j = 0; j < s[i]-'a'; j++) 
+            lessCnt += cnt[j];
+        long upper = (long)lessCnt * fact[n-1-i] % mod; // 排列公式分子
+        for (int j = 0; j < 26; j++) 
+            upper = upper * finv[cnt[j]] % mod;
+        ans = (ans + upper) % mod;
+        cnt[s[i]-'a']--; // 指针右移
+    }
+    return (int)ans;
+}
+#+END_SRC
+ 
+*** 1960. Maximum Product of the Length of Two Palindromic Substrings - Hard 马拉车算法 todo
+You are given a 0-indexed string s and are tasked with finding two non-intersecting palindromic substrings of odd length such that the product of their lengths is maximized.
+
+More formally, you want to choose four integers i, j, k, l such that 0 <= i <= j < k <= l < s.length and both the substrings s[i...j] and s[k...l] are palindromes and have odd lengths. s[i...j] denotes a substring from index i to index j inclusive.
+
+Return the maximum possible product of the lengths of the two non-intersecting palindromic substrings.
+
+A palindrome is a string that is the same forward and backward. A substring is a contiguous sequence of characters in a string.
+**** 解题思路与分析: rolling hash算法
+     #+BEGIN_SRC csharp
+public long maxProduct(String t) { // rolling hash 算法： Time complexity - O(n), space compelxity - O(n). NO collision detection
+    int n = t.length();
+    char [] s = t.toCharArray();
+    long [] p = new long[n + 1]; // pow[i] = BASE^i
+    p[0] = 1;
+    for (int i = 1; i <= n; i++) p[i] = p[i-1] * base % mod;
+    long [] lh = new long [n+1], rh = new long [n+1]; // 从左向右、从右向左遍历的hash值
+    for (int i = 1; i <= n; i++)   // s[0, i):   从左向右遍历
+        lh[i] = (lh[i-1] * base + s[i-1]-'a') % mod;
+    for (int i = n-1; i >= 0; i--) // s(i, n-1]: 从右向左遍历
+        rh[i] = (rh[i+1] * base + s[i] - 'a') % mod;
+    int left [] = new int [n], right [] = new int [n];
+    for (int i = 0, max = 1; i < n; i++) {    // 以i为 右 端点，回文片段在其左侧的最大回文长度
+        if (max < i && isPalindromic(i-max-1, i+1, lh, rh, p)) max += 2;
+        left[i] = max;
+    }
+    for (int i = n-1, max = 1; i >= 0; i--) { // 以i为 左 端点，回文片段在其右侧的最大回文长度
+        if (i + max + 2 <= n && isPalindromic(i, i+max+2, lh, rh, p)) max += 2;
+        right[i] = max;
+    }
+    long ans = 1;
+    for (int i = 1; i < n; i++)
+        ans = Math.max(ans, (long)left[i-1] * right[i]);
+    return ans;
+}        
+static final long mod = Integer.MAX_VALUE;
+static final long base = 29L;
+static boolean isPalindromic(int l, int r, long [] left, long [] right, long [] p) {
+    return lh(l, r, left, p) == rh(l, r, right, p);
+}
+static long lh(int l, int r, long [] hash, long [] p) {
+    long ans = (hash[r] - hash[l] * p[r-l]) % mod;
+    if (ans < 0) ans += mod;
+    return ans;
+}
+static long rh(int l, int r, long [] hash, long [] p) {
+    long ans = (hash[l] - hash[r] * p[r-l]) % mod;
+    if (ans < 0) ans += mod;
+    return ans;
+}
+ #+END_SRC
+**** 解题思路与分析： 马拉车
+
+https://leetcode.com/problems/maximum-product-of-the-length-of-two-palindromic-substrings/discuss/1393288/Java-100-O(n)-time-O(n)-space-using-Manacher's-algorithm
+#+BEGIN_SRC csharp
+public long maxProduct(String s) { // 
+    int n = s.length();
+    int d [] = manacher(s); // 以i为中心的，包括当前字符的单侧最大回文长度
+    int l [] = new int [n], r [] = new int [n]; // 转化为：以当前坐标为最右、最左极限的全回文片段最大长度
+    for (int i = 0; i < n; i++) {
+        l[i+d[i]-1] = Math.max(l[i+d[i]-1], 2 * d[i]-1); // 用第一个当前下标，来更新所有右端所能企及、以右端点为结尾的最大片段长度,从左向右
+        r[i-d[i]+1] = 2 * d[i] - 1;                      // 用当前回文片段全长，更新以左端点为起始点的最大长度, 从右向左???
+    }
+    // if maximum palindrome has end at i and its length is L, then there's a palindrome of length L-2 with end at position i-1
+    for (int i = n-2, j = n-1; i >= 0; i--, j--) // 从右向左
+        l[i] = Math.max(l[i], l[j]-2); 
+    for (int i = 1, j = 0; i < n; i++, j++)      // 从左向右
+        r[i] = Math.max(r[i], r[j]-2);
+    // Same fact for beginnings of palindromes
+    for (int i = 1, j = 0; i < n; i++, j++)
+        l[i] = Math.max(l[i], l[j]);
+    for (int i = n-2, j = n-1; i >= 0; i--, j--)
+        r[i] = Math.max(r[i], r[j]);
+    long ans = 1;
+    for (int i = 1; i < n; i++) 
+        ans = Math.max(ans, (long)l[i-1] * r[i]);
+    return ans;
+}
+static int [] manacher(String t) { // 这个写法可能并不标准： modifiedOddManacher
+    int n = t.length();
+    char [] s = t.toCharArray();
+    int [] ans = new int [n];
+    for (int i = 0, l = 0, r = -1; i < n; i++) {
+        int len = i > r ? 1 : Math.min(ans[l+r-i], r-i+1); // 起始单侧长度只有1
+        int maxLen = Math.min(i, n-1-i); // 就算两边都能对称延伸至两端点，以现i为中心的回文的 单侧最大长度(包括当前下标的字符计算在内)
+        int x = i - len, y = i + len;
+        while (len <= maxLen && s[x--] == s[y++]) len++; // 向两侧扩散延伸
+        ans[i] = len--;
+        if (i + len > r) {
+            l = i - len;
+            r = i + len;
+        }
+    }
+    return ans;
+}
+#+END_SRC
+**** 解题思路与分析: 根据题意提速版的马拉车算法
+     #+BEGIN_SRC csharp
+        public long maxProduct(String s) { // 这个方法是：目前自己能够理解的解法里最快的
+            int n = s.length();
+            StringBuilder sb = new StringBuilder(s);
+            int [] l = new int [n], r = new int [n];
+            modifiedOddManacher(sb.toString(), l);
+            modifiedOddManacher(sb.reverse().toString(), r);
+            long ans = 1;
+            for (int i = 0; i < n-1; i++) 
+                ans = Math.max(ans, (1 + (l[i]-1) * 2l) * (1 + (r[n-(i+1)-1]-1) * 2l));
+            return ans;
+        }
+        void modifiedOddManacher(String t, int [] d) { 
+            int n = t.length();
+            char [] s = t.toCharArray();
+            int [] idx = new int [n]; // idx: center
+            for (int i = 0, l = 0, r = -1; i < n; i++) {
+                int radius = (i > r) ? 1 : Math.min(idx[l+(r-i)], r-i+1);
+                while (i - radius >= 0 && i + radius < n && s[i-radius] == s[i+radius]) { // 因为半径没有限制，所以要检查两边是否会出界
+                    d[i+radius] = radius + 1;
+                    radius++;
+                }
+                idx[i] = radius--;
+                if (i + radius > r) {
+                    l = i - radius;
+                    r = i + radius;
+                }
+            }
+            for (int i = 0, max = 1; i < n; i++) {
+                max = Math.max(max, d[i]);
+                d[i] = max;
+            }
+        }
+        // Just comapare with basic odd Manacher for better understanding.
+        void oddManacher(String s) { // 是需要对比理解一下
+            int n = s.length();
+            int [] idx = new int [n];
+            for (int i = 0, l = 0, r = -1; i < n; i++) {
+                int radius = (i > r) ? 1 : Math.min(idx[l+r-i], r-i+1);
+                while (i - radius >= 0 && i + radius < n && s[i-radius] == s[i+radius]) radius++;
+                idx[i] = radius--;
+                if (i + radius > r) {
+                    l = i - radius;
+                    r = i + radius;
+                }
+            }
+        }
+     #+END_SRC
+**** DP解：要再好好理解消化一下
+#+BEGIN_SRC csharp
+public long maxProduct(String s) { // 这个方法稍慢，但思路相对简洁
+    final int n = s.length();
+    long ans = 1;
+    // l[i] := max length of palindromes in s[0..i)
+    int[] l = manacher(s, n);
+    // r[i] := max length of palindromes in s[i..n)
+    int[] r = manacher(new StringBuilder(s).reverse().toString(), n);
+    reverse(r, 0, n - 1);
+    for (int i = 0; i + 1 < n; ++i)
+        ans = Math.max(ans, (long) l[i] * r[i + 1]);
+    return ans;
+}
+private int[] manacher(final String s, int n) {
+    int[] maxExtends = new int[n];
+    int[] l2r = new int[n];
+    Arrays.fill(l2r, 1);
+    int center = 0;
+    for (int i = 0; i < n; ++i) {
+        final int r = center + maxExtends[center] - 1;
+        final int mirrorIndex = center - (i - center);
+        int extend = i > r ? 1 : Math.min(maxExtends[mirrorIndex], r - i + 1);
+        while (i - extend >= 0 && i + extend < n && s.charAt(i - extend) == s.charAt(i + extend)) {
+            l2r[i + extend] = 2 * extend + 1;
+            ++extend;
+        }
+        maxExtends[i] = extend;
+        if (i + maxExtends[i] >= r)
+            center = i;
+    }
+    for (int i = 1; i < n; ++i)
+        l2r[i] = Math.max(l2r[i], l2r[i - 1]);
+    return l2r;
+}
+private void reverse(int[] A, int l, int r) {
+    while (l < r)
+        swap(A, l++, r--);
+}
+private void swap(int[] A, int i, int j) {
+    final int temp = A[i];
+    A[i] = A[j];
+    A[j] = temp;
+}
+#+END_SRC
+
+* PreSum 差分数组 
+** 1674. Minimum Moves to Make Array Complementary - Medium 差分数组
+You are given an integer array nums of even length n and an integer limit. In one move, you can replace any integer from nums with another integer between 1 and limit, inclusive.
+
+The array nums is complementary if for all indices i (0-indexed), nums[i] + nums[n - 1 - i] equals the same number. For example, the array [1,2,3,4] is complementary because for all indices i, nums[i] + nums[n - 1 - i] = 5.
+
+Return the minimum number of moves required to make nums complementary.
+**** 解题思路与分析 Sweep Line / Prefix Sum
+Let a = min(nums[i], nums[n-i-1]), b = max(nums[i], nums[n-i-1])
+
+The key to this problem is how many moves do we need to make a + b == T.
+#+BEGIN_SRC csharp
+if 2 <= T < a + 1, two moves, lower both a and b.
+if a +1 <= T < a + b, one move, lower b
+if a + b == T, zero move
+if a + b + 1 <= T < b + limit + 1, one move, increase a
+if b + limit + 1 <= T <= 2*limit, two moves, increase both a and b.
+#+END_SRC
+- 关键是找到五个关键点，并利用扫描线、差分数组来暴搜所有数对和，并最全局最优解
+  
+[[./pic/diffArray.png]]
+  
+[[./pic/diffArray2.png]]
+- 用一个实例来看。这里强调一下：不可以使用二分搜索，因为这里的答案并不唯一。  
+
+[[./pic/diffArray3.png]]
+
+#+BEGIN_SRC csharp
+public int minMoves(int[] nums, int limit) {
+    int n = nums.length;
+    int [] delta = new int [2 * limit + 2]; // 差分数组
+    for (int i = 0; i < n/2; i++) {
+        int a = Math.min(nums[i], nums[n-1-i]);
+        int b = Math.max(nums[i], nums[n-1-i]); // 把各区间所需要的操作简化到五行代码中去了
+        delta[2] += 2; // dec a, decreasing b [2, a] 区间的和 所需要的变换次数都是 2 次
+        --delta[a+1];  // dec a               [a + 1, a+b-1] 区间中的和 所需要变的次数都是1次
+        --delta[a+b];  // no operations
+        ++delta[a+b+1];// inc a               [a+b+1, b+limit] 区间中的和 只需要变动 1 次;
+        ++delta[b+limit+1]; // inc a, inc b
+    }
+    int ans = n, sum = 0;
+    for (int t = 2; t < 2 * limit + 2; t++) {
+        sum += delta[t]; // 差分数组的前缀和等于（共需要的操作次数）
+        ans = Math.min(ans, sum);
+    }
+    return ans;
+}
+#+END_SRC
+
+** 798. Smallest Rotation with Highest Score
+Hard
+
+308
+
+19
+
+Add to List
+
+Share
+You are given an array nums. You can rotate it by a non-negative integer k so that the array becomes [nums[k], nums[k + 1], ... nums[nums.length - 1], nums[0], nums[1], ..., nums[k-1]]. Afterward, any entries that are less than or equal to their index are worth one point.
+
+For example, if we have nums = [2,4,1,3,0], and we rotate by k = 2, it becomes [1,3,0,2,4]. This is worth 3 points because 1 > 0 [no points], 3 > 1 [no points], 0 <= 2 [one point], 2 <= 3 [one point], 4 <= 4 [one point].
+Return the rotation index k that corresponds to the highest score we can achieve if we rotated nums by it. If there are multiple answers, return the smallest such index k.
+**** 解题思路与分析
+
+答案的思路也十分巧妙，并没有采用brute force那种直接求每一个K值的得分，而是反其道而行之，对于每个数字，探究其跟K值之间的联系。首先我们要讨论一下边界情况，那么就是当A[i] = 0 或 N 的情况，首先如果A[i] = 0的话，那么0这个数字在任何位置都会小于等于坐标值，所以在任何位置都会得分的，那么其实可以忽略之，因为其不会对最大值产生任何影响，同理，如果A[i] = N的时候，由于长度为N的数组的坐标值范围是[0, N-1]，所以数字N在任何位置都不得分，同样也不会对最大值产生任何影响，可以忽略之。那么我们关心的数字的范围其实是[1, N-1]。在这个范围内的数字在旋转数组的过程中，从位置0变到N-1位置的时候，一定会得分，因为此范围的数字最大就是N-1。这个一定得的分我们在最后统一加上，基于上面的发现，我们再来分析下题目中的例子 [2, 3, 1, 4, 0]，其中红色数字表示不得分的位置：
+
+#+BEGIN_SRC csharp
+A:    2   3   1   4   0   (K = 0)
+A:    3   1   4   0   2   (K = 1)
+A:    1   4   0   2   3   (K = 2)
+A:    4   0   2   3   1   (K = 3)
+A:    0   2   3   1   4   (K = 4)
+idx:  0   1   2   3   4
+#+END_SRC
+
+对于某个数字A[i]，我们想知道其什么时候能旋转到坐标位置为A[i]的地方，这样就可以得分了。比如上面博主标记了红色的数字3，最开始时的位置为1，此时是不得分的，我们想知道其什么时候能到位置3，答案是当K=3的时候，其刚好旋转到位置3，K再增加的时候，其又开始不得分了。所以这个最后能得分的临界位置是通过 (i - A[i] + N) % N 得到，那么此时如果K再增加1的话，A[i]就开始不得分了（如果我们suppose每个位置都可以得分，那么不得分的地方就可以当作是失分了），所以我们可以在这个刚好开始不得分的地方标记一下，通过-1进行标记，这个位置就是 (i - A[i] + 1 + N) % N。我们用一个长度为N的change数组，对于每个数字，我们都找到其刚好不得分的地方，进行-1操作，那么此时change[i]就表示数组中的数字在i位置会不得分的个数，如果我们仔细观察上面红色的数字，可以发现，由于是左移，坐标在不断减小，所以原先失分的地方，在K+1的时候还是失分，除非你从开头位置跑到末尾去了，那会得分，所以我们要累加change数组，并且K每增加1的时候，要加上额外的1，最后change数组中最大数字的位置就是要求的K值了.
+
+[[./pic/idx.png]]
+
+时间复杂度：O(n)
+
+空间复杂度：O(n)
+
+#+BEGIN_SRC csharp
+public int bestRotation(int[] a) {
+    int n = a.length, ans = 0;
+    int [] change = new int [n];
+    for (int i = 0; i < n; ++i) change[(i - a[i] + n + 1) % n] -= 1;
+    for (int i = 1; i < n; ++i) {
+        change[i] += change[i-1] + 1;
+        ans = change[i] > change[ans] ? i : ans;
+    }
+    return ans;
+}
+#+END_SRC
+** 1074. Number of Submatrices That Sum to Target - Hard 二维数组转化为一维数组:  数组中target Sum的2D版、presum思想的2d版
+Given a matrix and a target, return the number of non-empty submatrices that sum to target.
+
+A submatrix x1, y1, x2, y2 is the set of all cells matrix[x][y] with x1 <= x <= x2 and y1 <= y <= y2.
+
+Two submatrices (x1, y1, x2, y2) and (x1', y1', x2', y2') are different if they have some coordinate that is different: for example, if x1 != x1'.
+
+本题也需要使用到presum思路来解题，只不过这个前缀和presum的计算对象是二维数组。对于任意一个点，presum[i][j]代表了从Matrix[0][0]到Matrix[i][j]之间的和。
+
+有了前缀和之后，我们可以将二维数组拆解为多个一维数组，再用一维数组的思路去解题。
+
+拆分数组时可以以列拆分，也可以以行拆，无论如何都可以达到遍历所有子矩阵的效果。本题以列拆分为例，对于任意两列col1和col2，我们可以得到所有行的前缀和
+
+这样，二维数组就转化为了一维数组。接下来只要遍历所有列的组合即可。
+#+BEGIN_SRC csharp
+public int numSubmatrixSumTarget(int[][] matrix, int target) {
+    int m = matrix.length, n = matrix[0].length, rowSum = 0;
+    int [][] sum = new int [m][n]; // sums of row sum only
+    for (int i = 0; i < m; i++) {
+        rowSum = 0;
+        for (int j = 0; j < n; j++) {
+            rowSum += matrix[i][j];
+            sum[i][j] = rowSum + (i == 0 ? 0 : sum[i-1][j]);
+        }
+    }
+    int cnt = 0, cur = 0;
+    for (int j = 0; j < n; j++)     // col1
+        for (int k = j; k < n; k++) {// col2
+            Map<Integer, Integer> map = new HashMap<>(); // 用于记录前缀和个数
+            for (int i = 0; i < m; i++) {
+                cur = sum[i][k] - (j == 0 ? 0 : sum[i][j-1]);
+                if (cur == target) ++cnt;
+                cnt += map.getOrDefault(cur - target, 0);
+                map.put(cur, map.getOrDefault(cur, 0) + 1);
+            }
+        }
+    return cnt;
+}
+#+END_SRC
+- 对corner case的处理相对简洁的写法
+#+BEGIN_SRC csharp
+public int numSubmatrixSumTarget(int [][] matrix, int target) { 
+    int res = 0, m = matrix.length, n = matrix[0].length;
+    int [][] sum = new int [m+1][n+1];
+    for (int i = 1; i <= m; ++i) 
+        for (int j = 1; j <= n; ++j) // 对全数组纵横求和
+            sum[i][j] = sum[i][j - 1] + sum[i - 1][j] - sum[i - 1][j - 1] + matrix[i - 1][j - 1];
+    for (int i = 1; i <= m; ++i) 
+        for (int j = 1; j <= n; ++j) 
+            for (int p = 1; p <= i; ++p) 
+                for (int q = 1; q <= j; ++q) {
+                    int t = sum[i][j] - sum[i][q - 1] - sum[p - 1][j] + sum[p - 1][q - 1];
+                    if (t == target) ++res;
+                }
+    return res;
+}
+#+END_SRC
+#+BEGIN_SRC csharp
+public int numSubmatrixSumTarget(int[][] matrix, int target) {
+    int m = matrix.length, n = matrix[0].length;
+    int [][] sum = new int [m][n+1];                // sums of row sum only
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) 
+            sum[i][j+1] = sum[i][j] + matrix[i][j]; // row sums only
+    }
+    int cnt = 0, cur = 0;
+    for (int j = 0; j < n; j++)      // col1
+        for (int k = j; k < n; k++) {// col2
+            cur = 0;
+            Map<Integer, Integer> map = new HashMap<>(); // 用于记录前缀和个数
+            map.put(0, 1);
+            for (int i = 0; i < m; i++) {
+                cur += sum[i][k+1] - sum[i][j];
+                cnt += map.getOrDefault(cur - target, 0);
+                map.put(cur, map.getOrDefault(cur, 0) + 1);
+            }
+        }
+    return cnt;
+}
+#+END_SRC
+解题思路分析
+ 
+首先对每一行，计算一个presum
+
+然后对任意两个列， [j,k], 计算j和k之间的所有数的和， 因为对于每一行，我们已经计算了presum, 所以，
+
+对于[j,k]之间的树，可以通过presum[i][k] - (j == 0 ? 0 : presum[i][j-1])得到某一行在[j,k]之间的值
+
+这样， 对于任意两列[j,k]之间的数， 我们可以形成一个临时的一维数组， 表示从第0行到最后一行的数，
+
+那么， 问题就转换成在这个一维数组里面，找一个连续子数组， 使得这些数的和是target，
+
+那么，后面这个问题就转换成 leetcode 560
+
+http://www.noteanddata.com/leetcode-560-Subarray-Sum-Equals-K-java-solution-note.html
+
+所以， 这个是presum思想的2d版, 类似的题目还有leetcode 304 Range Sum Query 2D - Immutable
+#+BEGIN_SRC csharp
+public int numSubmatrixSumTarget(int [][] matrix, int target) {
+    int res = 0, m = matrix.length, n = matrix[0].length;
+    for (int i = 0; i < m; ++i) 
+        for (int j = 1; j < n; ++j) 
+            matrix[i][j] += matrix[i][j - 1];
+    for (int i = 0; i < n; ++i) 
+        for (int j = i; j < n; ++j) {
+            Map<Integer, Integer> cntMap = new HashMap<>();
+            cntMap.put(0, 1);
+            int cur = 0;
+            for (int k = 0; k < m; ++k) {
+                cur += matrix[k][j] - (i > 0 ? matrix[k][i - 1] : 0);
+                res += cntMap.getOrDefault(cur-target, 0);
+                cntMap.put(cur, cntMap.getOrDefault(cur, 0) + 1);
+            }
+        }
+    return res;
+}
+#+END_SRC
+#+BEGIN_SRC csharp
+private int cntTarget(int [] arr, int target) { // 比较一下与上面解法、写法的不同！！！
+    int cnt = 0, sum = 0;
+    Map<Integer, Integer> cntMap = new HashMap<>();
+    cntMap.put(0, 1);
+    for (int i = 0; i < arr.length; i++) {
+        sum += arr[i];
+        cnt += cntMap.getOrDefault(sum - target, 0);
+        cntMap.compute(sum, (k, v) -> { // 
+                if (v == null) v = 0;
+                return v+1;
+            });
+        return cnt;
+    }
+}
+public int numSubmatrixSumTarget(int[][] matrix, int target) {
+    int m = matrix.length, n = matrix[0].length, cur = 0;
+    int [][] sum = new int [m][n]; // sums of row sum only
+    for (int i = 0; i < m; i++) {
+        cur = 0;
+        for (int j = 0; j < n; j++) {
+            cur += matrix[i][j];
+            sum[i][j] = cur;
+        }
+    }
+    int cnt = 0;
+    for (int j = 0; j < n; j++) {
+        for (int k = j; k < n; k++) {
+            int [] tmp = new int [m];
+            for (int i = 0; i < m; i++) 
+                tmp[i] = sum[i][k] - (j == 0 ? 0 : sum[i][j-1]);
+            int oneCnt = cntTarget(tmp, target);
+            cnt += oneCnt;
+        }
+    }
+    return cnt;
+}
+#+END_SRC
+
+*** Java O(NlgN) optimized Brute Force with Fenwick Tree O(NlogN)
+
+我们假设A的大小为n，如果采用暴力法逐个测试，则时间复杂度为O(n^2)，应该过不了大数据测试。
+
+我采取的方法是：首先计算使得每个元素A[i]要符合条件，需要rotate的K的集合，用线段表示；然后再扫描一遍，求出这些线段中重合最多的点，那么这个点对应的rotate次数就是题目所要计算的K。对应A[i]来讲，如果A[i] <= i，那么它向左移动到j也可能维持A[i] <= j，所以我们计算出此时它向左移动的合法区间[0, i - A[i]]。那么A[i]向右移动的合法区间是多少呢？我们知道它向右移动最多移动到n - 1，即移动n - 1 - i步；而最少需要移动max(1, A[i] - i)步，其中1表示A[i] <= 的情况。那么如果这个区间合法，就可以同样构成了一个合法的移动区间[i + 1, n - max(1, A[i] - i)]。
+
+得到多个线段构成的合法移动区间之后，我们的任务就是求出这些区间的最大重合点。首先对segment中的各个点进行排序，然后采用扫描线的方法计算最大最大重合处。为了便于区分某个点是起点还是终点，我们定义一个pair<int, bool>来表示点，并且让起点的bool值为false，终点的bool值为true，这样就可以在扫描到某个点之后，先处理起点，再处理终点。
+
+由于每个A[i]最多对应2个合法移动区间，所以segments大小也是O(n)量级的。这样可以得知，本算法的时间复杂度是O(nlogn)，空间复杂度是O(n)。
+
+https://www.codeleading.com/article/62063257456/
+
+- 不是我的代码风格，需要再学习一下 
+
+#+BEGIN_SRC csharp
+public int bestRotation(int[] A) {
+    int LEN = A.length;
+    int score, ans, ansInd, k; score = k = ans = ansInd = 0;
+    for(int i = 0; i < LEN; i++) A[i] -= i;
+    int[] bit = new int[3 * LEN + 1];
+    for(int i = k; i < LEN; i++) bitAdd(bit, 3 * LEN + 1, vToIndex(A[i], LEN), 1);
+    while (k < LEN) {
+        score = bitPreSum(bit, vToIndex(-k, LEN));
+        if(score > ans) {
+            ansInd = k;
+            ans = score;
+        }
+        bitAdd(bit, 3 * LEN + 1, vToIndex(A[k], LEN), -1);
+        bitAdd(bit, 3 * LEN + 1, vToIndex(A[k] - LEN, LEN), 1);
+        k++;
+    }
+    return ansInd;
+}
+void bitAdd(int[] bit, int bLEN, int ind, int delta) {
+    for(; ind < bLEN; ind = (ind | (ind + 1))) {
+        bit[ind] += delta;
+    }
+}
+int bitPreSum(int[] bit, int ind) {
+    int ans = 0;
+    for(; ind >= 0; ind = (ind & (ind + 1)) - 1) {
+        ans += bit[ind];
+    }
+    return ans;
+}
+int vToIndex(int v, int LEN) {
+    return v + 2 * LEN;
+}
+#+END_SRC
+
+* Greedy
+** 1585. Check If String Is Transformable With Substring Sort Operations - Hard
+Given two strings s and t, you want to transform string s into string t using the following operation any number of times:
+
+Choose a non-empty substring in s and sort it in-place so the characters are in ascending order.
+For example, applying the operation on the underlined substring in "14234" results in "12344".
+
+Return true if it is possible to transform string s into string t. Otherwise, return false.
+
+A substring is a contiguous sequence of characters within a string.
+#+BEGIN_SRC csharp
+public boolean isTransformable(String s, String t) { 
+    ArrayDeque<Integer> [] q = new ArrayDeque[10];
+    for (int i = 0; i < 10; i++) 
+        q[i] = new ArrayDeque<Integer>();
+    for (int i = 0; i < s.length(); i++) 
+        q[s.charAt(i)-'0'].offerLast(i);
+    for (char c : t.toCharArray()) {
+        int d = c - '0';
+        if (q[d].isEmpty()) return false;
+        for (int i = 0; i < d; i++) 
+            if (!q[i].isEmpty() && q[i].peekFirst() < q[d].peekFirst())
+                return false;
+        q[d].pollFirst();
+    }
+    return true;
+}        
+#+END_SRC
+
+** 1330. Reverse Subarray To Maximize Array Value - Hard
+You are given an integer array nums. The value of this array is defined as the sum of |nums[i]-nums[i+1]| for all 0 <= i < nums.length-1.
+
+You are allowed to select any subarray of the given array and reverse it. You can perform this operation only once.
+
+Find maximum possible value of the final array.
+
+[[./pic/reverseSubarray.png]]
+
+#+BEGIN_SRC csharp
+public int maxValueAfterReverse(int[] a) {
+    int n = a.length, ans = 0, sum = 0;
+    if (n == 1) return 0;
+    for (int i = 0; i < n-1; i++) // 不发生交换情况下的解
+        sum += Math.abs(a[i] - a[i+1]);
+    for (int i = 0; i < n-1; i++) // 发生交换、但交换的左端点为数组头的case, 交换的区间左端点是数组的左边界
+        ans = Math.max(ans, sum + Math.abs(a[i+1]-a[0]) - Math.abs(a[i+1]-a[i]));
+    for (int i = n-1; i > 0; i--) // 发生交换、但交换的左端点为数组尾的case, 交换的区间右端点是数组的右边界
+        ans = Math.max(ans, sum + Math.abs(a[n-1] - a[i-1]) - Math.abs(a[i] - a[i-1]));
+    // 交换区间左右端点在数组内部
+    int l = 1; // 1.找出左端点b：每两个相邻的，选最大的那一个数；在所有相邻对中，选最小的
+    for (int i = 2; i < n; i++) 
+        if (Math.max(a[i], a[i-1]) < Math.max(a[l], a[l-1])) l = i;
+    int r = 0; // 2.找出右端点c：每两个相邻的，先最小的那一个数；在所有相邻对中，选最大的
+    for (int i = 1; i < n-1; i++) 
+        if (Math.min(a[i], a[i+1]) > Math.min(a[r], a[r+1])) r = i;
+    ans = Math.max(ans, sum + 2 * (Math.min(a[r], a[r+1]) - Math.max(a[l], a[l-1])));
+    return ans;
+}
+#+END_SRC
+
+* others
+** Predict the Winner
+You are given an integer array nums. Two players are playing a game with this array: player 1 and player 2.
+Player 1 and player 2 take turns, with player 1 starting first. Both players start the game with a score of 0. At each turn, the player takes one of the numbers from either end of the array (i.e., nums[0] or nums[nums.length - 1]) which reduces the size of the array by 1. The player adds the chosen number to their score. The game ends when there are no more elements in the array.
+Return true if Player 1 can win the game. If the scores of both players are equal, then player 1 is still the winner, and you should also return true. You may assume that both players are playing optimally.
+#+BEGIN_SRC csharp
+private int helper( int [] arr, int i, int j) {
+    if (i == j) return arr[i];
+    else return Math.max(arr[i] - helper(arr, i+1, j), arr[j] - helper(arr, i, j-1));
+}
+public boolean PredictTheWinner(int[] nums) {
+    int n = nums.length;
+    if (n == 1) return true;
+    return helper(nums, 0, n-1) >= 0;
+}
+#+END_SRC
+ 
+** Rectangle Area II
+We are given a list of (axis-aligned) rectangles. Each rectangle[i] = [xi1, yi1, xi2, yi2] , where (xi1, yi1) are the coordinates of the bottom-left corner, and (xi2, yi2) are the coordinates of the top-right corner of the ith rectangle.
+Find the total area covered by all rectangles in the plane. Since the answer may be too large, return it modulo 109 + 7.
+#+BEGIN_SRC csharp
+public int rectangleArea(int[][] rectangles) {
+    ll = new ArrayList<>();
+    long ans = 0;
+    for (int [] r : rectangles) 
+        addRect(r, 0);
+    for (int [] r : ll) 
+        ans = (ans + (long)(r[2] - r[0]) * (long)(r[3] - r[1])) % mod;
+    return (int)ans;
+}        
+static final int mod = (int)1e9 + 7;
+List<int []> ll;
+void addRect(int [] a, int i) { // i: idx
+    if (i >= ll.size()) {
+        ll.add(a);
+        return ;
+    }
+    int [] r = ll.get(i);
+    if (a[2] <= r[0] || a[0] >= r[2] || a[1] >= r[3] || a[3] <= r[1]) { // 被添加的，与现遍历的矩形，完全没有交集，直接往后遍历
+        addRect(a, i+1);
+        return ;
+    } // 找出所有有交集的、交集部分——与现遍历矩形相比，多出来的部分，的四个顶点，再往后遍历
+    if (a[0] < r[0]) // 左
+        addRect(new int [] {a[0], a[1], r[0], a[3]}, i+1);
+    if (a[2] > r[2]) // 右
+        addRect(new int [] {r[2], a[1], a[2], a[3]}, i+1);
+    if (a[1] < r[1]) // 下: 新增矩形 下侧 也可以有 交叠：注意左侧、右侧前面已经加进去了，现在只加中间部分，不要重复计算
+        addRect(new int [] {Math.max(a[0], r[0]), a[1], Math.min(a[2], r[2]), r[1]}, i+1);
+    if (a[3] > r[3]) // 上: 新增矩形 上侧 也可以有 交叠：注意左侧、右侧、下侧 前面已经加进去了，现在只加中间部分，不要重复计算
+        addRect(new int [] {Math.max(a[0], r[0]), r[3], Math.min(a[2], r[2]), a[3]}, i+1);
+}
+#+END_SRC
+
+** Construct Binary Tree from Preorder and Postorder Traversal
+Given two integer arrays, preorder and postorder where preorder is the preorder traversal of a binary tree of distinct values and postorder is the postorder traversal of the same tree, reconstruct and return the binary tree.
+If there exist multiple answers, you can return any of them.
+#+BEGIN_SRC csharp
+public TreeNode constructFromPrePost(int[] preorder, int[] postorder) {
+    int n = preorder.length;
+    TreeNode r = new TreeNode(preorder[0]);
+    if (n == 1) return r;
+    Stack<TreeNode> s = new Stack<>();
+    s.push(r);
+    int idx = 0;
+    for (int i = 1; i < n; i++) {
+        TreeNode cur = new TreeNode(preorder[i]);
+        if (s.peek().left == null) s.peek().left = cur;
+        else s.peek().right = cur;
+        s.push(cur);
+        while (idx < n && postorder[idx] == s.peek().val) {
+            s.pop();
+            ++idx;
+        }
+    }
+    return r;
+}
+#+END_SRC
+
+** Path Sum III
+Given the root of a binary tree and an integer targetSum, return the number of paths where the sum of the values along the path equals targetSum.
+The path does not need to start or end at the root or a leaf, but it must go downwards (i.e., traveling only from parent nodes to child nodes).
+#+BEGIN_SRC csharp
+private int solve(TreeNode r, int t, int value) {
+    if (r == null) return 0;
+    if (value + r.val == t)
+        return 1 + solve(r.left, 0, 0) + solve(r.right, 0, 0);
+    return solve(r.left, t, value + r.val) + solve(r.right, t, value + r.val);
+}
+public int pathSum(TreeNode root, int targetSum) {
+    if (root == null) return 0;
+    return solve(root, targetSum, 0) + pathSum(root.left, targetSum) + pathSum(root.right, targetSum);
+}
+#+END_SRC
+
+** Critical Connections in a Network
+- There are n servers numbered from 0 to n - 1 connected by undirected server-to-server connections forming a network where connections[i] = [ai, bi] represents a connection between servers ai and bi. Any server can reach other servers directly or indirectly through the network.
+- A critical connection is a connection that, if removed, will make some servers unable to reach some other server.
+- Return all critical connections in the network in any order.
+#+BEGIN_SRC csharp
+static class Eg {
+    int u, v, next;
+    // int w;
+    boolean cut;
+    // int num;
+}
+public Eg[] egs;
+public int cnt;
+public int [] fir; // 边的出发点
+int [] low;
+int [] dfn;
+int recdfn;
+void tarjanAddEg(int u, int v, int w) {
+    egs[cnt] = new Eg();
+    egs[cnt].u = u;
+    egs[cnt].v = v;
+    // egs[cnt].w = w;
+    egs[cnt].cut = false;
+    // egs[cnt].num = 0;
+    egs[cnt].next = fir[u]; // ?
+    fir[u] = cnt++;         // ?
+}
+private void initTarjan(int nodeSize, int edgeSize) {
+    cnt = 0;
+    egs = new Eg [edgeSize];
+    low = new int [nodeSize];
+    dfn = new int [nodeSize];
+    fir = new int [edgeSize];
+    Arrays.fill(fir, -1);
+}
+private void tarjan(int u, int fa) { // fa: father
+    low[u] = ++recdfn;
+    dfn[u] = recdfn;
+    int have = 0;
+    for (int i = fir[u]; i != -1; i = egs[i].next) {
+        int v = egs[i].v;
+        if (have == 0 && v == fa) { // 走过你来时的路
+            have++;
+            continue;
+        }
+        if (dfn[v] == 0) { // dfs过程中还未经过该点
+            tarjan(v, u);
+            low[u] = Math.min(low[u], low[v]);
+            if (dfn[u] < low[v]) { // 连通世外桃源与外界的路
+                // 当 dfn[x] < low[y] 的时候:
+                // --- 我们发现从yy节点出发,在不经过(x,y)(x,y)的前提下,不管走哪一条边,我们都无法抵达xx节点,或者比xx节点更早出现的节点
+                // --- 此时我们发现yy所在的子树似乎形成了一个封闭圈,那么(x,y)(x,y)自然也就是桥了.
+                egs[i].cut = true;
+                egs[i^1].cut = true; // ???
+            }
+        } else {
+            low[u] = Math.min(low[u], dfn[v]); // 取已访问的节点的dfs序的最小值
+        }
+    }
+}
+private boolean findEdgeCut(int l, int r) {
+    Arrays.fill(low, 0);
+    Arrays.fill(dfn, 0);
+    recdfn = 0;
+    tarjan(l, l);
+    for (int i = l; i <= r; i++) {
+        if (dfn[i] == 0) return false;
+    }
+    return true;
+}
+public List<List<Integer>> criticalConnections(int n, List<List<Integer>> connections) {
+    initTarjan(n, connections.size()*2);
+    for (List<Integer> eg : connections) {
+        tarjanAddEg(eg.get(0), eg.get(1), 1);
+        tarjanAddEg(eg.get(1), eg.get(0), 1);
+    }
+    // boolean ans = findEdgeCut(0, n-1);
+    Arrays.fill(low, 0);
+    Arrays.fill(dfn, 0);
+    recdfn = 0;
+    tarjan(0, 0);
+    List<List<Integer>> res = new ArrayList<>();
+    int l = connections.size();
+    for (int i = 0; i < l * 2; i += 2) { // i += 2 skipped egs[i^1] ?
+        Eg eg = egs[i];
+        if (eg != null && eg.cut) {
+            List<Integer> t = new ArrayList<>();
+            t.add(eg.u);
+            t.add(eg.v);
+            res.add(t);
+        }
+    }
+    return res;
+}
+#+END_SRC
+
+** 891. Sum of Subsequence Widths - Hard 考sorting和对subsequence的理解
+The width of a sequence is the difference between the maximum and minimum elements in the sequence.
+
+Given an array of integers nums, return the sum of the widths of all the non-empty subsequences of nums. Since the answer may be very large, return it modulo 109 + 7.
+
+A subsequence is a sequence that can be derived from an array by deleting some or no elements without changing the order of the remaining elements. For example, [3,6,2,7] is a subsequence of the array [0,3,1,6,2,2,7].
+**** 解题思路与分析
+- 这道题的最优解法相当的 tricky，基本有点脑筋急转弯的感觉了。在解题之前，我们首先要知道的是一个长度为n的数组，共有多少个子序列，如果算上空集的话，共有 2^n 个。
+
+那么在给数组排序之后，对于其中任意一个数字 A[i]，其前面共有i个数是小于等于 A[i] 的，这i个数字共有 2^i 个子序列，它们加上 A[i] 都可以组成一个新的非空子序列，并且 A[i] 是这里面最大的数字，那么在宽度计算的时候，就要加上 A[i] x (2^i)，
+
+同理，A[i] 后面还有 n-1-i 个数字是大于等于它的，后面可以形成 2^(n-1-i) 个子序列，每个加上 A[i] 就都是一个新的非空子序列，同时 A[i] 是这些子序列中最小的一个，那么结果中就要减去 A[i] x (2 ^ (n-1-i))。对于每个数字都这么计算一下，就是最终要求的所有子序列的宽度之和了。
+
+可能你会怀疑虽然加上了 A[i] 前面 2^i 个子序列的最大值，那些子序列的最小值减去了么？其实是减去了的，虽然不是在遍历 A[i] 的时候减去，在遍历之前的数字时已经将所有该数字是子序列最小值的情况减去了，同理，A[i] 后面的那些 2^(n-1-i) 个子序列的最大值也是在遍历到的时候才加上的，所以不会漏掉任何一个数字。
+
+在写代码的时候有几点需要注意的地方，首先，结果 res 要定义为 long 型，因为虽然每次会对 1e9+7 取余，但是不能保证不会在取余之前就已经整型溢出，所以要定义为长整型。
+
+其次，不能直接算 2^i 和 2^(n-1-i)，很容易溢出，即便是长整型，也有可能溢出。那么解决方案就是，在累加i的同时，每次都乘以个2，那么遍历到i的时候，也就乘到 2^i 了，防止溢出的诀窍就是每次乘以2之后就立马对 1e9+7 取余，这样就避免了指数溢出，同时又不影响结果。
+
+最后，由于这种机制下的 2^i 和 2^(n-1-i) 不方便同时计算，这里又用了一个 trick，就是将 A[i] x (2^(n-1-i)) 转换为了 A[n-1-i] x 2^i，其实二者最终的累加和是相等的：
+#+BEGIN_SRC csharp
+sum(A[i] * 2^(n-1-i)) = A[0]*2^(n-1) + A[1]*2^(n-2) + A[2]*2^(n-3) + ... + A[n-1]*2^0
+sum(A[n-1 - i] * 2^i) = A[n-1]*2^0 + A[n-2]*2^1 + ... + A[1]*2^(n-2) + A[0]*2^(n-1)
+#+END_SRC
+
+#+BEGIN_SRC csharp
+public int sumSubseqWidths(int[] a) {
+    long mod = (int)1e9 + 7, c = 1;
+    long ans = 0;
+    Arrays.sort(a);
+    for (int i = 0; i < a.length; i++) {
+        ans = (ans + (long)a[i] * c  - a[a.length-1-i] * c) % mod;
+        c = (c << 1) % mod;
+    }
+    return (int)ans;
+}
+#+END_SRC
+** 335. Self Crossing
+Hard
+
+225
+
+433
+
+Add to List
+
+Share
+You are given an array of integers distance.
+
+You start at point (0,0) on an X-Y plane and you move distance[0] meters to the north, then distance[1] meters to the west, distance[2] meters to the south, distance[3] meters to the east, and so on. In other words, after each move, your direction changes counter-clockwise.
+
+Return true if your path crosses itself, and false if it does not.
+**** 解题思路与分析
+- 参考的网上大神们的解法，实际上相交的情况只有以下三种情况：
+#+BEGIN_SRC csharp
+     x(1)
+    ┌───┐
+x(2)│   │x(0)
+    └───┼──>
+    x(3)│
+#+END_SRC
+第一类是第四条边和第一条边相交的情况，需要满足的条件是第一条边大于等于第三条边，第四条边大于等于第二条边。同样适用于第五条边和第二条边相交，第六条边和第三条边相交等等，依次向后类推的情况...
+
+#+BEGIN_SRC csharp
+      x(1)
+    ┌──────┐
+    │      │x(0)
+x(2)│      ^
+    │      │x(4)
+    └──────│
+      x(3)
+#+END_SRC
+第二类是第五条边和第一条边重合相交的情况，需要满足的条件是第二条边和第四条边相等，第五条边大于等于第三条边和第一条边的差值，同样适用于第六条边和第二条边重合相交的情况等等依次向后类推...
+#+BEGIN_SRC csharp
+      x(1)
+    ┌──────┐
+    │      │x(0)
+x(2)│     <│────│
+    │       x(5)│x(4)
+    └───────────│
+        x(3)
+#+END_SRC
+
+第三类是第六条边和第一条边相交的情况，需要满足的条件是第四条边大于等于第二条边，第三条边大于等于第五条边，第五条边大于等于第三条边和第一条边的差值，第六条边大于等于第四条边和第二条边的差值，同样适用于第七条边和第二条边相交的情况等等依次向后类推...
+
+#+BEGIN_SRC csharp
+public boolean isSelfCrossing(int [] d) {
+    int n = d.length;
+    if (n < 4) return false;
+    for (int i = 3; i < n; i++) { // 4 >= 2 && 1 >= 3
+        // if (i % 3 == 0 && d[i] >= d[i-2] && d[i-3] >= d[i-1]) return true; 
+        // else if (i % 4 == 0 && d[i-1] == d[i-3] && d[i] >= d[i-2] - d[i-4]) return true; // 2 == 4 && 5 >= 3-1
+        // else if (i % 5 == 0 && d[i-2] >= d[i-4] && d[i-3] >= d[i-1] && d[i-1] >= d[i-3] - d[i-5] && d[i] >= d[i-2] - d[i-4])
+            if (d[i] >= d[i-2] && d[i-3] >= d[i-1]) return true; 
+            else if (i >= 4 && d[i-1] == d[i-3] && d[i] >= d[i-2] - d[i-4]) return true; // 2 == 4 && 5 >= 3-1
+            else if (i >= 5 && d[i-2] >= d[i-4] && d[i-3] >= d[i-1] && d[i-1] >= d[i-3] - d[i-5] && d[i] >= d[i-2] - d[i-4])
+            return true;
+        // else if (i % 6 == 0 && d[i-4] + d[i] >= d[i-2] && d[i-1] <= d[i-3] && d[i-5] + d[i-1] >= d[i-3]) return true; // 这个条件不对
+    }
+    return false;
+}
+#+END_SRC
+** 391. Perfect Rectangle - Hard
+Given an array rectangles where rectangles[i] = [xi, yi, ai, bi] represents an axis-aligned rectangle. The bottom-left point of the rectangle is (xi, yi) and the top-right point of it is (ai, bi).
+
+Return true if all the rectangles together form an exact cover of a rectangular region.
+**** 解题思路与分析: 数顶点个数：掩码O(N)
+    
+    [[./pic/rect.png]]
+    
+#+BEGIN_SRC csharp
+public boolean isRectangleCover(int[][] arr) {
+    Map<String, Integer> m = new HashMap<>();
+    for (int [] a : arr) 
+        for (int i = 0; i < 4; i++) { // [0 1 2 3]四种类型的顶点，第个位置每个类型最多出现一次
+            String cur = a[i / 2 * 2] + "-" + a[i % 2 * 2 + 1];        // 记录从左下角开始逆时针的四个顶点 [0 1 2 3]: 左下，右下，右上，左上
+            if ((m.getOrDefault(cur, 0) & (1 << i)) > 0) return false; // 同一形状、同一个角型出现了重叠
+            m.put(cur, m.getOrDefault(cur, 0) | (1 << i));
+        }
+    int cnt = 0;
+    for (Map.Entry<String, Integer> en : m.entrySet()) {
+        int v = en.getValue();
+        if ((v & (v-1)) == 0 && cnt++ > 4) return false; // 只出现一次的顶点最多只有四个
+        // if ((v & (v-1)) > 0 && !(v == 15 || v == 10 || v == 12 || v == 5 || v == 3)) // 是test case太弱吗？检测不出来？
+        if ((v & (v-1)) > 0 && !(v == 15 || v == 12 || v == 10 || v == 9 || v == 5 || v == 3)) // 所有合法的子集除外
+            return false;
+    }
+    return true; // 所有的点都合法了，就不用检测面积了
+}
+#+END_SRC
+**** 解题思路与分析
+    
+    [[./pic/rect2.png]]
+#+BEGIN_SRC csharp
+public boolean isRectangleCover(int[][] arr) {
+    Set<String> s = new HashSet<>();
+    int i = Integer.MAX_VALUE, j = Integer.MAX_VALUE, x = Integer.MIN_VALUE, y = Integer.MIN_VALUE, sum = 0;
+    for (int [] a : arr) {
+        i = Math.min(i, a[0]);
+        j = Math.min(j, a[1]);
+        x = Math.max(x, a[2]);
+        y = Math.max(y, a[3]);
+        sum += (a[2] - a[0]) * (a[3] - a[1]);
+        String bl = a[0] + "-" + a[1], tl = a[2] + "-" + a[1];
+        String br = a[0] + "-" + a[3], tr = a[2] + "-" + a[3];
+        if (!s.contains(bl)) s.add(bl); else s.remove(bl);
+        if (!s.contains(br)) s.add(br); else s.remove(br);
+        if (!s.contains(tl)) s.add(tl); else s.remove(tl);
+        if (!s.contains(tr)) s.add(tr); else s.remove(tr);
+    }
+    String a = i + "-" + j, b = i + "-" + y;
+    String c = x + "-" + j, d = x + "-" + y;
+    if (!s.contains(a) || !s.contains(b) || !s.contains(c) || !s.contains(d) || s.size() != 4)
+        return false;
+    return sum == (x - i) * (y - j);
+}
+#+END_SRC    
+**** 解题思路与分析: 这个就当帮上面第一个方法再理解消化一下c++
+    
+    [[./pic/rect3.png]]
+#+BEGIN_SRC cpp
+bool isRectangleCover(vector<vector<int>>& rectangles) {
+    unordered_map<string, int> m;
+    int min_x = INT_MAX, min_y = INT_MAX, max_x = INT_MIN, max_y = INT_MIN, area = 0, cnt = 0;
+    for (auto rect : rectangles) {
+        min_x = min(min_x, rect[0]);
+        min_y = min(min_y, rect[1]);
+        max_x = max(max_x, rect[2]);
+        max_y = max(max_y, rect[3]);
+        area += (rect[2] - rect[0]) * (rect[3] - rect[1]);
+        if (!isValid(m, to_string(rect[0]) + "_" + to_string(rect[1]), 1)) return false; // bottom-left
+        if (!isValid(m, to_string(rect[0]) + "_" + to_string(rect[3]), 2)) return false; // top-left
+        if (!isValid(m, to_string(rect[2]) + "_" + to_string(rect[3]), 4)) return false; // top-right
+        if (!isValid(m, to_string(rect[2]) + "_" + to_string(rect[1]), 8)) return false; // bottom-right
+    }
+    for (auto it = m.begin(); it != m.end(); ++it) {
+        int t = it->second;
+        if (t != 15 && t != 12 && t != 10 && t != 9 && t != 6 && t != 5 && t!= 3) {
+            ++cnt;
+        }
+    }
+    return cnt == 4 && area == (max_x - min_x) * (max_y - min_y);
+}
+bool isValid(unordered_map<string, int>& m, string corner, int type) {
+    int& val = m[corner];
+    if (val & type) return false;
+    val |= type;
+    return true;
+}
+#+END_SRC
+
+
