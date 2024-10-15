@@ -5,16 +5,16 @@ import java.util.LinkedList;
 
 public class TreeNode {
     public int val;
-    public TreeNode l;
-    public TreeNode r;
-    public TreeNode p;
+    public TreeNode left;
+    public TreeNode right;
+    public TreeNode parent;
     public TreeNode(int x) {
         val = x;
     }
-    public TreeNode(int val, TreeNode l, TreeNode r) {
+    public TreeNode(int val, TreeNode left, TreeNode right) {
         this.val = val;
-        this.l = l;
-        this.r = r;
+        this.left = left;
+        this.right = right;
     }
     public TreeNode pp, qq;
         
@@ -28,25 +28,25 @@ public class TreeNode {
             curr = queue.poll();
             if (idx % 2 == 1) { 
                 if (a[idx] != -1) {
-                    curr.l = new TreeNode(a[idx]); 
-                    queue.add(curr.l);
-                } else curr.l = null;
+                    curr.left = new TreeNode(a[idx]); 
+                    queue.add(curr.left);
+                } else curr.left = null;
                 /*
                   } else {  //
-                  curr.l = new TreeNode(-1);
-                  queue.add(curr.l);
+                  curr.left = new TreeNode(-1);
+                  queue.add(curr.left);
                   } */  //
                 idx++;
             }
-            if (idx < a.length && idx % 2 == 0) {  // r
+            if (idx < a.length && idx % 2 == 0) {  // right
                 if (a[idx] != -1) {
-                    curr.r = new TreeNode(a[idx]); 
-                    queue.add(curr.r);
-                } else curr.r = null;
+                    curr.right = new TreeNode(a[idx]); 
+                    queue.add(curr.right);
+                } else curr.right = null;
                 /*
                   } else {  //
-                  curr.r = new TreeNode(-1);
-                  queue.add(curr.r);
+                  curr.right = new TreeNode(-1);
+                  queue.add(curr.right);
                   } */ //
                 idx++;
             }
@@ -62,39 +62,39 @@ public class TreeNode {
         while (!queue.isEmpty() && idx < a.length) {
             curr = queue.poll();
             //while (curr.val == -1) curr = queue.poll();    //
-            if (idx % 2 == 1) { // l
+            if (idx % 2 == 1) { // left
                 if (a[idx] != -1) {
-                    curr.l = new TreeNode(a[idx]); 
-                    queue.add(curr.l);
+                    curr.left = new TreeNode(a[idx]); 
+                    queue.add(curr.left);
                     if (a[idx] == x) {
-                        pp = curr.l;
+                        pp = curr.left;
                     }
                     // } else if (a[idx] == y) {
-                    //     qq = curr.l;
+                    //     qq = curr.left;
                     // }
-                } else curr.l = null;
+                } else curr.left = null;
                 /*
                 } else {  //
-                    curr.l = new TreeNode(-1);
-                    queue.add(curr.l);
+                    curr.left = new TreeNode(-1);
+                    queue.add(curr.left);
                     } */  //
                 idx++;
             }
-            if (idx < a.length && idx % 2 == 0) {  // r
+            if (idx < a.length && idx % 2 == 0) {  // right
                 if (a[idx] != -1) {
-                    curr.r = new TreeNode(a[idx]); 
-                    queue.add(curr.r);
+                    curr.right = new TreeNode(a[idx]); 
+                    queue.add(curr.right);
                     if (a[idx] == x) {
-                        pp = curr.r;
+                        pp = curr.right;
                     }
                     // } else if (a[idx] == y) {
-                    //     qq = curr.r;
+                    //     qq = curr.right;
                     // }
-                } else curr.r = null;
+                } else curr.right = null;
                 /*
                 } else {  //
-                    curr.r = new TreeNode(-1);
-                    queue.add(curr.r);
+                    curr.right = new TreeNode(-1);
+                    queue.add(curr.right);
                     } */ //
                 idx++;
             }
@@ -112,37 +112,37 @@ public class TreeNode {
         while (!queue.isEmpty() && idx < a.length) {
             curr = queue.poll();
             //while (curr.val == -1) curr = queue.poll();    //
-            if (idx % 2 == 1) { // l
+            if (idx % 2 == 1) { // left
                 if (a[idx] != -1) {
-                    curr.l = new TreeNode(a[idx]); 
-                    queue.add(curr.l);
+                    curr.left = new TreeNode(a[idx]); 
+                    queue.add(curr.left);
                     if (a[idx] == x) {
-                        pp = curr.l;
+                        pp = curr.left;
                     } else if (a[idx] == y) {
-                        qq = curr.l;
+                        qq = curr.left;
                     }
-                } else curr.l = null;
+                } else curr.left = null;
                 /*
                   } else {  //
-                  curr.l = new TreeNode(-1);
-                  queue.add(curr.l);
+                  curr.left = new TreeNode(-1);
+                  queue.add(curr.left);
                   } */  //
                 idx++;
             }
-            if (idx < a.length && idx % 2 == 0) {  // r
+            if (idx < a.length && idx % 2 == 0) {  // right
                 if (a[idx] != -1) {
-                    curr.r = new TreeNode(a[idx]); 
-                    queue.add(curr.r);
+                    curr.right = new TreeNode(a[idx]); 
+                    queue.add(curr.right);
                     if (a[idx] == x) {
-                        pp = curr.r;
+                        pp = curr.right;
                     } else if (a[idx] == y) {
-                        qq = curr.r;
+                        qq = curr.right;
                     }
-                } else curr.r = null;
+                } else curr.right = null;
                 /*
                   } else {  //
-                  curr.r = new TreeNode(-1);
-                  queue.add(curr.r);
+                  curr.right = new TreeNode(-1);
+                  queue.add(curr.right);
                   } */ //
                 idx++;
             }
@@ -159,32 +159,32 @@ public class TreeNode {
         else
             System.out.print("#, ");
 
-        if (curr.l != null)
-            preOrderPrintTree(curr.l);
-        if (curr.r != null)
-            preOrderPrintTree(curr.r);
+        if (curr.left != null)
+            preOrderPrintTree(curr.left);
+        if (curr.right != null)
+            preOrderPrintTree(curr.right);
     }
 
     public void inOrderPrintTree(TreeNode root) {
         if (root == null) return;
         TreeNode curr = root;
-        if (curr.l != null)
-            inOrderPrintTree(curr.l);
+        if (curr.left != null)
+            inOrderPrintTree(curr.left);
         if (curr.val != -1)
             System.out.print(curr.val + ", ");
         else
             System.out.print("#, ");
-        if (curr.r != null)
-            inOrderPrintTree(curr.r);
+        if (curr.right != null)
+            inOrderPrintTree(curr.right);
     }
     
     public void postOrderPrintTree(TreeNode root) {
         if (root == null) return;
         TreeNode curr = root;
-        if (curr.l != null)
-            postOrderPrintTree(curr.l);
-        if (curr.r != null)
-            postOrderPrintTree(curr.r);
+        if (curr.left != null)
+            postOrderPrintTree(curr.left);
+        if (curr.right != null)
+            postOrderPrintTree(curr.right);
         if (curr.val != -1)
             System.out.print(curr.val + ", ");
         else
@@ -210,15 +210,15 @@ public class TreeNode {
                 //     System.out.print(curr.val + ", ");
                 // else
                 // System.out.print("#, ");
-                if (curr.l != null) {
-                    queue.add(curr.l);
-                    System.out.print(curr.l.val + ", ");
+                if (curr.left != null) {
+                    queue.add(curr.left);
+                    System.out.print(curr.left.val + ", ");
                     ++tmpcnt;
                 } else
                     System.out.print("#.");
-                if (curr.r != null) {
-                    queue.add(curr.r);
-                    System.out.print(curr.r.val + ", ");
+                if (curr.right != null) {
+                    queue.add(curr.right);
+                    System.out.print(curr.right.val + ", ");
                     ++tmpcnt;
                 } else
                     System.out.print("#| ");
