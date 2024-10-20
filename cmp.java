@@ -8,10 +8,8 @@ import java.util.stream.*;
 import java.util.stream.Collectors;
 import java.util.HashSet;
 import java.util.Set;
-
 import java.math.BigInteger;
 import static java.util.stream.Collectors.toMap;
-
 public class cmp {
     public static class Solution {
         
@@ -715,19 +713,228 @@ public class cmp {
         //     return (int)ans;
         // }
 
-        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+    //     // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+    //     public List<String> stringSequence(String S) {
+    //         List<String> f = new ArrayList<>();
+    //         int n = S.length(); char [] s = S.toCharArray();
+    //         for (int i = 0; i < n; i++) {
+    //             System.out.println("\n i: " + i);
+    // char  c = s[i];
+    //             if (i == 0) {
+    //                 f.add("a");
+    //                 if (c == 'a') continue;
+    //                 StringBuilder si = new StringBuilder(f.get(f.size()-1));
+    //                 for (int j = 1; j < 26; j++) {
+    //                     if ('a' + j <= s[i]) {
+    //                         si.deleteCharAt(si.length()-1);
+    //                         si.append((char)('a'+j));
+    //                         f.add(new String(si));
+    // } else break;
+    //                 }
+    //                 continue;
+    //             }
+    //             StringBuilder si = new StringBuilder(f.get(f.size()-1));
+    //             for (int j = 0; j < 26; j++) {
+    //                 if ((char)('a' + j) <= c) {
+    //                     si.append((char)('a'+j));
+    //                     f.add(new String(si));
+    //                     si.deleteCharAt(si.length()-1);
+    //                 } else break;
+    //             }
+    //         }
+    //         return f;
+    //     }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 以【左端点】为固定点，数右边合法个数.
+        // // 所以，亲爱的表哥的活宝妹，只要稍微动动脑袋，亲爱的表哥的活宝妹，自己，还是可以独立想出来的，虽然它狠简单。。
+        // public int numberOfSubstrings(String S, int va) {
+        //     int n = S.length(), f = 0, max = 1; char [] s = S.toCharArray();
+        //     if (va == 1) return n * (n + 1) / 2;
+        //     TreeMap<Integer, Integer> m = new TreeMap<>();
+        //     int i = 0, j = 0;
+        //     while (i < n) {
+        //         while (j < n && max < va) {
+        //             int k = s[j]-'a';
+        //             m.put(k, m.getOrDefault(k, 0) + 1);
+        //             max = Math.max(max, m.get(k));
+        //             j++;
+        //         }
+        //         if (max == va) f += n - j + 1;
+        //         int k = s[i] - 'a';
+        //         m.put(k, m.getOrDefault(k, 1)-1);
+        //         if (m.get(k) == 0) m.remove(k);
+        //         max = m.isEmpty() ? 0 : Collections.max(m.values());
+        //         i++;
+        //     }
+        //     return f;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 【动规】：一定是这个思路，但亲爱的表哥的活宝妹，N[100000]a[i]=100000 数据规模大，不一定写得对
+        // public int minOperations(int[] a) {
+        //     int n = a.length;
+        //     int [][] f = new int [n][2];// 0 不操作 1 操作
+        //     Arrays.stream(f).forEach(z -> Arrays.fill(z, n+1));
+        //     f[0][0] = 0;
+        //     f[0][1] = 
+        // }
+        // int getVal(int x) {
+        //     int f = 1;
+        //     for (int i = 1; i <= (int)Math.sqrt(x); i++) 
+        //         if (x % i == 0)
+        //             f = Math.max(f, Math.max(i, x / i));
+        //     return f;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 亲爱的表哥的活宝妹，觉得：这个题目，看起来像是狠简单，数量级大：【TLE 超时】或是【暴内存】
+        // // 【暴内存】了。。580/582 passed 亲爱的表哥的活宝妹，昨天晚上、第一次写到一个会【暴内存】的破烂题目。。。
+        // // 亲爱的表哥的活宝妹，写过1 个【DFS 时间戳】但几年前写的、彻底忘记了、昨天晚上、居然又出一个【DFS时间戳】，亲爱的表哥的活宝妹还没能来得及复习到那个题型。。。
+        // public boolean[] findAnswer(int[] a, String S) {
+        //     int n = a.length; s = S.toCharArray();
+        //     g = new ArrayList[n];
+        //     for (int i = 0; i < n; i++)
+        //         g[i] = new ArrayList<Integer>();
+        //     // 【建图】：有向图
+        //     for (int i = 1; i < n; i++) // i 是升序遍历
+        //         g[a[i]].add(i); // 所以， g[a[i]] 链条里的值，也是【必然】升序
+        //     // // 【排序】：不必要！！亲爱的表哥的活宝妹，这里昨天晚上脑袋昏，既放错位置，还是完全不必要的步骤。。。
+        //     // for (List<Integer> l : g)
+        //     //     Collections.sort(l); // 升序排列
+        //     f = new String [n];
+        //     vis = new boolean [n];
+        //     // sb = new StringBuilder(n);
+        //     dfs(0); // O(N) 后序遍历
+        //     // 求解：O(NN)
+        //     // 换一种：【树的遍历】方法：父节点；右节点、左节点。可是提升的是【时间复杂度】不是【空间复杂度】
+        //     int j = 0;
+        //     for (int i = 0; i < n; i++) {
+        //         if (vis[i]) continue;
+        //         int m = f[i].length();
+        //         for ( j = 0; j < m/2; j++) 
+        //             if (f[i].charAt(j) != f[i].charAt(m-1-j)) {
+        //                 vis[i] = false;
+        //                 break;
+        //             }
+        //         if (j == m/2) vis[i] = true;
+        //     }
+        //     dfsdsf(0);
+        //     return vis;
+        // }
+        // List<Integer> [] g;
+        // String [] f; char [] s;
+        // boolean [] vis;
+        // void dfs(int u) {
+        //     if (g[u].size() == 0) {
+        //         f[u] = new String("" + s[u]);
+        //         vis[u] = true;
+        //         return ;
+        //     }
+        //     StringBuilder sb = new StringBuilder();
+        //     int m = g[u].size();
+        //     for (int i = 0; i < m; i++) {
+        //         int v = g[u].get(i);
+        //         if (vis[u] && i == 0 && s[v] != s[u]) 
+        //             vis[u] = false;
+        //         dfs(v);
+        //         // if (m > 1 && (i > 0 && sb.charAt(i) != s[m-1-i])
+        //         sb.append(f[v]);
+        //     }
+        //     sb.append(s[u]);
+        //     f[u] = new String(sb);
+        // }
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public boolean[] findAnswer(int[] a, String S) {
+        //     int n = a.length; s = S.toCharArray(); r = new char [n];
+        //     g = new ArrayList[n];
+        //     for (int i = 0; i < n; i++)
+        //         g[i] = new ArrayList<Integer>();
+        //     // 【建图】：有向图
+        //     for (int i = 1; i < n; i++) // i 是升序遍历
+        //         g[a[i]].add(i); // 所以， g[a[i]] 链条里的值，也是【必然】升序
+        //     f = new int [n][2]; // 【DFS时间戳】：亲爱的表哥的活宝妹，先前抄答案，彻底忘记的，这次要记住了！！！
+        //     // 【DFS时间戳、遍历】
+        //     t = 0;
+        //     dfs(0);
+        //     // 【马拉车算法】：O(n) 时间、求答案
+        //     // Manacher 模板
+        //     // 将 dfsStr 改造为 t，这样就不需要讨论 n 的奇偶性，因为新串 t 的每个回文子串都是奇回文串（都有回文中心）
+        //     // dfsStr 和 t 的下标转换关系：
+        //     // (dfsStr_i + 1) * 2 = ti
+        //     // ti / 2 - 1 = dfsStr_i
+        //     // ti 为偶数，对应奇回文串（从 2 开始）
+        //     // ti 为奇数，对应偶回文串（从 3 开始）
+        //     char [] rr = new char [n * 2 + 3]; // [0,2n+2] 下标有效
+        //     Arrays.fill(rr, '#');
+        //     rr[0] = '^';         // 开始标记
+        //     for (int i = 0; i < n; i++) 
+        //         rr[2 * (i + 1)] = r[i];
+        //     rr[2 * n + 2] = '$'; // 结束标记
+        //     // 定义一个【奇回文串】的【回文半径】 = (长度 + 1)/2，即【保留回文中心，去掉一侧后的剩余字符串的长度】
+        //     // halfLen[i] 表示在 t 上的以 t[i] 为回文中心的最长回文子串的回文半径
+        //     // 即 [i-halfLen[i]+1,i+halfLen[i]-1] 是 t 上的一个回文子串
+        //     int[] halfLen = new int[rr.length - 2]; // 取值范围：【0,2n】2n+1 的长度
+        //     halfLen[1] = 1;
+        //     int boxM = 0; // boxM 为该【回文子串的中心位置】，二者的关系为 boxR = boxM + halfLen[boxM]
+        //     int boxR = 0; // boxR 表示当前【右边界下标最大】的回文子串的【右边界下标+1】
+        //     for (int i = 2; i < halfLen.length; i++) { // 循环的起止位置对应着原串的首尾字符
+        //         int hl = 1; // 【初始化】：当前【回文中心 i】的半径长度
+        //         if (i < boxR) {
+        //             // 记 i 关于 boxM 的对称位置 i' = boxM * 2 - i,为【M-(i-m)=2M-i, M, i】换个大小方向，结果一样【i(M-i), M, M+(M-i)=2M-i】
+        //             // 若以 i' 为中心的最长回文子串范围，超出了以 boxM 为中心的回文串的范围（即 i+halfLen[i'] >= boxR）【超出的部分，未必匹配，要取小值保守值】
+        //             // 则 halfLen[i] 应先初始化为，【较小的】已知的回文半径 boxR-i，然后再继续暴力匹配
+        //             // 否则 halfLen[i] 与 halfLen[i'] 相等
+        //             hl = Math.min(halfLen[2 * boxM - i], boxR - i); // 取【保守最小值、最大合法值】
+        //         }
+        //         // 暴力扩展
+        //         // 算法的复杂度，取决于这部分，执行的次数
+        //         // 由于扩展之后 boxR 必然会更新（右移），且扩展的的次数就是 boxR 右移的次数
+        //         // 因此算法的复杂度 = O(len(t)) = O(n)
+        //         while (rr[i - hl] == rr[i + hl]) {
+        //             hl++;
+        //             boxM = i;
+        //             boxR = i + hl;
+        //         }
+        //         halfLen[i] = hl;
+        //     }
+        //     // rr 中回文子串的长度为 hl*2-1
+        //     // 由于其中 # 的数量总是比字母的数量多 1
+        //     // 因此其在 dfsStr 中对应的回文子串的长度为 hl-1
+        //     // 这一结论可用在下面的判断回文串中
+        //     boolean[] ans = new boolean[n];
+        //     for (int i = 0; i < n; i++) {
+        //         // 判断左闭右开区间 [l,r) 是否为回文串  0 <= l < r <= n
+        //         // 根据下标转换关系得到 dfsStr 的 [l,r) 子串，在 rr 中对应的回文中心下标为 l+r+1 = [l+(r-l)/2+1]*2=2l+r-l+2=l+r+2?? 这个地方算不对。。
+        //         // 需要满足 halfLen[l + r + 1] - 1 >= r - l，即 halfLen[l + r + 1] > r - l
+        //         int l = f[i][0];
+        //         int r = f[i][1];
+        //         ans[i] = halfLen[l + r + 1] > r - l;
+        //     }
+        //     return ans;
+        // }
+        // List<Integer> [] g;
+        // char [] s, r; // r: dfsStr
+        // int [][] f;
+        // int t; // 【DFS时间戳】全局时钟 time=clock=t
+        // void dfs(int u) {
+        //     f[u][0] = t; // in[u]: 第一次、访问到、父节点 u 的时间戳
+        //     for (int v : g[u]) 
+        //         dfs(v);
+        //     // 亲爱的表哥的活宝妹，觉得，下面怎么写，效果是一样的【会跳过 0 节点，下标超长度。。】。。。测试一下
+        //     // f[u][1] = ++t; // out[u]: 第二次、访问到、父节点 u 的时间戳
+        //     // r[t] = s[u];
+        //     r[t++] = s[u];
+        //     f[u][1] = t; // out[u]: 第二次、访问到、父节点 u 的时间戳
+        // }
     }
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
     public static void main (String[] args) { 
 		Solution s = new Solution ();
 
-        String a = "bcda";
-        String b = "d";
-        int []   c = new int []   {0, 3};
-        System.out.println("a: " + a + " " + "b: " + b);
-        System.out.println(Arrays.toString(c));
+        String a = "abcde";
 
-        int r = s.maxRemovals(a, b, c);
+        int r = s.numberOfSubstrings(a, 1);
         System.out.println("r: " + r);
     }
 }
@@ -737,6 +944,29 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
