@@ -1181,12 +1181,200 @@ public class cmp {
         //     }
         //     return j;
         // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 【0/1 背包】：
+        // int aa(int [] a, int [] v, int w) {
+        //     int n = 1027;
+        //     int [] f = new int [w+1];
+        //     for (int j = 0; j < n; j++) {
+        //         // 【重点】：【倒序遍历】
+        //         for (int i = w; i >= a[j]; i--) 
+        //             f[i] = Math.max(f[i], f[i-a[j]] + v[j]);
+        //     }
+        //     return f[w];
+        // }
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 【完全背包】：同一件物品、硬币，可以【重复使用多次】，是为【完全】背包
+        // int aa(int [] a, int [] v, int w) { // a[i]: weight v[i]: value
+        //     int n = 1027;
+        //     int [] f = new int [w+1];
+        //     for (int j = 0; j < n; j++) {
+        //         // for (int i = w; i >= a[i]; i--) // 【0/1 背包】的【倒序遍历】
+        //         // 【重点】：【正序、遍历】！！
+        //         for (int i = a[j]; i <= w; i++)
+        //             // if (f[i - a[j]] + v[j] > f[i])
+        //             //     f[i] = f[i - a[j]] + v[j];
+        //             f[i] = Math.max(f[i], f[i-a[j]] + v[j]);
+        //     }
+        //     return f[w];
+        // }
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 【多重背包】：同一件物品、硬币，可以【重复使用、特定最大限度的次数】，是为【多重】背包
+        // int aa(int [] a, int [] v, int [] r, int w) { // a[i]: weight v[i]: value r[i]: cnts of each items
+        //     int n = 1027;
+        //     int [] f = new int [w+1];
+        //     for (int j = 0; j < n; j++) // 【多重背包】：如同【0/1 背包】，需要【倒序遍历】来【避免重复、累加错误效应】。。 
+        //         // for (int i = a[j]; i <= w; i++) // 遍历：重量
+        //         for (int i = w; i >= a[j]; i--) 
+        //             for (int k = 1; k * a[j] <= i && k <= r[j]; k++) 
+        //                 f[i] = Math.max(f[i], f[i - k * a[j]] + v[j] * k);
+        //     }
+        //     return f[w];
+        // }
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 【混合背包】：混合背包就是将前面三种的背包问题混合起来，有的只能取一次，有的能取无限次，有的只能取 k 次。
+        // int aa(int [] a, int [] v, int [] r, int w) { // a[i]: weight v[i]: value r[i]: cnts of each items
+        //     int n = 1027;
+        //     int [] f = new int [w+1];
+        //     for (int j = 0; j < n; j++) // 【多重背包】：如同【0/1 背包】，需要【倒序遍历】来【避免重复、累加错误效应】。。
+        //         if (r[i] == 0) { // 如果【数量没有限制】使用【完全背包】的核心代码
+        //             for (int i = a[j]; i <= w; i++) // 重复累回效应，方便快速运算 
+        //                 f[i] = Math.max(f[i], f[i - a[j]] + v[j]);
+        //         } else { // 【0/1 背包】或是【多重背包】
+        //             for (int i = w; i >= a[j]; i--) 
+        //                 for (int k = 1; k * a[j] <= i && k <= r[j]; k++) // 没有【优化】：几种优化方法，【TODO：】改天去看懂 
+        //                     f[i] = Math.max(f[i], f[i - k * a[j]] + v[j] * k);
+        //         }
+        //     }
+        //     return f[w];
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 狗屁、破烂、机器絮叨不清的、狗屁破烂【国王问题】
+        // int idx;
+        // int [] sit, sta;
+        // int [][][] f;
+        // int getCnts(int n, int kk) { // 可能还存在 int 转为 long 的破烂问题、破烂题解。。。
+        //     idx = 0;
+        //     sit = new int [1327]; sta = new int [1327];
+        //     dfs(0, 0, 0);
+        //     f = new int [n][1327][kk+1];
+        //     // 【初始化】；第1 行的【初始化】，写丢了。。。
+        //     for (int j = 1; j <= idx; j++) // 有效座位：方案数为 1
+        //         f[0][j][sta[j]] = 1;
+        //     // 遍历【行】：【1,n-1】
+        //     for (int i = 1; i < n; i++)
+        //         // 遍历：当前第 i 行、当前坐位值为 j 时
+        //         // for (int j = 1; j < (1 << n); j++)
+        //         for (int j = 1; j <= idx; j++)
+        //             // 遍历：前一行 i-1 行，的坐位值为 k 时，方案数
+        //             // for (int x = 1; x < (1 << n); x++) {
+        //             for (int x = 1; x <= idx; x++) {
+        //                 if (!validSitting(sit[j], sit[x])) continue; // 非合法座位
+        //                 for (int k = 1; k <= kk; k++) 
+        //                     f[i][j][k] += f[i-1][x][k - sta[j]];
+        //             }
+        //     int r = 0;
+        //     for (int i = 1; i <= cnt; i++) 
+        //         r += f[n-1][i][kk];
+        //     return r;
+        // }
+        // boolean validSitting(int i, int j) { // 根那个考场学生坐位置一样：上下左右再加四个斜方向
+        //     if (i & j) return false;
+        //     // if ((i >> 1) & j) return false; // 这个方向，移得不精确，可能会出【BUG：】：只能左移，不能右移，右移会屏闭掉一个位 bit
+        //     if ((i << 1) & j) return false;
+        //     if (i & (j << 1)) return false;
+        // }
+        // void dfs(int i, int j, int k) { // i: 坐了几个国王； j:mask 位值 k: 是【列的、自左向右】遍历下标 idx
+        //     if (k >= n) { // 某个合法状态、终止条件
+        //         sit[++idx] = j;
+        //         sta[idx] = i;
+        //         return ;
+        //     }
+        //     dfs(i, j, k+1);              // 当前列 k 上，不坐国王；下一列就可以试坐一个国王
+        //     dfs(i+1, j | (1 << i), k+2); // 当前列 k 上，坐国王；下一列就【不能再坐】要 k+2 列才能再试坐一个国王
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public boolean isBalanced(String S) {
+        //     int n = S.length(), f = 0;  char [] s = S.toCharArray();
+        //     for (int i = 1; i < n; i += 2) 
+        //         f += s[i] - s[i-1];
+        //     if (n % 2 == 1) f -= s[n-1] - '0';
+        //     return f == 0;
+        // }
+
+        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // 转化成图：求最小代价、最短距离
+        public int minTimeToReach(int[][] a) { // 741/743 passed 358/717 passed
+            int n = a.length, m = a[0].length, t = 1;
+            int [][] f = new int [n][m];
+            // 【01 BFS】有优先级: 是怎么写的？亲爱的表哥的活宝妹，为什么会忘记？
+            int [][] dirs = {{1, 0}, {0, 1}, {0, -1}, {-1, 0}};
+            boolean [][] g = new boolean [n][m];
+            Queue<int []> p = new PriorityQueue<>((x, y) -> x[0] - y[0]);
+            Queue<int []> q = new PriorityQueue<>((x, y) -> x[0] - y[0]);
+            p.offer(new int [] {0, 0, 0, -1});
+            g[0][0] = true; 
+            while (!p.isEmpty() || !q.isEmpty()) {
+                int [] cur = new int [3];
+                // int size = p.size() + q.size();
+                int size = p.size();
+                for (int step = p.size()-1; step >= 0; step--) {
+                    System.out.println("\n step: " + step);
+                    // if (!p.isEmpty())
+                        cur = p.poll();
+                    // else if (!q.isEmpty()) cur = q.poll();
+                    System.out.println(Arrays.toString(cur));
+                        int x = cur[1], y = cur[2], v = cur[0], pre = cur[3];
+                    if (x == n-1 && y == m-1)
+                        return v;
+                    for (int [] d : dirs) {
+                        int i = x + d[0], j = y + d[1];
+                        // if (i < 0 || i >= n || j < 0 || j >= m || g[i][j]) continue;
+                        if (i < 0 || i >= n || j < 0 || j >= m || g[i][j] && pre == i * m + j) continue;
+                        // 有重复访问问题
+                        if (g[i][j] && f[i][j] >= Math.max(a[i][j]+t, v+t)) continue;
+                        if (!g[i][j] && a[i][j] > v+t) {
+                        // if (a[i][j] > v+t) {
+                            f[i][j] = a[i][j] + t;
+                            q.offer(new int [] {a[i][j] + t, i, j, pre});
+                        } else if (a[i][j] == v+t) {
+                            f[i][j] = a[i][j] + t;
+                            p.offer(new int [] {a[i][j] + t, i, j, pre});
+                        } else {
+                            f[i][j] = v + t;
+                            p.offer(new int [] {v + t, i, j, pre});
+                        }
+                        pre = i * m + j;
+                        g[i][j] = true;
+                    }
+                }
+                p.addAll(q);
+                q.clear();
+                t = 3 - t;
+                System.out.println("\nf.length: " + f.length);
+                for (int z = 0; z < f.length; ++z)
+                    System.out.println(Arrays.toString(f[z]));
+            }
+            return -1;
+        } 
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int minTimeToReach(int[][] a) {
+        //     int n = a.length, m = a[0].length;
+        //     return 0;
+        // }
     }
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
     public static void main (String[] args) { 
 		Solution s = new Solution ();
 
-        int r = s.subsequencePairCount(a);
+        // int [][] a = new int [][] {{0,4},{4,4}};
+        // int [][] a = new int [][] {{0,0,0},{0,0,0}};
+        // int [][] a = new int [][] {{17,56},{97,80}};
+        // int [][] a = new int [][] {{94,79,62,27,69,84},{6,32,11,82,42,30}};
+        // int [][] a = new int [][] {{0,1},{1,2}};
+        // int [][] a = new int [][] {{1,0,89},{86,61,11}};
+        int [][] a = new int [][] {{1,62,18},{57,41,93}};
+
+        System.out.println("a.length: " + a.length);
+        for (int z = 0; z < a.length; ++z)
+            System.out.println(Arrays.toString(a[z]));
+        System.out.println("");
+
+        int r = s.minTimeToReach(a);
         System.out.println("r: " + r);
     }
 }
@@ -1196,6 +1384,17 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
