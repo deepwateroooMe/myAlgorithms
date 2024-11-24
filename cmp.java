@@ -1,5 +1,6 @@
-import com.TreeNode;            
+import com.TreeNode;
 
+// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
@@ -1638,14 +1639,285 @@ public class cmp {
         // // 感觉也是【差分数组】，可是，亲爱的表哥的活宝妹，这个题目，没有思路。。。
         // public int minDifference(int[] a) {
         //     int n = a.length;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public boolean canAliceWin(int n) {
+        //     if (n < 10) return false; // [1,9][19,26][34,39]
+        //     if (n < 19) return true;  // [10,18][27,34)[40,45)
+        //     if (n < 27) return false;
+        //     if (n < 34) return true;
+        //     if (n < 40) return false;
+        //     if (n < 45) return true;
+        //     if (n < 49) return false;
+        //     if (n < 51) return true;
+        //     return false;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 亲爱的表哥的活宝妹，读不懂这个破烂题目，说的是什么意思。。。
+        // public long shiftDistance(String S, String T, int [] a, int[] g) { // f:next g:prev
+        //     int n = S.length(); char [] s = S.toCharArray(); char [] t = T.toCharArray();
+        //     long [] f = new long [n+1];
+        //     for (int i = 0; i < n; i++) {
+        //         if (t[i] == s[i]) {
+        //             f[i+1] = f[i];
+        //             continue;
+        //         }
+        //         if (t[i] > s[i]) {
+        //             long l = (long)a[s[i]-'a'] * (t[i] - s[i]), r = (long)g[s[i]-'a'] * (26-t[i]+s[i]);
+        //             // 亲爱的表哥的活宝妹，昨天晚上、今天上午吃了【炸面片】的脑袋，在这里发酱紫。。。晚点儿再写这个破烂题目
+        //             f[i+1] = f[i] + (Long.compare(l, r) <= 0 ? l : r);
+        //         } else {
+        //             long l = (long)g[s[i]-'a'] * (s[i]-t[i]), r = (long)a[s[i]-'a'] * (26 - s[i] + t[i]);
+        //             f[i+1] = f[i] + (Long.compare(l, r) <= 0 ? l : r);
+        //         }
+        //         System.out.println(Arrays.toString(f));
+        //     }
+        //     return f[n];
+        // }
+        // String a = "abab";
+        // String b = "baba";
+        // int [] c = new int [] {100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+        // int [] d = new int [] {1,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int maxRemoval(int[] nums, int[][] queries) {
         //     return 0;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 这个题目，同【左上角】【右上角】【2 个机器人】采樱桃的题型，好像，就只多了【左下角】一个小屁孩而已。。。
+        // // 一定是【动规】！！亲爱的表哥的活宝妹，感觉思路想清楚了，可是答案还不对，需要再 debug 一下。。。
+        // // 亲爱的表哥的活宝妹，吃午餐的时候，瓣瓣脚趾头想想：状态转移方程，没写对，改改应该就可以过了！！
+        // public int maxCollectedFruits(int[][] a) {
+        //     int n = a.length;
+        //     // 考虑：当步数 x 固定，【左上角】【右上角】与【左下角】的坐标
+        //     // 【左上角】：行列都不固定，但只需要记一个？只记一个好像不够用。。。。这里记【行下标】
+        //     // 【右上角】：行【永远固定】，只记【列】
+        //     // 【左下角】：列【永远固定】，只记【行】
+        //     // 【动规】状态定义： f[i][j][k]: i 是【左上角、行坐标】;j 是【右上角、列坐标】；k 是【左下角、行】坐标
+        //     int [][][][] f = new int [n][n][n][n];
+        //     for (int i = 0; i < n; i++)
+        //         for (int j = 0; j < n; j++)
+        //             for (int k = 0; k < n; k++) 
+        //             Arrays.fill(f[i][j][k], -1);
+        //     f[0][0][n-1][n-1] = a[0][0] + a[0][n-1] + a[n-1][0];
+        //     System.out.println("f[0][0][n-1][n-1]: " + f[0][0][n-1][n-1]);
+        //     boolean [][] vis = new boolean [n][n];
+        //     int [][] dra = {{1, 0}, {0, 1}, {1, 1}}; // 【左上角】移动方向
+        //     int [][] drb = {{1, -1}, {1, 0}, {1, 1}};
+        //     int [][] drc = {{-1, 1}, {0, 1}, {1, 1}};
+        //     Set<int []> sa = new HashSet<>(), ssa = new HashSet<>();
+        //     Set<Integer> sb = new HashSet<>(), ssb = new HashSet<>();
+        //     Set<Integer> sc = new HashSet<>(), ssc = new HashSet<>();
+        //     sa.add(new int [] {0, 0});
+        //     sb.add(n-1);
+        //     sc.add(n-1);
+        //     for (int x = 1; x <= n-1; x++) { // The children will make exactly n - 1 moves
+        //         for (int[] aa : sa) {
+        //             int ii = aa[0], jj = aa[1];
+        //             System.out.println("\n ii: " + ii + " " + "jj: " + jj);
+        //             for (int [] da : dra) { // 先前位置：【ii,x-1-ii】, 现在位置【i,x-i】
+        //                 int i = ii + da[0], ja = jj+da[1];
+        //                 if (i >= n || ja >= n || vis[i][ja]) continue;
+        //                 // System.out.println("i: " + i + " " + "ja: " + ja);
+        //                 ssa.add(new int [] {i, ja});
+
+        //                 for (int bb : sb) {
+        //                     // System.out.println("bb: " + bb);
+        //                     for (int [] db : drb) {
+        //                         int ib = x, j = bb + db[1];
+        //                         if (ib < 0 || j >= n || vis[ib][j]) continue;
+        //                         // if (ib == i && j == ja) continue; // 两小屁孩，踩进同一格
+        //                         // 【TODO：】把占同一个格的情况写里面，比较好写
+        //                         // System.out.println("ib: " + ib + " " + "j: " + j);
+        //                         ssb.add(j);
+        //                         for (int cc : sc) {
+        //                             // System.out.println("cc: " + cc);
+        //                             for (int [] dc : drc) {
+        //                                 int k = cc + dc[0], jc = x;
+        //                                 if (k >= n || jc >= n || vis[k][jc]) continue;
+        //                                 // if (k == i && jc == ja || k == ib && jc == j) continue; // 两小屁孩，踩进同一格
+        //                                 // System.out.println("k: " + k + " " + "jc: " + jc);
+        //                                 ssc.add(k);
+        //                                 // vis[i][ja] = true;
+        //                                 // vis[ib][j] = true;
+        //                                 // vis[k][jc] = true;
+        //                                 int va = a[i][ja], vb = a[ib][j], vc = a[k][jc];
+        //                                 // 【状态转移方程】：在【前一状态】之后，现状态，
+        //                                 // 【前状态】： f[ii][jj][bb][cc]
+        //                                 if (f[i][ja][j][k] == -1 || va + vb + vc + f[ii][jj][bb][cc] > f[i][ja][j][k]) 
+        //                                     f[i][ja][j][k] = va + vb + vc + f[ii][jj][bb][cc];
+        //                                 // System.out.println("f[i][ja][j][k]: " + f[i][ja][j][k]);
+        //                             }
+        //                         }
+        //                         // // 这些，不要放在后面处理，放前面处理，就可以了呀，。。比放后面简单好写
+        //                         // int va = a[i][ja], vb = a[ib][j];
+        //                         // if (f[i][ja][j][i] == -1 || va + vb + f[ii][jj][bb][ii] > f[i][ja][j][i]  // 【左上下、同一格】
+        //                         //     || f[i][ja][j][x] == -1 || va + vb + f[ii][jj][bb][x] > f[i][ja][j][x])  // 【右上、左下、同一格】
+        //                         //     if (va + vb + f[ii][jj][bb][ii] > f[i][ja][j][i])
+        //                         //         f[i][ja][j][i] = va + vb + f[ii][jj][bb][ii];
+        //                         //     else
+        //                         //         // if (va + vb + f[ii][jj][bb][x] > f[i][ja][j][x])
+        //                         //         f[i][ja][j][x] = va + vb + f[ii][jj][bb][x];
+        //                         //     // else 
+        //                         //     //     f[i][ja][j][k] = va + vb + f[ii][jj][bb][cc];
+        //                     }
+        //                 }
+        //                 // int va = a[i][ja];
+        //                 // // 这里，另2 个小屁孩的、各自前3 种情况，写得比较繁琐了。。。下午或是改天有兴趣时再弄。。。
+        //                 // if (f[i][ja][ja][i] == -1 || va + f[ii][jj][])
+        //             }
+        //         }
+        //         sa.clear();
+        //         sa.addAll(ssa);
+        //         ssa.clear();
+        //         sb.clear();
+        //         sb.addAll(ssb);
+        //         ssb.clear();
+        //         sc.clear();
+        //         sc.addAll(ssc);
+        //         ssc.clear();
+        //     }
+        //     return f[n-1][n-1][n-1][n-1];
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int minimumSumSubarray(List<Integer> li, int l, int r) {
+        //     int n = li.size(), min = 100001;
+        //     int [] a = new int [n], f = new int [n+1];
+        //     for (int i = 0; i < n; i++) {
+        //         a[i] = li.get(i);
+        //         f[i+1] = f[i] + a[i];
+        //     }
+        //     for (int d = l; d <= r; d++) 
+        //         for (int i = 0; i+d <= n; i++) 
+        //             if (f[i+d] - f[i] > 0)
+        //                 min = Math.min(min, f[i+d] - f[i]);
+        //     return min == 100001 ? -1 : min;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public boolean isPossibleToRearrange(String S, String T, int k) {
+        //     int n = S.length(); char [] s = S.toCharArray(), t = T.toCharArray();
+        //     Map<String, Integer> ss = new HashMap<>();
+        //     for (int i = 0; i < n; i += n/k) {
+        //         String cur = S.substring(i, i+n/k), curt = T.substring(i, i+n/k);
+        //         if (s[i] == t[i] && cur.equals(T.substring(i, i+n/k)))
+        //             continue;
+        //         if (ss.containsKey(curt)) {
+        //             ss.put(curt, ss.get(curt)-1);
+        //             if (ss.get(curt) == 0)
+        //                 ss.remove(curt);
+        //         } else
+        //             ss.put(curt, -1);
+        //         ss.put(cur, ss.getOrDefault(cur, 0) + 1);
+        //         if (ss.get(cur) == 0)
+        //             ss.remove(cur);
+        //     }
+        //     return ss.size() == 0;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int minArraySum(int[] a, int k, int ii, int jj) {
+        //     n = a.length;
+        //     int sum = Arrays.stream(a).sum();
+        //     Arrays.sort(a); this.a = a; this.kk = k; 
+        //     // 【排序】后、【倒序】遍历、【动规】求【减少】的最大值
+        //     // 亲爱的表哥的活宝妹，写不到【动规】，就还是先去写【记忆化深搜】
+        //     // int [][][][] f = new int [n+1][3][ii+1][jj+1]; // 0: ii 1:jj 2:ii+jj
+        //     // for (int i = n-1; i >= 0 && ii+jj > 0; i--) {
+        //     //     f[i][0][ii-1][jj] = f[i+1][]
+        //     //     if (a[i] >= k)
+        //     //     f[i][0]
+        //     // }
+        //     f = new Integer [n][ii+1][jj+1];
+        //     int v = dfs(n-1, ii, jj);
+        //     return sum - v;
+        // }
+        // Integer [][][] f;
+        // int n, kk; int [] a;
+        // // 最多操作 [j+k] 次，最大【减副】效果
+        // int dfs(int i, int j, int k) { // i:idx 
+        //     if (j == 0 && k == 0) return 0;
+        //     if (i < 0) return 0;
+        //     if (f[i][j][k] != null) return f[i][j][k];
+        //     int r = 0;
+        //     // 操作1:/2
+        //     if (j > 0)
+        //         r = Math.max(r, a[i] / 2 + dfs(i-1, j-1, k));
+        //     // 操作2:a[i]>=k
+        //     if (k > 0 && a[i] >= kk)
+        //         r = Math.max(r, kk + dfs(i-1, j, k-1));
+        //     // 两个都操作
+        //     if (j > 0 && k > 0 && a[i] > kk) {
+        //         if (a[i] - a[i]/2 < kk)
+        //             r = Math.max(r, kk + (a[i]-kk > 1 ? (a[i] - kk)/2 : 0) + dfs(i-1, j-(a[i]-kk > 1 ? 1 : 0), k-1));
+        //         else 
+        //             r = Math.max(r, a[i] / 2 + (a[i] - a[i]/2 >= kk ? kk : 0) + dfs(i-1, j-1, k - (a[i] - a[i]/2 >= kk ? 1 : 0)));
+        //     }
+        //     return f[i][j][k] = r;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public long maximizeSumOfWeights(int[][] egs, int k) {
+        //     n = egs.length + 1; this.k = k; 
+        //     long totalWeight = 0;
+        //     // 【权重】：【由小到大】
+        //     g = new PriorityQueue[n];
+        //     Arrays.setAll(g, z -> new PriorityQueue<int []>((x, y) -> x[1] - y[1]));
+        //     for (int [] e : egs) {
+        //         int u = e[0], v = e[1], w = e[2];
+        //         g[u].offer(new int [] {v, w});
+        //         g[v].offer(new int [] {u, w});
+        //         totalWeight += w;
+        //     }
+        //     f = new Long [n];
+        //     long v = dfs(0, -1);
+        //     // System.out.println(Arrays.toString(f));
+        //     return totalWeight - v;
+        // }
+        // Queue<int []> [] g;
+        // // List<int []> [] g;
+        // Long [] f;
+        // int n, k;
+        // // 感觉，亲爱的表哥的活宝妹，弄得，像是【遍历、轻链树？】一样。。。
+        // // 实时更新：如果【子树】链边断开了，【父树】效应？？
+        // long dfs(int u, int p) {
+        //     int egsToBeRemoved = Math.max(0, g[u].size() - k);
+        //     long r = 0;
+        //     for (int [] n : g[u]) {
+        //         int v = n[0], w = n[1];
+        //         // if (v == p) continue;
+        //         if (v == p) {
+        //             if (egsToBeRemoved > 0) {
+        //                 // 亲爱的表哥的活宝妹，觉得、这个题目这里，可能没能想透彻，这个题目暂时不写了。。
+        //                 r += w;
+        //                 --egsToBeRemoved;
+        //             }
+        //             continue;
+        //         }
+        //         // 先、【深搜子树】
+        //         dfs(v, u);
+        //         // 累加：【子树效应】
+        //         r += f[v]; 
+        //         if (egsToBeRemoved > 0) {
+        //             r += w;
+        //             egsToBeRemoved--;
+        //         }
+        //     }
+        //     f[u] = r;
+        //     return r;
         // }
     }
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
     public static void main (String[] args) { 
 		Solution s = new Solution ();
 
-       int r = s.minZeroArray(a, b);
+        int [][] a = new int [][] {{0,1,25},{0,2,10},{1,3,29}};
+
+        long r = s.maximizeSumOfWeights(a, 1);
         System.out.println("r: " + r);
     }
 }
@@ -1655,6 +1927,29 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
