@@ -733,12 +733,245 @@ public class cmp {
         //     System.out.println("f: " + f);
         //     return f;
         // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public boolean hasMatch(String S, String T) {
+        //     m = T.length(); n = S.length();
+        //     if (n < m-1) return false;
+        //     s = S.toCharArray(); t = T.toCharArray();
+        //     f = new Boolean [n][m];
+        //     for (int i = 0; i <= n-m+1; i++)
+        //         if (dfs(i, 0)) return true;
+        //     return false;
+        // }
+        // Boolean [][] f;
+        // char [] s, t;
+        // int m, n;
+        // boolean dfs(int i, int j) {
+        //     if (j == m) return true;
+        //     if (i == n)
+        //         return (j == m-1 && t[j] == '*') ? true : false;
+        //     if (f[i][j] != null) return f[i][j];
+        //     if (s[i] != t[j] && t[j] != '*')
+        //         return j == 0 ? dfs(i+1, j) : false;
+        //     // s[i] == t[j] || t[j] == '*'
+        //     if (t[j] != '*') // s[i] == t[j]
+        //         return dfs(i+1, j+1);
+        //     System.out.println("i: " + i + " " + "j: " + j);
+        //     // t[j] == '*'
+        //     boolean res = false; // 不匹配/当前的 t[j]='*', 就是匹配 0 字符
+        //     for (int k = 0; k <= n-(m-1-j)-i; k++) 
+        //         res |= dfs(i+k, j+1);
+        //     return f[i][j] = res;
+        // }
+
+    //     // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+    // // 这个题目不难，几个有序字典维护，但是比较繁琐，暂时不写这个题目了
+    // TreeMap<Integer, Integer> p = new TreeMap<>((x, y) ->y -x); // priority
+    // public TaskManager(List<List<Integer>> tasks) {
+    // }
+    // public void add(int userId, int taskId, int priority) {
+    // }
+    // public void edit(int taskId, int newPriority) {
+    // }
+    // public void rmv(int taskId) {
+    // }
+    // public int execTop() {
+    // }
+
+    // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+    //     public int longestSubsequence(int[] a) {
+    //         int n = a.length, m = 301, j = 0;
+    //         // 写不习惯倒着的，可以把它倒过来: 方便【自头向尾】遍历
+    //         for (int i = 0; i < n/2; i++) {
+    //             j = a[i];
+    //             a[i] = a[n-1-i];
+    //             a[n-1-i] = j;
+    //         }
+    //         // 【自左向右】遍历：
+    //         TreeMap<Integer, Integer> [] f = new TreeMap [n];
+    //         // Arrays.setAll(f, z -> new TreeMap<Integer, Integer>((x, y)->y-x));
+    //         Arrays.setAll(f, z -> new TreeMap<Integer, Integer>()); // dif: 升序
+    //         f[1].put(Math.abs(a[0]-a[1]), 1);
+    //         // 记录：【0,300】每个数值：不同长度下的最后出现下标, 贪心，下标尽可能地小
+    //         int [][] r = new int [m][m];
+    //         for (int i = 0; i < m; i++) 
+    //             Arrays.fill(r[i], -1);
+    //         r[a[0]] = 0;
+    //         r[a[1]] = 1;
+    //         for (int i = 2; i < n; i++) {
+    //             // 晚点儿再写、、                
+    //         }
+    //     }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // N[1,10^5] a[i]:[-10^6,10^6]
+        // public long maxSubarraySum(int[] a) {
+        //     int n = a.length;
+        //     TreMap<Integer, Integer> m = new TreeMap<>(); // 按【键】升序排列
+        //     Map<Integer, int []> idx = new HashMap<>();
+        //     // 【前缀和】
+        //     long [] f = new long [n+1];
+        //     for (int i = 0; i < n; i++) {
+        //         f[i+1] = f[i] + (long)a[i];
+        //         if (!m.containsKey(a[i])) {
+        //             m.put(a[i], 1);
+        //             idx.put(new int [] {i, -1});
+        //         } else {
+        //             m.put(a[i], m.get(a[i]) + 1);
+        //             idx.get(a[i])[1] = i;
+        //             // idx.computeIfAbsent(ai, z -> new ArrayList<>()).add(new int [] {-1, -1});
+        //         }
+        //     }
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int maxLength(int[] a) {
+        //     int n = a.length, f = 1, r = 1, rr = 1;
+        //     int [] l = new int [n+1], g = new int [n+1]; // lcm gcd
+        //     g[0] = 1; l[0] = 1;
+        //     for (int i = 0; i < n; i++) {
+        //         g[i+1] = gcd(g[i], a[i]);
+        //         l[i+1] = lcm(l[i], a[i]);
+        //     }
+        //     for (int i = 0; i < n; i++) {
+        //         r *= a[i];
+        //         rr = r;
+        //         for (int j = i+1; j < n; j++) {
+        //             rr *= a[j];
+        //             if (rr == )
+        //         }
+        //         r /= a[i];
+        //     }
+        // int lcm(int i, int j) {
+        //     return i * j / gcd(i, j);
+        // }
+        // int gcd(int i, int j) {
+        //     if (j == 0) return i;
+        //     return gcd(j, i % j);
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public long calculateScore(String S) {
+        //     int n = S.length(), m = 26; char [] s = S.toCharArray();
+        //     List<Integer> [] f = new ArrayList [m];
+        //     Arrays.setAll(f, z -> new ArrayList<>());
+        //     long r = 0;
+        //     for (int i = 0; i < n; i++) {
+        //         int j = s[i] - 'a';
+        //         f[j].add(i);
+        //         if (f[25-j].size() > 0) {
+        //             int k = f[25-j].get(f[25-j].size()-1);
+        //             r += (long)(i - k);
+        //             f[25-j].remove(f[25-j].size()-1);
+        //             f[j].remove(f[j].size()-1);
+        //         }
+        //     }
+        //     return r;
+        // }
+
+    //     // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+    //     // 破烂题目：最初思路 BIT: 【离散化数据】的【集中处理】【2*10^5】
+    //     // 再【自左向右】遍历一遍：求长度为 k 的区间和
+    //     // O(NlogN) 当N 在 [4*10^5] 应该不会超时
+    //     // 细节上，还有狠多错误，这个题目，先放一下。。
+    //     public class BIT {
+    //         int [] f, ff;
+    //         int n;
+    //         public BIT(int n) {
+    //             this.n = n;
+    //             f = new int [n];
+    //             ff = new int [n];
+    //         }
+    //         // 【单点更新】：区间更新，是怎么做的呢？
+    //         public void updatePoints(int i, int v) {
+    //             long vi = (long)i * v;
+    //             while (i < n) { // 【自底向上】更新区间和C(x)
+    //                 // 同时更新2 个BIT 数组
+    //                 f[i] += v;
+    //                 ff[i] += vi;
+    //                 i += lowbit(i);
+    //             }
+    //         }
+    //         // 【区间更新】：好像是2 个BIT. 要回忆点儿【差分数组】的数学基础。。。破烂
+    //         public void update(int i, int j, int v) {
+    //             // 本质是：对【差分数组】的【i,j+1）、受影响的、仅只两个端点，作更新
+    //             // 将【区间更新】，拆分为？差分为两个前缀和。。。？不懂
+    //             updatePoints(i, v);
+    //             updatePoints(j+1, -v);
+    //         }
+    //         // 求区间【1,i】的和
+    //         // 这里区分：使用的是 f 与 ff 中的哪个数组？
+    //         private long sum(int [] f, int i) {
+    //             System.out.println("i: " + i);
+    //             long r = 0;
+    //             while (i > 0) { // 从 i 的最高位、【自顶向下】求区间和
+    //                 r += (long)f[i];
+    //                 i -= lowbit(i);
+    //             }
+    //             return r;
+    //         }
+    //         public long query(int l, int r) {
+    //             // 2 个BIT 的时候，下面的非【差分数组】的写法，就不对！！！
+    //             // return sum(r) - sum(l-1);
+    //             return (long)(r+1) * sum(f, r) - 1l * (long)l * sum(f, l-1)
+    //                 - (sum(ff, r) - sum(ff, l-1));
+    //         }
+    //         private int lowbit(int i) {
+    //             return i & -i; // 感觉，这个细节又忘记原理了。。。
+    //         }
+    //     }
+    //     public long maximumCoins(int [][] a, int k) {
+    //         int n = a.length, j = 1, max = 0;
+    //         if (n == 1) return (k <= a[0][1]-a[0][0] ? k : a[0][1]-a[0][0]+1) * (long)a[0][2];
+    //         // 这里数集不对，要扩展一下。。。
+    //         TreeSet<Integer> s = new TreeSet<>();
+    //         for (int [] v : a) {
+    //             s.add(v[0]-1);// 后面【差分数组】要用这些、特殊端点。。。操作之。。。
+    //             s.add(v[0]);
+    //             s.add(v[1]);
+    //             s.add(v[1]+1);// 后面【差分数组】要用这些、特殊端点。。。操作之。。。
+    //             max = Math.max(max, v[1]);
+    //         }
+    //         Map<Integer, Integer> m = new HashMap<>();
+    //         for (int v : s) 
+    //             m.put(v, j++);
+    //         BIT bit = new BIT(s.size()+1);
+    //         for (int [] v : a) {
+    //             int l = m.get(v[0]), r = m.get(v[1]);
+    //             // 怀疑下面写得不对：维护的，是【差分数组】吗？【TODO：】
+    //             bit.update(l, r, v[2]);
+    //         }
+    //         // 【自左向右】遍历一遍？感觉这里想得不透彻。。
+    //         long ans = 0;
+    //         for (int i = 1; i <= max-(k-1); i++) {
+    //             // 手工处理：区间端点
+    //             int l = s.ceiling(i);
+    //             int r = s.floor(i+k-1);
+    //             // System.out.println("l: " + l + " " + "r: " + r);
+    //             if (l > r) continue;
+    //             // System.out.println("m.get(l): " + m.get(l) + " " + "m.get(r): " + m.get(r));
+    //             ans = Math.max(ans, bit.query(m.get(l), m.get(r)) * (l == r ? k : 1));
+                // System.out.println("ans: " + ans);
+                // }
+    //         return ans;
+    //     }
+
+        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        
     }
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
     public static void main (String[] args) { 
 		Solution s = new Solution ();
 
-        int r = s.;
+        // int [][] a = new int [][] {{8,10,1},{1,3,2},{5,6,4}};
+        // int [][] a = new int [][] {{1,10,3}};
+        int [][] a = new int [][] {{30,49,12}};
+
+        long r = s.maximumCoins(a, 28);
         System.out.println("r: " + r);
     }
 }
