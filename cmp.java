@@ -1293,34 +1293,129 @@ public class cmp {
         //     return min;
         // }
 
+        // // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // // 亲爱的表哥的活宝妹，先滚去爬那个简单一点儿的。。。。
+        // // public long minMaxSubarraySum(int [] a, int k) {
+        // //     int n = a.length;
+        // // }
         // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // // 亲爱的表哥的活宝妹，先滚去爬那个简单一点儿的。。。。
-        // public long minMaxSubarraySum(int [] a, int k) {
-        //     int n = a.length;
+        // // 这个题目，亲爱的表哥的活宝妹，暴食暴饮了炸鸡后的、亲爱的表哥的活宝妹，想不明白。。。
+        // // 亲爱的表哥的活宝妹，想不明白，就先【暴力】一下。。。
+        // // 【子序列】：（顺序不相关），就可以【排序】
+        // // 亲爱的表哥的活宝妹，不想再写这些【笨题目】了，太恶心人类了。。。
+        // static final int mod = (int)1e9 + 7;
+        // public int minMaxSums(int [] a, int k) {
+        //     int n = a.length, f = 0;
+        //     Arrays.sort(a);
+        //     TreeMap<Integer, Integer> m = new TreeMap<>();
+        //     for (int v : a) 
+        //         m.put(v, m.getOrDefault(v, 0) + 1);
+        //     // 【遍历】：有序字典（升序遍历），每个Key 作为【最小值】的、结果累积？
+        //     for (Map.Entry<Integer, Integer> en : m.entrySet()) {
+        //     }
+        //     // 【遍历】：有序字典（升序遍历），每个Key 作为【最大值】的、结果累积？
         // }
-        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // 这个题目，亲爱的表哥的活宝妹，暴食暴饮了炸鸡后的、亲爱的表哥的活宝妹，想不明白。。。
-        // 亲爱的表哥的活宝妹，想不明白，就先【暴力】一下。。。
-        // 【子序列】：（顺序不相关），就可以【排序】
-        // 亲爱的表哥的活宝妹，不想再写这些【笨题目】了，太恶心人类了。。。
-        static final int mod = (int)1e9 + 7;
-        public int minMaxSums(int [] a, int k) {
-            int n = a.length, f = 0;
-            Arrays.sort(a);
-            TreeMap<Integer, Integer> m = new TreeMap<>();
-            for (int v : a) 
-                m.put(v, m.getOrDefault(v, 0) + 1);
-            // 【遍历】：有序字典（升序遍历），每个Key 作为【最小值】的、结果累积？
-            for (Map.Entry<Integer, Integer> en : m.entrySet()) {
-            }
-            // 【遍历】：有序字典（升序遍历），每个Key 作为【最大值】的、结果累积？
-        }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int countPartitions(int[] a) {
+        //     int n = a.length, r = 0;
+        //     int [] f = new int [n+1];
+        //     for (int i = 0; i < n; i++)
+        //         f[i+1] = f[i] + a[i];
+        //     for (int i = 0; i < n-1; i++) 
+        //         if (Math.abs(f[n] - f[i+1] - f[i+1]) % 2 == 0) r++;
+        //     return r;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 这个题目，是它们的贱鸡、贱畜牲，故意作贱生命的、晚点儿再写。。
+        // public int[] countMentions(int m, List<List<String>> lls) {
+        //     int n = lls.size();
+        //     int [] f = new int [m], v = new int [m];
+        //     Arrays.fill(v, 1); // <<<<<<<<<<<<<<<<<<<<
+        //     Collections.sort(lls, (x, y) -> Integer.parseInt(x.get(1)) != Integer.parseInt(y.get(1)) ? Integer.parseInt(x.get(1)) - Integer.parseInt(y.get(1)) : -1 * x.get(0).compareTo(y.get(0)));
+        //     for (List<String> l : lls) {
+        //         if (l.get(0).equals("MESSAGE")) {
+        //             if (l.get(0).equals("MESSAGE") && (l.get(2).equals("HERE") || l.get(2).equals("ALL"))) {
+        //                 if (l.get(2).equals("ALL")) {
+        //                     for (int i = 0; i < m; i++)
+        //                         f[i]++;
+        //                 } else // HERE: online only
+        //                     for (int i = 0; i < m; i++)
+        //                         if (v[i] <= Integer.parseInt(l.get(1))) 
+        //                             f[i]++;
+        //                 continue;
+        //             } // message
+        //             List<Integer> li = new ArrayList<>();
+        //             li.add(Integer.parseInt(l.get(1)));
+        //             String [] si = l.get(2).replaceAll("id", "").split(" ");
+        //             for (String vs : si) {
+        //                 int vv = Integer.parseInt(vs);
+        //                 li.add(vv);
+        //                 f[vv]++;
+        //             }
+        //         } else  // offline
+        //             v[Integer.parseInt(l.get(2))] = Integer.parseInt(l.get(1)) + 60;
+        //     }
+        //     return f;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // TLE TLE TLE: 740/749
+        // public int maxFrequency(int[] a, int kk) {
+        //     int n = a.length, m = 51, ans = 0, j = 0;
+        //     List<Integer> [] f = new ArrayList [m];
+        //     Arrays.setAll(f, z -> new ArrayList<>());
+        //     int [] r = new int [n+1];
+        //     // 【TODO：】真正有意义的【分段】中一定夹杂着 kk 的出现，想要把【所有、区段中不含 kk 的子段，合并成一条大段，当作一段处理】
+        //     // boolean hasK = false;
+        //     for (int i = 0; i < n; i++) {
+        //         int v = a[i];
+        //         // if (f[v].size() == 0 || i == n-1 || hasK) {
+        //         // if (f[v].size() == 0 || hasK) {
+        //             f[v].add(i); // 【升序下标】
+        //             // if (hasK)
+        //             //     hasK = false;
+        //         // }
+        //         if (v == kk) {
+        //             r[i+1] = r[i] + 1;
+        //             // if (!hasK) hasK = true;
+        //         } else r[i+1] = r[i];
+        //     }
+        //     // 【TODO：】重新遍历：合并不必要的细小分段
+        //     // for (int i = 0; i < m; i++)
+        //     //     for (int j = f[i].size()-2; j >= 0; j--) {
+        //     //     }
+        //     // 求全局最优解: 【滑动窗口】: 这里，细节上脑袋有点儿僵，不知道细节怎么处理
+        //     ans = r[n];// k 的原始出现次数
+        //     if (ans == n) return n;
+        //     for (int i = 1; i < m; i++) {
+        //         if (kk == i) continue;
+        //         // 【自左向右】遍历1 遍: O(m * m )
+        //         if (f[i].size() == 0) {
+        //             ans = Math.max(ans, r[n] + 1);
+        //             continue;
+        //         }
+        //         // 【左右、两边都包含】的区间
+        //         for (j = 0; j < f[i].size(); j++)
+        //             for (int k = j; k < f[i].size(); k++) 
+        //                 ans = Math.max(ans, r[f[i].get(j)] + k-j+1 + r[n] - r[f[i].get(k)]);
+        //     }
+        //     return ans;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 全是【动规】：今天晚上，几乎全是【动规】。。
+        // public List<List<Integer>> supersequences(String[] words) {
+        // }
     }
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
     public static void main (String[] args) { 
 		Solution s = new Solution ();
 
-        long r = s.minCost(32, a);
+        int [] a = new int [] {10,2,3,4,5,5,4,3,2,2};
+
+        int r = s.maxFrequency(a, 10);
         System.out.println("r: " + r);
     }
 }
