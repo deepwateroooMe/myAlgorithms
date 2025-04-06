@@ -10,8 +10,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.math.BigInteger;
 import static java.util.stream.Collectors.toMap;
-public class cmp {
-    public static class Solution {
+// public class cmp {
+    // public static class Solution {
         // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
         // public int maxSum(int[] a) {
         //     int n = a.length, m = 0, j = 0;
@@ -502,7 +502,7 @@ public class cmp {
         //     return min;
         // }
 
-        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】 
         // // 这个关于【回文】的相关算法，亲爱的表哥的活宝妹忘记了，晚点儿再写这个
         // public int longestPalindrome(String SS, String TT) {
         //     String T = new StringBuilder(TT).reverse().toString();
@@ -529,16 +529,193 @@ public class cmp {
         //     // 这里也有个O(N) 的算法。。。
         //     return max * 2 + (max < m ? 1 : 0);
         // }
-    }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 亲爱的表哥的活宝妹，居然把它给写超时了。。TLE TLE TLE 【TODO：】
+        // public int minimumPairRemoval(int[] a) {
+        //     int n = a.length, min = 2000, f = 0, v = 0, idx = -1, j = 1;
+        //     l = Arrays.stream(a).boxed().collect(Collectors.toList());
+        //     while (j < l.size() && !valid()) {
+        //         min = 2000; idx = -1;
+        //         // for (int i = j; i < l.size(); i++) {
+        //         for (int i = 1; i < l.size(); i++) {
+        //             v = l.get(i) + l.get(i-1);
+        //             if (v < min) {
+        //                 min = v;
+        //                 idx = i;
+        //             }
+        //         }
+        //         if (idx != -1) {
+        //             f++;
+        //             l.remove(idx);
+        //             l.set(idx-1, min);
+        //             // j = (idx == l.size() ? 1 : idx);
+        //             idx = -1; min = 2000;
+        //         }
+        //     }
+        //     return f;
+        // }
+        // List<Integer> l;
+        // boolean valid() {
+        //     if (l.size() == 0) return true;
+        //     for (int i = 1; i < l.size(); i++)
+        //         if (l.get(i) < l.get(i-1)) return false;
+        //     return true;
+        // }
+
+    //     // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】 539/727 passed
+    //     // 这种破烂题目，是它们的贱鸡、贱畜牲，用来作贱生命的。。。它们的贱鸡、贱畜牲，真贱！！！
+    // // 亲爱的表哥的活宝妹，今天晚上，被这个破烂题目给恶心坏了。。它们的贱鸡、贱畜牲，真贱！！！
+    //     class BIT {
+    //         int [] f;
+    //         int n;
+    //         public BIT(int n) {
+    //             this.n = n;
+    //             f = new int [n];
+    //         }
+    //         // 亲爱的表哥的活宝妹，把这里没有写对。。。
+    //         public void update(int i, int v) {
+    //             while (i < n) {
+    //                 f[i] += v;
+    //                 i += lowBit(i);
+    //             }
+    //         }
+    //         private int lowBit(int i) {
+    //             return i & -i;
+    //         }
+
+    //         // 【TODO：】感觉这里的细节，有点儿忘记，或记错了
+    //         private int getSum(int i) {
+    //             System.out.println("i: " + i);
+    //            int ans = 0;
+    //             while (i > 0) {
+    //                 ans += f[i];
+    //                 i -= lowBit(i);
+    //             }
+    //             System.out.println("i: " + i + " " + "ans: " + ans);
+    //             // System.out.println("ans: " + ans);
+    //            return ans;
+    //         }
+    //         public int querySum(int i, int j) {
+    //             System.out.println("i: " + i + " " + "j: " + j);
+    //             System.out.println(Arrays.toString(f));
+    //             return getSum(i) - getSum(j-1);
+    //         }
+    //     }
+    //     // class Router {
+    // class cmp {
+    //     ArrayDeque<int []> q;
+    //     Map<Integer, Map<Integer, Set<Integer>>> dst;
+    //     Map<String, Set<Integer>> t;
+    //     // TreeMap<Integer, Integer> mt;
+    //     // Map<Integer, TreeMap<Integer, Integer>> mt; 
+    //     Map<Integer, TreeMap<Integer, Map<Integer, Integer>>> mt; 
+    //     Map<Integer, BIT> dq;
+    //         int idx, n, m, cc;
+    //     // public Router(int memoryLimit) {
+    //         public cmp(int memoryLimit) {
+    //         // n = 100001;
+    //             n = 10;
+    //         m = memoryLimit;
+    //         q = new ArrayDeque<>();
+    //         dst = new HashMap<>();
+    //         t = new HashMap<>();
+    //         mt = new HashMap<>();
+    //         dq = new HashMap<>();
+    //         idx = 1; cc = 0;
+    //     }
+    //     public boolean addPacket(int so, int de, int ti) {
+    //         String k = String.valueOf(so) + "-" + String.valueOf(de);
+    //         if (t.containsKey(k) && t.get(k).contains(ti)) return false;
+    //         // mt.put(ti, idx++);
+    //         mt.computeIfAbsent(de, z -> new TreeMap<Integer, Map<Integer, Integer>>());
+    //         dq.computeIfAbsent(de, z -> new BIT(n)); //.update(idx-1, 1);
+    //         if (mt.get(de).containsKey(ti)) {
+    //             int idxx = mt.get(de).get(ti);
+    //             dq.get(de).update(idxx, 1);
+    //             mt.get(de).get(ti).put(idxx, mt.get(de).get(ti).getOrDefault(idxx, 0) + 1);
+    //         } else {
+    //             // mt.get(de).put(ti, idx);
+    //             mt.get(de).computeIfAbsent(ti, z -> new HashMap<Integer, Integer>()).add(idx, 1);
+    //                 // put(ti, idx);
+    //             dq.get(de).update(idx, 1);
+    //         }
+    //         idx++;
+    //         cc++;
+    //       if (cc > m) {
+    //           System.out.println("cc: " + cc);
+    //             // q.pollFirst();
+    //           forwardPacket();
+    //             --cc;
+    //         }
+    //         q.offerLast(new int [] {so, de, ti});
+    //         Map<Integer, Set<Integer>> cur = dst.get(de);
+    //         if (cur == null) cur = new HashMap<Integer, Set<Integer>>();
+    //         cur.computeIfAbsent(so, z -> new HashSet<Integer>()).add(ti);
+    //         dst.put(de, cur);
+    //         t.computeIfAbsent(k, z -> new HashSet<Integer>()).add(ti); 
+    //         // dq.computeIfAbsent(de, z -> new BIT(n)).update(idx-1, 1);
+    //         return true;
+    //     }
+    //     public int[] forwardPacket() {
+    //         if (q.isEmpty()) return new int [] {};
+    //         int [] cur = q.pollFirst();
+    //         --cc;
+    //         String k = String.valueOf(cur[0]) + "-" + String.valueOf(cur[1]);
+    //         t.get(k).remove(cur[2]);
+    //         dst.get(cur[1]).get(cur[0]).remove(cur[2]);
+    //         if (mt.containsKey(cur[1]) && mt.get(cur[1]).containsKey(cur[2]) && dq.containsKey((cur[1])))
+    //             dq.get(cur[1]).update(mt.get(cur[1]).get(cur[2]), -1);
+    //         // mt.remove(cur[2]);
+    //         mt.get(cur[1]).remove(cur[2]); // <<<<<<<<<<<<<<<<<<<< 
+    //         return cur;
+    //     }
+    //     // 用BIT 字典；需要借助辅助字典压缩数据
+    //     public int getCount(int destination, int startTime, int endTime) {
+    //         if (!dq.containsKey(destination)) return 0;
+    //         for (int key : mt.get(destination).keySet()) 
+    //             System.out.println("key: " + key);
+    //         Integer end = mt.get(destination).floorKey(endTime);
+    //         Integer bgn = mt.get(destination).ceilingKey(startTime);
+    //         System.out.println("bgn: " + bgn + " " + "end: " + end);
+    //         if (bgn == null || end == null) return 0;
+    //         return dq.get(destination).querySum(mt.get(destination).get(end), bgn == null ? 0 : mt.get(destination).get(bgn));
+    //     }
+    //     // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 感觉，它像是【区间型动规】，但是还没能想明白：怎么比较小区间前后的大小。。最小区间单位为[相邻的、2 个数]
+        // public int minimumPairRemoval(int[] a) {
+        //     int n = a.length;
+        //     return 0;
+        // }
+    // }
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
     public static void main (String[] args) { 
-		Solution s = new Solution ();
+		// Solution s = new Solution ();
+        cmp s = new cmp (2);
 
-        String a = "b";
-        String b = "aaaa";
-
-        int r = s.longestPalindrome(a, b);
+        boolean r = s.addPacket(5, 3, 1);
         System.out.println("r: " + r);
+        r = s.addPacket(1, 5, 6);
+        System.out.println("r: " + r);
+        // r = s.addPacket(1,4,90);
+        // System.out.println("r: " + r);
+        // r = s.addPacket(3,5,95);
+        // System.out.println("r: " + r);
+        // int [] rr = s.forwardPacket();
+        // System.out.println(Arrays.toString(rr));
+        // r = s.addPacket(4,5,105);
+        // System.out.println("r: " + r);
+        // r = s.addPacket(5,2,110);
+        // System.out.println("r: " + r);
+        int rrr = s.getCount(3, 3, 3);
+        System.out.println("rrr: " + rrr);
+        // rrr = s.getCount(5, 2, 3);
+        // System.out.println("rrr: " + rrr);
+
+        // int r = s.minimumPairRemoval(a);
+        // System.out.println("r: " + r);
     }
 }
 // ListNode head = new ListNode(a0]);  
@@ -547,33 +724,6 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
