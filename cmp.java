@@ -12,7 +12,6 @@ import java.math.BigInteger;
 import static java.util.stream.Collectors.toMap;
 public class cmp {
     public static class Solution {
-
         // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
         // public int maxSum(int[] a) {
         //     int n = a.length, m = 0, j = 0;
@@ -820,114 +819,317 @@ public class cmp {
         //     return ss.toString();
         // }
 
+//         // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//         // 这个破烂题目，不难，就是【狠琐碎】
+//         // b:[2,10] 新生成的字符串，只可能涨长，不可能缩短，所以【转 Base】后，还得使用字符串
+//         // 【左右、字符串、转Base】后，就转换成为（经典题型）：【数位动规：左右边界字符串】符合要求的个数，遍历数位、动规。。或【记忆化深搜】
+//         // 写过的题目：有那个【左右串、非毒串】的个数，及其它【数位动规】相关。。
+//         // 难点在【新Base:2-10】后的【左右串】比较长，状态【记忆数组、记忆状态的、数据结构】不太好定义
+//         // 【目的 m <= n】：数【左、右】字符串界定的所有中间串里，数位值不降的个数
+//         // 【记忆化深搜】（记忆数组、记忆状态）定义：
+//         // Map<Integer, Integer> [] f;
+//         static final int mod = (int)1e9 + 7;
+//         public int countNumbers(String S, String T, int b) {
+//             this.b = b;
+//             if (b != 10) {
+//                 S = getBasedString(S);
+//                 T = getBasedString(T);
+//             }
+//             s = S.toCharArray(); t = T.toCharArray();
+//             m = s.length; n = t.length;
+//             System.out.println("S: " + S + " " + "T: " + T);
+//             // 【字符串、返过来】比较好操作
+// // 267 1314
+// // 762 772 862 872 882 962 972 982 992 ...
+// // 4131
+//             f = new HashMap[n];
+//             Arrays.setAll(f, z -> new HashMap<Integer, Integer>());
+//             // m 位、以 s[0] 打头的、满足【不小于、左串】的、所有合法个数
+//             long ans = 0;
+//             ans = (ans + dfs(m-1, 1, s[m-1]-'0', 0)) % mod;
+//             if (n > m) {
+//                 // 这里少算结果了
+//                 for (int j = s[m-1]-'0'; j < b; j++) {
+//                     // System.out.println("j: " + j);
+//                     // System.out.println("ans: " + ans);
+//                     ans = (ans + dfs(m-1, 0, j, 0)) % mod; // <<<<<<<<<<<<<<<<<<<< 
+//                     // System.out.println("ans: " + ans);
+//                 }
+//                 // for (int j = s[m-1]-'0'+1; j < b; j++) {
+//                 //     // System.out.println("j: " + j);
+//                 //     // System.out.println("ans: " + ans);
+//                 //     ans = (ans + dfs(m-1, 0, j, 0)) % mod;
+//                 //     // System.out.println("ans: " + ans);
+//                 // }
+//                 for (int i = m; i < n-1; i++)
+//                     for (int j = 0; j < b; j++) 
+//                         ans = (ans + dfs(i, 0, j, 0)) % mod;
+//                         // dfs(i, 0, j);
+//                 for (int j = 1; j <= t[n-1]-'0'; j++) {
+//                     // System.out.println("j: " + j);
+//                     // System.out.println("ans: " + ans);
+//                     ans = (ans + dfs(n-1, 0, j, (j == t[n-1]-'0' ? 1 : 0))) % mod;
+//                     // System.out.println("ans: " + ans);
+//                 }
+//             } else // n == m
+//                 for (int j = s[m-1]-'0'+1; j <= t[m-1]-'0'; j++) {
+//                     ans = (ans + dfs(m-1, 0, j, (j == t[m-1]-'0' ? 1 : 0))) % mod;
+//                 }
+//             // 结果：把字典【m-1,n-1】下所有合法值。累加求和，返回?
+//             return (int)ans;
+//         }
+//         Map<Integer, Integer> [] f;  // 【n】个不同数位打头的、不同（当前、最高最显著位上、数值为[0,b-1] 等子状态）的合法个数
+//         char [] s, t;
+//         int m, n, b;
+//         int dfs(int i, int j, int k, int y) { // 状态里，前一显著位的值？
+//             System.out.println("\ni: " + i + " " + "j: " + j + " k: " + k + " y: " + y);
+//             // System.out.println("\ni: " + i + " " + "j: " + j);
+//             // 【写错了】：需要检查当前位的合法性
+//             // 【TODO：】甚至：区分 j 在ST 左右串的不同，就是 j 匹配左串， k 匹配右串，用2 个不同数位来记 jk 这两个状态 
+//             // if (i == 0) return 0;
+//             if (i == 0) { // 【TODO：】这里脑袋昏昏、今天不想这个破烂题目了
+//                 // return 1;
+//                 int v = ((j == 1 && s[0]-'0' >= k
+//                           || y == 1 && t[0]-'0' <= k || j != 1 && y != 1) ? 1 : 0);
+//                 System.out.println("v: " + v);
+//                 return v;
+//             }
+//             int curKey = ((j << 6) | (y << 5) | k);
+//             if (f[i].containsKey(curKey)) return f[i].get(curKey);
+//             // 遍历：下一个不显著位的、【合法、取值范围】
+//             int l = k, r = b-1; // l: 这里缺省，不记0 打头的，需要时再数 0 打头的
+//             if (j == 1) {
+//                 if (i == m-1) {
+//                     l = Math.max(s[i]-'0', k);
+//                     r = (n > m ? b-1 : t[i]-'0');
+//                 } else { // i == n-1
+//                     r = t[i] - '0';
+//                 }
+//             } else if (y == 1) {
+//                 r = Math.min(b-1, t[i]-'0');
+//             }
+//             System.out.println("l: " + l + " " + "r: " + r);
+//             long ans = 0;
+//             for (int x = l; x <= r; x++) {
+//                 int key = ((j == 1 && i == m-1 && (x == l || x == r) ? (1 << 6) : 0)
+//                            | (y == 1 && i == n-1 && x == r ? (1 << 5) : 0)
+//                            | x);
+//                 if (f[i-1].containsKey(key))
+//                     ans = (ans + f[i-1].get(key)) % mod;
+//                 else ans = (ans + dfs(i-1, (j == 1 && i == m-1 && (x == l || x == r) ? 1 : 0), x, (y == 1 && i == n-1 && x == r ? 1 : 0))) % mod;
+//             }
+//             f[i].put(curKey, (int)ans);
+//             System.out.println("\ni: " + i + " " + "j: " + j + " k: " + k + " y: " + y);
+//             System.out.println("ans: " + ans);
+//             return (int)ans;
+//         }
+//         String getBasedString(String S) {
+//             int n = S.length(), r = 0; char [] f = S.toCharArray();
+//             long v = 0, base = 1;
+//             for (int i = n-1; i >= 0; i--) {
+//                 v += (long)(base * (f[i]-'0'));
+//                 base *= 10;
+//             }
+//             StringBuilder s = new StringBuilder();
+//             while (v > 0) {
+//                 s.insert(0, (char)('0'+ v % b));
+//                 v = v / b;
+//             }
+//             return s.reverse().toString();
+//         }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public long calculateScore(String[] f, int[] a) {
+        //     long ans = 0;
+        //     int n = f.length, i = 0;
+        //     boolean [] r = new boolean [n];
+        //     while (i >= 0 && i < n && !r[i]) {
+        //         r[i] = true;
+        //         if (f[i].equals("add")) {
+        //             ans += a[i];
+        //             i++;
+        //         } else 
+        //             i += a[i];
+        //     }
+        //     return ans;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int maximumPossibleSize(int[] a) {
+        //     int n = a.length, f = n, j = 0, p = a[0];
+        //     for (int i = 1; i < n; i++) {
+        //         if (a[i] >= p) {
+        //             p = a[i];
+        //             continue;
+        //         }
+        //         --f;
+        //         j = i+1;
+        //         while (j < n && a[j] < p) {
+        //             f--;
+        //             j++;
+        //         }
+        //         if (j == n) return f;
+        //         p = a[j];
+        //         i = j;
+        //     }
+        //     return f;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 破烂题目、恶心吧啦：【分解质因子】
+        // public long [] resultArray(int[] a, int k) {
+        //     n = a.length; this.a = a; this.k = k; 
+        //     f = new int [n][k+1]; // [235] 三个质因子，但为写得方便，就【012345】
+        //     prep();
+        //     System.out.println("f.length: " + f.length);
+        //     for (int z = 0; z < f.length; ++z)
+        //         System.out.println(Arrays.toString(f[z]));
+        //     // 然后，亲爱的表哥的活宝妹，就不知道该怎么去想后面的了。。。狠讨厌这类恶心死人不偿命的破烂题目
+        //     // 亲爱的表哥的活宝妹，讨厌这类题目，再不想看了，下周再写
+        //     // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        //     return new long [0];
+        // }
+        // int [][] f; int n, k; int [] a;
+        // void prep() {
+        //     int i = 0, vv = 0;
+        //     for (int v : a) {
+        //         for (int j = k; j > 1; j--) {
+        //             vv = v;
+        //             while (vv >= j && vv % j == 0) {
+        //                 f[i][j]++;
+        //                 vv /= j;
+        //             }
+        //         }
+        //         i++;
+        //     }
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int countCoveredBuildings(int n, int[][] f) {
+        //     TreeMap<Integer, TreeSet<Integer>> m = new TreeMap<>();
+        //     for (int [] a : f) {
+        //         int i = a[0], j = a[1];
+        //         m.computeIfAbsent(i, z -> new TreeSet<Integer>()).add(j);
+        //         m.computeIfAbsent(-j, z -> new TreeSet<Integer>()).add(i);
+        //     }
+        //     int r = 0;
+        //     for (int [] a : f) {
+        //         int i = a[0], j = a[1];
+        //         if (m.get(i).size() < 3 || m.get(-j).size() < 3) continue;
+        //         // 它要【四个方向】上都至少有一个楼
+        //         Integer li = m.get(-j).lower(i), hi = m.get(-j).higher(i), lj = m.get(i).lower(j), hj = m.get(i).higher(j);
+        //         if (li != null && hi != null && lj != null && hj != null) 
+        //             r++;
+        //     }
+        //     return r;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 亲爱的表哥的活宝妹，觉得：这好像是【连通图】 UnionFind
+        // public class UF {
+        //     int [] f;
+        //     int n;
+        //     public UF(int n) {
+        //         this.n = n;
+        //         f = new int [n];
+        //         for (int i = 0; i < n; i++) f[i] = i;
+        //     }
+        //     public int find(int i) {
+        //         if (i != f[i])
+        //             f[i] = find(f[i]);
+        //         return f[i];
+        //     }
+        //     public void merge(int i, int j) {
+        //         int fi = find(i), fj = find(j);
+        //         if (fi != fj) 
+        //             f[i] = fj;
+        //     }
+        //     public boolean sameComponent(int i, int j) {
+        //         return find(i) == find(j);
+        //     }
+        // }
+        public boolean[] pathExistenceQueries(int n, int[] a, int d, int[][] qs) {
+            int m = qs.length, j = 0;
+            UF uf = new UF(n);
+            for (int i = 1; i < a.length; i++) {
+                while (j < i && a[i] - a[j] > d) j++;
+                if (j < i) uf.merge(i, j);
+            }
+            boolean [] f =  new boolean [m];
+            j = 0;
+            for (int[] q : qs) {
+                int u = q[0], v = q[1];
+                if (uf.sameComponent(u, v)) f[j] = true;
+                j++;
+            }
+            return f;
+        }
+
         // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // 这个破烂题目，不难，就是【狠琐碎】
-        // b:[2,10] 新生成的字符串，只可能涨长，不可能缩短，所以【转 Base】后，还得使用字符串
-        // 【左右、字符串、转Base】后，就转换成为（经典题型）：【数位动规：左右边界字符串】符合要求的个数，遍历数位、动规。。或【记忆化深搜】
-        // 写过的题目：有那个【左右串、非毒串】的个数，及其它【数位动规】相关。。
-        // 难点在【新Base:2-10】后的【左右串】比较长，状态【记忆数组、记忆状态的、数据结构】不太好定义
-        // 【目的 m <= n】：数【左、右】字符串界定的所有中间串里，数位值不降的个数
-        // 【记忆化深搜】（记忆数组、记忆状态）定义：
-        // Map<Integer, Integer> [] f;
-        static final int mod = (int)1e9 + 7;
-        public int countNumbers(String S, String T, int b) {
-            this.b = b;
-            if (b != 10) {
-                S = getBasedString(S);
-                T = getBasedString(T);
+        // 跟上面的题目狠像，稍微变动了一下
+        // 亲爱的表哥的活宝妹，觉得：这好像是【连通图】 UnionFind
+        public class UF {
+            int [] f, r;
+            int n;
+            public UF(int n) {
+                this.n = n;
+                f = new int [n]; r = new int [n];
+                for (int i = 0; i < n; i++) f[i] = i;
+                // Arrays.fill(r, 1);
             }
-            s = S.toCharArray(); t = T.toCharArray();
-            m = s.length; n = t.length;
-            System.out.println("S: " + S + " " + "T: " + T);
-            // 【字符串、返过来】比较好操作
-// 267 1314
-// 762 772 862 872 882 962 972 982 992 ...
-// 4131
-            f = new HashMap[n];
-            Arrays.setAll(f, z -> new HashMap<Integer, Integer>());
-            // m 位、以 s[0] 打头的、满足【不小于、左串】的、所有合法个数
-            long ans = 0;
-            ans = (ans + dfs(m-1, 1, s[m-1]-'0', 0)) % mod;
-            if (n > m) {
-                for (int j = s[m-1]-'0'+1; j < b; j++) 
-                    ans = (ans + dfs(m-1, 0, j, 0)) % mod;
-                    // dfs(m-1, 0, j);
-                for (int i = m; i < n-1; i++)
-                    for (int j = 0; j < b; j++) 
-                        ans = (ans + dfs(i, 0, j, 0)) % mod;
-                        // dfs(i, 0, j);
-                for (int j = 1; j <= t[n-1]-'0'; j++) 
-                    ans = (ans + dfs(n-1, 0, j, (j == t[n-1]-'0' ? 1 : 0))) % mod;
-                    // dfs(n-1, (j == t[n-1]-'0' ? 1 : 0), j);
-            } else // n == m
-                for (int j = s[m-1]-'0'+1; j <= t[m-1]-'0'; j++) 
-                    ans = (ans + dfs(m-1, 0, j, (j == t[m-1]-'0' ? 1 : 0))) % mod;
-            // 结果：把字典【m-1,n-1】下所有合法值。累加求和，返回?
-            return (int)ans;
-        }
-        Map<Integer, Integer> [] f;  // 【n】个不同数位打头的、不同（当前、最高最显著位上、数值为[0,b-1] 等子状态）的合法个数
-        char [] s, t;
-        int m, n, b;
-        int dfs(int i, int j, int k, int y) { // 状态里，前一显著位的值？
-            System.out.println("\ni: " + i + " " + "j: " + j + " k: " + k);
-            // System.out.println("\ni: " + i + " " + "j: " + j);
-            // 【写错了】：需要检查当前位的合法性
-            // 【TODO：】甚至：区分 j 在ST 左右串的不同，就是 j 匹配左串， k 匹配右串，用2 个不同数位来记 jk 这两个状态 
-            // if (i == 0) return 0;
-            if (i == 0) // 【TODO：】这里脑袋昏昏、今天不想这个破烂题目了
-                return 1;
-                // return (j == 1 && s[0]-'0' >= k
-                //         || y == 1 && t[0]-'0' <= k) ? 1 : 0;
-            int curKey = ((j << 6) | (y << 5) | k);
-            if (f[i].containsKey(curKey)) return f[i].get(curKey);
-            // 遍历：下一个不显著位的、【合法、取值范围】
-            int l = k, r = b-1; // l: 这里缺省，不记0 打头的，需要时再数 0 打头的
-            if (j == 1) 
-                if (i == m-1) {
-                    l = Math.max(s[i]-'0', k);
-                    // r = (n > m ? Math.min(r, b-1) : Math.min(r, t[i]-'0'));
-                    r = (n > m ? b-1 : t[i]-'0');
-                } else { // i == n-1
-                    r = t[i] - '0';
+            public int find(int i) {
+                if (i != f[i])
+                    f[i] = find(f[i]);
+                return f[i];
+            }
+            // 这里Merge 的时候，最好维护【最小高度、平衡树，达到最高效O(logN) 查询】
+            public void merge(int i, int j) {
+                int fi = find(i), fj = find(j);
+                if (fi == fj) return ;
+                if (r[fi] > r[fj])
+                    f[fj] = fi;
+                else if (r[fi] < r[fj])
+                    f[fi] = fj;
+                else {
+                    f[fi] = fj;
+                    r[fj]++;
                 }
-            System.out.println("l: " + l + " " + "r: " + r);
-            long ans = 0;
-            for (int x = l; x <= r; x++) {
-                int key = ((j == 1 && i == m-1 && (x == l || x == r) ? (1 << 6) : 0)
-                           | (y == 1 && i == n-1 && x == r ? (1 << 5) : 0)
-                           | x);
-                if (f[i-1].containsKey(key))
-                    ans = (ans + f[i-1].get(key)) % mod;
-                else ans = (ans + dfs(i-1, (j == 1 && i == m-1 && (x == l || x == r) ? 1 : 0), x, (y == 1 && i == n-1 && x == r ? 1 : 0))) % mod;
             }
-            f[i].put(curKey, (int)ans);
-            System.out.println("\ni: " + i + " " + "j: " + j + " k: " + k); 
-            System.out.println("ans: " + ans);
-        return (int)ans;
+            public boolean sameComponent(int i, int j) {
+                return find(i) == find(j);
+            }
         }
-        String getBasedString(String S) {
-            int n = S.length(), r = 0; char [] f = S.toCharArray();
-            long v = 0, base = 1;
-            for (int i = n-1; i >= 0; i--) {
-                v += (long)(base * (f[i]-'0'));
-                base *= 10;
+        public int[] pathExistenceQueries(int n, int[] a, int d, int[][] qs) {
+            int m = qs.length, j = 0;
+            UF uf = new UF(n);
+            List<int []> l = new ArrayList<>();
+            for (int v : a) 
+                l.add(new int [v, j++]);
+            Collections.sort(l, (x, y)->x[0] != y[0] ? x[0] - y[0] : x[1] - y[1]);
+            for (int i = 1; i < a.length; i++) {
+                while (j < i && l.get(i) - l.get(j) > d) j++;
+                if (j < i) uf.merge(l.get(i)[1], l.get(j)[1]);
             }
-            StringBuilder s = new StringBuilder();
-            while (v > 0) {
-                s.insert(0, (char)('0'+ v % b));
-                v = v / b;
+            int [] f =  new int [m]; Arrays.fill(f, -1);
+            // 【TODO：】感觉，这个 qs 也需要【带下标、排序一下】？
+            // 不知道：【连通块内、两节点间的、最小距离】要怎么算，如果每个 qs-i 都【Dijango】最小距离一次，感觉会超时 TLE
+            j = 0;
+            for (int[] q : qs) {
+                int u = q[0], v = q[1];
+                if (!uf.sameComponent(u, v)) continue;
+                // 求【连通块内、两节点间的、最小距离】
+                j++;
             }
-            return s.reverse().toString();
+            return f;
         }
     }
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
     public static void main (String[] args) { 
 		Solution s = new Solution ();
 
-        String a = "2";
-        String b = "7";
+        int [][] a = new int [][] {{1,1},{2,3},{3,3},{2,2},{1,3}};
 
-        int r = s.countNumbers(a, b, 2);
+        int r = s.countCoveredBuildings(3, a);
         System.out.println("r: " + r);
     }
 }
@@ -937,6 +1139,43 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
