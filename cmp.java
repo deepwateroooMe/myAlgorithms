@@ -1048,89 +1048,222 @@ public class cmp {
         //         return find(i) == find(j);
         //     }
         // }
-        public boolean[] pathExistenceQueries(int n, int[] a, int d, int[][] qs) {
-            int m = qs.length, j = 0;
-            UF uf = new UF(n);
-            for (int i = 1; i < a.length; i++) {
-                while (j < i && a[i] - a[j] > d) j++;
-                if (j < i) uf.merge(i, j);
-            }
-            boolean [] f =  new boolean [m];
-            j = 0;
-            for (int[] q : qs) {
-                int u = q[0], v = q[1];
-                if (uf.sameComponent(u, v)) f[j] = true;
-                j++;
-            }
-            return f;
-        }
+        // public boolean[] pathExistenceQueries(int n, int[] a, int d, int[][] qs) {
+        //     int m = qs.length, j = 0;
+        //     UF uf = new UF(n);
+        //     for (int i = 1; i < a.length; i++) {
+        //         while (j < i && a[i] - a[j] > d) j++;
+        //         if (j < i) uf.merge(i, j);
+        //     }
+        //     boolean [] f =  new boolean [m];
+        //     j = 0;
+        //     for (int[] q : qs) {
+        //         int u = q[0], v = q[1];
+        //         if (uf.sameComponent(u, v)) f[j] = true;
+        //         j++;
+        //     }
+        //     return f;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 跟上面的题目狠像，稍微变动了一下
+        // // 亲爱的表哥的活宝妹，觉得：这好像是【连通图】 UnionFind
+        // public class UF {
+        //     int [] f, r;
+        //     int n;
+        //     public UF(int n) {
+        //         this.n = n;
+        //         f = new int [n]; r = new int [n];
+        //         for (int i = 0; i < n; i++) f[i] = i;
+        //         // Arrays.fill(r, 1);
+        //     }
+        //     public int find(int i) {
+        //         if (i != f[i])
+        //             f[i] = find(f[i]);
+        //         return f[i];
+        //     }
+        //     // 这里Merge 的时候，最好维护【最小高度、平衡树，达到最高效O(logN) 查询】
+        //     public void merge(int i, int j) {
+        //         int fi = find(i), fj = find(j);
+        //         if (fi == fj) return ;
+        //         if (r[fi] > r[fj])
+        //             f[fj] = fi;
+        //         else if (r[fi] < r[fj])
+        //             f[fi] = fj;
+        //         else {
+        //             f[fi] = fj;
+        //             r[fj]++;
+        //         }
+        //     }
+        //     public boolean sameComponent(int i, int j) {
+        //         return find(i) == find(j);
+        //     }
+        // }
+        // public int[] pathExistenceQueries(int n, int[] a, int d, int[][] qs) {
+        //     int m = qs.length, j = 0;
+        //     UF uf = new UF(n);
+        //     List<int []> l = new ArrayList<>();
+        //     for (int v : a) 
+        //         l.add(new int [v, j++]);
+        //     Collections.sort(l, (x, y)->x[0] != y[0] ? x[0] - y[0] : x[1] - y[1]);
+        //     for (int i = 1; i < a.length; i++) {
+        //         while (j < i && l.get(i) - l.get(j) > d) j++;
+        //         if (j < i) uf.merge(l.get(i)[1], l.get(j)[1]);
+        //     }
+        //     int [] f =  new int [m]; Arrays.fill(f, -1);
+        //     // 【TODO：】感觉，这个 qs 也需要【带下标、排序一下】？
+        //     // 不知道：【连通块内、两节点间的、最小距离】要怎么算，如果每个 qs-i 都【Dijango】最小距离一次，感觉会超时 TLE
+        //     j = 0;
+        //     for (int[] q : qs) {
+        //         int u = q[0], v = q[1];
+        //         if (!uf.sameComponent(u, v)) continue;
+        //         // 求【连通块内、两节点间的、最小距离】
+        //         j++;
+        //     }
+        //     return f;
+        // }
+
+        //  // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int maxProduct(int n) {
+        //     int [] f =  new int [10];
+        //     String s = String.valueOf(n);
+        //     for (char c : s.toCharArray()) 
+        //         f[c-'0']++;
+        //     int r = -1;
+        //     for (int i = 9; i >= 0; i--) {
+        //         if (f[i] == 0) continue;
+        //         if (f[i] > 1) return (r == -1 ? i * i : i * r);
+        //         else if (f[i] == 1 && r > -1) return r * i;
+        //         else r = i;
+        //     }
+        //     return -1;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        //  // 妈的。。好像，亲爱的表哥的活宝妹前几天刚看【游戏场景、所使用的数据结构的、四叉权与八叉树】
+        //  // 需要写一个，类似【recursive】的方法，分四个象限来填充正方块里的数字
+        // public int[][] specialGrid(int N) {
+        //     n = (int)Math.pow(2, N); m = n / 2;
+        //     if (N == 0) return new int [][] {{0}};
+        //     if (N == 1) return new int [][] {{3, 0}, {2, 1}};
+        //     f = new int [n][n];
+        //     quadFill2DArray(0, n * n -1, n, 0, 0);
+        //     return f;
+        // }
+        // int [][] f;
+        // int m, n;
+        // void quadFill2DArray(int l, int r, int nn, int i, int j) {
+        //     // 一个格
+        //     if (l == r && nn == 1) {
+        //         f[i][j] = l;
+        //         return ;
+        //     }
+        //     // 四个格
+        //     if (r - l == 3 && nn == 2) {
+        //         f[i][j+1] = l;
+        //         f[i+1][j+1] = l + 1;
+        //         f[i+1][j] = l + 2;
+        //         f[i][j] = r;
+        //         return ;
+        //     }
+        //     quadFill2DArray(l, l + nn * nn/4-1, nn/2, i, j+nn/2);
+        //     quadFill2DArray(l + nn * nn/4, l + nn * nn / 2 - 1, nn/2, i+nn/2, j+nn/2);
+        //     quadFill2DArray(l + nn * nn / 2, l + nn * nn / 4 * 3 -1, nn/2, i+nn/2, j);
+        //     quadFill2DArray(r - nn * nn / 4+1, r, nn/2, i, j);
+        // }
 
         // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // 跟上面的题目狠像，稍微变动了一下
-        // 亲爱的表哥的活宝妹，觉得：这好像是【连通图】 UnionFind
-        public class UF {
-            int [] f, r;
-            int n;
-            public UF(int n) {
-                this.n = n;
-                f = new int [n]; r = new int [n];
-                for (int i = 0; i < n; i++) f[i] = i;
-                // Arrays.fill(r, 1);
-            }
-            public int find(int i) {
-                if (i != f[i])
-                    f[i] = find(f[i]);
-                return f[i];
-            }
-            // 这里Merge 的时候，最好维护【最小高度、平衡树，达到最高效O(logN) 查询】
-            public void merge(int i, int j) {
-                int fi = find(i), fj = find(j);
-                if (fi == fj) return ;
-                if (r[fi] > r[fj])
-                    f[fj] = fi;
-                else if (r[fi] < r[fj])
-                    f[fi] = fj;
-                else {
-                    f[fi] = fj;
-                    r[fj]++;
+        // 狗屁【动规、区间型动规】：应该主要是考题型；想透彻能写出来的话，应该不至少TLE 超时
+        public int minTravelTime(int l, int n, int k, int[] a, int[] t) {
+            this.n = n; this.k = k; this.a = a; this.t = t;
+            // 【动态更新】：当某个【下标移除】后，用下标来标记，就存在局限。。
+            // 不用【动规】思路，用【贪心、或是、递推】，因为更新下标的【实时、与、后续】效应，这个状态定义、记忆数组？仍然不对。。
+            // int [][][] f = new int [n][n][k+1];
+            // Arrays.setAll(f, z -> new HashMap<Integer, Integer>());
+            //   j             i             k      val
+            // Map<Integer, Map<Integer, Map<Integer, Integer>>> f = new HashMap<>();
+            TreeMap<Integer, TreeMap<Integer, Integer>> f = new TreeMap<>();
+            Map<Integer, Integer> updates = new HashMap<>(); // 纪录实时更新的？
+            for (int i = 0; i < n; i++)
+                updates.put(a[i], t[i]);
+            for (int j = 0; j < n; j++) {
+                // f[j][j][0] = t[j] * ((j == n-1 ? a[j] : a[j+1]) - a[j]);
+                f.computeIfAbsent(a[j], z -> new TreeMap<Integer, Integer>>())();
+                // Map<Integer, Integer> tmp = new HashMap<>();
+                // tmp.put(0, j < n-1 ? t[j] * (a[j+1] - a[j]) : 0);
+                f.get(a[j]).put(0, j < n-1 ? t[j] * (a[j+1] - a[j]) : 0);
+                // 遍历：前序下标 i, 和【操作次数 K】
+                Integer lo = f.lowerKey(a[i]);
+                while (lo != null) {
+                    // 遍历：【操作次数 k: 从小到大】
+                    for (Map.Entry<Integer, Integer> en : f.get(lo).entrySet()) {
+                        int key = en.getKey(), v = en.getValue();
+                        // 上一个【lo,ti】是否更新过？
+                        int cur = v + updates.get(lo) * (a[j] - lo);
+                        f.get(a[j]).put(key, cur);
+                        if (j > 0 && j < n-1 && key < j-1) {
+                            // 在【当前位点 j】作一次合并、与实时更新。。。【TODO：】后面的细节没有写完。。                            
+                            cur = f.get(lo).get(key-1) + updates.get(lo) * (a[j+1] - lo);
+                        }
+                    }
+                    lo = f.lowerKey(lo);
                 }
-            }
-            public boolean sameComponent(int i, int j) {
-                return find(i) == find(j);
-            }
+                // for (int i = 0; i < n-1; i++) {
+                //     f[i][i][0] = t[i] * (a[i+1] - a[i]);
+                //     f[i].put(a[i], (i == 0 ? 0 : f[i-1].get(a[i-1])) + t[i] * (a[i+1] - a[i]));
+                //     // f.computeIfAbsent(a[i], z -> new HashMap<Integer, Map<Integer, Integer>>())();
+                //     // Map<Integer, Integer> tmp = new HashMap<>();
+                //     // tmp.put(0, t[i] * (a[i+1] - a[i]));
+                //     // f.get(a[i]).put(0, tmp);
+                //     // 这里是【极简：0 次操作】的
+                //     if (i > 0) // f[0][1][0] = f[0][0][0] + f[1][1][0] + ..
+                //         f[i-1][i][0] = f[0][i-1][0] + f[i][i][0] + t[i-1] * (a[i] - a[i-1]);
+                //     // 遍历：前序下标 j, 和【操作次数 K】
+                // }
+            // return dfs(0, n-1, k);
         }
-        public int[] pathExistenceQueries(int n, int[] a, int d, int[][] qs) {
-            int m = qs.length, j = 0;
-            UF uf = new UF(n);
-            List<int []> l = new ArrayList<>();
-            for (int v : a) 
-                l.add(new int [v, j++]);
-            Collections.sort(l, (x, y)->x[0] != y[0] ? x[0] - y[0] : x[1] - y[1]);
-            for (int i = 1; i < a.length; i++) {
-                while (j < i && l.get(i) - l.get(j) > d) j++;
-                if (j < i) uf.merge(l.get(i)[1], l.get(j)[1]);
-            }
-            int [] f =  new int [m]; Arrays.fill(f, -1);
-            // 【TODO：】感觉，这个 qs 也需要【带下标、排序一下】？
-            // 不知道：【连通块内、两节点间的、最小距离】要怎么算，如果每个 qs-i 都【Dijango】最小距离一次，感觉会超时 TLE
-            j = 0;
-            for (int[] q : qs) {
-                int u = q[0], v = q[1];
-                if (!uf.sameComponent(u, v)) continue;
-                // 求【连通块内、两节点间的、最小距离】
-                j++;
-            }
-            return f;
-        }
+        // Integer [][][] f;
+        // int [] a, t;
+        // int n, k;
+        // int dfs(int i, int j, int k) {
+        //     // if (i == j && k == 0)
+        //     //     return
+        //     // 没有操作、不操作
+        //     if (k == 0) {
+        //         int r = 0;
+        //         for (int x = i; x < j; x++) {
+        //             r += (a[x+1] - a[x]) * t[x];
+        //             return f[i][j][k] = r;
+        //         }
+        //     }
+        //         // 【叶子节点】：处理合并操作;
+        //     // 【动规？】这里【子问题】的处理，有后续效应，可能不能用【动规】，用【贪心】。。
+        //     if (i+1 == j && k == 1) {
+        //         return t[i-1] * (a[j] - a[i]) + t[i] * 
+        //             (a[j] - a[i]) * t[i]
+        //     }
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 这个题目，读不懂，感觉 k==m 永恒。。。想不出：什么情况下会可能 k != m
+        // // 题目有点儿烦琐：N[1,50], k==m[1,30]
+        // // 是【序列】，没有说【数组不能排序】，（数组应该就可以排序、简化重复数字的处理？）
+        // // 当k==m[1,30], 数组规模仍然相对大，得对半分、分成：2 个 k/2==m/2【1,15】规模级的O(NlogN) 解法？
+        // // 思路：想不透彻，不写这个破烂题目了。。
+        // static final int mod = (int)1e9 + 7;
+        // public int magicalSum(int m, int k, int[] a) {
+        //     int n = a.length;
+        //     Arrays.sort(a);
+        // }
     }
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
     public static void main (String[] args) { 
 		Solution s = new Solution ();
 
-        int [][] a = new int [][] {{1,1},{2,3},{3,3},{2,2},{1,3}};
-
-        int r = s.countCoveredBuildings(3, a);
-        System.out.println("r: " + r);
+        int [][] r = s.specialGrid(2);
+        System.out.println("r.length: " + r.length);
+        for (int z = 0; z < r.length; ++z)
+            System.out.println(Arrays.toString(r[z]));
     }
 }
 // ListNode head = new ListNode(a0]);  
