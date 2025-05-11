@@ -1172,56 +1172,56 @@ public class cmp {
         //     quadFill2DArray(r - nn * nn / 4+1, r, nn/2, i, j);
         // }
 
-        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // 狗屁【动规、区间型动规】：应该主要是考题型；想透彻能写出来的话，应该不至少TLE 超时
-        public int minTravelTime(int l, int n, int k, int[] a, int[] t) {
-            this.n = n; this.k = k; this.a = a; this.t = t;
-            // 【动态更新】：当某个【下标移除】后，用下标来标记，就存在局限。。
-            // 不用【动规】思路，用【贪心、或是、递推】，因为更新下标的【实时、与、后续】效应，这个状态定义、记忆数组？仍然不对。。
-            // int [][][] f = new int [n][n][k+1];
-            // Arrays.setAll(f, z -> new HashMap<Integer, Integer>());
-            //   j             i             k      val
-            // Map<Integer, Map<Integer, Map<Integer, Integer>>> f = new HashMap<>();
-            TreeMap<Integer, TreeMap<Integer, Integer>> f = new TreeMap<>();
-            Map<Integer, Integer> updates = new HashMap<>(); // 纪录实时更新的？
-            for (int i = 0; i < n; i++)
-                updates.put(a[i], t[i]);
-            for (int j = 0; j < n; j++) {
-                // f[j][j][0] = t[j] * ((j == n-1 ? a[j] : a[j+1]) - a[j]);
-                f.computeIfAbsent(a[j], z -> new TreeMap<Integer, Integer>>())();
-                // Map<Integer, Integer> tmp = new HashMap<>();
-                // tmp.put(0, j < n-1 ? t[j] * (a[j+1] - a[j]) : 0);
-                f.get(a[j]).put(0, j < n-1 ? t[j] * (a[j+1] - a[j]) : 0);
-                // 遍历：前序下标 i, 和【操作次数 K】
-                Integer lo = f.lowerKey(a[i]);
-                while (lo != null) {
-                    // 遍历：【操作次数 k: 从小到大】
-                    for (Map.Entry<Integer, Integer> en : f.get(lo).entrySet()) {
-                        int key = en.getKey(), v = en.getValue();
-                        // 上一个【lo,ti】是否更新过？
-                        int cur = v + updates.get(lo) * (a[j] - lo);
-                        f.get(a[j]).put(key, cur);
-                        if (j > 0 && j < n-1 && key < j-1) {
-                            // 在【当前位点 j】作一次合并、与实时更新。。。【TODO：】后面的细节没有写完。。                            
-                            cur = f.get(lo).get(key-1) + updates.get(lo) * (a[j+1] - lo);
-                        }
-                    }
-                    lo = f.lowerKey(lo);
-                }
-                // for (int i = 0; i < n-1; i++) {
-                //     f[i][i][0] = t[i] * (a[i+1] - a[i]);
-                //     f[i].put(a[i], (i == 0 ? 0 : f[i-1].get(a[i-1])) + t[i] * (a[i+1] - a[i]));
-                //     // f.computeIfAbsent(a[i], z -> new HashMap<Integer, Map<Integer, Integer>>())();
-                //     // Map<Integer, Integer> tmp = new HashMap<>();
-                //     // tmp.put(0, t[i] * (a[i+1] - a[i]));
-                //     // f.get(a[i]).put(0, tmp);
-                //     // 这里是【极简：0 次操作】的
-                //     if (i > 0) // f[0][1][0] = f[0][0][0] + f[1][1][0] + ..
-                //         f[i-1][i][0] = f[0][i-1][0] + f[i][i][0] + t[i-1] * (a[i] - a[i-1]);
-                //     // 遍历：前序下标 j, 和【操作次数 K】
-                // }
-            // return dfs(0, n-1, k);
-        }
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 狗屁【动规、区间型动规】：应该主要是考题型；想透彻能写出来的话，应该不至少TLE 超时
+        // public int minTravelTime(int l, int n, int k, int[] a, int[] t) {
+        //     this.n = n; this.k = k; this.a = a; this.t = t;
+        //     // 【动态更新】：当某个【下标移除】后，用下标来标记，就存在局限。。
+        //     // 不用【动规】思路，用【贪心、或是、递推】，因为更新下标的【实时、与、后续】效应，这个状态定义、记忆数组？仍然不对。。
+        //     // int [][][] f = new int [n][n][k+1];
+        //     // Arrays.setAll(f, z -> new HashMap<Integer, Integer>());
+        //     //   j             i             k      val
+        //     // Map<Integer, Map<Integer, Map<Integer, Integer>>> f = new HashMap<>();
+        //     TreeMap<Integer, TreeMap<Integer, Integer>> f = new TreeMap<>();
+        //     Map<Integer, Integer> updates = new HashMap<>(); // 纪录实时更新的？
+        //     for (int i = 0; i < n; i++)
+        //         updates.put(a[i], t[i]);
+        //     for (int j = 0; j < n; j++) {
+        //         // f[j][j][0] = t[j] * ((j == n-1 ? a[j] : a[j+1]) - a[j]);
+        //         f.computeIfAbsent(a[j], z -> new TreeMap<Integer, Integer>>())();
+        //         // Map<Integer, Integer> tmp = new HashMap<>();
+        //         // tmp.put(0, j < n-1 ? t[j] * (a[j+1] - a[j]) : 0);
+        //         f.get(a[j]).put(0, j < n-1 ? t[j] * (a[j+1] - a[j]) : 0);
+        //         // 遍历：前序下标 i, 和【操作次数 K】
+        //         Integer lo = f.lowerKey(a[i]);
+        //         while (lo != null) {
+        //             // 遍历：【操作次数 k: 从小到大】
+        //             for (Map.Entry<Integer, Integer> en : f.get(lo).entrySet()) {
+        //                 int key = en.getKey(), v = en.getValue();
+        //                 // 上一个【lo,ti】是否更新过？
+        //                 int cur = v + updates.get(lo) * (a[j] - lo);
+        //                 f.get(a[j]).put(key, cur);
+        //                 if (j > 0 && j < n-1 && key < j-1) {
+        //                     // 在【当前位点 j】作一次合并、与实时更新。。。【TODO：】后面的细节没有写完。。                            
+        //                     cur = f.get(lo).get(key-1) + updates.get(lo) * (a[j+1] - lo);
+        //                 }
+        //             }
+        //             lo = f.lowerKey(lo);
+        //         }
+        //         // for (int i = 0; i < n-1; i++) {
+        //         //     f[i][i][0] = t[i] * (a[i+1] - a[i]);
+        //         //     f[i].put(a[i], (i == 0 ? 0 : f[i-1].get(a[i-1])) + t[i] * (a[i+1] - a[i]));
+        //         //     // f.computeIfAbsent(a[i], z -> new HashMap<Integer, Map<Integer, Integer>>())();
+        //         //     // Map<Integer, Integer> tmp = new HashMap<>();
+        //         //     // tmp.put(0, t[i] * (a[i+1] - a[i]));
+        //         //     // f.get(a[i]).put(0, tmp);
+        //         //     // 这里是【极简：0 次操作】的
+        //         //     if (i > 0) // f[0][1][0] = f[0][0][0] + f[1][1][0] + ..
+        //         //         f[i-1][i][0] = f[0][i-1][0] + f[i][i][0] + t[i-1] * (a[i] - a[i-1]);
+        //         //     // 遍历：前序下标 j, 和【操作次数 K】
+        //         // }
+        //     // return dfs(0, n-1, k);
+        // }
         // Integer [][][] f;
         // int [] a, t;
         // int n, k;
@@ -1255,15 +1255,276 @@ public class cmp {
         //     int n = a.length;
         //     Arrays.sort(a);
         // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int maxFreqSum(String T) {
+        //     int n = T.length(); char [] s = T.toCharArray();
+        //     int [] f = new int [26];
+        //     for (char c : s) 
+        //         f[c-'a']++;
+        //     List<Character> cs = List.of('a', 'e', 'i', 'o', 'u');
+        //     int l = 0, r = 0;
+        //     for (int i = 0; i < 26; i++) 
+        //         if (cs.contains((char)(i+'a')))
+        //             l = Math.max(l, f[i]);
+        //         else r = Math.max(r, f[i]);
+        //     return l + r;
+        // }
+
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int minOperations(int[] f) {
+        //     n = f.length; this.f = f; 
+        //     // 亲爱的表哥的活宝妹，这里，没读懂题目
+        //     // return (int)Arrays.stream(a).distinct().count() - (Arrays.stream(a).min().getAsInt() == 0 ? 1 : 0);
+        //     return getOps(0, n-1);
+        // }
+        // int [] f;
+        // int n;
+        // int getOps(int i, int j) {
+        //     System.out.println("\ni: " + i + " " + "j: " + j);
+        //     if (Arrays.stream(f).max().getAsInt() == 0) return 0;
+        //     if (i == j) return (f[i] > 0 ? 1 : 0);
+        //     int min = Integer.MAX_VALUE;
+        //     int k = i;
+        //     while (j >= i && f[j] == 0) j--;
+        //     if (j < i) return 0;
+        //     while (k <= j && f[k] == 0) k++;
+        //     if (k == j) return 1;
+        //     i = k;
+        //     for (; k <= j; k++)
+        //         if (f[k] > 0)
+        //             min = Math.min(min, f[k]);
+        //     k = i;
+        //     int ans = 0;
+        //     for (; k <= j; k++) {
+        //         if (f[k] == min || f[k] == 0) {
+        //             System.out.println("k: " + k);
+        //             ans += (k == i ? 0 : getOps(i, k-1));
+        //             System.out.println("ans: " + ans);
+        //            i = k + (k == j ? 0 : 1);
+        //         }
+        //     }
+        //     if (f[j] != min)
+        //         ans += getOps(i, j);
+        //     return  ans+1;
+        // }
+        // // 晚点儿再写这个
+        
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 【动规】： f[i][j] 定义？
+        // // 如果【自底向上】 i 叶子节点的【父节点】，可能不止1 个。。
+        // public int maxWeight(int n, int[][] egs, int k, int t) { // TLE TLE TLE
+        //     g = new ArrayList[n]; this.n = n; this.k = k; this.t = t; 
+        //     Arrays.setAll(g, z -> new ArrayList<int[]>());
+        //     // 【根节点】：是哪个
+        //     int [] r = new int [n];
+        //     boolean [] vis = new boolean [n];
+        //     List<Integer> roots = new ArrayList<Integer>();
+        //     for (int [] e : egs) {
+        //         int u = e[0], v = e[1], w = e[2];
+        //         g[u].add(new int [] {v, w});
+        //         r[v]++;
+        //         vis[u] = true;
+        //     }
+        //     int u = -1;
+        //     for (int i = 0; i < n; i++)
+        //         if (r[i] == 0 && vis[i])
+        //             roots.add(i);
+        //     // 没有说，【必须从根节点出发】
+        //     if (roots.size() == 0) return (k == 0 ? 0 : max);
+        //     f = new int [n][k+1];
+        //     for (int v : roots) 
+        //         dfsMaxKt(v, 0, 0);
+        //     return max;
+        // }
+        // List<int []> [] g;
+        // int [][] f;
+        // int n, max = -1, k, t;
+        // void dfsMaxKt(int u, int d, int wi) {
+        //     // 【终节点】：全局最值            
+        //     if (d == k) {
+        //         // System.out.println("u: " + u + " " + "wi: " + wi);
+        //         if (wi < t)
+        //             max = Math.max(max, wi);
+        //         return;
+        //     }
+        //     for (int [] e : g[u]) {
+        //         int v = e[0], w = e[1];
+        //         dfsMaxKt(v, 0, 0);
+        //         if (wi + w >= t) continue;
+        //         dfsMaxKt(v, d+1, wi+w);
+        //     }
+        //     // for (int [] e : g[u]) {
+        //     //     int v = e[0], w = e[1];
+        //     //     dfsMaxKt(v, 0, 0);
+        //     // }
+        // }
+        
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public long subtreeInversionSum(int[][] egs, int[] a, int k) {
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int minDeletion(String S, int k) {
+        //     int n = S.length(); char [] s = S.toCharArray();
+        //     int [] f = new int [26];
+        //     for (char c : s) 
+        //         f[c-'a']++;
+        //     List<Integer> l = new ArrayList<>();
+        //     for (int v : f) 
+        //         if (v > 0)
+        //             l.add(v);
+        //     Collections.sort(l, (x, y)->y-x);
+        //     if (l.size() <= k) return 0;
+        //     int r = 0;
+        //     for (int i = l.size()-1; i >= k; i--) 
+        //         r += l.get(i);
+        //     return r;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public boolean canPartitionGrid(int[][] f) {
+        //     int m = f.length, n = f[0].length, v = 0;
+        //     int [] r = new int [m], c = new int [n];
+        //     for (int i = 0; i < m; i++) {
+        //         r[i] = Arrays.stream(f[i]).sum();
+        //         if (i > 0)
+        //             r[i] += r[i-1];
+        //     }
+        //     for (int i = 0; i < n; i++) {
+        //         v = 0;
+        //         for (int j = 0; j < m; j++)
+        //             v += f[j][i];
+        //         c[i] = v;
+        //         if (i > 0)
+        //             c[i] += c[i-1];
+        //     }
+        //     for (int i = 0; i < m-1; i++)
+        //         if (r[i] == r[m-1] - r[i]) return true;
+        //     for (int i = 0; i < n-1; i++)
+        //         if (c[i] == c[n-1] - c[i]) return true;
+        //     return false;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 先【检测：环的存在】；再分布其它: 一条线;
+        // // 只有【1 个或几个、独立的团环，和或，1 条或几条直线】算【1,n】的分布，求边和最大值
+        // public long maxScore(int n, int[][] egs) {
+        //     this.n = n;
+        //     g = new ArrayList [n];
+        //     f = new int [n];
+        //     for (int [] e : egs) {
+        //         int u = e[0], v = e[1];
+        //         g[u].add(v);
+        //         g[v].add(u);
+        //         f[u]++;
+        //         f[v]++;
+        //     }
+        //     vis = new boolean [n];
+        //     ans = 0;
+        //     List<Integer> l = new ArrayList<>();
+        //     for (int i = 0; i < n; i++) 
+        //         if (f[i] == 2)
+        //             l.add(i);
+        //     cur = n;
+        //     for (int v : l) 
+        //         if (!vis[v]) dfs(v, -1, new ArrayList<Integer>(), new boolean [n]);
+        // }
+        // List<Integer> [] g;
+        // int [] f;
+        // boolean [] vis;
+        // int n, ans, cur;
+        // void dfs(int u, int p, List<Integer> l, boolean [] vi) {
+        //     vi[u] = true;
+        //     l.add(u);
+        //     for (int v : g[u]) {
+        //         if (v != p && vi[v]) { // 检测到一个环
+        //             for (int node : l) {
+        //                 vis[node] = true;
+        //             }
+        //         }
+        //     }
+        // }
+        // long getVal(int v, int m) {
+        //     int pp = -1, p = v; // pp p
+        //     long f = 0;
+        //     while (m > 1) {
+        //         f += (long)(v * (v + 1));
+        //         pp = p;
+        //         p = v;
+        //         // if (r == -1) r = v;
+        //         // else if (l == -1) l = v;
+        //         v--;
+        //         m--;
+        //     }
+        // }
+
+        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // 跟前面的狠像，只多一步【纪录格里数字的出现与否、与出现的位置】 BIT
+        // 考虑【重复出现的数字】
+        public boolean canPartitionGrid(int[][] f) { // 681/682 testcases passed 不知道最后2 个数据量狠大的测试用命算是怎么回事。。
+            int m = f.length, n = f[0].length; long v = 0;
+            Map<Long, TreeMap<Integer, Integer>> mp = new HashMap<>(); 
+            for (int i = 0; i < f.length; i++) 
+                for (int j = 0; j < n; j++) {
+                    mp.computeIfAbsent((long)f[i][j], z -> new TreeMap<Integer, Integer>());
+                    mp.get((long)f[i][j]).put(i, j);
+                    mp.get((long)f[i][j]).put(-j, i);
+                }
+            long [] r = new long [m], c = new long [n];
+            for (int i = 0; i < m; i++) {
+                v = 0;
+                for (int j = 0; j < n; j++)
+                    r[i] += (long)f[i][j];
+                if (i > 0)
+                    r[i] += r[i-1];
+            }
+            for (int i = 0; i < n; i++) {
+                v = 0;
+                for (int j = 0; j < m; j++)
+                    v += (long)f[j][i];
+                c[i] = v;
+                if (i > 0)
+                    c[i] += c[i-1];
+            }
+            for (int i = 0; i < m-1; i++) {
+                long lt = r[i], rt = r[m-1] - r[i];
+                if (r[i] == r[m-1] - r[i]) return true;
+                long dif = Math.abs(lt - rt);
+                if (mp.containsKey(dif) && mp.get(dif).size() > 0) { 
+                    Integer lo = mp.get(dif).floorKey(i), hi = mp.get(dif).ceilingKey(i+1);
+                    if (lt > rt && lo != null && i > 0
+                        || lt < rt && hi != null && (hi > i+1 || m > i+2 || n == 2))
+                        return true;
+                }
+            }
+            for (int i = 0; i < n-1; i++) {
+                if (c[i] == c[n-1] - c[i]) return true;
+                long lt = c[i], rt = c[n-1] - c[i];
+                long dif = Math.abs(lt - rt);
+                if (mp.containsKey(dif) && mp.get(dif).size() > 0) { 
+                    Integer lo = mp.get(dif).ceilingKey(-1 * i), hi = mp.get(dif).floorKey(-1 * (i+1));
+                    if (lt > rt && lo != null && i > 0
+                        || lt < rt && hi != null && (hi < -1 * (i+1) || n > i+2 || m == 2))
+                        return true;
+                }
+            }
+            return false;
+        }
     }
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
-    public static void main (String[] args) { 
+        public static void main (String[] args) { 
 		Solution s = new Solution ();
 
-        int [][] r = s.specialGrid(2);
-        System.out.println("r.length: " + r.length);
-        for (int z = 0; z < r.length; ++z)
-            System.out.println(Arrays.toString(r[z]));
+        // int []  a = new int []  {7,2,0,4,2};
+        // System.out.println(Arrays.toString(a));
+        // int r = s.minOperations(a);
+
+        int [][] a = new int [][] {{4, 3, 7},{5, 3, 3}};
+
+    boolean r = s.canPartitionGrid(a);
+    System.out.println("r: " + r);
     }
 }
 // ListNode head = new ListNode(a0]);  
@@ -1272,6 +1533,12 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
