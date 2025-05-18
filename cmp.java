@@ -1460,71 +1460,190 @@ public class cmp {
         //     }
         // }
 
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 跟前面的狠像，只多一步【纪录格里数字的出现与否、与出现的位置】 BIT
+        // // 考虑【重复出现的数字】
+        // public boolean canPartitionGrid(int[][] f) { // 681/682 testcases passed 不知道最后2 个数据量狠大的测试用命算是怎么回事。。
+        //     int m = f.length, n = f[0].length; long v = 0;
+        //     Map<Long, TreeMap<Integer, Integer>> mp = new HashMap<>(); 
+        //     for (int i = 0; i < f.length; i++) 
+        //         for (int j = 0; j < n; j++) {
+        //             mp.computeIfAbsent((long)f[i][j], z -> new TreeMap<Integer, Integer>());
+        //             mp.get((long)f[i][j]).put(i, j);
+        //             mp.get((long)f[i][j]).put(-j, i);
+        //         }
+        //     long [] r = new long [m], c = new long [n];
+        //     for (int i = 0; i < m; i++) {
+        //         v = 0;
+        //         for (int j = 0; j < n; j++)
+        //             r[i] += (long)f[i][j];
+        //         if (i > 0)
+        //             r[i] += r[i-1];
+        //     }
+        //     for (int i = 0; i < n; i++) {
+        //         v = 0;
+        //         for (int j = 0; j < m; j++)
+        //             v += (long)f[j][i];
+        //         c[i] = v;
+        //         if (i > 0)
+        //             c[i] += c[i-1];
+        //     }
+        //     for (int i = 0; i < m-1; i++) {
+        //         long lt = r[i], rt = r[m-1] - r[i];
+        //         if (r[i] == r[m-1] - r[i]) return true;
+        //         long dif = Math.abs(lt - rt);
+        //         if (mp.containsKey(dif) && mp.get(dif).size() > 0) { 
+        //             Integer lo = mp.get(dif).floorKey(i), hi = mp.get(dif).ceilingKey(i+1);
+        //             if (lt > rt && lo != null && i > 0
+        //                 || lt < rt && hi != null && (hi > i+1 || m > i+2 || n == 2))
+        //                 return true;
+        //         }
+        //     }
+        //     for (int i = 0; i < n-1; i++) {
+        //         if (c[i] == c[n-1] - c[i]) return true;
+        //         long lt = c[i], rt = c[n-1] - c[i];
+        //         long dif = Math.abs(lt - rt);
+        //         if (mp.containsKey(dif) && mp.get(dif).size() > 0) { 
+        //             Integer lo = mp.get(dif).ceilingKey(-1 * i), hi = mp.get(dif).floorKey(-1 * (i+1));
+        //             if (lt > rt && lo != null && i > 0
+        //                 || lt < rt && hi != null && (hi < -1 * (i+1) || n > i+2 || m == 2))
+        //                 return true;
+        //         }
+        //     }
+        //     return false;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        //  public int smallestIndex(int[] a) {
+        //      int n = a.length, r = 0;
+        //      for (int i = 0; i < n; i++) {
+        //          r = 0;
+        //          for (char c : String.valueOf(a[i]).toCharArray()) 
+        //              r += c-'0';
+        //          if (i == r) return i;
+        //      }
+        //      return -1;
+        //  }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int minSwaps(int[] a) { 
+        //     int n = a.length, f = 0, j = 0;
+        //     List<Integer> l = Arrays.stream(a).boxed().collect(Collectors.toList());
+        //     Collections.sort(l, (x, y)->compare(x, y)); // O(NlogN)
+        //     Map<Integer, Integer> m = new HashMap<>();
+        //     for (int i = 0; i < n; i++)
+        //         m.put(a[i], i);
+        //     for (int i = 0; i < n; i++) {
+        //         // 下面，数得不对，就用笨办法，真正实际换，直到能够换成链条。。数换的次数
+        //         // if (a[i] != l.get(i)) f++;
+        //         int lv = l.get(i);
+        //         if (a[i] != l.get(i)) {
+        //             j = m.get(lv);
+        //             a[j] = a[i];
+        //             m.put(a[j], j);
+        //            f++;
+        //         }
+        //     }
+        //     return f;
+        // }
+        // public int compare(int i, int j) {
+        //     int l = 0, r = 0;
+        //     for (char c : String.valueOf(i).toCharArray())
+        //         l += c - '0';
+        //     for (char c : String.valueOf(j).toCharArray())
+        //         r += c - '0';
+        //     return (l != r ? l - r : i - j);
+        // }
+
         // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // 跟前面的狠像，只多一步【纪录格里数字的出现与否、与出现的位置】 BIT
-        // 考虑【重复出现的数字】
-        public boolean canPartitionGrid(int[][] f) { // 681/682 testcases passed 不知道最后2 个数据量狠大的测试用命算是怎么回事。。
-            int m = f.length, n = f[0].length; long v = 0;
-            Map<Long, TreeMap<Integer, Integer>> mp = new HashMap<>(); 
-            for (int i = 0; i < f.length; i++) 
+        // 感觉思路是清楚的，就是不知道，细节能不能够写得完整。。
+        // 【TODO：】还有【BUG：】，没能改完。。
+        int [][] dirs = {{1, 0}, {0, 1}, {0, -1}, {-1, 0}};
+        public int minMoves(String[] a) {
+            m = a.length; n = a[0].length();
+            idx = new ArrayList[26];
+            Arrays.setAll(idx, z -> new ArrayList<Integer>());
+            this.a = new char [m][n];
+            for (int i = 0; i < m; i++)
                 for (int j = 0; j < n; j++) {
-                    mp.computeIfAbsent((long)f[i][j], z -> new TreeMap<Integer, Integer>());
-                    mp.get((long)f[i][j]).put(i, j);
-                    mp.get((long)f[i][j]).put(-j, i);
+                    this.a[i][j] = a[i].charAt(j);
+                    if (this.a[i][j] != '.' && this.a[i][j] != '#') {
+                        int k = this.a[i][j] - 'A';
+                        idx[k].add(i * m + n);
+                    }
                 }
-            long [] r = new long [m], c = new long [n];
-            for (int i = 0; i < m; i++) {
-                v = 0;
-                for (int j = 0; j < n; j++)
-                    r[i] += (long)f[i][j];
-                if (i > 0)
-                    r[i] += r[i-1];
-            }
-            for (int i = 0; i < n; i++) {
-                v = 0;
-                for (int j = 0; j < m; j++)
-                    v += (long)f[j][i];
-                c[i] = v;
-                if (i > 0)
-                    c[i] += c[i-1];
-            }
-            for (int i = 0; i < m-1; i++) {
-                long lt = r[i], rt = r[m-1] - r[i];
-                if (r[i] == r[m-1] - r[i]) return true;
-                long dif = Math.abs(lt - rt);
-                if (mp.containsKey(dif) && mp.get(dif).size() > 0) { 
-                    Integer lo = mp.get(dif).floorKey(i), hi = mp.get(dif).ceilingKey(i+1);
-                    if (lt > rt && lo != null && i > 0
-                        || lt < rt && hi != null && (hi > i+1 || m > i+2 || n == 2))
-                        return true;
-                }
-            }
-            for (int i = 0; i < n-1; i++) {
-                if (c[i] == c[n-1] - c[i]) return true;
-                long lt = c[i], rt = c[n-1] - c[i];
-                long dif = Math.abs(lt - rt);
-                if (mp.containsKey(dif) && mp.get(dif).size() > 0) { 
-                    Integer lo = mp.get(dif).ceilingKey(-1 * i), hi = mp.get(dif).floorKey(-1 * (i+1));
-                    if (lt > rt && lo != null && i > 0
-                        || lt < rt && hi != null && (hi < -1 * (i+1) || n > i+2 || m == 2))
-                        return true;
-                }
-            }
-            return false;
+            // System.out.println("this.a.length: " + this.a.length);
+            // for (int z = 0; z < this.a.length; ++z)
+            //     System.out.println(Arrays.toString(this.a[z]));
+            r = new int [26];
+            Arrays.fill(r, -1);
+            vis = new boolean [m][n];
+            f = new int [m+1][n+1];
+            for (int i = 0; i <= m; i++)
+                for (int j = 0; j <= n; j++)
+                    f[i][j] = Integer.MAX_VALUE / 2;
+            f[0][0] = 0;
+            dfs(0, 0, 0, vis);
+            System.out.println("f.length: " + f.length);
+            for (int z = 0; z < f.length; ++z)
+                System.out.println(Arrays.toString(f[z]));
+            return (f[m][n] == Integer.MAX_VALUE / 2 ? -1 : f[m][n]);
         }
+        int [][] f; char [][] a;
+        boolean [][] vis;
+        int [] r;
+        List<Integer> [] idx;
+        int m, n;
+        // 更新【i,j】周围的四个框
+        void dfs(int i, int j, int k, boolean [][] vis) {
+            // System.out.println("i: " + i + " " + "j: " + j);
+            if (i == m-1 && j == n-1) {
+                if (a[i][j] == '.')
+                    f[i+1][j+1] = Math.min(f[i+1][j+1], k);
+                else if (a[i][j] != '#')
+                    f[i+1][j+1] = Math.min((r[a[i][j]-'A'] == -1 ? k : r[a[i][j]-'A']), f[i+1][j+1]);
+                return;
+            }
+           vis[i][j] = true;
+           if (a[i][j] != '.' && a[i][j] != '#') {
+               int idx = a[i][j] - 'A';
+               // System.out.println(Arrays.toString(r));
+               if (r[idx] != -1) {
+                   if (k < r[idx])
+                       r[idx] = k;
+               } else
+                   r[idx] = k;
+               f[i+1][j+1] = r[idx];
+           }
+           for (int [] d : dirs) {
+               int x = i + d[0], y = j + d[1];
+               if (x < 0 || x >= m || y < 0 || y >= n || a[x][y] == '#') continue;
+               if (!vis[x][y]
+                   || a[i][j] == '.' && k+1 < f[x+1][y+1]
+                   || a[i][j] != '.' && f[i+1][j+1]+1 <= f[x+1][y+1]) {
+                   if (a[i][j] == '.' && k+1 < f[x+1][y+1]) 
+                       f[x+1][y+1] = k+1;
+                   if (a[i][j] != '.' && f[i+1][j+1]+1 <= f[x+1][y+1])
+                       f[x+1][y+1] = f[i+1][j+1]+1;
+                   dfs(x, y, (a[i][j] == '.' ? k : f[i+1][j+1])+1, vis);
+               }
+           }
+           vis[i][j] = false;
+        }        
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // 相对难，没有思路；找2 条最短路径和，但不能保障【最小树、总重最小】
+        // public int[] minimumWeight(int[][] edges, int[][] queries) {
+        // }
     }
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
         public static void main (String[] args) { 
 		Solution s = new Solution ();
 
-        // int []  a = new int []  {7,2,0,4,2};
-        // System.out.println(Arrays.toString(a));
-        // int r = s.minOperations(a);
+        // String []  a = new String []  {".A", "CA"};
+        String []  a = new String []  {"..", "HA", ".C", "A."};
 
-        int [][] a = new int [][] {{4, 3, 7},{5, 3, 3}};
-
-    boolean r = s.canPartitionGrid(a);
-    System.out.println("r: " + r);
+        int r = s.minMoves(a);
+        System.out.println("r: " + r);
     }
 }
 // ListNode head = new ListNode(a0]);  
@@ -1533,6 +1652,17 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
