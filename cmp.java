@@ -1,4 +1,5 @@
 import com.TreeNode;
+
 // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 import java.util.HashMap;
 import java.util.Map;
@@ -344,79 +345,382 @@ public class cmp {
         //     return false;
         // }
 
+        // // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // // 思路，应该是把【距阵问题】转化成【图】？
+        // // public int minMoves(String[] classroom, int energy) {
+        // // }
+        // // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // // 数组大小N[1,50000] 感觉这个，实时更新是要用到BIT 的
+        // // // 但是 100,000 以内的质数，就只能查个质数 Set<Integer> s = new HashSet<>();
+        // // public int[] maximumCount(int[] nums, int[][] queries) {
+        // // }
         // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // // 思路，应该是把【距阵问题】转化成【图】？
-        // public int minMoves(String[] classroom, int energy) {
+        // // 就是【二维数组】上的相结动规，可是细节狠繁琐，不想再找这个错误掉的细节了。。。
+        // public int[][] minAbsDiff(int[][] a, int k) {
+        //     int m = a.length, n = a[0].length;
+        //     if (k == 1) return new int [m][n];
+        //     int [][] f = new int [m+1-k][n+1-k];
+        //     r = new TreeMap<>();
+        //     for (int i = 0; i < k-1; i++)
+        //         for (int j = 0; j < k-1; j++) 
+        //             r.put(a[i][j], r.getOrDefault(a[i][j], 0) + 1);
+        //     for (int i = 0; i < m+1-k; i++) {
+        //         // 【每一新行】：前【0,k-2】下标的数字
+        //         for (int j = 0; j < k-1; j++) 
+        //             r.put(a[i+k-1][j], r.getOrDefault(a[i+k-1][j], 0) + 1); 
+        //         for (int j = 0; j <= n-k; j++) {
+        //             // 【清理】：前一列【j-1】，行数为【i,i+k-1】
+        //             if (j > 0) {
+        //                 for (int x = i; x < i+k && x < m; x++) {
+        //                     r.put(a[x][j-1], r.get(a[x][j-1])-1); 
+        //                     if (r.get(a[x][j-1]) == 0) r.remove(a[x][j-1]);
+        //                 }
+        //             }
+        //             // 新增：第【j+k-1】列，行数为【i,i+k-1】
+        //             for (int x = i; x < i+k && x < m; x++) 
+        //                 r.put(a[x][j+k-1], r.getOrDefault(a[x][j+k-1], 0) + 1);
+        //             f[i][j] = getMinAbsDiff();
+        //         }
+        //         // 【每一旧行】：前【0,k-2】下标的数字
+        //         if (i == 0) continue;
+        //         // 清理上一行的存值 
+        //         for (int j = n-k; j < n; j++) {
+        //             r.put(a[i-1][j], r.get(a[i-1][j])-1);
+        //             if (r.get(a[i-1][j]) == 0) r.remove(a[i-1][j]);
+        //         }
+        //     }
+        //     return f;
+        // }
+        // TreeMap<Integer, Integer> r;
+        // int getMinAbsDiff() {
+        //     int f = Integer.MIN_VALUE, min = Integer.MAX_VALUE;
+        //     for (int key : r.keySet()) {
+        //         if (f == Integer.MIN_VALUE) {
+        //             f = key;
+        //             continue;
+        //         }
+        //         min = Math.min(min, Math.abs(key - f));
+        //         f = key;
+        //     }
+        //     return min;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 【TODO：】什么狗屁的细节地方，写错了，晚点儿再检查
+        // public int maxSumDistinctTriplet(int[] a, int[] b) {
+        //     int n = a.length, max = -1, idx = 0;
+        //     Set<Integer> s = new HashSet<>(Arrays.stream(a).boxed().collect(Collectors.toList()));
+        //     Set<Integer>[] m = new HashSet[s.size()];
+        //     Arrays.setAll(m, z -> new HashSet<Integer>());
+        //     Map<Integer, Integer> iis = new HashMap<>();
+        //     s.clear();
+        //     for (int i = 0; i < n; i++) 
+        //         if (!s.contains(a[i])) {
+        //             iis.put(a[i], idx);
+        //             m[idx++].add(i);
+        //             s.add(a[i]);
+        //         } else 
+        //             m[iis.get(a[i])].add(i);
+        //     int ii = 0, jj = 0, kk = 0;
+        //     for (int v = 0; v < (1 << m.length); v++) {
+        //         if (Integer.bitCount(v) != 3) continue;
+        //         for (int i = m.length-1; i > 0; i--) {
+        //             if ((v & (i << 1)) > 0) {
+        //                 ii = i;
+        //                 for (int j = i-1; j > 0; j--) 
+        //                     if ((v & (j << 1)) > 0) {
+        //                         jj = j;
+        //                         for (int k = j-1; k > 0; k--) 
+        //                             if ((v & (k << 1)) > 0) {
+        //                                 kk = k;
+        //                                 for (int x : m[ii])
+        //                                     for (int y : m[jj]) 
+        //                                         for (int z : m[kk]) {
+        //                                             System.out.println("x: " + x + " " + "y: " + y + " z: " + z);
+        //                                             max = Math.max(max, b[x] + b[y] + b[z]);
+        //                                         }
+        //                             }
+        //                     }
+        //             }
+        //         }
+        //     }
+        //     return max;
+        // }
+
+//         // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//         // 这个【股票】问题，是好红典的题型，可是亲爱的表哥的活宝妹，不确定自己是否还记得（背答案）这个题目的解法？？？
+//         // 不要想复杂了，用个【贪心】，超过 k 次交易，再减去一些利润？
+//         public long maximumProfit(int[] a, int k) {
+//             int n = a.length;
+//             TreeMap<Integer, Integer> m = new TreeMap<>();
+//             int [] l = new int [n+1], r = new int [n+1];
+//             for (int i = 1; i <= n; i++) 
+// l[i] = l[i-1] + 
+//         }
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public long maxGCDScore(int[] nums, int k) {
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 【自底向上】遍历树，像是【树型动规】，可是又与普通一般【树形动规】涉及子集与组合的部分，不一样。。
+        // // 亲爱的表哥的活宝妹，笨宝妹在想：这个要死不要活的破烂题目，同亲爱的表哥的活宝妹上个周末？【树上背包】问题，有什么不同？
+        // // 不是【0/1 背包】、不是【完全背包】、是【集合的全局最值、集合与子集】上的动规。。
+        // // 【0-9】10 个数位，任何可能组合的【最大值】动规。。
+        // // 感觉，这个破烂题目还是狠简单的。。
+        // // 不知道哪里细节写错了，傍晚再试着检查一下。。。
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // static final int mod = (int)1e9 + 7;
+        // public int goodSubtreeSum(int[] a, int[] p) {
+        //     n = a.length; nn = 10; this.a = a; 
+        //     // 【有向图：树】说是无向图，但实际是（有向图）
+        //     g = new ArrayList [n];
+        //     Arrays.setAll(g, z -> new ArrayList<Integer>());
+        //     for (int i = 1; i < n; i++) 
+        //         g[p[i]].add(i);
+        //     // 【背字典】：每个节点，背个字典，记住以【当前节点】为（根节点），（最大，任何？）的【0-9 及存在组合】的值
+        //     m = new HashMap[n];
+        //     Arrays.setAll(m, z -> new HashMap<Integer, Integer>());
+        //     f = new Long [n];
+        //     dfs(0);
+        //     int r = 0;
+        //     for (int i = 0; i < n; i++)
+        //         r = (int)(((long)(r + f[i])) % mod);
+        //     return r;
+        // }
+        // List<Integer> [] g;
+        // int n, nn;
+        // // 【背字典】：每个节点，背个字典，记住以【当前节点】为（根节点），（最大，任何？）的【0-9 及存在组合】的值
+        // // 也就是，【每个节点的、字典】最多丰储（1<<10）个銉
+        // Map<Integer, Integer> [] m;// 每个 Key: 代表 key 组合，所有可能组合里的最大值！！所以可以动规。。
+        // Long [] f;
+        // int [] a;
+        // long dfs(int u) {
+        //     // 【叶子节点】：最值固定
+        //     if (g[u].size() == 0) {
+        //         int binaryKey = getBinaryRepresentation(a[u]);
+        //         m[u].put(binaryKey, a[u]);
+        //         return f[u] = (long)a[u];
+        //     }
+        //     // 【非叶子节点】：集合，每个 Key: 代表 key 组合，所有可能组合里的最大值！！所以可以动规。。
+        //     // 集合与子集的遍历，是怎么遍历来着？？？亲爱的表哥的活宝妹，去胀午餐，回头再想这个破烂题目。。
+        //     // 【当前父节点】：复制、或（优化）取所有子节点中（1<<10）个不同键值的、所有子节点中的最优值；并结合自己的值，在当前父节点层面进一步优化
+        //     // O(1<<10 * (1<<10) * N[1,500]) 应该不会超时
+        //     for (int v : g[u]) {
+        //         // 遍历：所有【子节点】
+        //         dfs(v);
+        //         // 整合：所有【子节点】中，各子节点中已经存在的键值的、最优解
+        //         for (Map.Entry<Integer, Integer> en : m[v].entrySet()) {
+        //             int k = en.getKey(), val = en.getValue();
+        //             if (m[u].containsKey(k))
+        //                 m[u].put(k, Math.max(m[u].get(k), val));
+        //             else m[u].put(k, val);
+        //         }
+        //     }
+        //     // 【父节点】：整合自己的值，更新以【当前父节点】为根的（全局最优解）
+        //     // 【TODO：】感觉这里面还有机关，没想透彻。。。胀晚餐时再想一想
+        //     int binaryKey = getBinaryRepresentation(a[u]);
+        //     if (m[u].containsKey(binaryKey))
+        //         m[u].put(binaryKey, Math.max(m[u].get(binaryKey), a[u]));
+        //     else m[u].put(binaryKey, a[u]);
+        //     // 【TODO：】更新已要存在的 k, 不能仅只更新 m[u] 里的键值；？？
+        //     Map<Integer, Integer> t = new HashMap<>(m[u]);
+        //     for (Map.Entry<Integer, Integer> en : m[u].entrySet()) {
+        //         int k = en.getKey(), val = en.getValue();
+        //         // 【父节点】层面，根据父节点 a[u] 的值，当前层面全部更新
+        //         for (int kk : m[u].keySet()) {
+        //             if (k == kk) continue;
+        //             // if ((k & kk) == 0 && m[u].containsKey(k ^ kk))
+        //             // 引入新键，用新键更新，所有其它可能的、合法组合健
+        //             if ((k & kk) == 0) { 
+        //                 int v = (k | kk);
+        //                 // 不管 m[u] 存不存在 v, 存最优值；先前不存在就创建新键
+        //                 // m[u].put(v, Math.max(m[u].getOrDefault(v, 0), a[u] + m[u].get(kk)));
+        //                 t.put(v, Math.max(m[u].getOrDefault(v, 0), a[u] + m[u].get(kk)));
+        //             // 引入更新值，用更优的键值，来更新，所有其它可能的、合法组合健
+        //             } else if ((k & kk) == k) { //m[u] 中，来自于子节点的键中，早就存在键 a[u] ＝ binaryKey(a[u])
+        //                 int v = kk - k; // 此健， m[u] 中，来自于其子节点，一定已经存在的？？？怎么确认？
+        //                 // 用更优的、来自【当前父节点a[u] 】的值，更新来子节点的、非当前父节点全局最优的 kk 的值
+        //                 // m[u].put(kk, Math.max(m[u].get(kk), val + m[u].get(v)));
+        //                 t.put(kk, Math.max(m[u].get(kk), val + m[u].get(v)));
+        //             }
+        //         }
+        //     }
+        //     m[u] = t;
+        //     return f[u] = (long)Collections.max(m[u].values());
+        // }
+        // int getBinaryRepresentation(int v) {
+        //     int f = 0;
+        //     for (char c : String.valueOf(v).toCharArray())
+        //         f |= (1 << (c - '0'));
+        //     return f;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public boolean canMakeEqual(int[] a, int k) {
+        //     int n = a.length, i = 0, r = k, sum = 0;
+        //     boolean f = false;
+        //     // 试一遍：全变成 1
+        //     i = 0;
+        //     while (i < n-1 && r >= 0) {
+        //         if (a[i] == -1 && f) {
+        //             sum += a[i] * (-1);
+        //             f = false;
+        //             i++;
+        //             continue;
+        //         }
+        //         if (a[i] == -1) {
+        //             f = true;
+        //             sum += a[i] * (-1);
+        //             --r;
+        //         } else if (a[i] == 1 && f) {
+        //             sum += a[i];
+        //             --r;
+        //         }
+        //         i++;
+        //     }
+        //     if (i == n-1 && r >= 0 && (a[i] == 1 && !f || a[i] == -1 && f)) return true;
+        //     // 试一遍：全变成 -1
+        //     i = 0; r = k; sum = 0; f = false;
+        //     while (i < n-1 && r >= 0) {
+        //         if (a[i] == -1 && f) {
+        //             sum += a[i];
+        //             --r;
+        //             i++;
+        //             continue;
+        //         }
+        //         if (a[i] == 1 && !f) {
+        //             f = true;
+        //             sum += a[i] * (-1);
+        //             --r;
+        //         } else if (a[i] == 1) {
+        //             sum += a[i] * (-1);
+        //             f = false;
+        //         }
+        //         i++;
+        //     }
+        //     if (i == n-1 && r >= 0 && (a[i] == 1 && f || a[i] == -1 && !f)) return true;
+        //     return false;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 亲爱的表哥的活宝妹，读不懂这个题目在说什么，先看其它题目
+        // public int countPermutations(int[] complexity) {
+        //     return 0;
         // }
         // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // // 数组大小N[1,50000] 感觉这个，实时更新是要用到BIT 的
-        // // 但是 100,000 以内的质数，就只能查个质数 Set<Integer> s = new HashSet<>();
-        // public int[] maximumCount(int[] nums, int[][] queries) {
+        // public int minOperations(String word1, String word2) {
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 【思路不对】：好像有狠多统计重复的地方。。。
+        // static final int mod = (int)1e9 + 7;
+        // public int countPartitions(int[] a, int k) {
+        //     n = a.length; this.v = k; this.a = a; 
+        //     f = new Integer [n][n];
+        //     return dfs(0, n-1);
+        // }
+        // Integer [][] f;
+        // int n, v; int [] a;
+        // // 【思路不对】：好像有狠多统计重复的地方。。。
+        // int dfs(int i, int j) {
+        //     System.out.println("i: " + i + " " + "j: " + j);
+        //     // if (i > j) return 0;
+        //     if (i == j) return f[i][j] = 1;
+        //     if (f[i][j] != null) return f[i][j];
+        //     if (i+1 == j) {
+        //         f[i][j] = (Math.max(a[i], a[j]) - Math.min(a[i], a[j]) <= v ? 2 : 1);
+        //         System.out.println("i: " + i + " " + "j: " + j + " r: " + f[i][j]);
+        //         return f[i][j];
+        //     }
+        //     int r = 0, min = Integer.MAX_VALUE, max = Integer.MIN_VALUE;
+        //     // 这里面，有细节错误。。【TODO：】
+        //     for (int k = i; k < j; k++) {
+        //         System.out.println("k: " + k);
+        //         min = Math.min(min, a[k]);
+        //         max = Math.max(max, a[k]);
+        //         if (max - min <= v)
+        //             r = (r + dfs(i, k) * dfs(k+1, j)) % mod;
+        //         else {
+        //             r = (r + dfs(i, k-1) * dfs(k, j)) % mod;
+        //             break;
+        //         }
+        //     }
+        //     System.out.println("i: " + i + " " + "j: " + j + " r: " + r);
+        //     return f[i][j] = r;
         // }
         // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // 就是【二维数组】上的相结动规，可是细节狠繁琐，不想再找这个错误掉的细节了。。。
-        public int[][] minAbsDiff(int[][] a, int k) {
-            int m = a.length, n = a[0].length;
-            if (k == 1) return new int [m][n];
-            int [][] f = new int [m+1-k][n+1-k];
-            r = new TreeMap<>();
-            for (int i = 0; i < k-1; i++)
-                for (int j = 0; j < k-1; j++) 
-                    r.put(a[i][j], r.getOrDefault(a[i][j], 0) + 1);
-            for (int i = 0; i < m+1-k; i++) {
-                // 【每一新行】：前【0,k-2】下标的数字
-                for (int j = 0; j < k-1; j++) 
-                    r.put(a[i+k-1][j], r.getOrDefault(a[i+k-1][j], 0) + 1); 
-                for (int j = 0; j <= n-k; j++) {
-                    // 【清理】：前一列【j-1】，行数为【i,i+k-1】
-                    if (j > 0) {
-                        for (int x = i; x < i+k && x < m; x++) {
-                            r.put(a[x][j-1], r.get(a[x][j-1])-1); 
-                            if (r.get(a[x][j-1]) == 0) r.remove(a[x][j-1]);
-                        }
-                    }
-                    // 新增：第【j+k-1】列，行数为【i,i+k-1】
-                    for (int x = i; x < i+k && x < m; x++) 
-                        r.put(a[x][j+k-1], r.getOrDefault(a[x][j+k-1], 0) + 1);
-                    f[i][j] = getMinAbsDiff();
-                }
-                // 【每一旧行】：前【0,k-2】下标的数字
-                if (i == 0) continue;
-                // 清理上一行的存值 
-                for (int j = n-k; j < n; j++) {
-                    r.put(a[i-1][j], r.get(a[i-1][j])-1);
-                    if (r.get(a[i-1][j]) == 0) r.remove(a[i-1][j]);
-                }
-            }
-            return f;
-        }
-        TreeMap<Integer, Integer> r;
-        int getMinAbsDiff() {
-            int f = Integer.MIN_VALUE, min = Integer.MAX_VALUE;
-            for (int key : r.keySet()) {
-                if (f == Integer.MIN_VALUE) {
-                    f = key;
+        // 【动规】：
+        static final int mod = (int)1e9 + 7;
+        public int countPartitions(int[] a, int k) {
+            int n = a.length;
+            // 数据【预处理】：以每个下标 a[i] 为【最大值】【最小值】，（向左）可延伸的最远最小下标。。
+            // 亲爱的表哥的活宝妹，这里【数据预处理】的思路是好的，可是感觉这里脑袋昏昏，实现方法细节未必对。。
+            // l: 当前下标为【最小值】； r: 当前下标为（最大值）
+            int [] l = new int [n+1], r = new int [n+1];
+            ArrayDeque<Integer> s = new ArrayDeque<>();
+            // 【降序排列】双端队列： l: 当前下标为【最小值】
+            Arrays.fill(l, -1); // <<<<<<<<<<<<<<<<<<<< 对吗？
+            for (int i = 0; i < n; i++) {
+                if (s.isEmpty()) {
+                    s.offerFirst(i);
                     continue;
                 }
-                min = Math.min(min, Math.abs(key - f));
-                f = key;
+                // 去除：队头【超大非法值】
+                while (!s.isEmpty() && a[s.peekFirst()] - a[i] > k)
+                    s.pollFirst();
+                l[i+1] = (s.isEmpty() ? i : s.peekFirst());
+                // 去除：队尾【小于当前 a[i] 的值】，以维护（降序排列）
+                while (!s.isEmpty() && a[s.peekLast()] <= a[i])
+                    s.pollLast();
+                // 【当前下标】：入队列
+                s.offerLast(i);
             }
-            return min;
+            System.out.println(Arrays.toString(l));
+            // 【降序排列、倒序遍历】双端队列： l: 当前下标为【最大值】
+            Arrays.fill(r, n);
+            for (int i = n-1; i >= 0; i--) {
+                if (s.isEmpty()) {
+                    s.offerFirst(i);
+                    continue;
+                }
+                // 去除：队头【超大非法值】
+                while (!s.isEmpty() && a[s.peekFirst()] - a[i] > k)
+                    r[s.pollFirst()] = i+1;
+                // 去除：队尾【小于当前 a[i] 的值】，以维护（降序排列）
+                while (!s.isEmpty() && a[s.peekLast()] <= a[i])
+                    s.pollLast();
+                // 【当前下标】：入队列
+                s.offerLast(i);
+            }
+            System.out.println(Arrays.toString(r));
+
+            // 【状态定义】：到下标 i, 把【0,i】划分成 j 个有效段的方法数
+            int [][] f = new int [n+1][k+1];
+            // for (int i = 0; i <= n; i++) 
+            //     f[i][0] = 1;
+            f[0][0] = 1;
+            for (int i = 1; i <= n; i++) {
+                // 每个下标，单独成一个子数组
+                // f[i] = (f[i] + f[i-1]) % mod;
+                // 【当前下标 i-1】：合并到先前由下标[0,i-2] 所构成的第 [i-1,i-2,i-3...3,2,1] 段的可能性、方法数
+                // 【TODO：】想要使用（当前下标）为最大值最小值，来一定程度上约束缩小 j 可能遍历到的最小值，实现一点儿优化
+                for (int j = i-1; j > 0; j--) {
+                    // 这里想得不透彻，暂时不写了。。
+                    // 【TODO：】感觉，遍历 i 时，需要【滑动窗口】维护一个以（当前下标 a[i] 值）为最大最小值的2 个不同窗口，来优化求解 f[i][j]
+                }
+            }
+            return 0;
         }
 }
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
         public static void main (String[] args) { 
 		Solution s = new Solution ();
 
-        int [][] a = new int [][] {{20195,15337,73189,16963,-90840},{10664,-43796,-61984,13235,-33619}};
-        System.out.println("a.length: " + a.length);
-        for (int z = 0; z < a.length; ++z)
-            System.out.println(Arrays.toString(a[z]));
+        int []  a = new int []  {9, 4, 1, 3, 7};
+        System.out.println(Arrays.toString(a));
 
-        int [][] r = s.minAbsDiff(a, 2);
-        System.out.println("r.length: " + r.length);
-        for (int z = 0; z < r.length; ++z)
-            System.out.println(Arrays.toString(r[z]));
+        int r = s.countPartitions(a, 4);
+        System.out.println("r: " + r);
     }
 }
 // ListNode head = new ListNode(a0]);  
@@ -524,4 +828,5 @@ public class cmp {
 //  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 //  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 //  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
