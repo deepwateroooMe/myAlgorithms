@@ -648,78 +648,157 @@ public class cmp {
         //     System.out.println("i: " + i + " " + "j: " + j + " r: " + r);
         //     return f[i][j] = r;
         // }
-        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // 【动规】：
-        static final int mod = (int)1e9 + 7;
-        public int countPartitions(int[] a, int k) {
-            int n = a.length;
-            // 数据【预处理】：以每个下标 a[i] 为【最大值】【最小值】，（向左）可延伸的最远最小下标。。
-            // 亲爱的表哥的活宝妹，这里【数据预处理】的思路是好的，可是感觉这里脑袋昏昏，实现方法细节未必对。。
-            // l: 当前下标为【最小值】； r: 当前下标为（最大值）
-            int [] l = new int [n+1], r = new int [n+1];
-            ArrayDeque<Integer> s = new ArrayDeque<>();
-            // 【降序排列】双端队列： l: 当前下标为【最小值】
-            Arrays.fill(l, -1); // <<<<<<<<<<<<<<<<<<<< 对吗？
-            for (int i = 0; i < n; i++) {
-                if (s.isEmpty()) {
-                    s.offerFirst(i);
-                    continue;
-                }
-                // 去除：队头【超大非法值】
-                while (!s.isEmpty() && a[s.peekFirst()] - a[i] > k)
-                    s.pollFirst();
-                l[i+1] = (s.isEmpty() ? i : s.peekFirst());
-                // 去除：队尾【小于当前 a[i] 的值】，以维护（降序排列）
-                while (!s.isEmpty() && a[s.peekLast()] <= a[i])
-                    s.pollLast();
-                // 【当前下标】：入队列
-                s.offerLast(i);
-            }
-            System.out.println(Arrays.toString(l));
-            // 【降序排列、倒序遍历】双端队列： l: 当前下标为【最大值】
-            Arrays.fill(r, n);
-            for (int i = n-1; i >= 0; i--) {
-                if (s.isEmpty()) {
-                    s.offerFirst(i);
-                    continue;
-                }
-                // 去除：队头【超大非法值】
-                while (!s.isEmpty() && a[s.peekFirst()] - a[i] > k)
-                    r[s.pollFirst()] = i+1;
-                // 去除：队尾【小于当前 a[i] 的值】，以维护（降序排列）
-                while (!s.isEmpty() && a[s.peekLast()] <= a[i])
-                    s.pollLast();
-                // 【当前下标】：入队列
-                s.offerLast(i);
-            }
-            System.out.println(Arrays.toString(r));
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 【动规】：
+        // static final int mod = (int)1e9 + 7;
+        // public int countPartitions(int[] a, int k) {
+        //     int n = a.length;
+        //     // 数据【预处理】：以每个下标 a[i] 为【最大值】【最小值】，（向左）可延伸的最远最小下标。。
+        //     // 亲爱的表哥的活宝妹，这里【数据预处理】的思路是好的，可是感觉这里脑袋昏昏，实现方法细节未必对。。
+        //     // l: 当前下标为【最小值】； r: 当前下标为（最大值）
+        //     int [] l = new int [n+1], r = new int [n+1];
+        //     ArrayDeque<Integer> s = new ArrayDeque<>();
+        //     // 【降序排列】双端队列： l: 当前下标为【最小值】
+        //     Arrays.fill(l, -1); // <<<<<<<<<<<<<<<<<<<< 对吗？
+        //     for (int i = 0; i < n; i++) {
+        //         if (s.isEmpty()) {
+        //             s.offerFirst(i);
+        //             continue;
+        //         }
+        //         // 去除：队头【超大非法值】
+        //         while (!s.isEmpty() && a[s.peekFirst()] - a[i] > k)
+        //             s.pollFirst();
+        //         l[i+1] = (s.isEmpty() ? i : s.peekFirst());
+        //         // 去除：队尾【小于当前 a[i] 的值】，以维护（降序排列）
+        //         while (!s.isEmpty() && a[s.peekLast()] <= a[i])
+        //             s.pollLast();
+        //         // 【当前下标】：入队列
+        //         s.offerLast(i);
+        //     }
+        //     System.out.println(Arrays.toString(l));
+        //     // 【降序排列、倒序遍历】双端队列： l: 当前下标为【最大值】
+        //     Arrays.fill(r, n);
+        //     for (int i = n-1; i >= 0; i--) {
+        //         if (s.isEmpty()) {
+        //             s.offerFirst(i);
+        //             continue;
+        //         }
+        //         // 去除：队头【超大非法值】
+        //         while (!s.isEmpty() && a[s.peekFirst()] - a[i] > k)
+        //             r[s.pollFirst()] = i+1;
+        //         // 去除：队尾【小于当前 a[i] 的值】，以维护（降序排列）
+        //         while (!s.isEmpty() && a[s.peekLast()] <= a[i])
+        //             s.pollLast();
+        //         // 【当前下标】：入队列
+        //         s.offerLast(i);
+        //     }
+        //     System.out.println(Arrays.toString(r));
 
-            // 【状态定义】：到下标 i, 把【0,i】划分成 j 个有效段的方法数
-            int [][] f = new int [n+1][k+1];
-            // for (int i = 0; i <= n; i++) 
-            //     f[i][0] = 1;
-            f[0][0] = 1;
-            for (int i = 1; i <= n; i++) {
-                // 每个下标，单独成一个子数组
-                // f[i] = (f[i] + f[i-1]) % mod;
-                // 【当前下标 i-1】：合并到先前由下标[0,i-2] 所构成的第 [i-1,i-2,i-3...3,2,1] 段的可能性、方法数
-                // 【TODO：】想要使用（当前下标）为最大值最小值，来一定程度上约束缩小 j 可能遍历到的最小值，实现一点儿优化
-                for (int j = i-1; j > 0; j--) {
-                    // 这里想得不透彻，暂时不写了。。
-                    // 【TODO：】感觉，遍历 i 时，需要【滑动窗口】维护一个以（当前下标 a[i] 值）为最大最小值的2 个不同窗口，来优化求解 f[i][j]
-                }
-            }
-            return 0;
-        }
-}
+        //     // 【状态定义】：到下标 i, 把【0,i】划分成 j 个有效段的方法数
+        //     int [][] f = new int [n+1][k+1];
+        //     // for (int i = 0; i <= n; i++) 
+        //     //     f[i][0] = 1;
+        //     f[0][0] = 1;
+        //     for (int i = 1; i <= n; i++) {
+        //         // 每个下标，单独成一个子数组
+        //         // f[i] = (f[i] + f[i-1]) % mod;
+        //         // 【当前下标 i-1】：合并到先前由下标[0,i-2] 所构成的第 [i-1,i-2,i-3...3,2,1] 段的可能性、方法数
+        //         // 【TODO：】想要使用（当前下标）为最大值最小值，来一定程度上约束缩小 j 可能遍历到的最小值，实现一点儿优化
+        //         for (int j = i-1; j > 0; j--) {
+        //             // 这里想得不透彻，暂时不写了。。
+        //             // 【TODO：】感觉，遍历 i 时，需要【滑动窗口】维护一个以（当前下标 a[i] 值）为最大最小值的2 个不同窗口，来优化求解 f[i][j]
+        //         }
+        //     }
+        //     return 0;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public String generateTag(String S) {
+        //     S = S.trim();
+        //     if (S.length() == 0) return "#";
+        //     String [] s = S.split("\\s+");
+        //     int i = 1, idx = 1;
+        //     StringBuilder sb = new StringBuilder("#");
+        //     for (int j = 0; j < s.length && i < 100; j++) {
+        //         if (j == 0) 
+        //             sb.append(Character.toLowerCase(s[j].charAt(0)));
+        //         else 
+        //             sb.append(Character.toUpperCase(s[j].charAt(0)));
+        //         ++i;
+        //         idx = 1;
+        //         while (i < 100 && idx < s[j].length()) {
+        //             sb.append(Character.toLowerCase(s[j].charAt(idx++)));
+        //             ++i;
+        //         }
+        //     }
+        //     return sb.toString();
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public long maximumProduct(int[] a, int m) {
+        //     int n = a.length;
+        //     long f = Long.MIN_VALUE;
+        //     // 【自右往左】：到当前下标 i 的（最小值）与（最大值）
+        //     int [] l = new int [n+1], r = new int [n+1];
+        //     l[n] = Integer.MAX_VALUE; r[n] = Integer.MIN_VALUE;
+        //     for (int i = n-1; i >= m-1; i--) {
+        //         l[i] = Math.min(l[i+1], a[i]);
+        //         r[i] = Math.max(r[i+1], a[i]);
+        //     }
+        //     System.out.println(Arrays.toString(l));
+        //     System.out.println(Arrays.toString(r));
+        //     // 【自左向右、遍历：左端点】：
+        //     for (int i = 0; i <= n-m; i++) {
+        //         if (a[i] >= 0) f = Math.max(f, (long)a[i] * r[i+m-1]);
+        //         else f = Math.max(f, (long)a[i] * l[i + m-1]);
+        //     }
+        //     return f;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // static final int mod = (int)1e9 + 7;
+        // public int specialTriplets(int[] a) {
+        //     int n = a.length;
+        //     TreeMap<Integer, TreeMap<Integer, Integer>> m = new TreeMap<>();
+        //     for (int i = 0; i < n; i++) {
+        //         if (!m.containsKey(a[i])) {
+        //             m.put(a[i], new TreeMap<Integer, Integer>());
+        //             // 【a[i]>=0】（从左到右）
+        //             m.get(a[i]).put(i, 0);
+        //             continue;
+        //         }
+        //         m.get(a[i]).put(i, m.get(a[i]).lastEntry().getValue() + 1);
+        //     }
+        //     long f = 0;
+        //     // 【自左向右】：遍历下标 j, 数其左端与右端值为 2 × a[j] 的数的个数
+        //     for (int i = 1; i < n-1; i++) {
+        //         int v = a[i] * 2;
+        //         if (!m.containsKey(v)) continue;
+        //         Integer l = m.get(v).lowerKey(i);
+        //         if (l == null || l > i) continue;
+        //         int r = m.get(v).lastEntry().getValue() - m.get(v).get(l) - (v == a[i] ? 1 : 0);
+        //         f = (f + (long)(m.get(v).get(l)+1) * r) % mod;
+        //     }
+        //     return (int)f;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 这个题目，目前一时半会儿没有思路
+        // // 今天晚上的比赛题目，前3 题都太简单，写得终究是没什么意思。。可是最后一个相对难的，亲爱的表哥的活宝妹一时半会儿也还是没有思路
+        // // 等亲爱的表哥的活宝妹慢慢进化到可以、能够写出这类题目。。
+        // public int[] findMedian(int n, int[][] egs, int[][] qs) {
+        //     g = new ArrayList [n];
+        //     Arrays.setAll(g, z -> new ArrayList<int []>());
+        //     return new int [0]{};
+        // }
+        // List<int []> [] g;
+        // int n;
+    }
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
         public static void main (String[] args) { 
 		Solution s = new Solution ();
 
-        int []  a = new int []  {9, 4, 1, 3, 7};
-        System.out.println(Arrays.toString(a));
-
-        int r = s.countPartitions(a, 4);
+        long r = s.specialTriplets(a);
         System.out.println("r: " + r);
     }
 }
@@ -830,3 +909,19 @@ public class cmp {
 //  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
