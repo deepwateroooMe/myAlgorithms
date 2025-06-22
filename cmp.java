@@ -793,12 +793,244 @@ public class cmp {
         // }
         // List<int []> [] g;
         // int n;
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public long maxArea(int[][] a) {
+        //     int n = a.length, i = 1, j = 0, len = 0;
+        //     // 【X 轴升序排列】：求，平行于Y 轴，最大山角形面积
+        //     long f = -1;
+        //     Arrays.sort(a, (x, y)->x[0] != y[0] ? x[0] - y[0] : x[1] - y[1]); 
+        //     while (i < n) {
+        //         if (a[i][0] == a[j][0]) {
+        //             len = Math.max(len, a[i][1] - a[j][1]);
+        //             i++;
+        //         } else {
+        //             if (j != i && j+1 < i) {
+        //                 f = Math.max(f, (long)len * (Math.max(Math.abs(a[n-1][0] - a[j][0]), Math.abs(a[0][0] - a[j][0]))));
+        //                 len = 0;
+        //             }
+        //             j = i; // 往X 轴右，往前走一段
+        //             i++;
+        //         }
+        //     }
+        //     if (j+1 < i)
+        //         f = Math.max(f, (long)len * (Math.max(Math.abs(a[n-1][0] - a[j][0]), Math.abs(a[0][0] - a[j][0]))));
+        //     // 【Y 轴升序排列】：求，平行于X 轴，最大山角形面积
+        //     Arrays.sort(a, (x, y)->x[1] != y[1] ? x[1] - y[1] : x[0] - y[0]); 
+        //     i = 1; j = 0; len = 0;
+        //     while (i < n) {
+        //         if (a[i][1] == a[j][1]) {
+        //             len = Math.max(len, a[i][0] - a[j][0]);
+        //             i++;
+        //         } else {
+        //             if (j != i && j+1 < i) {
+        //                 f = Math.max(f, (long)len * Math.max(Math.abs(a[n-1][1] - a[j][1]), Math.abs(a[0][1] - a[j][1])));
+        //                 len = 0;
+        //             }
+        //             j = i; // 往X 轴右，往前走一段
+        //             i++;
+        //         }
+        //     }
+        //     if (j+1 < i)
+        //         f = Math.max(f, (long)len * Math.max(Math.abs(a[n-1][1] - a[j][1]), Math.abs(a[0][1] - a[j][1])));
+        //     return f == 0 ? -1 : f;
+        // }
+
+        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        public int minSwaps(int[] a) {
+            int n = a.length, m = 0;
+            for (int v : a)
+                if (v % 2 == 0) m++;
+            if (m < n / 2 || n - m < n / 2) return -1;
+            return 0;
+        }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 思路：遍历质数链条 li, 自左向右定位，以当前质数为左质数、向右延伸各种可能性的所有合法子数组个数
+        // // 亲爱的表哥的活宝妹，感觉这个题目的思路还是相对透彻，可是极其繁琐，最讨厌数个数的题目
+        // public int primeSubarray(int[] a, int k) {
+        //     int n = a.length, ans = 0;
+        //     List<Integer> li = new ArrayList<>(); // list of Prime idx
+        //     // 【自右向左】：（最小、最大）质数、数组预处理
+        //     int [] l = new int [n+1], r = new int [n+1];
+        //     Arrays.fill(l, 50000);
+        //     for (int i = n-1; i >= 0; i--) 
+        //         if (isPrime(a[i])) {
+        //             l[i] = Math.min(a[i], l[i+1]); // 升序排列
+        //             r[i] = Math.max(a[i], r[i+1]); // 降序排列
+        //             li.add(0, i);
+        //         }
+        //     // 【自左向右】：遍历，求解, 以当前（链条 li) 中下标 i 为 (左质数、且左质数为：最小、或最大质数) 的个数
+        //     int j = 0, rr = 0, rrr = 0;
+        //     for (int i = 0; i < li.size()-1; i++) {
+        //         // 【左质数 i为：最小质数】， j 可以延伸的（最远合法范围）
+        //         // 自 i 开始，剩余数组里，最小质数
+        //         // 【TODO：】上面，不用这个特例，可以 generalize （二分查找）到第一个不小于当前质数的下标
+        //         j = Arrays.binarySearch(l, a[li.get(i)]);
+        //         if (j >= 0) rr = j;
+        //         else rr = -1 * j -1; // 还是判断 rr 是否合范围
+        //         j = Arrays.binarySearch(r, a[li.get(i)]);
+                
+        //         if (a[li.get(i)] <= l[li.get(j)]) {
+        //             if ()
+        //         }
+        //         while (j < li.size() && )
+        //     }
+        // }
+        // boolean isPrime(int v) {
+        //     if (v == 1) return false;
+        //     for (int i = 2; i * i <= v; i++) 
+        //         if (v % i == 0) return false;
+        //     return true;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 亲爱的表哥的活宝妹、笨宝妹：闻到【树链剖分、重链线段树，第 k 小XOR 值】的烟火味道。。。       
+        // public int[] kthSmallest(int[] p, int[] a, int[][] qs) {
+        //     int m = qs.length; n = a.length;
+        //     // 【有向图】：直接建有向图
+        //     g = new ArrayList [n];
+        //     Arrays.setAll(g, z -> new ArrayList<Integer>());
+        //     for (int i = 1; i < n; i++)
+        //         g[a[i]].add(i);
+        // }
+        // List<Integer> [] g;
+        // int n;
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public boolean checkPrimeFrequency(int[] a) {
+        //     int n = a.length;
+        //     int [] f = new int [101];
+        //     Set<Integer> s = new HashSet<>();
+        //     for (int v : a) {
+        //         s.add(v);
+        //         f[v]++;
+        //     }
+        //     for (int v : s) 
+        //         if (isPrime(f[v])) return true;
+        //     return false;
+        // }
+        // boolean isPrime(int v) {
+        //     if (v <= 1) return false;
+        //     for (int i = 2; i * i <= v; i++)
+        //         if (v % i == 0) return false;
+        //     return true;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int minIncrease(int n, int[][] egs, int[] a) { // 552/553 passed
+        //     this.n = n; max = 0; this.a = a; 
+        //     g = new TreeSet [n];
+        //     Arrays.setAll(g, z -> new TreeSet<Integer>((x, y)->(a[x] != a[y] ? a[x] - a[y] : x-y)));
+        //     for (int [] e : egs) {
+        //         int u = e[0], v = e[1];
+        //         System.out.println("u: " + u + " " + "v: " + v);
+        //         g[u].add(v);
+        //         g[v].add(u);
+        //     }
+        //     m = new HashMap<>();
+        //     // DFS 同时，（无向图）改为【有向图】
+        //     dfs(0, -1, 0);
+        //     for (Map.Entry<Integer, Integer> en : m.entrySet()) {
+        //         int k = en.getKey(), v = en.getValue();
+        //         if (k == max) continue;
+        //         r += v;
+        //     }
+        //     return r;
+        // }
+        // int n, max, r; int [] a;
+        // Map<Integer, Integer> m;
+        // TreeSet<Integer> [] g;
+        // void dfs(int u, int p, int v) {
+        //     v += a[u];
+        //     // System.out.println("\nu: " + u + " " + "v: " + v);
+        //     if (p != -1)
+        //         g[u].remove(p);
+        //     // 叶子节点
+        //     if (g[u].size() == 0) {
+        //         max = Math.max(max, v);
+        //         m.put(v, m.getOrDefault(v, 0) + 1);
+        //         return ;
+        //     }
+        //     for (int x : g[u]) {
+        //         // if (x == p) continue;
+        //         dfs(x, u, v);
+        //     }
+        //     if (g[u].size() == 2) {
+        //         int l = g[u].first(), right = g[u].last();
+        //         System.out.println("l: " + l + " " + "right: " + right);
+        //         if (g[l].size() == 0 && g[right].size() == 0) {
+        //             if (a[l] == a[right])
+        //                 m.put(v + a[l], m.get(v + a[l])-1);
+        //             else {
+        //                 int j = v + Math.min(a[l], a[right]);
+        //                 System.out.println("j: " + j + " " + "m.get(j): " + m.get(j));
+        //                 m.put(j, m.get(j)-1);
+        //                 if (m.get(j) == 0)
+        //                     m.remove(j);
+        //                 r += 1;
+        //                 System.out.println("r: " + r);
+        //             }
+        //         }
+        //     }
+        // }
+
+        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // 亲爱的表哥的活宝妹、笨宝妹觉得：这个破烂题目，画了好大一个纸老虎。。。可是纸老虎是假的，它应该不难。。。。。。
+        // 亲爱的表哥的活宝妹，觉得是动规的题目，可是写不到动规，就只能先写记忆化深搜。。记忆化深搜不好写
+        // 要么【贪心】：永远使用速度最快的人返回；要么【递推】，因为阶段只能（自顶向下）写，所以【记忆化深搜：自底向上，反而不好写】
+        // 也像那个著名的【选课问题】：下个学期，从没选过的课里再继续选课。。
+        // 亲爱的表哥的活宝妹，笨宝妹，忘记：那个选择问题的细节：怎么从所有没有选择过的课里再课选 i,~i?i&(i-1)?
+        public double minTime(int n, int k, int m, int [] t, double [] a) {
+            if (k == 1) return (n == 1 ? (double)t[0] * a[0] : -1);
+            this.n = n; this.k = k; this.m = m; this.t = t; this.a = a;
+            // f = new HashMap[m]; // 这里，1 维，与第2 维，反着写的
+            // Arrays.setAll(f, z -> new HashMap<Integer, Double>());
+            // 【动规：自顶向下】好像这个破烂题目、更自然一点儿
+            f = new double [1 << n][m];
+            for (int i = 2; i < (1 << n); i++) {
+                // dfs(0, i);
+                int maxCurTime = 0, minCurTime = 101, minCurIdx = -1;
+                for (int j = 0; j < n; j++) {
+                    if (((i >> j) & 1) == 1) {
+                        maxCurTime = Math.max(maxCurTime, t[j]);
+                        if (t[j] < minCurTime) {
+                            minCurTime = t[j];
+                            minCurIdx = j;
+                        }
+                    }
+                }
+            }
+            double min = (double)Integer.MAX_VALUE / 2.0;
+            for (int i = 0; i < m; i++)
+                min = Math.min(min, f[i].getOrDefault((1 << n)-1, (double)Integer.MAX_VALUE / 2.0));
+            return min;
+        }
+        int n, k, m;
+        int [] t; double [] a;
+        double [][] f;
+        double dfs(int i, int j) {
+            int maxCurTime = 0, minCurTime = 101, minCurIdx = -1;
+            for (int k = 0; k < n; k++) {
+                if (((i >> k) & 1) == 1) {
+                    maxCurTime = Math.max(maxCurTime, t[k]);
+                    if (t[k] < minCurTime) {
+                        minCurTime = t[k];
+                        minCurIdx = k;
+                    }
+                }
+            }
+        }        
     }
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
-        public static void main (String[] args) { 
+    public static void main (String[] args) { 
 		Solution s = new Solution ();
 
-        long r = s.specialTriplets(a);
+        int [][] a = new int [][] {{0,1},{0,2},{1,3},{1,4}};
+        int [] b = new int [] {7,22,22,25,10};
+
+        int r = s.minIncrease(5, a, b);
         System.out.println("r: " + r);
     }
 }
@@ -925,3 +1157,11 @@ public class cmp {
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 //  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 //  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
