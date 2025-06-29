@@ -976,52 +976,170 @@ public class cmp {
         //     }
         // }
 
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 亲爱的表哥的活宝妹、笨宝妹觉得：这个破烂题目，画了好大一个纸老虎。。。可是纸老虎是假的，它应该不难。。。。。。
+        // // 亲爱的表哥的活宝妹，觉得是动规的题目，可是写不到动规，就只能先写记忆化深搜。。记忆化深搜不好写
+        // // 要么【贪心】：永远使用速度最快的人返回；要么【递推】，因为阶段只能（自顶向下）写，所以【记忆化深搜：自底向上，反而不好写】
+        // // 也像那个著名的【选课问题】：下个学期，从没选过的课里再继续选课。。
+        // // 亲爱的表哥的活宝妹，笨宝妹，忘记：那个选择问题的细节：怎么从所有没有选择过的课里再课选 i,~i?i&(i-1)?
+        // public double minTime(int n, int k, int m, int [] t, double [] a) {
+        //     if (k == 1) return (n == 1 ? (double)t[0] * a[0] : -1);
+        //     this.n = n; this.k = k; this.m = m; this.t = t; this.a = a;
+        //     // f = new HashMap[m]; // 这里，1 维，与第2 维，反着写的
+        //     // Arrays.setAll(f, z -> new HashMap<Integer, Double>());
+        //     // 【动规：自顶向下】好像这个破烂题目、更自然一点儿
+        //     f = new double [1 << n][m];
+        //     for (int i = 2; i < (1 << n); i++) {
+        //         // dfs(0, i);
+        //         int maxCurTime = 0, minCurTime = 101, minCurIdx = -1;
+        //         for (int j = 0; j < n; j++) {
+        //             if (((i >> j) & 1) == 1) {
+        //                 maxCurTime = Math.max(maxCurTime, t[j]);
+        //                 if (t[j] < minCurTime) {
+        //                     minCurTime = t[j];
+        //                     minCurIdx = j;
+        //                 }
+        //             }
+        //         }
+        //     }
+        //     double min = (double)Integer.MAX_VALUE / 2.0;
+        //     for (int i = 0; i < m; i++)
+        //         min = Math.min(min, f[i].getOrDefault((1 << n)-1, (double)Integer.MAX_VALUE / 2.0));
+        //     return min;
+        // }
+        // int n, k, m;
+        // int [] t; double [] a;
+        // double [][] f;
+        // double dfs(int i, int j) {
+        //     int maxCurTime = 0, minCurTime = 101, minCurIdx = -1;
+        //     for (int k = 0; k < n; k++) {
+        //         if (((i >> k) & 1) == 1) {
+        //             maxCurTime = Math.max(maxCurTime, t[k]);
+        //             if (t[k] < minCurTime) {
+        //                 minCurTime = t[k];
+        //                 minCurIdx = k;
+        //             }
+        //         }
+        //     }
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public List<String> partitionString(String s) {
+        //     List<String> f = new ArrayList<>();
+        //     Set<String> ss = new HashSet<>();
+        //     ss.add(s.substring(0, 1));
+        //     f.add(s.substring(0, 1));
+        //     int n = s.length();
+        //     int j= 0;
+        //     for (int i = 1; i < n; i++) {
+        //         for (j = i+1; j <= n; j++) {
+        //             if (!ss.contains(s.substring(i, j))) {
+        //                 f.add(s.substring(i, j));
+        //                 ss.add(s.substring(i, j));
+        //                 i = j-1;
+        //                 break;
+        //             }
+        //         }
+        //     }
+        //     return f;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 亲爱的表哥的活宝妹，今天中午午休没能休息好，脑袋糊糊，过会儿再看这个破烂题目。。
+        // public int[] longestCommonPrefix(String[] ss) {
+        //     int n = ss.length;
+        //     int [] f = new int [n], a = new int [n];
+        //     for (int i = 1; i < n; i++) 
+        //         a[i-1] = getLongestPrefix(ss[i-1], ss[i]);
+        //     a[n-1] = a[n-2];
+        //     TreeMap<Integer, Integer> m = new TreeMap<>((x, y)-> y - x);
+        //     for (int v : a)
+        //         m.put(v, m.getOrDefault(v, 0) + 1);
+        //     for (int i = 0; i < n; i++) {
+        //         int k = m.firstKey();
+        //         if ((i == 0 || i == n-1) && (a[i] != k || m.get(k) > 1))
+        //             f[i] = k;
+        //         else if (m.size() == 1)
+        //             f[i] = 0;
+        //         else {
+        //             ArrayList<Map.Entry<Integer, Integer>> entryList = new ArrayList<>(m.entrySet());
+        //             Map.Entry<Integer, Integer> secondEntry = entryList.get(1);
+        //             if (i == 0 || i == n-1) { // 首尾：仅只影响1 个 pair
+        //                 f[i] = secondEntry.getKey();
+        //             } else { // 【1,n-3】：中间下标，影响前后2 个 pair 
+        //                 int l = a[i-1], r = a[i];
+        //                 if ((k == l || k == r) && m.get(k) > 1)
+        //                     f[i] = k;
+        //                 else
+        //                     f[i] = secondEntry.getKey();
+        //             }
+        //         }
+        //     }
+        //     return f;
+        // }
+        // int getLongestPrefix(String S, String T) {
+        //     int m = S.length(), n = T.length(), i = 0, j = 0;
+        //     if (m > n) return getLongestPrefix(T, S);
+        //     char [] s = S.toCharArray(), t = T.toCharArray();
+        //     while (i < m) {
+        //         if (s[i] == t[j]) {
+        //             i++;
+        //             j++;
+        //         } else
+        //             return i;
+        //     }
+        //     return -1;
+        // }
+
         // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // 亲爱的表哥的活宝妹、笨宝妹觉得：这个破烂题目，画了好大一个纸老虎。。。可是纸老虎是假的，它应该不难。。。。。。
-        // 亲爱的表哥的活宝妹，觉得是动规的题目，可是写不到动规，就只能先写记忆化深搜。。记忆化深搜不好写
-        // 要么【贪心】：永远使用速度最快的人返回；要么【递推】，因为阶段只能（自顶向下）写，所以【记忆化深搜：自底向上，反而不好写】
-        // 也像那个著名的【选课问题】：下个学期，从没选过的课里再继续选课。。
-        // 亲爱的表哥的活宝妹，笨宝妹，忘记：那个选择问题的细节：怎么从所有没有选择过的课里再课选 i,~i?i&(i-1)?
-        public double minTime(int n, int k, int m, int [] t, double [] a) {
-            if (k == 1) return (n == 1 ? (double)t[0] * a[0] : -1);
-            this.n = n; this.k = k; this.m = m; this.t = t; this.a = a;
-            // f = new HashMap[m]; // 这里，1 维，与第2 维，反着写的
-            // Arrays.setAll(f, z -> new HashMap<Integer, Double>());
-            // 【动规：自顶向下】好像这个破烂题目、更自然一点儿
-            f = new double [1 << n][m];
-            for (int i = 2; i < (1 << n); i++) {
-                // dfs(0, i);
-                int maxCurTime = 0, minCurTime = 101, minCurIdx = -1;
-                for (int j = 0; j < n; j++) {
-                    if (((i >> j) & 1) == 1) {
-                        maxCurTime = Math.max(maxCurTime, t[j]);
-                        if (t[j] < minCurTime) {
-                            minCurTime = t[j];
-                            minCurIdx = j;
-                        }
+        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // 亲爱的表哥的活宝妹，笨宝妹，继续先写【记忆化深搜】: 写【记忆化深搜】的缺陷是：如何计算K 段的（异或 XOR最大值）？所以感觉还是要写【动规】。。
+        // 亲爱的表哥的活宝妹，不知道哪里细节写错了，晚点儿再检查这个
+        public int minXor(int[] a, int kk) {
+            int n = a.length;
+            for (int i = 1; i < n; i++) 
+                a[i] ^= a[i-1];
+            // f[i][j] 定义：到当前下标 i, 最多划分 j 段，的【最小可能的、 j 段中的最大值】，并记、最大值是否（最后一段第 j 段）出现的？
+            int [][][] f = new int [n][kk+1][2];
+            for (int i = 0; i < n; i++)
+                for (int j = 0; j <= kk; j++) 
+                Arrays.fill(f[i][j], Integer.MAX_VALUE / 2);
+            // 遍历：【当前下标 i】
+            for (int i = 0; i < n; i++) {
+                f[i][1][1] = a[i];
+                if (i == 0) continue;
+                // 遍历：当前所划分的段数 j 段: 到当前下标 i, 最多划分 i+1 段
+                for (int j = 2; j <= Math.min(kk, i+1); j++) {
+                    // 当前下标 a[i] 的、可能会有的 2 种影响：
+                    // 【单独开一新段、第 j 段】: 一个元素 a[i]
+                    if (a[i] > Math.max(f[i-1][j-1][0], f[i-1][j-1][1]))
+                        f[i][j][1] = a[i];
+                    else 
+                        f[i][j][0] = Math.min(f[i-1][j-1][0], f[i-1][j-1][1]);
+                    // 【合并到前一段，第 j 段】：作为第 j 段的最后一个元素，第 j 段到当前下标 i 至少 2 个元素
+                    // 前 j 段的最大值，出现在第【1,j-1】段: a[i] 合并到第 j 段，无任何影响
+                    f[i][j][0] = Math.min(f[i][j][0], f[i-1][j-1][0]); // 累积上面： a[i] 新开第 j 段的最优值
+                    // 前 j 段的最大值，出现在第【j】段：【TODO：】检测、去想，当段思路，考虑彻底吗？？？
+                    // 遍历：到当前下标第 j 段，所有可能的、第 j 段的【合法起始位置】，取全局（最小、段最大值）
+                    int min = Integer.MAX_VALUE / 2; // 记：第 j 段起始于【j-1, i-1】范围内所有下标 k，第 j 段的（最小、段最大值）
+                    for (int k = j-1; k < i; k++) {
+                        int mmin = Math.min(f[k-1][j-1][0], f[k-1][j-1][1]);
+                        // Math.max( f[k-1][j-1] 前 j-1 段的最小可能最大值, 当前第 j 段的XOR 值)
+                        min = Math.min(min, Math.max(a[i] | a[k-1], mmin));
                     }
+                    f[i][j][1] = Math.min(f[i][j][1], min);
                 }
             }
-            double min = (double)Integer.MAX_VALUE / 2.0;
-            for (int i = 0; i < m; i++)
-                min = Math.min(min, f[i].getOrDefault((1 << n)-1, (double)Integer.MAX_VALUE / 2.0));
-            return min;
+            return Arrays.stream(f[n-1][kk]).min().getAsInt();
         }
-        int n, k, m;
-        int [] t; double [] a;
-        double [][] f;
-        double dfs(int i, int j) {
-            int maxCurTime = 0, minCurTime = 101, minCurIdx = -1;
-            for (int k = 0; k < n; k++) {
-                if (((i >> k) & 1) == 1) {
-                    maxCurTime = Math.max(maxCurTime, t[k]);
-                    if (t[k] < minCurTime) {
-                        minCurTime = t[k];
-                        minCurIdx = k;
-                    }
-                }
-            }
-        }        
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 亲爱的表哥的活宝妹，感觉这个题目没有思路、、今天晚上不想写了、会试想把前面一个【动规】题目理解透彻、写完整
+        // public int maxStability(int n, int[][] egs, int k) {
+        //     Arrays.sort(egs, (x, y) -> x[3] != y[3] ? y[3] - x[3] : (x[2] != y[2] ? y[2] - x[2] : (x[0] != y[0] ? x[0] - y[0] : x[1] - y[1]))); 
+        // }
     }
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
     public static void main (String[] args) { 
@@ -1165,3 +1283,15 @@ public class cmp {
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 //  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
