@@ -1367,82 +1367,348 @@ public class cmp {
         //     return ans;
         // }
 
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 感觉是：【二分查找】在（图上、连通图上）的应用
+        // public class UF {
+        //     int [] f, r;
+        //     int n, s; // component size
+        //     public UF(int n) {
+        //         this.n = n; r = n;
+        //         f = new int [n]; r = new int [n];
+        //         for (int i = 1; i < n; i++)
+        //             f[i] = i;
+        //         Arrays.fill(r, 1);
+        //         s = n;
+        //     }
+        //     int find(int i) {
+        //         while (f[i] != i) { // 只要不相等，就往父级找，
+        //             f[i] = f[f[i]];
+        //             i = f[i]; // 并赋值：直到2 者相同为止
+        //         }
+        //         return i;
+        //     }
+        //     public void union(int i, int j) {
+        //         int fi = find(i), fj = find(j);
+        //         if (r[fi] < r[fj])
+        //             swap(fi, fj);
+        //         f[fi] = fj;
+        //         r[fj] += r[fi];
+        //         s--;
+        //     }
+        //     public boolean sameComponent(int i, int j) {
+        //         return find(i) == find(j);
+        //     }
+        //     public int getCnts() {
+        //         return s;
+        //     }
+        //     void swap(int i, int j) {
+        //         int t = i;
+        //         i = j;
+        //         j = t;
+        //     }
+        // }
+        //  public int minTime(int n, int[][] egs, int k) {
+        //      g = new ArrayList[n]; this.n = n; nn = egs.length;
+        //      Arrays.setAll(g, z -> new ArrayList<int[]>());
+        //      Arrays.sort(egs, (x, y)->x[2] != y[2] ? y[2] - x[2] : (x[0] != y[0] ? x[0] - y[0] : x[1] - y[1])); 
+        //      int l = egs[0][2], r = egs[nn-1][2], min = Integer.MAX_VALUE / 2;
+        //      if (k == n) return r; // n 个节点，无边相连，完全独立
+        //      // g 的建图：随二分查找的 m 值，动态变化。。
+        //      uf = new UF(n);
+        //      p = -1;
+        //      while (l <= r) {
+        //          int m = (l + r) / 2;
+        //          if (isValid(m, -1)) {
+        //              min = Math.min(min, m);
+        //              r = m - 1;
+        //          } else l = m + 1;
+        //      }
+        //      return min == Integer.MAX_VALUE / 2 ? -1 : min;
+        //  }
+        // List<int []> [] g = new ArrayList<>();
+        // int n, nn, p;
+        // UF uf;
+        // boolean isValid(int v) {
+        //     // 对连边的操作：涉入【添加边】和【撤销边】 2 种不同方向的操作
+        //     // 在【连通块UF】里：【撤销边】要如何操作呢？  // <<<<<<<<<<<<<<<<<<<< 【TODO：】这里没想透彻
+        //     int r = (p == -1 ? nn : (p-1 >= v ? p-1 : v)), l = (p == -1 ? v : (p-1 >= v ? v : p+1));
+        // }
+
         // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // 感觉是：【二分查找】在（图上、连通图上）的应用
-        public class UF {
-            int [] f, r;
-            int n, s; // component size
-            public UF(int n) {
-                this.n = n; r = n;
-                f = new int [n]; r = new int [n];
-                for (int i = 1; i < n; i++)
-                    f[i] = i;
-                Arrays.fill(r, 1);
-                s = n;
+        public String processStr(String S) {
+            char [] s = S.toCharArray();
+            StringBuilder sb = new StringBuilder();
+            for (char c : s) {
+                if (c == '*' && sb.length() > 0) {
+                    sb.deleteCharAt(sb.length()-1);
+                } else if (c == '#') {
+                    sb.append(sb);
+                } else if (c == '%') {
+                    sb = sb.reverse();
+                } else if (Character.isLowerCase(c))
+                    sb.append(c);
             }
-            int find(int i) {
-                while (f[i] != i) { // 只要不相等，就往父级找，
-                    f[i] = f[f[i]];
-                    i = f[i]; // 并赋值：直到2 者相同为止
-                }
-                return i;
-            }
-            public void union(int i, int j) {
-                int fi = find(i), fj = find(j);
-                if (r[fi] < r[fj])
-                    swap(fi, fj);
-                f[fi] = fj;
-                r[fj] += r[fi];
-                s--;
-            }
-            public boolean sameComponent(int i, int j) {
-                return find(i) == find(j);
-            }
-            public int getCnts() {
-                return s;
-            }
-            void swap(int i, int j) {
-                int t = i;
-                i = j;
-                j = t;
-            }
+            return sb.toString();
         }
-         public int minTime(int n, int[][] egs, int k) {
-             g = new ArrayList[n]; this.n = n; nn = egs.length;
-             Arrays.setAll(g, z -> new ArrayList<int[]>());
-             Arrays.sort(egs, (x, y)->x[2] != y[2] ? y[2] - x[2] : (x[0] != y[0] ? x[0] - y[0] : x[1] - y[1])); 
-             int l = egs[0][2], r = egs[nn-1][2], min = Integer.MAX_VALUE / 2;
-             if (k == n) return r; // n 个节点，无边相连，完全独立
-             // g 的建图：随二分查找的 m 值，动态变化。。
-             uf = new UF(n);
-             p = -1;
-             while (l <= r) {
-                 int m = (l + r) / 2;
-                 if (isValid(m, -1)) {
-                     min = Math.min(min, m);
-                     r = m - 1;
-                 } else l = m + 1;
-             }
-             return min == Integer.MAX_VALUE / 2 ? -1 : min;
-         }
-        List<int []> [] g = new ArrayList<>();
-        int n, nn, p;
-        UF uf;
-        boolean isValid(int v) {
-            // 对连边的操作：涉入【添加边】和【撤销边】 2 种不同方向的操作
-            // 在【连通块UF】里：【撤销边】要如何操作呢？  // <<<<<<<<<<<<<<<<<<<< 【TODO：】这里没想透彻
-            int r = (p == -1 ? nn : (p-1 >= v ? p-1 : v)), l = (p == -1 ? v : (p-1 >= v ? v : p+1));
-        }
+        
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public class UF {
+        //     // public int queryComponent(int i) {
+        //     //     if (c.get(f[i]).size() > 0) 
+        //     //         return c.get(f[i]).first();
+        //     //     else return -1;
+        //     // }
+        //     int [] f, r;
+        //     int n, s; // component size
+        //     TreeMap<Integer, TreeMap<Integer, Integer>> c;
+        //     public UF(int n) {
+        //         this.n = n; 
+        //         f = new int [n]; r = new int [n];
+        //         for (int i = 1; i < n; i++)
+        //             f[i] = i;
+        //         Arrays.fill(r, 1);
+        //         s = n-1;
+        //         c = new TreeMap<Integer, TreeMap<Integer, Integer>>();
+        //     }
+        //     int find(int i) {
+        //        while (f[i] != i) { // 只要不相等，就往父级找，
+        //             f[i] = f[f[i]];
+        //             i = f[i]; // 并赋值：直到2 者相同为止
+        //         }
+        //         return i;
+        //     }
+        //     public void union(int i, int j) {
+        //         int fi = find(i), fj = find(j);
+        //         if (r[fi] < r[fj])
+        //             swap(fi, fj);
+        //         f[fi] = fj;
+        //         r[fj] += r[fi];
+        //         s--;
+        //     }
+        //     public void getComponents() {
+        //         for (int i = 1; i < n; i++)
+        //             find(i);
+        //         System.out.println(Arrays.toString(f));
+        //         c = new TreeMap<Integer, TreeMap<Integer, Integer>>();
+        //         for (int i = 1; i < n; i++) 
+        //             c.computeIfAbsent(f[i], z -> new TreeMap<Integer, Integer>((x, y)->y-x)).add();
+        //     }
+        //     public boolean sameComponent(int i, int j) {
+        //         return find(i) == find(j);
+        //     }
+        //     public int getCnts() {
+        //         return s;
+        //     }
+        //     void swap(int i, int j) {
+        //         int t = i;
+        //         i = j;
+        //         j = t;
+        //     }
+        // }
+        // // 亲爱的表哥的活宝妹，笨宝妹，晚点儿再写这个破烂题目。。它居然连续2 个周出同一个破烂。。。
+        // public int minCost(int n, int[][] egs, int k) {
+        //     UF uf = new UF(n+1);
+        //     for (int [] e : egs) {
+        //         int u = e[0]+1, v = e[1]+1, w = e[2];
+        //         if (!uf.sameComponent(u, v))
+        //             uf.union(u, v, w);
+        //     }
+        // }
+        
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public char processStr(String S, long k) {
+        //     char [] s = S.toCharArray();
+        //     if (k == 0) return (Character.isLowerCase(s[0]) ? s[0] : '.');
+        //     StringBuilder sb = new StringBuilder();
+        //     long f = 0;
+        //     while (f < k) {
+        //         for (int i = 0; i < S.length() && f < k; i++) {
+        //             char c = s[i];
+        //             if (c == '*' && sb.length() > 0) {
+        //                 sb.deleteCharAt(sb.length()-1);
+        //                 --f;
+        //             } else if (c == '#') {
+        //                 sb.append(sb);
+        //                 if (2 * f >= k)
+        //                     return sb.charAt((int)(k-f-1));
+        //                 f *= 2;
+        //             } else if (c == '%') {
+        //                 sb = sb.reverse();
+        //             } else if (Character.isLowerCase(c)) {
+        //                 sb.append(c);
+        //                 ++f;
+        //             }
+        //         }
+        //         if (f >= k) return sb.charAt((int)(k-1));
+        //     }
+        //     if (f >= k)
+        //         return sb.charAt((int)(k-1));
+        //     return '.';
+        // }
+        
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // n[1,14] 数据规模狠小：随便写写玩玩儿，应该都可以过呀。。。
+        // // 思路：
+        // //     自大到小遍历【1<<n-1, 1】，选择【最多14 个节点】所有可能的节点
+        // //     先检测：(isPalindrome(i, s)), 保障【回文序列】
+        // //     再检测：是否一条通路；
+        // //     合法就直接返回；
+        // //     不合法找次优解。。
+        // public int maxLen(int n, int[][] egs, String S) {
+        //     s = S.toCharArray(); this.n = n;
+        //     g = new ArrayList [n];
+        //     Arrays.setAll(g, z -> new ArrayList<Integer>());
+        //     for (int [] e : egs) {
+        //         int u = e[0], v = e[1];
+        //         g[u].add(v);
+        //         g[v].add(u);
+        //     }
+        //     for (int i = (1 << n)-1; i >= 1; i--) {
+        //         System.out.println("Integer.toBinaryString(i): " + Integer.toBinaryString(i) + " " + "isPalindrome(i): " + isPalindrome(i));
+        //         if (isPalindrome(i)) {
+        //             int m = Integer.toBinaryString(i).length(); 
+        //             // System.out.println("i: " + i + " " + "m: " + m);
+        //             System.out.println("Integer.toBinaryString(i): " + Integer.toBinaryString(i) + " " + "m: " + m);
+        //             List<Integer> l = new ArrayList<>();
+        //             for (int j = 0; j < m; j++) 
+        //                 if (((i >> j) & 1) > 0) l.add(j);
+        //             System.out.println("l.size(): " + l.size());
+        //             System.out.println(Arrays.toString(l.toArray()));
+        //             if (dfs(l, 0))
+        //                 return Integer.bitCount(i);
+        //         }
+        //     }
+        //     return 1;
+        // }
+        // char [] s; int n;
+        // List<Integer> [] g;
+        // // 【DFS 查找：】是否连通，存在一条通路
+        // boolean dfs(List<Integer> f, int i) {
+        //     if (i == f.size()-1) return true;
+        //     int u = f.get(i);
+        //     for (int v : g[u]) {
+        //         if (i == f.size()-2 && v == f.get(i+1)) return true;
+        //         else if (i == f.size()-2) continue;
+        //         if (i < f.size()-1 && v != f.get(i+1)) continue;
+        //         return dfs(f, i+1);
+        //     }
+        //     return false;
+        // }
+        // // 【TODO：】这里的【节点的、遍历顺序】没能对应起来，需要多一点儿细节来实现这里。。
+        // boolean isPalindrome(int v) {
+        //     int n = Integer.toBinaryString(v).length(), j = 0, i = n-1;
+        //     System.out.println("Integer.toBinaryString(v): " + Integer.toBinaryString(v) + " " + "n: " + n);
+        //     char [] ss = Integer.toBinaryString(v).toCharArray();
+        //     // System.out.println(Arrays.toString(ss));
+        //     while (i > j) {
+        //         while (i > j && ss[i] == '0') i--;
+        //         while (i > j && ss[j] == '0') j++;
+        //         System.out.println("j: " + j + " " + "i: " + i);
+        //         if (i <= j) break;
+        //         if (s[i] != s[j]) return false;
+        //         i--;
+        //         j++;
+        //     }
+        //     return true;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public long splitArray(int[] a) {
+        //     int n = a.length;
+        //     long f = 0, p = 0;
+        //     for (int i = 0; i < n; i++) {
+        //         if (isPrime(i)) p += (long)a[i];
+        //         f += (long)a[i];
+        //     }
+        //     return Math.abs(f - p - p);
+        // }
+        // boolean isPrime(int v) {
+        //     if (v <= 1) return false;
+        //     for (int i = 2; i * i <= v; i++) 
+        //         if (v % i == 0) return false;
+        //     return true;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int countIslands(int[][] f, int k) {
+        //     m = f.length; n = f[0].length; this.f = f;
+        //     int r = 0;
+        //     a = new boolean [m][n];
+        //     for (int i = 0; i < m; i++) 
+        //         for (int j = 0; j < n; j++) 
+        //             if (f[i][j] > 0 && !a[i][j]) {
+        //                 long v = dfs(i, j);
+        //                 if (v % k == 0)
+        //                     r++;
+        //             }
+        //     return r;
+        // }
+        // int m, n; int [][] f;
+        // int [][] dirs = {{1, 0}, {0, 1}, {0, -1}, {-1, 0}};
+        // boolean [][] a; // vis
+        // long dfs(int x, int y) {
+        //     a[x][y] = true;
+        //     long ans = (long)f[x][y];
+        //     for (int [] d : dirs) {
+        //         int i = x + d[0], j = y + d[1];
+        //         if (i < 0 || i >= m || j < 0 || j >= n || a[i][j] || f[i][j] == 0) continue;
+        //         ans += dfs(i, j);
+        //     }
+        //     return (long)ans;
+        // }        
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 【TODO：】不知道哪里细节写错了。。错误案例图太大不想看了。。
+        // public int findMaxPathScore(int[][] egs, boolean[] a, long k) { // 422/631 passed
+        //     n = a.length; this.a = a; this.k = k;
+        //     // 最小最精简【有效合法图】
+        //     g = new ArrayList [n];
+        //     Arrays.setAll(g, z -> new ArrayList<int []>());
+        //     for (int [] e : egs) {
+        //         int u = e[0], v = e[1], w = e[2];
+        //         // 一点儿优化：不去处理不必要的节点、或路线
+        //         if (!a[u] || !a[v] || (long)w > k) continue;
+        //         g[u].add(new int [] {v, w});
+        //     }
+        //     f = new int [n];
+        //     Arrays.fill(f, Integer.MAX_VALUE / 2);
+        //     f[0] = 0; f[n-1] = -1;
+        //     dfs(0, -1, 0, 0);
+        //     System.out.println(Arrays.toString(f));
+        //     return f[n-1];
+        // }
+        // List<int []> [] g;
+        // int n, maxMin; boolean [] a; long k;
+        // List<Integer> cur;
+        // int [] f; 
+        // void dfs(int u, int p, int w, long sum) {
+        //     sum += w;
+        //     boolean ans = false;
+        //     for (int [] e : g[u]) {
+        //         int v = e[0], c = e[1];
+        //         if (v == n-1) {
+        //             if (sum + (long)c > k) continue;
+        //             f[v] = Math.max(f[v], Math.min((u == 0 ? c : f[u]), c));
+        //             continue;
+        //         }
+        //         f[v] = Math.min(f[v], Math.min((u == 0 ? c : f[u]), c));
+        //         // System.out.println(Arrays.toString(f));
+        //         dfs(v, u, c, sum);
+        //     }
+        // }
+
+        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        
     }
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
     public static void main (String[] args) { 
 		Solution s = new Solution ();
 
-        int [][] a = new int [][] {{1,2},{2,3},{3,4},{4,5}};
-        int [][] b = new int [][] {{1,3},{2,1},{1,1},{2,2},{1,2}}; 
+        int [][] a = new int [][] {{3,4,10},{2,3,14},{1,3,6},{2,5,43},{0,3,21},{2,4,75},{1,2,24},{0,5,15},{4,5,72},{0,4,88},{0,2,30},{3,5,78},{1,5,12},{0,1,45}};
+        boolean [] b = new boolean [] {true, true, true, true, true, true};
 
-        int [] r = s.processQueries(5, a, b);
-        System.out.println(Arrays.toString(r));
+        int r = s.findMaxPathScore(a, b, 371);
+        System.out.println("r: " + r);
     }
 }
 // ListNode head = new ListNode(a0]);  
@@ -1624,4 +1890,38 @@ public class cmp {
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 //  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 //  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
