@@ -1,6 +1,7 @@
 import com.TreeNode;
 
 // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
@@ -12,8 +13,9 @@ import java.util.Set;
 import java.math.BigInteger;
 import static java.util.stream.Collectors.toMap;
 public class cmp {
-    public static class Solution {
+    public static class Solution { 
 
+        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
         // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
         // public int maxSubstrings(String S) {
         //     n = S.length(); s = S.toCharArray();
@@ -1697,18 +1699,150 @@ public class cmp {
         //     }
         // }
 
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public boolean checkDivisibility(int n) {
+        //     char [] s = String.valueOf(n).toCharArray();
+        //     int f = 0, p = 1;
+        //     for (char c : s) {
+        //         f += c-'0';
+        //         p *= (c-'0');
+        //     }
+        //     f += p;
+        //     return (n % f == 0);
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // static final int mod = (int)1e9 + 7;
+        // public int countTrapezoids(int[][] f) { // 550 / 554 testcases passed
+        //     int n = f.length;
+        //     Map<Integer, Integer> m = new HashMap<>();
+        //     // 【Y 轴升序、X 轴序序】
+        //     Arrays.sort(f, (x, y)->(x[1] != y[1] ? x[1] - y[1] : x[0] - y[0])); 
+        //     for (int [] e : f) {
+        //         int i = e[0], j = e[1];
+        //         m.put(j, m.getOrDefault(j, 0) + 1);
+        //     }
+        //     for (Map.Entry<Integer, Integer> en : m.entrySet()) {
+        //         int k = en.getKey(), v = en.getValue();
+        //         if (v == 1) 
+        //             --n;
+        //     }
+        //     int o = m.size(), i = 0;
+        //     long [] a = new long [o];
+        //     long sum = 0, ans = 0;
+        //     for (Map.Entry<Integer, Integer> en : m.entrySet()) {
+        //         int k = en.getKey(), v = en.getValue();
+        //         if (v == 1) continue;
+        //         a[i] = (long)(v * (v-1) / 2l);
+        //         sum += a[i++];
+        //     }
+        //     i = 0;
+        //     for (Map.Entry<Integer, Integer> en : m.entrySet()) {
+        //         int k = en.getKey(), v = en.getValue();
+        //         if (v == 1) continue;
+        //         ans = (ans + a[i] * (sum - a[i])) % mod;
+        //         i++;
+        //     }
+        //     return (int)ans / 2;
+        // }
+
         // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        
+        // 亲爱的表哥的笨宝妹、亲爱的表哥的活宝妹、笨宝妹，终于把这个破烂题目写过了。。。开心！！
+        public class BIT {
+            int [] f;
+            int n;
+            public BIT(int n) {
+                this.n = n + 1;
+                f = new int [this.n];
+            }
+            public void update(int i, int v) { // f[i] = 1;
+                while (i < n) {
+                    f[i] += v;
+                    i += lowbit(i);
+                }
+            }
+            public int query(int l, int r) {
+                return sum(r) - sum(l-1);
+            }
+            public void print() {
+                System.out.println(Arrays.toString(f));
+            }
+            int sum(int i) {
+                int ans = 0;
+                while (i > 0) {
+                    ans += f[i];
+                    i -= lowbit(i);
+                }
+                return ans;
+            }
+            int lowbit(int i) {
+                return i & -i; // <<<<<<<<<<<<<<<<<<<< 对吗？记错了吗？
+            }
+        }
+        public int[] popcountDepth(long[] aa, long[][] qs) { // 50 位
+            int n = aa.length;
+            m = new HashMap<>();
+            for (int i = 1; i < 51; i++) 
+                m.put((long)i, Integer.bitCount(i));
+            m.put(1l, 0);
+            for (int i = 2; i < 51; i++) 
+                m.put((long)i, 1 + m.get((long)Integer.bitCount(i)));
+            int [] a = new int [n];
+            for (int i = 0; i < n; i++)
+                a[i] = dfs(aa[i]);
+           // // 用这个不理想；需要BIT[6] 用 6 个BIT 来数，比较快速高效
+            // long [][] ff = new long [n][];
+            // ff[0][a[0]] = 1;
+            // for (int i = 1; i < n; i++) {
+            //     ff[i] = Arrays.copyOf(ff[i-1], 6);
+            //     ff[i][a[i]]++;
+            // }
+            BIT [] f = new BIT[6];
+            Arrays.setAll(f, z -> new BIT(n+1));
+            for (int i = 0; i < n; i++) {
+                f[a[i]].update(i+1, 1);
+            }
+            List<Integer> li = new ArrayList<>();
+            for (long [] q : qs) {
+                if (q[0] == 1) {
+                    int l = (int)q[1], r = (int)q[2], k = (int)q[3];
+                    li.add(f[k].query(l+1, r+1));
+                    continue;
+                }
+                int v = dfs(q[2]);
+                f[a[(int)q[1]]].update((int)q[1]+1, -1);
+                a[(int)q[1]] = v;
+                f[v].update((int)q[1]+1, 1);
+            }
+            int [] ans = new int [li.size()];
+            int i = 0;
+            for (int v : li) 
+                ans[i++] = v;
+            return ans;
+        }
+        Map<Long, Integer> m;
+        int dfs(long i) {
+            if (m.containsKey(i)) return m.get(i);
+            int v = dfs(ibc(i));
+            m.put(i, 1 + v);
+            return 1 + v;
+        }
+        int ibc(long v) {
+            int f = 0;
+            for (int i = 50; i >= 0; i--) 
+                if (((v >> i) & 1) == 1) f++;
+            return f;
+        }
     }
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
     public static void main (String[] args) { 
 		Solution s = new Solution ();
 
-        int [][] a = new int [][] {{3,4,10},{2,3,14},{1,3,6},{2,5,43},{0,3,21},{2,4,75},{1,2,24},{0,5,15},{4,5,72},{0,4,88},{0,2,30},{3,5,78},{1,5,12},{0,1,45}};
-        boolean [] b = new boolean [] {true, true, true, true, true, true};
+        long []  a = new long []  {3, 5, 6};
+        long [][] b = new long [][] {{1,0,2,2},{2,1,4},{1,1,2,1},{1,0,1,0}};
 
-        int r = s.findMaxPathScore(a, b, 371);
-        System.out.println("r: " + r);
+        int [] r = s.popcountDepth(a, b);
+        System.out.println(Arrays.toString(r));
     }
 }
 // ListNode head = new ListNode(a0]);  
@@ -1923,5 +2057,11 @@ public class cmp {
 //  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 //  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 //  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 //  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
