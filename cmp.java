@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.math.BigInteger;
 import static java.util.stream.Collectors.toMap;
+
 public class cmp {
     public static class Solution { 
 
@@ -323,65 +324,251 @@ public class cmp {
         //     return (f[m-1][n-1][0] + f[m-1][n-1][1]) % mod;
         // }
 
-        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        public int[] recoverOrder(int[] a, int[] b) {
-            int n = a.length;
-            Set<Integer> s = new HashSet<>(Arrays.stream(b).boxed().collect(Collectors.toList()));
-            int [] f = new int [b.length];
-            int i = 0;
-            for (int j = 0; j < n; j++)
-                if (s.contains(a[j]))
-                    f[i++] = a[j];
-            return f;
-        }
-
         // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // public int[] minDifference(int n, int k) {
+        // public int[] recoverOrder(int[] a, int[] b) {
+        //     int n = a.length;
+        //     Set<Integer> s = new HashSet<>(Arrays.stream(b).boxed().collect(Collectors.toList()));
+        //     int [] f = new int [b.length];
+        //     int i = 0;
+        //     for (int j = 0; j < n; j++)
+        //         if (s.contains(a[j]))
+        //             f[i++] = a[j];
+        //     return f;
         // }
 
         // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
         // // Wrong Answer 754 / 758 testcases passed: Hidden for this testcase during contest.
+        // // 亲爱的表哥的活宝妹的基本思路、出发点都是对的；只是离【动规】解法的题解，还差一小步。。。需要转化为【动规】的状态转移方程。。。
+        // // 看【题解】看不懂，它的语言是体育老师教的，表达不清楚。。。看源码看懂了，可是今天不想再写这个破烂题目了。。。
         // public long maxProduct(int[] a) { // TLE TLE TLE 751/758 passed 算是亲爱的表哥的活宝妹、笨宝妹写【位运算】相关的、相对比较好的成绩。。
         //     int n = a.length;
         //     Set<Integer> s = new HashSet<>(Arrays.stream(a).boxed().collect(Collectors.toList()));
-        //     Arrays.sort(a); 
+        //     // Arrays.sort(a); 
         //     // 遍历：按数组降序遍历；每个数遍历这个数的【补集的、子集】
         //     long r = 0;
-        //     int j = 0, cur = 0, mask = (1 << Integer.toBinaryString(Arrays.stream(a).max().getAsInt()).length()+1);
-        //     System.out.println(Arrays.toString(a));
-        //     // for (int i = n-1; i > 0; i--) { // 755/758 passed TLE TLE TLE
-        //     for (int i = n-1; i >= n/8; i--) { // 752/758 passed
+        //     int j = 0, cur = 0, mask = (1 << Integer.toBinaryString(Arrays.stream(a).max().getAsInt()).length()+1) -1;
+        //     // System.out.println(Arrays.toString(a));
+        //     for (int i = n-1; i > 0; i--) { // 755/758 passed TLE TLE TLE
+        //     // for (int i = n-1; i >= n/8; i--) { // 752/758 passed
         //         // 【TODO：】怎么才能取（补集）；取32 位要遍历得太多了。缩小范围到 20 位左右
         //         // System.out.println("a[i]: " + a[i] + " " + "Integer.toBinaryString(a[i]): " + Integer.toBinaryString(a[i]));
         //         // j = ~a[i] & ((1 << 20)-1);
         //         // j = ~a[i] & ((1 << String.valueOf(Arrays.stream(a).max().getAsInt()).length()+1)-1);// 写得不对
-        //         cur = ~a[i] & (mask -1);
-        //         // System.out.println("j: " + j + " " + "Integer.toBinaryString(j): " + Integer.toBinaryString(j));
+        //         cur = ~a[i] & mask;
         //        // 【TODO：】如经典题型【选课问题】，遍历最大补数 j 的【所有、位子集】，O(20 × N)
-        //         for (j = cur; j > 0; j = cur & (j - 1)) { // 【TODO：】感觉，这里的细节，怎么有效按位的子集遍历的。细节写得不对
-        //             if (s.contains(j)) {
+        //         for (j = cur; j > 0 && a[i] * j >= r; j = cur & (j - 1)) { // 【TODO：】感觉，这里的细节，怎么有效按位的子集遍历的。细节写得不对
+        //         // for (j = cur; j > 0; j = j & (j - 1)) { // 这么写，居然是错的。。
+        //             // 【TODO：】裁枝，【自大到小】遍历 j; 当 a[i] × j <= max 时裁枝，跳出遍历
+        //             // a[i] * j >= r
+        //             if (s.contains(j)) { // <<<<<<<<<<<<<<<<<<<< 遍历：a[i] 【补集】中的所有元素，并一一判断是否存在
         //                 r = Math.max(r, (long)a[i] * j);
-        //                 // System.out.println("j: " + j + " " + "r: " + r);
         //             }
         //         }
         //     }
         //     return r;
         // }
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 这个破烂题目，真烦人，把它手写一遍，加深印象，以后，亲爱的表哥的活宝妹自己就会写了！！！
+        // // 亲爱的表哥的活宝妹、笨宝妹，上周考场上脑袋昏昏，天才般地【回忆、回想出了：经典题型（选课问题II）里的遍历方法】；却止步那里
+        // // 现在再看，这个【动规】的思路，浑然天成。。亲爱的表哥的活宝妹、笨宝妹，怎么会上周六自己想不出来、这么直观直白的【动规】解法。。。
+        // // 可是，感觉2 种解法的O(20N) 与O(w(1<<w)) 都差不多；感觉只能说，leetcode 把时间卡得太死，把亲爱的表哥的活宝妹的笨解法给卡成TLE TLE TLE 了。。。
+        // public long maxProduct(int[] a) { 
+        //     int n = a.length, mv = Arrays.stream(a).max().getAsInt(), w = 32 - Integer.numberOfLeadingZeros(mv), s = (1 << w);
+        //     // 【动规】数组：f[i] 存的是，【1,S-1】范围内a[i] 中存在的、【最大数】
+        //     long [] f = new long [s];
+        //     // 【初始化】
+        //     for (int v : a) 
+        //         f[v] = (long)v;
+        //     // 【自小到大】遍历：（自小到大）动规更新
+        //     for (int i = 1; i < s; i++) // O((w=20)*(1<<w20)
+        //         for (int j = 0; j < w; j++) {
+        //             if ((i & (1 << j)) > 0)
+        //                 f[i] = Math.max(f[i], f[i ^ (1 << j)]);
+        //         }
+        //     long max = 0;
+        //     for (int v : a) 
+        //         max = Math.max(max, (long)v * f[(s-1) ^ v]);
+        //     return max;
+        // }
+        
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int minOperations(int[] a) {
+        //     int n = a.length;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int minOperations(String S) {
+        //     int n = S.length(), m = 26; char [] s = S.toCharArray();
+        //     int [] f = new int [m], r = new int [m];
+        //     for (char c : s)
+        //         f[c-'a']++;
+        //     for (int i = 1; i < m; i++) {
+        //         if (r[i] + f[i] != 0)
+        //             r[(i+1)%26] += r[i] + 1;
+        //     }
+        //     return r[0];
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 【数位动规】：数（二进制）中，不大于这个数的个数，遍历位，遍历一半。。
+        // // 怎么数的呢？狠久没写这类题型，亲爱的表哥的活宝妹、笨宝妹还是忘记了是怎么数的了。。。前不久不是刚写出过【左右边界串、且非毒串】的遍历数法吗？
+        // // 【记忆化深搜】：
+        // // 从【低位0 往高位】遍历：第0 位特殊
+        // // 【TODO：】不知道哪里写错了
+        // public int countBinaryPalindromes(long n) { // 50 位
+        //     String S = Long.toBinaryString(n);
+        //     s = S.toCharArray();
+        //     this.n = s.length / 2 + s.length % 2;
+        //     m = s.length;
+        //     f = new Integer [this.n][2]; // j2[0/1]: 标记是否 match-n 的数位 
+        //     // f = new Integer [n][2][2]; //
+        //     int ans = dfs(0, 1);
+        //     --this.m; // 长度可以变短
+        //     for (; this.m >= 0; this.m--) {
+        //         for (int i = 0; i < this.n; i++)
+        //             Arrays.fill(f[i], 0);
+        //         n = this.m / 2;
+        //         ans += dfs(1, 0);
+        //     }
+        //     // return dfs(0, 1);
+        //     return ans;
+        // }
+        // int n, m;
+        // char [] s;
+        // Integer [][] f;
+        // int dfs(int i, int j) {
+        //     // 【终止条件】：遍历到【最中间位】 m 可以是【奇数、或、偶数】
+        //     // 【区分】：是否 match-n; 是【奇数位、偶数位】等
+        //     if (i == n-1) {
+        //         if (j == 1) { // match-n
+        //             if (m % 2 == 1)
+        //                 return f[i][j] = 1;
+        //             else // 偶数位: 完全相同，则0=>1 或1=>2; 不同：则1 种可能性就是0
+        //                 return f[i][j] = (s[i] == s[i+1] ? s[i]-'0'+1 : 1);
+        //         } else { // 不用 match-n: 是任何数位，都可以随意取 0/1 吗？应该是的
+        //             return f[i][j] = 2;
+        //         }
+        //     }
+        //     if (f[i][j] != null && f[i][j] != 0) return f[i][j];
+        //     if (j == 1) // match-n
+        //         return f[i][j] = (dfs(i+1, j) + (s[i] == '1' ? dfs(i+1, 1-j) : 0));
+        //     else // NO match-n
+        //         return f[i][j] = 2 * dfs(i+1, j);
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int smallestAbsent(int[] a) {
+        //     int n = a.length, sum = Arrays.stream(a).sum(), r = (int)Math.ceil((double)sum * 1.0/ n);
+        //     Set<Integer> s = new HashSet<>(Arrays.stream(a).boxed().collect(Collectors.toList()));
+        //     System.out.println("sum: " + sum + " " + "r: " + r);
+        //     for (int i = Math.max(r + (sum % n == 0 ? 1 : 0), 1); i < 102; i++) 
+        //         if (!s.contains(i)) return i;
+        //     return -1;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 【动规】：一看就是动规，只是要怎么去写呢？？
+        // // 【滑动窗口】：每个窗口里，其实只需要记录（Max=r, Sec=l)出现频次 [最多、次多]的类型，就可以了
+        // // 【pqia 双端优先队列】：O(N)?
+        // // 但是，亲爱的表哥的活宝妹，还是不知道怎么去想这个题目，晚点儿再写这个题目
+        // public int minArrivalsToDiscard(int[] a, int w, int m) {
+        //     int n = a.length;
+        //     int [][] f = new int [n][2];
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 这个破烂题目的【排序】狠烦人
+        // public int[][] generateSchedule(int n) {
+        //     int [][] f = new int [n * 2][2];
+        //     int [][][] a = new int [n][n][2];
+        //     f[0][0] = 0;
+        //     f[0][1] = 1;
+        //     a[0][1][0] = 1;
+        //     int j = 0, k = 0;
+        //     for (int i = 1; i < n * 2; i++) {
+        //         j = 0; k = 0;
+        //         while (j < n && k < n && (j == k || a[Math.min(j, k)][Math.max(j, k)][j < k ? 0 : 1] > 0)) {
+        //             while (j == f[i-1][0] || j == f[i-1][1]) j++;
+        //             while (k == f[i-1][0] || k == f[i-1][1]) k++;
+        //             if (j == k) j++;
+        //             if (j == n || k == n) break;
+        //             if (a[Math.min(j, k)][Math.max(j, k)][0] > 0 || a[Math.min(j, k)][Math.max(j, k)][1] > 0) {
+        //                 if (a[Math.min(j, k)][Math.max(j, k)][0] > 0) j++;
+        //                 else k++;
+        //             }
+        //         }
+        //         if (j == n || k == n) return new int [0][];
+        //         f[i][0] = j;
+        //         f[i][1] = k;
+        //         a[Math.min(j, k)][Math.max(j, k)][j < k ? 0 : 1] = 1;
+        //     }
+        //     return f;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 【动规】：这个破烂题目，是上次亲爱的表哥的活宝妹、亲爱的表哥的活宝妹、笨宝妹【自长成长。。上上个周末、自发终于能够写出：经典选课问题II】的变形、动规题目吗？
+        // // 先，【数组最大值 max】，再根据 max 的0-bit 空缺数位，遍历数位，XOR 出一个以 max 的首位为最长位的、【极尽可能大】的 XOR 序列＝＝》XOR 值＝f
+        // // 再，根据 f 的空缺位，遍历出一个【极尽可能大】的 SEc
+        // // 最后，最大值 f 与，次大值 sec XOR 出一个相对更大的数： f ^ sec = ans
+        // // 亲爱的表哥的活宝妹，亲爱的表哥的活宝妹、笨宝妹，如果再按【2 周前、上上周六】晚上的【按数位遍历】方法，可能又要TLE TLE TLE
+        // // 【动规】：只遍历一遍数组，O（30*N）动规出数组中每个数的（不大于、此数的？、最大XOR 值）？？？
+        // // 【动规】：只遍历一遍数组，O（30*N）动规出数组中每个数的（不小于、此数的？、最大XOR 值）？？？
+        // public int maxXorSubsequences(int[] a) {
+        //     int n = a.length, max = Arrays.stream(a).max().getAsInt(), m = 32 - Integer.numberOfLeadingZeros(max);
+        //     //（1<<30=10^9）感觉需要占用的空间太多，怕OOM, 用字典
+        //     TreeMap<Integer, Integer> f = new TreeMap<>((x, y)->y-x);
+        //     for (int v : a) f.put(v, v);
+        //     for (int i = 1; i < (1 << m); i++) {
+        //         int len = Math.min(m, 32 - Integer.numberOfLeadingZeros(i));
+        //         for (int j = 0; j < len; j++) {
+        //             if (((i >> j) & 1) == 0)
+        //                 f.put(i | (1 << j), Math.max(f.getOrDefault(i | (1 << j), 0), f.getOrDefault(i, 0) ^ f.getOrDefault(1 << j, 0)));
+        //         }
+        //     }
+        //     max = Collections.max(f.values());
+        //     System.out.println("max: " + max);
+        //     // 为什么，打印字典里的值，最小只能到 3 ，而没能1 和 2？？？
+        //     // 把 f 里，所有值为 0 的 entry, 全部清空，方便下面后面的，遍历查找【最大、有效键值对】
+        //     TreeMap<Integer, Integer> ff = new TreeMap<>((x, y)->y-x);
+        //     for (Map.Entry<Integer, Integer> en : f.entrySet()) 
+        //         if (en.getValue() != 0) ff.put(en.getKey(), en.getValue());
+        //     f.clear();
+        //     f = ff;
+        //     System.out.println("f.size(): " + f.size());
+        //     for (Map.Entry<Integer, Integer> en : f.entrySet()) 
+        //         System.out.print(en.getKey() + ", " + en.getValue() + "\n");
+        //     System.out.println("max: " + max);
+        //     Integer sec = null;
+        //     for (int i = m-1; i > 0; i--) {
+        //         if ((max & (1 << i)) == 0) {
+        //             // 【TODO：】感觉，这里取值太小了，可以取得再大一点儿
+        //             sec = f.floorKey(Math.min(max-1, 1 << i));
+        //             // System.out.println("(1 << (i+1)-1): " + (1 << (i+1)-1));
+        //             // sec = f.lowerKey(Math.min(max ^ (1 << i) & ((1 << (i+1))-1), (1 << (i + 1))-1));
+        //             // 【TODO：】亲爱的表哥的活宝妹，这里脑袋昏掉了，不知道是怎么回事，哪里细节出错了，今天上午不折腾这破烂题目了
+        //             System.out.println("Math.min(max-1, 1 << i): " + Math.min(max-1, 1 << i));
+        //             System.out.println("f.floorKey(Math.min(max-1,1<<i)): " + f.floorKey(Math.min(max-1,1<<i)));
+        //             System.out.println("f.floorKey(128): " + f.floorKey(128));
+        //             System.out.println("i: " + i + " " + "sec: " + sec);
+        //             if (sec != null ) {
+        //                 System.out.println("max: " + max + " " + "sec: " + sec);
+        //                 return Math.max(max, max ^ f.get(sec));
+        //             }
+        //         }
+        //     }
+        //     return max;
+        // }
 
         // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // 亲爱的表哥的活宝妹，不知道怎么去想这个题目。。。破烂题目
-        public int totalBeauty(int[] a) {
-            int n = a.length;
-            
-        }
+        
     }
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
     public static void main (String[] args) { 
 		Solution s = new Solution ();
 
-        int []  a = new int []  {64, 8, 32};
+        int [] a = new int [] {42, 772};
 
-        long r = s.maxProduct(a);
+        int r = s.maxXorSubsequences(a);
         System.out.println("r: " + r);
     }
 }
