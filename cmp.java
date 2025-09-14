@@ -559,16 +559,125 @@ public class cmp {
         //     return max;
         // }
 
-        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int earliestTime(int[][] a) {
+        //     int n = a.length, f = 227;
+        //     for (int [] e : a) 
+        //         f = Math.min(f, e[0] + e[1]);
+        //     return f;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int[] maxKDistinct(int[] a, int k) {
+        //     int n = a.length, i = 0;
+        //     // TreeSet<Integer> s = new TreeSet<>((x, y)->y-x);
+        //     Set<Integer> si = new HashSet<>();
+        //     Queue<Integer> s = new PriorityQueue<>((x, y)->y-x);
+        //     for (int v : a) {
+        //         if (si.contains(v)) continue;
+        //         si.add(v);
+        //         s.add(v);
+        //     }
+        //     int [] f = new int [Math.min(k, s.size())];
+        //     while (k > 0 && !s.isEmpty()) {
+        //         f[i++] = s.poll();
+        //         --k;
+        //     }            
+        //     return f;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 这不是个普通题目，感觉它应该是个【动规】题目。。
+        // // 【动规：状态方程、设计】： f[n][k], 定义，从取值 [0,n] 或数组 [0,i] 范围内，取到值 k 的可能性， x 呢？
+        // // 亲爱的表哥的活宝妹，对这个题型，还不太熟悉，感觉思路不够透彻。。
+        // public boolean[] subsequenceSumAfterCapping(int[] a, int k) {
+        //     int n = a.length, v = 0;
+        //     Arrays.sort(a);
+        //     int [] ff = new int [n+1];
+        //     for (int i = 1; i < n; i++)
+        //         ff[i] = ff[i-1] + a[i-1];
+        //     boolean [] f = new boolean [n];
+        //     for (int i = 0; i < n; i++) {
+        //         v = i+1;
+        //         // 【不能：整除】
+        //         if (a[0] >= v && k % v != 0) continue;
+        //         else if (a[0] >= v) {
+        //             f[i] = true;
+        //             continue;
+        //         }
+        //         // 【和：太小】
+        //         // if (a[n-1] <= v && Arrays.stream(a).sum() < k) continue;
+        //         if (a[n-1] <= v && Arrays.stream(a).sum() == k) {
+        //             f[i] = true;
+        //             continue;
+        //         }
+        //         f[i] = sumPossible(a, ff, v, k);
+        //     }
+        //     return f;
+        // }
+        // boolean sumPossible(int [] a, int [] f, int v , int k) {
+        //     int j = n-1;
+        //     while (j > 0 && a[j] > k) --j;
+        //     if (j < 0) return false;
+        //     else if (a[j] == k && k <= v) return true;
+        //     for (int i = 0; i < j; i++) {
+        //         if (f[i] == k - a[j] && a[i] <= v) return true;
+        //     }
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 数组狠长【1,10^5】：感觉只能用【全集＝所有子序列数】减去－（不稳定集＝序列里，至少一组3 个连续不合法）
+        // // 【全集＝所有子序列数】：N=10^5, 全集数 =n*(n+1)/2, 【TODO：】这么算全集数不对！各种可能的组合数、总数
+        // // 不知道这个题目，细节哪里错了，改天再写。。
+        // static final int mod = (int)1e9 + 7;
+        // public int countStableSubsequences(int[] a) {
+        //     int n = a.length;
+        //     // 【TODO：】这里算得不对，应该是 C1+C2+C3...
+        //     // long f = (long)n * (n + 1) / 2;
+        //     long [] p = new long [n+1]; p[0] = 1;
+        //     long f = 0;
+        //     for (int i = 1; i < n+1; i++) 
+        //         p[i] = ((long)p[i-1] * i) % mod;
+        //     for (int i = 1; i < n+1; i++)
+        //         f = (f + p[n] / p[n-i] / p[i]) % mod;
+        //     List<Integer> l = new ArrayList<>(), r = new ArrayList<>();
+        //     for (int i = 0; i < n; i++)
+        //         if (a[i] % 2 == 1) l.add(i);
+        //         else r.add(i);
+        //     // 遍历：3 个非法数中的【中间数】，并向【左、右、两侧延伸】数，所有可能长度的、不合法总数
+        //     long ff = 0;
+        //     for (int i = 1, idx; i < n-1; i++) {
+        //         // 去头去尾，保证【当前数，无论奇偶】，其前后必有至少一个同 parity 的数，即一个标准【非法、中间数】
+        //         if (a[i] % 2 == 1 && (l.get(0) == i || l.get(l.size()-1) == i)
+        //             || a[i] % 2 == 0 && (r.get(0) == i || r.get(r.size()-1) == i)) continue;
+        //         // 【当前数：奇数】
+        //         if (a[i] % 2 == 1) {
+        //             // 有序序列 l 里，找到当前下标 i 所在【有序下标序列中的。下标 j】
+        //             idx = Collections.binarySearch(l, i);
+        //             // 【当前中间数、下标】：遍历【左下标、右下标】所有可能组合的、所有非法方案数
+        //             for (int j = 0; j < idx; j++) 
+        //                 for (int k = idx+1; k < l.size(); k++) 
+        //                     ff = (ff + (long)Math.pow(2, l.get(j)) * (long)Math.pow(2, n - l.get(k) - 1)) % mod;
+        //         } else {
+        //             // 【当前数：奇数】
+        //             // 有序序列 l 里，找到当前下标 i 所在【有序下标序列中的。下标 j】
+        //             idx = Collections.binarySearch(r, i);
+        //             // 【当前中间数、下标】：遍历【左下标、右下标】所有可能组合的、所有非法方案数
+        //             for (int j = 0; j < idx; j++) 
+        //                 for (int k = idx+1; k < r.size(); k++) 
+        //                     ff = (ff + (long)Math.pow(2, r.get(j)) * (long)Math.pow(2, n - r.get(k) - 1)) % mod;
+        //         }
+        //     }
+        //     return (int)((f - ff) % mod);
+        // }
     }
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
     public static void main (String[] args) { 
 		Solution s = new Solution ();
 
-        int [] a = new int [] {42, 772};
+        int [] a = new int [] {1,3,5};
 
-        int r = s.maxXorSubsequences(a);
+        int r = s.countStableSubsequences(a);
         System.out.println("r: " + r);
     }
 }
@@ -578,6 +687,20 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 //  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
