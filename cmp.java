@@ -670,6 +670,101 @@ public class cmp {
         //     }
         //     return (int)((f - ff) % mod);
         // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int evenNumberBitwiseORs(int[] a) {
+        //     int n = a.length, f = 0;
+        //     for (int v : a)
+        //         if (v % 2 == 0)
+        //             f |= v;
+        //     return f;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public long maxTotalValue(int[] a, int k) {
+        //     return (long)(Arrays.stream(a).max().getAsInt() - Arrays.stream(a).min().getAsInt()) * k;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 亲爱的表哥的活宝妹，不太会想、不知道怎么去想这个题目，晚点儿再写这个题目
+        // public int minSplitMerge(int[] a, int[] b) {
+        //     int n = a.length;
+        // }
+
+        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // 【暴力解法】： k 在【1,n*(n+1)/2】范围内的任何值，都能暴力算出来。。 
+        public long maxTotalValue(int[] a, int k) {
+            int n = a.length, max = Arrays.stream(a).max().getAsInt(), min = Arrays.stream(a).min().getAsInt(), dir = 0;
+            // l:【有序队列：升序】：纪录（最小值）
+            ArrayDeque<Integer> l = new ArrayDeque<>(),
+            // r: 【有序队列：降序】：纪录（最大值）；
+                r = new ArrayDeque<>();
+            // 【有序字典】：用来纪录【子数组、预处理】结果
+            TreeMap<Integer, TreeSet<int []>> m = new TreeMap<>((x, y) -> (y - x));
+            // O(N*N) 遍历一遍【子数组、差值最值】
+            for (int i = 0; i < n; i++) {
+                // l:【有序队列：升序】：纪录（最小值）
+                while (!l.isEmpty() && a[l.peekLast()] > a[i]) l.pollLast();
+                l.offerLast(i);
+                // r: 【有序队列：降序】：纪录（最大值）；
+                while (!r.isEmpty() && a[r.peekLast()] < a[i]) r.pollLast();
+                r.offerLast(i);
+                if (dir == 0) {
+                    // 【自左向右】：2 双端队列，添加元素 
+                    for (int j = i; j < n; j++) {
+                        if (j > i) {
+                            // 【添加、当前元素 a[j]】
+                            // l:【有序队列：升序】：纪录（最小值）
+                            while (!l.isEmpty() && a[l.peekLast()] > a[j]) l.pollLast();
+                            l.offerLast(j);
+                            // r: 【有序队列：降序】：纪录（最大值）；
+                            while (!r.isEmpty() && a[r.peekLast()] < a[j]) r.pollLast();
+                            r.offerLast(j);
+                        }
+                        int dif = a[r.peekFirst()] - a[l.peekFirst()];
+                        m.computeIfAbsent(dif, z -> new TreeSet<int []>((x, y)->(x[0] != y[0] ? x[0] - y[0] : x[1] - y[1])));
+                        // 【TODO：】感觉这里需要多一步的处理，当 dif 相同，处理连续相同数值， a[j]==a[j-1] 的情况，感觉需要一点儿特殊处理；相同 dif, 尤其 l 或是 r 端连续相同数值，取【最小子数组长度】，方便算，最大【l × (n-1-r)】个重复
+                        m.get(dif).add(new int [] {r.peekFirst(), l.peekFirst()});
+                    }
+                } else { // dir == 1
+                    // 【自右向左】：2 双端队列，删除元素 
+                    for (int j = n-1; j >= i; j--) {
+                        // // 可能仍然需要【添加当前元素 j】【TODO：】想得不是狠透彻。。
+                        // if (j > i) {
+                        //     // 【添加、当前元素 a[j]】
+                        //     // l:【有序队列：升序】：纪录（最小值）
+                        //     while (!l.isEmpty() && l.peekLast() < j && a[l.peekLast()] > a[j]) l.pollLast();
+                        //     l.offerLast(j);
+                        //     // r: 【有序队列：降序】：纪录（最大值）；
+                        //     while (!r.isEmpty() && a[r.peekLast()] < a[j]) r.pollLast();
+                        //     r.offerLast(j);
+                        // }
+                        int dif = a[r.peekFirst()] - a[l.peekFirst()];
+                        m.computeIfAbsent(dif, z -> new TreeSet<int []>((x, y)->(x[0] != y[0] ? x[0] - y[0] : x[1] - y[1])));
+                        m.get(dif).add(new int [] {r.peekFirst(), l.peekFirst()});
+                        // 【删除、当前元素 a[j]】
+                        if (j > i) {
+                            // l:【有序队列：升序】：纪录（最小值）
+                            if (!l.isEmpty() && l.peekLast() == j) l.pollLast();
+                            if (!r.isEmpty() && r.peekLast() == j) r.pollLast();
+                        }                        
+                    }
+                }
+                if (!l.isEmpty() && l.peekFirst() == i) l.pollFirst();
+                if (!r.isEmpty() && r.peekFirst() == i) r.pollFirst();
+                dir = 1 - dir;
+            }
+            // 用【预处理】的（子数组）来求结果
+            // 遍历：【有序字典】，自最大值，向最小值数。。
+            int p = -1, pp = -1; // pl pr
+            for (Map.Entry<Integer, TreeSet<int []>> en : m.entrySet()) {
+                int key = en.getKey();
+                TreeSet<int []> s = en.getValue();
+                for (int [] v : s) {
+                    // 【TODO：】可能也可以这里处理：比较 v[0]==p||v[1]==pp 与前一个左或右端点值相同的情况。。
+                }
+            }
+        }
     }
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
     public static void main (String[] args) { 
