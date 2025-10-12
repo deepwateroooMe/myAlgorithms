@@ -870,125 +870,387 @@ public class cmp {
         //     return -1;
         // }
 
-        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // 亲爱的表哥的活宝妹，觉得：
-        // 这个破烂题目是，恶心死人不偿命的、破烂【数学：排列，非排列，是组合问题】，真恶心人。。。这是，想得简单一点儿
-        // 想得复杂一点儿，这是【动规】问题，或是【排列筷子】问题，某类动规，要求从某一侧【看不见更高的】，或是【不隐藏任何矮的】？？？
-        // 数字可以【无数次重复】！！！
-        // 亲爱的表哥的活宝妹，脑袋写昏了，今天不想再写这破烂题目了。。。
-        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        static final int mod = (int)1e9 + 7;
-        public int zigZagArrays(int n, int l, int r) {
-            // int m = r - l + 1;// 有效数字的【总数】
-            // 【动规、状态定义】： f[i][j], 当填充到【当前下标 i】
-            // // 先，试写简单思路：【数学组合问题】
-            // // 亲爱的表哥的活宝妹，脑袋不转，这个思路，【想不透彻】，不写这个思路
-            // int o = 2001, m = r - l + 1;
-            // int [] p = new int [o];// [1,2000] 的阶乘
-            // p[0] = 1;
-            // for (int i = 1; i < o; i++)
-            //     p[i] = (int)((long)p[i-1] * (long)i % mod);
-            // // 遍历2 遍：
-            // long f = 1, ff = 1;
-            // // 第一遍：【大小大】 zigzag, 遍历当前下标【i】时，可能的，从多少个【合法数】中选择1 个
-            // for (int i = 0; i < n; i++) {
-            //     f = (f + )
-            // }
-            // 第二遍：【小大小】 zigzag 
-            // 笨试写：傻【动规】、【暴力动规】：因为数据规模小，若真能把动规写出来，暴力应该也能够过
-            // int m = 2001;
-            int m = Math.max(n, r+1);
-            // 【动规：状态定义】：2 种不同序zigzag 数组中（某一种）中，遍历到【当前下标 i】，
-            // 当前下标 i 填充的是数值【j】的、所有方案数 ???
-            // 当前下标 i 填充的是数值【最大取 j】时、所有方案数 ???
-            long [][] f = new long [m][m], ff = new long [m][m];
-            // 第一种 zigzag: 【大小大】
-            for (int i = l+1; i <= r; i++) {
-                f[0][i] = 1;
-                ff[0][i] = (f[0][i] + ff[0][i-1]) % mod; // 【TODO：】还没能想明白，这个要不要【自小到大】累加成（前缀和）的形式？
-            }
-            // 遍历：【大小大】zigzag 数组中的、后序下标
-            // // 遍历：某种数组，【当前下标 i】
-            // for (int i = 1; i < n; i++) {
-            //     // 遍历：某种数组，当前下标 i 时的、有效取值【j】
-            //     for (int j = l; j <= r; j++) {
-            //         // 判断：【当前下标 i】，比前一下标（i-1）的大小
-            //         if (i % 2 == 1) { // 【奇数下标】：要比（前一下标 f[i-1][j] 的 j 值，要【小】
-            //             f[i][j] = (j == r ? 0 : ff[i-1][j+1]); 
-            //         } else { // 【偶数下标】：要比（前一下标 f[i-1][j] 的 j 值，要【大】
-            //             f[i][j] = (j == l ? 0 : ff[i-1][r] - ff[i-1][j]);
-            //         }
-            //         // 如果，亲爱的表哥的活宝妹、笨宝妹，把它想成【前缀和】累加的形式，这里也要累加
-            //         // f[i][j] = (f[i][j] + (j == l ? 0 : f[i][j-1])) % mod;
-            //         ff[i][j] = (f[i][j] + (j == l ? 0 : ff[i][j-1])) % mod;
-            //     }
-            // }
-            // 遍历：某种数组，【当前下标 i】
-            for (int i = 1; i < n; i++) {
-                // 遍历：某种数组，当前下标 i 时的、有效取值【j】
-                // 判断：【当前下标 i】，比前一下标（i-1）的大小
-                if (i % 2 == 1) { // 【奇数下标】：要比（前一下标 f[i-1][j] 的 j 值，要【小】
-                    for (int j = l; j < r; j++) {
-                        f[i][j] = ff[i-1][j+1]; 
-                        ff[i][j] = (f[i][j] + (j == l ? 0 : ff[i][j-1])) % mod;
-                    }
-                } else { // 【偶数下标】：要比（前一下标 f[i-1][j] 的 j 值，要【大】
-                    for (int j = l+1; j <= r; j++) {
-                        f[i][j] = ff[i-1][j-1];
-                        ff[i][j] = (f[i][j] + ff[i][j-1]) % mod;
-                    }
-                }
-                // 如果，亲爱的表哥的活宝妹、笨宝妹，把它想成【前缀和】累加的形式，这里也要累加
-                // f[i][j] = (f[i][j] + (j == l ? 0 : f[i][j-1])) % mod;
-                // ff[i][j] = (f[i][j] + (j == l ? 0 : ff[i][j-1])) % mod;
-            }
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 亲爱的表哥的活宝妹，觉得：
+        // // 这个破烂题目是，恶心死人不偿命的、破烂【数学：排列，非排列，是组合问题】，真恶心人。。。这是，想得简单一点儿
+        // // 想得复杂一点儿，这是【动规】问题，或是【排列筷子】问题，某类动规，要求从某一侧【看不见更高的】，或是【不隐藏任何矮的】？？？
+        // // 数字可以【无数次重复】！！！
+        // // 亲爱的表哥的活宝妹，脑袋写昏了，今天不想再写这破烂题目了。。。
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // static final int mod = (int)1e9 + 7;
+        // public int zigZagArrays(int n, int l, int r) {
+        //     // int m = r - l + 1;// 有效数字的【总数】
+        //     // 【动规、状态定义】： f[i][j], 当填充到【当前下标 i】
+        //     // // 先，试写简单思路：【数学组合问题】
+        //     // // 亲爱的表哥的活宝妹，脑袋不转，这个思路，【想不透彻】，不写这个思路
+        //     // int o = 2001, m = r - l + 1;
+        //     // int [] p = new int [o];// [1,2000] 的阶乘
+        //     // p[0] = 1;
+        //     // for (int i = 1; i < o; i++)
+        //     //     p[i] = (int)((long)p[i-1] * (long)i % mod);
+        //     // // 遍历2 遍：
+        //     // long f = 1, ff = 1;
+        //     // // 第一遍：【大小大】 zigzag, 遍历当前下标【i】时，可能的，从多少个【合法数】中选择1 个
+        //     // for (int i = 0; i < n; i++) {
+        //     //     f = (f + )
+        //     // }
+        //     // 第二遍：【小大小】 zigzag 
+        //     // 笨试写：傻【动规】、【暴力动规】：因为数据规模小，若真能把动规写出来，暴力应该也能够过
+        //     // int m = 2001;
+        //     int m = Math.max(n, r+1);
+        //     // 【动规：状态定义】：2 种不同序zigzag 数组中（某一种）中，遍历到【当前下标 i】，
+        //     // 当前下标 i 填充的是数值【j】的、所有方案数 ???
+        //     // 当前下标 i 填充的是数值【最大取 j】时、所有方案数 ???
+        //     long [][] f = new long [m][m], ff = new long [m][m];
+        //     // 第一种 zigzag: 【大小大】
+        //     for (int i = l+1; i <= r; i++) {
+        //         f[0][i] = 1;
+        //         ff[0][i] = (f[0][i] + ff[0][i-1]) % mod; // 【TODO：】还没能想明白，这个要不要【自小到大】累加成（前缀和）的形式？
+        //     }
+        //     // 遍历：【大小大】zigzag 数组中的、后序下标
+        //     // // 遍历：某种数组，【当前下标 i】
+        //     // for (int i = 1; i < n; i++) {
+        //     //     // 遍历：某种数组，当前下标 i 时的、有效取值【j】
+        //     //     for (int j = l; j <= r; j++) {
+        //     //         // 判断：【当前下标 i】，比前一下标（i-1）的大小
+        //     //         if (i % 2 == 1) { // 【奇数下标】：要比（前一下标 f[i-1][j] 的 j 值，要【小】
+        //     //             f[i][j] = (j == r ? 0 : ff[i-1][j+1]); 
+        //     //         } else { // 【偶数下标】：要比（前一下标 f[i-1][j] 的 j 值，要【大】
+        //     //             f[i][j] = (j == l ? 0 : ff[i-1][r] - ff[i-1][j]);
+        //     //         }
+        //     //         // 如果，亲爱的表哥的活宝妹、笨宝妹，把它想成【前缀和】累加的形式，这里也要累加
+        //     //         // f[i][j] = (f[i][j] + (j == l ? 0 : f[i][j-1])) % mod;
+        //     //         ff[i][j] = (f[i][j] + (j == l ? 0 : ff[i][j-1])) % mod;
+        //     //     }
+        //     // }
+        //     // 遍历：某种数组，【当前下标 i】
+        //     for (int i = 1; i < n; i++) {
+        //         // 遍历：某种数组，当前下标 i 时的、有效取值【j】
+        //         // 判断：【当前下标 i】，比前一下标（i-1）的大小
+        //         if (i % 2 == 1) { // 【奇数下标】：要比（前一下标 f[i-1][j] 的 j 值，要【小】
+        //             for (int j = l; j < r; j++) {
+        //                 f[i][j] = ff[i-1][j+1]; 
+        //                 ff[i][j] = (f[i][j] + (j == l ? 0 : ff[i][j-1])) % mod;
+        //             }
+        //         } else { // 【偶数下标】：要比（前一下标 f[i-1][j] 的 j 值，要【大】
+        //             for (int j = l+1; j <= r; j++) {
+        //                 f[i][j] = ff[i-1][j-1];
+        //                 ff[i][j] = (f[i][j] + ff[i][j-1]) % mod;
+        //             }
+        //         }
+        //         // 如果，亲爱的表哥的活宝妹、笨宝妹，把它想成【前缀和】累加的形式，这里也要累加
+        //         // f[i][j] = (f[i][j] + (j == l ? 0 : f[i][j-1])) % mod;
+        //         // ff[i][j] = (f[i][j] + (j == l ? 0 : ff[i][j-1])) % mod;
+        //     }
             
-            long rr = ff[n-1][r];
-            // for (int i = l; i <= r; i++)
-            //     rr = (rr + f[n-1][i]) % mod;
-            for (int i = 0; i < n; i++) {
-                Arrays.fill(f[i], 0);
-                Arrays.fill(ff[i], 0);
-            }
-            // 遍历：【小大小】zigzag 数组中的、后序下标
-            for (int i = l; i < r; i++) {
-                f[0][i] = 1;
-                // f[0][i] = (f[0][i] + (i == l ? 0 : f[0][i-1])) % mod; // 【TODO：】还没能想明白，这个要不要【自小到大】累加成（前缀和）的形式？
-                ff[0][i] = (f[0][i] + (i == l ? 0 : ff[0][i-1])) % mod; // 【TODO：】还没能想明白，这个要不要【自小到大】累加成（前缀和）的形式？
-            }
-            for (int i = 1; i < n; i++) {
-                // 判断：【当前下标 i】，比前一下标（i-1）的大小
-                if (i % 2 == 1) { // 【奇数下标】：要比（前一下标 f[i-1][j] 的 j 值，要【大】
-                    // 遍历：某种数组，当前下标 i 时的、有效取值【j】
-                    for (int j = l+1; j <= r; j++) {
-                        f[i][j] = ff[i-1][j-1];
-                        ff[i][j] = (f[i][j] + ff[i][j-1]) % mod;
-                    }
-                } else { // 【偶数下标】：要比（前一下标 f[i-1][j] 的 j 值，要【小】
-                    for (int j = l; j < r; j++) {
-                        f[i][j] = ff[i-1][j+1];
-                        ff[i][j] = (f[i][j] + (j == l ? 0 : ff[i][j-1])) % mod;
-                    }
-                }
-                // 如果，亲爱的表哥的活宝妹、笨宝妹，把它想成【前缀和】累加的形式，这里也要累加
-                // f[i][j] = (f[i][j] + (j == l ? 0 : f[i][j-1])) % mod;
-                // ff[i][j] = (f[i][j] + (j == l ? 0 : ff[i][j-1])) % mod;
-            }
-            System.out.println("f.length: " + f.length);
-            for (int z = 0; z < f.length; ++z)
-                System.out.println(Arrays.toString(f[z]));
+        //     long rr = ff[n-1][r];
+        //     // for (int i = l; i <= r; i++)
+        //     //     rr = (rr + f[n-1][i]) % mod;
+        //     for (int i = 0; i < n; i++) {
+        //         Arrays.fill(f[i], 0);
+        //         Arrays.fill(ff[i], 0);
+        //     }
+        //     // 遍历：【小大小】zigzag 数组中的、后序下标
+        //     for (int i = l; i < r; i++) {
+        //         f[0][i] = 1;
+        //         // f[0][i] = (f[0][i] + (i == l ? 0 : f[0][i-1])) % mod; // 【TODO：】还没能想明白，这个要不要【自小到大】累加成（前缀和）的形式？
+        //         ff[0][i] = (f[0][i] + (i == l ? 0 : ff[0][i-1])) % mod; // 【TODO：】还没能想明白，这个要不要【自小到大】累加成（前缀和）的形式？
+        //     }
+        //     for (int i = 1; i < n; i++) {
+        //         // 判断：【当前下标 i】，比前一下标（i-1）的大小
+        //         if (i % 2 == 1) { // 【奇数下标】：要比（前一下标 f[i-1][j] 的 j 值，要【大】
+        //             // 遍历：某种数组，当前下标 i 时的、有效取值【j】
+        //             for (int j = l+1; j <= r; j++) {
+        //                 f[i][j] = ff[i-1][j-1];
+        //                 ff[i][j] = (f[i][j] + ff[i][j-1]) % mod;
+        //             }
+        //         } else { // 【偶数下标】：要比（前一下标 f[i-1][j] 的 j 值，要【小】
+        //             for (int j = l; j < r; j++) {
+        //                 f[i][j] = ff[i-1][j+1];
+        //                 ff[i][j] = (f[i][j] + (j == l ? 0 : ff[i][j-1])) % mod;
+        //             }
+        //         }
+        //         // 如果，亲爱的表哥的活宝妹、笨宝妹，把它想成【前缀和】累加的形式，这里也要累加
+        //         // f[i][j] = (f[i][j] + (j == l ? 0 : f[i][j-1])) % mod;
+        //         // ff[i][j] = (f[i][j] + (j == l ? 0 : ff[i][j-1])) % mod;
+        //     }
+        //     System.out.println("f.length: " + f.length);
+        //     for (int z = 0; z < f.length; ++z)
+        //         System.out.println(Arrays.toString(f[z]));
+        //     // for (int i = l; i <= r; i++)
+        //     //     rr = (rr + f[n-1][i]) % mod;
+        //     // return (int)rr;
+        //     return (int)((rr + ff[n-1][r]) % mod);
+        // }
 
-            // for (int i = l; i <= r; i++)
-            //     rr = (rr + f[n-1][i]) % mod;
-            // return (int)rr;
-            return (int)((rr + ff[n-1][r]) % mod);
+        //  // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int alternatingSum(int[] a) {
+        //     int n = a.length, f = 0;
+        //     for (int i = 0; i < n; i += 2) 
+        //         f += a[i] - (i == n-1 ? 0 : a[i+1]);
+        //     return f;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 【动规】：感觉是动规，可是不知道怎么去想。。。
+        // // 像是去找，数组里，某个数，会是其它几个数的和。。那么这个数，就得被去掉，保留长片段几个数的、多个数的子序列。。
+        // // 亲爱的表哥的活宝妹，不喜欢今天的这组超级破烂的题目、、亲爱的表哥的活宝妹，这个周的题目不写了
+        // // 亲爱的表哥的活宝妹，下个周、周六，再写那2 组题目
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int longestSubsequence(int[] a) {
+        //     int n = a.length;
+        //     Arrays.sort(a);
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 不知道这个题目：怎么去想，数据规模狠大。。
+        // public long countNoZeroPairs(long n) {
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 改【数据结构】，用个 Stack, 【TODO：】仍然 TLE 979/1020 passed
+        // // 亲爱的表哥的活宝妹，讨厌这破烂题目，是纯粹浪费生命、作贱生命来着。。。
+        // public String removeSubstring(String S, int k) { // 
+        //     n = S.length(); this.S = S; this.k = k; s = S.toCharArray();
+        //     int [] f = new int [n], ff = new int [n];
+        //     for (int i = 0; i < n; i++)
+        //         if (s[i] == '(')
+        //             f[i] = (i == 0 ? 0 : f[i-1]) + 1;
+        //     for (int i = n-1; i >= 0; i--)
+        //         if (s[i] == ')')
+        //             ff[i] = (i == n-1 ? 0 : ff[i+1]) + 1;
+        //     // // 【自左向右】遍历一遍：消除一些必要的 k 片段【双指针】
+        //     // int i = 0, j = 0;
+        //     // 【TODO：】还有一种简单思路，用2 个栈Stack:
+        //     // 一个【）右括号栈：自右向左遍历到下标1】
+        //     // 一个【（左括号栈：自左向右，自下标 0 向右遍历】
+        //     // 就基本可以O(n) 写结果了，遍历2 次
+        //     Deque<int []> q = new ArrayDeque<>(), t = new ArrayDeque<>();
+        //     for (int i = n-1; i > 0; i--) 
+        //         if (f[i] > 0 && i < n-1) // 当前下标 i: 是【左括号（】
+        //             t.offerLast(new int [] {i+1, ff[i+1]});
+        //     StringBuilder sb = new StringBuilder("");
+        //     for (int i = 0; i < n; i++) {
+        //         if (ff[i] > 0) { // 当前下标 i: 是【右括号）】
+        //             if (q.isEmpty()) { // 没有任何，可以用来匹配的（左括号）
+        //                 // 这下面仍然逻辑不清。。【TODO：】亲爱的表哥的活宝妹，今天晚上再不想写这个、这种恶心死人、恶心坏这个世界不偿命的破烂题目了。。浪费生命。。。
+        //                 while (!t.isEmpty() && ) {
+        //                     int [] cur = t.pollLast();
+        //                     for (int j = 0; j < cur[1]; j++)
+        //                 }
+        //             }
+        //         }
+        //     }
+            // int [] cur = null, in = null;
+            // for (int i = 0; i < n; i++) {
+            //     System.out.println("\n i: " + i);
+            //     if (q.isEmpty()
+            //         || s[i] == '(' && q.peekLast()[0] == 1
+            //         || s[i] == ')' && q.peekLast()[0] == 0) {
+            //         cur = new int [] {(s[i] == '(' ? 0 : 1), 1};
+            //         // q.offerLast();
+            //     } else {
+            //         if (s[i] == '(' && q.peekLast()[0] == 0
+            //             || s[i] == ')' && q.peekLast()[0] == 1) {
+            //             cur = q.pollLast();
+            //             cur[1] = cur[1] + 1;
+            //         }
+            //     }
+            //     System.out.println(Arrays.toString(cur));
+            //     if (cur != null && s[i] == ')' && cur[1] == k && !q.isEmpty() && q.peekLast()[0] == 0 && q.peekLast()[1] >= k) {
+            //         in = q.pollLast();
+            //         in[1] = in[1] - k;
+            //         if (in[1] > 0) {
+            //             // System.out.println(Arrays.toString(in));
+            //             q.offerLast(in);
+            //         }
+            //         cur[1] = cur[1] - k;
+            //     }
+            //     if (cur != null && cur[1] > 0)
+            //         q.offerLast(cur);
+            // }
+            // StringBuilder sb = new StringBuilder("");
+            // while (!q.isEmpty()) {
+            //     int [] f = q.pollFirst();
+            //     for (int i = 0; i < f[1]; i++) 
+            //         sb.append(f[0] == 0 ? '(' : ')');
+            // }
+            // return sb.toString();
+        // }
+        // String S; char [] s;
+        // int [] f, ff;
+        // int n, k;
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public boolean scoreBalance(String S) {
+        //     int n = S.length(); char [] s = S.toCharArray();
+        //     int [] f = new int [n+1];
+        //     for (int i = 0; i < n; i++) f[i+1] = f[i] + s[i] -'a' + 1;
+        //     for (int i = 0; i < n; i++)
+        //         if (f[i] * 2 == f[n]) return true;
+        //     return false;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int longestSubarray(int [] a) {
+        //     int n = a.length;
+        //     if (n <= 2) return n;
+        //     int [] f = new int [n];
+        //     Arrays.fill(f, 1);
+        //     for (int i = 2; i < n; i++) 
+        //         if (a[i] == a[i-1] + a[i-2])
+        //             f[i] = Math.max(f[i-1], f[i-2]+1) + 1;
+        //     return Math.max(2, Arrays.stream(f).max().getAsInt());
+        // }
+
+    //     // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+    //     // 这个破烂题目， debug 狠烦人，晚点儿再写这个题目
+    //     // class ExamTracker {
+    //     TreeMap<Integer, Integer> m; // time, idx
+    //     int idx;
+    //     List<int []> l;
+    //     // public ExamTracker() {
+    //     public cmp() {
+    //         m = new TreeMap<>(); // time, idx
+    //         idx = -1;
+    //         l = new ArrayList<>();
+    //     }
+    //     public void record(int time, int score) {
+    //         l.add(new int [] {time, score});
+    //         ++idx;
+    //         m.put(time, idx);
+    //     }
+    //     public long totalScore(int startTime, int endTime) {
+    //         Integer hi = m.floorKey(startTime), lo = m.ceilingKey(endTime);
+    //         System.out.println("lo: " + lo + " " + "hi: " + hi);
+    //         long f = 0;
+    //         for (int i = m.get(lo); i <= m.get(hi); i++) 
+    //             f += (long)l.get(i)[1];
+    //         return f;
+    //     }
+    // }
+
+    // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+    //     public int sumDivisibleByK(int[] a, int k) {
+    //         int n = a.length, max = Arrays.stream(a).max().getAsInt(), r = 0;
+    //         int [] f = new int [max + 1];
+    //         for (int v : a) f[v]++;
+    //         for (int i = 1; i <= max; i++) 
+    //             if (f[i] > 0 && f[i] % k == 0)
+    //                 r += i * f[i];
+    //         return r;
+    //     }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 亲爱的表哥的活宝妹，觉得这2 个破烂题目狠烦人，先去写后面的
+        // public int longestBalanced(String S) {
+        //     int n = S.length(); char [] s = S.toCharArray();
+        //     int [][] r = new int [n+1][3];
+        //     for (int i = 0; i < n; i++) {
+        //         r[i+1] = Arrays.copyOf(r[i]);
+        //         r[i+1][s[i]-'a']++;
+        //     }
+        //     int [] f = new int [n+1];
+        //     for (int i = 1; i <= n; i++) {
+        //     }
+        // }
+        // int [] sorted(int [] f) {
+        // 这里分几种情况： abc 3 个频次相同；某1-2 个为0; 某2 个频次相同；3 个都非0 的几种可能性（重复3 字符、或2 字符或1 字符）等
+        // 感觉，思路还没能想透彻的时候，写这类破烂题目是被谋杀被杀人。。
+        //     int i = f[0], j = f[1], k = f[2];
+        //     int l = Arrays.stream(f).min().getAsInt(), r = Arrays.stream(f).max().getAsInt(), m = -1;
+        // }
+
+        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // 【树型动规】：这个题目，感觉极简单、傻瓜相机般的傻瓜题目。。不对。。每个祖先节点，都要算乘积。。
+        // 遍历祖先的算法，叫什么来着？【倍增法】603/693 passed...
+        // 亲爱的表哥的活宝妹，先回想一下：
+        // 有个动规 f[i][j] : 标记节点 i 的第2^j 级父节点为（2^j = 2^(j-1) + 2^(j-1)）
+        public long sumOfAncestors(int n, int[][] egs, int[] a) {
+            // int f = (int)Math.pow(2, 15), ff = (int)Math.pow(2, 17);
+            // System.out.println("f: " + f + " " + "ff: " + ff); // 树可能 17 层高
+            // 【建图】：先建（无向图）；再改有向图
+            g = new HashSet [n]; this.n = n; this.a = a; 
+            Arrays.setAll(g, z -> new HashSet<Integer>());
+            for (int [] e : egs) {
+                int u = e[0], v = e[1];
+                g[u].add(v);
+                g[v].add(u);
+            }
+            m = 17;
+            p = new int [n][m];
+            p[0][0] = 0;
+            for (int i = 0; i < n; i++)
+                Arrays.fill(p[i], -1);
+            // 【 DFS 遍历、无向图】：改（无向图）为【有向图】；并纪录每个节点的2^0 级父节点为 p
+            // 【 DFS 遍历、有向图】：记(祖先节点), 填充 p[i][j] 数组
+            dfs(0, -1);
+            System.out.println("p.length: " + p.length);
+            for (int z = 0; z < p.length; ++z)
+                System.out.println(Arrays.toString(p[z]));
+            // 【动规】求解，就可以了
+            f = new int [n];
+            // 【 DFS 遍历、有向图】：借助（倍增法）遍历每个节点的、最多 m=17 级祖先，求解
+            dfsdfs(0);
+            System.out.println(Arrays.toString(f));
+            long ans = 0;
+            for (int v : f) 
+                ans += (long)v;
+            return ans;
+        }
+        Set<Integer> [] g;
+        int [][] p;
+        int m, n; int [] a, f;
+        void dfsdfs(int u) {
+            if (u > 0) {
+                for (int j = 0; j < m && p[u][j] >= 0; j++) {
+                    if (a[u] == a[p[u][j]]) {
+                        f[u] += f[p[u][j]] + 1;
+                        break;
+                    } else if (isPerfectSqure((long)a[u] * a[p[u][j]]))
+                        f[u]++;
+                }
+            }
+            for (int v : g[u]) 
+                dfsdfs(v);
+        }
+        boolean isPerfectSqure(long r) {
+            int sqrt = (int)Math.sqrt(r);
+            for (int i = sqrt -1; i <= sqrt + 1; i++) 
+                if ((long)i * i == r) return true;
+            return false;
+        }
+        void dfs(int u, int pp) {
+            if (pp != -1) {
+                p[u][0] = pp;
+                g[u].remove(pp);
+                // int j = m;
+                // // 【TODO：】为什么 j 得倒着遍历？顺着遍历不行吗？
+                // while (j > 0 && p[pp][j] == 0) --j;
+                // for (j; j >= 0; j--) 
+                //     p[u][j+1] = p[p[u][j]][j];
+                System.out.println("\n u: " + u);
+                // for (int j = 1; j < m && p[pp][j-1] >= 0; j++) { 
+                for (int j = 0; j < m && p[pp][j] >= 0; j++) {
+                    System.out.println("j: " + j);
+                    // 【TODO：】感觉，亲爱的表哥的活宝妹，这个遍历方法写得不对！！！
+                    // 通过这个错掉的测试 Case, 亲爱的表哥的活宝妹意识到自己的这个【倍增】记父节点的逻辑，哪里写得不对。。【TODO：】 debug..
+                    p[u][j+1] = p[p[pp][j]][j];
+                    // p[u][j+1] = p[p[pp][j-1]][j];
+                }
+            }
+            System.out.println(Arrays.toString(p[u]));
+            for (int v : g[u]) 
+                dfs(v, u);
         }
     }
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
     public static void main (String[] args) { 
 		Solution s = new Solution ();
 
-        int r = s.zigZagArrays(3, 1, 3);
+        int [][] a = new int [][] {{0,1},{1,2},{1,3},{2,4},{0,5},{2,6},{4,7},{3,8},{6,9},{0,10}};
+
+        long r = s.sumOfAncestors(11, a, b);
         System.out.println("r: " + r);
     }
 }
