@@ -1925,85 +1925,220 @@ public class cmp {
         //     return s.size();
         // }
 
-        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // 亲爱的表哥的活宝妹，觉得这个破烂题目，还算比较简单的？ 按数组 a[i] 【从小到大】的顺序遍历、预处理【动规数组】
-        // 【动规】：有个经典题型，f[i] 既与 f[i-1] 相关，也与 f[i-2] 相关，需要找出来复习一下，是生成什么由【0/1】组成的半随机序列，要求片段里不能存在“011”之类的特殊子序列？忘记细节了，需要找出来复习一下
-        // 亲爱的表哥的活宝妹，觉得，这个动规，就是数个数，可是细节上仍然有狠大的出入，改天再写1!!
-        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        public long[] countStableSubarrays(int[] a, int[][] qs) {
-            int n = a.length, m = qs.length;
-            // 【左边、最小值的下标】＋（右边，最大值的下标）
-            int [] l = new int [n], r = new int [n];
-            for (int i = 1; i < n; i++) {
-                if (a[i] >= a[i-1]) l[i] = l[i-1];
-                else l[i] = i;
-            }
-            Arrays.fill(r, n-1);
-            for (int i = n-2; i >= 0; i--) {
-                if (a[i] <= a[i+1]) r[i] = r[i+1];
-                else r[i] = i;
-            }
-            int [] f = new int [n]; Arrays.fill(f, 1);
-           Integer [] idx = IntStream.range(0, n).boxed().toArray(Integer[]::new);
-            Arrays.sort(idx, (i, j)-> (a[i] != a[j] ? a[i] - a[j] : i - j));
-            System.out.println(Arrays.toString(idx));
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 亲爱的表哥的活宝妹，觉得这个破烂题目，还算比较简单的？ 按数组 a[i] 【从小到大】的顺序遍历、预处理【动规数组】
+        // // 【动规】：有个经典题型，f[i] 既与 f[i-1] 相关，也与 f[i-2] 相关，需要找出来复习一下，是生成什么由【0/1】组成的半随机序列，要求片段里不能存在“011”之类的特殊子序列？忘记细节了，需要找出来复习一下
+        // // 亲爱的表哥的活宝妹，觉得，这个动规，就是数个数，可是细节上仍然有狠大的出入，改天再写1!!
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public long[] countStableSubarrays(int[] a, int[][] qs) {
+        //     int n = a.length, m = qs.length;
+        //     // 【左边、最小值的下标】＋（右边，最大值的下标）
+        //     int [] l = new int [n], r = new int [n];
+        //     for (int i = 1; i < n; i++) {
+        //         if (a[i] >= a[i-1]) l[i] = l[i-1];
+        //         else l[i] = i;
+        //     }
+        //     Arrays.fill(r, n-1);
+        //     for (int i = n-2; i >= 0; i--) {
+        //         if (a[i] <= a[i+1]) r[i] = r[i+1];
+        //         else r[i] = i;
+        //     }
+        //     int [] f = new int [n]; Arrays.fill(f, 1);
+        //    Integer [] idx = IntStream.range(0, n).boxed().toArray(Integer[]::new);
+        //     Arrays.sort(idx, (i, j)-> (a[i] != a[j] ? a[i] - a[j] : i - j));
+        //     System.out.println(Arrays.toString(idx));
 
-            // 按数组 a[i] 【从小到大】的顺序遍历、预处理【动规数组】 
-            for (int idxx = 1; idxx < n; idxx++) {
-                int i = idx[idxx]; // 【自小到大：当前 a[i] 下标】
-                System.out.println("idxx: " + idxx + " " + "i: " + i);
-                if (i == 0 || a[i-1] > a[i]) {
-                    System.out.println(Arrays.toString(f));
-                    continue;
-                }
-                // 计算：【以前下标 i-1 为结尾的、所有合法子数组】（用来合并当前下标 i），叠加和
-                // f[i] += (f[i-1] - (i == 1 || l[i] > i-2 ? 0 : f[i-2])) * 2;
-                // f[i] += (f[i-1] - (i == 1 || l[i] > i-2 ? 0 : f[i-2])) * 2 + (i >= 2 ? f[i-2] : 0);
-                // 计算：【以前下标 i-1 为结尾的、所有合法子数组】（用来合并当前下标 i），叠加和【以i-1 为右端点的先前所有合法子数组】
-                // f[i] += (f[i-1] - (i == 1 || l[i] > i-2 ? 0 : f[i-2])) + f[i-1];
-                f[i] += (f[i-1] - (i == 1 || l[i] > i-2 ? 0 : f[i-2])) * 2 + (i == 1 || l[i] > i-2 ? 0 : f[i-2]);
-                // 【TODO：】这里还需要考虑 a[i] == a[i-1] 重复数字的特殊情况？
-                if (a[i] == a[i-1])
-                    f[i] -= 1; // 【TODO：】这里只减少1 个，对吗？
-                System.out.println(Arrays.toString(f));
-            }
-            System.out.println(Arrays.toString(f));
+        //     // 按数组 a[i] 【从小到大】的顺序遍历、预处理【动规数组】 
+        //     for (int idxx = 1; idxx < n; idxx++) {
+        //         int i = idx[idxx]; // 【自小到大：当前 a[i] 下标】
+        //         System.out.println("idxx: " + idxx + " " + "i: " + i);
+        //         if (i == 0 || a[i-1] > a[i]) {
+        //             System.out.println(Arrays.toString(f));
+        //             continue;
+        //         }
+        //         // 计算：【以前下标 i-1 为结尾的、所有合法子数组】（用来合并当前下标 i），叠加和
+        //         // f[i] += (f[i-1] - (i == 1 || l[i] > i-2 ? 0 : f[i-2])) * 2;
+        //         // f[i] += (f[i-1] - (i == 1 || l[i] > i-2 ? 0 : f[i-2])) * 2 + (i >= 2 ? f[i-2] : 0);
+        //         // 计算：【以前下标 i-1 为结尾的、所有合法子数组】（用来合并当前下标 i），叠加和【以i-1 为右端点的先前所有合法子数组】
+        //         // f[i] += (f[i-1] - (i == 1 || l[i] > i-2 ? 0 : f[i-2])) + f[i-1];
+        //         f[i] += (f[i-1] - (i == 1 || l[i] > i-2 ? 0 : f[i-2])) * 2 + (i == 1 || l[i] > i-2 ? 0 : f[i-2]);
+        //         // 【TODO：】这里还需要考虑 a[i] == a[i-1] 重复数字的特殊情况？
+        //         if (a[i] == a[i-1])
+        //             f[i] -= 1; // 【TODO：】这里只减少1 个，对吗？
+        //         System.out.println(Arrays.toString(f));
+        //     }
+        //     System.out.println(Arrays.toString(f));
 
-            long [] ans = new long [m];
-            int k = 0;
-            for (int [] q : qs) {
-                int i = q[0], j = q[1], cur = i;
-                // 【单值】
-                if (i == j) {
-                    ans[k++] = 1;
-                    continue;
-                }
-                // 【左端点】：可能数多，减去【左端点】可能多算的部分
-                if (i > 0 && a[i-1] <= a[i])
-                    ans[k] -= f[i-1] * 2;
-                while (i <= j) {
-                    // 【右端点】：移动到（当前：不减子数组）可以延伸的【合法、最右端】
-                    cur = Math.min(j, r[i]);
-                    ans[k] += f[cur];
-                    i = cur+1;
-                }
-                k++;
-            }
-            return ans;
-        }
+        //     long [] ans = new long [m];
+        //     int k = 0;
+        //     for (int [] q : qs) {
+        //         int i = q[0], j = q[1], cur = i;
+        //         // 【单值】
+        //         if (i == j) {
+        //             ans[k++] = 1;
+        //             continue;
+        //         }
+        //         // 【左端点】：可能数多，减去【左端点】可能多算的部分
+        //         if (i > 0 && a[i-1] <= a[i])
+        //             ans[k] -= f[i-1] * 2;
+        //         while (i <= j) {
+        //             // 【右端点】：移动到（当前：不减子数组）可以延伸的【合法、最右端】
+        //             cur = Math.min(j, r[i]);
+        //             ans[k] += f[cur];
+        //             i = cur+1;
+        //         }
+        //         k++;
+        //     }
+        //     return ans;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int minimumFlips(int n) {
+        //     String S = Integer.toBinaryString(n); char [] s = S.toCharArray();
+        //     String T = new StringBuilder(S).reverse().toString(); char [] t = T.toCharArray();
+        //     int f = 0;
+        //     for (int i = 0; i < s.length; i++) 
+        //         if (s[i] != t[i]) f++;
+        //     return f;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 这个破烂题目，要【暴力】一个数字一个数字、一个数位一个数位地去数吗？讨厌这类破烂题目，晚点儿再写这个题目
+        // 亲爱的表哥的活宝妹，傍晚想到后面那个相对难题目的解法了，【数位动规】，遍历【l,r】上下界两边界数的【1,n-1】数位，
+        // 遍历当前数位，记【前一位数字】，动规过度到下一位【从低位到高位遍历】时，数当前数位向下一个高位过渡时的【顶或是底】的个数，就不会超时了【TODO：】
+        // public int totalWaviness(int x, int y) {
+        //     int f = 0, k = 0;
+        //     for (int i = x; i <= y; i++) {
+        //         char [] s = String.valueOf(i).toCharArray();
+        //         if (s.length < 3) continue;
+        //         k = 0;
+        //         for (int j = 1; j < s.length-1; j++) 
+        //             if (s[j] - s[j-1] > 0 && s[j] - s[j+1] > 0
+        //                 || s[j] - s[j-1] < 0 && s[j] - s[j+1] < 0)
+        //                 k++;
+        //         f += k;
+        //     }
+        //     return f;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public long sumAndMultiply(int n) {
+        //     String S = String.valueOf(n);
+        //     StringBuilder s = new StringBuilder();
+        //     int f = 0;
+        //     for (char c : S.toCharArray())
+        //         if (c != '0') {
+        //             s.append(c);
+        //             f += c - '0';
+        //         }
+        //     if (s.length() == 0) return 0;
+        //     return (long)f * Integer.parseInt(s.toString());
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 亲爱的表哥的活宝妹，感觉，这里XOR 异或数组的性质，好像忘记了，先不写这个题目
+        // // TLE TLE TLE: 超时了，并且超时还比较严重。。。晚点儿再写这个破烂题目
+        // public int maxBalancedSubarray(int[] a) {
+        //     int n = a.length;
+        //     int [] l = new int [n+1], r = new int [n+1], f = new int [n+1];
+        //     for (int i = 0; i < n; i++) { // 数：【奇偶个数】
+        //         if (a[i] % 2 == 1) {
+        //             l[i+1] = l[i] + 1;
+        //             r[i+1] = r[i];
+        //         } else {
+        //             r[i+1] = r[i] + 1;
+        //             l[i+1] = l[i];
+        //         }
+        //         f[i+1] = f[i] ^ a[i];
+        //     }
+        //     // 遍历（有技巧、有裁枝地、遍历所有可能性）：所有【子数组 XOR 值为 0】的可能性，再检测：子数组【奇偶个数的、合法性】
+        //     Map<Integer, List<Integer>> m = new HashMap<>();
+        //     int ff = 0; // 答案
+        //     for (int i = 1; i <= n; i++) {
+        //         // 先查：当前子数组【0,i-1】
+        //         if (f[i] == 0 && l[i] == r[i]) {
+        //             ff = Math.max(ff, i);
+        //             // if (!m.containsKey(f[i])) // 保留【最左端点】？
+        //             //     m.put(f[i], i); // i
+        //             System.out.println("ff 0: " + ff);
+        //           m.computeIfAbsent(f[i], z -> new ArrayList<>()).add(i);
+        //             continue;
+        //         }
+        //         // 再查：左端点右移后的、子数组
+        //         if (m.containsKey(f[i])) 
+        //             for (int j : m.get(f[i])) 
+        //                 if (l[i] - l[j] == r[i] - r[j]) {
+        //                     ff = Math.max(ff, i - j);
+        //                     System.out.println("ff 1: " + ff);
+        //                     break;
+        //                 }
+        //         m.computeIfAbsent(f[i], z -> new ArrayList<>()).add(i);
+        //     }
+        //     System.out.println("ff: " + ff);
+        //     return ff;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // TLE TLE TLE 509/52617 passed..【TODO：】 queries 是【离线解法】还可以将queries 按【l,r】左右下标升序排列，以便必要的时候，可以得用前面求得的结果
+        // // 亲爱的表哥的活宝妹，今天不想再写这破烂题目了，今天的两组题目都极其恶心人，亲爱的表哥的活宝妹，下周六再写晚上的题目
+        // static final int mod = (int)1e9 + 7;
+        // public int[] sumAndMultiply(String S, int[][] qs) {
+        //     int n = S.length();
+        //     char [] s = S.toCharArray();
+        //     TreeMap<Integer, Integer> m = new TreeMap<>(); // s[i]==>idx
+        //     List<Integer> li = new ArrayList<>();
+        //     int j = 0; // li 下标 idx=j
+        //     for (int i = 0; i < n; i++) {
+        //         if (s[i] != '0') {
+        //             m.put(i, j);
+        //             li.add(s[i] - '0');
+        //             j++;
+        //         }
+        //     }
+        //     int [] p = new int [li.size()+1];
+        //     for (int i = 1; i < li.size()+1; i++) // 数位【前缀和】
+        //         p[i] = p[i-1] + li.get(i-1);
+        //     int [] f = new int [qs.length];
+        //     j = 0;
+        //     // TLE TLE TLE 【TODO：】 queries 是【离线解法】还可以将queries 按【l,r】左右下标升序排列，以便必要的时候，可以得用前面求得的结果
+        //     for (int[] q : qs) {
+        //         // System.out.println("j: " + j);
+        //         // System.out.println(Arrays.toString(q));
+        //        // 【TODO：】这里边界，可能不对
+        //         Integer ll = m.ceilingKey(q[0]), rr = m.floorKey(q[1]);
+        //         int l = 0, r = n-1;
+        //         if (ll == null || (rr == null || ll > rr)) {
+        //             j++;
+        //             continue;
+        //         }
+        //         l = m.get(ll); r = m.get(rr);
+        //     for (int k = l; k <= r; k++) 
+        //             f[j] = (int)(((long)f[j] * 10l + li.get(k)) % mod);
+        //         f[j] = (int)((long)f[j] * (p[r+1] - p[l]) % mod);
+        //         j++;
+        //     } 
+        //     return f;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 【动规】，绝对的【动规题型】：数组元素的值，最多 19 位，一定按照数位遍历！！ 19 位有点儿大，15 位或不超时，但19 位感觉有可能会超时
+        // // 【自顶向下】：子序列遍历的方法，是：【暴力 19 个数位】的所有可能性！【1<<19-1】
+        // // 【0,18】数位，每个数位的遍历方法：【数位遍历】的技巧：按【0,18】数位上的【1/0】分组，分组后，直接数所有可能性
+        // // 【TODO：】把这个题目，拆成（2 个阶段的、暴力遍历），是否存在奇角数错的地方？遍历【1<<19-1】当多个数位时，可能会存在交差？
+        // // 亲爱的表哥的活宝妹，晚点儿再想这个破烂题目
+        // static final int mod = (int)1e9 + 7;
+        // public int countEffective(int[] a) {
+        //     // int f = (int)Math.pow(2, 18), ff = (int)Math.pow(2, 20); // a[] 无素最多 15 位
+        //     // System.out.println("f: " + f + " " + "ff: " + ff);
+        //     int n = a.length, max = Arrays.stream(a).max().getAsInt(), m = (int)(Math.log(max) / Math.log(2));
+        //     return 0;
+        // }
     }
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
         public static void main (String[] args) { 
 		Solution s = new Solution ();
 
-        // int [] a = new int [] {21,3,4,17};
-        // int [][] b = new int [][] {{1, 3}};
-        int []  a = new int []  {16, 17, 17};
-        int [][] b = new int [][] {{1,2}};
-
-        System.out.println(Arrays.toString(a));
-
-        long [] r = s.countStableSubarrays(a, b);
+        int [] r = s.sumAndMultiply(a, b);
         System.out.println(Arrays.toString(r));
     }
 }
@@ -2520,6 +2655,11 @@ public class cmp {
 //  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 //  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 //  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
