@@ -215,113 +215,228 @@ public class cmp {
         //     return r;
         // }
 
-        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // 亲爱的表哥的活宝妹，感觉，这个破烂题目，像是：【树型动规】中的【换根、树型动规】？
-        // 可是，【换根树型动规】的细节，感觉被亲爱的表哥的活宝妹、笨宝妹忘记光了。。。        
-        public int[] maxSubgraphScore(int n, int[][] egs, int[] a) {
-            this.n = n; g = new ArrayList[n]; this.a = a; 
-            Arrays.setAll(g, z -> new ArrayList<Integer>());
-            for (int [] e : egs) {
-                int u = e[0], v = e[1];
-                g[u].add(v);
-                g[v].add(u);
-            }
-            // 纪录【整个树、不是子树！】： good － bad 节点数
-            // 【TODO：】应该纪录，以【0】为根节点的树，以【i】为根节点的（子树）上， good/bad 节点数『最多/最少』的（路径 Path）上的 good/bad 节点个数
-            f = new int [n]; ff = new int [n];
-            fa = dep = siz = son = top = dfn = rnk = new int [n];
-            // 预处理数据：数据【初始化：以 0 为根节点】当作（有向树）来遍历
-            // 【TODO：】亲爱的表哥的活宝妹、笨宝妹觉得，这里应该加上【重链树剖？排序】才更方便，这里（重链）定义为 good 节点最多的子树链？
-            // 【TODO：】亲爱的表哥的活宝妹，亲爱的表哥的活宝妹、笨宝妹，这里如果 good 用【重链重儿了】纪录，是否同时同步纪录 bad 用【最轻链、最轻儿子】来也纪录？
-            // 【TODO：】【重链树剖？排序】
-            // 【TODO：】不用去想【重链路、轻链路】，
-            // 感觉这里涉及【所有子树】的参与与否，经典题型如（没有上司的舞会）？某个上司的任何下属（及其下属）都是可能参与的，
-            // 所以涉及任何子树的【参与与否】的动规选择与状态转换，那就仍然是数【子树里的、good/bad 总数】最方便
-            dfs(0, -1);
-            // 【重链】搭建
-            idx = 0;
-            // dfsdfs(0, 0);
-            // 【换根动规】：可能会影响【重链】，可能把一个重链拆成 2 个。。。
-
-            // 【换根动规】：
-            // 感觉这里涉及【所有子树】的参与与否，经典题型如（没有上司的舞会）？某个上司的任何下属（及其下属）都是可能参与的，
-            // 所以涉及任何子树的【参与与否】的动规选择与状态转换，那就仍然是数【子树里的、good/bad 总数】最方便
-            r = new int [n];
-            // 【换根动规】：要考虑换树，对重链的影响
-            dfsdfs(0, -1);
-            return r;
-        }
-        List<Integer> [] g;
-        int n, idx; int [] a;
-        int [] r, f, ff;
-        // // 求解： r[] 不按 idx[0...n-1] 序，按树遍历
-        // void dfsdfs(int u, int p) {
-        //     int max = f[u] - ff[u];
-        //     if (son[u] != 0) {
-        //         // 【根节点 u】＋【 son[u] 重链路】
-        //         max = Math.max(max, f[son[u]] - ff[son[u]] + a[u] * (a[u] > 0 ? 1 : -1));
-        //         // 【TODO：】，亲爱的表哥的活宝妹，亲爱的表哥的活宝妹、笨宝妹，这里，只考虑了：
-        //         //     以【 u】为根节点的原树的子树，和
-        //         //     以【son[u]】为根节点的重链路＋子树【根节点 u】：一条路径 path
-        //         //     而没能考虑，包括：其它非【重链】Path, 和（换根前换根后）形成的【新、前父节点 u 链路 Path】
-        //         // 【TODO：】感觉，这里应该存在一个、笨宝妹脑袋里冒出来的【重链路】与【轻链路】的贪心解法、或优化存在，才对。。
-        //         // 亲爱的表哥的活宝妹，亲爱的表哥的活宝妹、笨宝妹，今天写不到这个破烂题目。。。改天、将来，亲爱的表哥的活宝妹、笨宝妹可能写得出来。、。。
-        //         dfsdfs(son[u], ftop); // ftop: 【重链的顶端节点】
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 亲爱的表哥的活宝妹，感觉，这个破烂题目，像是：【树型动规】中的【换根、树型动规】？
+        // // 可是，【换根树型动规】的细节，感觉被亲爱的表哥的活宝妹、笨宝妹忘记光了。。。        
+        // public int[] maxSubgraphScore(int n, int[][] egs, int[] a) {
+        //     this.n = n; g = new ArrayList[n]; this.a = a; 
+        //     Arrays.setAll(g, z -> new ArrayList<Integer>());
+        //     for (int [] e : egs) {
+        //         int u = e[0], v = e[1];
+        //         g[u].add(v);
+        //         g[v].add(u);
         //     }
+        //     // 纪录【整个树、不是子树！】： good － bad 节点数
+        //     // 【TODO：】应该纪录，以【0】为根节点的树，以【i】为根节点的（子树）上， good/bad 节点数『最多/最少』的（路径 Path）上的 good/bad 节点个数
+        //     f = new int [n]; ff = new int [n];
+        //     fa = dep = siz = son = top = dfn = rnk = new int [n];
+        //     // 预处理数据：数据【初始化：以 0 为根节点】当作（有向树）来遍历
+        //     // 【TODO：】亲爱的表哥的活宝妹、笨宝妹觉得，这里应该加上【重链树剖？排序】才更方便，这里（重链）定义为 good 节点最多的子树链？
+        //     // 【TODO：】亲爱的表哥的活宝妹，亲爱的表哥的活宝妹、笨宝妹，这里如果 good 用【重链重儿了】纪录，是否同时同步纪录 bad 用【最轻链、最轻儿子】来也纪录？
+        //     // 【TODO：】【重链树剖？排序】
+        //     // 【TODO：】不用去想【重链路、轻链路】，
+        //     // 感觉这里涉及【所有子树】的参与与否，经典题型如（没有上司的舞会）？某个上司的任何下属（及其下属）都是可能参与的，
+        //     // 所以涉及任何子树的【参与与否】的动规选择与状态转换，那就仍然是数【子树里的、good/bad 总数】最方便
+        //     dfs(0, -1);
+        //     // 【重链】搭建
+        //     idx = 0;
+        //     // dfsdfs(0, 0);
+        //     // 【换根动规】：可能会影响【重链】，可能把一个重链拆成 2 个。。。
+
+        //     // 【换根动规】：
+        //     // 感觉这里涉及【所有子树】的参与与否，经典题型如（没有上司的舞会）？某个上司的任何下属（及其下属）都是可能参与的，
+        //     // 所以涉及任何子树的【参与与否】的动规选择与状态转换，那就仍然是数【子树里的、good/bad 总数】最方便
+        //     r = new int [n];
+        //     // 【换根动规】：要考虑换树，对重链的影响
+        //     dfsdfs(0, -1);
+        //     return r;
+        // }
+        // List<Integer> [] g;
+        // int n, idx; int [] a;
+        // int [] r, f, ff;
+        // // // 求解： r[] 不按 idx[0...n-1] 序，按树遍历
+        // // void dfsdfs(int u, int p) {
+        // //     int max = f[u] - ff[u];
+        // //     if (son[u] != 0) {
+        // //         // 【根节点 u】＋【 son[u] 重链路】
+        // //         max = Math.max(max, f[son[u]] - ff[son[u]] + a[u] * (a[u] > 0 ? 1 : -1));
+        // //         // 【TODO：】，亲爱的表哥的活宝妹，亲爱的表哥的活宝妹、笨宝妹，这里，只考虑了：
+        // //         //     以【 u】为根节点的原树的子树，和
+        // //         //     以【son[u]】为根节点的重链路＋子树【根节点 u】：一条路径 path
+        // //         //     而没能考虑，包括：其它非【重链】Path, 和（换根前换根后）形成的【新、前父节点 u 链路 Path】
+        // //         // 【TODO：】感觉，这里应该存在一个、笨宝妹脑袋里冒出来的【重链路】与【轻链路】的贪心解法、或优化存在，才对。。
+        // //         // 亲爱的表哥的活宝妹，亲爱的表哥的活宝妹、笨宝妹，今天写不到这个破烂题目。。。改天、将来，亲爱的表哥的活宝妹、笨宝妹可能写得出来。、。。
+        // //         dfsdfs(son[u], ftop); // ftop: 【重链的顶端节点】
+        // //     }
+        // //     for (int v : g[u]) {
+        // //         if (v != son[u] && v != fa[u])
+        // //             dfsdfs(v, v); // 轻链：以自己为（顶端节点）
+        // //     }
+        // // }
+        // void dfs(int u, int p) {
+        //     fa[u] = p;
+        //     dep[u] = (p == -1 ? 0 : dep[p]) + 1;
+        //     siz[u] = 1;
+            
+        //     f[u] = a[u]; // 【初始化】当前（根节点） 
+        //     // 【0 为根节点、有向树：叶子节点】
+        //     if (g[u].size() == 1 && g[u].get(0) == p) {
+        //         // f[u] = a[u];      // good
+        //         ff[u] = 1 - a[u]; // bad
+        //         return ;
+        //     }
+        //     for (int v : g[u]) {
+        //         if (v == p) continue;
+        //         dfs(v, u);
+        //         siz[u] += siz[v];
+        //         // 【重链重儿子】：实时更新
+        //         // if (siz[v] > siz[son[u]]) // 【TODO：】这个【重链】的比较标准，不对
+        //         if (f[v] - ff[v] > f[son[u]] - ff[son[u]]) 
+        //             son[u] = v;
+                
+        //         f[u] += f[v];
+        //         ff[u] += ff[v];
+        //     }
+        //     ff[u] += 1 - a[u];
+        // }        
+        // int [] fa, dep, siz, son, top, dfn, rnk;
+        // void dfsdfs(int u, int ftop) { // ftop: 【重链的顶端节点】
+        //     top[u] = ftop;
+        //     dfn[u] = ++idx;
+        //     rnk[idx] = u;
+        //     if (son[u] != 0)
+        //         dfsdfs(son[u], ftop); // ftop: 【重链的顶端节点】
         //     for (int v : g[u]) {
         //         if (v != son[u] && v != fa[u])
         //             dfsdfs(v, v); // 轻链：以自己为（顶端节点）
         //     }
         // }
-        void dfs(int u, int p) {
-            fa[u] = p;
-            dep[u] = (p == -1 ? 0 : dep[p]) + 1;
-            siz[u] = 1;
-            
-            f[u] = a[u]; // 【初始化】当前（根节点） 
-            // 【0 为根节点、有向树：叶子节点】
-            if (g[u].size() == 1 && g[u].get(0) == p) {
-                // f[u] = a[u];      // good
-                ff[u] = 1 - a[u]; // bad
-                return ;
-            }
-            for (int v : g[u]) {
-                if (v == p) continue;
-                dfs(v, u);
-                siz[u] += siz[v];
-                // 【重链重儿子】：实时更新
-                // if (siz[v] > siz[son[u]]) // 【TODO：】这个【重链】的比较标准，不对
-                if (f[v] - ff[v] > f[son[u]] - ff[son[u]]) 
-                    son[u] = v;
-                
-                f[u] += f[v];
-                ff[u] += ff[v];
-            }
-            ff[u] += 1 - a[u];
-        }        
-        int [] fa, dep, siz, son, top, dfn, rnk;
-        void dfsdfs(int u, int ftop) { // ftop: 【重链的顶端节点】
-            top[u] = ftop;
-            dfn[u] = ++idx;
-            rnk[idx] = u;
 
-            if (son[u] != 0)
-                dfsdfs(son[u], ftop); // ftop: 【重链的顶端节点】
-            for (int v : g[u]) {
-                if (v != son[u] && v != fa[u])
-                    dfsdfs(v, v); // 轻链：以自己为（顶端节点）
-            }
-        }
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int absDifference(int[] a, int k) {
+        //     int n = a.length;
+        //     Arrays.sort(a);
+        //     int [] f = new int [n+1];
+        //     for (int i = 0; i < n; i++)
+        //         f[i+1] = f[i] + a[i];
+        //     return f[n] - f[n-k] - (f[k] - f[0]);
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public String reverseWords(String S) {
+        //     String [] sa = S.split(" ");
+        //     StringBuilder sb = new StringBuilder(sa[0]);
+        //     if (sa.length == 1) return sb.toString();
+        //     sb.append(' ');
+        //     int r = getVowelCnts(sa[0]);
+        //     for (int i = 1; i < sa.length; i++) {
+        //         if (getVowelCnts(sa[i]) == r)
+        //             sb.append(new StringBuilder(sa[i]).reverse().toString());
+        //         else sb.append(sa[i]);
+        //         if (i < sa.length-1)
+        //         sb.append(' ');
+        //     }
+        //     return sb.toString();
+        // }
+        // Set<Character> s = new HashSet<>(List.of('a', 'e', 'i', 'o', 'u'));
+        // int getVowelCnts(String S) {
+        //     int f = 0;
+        //     for (char c : S.toCharArray()) 
+        //         if (s.contains(c)) f++;
+        //     return f;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 亲爱的表哥的活宝妹，读不懂这个破烂题目，尤其是2 个例子的案例，实例分析互相矛盾、读不懂。。。【circular 滚动数组】。。。
+        // // 这个破烂题目、最初读丢了【环形数组】所以读不懂题目、、后来读懂了，就是感觉细节恶心吧拉地。。只能捡一个【最方便避免犯小细节错误】的相对低效写法来写，
+        // // 感觉这种破烂题目恶心吧啦地。。
+        // public long minMoves(int[] a) {
+        //     int n = a.length, k = -1, i = 0, j = 0;
+        //     long sum = 0;
+        //     for (int v : a)
+        //         sum += (long)v;
+        //     if (sum < 0) return -1;
+        //     for ( i = 0; i < n; i++)
+        //         if (a[i] < 0) {
+        //             k = i;
+        //             break;
+        //         }
+        //     if (k == -1) return 0;
+        //     long f = 0;
+        //     for (int d = 1; d <= n/2 && a[k] < 0; d++) {
+        //         i = k-d;
+        //         if (i < 0) i += n;
+        //         if (a[i] > 0) {
+        //             f += (i < k ? d : Math.min(d, i-k)) * (long)Math.min(a[k] * (-1), a[i]);
+        //             a[k] += a[i];
+        //             if (a[k] >= 0) return f;
+        //         }
+        //         j = k+d;
+        //         if (j >= n) j -= n;
+        //         if (a[j] > 0) {
+        //             f += (j > k ? d : Math.min(d, k-j)) * (long)Math.min(-1 * a[k], a[j]);
+        //             a[k] += a[j];
+        //             if (a[k] >= 0) return f;
+        //         }
+        //     }
+        //     return f;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 亲爱的表哥的活宝妹，不想再写这个破烂题目了，感觉细节恶心吧啦地。。除非能够想到狠好的【方便避免犯小细节错误】的解题写法，笨宝妹不喜欢写这些感觉既没有技术含量又极度恶心吧啦的破烂题目。。。这个题目今天不写了。。前几个题目也都太简单，今天晚上这组比赛题目出得没什么意思。。
+        // public int[] minDeletions(String S, int[][] qs) {
+        //     n = S.length(); char [] s = S.toCharArray();
+        //     f = new int [n]; // A=0 B=1
+        //     for (int i = 0; i < n; i++)
+        //         f[i] = s[i] - 'A';
+        //     List<Integer> li = new ArrayList<>();
+        //     for (int i = 0; i < qs.length; i++) 
+        //         if (qs[i][0] == 1)
+        //             f[qs[i][1]] = 1 - f[qs[i][1]];
+        //         else {
+        //             int l = qs[i][1], r = qs[i][2];
+        //             li.add(getMinCnts(l, r));
+        //         }
+        //     int [] ans = new int [li.size()];
+        //     int i = 0;
+        //     for (int v : li) 
+        //         ans[i++] = v;
+        //     return ans;
+        // }
+        // int [] f; int n;
+        // int getMinCnts(int l, int r) {
+        //     System.out.println(Arrays.toString(f));
+        //     if (l == r) return 0;
+        //     int cur = 0, curr = r-l+1, p = f[l], pp = 1-f[l];
+        //     for (int i = l+1; i <= r; i++) {
+        //         // cur: 以 f[l] 打头
+        //         // curr: 以 1-f[l] 打头
+        //         if (f[i] == p) {
+        //             cur++;
+        //             if (curr != r-l+1)
+        //                 pp = f[i];
+        //         }
+        //         //else
+        //         if (f[i] == pp) {
+        //             if (curr == r-l+1)
+        //                 curr = i-l;
+        //             else
+        //                 curr++;
+        //             p = f[i];
+        //         }
+        //     }
+        //     return Math.min(cur, curr);
+        // }
     }
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
         public static void main (String[] args) { 
 		Solution s = new Solution ();
 
-        int []  a = new int []  {1, 1};
-        int [] b = new int [] {1, 1};
+        String a = "BABBB";
+        int [][] b = new int [][] {{2,1,4},{2,1,2}};
 
-        long r = s.totalScore(2, a, b);
-        System.out.println("r: " + r);
+        int [] r = s.minDeletions(a, b);
+        System.out.println(Arrays.toString(r));
     }
 }
 // ListNode head = new ListNode(a0]);  
@@ -393,5 +508,10 @@ public class cmp {
 //  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 //  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 //  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
