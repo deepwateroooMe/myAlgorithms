@@ -427,16 +427,127 @@ public class cmp {
         //     }
         //     return Math.min(cur, curr);
         // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int minOperations(int[] a) {
+        //     int n = a.length, ans = 0;
+        //     int [] f = new int [n]; Arrays.fill(f, -1);
+        //     int [] r = new int [n]; Arrays.fill(r, -1);// 需要移除掉的、最小下标 idx
+        //     Map<Integer, Integer> m = new HashMap<>();
+        //     m.put(a[n-1], n-1);
+        //     for (int i = n-2; i >= 0; i--) {
+        //         if (m.containsKey(a[i])) {
+        //             f[i] = m.get(a[i]);
+        //             r[i] = Math.max(i, r[i+1]);
+        //         } else
+        //             r[i] = r[i+1];
+        //         m.put(a[i], i);
+        //     }
+        //     if (r[0] == -1) return 0;
+        //     if (n < 3) return 1;
+        //     for (int i = 2; i < n; i += 2) 
+        //         r[i] = Math.max(r[i], Math.max(r[i-1], r[i-2]));
+        //     for (int i = 2; i < n; i += 3) {
+        //         if (r[i] <= i) return ans + 1;
+        //         ans++;
+        //     }
+        //     return ans + 1;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int maximumSum(int[] a) {
+        //     int n = a.length;
+        //     Arrays.sort(a);
+        //     System.out.println(Arrays.toString(a));
+        //     Map<Integer, List<Integer>> m = new HashMap<>();
+        //     for (int i = n-1; i >= 0; i--) {
+        //         int j = a[i] % 3;
+        //         if (!m.containsKey(j))
+        //             m.computeIfAbsent(j, z -> new ArrayList<>()).add(a[i]);
+        //         else if (m.get(j).size() < 3) {
+        //             m.get(j).add(a[i]);
+        //             if (m.get(j).size() == 3) {
+        //                 boolean enough = true;
+        //                 for (int k = 0; k < 3; k++) {
+        //                     if (k == j) continue;
+        //                     if (!m.containsKey(k) || m.get(k).size() < 3) enough = false;
+        //                 }
+        //                 if (enough) break;
+        //             }
+        //         }
+        //     }
+        //     // if (m.size() < 3) return 0;
+        //     int k = 0;
+        //     if (m.size() == 3)
+        //         k = m.get(0).get(0) + m.get(1).get(0) + m.get(2).get(0); 
+        //     if (m.containsKey(0) || m.containsKey(1) || m.containsKey(2)) {
+        //        int i = (m.containsKey(1) && m.get(1).size() == 3 ? m.get(1).stream().mapToInt(Integer::intValue).sum() : 0);
+        //        int j = (m.containsKey(2) && m.get(2).size() == 3 ? m.get(2).stream().mapToInt(Integer::intValue).sum() : 0);
+        //        int x = (m.containsKey(0) && m.get(0).size() == 3 ? m.get(0).stream().mapToInt(Integer::intValue).sum() : 0);
+        //         if ((!m.containsKey(0) || m.get(0).size() < 3) || (!m.containsKey(1) || m.get(1).size() < 3) && (!m.containsKey(2) || m.get(2).size() < 3))
+        //             return ((!m.containsKey(0) || m.get(0).size() < 3) ? Math.max(k, Math.max(i, j)) : Math.max(k, x));
+        //         return Math.max(Math.max(x, k), Math.max(i, j)); 
+        //     }
+        //     return k;
+        // }
+
+//         // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//         // 【思路错误】：每个子片段（局部最优解），子片段合并后并不累积：全局最优解。。
+//         // 【动规】：这个【兼并了贪心——同值重复数字，永远取最左边】的动规，笨宝妹不会写这个动规
+//         // 【记忆化深搜】：应该能够写得出来；感觉记忆化深搜就像写【暴力】一样搜索了所有的可能性，但是必定会TLE TLE TLE... 所以，不想写这个破烂题目了。。。
+//         // 破烂题目，出得不好：无限抹杀解题热情、现在看着这个破烂题目就够了。。。
+//         // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // 亲爱的表哥的活宝妹，昨天晚上又被世界上最贱恶的追杀、谋杀杀人的它们的贱鸡贱畜牲爪牙恶吵
+        // 它们的贱鸡、贱畜牲，真贱：就它妈的至贱无敌地、一定要半夜恶开窗、利用 freeway 过往车辆声恶吵恶打扰笨宝妹的休息、把别人折磨成肾脏衰竭、被它们的贱鸡贱畜牲活活折磨死
+        // 它们的贱鸡、贱畜牲，真贱：就它妈的至贱无敌地、一定要半夜恶开窗夜间、午夜或是凌晨的大风、恶冻笨宝妹，想要把笨宝妹恶冻至感冒发烧免疫瘫痪败血症多脏器衰竭谋杀杀人
+        // 它们的贱鸡、贱畜牲，真贱；出门就被车撞死、出门就被雷劈死；开打雷劈得不好死；不是不报，时候未到，它们的贱鸡、贱畜牲，迟早遭报应；天底下最贱恶的一群贱渣！！！
+//         // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//         public long maximumScore(int[] a, String S) {
+//             char [] s = S.toCharArray();
+//             int n = a.length, i = 0, j = n-1;
+//             ArrayDeque<Integer> q = new ArrayDeque<>(); // 【最大堆－单调队列：降序排列】
+//             long ans = 0;
+//             int [] f = new int [n]; Arrays.fill(f, -1);
+//             while (j >= 0 && s[j] == '0') --j; // 最尾一个1
+//             if (j < 0) return 0;
+//             while (i < n && s[i] == '0') {
+//                 while (!q.isEmpty() && a[q.peekFirst()] < a[i]) q.pollFirst();
+//                 q.offerFirst(i);
+//                 i++;  // 最头一个1
+//             }
+//            while (i <= j) { // 【自左向右】：遍历i: s[i]='1'
+//                 // s[i]='1'; 这里，是可能：【i==j】的
+//                 // 当前下标【i: 入单调递减队列】
+//                while (!q.isEmpty() && a[q.peekFirst()] < a[i]) q.pollFirst();
+//                q.offerFirst(i);
+// // 取局闻最优解
+//                ans += (i == 0 ? a[0] : a[q.peekLast()]);
+//                 if (!q.isEmpty()) q.pollLast();
+
+//                 ++i;
+//                 if (i > j) return ans;
+//                 // i <= j
+//                 while (i < j && s[i] == '0') {
+//                     while (!q.isEmpty() && a[q.peekFirst()] < a[i]) q.pollFirst();
+//                     q.offerFirst(i);
+//                     i++;
+//                 }
+//             }
+//             return 0;
+//         }
     }
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
         public static void main (String[] args) { 
 		Solution s = new Solution ();
 
-        String a = "BABBB";
-        int [][] b = new int [][] {{2,1,4},{2,1,2}};
+        int []   a = {5, 6, 4, 6, 10, 3, 2, 2, 6}; //5-6-6-10-6 
+        String b = "010010111";
 
-        int [] r = s.minDeletions(a, b);
-        System.out.println(Arrays.toString(r));
+        System.out.println("b: " + b);
+        System.out.println(Arrays.toString(a));
+
+        long r = s.maximumScore(a, b);
+        System.out.println("r: " + r);
     }
 }
 // ListNode head = new ListNode(a0]);  
@@ -514,4 +625,3 @@ public class cmp {
 //  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 //  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
