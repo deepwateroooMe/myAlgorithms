@@ -1153,16 +1153,106 @@ public class cmp {
         // List<int []> [] g;
         // char [] s, t;
         // int n;
-}
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int vowelConsonantScore(String S) {
+        //     int n = S.length();
+        //     Set<Character> s = new HashSet<>(List.of('a', 'e', 'i', 'o', 'u'));
+        //     int f = 0, ff = 0;
+        //     for (char c : S.toCharArray()) 
+        //         if (Character.isLowerCase(c)) {
+        //             if (s.contains(c)) f++;
+        //             else ff++;
+        //         }
+        //     return ff > 0 ? (int)Math.floor(f / ff) : 0;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 不知道哪里细节写错了，不想再写这个破烂题目了
+        // public int maxCapacity(int[] f, int[] g, int v) { // 991/1022 passed 
+        //     int n = f.length, max = 0;
+        //     List<int []> l = new ArrayList<>(); List<Integer> ll = new ArrayList<>();
+        //     for (int i = 0; i < n; i++) 
+        //         l.add(new int [] {f[i], g[i]});
+        //     Collections.sort(l, (x, y)->(x[0] != y[0] ? x[0] - y[0] : x[1] - y[1]));
+        //     if (v <= l.get(0)[0]) return 0;
+        //     for (int i = 0; i < n; i++)
+        //         ll.add(l.get(i)[0]);
+        //     int idx = Collections.binarySearch(ll, v);
+        //     // if (idx >= 0) {
+        //     //     while (l.get(--idx)[0] == v) --idx;
+        //     //     idx += 1;
+        //     // }
+        //     // System.out.println("idx: " + idx);
+        //     if (idx < 0)
+        //         idx = -1 * (idx + 1);
+        //     for (int i = 0; i < idx; i++) 
+        //         max = Math.max(max, l.get(i)[1]);
+        //     Collections.sort(l.subList(0, idx), (x, y)-> x[1] != y[1] ? y[1] - x[1] : x[0] - y[0]);
+        //    for (int i = 0; i < idx; i++) {
+        //         for (int j = i+1; j < idx; j++) {
+        //             if (l.get(i)[0] + l.get(j)[0] >= v) continue;
+        //             if (l.get(i)[1] + l.get(j)[1] <= max) break;
+        //             max = Math.max(max, l.get(i)[1] + l.get(j)[1]);
+        //         }
+        //     }
+        //     return max;
+        // }
+
+//         // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// // 这个破烂题目: 什么知识点也没有考到，把人恶心死不偿命。。。
+//         Map<Integer, Map<Integer, Integer>> m = new HashMap<>();
+//         Map<Integer, TreeMap<Integer, TreeSet<Integer>>> f = new HashMap<>(); // items
+//         public AuctionSystem() {
+//         // public cmp {
+//             m = new HashMap<Integer,  Map<Integer, Integer>>();
+//             f = new HashMap<Integer, TreeMap<Integer, TreeSet<Integer>>>();
+//         }
+//         public void addBid(int userId, int itemId, int bidAmount) {
+//             int preV = -1;
+//             if (m.containsKey(userId) && m.get(userId).containsKey(itemId))
+//                 preV = m.get(userId).get(itemId);
+//             if (preV != -1) 
+//                 removeBid(userId, itemId);
+//             m.computeIfAbsent(userId, z -> new HashMap<>()).put(itemId, bidAmount);
+//             f.computeIfAbsent(itemId, z -> new TreeMap<Integer, TreeSet<Integer>>(Collections.reverseOrder())).computeIfAbsent(bidAmount, z -> new TreeSet<>((x, y)->(y-x))).add(userId);
+//         }
+//         public void updateBid(int userId, int itemId, int newAmount) {
+//             Map<Integer, Integer> map = m.get(userId);
+//             int preV = map.get(itemId);
+//             map.put(itemId, newAmount);
+//             m.put(userId, map);
+//             TreeMap<Integer, TreeSet<Integer>> ma = f.get(itemId);
+//             ma.get(preV).remove(userId);
+//             if (ma.get(preV).size() == 0)
+//                 ma.remove(preV);
+//             ma.computeIfAbsent(newAmount, z -> new TreeSet<>((x, y)->(y-x))).add(userId);
+//             f.put(itemId, ma);
+//         }
+//         public void removeBid(int userId, int itemId) {
+//             TreeMap<Integer, TreeSet<Integer>> map = f.get(itemId);
+//             int preV = m.get(userId).get(itemId);
+//             map.get(preV).remove(userId);
+//             if (map.get(preV).size() == 0)
+//                 map.remove(preV);
+//             if (map.size() > 0)
+//                 f.put(itemId, map);
+//             Map<Integer, Integer> ma = m.get(userId);
+//             ma.remove(itemId);
+//             if (ma.size() > 0)
+//                 m.put(userId, ma);
+//         }
+//         public int getHighestBidder(int itemId) {
+//             return f.containsKey(itemId) 
+//                 ? (f.get(itemId).size() > 0
+//                    ? (f.get(itemId).firstEntry().getValue().size() > 0 
+//                       ? f.get(itemId).firstEntry().getValue().iterator().next() : -1)
+//                    : -1) : -1;
+//         }
+    }
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
-        public static void main (String[] args) { 
+    public static void main (String[] args) { 
 		Solution s = new Solution ();
-
-        int [] a = new int [] {2,3,1,4};
-        System.out.println(Arrays.toString(a));
-
-        int r = s.alternatingXOR(a, 1, 5);
-        System.out.println("r: " + r);
     }
 }
 // ListNode head = new ListNode(a0]);  
@@ -1364,4 +1454,8 @@ public class cmp {
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 //  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 //  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
