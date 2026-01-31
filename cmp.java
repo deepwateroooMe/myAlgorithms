@@ -1355,16 +1355,101 @@ public class cmp {
         //     }
         //     return "";
         // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public String reverseByType(String S) {
+        //     int n = S.length(), l = 0, r = n-1, i = 0, j = n-1; char [] s = S.toCharArray();
+        //     while (i < j) {
+        //         while (i < j && !Character.isLowerCase(s[i])) i++;
+        //         while (j >= 0  && !Character.isLowerCase(s[j])) --j;
+        //         if (i >= j) break;
+        //         swap(i, j, s);
+        //         i++; --j;
+        //     }
+        //     while (l < r) {
+        //         while (l < r && Character.isLowerCase(s[l])) l++;
+        //         while (r >= 0  && Character.isLowerCase(s[r])) --r;
+        //         if (l >= r)  return new String(s);
+        //         swap(l, r, s);
+        //         l++; --r;
+        //     }
+        //     return new String(s);
+        // }
+        // void swap(int l, int r, char [] s) {
+        //     char tmp = s[l];
+        //     s[l] = s[r];
+        //     s[r] = tmp;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int minimumK(int[] f) {
+        //     n = f.length; this.f = f;
+        //     Arrays.sort(f);
+        //     int l = 1, r = Math.max(f[n-1], n), ans = Integer.MAX_VALUE;
+        //     while (l <= r) {
+        //         int m = (l + r) / 2;
+        //         if (isValid(m)) {
+        //             ans = m;
+        //             r = m - 1;
+        //         } else l = m + 1;
+        //     }
+        //     return ans;
+        // }
+        // int n; int [] f;
+        // boolean isValid(int i) {
+        //     int r = 0;
+        //     for (int v : f) 
+        //         r += v / i + (v % i > 0 ? 1 : 0);
+        //     return ((long)r <= (long)i * i);
+        // }        
+        
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // TLE TLE TLE 不明白为什么超时了
+        // // 题目就是要把数组分成【元素和、最均等的 K 段、k 个子数组】：
+        // public long minPartitionScore(int[] a, int k) {
+        //     n = a.length;
+        //     if (Arrays.stream(a).distinct().count() == 1) {
+        //         long s = a[0] * (n / k + (n % k > 0 ? 1 : 0)), r = 0l;
+        //         r += s * (s + 1) / 2 * (n % k > 0 ? n % k : k);
+        //         if (n % k > 0) {
+        //             s = a[0] * (n / k);
+        //             r += s * (s + 1) / 2 * (k - n % k);
+        //         }
+        //         return r;
+        //     }
+        //     g = new int [n+1];
+        //     for (int i = 1; i <= n; i++) 
+        //         g[i] = g[i-1] + a[i-1];
+        //     f = new Long [n][k+1];
+        //     for (int i = 0; i < n; i++)
+        //         Arrays.fill(f[i], Long.MAX_VALUE / 2);
+        //     return dfs(0, k);
+        // }
+        // int n;
+        // int [] g;
+        // Long [][] f;
+        // long dfs(int i, int j) {
+        //     if (f[i][j] != Long.MAX_VALUE / 2) return f[i][j];
+        //     if (j == 1) {
+        //         int sum = g[n] - g[i];
+        //         return f[i][j] = (long)sum * (sum + 1) / 2l;
+        //     }
+        //     long ans = Long.MAX_VALUE / 2;
+        //     // 遍历：当前【此：以下标 i 打头，以下标 k 结尾】的片段的、尾巴结点
+        //     for (int k = i; k < n-(j-1); k++) 
+        //         ans = Math.min(ans, dfs(k+1, j-1) + (long)(g[k+1] - g[i]) * (g[k+1] - g[i] + 1) /  2l);
+        //     return f[i][j] = ans;
+        // }        
+        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
     }
 // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
     public static void main (String[] args) { 
 		Solution s = new Solution ();
 
-        int [] a = new int [] {1,-2,3,-4};
-        System.out.println(Arrays.toString(a));
+        int [] a = new int [] {10000,10000,10000,10000,10000,10000,10000,10000};
 
-        int [] r = s.rotateElements(a, 3);
-        System.out.println(Arrays.toString(r));
+        long r = s.minPartitionScore(a, 3);
+        System.out.println("r: " + r);
     }
 }
 // ListNode head = new ListNode(a0]);  
@@ -1626,3 +1711,17 @@ public class cmp {
 //  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 //  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 //  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
