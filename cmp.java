@@ -1623,14 +1623,133 @@ public class cmp {
         //     }
         //     return max;
         // }
-    }
-// 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int dominantIndices(int[] f) {
+        //     int n = f.length, r = 0;
+        //     int [] g = new int [n+1];
+        //     for (int i = 1; i <= n; i++) 
+        //         g[i] = g[i-1] + f[i-1];
+        //     for (int i = 0; i < n-1; i++) {
+        //         float avg = (float)((g[n] - g[i+1]) / (n - i - 1));
+        //         if (Float.compare((float)f[i], avg) > 0)
+        //             r++;
+        //     }
+        //     return r;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // TLE TLE TLE 
+        // public List<Long> mergeAdjacent(int[] a) {
+        //     int n = a.length;
+        //     List<Long> f = new ArrayList<>();
+        //     for (int i = 0; i < n; i++)
+        //         f.add((long)a[i]);
+        //     while (f.size() > 1 && !isDone(f)) {
+        //         for (int i = 1; i < f.size(); i++) 
+        //             if (Long.compare(f.get(i), f.get(i-1)) == 0) {
+        //                 f.set(i-1, (long)(2 * f.get(i)));
+        //                 f.remove(i);
+        //                 break;
+        //             }
+        //     }
+        //     return f;
+        // }
+        // boolean isDone(List<Long> f) {
+        //     for (int i = 1; i < f.size(); i++) 
+        //         if (Long.compare(f.get(i), f.get(i-1)) == 0) return false;
+        //     return true;
+        // }
+// // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//         // TLE TLE TLE 1112/1113 passed...
+//         public List<Long> mergeAdjacent(int[] a) {
+//             int n = a.length;
+//             List<Long> g = new ArrayList<>();
+//             for (int i = 1; i < n; i++)
+//                 g.add((long)a[i]);
+//             Deque<Long> f = new ArrayDeque<>();
+//             f.add((long)a[0]);
+//             while (g.size() > 0) {
+//                 long v = (long)g.get(0);
+//                 if (f.isEmpty()) {
+//                     f.addLast(v);
+//                     g.remove(0);
+//                 } else if (Long.compare(f.peekLast(), v) == 0) {
+//                     while (!f.isEmpty() && Long.compare(f.peekLast(), v) == 0) {
+//                         v *= 2l;
+//                         f.pollLast();
+//                     }
+//                     f.addLast(v);
+//                     g.remove(0);
+//                 } else if (g.size() > 1 && Long.compare(v, g.get(1)) == 0) {
+//                     g.set(0, 2l * v);
+//                     g.remove(1);
+//                 } else {
+//                     f.addLast(v);
+//                     g.remove(0);
+//                 }
+//             }
+//             while (!f.isEmpty())
+//                 g.add(f.pollFirst());
+//             return g;
+//         }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // ＃subarrays of nums whose cost is less than or equal to k ＝【子数组总数】一 (# > k)
+        // // 【左右双指针】：但双指针，定义意义，相对重要
+        // // 【自左向右】遍历数组，以（当前下标 i）作为[最大数], 向左、向右扩展到极限，数(>k) 的子数组个数？？？
+        // public long countSubarrays(int[] f, long k) {
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 【动规】：它居然没有 TLE 就过了。。。破烂题目。亲爱的表哥的活宝妹，觉得，这个破烂动规太简单。。。
+        // public long maxScore(int[] a, int[] g, int d) {
+        //     int m = a.length, n = g.length;
+        //     if (m < n) return maxScore(g, a, d); // m >= n
+        //     // 【动规】：记忆数组, 及（初始化）
+        //     long [][][] f = new long [m][n][d+1];
+        //     for (int i = 0; i < m; i++)
+        //         for (int j = 0; j < n; j++)
+        //             Arrays.fill(f[i][j], Long.MIN_VALUE / 2);
+        //     for (int i = 0; i <= m-d; i++)
+        //         for (int j = 0; j <= n-d; j++)
+        //             f[i][j][1] = (long)a[i] * g[j];
+        //     long p = (long)a[0] * g[0];
+        //     // 【自左向右】遍历，下标
+        //     // 遍历【d】：第 k 个片段; 每个片段【k】，其 i=【k-1,m-(d-k)-1】，j=【 k-1,n-(d-k)-1】
+        //     // 遍历【d】：第 k 个片段; 每个片段【k】，每个 i=【k-1,m-(d-k)-1】，
+        //     // 其前片段【k-1】，对每个【当前片段 k 的、每个 i】：
+        //     // 其前片段【k-1】，i=【(k-1)-1/0,i-1】
+        //     // 其前片段【k-1】，j=【(k-1)-1/0,j-1】
+        //     for (int k = 2; k <= d; k++) {
+        //         // 第 d 个片段， i 可能的合法下标范围
+        //         for (int i = k-1; i < m-(d-k); i++) {
+        //             for (int j = k-1; j < n-(d-k); j++) {
+        //                 // 对每个，当前片段 k, 【i,j】打头时，前片段 k-1 的最大取值
+        //                 p = Long.MIN_VALUE;
+        //                 for (int x = Math.max(0, k-1-1); x < i; x++)
+        //                     for (int y = Math.max(0, k-2); y < j; y++) 
+        //                         p = Math.max(p, f[x][y][k-1]);
+        //                 f[i][j][k] = Math.max(f[i][j][k], p + (long)a[i] * g[j]);
+        //             }
+        //         }
+        //     }
+        //     long r = Long.MIN_VALUE;
+        //     for (int i = d-1; i < m; i++) 
+        //         for (int j = d-1; j < n; j++) 
+        //             r = Math.max(r, f[i][j][d]);
+        //     return r;
+        // }
+    }    // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
     public static void main (String[] args) { 
 		Solution s = new Solution ();
 
-        int [] a = new int [] {1, 2, 2, 1};
+        int []  a = new int []  {-2, 0, 5};
+        int []  b = new int []  {-3, 4, -1, 2};
+        System.out.println(Arrays.toString(a));
+        System.out.println(Arrays.toString(b));
 
-        int r = s.longestAlternating(a);
+        long r = s.maxScore(a, b, 2);
         System.out.println("r: " + r);
     }
 }
@@ -1877,3 +1996,22 @@ public class cmp {
 //  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 //  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
