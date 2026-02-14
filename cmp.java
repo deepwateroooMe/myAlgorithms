@@ -1740,6 +1740,232 @@ public class cmp {
         //             r = Math.max(r, f[i][j][d]);
         //     return r;
         // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public String mapWordWeights(String[] sa, int[] f) {
+        //     StringBuilder s = new StringBuilder("");
+        //     int m = sa.length, n = f.length, r = 0;
+        //     for (String si : sa) {
+        //         r = 0;
+        //         for (char c : si.toCharArray()) 
+        //             r = (r + f[c-'a']) % 26;
+        //         s.append((char)(25-r + 'a'));
+        //     }
+        //     return s.toString();
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 感觉，像（连通图），更应该是【字典树】才对
+        // public class Node {
+        //     char c;
+        //     int s; // 个数 size 
+        //     Node [] n;
+        //     public Node(char c) {
+        //         this.c = c;
+        //         this.n = new Node[26];
+        //     }
+        // }
+        // public class Trie {
+        //     Node h;
+        //     public Trie() {
+        //         h = new Node(' ');
+        //         h.s = 0;
+        //     }
+        //     public void insert(String S) {
+        //         int n = S.length(), j = 0; char [] s = S.toCharArray();
+        //         Node r = h;
+        //         for (int i = 0; i < n; i++) {
+        //             j = s[i] - 'a';
+        //             if (r.n[j] == null)
+        //                 r.n[j] = new Node(s[i]);
+        //             r.n[j].s++;
+        //             r = r.n[j];
+        //         }
+        //     }
+        //     // BFS: 广度优先遍历，到 Trie 树，层级深度 k, 数节点个数
+        //     public int getCounts(int d) {
+        //         Deque<Node> s = new ArrayDeque<>();
+        //         s.offerFirst(h);
+        //         for (int depth = 0; depth < d; depth++) {
+        //             for (int size = s.size()-1; size >= 0; size--) {
+        //                 Node cur = s.pollLast();
+        //                 for (Node n : cur.n) {
+        //                     if (n == null) continue;
+        //                     s.offerFirst(n);
+        //                 }
+        //             }
+        //         }
+        //         int f = 0;
+        //         while (!s.isEmpty()) {
+        //             Node cur = s.pollLast();
+        //             if (cur.s > 1) f++;
+        //         }
+        //         return f;
+        //     } 
+        // }
+        // public int prefixConnected(String[] sa, int k) {
+        //     int n = sa.length;
+        //     Trie t = new Trie();
+        //     for (String s : sa) {
+        //         if (s.length() < k) continue;
+        //         t.insert(s);
+        //     }
+        //     return t.getCounts(k);
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public long rob(int[] a, int[] g) {
+        //     int n = a.length;
+        //     long [][] f = new long [n][2]; //0:不偷； 1:偷
+        //     f[0][1] = (long)a[0];
+        //     for (int i = 1; i < n; i++) {
+        //         // 与【前一个房子】：（同一颜色）
+        //         if (g[i] == g[i-1]) {
+        //             // 不偷
+        //             f[i][0] = Math.max(f[i-1][0], f[i-1][1]);
+        //             // 偷: 前一个房子，不偷
+        //             f[i][1] = f[i-1][0] + (long)a[i];
+        //         }
+        //         // 与【前一个房子】：（不同颜色）
+        //         else {
+        //             f[i][0] = Math.max(f[i-1][0], f[i-1][1]);
+        //             f[i][1] = f[i][0] + (long)a[i];
+        //         }
+        //     }
+        //     return f[n-1][0] >= f[n-1][1] ? f[n-1][0] : f[n-1][1];
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public class Node {
+        //     int i;
+        //     int [] r; // size counts r
+        //     Node [] n;
+        //    int [] l; // lazy mark 懒惰标记, 要懒惰细节到：每个子节点
+        //     boolean ly; // lazy
+        //     public Node(int c) {
+        //         this.i = c;
+        //         n = new Node[26];
+        //         r = new int [26];
+        //         l = new int [26];
+        //         r[s[i]-'a']++; // 当前节点，字符数＋＋
+        //     }
+        // }
+        // // 不是严格意义上的【线段树】，是带有【懒惰标记】的多子节点，（有向树）
+        // public class SegTree {
+        //     Node h;
+        //     public SegTree(Node r) {
+        //         this.h = r;                 
+        //     }
+        //     // 【TODO：】如果自（根节点 0 到节点 u）之间有懒惰标记呢？ dfs 随时中断，中止在懒惰标记上。
+        //     // 【TODO：】但是 BFS 层级遍历更有效，还可以继续懒惰，标记：最小层级的更新深度 d, 和，最大层级的更新深度 dd 等
+        //     private void dfs0U(int u, int p, int t) {
+        //         List<Integer> l = new ArrayList<>();
+        //         if (f[u].ly) {
+        //             for (int i = 0; i < 26; i++) // 哪个，哪此字符的标记
+        //                 if (f[u].l[i] != 0) {
+        //                     l.add(i);
+        //                     f[u].r[i] += f[u].l[i];
+        //                 }
+        //         }
+        //         boolean visT = false;
+        //         for (int v : g[u]) {
+        //             if (v == p) continue;
+        //             if (f[u].ly) {
+        //                 f[v].ly = true;
+        //                 for (int i : l) 
+        //                     f[v].l[i] = f[u].l[i];
+        //             }
+        //             if (v == t) visT = true;
+        //         }
+        //         if (visT) {
+        //             Arrays.fill(f[u].l, 0);
+        //             f[u].ly = false;
+        //             return;
+        //         }
+        //         for (int v : g[u]) {
+        //             if (v == p) continue;
+        //             dfs(v, u, t);
+        //         }
+        //         Arrays.fill(f[u].l, 0);
+        //         f[u].ly = false;
+        //     }
+        //     public void update(int u, int v) { // p: 前值
+        //         dfs0U(0, -1, u);
+        //         // if (f[u].ly) {
+        //         //     for (int i = 0; i < 26; i++) // 哪个，哪此字符的标记
+        //         //         if (f[u].l[i] != 0) {
+        //         //             l.add(i);
+        //         //             f[u].r[i] += f[u].l[i];
+        //         //         }
+        //         // }
+        //         int j = s[u] - 'a';
+        //         f[u].r[j]--;
+        //         f[u].r[v]++;
+        //         for (int i = 0; i < 26; i++)
+        //             if (f[u].l[i] != 0) {
+        //                 f[u].ly = true;
+        //                 break;
+        //             }
+        //         //pushDownUpdate(f[u], j, -1);
+        //     }
+        //     // private void pushDownUpdate(Node r, int j, int v) {
+        //     //     // 【广度优先】：打懒惰标记
+        //     //     for (int i = 0; i < 26; i++) {
+        //     //         if (r.n[i] == null) continue;
+        //     //         r.n[i].ly = true;
+        //     //         r.n[i].l[j] = v; // 打标记
+        //     //     }
+        //     // }
+        // }
+        // void dfs(int u, int p, Node r) {
+        //     f[u] = r;
+        //     for (int v : g[u]) {
+        //         if (v == p) continue;
+        //         int j = s[v]-'a';
+        //         if (r.n[j] == null)
+        //             r.n[j] = new Node(j);
+        //         for (int i = 0; i < 26; i++) // 把自【根节点 0】的 [ab..z] 总计数累加上来
+        //             r.n[j].r[i] += r.r[i];
+        //         dfs(v, u, r.n[j]);
+        //     }
+        // }
+        // // 先建树，再变换为：另一种树？？？
+        // List<int> g;
+        // char [] s;
+        // int n;
+        // SegTree st; Node h;
+        // Node [] f;
+        // public List<Boolean> palindromePath(int n, int[][] egs, String S, String[] qs) {
+        //     this.n = n; s = S.toCharArray();
+        //     g = new ArrayList[n];
+        //     Arrays.setAll(g, z -> new ArrayList<int>());
+        //     for (int [] e : egs) {
+        //         int u = e[0], v = e[1];
+        //         g[u].add(v);
+        //         g[v].add(u);
+        //     }
+        //     // 以【0 为根节点】的（有向树），建树
+        //     h = new Node(0);
+        //     st = new SegTree(h);
+        //     f = new Node[n];
+        //     // f[0] = h;
+        //     dfs(0, -1, h);
+        //     // 虽然是【离线 query 数据】但有 update 先后顺序，所以不能（想要优化）排序之类的。。
+        //     List<Boolean> ans = new ArrayList<>();
+        //     for (String q : qs) {
+        //         String [] cur = q.Split(" ");
+        //         if (cur[0].equals("update")) {
+        //             st.update(Integer.parseInt(cur[1]), cur[2].charAt(0)-'a');
+        //         } else {
+        //             int u = Integer.parseInt(cur[1]), v = Integer.parseInt(cur[2]);
+        //             // 问题：又双叒。。。转化先，最近公共祖先问题。。。亲爱的表哥的活宝妹，写到里不想写了
+        //             //     根节点【0,u】上【ab...z】总个数 + 根节点【0,v】上【ab...z】总个数 - 2 × 根节点【0,(u,v) 最近祖先】上【ab...z】总个数
+        //             //     就能知道是否可以：回文了。。
+        //             // 亲爱的表哥的活宝妹，今天早上不想再写这个破烂题目了。。亲爱的表哥的活宝妹，上次自悟写最近公共祖先问题，现在还不知道细节上是错在哪里了。。
+        //         }
+        //     }
+        }
     }    // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
     public static void main (String[] args) { 
 		Solution s = new Solution ();
@@ -2014,4 +2240,28 @@ public class cmp {
 //  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 //  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+//  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 //  【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
