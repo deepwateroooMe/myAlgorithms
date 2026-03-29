@@ -597,22 +597,282 @@ public class cmp {
         //     }
         //     return r;
         // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int minAbsoluteDifference(int[] a) {
+        //     int n = a.length, f = Integer.MAX_VALUE;
+        //     List<Integer> l = new ArrayList<>();
+        //     for (int i = 0; i < n; i++)
+        //         if (a[i] == 2) l.add(i);
+        //     for (int i = 0; i < n; i++) {
+        //         if (a[i] != 1) continue;
+        //         for (int j : l) 
+        //             f = Math.min(f, Math.abs(i - j));
+        //     }
+        //     return (f == Integer.MAX_VALUE ? -1 : f);
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 亲爱的表哥的活宝妹，这个题目，感觉：整体思路是对的，但是细节哪里没能写对，晚点儿再写这个破烂题目
+        // // 亲爱的表哥的活宝妹，昨天晚上休息不足 3.5 小时，一早上读不懂：在 idx 位置的人，L/R 什么时候 count, 什么时候不能 count 。。
+        // static final int mod = (int)1e9 + 7;
+        // public int countVisiblePeople(int n, int idx, int k) {
+        //     long f = 0, v = 0;
+        //     if (idx == 0 || idx == n-1) 
+        //         f = (f + combination(n-1, k)) % mod;
+        //     else {
+        //         if (idx >= k) {
+        //             // 在 idx 位置的人：可以有 L/R 2 种可能的选择
+        //             v = combination(idx, k);
+        //             f = (f + v + v) % mod;
+        //         }
+        //         if (idx < n-k) {
+        //             v = combination(n-1-idx, k);
+        //             f = (f + v + v) % mod;
+        //         }
+        //         int maxR = Math.min(n-1-idx, k-1), minL = k - maxR, maxL = Math.min(idx, k-1);
+        //         // int maxR = Math.min(n-1-idx, k), minL = k - maxR, maxL = Math.min(idx, k);
+        //         for (int i = minL; i <= maxL; i++) {
+        //             v = combination(idx, i);
+        //             f = (f + v + v) % mod;
+        //         }
+        //     }
+        //     return (int)f;
+        // }
+        // public static long factorial(int n) {
+        //     if (n == 0) return 1;
+        //     long fact = 1;
+        //     for (int i = 1; i <= n; i++) fact *= i;
+        //     return fact;
+        // }
+        // public static long combination(int n, int r) {
+        //     return factorial(n) / (factorial(r) * factorial(n - r));
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // static final int mod = (int)1e9 + 7;
+        // public int countArrays(int[] a) {
+        //     int n = a.length;
+        //     if (Arrays.stream(a).max().getAsInt() > 40) return 0;
+        //     List<Integer> [] g = new ArrayList[n];
+        //     Arrays.setAll(l, z -> new ArrayList<Integer>());
+        //     l = new ArrayList<>();
+        //     for (int i = 0; i < n; i++) {
+        //         l.clear();
+        //         // g[i] = 
+        //     }
+        // }
+        // List<Integer> getValidCandidates(int v) {
+        //     List<Integer> f = new ArrayList<>();
+        //     if (v == 0) {
+        //         f.add(0);
+        //         return ;
+        //     }
+        //     if (v == 40) {
+        //         f.add(49999);
+        //         return ;
+        //     }
+        //     return ;
+        // }
+        // List<Integer> l = new ArrayList<>();
+        // // 【TODO：】需要一个 recursion 方法，来生成针对特定 v 的每一个 candidate 值，加进 global=l 链条里
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 亲爱的表哥的活宝妹，觉得：这是世界上、最基础、最简章的（动规）;
+        // // 可是，亲爱的表哥的活宝妹，早上不知道哪里写错了、下午或是傍晚再写
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int minCost(int[][] a) {
+        //     int m = a.length, n = a[0].length;
+        //     int [][] f = new int [m+1][n+1];
+        //     for (int i = 0; i <= m; i++)
+        //         Arrays.fill(f[i], Integer.MAX_VALUE / 2);
+        //     f[0][0] = f[0][1] = f[1][0] = 0;
+        //     for (int i = 1; i <= m; i++) 
+        //         for (int j = 1; j <= n; j++) {
+        //             if (i == 1 && j == 1) {
+        //                 f[i][j] = a[i-1][j-1];
+        //                 continue;
+        //             }
+        //             f[i][j] = Math.min(f[i-1][j] ^ a[i-1][j-1], f[i][j-1] ^ a[i-1][j-1]);
+        //         }
+        //     return f[m][n];
+        // }
+        // int [][] a = new int [][] {{26,24,3},{2,22,17}};// 16==>5
+        // System.out.println("a.length: " + a.length);
+        // for (int z = 0; z < a.length; ++z)
+        //     System.out.println(Arrays.toString(a[z]));
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int firstMatchingIndex(String S) {
+        //     int n = S.length(); char [] s = S.toCharArray();
+        //     for (int i = 0; i < n/2; i++) 
+        //         if (s[i] == s[n-1-i])
+        //             return i;
+        //     if (n % 2 == 1) return n/2;
+        //     return -1;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // class EventManager {
+        // // class cmp {
+        //     Map<Integer, Integer> m;
+        //     Queue<int []> q;
+        //     // public cmp(int[][] events) {
+        //     public EventManager(int[][] events) {
+        //         m = new HashMap<>();
+        //         for (int [] e : events) 
+        //             m.put(e[0], e[1]);
+        //         q = new PriorityQueue<>((x, y) -> (x[1] != y[1] ? y[1] - x[1] : x[0] - y[0]));
+        //         for (int [] e : events) 
+        //             q.offer(new int [] {e[0], e[1]});
+        //     }
+        //     public void updatePriority(int eventId, int newPriority) {
+        //         if (m.containsKey(eventId)) {
+        //             m.put(eventId, newPriority);
+        //             q.offer(new int [] {eventId, newPriority});
+        //         }
+        //     }
+        //     public int pollHighest() {
+        //         if (m.size() == 0) return -1;
+        //         int [] f = new int [] {-1, -1};
+        //         while (!q.isEmpty()) {
+        //             f = q.poll();
+        //             while ((!m.containsKey(f[0]) || m.get(f[0]) != f[1]) && !q.isEmpty()) 
+        //                 f = q.poll();
+        //             if (!m.containsKey(f[0]) || m.get(f[0]) != f[1]) return -1;
+        //             // if (q.isEmpty()) return -1;
+        //             m.remove(f[0]);
+        //             System.out.println(Arrays.toString(f));
+        //             break;
+        //         }
+        //         return f[0];
+        //     }
+        // }
+            
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 亲爱的表哥的活宝妹，不想再写这个破烂题目了。。
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int sortableIntegers(int[] a) {
+        //     int n = a.length, r = 0;
+        //     if (isDecending(a) && n >= 3) return 0;
+        //     if (n == 1) return 1;
+        //     if (n == 2) return 2 + (isNonDecending(a) ? 1 : 0);
+        //     for (int i = 1; i <= n; i++) {
+        //         if (i == 1) {
+        //             if (isNonDecending(a))
+        //                 r += i;
+        //             continue;
+        //         }
+        //         if (n % i > 0) continue;
+        //         if (i == n) {
+        //             if (rotateAchievable(a, 0, n-1))
+        //                 r += i;
+        //             continue;
+        //         }
+        //         boolean possible = true;
+        //         for (int j = 0; j < n-i; j += i) 
+        //             if (!rotateAchievable(a, j, j+i-1)) {
+        //                 possible = false;
+        //                 break;
+        //             }
+        //         if (possible) 
+        //             r += i;
+        //     }
+        //     return r;
+        // }
+        // boolean rotateAchievable(int [] f, int l, int r) {
+        //     int n = f.length, min = f[l], idx = l, max = f[l], midx = l;
+        //     for (int i = l+1; i <= r; i++) {
+        //         if (f[i] < min) {
+        //             min = f[i];
+        //             idx = i;
+        //         } else if (f[i] > max) {
+        //             max = f[i];
+        //             midx = i;
+        //         }
+        //     }
+        //     boolean valid = true; // 【大大、小、大大】
+        //     for (int i = idx+1; i <= r; i++)
+        //         if (f[i] < f[i-1]) {
+        //             valid = false;
+        //             break;
+        //         }
+        //     if (valid)
+        //         for (int i = idx-1; i >= l; i--) 
+        //             if (f[i] < f[i+1]) {
+        //                 valid = false;
+        //                 break;
+        //             }
+        //     if (valid) return true;
+        //     valid = true; // 【小小、大、小小】
+        //     for (int i = midx+1; i <= r; i++)
+        //         if (f[i] > f[i-1]) {
+        //             valid = false;
+        //             break;
+        //         }
+        //     if (valid)
+        //         for (int i = midx-1; i >= l; i--) 
+        //             if (f[i] > f[i+1]) {
+        //                 valid = false;
+        //                 break;
+        //             }
+        //     return valid;
+        // }
+        // boolean isDecending(int [] f) {
+        //     int n = f.length;
+        //     for (int i = 1; i < n; i++)
+        //         if (f[i] >= f[i-1]) return false;
+        //     return true;
+        // }
+        // boolean isNonDecending(int [] f) {
+        //     int n = f.length;
+        //     for (int i = 1; i < n; i++)
+        //         if (f[i] < f[i-1]) return false;
+        //     return true;
+        // }
+
+        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // 【TODO：】有个亲爱的表哥的活宝妹，当年没能消化的题目，DPN??DFN? 就是【带时间戳】的图上 DFS? 用时间戳，来标记某个节点，先前是否已经遍历过了。。
+        // 如果【时间戳】不是检测图上是否存在环，就有另外的标记（vis[]）之类的，用来帮助标记，某个节点是否遍历过了
+        public int numberOfEdgesAdded(int n, int[][] edges) {
+        }
     }    // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
-    public static void main (String[] args) { 
-		Solution s = new Solution (); 
+        public static void main (String[] args) { 
+            Solution s = new Solution (); 
 
-        int [] a = new int [] {1, 4, 7};
+            int [] a = new int [] {2, 3, 1};
 
-        boolean r = s.uniformArray(a);
-        System.out.println("r: " + r);
+            int r = s.sortableIntegers(a);
+            System.out.println("r: " + r);
+        }
     }
-}
 // ListNode head = new ListNode(a0]);  
 // head.buildList(head, a);
 // head.printList(head);
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
