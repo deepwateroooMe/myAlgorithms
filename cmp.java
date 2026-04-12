@@ -697,7 +697,7 @@ public class cmp {
         //         }
         //     return f[m][n];
         // }
-        // int [][] a = new int [][] {{26,24,3},{2,22,17}};// 16==>5
+        // int [][] a = new int [][] {{26,24,3},{2,22,17}};// 16==>5 
         // System.out.println("a.length: " + a.length);
         // for (int z = 0; z < a.length; ++z)
         //     System.out.println(Arrays.toString(a[z]));
@@ -827,7 +827,7 @@ public class cmp {
         // boolean isNonDecending(int [] f) {
         //     int n = f.length;
         //     for (int i = 1; i < n; i++)
-        //         if (f[i] < f[i-1]) return false;
+   //         if (f[i] < f[i-1]) return false;
         //     return true;
         // }
 
@@ -865,7 +865,7 @@ public class cmp {
         //         for (int i = 1; i < n-1; i += 2) 
         //             r = Math.min(r, f[i] + (i >= n-3 ? 0 : g[i+3]));
         //     return r;
-        // }
+               // }
 
         // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
         // // 这个破烂题目的本质：是【动规】
@@ -940,22 +940,182 @@ public class cmp {
         //         if (g[i] > 0 || g[9-i] > 0) r += Math.abs(g[i] - g[9-i]);
         //     return r;
         // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public String trafficSignal(int v) {
+        //   if (v == 0) return "Green";
+        //   if (v == 30) return "Orange";
+        //   if (30 < v && v <= 90) return "Red";
+        //   return "Invalid";
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int countDigitOccurrences(int[] a, int digit) {
+        //     int n = a.length, f = 0;
+        //     for (int S : a) {
+        //         char [] s = String.valueOf(S).toCharArray();
+        //         for (char c : s)
+        //             if (c - '0' == digit) f++;
+        //     }
+        //     return f;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 这个破烂题目，思路无限简单，可是查找质烽无限繁琐，恶心死人、恶心坏这个世界不偿命！！！不写或是晚点儿再写这个破烂题目
+        // public int minOperations(int[] a) {
+        //     int n = a.length;
+        // }
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // static final int mod = (int)1e9 + 7;
+        // public int maxValue(int[] a, int[] b) {
+        //     int n = a.length;
+        //     long f = 0;
+        //     List<int []> l = new ArrayList<>();
+        //     for (int i = 0; i < n; i++)
+        //         l.add(new int [] {a[i], b[i]});
+        //     Collections.sort(l, (x, y)->(x[0] != y[0] ? y[0] - x[0] : y[1] - x[1]));
+        //     for (int i = 0; i < n; i++) {
+        //         int [] g = l.get(i);
+        //         System.out.println(Arrays.toString(g));
+        //      int m = Arrays.stream(g).sum();
+        //         int cur = getFastSum(g[0]);
+        //         // System.out.println("cur: " + cur);
+        //         // System.out.println("(f << m): " + (f << m));
+        //         f = ((i == 0 ? 0 : (long)(f << m)) + (g[1] == 0 ? cur : (long)(cur << g[1]))) % mod;
+        //         System.out.println("i: " + i + " " + "f: " + f);
+        // }
+        //     return (int)f;
+        // }
+        // int getFastSum(int m) {
+        //     long f = 0;
+        //     for (int i = 0; i < m; i++)
+        //         f = (f + (long)Math.pow(2, i)) % mod;
+        //     return (int)f;
+        // }
+        // 早上的一组破烂题目，都出得极度恶心。亲爱的表哥的活宝妹，不写了；亲爱的表哥的活宝妹，傍晚再写另一组
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int[] findDegrees(int[][] a) {
+        //     int n = a.length;
+        //     List<Integer> [] g = new ArrayList[n];
+        //     Arrays.setAll(g, z -> new ArrayList<Integer>());
+        //     for (int i = 0; i < n; i++)
+        //         for (int j = 0; j < i; j++) 
+        //             if (a[i][j] == 1) {
+        //                 g[i].add(j);
+        //                 g[j].add(i);
+        //             }
+        //     int [] f = new int [n];
+        //     for (int i = 0; i < n; i++)
+        //         f[i] = g[i].size();
+        //     return f;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 算三角形的内角。这个破烂题目好恶心，半点儿也不想写
+        // public double[] internalAngles(int[] sides) {
+        // }
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int longestBalanced(String S) {
+        //     int n = S.length(), max = 2; char [] s = S.toCharArray();
+        //     int [] g = new int [n+1];
+        //     for (int i = 0; i < n; i++)
+        //         g[i+1] = g[i] + (s[i] - '0');
+        //     if (g[n] == n || g[n] == 0) return 0;
+        //     if (g[n] * 2 == n) return n;
+        //     // 哪里是什么动规？明明是：双指针【滑动窗口】。。
+        //     char c = (g[n] >= n / 2 + (n % 2 == 1 ? 1 : 0) ? '0' : '1');
+        //     // 查找：可以取得的、连续 c 字符的最大片段长度
+        //     for (int i = 0, j = i+1; i < n; i++) {
+        //         if (s[i] != c) continue;
+        //         while (j < n &&
+        //                (c == '0' && 2 * (g[j+1]-g[i]) <= j-i+1
+        //                 || c == '1' && g[j+1]-g[i] >= (j-i+1) / 2 +(j-i+1) % 2)) j++;
+        //         // 这里的判断标准，细节了繁琐，不想写了，下个周六再写
+        //         // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        //     }
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int countGoodSubseq(int[] a, int p, int[][] qs) { // TLE TLE 983/1036 passed
+        //     int n = a.length, m = qs.length, f = 0;
+        //     TreeSet<Integer> s = new TreeSet<>((i, j)->(a[i] != a[j] ? a[i] - a[j] : i - j));
+        //     for (int i = 0; i < n; i++)
+        //         if (a[i] % p == 0) s.add(i);
+        //     for (int i = 0; i < m; i++) {
+        //         int k = qs[i][0], v = qs[i][1];
+        //         if (v % p == 0) {
+        //             if (a[k] % p == 0)
+        //                 s.remove(k);
+        //             a[k] = v;
+        //             s.add(k);
+        //         } else if (a[k] % p == 0)
+        //             s.remove(k);
+        //         if (!s.isEmpty() && a[s.first()] == p) f++;
+        //         else if (s.size() >= 2) {
+        //             Iterator<Integer> it = s.iterator();
+        //             int pre = s.first(), cur = 0;
+        //             it.next();
+        //             boolean valid = false;
+        //             while (it.hasNext()) {
+        //                 cur = it.next();
+        //                 for (int j : s) {
+        //                     if (j == cur) continue;
+        //                     if (gcd(a[cur], a[j]) == p) {
+        //                         f++;
+        //                         valid = true;
+        //                         break;
+        //                     }
+        //                 }
+        //                 if (valid) break;
+        //             }
+        //         }
+        //         // System.out.println("i: " + i + " " + "f: " + f);
+        //     }
+        //     return f;
+        // }
+        // int gcd(int x, int y) {
+        //     if (y == 0) return x;
+        //     return gcd(y, x % y);
+        // }
     }    // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
     public static void main (String[] args) { 
         Solution s = new Solution (); 
 
-        String a = "ab1z9";
-
-        int r = s.mirrorFrequency(a);
         System.out.println("r: " + r);
     }
 }
-// ListNode head = new ListNode(a0]);  
+// ListNode head = new ListNode(a0]);   
 // head.buildList(head, a);
 // head.printList(head);
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
