@@ -1078,11 +1078,101 @@ public class cmp {
         //     if (y == 0) return x;
         //     return gcd(y, x % y);
         // }
-    }    // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int firstStableIndex(int[] a, int k) {
+        //     int n = a.length, r = 0;
+        //     if (n == 1) return 0;
+        //     int [] f = new int [n];
+        //     Arrays.fill(f, Integer.MAX_VALUE / 2);
+        //     f[n-1] = a[n-1];
+        //     for (int i = n-2; i >= 0; i--) 
+        //         f[i] = Math.min(f[i+1], a[i]);
+        //     for (int i = 0; i < n; i++) {
+        //         r = Math.max(r, a[i]);
+        //         if (r - f[i] <= k) return i;
+        //     }
+        //     return -1;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // int [][] dirs = {{1, 0}, {0, 1}, {0, -1}, {-1, 0}};
+        // public int[][] colorGrid(int m, int n, int[][] a) {
+        //     System.out.println("m: " + m + " " + "n: " + n);
+        //    int [][] f = new int [m][n];
+        //     Deque<int []> q = new ArrayDeque<>();
+        //     for (int i = 0; i < a.length; i++) {
+        //         q.offerFirst(a[i]);
+        //         f[a[i][0]][a[i][1]] = a[i][2];
+        //     }
+        //     Map<Integer, Integer> s = new HashMap<>();
+        //     while (!q.isEmpty()) {
+        //         for (int w = q.size()-1; w >= 0; w--) {
+        //             int [] g = q.pollLast();
+        //             int i = g[0], j = g[1], v = g[2];
+        //             for (int [] d : dirs) {
+        //                 int x = i + d[0], y = j + d[1];
+        //                 if (x < 0 || x >= m || y < 0 || y >= n || f[x][y] > 0 && !s.containsKey(x * n + y)) continue;
+        //                 if (!s.containsKey(x * n + y)) 
+        //                     s.put(x * n + y, v);
+        //                 else 
+        //                     s.put(x * n + y, Math.max(v, s.get(x * n + y)));
+        //             }
+        //         }
+        //         for (Map.Entry<Integer, Integer> en : s.entrySet()) {
+        //             int k = en.getKey(), v = en.getValue();
+        //            q.offerFirst(new int [] {k / n, k % n, v});
+        //             f[k/n][k%n] = v;
+        //         }
+        //         s.clear();
+        //     }
+        //     return f;
+        // }
+        
+        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // 亲爱的表哥的活宝妹，能够想到的就是【暴力解法】按步就班地、遍历：不知道会不会 TLE ？？？一定会 TLE 的！！！
+        // 【暴力】不好、拒绝暴力！！！
+        // 1.【String directions】是离线不变数据；并且它界定了【16 个数位】里：（真正 matter 的 critical 的数位，仅仅只 7 个数位），其它不关键数位任意填。。
+        // 2.【l,r】都是 long, 数据规模大，但（不超过：16 个数位）
+        // 上面两点，就决定了，这个题目，应该是【数位 DP 动规】：遍历 16 个有效数位；根据字符串等限制条件，来判定合法有效性数个数
+        // 亲爱的表哥的活宝妹，曾经【灵光一现的：左右边界串、且非毒串】记忆化深搜数个数，同这个数个数，除了更简单（不涉及：非毒串）；判断计入统计的标准，多一点儿新意
+        // 亲爱的表哥的活宝妹，明天周日会抽时间再想想、写写这个破烂题目。
+        // 【记忆化深搜】：定义（哪些状态、界定）一个 state 状态？【TODO：】
+        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹女，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        public long countGoodIntegersOnPath(long l, long r, String D) {
+            String S = String.valueOf(l), T = String.valueOf(r);
+            m = S.length(); n = T.length(); o = 16 - m; p = 16 - n
+            s = S.toCharArray(); t = T.toCharArray(); d = D.toCharArray();
+            // 【TODO：】把【16 个数位】里：（真正 matter 的 critical 的数位，仅仅只 7 个数位），其它不关键数位任意填。。把 7 个关键位放进一个 set 里
+            // m <= n
+            long ans = 0;
+            f = new HashMap<>();
+            for (int i = o; i >= 0; i--) {
+                // for (int j = 0; j < 10; j++) {
+                int lo = (i == o ? s[0]-'0' : 1);
+                int hi = (i == p ? t[0]-'0' : 9);
+                for (int j = lo; j <= hi; j++) 
+                    // ans += dfs(i, (i == o || i == p ? 1 : 0), k=pre|todo);
+                    ;
+            }
+            return ans;
+        }
+        Map<Long, Long> f;
+        char [] s, t, d;
+        int m, n, o;
+        // long dfs(int i, boolean j, boolean k) { // i: 数位下标 idx; j: 是否 match 【左右l.r 边界】; k: 是否 match 【7 个关键数位】——这个可以不用
+        long dfs(int i, int j, int k) { // i: 数位下标 idx; j: 是否 match 【左右l.r 边界】; k:  【7 个关键数位】前一个高位 pre 的取值
+            // i: [0,15] 16 个数位，用 5 个 bit 来纪录状态； j:[0/1] 1 个bit 来纪录状态； k:pre[0,1...9]用 4 个 bit 来纪录状态
+            long key = ((i << 5) | (j << 4) | k);
+            if (f.containsKey(key)) return f.get(key);
+            // 【TODO：】亲爱的表哥的活宝妹，明天拉着这里往后写。
+            // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        }
+     }    // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
     public static void main (String[] args) { 
         Solution s = new Solution (); 
 
-        System.out.println("r: " + r);
+        int [][] r = s.colorGrid(1, 5, a);
     }
 }
 // ListNode head = new ListNode(a0]);   
@@ -1091,6 +1181,16 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
