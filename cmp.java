@@ -1129,50 +1129,310 @@ public class cmp {
         //     return f;
         // }
         
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 亲爱的表哥的活宝妹，能够想到的就是【暴力解法】按步就班地、遍历：不知道会不会 TLE ？？？一定会 TLE 的！！！
+        // // 【暴力】不好、拒绝暴力！！！
+        // // 1.【String directions】是离线不变数据；并且它界定了【16 个数位】里：（真正 matter 的 critical 的数位，仅仅只 7 个数位），其它不关键数位任意填。。
+        // // 2.【l,r】都是 long, 数据规模大，但（不超过：16 个数位）
+        // // 上面两点，就决定了，这个题目，应该是【数位 DP 动规】：遍历 16 个有效数位；根据字符串等限制条件，来判定合法有效性数个数
+        // // 亲爱的表哥的活宝妹，曾经【灵光一现的：左右边界串、且非毒串】记忆化深搜数个数，同这个数个数，除了更简单（不涉及：非毒串）；判断计入统计的标准，多一点儿新意
+        // // 亲爱的表哥的活宝妹，明天周日会抽时间再想想、写写这个破烂题目。
+        // // 【记忆化深搜】：定义（哪些状态、界定）一个 state 状态？【TODO：】
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹女，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public long countGoodIntegersOnPath(long l, long r, String D) {
+        //     String S = String.valueOf(l), T = String.valueOf(r);
+        //     m = S.length(); n = T.length(); o = 16 - m; p = 16 - n
+        //     s = S.toCharArray(); t = T.toCharArray(); d = D.toCharArray();
+        //     // 【TODO：】把【16 个数位】里：（真正 matter 的 critical 的数位，仅仅只 7 个数位），其它不关键数位任意填。。把 7 个关键位放进一个 set 里
+        //     // m <= n
+        //     long ans = 0;
+        //     f = new HashMap<>();
+        //     for (int i = o; i >= 0; i--) {
+        //         // for (int j = 0; j < 10; j++) {
+        //         int lo = (i == o ? s[0]-'0' : 1);
+        //         int hi = (i == p ? t[0]-'0' : 9);
+        //         for (int j = lo; j <= hi; j++) 
+        //             // ans += dfs(i, (i == o || i == p ? 1 : 0), k=pre|todo);
+        //             ;
+        //     }
+        //     return ans;
+        // }
+        // Map<Long, Long> f;
+        // char [] s, t, d;
+        // int m, n, o;
+        // // long dfs(int i, boolean j, boolean k) { // i: 数位下标 idx; j: 是否 match 【左右l.r 边界】; k: 是否 match 【7 个关键数位】——这个可以不用
+        // long dfs(int i, int j, int k) { // i: 数位下标 idx; j: 是否 match 【左右l.r 边界】; k:  【7 个关键数位】前一个高位 pre 的取值
+        //     // i: [0,15] 16 个数位，用 5 个 bit 来纪录状态； j:[0/1] 1 个bit 来纪录状态； k:pre[0,1...9]用 4 个 bit 来纪录状态
+        //     long key = ((i << 5) | (j << 4) | k);
+        //     if (f.containsKey(key)) return f.get(key);
+        //     // 【TODO：】亲爱的表哥的活宝妹，明天拉着这里往后写。
+        //     // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public List<Integer> findValidElements(int[] a) {
+        //     int n = a.length;
+        //     int [] f = new int [n], g = new int [n];
+        //     f[0] = 0;
+        //     for (int i = 1; i < n; i++)
+        //         if (a[i] > a[f[i-1]])
+        //             f[i] = i;
+        //         else f[i] = f[i-1];
+        //     g[n-1] = n-1;
+        //     for (int i = n-2; i >= 0; i--)
+        //         if (a[i] > a[g[i+1]])
+        //             g[i] = i;
+        //         else g[i] = g[i+1];
+        //     List<Integer> l = new ArrayList<>();
+        //     l.add(a[0]);
+        //     for (int i = 1; i < n-1; i++) 
+        //         if (f[i] == i || g[i] == i)
+        //             l.add(a[i]);
+        //     if (n > 1)
+        //         l.add(a[n-1]);
+        //     return l;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public String sortVowels(String S) {
+        //     int n = S.length(); char [] s = S.toCharArray();
+        //     Set<Character> sc = new HashSet<>(List.Of('a', 'e', 'i', 'o', 'u'));
+        //     int [] g = new int [26];
+        //     Arrays.fill(g, -1);
+        //     TreeMap<Integer, Character> idx = new TreeMap<>();
+        //     TreeMap<Integer, Integer> mo = new TreeMap<>();
+        //     for (int i = 0; i < n; i++)
+        //         if (sc.contains(s[i])) {
+        //             mo.put(s[i], mo.getOrDefault(s[i], 0) + 1);
+        //             if (!idx.containsKey(s[i]))
+        //                 idx.put(i, s[i]);
+        //             if (g[s[i]-'a'] == -1)
+        //                 g[s[i]-'a'] = i;
+        //         }
+        //     Map<Integer, Integer> m = MapUtil.sortByValue(mo, true); // 【TODO：】这个排序算法，对此题不完整
+        //     // 【TODO：】亲爱的表哥的活宝妹，晚点儿再写这个破烂题目
+        //     for (int i = 0; i < n; i++) 
+        //         if (sc.contains(s[i])) {
+        //         }
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 【动规】：一定是动规！！！
+        // // 亲爱的表哥的活宝妹，还是某些时候写不习惯【动规】，就先写【记忆化深搜 DFS】
+        // public long maxAlternatingSum(int[] a, int k) {
+        //     n = a.length; this.k = k;
+        //     l = new int [n]; r = new int [n];
+        //     for (int i = n-2; i >= 0; i--) {
+        //         if ()
+        //     }
+        //     long max = (long)Arrays.stream(a).max().getAsInt();
+        //     f = new Long [n]; // 升
+        //     g = new Long [n]; // 降
+        //     for (int i = 0; i < n; i++)
+        //         max = Math.max(max, Math.max(dfs(i, 0), dfs(i, 1)));
+        //     return max;
+        // }
+        // Long [] f, g;
+        // // 想要存储：【自右往左】遍历：比（当前下标 i）k 元素之外 [小，或是，大] 的最近下标。不要 k 元素之外的限制
+        // int [] l, r;
+        // int n, k;
+        // // 【TODO：】记（升序降序）没用，得知道，（上个元素、下标 idx 在哪里）以便比较是升或是降序
+        // long dfs(int i, int j) { // j : [0:升序；1:降序]
+        //     if (i >= n) return Long.MIN_VALUE / 2;
+        //     if (j == 0 && f[i] != null) return f[i];
+        //     else if (j == 1 && g[i] != null) return g[i];
+        //     if (i == n-1)
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public boolean validDigit(int n, int x) {
+        //     char [] s = String.valueOf(n).toCharArray();
+        //     if (s[0] - '0' == x) return false;
+        //     if (n == 1) return false;
+        //     for (int i = 1; i < s.length; i++)
+        //         if (s[i] - '0' == x) return true;
+        //     return false;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int compareBitonicSums(int[] a) {
+        //     int n = a.length, j = 0;
+        //     if (n == 1) return -1;
+        //     long [] f = new long [n+1];
+        //     for (int i = 0; i < n; i++)
+        //         f[i+1] = f[i] + (long)a[i];
+        //     for (int i = 1; i < n; i++)
+        //         if (a[i] > a[i-1]) j = i;
+        //     long r = f[n] - f[j];
+        //     if (f[j+1] > r) return 0;
+        //     if (f[j+1] < r) return 1;
+        //     return -1;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 【无向图】：基本建图都懂；但不知道怎么遍历和判断，晚点儿再写这个破烂题目
+        // public int evenSumSubgraphs(int[] a, int[][] egs) {
+        //     int n = a.length;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public class SegTree {
+        //     public class Node {
+        //         int i; // idx
+        //         int v; // 是否【偶数】的标记（0,1）
+        //         Node l, r;
+        //         public Node(int i, int j) {
+        //             this.i = i; v = j;
+        //         }
+        //     }
+        //     Node r; // root
+        //     int n;
+        //     public SegTree(int [] a) {
+        //         n = a.length;
+        //     }
+        // }
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // a[i] 数组：离散化数据的（集中化处理），集中到【0,10^5】下标 idx 范围内；方便【Bit 数据】区间更新？还是一个一个单点更新恢复数据
+        // // 【单点更新】：是用 Bit 还是用线段树？统计（偶数总个数的）求和线段树？如果只是数偶数总个数，用个数偶数个数【前缀和】数组就可以了。。。不需要 BIT 或是线段树！！！
+        // // 每个 qs[i]: 数的是 [li,ri] 下标范围内（偶数）的总个数，或某个个数（若 qs[i][3] 落在【li,ri】范围内）
+        // // qs 离线数据，顺序不重要、不产生交互影响，【可排序】优化
+        // public int[] kthRemainingInteger(int[] a, int[][] qs) {
+        //     int n = a.length;
+        //     // Map<Integer, Integer> m = new HashMap<>(); // 离散化数据、集中化处理时的【一一对应】：
+        //     // TreeSet<Integer> s = new TreeSet<>(); // 方便快速遍历恢复数据
+        //     int [] f = new int [n];
+        //     f[0] = (a[0] >= 2 && a[0] % 2 == 0 ? 1 : 0);
+        //     for (int i = 0; i < n; i++)
+        //         // if (a[i] >= 2 && a[i] % 2 == 0) s.add(i);  // <<<<<<<<<<<<<<<<<<<< idx
+        //         f[i+1] = f[i] + (a[i] >= 2 && a[i] % 2 == 0 ? 1 : 0);
+        //     List<int []> l = new ArrayList<>();
+        //     for (int i = 0; i < qs.length; i++) 
+        //         l.add(new int [] {qs[i][0], qs[i][1], qs[i][2], i});
+        //     Collections.sort(l, (x, y) -> x[0] != y[0] ? x[0] - y[0] : (x[1] != y[1] ? x[1] - y[1] : x[2] - y[2]));
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int[] countOppositeParity(int[] a) {
+        //     int n = a.length;
+        //     int [] f = new int [n];
+        //     int [] l = new int [n+1], r = new int [n+1];
+        //     for (int i = n-1; i >= 0; i--) {
+        //         if (a[i] % 2 == 1) {
+        //             l[i] = l[i+1] + 1;
+        //             r[i] = r[i+1];
+        //         } else {
+        //             l[i] = l[i+1];
+        //             r[i] = r[i+1] + 1;
+        //         }
+        //     }
+        //     for (int i = 0; i < n; i++)
+        //         f[i] = (a[i] % 2 == 1 ? r[i+1] : l[i+1]);
+        //     return f;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 数据规模不大，就【暴力】所有步骤与可能性
+        // public int sumOfPrimesInRange(int n) {
+        //     int m = Integer.parseInt(new StringBuilder(String.valueOf(n)).reverse().toString());
+        //     int l = Math.min(m, n), r = Math.max(m, n);
+        //     int f = 0;
+        //     for (int i = l; i <= r; i++)
+        //         if (isPrime(i))
+        //             f += i;
+        //     return f;
+        // }
+        // boolean isPrime(int v) {
+        //     if (v < 2) return false;
+        //     if (v == 2) return true;
+        //     for (int i = 2; i * i <= v; i++) 
+        //         if (v % i == 0) return false;
+        //     return true;
+        // }
+
         // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // 亲爱的表哥的活宝妹，能够想到的就是【暴力解法】按步就班地、遍历：不知道会不会 TLE ？？？一定会 TLE 的！！！
-        // 【暴力】不好、拒绝暴力！！！
-        // 1.【String directions】是离线不变数据；并且它界定了【16 个数位】里：（真正 matter 的 critical 的数位，仅仅只 7 个数位），其它不关键数位任意填。。
-        // 2.【l,r】都是 long, 数据规模大，但（不超过：16 个数位）
-        // 上面两点，就决定了，这个题目，应该是【数位 DP 动规】：遍历 16 个有效数位；根据字符串等限制条件，来判定合法有效性数个数
-        // 亲爱的表哥的活宝妹，曾经【灵光一现的：左右边界串、且非毒串】记忆化深搜数个数，同这个数个数，除了更简单（不涉及：非毒串）；判断计入统计的标准，多一点儿新意
-        // 亲爱的表哥的活宝妹，明天周日会抽时间再想想、写写这个破烂题目。
-        // 【记忆化深搜】：定义（哪些状态、界定）一个 state 状态？【TODO：】
-        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹女，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        public long countGoodIntegersOnPath(long l, long r, String D) {
-            String S = String.valueOf(l), T = String.valueOf(r);
-            m = S.length(); n = T.length(); o = 16 - m; p = 16 - n
-            s = S.toCharArray(); t = T.toCharArray(); d = D.toCharArray();
-            // 【TODO：】把【16 个数位】里：（真正 matter 的 critical 的数位，仅仅只 7 个数位），其它不关键数位任意填。。把 7 个关键位放进一个 set 里
-            // m <= n
-            long ans = 0;
-            f = new HashMap<>();
-            for (int i = o; i >= 0; i--) {
-                // for (int j = 0; j < 10; j++) {
-                int lo = (i == o ? s[0]-'0' : 1);
-                int hi = (i == p ? t[0]-'0' : 9);
-                for (int j = lo; j <= hi; j++) 
-                    // ans += dfs(i, (i == o || i == p ? 1 : 0), k=pre|todo);
-                    ;
+        // 这是个【带边线权重的、图 graph: 有向图！】：求两节点间的（最小代价、最小权重）等。感觉所它转化成图的问题，应该是正确的思路，但细节未能完成完整
+        // 亲爱的表哥的活宝妹，不知道这个题目，哪里的细节写错了，改天再接着这里往后改。
+        public int[] minCost(int[] a, int[][] qs) {
+            n = a.length;
+            int [] f = new int [n];
+            f[0] = 1; f[n-1] = n-2;
+            for (int i = 1; i < n-1; i++) 
+                f[i] = (Math.abs(a[i] - a[i-1]) <= Math.abs(a[i] - a[i+1]) ? i-1 : i+1);
+            System.out.println(Arrays.toString(f));
+            // 【建图：边有权重的、无向图】？
+            g = new ArrayList[n];
+            Arrays.setAll(g, z -> new ArrayList<int []>());
+            for (int i = 0; i < n; i++) 
+                g[i].add(new int [] {f[i], 1});
+            m = new HashMap<>();
+            int idx = 0;
+            for (int [] e : qs) {
+                int u = e[0], v = e[1], x = Math.abs(a[u] - a[v]);
+                g[u].add(new int [] {v, x});
+                // g[v].add(new int [] {u, x});
+                m.computeIfAbsent(u, z -> new HashMap<Integer, Integer>());
+                m.get(u).put(v, idx);
+                idx++;
+            }
+            // 【有向图】：两节点间的（最短距离），
+            // 设定【根节点、起始节点】为 0
+            // 预处理数据：所有节点，到根节点的（最小距离）。。。这个思路，像是，不再对了。。。?????
+            // 思路换成：【有向图的、树型遍历？广度优先遍历？动规DP】
+            d = new long [n];
+            // 【TODO：】想要一种，有序遍历方法，能够有序一次遍历出 qs 里所有的结果，但【TODO：】感觉这里思路欠缺一点儿什么。。。
+            // 【有向图】：把它想像成（有向树）。自底向上遍历。。。
+            bfs(0);
+            int [] ans;
+            ans = new int [qs.length];
+            for (int u : m.keySet()) {
+                if (d[u] == Long.MAX_VALUE / 2) continue; // <<<<<<<<<<<<<<<<<<<< 存在这种情况吗？？？存在！！
+                for (int v : m.get(u).keySet()) 
+                    ans[m.get(u).get(v)] = (int)(d[v] - d[u]);
+            }
+            System.out.println(Arrays.toString(ans));
+            for (int u : m.keySet()) {
+                if (d[u] == Long.MAX_VALUE / 2) {
+                    // 以【u 为根节点：BFS】求结果
+                    bfs(u);
+                    for (int v : m.get(u).keySet()) 
+                        ans[m.get(u).get(v)] = (int)(d[v] - d[u]);
+                }
             }
             return ans;
         }
-        Map<Long, Long> f;
-        char [] s, t, d;
-        int m, n, o;
-        // long dfs(int i, boolean j, boolean k) { // i: 数位下标 idx; j: 是否 match 【左右l.r 边界】; k: 是否 match 【7 个关键数位】——这个可以不用
-        long dfs(int i, int j, int k) { // i: 数位下标 idx; j: 是否 match 【左右l.r 边界】; k:  【7 个关键数位】前一个高位 pre 的取值
-            // i: [0,15] 16 个数位，用 5 个 bit 来纪录状态； j:[0/1] 1 个bit 来纪录状态； k:pre[0,1...9]用 4 个 bit 来纪录状态
-            long key = ((i << 5) | (j << 4) | k);
-            if (f.containsKey(key)) return f.get(key);
-            // 【TODO：】亲爱的表哥的活宝妹，明天拉着这里往后写。
-            // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        }
-     }    // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
+        List<int []> [] g;        
+        Map<Integer, Map<Integer, Integer>> m = new HashMap<>();
+        long [] d;
+        int n;
+        void bfs(int uu) {
+            Arrays.fill(d, Long.MAX_VALUE / 2);
+            d[uu] = 0;
+            Deque<long []> q = new ArrayDeque<>();
+            q.offerFirst(new long [] {uu, 0l});
+            while (!q.isEmpty()) {
+                long [] cur = q.pollLast();
+                int u = (int)cur[0]; long dv = cur[1];
+                for (int [] v : g[u]) {
+                    if ((long)v[1] + dv <= d[v[0]]) { // <= ?
+                        d[v[0]] = (long)v[1] + dv;
+                        q.offerFirst(new long [] {(long)v[0], (long)v[1] + dv});
+                    }
+                }
+            }
+        }        
+        // void Dij() // 应该，不再是【最短距离】的那个、想不起来名字的 Dij 算法
+    }    // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
+    
     public static void main (String[] args) { 
         Solution s = new Solution (); 
 
-        int [][] r = s.colorGrid(1, 5, a);
+        int []  a = new int []  {-5, -2, 3};
+        int [][] b = new int [][] {{0,2},{2,0},{1,2}};
+
+        int [] r = s.minCost(a, b);
+        System.out.println(Arrays.toString(r));
     }
 }
 // ListNode head = new ListNode(a0]);   
@@ -1181,6 +1441,36 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
