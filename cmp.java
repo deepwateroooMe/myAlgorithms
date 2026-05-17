@@ -1351,88 +1351,254 @@ public class cmp {
         //     return true;
         // }
 
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 这是个【带边线权重的、图 graph: 有向图！】：求两节点间的（最小代价、最小权重）等。感觉所它转化成图的问题，应该是正确的思路，但细节未能完成完整
+        // // 亲爱的表哥的活宝妹，不知道这个题目，哪里的细节写错了，改天再接着这里往后改。
+        // public int[] minCost(int[] a, int[][] qs) {
+        //     n = a.length;
+        //     int [] f = new int [n];
+        //     f[0] = 1; f[n-1] = n-2;
+        //     for (int i = 1; i < n-1; i++) 
+        //         f[i] = (Math.abs(a[i] - a[i-1]) <= Math.abs(a[i] - a[i+1]) ? i-1 : i+1);
+        //     System.out.println(Arrays.toString(f));
+        //     // 【建图：边有权重的、无向图】？
+        //     g = new ArrayList[n];
+        //     Arrays.setAll(g, z -> new ArrayList<int []>());
+        //     for (int i = 0; i < n; i++) 
+        //         g[i].add(new int [] {f[i], 1});
+        //     m = new HashMap<>();
+        //     int idx = 0;
+        //     for (int [] e : qs) {
+        //         int u = e[0], v = e[1], x = Math.abs(a[u] - a[v]);
+        //         g[u].add(new int [] {v, x});
+        //         // g[v].add(new int [] {u, x});
+        //         m.computeIfAbsent(u, z -> new HashMap<Integer, Integer>());
+        //         m.get(u).put(v, idx);
+        //         idx++;
+        //     }
+        //     // 【有向图】：两节点间的（最短距离），
+        //     // 设定【根节点、起始节点】为 0
+        //     // 预处理数据：所有节点，到根节点的（最小距离）。。。这个思路，像是，不再对了。。。?????
+        //     // 思路换成：【有向图的、树型遍历？广度优先遍历？动规DP】
+        //     d = new long [n];
+        //     // 【TODO：】想要一种，有序遍历方法，能够有序一次遍历出 qs 里所有的结果，但【TODO：】感觉这里思路欠缺一点儿什么。。。
+        //     // 【有向图】：把它想像成（有向树）。自底向上遍历。。。
+        //     bfs(0);
+        //     int [] ans;
+        //     ans = new int [qs.length];
+        //     for (int u : m.keySet()) {
+        //         if (d[u] == Long.MAX_VALUE / 2) continue; // <<<<<<<<<<<<<<<<<<<< 存在这种情况吗？？？存在！！
+        //         for (int v : m.get(u).keySet()) 
+        //             ans[m.get(u).get(v)] = (int)(d[v] - d[u]);
+        //     }
+        //     System.out.println(Arrays.toString(ans));
+        //     for (int u : m.keySet()) {
+        //         if (d[u] == Long.MAX_VALUE / 2) {
+        //             // 以【u 为根节点：BFS】求结果
+        //             bfs(u);
+        //             for (int v : m.get(u).keySet()) 
+        //                 ans[m.get(u).get(v)] = (int)(d[v] - d[u]);
+        //         }
+        //     }
+        //     return ans;
+        // }
+        // List<int []> [] g;        
+        // Map<Integer, Map<Integer, Integer>> m = new HashMap<>();
+        // long [] d;
+        // int n;
+        // void bfs(int uu) {
+        //     Arrays.fill(d, Long.MAX_VALUE / 2);
+        //     d[uu] = 0;
+        //     Deque<long []> q = new ArrayDeque<>();
+        //     q.offerFirst(new long [] {uu, 0l});
+        //     while (!q.isEmpty()) {
+        //         long [] cur = q.pollLast();
+        //         int u = (int)cur[0]; long dv = cur[1];
+        //         for (int [] v : g[u]) {
+        //             if ((long)v[1] + dv <= d[v[0]]) { // <= ?
+        //                 d[v[0]] = (long)v[1] + dv;
+        //                 q.offerFirst(new long [] {(long)v[0], (long)v[1] + dv});
+        //             }
+        //         }
+        //     }
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int[] scoreValidator(String[] s) {
+        //     int [] f = new int [2];
+        //     int n = s.length;
+        //     Set<String> ss = new HashSet<>();
+        //     for (int i = 0; i < 7; i++)
+        //         ss.add(String.valueOf(i));
+        //     for (int i = 0; i < n; i++) {
+        //         if (ss.contains(s[i]))
+        //             f[0] += Integer.parseInt(s[i]);
+        //         else if (s[i].equals("W"))
+        //             f[1] += 1;
+        //         else if (s[i].equals("WD") || s[i].equals("NB"))
+        //             f[0] += 1;
+        //         if (f[1] == 10) break;
+        //     }
+        //     return f;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 亲爱的表哥的活宝妹，亲爱的表哥的活宝妹、笨宝妹，觉得：这个破烂题目，像是个【二分查找】？
+        // public int minimumThreshold(int n, int[][] egs, int src, int tgt, int k) {
+        //     g = new ArrayList[n];
+        //     Arrays.setAll(g, z -> new ArrayList<int []>());
+        //     for (int [] e : egs) {
+        //         int u = e[0], v = e[1], w = e[2];
+        //         g[u].add(new int [] {v, w});
+        //         g[v].add(new int [] {u, w});
+        //     }
+        // }
+        // List<int []> [] g = new ArrayList<>();
+        // int n;
+        // 亲爱的表哥的活宝妹，写不到今天早上的这组题目；亲爱的表哥的活宝妹，晚上再接着写今天晚上的那组破烂题目
         // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // 这是个【带边线权重的、图 graph: 有向图！】：求两节点间的（最小代价、最小权重）等。感觉所它转化成图的问题，应该是正确的思路，但细节未能完成完整
-        // 亲爱的表哥的活宝妹，不知道这个题目，哪里的细节写错了，改天再接着这里往后改。
-        public int[] minCost(int[] a, int[][] qs) {
-            n = a.length;
-            int [] f = new int [n];
-            f[0] = 1; f[n-1] = n-2;
-            for (int i = 1; i < n-1; i++) 
-                f[i] = (Math.abs(a[i] - a[i-1]) <= Math.abs(a[i] - a[i+1]) ? i-1 : i+1);
-            System.out.println(Arrays.toString(f));
-            // 【建图：边有权重的、无向图】？
-            g = new ArrayList[n];
-            Arrays.setAll(g, z -> new ArrayList<int []>());
-            for (int i = 0; i < n; i++) 
-                g[i].add(new int [] {f[i], 1});
-            m = new HashMap<>();
-            int idx = 0;
-            for (int [] e : qs) {
-                int u = e[0], v = e[1], x = Math.abs(a[u] - a[v]);
-                g[u].add(new int [] {v, x});
-                // g[v].add(new int [] {u, x});
-                m.computeIfAbsent(u, z -> new HashMap<Integer, Integer>());
-                m.get(u).put(v, idx);
-                idx++;
-            }
-            // 【有向图】：两节点间的（最短距离），
-            // 设定【根节点、起始节点】为 0
-            // 预处理数据：所有节点，到根节点的（最小距离）。。。这个思路，像是，不再对了。。。?????
-            // 思路换成：【有向图的、树型遍历？广度优先遍历？动规DP】
-            d = new long [n];
-            // 【TODO：】想要一种，有序遍历方法，能够有序一次遍历出 qs 里所有的结果，但【TODO：】感觉这里思路欠缺一点儿什么。。。
-            // 【有向图】：把它想像成（有向树）。自底向上遍历。。。
-            bfs(0);
-            int [] ans;
-            ans = new int [qs.length];
-            for (int u : m.keySet()) {
-                if (d[u] == Long.MAX_VALUE / 2) continue; // <<<<<<<<<<<<<<<<<<<< 存在这种情况吗？？？存在！！
-                for (int v : m.get(u).keySet()) 
-                    ans[m.get(u).get(v)] = (int)(d[v] - d[u]);
-            }
-            System.out.println(Arrays.toString(ans));
-            for (int u : m.keySet()) {
-                if (d[u] == Long.MAX_VALUE / 2) {
-                    // 以【u 为根节点：BFS】求结果
-                    bfs(u);
-                    for (int v : m.get(u).keySet()) 
-                        ans[m.get(u).get(v)] = (int)(d[v] - d[u]);
-                }
-            }
-            return ans;
-        }
-        List<int []> [] g;        
-        Map<Integer, Map<Integer, Integer>> m = new HashMap<>();
-        long [] d;
-        int n;
-        void bfs(int uu) {
-            Arrays.fill(d, Long.MAX_VALUE / 2);
-            d[uu] = 0;
-            Deque<long []> q = new ArrayDeque<>();
-            q.offerFirst(new long [] {uu, 0l});
-            while (!q.isEmpty()) {
-                long [] cur = q.pollLast();
-                int u = (int)cur[0]; long dv = cur[1];
-                for (int [] v : g[u]) {
-                    if ((long)v[1] + dv <= d[v[0]]) { // <= ?
-                        d[v[0]] = (long)v[1] + dv;
-                        q.offerFirst(new long [] {(long)v[0], (long)v[1] + dv});
-                    }
-                }
-            }
-        }        
-        // void Dij() // 应该，不再是【最短距离】的那个、想不起来名字的 Dij 算法
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int[] concatWithReverse(int[] a) {
+        //     int n = a.length;
+        //     int [] f = new int [2 * n];
+        //     for (int i = 0; i < n; i++) {
+        //         f[i] = a[i];
+        //         f[n + i] = a[n-1 - i];
+        //     }
+        //     return f;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 这个破烂题目，感觉不难，就是狠琐碎，把连起来的大字符串，怎么拆成有效单词，正则表达式？
+        // public int[] countWordOccurrences(String[] chunks, String[] queries) {
+        // }
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public long minArraySum(int[] a) {
+        //     int n = a.length;
+        //     int [] f = new int [n];
+        //     Arrays.sort(a);
+        //     for (int i = n-1, j = 0; i >= 0; i--, j = 0) {
+        //         if (i < n-1 && a[i] == a[i+1]) {
+        //             f[i] = f[i+1];
+        //             continue;
+        //         }
+        //         while (j < i && a[i] % a[j] != 0) j ++;
+        //         if (j < i) // a[i] % a[j] == 0
+        //             f[i] = a[j];
+        //         else f[i] = a[i];
+        //     }
+        //     long r = 0;
+        //     for (int i = 0; i < n; i++)
+        //         r += (long)f[i];
+        //     return r;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 怀疑，这个破烂【无向图】的（动规）题型：有点儿像先前【树型动规】中的（换根DP）？
+        // // 可是，这个题目， round-trip 往返路线，为最小代价，可能不一样。所以又有点儿不同或是区别
+        // // 【round-trip 往返路线】不同：本质就是（最小代价、最短距离、最值权重）等，方法区分（往返）执行2 遍!!!
+        // public int[] minCost(int n, int[] a, int[][] egs) {
+        //     g = new ArrayList[n];
+        //     Arrays.setAll(g, z -> new ArrayList<int []>());
+        //     // 【建图：无向图】
+        //     for (int [] e : egs) {
+        //         int u = e[0], v = e[1], x = e[2], y = e[3];
+        //         g[u].add(new int [] {v, x, y});
+        //         g[v].add(new int [] {u, x, y});
+        //     }
+        //     f = new long [n]; g = new long [n]; // 【往、返】
+        //     // 假定是：【0 为根节点】的（有向图）：BFS 图上遍历，统计记忆，接下来，有向图上换根遍历的、换根动规的、动规【基础数据】
+        //     dij(0, -1, 0); // 【住：去往其它店】最小代价
+        //     dij(0, -1, 1); // 【返：从其它店】回 0 号根节点，最小代价
+        //     int [] r = Arrays.copyOf(a, n);
+        //     for (int i = 0; i < n; i++)
+        //         if (f[i] + g[i] + a[i] < r[0])
+        //             r[0] = f[i] + g[i] + a[i]; // 【0 为根节点】时，最便宜的购买方法
+        //     // 【有向图上换根遍历的、换根动规】：？？？
+        //     // 亲爱的表哥的活宝妹，感觉自己的脑袋，在这个细节上，想不通想不透彻。。。
+        //     // 【TODO：】亲爱的表哥的活宝妹，今天不写了；笨宝妹改天再碰到此类题型、受到刺激与启发，再试着继续写【树上图上、换根动规】之类的算法
+        //     // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // }
+        // List<int []> [] g;
+        // long [] f, g;
+        // int n;
+        // void dij(int uu, int p, int d) { // d = [0,1] 往或是返
+        //     Arrays.fill(f, Long.MAX_VALUE / 2); Arrays.fill(g, Long.MAX_VALUE / 2);
+        //     f[uu] = 0; g[uu] = 0;
+        //     Queue<long []> q = new PriorityQueue<>((x, y) -> x[1] - y[1]);
+        //     q.offerFirst(new long [] {(long)uu, 0l});
+        //     while (!q.isEmpty()) {
+        //         long [] cur = q.pollLast();
+        //         int u = (int)cur[0]; long w = cur[1];
+        //         for (int [] e : g[u]) {
+        //             int v = (int)e[0], x = e[1], y = e[2];
+        //             if (d == 0 && w + (long)x <= f[v]) {
+        //                 f[v] = w + (long)x;
+        //                 q.offerFirst(new long [] {v, f[v]});
+        //             } else if (d == 1 && w + (long)x * y <= g[v]) {
+        //                 g[v] = w + (long)x * y;
+        //                 q.offerFirst(new long [] {v, g[v]});
+        //             }
+        //         }
+        //     }
+        // }
+        // 亲爱的表哥的活宝妹，这个周末的两组题目，因为睡眠不足，写得不够好不提交；等亲爱的表哥的活宝妹、亲爱的表哥的活宝妹、笨宝妹接下来周六傍晚写得好一点儿时，再提交
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public boolean isAdjacentDiffAtMostTwo(String S) {
+        //     int n = S.length(); char [] s = S.toCharArray();
+        //     for (int i = 0; i < n-1; i++)
+        //         if (Math.abs(s[i] - s[i+1]) > 2) return false;
+        //     return true;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int countKthRoots(int ll, int rr, int k) {
+        //     if (k == 1) return rr - ll + 1;
+        //     int l = (int)Math.floor(Math.pow(ll, 1.0/k)), r = (int)Math.ceil(Math.pow(rr, 1.0/k)), f = 0;
+        //     for (int i = l; i <= r; i++) {
+        //         int v = (int)Math.pow(i, k);
+        //         if (ll <= v && v <= rr) f++;
+        //     }
+        //     return f;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // Time Limit Exceeded 697 / 702 testcases passed
+        // // 类似【动规】？可以建立一种【矩阵里：自小到大】的遍历方法??? 感觉思路想得不太透彻，今天不写了，下周六再写
+        // public int countLocalMaximums(int[][] a) {
+        //     int m = a.length, n = a[0].length, r = 0;
+        //     Integer [] f = IntStream.range(0, m * n).boxed().toArray(Integer[]::new);
+        //     Arrays.sort(f, (x, y)->a[x/n][x%n] - a[y/n][y%n]);
+        //     for (int i = 0; i < m; i++)
+        //         for (int j = 0; j < n; j++) {
+        //             if (a[i][j] == 0) continue;
+        //             boolean valid = true;
+        //             int v = a[i][j], min = v;
+        //             for (int x = Math.max(0, i-v); x <= Math.min(m-1, i+v); x++) {
+        //                 for (int y = Math.max(0, j-v); y <= Math.min(n-1, j+v); y++) {
+        //                     if (Math.abs(i-x) == v && Math.abs(j-y) == v) continue;
+        //                     if (a[x][y] > v) {
+        //                         valid = false;
+        //                         break;
+        //                     }
+        //                 }
+        //                 if (!valid) break;
+        //             }
+        //             if (valid) 
+        //                 r++;
+        //         }
+        //     return r;
+        // }
+        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
     }    // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
-    
     public static void main (String[] args) { 
         Solution s = new Solution (); 
 
-        int []  a = new int []  {-5, -2, 3};
-        int [][] b = new int [][] {{0,2},{2,0},{1,2}};
-
-        int [] r = s.minCost(a, b);
-        System.out.println(Arrays.toString(r));
+        int r = s.countKthRoots(30, 64, 3);
+        System.out.println("r: " + r);
     }
 }
 // ListNode head = new ListNode(a0]);   
@@ -1441,21 +1607,6 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
