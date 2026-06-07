@@ -1646,97 +1646,313 @@ public class cmp {
         //     int [][][] f = new int [m][n][m];
         // }
 
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 这不是：如咱们现在的菜地里、有个世界最著名会偷其它人种的菜的、菜地里的地头蛇般的、世界最著名的【树型小偷动规】题型吗？！！！
+        // // 亲爱的表哥的活宝妹，感觉【思路无限清晰】可是细节上出小差池。。。
+        // // 亲爱的表哥的活宝妹，先去写中午公园里想出来的前面的第三题，再回来完成此题目
+        // static final int mod = (int)1e9 + 7;
+        // public int countValidSubsets(int [] p, int [] a, int v) {
+        //     n = a.length;
+        //     g  = new ArrayList[n];
+        //     Arrays.setAll(g, z -> new ArrayList<Integer>());
+        //     for (int i = 1; i < n; i++)
+        //         g[p[i]].add(i);
+        //     for (int i = 0; i < n; i++)
+        //         a[i] = a[i] % v; this.a = a; this.v = v; 
+        //     f = new Integer [n][2][v]; // 2: 【0:不偷；1:偷】
+        //     // 【自顶向下】遍历树：是（记忆化深搜）还是 [动规] 呢？??
+        //     // 写【记忆化深搜】：是（自底向上）得出答案的. 每个叶子节点可以有（被偷、与不被偷）2 种可有的（潜在有效选项）
+        //     dfs(0, 0, 0);
+        //     dfs(0, 1, 0);
+        //     return (int)(((long)f[0][0][0] + f[0][1][0]) % mod);
+        // }
+        // List<Integer> [] g;
+        // Integer [][][] f;
+        // int n, v; int [] a;
+        // // 只考虑了：【自根节点】往叶子节点的所有可能性；即【父节点不被偷，仅只某 1 个子节点被偷】的计数
+        // // 【TODO：】但从未考虑（父节点不被偷，2-N 所有可能的、姊妹节点）被偷的可能性
+        // int dfs(int i, int j, int k) {
+        //     System.out.println("i: " + i + " " + "j: " + j + " " + "k: " + k);
+        //   if (f[i][j][k] != null) return f[i][j][k];
+        //     // 【叶子节点】
+        //     if (g[i].size() == 0) {
+        //         // 【不被偷、恰好可以被 v 整除】或是（被偷，累加后可被 v 整除）
+        //         int r = ((j == 0 && k % v == 0 || j == 1 && (k + a[i]) % v == 0) ? 1 : 0);
+        //         return f[i][j][k] = r;
+        //     }
+        //     // 【父节点】链接节点
+        //     long r = 0l;
+        //     if (j == 0) { // 本【父节点： i, 不被偷】
+        //         // 【子节点 c】：可以（被偷）
+        //         // 【子节点 c】：也可以（不被偷）
+        //         // 但是数【合法有效子集】的总个数，需要考虑所有的可有性
+        //         for (int c : g[i]) {
+        //             // // 【子节点 c】：可以（被偷）
+        //             // // r = (r + (long)dfs(c, 1-j, (i == 0 ? 0 : k))) % mod;
+        //             // r = (r + (long)dfs(c, 1-j, k)) % mod;
+        //             // 【子节点 c】：也可以（不被偷）
+        //             // r = (r + (long)dfs(c, j, (i == 0 ? 0 : k))) % mod;
+        //             r = (r + (long)dfs(c, j, Math.abs(v - k))) % mod;
+        //         }
+        //         // 本父节点【不被偷】时：【1-N】个子节点被偷的、所有有效方案数
+        //         int N = (1 << g[i].size())-1, M = g[i].size();
+        //         for (int x = 0; x <= N; x++) {
+        //             // int md = 0;
+        //             long cur = 1l;
+        //             // for (int y = 0; y < M; y++) 
+        //             //     if ((x & (1 << y)) > 0) 
+        //             //         md = (md + a[g[i].get(y)]) % v;
+        //             for (int y = 0; y < M; y++) 
+        //                 if ((x & (1 << y)) > 0) {
+        //                     // 遍历：【此子节点】为根节点，取余【0,v-1】的所有可能性、与各种可能性下对应的方案数
+        //                     for (int z = 0; z < v; z++) {
+        //                         // f[g[i].get(y)][1][z] = dfs(g[i].get(y), 1, (v - (a[g[i].get(y)] + z) % v + v) % v);
+        //                         dfs(g[i].get(y), 1, (v - (a[g[i].get(y)] + z) % v + v) % v);
+        //                     }
+        //                     cur = (cur * ) % mod; // <<<<<<<<<<<<<<<<<<<< 
+        //                     System.out.println("y: " + y + " " + "cur: " + cur);
+                            
+        //                 }
+        //             // 本父节点【不被偷】时：【1-N】个子节点被偷的、所有有效方案数
+        //             // 【TODO：】上面（嵌套）的内部动规，变成为是：
+        //             // 【1-N】个子节点被偷的、所有方案【1, （1<M)-1】各[被偷子节点、子集]方案里：合法有效方案数
+        //             // 【TODO：】即：所有方案【1, （1<M)-1】中的任一方案里，各被偷子节点为根节点时取余【0,v-1】情况下，组合成有效方案 md ％ v == 0 的总方案数
+        //             // 至此，亲爱的表哥的活宝妹，觉得哪里可能想得不够透彻，应该、不至于这么复杂、动规里嵌套动规才对。。。。
+        //             r = (r + cur) % mod;
+        //         }
+        //     } else { // 本【父节点： i, 被偷】: 任何（子节点）不能再被偷
+        //         for (int c : g[i]) {
+        //             // 【子节点 c】：不能（被偷）
+        //             r = (r + (long)dfs(c, 1-j, (k + a[i]) % v)) % mod;
+        //         }
+        //     }
+        //     return f[i][j][k] = (int)r;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int[] limitOccurrences(int[] a, int v) {
+        //     int n = a.length, cnt = 1;
+        //     List<Integer> l = new ArrayList<>();
+        //     for (int i = 0, j = i+1; i < n; i++, j = i + 1) {
+        //         cnt = 1; 
+        //         while (j < n && a[j] == a[i]) {
+        //             cnt++;
+        //             j++;
+        //         }
+        //       for (int k = 0; k < Math.min(v, cnt); k++)
+        //             l.add(a[i]);
+        //         i = j-(i == n-1 ? 0 : 1);
+        //     }
+        //     int [] f = new int [l.size()];
+        //     int i = 0;
+        //     for (int vi : l) 
+        //         f[i++] = vi;
+        //     return f;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int passwordStrength(String S) {
+        //     int n = S.length(), r = 0; char [] s = S.toCharArray();
+        //     int [] f = new int [26], ff = new int [26], g = new int [10];
+        //     Set<Character> sc = new HashSet<>(List.of('!', '@', '#', '$'));
+        //     Map<Character, Integer> m = new HashMap<>();
+        //     for (char c : s) {
+        //         if (Character.isDigit(c))
+        //             g[c-'0'] ++;
+        //         else if (Character.isLowerCase(c))
+        //             f[c-'a']++;
+        //         else if (Character.isUpperCase(c))
+        //             ff[c-'A']++;
+        //         else if (sc.contains(c))
+        //             m.put(c, m.getOrDefault(c, 0) + 1);
+        //     }
+        //     for (int v : f) 
+        //         if (v > 0) r += 1;
+        //     for (int v : ff) 
+        //         if (v > 0) r += 2;
+        //     for (int v : g) 
+        //         if (v > 0) r += 3;
+        //     r += m.size() * 5;
+        //     return r;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 对【1 型操作】：可能使用：
+        // //     1 【带懒惰标记的、最小值、最大值线段树】但无法统计值的次数
+        // //     2 【统计数值频次的 BIT】但区间更新时，会换成单点更新，不知道会不会超时??? BIT ？用个统计频次的数组不行吗？
+        // // 但感觉，后者 2 的思路应该先尝试。。这个思路不地
+        // // 修正 1 的思路：【带懒惰标记的、升序排值区间、并统计值次数的、最小下标、最大下标、线段树】
+        // // a 数组的下标，只在更新时，才起作用
+        // // 【TODO：】这个（新题型）亲爱的表哥的活宝妹，亲爱的表哥的活宝妹、笨宝妹，先前从未写过，可以学习研究一下这个题型。。。
+        // public class SegTree {
+        //     public class Node {
+        //         int c; // cnt 总频次
+        //         int l, r; // min, max 区间节点，左右边界值 
+        //         int 
+        //         public Node(int i) {
+        //             this.i = i; c = 1;
+        //         }
+        //     }
+        //     public SegTree {
+        //     }
+        // }
+        // public int[] numberOfPairs(int[] b, int[] a, int[][] qs) {
+        //     int m = b.length, n = a.length;
+        //     BIT bit = new BIT(100001);
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int digitFrequencyScore(int n) {
+        //     int [] f = new int [10]; char [] s = String.valueOf(n).toCharArray();
+        //     for (char v : s) 
+        //         f[v-'0']++;
+        //     f[0] = 0;
+        //     for (int i = 1; i < 10; i++) 
+        //         f[i] = f[i-1] + i * f[i];
+        //     // System.out.println(Arrays.toString(f));
+        //     return f[9];
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // //  这个破烂题目好恶心人呀，先去写其它的
+        // public boolean consecutiveSetBits(int n) {
+        //     String S = Integer.toBinaryString(n);
+        //     char [] s = S.toCharArray();
+        //     System.out.println("S: " + S); System.out.println(Arrays.toString(s));
+        //     int m = s.length, f = 0, i = 0;
+        //     while (i < m) {
+        //         if (s[0] == '0') {
+        //             while (i < m && s[i] == '0') i++;
+        //             if (i == m) return true;
+        //             int idx = S.substring(i).indexOf('0');
+        //             return (idx == -1 && m-i == 2);
+        //         } else if (s[m-1] == '0') {
+        //             i = m-2;
+        //             while (i >= 0 && s[i] == '0') i--;
+        //             if (i < 0) return true;
+        //             int idx = S.substring(0, i).indexOf('0');
+        //             return (idx == -1 && i+1 == 2);
+        //         }
+        //         int idx = S.indexOf('0');
+        //         return (idx == -1 && m == 2);
+        //     }
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 【TODO：】可能是负数的二进制表达，有点儿不同
+        // public int sumOfGoodIntegers(int n, int k) {
+        //     int f = 0;
+        //     for (int i = n-k; i <= n+k; i++) 
+        //         if ((i & n) == 0) f += i;
+        //     return f;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 这个题目，像是：最大长度 12 的字符串：背包回塑问题？遍历所有有效可能性
+        // public List<String> generateValidStrings(int n, int k) {
+        //     f = new ArrayList<String>(); this.v = k; this.n = n; 
+        //     backPacking(new StringBuilder("0"), 0);
+        //     backPacking(new StringBuilder("1"), 0);
+        //     return f;
+        // }
+        // List<String> f;
+        // int v, n;
+        // void backPacking(StringBuilder s, int i) { // i:idx; j:0-idxed=0/1; k:sum
+        //     if (s.length() == n) {
+        //         if (i <= v) f.add(s.toString());
+        //         return ;
+        //     }
+        //     int m = s.length();
+        //     char c = s.charAt(m-1);
+        //     if (c == '0') {
+        //         s.append('1');
+        //         backPacking(s, i + m);
+        //         s.deleteCharAt(m);
+        //     }
+        //     s.append('0');
+        //     backPacking(s, i);
+        //     s.deleteCharAt(m);
+        // }
 
         // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // 这不是：如咱们现在的菜地里、有个世界最著名会偷其它人种的菜的、菜地里的地头蛇般的、世界最著名的【树型小偷动规】题型吗？！！！
-        // 亲爱的表哥的活宝妹，感觉【思路无限清晰】可是细节上出小差池。。。
-        // 亲爱的表哥的活宝妹，先去写中午公园里想出来的前面的第三题，再回来完成此题目
-        static final int mod = (int)1e9 + 7;
-        public int countValidSubsets(int [] p, int [] a, int v) {
-            n = a.length;
-            g  = new ArrayList[n];
-            Arrays.setAll(g, z -> new ArrayList<Integer>());
-            for (int i = 1; i < n; i++)
-                g[p[i]].add(i);
-            for (int i = 0; i < n; i++)
-                a[i] = a[i] % v; this.a = a; this.v = v; 
-            f = new Integer [n][2][v]; // 2: 【0:不偷；1:偷】
-            // 【自顶向下】遍历树：是（记忆化深搜）还是 [动规] 呢？??
-            // 写【记忆化深搜】：是（自底向上）得出答案的. 每个叶子节点可以有（被偷、与不被偷）2 种可有的（潜在有效选项）
-            dfs(0, 0, 0);
-            dfs(0, 1, 0);
-            return (int)(((long)f[0][0][0] + f[0][1][0]) % mod);
+        // 感觉应该是【动规】；可是这里，亲爱的表哥的活宝妹，亲爱的表哥的活宝妹、笨宝妹，只会写【记忆化深搜】
+        // 亲爱的表哥的活宝妹，先写【记忆化深搜】，万一超时，再去想，是否或是如何改装成（动规）？
+        // 另外，可能涉及的思路是【贪心】相关：因为需要去掉负数，但受【l,r】子数组的长度限制。把对【贪心】思路的优化，直接用在（记忆化深搜）的逻辑实现里;
+        // 【TODO：】上面的【贪心】思路相关的、可能的优化，现在不考虑，先写暴力
+        // 可是，脑袋里还会有【区间型动规】的思路：因为子数组的个数要求在【1,m】之间，涉及（自顶向下，自 1 个大区间，向下向底向 m 个子数组子区间）的拆分过程
+        public long maximumSum(int[] a, int m, int l, int r) {
+            n = a.length; this.l = l; this.r = r; this.a = a;
+            g = new long [n];
+            for (int i = 0; i < n; i++) 
+                g[i] = (i == 0 ? 0l : g[i-1]) + (long)a[i];
+            f = new Long [n][n][n+1]; // TLE TLE TLE 又或者不会超时？！！！
+            // 【自底向上】的解法：把 n 个区间，合并成【最多 m 个区间、最少 1 个区间】的最值
+            for (int i = 0; i < n; i++) 
+                f[i][i][1] = (long)a[i];
+            // for (int i = 0; i <= n-l; i++) 
+            //     for (int j = i+l-1; j < Math.min(n, i+r); j++) 
+            //         f[i][j][1] = g[j] - (i == 0 ? 0 : g[i-1]);
+            for (int i = 1; i <= m; i++)
+                dfs(0, n-1, i);
+            long ans = 0l;
+            for (int i = 1; i <= m; i++)
+                ans = Math.max(ans, f[0][n-1][i]);
+            return ans;
         }
-        List<Integer> [] g;
-        Integer [][][] f;
-        int n, v; int [] a;
-        // 只考虑了：【自根节点】往叶子节点的所有可能性；即【父节点不被偷，仅只某 1 个子节点被偷】的计数
-        // 【TODO：】但从未考虑（父节点不被偷，2-N 所有可能的、姊妹节点）被偷的可能性
-        int dfs(int i, int j, int k) {
-            System.out.println("i: " + i + " " + "j: " + j + " " + "k: " + k);
-          if (f[i][j][k] != null) return f[i][j][k];
-            // 【叶子节点】
-            if (g[i].size() == 0) {
-                // 【不被偷、恰好可以被 v 整除】或是（被偷，累加后可被 v 整除）
-                int r = ((j == 0 && k % v == 0 || j == 1 && (k + a[i]) % v == 0) ? 1 : 0);
-                return f[i][j][k] = r;
+        long [] g; int [] a;
+        Long [][][] f;
+        int n, l, r;
+        long dfs(int i, int j, int k) {
+            // if (i > j || j-i+1 < l || j-i+1 > r) return 0l;
+            // if (i > j) return 0l;
+            if (i > j || j-i+1 < l) return 0l;
+            if (f[i][j][k] != null) return f[i][j][k];
+            long max = 0l;
+            if (k == 1) {
+                // max = g[j] - (i == 0 ? 0 : g[i-1]);
+                // if (l == r) return f[i][j][k] = (long)a[l];
+                max = getMax(l, r);
+                System.out.println("i: " + i + " " + "j: " + j + " " + "k: " + k + " max: " + max);
+                return f[i][j][k] = max;
             }
-            // 【父节点】链接节点
-            long r = 0l;
-            if (j == 0) { // 本【父节点： i, 不被偷】
-                // 【子节点 c】：可以（被偷）
-                // 【子节点 c】：也可以（不被偷）
-                // 但是数【合法有效子集】的总个数，需要考虑所有的可有性
-                for (int c : g[i]) {
-                    // // 【子节点 c】：可以（被偷）
-                    // // r = (r + (long)dfs(c, 1-j, (i == 0 ? 0 : k))) % mod;
-                    // r = (r + (long)dfs(c, 1-j, k)) % mod;
-                    // 【子节点 c】：也可以（不被偷）
-                    // r = (r + (long)dfs(c, j, (i == 0 ? 0 : k))) % mod;
-                    r = (r + (long)dfs(c, j, Math.abs(v - k))) % mod;
+            // 动规思路：把大问题拆成小问题来分布解决
+            // 【跳过】不要当前下标 i 元素
+            max = dfs(i+1, j, k);
+            // 遍历【以当前下标 i 为起点】子数组长度在【l,r】之间的第一个子数组片段、的所有可能性
+            for (int x = i+l-1; x < Math.min(n, i+r); x++) 
+                max = Math.max(max, dfs(x+1, j, k-1) + g[x] - (i == 0 ? 0l : g[i-1]));
+            return f[i][j][k] = max;
+        }
+        // 【TODO：】问题出在这个嵌套的、小题型上面。。亲爱的表哥的活宝妹，晚点儿再解决这个问题。。。
+        long getMax(int l, int r) {  // 嵌套题型：求带负数数组里、子数组片段的元素和的、最大值. 忘记是怎么写的了。。。
+            // if (r-l+1 < this.l || r-l+1 > this.r) return 0l;
+            if (r-l+1 < this.l) return 0l;
+            TreeMap<Long, Integer> f = new TreeMap<>();
+            long p = (l == 0 ? 0l : g[l-1]);
+            long ans = 0l;
+            f.put(p, l-1);
+            for (int x = l; x <= r-this.l; x++) {
+                for (int i = x+this.l-1; i <= Math.min(r, x + this.r-1); i++) {
+                    // long k = f.firstKey(), v = f.firstEntry().getValue();
+                    // if (g[i] - k > ans && i-v+1 >= l && i-v+1 <= r)
+                    if (g[i] - (x == 0 ? 0l : g[x-1]) > ans) {
+                        ans = g[i] - (x == 0 ? 0l : g[x-1]); 
+                        // f.put(g[i], i);
+                        System.out.println("x: " + x + " " + "i: " + i + " " + "ans: " + ans);
+                    }
                 }
-                // 本父节点【不被偷】时：【1-N】个子节点被偷的、所有有效方案数
-                int N = (1 << g[i].size())-1, M = g[i].size();
-                for (int x = 0; x <= N; x++) {
-                    // int md = 0;
-                    long cur = 1l;
-                    // for (int y = 0; y < M; y++) 
-                    //     if ((x & (1 << y)) > 0) 
-                    //         md = (md + a[g[i].get(y)]) % v;
-                    for (int y = 0; y < M; y++) 
-                        if ((x & (1 << y)) > 0) {
-                            // 遍历：【此子节点】为根节点，取余【0,v-1】的所有可能性、与各种可能性下对应的方案数
-                            for (int z = 0; z < v; z++) {
-                                // f[g[i].get(y)][1][z] = dfs(g[i].get(y), 1, (v - (a[g[i].get(y)] + z) % v + v) % v);
-                                dfs(g[i].get(y), 1, (v - (a[g[i].get(y)] + z) % v + v) % v);
-                            }
-                            cur = (cur * ) % mod; // <<<<<<<<<<<<<<<<<<<< 
-                            System.out.println("y: " + y + " " + "cur: " + cur);
-                            
-                        }
-                    // 本父节点【不被偷】时：【1-N】个子节点被偷的、所有有效方案数
-                    // 【TODO：】上面（嵌套）的内部动规，变成为是：
-                    // 【1-N】个子节点被偷的、所有方案【1, （1<M)-1】各[被偷子节点、子集]方案里：合法有效方案数
-                    // 【TODO：】即：所有方案【1, （1<M)-1】中的任一方案里，各被偷子节点为根节点时取余【0,v-1】情况下，组合成有效方案 md ％ v == 0 的总方案数
-                    // 至此，亲爱的表哥的活宝妹，觉得哪里可能想得不够透彻，应该、不至于这么复杂、动规里嵌套动规才对。。。。
-                    r = (r + cur) % mod;
-                }
-            } else { // 本【父节点： i, 被偷】: 任何（子节点）不能再被偷
-                for (int c : g[i]) {
-                    // 【子节点 c】：不能（被偷）
-                    r = (r + (long)dfs(c, 1-j, (k + a[i]) % v)) % mod;
-                }
+                f.put(g[x], x);
             }
-            return f[i][j][k] = (int)r;
+            return ans;
         }
     }    // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
     public static void main (String[] args) { 
         Solution s = new Solution (); 
 
-        int [] a = new int [] {-1, 0, 1};
-        int [] b = new int [] {1, 2, 3};
+        int [] a = new int [] {1,0,3,4};
+        System.out.println(Arrays.toString(a));
 
-        int r = s.countValidSubsets(a, b, 3);
+        long r = s.maximumSum(a, 2, 1, 7);
         System.out.println("r: " + r);
     }
 }
@@ -1746,6 +1962,10 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
