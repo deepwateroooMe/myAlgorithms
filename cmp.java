@@ -210,17 +210,211 @@ public class cmp {
         //     return -1;
         // }
 
-        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        public int maxTotalValue(int[] value, int[] decay, int m) {
-        }
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public long maxSum(int[] a, int k, int mul) {
+        //     int n = a.length;
+        //     Arrays.sort(a);
+        //     long f = 0;
+        //     for (int i = n-1; i >= 0 && k > 0; i--, k--, mul--) {
+        //         if (mul >= 1)
+        //             f += (long)mul * a[i];
+        //         else f += (long)a[i];
+        //     }
+        //     return f;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 这个破烂题目出得真恶心人，亲爱的表哥的活宝妹，亲爱的表哥的活宝妹、笨宝妹，晚点儿再写这个破烂题目。。。
+        // public class Range implements Comparable<Range> {
+        //     int l, r;
+        //     public Range(int [] a) {
+        //         l = a[0];
+        //         r = a[1];
+        //     }
+        //     public void print() {
+        //         System.out.println("[" + this.l + ", " + this.r + "]");
+        //     }
+        //     @Override public int compareTo(Range other) {
+        //         return (this.l != other.l ? this.l - other.l : this.r - other.r);
+        //     }
+        // }
+        // public class RangeMgr {
+        //     TreeSet<Range> s;
+        //     public RangeMgr() {
+        //         s = new TreeSet<Range>();
+        //     }
+        //     public void mergeRange(int [] a) {
+        //         System.out.println("\n Insert:" + Arrays.toString(a));
+        //         Range cur = new Range(a);
+        //         Range bef = s.floor(cur), aft = s.ceiling(cur);
+        //         if (bef != null && bef.r + 1 >= cur.l) {
+        //             cur.l = bef.l;
+        //             cur.r = Math.max(bef.r, cur.r);
+        //             s.remove(bef);
+        //         }
+        //         if (aft != null && cur.r + 1 >= aft.l) {
+        //             cur.r = Math.max(cur.r, aft.r);
+        //             s.remove(aft);
+        //         }
+        //         s.add(cur);
+        //         for (Range v : s) 
+        //             v.print();
+        //     }
+        //     public List<List<Integer>> removeRange(int [] a) {
+        //         System.out.println("\n removeRange(): " + Arrays.toString(a));
+        //         Range cur = new Range(a);
+        //         Range bef = s.floor(cur), aft = s.ceiling(cur);
+        //         if (bef != null && bef.r > cur.l - 1) {
+        //             int befR = bef.r;
+        //             bef.r = cur.l - 1;
+        //             if (cur.r < befR)
+        //                 mergeRange(new int [] {cur.r + 1, befR});
+        //         }
+        //         while (aft != null && cur.r > aft.l - 1) { // while ? 多个单数？
+        //             aft.print(); // <<<<<<<<<<<<<<<<<<<<
+        //             if (cur.r >= aft.r) {
+        //                 s.remove(aft);
+        //                 aft = s.ceiling(cur);
+        //             } else { // (aft != null && cur.r < aft.r)
+        //                 if (cur.r > aft.l - 1) {
+        //                     aft.l = cur.r + 1;
+        //                     break;
+        //                 }
+        //             }
+        //         }
+        //         // if (aft != null && cur.r < aft.r) {
+        //         // }
+        //         List<List<Integer>> f = new ArrayList<>();
+        //         for (Range v : s) 
+        //             f.add(List.of(v.l, v.r));
+        //         return f;
+        //     }
+        // }
+        // public List<List<Integer>> filterOccupiedIntervals(int[][] a, int l, int r) {
+        //     int n = a.length;
+        //     Arrays.sort(a, (x, y)->(x[0] != y[0] ? x[0] - y[0] : x[1] - y[1]));
+        //     RangeMgr f = new RangeMgr();
+        //     for (int [] v : a) 
+        //         f.mergeRange(v);
+        //     return f.removeRange(new int [] {l, r});
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 717/718 passed
+        // // 【TODO：感觉，还需要一个【整合数组 f 与 g: 遍历两数组的交叉整合点 i] 来求最大值的过程
+        // public long maxSubarraySum(int[] a, int k) {
+        //     int n = a.length, min = Arrays.stream(a).min().getAsInt(), max = Arrays.stream(a).max().getAsInt();
+        //     // 只有【非负数】
+        //     if (min >= 0) {
+        //         long f = 0;
+        //         for (int v : a) f += (long)v;
+        //         return f * (long)k;
+        //     }
+        //     // 只有【负数】
+        //     if (max < 0) return (long)Math.ceil(max / k);
+        //     // 【有负数，有正数】
+        //     long [] f = new long [n+1], g = new long [n+1];
+        //     for (int i = 0; i < n; i++) {
+        //         f[i+1] = f[i] + (long)a[i];
+        //         if (a[i] > 0)
+        //             a[i] = (int)Math.floor(a[i] / k);
+        //         else if (a[i] < 0)
+        //             a[i] = (int)Math.ceil(a[i] / k);
+        //         g[i+1] = g[i] + (long)a[i];
+        //     }
+        //     System.out.println(Arrays.toString(f));
+        //     System.out.println(Arrays.toString(a));
+        //     System.out.println(Arrays.toString(g));
+        //     long r = getMaxSubSum(f) * (long)k;
+        //     System.out.println("r 1: " + r);
+        //     r = Math.max(r, getMaxSubSum(g));
+        //     System.out.println("r 2: " + r);
+        //     // 【TODO：】这里不是这么求（子数组片段晨大和）的，得【线段树】动态更新 g[] 数组区间值。。。
+        //     for (int i = 1; i <= n; i++)
+        //         r = Math.max(r, f[i] + (g[n] - g[i]));
+        //     return r;
+        // }
+        // long getMaxSubSum(long [] a) {
+        //     long f = Long.MIN_VALUE;
+        //     TreeMap<Long, Integer> m = new TreeMap<>();
+        //     for (int i = 1; i < a.length; i++) {
+        //         if (i == 1) {
+        //             m.put(a[i], 0);
+        //             f = Math.max(f, a[i]);
+        //             continue;
+        //         }
+        //         if (a[i] > f)
+        //             f = a[i];
+        //         if (a[i] - m.firstKey() > f) 
+        //             f = a[i] - m.firstKey();
+        //         m.put(a[i], i);
+        //     }
+        //     return f;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 633/641 passed faild 掉的测试案例，节点无限多，真烦人。。。它们的贱鸡、贱畜牲们，真贱！！！
+        // public long [] minTimeMaxPower(int n, int[][] egs, int po, int[] a, int uu, int vv) {
+        //     g = new ArrayList [n]; Arrays.setAll(g, z -> new ArrayList<int []>());
+        //     this.n = n; this.a = a; this.uu = uu; this.vv = vv; this.po = po; 
+        //     for (int [] e : egs) {
+        //         int u = e[0], v = e[1], t = e[2];
+        //         g[u].add(new int [] {v, t});
+        //     }
+        //     minT = Long.MAX_VALUE; maxP = Long.MIN_VALUE;
+        //     f = new long [n]; Arrays.fill(f, Long.MAX_VALUE / 2);
+        //     // 【最短时间、最小能量消耗】等，使用Dij 算法；但不能使用简单标记[0,n-1] 的vis[] 数组，简单数组状态可能会有交叉。。。
+        //     // vis = new boolean [n];
+        //     s = new TreeMap [n];
+        //     Arrays.setAll(s, z -> new TreeMap<Long, Long>());
+        //     dij();
+        //     System.out.println("minT: " + minT + " " + "maxP: " + maxP);
+        //     return (minT == Long.MAX_VALUE ? new long [] {-1, -1} : new long [] {minT, maxP});
+        // }
+        // List<int []> [] g;
+        // int n, uu, vv, po; int [] a;
+        // // boolean [] vis;
+        // TreeMap<Long, Long> [] s;
+        // long [] f; // d: time
+        // long minT, maxP;
+        // void dij() {
+        //     f[uu] = 0;
+        //     Queue<long []> q = new PriorityQueue<long []>((x, y) -> (x[0] != y[0] ? Long.compare(x[0], y[0]) : Long.compare(y[1], x[1])));
+        //     //           timeSpent, powerLeft
+        //     q.offer(new long [] {0, po, uu});
+        //     while (!q.isEmpty()) {
+        //         long [] cur = q.poll();
+        //         long t = cur[0], p = cur[1]; int u = (int)cur[2];
+        //         s[u].put(t, p);
+        //         if (u == vv) {
+        //             if (t < minT) {
+        //                 minT = Math.min(minT, t);
+        //                 maxP = p;
+        //             } else if (t == minT) 
+        //                 maxP = Math.max(maxP, p);
+        //             return ;
+        //         }
+        //         if (p < a[u]) continue; // 下一个路径方案等
+        //         for (int [] nt : g[u]) {
+        //             // || s[u].contains(new long []{t, p});
+        //             int v = nt[0]; long ti = nt[1];
+        //             if (t + ti < f[v]) {
+        //                 f[v] = t + ti;
+        //                 q.offer(new long [] {f[v], p - a[u], v});
+        //             } else if (t + ti == f[v] && s[v].containsKey(f[v]) && p - a[u] > s[v].get(f[v])) {
+        //                 s[v].put(f[v], p - a[u]);
+        //                 q.offer(new long [] {f[v], p - a[u], v});
+        //             }
+        //         }
+        //     }
+        // }
     }    // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
     public static void main (String[] args) { 
         Solution s = new Solution (); 
+        // int []  a = new int []  {-8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10};// 5
 
-        int [][] a = new int [][] {{3,2,9451},{2,0,1125},{2,3,3227},{2,0,2859},{0,1,8},{1,2,8},{2,3,8}};
-
-        int r = s.shortestPath(4, a, "abab", 1);
-        System.out.println("r: " + r);
+        long [] r = s.minTimeMaxPower(...);
+        System.out.println(Arrays.toString(r));
     }
 }
 // ListNode head = new ListNode(a0]);   
@@ -229,4 +423,5 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
