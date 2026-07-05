@@ -408,13 +408,129 @@ public class cmp {
         //         }
         //     }
         // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public boolean isMiddleElementUnique(int[] a) {
+        //     int n = a.length, v = a[n/2], f = 0;
+        //     for (int vi : a)
+        //         if (vi == v) f++;
+        //     return f == 1;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 【暴力】：O(N*N) TLE TLE TLE ？？？ 999/1002 test cases passed....
+        // public int maxValidPairSum(int[] a, int k) {
+        //     int n = a.length, f = 0;
+        //     for (int i = 0; i+k < n; i++)
+        //         for (int j = i+k; j < n; j++)
+        //             f = Math.max(f, a[i] + a[j]);
+        //     return f;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int minOperations(String S, String T) {
+        //     int n = S.length(); char [] s = S.toCharArray(), t = T.toCharArray();
+        //     int [] f = new int [n];
+        //     for (int i = 0; i < n; i++) {
+        //         if (s[i] == t[i]) {
+        //             f[i] = (i == 0 ? 0 : f[i-1]);
+        //             continue;
+        //         } 
+        //         if (s[i] == '0') { // t[i] = '1
+        //             f[i] = (i == 0 ? 0 : f[i-1]) + 1;
+        //             s[i] = '1';
+        //             continue;
+        //         }
+        //         if (s[i] == '1') { // t[i] = '0'
+        //             if (n == 1) return -1;
+        //             // 优先：改后序：假定【0,i】都匹配完成
+        //             if (i < n-1 && s[i+1] == '1') {
+        //                 f[i] = (i == 0 ? 0 : f[i-1]) + 1;
+        //                 s[i] = s[i+1] = '0';
+        //                 continue;
+        //             }
+        //             // 再：考虑改前位
+        //             // 【写错过】：前面不直接改，还需要尝试，试改后面
+        //             // if (i == 0 || i > 0 && s[i-1] == '0') return -1;
+        //             if (i > 0 && s[i-1] == '1') { // i > 0 && s[i-1] = '1'
+        //                 f[i] = (i == 0 ? 0 : f[i-1]) + 1;
+        //                 s[i] = s[i-1] = '0';
+        //                 // f[i-1] += 1;
+        //                 // s[i-1] = '1';
+        //                 f[i] += 1;
+        //                 continue;
+        //             }
+        //             if (i < n-1) { // s[i+1] == '0' "10"==>"00"
+        //                 f[i] = f[i+1] = (i == 0 ? 0 : f[i-1]) + 1;
+        //                 //s[i+1] = '1'; // "11"
+        //                 f[i] += 1; // f[i+1] += 1;
+        //                 s[i] = '0'; // "00"
+        //                 continue;
+        //             }
+        //             //if (i == n-1) return -1; // 【写错过】：还得尝试改前面的
+        //             if (i > 0) {// s[i-1] == '0' "01"==>"00"
+        //                 f[i] = (i == 0 ? 0 : f[i-1]) + 2; // "01"==>"11"==>"00" 
+        //                 s[i] = '0';
+        //                 continue;
+        //             }
+        //         }
+        //     }
+        //     return f[n-1];
+        // }
+
+        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // 【记忆化深搜】：狠像（左右边界串，不涉及毒串）
+        // 【TODO：】细节上存在小错误；亲爱的表哥的活宝妹，亲爱的表哥的活宝妹、笨宝妹，晚点儿再把这个破烂题目完整
+        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        static final int mod = (int)1e9 + 7;
+        public int interleaveCharacters(String S, String T, String tg) {
+            m = S.length(); n = T.length(); o = tg.length(); s = S.toCharArray(); t = T.toCharArray(); tt = tg.toCharArray();
+            qs = new ArrayList[26]; qt = new ArrayList[26];
+            Arrays.setAll(qs, z -> new ArrayList<Integer>()); Arrays.setAll(qt, z -> new ArrayList<Integer>());
+            for (int i = 0; i < m; i++) 
+                qs[s[i]-'a'].add(i);
+            for (int i = 0; i < n; i++) 
+                qt[t[i]-'a'].add(i);
+           f = new HashMap<>();
+            return dfs(0, 0, 0, 0, 0);
+        }
+        // 【记忆化深搜】：记忆状态定义
+        Map<Integer, Integer> f;
+        char [] s, t, tt;
+        List<Integer> [] qs, qt;
+        int m, n, o;
+        // S T tg IDX:  i  j      k; a/b: S T 0/1; 
+        int dfs(int i, int j, int k, int a, int b) {
+            if (k == o) return (a == 1 && b == 1 ? 1 : 0);
+            if (i >= m && a == 0 || j >= n && b == 0) return 0; // 没有从S T 两个串中，都取字符
+            int key = ((i << 10) | (j << 2) | (a << 1) | b); 
+            if (f.containsKey(key)) return f.get(key);
+            int idx = tt[k] - 'a';
+            int xx = Collections.binarySearch(qs[idx], i), yy = Collections.binarySearch(qt[idx], j);
+            int x = (xx >= 0 ? xx : -1 * (xx + 1)), y = (yy >= 0 ? yy : -1 * (yy + 1));
+            System.out.println("i: " + i + " " + "j: " + j + " " + "k: " + k + " " + "x: " + x + " " + "y: " + y);
+            long r = 0l;
+            if (qs[idx].size() > 0)
+                for (int w = x; w < qs[idx].size(); w++) {
+                    r = (r + dfs(qs[idx].get(w)+1, j, k+1, 1, b)) % mod;
+                    System.out.println("i: " + i + " " + "j: " + j + " " + "k: " + k + " " + "r: " + r);
+                }
+            if (qt[idx].size() > 0)
+                for (int w = y; w < qt[idx].size(); w++) {
+                    r = (r + dfs(i, qt[idx].get(w)+1, k+1, a, 1)) % mod;
+                    System.out.println("i: " + i + " " + "j: " + j + " " + "k: " + k + " " + "r: " + r);
+                }
+            f.put(key, (int)r);
+            return (int)r;
+        }        
     }    // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
     public static void main (String[] args) { 
         Solution s = new Solution (); 
-        // int []  a = new int []  {-8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10, -8, 5, -8, 10};// 5
 
-        long [] r = s.minTimeMaxPower(...);
-        System.out.println(Arrays.toString(r));
+        String a = "n", b = "mmm", c = "nmmm";
+        System.out.println("a: " + a + " " + "b: " + b + " " + "c: " + c);
+       int r = s.interleaveCharacters(a, b, c);
+        System.out.println("r: " + r);
     }
 }
 // ListNode head = new ListNode(a0]);   
