@@ -637,84 +637,31 @@ public class cmp {
         //     return (int)ff;
         // }
 
-        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // // 把【二维数组题目，转化为: 有向图】来求：最长路径. 这个思路应该是对的
-        // // 【TODO：】存在，暴力所有边，能够保障全局最优解，但会 TLE; 想要有效边只连一个，却不能保障全局最优解
-        // public int maxConsistentColumns(int[][] a, int v) {
-        //     m = a.length; n = a[0].length;
-        //     g = new ArrayList [n];
-        //     Arrays.setAll(g, z -> new ArrayList<Integer>());
-        //     Set<Integer> s = new HashSet<>(); // 【头节点集】
-        //     int cnt = 0;
-        //     for (int j = 0; j < n-1; j++) {
-        //         cnt = 0;
-        //         System.out.println("\n j: " + j);
-        //         for (int k = 1; j+k < n && cnt < Math.max(n/10, 5); k++) {
-        //             boolean adj = true;
-        //             for (int i = 0; i < m; i++) 
-        //                 if (Math.abs(a[i][j+k] - a[i][j]) > v) {
-        //                     adj = false;
-        //                     break;
-        //                 }
-        //             if (adj) {// j ==> j+1 
-        //                 g[j].add(j+k);
-        //                 if (j == 0)
-        //                     s.add(j);
-        //                 System.out.println("j: " + j + " " + " ==> j+1: " + (j+1));
-        //                 cnt++;
-        //                 // continue;// 【TODO：】像是会跳过可能的全局最优解？？？是的！！这里的平衡是：保障全局最优解会TLE，与，贪心裁枝优化会 miss 掉全局最优解。。
-        //             } else { // adj=false
-        //                 if (j == n-2) break;
-        //                 // }
-        //                 s.add(j);
-        //                 s.add(j+k);
-        //                 // for (int k = 2; j+k < n; k++) {
-        //                 //     boolean nestedAdj = true;
-        //                 //     for (int i = 0; i < m; i++) 
-        //                 //         if (Math.abs(a[i][j+k] - a[i][j]) > v) {
-        //                 //             nestedAdj = false;
-        //                 //             break;
-        //                 //         }
-        //                 //     if (nestedAdj) {// j ==> j+1 
-        //                 //         g[j].add(j+k);
-        //                 //         System.out.println("j: " + j + " " + " ==> j+k: " + (j+k));
-        //                 //         //break;
-        //                 //     } else {
-        //                 //         s.add(j+k);
-        //                 //         System.out.println("j+k: " + (j+k));
-        //                 //     }
-        //                 // }
-        //                 // // 【暴力】所有可有连通的边，但有可能 TLE TLE TLE O（250*250*250 =62500*250 ？？？）
-        //                 // if (Math.abs(a[i][j] - a[i][j+k]) > v) {
-        //                 //     adj = false;
-        //                 //     break;
-        //                 // }
-        //                 // if (adj)
-        //                 //     g[j].add(j+k);
-        //             }
-        //         }
-        //     }
-        //     // 求【有向图：最长路径】
-        //     d = 1;
-        //     // for (int i = 0; i < n-1; i++)
-        //     for (int ori : s) {
-        //         dfs(ori, 1);
-        //         System.out.println("ori: " + ori + " " + "d: " + d);
-        //     }
-        //     return d;
-        // }
-        // int m, n, d;
-        // List<Integer> [] g;
-        // void dfs(int j, int dep) {
-        //     if (g[j].size() == 0) { // 【叶子节点】：求有向图、多子树，最大深度 d
-        //         if (dep > d)
-        //             d = dep;
-        //         return ;
-        //     }
-        //     for (int v : g[j]) 
-        //         dfs(v, dep+1);
-        // }
-
+        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // 把【二维数组题目，转化为: 有向图】来求：最长路径. 这个思路应该是对的
+        // 【TODO：】存在，暴力所有边，能够保障全局最优解，但会 TLE; 想要有效边只连一个，却不能保障全局最优解
+        public int maxConsistentColumns(int[][] a, int v) {
+            int m = a.length, n = a[0].length;
+            boolean [][] g = new boolean [n][n];
+            for (int i = 0; i < n; i++) 
+                for (int j = i+1; j < n; j++) {
+                    boolean connected = true;
+                    for (int k = 0; k < m; k++)
+                        if (Math.abs(a[k][i] - a[k][j]) > v) {
+                            connected = false;
+                            break;
+                        }
+                    if (connected)
+                        g[i][j] = true;
+                }
+            int [] f = new int [n];
+            Arrays.fill(f, 1);
+            for (int j = 0; j < n; j++)
+                for (int i = 0; i < j; i++)
+                    if (g[i][j])
+                        f[j] = Math.max(f[j], f[i] + 1);
+            return Arrays.stream(f).max().getAsInt();
+        }
         // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
     }    // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
     public static void main (String[] args) { 
@@ -734,6 +681,17 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
