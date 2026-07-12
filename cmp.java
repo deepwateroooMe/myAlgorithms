@@ -478,58 +478,253 @@ public class cmp {
         //     return f[n-1];
         // }
 
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 【记忆化深搜】：狠像（左右边界串，不涉及毒串）
+        // // 【TODO：】细节上存在小错误；亲爱的表哥的活宝妹，亲爱的表哥的活宝妹、笨宝妹，晚点儿再把这个破烂题目完整
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // static final int mod = (int)1e9 + 7;
+        // public int interleaveCharacters(String S, String T, String tg) {
+        //     m = S.length(); n = T.length(); o = tg.length(); s = S.toCharArray(); t = T.toCharArray(); tt = tg.toCharArray();
+        //     qs = new ArrayList[26]; qt = new ArrayList[26];
+        //     Arrays.setAll(qs, z -> new ArrayList<Integer>()); Arrays.setAll(qt, z -> new ArrayList<Integer>());
+        //     for (int i = 0; i < m; i++) 
+        //         qs[s[i]-'a'].add(i);
+        //     for (int i = 0; i < n; i++) 
+        //         qt[t[i]-'a'].add(i);
+        //    f = new HashMap<>();
+        //     return dfs(0, 0, 0, 0, 0);
+        // }
+        // // 【记忆化深搜】：记忆状态定义
+        // Map<Integer, Integer> f;
+        // char [] s, t, tt;
+        // List<Integer> [] qs, qt;
+        // int m, n, o;
+        // // S T tg IDX:  i  j      k; a/b: S T 0/1; 
+        // int dfs(int i, int j, int k, int a, int b) {
+        //     if (k == o) return (a == 1 && b == 1 ? 1 : 0);
+        //     if (i >= m && a == 0 || j >= n && b == 0) return 0; // 没有从S T 两个串中，都取字符
+        //     int key = ((i << 10) | (j << 2) | (a << 1) | b); 
+        //     if (f.containsKey(key)) return f.get(key);
+        //     int idx = tt[k] - 'a';
+        //     int xx = Collections.binarySearch(qs[idx], i), yy = Collections.binarySearch(qt[idx], j);
+        //     int x = (xx >= 0 ? xx : -1 * (xx + 1)), y = (yy >= 0 ? yy : -1 * (yy + 1));
+        //     System.out.println("i: " + i + " " + "j: " + j + " " + "k: " + k + " " + "x: " + x + " " + "y: " + y);
+        //     long r = 0l;
+        //     if (qs[idx].size() > 0)
+        //         for (int w = x; w < qs[idx].size(); w++) {
+        //             r = (r + dfs(qs[idx].get(w)+1, j, k+1, 1, b)) % mod;
+        //             System.out.println("i: " + i + " " + "j: " + j + " " + "k: " + k + " " + "r: " + r);
+        //         }
+        //     if (qt[idx].size() > 0)
+        //         for (int w = y; w < qt[idx].size(); w++) {
+        //             r = (r + dfs(i, qt[idx].get(w)+1, k+1, a, 1)) % mod;
+        //             System.out.println("i: " + i + " " + "j: " + j + " " + "k: " + k + " " + "r: " + r);
+        //         }
+        //     f.put(key, (int)r);
+        //     return (int)r;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int maxDigitRange(int[] a) {
+        //     int n = a.length, max = 0;
+        //     for (int v : a)
+        //         max = Math.max(max, range(v));
+        //     int f = 0;
+        //     for (int v : a)
+        //         if (range(v) == max)
+        //             f += v;
+        //     return f;
+        // }
+        // int range(int v) {
+        //     char [] s = String.valueOf(v).toCharArray();
+        //     int min = 9, max = 0;
+        //     for (char c : s) {
+        //         int i = c - '0';
+        //         min = Math.min(min, i);
+        //         max = Math.max(max, i);
+        //     }
+        //     return max - min;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public boolean canMakeSubsequence(String S, String T) {
+        //     int m = S.length(), n = T.length();
+        //     char [] s = S.toCharArray(), t = T.toCharArray();
+        //     if (m > n) return false;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int divisibleGame(int[] a) {
+        //     int n = a.length;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public long getSum(int[] a) {
+        //     n = a.length; this.a = a;
+        //     // O(N*N)? TLE TLE TLE 有更好的遍历方法，经曲字符串回文 O(N)，被笨宝妹弄忘记了。。。O(N)
+        //     boolean [][] f = new boolean [n][n/2], g = new boolean [n][n/2];
+        //     // 以【当前下标 i】为（奇数长度对称）子数组 f
+        //     for (int i = 0; i < n; i++)
+        //         f[i][0] = true;
+        //     for (int i = 1; i < n-1; i++) {
+        //         // 中心点【左右驿称、半侧长度】： [1,i]
+        //         for (int j = 1; i-j >= 0 && i+j < n; j++) {
+        //             if (a[i-j] == a[i+j])
+        //                 f[i][j] = true;
+        //             else
+        //                 break;
+        //         }
+        //     }
+        // }
+        // int [] a; int n;
+        // boolean isPalindrome(int l, int r) {
+        //     for (int i = l; i <= l + (r-l)/2; i++) 
+        //         if (a[i] != a[r-(i-l)]) return false;
+        //     return true;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 亲爱的表哥的活宝妹，觉得，这个应该是【最简单直接的、2 个数组的动规】
+        // public int minSwap(int[] a, int[] g) {
+        //     int n = a.length;
+        //     int [][] f = new int [n][2];
+        //     for (int i = 0; i < n; i++)
+        //         Arrays.fill(f[i], Integer.MAX_VALUE / 2);
+        //     for (int i = 0; i < n; i++) {
+        //         if (i == 0) {
+        //             f[i][0] = 0;
+        //             f[i][1] = 1;
+        //             continue;
+        //         }
+        //         if (a[i] > a[i-1] && g[i] > g[i-1]) {
+        //             f[i][0] = f[i-1][0];
+        //             f[i][1] = Math.min(f[i][1], f[i-1][1] + 1); // 连续换 2 个，有必要吗？【有必要，否则答案会错】，就是特殊情况下，丢掉全局最优解
+        //         }
+        //         if (a[i] > g[i-1] && g[i] > a[i-1]) {
+        //             f[i][0] = Math.min(f[i][0], f[i-1][1]);
+        //             f[i][1] = Math.min(f[i][1], f[i-1][0] + 1);
+        //         }
+        //     }
+        //     return Arrays.stream(f[n-1]).min().getAsInt();
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int secondsBetweenTimes(String S, String T) {
+        //     int l = Integer.parseInt(S.substring(0, 2)) * 3600 + Integer.parseInt(S.substring(3, 5)) * 60 + Integer.parseInt(S.substring(6));
+        //     int r = Integer.parseInt(T.substring(0, 2)) * 3600 + Integer.parseInt(T.substring(3, 5)) * 60 + Integer.parseInt(T.substring(6));
+        //     return r - l;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 这个破烂题目出得真恶心人。。。。
+        // static final int mod = (int)1e9 + 7;
+        // public int minimumCost(int[] a, int k) {
+        //     int n = a.length, i = 0, v = k;
+        //     long f = 1l, ff = 0;
+        //     while (i < n) {
+        //         while (i < n && k >= a[i]) {
+        //             k -= a[i];
+        //             i++;
+        //         }
+        //         if (i == n) break;
+        //         // i < n && k < a[i]
+        //         int cnt = (a[i] - k) / v + ((a[i]-k) % v == 0 ? 0 : 1);
+        //         ff = ((long)cnt  * (long)(f + f+cnt-1) / 2l + ff) % mod;
+        //         f = (f + (long)cnt) % mod;
+        //         k = (int)(((long)k + (long)v * cnt) - a[i]);
+        //         i++; 
+        //     }
+        //     return (int)ff;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 把【二维数组题目，转化为: 有向图】来求：最长路径. 这个思路应该是对的
+        // // 【TODO：】存在，暴力所有边，能够保障全局最优解，但会 TLE; 想要有效边只连一个，却不能保障全局最优解
+        // public int maxConsistentColumns(int[][] a, int v) {
+        //     m = a.length; n = a[0].length;
+        //     g = new ArrayList [n];
+        //     Arrays.setAll(g, z -> new ArrayList<Integer>());
+        //     Set<Integer> s = new HashSet<>(); // 【头节点集】
+        //     int cnt = 0;
+        //     for (int j = 0; j < n-1; j++) {
+        //         cnt = 0;
+        //         System.out.println("\n j: " + j);
+        //         for (int k = 1; j+k < n && cnt < Math.max(n/10, 5); k++) {
+        //             boolean adj = true;
+        //             for (int i = 0; i < m; i++) 
+        //                 if (Math.abs(a[i][j+k] - a[i][j]) > v) {
+        //                     adj = false;
+        //                     break;
+        //                 }
+        //             if (adj) {// j ==> j+1 
+        //                 g[j].add(j+k);
+        //                 if (j == 0)
+        //                     s.add(j);
+        //                 System.out.println("j: " + j + " " + " ==> j+1: " + (j+1));
+        //                 cnt++;
+        //                 // continue;// 【TODO：】像是会跳过可能的全局最优解？？？是的！！这里的平衡是：保障全局最优解会TLE，与，贪心裁枝优化会 miss 掉全局最优解。。
+        //             } else { // adj=false
+        //                 if (j == n-2) break;
+        //                 // }
+        //                 s.add(j);
+        //                 s.add(j+k);
+        //                 // for (int k = 2; j+k < n; k++) {
+        //                 //     boolean nestedAdj = true;
+        //                 //     for (int i = 0; i < m; i++) 
+        //                 //         if (Math.abs(a[i][j+k] - a[i][j]) > v) {
+        //                 //             nestedAdj = false;
+        //                 //             break;
+        //                 //         }
+        //                 //     if (nestedAdj) {// j ==> j+1 
+        //                 //         g[j].add(j+k);
+        //                 //         System.out.println("j: " + j + " " + " ==> j+k: " + (j+k));
+        //                 //         //break;
+        //                 //     } else {
+        //                 //         s.add(j+k);
+        //                 //         System.out.println("j+k: " + (j+k));
+        //                 //     }
+        //                 // }
+        //                 // // 【暴力】所有可有连通的边，但有可能 TLE TLE TLE O（250*250*250 =62500*250 ？？？）
+        //                 // if (Math.abs(a[i][j] - a[i][j+k]) > v) {
+        //                 //     adj = false;
+        //                 //     break;
+        //                 // }
+        //                 // if (adj)
+        //                 //     g[j].add(j+k);
+        //             }
+        //         }
+        //     }
+        //     // 求【有向图：最长路径】
+        //     d = 1;
+        //     // for (int i = 0; i < n-1; i++)
+        //     for (int ori : s) {
+        //         dfs(ori, 1);
+        //         System.out.println("ori: " + ori + " " + "d: " + d);
+        //     }
+        //     return d;
+        // }
+        // int m, n, d;
+        // List<Integer> [] g;
+        // void dfs(int j, int dep) {
+        //     if (g[j].size() == 0) { // 【叶子节点】：求有向图、多子树，最大深度 d
+        //         if (dep > d)
+        //             d = dep;
+        //         return ;
+        //     }
+        //     for (int v : g[j]) 
+        //         dfs(v, dep+1);
+        // }
+
         // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // 【记忆化深搜】：狠像（左右边界串，不涉及毒串）
-        // 【TODO：】细节上存在小错误；亲爱的表哥的活宝妹，亲爱的表哥的活宝妹、笨宝妹，晚点儿再把这个破烂题目完整
-        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        static final int mod = (int)1e9 + 7;
-        public int interleaveCharacters(String S, String T, String tg) {
-            m = S.length(); n = T.length(); o = tg.length(); s = S.toCharArray(); t = T.toCharArray(); tt = tg.toCharArray();
-            qs = new ArrayList[26]; qt = new ArrayList[26];
-            Arrays.setAll(qs, z -> new ArrayList<Integer>()); Arrays.setAll(qt, z -> new ArrayList<Integer>());
-            for (int i = 0; i < m; i++) 
-                qs[s[i]-'a'].add(i);
-            for (int i = 0; i < n; i++) 
-                qt[t[i]-'a'].add(i);
-           f = new HashMap<>();
-            return dfs(0, 0, 0, 0, 0);
-        }
-        // 【记忆化深搜】：记忆状态定义
-        Map<Integer, Integer> f;
-        char [] s, t, tt;
-        List<Integer> [] qs, qt;
-        int m, n, o;
-        // S T tg IDX:  i  j      k; a/b: S T 0/1; 
-        int dfs(int i, int j, int k, int a, int b) {
-            if (k == o) return (a == 1 && b == 1 ? 1 : 0);
-            if (i >= m && a == 0 || j >= n && b == 0) return 0; // 没有从S T 两个串中，都取字符
-            int key = ((i << 10) | (j << 2) | (a << 1) | b); 
-            if (f.containsKey(key)) return f.get(key);
-            int idx = tt[k] - 'a';
-            int xx = Collections.binarySearch(qs[idx], i), yy = Collections.binarySearch(qt[idx], j);
-            int x = (xx >= 0 ? xx : -1 * (xx + 1)), y = (yy >= 0 ? yy : -1 * (yy + 1));
-            System.out.println("i: " + i + " " + "j: " + j + " " + "k: " + k + " " + "x: " + x + " " + "y: " + y);
-            long r = 0l;
-            if (qs[idx].size() > 0)
-                for (int w = x; w < qs[idx].size(); w++) {
-                    r = (r + dfs(qs[idx].get(w)+1, j, k+1, 1, b)) % mod;
-                    System.out.println("i: " + i + " " + "j: " + j + " " + "k: " + k + " " + "r: " + r);
-                }
-            if (qt[idx].size() > 0)
-                for (int w = y; w < qt[idx].size(); w++) {
-                    r = (r + dfs(i, qt[idx].get(w)+1, k+1, a, 1)) % mod;
-                    System.out.println("i: " + i + " " + "j: " + j + " " + "k: " + k + " " + "r: " + r);
-                }
-            f.put(key, (int)r);
-            return (int)r;
-        }        
     }    // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
     public static void main (String[] args) { 
         Solution s = new Solution (); 
 
-        String a = "n", b = "mmm", c = "nmmm";
-        System.out.println("a: " + a + " " + "b: " + b + " " + "c: " + c);
-       int r = s.interleaveCharacters(a, b, c);
+        System.out.println("a.length: " + a.length);
+        for (int z = 0; z < a.length; ++z)
+            System.out.println(Arrays.toString(a[z]));
+
+        int r = s.maxConsistentColumns(a, 36);
         System.out.println("r: " + r);
     }
 }
@@ -539,5 +734,6 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
