@@ -637,41 +637,162 @@ public class cmp {
         //     return (int)ff;
         // }
 
-        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // 把【二维数组题目，转化为: 有向图】来求：最长路径. 这个思路应该是对的
-        // 【TODO：】存在，暴力所有边，能够保障全局最优解，但会 TLE; 想要有效边只连一个，却不能保障全局最优解
-        public int maxConsistentColumns(int[][] a, int v) {
-            int m = a.length, n = a[0].length;
-            boolean [][] g = new boolean [n][n];
-            for (int i = 0; i < n; i++) 
-                for (int j = i+1; j < n; j++) {
-                    boolean connected = true;
-                    for (int k = 0; k < m; k++)
-                        if (Math.abs(a[k][i] - a[k][j]) > v) {
-                            connected = false;
-                            break;
-                        }
-                    if (connected)
-                        g[i][j] = true;
-                }
-            int [] f = new int [n];
-            Arrays.fill(f, 1);
-            for (int j = 0; j < n; j++)
-                for (int i = 0; i < j; i++)
-                    if (g[i][j])
-                        f[j] = Math.max(f[j], f[i] + 1);
-            return Arrays.stream(f).max().getAsInt();
-        }
-        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 把【二维数组题目，转化为: 有向图】来求：最长路径. 这个思路应该是对的
+        // // 【TODO：】存在，暴力所有边，能够保障全局最优解，但会 TLE; 想要有效边只连一个，却不能保障全局最优解
+        // public int maxConsistentColumns(int[][] a, int v) {
+        //     int m = a.length, n = a[0].length;
+        //     boolean [][] g = new boolean [n][n];
+        //     for (int i = 0; i < n; i++) 
+        //         for (int j = i+1; j < n; j++) {
+        //             boolean connected = true;
+        //             for (int k = 0; k < m; k++)
+        //                 if (Math.abs(a[k][i] - a[k][j]) > v) {
+        //                     connected = false;
+        //                     break;
+        //                 }
+        //             if (connected)
+        //                 g[i][j] = true;
+        //         }
+        //     int [] f = new int [n];
+        //     Arrays.fill(f, 1);
+        //     for (int j = 0; j < n; j++)
+        //         for (int i = 0; i < j; i++)
+        //             if (g[i][j])
+        //                 f[j] = Math.max(f[j], f[i] + 1);
+        //     return Arrays.stream(f).max().getAsInt();
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public String rearrangeString(String S, char x, char y) {
+        //     int n = S.length(); char [] s = S.toCharArray();
+        //     int l = 0, r = 0;
+        //     StringBuilder sb = new StringBuilder();
+        //     for (int i = 0; i < n; i++) {
+        //         char c = s[i];
+        //         if (c == x) l++;
+        //         else if (c == y) r++;
+        //         else sb.append(c);
+        //     }
+        //     for (int i = 0; i < r; i++)
+        //         sb.append(y);
+        //     for (int i = 0; i < l; i++)
+        //         sb.append(x);
+        //     return sb.toString();
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public long maximumValue(int n, int s, int m) {
+        //     return (n % 2 == 0 ? (long)s + m + (n == 2 ? 0 : (long)(m-1) * (n-2)/2l) : (n == 1 ? (long)s : (long)s + (long)(m-1) * (n-1)/2l+1));
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 【TODO：】感觉这个破烂题目，思路不太全。。。看提示看不懂。。。
+        // static final int mod = (int)1e9 + 7;
+        // public int minAdjacentSwaps(int[] a, int a, int b) {
+        //     int n = a.length, l = 0, r = 0, f = 0;
+        //     for (int v : a)
+        //         if (v < a) l ++;
+        //         else if (v > b) r ++;
+        //     int j = l, k = n-r;
+        //     for (int i = 0; i < n; i++) {
+        //     }
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 858/999 passed... 不知道细节嘯城写错了，今天不想再写这个破烂题目了。。
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int minCost(String S, String T, List<List<String>> rules, int[] costs) {
+        //     int n = S.length(), m = rules.size(); char [] s = S.toCharArray(), t = T.toCharArray();
+        //     int [] f = new int [n+1]; Arrays.fill(f, Integer.MAX_VALUE / 2); f[0] = 0;
+        //     Map<String, List<Integer>> [] ss = new HashMap[27];
+        //     Arrays.setAll(ss, z -> new HashMap<String, Integer>());
+        //     for (int i = 0; i < m; i++) {
+        //         char c = rules.get(i).get(0).charAt(0);
+        //         if (c != '*')
+        //             ss[c-'a'].computeIfAbsent(rules.get(i).get(0), z -> new ArrayList<>()).add(i);
+        //         else 
+        //             ss[26].computeIfAbsent(rules.get(i).get(0), z -> new ArrayList<>()).add(i);
+        //     }
+        //     for (int i = 0; i < n; i++) {
+        //         System.out.println("\n i: " + i);
+        //        if (s[i] == t[i]) {
+        //             f[i+1] = Math.min(f[i+1], f[i]);
+        //             continue;
+        //         }
+        //        for (String p : ss[s[i]-'a'].keySet())
+        //            if (i+p.length() <= n) {
+        //                for (int j : ss[s[i]-'a'].get(p)) {
+        //                    if (isMatched(p, S.substring(i, i+p.length())) && isMatched(rules.get(j).get(1), T.substring(i, i+p.length())))
+        //                        f[i+p.length()] = Math.min(f[i+p.length()], f[i] + costs[j] + getCnt(p));
+        //                }
+        //            } 
+        //        for (String p : ss[26].keySet())
+        //            if (i+p.length() <= n) {
+        //                for (int j : ss[26].get(p)) {
+        //                    if (isMatched(p, S.substring(i, i+p.length())) && isMatched(rules.get(j).get(1), T.substring(i, i+p.length())))
+        //                        f[i+p.length()] = Math.min(f[i+p.length()], f[i] + costs[j] + getCnt(p));
+        //                }
+        //            } 
+        //        System.out.println(Arrays.toString(f));
+        //     }
+        //   return (f[n] == Integer.MAX_VALUE / 2 ? -1 : f[n]);
+        // }
+        // boolean isMatched(String S, String T) {
+        //     int m = S.length(), n = T.length();
+        //     if (m != n) return false;
+        //     char [] s = S.toCharArray(), t = T.toCharArray();
+        //     for (int i = 0; i < n; i++)
+        //         if (s[i] != t[i] && s[i] != '*') return false;
+        //     return true;
+        // }
+        // int getCnt(String S) {
+        //     int n = S.length(), f = 0; char [] s = S.toCharArray();
+        //     for (char c : s) 
+        //         if (c == '*') f++;
+        //     return f;
+        // }
     }    // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
     public static void main (String[] args) { 
         Solution s = new Solution (); 
+        // String a = "sccgccc", b = "pnsfnsn";
+        //          // pnsfnsn
+        // List<List<String>> lls = new ArrayList<>();
+        // lls.add(List.of("eth*zlbjt*jk*fs*yi*","qqyquiwhthiijrpnuxp"));
+        // lls.add(List.of("c","s"));
+        // lls.add(List.of("ts*jhxrxi*zb*euxjvfu","qoryrrrijfongynejtaa"));
+        // lls.add(List.of("vastexmfbdych","tipshqfvkpesc"));
+        // lls.add(List.of("g","f"));
+        // lls.add(List.of("a*egap*j*r*ck","ktcawrutiyuxf"));
+        // lls.add(List.of("fj**c**o*","zudrkqxov"));
+        // lls.add(List.of("ldsdt*zydtla*obpmp","pgrjeuwxtwgbmmqmvf"));
+        // lls.add(List.of("u*hobjsw**smlt","xsbpdclshgypcn"));
+        // lls.add(List.of("xoiqwth*apzkwpm*ca","dgaggdekjxffyzzpng"));
+        // lls.add(List.of("c","n"));
+        // lls.add(List.of("s","p"));
+        // lls.add(List.of("kwhybsl*f*fpoj","qehglwiklxfmxk"));
+        //     int [] c = new int [] {82,818,136,176,206,14,230,512,176,98,672,559,250};
 
-        System.out.println("a.length: " + a.length);
-        for (int z = 0; z < a.length; ++z)
-            System.out.println(Arrays.toString(a[z]));
-
-        int r = s.maxConsistentColumns(a, 36);
+        "qhvpxyarqcwrxyobryhpghjqrbfmkpzunhyyhishjqrqivp"
+            target =
+            "jsxnxwiqgwuxznrjjhlwobxbpjuvpfbcxejhlwobxbpjsxn"
+            rules =
+            [["b","j"],
+             ["vgzjtlhhfdiy**m*","szvdzgzyuikxadvr"],
+             ["uifo*vktzdsj","ckmiazdpohmn"],
+             ["*yh**hjqr","jhlwobxbp"],
+             ["q*v*","jsxn"],
+             ["****qcwrx*o","xwiqgwuxznr"],
+             ["fmk*zunh","uvpfbcxe"],
+             ["tjvwzdnglkckr*","ctncmmxdhfuolz"],
+             ["*a*","sxu"],
+             ["mhludrcowuckzdbbbh*","xbpmhypyvacjescsuxn"],
+             ["vskds*w*i*sbw*qwk*a","pdblrviscwnrdztkurv"],
+             ["*w*lj","lspfa"],
+             ["euqh*rnfw","ehmvfttzo"]]
+            costs =
+            [133,195,595,585,942,234,625,927,969,217,511,958,336]
+        int r = s.minCost(a, b, lls, c);
         System.out.println("r: " + r);
     }
 }
@@ -681,6 +802,15 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
