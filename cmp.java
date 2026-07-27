@@ -752,47 +752,430 @@ public class cmp {
         //         if (c == '*') f++;
         //     return f;
         // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public boolean canReach(int[] s, int[] t) {
+        //     int [][] dirs = {{-2, -1}, {-2, 1}, {-1, -2}, {-1, 2}, {2, -1}, {2, 1}, {1, -2}, {1, 2}};
+        //     Deque<int []> q = new ArrayDeque<>();
+        //     q.offerFirst(new int [] {s[0], s[1], 0});;
+        //     int n = 8;
+        //     while (!q.isEmpty()) {
+        //         int [] r = q.pollLast();
+        //         if (r[0] == t[0] && r[1] == t[1] && r[2] % 2 == 0) return true;
+        //         else if (r[0] == t[0] && r[1] == t[1]) return false;
+        //         for (int [] d : dirs) {
+        //             int i = r[0] + d[0], j = r[1] + d[1];
+        //             if (i < 0 ||i >= n || j < 0 || j >= n) continue;
+        //             q.offerFirst(new int [] {i, j, r[2]+1});
+        //         }
+        //     }
+        //     return false;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public class Node {
+        //     TreeNode f;
+        //     int v, cnt;
+        //     Node l, r;
+        //     public Node(TreeNode root) {
+        //         this.f = root;
+        //         v = root.val;
+        //         // l = null; r = null;
+        //         cnt = 0;
+        //     }
+        // }
+        // void buildNodeTree(Node f, TreeNode r) {
+        //     if (r.left == null && r.right == null) {
+        //         f.v = r.val;
+        //         f.cnt = 1; // 叶子节点
+        //         return ;
+        //     }
+        //     if (r.left != null) {
+        //         f.l = new Node(r.left);
+        //         buildNodeTree(f.l, r.left);
+        //     }
+        //     if (r.right != null) {
+        //         f.r = new Node(r.right);
+        //         buildNodeTree(f.r, r.right);
+        //     }
+        //     f.cnt = (f.l != null ? f.l.cnt : 0) + (f.r != null ? f.r.cnt : 0) + (f.v >= Math.max((f.l != null ? f.l.v : 0), (f.r != null ? f.r.v : 0)) ? 1 : 0);
+        //     f.v = Math.max(f.v, Math.max((f.l != null ? f.l.v : 0), (f.r != null ? f.r.v : 0)));
+        // }
+        // public int countDominantNodes(TreeNode root) {
+        //     Node r = new Node(root);
+        //     buildNodeTree(r, root);
+        //     return r.cnt;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int maximalRectangle(char [][] a) {
+        //     int m = a.length, n = a[0].length, r = 0;
+        //     // col                        row
+        //     int [][] f = new int [m][n+1], g = new int [m+1][n];
+        //     for (int i = 0; i < m; i++)
+        //         for (int j = n-1; j >= 0; j--) {
+        //             if (a[i][j] == '1') f[i][j] = f[i][j+1] + 1;
+        //             else f[i][j] = 0;
+        //         }
+        //     for (int j = 0; j < n; j++)
+        //         for (int i = m-1; i >= 0; i--) {
+        //             if (a[i][j] == '1') g[i][j] = g[i+1][j] + 1;
+        //             else g[i][j] = 0;
+        //         }
+        //     System.out.println("f.length: " + f.length);
+        //     for (int z = 0; z < f.length; ++z)
+        //         System.out.println(Arrays.toString(f[z]));
+        //     System.out.println("g.length: " + g.length);
+        //     for (int z = 0; z < g.length; ++z)
+        //         System.out.println(Arrays.toString(g[z]));
+        //     for (int i = 0; i < m; i++)
+        //         for (int j = 0; j < n; j++) {
+        //             if (a[i][j] == '0') continue;
+        //             // 确定长方形的两条边长
+        //             // 【长条：某边为 1】
+        //             if (f[i][j] == 1 || g[i][j] == 1) {
+        //                 r = Math.max(r, f[i][j] * g[i][j]);
+        //                 continue;
+        //             }
+        //             // 两条边都大于 1: 【TODO：】遍历两条边上所有可能性——每种可能性都要确认此长方形的合法性，是否全为1 等
+        //         }
+        //     return r;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 【TODO：】不知道这个破烂题目要怎么 debug 晚点儿再写这个破烂题目
+        // public int oddEvenJumps(int[] a) {
+        //     n = a.length;
+        //     f = new int [n]; g = new int [n];
+        //     Arrays.fill(f, -1); Arrays.fill(g, -1);
+        //     ArrayDeque<Integer> q = new ArrayDeque<>(), t = new ArrayDeque<>();
+        //     // 【单调递减队列】：
+        //     for (int i = n-1; i >= 0; i--) {
+        //         while (!q.isEmpty() && a[i] > a[q.peekFirst()]) 
+        //             t.offerFirst(q.pollFirst());
+        //         if (!q.isEmpty())
+        //             f[i] = q.peekFirst();
+        //         q.offerFirst(i);
+        //         while (!t.isEmpty())
+        //             q.offerFirst(t.pollLast());
+        //     }
+        //     q.clear(); t.clear();
+        //     // 【单调递增队列】：
+        //     for (int i = n-1; i >= 0; i--) {
+        //         while (!q.isEmpty() && a[i] < a[q.peekFirst()]) 
+        //             t.offerFirst(q.pollFirst());
+        //         if (!q.isEmpty())
+        //             g[i] = q.peekFirst();
+        //         q.offerFirst(i);
+        //         while (!t.isEmpty())
+        //             q.offerFirst(t.pollLast());
+        //     }
+        //     System.out.println(Arrays.toString(f));
+        //     System.out.println(Arrays.toString(g));
+        //   int ans = 0;
+        //     for (int i = 0; i < n; i++) 
+        //         if (canReach(i)) {
+        //             ans++;
+        //             System.out.println("i: " + i + " " + "ans: " + ans);
+        //         }
+        //     return ans;
+        // }
+        // int [] f, g;
+        // int n;
+        // boolean canReach(int idx) {
+        //     int i = 1;
+        //     while (idx != n-1) {
+        //         if (i % 2 == 1 && f[idx] != -1) {
+        //             idx = f[idx];
+        //             i++;
+        //         } else if (i % 2 == 0 && g[idx] != -1) {
+        //             idx = g[idx];
+        //             i++;
+        //         } else // if (f[idx] == -1 && g[idx] == -1)
+        //             return false;
+        //     }
+        //     return true;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 亲爱的表哥的活宝妹，还晃习惯与动规，先写【记忆化深搜】
+        // // 【TODO：】感觉，明明是【区间型动规】可是却不知道怎么实时更新累加后的和。。。
+        // // 一方面，亲爱的表哥的活宝妹，确实猊主没有练习动规，忘记了狠多算法和细节；另一方面，感觉现在睡眠状态不佳的笨宝妹，脑袋昏昏。。。
+        // // 亲爱的表哥的活宝妹，晚上或是明天再接着写这些破烂动规！！！
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int mergeStones(int[] a, int k) {
+        //     n = a.length; this.k = k; 
+        //     if (k != 2 && n % k != k-1) return -1;
+        //     g = new int [n+1];
+        //     for (int i = 0; i < n; i++)
+        //         g[i+1] = g[i] + a[i];
+        //     f = new int [n][n];
+        //     for (int i = 0; i < n; i++)
+        //         Arrays.fill(f[i], Integer.MAX_VALUE / 2);
+        //     dfs(0, n-1);
+        //     System.out.println("f.length: " + f.length);
+        //     for (int z = 0; z < f.length; ++z)
+        //         System.out.println(Arrays.toString(f[z]));
+        //     return f[0][n-1];
+        //     // return dfs(0, n-1);
+        // }
+        // int [][] f;
+        // int [] g;
+        // int n, k;
+        // int dfs(int i, int j) {
+        //     if (j-i < k-1) return Integer.MAX_VALUE / 2;
+        //     if (f[i][j] != Integer.MAX_VALUE / 2) return f[i][j];
+        //     if (j - i == k-1) return f[i][j] = g[j+1] - g[i];
+        //     int r = Integer.MAX_VALUE / 2;
+        //     for (int x = i+k-1; x <= j; x++) 
+        //         r = Math.min(r, (x == i+k-1 ? 0 : dfs(i, x-k)) + g[x+1] - g[x-k+1] + dfs(x+1, j));
+        //     return f[i][j] = r;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 【TODO：】晚点儿再写这个破烂题目
+        // public int minTaps(int n, int[] a) {
+        //     int r = 1;
+        //     List<int []> l = new ArrayList<>();
+        //     for (int i = 0; i <= n; i++) {
+        //         if (a[i] == 0) continue;
+        //         l.add(new int [] {i-a[i], i+a[i]});
+        //     }
+        //     Collections.sort(l, (x, y)->x[0] != y[0] ? x[0] - y[0] : x[1] - y[1]);
+        //     if (l.size() == 0 || l.get(0)[0] > 0) return -1;
+
+        //     for (int i = 0; i < l.size(); i++)
+        //         System.out.println(Arrays.toString(l.get(i)));
+
+        //     int i = 0, j = l.get(0)[1], left = l.get(i)[0];
+        //     while (j < n) {
+        //         // 【左端点：相同】选（右端点，能够延伸的最远处）
+        //         while (i < l.size() && l.get(i)[0] == left) {
+        //             j = Math.max(j, l.get(i)[1]);
+        //             i++;
+        //         }
+        //         if (j >= n) return r;
+        //         // 【左端点右移】，但（右端点，仍在被覆盖范围内）
+        //         while (i < l.size() && l.get(i)[1] <= j) i++;
+        //         if (i >= l.size()) return (j >= n ? r : -1);
+        //         if (l.get(i)[0] > j) return -1;
+        //         r++;
+        //         left = l.get(i)[0];
+        //     }
+        //     return r;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public class Node {
+        //     TreeNode f;
+        //     Node l, r;
+        //     int s;
+        //     boolean isBST;
+        //     int minL, maxL, minR, maxR; // <<<<<<<<<<<<<<<<<<<< 这四个变量，写得昏昏的。。。
+        //     public Node(TreeNode r) {
+        //         this.f = r;
+        //         s = r.val;
+        //     }
+        // }
+        // void buidNodeTree(Node f, TreeNode g) {
+        //     if (g.left == null && g.right == null) {
+        //         f.isBST = true;
+        //         return ;
+        //     }
+        //     if (g.left != null) {
+        //         f.l = new Node(g.left);
+        //         buildNodeTree(f.l, g.left);
+        //         // f.minL = (f.l.l == null ? f.l.)
+        //         // f.maxL = f.l.maxL; // 【TODO：】这里像是写得不对
+        //     }
+        //     if (g.right != null) {
+        //         f.r = new Node(g.right);
+        //         buildNodeTree(f.r, g.right);
+        //         // f.minR = f.r.min
+        //     }
+        //     // 【左子节点。或、右子节点：单侧为空】
+        //     if (g.left == null || g.right == null) {
+        //         if (g.left == null) {
+        //             if (f.r.isBST && f.f.val < f.r.minL) { // 这里写得不对。。。
+        //                 f.isBST = true;
+        //                 f.minR = (f.r.l == null ? f.r.f.val : f.r.minL);
+        //             }
+        //         }
+        //     }
+        // }
+        // public int maxSumBST(TreeNode root) {
+        //     Node r = new Node(root);
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 明明应该是最经典、最典型的【动规】：人数狠少 n[1,2,...10]
+        // // 亲爱的表哥的活宝妹，亲爱的表哥的活宝妹、笨宝妹的脑袋真昏：就不知道细节上哪里写错了。。看来晚餐得少吃一点儿了；调整几天，再不行晚餐得在学校里解决
+        // // 亲爱的表哥的活宝妹，今天不想再写这个破烂题目了，明天再接着这里写；看明天能否把这个细节自己纠正过来
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // static final int mod = (int)1e9 + 7;
+        // public int numberWays(List<List<Integer>> l) {
+        //     int n = l.size(), m = 40, max = 0;
+        //     List<Integer> [] a = new ArrayList [m];
+        //     Arrays.setAll(a, z -> new ArrayList<Integer>());
+        //     for (int j = 0; j < n; j++) 
+        //         for (int i : l.get(j)) {
+        //             a[i-1].add(j); // 【每顶帽子】：有哪些人爱戴
+        //             max = Math.max(max, i);
+        //         }
+        //     System.out.println("a.size(): " + a.length);
+        //     for (int i = 0; i < max; i++) {
+        //         // System.out.println("a[i].size(): " + a[i].size());
+        //         System.out.println(Arrays.toString(a[i].toArray()));
+        //     }
+
+        //         int [][] f = new int [max][1 << n];
+        //         // f[0][0] = 1;
+        //         for (int i = 0; i < max; i++)
+        //             f[i][0] = 1;
+        //     // 【遍历帽子】
+        //     for (int i = 0; i < max; i++) {
+        //         if (a[i].size() == 0) continue;
+        //         // 遍历：【1 << n】 peopleMask
+        //         for (int j = 0; j < (1 << n); j++) {
+        //             // 遍历：【爱戴：此顶帽子的人】
+        //             for (int k : a[i]) {
+        //                 if ((j & (1 << k)) == 0) { // 可以把此帽子，给它戴
+        //                     // System.out.println("i: " + i + " " + "Integer.toBinaryString(j): " + Integer.toBinaryString(j) + " " + "k: " + k);
+        //                     f[i][j | (1 << k)] = (f[i][j | (1 << k)] + (i == 0 ? 1 : f[i-1][j])) % mod;
+        //                     // if (i > 0)
+        //                     //     System.out.println("f[i-1][j]: " + f[i-1][j] + " " + "f[i][j|(1 <<k)]: " + f[i][j|(1 <<k)]);
+        //                     // else System.out.println("f[i][j | (1 << k)]: " + f[i][j | (1 << k)]);
+        //                 } 
+        //             }
+        //         }
+        //     }
+        //     System.out.println("f.length: " + f.length);
+        //     for (int z = 0; z < f.length; ++z)
+        //         System.out.println(Arrays.toString(f[z]));
+        //    return f[max-1][(1 << n)-1];
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int largestInteger(int n, int s) {
+        //     if (s > 45 || s == 45 && n < 5) return -1;
+        //     StringBuilder sb = new StringBuilder();
+        //     while (s >= 0 && n > 0) {
+        //         if (s < 10) {
+        //             sb.append((char)(s+'0'));
+        //             s = 0;
+        //             n--;
+        //         } else {
+        //             sb.append('9');
+        //             s -= 9;
+        //             n--;
+        //         }
+        //     }
+        //     if (n == 0) return (s == 0 ? Integer.parseInt(sb.toString()) : -1);
+        //     return Integer.parseInt(sb.toString());
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public List<List<Integer>> aggregateTimeSeries(int[][] a, int[][] g) {
+        //     int m = a.length, n = g.length, i = 0, j = 0, s = 0, t = 0, ti = 0, v = 0;
+        //     List<List<Integer>> ll = new ArrayList<>();
+        //     while (i < m || j < n) {
+        //         if (i >= m || j >= n) {
+        //             if (i >= m)
+        //                 while (j < n) {
+        //                     ll.add(List.of(g[j][0], g[j][1]));
+        //                     j++;
+        //                 }
+        //             if (j >= n) 
+        //                 while (i < m) {
+        //                     ll.add(List.of(a[i][0], a[i][1]));
+        //                     i++;
+        //                 }
+        //             break;
+        //         }
+        //         s = a[i][0];
+        //         t = g[j][0];
+        //         ti = 0;
+        //         v = 0;
+        //         if (s < t) {
+        //             ti = s;
+        //             v = a[i][1] + g[j][1];
+        //             i++;
+        //         } else if (s == t) {
+        //             ti = s;
+        //             v = a[i][1] + g[j][1];
+        //             i++; j++;
+        //         } else { // s > t
+        //             ti = t;
+        //             v = a[i][1] + g[j][1];
+        //             j++;
+        //         }
+        //         ll.add(List.of(ti, v));
+        //     }
+        //     return ll;
+        // }
+
+        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // 亲爱的表哥的活宝妹，不知道细节哪里写错了。。。晚点儿再写这个破烂题目
+        public long minCost(int m, int n, int[][] a) {
+            f = new long [m][n][2]; this.m = m; this.n = n; this.a = a;
+            for (int i = 0; i < m; i++)
+                for (int j = 0; j < n; j++)
+                    Arrays.fill(f[i][j], Long.MAX_VALUE / 2);
+            Arrays.fill(f[0][0], 1);
+            dij(0, 0, 1);
+            // dij(0, 0, 0);
+            return Math.max(f[m-1][n-1][0], f[m-1][n-1][1]); 
+        }
+        long [][][] f;
+        int [][] a;
+        int m, n;
+        int [][] dirs = {{1, 0}, {0, 1}, {0, -1}, {-1, 0}};
+        void dij(int x, int y, int pp) {
+            Queue<long []> q = new PriorityQueue<>((u, v) -> (Long.compare(u[3], v[3])));
+            q.offer(new long [] {(long)x, (long)y, (long)pp, 1l});
+            long val = 0;
+            while (!q.isEmpty()) {
+                long [] cur = q.poll();
+                int i = (int)cur[0], j = (int)cur[1], p = (int)cur[2]; long v = cur[3];
+                if (i == m-1 && j == n-1) {
+                    f[i][j][p] = v;
+                    return ;
+                }
+                if (f[i][j][1-p] > v + (long)a[i][j]) {
+                    f[i][j][1-p] = v + (long)a[i][j];
+                    q.offer(new long [] {i, j, 1-p, v + (long)a[i][j]}); // for waiting
+                }
+                for (int [] d : dirs) {
+                    int ii = i + d[0], jj = j + d[1];
+                    if (ii < 0 || ii >= m || jj < 0 || jj >= n) continue;
+                    if (p == 0) { // Left Up
+                        if (d[0] == -1 && d[1] == 0 || d[0] == 0 && d[1] == -1) 
+                            val = v + (long)(ii + 1) * (jj + 1);
+                        else // breaking rules
+                            val = v + (long)(ii + 1) * (jj + 1) + (long)a[i][j];
+                    } else { // p = 1;
+                        if (d[0] == -1 && d[1] == 0 || d[0] == 0 && d[1] == -1) // breaking rules
+                            val = v + (long)(ii + 1) * (jj + 1) + (long)a[i][j];
+                        else 
+                            val = v + (long)(ii + 1) * (jj + 1);
+                    }
+                    if (f[ii][jj][1-p] > val) {
+                        f[ii][jj][1-p] = val;
+                        q.offer(new long [] {ii, jj, 1-p, val});
+                    }
+                }
+            }
+        }        
     }    // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
     public static void main (String[] args) { 
         Solution s = new Solution (); 
-        // String a = "sccgccc", b = "pnsfnsn";
-        //          // pnsfnsn
-        // List<List<String>> lls = new ArrayList<>();
-        // lls.add(List.of("eth*zlbjt*jk*fs*yi*","qqyquiwhthiijrpnuxp"));
-        // lls.add(List.of("c","s"));
-        // lls.add(List.of("ts*jhxrxi*zb*euxjvfu","qoryrrrijfongynejtaa"));
-        // lls.add(List.of("vastexmfbdych","tipshqfvkpesc"));
-        // lls.add(List.of("g","f"));
-        // lls.add(List.of("a*egap*j*r*ck","ktcawrutiyuxf"));
-        // lls.add(List.of("fj**c**o*","zudrkqxov"));
-        // lls.add(List.of("ldsdt*zydtla*obpmp","pgrjeuwxtwgbmmqmvf"));
-        // lls.add(List.of("u*hobjsw**smlt","xsbpdclshgypcn"));
-        // lls.add(List.of("xoiqwth*apzkwpm*ca","dgaggdekjxffyzzpng"));
-        // lls.add(List.of("c","n"));
-        // lls.add(List.of("s","p"));
-        // lls.add(List.of("kwhybsl*f*fpoj","qehglwiklxfmxk"));
-        //     int [] c = new int [] {82,818,136,176,206,14,230,512,176,98,672,559,250};
 
-        "qhvpxyarqcwrxyobryhpghjqrbfmkpzunhyyhishjqrqivp"
-            target =
-            "jsxnxwiqgwuxznrjjhlwobxbpjuvpfbcxejhlwobxbpjsxn"
-            rules =
-            [["b","j"],
-             ["vgzjtlhhfdiy**m*","szvdzgzyuikxadvr"],
-             ["uifo*vktzdsj","ckmiazdpohmn"],
-             ["*yh**hjqr","jhlwobxbp"],
-             ["q*v*","jsxn"],
-             ["****qcwrx*o","xwiqgwuxznr"],
-             ["fmk*zunh","uvpfbcxe"],
-             ["tjvwzdnglkckr*","ctncmmxdhfuolz"],
-             ["*a*","sxu"],
-             ["mhludrcowuckzdbbbh*","xbpmhypyvacjescsuxn"],
-             ["vskds*w*i*sbw*qwk*a","pdblrviscwnrdztkurv"],
-             ["*w*lj","lspfa"],
-             ["euqh*rnfw","ehmvfttzo"]]
-            costs =
-            [133,195,595,585,942,234,625,927,969,217,511,958,336]
-        int r = s.minCost(a, b, lls, c);
+        int [][] a = new int [][] {{0,7},{3,2}};
+        System.out.println("a.length: " + a.length);
+        for (int z = 0; z < a.length; ++z)
+            System.out.println(Arrays.toString(a[z]));
+
+        long r = s.minCost(2, 2, a);
         System.out.println("r: " + r);
     }
 }
@@ -802,6 +1185,13 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
