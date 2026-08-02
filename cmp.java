@@ -1360,14 +1360,117 @@ public class cmp {
         //             f[0][i] = 0;
         //         else f[0][i] = Integer.MAX_VALUE / 2;
         // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public long maxPairStrength(int[] a) {
+        //     int n = a.length;
+        //     long f = Long.MIN_VALUE;
+        //     for (int i = 0; i < n; i++)
+        //         for (int j = 0; j < n; j++) {
+        //             if (i == j) continue;
+        //             int v = gcd(a[i], a[j]);
+        //             f = Math.max(f, (long)a[i] * a[j] / ((long)(v * v)));
+        //         }
+        //     return f;
+        // }
+        // int gcd(int x, int y) {
+        //     if (y == 0) return x;
+        //     return gcd(y, x % y);
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int countRatioSubarrays(int[] a, int x, int y) {
+        //     int n = a.length, r = 0;
+        //     int [] f = new int [n];
+        //     f[0] = (a[0] % 2 == 1 ? 1 : 0);
+        //     for (int i = 1; i < n; i++)
+        //         if (a[i] % 2 == 1)
+        //             f[i] = f[i-1] + 1;
+        //         else f[i] = f[i-1];
+        //     for (int i = 0; i < n; i++)
+        //         for (int j = i; j < n; j++) {
+        //             int o = f[j] - (i == 0 ? 0 : f[i-1]), e = j - i + 1 - o;
+        //             if (o > 0 && e * y <= x * o)
+        //                 r++;
+        //         }
+        //     return r;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 这个破烂题目出得真恶心人，亲爱的表哥的活宝妹，晚点儿再写这个破烂题目
+        // public int[] countTasks(int[] a, int[] b) {
+        //     int n = a.length, m = b.length, idx = 0, t = 0;
+        //     long [] p = new long [n]; p[0] = (long)a[0];
+        //     for (int i = 1; i < n; i++) 
+        //         p[i] = p[i-1] + (long)a[i];
+        //     int [] r = new int [m];
+        //     for (int i = 0; i < m; i++) {
+        //         System.out.println("\n i: " + i);
+        //         if (i == 0 || p[i-1] == 0) {
+        //             if (b[i] >= p[n-1]) {
+        //                 r[i] = 0;
+        //                 idx = 0;
+        //                 t = a[idx];
+        //                 continue;
+        //             }
+        //             int j = Arrays.binarySearch(p, (long)b[i]);
+        //             if (j >= 0) {
+        //                 idx = (j == n-1 ? 0 : j+1); // idx 完全没有开始
+        //                 t = a[idx];
+        //                 r[i] = n-1 - j;
+        //             } else {
+        //                 idx = -1 * j - 1;
+        //                 r[i] = n-1 - idx + 1;
+        //                 System.out.println("idx: " + idx + " " + "i: " + i); // <<<<<<<<<<<<<<<<<<<<
+        //                 // if (idx == n) 
+        //                 //     r[i] = 0;
+        //                 t = (int)(p[idx] - (long)b[i]); // <<<<<<<<<<<<<<<<<<<< 
+        //             }
+        //         } else {
+        //             int j = Arrays.binarySearch(p, idx, n, p[idx] + (long)b[i] - (long)t);
+        //             System.out.println("j: " + j);
+        //             if (j >= 0) {
+        //                 r[i] = n-1 - j - (j == idx ? 1 : 0);
+        //                 idx = (j == n-1 ? 0 : j+1); // idx 完全没有开始
+        //                 t = a[idx];
+        //             } else {
+        //                 idx = -1 * j - 1;
+        //                 r[i] = n-1 - idx + 1; 
+        //                 System.out.println("idx 二: " + idx + " " + "i: " + i + "; r[i]: " + r[i]); // <<<<<<<<<<<<<<<<<<<<
+        //                 if (idx == n) {
+        //                     idx = 0; t = a[idx];
+        //                     // r[i] = 0;
+        //                 } else 
+        //                     t = (int)(p[idx] - (long)b[i]); // <<<<<<<<<<<<<<<<<<<< 
+        //             }
+        //         }
+        //     }
+        //     return r;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int countRatioSubarrays(int[] a, int x, int y) { // TLE TLE TLE: Time Limit Exceeded 561 / 601 testcases passed
+        //     int n = a.length, r = 0;
+        //     int [] f = new int [n];
+        //     f[0] = (a[0] % 2 == 1 ? 1 : 0);
+        //     for (int i = 1; i < n; i++)
+        //         if (a[i] % 2 == 1)
+        //             f[i] = f[i-1] + 1;
+        //         else f[i] = f[i-1];
+        //     for (int i = 0; i < n; i++)
+        //         for (int j = i; j < n; j++) {
+        //             int o = f[j] - (i == 0 ? 0 : f[i-1]), e = j - i + 1 - o;
+        //             if (o > 0 && (long)e * y <= (long)x * o)
+        //                 r++;
+        //         }
+        //     return r;
+        // }
     }    // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
     public static void main (String[] args) { 
         Solution s = new Solution (); 
 
-        System.out.println(Arrays.toString(a));
-
-        int r = s.maximumWidth(a);
-        System.out.println("r: " + r);
+        int [] r = s.countTasks(a, b);
+        System.out.println(Arrays.toString(r));
     }
 }
 // ListNode head = new ListNode(a0]);   
@@ -1376,7 +1479,6 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
-// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
