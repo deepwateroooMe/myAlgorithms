@@ -1694,7 +1694,7 @@ public class cmp {
      //        System.out.println("f.length: " + f.length);
      //        for (int z = 0; z < f.length; ++z)
      //            System.out.println(Arrays.toString(f[z]));
-     //       int min = 0, max = Math.max(Math.min(m/2, n), Math.min(n/2, m)), ans = 0;
+     //       int min = 1, max = Math.max(Math.min(m/2, n), Math.min(n/2, m)), ans = 0;
      //       System.out.println("min: " + min + " " + "max: " + max);
      //       while (min <= max) {
      //            int mid = (min + max) / 2;
@@ -1715,17 +1715,15 @@ public class cmp {
      //                if (a[i][j] == 0) continue;
      //                System.out.println("i: " + i + " " + "j: " + j + " k: " + k + " (f[i+k][j+k] - f[i+1][j] - f[i][j+1] + f[i][j] == k * k): " + (f[i+k][j+k] - f[i+1][j] - f[i][j+1] + f[i][j] == k * k));
      //                if (f[i+k][j+k] - f[i+1][j] - f[i][j+1] + f[i][j] == k * k) {
-     //                    System.out.println("entered here");
      //                    // 【扫右侧】
-     //                    for (int x = i; x+k < m; x++)
-     //                        for (int y = j+k; y+k < n; y++) {
+     //                    for (int x = i; x+k <= m; x++)
+     //                        for (int y = j+k; y+k <= n; y++) {
      //                            // 亲爱的表哥的活宝妹的脑袋，在这里卡住了，不知道是怎么了。。。亲爱的表哥的活宝妹的脑袋，改天再写这个破烂题目...
-     //                            System.out.println("x: " + x + " " + "y: " + y);
      //                            if (a[x][y] == 0) continue;
-     //                            System.out.println("x: " + x + " " + "y: " + y + " " + "a[x][y]: " + a[x][y]);
-     // System.out.println("entered here"); // <<<<<<<<<<<<<<<<<<<< 
-     //                            System.out.println("x: " + x + " " + "y: " + y + " " + "(f[x+k][y+k] - f[x+1][y] - f[x][y+1] + f[x][y]): " + (f[x+k][y+k] - f[x+1][y] - f[x][y+1] + f[x][y]));
-     //                            System.out.println("x: " + x + " " + "y: " + y + " " + "(f[x+k][y+k] - f[x+1][y] - f[x][y+1] + f[x][y] == k * k): " + (f[x+k][y+k] - f[x+1][y] - f[x][y+1] + f[x][y] == k * k));
+     // //                            System.out.println("x: " + x + " " + "y: " + y + " " + "a[x][y]: " + a[x][y]);
+     // // System.out.println("entered here"); // <<<<<<<<<<<<<<<<<<<< 
+     // //                            System.out.println("x: " + x + " " + "y: " + y + " " + "(f[x+k][y+k] - f[x+1][y] - f[x][y+1] + f[x][y]): " + (f[x+k][y+k] - f[x+1][y] - f[x][y+1] + f[x][y]));
+     // //                            System.out.println("x: " + x + " " + "y: " + y + " " + "(f[x+k][y+k] - f[x+1][y] - f[x][y+1] + f[x][y] == k * k): " + (f[x+k][y+k] - f[x+1][y] - f[x][y+1] + f[x][y] == k * k));
      //                            if (f[x+k][y+k] - f[x+1][y] - f[x][y+1] + f[x][y] == k * k) 
      //                                return true;
      //                        }
@@ -1738,17 +1736,230 @@ public class cmp {
      //            }
      //        return false;
      //    }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int elevatorRequests(int n, int[] a) {
+        //     int f = 0, r = 0;
+        //     for (int v : a) 
+        //         if (v != r) {
+        //             f += Math.abs(r - v);
+        //             r = v;
+        //         }
+        //     return f;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int minOperations(String s) {
+        // }
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int kthDigit(long k) {
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 亲爱的表哥的活宝妹，解决了：从【电梯起始位置 v】这一个特定特殊位置，（先下后上，与、先上后下）的最优解
+        // // 【TODO：】但，题目需要尝试【从 ai 数组中，任一 idx】起始，（先下后上，与、先上后下）的全局最优解
+        // // 【TODO：】感觉，要用到（差分数组）的什么狗屁性质。。。
+        // public long elevatorRequests(int n, int v, int[] a) {
+        //     Arrays.sort(a);
+        //     n = a.length;
+        //     System.out.println(Arrays.toString(a));
+        // int idx = Arrays.binarySearch(a, v), cur = v; // cur: 【当前电梯在哪层】
+        //     int r = (idx >= 0 ? idx-1 : -1 * idx-1 - 1), l = (idx >= 0 ? idx + 1 : -1 * idx-1);
+        //     long f = Long.MAX_VALUE / 2, ff = 0l, rr = 0l;
+        //     // 【先下后上】
+        //     if (r >= 0) 
+        //         for (int i = r; i >= 0; i--) {
+        //             rr += (long)(cur - a[i]); // 到达（当前楼层）所需要的累积时间
+        //             ff += rr; // 【总 panelty】
+        //             cur = a[i];
+        //         }
+        //  if (l < n)
+        //         for (int i = l; i < n; i++) {
+        //             rr += (long)(a[i] - cur); // 到达（当前楼层）所需要的累积时间
+        //             ff += rr; // 【总 panelty】
+        //             cur = a[i];
+        //         }
+        //    f = Math.min(f, ff);
+        //     // 【先上后下】
+        //    cur = v; ff = 0l; rr = 0l;
+        //     if (l < n)
+        //         for (int i = l; i < n; i++) {
+        //             rr += (long)(a[i] - cur); // 到达（当前楼层）所需要的累积时间
+        //             ff += rr; // 【总 panelty】
+        //             cur = a[i];
+        //         }
+        //     if (r >= 0) 
+        //         for (int i = r; i >= 0; i--) {
+        //             rr += (long)(cur - a[i]); // 到达（当前楼层）所需要的累积时间
+        //             ff += rr; // 【总 panelty】
+        //             cur = a[i];
+        //         }
+        //     f = Math.min(f, ff);
+        //     return f;
+        // }
+        // int []  a = new int []  {10, 4, 12, 19, 20, 18, 15, 6, 14, 3, 0};
+        // long r = s.elevatorRequests(22, 4, a);
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int nearestDrone(int[][] a, int[] b) {
+        //     int n = a.length, r = -1, f = Integer.MAX_VALUE / 2;
+        //     for (int idx = 0; idx < n; idx++) {
+        //         int [] v = a[idx];
+        //         int i = v[0], j = v[1], d = v[2];
+        //         int dd = Math.abs(i - b[0]) + Math.abs(j - b[1]);
+        //         if (dd <= d && dd < f) {
+        //             r = idx;
+        //             f = dd;
+        //         }
+        //     }
+        //     return r;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int minPenalty(int v, int[] a, int[] b) {
+        //     int m = b.length, n = a.length, min = 0;
+        //     Arrays.sort(a); // 【灯：升序】
+        //     for (int i = 0; i < m; i++) {
+        //         int mod = b[i] % v;
+        //         if (mod < a[n-1]) continue;
+        //         if (v - mod > min) 
+        //             min = v - mod;
+        //     }
+        //     return min;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public boolean isPalindromic(String S) {
+        //     StringBuilder sb = new StringBuilder("");
+        //     for (char c : S.toCharArray()) {
+        //         String tmp = Integer.toBinaryString(97+c-'a');
+        //         if (tmp.length() < 8) {
+        //             for (int i = 0; i < 8-tmp.length(); i++) 
+        //                 sb.append('0');
+        //         }
+        //         sb.append(tmp);
+        //     }
+        //     int n = sb.length();
+        //     // System.out.println("sb.toString(): " + sb.toString());
+        //     for (int i = 0; i < n/2+n%2; i++) 
+        //         if (sb.charAt(i) != sb.charAt(n-1-i)) return false;
+        //     return true;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public List<List<Integer>> findDisappearedNumbers(int[] a, int l, int r) {
+        //     int n = a.length;
+        //     Arrays.sort(a);
+        //     List<List<Integer>> f = new ArrayList<>();
+        //     if (r <= a[0]) {
+        //         if (r == a[0] && l == r) return f;
+        //         f.add(List.of(l, (r == a[0] ? r-1 : r)));
+        //         return f;
+        //     } else if (a[n-1] <= l) {
+        //         if (a[n-1] == l) {
+        //             if (l == r) return f;
+        //             f.add(List.of(l+1, r));
+        //         } else
+        //             f.add(List.of(l, r));
+        //         return f;
+        //     }
+        //     for (int i = 0; i < n; i++) {
+        //         if (l > r) return f;
+        //         if (l <= a[i]) {
+        //             if (l < a[i]) {
+        //                 if (a[i] <= r)                    
+        //                     f.add(List.of(l, a[i]-1));
+        //                 else {
+        //                     f.add(List.of(l, r));
+        //                     return f;
+        //                 }
+        //             }
+        //             l = a[i] + 1;
+        //         } else if (l > a[i]) {
+        //             continue;
+        //         }
+        //     }
+        //     if (l <= r && a[n-1] < r)
+        //         f.add(List.of(l, r));
+        //     return f;
+        // }
+ 
+        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        public int longestSubarray(int[] a, int k) {
+            int n = a.length;
+            return 0;
+        }
+        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // 它们的贱鸡、贱畜牲们真贱！！！故意让亲爱的表哥的活宝妹、亲爱的表哥的活宝妹、笨宝妹这个破烂题目不过，它们的贱鸡、贱畜牲们真贱！！！
+        public boolean[] validSubarrays(int[] a, int kk, int[][] qs) {
+            int n = a.length;
+            System.out.println(Arrays.toString(a));
+           // qs: 【离线数据】可以排序，有序线性O(n)处理
+            List<int []> lia = new ArrayList<>();
+            for (int i = 0; i < qs.length; i++) {
+                int [] e = qs[i];
+                lia.add(new int [] {i, e[0], e[1]});
+            }
+            Collections.sort(lia, (x, y)->x[1] != y[1] ? x[1] - y[1] : x[2] - y[2]);
+            boolean [] f = new boolean [qs.length];
+            Map<Integer, Integer> m = new HashMap<>();
+            int j = -1, rr = -1; // 【左指针】
+            for (int i = 0; i < qs.length; i++) {
+                int [] e = lia.get(i);
+                int l = e[1], r = e[2], idx = e[0];
+// 【左指针：右移】：去无效头
+                int tmp = (rr < l ? Math.min(l-(l==0 ? 0 : 1), rr) : l-1);
+                while (j != -1 && j <= tmp) { 
+                    m.put(a[j], m.get(a[j])-1);
+                    if (m.get(a[j]) == 0) // 影响后面统计【特异元素个数】
+                        m.remove(a[j]);
+                    j++;
+                } // j == l 或者是 j == rr+1
+                if (j == -1) j = l;
+// 【添加：当前有效子数组】
+// 【右指针】：右移，从先前的右端点，右移添加当前子数组有效后半段元素
+                if (rr == -1 || rr < l) {
+                    rr = l-1;
+                    j = l;
+                } else if (rr > r) { // 【右端点】：需要左移的、特殊情况
+                    // for (int k = rr; k > r; k--) {
+                    while (rr > r) {
+                        m.put(a[rr], m.get(a[rr])-1);
+                        if (m.get(a[rr]) == 0) // 影响后面统计【特异元素个数】
+                            m.remove(a[rr]);
+                        --rr;
+                    } // rr == r
+                }
+                while (rr < r) {
+                    ++rr;
+                    m.put(a[rr], m.getOrDefault(a[rr], 0) + 1);
+                } // rr == r
+                if (m.size() == kk) {
+                    boolean valid = true;
+                    // for (int v : m.values())
+                    for (Map.Entry<Integer, Integer> en : m.entrySet()) {
+                        int key = en.getKey(), v = en.getValue();
+                        if (v % 2 != 0) {
+                            // System.out.println("v: " + v + " " + "key: " + key);
+                            valid = false;
+                            break;
+                        }
+                    }
+                    if (valid)
+                        f[idx] = true;
+                }
+            }
+            return f;
+        }
     }    // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
     public static void main (String[] args) { 
         Solution s = new Solution (); 
 
-        int [][] a = new int [][] {{1,1,1,0},{1,1,1,1},{0,0,1,1}};
-        System.out.println("a.length: " + a.length);
-        for (int z = 0; z < a.length; ++z)
-            System.out.println(Arrays.toString(a[z]));
-            
-        int r = s.maxArea(a);
-        System.out.println("r: " + r);
+        int []  a = new int []  {1,1,1,1,2,2};
+        int [][] b = new int [][] {{0,5}};
+
+        boolean []  r = s.validSubarrays(a, 2, b);
+        System.out.println(Arrays.toString(r));
     }
 }
 // ListNode head = new ListNode(a0]);   
@@ -1757,6 +1968,35 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
