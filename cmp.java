@@ -2052,129 +2052,204 @@ public class cmp {
         //     return (int)(f % mod);
         // }
 
-        
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 亲爱的表哥的活宝妹，觉得：这个破烂题目，用【线段树】来写，不是太简单了吗？？？
+        // // 亲爱的表哥的活宝妹，下午写这个题目的时候，查到使用【线段树】感觉思路无限清晰；可是真正写时，在细节上傻掉了，，，不知道细节哪里写错了，晚点儿再回来改这个破烂【BUG：】
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public class SegTree {
+        //     public class Node {
+        //         public int v, s, e; // gcd 值, start/end
+        //         public Node l, r; // 【二叉树】左右子节点
+        //         public Node(int l, int r) {
+        //             this.s = l; this.e = r;
+        //             this.v = 0;
+        //             this.l = this.r = null;
+        //         }
+        //     }
+        //     Node root;
+        //     int [] f;
+        //     int n;
+        //     public SegTree(int [] a) {
+        //         n = a.length;
+        //         f = a;
+        //         System.out.println(Arrays.toString(f));
+        //         this.root = buildTree(1, n);
+        //     }
+        //     Node buildTree(int l, int r) {
+        //         // if (l > r) return null;
+        //         Node rt = new Node(l, r);
+        //         if (l == r) {
+        //             rt.v = f[l-1]; // <<<<<<<<<<<<<<<<<<<< 
+        //             System.out.println("l: " + l + " " + "f[l-1]: " + f[l-1] + " " + "rt.v: " + rt.v);
+        //             // return rt;
+        //         } else {
+        //             // 【自顶向下】：建二叉树
+        //             int m = (l + r) / 2;
+        //             rt.l = buildTree(l, m);
+        //             rt.r = buildTree(m+1, r);
+        //             // 【自底向上】：更新（区间 gcd 的值） 
+        //             rt.v = gcd(rt.l.v, rt.r.v);
+        //             System.out.println("rt.l.v: " + rt.l.v + " " + "rt.r.v: " + rt.r.v + " " + "rt.v: " + rt.v);
+        //             // System.out.println("l: " + l + " " + "r: " + r + " " + "rt.v: " + rt.v);
+        //         }
+        //         return rt;
+        //     }
+        //     int getGcd(Node f, int l, int r) {
+        //         if (f == null) {
+        //             System.out.println("l: " + l + " " + "r: " + r); // <<<<<<<<<<<<<<<<<<<< 
+        //             return 0;
+        //         }
+        //         // if (l <= f.s && f.e <= r) return f.v;
+        //         // System.out.println("l: " + l + " " + "r: " + r + " " + "getGcd() f.v: " + f.v);
+        //        // if (l == r && f.s == l && f.e == r) return f.v;
+        //        if (l <= f.s && f.e <= r) return f.v;
+        //        // if (l == r) return f.v;
+        //         // if (f.s <= l && r <= f.e) return f.v;
+        //         int m = (l + r) / 2, left = 0, right = 0;
+        //         if (r <= m)
+        //             return getGcd(f.l, l, r);
+        //         else if (m+1 <= l)
+        //             return getGcd(f.r, l, r);
+        //         // if (l <= m)
+        //         left = getGcd(f.l, l, m);
+        //         // if (r > m)
+        //         right = getGcd(f.r, m+1, r);
+        //         System.out.println("l: " + l + " " + "m: " + m + " r: " + r + " " + "left: " + left + " right: " + right);
+        //         // return (left == 0 ? right : (right == 0 ? left : gcd(left, right)));
+        //         return gcd(left, right);
+        //     }
+        // }
+        // public int maxValidSplits(int[] a) {
+        //     int n = a.length, r = 0, max = 0;
+        //     SegTree f = new SegTree(a);
+        //     for (int i = 0; i < n-1; i++) {
+        //         int left = f.getGcd(f.root, 1, i+1), right = f.getGcd(f.root, i+2, n);
+        //         System.out.println("i: " + i + " " + "left: " + left + " " + "right: " + right);
+        //         r += (left == right ? 1 : 0);
+        //     }
+        //     System.out.println("r: " + r + " " + "max: " + max);
+        //     max = Math.max(max, r);
+        //     // 遍历：【移除：当前下标 i 元素】
+        //     for (int i = 0; i < n; i++) {
+        //         System.out.println("\n i: " + i);
+        //       r = 0;
+        //         if (i == 0) {
+        //             for (int j = 1; j < n-1; j++) {
+        //                 int left = f.getGcd(f.root, 2, j+1), right = f.getGcd(f.root, j+2, n);
+        //                 r += (left == right ? 1 : 0);
+        //             }
+        //         } else if (i == n-1) {
+        //             for (int j = 0; j < n-2; j++) {
+        //                 int left = f.getGcd(f.root, 1, j+1), right = f.getGcd(f.root, j+2, n-1);
+        //                 r += (left == right ? 1 : 0);
+        //             }
+        //         } else {
+        //             for (int j = 0; j < n-1; j++) {
+        //                 if (j == i) continue; // 【当前下标 i: 被移除掉了】 
+        //                 int left = (j < i ? f.getGcd(f.root, 1, j+1) : gcd(f.getGcd(f.root, 1, i), f.getGcd(f.root, i+2, j+1)));
+        //                             // int left = (j < i ? f.getGcd(1, j+1) : (j == i-1 ? f.getGcd(i+1, n) : gcd(f.getGcd(1, i), f.getGcd(i+2, j+1)));
+        //                 if (j < i-1) {
+        //                     System.out.println("f.getGcd(f.root, j+2, i): " + f.getGcd(f.root, j+2, i));
+        //                     // System.out.println("f.getGcd(f.root, 2, 2): " + f.getGcd(f.root, 2, 2));
+        //                     System.out.println("f.getGcd(f.root, i+2, n): " + f.getGcd(f.root, i+2, n));
+        //                 }
+        //                 int right = (j < i-1 ? gcd(f.getGcd(f.root, j+2, i), f.getGcd(f.root, i+2, n)) : f.getGcd(f.root, j+2, n));
+        //                 System.out.println("j: " + j + " " + "left: " + left + " " + "right: " + right);
+        //               r += (left == right ? 1 : 0);
+        //             }
+        //         }
+        //         max = Math.max(max, r);
+        //         System.out.println("r: " + r + " " + "max: " + max);
+        //     }
+        //     return max;
+        // }
+        // int gcd(int x, int y) {
+        //     return (y == 0 ? x : gcd(y, x % y));
+        // }
+
         // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        // 亲爱的表哥的活宝妹，觉得：这个破烂题目，用【线段树】来写，不是太简单了吗？？？
-        // 亲爱的表哥的活宝妹，下午写这个题目的时候，查到使用【线段树】感觉思路无限清晰；可是真正写时，在细节上傻掉了，，，不知道细节哪里写错了，晚点儿再回来改这个破烂【BUG：】
-        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        public class SegTree {
-            public class Node {
-                public int v, s, e; // gcd 值, start/end
-                public Node l, r; // 【二叉树】左右子节点
-                public Node(int l, int r) {
-                    this.s = l; this.e = r;
-                    this.v = 0;
-                    this.l = this.r = null;
-                }
+        public int countRotations(String S, int k) {
+            int n = S.length(); char [] s = S.toCharArray();
+            int [] f = new int [n];
+            for (int i = 1; i < n; i++)
+                if (s[i] == s[i-1])
+                    f[i] = f[i-1] + 1;
+                else f[i] = f[i-1];
+            System.out.println(Arrays.toString(f));
+            int r = (f[n-1] == k ? 1 : 0);
+            System.out.println("r: " + r);
+            for (int i = 1; i < n; i++) {
+                int cur = f[i-1] + (f[n-1] - f[i])
+                    + (s[0] == s[n-1] ? 1 : 0);
+                if (cur == k) r++;
             }
-            Node root;
-            int [] f;
-            int n;
-            public SegTree(int [] a) {
-                n = a.length;
-                f = a;
-                System.out.println(Arrays.toString(f));
-                this.root = buildTree(1, n);
-            }
-            Node buildTree(int l, int r) {
-                // if (l > r) return null;
-                Node rt = new Node(l, r);
-                if (l == r) {
-                    rt.v = f[l-1]; // <<<<<<<<<<<<<<<<<<<< 
-                    System.out.println("l: " + l + " " + "f[l-1]: " + f[l-1] + " " + "rt.v: " + rt.v);
-                    // return rt;
-                } else {
-                    // 【自顶向下】：建二叉树
-                    int m = (l + r) / 2;
-                    rt.l = buildTree(l, m);
-                    rt.r = buildTree(m+1, r);
-                    // 【自底向上】：更新（区间 gcd 的值） 
-                    rt.v = gcd(rt.l.v, rt.r.v);
-                    System.out.println("rt.l.v: " + rt.l.v + " " + "rt.r.v: " + rt.r.v + " " + "rt.v: " + rt.v);
-                    // System.out.println("l: " + l + " " + "r: " + r + " " + "rt.v: " + rt.v);
-                }
-                return rt;
-            }
-            int getGcd(Node f, int l, int r) {
-                if (f == null) {
-                    System.out.println("l: " + l + " " + "r: " + r); // <<<<<<<<<<<<<<<<<<<< 
-                    return 0;
-                }
-                // if (l <= f.s && f.e <= r) return f.v;
-                // System.out.println("l: " + l + " " + "r: " + r + " " + "getGcd() f.v: " + f.v);
-               // if (l == r && f.s == l && f.e == r) return f.v;
-               if (l <= f.s && f.e <= r) return f.v;
-               // if (l == r) return f.v;
-                // if (f.s <= l && r <= f.e) return f.v;
-                int m = (l + r) / 2, left = 0, right = 0;
-                if (r <= m)
-                    return getGcd(f.l, l, r);
-                else if (m+1 <= l)
-                    return getGcd(f.r, l, r);
-                // if (l <= m)
-                left = getGcd(f.l, l, m);
-                // if (r > m)
-                right = getGcd(f.r, m+1, r);
-                System.out.println("l: " + l + " " + "m: " + m + " r: " + r + " " + "left: " + left + " right: " + right);
-                // return (left == 0 ? right : (right == 0 ? left : gcd(left, right)));
-                return gcd(left, right);
-            }
+            return r;
         }
-        public int maxValidSplits(int[] a) {
-            int n = a.length, r = 0, max = 0;
-            SegTree f = new SegTree(a);
-            for (int i = 0; i < n-1; i++) {
-                int left = f.getGcd(f.root, 1, i+1), right = f.getGcd(f.root, i+2, n);
-                System.out.println("i: " + i + " " + "left: " + left + " " + "right: " + right);
-                r += (left == right ? 1 : 0);
-            }
-            System.out.println("r: " + r + " " + "max: " + max);
-            max = Math.max(max, r);
-            // 遍历：【移除：当前下标 i 元素】
-            for (int i = 0; i < n; i++) {
-                System.out.println("\n i: " + i);
-              r = 0;
-                if (i == 0) {
-                    for (int j = 1; j < n-1; j++) {
-                        int left = f.getGcd(f.root, 2, j+1), right = f.getGcd(f.root, j+2, n);
-                        r += (left == right ? 1 : 0);
-                    }
-                } else if (i == n-1) {
-                    for (int j = 0; j < n-2; j++) {
-                        int left = f.getGcd(f.root, 1, j+1), right = f.getGcd(f.root, j+2, n-1);
-                        r += (left == right ? 1 : 0);
-                    }
-                } else {
-                    for (int j = 0; j < n-1; j++) {
-                        if (j == i) continue; // 【当前下标 i: 被移除掉了】 
-                        int left = (j < i ? f.getGcd(f.root, 1, j+1) : gcd(f.getGcd(f.root, 1, i), f.getGcd(f.root, i+2, j+1)));
-                                    // int left = (j < i ? f.getGcd(1, j+1) : (j == i-1 ? f.getGcd(i+1, n) : gcd(f.getGcd(1, i), f.getGcd(i+2, j+1)));
-                        if (j < i-1) {
-                            System.out.println("f.getGcd(f.root, j+2, i): " + f.getGcd(f.root, j+2, i));
-                            // System.out.println("f.getGcd(f.root, 2, 2): " + f.getGcd(f.root, 2, 2));
-                            System.out.println("f.getGcd(f.root, i+2, n): " + f.getGcd(f.root, i+2, n));
-                        }
-                        int right = (j < i-1 ? gcd(f.getGcd(f.root, j+2, i), f.getGcd(f.root, i+2, n)) : f.getGcd(f.root, j+2, n));
-                        System.out.println("j: " + j + " " + "left: " + left + " " + "right: " + right);
-                      r += (left == right ? 1 : 0);
-                    }
-                }
-                max = Math.max(max, r);
-                System.out.println("r: " + r + " " + "max: " + max);
-            }
-            return max;
-        }
-        int gcd(int x, int y) {
-            return (y == 0 ? x : gcd(y, x % y));
-        }
-    }    // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int countGoodRotations(int[] a) {
+        //     int n = a.length, m = n/2;
+        //     long [] f = new long [n+1];
+        //     for (int i = 0; i < n; i++)
+        //         f[i+1] = f[i] + (long)a[i];
+        //     int r = (f[n] < f[m] * 2l ? 1 : 0);
+        //     long left = 0l, right = 0l;
+        //     for (int i = 1; i < n; i++) {
+        //         if (i < m) {
+        //             right = f[i] + f[n] - f[n-(m-i)];
+        //             left = f[n] - right;
+        //             if (left > right) r++;
+        //         } else {
+        //             left = f[n] - f[i] + f[m-(n-i)];
+        //             right = f[n] - left;
+        //             if (left > right) r++;
+        //         }
+        //     }
+        //     return r;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 亲爱的表哥的活宝妹，想写【动规】，但是写不习惯动规，还是只能先写【记忆化深搜】
+        // // int [][] dirs = {{1, 0}, {0, 1}}; // , {0, -1}, {-1, 0}
+        // int [][] dirs = {{1, 0}, {0, 1}, {0, -1}, {-1, 0}};
+        // public int minCost(int[][] a, int kk) {
+        //     m = a.length; n = a[0].length; this.a = a; 
+        //     f = new Integer [m][n][4][kk+1];
+        //     int r = Math.min(dfs(0, 0, 0, kk), dfs(0, 0, 1, kk));
+        //     int rr = Math.min(dfs(0, 0, 2, kk), dfs(0, 0, 3, kk));
+        //     int ff = Math.min(r, rr);
+        //     return (ff >= Integer.MAX_VALUE / 2 ? -1 : ff);
+        // }
+        // Integer [][][][] f; int [][] a;
+        // int m, n;
+        // int dfs(int i, int j, int k, int x) {
+        //     if (x < 0) return Integer.MAX_VALUE / 2;
+        //     // System.out.println("i: " + i + " " + "j: " + j + " " + "x: " + x);
+        //     if (f[i][j][k][x] != null) return f[i][j][k][x];
+        //     if (i == m-1 && j == n-1) {
+        //         if (x < 0) return Integer.MAX_VALUE / 2;
+        //         return f[i][j][k][x] = a[i][j];
+        //     }
+        //     int r = Integer.MAX_VALUE / 2;
+        //     // 【向下：移动】
+        //     if (i < m-1) 
+        //         r = Math.min(r, a[i][j] + dfs(i+1, j, 1, (k == 1 ? x : x-1)));
+        //     // 【向右：移动】
+        //     if (j < n-1)
+        //         r = Math.min(r, a[i][j] + dfs(i, j+1, 0, (k == 0 ? x : x-1)));
+        //     // 【向上：移动】
+        //     if (i > 0) 
+        //         r = Math.min(r, a[i][j] + dfs(i-1, j, 3, (k == 3 ? x : x-1)));
+        //     // 【向左：移动】
+        //     if (j > 0)
+        //         r = Math.min(r, a[i][j] + dfs(i, j-1, 2, (k == 2 ? x : x-1)));
+        //     return f[i][j][k][x] = r;
+        // }
+     }    // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
     public static void main (String[] args) { 
         Solution s = new Solution (); 
 
-        int [] a = new int [] {10,30,15,10};
-        System.out.println(Arrays.toString(a));
-
-        int r = s.maxValidSplits(a);
+        int r = s.minCost(a, 5);
         System.out.println("r: " + r);
     }
 }
@@ -2184,6 +2259,31 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
