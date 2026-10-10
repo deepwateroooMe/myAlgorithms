@@ -213,57 +213,119 @@ public class cmp {
         //     }
         // }
 
-        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        public long maxAlternatingSum(int[] a) {
-            int n = a.length;
-            // 【偶奇下标、分别的、前缀和】预处理
-            long [] f = new long [n+1], g = new long [n+1]; // Even Odd
-            Arrays.fill(f, Long.MIN_VALUE / 2);
-            Arrays.fill(g, Long.MIN_VALUE / 2);
-            for (int i = 0; i < n; i++) 
-                if (i % 2 == 0) {
-                    // f[i+1] = (i == 0 ? 0 : f[i-1]) + a[i];
-                    f[i+1] = (i == 0 ? 0 : f[i]) + a[i];
-                    if (i > 0)
-                        g[i+1] = g[i];
-                    else if (n > 1)
-                        g[i+1] = 0;
-                } else {
-                    // g[i+1] = (i == 1 ? 0 : g[i-1]) + a[i];
-                    g[i+1] = (i == 1 ? 0 : g[i]) + a[i];
-                    f[i+1] = f[i];
-                }
-            System.out.println(Arrays.toString(f));
-            System.out.println(Arrays.toString(g));
-            long r = f[n] - (g[n] == Long.MIN_VALUE / 2 ? 0 : g[n]);
-            // 遍历：被删除下标 i 元素后的、全局最优解
-            for (int i = 0; i < n; i++) {
-                // 删除【偶数下标】
-                if (i % 2 == 0) {
-                    r = Math.max(r, (i == 0 ? g[n] - (f[n] - a[i])
-                                     : f[i] - g[i] + (g[n]-g[i] - (f[n]-f[i+1]))));
-                }
-                // 删除【奇数下标】
-                else {
-                    r = Math.max(r, (i == n-1 ? f[n]-g[n-1]
-                                     : f[i]-g[i] + (g[n]-g[i+1]) - (f[n]-f[i])));
-                }
-            }
-            return r;
-        }
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public long maxAlternatingSum(int[] a) {
+        //     int n = a.length;
+        //     // 【偶奇下标、分别的、前缀和】预处理
+        //     long [] f = new long [n+1], g = new long [n+1]; // Even Odd
+        //     Arrays.fill(f, Long.MIN_VALUE / 2);
+        //     Arrays.fill(g, Long.MIN_VALUE / 2);
+        //     for (int i = 0; i < n; i++) 
+        //         if (i % 2 == 0) {
+        //             // f[i+1] = (i == 0 ? 0 : f[i-1]) + a[i];
+        //             f[i+1] = (i == 0 ? 0 : f[i]) + a[i];
+        //             if (i > 0)
+        //                 g[i+1] = g[i];
+        //             else if (n > 1)
+        //                 g[i+1] = 0;
+        //         } else {
+        //             // g[i+1] = (i == 1 ? 0 : g[i-1]) + a[i];
+        //             g[i+1] = (i == 1 ? 0 : g[i]) + a[i];
+        //             f[i+1] = f[i];
+        //         }
+        //     System.out.println(Arrays.toString(f));
+        //     System.out.println(Arrays.toString(g));
+        //     long r = f[n] - (g[n] == Long.MIN_VALUE / 2 ? 0 : g[n]);
+        //     // 遍历：被删除下标 i 元素后的、全局最优解
+        //     for (int i = 0; i < n; i++) {
+        //         // 删除【偶数下标】
+        //         if (i % 2 == 0) {
+        //             r = Math.max(r, (i == 0 ? g[n] - (f[n] - a[i])
+        //                              : f[i] - g[i] + (g[n]-g[i] - (f[n]-f[i+1]))));
+        //         }
+        //         // 删除【奇数下标】
+        //         else {
+        //             r = Math.max(r, (i == n-1 ? f[n]-g[n-1]
+        //                              : f[i]-g[i] + (g[n]-g[i+1]) - (f[n]-f[i])));
+        //         }
+        //     }
+        //     return r;
+        // }
 
-        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
-        public int countGoodStrings(long n) {
-            return 0;
-        }
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int[] maxProductPair(int[] a, int v) {
+        //     int n = a.length, max = Integer.MIN_VALUE / 2;
+        //     int [] f = new int [2]; Arrays.fill(f, -1);
+        //     for (int i = 0; i < n-1; i++)
+        //         for (int j = i+1; j < n; j++) {
+        //             if (a[i] == a[j]) continue;
+        //             if (a[i] + a[j] == v && a[i] * a[j] > max) {
+        //                 max = a[i] * a[j];
+        //                 f[0] = (a[i] > a[j] ? i : j);
+        //                 f[1] = (a[i] > a[j] ? j : i); 
+        //             }
+        //         }
+        //     return f;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int resilientSubarray(int[] a, int k) {
+        //     int n = a.length, ans = 1;
+        //     int [] f = new int [n], r  = new int [n];
+        //     for (int i = 0; i < n; i++) {
+        //         f[i] = a[i] % k;
+        //         r[i] = (i == 0 ? 0 : r[i-1]) + a[i]; // preSum
+        //     }
+        //     for (int i = 0; i < n-1; i++) {
+        //         int j = i+1;
+        //         while (j < n && f[j] == f[i]) j++;
+        //         if ((r[j-1] - r[i]) % k == 0) {
+        //             ans = Math.max(ans, j-i);
+        //             i = j-1; 
+        //         }
+        //     }
+        //     return ans;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // TLE TLE TLE ...
+        // public int resilientSubarray(int[] a, int k) {
+        //     int n = a.length, ans = 1;
+        //     int [] f = new int [n], g = new int [n];
+        //     long [] r = new long [n];
+        //     for (int i = 0; i < n; i++) {
+        //         f[i] = a[i] % k;
+        //         r[i] = (i == 0 ? 0l : r[i-1]) + (long)a[i]; // preSum
+        //     }
+        //     System.out.println(Arrays.toString(f));
+        //     System.out.println(Arrays.toString(r));
+        //     for (int i = 0; i < n; i++) {
+        //         g[i] = i;
+        //         int j = i+1;
+        //         while (j < n && f[j] == f[i]) j++;
+        //         if (j-1 != i)
+        //             Arrays.fill(g, i, j-1, j-1);
+        //     }
+        //     System.out.println(Arrays.toString(g));
+        //     // 【TODO：】改状下面的方法，把它改写成不超时 
+        //     for (int i = 0; i < n-1; i++) {        // 遍历了：【所有可能性的、打头】。。
+        //         if (g[i] != i && (r[g[i]] - r[i]) % k == 0) {
+        //             ans = Math.max(ans, g[i]-i + 1);
+        //             i = g[i]; 
+        //         }
+        //     }
+        //     return ans;
+        // }
     }    // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
     public static void main (String[] args) { 
         Solution s = new Solution (); 
 
-        int [] a = new int [] {5, -5, 1};
-        
-        long r = s.maxAlternatingSum(a);
+        int [] a = new int [] {2,18,7};
+        System.out.println(Arrays.toString(a));
+     
+        int r = s.resilientSubarray(a, 6);
         System.out.println("r: " + r);
+
     }
 }
 // ListNode head = new ListNode(a0]);   
@@ -272,6 +334,14 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
