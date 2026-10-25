@@ -14,6 +14,7 @@ import static java.util.stream.Collectors.toMap;
 public class cmp {
     // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
     public static class Solution { 
+
         // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
         // public int minQueenMoves(int[] a, int[] b) {
         //     if (a[0] == b[0] && a[1] == b[1]) return 0;
@@ -400,21 +401,320 @@ public class cmp {
         //         if (v % i == 0) return false;
         //     return true;
         // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int minDeletions(int[] a) {
+        //     int n = a.length, i = 0, j = 0, f = 0;
+        //     while (i < n-1) {
+        //         j = i+1;
+        //         while (j < n && a[j] == a[i]) {
+        //             f++;
+        //             j++;
+        //         }
+        //         if (j == n) return f;
+        //         i = j;
+        //     }
+        //     return f;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int[] lastVisitedCell(char[][] a) {
+        //     int m = a.length, n = a[0].length;
+        //     boolean [][] f = new boolean [m][n];
+        //     int i = 0, j = 0, l = 0, r = 0;
+        //     while (i >= 0 && i < m && j >= 0 && j < n && !f[i][j]) {
+        //         f[i][j] = true; l = i; r = j;
+        //         if (a[i][j] == 'L')
+        //             --j;
+        //         else if (a[i][j] == 'R')
+        //             ++j;
+        //         else if (a[i][j] == 'U')
+        //             --i;
+        //         else if (a[i][j] == 'D')
+        //             ++i;
+        //     }
+        //     return new int [] {l, r};           
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int findColoredRoot(int[][] egs, String S) {
+        //     n = egs.length+1; s = S.toCharArray();
+        //     g = new ArrayList [n];
+        //     Arrays.setAll(g, z -> new ArrayList<Integer>());
+        //     for (int [] e : egs) {
+        //         int u = e[0], v = e[1];
+        //         g[u].add(v);
+        //         g[v].add(u);
+        //     }
+        //     // possible Root 链条 
+        //     List<Integer> li = new ArrayList<>();
+        //     for (int i = 0; i < n; i++) {
+        //         List<Integer> l = g[i];
+        //         if (sameColor(l) && l.size() <= 2)
+        //             li.add(i);
+        //     }
+        //     if (li.size() == 0) return -1;
+        //     for (int i : li) {
+        //         if (isValidRoot(i, s[i], -1))
+        //             return i;
+        //     }
+        //     return -1;
+        // }
+        // List<Integer> [] g; 
+        // int n; char [] s;
+        // boolean isValidRoot(int u, char c, int p) {
+        //     if (s[u] != c) return false;
+        //     char cc = (c == 'R' ? 'B' : (c == 'B' ? 'W' : 'R'));
+        //     for (int v : g[u]) {
+        //         if (v == p) continue;
+        //         if (!isValidRoot(v, cc, u)) return false;
+        //     }
+        //     return true;
+        // }
+        // boolean sameColor(List<Integer> l) {
+        //     char c = s[l.get(0)];
+        //     for (int v : l) 
+        //         if (s[v] != c)
+        //             return false;
+        //     return true;
+        // }
+
+        // public void removeRange(int left, int right) {
+        //     Range high = new Range(right, right);
+        //     while (true) {
+        //         Range r = ts.lower(high);
+        //         if (r == null || r.right <= left) break;
+        //         if (r.right > right)
+        //             ts.add(new Range(right, r.right));
+        //         if (r.left < left)
+        //             ts.add(new Range(r.left, left));
+        //         ts.remove(r);
+        //     }
+        // }
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 亲爱的表哥的活宝妹，记得：有个 mergeInterval 相关的题目题型
+        // class Range implements Comparable<Range> { // 【重要：】只有这样，才可以借助 TreeSet 等数据结构简单查询，就不用自己再写二分搜索了。。。
+        //     public int l, r;
+        //     public Range(int l, int r) {
+        //         this.l = l;
+        //         this.r = r;
+        //     }
+        //     @Override public int compareTo(Range other) { // 这里，我按结束时间升序排列
+        //         return this.l != other.l ? this.l - other.l : this.r - other.r;
+        //     }
+        // }
+        // public void addRange(int left, int right, TreeSet<Range> ts) {
+        //     int nl = left, nr = right;
+        //     Range high = new Range(right, Integer.MAX_VALUE);
+        //     while (true) { // 遍历：【自大到小】遍历，会自动合并所有 overlap 的 Range
+        //         Range r = ts.lower(high);
+        //         if (r == null || r.right < left) break;
+        //         if (r.right > right) nr = r.right;
+        //         if (r.left < left) nl = r.left;
+        //         ts.remove(r);
+        //     }
+        //     ts.add(new Range(nl, nr));
+        // }
+        // public boolean queryRange(int left, int right, TreeSet<Range> ts) {
+        //     Range target = ts.floor(new Range(left, Integer.MAX_VALUE));
+        //     return target != null && target.left <= left && target.right >= right;
+        // }
+        // // 【TODO：】需要一个改写版本的，可以查询【多个片段，能够合并成目标片段】的 Override 方法 for f
+        // public boolean queryRange(int left, int right, TreeSet<Range> ts) {
+        //     Range target = ts.floor(new Range(left, Integer.MAX_VALUE));
+        //     return target != null && target.left <= left && target.right >= right;
+        // }
+        // public int minSelection(int[][] a, int[][] b) {
+        //     int m = a.length, n = b.length;
+        //     Arrays.sort(a, (x, y) -> (x[0] != y[0] ? x[0] - y[0] : x[1] - y[1]));
+        //     // target: 合并了的【有序、不 overlap 片段集】
+        //     TreeSet<Range> f = new TreeSet<>((a, b)->(a.l != b.l ? a.l - b.l : a.r - b.r)); // 【TODO：】右端点升序，重新排序。。。
+        //     TreeSet<Range> ff = new TreeSet<>((a, b)->(a.l != b.l ? a.l - b.l : a.r - b.r));
+        //     for (int [] v : b) 
+        //         addRange(v[0], v[1], ff);
+        //     // 选择：保留【可能完全覆盖的、最大片段】
+        //     List<Range> li = new ArrayList<>(), ll = new ArrayList<>();
+        //     int i = 0, j = 0;
+        //     while (i < m) {
+        //         j = i+1;
+        //         while (j < m && a[j][0] == a[i][0]) j++;
+        //         li.add(a[j-1][0], a[j-1][1]);
+        //         i = j;
+        //     }
+        //     for (Range r : li) f.add(r); // <<<<<<<<<<<<<<<<<<<< 不能合并：源片段
+        //     TreeMap<Integer, Integer> dp = new TreeMap<>();
+        //     Iterator<Range> it = f.iterator();
+        //     while (it.hasNext()) 
+        //         ll.add(it.next); // <<<<<<<<<<<<<<<<<<<< 
+        //     // 遍历【完全不 overlap 的、目标片段】
+        //     for (int i = 0; i < ll.size(); i++) {
+        //         Range r = ll.get(i);
+        //         if (queryRange(r.l, r.r. f)) { // 存在【1 个片段】可以完全覆盖
+        //             if (i == 0)
+        //                 dp.put(i, 1);
+        //             else dp.put(i, dp.get(i-1) + 1);
+        //         } else { // 【TODO：】可能【多个片段，终于，可以完全覆盖】
+        //             // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        //             // 亲爱的表哥的活宝妹，改天再写这个破烂题目
+        //         }
+        //     }
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int peakValleyDifference(int[] a) {
+        //     int n = a.length, f = 0;
+        //     for (int i = 1; i < n-1; i++) {
+        //         if (a[i-1] < a[i] && a[i] > a[i+1])
+        //             f += a[i];
+        //         else if (a[i-1] > a[i] && a[i] < a[i+1])
+        //             f -= a[i];
+        //     }
+        //     return f;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int countMagicalPairs(String S) {
+        //     int n = S.length(), r = 0; char [] s = S.toCharArray();
+        //     int [][] f = new int [n][n];
+        //     Set<Character> sc = new HashSet<>();
+        //     for (int i = 0; i < n; i++) {
+        //         sc.clear();
+        //         for (int j = i; j < n; j++) {
+        //             sc.add(s[j]);
+        //             f[i][j] = sc.size();
+        //         }
+        //     }
+        //     for (int i = 0; i < n-1; i++) 
+        //         for (int j = i; j < n-1; j++) 
+        //             for (int k = j+1; k < n; k++) 
+        //                 if (f[i][j] == f[j+1][k]) r++;
+        //     return r;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // TLE TLE TLE 955/1000 passed ... O(NN) 亲爱的表哥的活宝妹，晚点儿再写这个破烂题目
+        // // 这个破烂题目，不应该是：遍历【左端点：以左端点为（最大值、或是最小值）来遍历到向右可以延展到的最右端，然后数个数吗，亲爱的表哥的活宝妹、笨宝妹？？？！！！
+        // public long countSubarrays(int[] a, int minK, int maxK) {
+        //     int n = a.length, i = 0, j = 0, p = 0;
+        //     long f = 0l;
+        //     while (i < n) {
+        //         if (a[i] < minK || a[i] > maxK) {
+        //             i++;
+        //             continue;
+        //         } else if (i > 0 && a[i] == a[i-1]) {
+        //             f += (long)--p ;
+        //             i++;
+        //             continue;
+        //         }
+        //         j = i + 1;
+        //         while (j < n && minK <= a[j] && a[j] <= maxK) j++;
+        //         p = j - i;
+        //         f += (long)(j - i);
+        //         i++;
+        //     }
+        //     return f;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 亲爱的表哥的活宝妹，把前一题目，【小规模的 N=2000 的 O(N × N × N)】转化为现在（大规模 N=10^5 的。O(N × 26 × 26)）就可以了
+        // // 改进是：外循环每个下标 i, 内循环 j 及内循环 k 不再遍历所有 N, 而仅只遍历最大可能的 26 就可以，不会超时 TLE
+        // // 亲爱的表哥的活宝妹，感觉：思路无限清楚，可是下午思路写到这里，细节上脑袋有点儿发昏了。。。改天再接着写这个破烂题目。。。。亲爱的表哥的活宝妹，今天写这些写 sick 了，改天再写。。。
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public long countMagicalPairs(String S) {
+        //     int n = S.length(), j = 0, r = 0, l = 0, ll = 0; char [] s = S.toCharArray();
+        //     long ans = 0l;
+        //     Set<Character> sc = new HashSet<>(), sr = new HashSet<>();
+        //     long cur = 0l;
+        //     for (int i = 0; i < n-1; i++) { // j: distance
+        //         System.out.println("\n i: " + i);
+        //         sc.clear();
+        //         cur = 0l;
+        //         r = i;
+        //         // toContinue = false;
+        //         while (r < n-1) { // 循环 j:
+        //             sc.add(s[r]);
+        //             j = sc.size();
+        //             System.out.println("i: " + i + " " + "j: " + j);
+        //             // 后续字符串：【不够长】
+        //             if (j > n - r - 1) break;
+        //             sr.clear();
+        //             l = r+1;
+        //             while (l < n && sr.size() < j) { // 【TODO：】这里要区分 <j 和 ==j 才能数有效个数
+        //                 sr.add(s[l]);
+        //                 l++;
+        //             } // l == n || sr.size() == j
+        //             System.out.println("r: " + r + " " + "j: " + j + " " + "l: " + l);
+        //             if (sr.size() < j || l >= n-1) {
+        //                 if (l >= n-1) {
+        //                     // 亲爱的表哥的活宝妹的脑袋，现在正在这个细节上发昏。。。亲爱的表哥的活宝妹，亲爱的表哥的活宝妹、笨宝妹。。。
+        //                     int counts = l - r - (l == n && sr.size() == j ? 1 : 0);
+        //                     // int counts = l - r - (l == n ? 1 : 0);
+        //                     // int counts = l - r - 1;
+        //                     ans += (long)counts;
+        //                 }
+        //                 System.out.println("r: " + r + " " + "j: " + j + " " + "ans 0: " + ans);
+        //                 r++;
+        //                 continue;
+        //             }
+        //             // if (l == n) f[i][j] = 1;
+        //             ll = l + 1; // 循环 k
+        //             sr.add(s[ll]);
+        //             while (ll < n && sr.size() == j) {
+        //                 ll++;
+        //                 sr.add(s[ll]);
+        //             }
+        //             // if (sr.size() == j) // ll = n;
+        //             ans += (long)(ll - l);
+        //             System.out.println("r: " + r + " " + "j: " + j + " " + "ans 1: " + ans);
+        //             r++;
+        //         }
+        //         System.out.println("i: " + i + " " + "ans: " + ans);
+        //     }
+        //     return ans;
+        // }
+        
     }    // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
     public static void main (String[] args) { 
         Solution s = new Solution (); 
-     
-        List<Integer> r = s.maxPrimes(5, 7);
-        System.out.println("r.size(): " + r.size());
-        System.out.println(Arrays.toString(r.toArray()));
+
+        // String a = "kkk";
+        String a = "aba";
+
+        long r = s.countMagicalPairs(a);
+        System.out.println("r: " + r);
     }
 }
-// ListNode head = new ListNode(a0]);   
+// ListNode head = new ListNode(a0]);    
 // head.buildList(head, a);
 // head.printList(head);
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
