@@ -672,15 +672,333 @@ public class cmp {
         //     }
         //     return ans;
         // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int calculateScore(int a, int b) {
+        //     int x = Integer.bitCount(a), y = Integer.bitCount(b);
+        //     if (x >= y) return x * y;
+        //     return y / x;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public long maximizeSum(int[] a, int k) {
+        //     int n = a.length;
+        //     Queue<long []> q = new PriorityQueue<long []>((x, y) -> (-1 * Long.compare(x[2], y[2])));
+        //     for (int v : a) q.offer(new long [] {(long)v, getMax(v), getMax(v) - (long)v});
+        //     long f = 0;
+        //     while (k > 0 && !q.isEmpty()) {
+        //         long [] v = q.poll();
+        //         if (v[2] != 0l) {
+        //             f += v[1];
+        //             --k;
+        //         } else f += v[0];
+        //     }
+        //     while (!q.isEmpty())
+        //         f += q.poll()[0];
+        //     return f;
+        // }
+        // int getMax(int v) {
+        //     char [] digits = String.valueOf(v).toCharArray();
+        //     // 1. Sort in ascending order ('0' to '9')
+        //           Arrays.sort(digits);
+        //     // 2. Reverse the array in-place to get descending order ('9' to '0')
+        //     int left = 0;
+        //     int right = digits.length - 1;
+        //     while (left < right) {
+        //         char temp = digits[left];
+        //         digits[left] = digits[right];
+        //         digits[right] = temp;
+        //         left++;
+        //         right--;
+        //     }
+        //     return Integer.parseInt(new String(digits));
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int countStaircase(int[] a) {
+        //     int n = a.length;
+        //     Map<Integer, List<Integer>> m = new HashMap<>();
+        //     for (int i = 0; i < n; i++)
+        //         m.computeIfAbsent(a[i], z -> new ArrayList<>()).add(i);
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int minMergedInteger(int[] a) {
+        //     int n = a.length, f = 90000027;
+        //     for (int i = 0; i < n-1; i += 2)
+        //         f = Math.min(f, Integer.parseInt(new StringBuilder(String.valueOf(a[i]) + String.valueOf(a[i+1])).toString()));
+        //     return f;
+        // }
+
+        // 【亲爱的表哥的活宝妹，不喜欢今天晚上的这组破烂题目，亲爱的表哥的活宝妹，改天，下个周再继续写】，这个周亲爱的表哥的活宝妹，亲爱的表哥的活宝妹、笨宝妹不想再写这组恶心吧啦的破烂题目了。。。
+        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public long minimumMaxValue(int n, int idx, int v) {
+        //     long [] f = new long [n];
+        //     f[idx] = (long)v;
+        //     if (idx == 0)
+        //         return (long)(v % 2 == 0 ? 2l * (v / 2 + (n - (idx+1))) : (idx == n-2 ? 2l * v : 2l * (v + n - (idx + 2))));
+        //     for (int i = idx-1; i < n; i++) {
+        //         // 【TODO：】这里像是要遍历 module=234567...
+        //         f[i] = (long)(v % 2 == 0 ? 2 * (f[i+1]/2 - 1) : )
+        //     }
+        // }
         
-    }    // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int minOperations(int[] a, int[] b, int k) {
+        //     int n = a.length, r = 0;
+        //     // Integer [] f = IntStream.rangeClosed(0, n-1).boxed().map(z->a[n-1-z]).toArray();
+        //     Integer [] f = new Integer [n];
+        //     for (int i = 0; i < n; i++)
+        //         // f[i]//  = i;
+        //         // Arrays.sort(f, (x, y)-> a[x] - a[y]);
+        //         // System.out.println(Arrays.toString(f));
+        //         // // 遍历：【123...n】
+        //         // for (int i = 0; i < n; i++) {
+        //         //     if (a[f[i]] == i+1
+        //         // }
+        //         return 0;
+        // }
+        
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int minActivationCost(int[][] egs, int[] a) {
+        //     n = egs.length; this.a = a; 
+        //     g = new ArrayList [n];
+        //     Arrays.setAll(g, z -> new ArrayList<int []>());
+        //     for (int [] e : egs) {
+        //         int u = e[0], v = e[1], c = e[2];
+        //         g[u].add(new int [] {v, c});
+        //         g[v].add(new int [] {u, c});
+        //     }
+        // }
+        // List<int []> [] g; int [] a;
+        // int n;
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public List<List<String>> findMismatchedSegments(String S, String T) {
+        //     int n = S.length(), i = 0, j = 0;
+        //     char [] s = S.toCharArray(), t = T.toCharArray();
+        //     List<List<String>> ll = new ArrayList<>();
+        //     while (i < n) {
+        //         if (s[i] == t[i]) {
+        //             i++;
+        //             continue;
+        //         }
+        //         j = i+1;
+        //         while (j < n && s[j] != t[j]) j++;
+        //         ll.add(List.of(S.substring(i, j), T.substring(i, j)));
+        //         i = j;
+        //     }
+        //     return ll;
+        // }
+
+        // // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // public int countSuffix(int[] a, int[] b) {
+        //     int n = a.length, j = n-2, i = 0, max = Arrays.stream(a).max().getAsInt(), r = 1; // ++j
+        //     if (Arrays.stream(a).max().getAsInt() != Arrays.stream(b).max().getAsInt()) return 0;
+        //     if (n ==1) return (a[0] == b[0] ? 1 : 0);
+        //     if (n == 2 && b[n-1] > b[n-2]) return (a[0] == b[0] && a[1] == b[1] ? 1 : 0);
+        //     while (j >= 0 && b[j] >= b[j+1]) --j;
+        //     while (i <= j && a[i] == b[i]) i++;
+        //     System.out.println("i: " + i + " " + "j: " + j);
+        //     if (i <= j) return 0;
+        //     int [] f = new int [max+1];
+        //     for (int v : a) f[v]++;
+        //     for (int v : b) 
+        //         f[v]--;
+        //     if (!(Arrays.stream(f).distinct().count() == 1 && f[max] == 0)) return 0;
+        //     ++j;
+        //     while (j < n) {
+        //         if (a[j] == b[j]) {
+        //             ++r;
+        //             ++j;
+        //         } else // a[j] != b[j]
+        //             return r;
+        //     }
+        //     return r - (a[n-1] == b[n-1] ? 1 : 0);
+        // }
+
+        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        // 亲爱的表哥的活宝妹，亲爱的表哥的活宝妹、笨宝妹，今天晚上掐这个破烂题目，用了九牛二虎之力。。。
+        // 590 / 1007 testcases passed
+        // 亲爱的表哥的活宝妹的脑袋，今天晚上已经傻掉了、、、亲爱的表哥的活宝妹，改天再写
+        // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹，就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+        public long minCost(int n, String S, int[][] egs) {
+            g = new ArrayList [n]; this.n = n; s = S.toCharArray();
+            Arrays.setAll(g, z -> new ArrayList<>());
+            for (int [] e : egs) {
+                int u = e[0], v = e[1];
+                g[u].add(v);
+                g[v].add(u);
+            }
+            // 变【无向图】为（有向图）
+            dfs(0, -1);
+            // buildNodeTree 【有向树】: （预处理、动规所要用到的数据），如最长相连红路径 path 的节点个数等
+            Node r = buildNodeTree(0);
+            // 【TODO：】写个自定义类，每个节点纪录【此根节点：子树的大小，子树红节点的总个数】。
+            // 上面这步不难；但是笨宝妹，还没能想清楚：之后的【动规】：怎么才能遍历所有的可能性？？？
+// <<<<<<<<<<<<<<<<<<<< 或许，笨宝妹可以把这个破烂题目手指掐出来？？？
+            // // 【树型动规】：每个节点【0/1 红蓝】2 种可能性；
+            // // 目的：（红节点相连）
+            // 2 种实现方法：
+            //     1. 【增加：红节点个数】使红节点最终可连通
+            //     2. 【减少：红节点个数】使（所剩余的红节点）相连即可；不限于仅剩余1 个红节点，可以剩余更多红节点，只要它们是相连的
+            // 【动规、记忆数组】：
+            // long [][] f = new long [n][2]; // 【0: 蓝； 1: 红】
+            // long [] f = new long [n]; // 把蓝变红，连通的最小代价
+            // 【TODO：】核心考量点：
+            // f[i][0] 把红变蓝，但不是要变所有的，而只是变尽可能少的、使剩余（最长相连红节点）保持不动，以减少代价
+            //     f[i][0] 把红变蓝，比较好写，求【根树红节点的、总代价】 - 【某根节点红节点路径左右臂、最大代价】，就是把小代价零散红节点变蓝的总代价
+            // f[i][1] 把蓝变红，最小代价。dfs 时【自顶向下】根据父子节点红节点相关信息，决定某蓝节点是否变红，累加蓝变红的所有代价
+            // 上面两者取最小，就可以了。像是可以掐得出来的样子。。。
+            dfsBlue2Red(r, null);
+            // return Math.min(f[0][0], f[0][1]);
+            long minCost = ttRedCost - r.ll;
+            System.out.println("ttRedCost: " + ttRedCost + " " + "minCost: " + minCost + " " + "ttBlue2Red: " + ttBlue2Red);
+            System.out.println("r.ll: " + r.ll);
+
+    
+       return minCost <= ttBlue2Red ? minCost : ttBlue2Red;
+        }
+        List<Integer> [] g;
+        // Set<Integer> [] g;
+        int n; char [] s;
+        long ttRedCost, ttBlue2Red; // totalRedCost
+        void dfsBlue2Red(Node r, Node p) {
+            // // 【根节点0: (蓝节点，子节点全蓝) 或是（红节点：子节点红节点 cr>=1）】当前节点不用管
+            // if (p == null && (s[r.i] == 'B' && r.cr == 0 || s[r.i] == 'R' && r.cr > 0)
+            //     // 【非根节点：】
+            //     || s[r.i] == 'B'  
+            //     || s[p.i] == 'R' && )
+            // 当前蓝节点，且需要连通
+            if (s[r.i] == 'B' && (p == null && r.cr > 1
+                                  || p != null && (s[p.i] == 'R' && r.cr > 0
+                                                   || r.cr > 1))) {
+                s[r.i] = 'R';
+                ttBlue2Red += r.s;
+            }
+            for (int i = 0; i < r.n.length; i++)
+                dfsBlue2Red(r.n[i], r);
+            // else if (s[r.i] == 'R') {
+            // }
+        }
+        public class Node {
+            // l: 包括本红节点的 longest continuous red path counts lsmallSec lbigFirstBigest ll: 不包括本节点的子树最长红路径长度
+            // 亲爱的表哥的活宝妹，还记得【有向树的、2 条最长次长路径、组合成的（树的最大走私跨度）吗】？？？
+            // 亲爱的表哥的活宝妹，亲爱的表哥的活宝妹、笨宝妹，这里的考量标准变了
+            // 不是【根节点、左右臂、最长次长】，而是【根节点。左右臂、最小代价、次小代价】。。。
+            // 亲爱的表哥的活宝妹，亲爱的表哥的活宝妹、笨宝妹，这里想反了
+            // 应该记：【根节点。左右臂、最大代价、次大代价】。。。
+            int i, s, r, c, cr; // idx size #red childCounts redChildCounts
+            long ls, lb, ll; 
+            Node [] n;
+            public Node(int idx, int c) {
+                this.i = idx; this.c = c; 
+                s = 1;
+                r = 0;
+                n = new Node [c];
+            }
+        }
+        Node buildNodeTree(int u) {
+            Node r = new Node(u, g[u].size());
+            // 【叶子节点】：先特殊处理
+            if (g[u].size() == 0) {
+                if (s[u] == 'R') {
+                    r.r = r.cr = 1; // red
+                    r.lb = 1;
+                    r.ll = 1;
+                    ttRedCost += 1;
+                }
+                System.out.println("r.i: " + r.i + " " + "r.lb: " + r.lb + " " + "r.ll: " + r.ll);
+                return r;
+            } //else {
+            long longestRedPathCntsLL = 0l;
+            int redChildCounts = 0;
+            for (int i = 0; i < g[u].size(); i++) {
+                int v = g[u].get(i);
+            // for (int v : g[u]) {
+                r.n[i] = buildNodeTree(v);
+                r.s += r.n[i].s; // 合并【儿子：子树的、大小 size】
+                r.r += r.n[i].r; // 合并【儿子：子树的、红节点的、总个数】
+                // ll: 不包括本节点的子树最长红路径长度  // <<<<<<<<<<<<<<<<<<<< 【TODO：】这个更新对吗？什么时候合并、本节点相关的路径？？？
+                longestRedPathCntsLL = Math.max(longestRedPathCntsLL, r.n[i].ll); // 不管 v 是不是红节点，因为不包括 v 节点的代价
+                // 合并【儿子：子树的、最长相连红节点的 path 里、节点总个数】 ls lb
+                if (s[u] == 'R' && s[v] == 'R') { // 父子都为红节点，当前路径最长红节点。。。
+                    // if (r.n[i].lb > r.lb) { // 比最大的大
+                    //     r.ls = r.lb;
+                    //     r.lb = r.n[i].lb;
+                    // } else if (r.n[i].lb == r.lb || r.n[i].lb > r.ls) { // 两条同样长、最大红路径
+                    //     r.ls = r.n[i].lb;
+                    // } // 其它：比第 2 当前最长红路径短，一定不会是全局最优解，不纪录不备案
+                    if (r.n[i].ll > r.lb) { // 比最大的大
+                        r.ls = r.lb;
+                        r.lb = r.n[i].ll;
+                    } else if (r.n[i].ll == r.lb || r.n[i].ll > r.ls) { // 两条同样长、最大红路径
+                        r.ls = r.n[i].ll;
+                    } // 其它：比第 2 当前最长红路径短，一定不会是全局最优解，不纪录不备案
+                } else if (s[v] == 'R' || r.n[i].cr > 0) {
+                    redChildCounts++;
+                    if (r.n[i].cr > 0) {
+                        r.cr ++;
+                        if (r.n[i].ll > r.ll) {
+                            // r.ls = r.lb;
+                            // r.lb = r.n[i].lb;
+                            r.ll = r.n[i].ll;
+                        }
+                        // else if (r.n[i].ll == r.lb || r.n[i].ll > r.ls)
+                        //     r.ls = r.n[i].ll;
+                    }
+                }
+            }
+            // }
+            r.cr = redChildCounts;
+            if (s[u] == 'R') {
+                r.r ++;
+                r.cr++;
+                // 红节点：全局总代价
+                ttRedCost += (long)r.s;
+                // 最重、次重臂：累加当前根要点代价
+                if (r.ls > 0 && r.lb > 0) {
+                    r.ls += r.s;
+                    r.lb += r.s;
+                    // r.ls += 1;
+                    // r.lb += 1;
+                    // ll: 更新当前（根节点左右臂、子树全局最重代价）
+                    if (r.ls + r.lb - r.s > longestRedPathCntsLL)
+                        longestRedPathCntsLL = r.ls + r.lb - r.s;
+                // } else if (r.lb > 0) {
+                } else {
+                    r.lb += r.s;
+                    r.ll = Math.max(r.ll, r.lb); // <<<<<<<<<<<<<<<<<<<< 感觉笨宝妹现在脑袋已经傻掉了不动了。。。
+                    if (r.lb > longestRedPathCntsLL)
+                        longestRedPathCntsLL = r.lb;
+                }
+                System.out.println("r(R).i: " + r.i + " " + "r.lb: " + r.lb + " " + "r.ls: " + r.ls + " r.ll: " + r.ll);
+            } else {
+                // System.out.println("r.i: " + r.i + " " + "r.lb: " + r.lb + " " + "r.ls: " + r.ls);
+                System.out.println("r(B).i: " + r.i + " " + "r.cr: " + r.cr + " " + "r.ll: " + r.ll );
+                System.out.println();
+
+            }
+            r.ll = Math.max(r.ll, longestRedPathCntsLL);
+            System.out.println("r(Out).i: " + r.i + " " + "r.lb: " + r.lb + " " + "r.ls: " + r.ls + " r.ll: " + r.ll);
+            return r;
+        }
+        void dfs(int u, int p) {
+            if (p != -1)
+                g[u].remove((Integer)p);
+            for (int v : g[u])
+                dfs(v, u);
+        }        
+}    // 亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！ 
     public static void main (String[] args) { 
         Solution s = new Solution (); 
+            
+        String a = "RRRBRRBB";
+        int [][] b = new int [][] {{1,2},{2,6},{1,5},{2,3},{3,4},{2,7},{0,1}};
 
-        // String a = "kkk";
-        String a = "aba";
-
-        long r = s.countMagicalPairs(a);
+        long r = s.minCost(8, a, b);
         System.out.println("r: " + r);
     }
 }
@@ -690,6 +1008,26 @@ public class cmp {
 // TreeNode rr = new TreeNode(a[0]);
 // rr.buildTree(rr, a);
 // rr.levelPrintTree(rr);
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
+// 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
 // 【爱表哥，爱生活！！！任何时候，亲爱的表哥的活宝妹就是一定要,一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
